@@ -1,0 +1,80 @@
+import { Injectable } from '@angular/core';
+
+import * as Raven from 'raven-js';
+
+import { Card } from '../models/card';
+import { CollectionManager } from './collection-manager.service';
+import { Events } from './events.service';
+
+declare var OverwolfPlugin: any;
+declare var overwolf: any;
+declare var parseCardsText: any;
+
+@Injectable()
+export class LogParserService {
+	plugin: any;
+
+	private cardRegex = new RegExp('.* NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d).*');
+
+	constructor(private collectionManager: CollectionManager, private events: Events) {
+	}
+
+	public receiveLogLine(data: string) {
+		// console.log('received log line', data);
+		let match = this.cardRegex.exec(data);
+		if (match) {
+			// console.log('New card received!');
+			let cardId = match[1];
+			let type = match[2];
+			// TODO: add debounce
+			this.collectionManager.getCollection((collection) => {
+				let cardInCollection = this.collectionManager.inCollection(collection, cardId, type);
+				if (!this.hasReachedMaxCollectibleOf(cardInCollection)) {
+					this.displayNewCardMessage(cardInCollection);
+				}
+				else {
+					this.displayDustMessage(cardInCollection);
+				}
+			})
+		}
+	}
+
+	private hasReachedMaxCollectibleOf(card: Card):boolean {
+		// Card is not in collection at all
+		if (!card) {
+			return false;
+		}
+
+		let dbCard = parseCardsText.getCard(card.Id);
+		if (dbCard.rarity === 'Legendary' || card.Count >= 2) {
+			return true;
+		}
+		return false;
+	}
+
+	private displayNewCardMessage(card: Card) {
+		console.log('New card!', card.Id, card.Premium);
+		this.events.broadcast(Events.NEW_CARD, card);
+	}
+
+	private displayDustMessage(card: Card) {
+		let dbCard = parseCardsText.getCard(card.Id);
+		let dust = this.dustFor(dbCard.rarity.toLowerCase());
+		dust = card.Premium ? dust * 4 : dust;
+		this.events.broadcast(Events.MORE_DUST, card, dust);
+		console.log('Got ' + dust + ' dust', card.Id, card.Premium);
+	}
+
+	private dustFor(rarity: string): number {
+		switch (rarity) {
+			case 'legendary':
+				return 400;
+			case 'epic':
+				return 100;
+			case 'rare':
+				return 20;
+			default:
+				return 5;
+		}
+	}
+}

@@ -1,0 +1,40 @@
+html {
+	// background-color: white;
+}
+
+body {
+	margin: 0;
+}
+
+.notifications {
+
+	.simple-notification-wrapper.simple-notification-wrapper {
+		top: 0;
+		right: 20px;
+		bottom: auto;
+
+		.simple-notification {
+		    padding: 10px;
+		    margin-bottom: 5px;
+		    background-color: rgba(0, 0, 0, 0.8);
+    		border-radius: 5px 0 0 5px;
+
+    		.message-container {
+    			display: flex;
+    			align-items: center;
+
+    			img {
+    				margin-right: 5px;
+    				width: 24px;
+    				height: 24px;
+    			}
+
+			    .message {
+			    	padding: 0;
+			    	font-size: 14px;
+			    	line-height: 15px;
+			    }
+    		}
+		}
+	}
+}
