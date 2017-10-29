@@ -26,7 +26,7 @@ export class NotificationsComponent {
 	// private alreadyHiding: boolean;
 
 	private toastOptions = {
-		timeOut: 0, // this.timeout,
+		timeOut: this.timeout,
 		pauseOnHover: true,
 		showProgressBar: false,
 	}
@@ -82,6 +82,16 @@ export class NotificationsComponent {
 	// }
 
 	private created(event) {
+		console.log('created', event);
+		this.resize();
+	}
+
+	private destroyed(event) {
+		console.log('destroyed', event);
+		this.resize();
+	}
+
+	private resize() {
 		let wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 		overwolf.windows.getCurrentWindow((currentWindow) => {
 			let height = wrapper.getBoundingClientRect().height + 20;
@@ -102,9 +112,5 @@ export class NotificationsComponent {
 				});
 			});
 		});
-	}
-
-	private destroyed(event) {
-		console.log('destroyed', event);
 	}
 }

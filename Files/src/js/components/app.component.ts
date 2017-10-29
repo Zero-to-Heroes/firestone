@@ -60,7 +60,10 @@ export class AppComponent {
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
 			if (this.unrevealedCards.length > 0 && data.onGame) {
 				console.log('Detecting revealed cards', data, this.unrevealedCards);
-				this.detectRevealedCards();
+				// We need to wait until the animation completes
+				setTimeout(() => {
+					this.detectRevealedCards();
+				}, 500)
 			}
 		});
 	}
@@ -77,28 +80,38 @@ export class AppComponent {
 			return;
 		}
 
+		console.log('detecting card', i);
 		overwolf.media.getScreenshotUrl(
 			{
-				//Recommended for better rounding.
 				roundAwayFromZero : "true",
-				//Optional - Crop the screen (happens before the rescale, if both are used).
-				//Positive values are absolute, negative values are relative (-1.0 - 0)
 				crop: this.getBoxForCard(i)
 			},
 			(result) => {
 				if (result.status !== 'success') {
 					console.log('[WARN] Could not take screenshot', result);
 				}
-				// console.log('Part: Screenshot', result.url);
-				// Load the reference images
-				// TODO: increase reliability
+				console.log('Part: Screenshot', result.url);
 				this.compare(result.url, 'unrevealed_card.JPG', (data) => {
-					if (data.rawMisMatchPercentage > 65) {
-						this.compare(result.url, 'unrevealed_card_zoom.JPG', (data) => {
-							if (data.rawMisMatchPercentage > 65) {
-								this.revealCard(i);
+					console.log('screenshot match?', data);
+					if (data.rawMisMatchPercentage > 5) {
+						overwolf.media.getScreenshotUrl(
+							{
+								roundAwayFromZero : "true",
+								crop: this.getBoxForCardZoom(i)
+							},
+							(result) => {
+								if (result.status !== 'success') {
+									console.log('[WARN] Could not take screenshot', result);
+								}
+								console.log('Part: Screenshot zoom', result.url);
+								this.compare(result.url, 'unrevealed_card_zoom.JPG', (data) => {
+									console.log('screenshot match?', data);
+									if (data.rawMisMatchPercentage > 5) {
+										this.revealCard(i);
+									}
+								});
 							}
-						});
+						);
 					}
 				});
 			}
@@ -125,42 +138,83 @@ export class AppComponent {
 			.compareTo(actualUrl)
 			.ignoreAntialiasing()
 			.scaleToSameSize()
-			.ignoreColors()
+			// .ignoreColors()
 			.onComplete((data) => {
 				callback(data);
 			});
 	}
 
 	private getBoxForCard(i: number): any {
-		let width = -0.08;
-		let height = -0.17;
+		let width = -0.02;
+		let height = -0.05;
 		let x, y;
 
 		switch (i) {
 			// Bottom left
 			case 0:
-				x = -0.45;
-				y = -0.63;
+				x = -0.505;
+				y = -0.78;
 				break;
 			// Bottom right
 			case 1:
-				x = -0.62;
-				y = -0.64;
+				x = -0.675;
+				y = -0.79;
 				break;
 			// Top card center
 			case 2:
-				x = -0.535;
-				y = -0.19;
+				x = -0.59;
+				y = -0.34;
 				break;
 			// Top right
 			case 3:
-				x = -0.69;
-				y = -0.28;
+				x = -0.745;
+				y = -0.43;
 				break;
 			// Top left
 			case 4:
-				x = -0.39;
-				y = -0.28;
+				x = -0.445;
+				y = -0.42;
+				break;
+		}
+
+		return {
+			x: x,
+			y: y,
+			width: width,
+			height: height
+		}
+	}
+
+	private getBoxForCardZoom(i: number): any {
+		let width = -0.02;
+		let height = -0.05;
+		let x, y;
+
+		switch (i) {
+			// Bottom left
+			case 0:
+				x = -0.505;
+				y = -0.84;
+				break;
+			// Bottom right
+			case 1:
+				x = -0.675;
+				y = -0.85;
+				break;
+			// Top card center
+			case 2:
+				x = -0.61;
+				y = -0.30;
+				break;
+			// Top right
+			case 3:
+				x = -0.745;
+				y = -0.37;
+				break;
+			// Top left
+			case 4:
+				x = -0.445;
+				y = -0.36;
 				break;
 		}
 
@@ -173,65 +227,58 @@ export class AppComponent {
 	}
 
 	// private testScreenshot() {
+	// 	let i = 4;
 	// 	overwolf.media.getScreenshotUrl(
 	// 		{
-	// 			//Recommended for better rounding.
 	// 			roundAwayFromZero : "true",
-	// 			//Optional - Crop the screen (happens before the rescale, if both are used).
-	// 			//Positive values are absolute, negative values are relative (-1.0 - 0)
-	// 			crop: {
-	// 				x: -0.39, //Start cropping at the middle of the screen
-	// 				y: -0.28,
-	// 				width: -0.08,
-	// 				height: -0.17
-	// 			},
+	// 			crop: this.getBoxForCard(i)
 	// 		},
-	// 		function(result) {
-	// 			// console.log('screenshot status', result);
-	// 			if (result.status == "success") {
-	// 				console.log('Part: Screenshot', result.url);
-	// 				// Load the reference images
-	// 				resemble('/Files/assets/images/unrevealed_card.JPG')
-	// 					.compareTo(result.url)
-	// 					.ignoreAntialiasing()
-	// 					.scaleToSameSize()
-	// 					.ignoreColors()
-	// 					.onComplete((data) => {
-	// 						console.log('comparison with unzoomed', data);
-	// 						// The images move!
-	// 						if (data.rawMisMatchPercentage > 60) {
-	// 							console.log('matching with zoomed');
-	// 							resemble('/Files/assets/images/unrevealed_card_zoom.JPG')
-	// 								.compareTo(result.url)
-	// 								.ignoreAntialiasing()
-	// 								.scaleToSameSize()
-	// 								.ignoreColors()
-	// 								.onComplete((data) => {
-	// 									console.log('comparison with zoom', data);
-	// 									if (data.rawMisMatchPercentage > 60) {
-	// 										console.log('no match');
-	// 									}
-	// 									else {
-	// 										console.log('match');
-	// 									}
-	// 								})
-	// 						}
-	// 						else {
-	// 							console.log('match');
-	// 						}
-	// 					})
+	// 		(result) => {
+	// 			if (result.status !== 'success') {
+	// 				console.log('[WARN] Could not take screenshot', result);
 	// 			}
+	// 			console.log('Part: Screenshot', result.url);
+	// 			this.compare(result.url, 'unrevealed_card.JPG', (data) => {
+	// 				console.log('screenshot match?', data);
+	// 				if (data.rawMisMatchPercentage > 5) {
+	// 					overwolf.media.getScreenshotUrl(
+	// 						{
+	// 							roundAwayFromZero : "true",
+	// 							crop: this.getBoxForCardZoom(i)
+	// 						},
+	// 						(result) => {
+	// 							if (result.status !== 'success') {
+	// 								console.log('[WARN] Could not take screenshot', result);
+	// 							}
+	// 							console.log('Part: Screenshot zoom', result.url);
+	// 							this.compare(result.url, 'unrevealed_card_zoom.JPG', (data) => {
+	// 								console.log('screenshot match?', data);
+	// 								if (data.rawMisMatchPercentage > 5) {
+	// 									console.log('no match');
+	// 								}
+	// 								else {
+	// 									console.log('match');
+	// 								}
+	// 							});
+	// 						}
+	// 					);
+	// 				}
+	// 				else {
+	// 					console.log('match');
+	// 				}
+	// 			});
 	// 		}
 	// 	);
 	// }
 
 	private createNewCardToast(card: Card) {
-		let cardName: string = parseCardsText.getCard(card.Id).name;
+		let dbCard = parseCardsText.getCard(card.Id);
+		let cardName: string = dbCard.name;
 		if (card.Premium) {
 			cardName = 'Golden ' + cardName;
 		}
 		console.log('displaying new card toast notification for ' + cardName);
-		this.notificationService.html('<div class="message-container"><div class="message">New card! ' + cardName + '</div></div>');
+		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/rarity-' + dbCard.rarity.toLowerCase() + '.png"><div class="message">New card! ' + cardName + '</div></div>');
 	}
 
 	private createDustToast(card: Card, dust: number) {

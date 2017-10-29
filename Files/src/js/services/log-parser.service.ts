@@ -41,12 +41,15 @@ export class LogParserService {
 
 	private hasReachedMaxCollectibleOf(card: Card):boolean {
 		// Card is not in collection at all
+		// Should never occur
 		if (!card) {
+			console.warn('Should never have a missing card in collection, since the collection is retrieved after card pack opening');
 			return false;
 		}
 
 		let dbCard = parseCardsText.getCard(card.Id);
-		if (dbCard.rarity === 'Legendary' || card.Count >= 2) {
+		// The collection is updated immediately, so when we query it the new card has already been inserted
+		if ((dbCard.rarity === 'Legendary' && card.Count >= 2) || card.Count >= 3) {
 			return true;
 		}
 		return false;
