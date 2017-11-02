@@ -22,6 +22,7 @@ export class NotificationsComponent {
 
 	private timeout = 10000;
 	private windowId: string;
+	private mainWindowId: string;
 	// private closeTime: number;
 	// private alreadyHiding: boolean;
 
@@ -46,11 +47,31 @@ export class NotificationsComponent {
 
 			// Change position to be bottom right?
 			console.log('retrieved current notifications window', result, this.windowId);
+
+			overwolf.windows.obtainDeclaredWindow("MainWindow", (result) => {
+				if (result.status !== 'success') {
+					console.warn('Could not get MainWindow', result);
+				}
+				this.mainWindowId = result.window.id;
+
+
+				overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
+					console.log('ack sent to main window', result);
+				});
+			});
 		})
 		console.log('notifications windows initialized')
 	}
 
 	private sendNotification(htmlMessage: string) {
+		if (!this.windowId) {
+			console.log('Notification window isnt properly initialized yet, waiting');
+			setTimeout(() => {
+				this.sendNotification(htmlMessage);
+			}, 100);
+			return;
+		}
+		console.log('received message, restoring notification window');
 		overwolf.windows.restore(this.windowId, (result) => {
 			console.log('notifications window is on?', result);
 

@@ -17,7 +17,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeModules = path.join(process.cwd(), 'node_modules');
 const realNodeModules = fs.realpathSync(nodeModules);
 const genDirNodeModules = path.join(process.cwd(), 'src', '$$_gendir', 'node_modules');
-const entryPoints = ["inline","polyfills","sw-register","vendor","background","notifications"];
+const entryPoints = ["inline","polyfills","sw-register","vendor","background","notifications","welcome"];
 const minimizeCss = false;
 const baseHref = "";
 const deployUrl = "";
@@ -82,6 +82,9 @@ module.exports = {
     ],
     "notifications": [
       "./src\\js\\modules\\notifications\\main.ts"
+    ],
+    "welcome": [
+      "./src\\js\\modules\\welcome\\main.ts"
     ],
     "polyfills": [
       "./src\\polyfills.ts"
@@ -269,8 +272,8 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["notifications"],
-      "title": "Codex - Hearthstone Collection Tracker",
+      "excludeChunks": ["notifications","welcome"],
+      "title": "HS Collection Companion",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -297,8 +300,36 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background"],
-      "title": "Codex - Hearthstone Collection Tracker",
+      "excludeChunks": ["background","welcome"],
+      "title": "HS Collection Companion",
+      "xhtml": true,
+      "chunksSortMode": function sort(left, right) {
+        let leftIndex = entryPoints.indexOf(left.names[0]);
+        let rightindex = entryPoints.indexOf(right.names[0]);
+        if (leftIndex > rightindex) {
+            return 1;
+        }
+        else if (leftIndex < rightindex) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+    }),
+    new HtmlWebpackPlugin({
+      "template": "./src\\html\\welcome.html",
+      "filename": "./html\\welcome.html",
+      "hash": false,
+      "inject": true,
+      "compile": true,
+      "favicon": false,
+      "minify": false,
+      "cache": true,
+      "showErrors": true,
+      "chunks": "all",
+      "excludeChunks": ["background","notifications"],
+      "title": "HS Collection Companion",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -332,7 +363,7 @@ module.exports = {
                         || module.resource.startsWith(realNodeModules));
             },
       "chunks": [
-        "background", "notifications"
+        "background", "notifications", "welcome"
       ]
     }),
     // new SourceMapDevToolPlugin({
@@ -351,6 +382,13 @@ module.exports = {
     new CommonsChunkPlugin({
       "name": [
         "notifications"
+      ],
+      "minChunks": 2,
+      "async": "common"
+    }),
+    new CommonsChunkPlugin({
+      "name": [
+        "welcome"
       ],
       "minChunks": 2,
       "async": "common"

@@ -11,14 +11,26 @@ export class OwNotificationsService {
 	private windowId: string;
 	private messageId: number;
 
+	private retriesLeft = 10;
+	private notificationWindowInit = false;
+
 	constructor() {
 		this.detectNotificationsWindow();
 	}
 
 	public html(htmlMessage: string) {
 		console.log('trying to display html message: ', htmlMessage);
-		if (!this.windowId) {
-			throw new Error("NotificationsWindow was not identified at app start");
+		if (!this.windowId || !this.notificationWindowInit) {
+			if (this.retriesLeft <= 0) {
+				throw new Error("NotificationsWindow was not identified at app start");
+			}
+			else {
+				this.retriesLeft--;
+				setTimeout(() => {
+					this.html(htmlMessage);
+				}, 100);
+				return;
+			}
 		}
 
 		// overwolf.windows.restore(this.windowId, (result) => {
@@ -45,5 +57,12 @@ export class OwNotificationsService {
 				})
 			})
 		});
+
+		overwolf.windows.onMessageReceived.addListener((message) => {
+			console.log('received ack', message);
+			if (message.content === 'ack') {
+				this.notificationWindowInit = true;
+			}
+		})
 	}
 }

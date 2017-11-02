@@ -26,10 +26,10 @@ export class CollectionManager {
 				console.log('received global event mindvision', first, second);
 			});
 
-			this.mindvisionPlugin.get().getCollection((cards) => {
-			let collection: Card[] = JSON.parse(cards);
-			console.log('Collection: ', collection);
-			})
+			// this.mindvisionPlugin.get().getCollection((cards) => {
+			// 	let collection: Card[] = JSON.parse(cards);
+			// 	console.log('Collection: ', collection);
+			// })
 		});
 	}
 

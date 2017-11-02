@@ -2,13 +2,13 @@
 	"manifest_version":1,
 	"type":"WebApp",
 	"meta":{
-		"name":"Codex - Hearthstone collection companion",
+		"name":"HS Collection Companion",
 		"author":"Sébastien Tromp",
 		"version":"0.0.1",
 		"minimum-overwolf-version":"0.107.240.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.librarian",
 		"description":"A collection companion to have in-game the information you want to know",
-		"dock_button_title": "Collection Manager",
+		"dock_button_title": "HS Collection Companion",
 		"icon":"IconStore.png",
 		"icon_gray":"IconStore.png",
 		"store_icon": "IconStore.png"
@@ -41,8 +41,21 @@
                 "grab_keyboard_focus": false,
                 "grab_focus_on_desktop": false,
                 "block_top_window_navigation": true
+			},
+			"WelcomeWindow": {
+				"file": "Files/html/welcome.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+		        "size": {"width": 1316, "height": 787},
+		        "min_size": {"width": 1316, "height": 787},
+		        "max_size": {"width": 1316, "height": 787},
+		        "block_top_window_navigation": true,
+		        "popup_blocker": true,
+		        "mute": true
 			}
 		},
+		"force_browser": "user",
 		"game_events": ["9898"],
 		"launch_events": [
 			{
