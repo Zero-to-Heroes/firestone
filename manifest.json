@@ -68,7 +68,8 @@
 		],
 		"externally_connectable": {
 			"matches": [
-				"http://www.zerotoheroes.com"
+				"http://www.zerotoheroes.com",
+				"https://www.googletagmanager.com"
 			]
 		},
 		"extra-objects": {
