@@ -10,9 +10,9 @@ Please don't hesitate to request new features or report issues using the issues 
 
 # Screenshots
 
-![welcome page](https://imgur.com/tbw7Vmg)
+[Imgur](https://i.imgur.com/tbw7Vmg.png)
 
-![in-game notifications](https://imgur.com/gp4Ug22)
+[Imgur](https://i.imgur.com/gp4Ug22.jpg)
 
 # License
 
