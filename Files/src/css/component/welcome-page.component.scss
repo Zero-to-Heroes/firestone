@@ -69,7 +69,7 @@ body {
 			    align-items: flex-start;
 			    line-height: 1.2;
 			    position: relative;
-			    padding: 100px 0 100px 70px;
+			    padding: 100px 0 0 70px;
 
 			    h1 {
 				    display: flex;
@@ -100,7 +100,7 @@ body {
 
 			    .main-text {
 			    	text-align: justify;
-    				padding: 20px 0 20px 4px;
+    				padding: 20px 30px 20px 4px;
 				    height: 220px;
 				    display: flex;
 				    flex-direction: column;
@@ -110,32 +110,51 @@ body {
 				    span {
 				    	color: white;
 					    font-size: 16px;
-					    display: block;
+					    // display: block;
 					    font-weight: 300;
 					    line-height: 1.7;
 				    }
+
+				    .text {
+				    	margin-bottom: 20px;
+				    }
+
+				    .command {
+					    display: inline-block;
+					    border: 1px solid white;
+					    padding: 5px 15px;
+					    border-radius: 6px;
+					}
 			    }
 		    }
 
-		    .social-media {
-			    position: absolute;
-			    bottom: 10px;
-			    left: 15px;
+		    .actions {
+			    display: flex;
+			    flex-direction: row;
+			    width: 60%;
+			    align-items: center;
+			    justify-content: center;
+			    line-height: 1.2;
+			    position: relative;
+			    padding-left: 70px;
 
-		    	svg {
-		    		fill: white;
-				    width: 24px;
-				    height: 24px;
-				    cursor: pointer;
-				    margin-right: 15px;
+		    	.action {
+		    		display: flex;
+		    		flex-direction: column;
+		    		align-items: center;
+		    		width: 150px;
+		    		cursor: pointer;
+
+		    		.icon {
+		    			font-size: 4em;
+		    			margin-bottom: 10px;
+		    		}
+
+		    		span {
+		    			text-align: center;
+		    		}
 		    	}
 		    }
-
-		    .version-info {
-			    position: absolute;
-			    bottom: 0px;
-			    right: 5px;
-			}
 	    }
 	}
 }

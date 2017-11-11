@@ -6,6 +6,9 @@ import { HttpModule }    from '@angular/http';
 import * as Raven from 'raven-js';
 
 import { WelcomePageComponent }  from '../../components/welcome-page.component';
+import { SocialMediaComponent }  from '../../components/social-media.component';
+import { VersionComponent }  from '../../components/version.component';
+import { DebugService } from '../../services/debug.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -29,11 +32,14 @@ import { WelcomePageComponent }  from '../../components/welcome-page.component';
 	],
 	declarations: [
 		WelcomePageComponent,
+		SocialMediaComponent,
+		VersionComponent,
 	],
 	bootstrap: [
 		WelcomePageComponent,
 	],
 	providers: [
+		DebugService,
 		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })

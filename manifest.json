@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"HS Collection Companion",
 		"author":"Sébastien Tromp",
-		"version":"0.0.1",
+		"version":"0.0.2",
 		"minimum-overwolf-version":"0.107.240.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.librarian",
 		"description":"A collection companion to have in-game the information you want to know",
@@ -42,6 +42,18 @@
                 "grab_focus_on_desktop": false,
                 "block_top_window_navigation": true
 			},
+			"ErrorsWindow": {
+				"file": "Files/html/errors.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+		        "size": {"width": 600, "height": 400},
+		        "min_size": {"width": 600, "height": 400},
+		        "max_size": {"width": 600, "height": 400},
+		        "block_top_window_navigation": true,
+		        "popup_blocker": true,
+		        "mute": true
+			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
 				"transparent": true,
@@ -50,6 +62,17 @@
 		        "size": {"width": 1316, "height": 787},
 		        "min_size": {"width": 1316, "height": 787},
 		        "max_size": {"width": 1316, "height": 787},
+		        "block_top_window_navigation": true,
+		        "popup_blocker": true,
+		        "mute": true
+			},
+			"CollectionWindow": {
+				"file": "Files/html/collection.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": false,
+		        "size": {"width": 1100, "height": 787},
+		        "min_size": {"width": 1100, "height": 787},
 		        "block_top_window_navigation": true,
 		        "popup_blocker": true,
 		        "mute": true
@@ -83,10 +106,10 @@
 			}
 		},
 		"hotkeys": {
-			"test_screenshot": {
-				"title": "Test screenshot",
+			"collection": {
+				"title": "Show/hide collection window",
 				"action-type": "custom",
-				"default": "Ctrl+Alt+S"
+				"default": "Alt+C"
 			}
 		}
 	}
