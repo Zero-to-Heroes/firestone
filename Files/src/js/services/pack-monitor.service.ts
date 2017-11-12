@@ -17,6 +17,8 @@ export class PackMonitor {
 
 	private unrevealedCards: string[] = [];
 	private cardEvents = {};
+	private detecting = false;
+	private detectingSingleCard = false;
 	private hadNewCard = false;
 
 	constructor(
@@ -42,24 +44,81 @@ export class PackMonitor {
 			});
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
+			// if (data.onGame) this.cardClicked(data, (result) => console.log('card clicked', result));
 			if (this.unrevealedCards.length > 0 && data.onGame) {
 				console.log('Detecting revealed cards', data, this.unrevealedCards);
-				// We need to wait until the animation completes
-				setTimeout(() => {
-					this.detectRevealedCards();
-				}, 500)
+				this.cardClicked(data, (index) => {
+					// console.log('bouh')
+					// We need to wait until the animation completes
+					setTimeout(() => {
+						this.detectRevealedCard(index);
+						// this.detectRevealedCards();
+					}, 500)
+				});
 			}
 		});
 	}
 
+	private cardClicked(data, callback: Function) {
+		overwolf.games.getRunningGameInfo((result) => {
+			let x = 1.0 * data.x / result.width;
+			let y = 1.0 * data.y / result.height;
+			console.log('clicked at ', x, y, data, result);
+
+			// Top left
+			let ret = -1;
+			if (x >= 0.378 && x <= 0.495 && y >= 0.139 && y <= 0.507) {
+				ret = 4;
+			}
+			// Top center
+			else if (x >= 0.52 && x <= 0.665 && y >= 0.03 && y <= 0.4) {
+				ret = 2;
+			}
+			// Top right
+			else if (x >= 0.7 && x <= 0.86 && y >= 0.15 && y <= 0.51) {
+				ret = 3;
+			}
+			// Bottom left
+			else if (x >= 0.415 && x <= 0.57 && y >= 0.565 && y <= 0.94) {
+				ret = 0;
+			}
+			// Bottom right
+			else if (x >= 0.415 && x <= 0.772 && y >= 0.58 && y <= 0.96) {
+				ret = 1;
+			}
+			else {
+				console.log('[WARN] Could not detect the clicked on card', x, y, data, result);
+			}
+
+			callback(ret);
+		});
+	}
 
 	private detectRevealedCards() {
+		if (this.detecting || this.detectingSingleCard) {
+			setTimeout(() => {
+				this.detectRevealedCards();
+			}, 500);
+			return;
+		}
+
+		this.detecting = true;
 		for (let i = 0; i < 5; i++) {
 			this.detectRevealedCard(i);
 		}
+		this.detecting = false;
 	}
 
 	private detectRevealedCard(i: number) {
+		if (this.detectingSingleCard) {
+			setTimeout(() => {
+				this.detectRevealedCard(i);
+			}, 10);
+			return;
+		}
+
+		this.detectingSingleCard = true;
+
 		// card has been revealed already
 		if (this.unrevealedCards[i] === '') {
 			return;
@@ -74,6 +133,7 @@ export class PackMonitor {
 			(result) => {
 				if (result.status !== 'success') {
 					console.log('[WARN] Could not take screenshot', result);
+					this.detectingSingleCard = false;
 				}
 				console.log('Part: Screenshot', result.url);
 				this.compare(result.url, 'unrevealed_card.JPG', (data) => {
@@ -87,6 +147,7 @@ export class PackMonitor {
 							(result) => {
 								if (result.status !== 'success') {
 									console.log('[WARN] Could not take screenshot', result);
+									this.detectingSingleCard = false;
 								}
 								console.log('Part: Screenshot zoom', result.url);
 								this.compare(result.url, 'unrevealed_card_zoom.JPG', (data) => {
@@ -94,9 +155,13 @@ export class PackMonitor {
 									if (data.rawMisMatchPercentage > 5) {
 										this.revealCard(i);
 									}
+									this.detectingSingleCard = false;
 								});
 							}
 						);
+					}
+					else {
+						this.detectingSingleCard = false;
 					}
 				});
 			}
@@ -105,17 +170,21 @@ export class PackMonitor {
 
 	private revealCard(i: number) {
 		let cardId = this.unrevealedCards[i];
+		console.log('revealing card', i, cardId, this.cardEvents[cardId], this.unrevealedCards);
 		this.unrevealedCards[i] = '';
 		this.cardEvents[cardId]();
+
 		for (let j = 0; j < 5; j++) {
 			// Not all cards have been revealed yet
 			if (this.unrevealedCards[j] !== '') {
 				return;
 			}
 		}
+		console.log('All cards revealed, resetting');
 		// All cards have been revealed, full reset
 		this.unrevealedCards = [];
 		this.cardEvents = {};
+		console.log('reset done');
 
 		// if (this.hadNewCard) {
 		// 	this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/collection.png"><div class="message">Click to see your collection</div></div>');

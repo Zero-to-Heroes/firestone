@@ -17,7 +17,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeModules = path.join(process.cwd(), 'node_modules');
 const realNodeModules = fs.realpathSync(nodeModules);
 const genDirNodeModules = path.join(process.cwd(), 'src', '$$_gendir', 'node_modules');
-const entryPoints = ["inline","polyfills","sw-register","vendor","background","notifications","welcome"];
+const entryPoints = ["inline","polyfills","sw-register","vendor","background","notifications","welcome","collection","errors"];
 const minimizeCss = false;
 const baseHref = "";
 const deployUrl = "";
@@ -85,6 +85,12 @@ module.exports = {
     ],
     "welcome": [
       "./src\\js\\modules\\welcome\\main.ts"
+    ],
+    "collection": [
+      "./src\\js\\modules\\collection\\main.ts"
+    ],
+    "errors": [
+      "./src\\js\\modules\\errors\\main.ts"
     ],
     "polyfills": [
       "./src\\polyfills.ts"
@@ -272,7 +278,7 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["notifications","welcome"],
+      "excludeChunks": ["notifications","welcome","collection","errors"],
       "title": "HS Collection Companion",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
@@ -300,7 +306,7 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background","welcome"],
+      "excludeChunks": ["background","welcome","collection","errors"],
       "title": "HS Collection Companion",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
@@ -328,7 +334,63 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background","notifications"],
+      "excludeChunks": ["background","notifications","collection","errors"],
+      "title": "HS Collection Companion",
+      "xhtml": true,
+      "chunksSortMode": function sort(left, right) {
+        let leftIndex = entryPoints.indexOf(left.names[0]);
+        let rightindex = entryPoints.indexOf(right.names[0]);
+        if (leftIndex > rightindex) {
+            return 1;
+        }
+        else if (leftIndex < rightindex) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+    }),
+    new HtmlWebpackPlugin({
+      "template": "./src\\html\\collection.html",
+      "filename": "./html\\collection.html",
+      "hash": false,
+      "inject": true,
+      "compile": true,
+      "favicon": false,
+      "minify": false,
+      "cache": true,
+      "showErrors": true,
+      "chunks": "all",
+      "excludeChunks": ["background","notifications","welcome","errors"],
+      "title": "HS Collection Companion",
+      "xhtml": true,
+      "chunksSortMode": function sort(left, right) {
+        let leftIndex = entryPoints.indexOf(left.names[0]);
+        let rightindex = entryPoints.indexOf(right.names[0]);
+        if (leftIndex > rightindex) {
+            return 1;
+        }
+        else if (leftIndex < rightindex) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+    }),
+    new HtmlWebpackPlugin({
+      "template": "./src\\html\\errors.html",
+      "filename": "./html\\errors.html",
+      "hash": false,
+      "inject": true,
+      "compile": true,
+      "favicon": false,
+      "minify": false,
+      "cache": true,
+      "showErrors": true,
+      "chunks": "all",
+      "excludeChunks": ["background","notifications","welcome","collection"],
       "title": "HS Collection Companion",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
@@ -363,7 +425,7 @@ module.exports = {
                         || module.resource.startsWith(realNodeModules));
             },
       "chunks": [
-        "background", "notifications", "welcome"
+        "background", "notifications", "welcome", "collection", "errors"
       ]
     }),
     // new SourceMapDevToolPlugin({
@@ -389,6 +451,20 @@ module.exports = {
     new CommonsChunkPlugin({
       "name": [
         "welcome"
+      ],
+      "minChunks": 2,
+      "async": "common"
+    }),
+    new CommonsChunkPlugin({
+      "name": [
+        "collection"
+      ],
+      "minChunks": 2,
+      "async": "common"
+    }),
+    new CommonsChunkPlugin({
+      "name": [
+        "errors"
       ],
       "minChunks": 2,
       "async": "common"

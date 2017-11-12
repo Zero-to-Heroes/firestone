@@ -12,10 +12,12 @@ import { AppComponent }  from '../../components/app.component';
 
 import { LogListenerService }  from '../../services/log-listener.service';
 import { LogParserService }  from '../../services/log-parser.service';
+import { LogStatusService }  from '../../services/log-status.service';
 import { CollectionManager }  from '../../services/collection-manager.service';
 import { PackMonitor }  from '../../services/pack-monitor.service';
 import { Events }  from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
+import { DebugService } from '../../services/debug.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -56,6 +58,8 @@ import { OwNotificationsService }  from '../../services/notifications.service';
 		OwNotificationsService,
 		PackMonitor,
 		Events,
+		DebugService,
+		LogStatusService,
 		// { provide: ErrorHandler, useClass: RavenErrorHandler },
 	],
 })

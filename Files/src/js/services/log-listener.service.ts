@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as Raven from 'raven-js';
 
 import { LogParserService } from './log-parser.service'
+import { Events } from '../services/events.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -19,7 +20,9 @@ export class LogListenerService {
 	fileInitiallyPresent: boolean;
 	logsLocation: string;
 
-	constructor(private logParserService: LogParserService) {
+	retriesLeft = 20;
+
+	constructor(private events: Events, private logParserService: LogParserService) {
 		this.init();
 	}
 
@@ -84,6 +87,7 @@ export class LogListenerService {
 	}
 
 	listenOnFile(logsLocation: string): void {
+		this.events.broadcast(Events.START_LOG_FILE_DETECTION);
 		// Sentry raises a stack trace too big without this
 		setTimeout(() => {
 			this.listenOnFileCreation(logsLocation);
@@ -93,6 +97,11 @@ export class LogListenerService {
 	listenOnFileCreation(logsLocation: string): void {
 		console.log('starting to listen on file', logsLocation);
 
+		if (this.retriesLeft < 0) {
+			this.events.broadcast(Events.NO_LOG_FILE);
+			return;
+		}
+
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
 			console.log('fileExists?', status, message);
 			if (status === true) {
@@ -100,7 +109,10 @@ export class LogListenerService {
 			}
 			else {
 				this.fileInitiallyPresent = false;
-				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
+				setTimeout( () => {
+					this.retriesLeft--;
+					this.listenOnFileCreation(logsLocation);
+				}, 1000);
 			}
 		});
 	}
@@ -111,7 +123,6 @@ export class LogListenerService {
 
 		// Register file listener
 		let handler = (id: any, status: any, data: string) => {
-
 			if (!status) {
 				if (data === 'truncated') {
 					this.plugin.get().stopFileListen(fileIdentifier);
@@ -145,6 +156,7 @@ export class LogListenerService {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
+					this.events.broadcast(Events.STREAMING_LOG_FILE);
 				}
 				else {
 					console.warn("something bad happened with: " + id);

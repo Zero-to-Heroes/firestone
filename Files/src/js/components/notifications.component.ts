@@ -1,7 +1,9 @@
 import { Component, NgZone, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import * as Raven from 'raven-js';
+
 import { NotificationsService } from 'angular2-notifications';
+import { DebugService } from '../services/debug.service';
 
 declare var overwolf: any;
 
@@ -20,7 +22,7 @@ export class NotificationsComponent {
 
 	// @ViewChild('notificationsContainer') container:ElementRef;
 
-	private timeout = 10000;
+	private timeout = 20000;
 	private windowId: string;
 	private mainWindowId: string;
 	// private closeTime: number;
@@ -35,6 +37,7 @@ export class NotificationsComponent {
 	constructor(
 		private ngZone: NgZone,
 		private notificationService: NotificationsService,
+		private debugService: DebugService,
 		private elRef: ElementRef) {
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
@@ -79,28 +82,8 @@ export class NotificationsComponent {
 				let toast = this.notificationService.html(htmlMessage);
 				console.log('toast', toast);
 			});
-			// this.closeTime = Date.now() + this.toastOptions.timeOut + 1000;
-			// this.hideWindow();
 		})
 	}
-
-	// private hideWindow() {
-	// 	// Single instance... Could do that via specific class instead?
-	// 	if (this.alreadyHiding) {
-	// 		return;
-	// 	}
-
-	// 	this.alreadyHiding = true;
-	// 	if (Date.now() < this.closeTime) {
-	// 		setTimeout(this.hideWindow, (this.closeTime - Date.now()));
-	// 		return;
-	// 	}
-
-	// 	overwolf.windows.minimize(this.windowId, (result) => {
-	// 		console.log('hiding notifications', result);
-	// 		this.alreadyHiding = false;
-	// 	})
-	// }
 
 	private created(event) {
 		console.log('created', event);

@@ -5,9 +5,10 @@ import { HttpModule }    from '@angular/http';
 
 import * as Raven from 'raven-js';
 
-import { SimpleNotificationsModule } from 'angular2-notifications';
+import { ErrorsComponent } from '../../components/errors.component';
+import { SocialMediaComponent }  from '../../components/social-media.component';
+import { VersionComponent }  from '../../components/version.component';
 
-import { NotificationsComponent }  from '../../components/notifications.component';
 import { DebugService } from '../../services/debug.service';
 
 // console.log('configuring Raven'),
@@ -29,13 +30,14 @@ import { DebugService } from '../../services/debug.service';
 		HttpModule,
 		// Animations need to be imported in to your project to use the library
         BrowserAnimationsModule,
-        SimpleNotificationsModule.forRoot(),
 	],
 	declarations: [
-		NotificationsComponent,
+		ErrorsComponent,
+		SocialMediaComponent,
+		VersionComponent,
 	],
 	bootstrap: [
-		NotificationsComponent,
+		ErrorsComponent,
 	],
 	providers: [
 		DebugService,
@@ -43,4 +45,4 @@ import { DebugService } from '../../services/debug.service';
 	],
 })
 
-export class NotificationsModule { }
+export class ErrorsModule { }

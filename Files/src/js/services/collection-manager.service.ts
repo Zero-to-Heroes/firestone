@@ -34,6 +34,10 @@ export class CollectionManager {
 	}
 
 	public getCollection(callback: Function) {
+		if (!this.mindvisionPlugin.get()) {
+			setTimeout(() => this.getCollection(callback), 100);
+			return;
+		}
 		this.mindvisionPlugin.get().getCollection((cards) => {
 			let collection: Card[] = JSON.parse(cards);
 			callback(collection);

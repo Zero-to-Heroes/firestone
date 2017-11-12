@@ -13,6 +13,9 @@ export class Events {
 
 	public static NEW_CARD = 'new-card';
 	public static MORE_DUST = 'more-dust';
+	public static NO_LOG_FILE = 'no-log-file';
+	public static START_LOG_FILE_DETECTION = 'start-log-file-detection';
+	public static STREAMING_LOG_FILE = 'streaming-log-file';
 
 	private _eventBus: Subject<BroadcastEvent>;
 
