@@ -26,23 +26,23 @@ export class AppComponent {
 		private debugService: DebugService,
 		private logStatusService: LogStatusService) {
 
-		overwolf.settings.registerHotKey(
-			"collection",
-			(result) => {
-				console.log('hotkey pressed')
-				if (result.status === 'success') {
-					this.startApp(() => this.showCollectionWindow());
-				}
-				else {
-					console.log('error registering hotkey', result);
-				}
-			}
-		)
+		// overwolf.settings.registerHotKey(
+		// 	"collection",
+		// 	(result) => {
+		// 		console.log('hotkey pressed')
+		// 		if (result.status === 'success') {
+		// 			this.startApp(() => this.showCollectionWindow());
+		// 		}
+		// 		else {
+		// 			console.log('error registering hotkey', result);
+		// 		}
+		// 	}
+		// )
 
 		this.startApp();
 
 		overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-			this.startApp(() => this.showCollectionWindow());
+			this.startApp(() => this.showWelcomePage());
 		})
 	}
 
