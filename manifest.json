@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"HS Collection Companion",
 		"author":"Sébastien Tromp",
-		"version":"0.0.2",
+		"version":"0.0.2.2",
 		"minimum-overwolf-version":"0.107.240.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.librarian",
 		"description":"A collection companion to have in-game the information you want to know",

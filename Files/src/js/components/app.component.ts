@@ -42,6 +42,7 @@ export class AppComponent {
 		this.startApp();
 
 		overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
+			// this.startApp(() => this.showCollectionWindow());
 			this.startApp(() => this.showWelcomePage());
 		})
 	}
@@ -99,11 +100,6 @@ export class AppComponent {
 			console.log('No gameInfoResult.gameInfo, returning');
 			return false;
 		}
-
-		// if (!gameInfoResult.runningChanged && !gameInfoResult.gameChanged) {
-		// 	console.log('Running didnt change, returning');
-		// 	return false;
-		// }
 
 		if (!gameInfoResult.gameInfo.isRunning) {
 			console.log('Game not running, returning');

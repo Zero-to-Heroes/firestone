@@ -13,6 +13,7 @@ export class LogStatusService {
 
 	private windowId: string;
 
+	private loaded = false;
 	private retriesLeft = 10;
 	private errorsWindowInit = false;
 
@@ -25,7 +26,11 @@ export class LogStatusService {
 
 		this.events.on(Events.START_LOG_FILE_DETECTION)
 			.subscribe(event => {
-				this.createDetectingLogsToast();
+				setTimeout(() => {
+					if (!this.loaded) {
+						this.createDetectingLogsToast();
+					}
+				}, 1500);
 			});
 		this.events.on(Events.STREAMING_LOG_FILE)
 			.subscribe(event => {
@@ -44,6 +49,7 @@ export class LogStatusService {
 
 	private createAppRunningToast() {
 		console.log('sending start notification');
+		this.loaded = true;
 		this.notificationService.html('<div class="message-container"><img src="/IconStore.png"><div class="message">HS Collection Companion is now monitoring your card packs.</div></div>');
 	}
 
