@@ -1,3 +1,5 @@
+[<img src="http://developers.overwolf.com/wp-content/uploads/2017/09/overwolf-appstore-badge.png">](https://www.overwolf.com/app/sebastien_tromp-hs_collection_companion)
+
 # What is HS Collection Companion?
 
 HS Collection Companion is an app you run on Overwolf alongside Hearthstone (like HearthArena).
