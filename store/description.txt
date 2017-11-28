@@ -1,0 +1,6 @@
+<h3>HS Collection Companion</h3>
+
+Track your new cards and manage your collection!<br/>
+
+See which cards are new additions to your collection when opening new packs. If you already have the maximum number of collectibles for that card, it tells you how much dust it is worth.
+
