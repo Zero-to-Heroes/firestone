@@ -76,10 +76,10 @@ export class WelcomePageComponent {
 	};
 
 	private openDescription() {
-		window.open('https://github.com/Zero-to-Heroes/overwolf-collection-companion/');
+		window.open('http://support.overwolf.com/knowledge-base/hs-collection-companion-faq/');
 	}
 
 	private openIssuesPage() {
-		window.open('https://github.com/Zero-to-Heroes/overwolf-collection-companion/issues/');
+		window.open('https://docs.google.com/forms/d/e/1FAIpQLSfcGcV-kZHFshv8RIjMZYPbEHQEQwyo7e1IeXuZ4Tyyz4USiQ/viewform?usp=sf_link');
 	}
 }
