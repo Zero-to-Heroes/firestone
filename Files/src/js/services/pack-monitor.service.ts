@@ -67,25 +67,6 @@ export class PackMonitor {
 
 			// Top left
 			let ret = -1;
-			// if (x >= 0.368 && x <= 0.496 && y >= 0.2 && y <= 0.513) {
-			// 	ret = 4;
-			// }
-			// // Top center
-			// else if (x >= 0.514 && x <= 0.64 && y >= 0.11 && y <= 0.425) {
-			// 	ret = 2;
-			// }
-			// // Top right
-			// else if (x >= 0.67 && x <= 0.80 && y >= 0.21 && y <= 0.52) {
-			// 	ret = 3;
-			// }
-			// // Bottom left
-			// else if (x >= 0.42 && x <= 0.557 && y >= 0.56 && y <= 0.878) {
-			// 	ret = 0;
-			// }
-			// // Bottom right
-			// else if (x >= 0.59 && x <= 0.772 && y >= 0.57 && y <= 0.74) {
-			// 	ret = 1;
-			// }
 			if (x <= 0.505 && y <= 0.52) {
 				ret = 4;
 			}

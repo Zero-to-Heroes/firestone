@@ -17,6 +17,7 @@ export class AllCardsService {
 		['gangs', 'Mean Streets of Gadgetzan'],
 		['ungoro', 'Journey to Un\'Goro'],
 		['icecrown', 'Knights of the Frozen Throne'],
+		['lootapalooza', 'Kobolds and Catacombs'],
 	]
 
 	// I can't find anything in the card data that sets these apart

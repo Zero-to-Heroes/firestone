@@ -1,0 +1,17 @@
+.card-container {
+	position: relative;
+
+	img {
+		width: 100px;
+	}
+
+	.count {
+	    position: absolute;
+	    bottom: 9px;
+	    left: 37px;
+	}
+
+	.full-size {
+		width: 300px;
+	}
+}

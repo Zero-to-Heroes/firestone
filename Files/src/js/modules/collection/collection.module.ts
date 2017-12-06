@@ -4,9 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
 
 import * as Raven from 'raven-js';
+import { NgxPopperModule } from 'ngx-popper';
 
 import { CollectionComponent }  from '../../components/collection.component';
 import { SetComponent }  from '../../components/collection/set.component';
+import { RarityComponent }  from '../../components/collection/rarity.component';
+import { CardComponent }  from '../../components/collection/card.component';
 import { CollectionStatsComponent }  from '../../components/collection-stats.component';
 import { SocialMediaComponent }  from '../../components/social-media.component';
 import { VersionComponent }  from '../../components/version.component';
@@ -33,10 +36,13 @@ import { DebugService } from '../../services/debug.service';
 		HttpModule,
 		// Animations need to be imported in to your project to use the library
         BrowserAnimationsModule,
+        NgxPopperModule,
 	],
 	declarations: [
 		CollectionComponent,
 		SetComponent,
+		RarityComponent,
+		CardComponent,
 		CollectionStatsComponent,
 		SocialMediaComponent,
 		VersionComponent,

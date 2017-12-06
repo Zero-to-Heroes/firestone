@@ -15,10 +15,13 @@ declare var overwolf: any;
 	styleUrls: [`../../css/component/collection-stats.component.scss`],
 	template: `
 		<div>
-			Standard:
-			<ul>
-				<li *ngFor="let set of standardSets"><set-view set="set"></set></li>
-			</ul>
+			<div class="category-container standard">
+				<div class="background"></div>
+				<span class="category-title">Standard</span>
+				<ul>
+					<li *ngFor="let standardSet of standardSets"><set-view [cardSet]="standardSet" [maxCards]="maxCards"></set-view></li>
+				</ul>
+			</div>
 		</div>
 	`,
 })
@@ -26,6 +29,7 @@ declare var overwolf: any;
 export class CollectionStatsComponent implements OnInit {
 
 	private standardSets: Set[];
+	private maxCards = 0;
 
 	constructor(private collectionManager: CollectionManager, private cards: AllCardsService) {
 		console.log('constructor CollectionComponent');
@@ -39,8 +43,8 @@ export class CollectionStatsComponent implements OnInit {
 
 		this.collectionManager.getCollection((collection: Card[]) => {
 			// Add the number of owned cards on each card in the standard set
-			this.standardSets.forEach((set: Set) => {
-				set.allCards.forEach((card: SetCard) => {
+			this.standardSets.forEach((standardSet: Set) => {
+				standardSet.allCards.forEach((card: SetCard) => {
 					let owned = collection.filter((collectionCard: Card) => collectionCard.Id === card.id);
 					owned.forEach((collectionCard: Card) => {
 						if (collectionCard.Premium) {
@@ -52,7 +56,9 @@ export class CollectionStatsComponent implements OnInit {
 					})
 				})
 
-				set.ownedCards = set.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
+				this.maxCards = Math.max(this.maxCards, standardSet.numberOfCards());
+
+				standardSet.ownedCards = standardSet.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
 			})
 		})
 		console.log('after adding owned cards', this.standardSets);
