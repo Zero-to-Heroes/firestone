@@ -17,6 +17,8 @@ export class LogParserService {
 
 	private cardRegex = new RegExp('.* NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d).*');
 
+	private lastLogReceivedDate: Date;
+
 	constructor(private collectionManager: CollectionManager, private events: Events) {
 	}
 
@@ -24,6 +26,13 @@ export class LogParserService {
 		// console.log('received log line', data);
 		let match = this.cardRegex.exec(data);
 		if (match) {
+			// Send a message that a new pack is being opened
+			if (!this.lastLogReceivedDate || new Date().getTime() - this.lastLogReceivedDate.getTime() > 1000 * 3)  {
+				console.log('notifying new pack opening');
+				ga('send', 'event', 'toast', 'new-pack');
+				this.events.broadcast(Events.NEW_PACK);
+			}
+
 			// console.log('New card received!');
 			let cardId = match[1];
 			let type = match[2];
@@ -38,6 +47,7 @@ export class LogParserService {
 					this.displayDustMessage(cardInCollection);
 				}
 			})
+			this.lastLogReceivedDate = new Date();
 		}
 	}
 

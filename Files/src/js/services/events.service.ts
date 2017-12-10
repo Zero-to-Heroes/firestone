@@ -11,6 +11,7 @@ interface BroadcastEvent {
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
 
+	public static NEW_PACK = 'new-pack';
 	public static NEW_CARD = 'new-card';
 	public static MORE_DUST = 'more-dust';
 	public static NO_LOG_FILE = 'no-log-file';

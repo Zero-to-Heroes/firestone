@@ -11,6 +11,7 @@ import { LogListenerService } from '../services/log-listener.service';
 declare var overwolf: any;
 declare var parseCardsText: any;
 declare var resemble: any;
+declare var ga: any;
 
 @Injectable()
 export class PackMonitor {
@@ -25,6 +26,12 @@ export class PackMonitor {
 		private events: Events,
 		private logListenerService: LogListenerService,
 		private notificationService: OwNotificationsService) {
+
+		this.events.on(Events.NEW_PACK)
+			.subscribe(event => {
+				console.log('resetting cards for new pack');
+				this.unrevealedCards = [];
+			});
 
 		this.events.on(Events.NEW_CARD)
 			.subscribe(event => {
@@ -50,10 +57,10 @@ export class PackMonitor {
 				this.cardClicked(data, (index) => {
 					// console.log('bouh')
 					// We need to wait until the animation completes
-					setTimeout(() => {
-						this.detectRevealedCard(index);
+					// setTimeout(() => {
+					this.detectRevealedCard(index);
 						// this.detectRevealedCards();
-					}, 500)
+					// }, 800)
 				});
 			}
 		});
@@ -94,20 +101,20 @@ export class PackMonitor {
 		});
 	}
 
-	private detectRevealedCards() {
-		if (this.detecting || this.detectingSingleCard) {
-			setTimeout(() => {
-				this.detectRevealedCards();
-			}, 500);
-			return;
-		}
+	// private detectRevealedCards() {
+	// 	if (this.detecting || this.detectingSingleCard) {
+	// 		setTimeout(() => {
+	// 			this.detectRevealedCards();
+	// 		}, 500);
+	// 		return;
+	// 	}
 
-		this.detecting = true;
-		for (let i = 0; i < 5; i++) {
-			this.detectRevealedCard(i);
-		}
-		this.detecting = false;
-	}
+	// 	this.detecting = true;
+	// 	for (let i = 0; i < 5; i++) {
+	// 		this.detectRevealedCard(i);
+	// 	}
+	// 	this.detecting = false;
+	// }
 
 	private detectRevealedCard(i: number) {
 		if (this.detectingSingleCard) {
@@ -124,51 +131,60 @@ export class PackMonitor {
 			return;
 		}
 
-		console.log('detecting card', i);
-		overwolf.media.getScreenshotUrl(
-			{
-				roundAwayFromZero : "true",
-				crop: this.getBoxForCard(i)
-			},
-			(result) => {
-				if (result.status !== 'success') {
-					console.log('[WARN] Could not take screenshot', result);
-					this.detectingSingleCard = false;
-				}
-				console.log('Part: Screenshot', result.url);
-				this.compare(result.url, 'unrevealed_card.JPG', (data) => {
-					console.log('screenshot match?', data);
-					if (data.rawMisMatchPercentage > 5) {
-						overwolf.media.getScreenshotUrl(
-							{
-								roundAwayFromZero : "true",
-								crop: this.getBoxForCardZoom(i)
-							},
-							(result) => {
-								if (result.status !== 'success') {
-									console.log('[WARN] Could not take screenshot', result);
-									this.detectingSingleCard = false;
-								}
-								console.log('Part: Screenshot zoom', result.url);
-								this.compare(result.url, 'unrevealed_card_zoom.JPG', (data) => {
-									console.log('screenshot match?', data);
-									if (data.rawMisMatchPercentage > 5) {
-										this.revealCard(i);
-									}
-									this.detectingSingleCard = false;
-								});
-							}
-						);
-					}
-					else {
-						this.detectingSingleCard = false;
-					}
-				});
-			}
-		);
+		// console.log('detecting card', i);
+		this.revealCard(i);
+		// Prevent spamming the same card
+		this.detectingSingleCard = false;
+
+		// overwolf.media.getScreenshotUrl(
+		// 	{
+		// 		roundAwayFromZero : "true",
+		// 		crop: this.getBoxForCard(i)
+		// 	},
+		// 	(result) => {
+		// 		if (result.status !== 'success') {
+		// 			console.log('[WARN] Could not take screenshot', result);
+		// 			this.detectingSingleCard = false;
+		// 		}
+		// 		console.log('Part: Screenshot', result.url);
+		// 		this.compare(result.url, 'unrevealed_card.JPG', (data) => {
+		// 			console.log('screenshot match?', data);
+		// 			if (data.rawMisMatchPercentage > 5) {
+		// 				overwolf.media.getScreenshotUrl(
+		// 					{
+		// 						roundAwayFromZero : "true",
+		// 						crop: this.getBoxForCardZoom(i)
+		// 					},
+		// 					(result) => {
+		// 						if (result.status !== 'success') {
+		// 							console.log('[WARN] Could not take screenshot', result);
+		// 							this.detectingSingleCard = false;
+		// 						}
+		// 						console.log('Part: Screenshot zoom', result.url);
+		// 						this.compare(result.url, 'unrevealed_card_zoom.JPG', (data) => {
+		// 							console.log('screenshot match?', data);
+		// 							if (data.rawMisMatchPercentage > 5) {
+		// 								this.revealCard(i);
+		// 							}
+		// 							this.detectingSingleCard = false;
+		// 						});
+		// 					}
+		// 				);
+		// 			}
+		// 			else {
+		// 				this.detectingSingleCard = false;
+		// 			}
+		// 		});
+		// 	}
+		// );
 	}
 
 	private revealCard(i: number) {
+		if (i === -1) {
+			console.log('could not identify card');
+			ga('send', 'event', 'error', 'card-unidentified');
+			return;
+		}
 		let cardId = this.unrevealedCards[i];
 		console.log('revealing card', i, cardId, this.cardEvents[cardId], this.unrevealedCards);
 		this.unrevealedCards[i] = '';
