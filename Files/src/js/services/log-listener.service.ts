@@ -160,13 +160,13 @@ export class LogListenerService {
 				}
 				else {
 					console.warn("something bad happened with: " + id);
-					Raven.captureMessage('listenOnFile returned wrong id', { extra: {
-						id: id,
-						fileIdentifier: fileIdentifier,
-						fileInitiallyPresent: this.fileInitiallyPresent,
-						initData: initData,
-						path: logsLocation
-					}});
+					// Raven.captureMessage('listenOnFile returned wrong id', { extra: {
+					// 	id: id,
+					// 	fileIdentifier: fileIdentifier,
+					// 	fileInitiallyPresent: this.fileInitiallyPresent,
+					// 	initData: initData,
+					// 	path: logsLocation
+					// }});
 				}
 			}
 		});

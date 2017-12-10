@@ -9,6 +9,7 @@ import { LogStatusService } from '../services/log-status.service';
 const HEARTHSTONE_GAME_ID = 9898;
 
 declare var overwolf: any;
+declare var ga: any;
 
 @Component({
 	selector: 'zh-app',
@@ -45,6 +46,16 @@ export class AppComponent {
 			// this.startApp(() => this.showCollectionWindow());
 			this.startApp(() => this.showWelcomePage());
 		})
+
+		ga('send', 'pageview');
+		console.log('sent pageview to ga', ga.q);
+		ga('send', 'event', 'toast', 'auto', 'start-app');
+		// ga('send', {
+  //               hitType: 'pageview',
+  //               location: 'http://www.hscollectioncompanion.com',
+  //               page: '/'
+  //           });
+		// ga('set', 'location', 'http://www.hscollectioncompanion.com');
 	}
 
 	private startApp(showWhenStarted?: Function) {

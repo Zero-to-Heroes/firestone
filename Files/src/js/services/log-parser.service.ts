@@ -9,6 +9,7 @@ import { Events } from './events.service';
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
 declare var parseCardsText: any;
+declare var ga: any;
 
 @Injectable()
 export class LogParserService {
@@ -28,6 +29,7 @@ export class LogParserService {
 			let type = match[2];
 			// TODO: add debounce
 			this.collectionManager.getCollection((collection) => {
+				ga('send', 'event', 'toast', 'revealed', cardId);
 				let cardInCollection = this.collectionManager.inCollection(collection, cardId, type);
 				if (!this.hasReachedMaxCollectibleOf(cardInCollection)) {
 					this.displayNewCardMessage(cardInCollection);
@@ -58,6 +60,7 @@ export class LogParserService {
 	private displayNewCardMessage(card: Card) {
 		console.log('New card!', card.Id, card.Premium);
 		this.events.broadcast(Events.NEW_CARD, card);
+		ga('send', 'event', 'toast', 'new-card', card.Id);
 	}
 
 	private displayDustMessage(card: Card) {
@@ -65,6 +68,7 @@ export class LogParserService {
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
 		dust = card.Premium ? dust * 4 : dust;
 		this.events.broadcast(Events.MORE_DUST, card, dust);
+		ga('send', 'event', 'toast', 'dust', dust);
 		console.log('Got ' + dust + ' dust', card.Id, card.Premium);
 	}
 
