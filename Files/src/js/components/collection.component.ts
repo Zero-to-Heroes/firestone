@@ -6,6 +6,7 @@ import { CollectionManager } from '../services/collection-manager.service';
 import { DebugService } from '../services/debug.service';
 
 declare var overwolf: any;
+declare var ga: any;
 
 @Component({
 	selector: 'collection',
@@ -30,10 +31,12 @@ declare var overwolf: any;
 						</h1>
 						<collection-stats class="main"></collection-stats>
 					</div>
+					<div id="ad-div"></div>
 					<social-media></social-media>
 					<version></version>
 				</div>
 			</div>
+			<tooltips></tooltips>
 		</div>
 	`,
 })
@@ -50,6 +53,7 @@ export class CollectionComponent {
 		private collectionManager: CollectionManager) {
 
 		console.log('constructor CollectionComponent');
+		ga('send', 'event', 'collection', 'show');
 
 	}
 

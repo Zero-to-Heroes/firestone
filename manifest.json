@@ -13,7 +13,15 @@
 		"icon_gray":"IconStore.png",
 		"store_icon": "IconStore.png"
 	},
-	"permissions": ["Logging", "GameInfo", "FileSystem", "Extensions", "Profile", "Hotkeys"],
+	"permissions": [
+		"Logging",
+		"GameInfo",
+		"FileSystem",
+		"Extensions",
+		"Profile",
+		"Hotkeys",
+        "Streaming"
+	],
 	"disable_dockbutton": false,
 	"hide_from_store": false,
 	"data": {
@@ -71,8 +79,8 @@
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": false,
-		        "size": {"width": 1100, "height": 787},
-		        "min_size": {"width": 1100, "height": 787},
+		        "size": {"width": 1200, "height": 787},
+		        "min_size": {"width": 1200, "height": 787},
 		        "block_top_window_navigation": true,
 		        "popup_blocker": true,
 		        "mute": true
@@ -89,6 +97,9 @@
 				"start_minimized": false
 			}
 		],
+	    "protocol_override_domains" : {
+	    	"googlesyndication" : "http"
+	   	},
 		"externally_connectable": {
 			"matches": [
 				"http://www.zerotoheroes.com",

@@ -14,9 +14,13 @@ export class Events {
 	public static NEW_PACK = 'new-pack';
 	public static NEW_CARD = 'new-card';
 	public static MORE_DUST = 'more-dust';
+
 	public static NO_LOG_FILE = 'no-log-file';
 	public static START_LOG_FILE_DETECTION = 'start-log-file-detection';
 	public static STREAMING_LOG_FILE = 'streaming-log-file';
+
+	public static SHOW_TOOLTIP = 'show-tooltip';
+	public static HIDE_TOOLTIP = 'hide-tooltip';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

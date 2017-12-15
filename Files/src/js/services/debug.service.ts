@@ -1,15 +1,20 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
+// import * as Raven from 'raven-js';
 
 @Injectable()
 export class DebugService {
 
 	constructor() {
-		let oldConsoleLogFunc = console.log;
 		let debugMode = true;
+		console.log = this.override(console.log, debugMode);
+		console.warn = this.override(console.warn, debugMode);
+		console.error = this.override(console.error, debugMode);
+	}
+
+	private override(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
-			console.log = function() {
+			return function() {
 				let argsString = "";
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
@@ -29,9 +34,6 @@ export class DebugService {
 				oldConsoleLogFunc.apply(console, [argsString]);
 			};
 		}
+		return oldConsoleLogFunc;
 	}
 }
-
-
-
-

@@ -1,8 +1,19 @@
 .card-container {
 	position: relative;
+	width: 100px;
+	height: 151px;
 
 	img {
 		width: 100px;
+		position: relative;
+	}
+
+	.placeholder {
+		position: absolute;
+		width: 100px;
+		height: 151px;
+	    top: 10px;
+	    left: 0;
 	}
 
 	.count {

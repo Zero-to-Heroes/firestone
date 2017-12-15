@@ -11,28 +11,48 @@ import { Set, SetCard, MissingCard } from '../../models/set';
 declare var overwolf: any;
 
 @Component({
-	selector: 'set-view',
-	styleUrls: [`../../../css/component/collection/set.component.scss`],
+	selector: 'card-display',
+	styleUrls: [`../../../css/component/collection/card-display.component.scss`],
 	template: `
-		<div *ngIf="cardSet" class="set" >
-			<img src="{{'/Files/assets/images/set-logos/' + cardSet.id + '.png'}}" class="set-logo" />
-			<span class="text set-name">{{cardSet.name}}</span>
-			<span class="text">{{cardSet.ownedCards}} / {{cardSet.numberOfCards()}}</span>
+		<div *ngIf="_set" class="card-display">
+			<div *ngIf="_missingCards.length > 0">
+				<h2>Showing missing cards for {{_set.name}}</h2>
+				<!--<ul *ngIf="cards.getRarities(_set.id).length > 1" class="rarities">
+					<li *ngFor="let rarity of cards.getRarities(_set.id)">
+						<rarity-view [rarity]="rarity" [cardSet]="_set"></rarity-view>
+					</li>
+				</ul>-->
+				<ul class="missing-cards">
+					<li *ngFor="let missingCard of _missingCards">
+						<card-view [cardId]="missingCard.id" [collected]="missingCard.collected" [maxCollectible]="missingCard.maxCollectible">/</card-view>
+					</li>
+				</ul>
+			</div>
+			<div *ngIf="_missingCards.length == 0">
+				<h2>Congratulations! You have collected all the cards for {{_set.name}}</h2>
+			</div>
 		</div>
 	`,
 })
-// 7.1.1.17994
-export class SetComponent {
+export class CardDisplayComponent {
 
-	@Input() private maxCards: number;
-	@Input() private cardSet: Set;
+	// @Input() private maxCards: number;
+	private _set: Set;
+	private _missingCards: MissingCard[];
 	// private _showRarities = false;
 	// private showMissingCards = false;
 
 	constructor(
-		private sanitizer: DomSanitizer,
+		// private sanitizer: DomSanitizer,
 		private cards: AllCardsService) {
 		// console.log('constructor CollectionComponent');
+	}
+
+	@Input('set') set cardSet(set: Set) {
+		this._set = set;
+		if (set != null) {
+			this._missingCards = set.missingCards();
+		}
 	}
 
 	// private toggleShowRarities() {

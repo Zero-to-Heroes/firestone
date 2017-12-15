@@ -24,6 +24,14 @@ import { DebugService } from '../../services/debug.service';
 //   	}
 // }
 
+declare var ga: any;
+export class AnalyticsErrorHandler implements ErrorHandler {
+  	handleError(err: any) : void {
+	  	console.error('error captured and sent to GA', err);
+		ga('send', 'event', 'error', 'other', JSON.stringify(err));
+  	}
+}
+
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -41,7 +49,7 @@ import { DebugService } from '../../services/debug.service';
 	],
 	providers: [
 		DebugService,
-		// { provide: ErrorHandler, useClass: RavenErrorHandler },
+		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })
 

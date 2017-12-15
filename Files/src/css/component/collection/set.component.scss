@@ -1,78 +1,21 @@
 .set {
-
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 
-	.set-container {
-		display: flex;
-		align-items: center;
-		flex-direction: row;
-		width: 100%;
-	}
-
-	.image-container {
-		width: 100px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-right: 10px;
+	span.text.text.text.text {
+		// margin-right: 10px;
+		font-size: 10px;
+		text-align: center;
 	}
 
 	.set-logo {
-		height: 50px;
+		height: 75px;
 		z-index: 1;
+		cursor: pointer;
 	}
 
-	.set-progress-bar {
-		height: 50px;
-		flex-grow: 1;
-	    display: flex;
-	    align-items: center;
-	    justify-content: flex-start;
-	    position: relative;
-	    cursor: pointer;
-
-	    .set-progress-bar-background {
-	    	background-size: 100% auto;
-		    position: absolute;
-		    width: 100%;
-		    height: 100%;
-    		background-position: 50%;
-    		filter: grayscale(100%);
-    		opacity: 0.5;
-	    }
-
-	    .set-progress-bar-done {
-	    	background-size: 100% auto;
-		    position: absolute;
-		    width: 100%;
-		    height: 100%;
-    		background-position: 50%;
-	    }
-
-	    .set-progress-info {
-		    position: absolute;
-		    left: 17px;
-		    font-size: 1.5em;
-	   		text-shadow: -1px -1px 0 #000, 0px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 0px 1px 0 #000, 1px 1px 0 #000;
-	    }
-	}
-
-	.rarities {
-		list-style: none;
-		display: flex;
-		margin-top: 10px;
-
-		li {
-			margin-right: 15px;
-		}
-	}
-
-	.missing-cards {
-		list-style: none;
-		display: flex;
-		padding-left: 100px;
-		flex-wrap: wrap;
+	.set-name {
+		margin-top: -5px;
 	}
 }
