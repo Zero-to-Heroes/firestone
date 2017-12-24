@@ -19,7 +19,7 @@ export class PackMonitor {
 	private unrevealedCards: string[] = [];
 	private cardEvents = {};
 	private detecting = false;
-	private detectingSingleCard = false;
+	private busy = false;
 	private hadNewCard = false;
 
 	constructor(
@@ -29,19 +29,22 @@ export class PackMonitor {
 
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
+				this.busy = true;
 				console.log('resetting cards for new pack');
 				let undetectedCards = [];
 				let anyUndetected = false;
 				for (let j = 0; j < 5; j++) {
-					if (this.unrevealedCards[j] !== '') {
+					if (this.unrevealedCards[j] !== '' && this.unrevealedCards[j]) {
 						undetectedCards.push(this.unrevealedCards[j]);
+						console.warn('undetected', this.unrevealedCards[j], JSON.stringify(this.unrevealedCards[j]));
 						anyUndetected = true;
 					}
 				}
 				if (anyUndetected) {
-					console.warn('opening new pack with cards still undetected', anyUndetected);
+					console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
 					ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
 				}
+				this.busy = false;
 				this.unrevealedCards = [];
 			});
 
@@ -82,7 +85,7 @@ export class PackMonitor {
 		overwolf.games.getRunningGameInfo((result) => {
 			let x = 1.0 * data.x / result.width;
 			let y = 1.0 * data.y / result.height;
-			console.log('clicked at ', x, y, data, result);
+			// console.log('clicked at ', x, y, data, result);
 
 			// Top left
 			let ret = -1;
@@ -117,24 +120,25 @@ export class PackMonitor {
 	}
 
 	private detectRevealedCard(i: number) {
-		if (this.detectingSingleCard) {
+		if (this.busy) {
 			setTimeout(() => {
 				this.detectRevealedCard(i);
 			}, 10);
 			return;
 		}
 
-		this.detectingSingleCard = true;
+		this.busy = true;
 
 		// card has been revealed already
 		if (this.unrevealedCards[i] === '') {
+			this.busy = false;
 			return;
 		}
 
 		// console.log('detecting card', i);
 		this.revealCard(i);
 		// Prevent spamming the same card
-		this.detectingSingleCard = false;
+		this.busy = false;
 	}
 
 	private revealCard(i: number) {
