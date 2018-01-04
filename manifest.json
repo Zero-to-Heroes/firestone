@@ -11,6 +11,7 @@
 		"dock_button_title": "HS Collection Companion",
 		"icon":"IconStore.png",
 		"icon_gray":"IconStore.png",
+		"launcher_icon": "launcher_icon.ico",
 		"store_icon": "IconStore.png"
 	},
 	"permissions": [
@@ -85,6 +86,10 @@
 		        "popup_blocker": true,
 		        "mute": true
 			}
+		},
+		"game_targeting": {
+		  "type": "dedicated",
+		  "game_ids": [9898]
 		},
 		"force_browser": "user",
 		"game_events": ["9898"],
