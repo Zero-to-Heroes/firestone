@@ -1,0 +1,34 @@
+.menu-selection {
+
+	position: relative;
+    margin-bottom: 25px;
+    font-size: 18px;
+
+	&:before {
+		content: "";
+		border-bottom: 1px solid grey;
+	    width: 100%;
+	    position: absolute;
+	    bottom: 1px;
+	}
+}
+
+.breadcrumbs {
+	list-style: none;
+	display: flex;
+	margin: 0;
+
+	li {
+		cursor: pointer;
+	}
+
+	li:after {
+		content: ">";
+	    margin-left: 10px;
+	    margin-right: 10px;
+	}
+
+	li:last-child:after {
+		content: "";
+	}
+}

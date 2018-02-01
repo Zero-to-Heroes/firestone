@@ -27,6 +27,9 @@ export class AppComponent {
 		private debugService: DebugService,
 		private logStatusService: LogStatusService) {
 
+		console.error('TODO: stay logged in to HH');
+		console.error('TODO: log in to Hearthhead when game not started - wait until game started to sync');
+
 		overwolf.settings.registerHotKey(
 			"collection",
 			(result) => {

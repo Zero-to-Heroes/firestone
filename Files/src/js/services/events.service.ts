@@ -15,12 +15,19 @@ export class Events {
 	public static NEW_CARD = 'new-card';
 	public static MORE_DUST = 'more-dust';
 
+	public static MODULE_SELECTED = 'module-selected';
+	public static FORMAT_SELECTED = 'format-selected';
+
+	public static SET_SELECTED = 'set-selected';
+
 	public static NO_LOG_FILE = 'no-log-file';
 	public static START_LOG_FILE_DETECTION = 'start-log-file-detection';
 	public static STREAMING_LOG_FILE = 'streaming-log-file';
 
 	public static SHOW_TOOLTIP = 'show-tooltip';
 	public static HIDE_TOOLTIP = 'hide-tooltip';
+
+	public static HEARTHHEAD_LOGIN = 'hearthhead-login';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

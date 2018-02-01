@@ -4,6 +4,7 @@ import * as Raven from 'raven-js';
 
 import { CollectionManager } from '../../services/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
+import { Events } from '../../services/events.service';
 
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -29,17 +30,18 @@ export class SetsContainer {
 
 	@Input() sets: Set[];
 	@Input() category: string;
-	@Output() onSetSelected = new EventEmitter<Set>();
+	// @Output() onSetSelected = new EventEmitter<Set>();
 	// private wildSets: Set[];
 	// private maxCards = 0;
 
-	constructor(private collectionManager: CollectionManager, private cards: AllCardsService) {
+	constructor(private collectionManager: CollectionManager, private cards: AllCardsService, private _events: Events) {
 		// console.log('constructor CollectionComponent');
 	}
 
 	selectSet(set: Set) {
 		console.log('selected set', set);
-		this.onSetSelected.emit(set);
+		// this.onSetSelected.emit(set);
+		this._events.broadcast(Events.SET_SELECTED, set);
 	}
 
 	// ngOnInit() {

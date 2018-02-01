@@ -1,112 +1,79 @@
-import { Component, ViewEncapsulation, HostListener, NgZone } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
 import { CollectionManager } from '../services/collection-manager.service';
-import { DebugService } from '../services/debug.service';
+import { AllCardsService } from '../services/all-cards.service';
+import { Events } from '../services/events.service';
+
+import { Card } from '../models/card';
+import { Set, SetCard } from '../models/set';
 
 declare var overwolf: any;
-declare var ga: any;
 
 @Component({
 	selector: 'collection',
 	styleUrls: [`../../css/component/collection.component.scss`],
-	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="root">
-			<div class="app-container">
-				<div class="menu-bar">
-					<i class="glyphicon glyphicon-resize-full" (click)="maximizeWindow()" *ngIf="!maximized"></i>
-					<i class="glyphicon glyphicon-resize-small" (click)="restoreWindow()" *ngIf="maximized"></i>
-					<i class="glyphicon glyphicon-remove" (click)="closeWindow()"></i>
-				</div>
-				<div class="content-container">
-					<div class="content">
-						<h1>
-							<img class="logo" src="/IconStore.png" />
-							<div class="title-text">
-								<span class="title">HS Collection Companion</span>
-								<span class="subtitle">Pack Opening & Collection Assistant</span>
-							</div>
-						</h1>
-						<collection-stats class="main"></collection-stats>
-					</div>
-					<div id="ad-div"></div>
-					<social-media></social-media>
-					<version></version>
-				</div>
-			</div>
-			<tooltips></tooltips>
+		<div class="collection">
+			<section class="main">
+				<collection-menu [displayType]="_menuDisplayType" [selectedSet]="_selectedSet" [selectedFormat]="_selectedFormat"></collection-menu>
+				<ng-container [ngSwitch]="_selectedView">
+					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
+					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet"></cards>
+				</ng-container>
+			</section>
+			<section class="secondary">
+				<div>Search card</div>
+				<div>Card history</div>
+				<div>Ads</div>
+			</section>
 		</div>
 	`,
 })
 // 7.1.1.17994
 export class CollectionComponent {
 
-	private version;
-	private maximized = false;
-	private lastSize: any;
+	private _menuDisplayType = 'menu';
+	private _selectedView = 'sets';
+	private _selectedSet: Set;
+	private _selectedFormat: string;
 
-	constructor(
-		private ngZone: NgZone,
-		private debugService: DebugService,
-		private collectionManager: CollectionManager) {
+	private _cardList: SetCard[];
 
-		console.log('constructor CollectionComponent');
-		ga('send', 'event', 'collection', 'show');
-
-	}
-
-	@HostListener('mousedown', ['$event'])
-	private dragMove(event: MouseEvent) {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.dragMove(result.window.id);
+	constructor(private _events: Events) {
+		console.log('constructing');
+		this._events.on(Events.SET_SELECTED).subscribe(
+			(data) => {
+				console.log(`selecting set, showing cards`, data);
+				this._menuDisplayType = 'breadcrumbs';
+				this._selectedView = 'cards';
+				this._selectedSet = data.data[0];
+				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+				this._cardList = this._selectedSet.allCards;
 			}
-		});
-	};
+		)
 
-	private closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.close(result.window.id);
+		this._events.on(Events.FORMAT_SELECTED).subscribe(
+			(data) => {
+				console.log(`selecting format in collection`, data);
+				this._menuDisplayType = 'breadcrumbs';
+				this._selectedView = 'sets';
+				this._selectedFormat = data.data[0];
+				this._selectedSet = null;
+				this._cardList = null;
 			}
-		});
-	};
+		)
 
-	private maximizeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				this.lastSize = {
-					width: result.window.width,
-					height: result.window.height,
-					top: result.window.top,
-					left: result.window.left
-				}
-				overwolf.windows.maximize(result.window.id, (result) => {
-					console.log('window maximized', result);
-					this.ngZone.run(() => {
-						this.maximized = true;
-					});
-				});
+		this._events.on(Events.MODULE_SELECTED).subscribe(
+			(data) => {
+				this._menuDisplayType = 'menu';
+				this._selectedView = 'sets';
+				this._selectedFormat = null;
+				this._selectedSet = null;
+				this._cardList = null;
 			}
-		});
-	}
+		)
 
-	private restoreWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				let windowId = result.window.id;
-				overwolf.windows.changeSize(windowId, this.lastSize.width, this.lastSize.height, (result) => {
-					console.log('window resize', result);
-					overwolf.windows.changePosition(windowId, this.lastSize.left, this.lastSize.top, (result) => {
-						console.log('window repositioned', result);
-						this.ngZone.run(() => {
-							this.maximized = false;
-						});
-					});
-				});
-			}
-		});
 	}
 }

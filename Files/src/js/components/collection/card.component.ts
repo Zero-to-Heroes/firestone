@@ -16,11 +16,11 @@ declare var overwolf: any;
 	selector: 'card-view',
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
-		<div *ngIf="cardId" class="card-container">
+		<div class="card-container">
 			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder"/>
 			<img src="{{image()}}"/>
 			<div class="count">
-				{{collected + ' / ' + maxCollectible}}
+				{{card.ownedNonPremium + ' - ' + card.ownedPremium}}
 			</div>
 		</div>
 	`,
@@ -28,10 +28,7 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class CardComponent {
 
-	@Input() private cardId: string;
-	// @Input() private setId: string;
-	@Input() private collected: number;
-	@Input() private maxCollectible: number;
+	@Input() public card: SetCard;
 
 	constructor(
 		private el: ElementRef,
@@ -41,27 +38,19 @@ export class CardComponent {
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		console.log('mouseenter', this.cardId, this.el.nativeElement.getBoundingClientRect());
+		// console.log('mouseenter', this.card, this.el.nativeElement.getBoundingClientRect());
 		let rect = this.el.nativeElement.getBoundingClientRect();
 		let x = rect.left + rect.width - 20;
 		let y = rect.top + rect.height / 2;
-		this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y);
+		this.events.broadcast(Events.SHOW_TOOLTIP, this.card.id, x, y);
 	}
 
 	@HostListener('mouseleave') onMouseLeave() {
 		// console.log('hiding tooltip', this.cardId);
-		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
+		this.events.broadcast(Events.HIDE_TOOLTIP, this.card.id);
 	}
 
-	// private showTooltip(cardId: string) {
-	// 	console.log('showing tooltip', cardId);
-	// }
-
-	// private hideTooltip(cardId: string) {
-	// 	console.log('hidiing tooltip', cardId);
-	// }
-
 	private image() {
-		return 'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + this.cardId + '.png';
+		return 'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + this.card.id + '.png';
 	}
 }

@@ -39,6 +39,7 @@ export class CollectionManager {
 			return;
 		}
 		this.mindvisionPlugin.get().getCollection((cards) => {
+			// console.log('retrieve collection', cards);
 			let collection: Card[] = JSON.parse(cards);
 			callback(collection);
 		})

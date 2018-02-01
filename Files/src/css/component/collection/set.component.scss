@@ -2,6 +2,8 @@
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	height: 100%;
+	cursor: pointer;
 
 	span.text.text.text.text {
 		// margin-right: 10px;
@@ -9,10 +11,17 @@
 		text-align: center;
 	}
 
+	.logo-container {
+		width: 100%;
+	    position: relative;
+	    display: flex;
+	    flex-direction: column;
+    	height: calc(100% - 25px);
+	}
+
 	.set-logo {
 		height: 75px;
 		z-index: 1;
-		cursor: pointer;
 	}
 
 	.set-name {

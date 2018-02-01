@@ -18,6 +18,7 @@ import { PackMonitor }  from '../../services/pack-monitor.service';
 import { Events }  from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 import { DebugService } from '../../services/debug.service';
+import { HearthHeadSyncService } from '../../services/hearthhead-sync.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -60,6 +61,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	],
 	providers: [
 		LocalStorageService,
+		HearthHeadSyncService,
 		LogListenerService,
 		LogParserService,
 		CollectionManager,

@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"HS Collection Companion",
 		"author":"Sébastien Tromp",
-		"version":"1.0.0",
+		"version":"0.9",
 		"minimum-overwolf-version":"0.107.240.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.librarian",
 		"description":"A collection companion to have in-game the information you want to know",
@@ -80,8 +80,8 @@
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": false,
-		        "size": {"width": 1200, "height": 787},
-		        "min_size": {"width": 1200, "height": 787},
+		        "size": {"width": 1100, "height": 787},
+		        "min_size": {"width": 1100, "height": 787},
 		        "block_top_window_navigation": true,
 		        "popup_blocker": true,
 		        "mute": true
@@ -108,7 +108,8 @@
 		"externally_connectable": {
 			"matches": [
 				"http://www.zerotoheroes.com",
-				"https://www.googletagmanager.com"
+				"https://www.googletagmanager.com",
+				"https://*.zam.com"
 			]
 		},
 		"extra-objects": {

@@ -17,16 +17,11 @@ declare var overwolf: any;
 		</div>
 	`,
 })
-// 7.1.1.17994
 export class NotificationsComponent {
-
-	// @ViewChild('notificationsContainer') container:ElementRef;
 
 	private timeout = 20000;
 	private windowId: string;
-	private mainWindowId: string;
-	// private closeTime: number;
-	// private alreadyHiding: boolean;
+	// private mainWindowId: string;
 
 	private toastOptions = {
 		timeOut: this.timeout,
@@ -51,17 +46,17 @@ export class NotificationsComponent {
 			// Change position to be bottom right?
 			console.log('retrieved current notifications window', result, this.windowId);
 
-			overwolf.windows.obtainDeclaredWindow("MainWindow", (result) => {
-				if (result.status !== 'success') {
-					console.warn('Could not get MainWindow', result);
-				}
-				this.mainWindowId = result.window.id;
+			// overwolf.windows.obtainDeclaredWindow("MainWindow", (result) => {
+			// 	if (result.status !== 'success') {
+			// 		console.warn('Could not get MainWindow', result);
+			// 	}
+			// 	this.mainWindowId = result.window.id;
 
 
-				overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
-					console.log('ack sent to main window', result);
-				});
-			});
+			// 	overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
+			// 		console.log('ack sent to main window', result);
+			// 	});
+			// });
 		})
 		console.log('notifications windows initialized')
 	}

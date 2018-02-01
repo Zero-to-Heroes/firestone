@@ -1,0 +1,55 @@
+h1 {
+	display: flex;
+    align-items: center;
+	margin: 0;
+
+	img {
+		width: 75px;
+		height: 75px;
+	}
+}
+
+.cards-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+    	width: 104px;
+    	height: 162px; // We need this so that things are not a mess when the placeholder image is showing
+    	margin-right: 15px;
+    }
+}
+
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	list-style: none;
+
+	li {
+		opacity: 0.5;
+		margin-right: 5px;
+		cursor: pointer;
+
+		&.active {
+			opacity: 1;
+			cursor: default;
+		}
+
+		&.disabled {
+			opacity: 0.5;
+			cursor: default;
+		}
+
+		&.arrow {
+			opacity: 1;
+		}
+	}
+
+}
+

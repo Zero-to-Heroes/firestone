@@ -1,0 +1,29 @@
+.menu-selection {
+
+    display: flex;
+    list-style: none;
+    font-size: 25px;
+    margin: 0;
+    padding: 0;
+
+	ul {
+		margin: 0;
+	}
+
+    li {
+	    margin-right: 30px;
+	    cursor: pointer;
+	}
+
+	.selected {
+		color: #f5c469;
+	    padding-bottom: 12px;
+	    border-bottom: 2px solid #f5c469;
+    	z-index: 1;
+	}
+
+	.disabled {
+		color: #808080;
+		cursor: default;
+	}
+}

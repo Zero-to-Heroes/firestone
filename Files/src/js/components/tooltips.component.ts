@@ -51,18 +51,18 @@ export class TooltipsComponent {
 				let cardId: string = data.data[0];
 				let x: number = data.data[1];
 				let y: number = data.data[2];
-				console.log('showing tooltip', cardId, x, y, data);
+				// console.log('showing tooltip', cardId, x, y, data);
 
 				let top: number = Math.min(window.innerHeight - 400, y - 388 / 2);
 				// this.appendComponentToBody(Tooltip);
 
 			    // We create a factory out of the component we want to create
 			    let factory = this.resolver.resolveComponentFactory(Tooltip);
-			    console.log('created facctory', factory);
+			    // console.log('created facctory', factory);
 
 			    // We create the component using the factory and the injector
 			    let component = this.tooltips.createComponent(factory);
-			    console.log('created component', component);
+			    // console.log('created component', component);
 			    component.instance.cardId = cardId;
 			    component.instance.left = x + 'px';
 			    component.instance.top = top + 'px';
@@ -74,7 +74,7 @@ export class TooltipsComponent {
 
 		this.events.on(Events.HIDE_TOOLTIP).subscribe(
 			(data) => {
-				console.log('hiding tooltip', data);
+				// console.log('hiding tooltip', data);
 				this.destroy();
 			}
 		);
@@ -82,7 +82,7 @@ export class TooltipsComponent {
 
 	private destroy() {
 		if (this.currentTooltip) {
-			console.log('destroying');
+			// console.log('destroying');
 			this.currentTooltip.destroy();
 			this.currentTooltip = null;
 		}

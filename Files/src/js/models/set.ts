@@ -1,13 +1,15 @@
 export class Set {
 	id: string;
 	name: string;
+	standard: boolean;
 	allCards: SetCard[] = [];
 
 	ownedCards = 0;
 
-	constructor(id: string, name: string) {
+	constructor(id: string, name: string, isStandard: boolean) {
 		this.id = id;
 		this.name = name;
+		this.standard = isStandard;
 	}
 
 	numberOfCards(): number {

@@ -35,11 +35,11 @@ export class AllCardsService {
 	];
 
 	public getStandardSets(): Set[] {
-		return this.getSets(this.STANDARD_SETS);
+		return this.getSets(this.STANDARD_SETS, true);
 	}
 
 	public getWildSets(): Set[] {
-		return this.getSets(this.WILD_SETS);
+		return this.getSets(this.WILD_SETS, false);
 	}
 
 	public getRarities(setId: string): string[] {
@@ -51,8 +51,8 @@ export class AllCardsService {
 		}
 	}
 
-	private getSets(references): Set[] {
-		let standardSets: Set[] = references.map((set) => new Set(set[0], set[1]));
+	private getSets(references, isStandard: boolean): Set[] {
+		let standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
 		parseCardsText.jsonDatabase.forEach((card) => {
 			let elligible = card.collectible;
 			elligible = elligible && card.set;

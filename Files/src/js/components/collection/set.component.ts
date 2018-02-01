@@ -14,10 +14,12 @@ declare var overwolf: any;
 	selector: 'set-view',
 	styleUrls: [`../../../css/component/collection/set.component.scss`],
 	template: `
-		<div *ngIf="cardSet" class="set" >
-			<img src="{{'/Files/assets/images/set-logos/' + cardSet.id + '.png'}}" class="set-logo" />
-			<span class="text set-name">{{cardSet.name}}</span>
-			<span class="text">{{cardSet.ownedCards}} / {{cardSet.numberOfCards()}}</span>
+		<div *ngIf="_cardSet" class="set">
+			<div class="logo-container">
+				<img src="{{'/Files/assets/images/set-logos/' + _cardSet.id + '.png'}}" class="set-logo" />
+				<span class="text set-name" *ngIf="_displayName">{{_cardSet.name}}</span>
+			</div>
+			<span class="text">{{_cardSet.ownedCards}} / {{_cardSet.numberOfCards()}}</span>
 		</div>
 	`,
 })
@@ -25,15 +27,25 @@ declare var overwolf: any;
 export class SetComponent {
 
 	@Input() private maxCards: number;
-	@Input() private cardSet: Set;
-	// private _showRarities = false;
-	// private showMissingCards = false;
+
+	private _cardSet: Set;
+	private _displayName = false;
+
+	@Input('cardSet') set cardSet(set: Set) {
+		this._cardSet = set;
+		console.log('setting set', set, set.name)
+		if (['Basic', 'Classic', 'Hall of Fame'].indexOf(set.name) > -1) {
+			this._displayName = true;
+		}
+	}
 
 	constructor(
 		private sanitizer: DomSanitizer,
 		private cards: AllCardsService) {
 		// console.log('constructor CollectionComponent');
 	}
+
+
 
 	// private toggleShowRarities() {
 	// 	this._showRarities = !this._showRarities;

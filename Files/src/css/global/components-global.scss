@@ -1,0 +1,96 @@
+// colors -------------------------------
+$red01: rgb(194, 25, 19);
+$red02: rgb(255, 0, 0);
+
+$brown01: rgb(58, 36, 15);
+$brown02: rgb(90, 55, 23);
+
+$light-brown01: rgb(218, 172, 118);
+$light-brown02: rgb(255, 201, 138);
+
+$gray246: rgb(246, 246, 246);
+
+// vars -----------------------
+$fast-hover: .15s;
+
+h1 {
+  font-family: 'lhf-uncial', sans-serif;
+  font-size: 22px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+button, i {
+  position: relative;
+  width: var(--size, 30px);
+  height: var(--size, 30px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  cursor: default;
+  transition: $fast-hover;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    flex: 0 0 auto;
+    pointer-events: none;
+    user-select: none;
+  }
+}
+
+.svg-icon-fill {
+  fill: currentcolor;
+}
+
+.svg-icon-stroke {
+  fill: none;
+  stroke: currentcolor;
+}
+
+// window-controls
+.window-control {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: rgba($brown01, .6);
+  background-color: transparent;
+
+  &:hover {
+    color: white;
+    background-color: $red01;
+  }
+}
+
+// buttons
+.btn {
+  position: relative;
+  font-size: 15px;
+  white-space: nowrap;
+  padding: 0 10px;
+  width: auto;
+  min-width: 120px;
+  height: 30px;
+  color: white;
+  background-color: $brown01;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: $fast-hover;
+  cursor: pointer;
+  -webkit-user-select: none;
+
+  &:hover, &.selected {
+    background-color: $brown02;
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: .6;
+  }
+}
