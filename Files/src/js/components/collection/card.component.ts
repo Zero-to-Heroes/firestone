@@ -37,6 +37,14 @@ export class CardComponent {
 		// console.log('constructor CollectionComponent');
 	}
 
+	@HostListener('click') onClick() {
+		console.log('click', this.card, this.el.nativeElement.getBoundingClientRect());
+		let rect = this.el.nativeElement.getBoundingClientRect();
+		let x = rect.left + rect.width - 20;
+		let y = rect.top + rect.height / 2;
+		this.events.broadcast(Events.SHOW_TOOLTIP, this.card.id, x, y);
+	}
+
 	@HostListener('mouseenter') onMouseEnter() {
 		// console.log('mouseenter', this.card, this.el.nativeElement.getBoundingClientRect());
 		let rect = this.el.nativeElement.getBoundingClientRect();

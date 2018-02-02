@@ -38,6 +38,7 @@
     "jquery": "^3.2.1",
     "live-server": "1.0.0",
     "lodash": "^4.16.4",
+    "ng2-material-dropdown": "^0.8.0",
     "ngx-popper": "^1.4.2",
     "raven-js": "^3.17.0",
     "reflect-metadata": "0.1.2",

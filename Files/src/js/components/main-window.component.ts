@@ -60,8 +60,6 @@ export class MainWindowComponent {
 		private events: Events,
 		private collectionManager: CollectionManager) {
 
-		ga('send', 'event', 'collection', 'show');
-
 		this.events.on(Events.HEARTHHEAD_LOGIN).subscribe(
 			(data) => {
 				this.showLogin = true;
@@ -71,7 +69,7 @@ export class MainWindowComponent {
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.selectedModule = data.data[0];
-				console.log('selected module', this.selectedModule);
+				// console.log('selected module', this.selectedModule);
 			}
 		)
 

@@ -37,7 +37,7 @@ export class SetsComponent implements OnInit {
 	}
 
 	@Input('selectedFormat') set selectedFormat(format: string) {
-		console.log('showing selected format', format);
+		// console.log('showing selected format', format);
 		switch (format) {
 			case 'standard':
 				this.showStandard = true;
@@ -56,7 +56,7 @@ export class SetsComponent implements OnInit {
 	ngOnInit() {
 		this.standardSets = this.cards.getStandardSets();
 		this.wildSets = this.cards.getWildSets();
-		console.log('sets', this.standardSets, this.wildSets);
+		// console.log('sets', this.standardSets, this.wildSets);
 
 		this.collectionManager.getCollection((collection: Card[]) => {
 			// Add the number of owned cards on each card in the standard set
@@ -67,7 +67,7 @@ export class SetsComponent implements OnInit {
 				this.updateSet(collection, standardSet);
 			})
 		})
-		console.log('after adding owned cards', this.standardSets);
+		// console.log('after adding owned cards', this.standardSets);
 	}
 
 	private updateSet(collection: Card[], set: Set) {

@@ -10,6 +10,7 @@ import { Card } from '../models/card';
 import { Set, SetCard } from '../models/set';
 
 declare var overwolf: any;
+declare var ga: any;
 
 @Component({
 	selector: 'collection',
@@ -42,10 +43,12 @@ export class CollectionComponent {
 	private _cardList: SetCard[];
 
 	constructor(private _events: Events) {
-		console.log('constructing');
+		ga('send', 'event', 'collection', 'show');
+
+		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
 			(data) => {
-				console.log(`selecting set, showing cards`, data);
+				// console.log(`selecting set, showing cards`, data);
 				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'cards';
 				this._selectedSet = data.data[0];
@@ -56,7 +59,7 @@ export class CollectionComponent {
 
 		this._events.on(Events.FORMAT_SELECTED).subscribe(
 			(data) => {
-				console.log(`selecting format in collection`, data);
+				// console.log(`selecting format in collection`, data);
 				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'sets';
 				this._selectedFormat = data.data[0];

@@ -39,7 +39,7 @@ export class SetsContainer {
 	}
 
 	selectSet(set: Set) {
-		console.log('selected set', set);
+		// console.log('selected set', set);
 		// this.onSetSelected.emit(set);
 		this._events.broadcast(Events.SET_SELECTED, set);
 	}

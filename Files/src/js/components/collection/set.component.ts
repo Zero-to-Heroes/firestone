@@ -33,7 +33,7 @@ export class SetComponent {
 
 	@Input('cardSet') set cardSet(set: Set) {
 		this._cardSet = set;
-		console.log('setting set', set, set.name)
+		// console.log('setting set', set, set.name)
 		if (['Basic', 'Classic', 'Hall of Fame'].indexOf(set.name) > -1) {
 			this._displayName = true;
 		}
