@@ -23,7 +23,7 @@ declare var ga: any;
 				<input type="checkbox" [checked]="showOnlyNewCards" (change)="toggleShowOnlyNewCards()" />
 			</div>
 			<ul class="history">
-				<li *ngFor="let history of cardHistory">
+				<li *ngFor="let history of shownHistory">
 					<img class="rarity" src="{{rarityImg(history.rarity)}}" />
 					<span class="name">{{getCardName(history)}}</span>
 					<span class="dust-amount" *ngIf="!history.isNewCard">{{history.dustValue}}</span>
@@ -39,6 +39,7 @@ export class CardHistoryComponent implements OnInit {
 
 	private showOnlyNewCards: boolean;
 	private cardHistory: CardHistory[];
+	private shownHistory: CardHistory[];
 
 	constructor(private storage: CardHistoryStorageService, private events: Events) {
 	}
@@ -50,12 +51,19 @@ export class CardHistoryComponent implements OnInit {
 			(result: CardHistory[]) => {
 				console.log('loaded history', result);
 				this.cardHistory = result.reverse();
+				this.shownHistory = this.cardHistory;
 			},
 			timestampOfEarliestHistory);
 	}
 
 	private toggleShowOnlyNewCards() {
 		this.showOnlyNewCards = !this.showOnlyNewCards;
+		if (this.showOnlyNewCards) {
+			this.shownHistory = this.cardHistory.filter((card: CardHistory) => card.isNewCard);
+		}
+		else {
+			this.shownHistory = this.cardHistory;
+		}
 	}
 
 	private rarityImg(rarity: string) {
