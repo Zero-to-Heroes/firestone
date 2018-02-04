@@ -33,3 +33,17 @@
 
 	}
 }
+
+.ads {
+    position: absolute;
+    background: red;
+    width: 400px;
+    height: 300px;
+    bottom: 0;
+    right: 0;
+}
+
+card-search {
+    display: flex;
+    justify-content: flex-end;
+}

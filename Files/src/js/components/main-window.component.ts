@@ -39,6 +39,7 @@ declare var ga: any;
 				</section>
 			</div>
 			<tooltips></tooltips>
+			<!--<card-modal></card-modal>-->
 			<login *ngIf="showLogin" (close)="showLogin = false"></login>
 		</div>
 	`,

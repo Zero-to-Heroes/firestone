@@ -3,10 +3,13 @@ import { Injectable } from '@angular/core';
 import * as Raven from 'raven-js';
 
 import { Card } from '../models/card';
+import { CardHistory } from '../models/card-history';
+
 import { Events } from '../services/events.service';
 import { OwNotificationsService } from '../services/notifications.service';
 import { CollectionManager } from '../services/collection-manager.service';
 import { LogListenerService } from '../services/log-listener.service';
+import { CardHistoryStorageService } from '../services/card-history-storage.service';
 
 declare var overwolf: any;
 declare var parseCardsText: any;
@@ -25,6 +28,7 @@ export class PackMonitor {
 	constructor(
 		private events: Events,
 		private logListenerService: LogListenerService,
+		private storage: CardHistoryStorageService,
 		private notificationService: OwNotificationsService) {
 
 		this.events.on(Events.NEW_PACK)
@@ -56,6 +60,9 @@ export class PackMonitor {
 					this.hadNewCard = true;
 					this.createNewCardToast(card);
 				};
+
+				let dbCard = parseCardsText.getCard(card.Id);
+				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, card.Premium, true));
 			});
 		this.events.on(Events.MORE_DUST)
 			.subscribe(event => {
@@ -63,6 +70,9 @@ export class PackMonitor {
 				let dust: number = event.data[1];
 				this.unrevealedCards.push(card.Id);
 				this.cardEvents[card.Id] = () => { this.createDustToast(card, dust); };
+
+				let dbCard = parseCardsText.getCard(card.Id);
+				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, card.Premium, false));
 			});
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {

@@ -1,0 +1,21 @@
+.card-search {
+	position: relative;
+	width: 200px;
+
+	input {
+		width: 100%;
+	}
+
+	.search-results {
+		position: absolute;
+		background: white;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+
+		li {
+			color: black;
+		}
+	}
+}

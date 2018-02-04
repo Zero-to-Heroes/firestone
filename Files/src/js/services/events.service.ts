@@ -11,23 +11,26 @@ interface BroadcastEvent {
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
 
-	public static NEW_PACK = 'new-pack';
-	public static NEW_CARD = 'new-card';
-	public static MORE_DUST = 'more-dust';
+	public static readonly NO_LOG_FILE = 'no-log-file';
+	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
+	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
 
-	public static MODULE_SELECTED = 'module-selected';
-	public static FORMAT_SELECTED = 'format-selected';
+	public static readonly NEW_PACK = 'new-pack';
+	public static readonly NEW_CARD = 'new-card';
+	public static readonly MORE_DUST = 'more-dust';
 
-	public static SET_SELECTED = 'set-selected';
+	public static readonly MODULE_SELECTED = 'module-selected';
+	public static readonly FORMAT_SELECTED = 'format-selected';
 
-	public static NO_LOG_FILE = 'no-log-file';
-	public static START_LOG_FILE_DETECTION = 'start-log-file-detection';
-	public static STREAMING_LOG_FILE = 'streaming-log-file';
+	public static readonly SHOW_CARDS = 'show-cards';
 
-	public static SHOW_TOOLTIP = 'show-tooltip';
-	public static HIDE_TOOLTIP = 'hide-tooltip';
+	public static readonly SET_SELECTED = 'set-selected';
 
-	public static HEARTHHEAD_LOGIN = 'hearthhead-login';
+	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
+	public static readonly SHOW_TOOLTIP = 'show-tooltip';
+	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
+
+	public static readonly HEARTHHEAD_LOGIN = 'hearthhead-login';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

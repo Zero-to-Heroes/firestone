@@ -12,11 +12,13 @@ import { NgxPopperModule } from 'ngx-popper';
 
 import { CollectionComponent }  from '../../components/collection.component';
 import { CollectionMenuComponent }  from '../../components/collection/collection-menu.component';
+import { CardsComponent }  from '../../components/collection/cards.component';
+import { CardHistoryComponent }  from '../../components/collection/card-history.component';
 import { SetComponent }  from '../../components/collection/set.component';
 import { SetsContainer }  from '../../components/collection/sets-container.component';
-import { CardsComponent }  from '../../components/collection/cards.component';
 import { RarityComponent }  from '../../components/collection/rarity.component';
 import { CardComponent }  from '../../components/collection/card.component';
+import { CardSearchComponent }  from '../../components/collection/card-search.component';
 import { HearthheadComponent }  from '../../components/hearthhead.component';
 import { LoginComponent }  from '../../components/login.component';
 import { MainWindowComponent }  from '../../components/main-window.component';
@@ -28,10 +30,12 @@ import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component
 import { VersionComponent }  from '../../components/version.component';
 
 import { AllCardsService }  from '../../services/all-cards.service';
+import { CardHistoryStorageService }  from '../../services/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection-manager.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { HearthHeadSyncService }  from '../../services/hearthhead-sync.service';
+import { IndexedDbService }  from '../../services/indexed-db.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 
 // console.log('configuring Raven'),
@@ -72,7 +76,9 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	],
 	declarations: [
 		CardComponent,
+		CardHistoryComponent,
 		CardsComponent,
+		CardSearchComponent,
 		CollectionComponent,
 		CollectionMenuComponent,
 		HearthheadComponent,
@@ -95,10 +101,12 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	entryComponents: [Tooltip],
 	providers: [
 		AllCardsService,
+		CardHistoryStorageService,
 		CollectionManager,
 		DebugService,
 		Events,
 		HearthHeadSyncService,
+		IndexedDbService,
 		LocalStorageService,
 		OwNotificationsService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },

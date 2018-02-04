@@ -51,6 +51,16 @@ export class AllCardsService {
 		}
 	}
 
+	public searchCards(searchString: string): SetCard[] {
+		if (!searchString) return [];
+
+		return parseCardsText.jsonDatabase
+			.filter((card) => card.collectible)
+			.filter((card) => card.name)
+			.filter((card) => card.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1)
+			.map((card) => new SetCard(card.id, card.name, card.rarity.toLowerCase()));
+	}
+
 	private getSets(references, isStandard: boolean): Set[] {
 		let standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
 		parseCardsText.jsonDatabase.forEach((card) => {

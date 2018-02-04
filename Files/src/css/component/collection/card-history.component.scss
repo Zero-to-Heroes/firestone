@@ -1,0 +1,33 @@
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+    max-height: 250px;
+    overflow: auto;
+}
+
+li {
+	display: flex;
+	flex-direction: row;
+    align-items: center;
+
+	.rarity {
+		width: 15px;
+	}
+
+	.name {
+		width: 150px;
+	}
+
+	.dust-amount, .new {
+		width: 100px;
+	}
+}
+
+.card-history {
+	margin-left: 75px;
+}
+
+.top-container {
+	margin-bottom: 20px;
+}

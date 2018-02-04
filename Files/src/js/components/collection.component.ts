@@ -25,9 +25,9 @@ declare var ga: any;
 				</ng-container>
 			</section>
 			<section class="secondary">
-				<div>Search card</div>
-				<div>Card history</div>
-				<div>Ads</div>
+				<card-search>Search card</card-search>
+				<card-history></card-history>
+				<div class="ads">Ads</div>
 			</section>
 		</div>
 	`,
@@ -75,6 +75,16 @@ export class CollectionComponent {
 				this._selectedFormat = null;
 				this._selectedSet = null;
 				this._cardList = null;
+			}
+		)
+
+		this._events.on(Events.SHOW_CARDS).subscribe(
+			(data) => {
+				this._menuDisplayType = 'menu';
+				this._selectedView = 'cards';
+				this._selectedFormat = null;
+				this._selectedSet = null;
+				this._cardList = data.data[0];
 			}
 		)
 

@@ -10,6 +10,8 @@ import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage
 
 import { AppComponent }  from '../../components/app.component';
 
+import { CardHistoryStorageService }  from '../../services/card-history-storage.service';
+import { IndexedDbService }  from '../../services/indexed-db.service';
 import { LogListenerService }  from '../../services/log-listener.service';
 import { LogParserService }  from '../../services/log-parser.service';
 import { LogStatusService }  from '../../services/log-status.service';
@@ -60,6 +62,8 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AppComponent,
 	],
 	providers: [
+		CardHistoryStorageService,
+		IndexedDbService,
 		LocalStorageService,
 		HearthHeadSyncService,
 		LogListenerService,
