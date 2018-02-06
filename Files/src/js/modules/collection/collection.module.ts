@@ -14,6 +14,7 @@ import { CollectionComponent }  from '../../components/collection.component';
 import { CollectionMenuComponent }  from '../../components/collection/collection-menu.component';
 import { CardsComponent }  from '../../components/collection/cards.component';
 import { CardHistoryComponent }  from '../../components/collection/card-history.component';
+import { CardHistoryItemComponent }  from '../../components/collection/card-history-item.component';
 import { SetComponent }  from '../../components/collection/set.component';
 import { SetsContainer }  from '../../components/collection/sets-container.component';
 import { RarityComponent }  from '../../components/collection/rarity.component';
@@ -77,6 +78,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	declarations: [
 		CardComponent,
 		CardHistoryComponent,
+		CardHistoryItemComponent,
 		CardsComponent,
 		CardSearchComponent,
 		CollectionComponent,

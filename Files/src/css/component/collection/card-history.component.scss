@@ -7,21 +7,6 @@ ul {
 }
 
 li {
-	display: flex;
-	flex-direction: row;
-    align-items: center;
-
-	.rarity {
-		width: 15px;
-	}
-
-	.name {
-		width: 150px;
-	}
-
-	.dust-amount, .new {
-		width: 100px;
-	}
 }
 
 .card-history {

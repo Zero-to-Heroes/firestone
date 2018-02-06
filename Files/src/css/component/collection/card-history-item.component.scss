@@ -1,0 +1,22 @@
+.card-history-item {
+	display: flex;
+	flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+
+	.rarity {
+		width: 15px;
+	}
+
+	.name {
+		width: 150px;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	}
+
+	.dust-amount, .new {
+		width: 100px;
+		text-align: center;
+	}
+}

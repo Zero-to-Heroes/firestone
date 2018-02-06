@@ -23,12 +23,8 @@ declare var ga: any;
 				<input type="checkbox" [checked]="showOnlyNewCards" (change)="toggleShowOnlyNewCards()" />
 			</div>
 			<ul class="history">
-				<li *ngFor="let history of shownHistory">
-					<img class="rarity" src="{{rarityImg(history.rarity)}}" />
-					<span class="name">{{getCardName(history)}}</span>
-					<span class="dust-amount" *ngIf="!history.isNewCard">{{history.dustValue}}</span>
-					<span class="new" *ngIf="history.isNewCard">NEW</span>
-					<span class="date">{{formatDate(history.creationTimestamp)}}</span>
+				<li *ngFor="let historyItem of shownHistory">
+					<card-history-item [historyItem]="historyItem"></card-history-item>
 				</li>
 			</ul>
 		</div>
@@ -64,17 +60,5 @@ export class CardHistoryComponent implements OnInit {
 		else {
 			this.shownHistory = this.cardHistory;
 		}
-	}
-
-	private rarityImg(rarity: string) {
-		return `/Files/assets/images/rarity-${rarity}.png`;
-	}
-
-	private formatDate(timestamp: number): string {
-		return new Date(timestamp).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "2-digit"} );
-	}
-
-	private getCardName(history: CardHistory): string {
-		return (history.isPremium ? 'Golden ' : '') + history.cardName;
 	}
 }
