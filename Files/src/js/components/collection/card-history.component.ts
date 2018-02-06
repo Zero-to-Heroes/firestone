@@ -27,29 +27,51 @@ declare var ga: any;
 					<card-history-item [historyItem]="historyItem"></card-history-item>
 				</li>
 			</ul>
+			<div *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
+				<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
+				<button (click)="loadMore()">Load More</button>
+			</div>
 		</div>
 	`,
 })
 // 7.1.1.17994
 export class CardHistoryComponent implements OnInit {
 
+	private readonly MAX_RESULTS_DISPLAYED = 1000;
+
 	private showOnlyNewCards: boolean;
 	private cardHistory: CardHistory[];
 	private shownHistory: CardHistory[];
+	private totalHistoryLength: number;
+	private limit = 100;
 
 	constructor(private storage: CardHistoryStorageService, private events: Events) {
 	}
 
 	ngOnInit() {
-		// From the last 5 days
-		let timestampOfEarliestHistory = Date.now() - 5 * 24 * 3600 * 1000;
+		console.log('request to load');
 		this.storage.loadAll(
 			(result: CardHistory[]) => {
 				console.log('loaded history', result);
-				this.cardHistory = result.reverse();
+				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
 			},
-			timestampOfEarliestHistory);
+			this.limit);
+
+		this.storage.countHistory((historySize) => {
+			this.totalHistoryLength = historySize;
+		})
+	}
+
+	private loadMore() {
+		console.log('request to load more');
+		this.storage.loadAll(
+			(result: CardHistory[]) => {
+				console.log('loaded history', result);
+				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
+				this.shownHistory = this.cardHistory;
+			},
+			0);
 	}
 
 	private toggleShowOnlyNewCards() {

@@ -10,12 +10,16 @@ export class CardHistoryStorageService {
 	constructor(private indexedDb: IndexedDbService) {
 	}
 
-	public loadAll(callback: Function, fromTimestamp?: number) {
+	public loadAll(callback: Function, limit: number) {
 		this.indexedDb.getAll(
 			(result) => {
 				callback(result);
 			},
-			fromTimestamp)
+			limit);
+	}
+
+	public countHistory(callback: Function) {
+		this.indexedDb.countHistory(callback);
 	}
 
 	public newCard(history: CardHistory) {
