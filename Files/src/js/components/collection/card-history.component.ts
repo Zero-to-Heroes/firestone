@@ -26,11 +26,11 @@ declare var ga: any;
 				<li *ngFor="let historyItem of shownHistory">
 					<card-history-item [historyItem]="historyItem"></card-history-item>
 				</li>
+				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
+					<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
+					<button (click)="loadMore()">Load More</button>
+				</li>
 			</ul>
-			<div *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
-				<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
-				<button (click)="loadMore()">Load More</button>
-			</div>
 		</div>
 	`,
 })
