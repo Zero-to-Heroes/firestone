@@ -20,7 +20,7 @@ declare var overwolf: any;
 				<img src="{{'/Files/assets/images/set-logos/' + _set.id + '.png'}}" class="set-logo" />
 				<span class="text set-name">{{_set.name}}</span>
 			</h1>
-			<div class="show-filter">
+			<div class="show-filter" *ngIf="_activeCards">
 				<span class="label">Show</span>
 				<ng2-dropdown (onItemClicked)="selectFilter($event)">
 				    <ng2-dropdown-button>{{labelFor(_activeFilter)}}</ng2-dropdown-button>
@@ -36,11 +36,14 @@ declare var overwolf: any;
 					<card-view [card]="card">/</card-view>
 				</li>
 			</ul>
-			<ul class="pagination">
+			<ul class="pagination" *ngIf="_numberOfPages > 1">
 				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">{{'<'}}</li>
 				<li *ngFor="let page of _pages" [ngClass]="_currentPage == page ? 'active' : ''" (click)="goToPage(page)">{{page + 1}}</li>
 				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage == _numberOfPages ? 'disabled' : ''">{{'>'}}</li>
 			</ul>
+			<div>
+				Oh no! We couldn't find any cards matching your search
+			</div>
 		</div>
 	`,
 })
