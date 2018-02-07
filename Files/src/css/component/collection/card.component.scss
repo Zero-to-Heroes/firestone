@@ -26,4 +26,8 @@
 	.full-size {
 		width: 300px;
 	}
+
+	&.missing {
+		opacity: 0.3;
+	}
 }

@@ -16,10 +16,10 @@ declare var overwolf: any;
 	selector: 'card-view',
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
-		<div class="card-container">
+		<div class="card-container" [ngClass]="{'missing': card.ownedNonPremium + card.ownedPremium == 0}">
 			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder"/>
 			<img src="{{image()}}"/>
-			<div class="count">
+			<div class="count" *ngIf="card.ownedNonPremium + card.ownedPremium > 0">
 				{{card.ownedNonPremium + ' - ' + card.ownedPremium}}
 			</div>
 		</div>
