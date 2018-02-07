@@ -252,16 +252,25 @@ var parseCardsText = {
 		}
 		cardName = cardName.replace(new RegExp('’', 'g'), '\'')
 
-		var result;
-		var possibleResult;
+		// Order the results by relevance later on
+		var result = []
 
 		// cf http://stackoverflow.com/questions/2641347/how-to-short-circuit-array-foreach-like-calling-break
 		// console.log('preparing', cardName)
-		parseCardsText.jsonDatabase.some(function(card) {
+		parseCardsText.jsonDatabase.forEach(function(card) {
+			card.collectibleSort = card.collectible ? 1 : 0;
 			// Seems like variations (the non-standard version) of the card has a lowercase letter in the name
 			if (card.id == cardName) {
-				result = card;
-				return true;
+				card.confidence = 1;
+				result.push(card);
+				// console.log('\tadding possibleResult', card);
+				return;
+			}
+			else if (card.dbfId == cardName) {
+				card.confidence = 1;
+				result.push(card);
+				// console.log('\tadding possibleResult', card);
+				return;
 			}
 			else if (card.name && card.name.toLowerCase() == cardName.toLowerCase()) {
 				// console.log('getting card', cardName, card)
@@ -273,22 +282,34 @@ var parseCardsText = {
 				res = res && card.type != 'Enchantment'
 				res = res && card.set != 'Hero_skins' && card.set != 'Cheat'
 				if (res) {
-					possibleResult = card
+					card.confidence = 0.5;
+					// console.log('\tadding possibleResult', card);
+					result.push(card);
+					return;
 				}
+
+				// Cards which ID doesn't end with a digit are usually enchantments or things like that
 				res = res && (card.id.toLowerCase() == card.id || card.id.toUpperCase() == card.id) && card.id.match(/.*\d$/)
 				// console.log('card id matches regex?', card.id, card.id.match(/.*\d$/));
 				// console.log('card type', card.type)
 				if (res) {
 					// console.log('\tconsidering', card)
-					result = card;
-					if (result.cardImage) {
-						// console.log('returning card', result);
-						return true;
-					}
+					card.confidence = 1;
+					result.push(card);
+					// console.log('\tadding possibleResult', card);
+					return;
 				}
 			}
 		});
-		return result || possibleResult;
+		if (result.length == 0) {
+			return null;
+		}
+		var sorted = result
+			.sort(function(a, b) {
+				return a["confidence"] - b["confidence"] || b["collectibleSort"] - a["collectibleSort"];
+			});
+		// console.log('sorted', sorted);
+		return sorted[0];
 	},
 
 	jsonDatabase: [
@@ -317,6 +338,9 @@ var parseCardsText = {
 		"dbfId": 2541,
 		"goldenImage": "AT_002.gif",
 		"id": "AT_002",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Effigy",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -351,6 +375,9 @@ var parseCardsText = {
 		"dbfId": 2572,
 		"goldenImage": "AT_004.gif",
 		"id": "AT_004",
+		"mechanics": [
+			"RECEIVES_DOUBLE_SPELLDAMAGE_BONUS"
+		],
 		"name": "Arcane Blast",
 		"playerClass": "Mage",
 		"rarity": "Epic",
@@ -389,6 +416,9 @@ var parseCardsText = {
 		"goldenImage": "AT_005t.gif",
 		"health": 2,
 		"id": "AT_005t",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Boar",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -407,6 +437,9 @@ var parseCardsText = {
 		"goldenImage": "AT_006.gif",
 		"health": 5,
 		"id": "AT_006",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Dalaran Aspirant",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -419,7 +452,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "AT_006e.png",
 		"dbfId": 2550,
 		"goldenImage": "AT_006e.gif",
 		"id": "AT_006e",
@@ -440,6 +472,9 @@ var parseCardsText = {
 		"goldenImage": "AT_007.gif",
 		"health": 4,
 		"id": "AT_007",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Spellslinger",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -478,6 +513,9 @@ var parseCardsText = {
 		"goldenImage": "AT_009.gif",
 		"health": 7,
 		"id": "AT_009",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Rhonin",
 		"playerClass": "Mage",
 		"rarity": "Legendary",
@@ -496,6 +534,9 @@ var parseCardsText = {
 		"goldenImage": "AT_010.gif",
 		"health": 3,
 		"id": "AT_010",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ram Wrangler",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -523,10 +564,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_011e.png",
 		"dbfId": 2846,
 		"goldenImage": "AT_011e.gif",
 		"id": "AT_011e",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Light's Blessing",
 		"playerClass": "Neutral",
 		"set": "Tgt",
@@ -544,6 +587,9 @@ var parseCardsText = {
 		"goldenImage": "AT_012.gif",
 		"health": 4,
 		"id": "AT_012",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Spawn of Shadows",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -569,7 +615,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_013e.png",
 		"dbfId": 2848,
 		"goldenImage": "AT_013e.gif",
 		"id": "AT_013e",
@@ -599,7 +644,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "AT_014e.png",
 		"dbfId": 2567,
 		"goldenImage": "AT_014e.gif",
 		"id": "AT_014e",
@@ -643,7 +687,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "AT_016e.png",
 		"dbfId": 2565,
 		"goldenImage": "AT_016e.gif",
 		"id": "AT_016e",
@@ -664,6 +707,9 @@ var parseCardsText = {
 		"goldenImage": "AT_017.gif",
 		"health": 6,
 		"id": "AT_017",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Twilight Guardian",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -677,7 +723,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_017e.png",
 		"dbfId": 2570,
 		"goldenImage": "AT_017e.gif",
 		"id": "AT_017e",
@@ -699,6 +744,9 @@ var parseCardsText = {
 		"goldenImage": "AT_018.gif",
 		"health": 4,
 		"id": "AT_018",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Confessor Paletress",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
@@ -717,6 +765,9 @@ var parseCardsText = {
 		"goldenImage": "AT_019.gif",
 		"health": 1,
 		"id": "AT_019",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Dreadsteed",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -727,7 +778,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_019e.png",
 		"dbfId": 47218,
 		"goldenImage": "AT_019e.gif",
 		"id": "AT_019e",
@@ -776,7 +826,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "AT_021e.png",
 		"dbfId": 2778,
 		"goldenImage": "AT_021e.gif",
 		"id": "AT_021e",
@@ -795,6 +844,9 @@ var parseCardsText = {
 		"dbfId": 2628,
 		"goldenImage": "AT_022.gif",
 		"id": "AT_022",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Fist of Jaraxxus",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -813,6 +865,9 @@ var parseCardsText = {
 		"goldenImage": "AT_023.gif",
 		"health": 4,
 		"id": "AT_023",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Void Crusher",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -839,7 +894,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_024e.png",
 		"dbfId": 2867,
 		"goldenImage": "AT_024e.gif",
 		"id": "AT_024e",
@@ -905,7 +959,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "AT_027e.png",
 		"dbfId": 2622,
 		"goldenImage": "AT_027e.gif",
 		"id": "AT_027e",
@@ -926,6 +979,9 @@ var parseCardsText = {
 		"goldenImage": "AT_028.gif",
 		"health": 7,
 		"id": "AT_028",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Shado-Pan Rider",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -935,7 +991,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_028e.png",
 		"dbfId": 2859,
 		"goldenImage": "AT_028e.gif",
 		"id": "AT_028e",
@@ -966,7 +1021,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_029e.png",
 		"dbfId": 2714,
 		"goldenImage": "AT_029e.gif",
 		"id": "AT_029e",
@@ -987,6 +1041,9 @@ var parseCardsText = {
 		"goldenImage": "AT_030.gif",
 		"health": 2,
 		"id": "AT_030",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Undercity Valiant",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -1023,6 +1080,9 @@ var parseCardsText = {
 		"goldenImage": "AT_032.gif",
 		"health": 3,
 		"id": "AT_032",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shady Dealer",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -1032,7 +1092,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "AT_032e.png",
 		"dbfId": 2769,
 		"goldenImage": "AT_032e.gif",
 		"id": "AT_032e",
@@ -1078,7 +1137,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "AT_034e.png",
 		"dbfId": 2764,
 		"goldenImage": "AT_034e.gif",
 		"id": "AT_034e",
@@ -1111,6 +1169,9 @@ var parseCardsText = {
 		"dbfId": 2847,
 		"goldenImage": "AT_035t.gif",
 		"id": "AT_035t",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Nerubian Ambush!",
 		"playerClass": "Rogue",
 		"set": "Tgt",
@@ -1129,6 +1190,9 @@ var parseCardsText = {
 		"goldenImage": "AT_036.gif",
 		"health": 4,
 		"id": "AT_036",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Anub'arak",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -1159,6 +1223,9 @@ var parseCardsText = {
 		"dbfId": 2792,
 		"goldenImage": "AT_037.gif",
 		"id": "AT_037",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Living Roots",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -1217,6 +1284,10 @@ var parseCardsText = {
 		"goldenImage": "AT_038.gif",
 		"health": 3,
 		"id": "AT_038",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Darnassus Aspirant",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -1235,6 +1306,9 @@ var parseCardsText = {
 		"goldenImage": "AT_039.gif",
 		"health": 4,
 		"id": "AT_039",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Savage Combatant",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -1245,10 +1319,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "AT_039e.png",
 		"dbfId": 2781,
 		"goldenImage": "AT_039e.gif",
 		"id": "AT_039e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Savage",
 		"playerClass": "Druid",
 		"set": "Tgt",
@@ -1266,6 +1342,9 @@ var parseCardsText = {
 		"goldenImage": "AT_040.gif",
 		"health": 4,
 		"id": "AT_040",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Wildwalker",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -1275,7 +1354,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "AT_040e.png",
 		"dbfId": 2787,
 		"goldenImage": "AT_040e.gif",
 		"id": "AT_040e",
@@ -1305,7 +1383,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_041e.png",
 		"dbfId": 2991,
 		"goldenImage": "AT_041e.gif",
 		"id": "AT_041e",
@@ -1326,6 +1403,9 @@ var parseCardsText = {
 		"goldenImage": "AT_042.gif",
 		"health": 1,
 		"id": "AT_042",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Druid of the Saber",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -1372,6 +1452,9 @@ var parseCardsText = {
 		"goldenImage": "AT_042t.gif",
 		"health": 1,
 		"id": "AT_042t",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Sabertooth Lion",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -1389,6 +1472,9 @@ var parseCardsText = {
 		"goldenImage": "AT_042t2.gif",
 		"health": 2,
 		"id": "AT_042t2",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Sabertooth Panther",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -1441,6 +1527,9 @@ var parseCardsText = {
 		"goldenImage": "AT_045.gif",
 		"health": 5,
 		"id": "AT_045",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Aviana",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -1450,7 +1539,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_045e.png",
 		"dbfId": 2842,
 		"goldenImage": "AT_045e.gif",
 		"id": "AT_045e",
@@ -1462,7 +1550,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_045ee.png",
 		"dbfId": 2844,
 		"goldenImage": "AT_045ee.gif",
 		"id": "AT_045ee",
@@ -1482,6 +1569,9 @@ var parseCardsText = {
 		"goldenImage": "AT_046.gif",
 		"health": 2,
 		"id": "AT_046",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tuskarr Totemic",
 		"playerClass": "Shaman",
 		"rarity": "Common",
@@ -1500,6 +1590,9 @@ var parseCardsText = {
 		"goldenImage": "AT_047.gif",
 		"health": 4,
 		"id": "AT_047",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Draenei Totemcarver",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -1509,7 +1602,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "AT_047e.png",
 		"dbfId": 2614,
 		"goldenImage": "AT_047e.gif",
 		"id": "AT_047e",
@@ -1546,6 +1638,9 @@ var parseCardsText = {
 		"goldenImage": "AT_049.gif",
 		"health": 6,
 		"id": "AT_049",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Thunder Bluff Valiant",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -1555,7 +1650,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "AT_049e.png",
 		"dbfId": 2616,
 		"goldenImage": "AT_049e.gif",
 		"id": "AT_049e",
@@ -1576,6 +1670,9 @@ var parseCardsText = {
 		"durability": 4,
 		"goldenImage": "AT_050.gif",
 		"id": "AT_050",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Charged Hammer",
 		"playerClass": "Shaman",
 		"rarity": "Epic",
@@ -1623,6 +1720,9 @@ var parseCardsText = {
 		"goldenImage": "AT_052.gif",
 		"health": 4,
 		"id": "AT_052",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Totem Golem",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -1641,6 +1741,9 @@ var parseCardsText = {
 		"dbfId": 2514,
 		"goldenImage": "AT_053.gif",
 		"id": "AT_053",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Ancestral Knowledge",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -1661,6 +1764,9 @@ var parseCardsText = {
 		"goldenImage": "AT_054.gif",
 		"health": 4,
 		"id": "AT_054",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "The Mistcaller",
 		"playerClass": "Shaman",
 		"rarity": "Legendary",
@@ -1711,6 +1817,9 @@ var parseCardsText = {
 		"goldenImage": "AT_057.gif",
 		"health": 2,
 		"id": "AT_057",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Stablemaster",
 		"playerClass": "Hunter",
 		"rarity": "Epic",
@@ -1723,10 +1832,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "AT_057o.png",
 		"dbfId": 2640,
 		"goldenImage": "AT_057o.gif",
 		"id": "AT_057o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Groomed",
 		"playerClass": "Hunter",
 		"set": "Tgt",
@@ -1744,6 +1855,9 @@ var parseCardsText = {
 		"goldenImage": "AT_058.gif",
 		"health": 2,
 		"id": "AT_058",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "King's Elekk",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -1763,6 +1877,9 @@ var parseCardsText = {
 		"goldenImage": "AT_059.gif",
 		"health": 1,
 		"id": "AT_059",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Brave Archer",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -1779,6 +1896,9 @@ var parseCardsText = {
 		"dbfId": 2641,
 		"goldenImage": "AT_060.gif",
 		"id": "AT_060",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Bear Trap",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -1807,10 +1927,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "AT_061e.png",
 		"dbfId": 2485,
 		"goldenImage": "AT_061e.gif",
 		"id": "AT_061e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Lock and Load",
 		"playerClass": "Hunter",
 		"set": "Tgt",
@@ -1899,6 +2021,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "AT_065.gif",
 		"id": "AT_065",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "King's Defender",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -1911,7 +2036,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_065e.png",
 		"dbfId": 2824,
 		"goldenImage": "AT_065e.gif",
 		"id": "AT_065e",
@@ -1932,6 +2056,9 @@ var parseCardsText = {
 		"goldenImage": "AT_066.gif",
 		"health": 3,
 		"id": "AT_066",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Orgrimmar Aspirant",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -1941,7 +2068,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "AT_066e.png",
 		"dbfId": 2732,
 		"goldenImage": "AT_066e.gif",
 		"id": "AT_066e",
@@ -1990,7 +2116,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "AT_068e.png",
 		"dbfId": 2755,
 		"goldenImage": "AT_068e.gif",
 		"id": "AT_068e",
@@ -2011,6 +2136,10 @@ var parseCardsText = {
 		"goldenImage": "AT_069.gif",
 		"health": 2,
 		"id": "AT_069",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Sparring Partner",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -2020,7 +2149,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "AT_069e.png",
 		"dbfId": 2734,
 		"goldenImage": "AT_069e.gif",
 		"id": "AT_069e",
@@ -2042,6 +2170,9 @@ var parseCardsText = {
 		"goldenImage": "AT_070.gif",
 		"health": 6,
 		"id": "AT_070",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Skycap'n Kragg",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -2061,6 +2192,9 @@ var parseCardsText = {
 		"goldenImage": "AT_071.gif",
 		"health": 3,
 		"id": "AT_071",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Alexstrasza's Champion",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -2073,7 +2207,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "AT_071e.png",
 		"dbfId": 2759,
 		"goldenImage": "AT_071e.gif",
 		"id": "AT_071e",
@@ -2095,6 +2228,9 @@ var parseCardsText = {
 		"goldenImage": "AT_072.gif",
 		"health": 7,
 		"id": "AT_072",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Varian Wrynn",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
@@ -2111,6 +2247,9 @@ var parseCardsText = {
 		"dbfId": 2648,
 		"goldenImage": "AT_073.gif",
 		"id": "AT_073",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Competitive Spirit",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -2120,7 +2259,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_073e.png",
 		"dbfId": 2849,
 		"goldenImage": "AT_073e.gif",
 		"id": "AT_073e",
@@ -2151,7 +2289,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "AT_074e2.png",
 		"dbfId": 2719,
 		"goldenImage": "AT_074e2.gif",
 		"id": "AT_074e2",
@@ -2172,6 +2309,9 @@ var parseCardsText = {
 		"goldenImage": "AT_075.gif",
 		"health": 4,
 		"id": "AT_075",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Warhorse Trainer",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -2181,7 +2321,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "AT_075e.png",
 		"dbfId": 2516,
 		"goldenImage": "AT_075e.gif",
 		"id": "AT_075e",
@@ -2202,6 +2341,9 @@ var parseCardsText = {
 		"goldenImage": "AT_076.gif",
 		"health": 4,
 		"id": "AT_076",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Murloc Knight",
 		"playerClass": "Paladin",
 		"race": "MURLOC",
@@ -2221,6 +2363,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "AT_077.gif",
 		"id": "AT_077",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Argent Lance",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -2230,7 +2375,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_077e.png",
 		"dbfId": 2845,
 		"goldenImage": "AT_077e.gif",
 		"id": "AT_077e",
@@ -2267,6 +2411,9 @@ var parseCardsText = {
 		"goldenImage": "AT_079.gif",
 		"health": 6,
 		"id": "AT_079",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Mysterious Challenger",
 		"playerClass": "Paladin",
 		"rarity": "Epic",
@@ -2307,6 +2454,9 @@ var parseCardsText = {
 		"goldenImage": "AT_081.gif",
 		"health": 7,
 		"id": "AT_081",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Eadric the Pure",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -2316,7 +2466,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "AT_081e.png",
 		"dbfId": 2728,
 		"goldenImage": "AT_081e.gif",
 		"id": "AT_081e",
@@ -2337,6 +2486,9 @@ var parseCardsText = {
 		"goldenImage": "AT_082.gif",
 		"health": 2,
 		"id": "AT_082",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Lowly Squire",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2346,7 +2498,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_082e.png",
 		"dbfId": 2487,
 		"goldenImage": "AT_082e.gif",
 		"id": "AT_082e",
@@ -2367,6 +2518,9 @@ var parseCardsText = {
 		"goldenImage": "AT_083.gif",
 		"health": 3,
 		"id": "AT_083",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Dragonhawk Rider",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2379,10 +2533,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_083e.png",
 		"dbfId": 2534,
 		"goldenImage": "AT_083e.gif",
 		"id": "AT_083e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Dragonhawkery",
 		"playerClass": "Neutral",
 		"set": "Tgt",
@@ -2400,6 +2556,9 @@ var parseCardsText = {
 		"goldenImage": "AT_084.gif",
 		"health": 2,
 		"id": "AT_084",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lance Carrier",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2409,7 +2568,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_084e.png",
 		"dbfId": 2578,
 		"goldenImage": "AT_084e.gif",
 		"id": "AT_084e",
@@ -2430,6 +2588,9 @@ var parseCardsText = {
 		"goldenImage": "AT_085.gif",
 		"health": 6,
 		"id": "AT_085",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Maiden of the Lake",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2448,6 +2609,9 @@ var parseCardsText = {
 		"goldenImage": "AT_086.gif",
 		"health": 3,
 		"id": "AT_086",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Saboteur",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -2457,7 +2621,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_086e.png",
 		"dbfId": 2870,
 		"goldenImage": "AT_086e.gif",
 		"id": "AT_086e",
@@ -2478,6 +2641,10 @@ var parseCardsText = {
 		"goldenImage": "AT_087.gif",
 		"health": 1,
 		"id": "AT_087",
+		"mechanics": [
+			"CHARGE",
+			"DIVINE_SHIELD"
+		],
 		"name": "Argent Horserider",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2496,6 +2663,9 @@ var parseCardsText = {
 		"goldenImage": "AT_088.gif",
 		"health": 5,
 		"id": "AT_088",
+		"mechanics": [
+			"FORGETFUL"
+		],
 		"name": "Mogor's Champion",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -2514,6 +2684,9 @@ var parseCardsText = {
 		"goldenImage": "AT_089.gif",
 		"health": 2,
 		"id": "AT_089",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Boneguard Lieutenant",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2523,7 +2696,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_089e.png",
 		"dbfId": 2496,
 		"goldenImage": "AT_089e.gif",
 		"id": "AT_089e",
@@ -2544,6 +2716,9 @@ var parseCardsText = {
 		"goldenImage": "AT_090.gif",
 		"health": 3,
 		"id": "AT_090",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Mukla's Champion",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -2554,7 +2729,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_090e.png",
 		"dbfId": 2498,
 		"goldenImage": "AT_090e.gif",
 		"id": "AT_090e",
@@ -2575,6 +2749,9 @@ var parseCardsText = {
 		"goldenImage": "AT_091.gif",
 		"health": 8,
 		"id": "AT_091",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Tournament Medic",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2611,6 +2788,9 @@ var parseCardsText = {
 		"goldenImage": "AT_093.gif",
 		"health": 6,
 		"id": "AT_093",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Frigid Snobold",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2630,6 +2810,9 @@ var parseCardsText = {
 		"goldenImage": "AT_094.gif",
 		"health": 3,
 		"id": "AT_094",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Flame Juggler",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2648,6 +2831,10 @@ var parseCardsText = {
 		"goldenImage": "AT_095.gif",
 		"health": 2,
 		"id": "AT_095",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"STEALTH"
+		],
 		"name": "Silent Knight",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2666,6 +2853,9 @@ var parseCardsText = {
 		"goldenImage": "AT_096.gif",
 		"health": 5,
 		"id": "AT_096",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Clockwork Knight",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -2676,7 +2866,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_096e.png",
 		"dbfId": 2501,
 		"goldenImage": "AT_096e.gif",
 		"id": "AT_096e",
@@ -2697,6 +2886,9 @@ var parseCardsText = {
 		"goldenImage": "AT_097.gif",
 		"health": 1,
 		"id": "AT_097",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Tournament Attendee",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2715,6 +2907,9 @@ var parseCardsText = {
 		"goldenImage": "AT_098.gif",
 		"health": 5,
 		"id": "AT_098",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sideshow Spelleater",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -2733,6 +2928,9 @@ var parseCardsText = {
 		"goldenImage": "AT_099.gif",
 		"health": 5,
 		"id": "AT_099",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Kodorider",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -2766,6 +2964,9 @@ var parseCardsText = {
 		"goldenImage": "AT_100.gif",
 		"health": 3,
 		"id": "AT_100",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Silver Hand Regent",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2819,6 +3020,9 @@ var parseCardsText = {
 		"goldenImage": "AT_103.gif",
 		"health": 7,
 		"id": "AT_103",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "North Sea Kraken",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2837,6 +3041,9 @@ var parseCardsText = {
 		"goldenImage": "AT_104.gif",
 		"health": 5,
 		"id": "AT_104",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tuskarr Jouster",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -2855,6 +3062,9 @@ var parseCardsText = {
 		"goldenImage": "AT_105.gif",
 		"health": 4,
 		"id": "AT_105",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Injured Kvaldir",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -2873,6 +3083,9 @@ var parseCardsText = {
 		"goldenImage": "AT_106.gif",
 		"health": 3,
 		"id": "AT_106",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Light's Champion",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -2894,6 +3107,9 @@ var parseCardsText = {
 		"goldenImage": "AT_108.gif",
 		"health": 3,
 		"id": "AT_108",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Armored Warhorse",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -2916,6 +3132,10 @@ var parseCardsText = {
 		"goldenImage": "AT_109.gif",
 		"health": 4,
 		"id": "AT_109",
+		"mechanics": [
+			"CANT_ATTACK",
+			"INSPIRE"
+		],
 		"name": "Argent Watchman",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -2925,10 +3145,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_109e.png",
 		"dbfId": 2506,
 		"goldenImage": "AT_109e.gif",
 		"id": "AT_109e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Inspired",
 		"playerClass": "Neutral",
 		"set": "Tgt",
@@ -2946,6 +3168,9 @@ var parseCardsText = {
 		"goldenImage": "AT_110.gif",
 		"health": 5,
 		"id": "AT_110",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Coliseum Manager",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -2964,6 +3189,9 @@ var parseCardsText = {
 		"goldenImage": "AT_111.gif",
 		"health": 5,
 		"id": "AT_111",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Refreshment Vendor",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -2982,6 +3210,9 @@ var parseCardsText = {
 		"goldenImage": "AT_112.gif",
 		"health": 6,
 		"id": "AT_112",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Master Jouster",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -3004,6 +3235,9 @@ var parseCardsText = {
 		"goldenImage": "AT_113.gif",
 		"health": 4,
 		"id": "AT_113",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Recruiter",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -3022,6 +3256,9 @@ var parseCardsText = {
 		"goldenImage": "AT_114.gif",
 		"health": 4,
 		"id": "AT_114",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Evil Heckler",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -3040,6 +3277,9 @@ var parseCardsText = {
 		"goldenImage": "AT_115.gif",
 		"health": 2,
 		"id": "AT_115",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fencing Coach",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -3049,7 +3289,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_115e.png",
 		"dbfId": 2825,
 		"goldenImage": "AT_115e.gif",
 		"id": "AT_115e",
@@ -3070,6 +3309,9 @@ var parseCardsText = {
 		"goldenImage": "AT_116.gif",
 		"health": 4,
 		"id": "AT_116",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Wyrmrest Agent",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -3082,7 +3324,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "AT_116e.png",
 		"dbfId": 2597,
 		"goldenImage": "AT_116e.gif",
 		"id": "AT_116e",
@@ -3103,6 +3344,9 @@ var parseCardsText = {
 		"goldenImage": "AT_117.gif",
 		"health": 2,
 		"id": "AT_117",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Master of Ceremonies",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -3112,7 +3356,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_117e.png",
 		"dbfId": 2751,
 		"goldenImage": "AT_117e.gif",
 		"id": "AT_117e",
@@ -3133,6 +3376,9 @@ var parseCardsText = {
 		"goldenImage": "AT_118.gif",
 		"health": 5,
 		"id": "AT_118",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Grand Crusader",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -3151,6 +3397,9 @@ var parseCardsText = {
 		"goldenImage": "AT_119.gif",
 		"health": 4,
 		"id": "AT_119",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Kvaldir Raider",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -3160,7 +3409,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_119e.png",
 		"dbfId": 2735,
 		"goldenImage": "AT_119e.gif",
 		"id": "AT_119e",
@@ -3211,7 +3459,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_121e.png",
 		"dbfId": 2750,
 		"goldenImage": "AT_121e.gif",
 		"id": "AT_121e",
@@ -3233,6 +3480,9 @@ var parseCardsText = {
 		"goldenImage": "AT_122.gif",
 		"health": 4,
 		"id": "AT_122",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gormok the Impaler",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -3252,6 +3502,10 @@ var parseCardsText = {
 		"goldenImage": "AT_123.gif",
 		"health": 6,
 		"id": "AT_123",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Chillmaw",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -3291,6 +3545,9 @@ var parseCardsText = {
 		"goldenImage": "AT_125.gif",
 		"health": 10,
 		"id": "AT_125",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Icehowl",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -3310,6 +3567,9 @@ var parseCardsText = {
 		"goldenImage": "AT_127.gif",
 		"health": 5,
 		"id": "AT_127",
+		"mechanics": [
+			"INSPIRE"
+		],
 		"name": "Nexus-Champion Saraad",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -3329,6 +3589,9 @@ var parseCardsText = {
 		"goldenImage": "AT_128.gif",
 		"health": 4,
 		"id": "AT_128",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "The Skeleton Knight",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -3369,6 +3632,9 @@ var parseCardsText = {
 		"goldenImage": "AT_130.gif",
 		"health": 7,
 		"id": "AT_130",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Sea Reaver",
 		"playerClass": "Warrior",
 		"rarity": "Epic",
@@ -3407,6 +3673,9 @@ var parseCardsText = {
 		"goldenImage": "AT_132.gif",
 		"health": 3,
 		"id": "AT_132",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Justicar Trueheart",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -3429,10 +3698,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "AT_132_DRUIDe.png",
 		"dbfId": 2747,
 		"goldenImage": "AT_132_DRUIDe.gif",
 		"id": "AT_132_DRUIDe",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Dire Claws",
 		"playerClass": "Druid",
 		"set": "Tgt",
@@ -3654,6 +3925,9 @@ var parseCardsText = {
 		"goldenImage": "AT_133.gif",
 		"health": 2,
 		"id": "AT_133",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gadgetzan Jouster",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -3663,7 +3937,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "AT_133e.png",
 		"dbfId": 2819,
 		"goldenImage": "AT_133e.gif",
 		"id": "AT_133e",
@@ -3691,10 +3964,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "BRM_001e.png",
 		"dbfId": 2276,
 		"goldenImage": "BRM_001e.gif",
 		"id": "BRM_001e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Melt",
 		"playerClass": "Priest",
 		"set": "Brm",
@@ -3737,10 +4012,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "BRM_003e.png",
 		"dbfId": 2285,
 		"goldenImage": "BRM_003e.gif",
 		"id": "BRM_003e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Dragon's Might",
 		"playerClass": "Mage",
 		"set": "Brm",
@@ -3758,6 +4035,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_004.gif",
 		"health": 1,
 		"id": "BRM_004",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Twilight Whelp",
 		"playerClass": "Priest",
 		"race": "DRAGON",
@@ -3768,7 +4048,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRM_004e.png",
 		"dbfId": 2428,
 		"goldenImage": "BRM_004e.gif",
 		"id": "BRM_004e",
@@ -3869,6 +4148,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_008.gif",
 		"health": 3,
 		"id": "BRM_008",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dark Iron Skulker",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -3887,6 +4169,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_009.gif",
 		"health": 8,
 		"id": "BRM_009",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Volcanic Lumberer",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -3905,6 +4190,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_010.gif",
 		"health": 2,
 		"id": "BRM_010",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Druid of the Flame",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -3993,10 +4281,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "BRM_011t.png",
 		"dbfId": 2312,
 		"goldenImage": "BRM_011t.gif",
 		"id": "BRM_011t",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Lava Shock",
 		"playerClass": "Shaman",
 		"set": "Brm",
@@ -4014,6 +4304,10 @@ var parseCardsText = {
 		"goldenImage": "BRM_012.gif",
 		"health": 6,
 		"id": "BRM_012",
+		"mechanics": [
+			"BATTLECRY",
+			"OVERLOAD"
+		],
 		"name": "Fireguard Destroyer",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -4025,7 +4319,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRM_012e.png",
 		"dbfId": 2370,
 		"goldenImage": "BRM_012e.gif",
 		"id": "BRM_012e",
@@ -4062,6 +4355,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_014.gif",
 		"health": 4,
 		"id": "BRM_014",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Core Rager",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -4072,7 +4368,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "BRM_014e.png",
 		"dbfId": 2601,
 		"goldenImage": "BRM_014e.gif",
 		"id": "BRM_014e",
@@ -4143,6 +4438,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_018.gif",
 		"health": 5,
 		"id": "BRM_018",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dragon Consort",
 		"playerClass": "Paladin",
 		"race": "DRAGON",
@@ -4153,7 +4451,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "BRM_018e.png",
 		"dbfId": 2300,
 		"goldenImage": "BRM_018e.gif",
 		"id": "BRM_018e",
@@ -4178,7 +4475,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"rarity": "Rare",
 		"set": "Brm",
-		"text": "Whenever this minion survives damage, summon another Grim Patron.",
+		"text": "After this minion survives damage, summon another Grim Patron.",
 		"type": "Minion"
 	},
 	{
@@ -4202,7 +4499,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRM_020e.png",
 		"dbfId": 2307,
 		"goldenImage": "BRM_020e.gif",
 		"id": "BRM_020e",
@@ -4258,6 +4554,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_024.gif",
 		"health": 6,
 		"id": "BRM_024",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Drakonid Crusher",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -4268,7 +4567,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRM_024e.png",
 		"dbfId": 2415,
 		"goldenImage": "BRM_024e.gif",
 		"id": "BRM_024e",
@@ -4308,6 +4606,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_026.gif",
 		"health": 6,
 		"id": "BRM_026",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hungry Dragon",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -4328,6 +4629,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_027.gif",
 		"health": 7,
 		"id": "BRM_027",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Majordomo Executus",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -4394,7 +4698,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRM_028e.png",
 		"dbfId": 2407,
 		"goldenImage": "BRM_028e.gif",
 		"id": "BRM_028e",
@@ -4405,7 +4708,7 @@ var parseCardsText = {
 		"type": "Enchantment"
 	},
 	{
-		"artist": "Alex Horley",
+		"artist": "Alex Horley Orlandelli",
 		"attack": 8,
 		"cardClass": "NEUTRAL",
 		"cardImage": "BRM_029.png",
@@ -4416,6 +4719,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_029.gif",
 		"health": 4,
 		"id": "BRM_029",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Rend Blackhand",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -4435,6 +4741,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_030.gif",
 		"health": 8,
 		"id": "BRM_030",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Nefarian",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -4487,6 +4796,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_033.gif",
 		"health": 4,
 		"id": "BRM_033",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blackwing Technician",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -4496,7 +4808,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRM_033e.png",
 		"dbfId": 2721,
 		"goldenImage": "BRM_033e.gif",
 		"id": "BRM_033e",
@@ -4517,6 +4828,9 @@ var parseCardsText = {
 		"goldenImage": "BRM_034.gif",
 		"health": 4,
 		"id": "BRM_034",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blackwing Corruptor",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -4531,6 +4845,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA01_1.gif",
 		"health": 30,
 		"id": "BRMA01_1",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Coren Direbrew",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4543,6 +4860,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA01_1H.gif",
 		"health": 30,
 		"id": "BRMA01_1H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Coren Direbrew",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4555,6 +4875,9 @@ var parseCardsText = {
 		"dbfId": 2314,
 		"goldenImage": "BRMA01_2.gif",
 		"id": "BRMA01_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Pile On!",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4568,6 +4891,9 @@ var parseCardsText = {
 		"dbfId": 2439,
 		"goldenImage": "BRMA01_2H.gif",
 		"id": "BRMA01_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Pile On!",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4640,6 +4966,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA01_4t.gif",
 		"health": 1,
 		"id": "BRMA01_4t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Guzzler",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4734,6 +5063,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA02_2t.gif",
 		"health": 1,
 		"id": "BRMA02_2t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Dark Iron Spectator",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4786,6 +5118,10 @@ var parseCardsText = {
 		"goldenImage": "BRMA03_3.gif",
 		"health": 3,
 		"id": "BRMA03_3",
+		"mechanics": [
+			"AURA",
+			"InvisibleDeathrattle"
+		],
 		"name": "Moira Bronzebeard",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -4804,6 +5140,10 @@ var parseCardsText = {
 		"goldenImage": "BRMA03_3H.gif",
 		"health": 1,
 		"id": "BRMA03_3H",
+		"mechanics": [
+			"AURA",
+			"InvisibleDeathrattle"
+		],
 		"name": "Moira Bronzebeard",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -4844,6 +5184,9 @@ var parseCardsText = {
 		"dbfId": 2325,
 		"goldenImage": "BRMA04_2.gif",
 		"id": "BRMA04_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Magma Pulse",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4859,6 +5202,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA04_3.gif",
 		"health": 5,
 		"id": "BRMA04_3",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Firesworn",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4874,6 +5220,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA04_3H.gif",
 		"health": 5,
 		"id": "BRMA04_3H",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Firesworn",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -4887,6 +5236,9 @@ var parseCardsText = {
 		"dbfId": 2343,
 		"goldenImage": "BRMA04_4.gif",
 		"id": "BRMA04_4",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Rock Out",
 		"overload": 2,
 		"playerClass": "Neutral",
@@ -4901,6 +5253,9 @@ var parseCardsText = {
 		"dbfId": 2476,
 		"goldenImage": "BRMA04_4H.gif",
 		"id": "BRMA04_4H",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Rock Out",
 		"overload": 2,
 		"playerClass": "Neutral",
@@ -4973,7 +5328,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA05_3e.png",
 		"dbfId": 2331,
 		"goldenImage": "BRMA05_3e.gif",
 		"id": "BRMA05_3e",
@@ -4998,7 +5352,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA05_3He.png",
 		"dbfId": 2679,
 		"goldenImage": "BRMA05_3He.gif",
 		"id": "BRMA05_3He",
@@ -5193,6 +5546,9 @@ var parseCardsText = {
 		"dbfId": 2451,
 		"goldenImage": "BRMA07_2H.gif",
 		"id": "BRMA07_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "ME SMASH",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5306,6 +5662,10 @@ var parseCardsText = {
 		"cardImage": "BRMA09_2.png",
 		"cost": 2,
 		"dbfId": 2345,
+		"entourage": [
+			"BRMA09_3",
+			"BRMA09_4"
+		],
 		"goldenImage": "BRMA09_2.gif",
 		"id": "BRMA09_2",
 		"name": "Open the Gates",
@@ -5332,6 +5692,10 @@ var parseCardsText = {
 		"cardImage": "BRMA09_2H.png",
 		"cost": 2,
 		"dbfId": 2530,
+		"entourage": [
+			"BRMA09_3H",
+			"BRMA09_4H"
+		],
 		"goldenImage": "BRMA09_2H.gif",
 		"id": "BRMA09_2H",
 		"name": "Open the Gates",
@@ -5375,6 +5739,11 @@ var parseCardsText = {
 		"cardImage": "BRMA09_3.png",
 		"cost": 2,
 		"dbfId": 2347,
+		"entourage": [
+			"BRMA09_2",
+			"BRMA09_4",
+			"BRMA09_5"
+		],
 		"goldenImage": "BRMA09_3.gif",
 		"id": "BRMA09_3",
 		"name": "Old Horde",
@@ -5388,6 +5757,11 @@ var parseCardsText = {
 		"cardImage": "BRMA09_3H.png",
 		"cost": 2,
 		"dbfId": 2529,
+		"entourage": [
+			"BRMA09_2H",
+			"BRMA09_4H",
+			"BRMA09_5H"
+		],
 		"goldenImage": "BRMA09_3H.gif",
 		"id": "BRMA09_3H",
 		"name": "Old Horde",
@@ -5405,6 +5779,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA09_3Ht.gif",
 		"health": 2,
 		"id": "BRMA09_3Ht",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Old Horde Orc",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5420,6 +5797,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA09_3t.gif",
 		"health": 1,
 		"id": "BRMA09_3t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Old Horde Orc",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5431,6 +5811,11 @@ var parseCardsText = {
 		"cardImage": "BRMA09_4.png",
 		"cost": 1,
 		"dbfId": 2349,
+		"entourage": [
+			"BRMA09_2",
+			"BRMA09_3",
+			"BRMA09_5"
+		],
 		"goldenImage": "BRMA09_4.gif",
 		"id": "BRMA09_4",
 		"name": "Blackwing",
@@ -5444,6 +5829,11 @@ var parseCardsText = {
 		"cardImage": "BRMA09_4H.png",
 		"cost": 1,
 		"dbfId": 2523,
+		"entourage": [
+			"BRMA09_2H",
+			"BRMA09_3H",
+			"BRMA09_5H"
+		],
 		"goldenImage": "BRMA09_4H.gif",
 		"id": "BRMA09_4H",
 		"name": "Blackwing",
@@ -5487,6 +5877,11 @@ var parseCardsText = {
 		"cardImage": "BRMA09_5.png",
 		"cost": 4,
 		"dbfId": 2351,
+		"entourage": [
+			"BRMA09_2",
+			"BRMA09_3",
+			"BRMA09_4"
+		],
 		"goldenImage": "BRMA09_5.gif",
 		"id": "BRMA09_5",
 		"name": "Dismount",
@@ -5500,6 +5895,11 @@ var parseCardsText = {
 		"cardImage": "BRMA09_5H.png",
 		"cost": 4,
 		"dbfId": 2531,
+		"entourage": [
+			"BRMA09_2H",
+			"BRMA09_3H",
+			"BRMA09_4H"
+		],
 		"goldenImage": "BRMA09_5H.gif",
 		"id": "BRMA09_5H",
 		"name": "Dismount",
@@ -5584,6 +5984,9 @@ var parseCardsText = {
 		"dbfId": 2356,
 		"goldenImage": "BRMA10_3.gif",
 		"id": "BRMA10_3",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "The Rookery",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5592,7 +5995,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA10_3e.png",
 		"dbfId": 2604,
 		"goldenImage": "BRMA10_3e.gif",
 		"id": "BRMA10_3e",
@@ -5609,6 +6011,9 @@ var parseCardsText = {
 		"dbfId": 2475,
 		"goldenImage": "BRMA10_3H.gif",
 		"id": "BRMA10_3H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "The Rookery",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5624,6 +6029,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA10_4.gif",
 		"health": 1,
 		"id": "BRMA10_4",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Corrupted Egg",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5639,6 +6047,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA10_4H.gif",
 		"health": 3,
 		"id": "BRMA10_4H",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Corrupted Egg",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5692,7 +6103,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA10_6e.png",
 		"dbfId": 2538,
 		"goldenImage": "BRMA10_6e.gif",
 		"id": "BRMA10_6e",
@@ -5733,6 +6143,9 @@ var parseCardsText = {
 		"dbfId": 2358,
 		"goldenImage": "BRMA11_2.gif",
 		"id": "BRMA11_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Essence of the Red",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5746,6 +6159,9 @@ var parseCardsText = {
 		"dbfId": 2456,
 		"goldenImage": "BRMA11_2H.gif",
 		"id": "BRMA11_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Essence of the Red",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5820,8 +6236,18 @@ var parseCardsText = {
 		"cardImage": "BRMA12_2.png",
 		"cost": 0,
 		"dbfId": 2361,
+		"entourage": [
+			"BRMA12_6",
+			"BRMA12_5",
+			"BRMA12_7",
+			"BRMA12_4",
+			"BRMA12_3"
+		],
 		"goldenImage": "BRMA12_2.gif",
 		"id": "BRMA12_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Brood Affliction",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5833,8 +6259,18 @@ var parseCardsText = {
 		"cardImage": "BRMA12_2H.png",
 		"cost": 0,
 		"dbfId": 2458,
+		"entourage": [
+			"BRMA12_3H",
+			"BRMA12_4H",
+			"BRMA12_5H",
+			"BRMA12_6H",
+			"BRMA12_7H"
+		],
 		"goldenImage": "BRMA12_2H.gif",
 		"id": "BRMA12_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Brood Affliction",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5848,6 +6284,10 @@ var parseCardsText = {
 		"dbfId": 2362,
 		"goldenImage": "BRMA12_3.gif",
 		"id": "BRMA12_3",
+		"mechanics": [
+			"EVIL_GLOW",
+			"ImmuneToSpellpower"
+		],
 		"name": "Brood Affliction: Red",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5861,6 +6301,10 @@ var parseCardsText = {
 		"dbfId": 2459,
 		"goldenImage": "BRMA12_3H.gif",
 		"id": "BRMA12_3H",
+		"mechanics": [
+			"EVIL_GLOW",
+			"ImmuneToSpellpower"
+		],
 		"name": "Brood Affliction: Red",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5874,6 +6318,9 @@ var parseCardsText = {
 		"dbfId": 2363,
 		"goldenImage": "BRMA12_4.gif",
 		"id": "BRMA12_4",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Green",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5887,6 +6334,9 @@ var parseCardsText = {
 		"dbfId": 2460,
 		"goldenImage": "BRMA12_4H.gif",
 		"id": "BRMA12_4H",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Green",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5900,6 +6350,9 @@ var parseCardsText = {
 		"dbfId": 2364,
 		"goldenImage": "BRMA12_5.gif",
 		"id": "BRMA12_5",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Blue",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5913,6 +6366,9 @@ var parseCardsText = {
 		"dbfId": 2461,
 		"goldenImage": "BRMA12_5H.gif",
 		"id": "BRMA12_5H",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Blue",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5926,6 +6382,9 @@ var parseCardsText = {
 		"dbfId": 2365,
 		"goldenImage": "BRMA12_6.gif",
 		"id": "BRMA12_6",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Black",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5939,6 +6398,9 @@ var parseCardsText = {
 		"dbfId": 2462,
 		"goldenImage": "BRMA12_6H.gif",
 		"id": "BRMA12_6H",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Black",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5952,6 +6414,9 @@ var parseCardsText = {
 		"dbfId": 2366,
 		"goldenImage": "BRMA12_7.gif",
 		"id": "BRMA12_7",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Bronze",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -5965,6 +6430,9 @@ var parseCardsText = {
 		"dbfId": 2463,
 		"goldenImage": "BRMA12_7H.gif",
 		"id": "BRMA12_7H",
+		"mechanics": [
+			"EVIL_GLOW"
+		],
 		"name": "Brood Affliction: Bronze",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6002,7 +6470,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA12_8te.png",
 		"dbfId": 39810,
 		"goldenImage": "BRMA12_8te.gif",
 		"id": "BRMA12_8te",
@@ -6053,8 +6520,17 @@ var parseCardsText = {
 		"cardImage": "BRMA13_2.png",
 		"cost": 1,
 		"dbfId": 2379,
+		"entourage": [
+			"BRMA13_6",
+			"BRMA13_8",
+			"BRMA13_7",
+			"BRMA13_5"
+		],
 		"goldenImage": "BRMA13_2.gif",
 		"id": "BRMA13_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "True Form",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6066,8 +6542,17 @@ var parseCardsText = {
 		"cardImage": "BRMA13_2H.png",
 		"cost": 1,
 		"dbfId": 2465,
+		"entourage": [
+			"BRMA13_6",
+			"BRMA13_8",
+			"BRMA13_7",
+			"BRMA13_5"
+		],
 		"goldenImage": "BRMA13_2H.gif",
 		"id": "BRMA13_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "True Form",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6078,6 +6563,12 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "BRMA13_3.png",
 		"dbfId": 2380,
+		"entourage": [
+			"BRMA13_8",
+			"BRMA13_7",
+			"BRMA13_5",
+			"BRMA13_6"
+		],
 		"goldenImage": "BRMA13_3.gif",
 		"health": 30,
 		"id": "BRMA13_3",
@@ -6090,6 +6581,12 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "BRMA13_3H.png",
 		"dbfId": 2466,
+		"entourage": [
+			"BRMA13_8",
+			"BRMA13_7",
+			"BRMA13_6",
+			"BRMA13_5"
+		],
 		"goldenImage": "BRMA13_3H.gif",
 		"health": 30,
 		"id": "BRMA13_3H",
@@ -6105,6 +6602,9 @@ var parseCardsText = {
 		"dbfId": 2381,
 		"goldenImage": "BRMA13_4.gif",
 		"id": "BRMA13_4",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Wild Magic",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6131,6 +6631,9 @@ var parseCardsText = {
 		"dbfId": 2467,
 		"goldenImage": "BRMA13_4H.gif",
 		"id": "BRMA13_4H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Wild Magic",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6146,6 +6649,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA13_5.gif",
 		"health": 3,
 		"id": "BRMA13_5",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Son of the Flame",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6161,6 +6667,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA13_6.gif",
 		"health": 6,
 		"id": "BRMA13_6",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Living Lava",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6176,6 +6685,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA13_7.gif",
 		"health": 5,
 		"id": "BRMA13_7",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Whirling Ash",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6212,6 +6724,12 @@ var parseCardsText = {
 		"cardImage": "BRMA14_10.png",
 		"cost": 4,
 		"dbfId": 2386,
+		"entourage": [
+			"BRMA14_3",
+			"BRMA14_5",
+			"BRMA14_7",
+			"BRMA14_9"
+		],
 		"goldenImage": "BRMA14_10.gif",
 		"id": "BRMA14_10",
 		"name": "Activate!",
@@ -6225,6 +6743,12 @@ var parseCardsText = {
 		"cardImage": "BRMA14_10H.png",
 		"cost": 2,
 		"dbfId": 2482,
+		"entourage": [
+			"BRMA14_3",
+			"BRMA14_5H",
+			"BRMA14_7H",
+			"BRMA14_9H"
+		],
 		"goldenImage": "BRMA14_10H.gif",
 		"id": "BRMA14_10H",
 		"name": "Activate!",
@@ -6238,6 +6762,12 @@ var parseCardsText = {
 		"cardImage": "BRMA14_10H_TB.png",
 		"cost": 2,
 		"dbfId": 36734,
+		"entourage": [
+			"BRMA14_3",
+			"BRMA14_5",
+			"BRMA14_7",
+			"BRMA14_9"
+		],
 		"goldenImage": "BRMA14_10H_TB.gif",
 		"id": "BRMA14_10H_TB",
 		"name": "Activate!",
@@ -6269,6 +6799,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA14_12.gif",
 		"health": 2,
 		"id": "BRMA14_12",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Magmaw",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6294,6 +6827,9 @@ var parseCardsText = {
 		"dbfId": 2388,
 		"goldenImage": "BRMA14_2.gif",
 		"id": "BRMA14_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Arcanotron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6307,6 +6843,9 @@ var parseCardsText = {
 		"dbfId": 2469,
 		"goldenImage": "BRMA14_2H.gif",
 		"id": "BRMA14_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Arcanotron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6323,6 +6862,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA14_3.gif",
 		"health": 2,
 		"id": "BRMA14_3",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Arcanotron",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -6338,6 +6880,9 @@ var parseCardsText = {
 		"dbfId": 2390,
 		"goldenImage": "BRMA14_4.gif",
 		"id": "BRMA14_4",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Toxitron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6351,6 +6896,9 @@ var parseCardsText = {
 		"dbfId": 2470,
 		"goldenImage": "BRMA14_4H.gif",
 		"id": "BRMA14_4H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Toxitron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6398,6 +6946,9 @@ var parseCardsText = {
 		"dbfId": 2392,
 		"goldenImage": "BRMA14_6.gif",
 		"id": "BRMA14_6",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Electron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6411,6 +6962,9 @@ var parseCardsText = {
 		"dbfId": 2471,
 		"goldenImage": "BRMA14_6H.gif",
 		"id": "BRMA14_6H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Electron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6427,6 +6981,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA14_7.gif",
 		"health": 5,
 		"id": "BRMA14_7",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Electron",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -6458,6 +7015,9 @@ var parseCardsText = {
 		"dbfId": 2394,
 		"goldenImage": "BRMA14_8.gif",
 		"id": "BRMA14_8",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Magmatron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6471,6 +7031,9 @@ var parseCardsText = {
 		"dbfId": 2472,
 		"goldenImage": "BRMA14_8H.gif",
 		"id": "BRMA14_8H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Activate Magmatron",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6487,6 +7050,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA14_9.gif",
 		"health": 7,
 		"id": "BRMA14_9",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Magmatron",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -6563,7 +7129,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA15_2He.png",
 		"dbfId": 2593,
 		"goldenImage": "BRMA15_2He.gif",
 		"id": "BRMA15_2He",
@@ -6595,6 +7160,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA15_4.gif",
 		"health": 1,
 		"id": "BRMA15_4",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Aberration",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6666,7 +7234,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA16_3e.png",
 		"dbfId": 2426,
 		"goldenImage": "BRMA16_3e.gif",
 		"id": "BRMA16_3e",
@@ -6706,7 +7273,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMA16_5e.png",
 		"dbfId": 2427,
 		"goldenImage": "BRMA16_5e.gif",
 		"id": "BRMA16_5e",
@@ -6853,6 +7419,9 @@ var parseCardsText = {
 		"goldenImage": "BRMA17_7.gif",
 		"health": 4,
 		"id": "BRMA17_7",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Chromatic Prototype",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6866,6 +7435,9 @@ var parseCardsText = {
 		"dbfId": 2548,
 		"goldenImage": "BRMA17_8.gif",
 		"id": "BRMA17_8",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Nefarian Strikes!",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6879,6 +7451,9 @@ var parseCardsText = {
 		"dbfId": 2559,
 		"goldenImage": "BRMA17_8H.gif",
 		"id": "BRMA17_8H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Nefarian Strikes!",
 		"playerClass": "Neutral",
 		"set": "Brm",
@@ -6927,7 +7502,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMC_100e.png",
 		"dbfId": 2863,
 		"goldenImage": "BRMC_100e.gif",
 		"id": "BRMC_100e",
@@ -6959,6 +7533,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_84.gif",
 		"health": 6,
 		"id": "BRMC_84",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dragonkin Spellcaster",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -6976,6 +7553,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_85.gif",
 		"health": 7,
 		"id": "BRMC_85",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lucifron",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7001,7 +7581,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMC_86e.png",
 		"dbfId": 2865,
 		"goldenImage": "BRMC_86e.gif",
 		"id": "BRMC_86e",
@@ -7021,6 +7600,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_87.gif",
 		"health": 3,
 		"id": "BRMC_87",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Moira Bronzebeard",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7052,6 +7634,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_89.gif",
 		"health": 5,
 		"id": "BRMC_89",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Whirling Ash",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7067,6 +7652,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_90.gif",
 		"health": 6,
 		"id": "BRMC_90",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Living Lava",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7082,6 +7670,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_91.gif",
 		"health": 3,
 		"id": "BRMC_91",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Son of the Flame",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7098,6 +7689,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_92.gif",
 		"health": 8,
 		"id": "BRMC_92",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Coren Direbrew",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7109,6 +7703,12 @@ var parseCardsText = {
 		"cardImage": "BRMC_93.png",
 		"cost": 3,
 		"dbfId": 2694,
+		"entourage": [
+			"BRMA14_3",
+			"BRMA14_5",
+			"BRMA14_7",
+			"BRMA14_9"
+		],
 		"goldenImage": "BRMC_93.gif",
 		"id": "BRMC_93",
 		"name": "Omnotron Defense System",
@@ -7126,6 +7726,9 @@ var parseCardsText = {
 		"durability": 6,
 		"goldenImage": "BRMC_94.gif",
 		"id": "BRMC_94",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sulfuras",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7213,7 +7816,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMC_97e.png",
 		"dbfId": 2693,
 		"goldenImage": "BRMC_97e.gif",
 		"id": "BRMC_97e",
@@ -7242,7 +7844,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "BRMC_98e.png",
 		"dbfId": 2866,
 		"goldenImage": "BRMC_98e.gif",
 		"id": "BRMC_98e",
@@ -7280,6 +7881,9 @@ var parseCardsText = {
 		"goldenImage": "BRMC_99e.gif",
 		"health": 3,
 		"id": "BRMC_99e",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Rock Elemental",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -7298,24 +7902,26 @@ var parseCardsText = {
 		"goldenImage": "CFM_020.gif",
 		"health": 5,
 		"id": "CFM_020",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Raza the Chained",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
 		"set": "Gangs",
-		"text": "[x]  <b>Battlecry:</b> If your deck has  \nno duplicates, your Hero\n Power costs (0) this game.",
+		"text": "[x]  <b>Battlecry:</b> If your deck has  \nno duplicates, your Hero\n Power costs (1) this game.",
 		"type": "Minion"
 	},
 	{
 		"artist": "James Ryman",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_020e.png",
 		"dbfId": 40762,
 		"goldenImage": "CFM_020e.gif",
 		"id": "CFM_020e",
 		"name": "Raza Enchant",
 		"playerClass": "Neutral",
 		"set": "Gangs",
-		"text": "Your <b>Hero Power</b> costs (0).",
+		"text": "Your <b>Hero Power</b> costs (1).",
 		"type": "Enchantment"
 	},
 	{
@@ -7365,6 +7971,9 @@ var parseCardsText = {
 		"dbfId": 40339,
 		"goldenImage": "CFM_026.gif",
 		"id": "CFM_026",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Hidden Cache",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -7375,7 +7984,6 @@ var parseCardsText = {
 	{
 		"artist": "Dan Scott",
 		"cardClass": "HUNTER",
-		"cardImage": "CFM_026e.png",
 		"dbfId": 41127,
 		"goldenImage": "CFM_026e.gif",
 		"id": "CFM_026e",
@@ -7396,6 +8004,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_039.gif",
 		"health": 7,
 		"id": "CFM_039",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Street Trickster",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -7426,7 +8037,6 @@ var parseCardsText = {
 	{
 		"artist": "Slawomir Maniak",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_060e.png",
 		"dbfId": 40279,
 		"goldenImage": "CFM_060e.gif",
 		"id": "CFM_060e",
@@ -7447,6 +8057,10 @@ var parseCardsText = {
 		"goldenImage": "CFM_061.gif",
 		"health": 6,
 		"id": "CFM_061",
+		"mechanics": [
+			"BATTLECRY",
+			"OVERLOAD"
+		],
 		"name": "Jinyu Waterspeaker",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -7466,6 +8080,10 @@ var parseCardsText = {
 		"goldenImage": "CFM_062.gif",
 		"health": 6,
 		"id": "CFM_062",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Grimestreet Protector",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -7487,6 +8105,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_063.gif",
 		"health": 4,
 		"id": "CFM_063",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kooky Chemist",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -7497,7 +8118,6 @@ var parseCardsText = {
 	{
 		"artist": "Dave Allsop",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_063e.png",
 		"dbfId": 40286,
 		"goldenImage": "CFM_063e.gif",
 		"id": "CFM_063e",
@@ -7531,7 +8151,6 @@ var parseCardsText = {
 	{
 		"artist": "Eva Widermann",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_064e.png",
 		"dbfId": 40293,
 		"goldenImage": "CFM_064e.gif",
 		"id": "CFM_064e",
@@ -7568,6 +8187,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_066.gif",
 		"health": 1,
 		"id": "CFM_066",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kabal Lackey",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -7589,6 +8211,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_067.gif",
 		"health": 6,
 		"id": "CFM_067",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hozen Healer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -7623,6 +8248,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_095.gif",
 		"health": 1,
 		"id": "CFM_095",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Weasel Tunneler",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -7642,6 +8270,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_120.gif",
 		"health": 2,
 		"id": "CFM_120",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Mistress of Mixtures",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -7660,6 +8291,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_300.gif",
 		"health": 7,
 		"id": "CFM_300",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Public Defender",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -7686,7 +8320,6 @@ var parseCardsText = {
 	{
 		"artist": "Alex Horley Orlandelli",
 		"cardClass": "PALADIN",
-		"cardImage": "CFM_305e.png",
 		"dbfId": 40632,
 		"goldenImage": "CFM_305e.gif",
 		"id": "CFM_305e",
@@ -7708,6 +8341,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_308.gif",
 		"health": 7,
 		"id": "CFM_308",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Kun the Forgotten King",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -7781,27 +8417,14 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "CFM_312.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei. Verleiht ihm <b>Spott</b>.",
-			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>. Give it <b>Taunt</b>.",
-			"esES": "<b>Grito de batalla:</b> Invoca un <b>gólem de jade</b> y le otorga <b>Provocar</b>.",
-			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b> y le otorgas <b>Provocación</b>.",
-			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>. Lui confère <b>Provocation</b>.",
-			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b> e gli fornisce <b>Provocazione</b>.",
-			"jaJP": "<b>雄叫び:</b>  \n<b>翡翠のゴーレム</b>を\n1体召喚し\n<b>挑発</b>を付与する。",
-			"koKR": "<b>전투의 함성:</b> <b>비취 골렘</b>을 하나 소환하고 <b>도발</b>을 부여합니다.",
-			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>. Daj mu <b>Prowokację</b>.",
-			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>. Conceda <b>Provocar</b> a ele.",
-			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b> с <b>«Провокацией»</b>.",
-			"thTH": "<b>คำรามสู้ศึก:</b> เรียก<b>เจดโกเล็ม</b> และมอบ[b]<b>ยั่วยุ</b> ให้มัน",
-			"zhCN": "<b>战吼：</b>召唤一个<b>青玉魔像</b>，使其获得\n<b>嘲讽</b>。",
-			"zhTW": "<b>戰吼：</b>召喚一個<b>翠玉魔像</b>並賦予<b>嘲諷</b>"
-		},
 		"cost": 7,
 		"dbfId": 40422,
 		"goldenImage": "CFM_312.gif",
 		"health": 5,
 		"id": "CFM_312",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Jade Chieftain",
 		"playerClass": "Shaman",
 		"rarity": "Common",
@@ -7822,6 +8445,9 @@ var parseCardsText = {
 		"dbfId": 40423,
 		"goldenImage": "CFM_313.gif",
 		"id": "CFM_313",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Finders Keepers",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -7844,6 +8470,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_315.gif",
 		"health": 1,
 		"id": "CFM_315",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Alleycat",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -7879,6 +8508,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_316.gif",
 		"health": 2,
 		"id": "CFM_316",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Rat Pack",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -7919,6 +8551,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_321.gif",
 		"health": 1,
 		"id": "CFM_321",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "GRIMY_GOONS",
 		"name": "Grimestreet Informant",
 		"playerClass": "Neutral",
@@ -7942,6 +8577,10 @@ var parseCardsText = {
 		"goldenImage": "CFM_324.gif",
 		"health": 5,
 		"id": "CFM_324",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "White Eyes",
 		"playerClass": "Shaman",
 		"rarity": "Legendary",
@@ -7960,6 +8599,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_324t.gif",
 		"health": 10,
 		"id": "CFM_324t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "The Storm Guardian",
 		"playerClass": "Shaman",
 		"set": "Gangs",
@@ -7987,7 +8629,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_325e.png",
 		"dbfId": 42705,
 		"goldenImage": "CFM_325e.gif",
 		"id": "CFM_325e",
@@ -7998,7 +8639,7 @@ var parseCardsText = {
 		"type": "Enchantment"
 	},
 	{
-		"artist": "Adam Byrne",
+		"artist": "Eric Braddock",
 		"attack": 4,
 		"cardClass": "NEUTRAL",
 		"cardImage": "CFM_328.png",
@@ -8008,6 +8649,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_328.gif",
 		"health": 4,
 		"id": "CFM_328",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fight Promoter",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -8054,7 +8698,6 @@ var parseCardsText = {
 	{
 		"artist": "Grace Liu",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_334e.png",
 		"dbfId": 41672,
 		"goldenImage": "CFM_334e.gif",
 		"id": "CFM_334e",
@@ -8075,6 +8718,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_335.gif",
 		"health": 4,
 		"id": "CFM_335",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dispatch Kodo",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -8094,6 +8740,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_336.gif",
 		"health": 3,
 		"id": "CFM_336",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Shaky Zipgunner",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -8104,7 +8753,6 @@ var parseCardsText = {
 	{
 		"artist": "Andrew Hou",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_336e.png",
 		"dbfId": 40846,
 		"goldenImage": "CFM_336e.gif",
 		"id": "CFM_336e",
@@ -8159,6 +8807,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_338.gif",
 		"health": 2,
 		"id": "CFM_338",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Trogg Beastrager",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -8169,7 +8820,6 @@ var parseCardsText = {
 	{
 		"artist": "Adam Byrne",
 		"cardClass": "HUNTER",
-		"cardImage": "CFM_338e.png",
 		"dbfId": 40685,
 		"goldenImage": "CFM_338e.gif",
 		"id": "CFM_338e",
@@ -8191,6 +8841,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_341.gif",
 		"health": 1,
 		"id": "CFM_341",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sergeant Sally",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -8209,6 +8862,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_342.gif",
 		"health": 5,
 		"id": "CFM_342",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Luckydo Buccaneer",
 		"playerClass": "Rogue",
 		"race": "PIRATE",
@@ -8220,7 +8876,6 @@ var parseCardsText = {
 	{
 		"artist": "Mark Gibbons",
 		"cardClass": "ROGUE",
-		"cardImage": "CFM_342e.png",
 		"dbfId": 40790,
 		"goldenImage": "CFM_342e.gif",
 		"id": "CFM_342e",
@@ -8236,27 +8891,15 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "CFM_343.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon a\n<b>Jade Golem</b>.",
-			"esES": "[x]<b>Provocar</b>. <b>Grito de batalla:</b>\nInvoca un <b>gólem de jade</b>.",
-			"esMX": "<b>Provocación</b>\n<b>Grito de batalla:</b> Invoca un <b>Gólem de jade</b>.",
-			"frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.",
-			"itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>.",
-			"jaJP": "<b>挑発</b>、<b>雄叫び:</b>\n <b>翡翠のゴーレム</b>を\n1体召喚する。     ",
-			"koKR": "<b>도발</b>, <b>전투의 함성:</b>\n<b>비취 골렘</b>을 하나 소환합니다.",
-			"plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": "[x]<b>Provocar</b>\n<b>Grito de Guerra:</b> Evoque um \n<b>Golem de Jade</b>.",
-			"ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b> призывает <b>нефритового голема</b>.",
-			"thTH": "[x]<b>ยั่วยุ</b>\n<b>คำรามสู้ศึก:</b> \nเรียก <b>เจดโกเล็ม</b>",
-			"zhCN": "<b>嘲讽，战吼：</b>召唤一个<b>青玉魔像</b>。",
-			"zhTW": "<b>嘲諷</b>\n<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>"
-		},
 		"cost": 6,
 		"dbfId": 40797,
 		"goldenImage": "CFM_343.gif",
 		"health": 6,
 		"id": "CFM_343",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Jade Behemoth",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -8279,6 +8922,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_344.gif",
 		"health": 4,
 		"id": "CFM_344",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Finja, the Flying Star",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -8292,26 +8938,13 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "CFM_602.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Wählt aus:</b> Ruft einen <b>Jadegolem</b> herbei; oder mischt 3 Kopien dieser Karte in Euer Deck.",
-			"enUS": "<b>Choose One -</b> Summon a <b>Jade Golem</b>; or Shuffle 3 copies of this card into your deck.",
-			"esES": "<b>Elige una:</b> Invoca un <b>gólem de jade</b>,\no bien mete 3 copias de esta carta en tu mazo.",
-			"esMX": "<b>Elige una opción:</b> invoca un <b>Gólem de jade</b> o coloca 3 copias de esta carta en tu mazo.",
-			"frFR": "<b>Choix des armes :</b> invoque un <b>golem de jade</b> ou place 3 copies de cette carte dans votre deck.",
-			"itIT": "<b>Scegli:</b> evoca un <b>Golem di Giada</b> <b>o</b> mette tre copie di questa carta nel tuo mazzo.",
-			"jaJP": "[x]<b>選択:</b>\n<b>翡翠のゴーレム</b>\nを1体召喚する。\nまたは、このカードのコピー\n3枚を自分のデッキに混ぜる。",
-			"koKR": "<b>선택 -</b> <b>비취 골렘</b>을 하나 소환합니다. 또는\n이 카드를 3장 복사하여 내 덱에 섞어 넣습니다.",
-			"plPL": "<b>Wybierz jedno:</b> Przyzwij <b>Nefrytowego golema</b>; lub wtasuj 3 kopie tej karty do twojej talii.",
-			"ptBR": "<b>Escolha Um -</b> Evoque um <b>Golem de Jade</b>; ou Coloque 3 cópias deste card no seu deck.",
-			"ruRU": "<b>Выберите эффект:</b> призывает <b>нефритового голема</b>; или замешивает 3 копии этой карты в колоду.",
-			"thTH": "<b>เลือกหนึ่งอย่าง -</b> เรียก <b>เจดโกเล็ม</b> หรือสับการ์ดนี้ 3 ใบ เข้าไปในเด็คของคุณ",
-			"zhCN": "<b>抉择：</b>召唤一个<b>青玉魔像</b>；或者将该牌的三个复制洗入你的\n牌库。",
-			"zhTW": "<b>二選一：</b>召喚\n一個<b>翠玉魔像</b>，或將三張<b>翠玉塑像</b>洗入你的牌堆中"
-		},
 		"cost": 1,
 		"dbfId": 40372,
 		"goldenImage": "CFM_602.gif",
 		"id": "CFM_602",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Jade Idol",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -8372,7 +9005,6 @@ var parseCardsText = {
 	{
 		"artist": "Arthur Bozonnet",
 		"cardClass": "PRIEST",
-		"cardImage": "CFM_603e.png",
 		"dbfId": 42155,
 		"goldenImage": "CFM_603e.gif",
 		"id": "CFM_603e",
@@ -8409,6 +9041,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_605.gif",
 		"health": 6,
 		"id": "CFM_605",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Drakonid Operative",
 		"playerClass": "Priest",
 		"race": "DRAGON",
@@ -8500,6 +9135,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_610.gif",
 		"health": 4,
 		"id": "CFM_610",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Crystalweaver",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -8510,7 +9148,6 @@ var parseCardsText = {
 	{
 		"artist": "Arthur Gimaldinov",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_610e.png",
 		"dbfId": 40390,
 		"goldenImage": "CFM_610e.gif",
 		"id": "CFM_610e",
@@ -8539,7 +9176,6 @@ var parseCardsText = {
 	{
 		"artist": "Raven Mimura",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_611e.png",
 		"dbfId": 42086,
 		"goldenImage": "CFM_611e.gif",
 		"id": "CFM_611e",
@@ -8552,7 +9188,6 @@ var parseCardsText = {
 	{
 		"artist": "Raven Mimura",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_611e2.png",
 		"dbfId": 42087,
 		"goldenImage": "CFM_611e2.gif",
 		"id": "CFM_611e2",
@@ -8581,7 +9216,6 @@ var parseCardsText = {
 	{
 		"artist": "Wayne Reynolds",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_614e.png",
 		"dbfId": 40396,
 		"goldenImage": "CFM_614e.gif",
 		"id": "CFM_614e",
@@ -8618,6 +9252,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_617.gif",
 		"health": 3,
 		"id": "CFM_617",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Celestial Dreamer",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -8628,7 +9265,6 @@ var parseCardsText = {
 	{
 		"artist": "Alex Garner",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_617e.png",
 		"dbfId": 40403,
 		"goldenImage": "CFM_617e.gif",
 		"id": "CFM_617e",
@@ -8651,9 +9287,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"dbfId": 40407,
+		"entourage": [
+			"CFM_065",
+			"CFM_021",
+			"CFM_603",
+			"CFM_604",
+			"CFM_611",
+			"CFM_620",
+			"CFM_094",
+			"CFM_661",
+			"CFM_662",
+			"CFM_608"
+		],
 		"goldenImage": "CFM_619.gif",
 		"health": 3,
 		"id": "CFM_619",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "KABAL",
 		"name": "Kabal Chemist",
 		"playerClass": "Neutral",
@@ -8671,6 +9322,9 @@ var parseCardsText = {
 		"dbfId": 40409,
 		"goldenImage": "CFM_620.gif",
 		"id": "CFM_620",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Potion of Polymorph",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -8692,9 +9346,17 @@ var parseCardsText = {
 		"cost": 4,
 		"dbfId": 40408,
 		"elite": true,
+		"entourage": [
+			"CFM_621t11",
+			"CFM_621t12",
+			"CFM_621t13"
+		],
 		"goldenImage": "CFM_621.gif",
 		"health": 3,
 		"id": "CFM_621",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "KABAL",
 		"name": "Kazakus",
 		"playerClass": "Neutral",
@@ -8770,7 +9432,6 @@ var parseCardsText = {
 	{
 		"artist": "Konstantin Turovec",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_621e.png",
 		"dbfId": 42058,
 		"goldenImage": "CFM_621e.gif",
 		"id": "CFM_621e",
@@ -8783,7 +9444,6 @@ var parseCardsText = {
 	{
 		"artist": "Konstantin Turovec",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_621e2.png",
 		"dbfId": 42059,
 		"goldenImage": "CFM_621e2.gif",
 		"id": "CFM_621e2",
@@ -8796,7 +9456,6 @@ var parseCardsText = {
 	{
 		"artist": "Konstantin Turovec",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_621e3.png",
 		"dbfId": 42060,
 		"goldenImage": "CFM_621e3.gif",
 		"id": "CFM_621e3",
@@ -8992,22 +9651,6 @@ var parseCardsText = {
 		"artist": "Konstantin Turovec",
 		"cardClass": "NEUTRAL",
 		"cardImage": "CFM_621t21.png",
-		"collectionText": {
-			"deDE": "Verwandelt einen zufälligen feindlichen Diener.",
-			"enUS": "Polymorph a random enemy minion.",
-			"esES": "Transforma\na un esbirro enemigo aleatorio.",
-			"esMX": "Lanza Polimorfia sobre un esbirro enemigo aleatorio.",
-			"frFR": "Métamorphose un serviteur adverse aléatoire.",
-			"itIT": "Trasforma un servitore nemico casuale in una pecora.",
-			"jaJP": "ランダムな[b]敵の[b]ミニオン1体を[b]変身させる。",
-			"koKR": "무작위 적 하수인 하나를 변이시킵니다.",
-			"plPL": "Przemień losowego wrogiego stronnika w Owcę.",
-			"ptBR": "Transforma um lacaio inimigo aleatório.",
-			"ruRU": "Превращает случайное существо противника.",
-			"thTH": "สุ่มเปลี่ยนร่าง\nมินเนี่ยนศัตรูหนึ่งตัว",
-			"zhCN": "随机使一个敌方随从变形。",
-			"zhTW": "將一個隨機敵方手下變成羊"
-		},
 		"cost": 5,
 		"dbfId": 41617,
 		"goldenImage": "CFM_621t21.gif",
@@ -9345,6 +9988,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_626.gif",
 		"health": 4,
 		"id": "CFM_626",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kabal Talonpriest",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -9355,7 +10001,6 @@ var parseCardsText = {
 	{
 		"artist": "Dave Allsop",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_626e.png",
 		"dbfId": 40431,
 		"goldenImage": "CFM_626e.gif",
 		"id": "CFM_626e",
@@ -9402,7 +10047,6 @@ var parseCardsText = {
 	{
 		"artist": "Anton Magdalina",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_631e.png",
 		"dbfId": 41528,
 		"goldenImage": "CFM_631e.gif",
 		"id": "CFM_631e",
@@ -9423,6 +10067,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_634.gif",
 		"health": 5,
 		"id": "CFM_634",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Lotus Assassin",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -9441,6 +10088,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_636.gif",
 		"health": 1,
 		"id": "CFM_636",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Shadow Rager",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -9465,7 +10115,7 @@ var parseCardsText = {
 		"race": "PIRATE",
 		"rarity": "Legendary",
 		"set": "Gangs",
-		"text": "[x]<b>Charge</b>\nAfter you play a Pirate,\nsummon this minion\nfrom your deck.",
+		"text": "[x]After you play a Pirate,\nsummon this minion\nfrom your deck.",
 		"type": "Minion"
 	},
 	{
@@ -9489,7 +10139,6 @@ var parseCardsText = {
 	{
 		"artist": "Mike Azevedo",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_639e.png",
 		"dbfId": 40468,
 		"goldenImage": "CFM_639e.gif",
 		"id": "CFM_639e",
@@ -9511,6 +10160,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_643.gif",
 		"health": 2,
 		"id": "CFM_643",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hobart Grapplehammer",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
@@ -9521,7 +10173,6 @@ var parseCardsText = {
 	{
 		"artist": "A.J. Nazzaro",
 		"cardClass": "WARRIOR",
-		"cardImage": "CFM_643e.png",
 		"dbfId": 40481,
 		"goldenImage": "CFM_643e.gif",
 		"id": "CFM_643e",
@@ -9533,7 +10184,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "CFM_643e2.png",
 		"dbfId": 42631,
 		"goldenImage": "CFM_643e2.gif",
 		"id": "CFM_643e2",
@@ -9554,6 +10204,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_646.gif",
 		"health": 1,
 		"id": "CFM_646",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Backstreet Leper",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9572,6 +10225,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_647.gif",
 		"health": 1,
 		"id": "CFM_647",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blowgill Sniper",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -9591,6 +10247,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_648.gif",
 		"health": 1,
 		"id": "CFM_648",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Big-Time Racketeer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9629,6 +10288,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_649.gif",
 		"health": 2,
 		"id": "CFM_649",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "KABAL",
 		"name": "Kabal Courier",
 		"playerClass": "Neutral",
@@ -9651,6 +10313,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_650.gif",
 		"health": 1,
 		"id": "CFM_650",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Grimscale Chum",
 		"playerClass": "Paladin",
 		"race": "MURLOC",
@@ -9662,7 +10327,6 @@ var parseCardsText = {
 	{
 		"artist": "Matt Dixon",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_650e.png",
 		"dbfId": 40530,
 		"goldenImage": "CFM_650e.gif",
 		"id": "CFM_650e",
@@ -9683,6 +10347,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_651.gif",
 		"health": 4,
 		"id": "CFM_651",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Naga Corsair",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -9694,7 +10361,6 @@ var parseCardsText = {
 	{
 		"artist": "Rafael Zanchetin",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_651e.png",
 		"dbfId": 40887,
 		"goldenImage": "CFM_651e.gif",
 		"id": "CFM_651e",
@@ -9715,6 +10381,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_652.gif",
 		"health": 5,
 		"id": "CFM_652",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Second-Rate Bruiser",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -9733,6 +10402,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_653.gif",
 		"health": 3,
 		"id": "CFM_653",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Hired Gun",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9769,6 +10441,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_655.gif",
 		"health": 3,
 		"id": "CFM_655",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Toxic Sewer Ooze",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9787,6 +10462,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_656.gif",
 		"health": 6,
 		"id": "CFM_656",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Streetwise Investigator",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9808,6 +10486,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_657.gif",
 		"health": 5,
 		"id": "CFM_657",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kabal Songstealer",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -9839,7 +10520,6 @@ var parseCardsText = {
 	{
 		"artist": "Paul Mafayon",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_658e.png",
 		"dbfId": 41840,
 		"goldenImage": "CFM_658e.gif",
 		"id": "CFM_658e",
@@ -9860,6 +10540,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_659.gif",
 		"health": 2,
 		"id": "CFM_659",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gadgetzan Socialite",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9878,6 +10561,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_660.gif",
 		"health": 4,
 		"id": "CFM_660",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Manic Soulcaster",
 		"playerClass": "Mage",
 		"rarity": "Epic",
@@ -9904,10 +10590,12 @@ var parseCardsText = {
 	{
 		"artist": "Matt Dixon",
 		"cardClass": "PRIEST",
-		"cardImage": "CFM_661e.png",
 		"dbfId": 40960,
 		"goldenImage": "CFM_661e.gif",
 		"id": "CFM_661e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Shrunk",
 		"playerClass": "Priest",
 		"set": "Gangs",
@@ -9976,6 +10664,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_666.gif",
 		"health": 5,
 		"id": "CFM_666",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Grook Fu Master",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -9994,6 +10685,10 @@ var parseCardsText = {
 		"goldenImage": "CFM_667.gif",
 		"health": 2,
 		"id": "CFM_667",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Bomb Squad",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -10012,6 +10707,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_668.gif",
 		"health": 2,
 		"id": "CFM_668",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Doppelgangster",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -10029,6 +10727,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_668t.gif",
 		"health": 2,
 		"id": "CFM_668t",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Doppelgangster",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -10046,6 +10747,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_668t2.gif",
 		"health": 2,
 		"id": "CFM_668t2",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Doppelgangster",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -10101,6 +10805,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_671.gif",
 		"health": 5,
 		"id": "CFM_671",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Cryomancer",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -10114,7 +10821,6 @@ var parseCardsText = {
 	{
 		"artist": "Tyler West Studios",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_671e.png",
 		"dbfId": 40987,
 		"goldenImage": "CFM_671e.gif",
 		"id": "CFM_671e",
@@ -10136,6 +10842,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_672.gif",
 		"health": 3,
 		"id": "CFM_672",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Madam Goya",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -10160,6 +10869,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_685.gif",
 		"health": 6,
 		"id": "CFM_685",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "GRIMY_GOONS",
 		"name": "Don Han'Cho",
 		"playerClass": "Neutral",
@@ -10171,7 +10883,6 @@ var parseCardsText = {
 	{
 		"artist": "Tyson Murphy",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_685e.png",
 		"dbfId": 40844,
 		"goldenImage": "CFM_685e.gif",
 		"id": "CFM_685e",
@@ -10193,6 +10904,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_687.gif",
 		"health": 5,
 		"id": "CFM_687",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Inkmaster Solia",
 		"playerClass": "Mage",
 		"rarity": "Legendary",
@@ -10203,10 +10917,12 @@ var parseCardsText = {
 	{
 		"artist": "J. Ejsing & E. Amundsen",
 		"cardClass": "MAGE",
-		"cardImage": "CFM_687e.png",
 		"dbfId": 41957,
 		"goldenImage": "CFM_687e.gif",
 		"id": "CFM_687e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Free Spell",
 		"playerClass": "Mage",
 		"set": "Gangs",
@@ -10224,6 +10940,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_688.gif",
 		"health": 5,
 		"id": "CFM_688",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Spiked Hogrider",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -10240,26 +10959,13 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "CFM_690.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "Verursacht $2 Schaden. <b>Combo:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": "Deal $2 damage.\n<b>Combo:</b> Summon a <b>Jade Golem</b>.",
-			"esES": "Inflige $2 p. de daño.\n<b>Combo:</b> Invoca un <b>gólem de jade</b>.",
-			"esMX": "Inflige $2 de daño.\n<b>Combo:</b> invoca un <b>Gólem de jade</b>.",
-			"frFR": "Inflige $2 |4(point,points) de dégâts. <b>Combo :</b> invoque un <b>golem de jade</b>.",
-			"itIT": "Infligge $2 danni. <b>Combo:</b> evoca un <b>Golem di Giada</b>.",
-			"jaJP": "[x]  $2ダメージを与える。\n<b>コンボ:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"koKR": "[x]피해를 $2 줍니다.\n<b>연계:</b> <b>비취 골렘</b>을 하나\n소환합니다.",
-			"plPL": "Zadaj $2 pkt. obrażeń.\n<b>Kombinacja:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": "Cause $2 de dano.\n<b>Combo:</b> Evoque um <b>Golem de Jade</b>.",
-			"ruRU": "Наносит $2 ед. урона. <b>Серия приемов:</b> призывает\n<b>нефритового голема</b>.",
-			"thTH": "สร้างความเสียหาย $2 แต้ม\n<b>คอมโบ:</b> เรียก <b>เจดโกเล็ม</b>",
-			"zhCN": "造成$2点伤害。\n<b>连击：</b>召唤一个<b>青玉魔像</b>。",
-			"zhTW": "造成$2點傷害。<b>連擊：</b>召喚一個\n<b>翠玉魔像</b>"
-		},
 		"cost": 2,
 		"dbfId": 40698,
 		"goldenImage": "CFM_690.gif",
 		"id": "CFM_690",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Jade Shuriken",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -10277,27 +10983,15 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "CFM_691.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Verstohlenheit</b>. <b>Todesröcheln:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": "<b>Stealth</b>\n<b>Deathrattle:</b> Summon a <b>Jade Golem</b>.",
-			"esES": "<b>Sigilo</b>.\n<b>Último aliento:</b> Invoca un <b>gólem de jade</b>.",
-			"esMX": "<b>Sigilo</b>\n<b>Estertor:</b> invoca un <b>Gólem de jade</b>.",
-			"frFR": "<b>Camouflage</b>. <b>Râle d’agonie :</b> invoque un <b>golem de jade</b>.",
-			"itIT": "<b>Furtività</b>. <b>Rantolo di Morte:</b> evoca un <b>Golem di Giada</b>.",
-			"jaJP": "[x]<b>隠れ身</b>、 <b>断末魔:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"koKR": "<b>은신</b>\n<b>죽음의 메아리:</b>\n<b>비취 골렘</b>을 하나 소환합니다.",
-			"plPL": "<b>Ukrycie</b>\n<b>Agonia:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": "<b>Furtividade</b>.\n<b>Último Suspiro:</b> Evoque um <b>Golem de Jade</b>.",
-			"ruRU": "<b>Маскировка</b>. <b>Предсмертный хрип:</b> призывает   <b>нефритового голема</b>.",
-			"thTH": "<b>ซ่อนตัว</b>\n<b>เสียงสุดท้าย:</b> เรียก <b>เจดโกเล็ม</b>",
-			"zhCN": "<b>潜行，亡语：</b>召唤一个<b>青玉魔像</b>。",
-			"zhTW": "<b>潛行</b>\n<b>死亡之聲：</b>召喚一個<b>翠玉魔像</b>"
-		},
 		"cost": 2,
 		"dbfId": 40697,
 		"goldenImage": "CFM_691.gif",
 		"health": 1,
 		"id": "CFM_691",
+		"mechanics": [
+			"DEATHRATTLE",
+			"STEALTH"
+		],
 		"name": "Jade Swarmer",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -10319,6 +11013,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_693.gif",
 		"health": 3,
 		"id": "CFM_693",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Gadgetzan Ferryman",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -10337,6 +11034,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_694.gif",
 		"health": 4,
 		"id": "CFM_694",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shadow Sensei",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -10350,7 +11050,6 @@ var parseCardsText = {
 	{
 		"artist": "Andrew Hou",
 		"cardClass": "ROGUE",
-		"cardImage": "CFM_694e.png",
 		"dbfId": 40789,
 		"goldenImage": "CFM_694e.gif",
 		"id": "CFM_694e",
@@ -10405,6 +11104,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_699.gif",
 		"health": 2,
 		"id": "CFM_699",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Seadevil Stinger",
 		"playerClass": "Warlock",
 		"race": "MURLOC",
@@ -10416,10 +11118,12 @@ var parseCardsText = {
 	{
 		"artist": "Yewon Park",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_699e.png",
 		"dbfId": 42161,
 		"goldenImage": "CFM_699e.gif",
 		"id": "CFM_699e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Seadevil Enchant",
 		"playerClass": "Neutral",
 		"set": "Gangs",
@@ -10430,22 +11134,6 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "CFM_707.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "Verursacht $4 Schaden. Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": "Deal $4 damage. Summon a <b>Jade Golem</b>.",
-			"esES": "Inflige $4 p. de daño. Invoca un <b>gólem de jade</b>.",
-			"esMX": "Inflige $4 de daño. Invoca un <b>Gólem de jade</b>.",
-			"frFR": "Inflige $4 |4(point,points) de dégâts. Invoque un <b>golem de jade</b>.",
-			"itIT": "Infligge $4 danni. Evoca un <b>Golem di Giada</b>.",
-			"jaJP": "[x]$4ダメージを与える。\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"koKR": "[x]피해를 $4 줍니다.\n<b>비취 골렘</b>을 하나\n소환합니다.",
-			"plPL": "Zadaj $4 pkt. obrażeń. Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": "Cause $4 de dano. Evoque um <b>Golem de Jade</b>.",
-			"ruRU": "Наносит $4 ед. урона. Призывает <b>нефритового голема</b>.",
-			"thTH": "สร้างความเสียหาย $4 แต้ม\nเรียก <b>เจดโกเล็ม</b>",
-			"zhCN": "造成$4点伤害，召唤一个<b>青玉魔像</b>。",
-			"zhTW": "造成$4點傷害。召喚一個\n<b>翠玉魔像</b>"
-		},
 		"cost": 4,
 		"dbfId": 40455,
 		"goldenImage": "CFM_707.gif",
@@ -11005,22 +11693,6 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "CFM_713.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "Ruft einen <b>Jadegolem</b> herbei. Erhaltet einen leeren Manakristall.",
-			"enUS": "Summon a <b>Jade Golem</b>. Gain an empty Mana Crystal.",
-			"esES": "Invoca un\n<b>gólem de jade</b>. Obtienes un cristal de maná vacío.",
-			"esMX": "Invoca un <b>Gólem de jade</b>. Obtienes un Cristal de maná vacío.",
-			"frFR": "Invoque un <b>golem de jade</b>. Gagne un cristal de mana vide.",
-			"itIT": "Evoca un <b>Golem di Giada</b>. Fornisce 1 Cristallo di Mana vuoto",
-			"jaJP": "[x]<b>翡翠のゴーレム</b>\nを1体召喚する。\n空のマナクリスタル\nを1つ獲得する。",
-			"koKR": "<b>비취 골렘</b>을 하나 소환합니다. 빈 마나 수정을 1개 획득합니다.",
-			"plPL": "Przyzwij <b>Nefrytowego golema</b>. Otrzymujesz pusty kryształ many.",
-			"ptBR": "Evoque um <b>Golem de Jade</b>. Receba um Cristal de Mana vazio.",
-			"ruRU": "Призывает <b>нефритового голема</b>. Вы получаете\n[x]пустой кристалл маны.",
-			"thTH": "เรียก <b>เจดโกเล็ม</b> ได้รับคริสตัลมานาเปล่าหนึ่งอัน",
-			"zhCN": "召唤一个<b>青玉魔像</b>，获得一个空的法力水晶。",
-			"zhTW": "召喚一個\n<b>翠玉魔像</b>。獲得\n1顆空的法力水晶"
-		},
 		"cost": 3,
 		"dbfId": 40523,
 		"goldenImage": "CFM_713.gif",
@@ -11046,27 +11718,15 @@ var parseCardsText = {
 			"SHAMAN"
 		],
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.",
-			"esES": "[x]<b>Grito de batalla:</b>\nInvoca un\n<b>gólem de jade</b>.",
-			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b>.",
-			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.",
-			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>.",
-			"jaJP": "[x]<b>雄叫び:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"koKR": "<b>전투의 함성:</b>\n<b>비취 골렘</b>을 하나 소환합니다.",
-			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>.",
-			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b>.",
-			"thTH": "<b>คำรามสู้ศึก:</b> \nเรียก <b>เจดโกเล็ม</b>",
-			"zhCN": "<b>战吼：</b>召唤一个\n<b>青玉魔像</b>。",
-			"zhTW": "<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>"
-		},
 		"cost": 4,
 		"dbfId": 40527,
 		"goldenImage": "CFM_715.gif",
 		"health": 3,
 		"id": "CFM_715",
+		"mechanics": [
+			"BATTLECRY",
+			"JADE_GOLEM"
+		],
 		"multiClassGroup": "JADE_LOTUS",
 		"name": "Jade Spirit",
 		"playerClass": "Neutral",
@@ -11098,27 +11758,15 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "CFM_717.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei. <b>Überladung:</b> (1)",
-			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.\n<b><b>Overload</b>:</b> (1)",
-			"esES": "[x]<b>Grito de batalla:</b> Invoca un\n<b>gólem de jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
-			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
-			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.\n<b><b>Surcharge :</b></b> (1)",
-			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>. <b>Sovraccarico:</b> (1)",
-			"jaJP": "[x]<b>雄叫び:</b> \n<b>翡翠のゴーレム</b>を\n1体召喚する。\n     <b>オーバーロード</b>:（1）",
-			"koKR": "<b>전투의 함성:</b>\n<b>비취 골렘</b>을 하나 소환합니다.\n<b>과부하:</b> (1)",
-			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.\n<b>Przeciążenie:</b> (1)",
-			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
-			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b>.\n<b>Перегрузка</b>: (1)",
-			"thTH": "<b>คำรามสู้ศึก:</b>\nเรียก <b>เจดโกเล็ม</b> \n<b><b>โอเวอร์โหลด</b>:</b> (1)",
-			"zhCN": "<b>战吼：</b>召唤一个<b>青玉魔像</b>。\n<b>过载：</b>（1）",
-			"zhTW": "[x]<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>\n<b><b>超載</b>：</b>(1)"
-		},
 		"cost": 2,
 		"dbfId": 40529,
 		"durability": 2,
 		"goldenImage": "CFM_717.gif",
 		"id": "CFM_717",
+		"mechanics": [
+			"BATTLECRY",
+			"OVERLOAD"
+		],
 		"name": "Jade Claws",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -11142,6 +11790,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_750.gif",
 		"health": 9,
 		"id": "CFM_750",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Krul the Unshackled",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -11161,6 +11812,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_751.gif",
 		"health": 6,
 		"id": "CFM_751",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Abyssal Enforcer",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -11191,7 +11845,6 @@ var parseCardsText = {
 	{
 		"artist": "Mark Gibbons",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_752e.png",
 		"dbfId": 40570,
 		"goldenImage": "CFM_752e.gif",
 		"id": "CFM_752e",
@@ -11212,6 +11865,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_753.gif",
 		"health": 1,
 		"id": "CFM_753",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Grimestreet Outfitter",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -11222,7 +11878,6 @@ var parseCardsText = {
 	{
 		"artist": "Peter Stapleton",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_753e.png",
 		"dbfId": 40571,
 		"goldenImage": "CFM_753e.gif",
 		"id": "CFM_753e",
@@ -11253,7 +11908,6 @@ var parseCardsText = {
 	{
 		"artist": "Wayne Reynolds",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_754e.png",
 		"dbfId": 40573,
 		"goldenImage": "CFM_754e.gif",
 		"id": "CFM_754e",
@@ -11274,6 +11928,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_755.gif",
 		"health": 3,
 		"id": "CFM_755",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Grimestreet Pawnbroker",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -11284,7 +11941,6 @@ var parseCardsText = {
 	{
 		"artist": "Mauricio Herrera",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_755e.png",
 		"dbfId": 40572,
 		"goldenImage": "CFM_755e.gif",
 		"id": "CFM_755e",
@@ -11305,6 +11961,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_756.gif",
 		"health": 7,
 		"id": "CFM_756",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Alley Armorsmith",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -11323,6 +11982,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_759.gif",
 		"health": 2,
 		"id": "CFM_759",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Meanstreet Marshal",
 		"playerClass": "Paladin",
 		"rarity": "Epic",
@@ -11363,6 +12025,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_781.gif",
 		"health": 3,
 		"id": "CFM_781",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Shaku, the Collector",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -11381,6 +12046,10 @@ var parseCardsText = {
 		"goldenImage": "CFM_790.gif",
 		"health": 6,
 		"id": "CFM_790",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Dirty Rat",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -11397,6 +12066,9 @@ var parseCardsText = {
 		"dbfId": 40587,
 		"goldenImage": "CFM_800.gif",
 		"id": "CFM_800",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Getaway Kodo",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -11416,6 +12088,10 @@ var parseCardsText = {
 		"goldenImage": "CFM_806.gif",
 		"health": 5,
 		"id": "CFM_806",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Wrathion",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -11472,6 +12148,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_809.gif",
 		"health": 4,
 		"id": "CFM_809",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tanaris Hogchopper",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -11493,6 +12172,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_810.gif",
 		"health": 6,
 		"id": "CFM_810",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Leatherclad Hogleader",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -11531,6 +12213,11 @@ var parseCardsText = {
 		"goldenImage": "CFM_815.gif",
 		"health": 2,
 		"id": "CFM_815",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"LIFESTEAL",
+			"TAUNT"
+		],
 		"name": "Wickerflame Burnbristle",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -11549,6 +12236,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_816.gif",
 		"health": 5,
 		"id": "CFM_816",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Virmen Sensei",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -11559,7 +12249,6 @@ var parseCardsText = {
 	{
 		"artist": "Dany Orizio",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_816e.png",
 		"dbfId": 40640,
 		"goldenImage": "CFM_816e.gif",
 		"id": "CFM_816e",
@@ -11590,7 +12279,6 @@ var parseCardsText = {
 	{
 		"artist": "Sojin Hwang",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_851e.png",
 		"dbfId": 42054,
 		"goldenImage": "CFM_851e.gif",
 		"id": "CFM_851e",
@@ -11616,6 +12304,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_852.gif",
 		"health": 3,
 		"id": "CFM_852",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "JADE_LOTUS",
 		"name": "Lotus Agents",
 		"playerClass": "Neutral",
@@ -11643,6 +12334,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_853.gif",
 		"health": 4,
 		"id": "CFM_853",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"multiClassGroup": "GRIMY_GOONS",
 		"name": "Grimestreet Smuggler",
 		"playerClass": "Neutral",
@@ -11654,7 +12348,6 @@ var parseCardsText = {
 	{
 		"artist": "Sean McNally",
 		"cardClass": "NEUTRAL",
-		"cardImage": "CFM_853e.png",
 		"dbfId": 41526,
 		"goldenImage": "CFM_853e.gif",
 		"id": "CFM_853e",
@@ -11675,6 +12368,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_854.gif",
 		"health": 8,
 		"id": "CFM_854",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ancient of Blossoms",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -11693,6 +12389,9 @@ var parseCardsText = {
 		"goldenImage": "CFM_855.gif",
 		"health": 7,
 		"id": "CFM_855",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Defias Cleaner",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -11734,28 +12433,17 @@ var parseCardsText = {
 			"SHAMAN"
 		],
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<b>Kampfschrei und Todesröcheln:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": " <b>Battlecry and Deathrattle:</b> Summon a <b>Jade Golem</b>.",
-			"esES": "<b>Grito de batalla y\nÚltimo aliento:</b>\nInvoca un\n<b>gólem de jade</b>.",
-			"esMX": "<b>Grito de batalla y Estertor:</b> invoca un <b>Gólem de jade</b>.",
-			"frFR": "<b>Cri de guerre et Râle d’agonie :</b> invoque un <b>golem de jade</b>.",
-			"itIT": "<b>Grido di Battaglia</b> e <b>Rantolo di Morte:</b> evoca un <b>Golem di Giada</b>.",
-			"jaJP": "[x]<b>雄叫び＆断末魔:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"koKR": "<b>전투의 함성과\n죽음의 메아리:</b> <b>비취 골렘</b>을 하나 소환합니다.",
-			"plPL": "<b>Okrzyk bojowy i Agonia:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": " <b>Grito de Guerra e Último Suspiro:</b> Evoque um <b>Golem de Jade</b>.",
-			"ruRU": "<b>Боевой клич и предсмертный хрип:</b> призывает   <b>нефритового голема</b>.",
-			"thTH": "<b>คำรามสู้ศึกและเสียงสุดท้าย:</b> เรียก <b>เจดโกเล็ม</b>",
-			"zhCN": "<b>战吼，亡语：</b>召唤一个<b>青玉魔像</b>。",
-			"zhTW": "<b>戰吼及死亡之聲：</b>召喚一個<b>翠玉魔像</b>"
-		},
 		"cost": 6,
 		"dbfId": 40596,
 		"elite": true,
 		"goldenImage": "CFM_902.gif",
 		"health": 3,
 		"id": "CFM_902",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE",
+			"JADE_GOLEM"
+		],
 		"multiClassGroup": "JADE_LOTUS",
 		"name": "Aya Blackpaw",
 		"playerClass": "Neutral",
@@ -11789,6 +12477,9 @@ var parseCardsText = {
 		"dbfId": 40839,
 		"goldenImage": "CFM_940.gif",
 		"id": "CFM_940",
+		"mechanics": [
+			"DISCOVER"
+		],
 		"name": "I Know a Guy",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -13291,6 +13982,9 @@ var parseCardsText = {
 		"goldenImage": "CS1_042.gif",
 		"health": 2,
 		"id": "CS1_042",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Goldshire Footman",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -13310,6 +14004,9 @@ var parseCardsText = {
 		"goldenImage": "CS1_069.gif",
 		"health": 6,
 		"id": "CS1_069",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Fen Creeper",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -13367,7 +14064,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "CS1_129e.png",
 		"dbfId": 650,
 		"goldenImage": "CS1_129e.gif",
 		"id": "CS1_129e",
@@ -13468,7 +14164,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "CS2_004e.png",
 		"dbfId": 591,
 		"goldenImage": "CS2_004e.gif",
 		"id": "CS2_004e",
@@ -13496,10 +14191,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "CS2_005o.png",
 		"dbfId": 65,
 		"goldenImage": "CS2_005o.gif",
 		"id": "CS2_005o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Claw",
 		"playerClass": "Druid",
 		"set": "Core",
@@ -13559,7 +14256,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "CS2_009e.png",
 		"dbfId": 207,
 		"goldenImage": "CS2_009e.gif",
 		"id": "CS2_009e",
@@ -13587,10 +14283,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "CS2_011o.png",
 		"dbfId": 789,
 		"goldenImage": "CS2_011o.gif",
 		"id": "CS2_011o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Savage Roar",
 		"playerClass": "Druid",
 		"set": "Core",
@@ -13658,10 +14356,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "CS2_017o.png",
 		"dbfId": 1668,
 		"goldenImage": "CS2_017o.gif",
 		"id": "CS2_017o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Claws",
 		"playerClass": "Druid",
 		"set": "Core",
@@ -13686,10 +14386,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "CS2_022e.png",
 		"dbfId": 130,
 		"goldenImage": "CS2_022e.gif",
 		"id": "CS2_022e",
+		"mechanics": [
+			"MORPH"
+		],
 		"name": "Polymorph",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -13722,6 +14424,9 @@ var parseCardsText = {
 		"dbfId": 662,
 		"goldenImage": "CS2_024.gif",
 		"id": "CS2_024",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Frostbolt",
 		"playerClass": "Mage",
 		"rarity": "Free",
@@ -13754,6 +14459,9 @@ var parseCardsText = {
 		"dbfId": 587,
 		"goldenImage": "CS2_026.gif",
 		"id": "CS2_026",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Frost Nova",
 		"playerClass": "Mage",
 		"rarity": "Free",
@@ -13789,6 +14497,9 @@ var parseCardsText = {
 		"dbfId": 457,
 		"goldenImage": "CS2_028.gif",
 		"id": "CS2_028",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Blizzard",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -13821,6 +14532,9 @@ var parseCardsText = {
 		"dbfId": 172,
 		"goldenImage": "CS2_031.gif",
 		"id": "CS2_031",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Ice Lance",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -13855,6 +14569,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_033.gif",
 		"health": 6,
 		"id": "CS2_033",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Water Elemental",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -13940,6 +14657,9 @@ var parseCardsText = {
 		"dbfId": 971,
 		"goldenImage": "CS2_037.gif",
 		"id": "CS2_037",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Frost Shock",
 		"playerClass": "Shaman",
 		"rarity": "Free",
@@ -13968,7 +14688,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "CS2_038e.png",
 		"dbfId": 942,
 		"goldenImage": "CS2_038e.gif",
 		"id": "CS2_038e",
@@ -14018,10 +14737,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "CS2_041e.png",
 		"dbfId": 1853,
 		"goldenImage": "CS2_041e.gif",
 		"id": "CS2_041e",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ancestral Infusion",
 		"playerClass": "Shaman",
 		"set": "Core",
@@ -14039,6 +14760,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_042.gif",
 		"health": 5,
 		"id": "CS2_042",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fire Elemental",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -14065,10 +14789,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "CS2_045e.png",
 		"dbfId": 1102,
 		"goldenImage": "CS2_045e.gif",
 		"id": "CS2_045e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Rockbiter Weapon",
 		"playerClass": "Shaman",
 		"set": "Core",
@@ -14093,10 +14819,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "CS2_046e.png",
 		"dbfId": 1096,
 		"goldenImage": "CS2_046e.gif",
 		"id": "CS2_046e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Bloodlust",
 		"playerClass": "Shaman",
 		"set": "Core",
@@ -14108,6 +14836,12 @@ var parseCardsText = {
 		"cardImage": "CS2_049.png",
 		"cost": 2,
 		"dbfId": 687,
+		"entourage": [
+			"CS2_050",
+			"CS2_051",
+			"CS2_052",
+			"NEW1_009"
+		],
 		"goldenImage": "CS2_049.gif",
 		"id": "CS2_049",
 		"name": "Totemic Call",
@@ -14122,6 +14856,12 @@ var parseCardsText = {
 		"cardImage": "CS2_049_H1.png",
 		"cost": 2,
 		"dbfId": 40247,
+		"entourage": [
+			"CS2_050",
+			"CS2_051",
+			"CS2_052",
+			"NEW1_009"
+		],
 		"goldenImage": "CS2_049_H1.gif",
 		"id": "CS2_049_H1",
 		"name": "Totemic Call",
@@ -14169,6 +14909,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_051.gif",
 		"health": 2,
 		"id": "CS2_051",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Stoneclaw Totem",
 		"playerClass": "Shaman",
 		"race": "TOTEM",
@@ -14186,6 +14929,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_052.gif",
 		"health": 2,
 		"id": "CS2_052",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Wrath of Air Totem",
 		"playerClass": "Shaman",
 		"race": "TOTEM",
@@ -14214,7 +14960,6 @@ var parseCardsText = {
 	{
 		"artist": "Lars Grant-West",
 		"cardClass": "SHAMAN",
-		"cardImage": "CS2_053e.png",
 		"dbfId": 1750,
 		"goldenImage": "CS2_053e.gif",
 		"id": "CS2_053e",
@@ -14278,6 +15023,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_059.gif",
 		"health": 1,
 		"id": "CS2_059",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Blood Imp",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -14288,7 +15036,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "CS2_059o.png",
 		"dbfId": 185,
 		"goldenImage": "CS2_059o.gif",
 		"id": "CS2_059o",
@@ -14348,7 +15095,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "CS2_063e.png",
 		"dbfId": 917,
 		"goldenImage": "CS2_063e.gif",
 		"id": "CS2_063e",
@@ -14369,6 +15115,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_064.gif",
 		"health": 6,
 		"id": "CS2_064",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dread Infernal",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -14388,6 +15137,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_065.gif",
 		"health": 3,
 		"id": "CS2_065",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Voidwalker",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -14421,6 +15173,9 @@ var parseCardsText = {
 		"dbfId": 268,
 		"goldenImage": "CS2_073.gif",
 		"id": "CS2_073",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Cold Blood",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -14430,7 +15185,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "CS2_073e.png",
 		"dbfId": 1626,
 		"goldenImage": "CS2_073e.gif",
 		"id": "CS2_073e",
@@ -14442,7 +15196,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "CS2_073e2.png",
 		"dbfId": 1625,
 		"goldenImage": "CS2_073e2.gif",
 		"id": "CS2_073e2",
@@ -14470,7 +15223,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_074e.png",
 		"dbfId": 1739,
 		"goldenImage": "CS2_074e.gif",
 		"id": "CS2_074e",
@@ -14605,10 +15357,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "CS2_083e.png",
 		"dbfId": 1644,
 		"goldenImage": "CS2_083e.gif",
 		"id": "CS2_083e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Sharpened",
 		"playerClass": "Rogue",
 		"set": "Core",
@@ -14633,7 +15387,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "CS2_084e.png",
 		"dbfId": 925,
 		"goldenImage": "CS2_084e.gif",
 		"id": "CS2_084e",
@@ -14661,7 +15414,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "CS2_087e.png",
 		"dbfId": 603,
 		"goldenImage": "CS2_087e.gif",
 		"id": "CS2_087e",
@@ -14682,6 +15434,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_088.gif",
 		"health": 6,
 		"id": "CS2_088",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Guardian of Kings",
 		"playerClass": "Paladin",
 		"rarity": "Free",
@@ -14740,7 +15495,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "CS2_092e.png",
 		"dbfId": 803,
 		"goldenImage": "CS2_092e.gif",
 		"id": "CS2_092e",
@@ -14947,7 +15701,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "CS2_103e2.png",
 		"dbfId": 1713,
 		"goldenImage": "CS2_103e2.gif",
 		"id": "CS2_103e2",
@@ -14975,7 +15728,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "CS2_104e.png",
 		"dbfId": 616,
 		"goldenImage": "CS2_104e.gif",
 		"id": "CS2_104e",
@@ -15003,10 +15755,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "CS2_105e.png",
 		"dbfId": 78,
 		"goldenImage": "CS2_105e.gif",
 		"id": "CS2_105e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Heroic Strike",
 		"playerClass": "Warrior",
 		"set": "Core",
@@ -15090,6 +15844,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_117.gif",
 		"health": 3,
 		"id": "CS2_117",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Earthen Ring Farseer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -15162,6 +15919,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_121.gif",
 		"health": 2,
 		"id": "CS2_121",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Frostwolf Grunt",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15180,6 +15940,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_122.gif",
 		"health": 2,
 		"id": "CS2_122",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Raid Leader",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15189,7 +15952,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_122e.png",
 		"dbfId": 1402,
 		"goldenImage": "CS2_122e.gif",
 		"id": "CS2_122e",
@@ -15211,6 +15973,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_124.gif",
 		"health": 1,
 		"id": "CS2_124",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Wolfrider",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15229,6 +15994,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_125.gif",
 		"health": 3,
 		"id": "CS2_125",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ironfur Grizzly",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -15249,6 +16017,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_127.gif",
 		"health": 4,
 		"id": "CS2_127",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Silverback Patriarch",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -15269,6 +16040,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_131.gif",
 		"health": 5,
 		"id": "CS2_131",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Stormwind Knight",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15288,6 +16062,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_141.gif",
 		"health": 2,
 		"id": "CS2_141",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ironforge Rifleman",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15307,6 +16084,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_142.gif",
 		"health": 2,
 		"id": "CS2_142",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Kobold Geomancer",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15350,6 +16130,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_147.gif",
 		"health": 4,
 		"id": "CS2_147",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gnomish Inventor",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15369,6 +16152,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_150.gif",
 		"health": 2,
 		"id": "CS2_150",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Stormpike Commando",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15388,6 +16174,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_151.gif",
 		"health": 4,
 		"id": "CS2_151",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Silver Hand Knight",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -15423,6 +16212,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_155.gif",
 		"health": 7,
 		"id": "CS2_155",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Archmage",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15443,6 +16235,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_161.gif",
 		"health": 5,
 		"id": "CS2_161",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Ravenholdt Assassin",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -15462,6 +16257,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_162.gif",
 		"health": 5,
 		"id": "CS2_162",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Lord of the Arena",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15500,6 +16298,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_169.gif",
 		"health": 1,
 		"id": "CS2_169",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Young Dragonhawk",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -15519,6 +16320,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_171.gif",
 		"health": 1,
 		"id": "CS2_171",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Stonetusk Boar",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -15557,6 +16361,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_173.gif",
 		"health": 1,
 		"id": "CS2_173",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Bluegill Warrior",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -15577,6 +16384,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_179.gif",
 		"health": 5,
 		"id": "CS2_179",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Sen'jin Shieldmasta",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15596,6 +16406,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_181.gif",
 		"health": 7,
 		"id": "CS2_181",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Injured Blademaster",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -15605,7 +16418,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_181e.png",
 		"dbfId": 978,
 		"goldenImage": "CS2_181e.gif",
 		"id": "CS2_181e",
@@ -15661,6 +16473,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_187.gif",
 		"health": 4,
 		"id": "CS2_187",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Booty Bay Bodyguard",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15680,6 +16495,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_188.gif",
 		"health": 1,
 		"id": "CS2_188",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Abusive Sergeant",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -15689,10 +16507,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_188o.png",
 		"dbfId": 809,
 		"goldenImage": "CS2_188o.gif",
 		"id": "CS2_188o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "'Inspired'",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -15711,6 +16531,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_189.gif",
 		"health": 1,
 		"id": "CS2_189",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Elven Archer",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15730,6 +16553,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_196.gif",
 		"health": 3,
 		"id": "CS2_196",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Razorfen Hunter",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15748,6 +16574,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_197.gif",
 		"health": 4,
 		"id": "CS2_197",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Ogre Magi",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15803,6 +16632,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_203.gif",
 		"health": 1,
 		"id": "CS2_203",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ironbeak Owl",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -15826,6 +16658,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_213.gif",
 		"health": 2,
 		"id": "CS2_213",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Reckless Rocketeer",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15845,6 +16680,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_221.gif",
 		"health": 6,
 		"id": "CS2_221",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Spiteful Smith",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -15854,7 +16692,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_221e.png",
 		"dbfId": 1752,
 		"goldenImage": "CS2_221e.gif",
 		"id": "CS2_221e",
@@ -15876,6 +16713,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_222.gif",
 		"health": 6,
 		"id": "CS2_222",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Stormwind Champion",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15885,7 +16725,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_222o.png",
 		"dbfId": 240,
 		"goldenImage": "CS2_222o.gif",
 		"id": "CS2_222o",
@@ -15907,6 +16746,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_226.gif",
 		"health": 4,
 		"id": "CS2_226",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Frostwolf Warlord",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -15916,7 +16758,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "CS2_226e.png",
 		"dbfId": 1811,
 		"goldenImage": "CS2_226e.gif",
 		"id": "CS2_226e",
@@ -15938,6 +16779,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_227.gif",
 		"health": 6,
 		"id": "CS2_227",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Venture Co. Mercenary",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -15973,6 +16817,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_232.gif",
 		"health": 8,
 		"id": "CS2_232",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ironbark Protector",
 		"playerClass": "Druid",
 		"rarity": "Free",
@@ -16048,7 +16895,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "CS2_236e.png",
 		"dbfId": 1627,
 		"goldenImage": "CS2_236e.gif",
 		"id": "CS2_236e",
@@ -16102,6 +16948,9 @@ var parseCardsText = {
 		"goldenImage": "CS2_mirror.gif",
 		"health": 2,
 		"id": "CS2_mirror",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Mirror Image",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -16134,6 +16983,10 @@ var parseCardsText = {
 		"goldenImage": "DREAM_01.gif",
 		"health": 5,
 		"id": "DREAM_01",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Laughing Sister",
 		"playerClass": "Dream",
 		"set": "Expert1",
@@ -16196,7 +17049,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "DREAM_05e.png",
 		"dbfId": 208,
 		"goldenImage": "DREAM_05e.gif",
 		"id": "DREAM_05e",
@@ -16217,6 +17069,9 @@ var parseCardsText = {
 		"goldenImage": "DS1_055.gif",
 		"health": 5,
 		"id": "DS1_055",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Darkscale Healer",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -16235,6 +17090,9 @@ var parseCardsText = {
 		"goldenImage": "DS1_070.gif",
 		"health": 3,
 		"id": "DS1_070",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Houndmaster",
 		"playerClass": "Hunter",
 		"rarity": "Free",
@@ -16247,7 +17105,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "DS1_070o.png",
 		"dbfId": 722,
 		"goldenImage": "DS1_070o.gif",
 		"id": "DS1_070o",
@@ -16268,6 +17125,9 @@ var parseCardsText = {
 		"goldenImage": "DS1_175.gif",
 		"health": 1,
 		"id": "DS1_175",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Timber Wolf",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -16278,7 +17138,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "DS1_175o.png",
 		"dbfId": 1629,
 		"goldenImage": "DS1_175o.gif",
 		"id": "DS1_175o",
@@ -16299,6 +17158,9 @@ var parseCardsText = {
 		"goldenImage": "DS1_178.gif",
 		"health": 5,
 		"id": "DS1_178",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Tundra Rhino",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -16312,7 +17174,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "DS1_178e.png",
 		"dbfId": 1712,
 		"goldenImage": "DS1_178e.gif",
 		"id": "DS1_178e",
@@ -16393,7 +17254,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "DS1_188e.png",
 		"dbfId": 40197,
 		"goldenImage": "DS1_188e.gif",
 		"id": "DS1_188e",
@@ -16494,7 +17354,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_001e.png",
 		"dbfId": 1632,
 		"goldenImage": "EX1_001e.gif",
 		"id": "EX1_001e",
@@ -16516,6 +17375,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_002.gif",
 		"health": 5,
 		"id": "EX1_002",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "The Black Knight",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -16546,7 +17408,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_004e.png",
 		"dbfId": 1628,
 		"goldenImage": "EX1_004e.gif",
 		"id": "EX1_004e",
@@ -16567,6 +17428,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_005.gif",
 		"health": 2,
 		"id": "EX1_005",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Big Game Hunter",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -16623,6 +17487,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_008.gif",
 		"health": 1,
 		"id": "EX1_008",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Argent Squire",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -16641,6 +17508,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_009.gif",
 		"health": 1,
 		"id": "EX1_009",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Angry Chicken",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -16651,10 +17521,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_009e.png",
 		"dbfId": 39829,
 		"goldenImage": "EX1_009e.gif",
 		"id": "EX1_009e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -16673,6 +17545,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_010.gif",
 		"health": 1,
 		"id": "EX1_010",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Worgen Infiltrator",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -16692,6 +17567,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_011.gif",
 		"health": 1,
 		"id": "EX1_011",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Voodoo Doctor",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -16711,6 +17589,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_012.gif",
 		"health": 1,
 		"id": "EX1_012",
+		"mechanics": [
+			"DEATHRATTLE",
+			"SPELLPOWER"
+		],
 		"name": "Bloodmage Thalnos",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -16731,6 +17613,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_014.gif",
 		"health": 5,
 		"id": "EX1_014",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "King Mukla",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -16754,7 +17639,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_014te.png",
 		"dbfId": 1695,
 		"goldenImage": "EX1_014te.gif",
 		"id": "EX1_014te",
@@ -16776,6 +17660,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_015.gif",
 		"health": 1,
 		"id": "EX1_015",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Novice Engineer",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -16795,6 +17682,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_016.gif",
 		"health": 5,
 		"id": "EX1_016",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sylvanas Windrunner",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -16814,6 +17704,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_017.gif",
 		"health": 2,
 		"id": "EX1_017",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Jungle Panther",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -16833,6 +17726,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_019.gif",
 		"health": 2,
 		"id": "EX1_019",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shattered Sun Cleric",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -16842,7 +17738,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "EX1_019e.png",
 		"dbfId": 388,
 		"goldenImage": "EX1_019e.gif",
 		"id": "EX1_019e",
@@ -16864,6 +17759,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_020.gif",
 		"health": 1,
 		"id": "EX1_020",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Scarlet Crusader",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -16883,6 +17781,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_021.gif",
 		"health": 3,
 		"id": "EX1_021",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Thrallmar Farseer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -16902,6 +17803,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_023.gif",
 		"health": 3,
 		"id": "EX1_023",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Silvermoon Guardian",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -16921,6 +17825,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_025.gif",
 		"health": 4,
 		"id": "EX1_025",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dragonling Mechanic",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -16956,6 +17863,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_028.gif",
 		"health": 5,
 		"id": "EX1_028",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Stranglethorn Tiger",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -16975,6 +17885,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_029.gif",
 		"health": 1,
 		"id": "EX1_029",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Leper Gnome",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -16994,6 +17907,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_032.gif",
 		"health": 5,
 		"id": "EX1_032",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Sunwalker",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17013,6 +17930,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_033.gif",
 		"health": 5,
 		"id": "EX1_033",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Windfury Harpy",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17031,6 +17951,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_043.gif",
 		"health": 1,
 		"id": "EX1_043",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Twilight Drake",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -17041,7 +17964,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_043e.png",
 		"dbfId": 1630,
 		"goldenImage": "EX1_043e.gif",
 		"id": "EX1_043e",
@@ -17072,7 +17994,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_044e.png",
 		"dbfId": 42,
 		"goldenImage": "EX1_044e.gif",
 		"id": "EX1_044e",
@@ -17094,6 +18015,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_045.gif",
 		"health": 5,
 		"id": "EX1_045",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "Ancient Watcher",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17113,6 +18037,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_046.gif",
 		"health": 4,
 		"id": "EX1_046",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dark Iron Dwarf",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17122,10 +18049,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_046e.png",
 		"dbfId": 1700,
 		"goldenImage": "EX1_046e.gif",
 		"id": "EX1_046e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Tempered",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -17144,6 +18073,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_048.gif",
 		"health": 3,
 		"id": "EX1_048",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Spellbreaker",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17166,6 +18098,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_049.gif",
 		"health": 2,
 		"id": "EX1_049",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Youthful Brewmaster",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17184,6 +18119,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_050.gif",
 		"health": 2,
 		"id": "EX1_050",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Coldlight Oracle",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -17213,10 +18151,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_055o.png",
 		"dbfId": 450,
 		"goldenImage": "EX1_055o.gif",
 		"id": "EX1_055o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Empowered",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -17235,6 +18175,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_057.gif",
 		"health": 4,
 		"id": "EX1_057",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ancient Brewmaster",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17254,6 +18197,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_058.gif",
 		"health": 3,
 		"id": "EX1_058",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sunfury Protector",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17275,6 +18221,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_059.gif",
 		"health": 2,
 		"id": "EX1_059",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Crazed Alchemist",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17284,7 +18233,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_059e.png",
 		"dbfId": 1664,
 		"goldenImage": "EX1_059e.gif",
 		"id": "EX1_059e",
@@ -17306,6 +18254,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_062.gif",
 		"health": 4,
 		"id": "EX1_062",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Old Murk-Eye",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -17326,6 +18277,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_066.gif",
 		"health": 2,
 		"id": "EX1_066",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Acidic Swamp Ooze",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -17344,6 +18298,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_067.gif",
 		"health": 2,
 		"id": "EX1_067",
+		"mechanics": [
+			"CHARGE",
+			"DIVINE_SHIELD"
+		],
 		"name": "Argent Commander",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17363,6 +18321,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_076.gif",
 		"health": 2,
 		"id": "EX1_076",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Pint-Sized Summoner",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17394,7 +18355,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_080o.png",
 		"dbfId": 634,
 		"goldenImage": "EX1_080o.gif",
 		"id": "EX1_080o",
@@ -17416,6 +18376,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_082.gif",
 		"health": 2,
 		"id": "EX1_082",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Mad Bomber",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17436,6 +18399,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_083.gif",
 		"health": 3,
 		"id": "EX1_083",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tinkmaster Overspark",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -17454,6 +18420,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_084.gif",
 		"health": 3,
 		"id": "EX1_084",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Warsong Commander",
 		"playerClass": "Warrior",
 		"rarity": "Free",
@@ -17466,7 +18435,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_084e.png",
 		"dbfId": 706,
 		"goldenImage": "EX1_084e.gif",
 		"id": "EX1_084e",
@@ -17488,6 +18456,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_085.gif",
 		"health": 3,
 		"id": "EX1_085",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Mind Control Tech",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17506,6 +18477,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_089.gif",
 		"health": 4,
 		"id": "EX1_089",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Arcane Golem",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17524,6 +18498,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_091.gif",
 		"health": 5,
 		"id": "EX1_091",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Cabal Shadow Priest",
 		"playerClass": "Priest",
 		"rarity": "Epic",
@@ -17543,6 +18520,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_093.gif",
 		"health": 3,
 		"id": "EX1_093",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Defender of Argus",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17555,7 +18535,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_093e.png",
 		"dbfId": 1103,
 		"goldenImage": "EX1_093e.gif",
 		"id": "EX1_093e",
@@ -17594,6 +18573,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_096.gif",
 		"health": 1,
 		"id": "EX1_096",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Loot Hoarder",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -17612,6 +18594,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_097.gif",
 		"health": 4,
 		"id": "EX1_097",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Abomination",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -17668,6 +18654,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_103.gif",
 		"health": 3,
 		"id": "EX1_103",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Coldlight Seer",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -17678,7 +18667,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_103e.png",
 		"dbfId": 1718,
 		"goldenImage": "EX1_103e.gif",
 		"id": "EX1_103e",
@@ -17719,6 +18707,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_110.gif",
 		"health": 5,
 		"id": "EX1_110",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Cairne Bloodhoof",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -17750,10 +18741,19 @@ var parseCardsText = {
 		"cost": 6,
 		"dbfId": 858,
 		"elite": true,
+		"entourage": [
+			"Mekka1",
+			"Mekka2",
+			"Mekka3",
+			"Mekka4"
+		],
 		"faction": "ALLIANCE",
 		"goldenImage": "EX1_112.gif",
 		"health": 6,
 		"id": "EX1_112",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gelbin Mekkatorque",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -17774,6 +18774,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_116.gif",
 		"health": 2,
 		"id": "EX1_116",
+		"mechanics": [
+			"BATTLECRY",
+			"CHARGE"
+		],
 		"name": "Leeroy Jenkins",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -17805,6 +18809,9 @@ var parseCardsText = {
 		"dbfId": 904,
 		"goldenImage": "EX1_124.gif",
 		"id": "EX1_124",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Eviscerate",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -17849,7 +18856,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "EX1_128e.png",
 		"dbfId": 1756,
 		"goldenImage": "EX1_128e.gif",
 		"id": "EX1_128e",
@@ -17884,6 +18890,9 @@ var parseCardsText = {
 		"dbfId": 584,
 		"goldenImage": "EX1_130.gif",
 		"id": "EX1_130",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Noble Sacrifice",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -17917,6 +18926,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_131.gif",
 		"health": 2,
 		"id": "EX1_131",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Defias Ringleader",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -17947,6 +18959,9 @@ var parseCardsText = {
 		"dbfId": 462,
 		"goldenImage": "EX1_132.gif",
 		"id": "EX1_132",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Eye for an Eye",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -17965,6 +18980,10 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "EX1_133.gif",
 		"id": "EX1_133",
+		"mechanics": [
+			"BATTLECRY",
+			"COMBO"
+		],
 		"name": "Perdition's Blade",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -17983,6 +19002,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_134.gif",
 		"health": 3,
 		"id": "EX1_134",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "SI:7 Agent",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -17999,6 +19021,9 @@ var parseCardsText = {
 		"dbfId": 140,
 		"goldenImage": "EX1_136.gif",
 		"id": "EX1_136",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Redemption",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -18015,6 +19040,9 @@ var parseCardsText = {
 		"dbfId": 708,
 		"goldenImage": "EX1_137.gif",
 		"id": "EX1_137",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Headcrack",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -18056,10 +19084,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "EX1_145o.png",
 		"dbfId": 1760,
 		"goldenImage": "EX1_145o.gif",
 		"id": "EX1_145o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Preparation",
 		"playerClass": "Rogue",
 		"set": "Expert1",
@@ -18075,6 +19105,9 @@ var parseCardsText = {
 		"dbfId": 836,
 		"goldenImage": "EX1_154.gif",
 		"id": "EX1_154",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Wrath",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -18117,6 +19150,9 @@ var parseCardsText = {
 		"dbfId": 151,
 		"goldenImage": "EX1_155.gif",
 		"id": "EX1_155",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Mark of Nature",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -18142,7 +19178,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_155ae.png",
 		"dbfId": 322,
 		"goldenImage": "EX1_155ae.gif",
 		"id": "EX1_155ae",
@@ -18167,7 +19202,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_155be.png",
 		"dbfId": 276,
 		"goldenImage": "EX1_155be.gif",
 		"id": "EX1_155be",
@@ -18198,7 +19232,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_158e.png",
 		"dbfId": 638,
 		"goldenImage": "EX1_158e.gif",
 		"id": "EX1_158e",
@@ -18231,6 +19264,9 @@ var parseCardsText = {
 		"dbfId": 503,
 		"goldenImage": "EX1_160.gif",
 		"id": "EX1_160",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Power of the Wild",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -18266,7 +19302,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_160be.png",
 		"dbfId": 980,
 		"goldenImage": "EX1_160be.gif",
 		"id": "EX1_160be",
@@ -18319,6 +19354,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_162.gif",
 		"health": 2,
 		"id": "EX1_162",
+		"mechanics": [
+			"ADJACENT_BUFF",
+			"AURA"
+		],
 		"name": "Dire Wolf Alpha",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -18329,7 +19368,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_162o.png",
 		"dbfId": 705,
 		"goldenImage": "EX1_162o.gif",
 		"id": "EX1_162o",
@@ -18348,6 +19386,9 @@ var parseCardsText = {
 		"dbfId": 95,
 		"goldenImage": "EX1_164.gif",
 		"id": "EX1_164",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Nourish",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -18392,6 +19433,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_165.gif",
 		"health": 4,
 		"id": "EX1_165",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -18438,6 +19482,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_165t1.gif",
 		"health": 4,
 		"id": "EX1_165t1",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -18455,6 +19502,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_165t2.gif",
 		"health": 6,
 		"id": "EX1_165t2",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -18474,6 +19524,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_166.gif",
 		"health": 2,
 		"id": "EX1_166",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Keeper of the Grove",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -18504,6 +19557,9 @@ var parseCardsText = {
 		"dbfId": 321,
 		"goldenImage": "EX1_166b.gif",
 		"id": "EX1_166b",
+		"mechanics": [
+			"SILENCE"
+		],
 		"name": "Dispel",
 		"playerClass": "Druid",
 		"set": "Expert1",
@@ -18537,6 +19593,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_170.gif",
 		"health": 3,
 		"id": "EX1_170",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Emperor Cobra",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -18572,6 +19631,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_178.gif",
 		"health": 5,
 		"id": "EX1_178",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Ancient of War",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -18597,7 +19659,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_178ae.png",
 		"dbfId": 153,
 		"goldenImage": "EX1_178ae.gif",
 		"id": "EX1_178ae",
@@ -18622,7 +19683,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_178be.png",
 		"dbfId": 876,
 		"goldenImage": "EX1_178be.gif",
 		"id": "EX1_178be",
@@ -18641,6 +19701,9 @@ var parseCardsText = {
 		"dbfId": 505,
 		"goldenImage": "EX1_238.gif",
 		"id": "EX1_238",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Lightning Bolt",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -18658,6 +19721,9 @@ var parseCardsText = {
 		"dbfId": 864,
 		"goldenImage": "EX1_241.gif",
 		"id": "EX1_241",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Lava Burst",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -18677,6 +19743,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_243.gif",
 		"health": 1,
 		"id": "EX1_243",
+		"mechanics": [
+			"OVERLOAD",
+			"WINDFURY"
+		],
 		"name": "Dust Devil",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -18704,7 +19774,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "EX1_244e.png",
 		"dbfId": 294,
 		"goldenImage": "EX1_244e.gif",
 		"id": "EX1_244e",
@@ -18723,6 +19792,9 @@ var parseCardsText = {
 		"dbfId": 767,
 		"goldenImage": "EX1_245.gif",
 		"id": "EX1_245",
+		"mechanics": [
+			"SILENCE"
+		],
 		"name": "Earth Shock",
 		"playerClass": "Shaman",
 		"rarity": "Common",
@@ -18751,10 +19823,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "EX1_246e.png",
 		"dbfId": 1635,
 		"goldenImage": "EX1_246e.gif",
 		"id": "EX1_246e",
+		"mechanics": [
+			"MORPH"
+		],
 		"name": "Hexxed",
 		"playerClass": "Shaman",
 		"set": "Core",
@@ -18772,6 +19846,9 @@ var parseCardsText = {
 		"durability": 3,
 		"goldenImage": "EX1_247.gif",
 		"id": "EX1_247",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Stormforged Axe",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -18789,6 +19866,9 @@ var parseCardsText = {
 		"dbfId": 238,
 		"goldenImage": "EX1_248.gif",
 		"id": "EX1_248",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Feral Spirit",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -18831,6 +19911,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_250.gif",
 		"health": 8,
 		"id": "EX1_250",
+		"mechanics": [
+			"OVERLOAD",
+			"TAUNT"
+		],
 		"name": "Earth Elemental",
 		"overload": 3,
 		"playerClass": "Shaman",
@@ -18849,6 +19933,9 @@ var parseCardsText = {
 		"dbfId": 299,
 		"goldenImage": "EX1_251.gif",
 		"id": "EX1_251",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Forked Lightning",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -18881,7 +19968,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "EX1_258e.png",
 		"dbfId": 1738,
 		"goldenImage": "EX1_258e.gif",
 		"id": "EX1_258e",
@@ -18900,6 +19986,9 @@ var parseCardsText = {
 		"dbfId": 629,
 		"goldenImage": "EX1_259.gif",
 		"id": "EX1_259",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Lightning Storm",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -18931,7 +20020,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "EX1_274e.png",
 		"dbfId": 1779,
 		"goldenImage": "EX1_274e.gif",
 		"id": "EX1_274e",
@@ -18950,6 +20038,9 @@ var parseCardsText = {
 		"dbfId": 430,
 		"goldenImage": "EX1_275.gif",
 		"id": "EX1_275",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Cone of Cold",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -18966,6 +20057,9 @@ var parseCardsText = {
 		"dbfId": 564,
 		"goldenImage": "EX1_277.gif",
 		"id": "EX1_277",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Arcane Missiles",
 		"playerClass": "Mage",
 		"rarity": "Free",
@@ -19016,6 +20110,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_283.gif",
 		"health": 5,
 		"id": "EX1_283",
+		"mechanics": [
+			"BATTLECRY",
+			"FREEZE"
+		],
 		"name": "Frost Elemental",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -19035,6 +20133,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_284.gif",
 		"health": 4,
 		"id": "EX1_284",
+		"mechanics": [
+			"BATTLECRY",
+			"SPELLPOWER"
+		],
 		"name": "Azure Drake",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -19053,6 +20155,9 @@ var parseCardsText = {
 		"dbfId": 113,
 		"goldenImage": "EX1_287.gif",
 		"id": "EX1_287",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Counterspell",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -19072,6 +20177,9 @@ var parseCardsText = {
 		"dbfId": 621,
 		"goldenImage": "EX1_289.gif",
 		"id": "EX1_289",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Ice Barrier",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -19088,6 +20196,9 @@ var parseCardsText = {
 		"dbfId": 195,
 		"goldenImage": "EX1_294.gif",
 		"id": "EX1_294",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Mirror Entity",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -19104,6 +20215,9 @@ var parseCardsText = {
 		"dbfId": 192,
 		"goldenImage": "EX1_295.gif",
 		"id": "EX1_295",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Ice Block",
 		"playerClass": "Mage",
 		"rarity": "Epic",
@@ -19116,10 +20230,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "EX1_295o.png",
 		"dbfId": 849,
 		"goldenImage": "EX1_295o.gif",
 		"id": "EX1_295o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Ice Block",
 		"playerClass": "Mage",
 		"set": "Expert1",
@@ -19138,6 +20254,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_298.gif",
 		"health": 8,
 		"id": "EX1_298",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "Ragnaros the Firelord",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -19157,6 +20276,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_301.gif",
 		"health": 5,
 		"id": "EX1_301",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Felguard",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19208,6 +20331,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_304.gif",
 		"health": 3,
 		"id": "EX1_304",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Void Terror",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19218,7 +20344,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "EX1_304e.png",
 		"dbfId": 1702,
 		"goldenImage": "EX1_304e.gif",
 		"id": "EX1_304e",
@@ -19239,6 +20364,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_306.gif",
 		"health": 3,
 		"id": "EX1_306",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Succubus",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19290,6 +20418,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_310.gif",
 		"health": 7,
 		"id": "EX1_310",
+		"mechanics": [
+			"BATTLECRY",
+			"CHARGE"
+		],
 		"name": "Doomguard",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19325,6 +20457,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_313.gif",
 		"health": 6,
 		"id": "EX1_313",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Pit Lord",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19344,6 +20479,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_315.gif",
 		"health": 4,
 		"id": "EX1_315",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Summoning Portal",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -19369,7 +20507,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "EX1_316e.png",
 		"dbfId": 953,
 		"goldenImage": "EX1_316e.gif",
 		"id": "EX1_316e",
@@ -19423,6 +20560,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_319.gif",
 		"health": 2,
 		"id": "EX1_319",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Flame Imp",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19459,6 +20599,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_323.gif",
 		"health": 15,
 		"id": "EX1_323",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lord Jaraxxus",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -19505,6 +20648,9 @@ var parseCardsText = {
 		"dbfId": 1189,
 		"goldenImage": "EX1_332.gif",
 		"id": "EX1_332",
+		"mechanics": [
+			"SILENCE"
+		],
 		"name": "Silence",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -19530,7 +20676,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "EX1_334e.png",
 		"dbfId": 639,
 		"goldenImage": "EX1_334e.gif",
 		"id": "EX1_334e",
@@ -19694,7 +20839,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_355e.png",
 		"dbfId": 1523,
 		"goldenImage": "EX1_355e.gif",
 		"id": "EX1_355e",
@@ -19722,7 +20866,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_360e.png",
 		"dbfId": 1088,
 		"goldenImage": "EX1_360e.gif",
 		"id": "EX1_360e",
@@ -19743,6 +20886,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_362.gif",
 		"health": 2,
 		"id": "EX1_362",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Argent Protector",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -19771,7 +20917,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_363e.png",
 		"dbfId": 1543,
 		"goldenImage": "EX1_363e.gif",
 		"id": "EX1_363e",
@@ -19783,7 +20928,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_363e2.png",
 		"dbfId": 1544,
 		"goldenImage": "EX1_363e2.gif",
 		"id": "EX1_363e2",
@@ -19829,7 +20973,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_366e.png",
 		"dbfId": 1685,
 		"goldenImage": "EX1_366e.gif",
 		"id": "EX1_366e",
@@ -19867,6 +21010,9 @@ var parseCardsText = {
 		"dbfId": 232,
 		"goldenImage": "EX1_379.gif",
 		"id": "EX1_379",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Repentance",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -19876,7 +21022,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_379e.png",
 		"dbfId": 169,
 		"goldenImage": "EX1_379e.gif",
 		"id": "EX1_379e",
@@ -19897,6 +21042,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_382.gif",
 		"health": 3,
 		"id": "EX1_382",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Aldor Peacekeeper",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -19906,7 +21054,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_382e.png",
 		"dbfId": 1918,
 		"goldenImage": "EX1_382e.gif",
 		"id": "EX1_382e",
@@ -19928,6 +21075,11 @@ var parseCardsText = {
 		"goldenImage": "EX1_383.gif",
 		"health": 6,
 		"id": "EX1_383",
+		"mechanics": [
+			"DEATHRATTLE",
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Tirion Fordring",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -19959,6 +21111,9 @@ var parseCardsText = {
 		"dbfId": 1174,
 		"goldenImage": "EX1_384.gif",
 		"id": "EX1_384",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Avenging Wrath",
 		"playerClass": "Paladin",
 		"rarity": "Epic",
@@ -19977,6 +21132,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_390.gif",
 		"health": 3,
 		"id": "EX1_390",
+		"mechanics": [
+			"ENRAGED",
+			"TAUNT"
+		],
 		"name": "Tauren Warrior",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -19986,10 +21145,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_390e.png",
 		"dbfId": 39838,
 		"goldenImage": "EX1_390e.gif",
 		"id": "EX1_390e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -20039,6 +21200,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_393.gif",
 		"health": 3,
 		"id": "EX1_393",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Amani Berserker",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -20048,10 +21212,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_393e.png",
 		"dbfId": 39836,
 		"goldenImage": "EX1_393e.gif",
 		"id": "EX1_393e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -20069,6 +21235,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_396.gif",
 		"health": 7,
 		"id": "EX1_396",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Mogu'shan Warden",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -20087,6 +21256,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_398.gif",
 		"health": 3,
 		"id": "EX1_398",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Arathi Weaponsmith",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -20128,7 +21300,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_399e.png",
 		"dbfId": 1621,
 		"goldenImage": "EX1_399e.gif",
 		"id": "EX1_399e",
@@ -20183,6 +21354,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_405.gif",
 		"health": 4,
 		"id": "EX1_405",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Shieldbearer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -20240,7 +21414,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_409e.png",
 		"dbfId": 726,
 		"goldenImage": "EX1_409e.gif",
 		"id": "EX1_409e",
@@ -20300,7 +21473,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_411e.png",
 		"dbfId": 1521,
 		"goldenImage": "EX1_411e.gif",
 		"id": "EX1_411e",
@@ -20312,7 +21484,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_411e2.png",
 		"dbfId": 1731,
 		"goldenImage": "EX1_411e2.gif",
 		"id": "EX1_411e2",
@@ -20333,6 +21504,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_412.gif",
 		"health": 3,
 		"id": "EX1_412",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Raging Worgen",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -20345,10 +21519,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_412e.png",
 		"dbfId": 39837,
 		"goldenImage": "EX1_412e.gif",
 		"id": "EX1_412e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -20367,6 +21543,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_414.gif",
 		"health": 9,
 		"id": "EX1_414",
+		"mechanics": [
+			"CHARGE",
+			"ENRAGED"
+		],
 		"name": "Grommash Hellscream",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
@@ -20376,7 +21556,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_414e.png",
 		"dbfId": 39835,
 		"goldenImage": "EX1_414e.gif",
 		"id": "EX1_414e",
@@ -20397,6 +21576,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_506.gif",
 		"health": 1,
 		"id": "EX1_506",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Murloc Tidehunter",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -20432,6 +21614,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_507.gif",
 		"health": 3,
 		"id": "EX1_507",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Murloc Warleader",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -20442,7 +21627,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_507e.png",
 		"dbfId": 535,
 		"goldenImage": "EX1_507e.gif",
 		"id": "EX1_507e",
@@ -20473,7 +21657,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_508o.png",
 		"dbfId": 729,
 		"goldenImage": "EX1_508o.gif",
 		"id": "EX1_508o",
@@ -20504,7 +21687,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_509e.png",
 		"dbfId": 1719,
 		"goldenImage": "EX1_509e.gif",
 		"id": "EX1_509e",
@@ -20525,6 +21707,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_522.gif",
 		"health": 1,
 		"id": "EX1_522",
+		"mechanics": [
+			"POISONOUS",
+			"STEALTH"
+		],
 		"name": "Patient Assassin",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -20553,7 +21739,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "EX1_531e.png",
 		"dbfId": 1633,
 		"goldenImage": "EX1_531e.gif",
 		"id": "EX1_531e",
@@ -20572,6 +21757,9 @@ var parseCardsText = {
 		"dbfId": 1091,
 		"goldenImage": "EX1_533.gif",
 		"id": "EX1_533",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Misdirection",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -20590,6 +21778,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_534.gif",
 		"health": 5,
 		"id": "EX1_534",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Savannah Highmane",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -20638,7 +21829,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "EX1_536e.png",
 		"dbfId": 1680,
 		"goldenImage": "EX1_536e.gif",
 		"id": "EX1_536e",
@@ -20692,6 +21882,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_538t.gif",
 		"health": 1,
 		"id": "EX1_538t",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Hound",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -20727,6 +21920,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_543.gif",
 		"health": 8,
 		"id": "EX1_543",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "King Krush",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -20776,10 +21972,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "EX1_549o.png",
 		"dbfId": 668,
 		"goldenImage": "EX1_549o.gif",
 		"id": "EX1_549o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Bestial Wrath",
 		"playerClass": "Hunter",
 		"set": "Expert1",
@@ -20795,6 +21993,9 @@ var parseCardsText = {
 		"dbfId": 455,
 		"goldenImage": "EX1_554.gif",
 		"id": "EX1_554",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Snake Trap",
 		"playerClass": "Hunter",
 		"rarity": "Epic",
@@ -20829,6 +22030,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_556.gif",
 		"health": 3,
 		"id": "EX1_556",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Harvest Golem",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -20868,6 +22072,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_558.gif",
 		"health": 4,
 		"id": "EX1_558",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Harrison Jones",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -20926,6 +22133,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_561.gif",
 		"health": 8,
 		"id": "EX1_561",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Alexstrasza",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -20936,7 +22146,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_561e.png",
 		"dbfId": 1778,
 		"goldenImage": "EX1_561e.gif",
 		"id": "EX1_561e",
@@ -20958,6 +22167,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_562.gif",
 		"health": 8,
 		"id": "EX1_562",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Onyxia",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -20978,6 +22190,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_563.gif",
 		"health": 12,
 		"id": "EX1_563",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Malygos",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -20998,6 +22213,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_564.gif",
 		"health": 3,
 		"id": "EX1_564",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Faceless Manipulator",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -21016,6 +22234,10 @@ var parseCardsText = {
 		"goldenImage": "EX1_565.gif",
 		"health": 3,
 		"id": "EX1_565",
+		"mechanics": [
+			"ADJACENT_BUFF",
+			"AURA"
+		],
 		"name": "Flametongue Totem",
 		"playerClass": "Shaman",
 		"race": "TOTEM",
@@ -21026,7 +22248,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "EX1_565o.png",
 		"dbfId": 516,
 		"goldenImage": "EX1_565o.gif",
 		"id": "EX1_565o",
@@ -21047,6 +22268,10 @@ var parseCardsText = {
 		"durability": 8,
 		"goldenImage": "EX1_567.gif",
 		"id": "EX1_567",
+		"mechanics": [
+			"OVERLOAD",
+			"WINDFURY"
+		],
 		"name": "Doomhammer",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -21073,10 +22298,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_570e.png",
 		"dbfId": 1708,
 		"goldenImage": "EX1_570e.gif",
 		"id": "EX1_570e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Bite",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -21108,6 +22335,13 @@ var parseCardsText = {
 		"cost": 9,
 		"dbfId": 1186,
 		"elite": true,
+		"entourage": [
+			"DREAM_01",
+			"DREAM_02",
+			"DREAM_03",
+			"DREAM_04",
+			"DREAM_05"
+		],
 		"goldenImage": "EX1_572.gif",
 		"health": 12,
 		"id": "EX1_572",
@@ -21131,6 +22365,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_573.gif",
 		"health": 8,
 		"id": "EX1_573",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Cenarius",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -21156,7 +22393,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "EX1_573ae.png",
 		"dbfId": 331,
 		"goldenImage": "EX1_573ae.gif",
 		"id": "EX1_573ae",
@@ -21188,6 +22424,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_573t.gif",
 		"health": 2,
 		"id": "EX1_573t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Treant",
 		"playerClass": "Druid",
 		"set": "Expert1",
@@ -21225,6 +22464,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_577.gif",
 		"health": 7,
 		"id": "EX1_577",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "The Beast",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -21276,6 +22518,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_582.gif",
 		"health": 4,
 		"id": "EX1_582",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Dalaran Mage",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -21295,6 +22540,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_583.gif",
 		"health": 4,
 		"id": "EX1_583",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Priestess of Elune",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -21313,6 +22561,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_584.gif",
 		"health": 5,
 		"id": "EX1_584",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ancient Mage",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -21325,7 +22576,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_584e.png",
 		"dbfId": 863,
 		"goldenImage": "EX1_584e.gif",
 		"id": "EX1_584e",
@@ -21364,6 +22614,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_587.gif",
 		"health": 3,
 		"id": "EX1_587",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Windspeaker",
 		"playerClass": "Shaman",
 		"rarity": "Free",
@@ -21385,6 +22638,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_590.gif",
 		"health": 3,
 		"id": "EX1_590",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blood Knight",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -21397,7 +22653,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "EX1_590e.png",
 		"dbfId": 258,
 		"goldenImage": "EX1_590e.gif",
 		"id": "EX1_590e",
@@ -21419,6 +22674,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_591.gif",
 		"health": 5,
 		"id": "EX1_591",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Auchenai Soulpriest",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -21437,6 +22695,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_593.gif",
 		"health": 4,
 		"id": "EX1_593",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Nightblade",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -21453,6 +22714,9 @@ var parseCardsText = {
 		"dbfId": 286,
 		"goldenImage": "EX1_594.gif",
 		"id": "EX1_594",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Vaporize",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -21496,7 +22760,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "EX1_596e.png",
 		"dbfId": 26,
 		"goldenImage": "EX1_596e.gif",
 		"id": "EX1_596e",
@@ -21551,6 +22814,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_603.gif",
 		"health": 2,
 		"id": "EX1_603",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Cruel Taskmaster",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -21560,7 +22826,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_603e.png",
 		"dbfId": 1645,
 		"goldenImage": "EX1_603e.gif",
 		"id": "EX1_603e",
@@ -21590,7 +22855,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_604o.png",
 		"dbfId": 1177,
 		"goldenImage": "EX1_604o.gif",
 		"id": "EX1_604o",
@@ -21634,7 +22898,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "EX1_607e.png",
 		"dbfId": 320,
 		"goldenImage": "EX1_607e.gif",
 		"id": "EX1_607e",
@@ -21655,6 +22918,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_608.gif",
 		"health": 2,
 		"id": "EX1_608",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Sorcerer's Apprentice",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -21671,6 +22937,9 @@ var parseCardsText = {
 		"dbfId": 814,
 		"goldenImage": "EX1_609.gif",
 		"id": "EX1_609",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Snipe",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -21687,6 +22956,9 @@ var parseCardsText = {
 		"dbfId": 585,
 		"goldenImage": "EX1_610.gif",
 		"id": "EX1_610",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Explosive Trap",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -21703,6 +22975,9 @@ var parseCardsText = {
 		"dbfId": 519,
 		"goldenImage": "EX1_611.gif",
 		"id": "EX1_611",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Freezing Trap",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -21712,7 +22987,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "EX1_611e.png",
 		"dbfId": 566,
 		"goldenImage": "EX1_611e.gif",
 		"id": "EX1_611e",
@@ -21733,6 +23007,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_612.gif",
 		"health": 3,
 		"id": "EX1_612",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kirin Tor Mage",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -21745,10 +23022,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "EX1_612o.png",
 		"dbfId": 697,
 		"goldenImage": "EX1_612o.gif",
 		"id": "EX1_612o",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Power of the Kirin Tor",
 		"playerClass": "Mage",
 		"set": "Expert1",
@@ -21767,6 +23046,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_613.gif",
 		"health": 2,
 		"id": "EX1_613",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Edwin VanCleef",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -21776,7 +23058,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "EX1_613e.png",
 		"dbfId": 593,
 		"goldenImage": "EX1_613e.gif",
 		"id": "EX1_613e",
@@ -21832,6 +23113,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_616.gif",
 		"health": 2,
 		"id": "EX1_616",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Mana Wraith",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -21873,7 +23157,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "EX1_619e.png",
 		"dbfId": 931,
 		"goldenImage": "EX1_619e.gif",
 		"id": "EX1_619e",
@@ -21944,6 +23227,9 @@ var parseCardsText = {
 		"goldenImage": "EX1_623.gif",
 		"health": 6,
 		"id": "EX1_623",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Temple Enforcer",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -21953,7 +23239,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "EX1_623e.png",
 		"dbfId": 1749,
 		"goldenImage": "EX1_623e.gif",
 		"id": "EX1_623e",
@@ -22030,6 +23315,9 @@ var parseCardsText = {
 		"dbfId": 1366,
 		"goldenImage": "EX1_626.gif",
 		"id": "EX1_626",
+		"mechanics": [
+			"SILENCE"
+		],
 		"name": "Mass Dispel",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -22061,9 +23349,11 @@ var parseCardsText = {
 		"goldenImage": "EX1_tk11.gif",
 		"health": 3,
 		"id": "EX1_tk11",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Spirit Wolf",
 		"playerClass": "Shaman",
-		"rarity": "Rare",
 		"set": "Expert1",
 		"text": "<b>Taunt</b>",
 		"type": "Minion"
@@ -22080,7 +23370,6 @@ var parseCardsText = {
 		"name": "Squirrel",
 		"playerClass": "Neutral",
 		"race": "BEAST",
-		"rarity": "Common",
 		"set": "Expert1",
 		"type": "Minion"
 	},
@@ -22096,13 +23385,11 @@ var parseCardsText = {
 		"name": "Devilsaur",
 		"playerClass": "Neutral",
 		"race": "BEAST",
-		"rarity": "Common",
 		"set": "Expert1",
 		"type": "Minion"
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "EX1_tk31.png",
 		"dbfId": 536,
 		"goldenImage": "EX1_tk31.gif",
 		"id": "EX1_tk31",
@@ -22150,7 +23437,6 @@ var parseCardsText = {
 		"name": "Infernal",
 		"playerClass": "Warlock",
 		"race": "DEMON",
-		"rarity": "Common",
 		"set": "Expert1",
 		"type": "Minion"
 	},
@@ -22165,9 +23451,257 @@ var parseCardsText = {
 		"id": "EX1_tk9",
 		"name": "Treant",
 		"playerClass": "Druid",
-		"rarity": "Common",
 		"set": "Expert1",
 		"type": "Minion"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49074,
+		"entourage": [
+			"FB_BuildABrawl001a",
+			"FB_BuildABrawl001b",
+			"FB_BuildABrawl001c",
+			"FB_BuildABrawl003c"
+		],
+		"id": "FB_BuildABrawl001",
+		"name": "Innkeeper Tools - Build A Brawl",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Play the Brawl as normal or Build a new brawl",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl001a.png",
+		"cost": 0,
+		"dbfId": 49075,
+		"id": "FB_BuildABrawl001a",
+		"name": "By the Power of Ragnaros!",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "At the end of your turn, reduce the Cost of cards in your hand by (1).",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49113,
+		"id": "FB_BuildABrawl001a_ench",
+		"name": "By the Power of Ragnaros! Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Each turn reduce the cost of all cards by (1).",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl001b.png",
+		"cost": 0,
+		"dbfId": 49076,
+		"id": "FB_BuildABrawl001b",
+		"name": "Randomonium",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "At the start of your turn, randomize the Cost of cards in your hand.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49118,
+		"id": "FB_BuildABrawl001b_ench",
+		"name": "Randomonium Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Each turn randomize the cost of all cards in your hand.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl001c.png",
+		"cost": 0,
+		"dbfId": 49077,
+		"id": "FB_BuildABrawl001c",
+		"name": "Battle of Tol Barad",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "After you summon a minion, add a spell of the same Cost to your hand. \n It costs (0).",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49119,
+		"id": "FB_BuildABrawl001c_ench",
+		"name": "Battle of Tol Barad Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "After a minion is played add a spell of the same mana cost to your hand. \n It costs (0).",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49129,
+		"entourage": [
+			"FB_BuildABrawl002a",
+			"FB_BuildABrawl002b",
+			"FB_BuildABrawl002c",
+			"FB_BuildABrawl003b"
+		],
+		"id": "FB_BuildABrawl002",
+		"name": "Innkeeper Tools - Build A Brawl 2",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Second Tier of Choices for Build A Brawl",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl002a.png",
+		"cost": 0,
+		"dbfId": 49130,
+		"id": "FB_BuildABrawl002a",
+		"name": "Summoner Competition",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "After you cast a spell, summon a random minion of the same Cost.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49133,
+		"id": "FB_BuildABrawl002a_ench",
+		"name": "Great Summoner Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Spells summon minions of the same mana cost.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl002b.png",
+		"cost": 0,
+		"dbfId": 49131,
+		"id": "FB_BuildABrawl002b",
+		"name": "The Masked Ball",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "After you summon a minion, give it \"<b>Deathrattle:</b> Summon a minion that costs (2) less.\"",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49134,
+		"id": "FB_BuildABrawl002b_ench",
+		"name": "Masked Ball Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "All minions gain <b>Deathrattle:</b> Summon a minion that costs (2) less.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl002c.png",
+		"cost": 0,
+		"dbfId": 49132,
+		"id": "FB_BuildABrawl002c",
+		"name": "Servant of Yogg Tryouts",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "After you summon a minion, cast a random spell on a random target.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49135,
+		"id": "FB_BuildABrawl002c_ench",
+		"name": "Servant of Yogg Saron Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "All minons cast a random spell at a random target when played.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49136,
+		"entourage": [
+			"00000011-91c8-41bf-87c6-63491203f862",
+			"FB_BuildABrawl003b",
+			"FB_BuildABrawl003c"
+		],
+		"id": "FB_BuildABrawl003",
+		"name": "Innkeeper Tools - Build A Brawl 3",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Third Tier of Choices for Build A Brawl",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl003b.png",
+		"cost": 0,
+		"dbfId": 49139,
+		"id": "FB_BuildABrawl003b",
+		"name": "Clash of the Minions",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "After you summon a minion, give it <b>Charge</b> and <b>Taunt</b>.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49140,
+		"id": "FB_BuildABrawl003b_ench",
+		"name": "Clash of the Minions Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "All minions gain <b>Charge</b> and <b>Taunt</b>.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl003c.png",
+		"cost": 0,
+		"dbfId": 49141,
+		"id": "FB_BuildABrawl003c",
+		"name": "Blood Magic",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "All spells cost Health instead of Mana.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49142,
+		"id": "FB_BuildABrawl003c_ench",
+		"name": "Blood Magic Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "All spells cost health instead of mana",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49408,
+		"entourage": [
+			"FB_IKC_SetupNo",
+			"FB_BuildABrawl_Tools_reset"
+		],
+		"id": "FB_BuildABrawl_Tools_ench",
+		"name": "Build-A-Brawl Innkeeper Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Choose a new blend of Tavern Brawls for your Fireside Gathering.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "FB_BuildABrawl_Tools_reset.png",
+		"cost": 0,
+		"dbfId": 49409,
+		"id": "FB_BuildABrawl_Tools_reset",
+		"name": "Build-A-Brawl",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Choose a new blend of Tavern Brawls for your Fireside Gathering.",
+		"type": "Spell"
 	},
 	{
 		"attack": 3,
@@ -22208,6 +23742,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_CS2_188.gif",
 		"health": 1,
 		"id": "FB_Champs_CS2_188",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Abusive Sergeant",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -22238,6 +23775,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_005.gif",
 		"health": 2,
 		"id": "FB_Champs_EX1_005",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Big Game Hunter",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -22254,6 +23794,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_029.gif",
 		"health": 1,
 		"id": "FB_Champs_EX1_029",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Leper Gnome",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -22286,6 +23829,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_165.gif",
 		"health": 4,
 		"id": "FB_Champs_EX1_165",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -22332,6 +23878,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_165t1.gif",
 		"health": 4,
 		"id": "FB_Champs_EX1_165t1",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -22348,6 +23897,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_165t2.gif",
 		"health": 6,
 		"id": "FB_Champs_EX1_165t2",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -22364,6 +23916,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_166.gif",
 		"health": 4,
 		"id": "FB_Champs_EX1_166",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Keeper of the Grove",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -22428,6 +23983,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_556.gif",
 		"health": 3,
 		"id": "FB_Champs_EX1_556",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Harvest Golem",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -22458,6 +24016,10 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_EX1_tk9.gif",
 		"health": 2,
 		"id": "FB_Champs_EX1_tk9",
+		"mechanics": [
+			"CHARGE",
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Treant",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -22485,8 +24047,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_Champs_FP1_028e.png",
 		"dbfId": 48857,
+		"goldenImage": "FB_Champs_FP1_028e.gif",
 		"id": "FB_Champs_FP1_028e",
 		"name": "Darkness Calls",
 		"playerClass": "Neutral",
@@ -22522,6 +24084,9 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_NEW1_008.gif",
 		"health": 5,
 		"id": "FB_Champs_NEW1_008",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Ancient of Lore",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -22580,6 +24145,10 @@ var parseCardsText = {
 		"goldenImage": "FB_Champs_OG_044a.gif",
 		"health": 6,
 		"id": "FB_Champs_OG_044a",
+		"mechanics": [
+			"CHARGE",
+			"TAUNT"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -22592,6 +24161,7 @@ var parseCardsText = {
 		"cardImage": "FB_Champs_Reset.png",
 		"cost": 0,
 		"dbfId": 49069,
+		"goldenImage": "FB_Champs_Reset.gif",
 		"hideStats": true,
 		"id": "FB_Champs_Reset",
 		"name": "Reset the Brawl",
@@ -22602,8 +24172,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_Champs_SetEvent.png",
 		"dbfId": 48888,
+		"goldenImage": "FB_Champs_SetEvent.gif",
 		"id": "FB_Champs_SetEvent",
 		"name": "Set Mission Event",
 		"playerClass": "Neutral",
@@ -22613,8 +24183,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_Champs_SetEvent_copy.png",
 		"dbfId": 49040,
+		"goldenImage": "FB_Champs_SetEvent_copy.gif",
 		"id": "FB_Champs_SetEvent_copy",
 		"name": "Add FSG Score Screen",
 		"playerClass": "Neutral",
@@ -22623,8 +24193,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_Champs_SetUp_Ench.png",
 		"dbfId": 49072,
+		"goldenImage": "FB_Champs_SetUp_Ench.gif",
 		"id": "FB_Champs_SetUp_Ench",
 		"name": "Champs Setup",
 		"playerClass": "Neutral",
@@ -22648,8 +24218,11 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO001.png",
 		"dbfId": 47269,
+		"entourage": [
+			"FB_ELO001a",
+			"FB_ELO001b"
+		],
 		"goldenImage": "FB_ELO001.gif",
 		"id": "FB_ELO001",
 		"name": "Innkeeper Tools - ELO",
@@ -22686,8 +24259,11 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO001bench.png",
 		"dbfId": 47272,
+		"entourage": [
+			"FB_ELO001c",
+			"FB_ELO001d"
+		],
 		"goldenImage": "FB_ELO001bench.gif",
 		"id": "FB_ELO001bench",
 		"name": "ELO Reset Confirmation",
@@ -22723,8 +24299,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002.png",
 		"dbfId": 47275,
+		"entourage": [
+			"FB_ELO002a",
+			"FB_ELO002b",
+			"FB_ELO002c"
+		],
 		"goldenImage": "FB_ELO002.gif",
 		"id": "FB_ELO002",
 		"name": "Competitive Spirits",
@@ -22735,8 +24315,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002_copy.png",
 		"dbfId": 48707,
+		"entourage": [
+			"FB_ELO002a_copy",
+			"FB_ELO002b_copy",
+			"FB_ELO002c_copy"
+		],
 		"goldenImage": "FB_ELO002_copy.gif",
 		"id": "FB_ELO002_copy",
 		"name": "Greater Competitive Spirits",
@@ -22773,7 +24357,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002a_ench.png",
 		"dbfId": 47505,
 		"goldenImage": "FB_ELO002a_ench.gif",
 		"id": "FB_ELO002a_ench",
@@ -22785,7 +24368,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002a_ench_copy.png",
 		"dbfId": 48709,
 		"goldenImage": "FB_ELO002a_ench_copy.gif",
 		"id": "FB_ELO002a_ench_copy",
@@ -22823,7 +24405,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002b_ench.png",
 		"dbfId": 47507,
 		"goldenImage": "FB_ELO002b_ench.gif",
 		"id": "FB_ELO002b_ench",
@@ -22835,7 +24416,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002b_ench_copy.png",
 		"dbfId": 48711,
 		"goldenImage": "FB_ELO002b_ench_copy.gif",
 		"id": "FB_ELO002b_ench_copy",
@@ -22873,7 +24453,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002c_ench.png",
 		"dbfId": 47506,
 		"goldenImage": "FB_ELO002c_ench.gif",
 		"id": "FB_ELO002c_ench",
@@ -22885,7 +24464,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_ELO002c_ench_copy.png",
 		"dbfId": 48713,
 		"goldenImage": "FB_ELO002c_ench_copy.gif",
 		"id": "FB_ELO002c_ench_copy",
@@ -22897,7 +24475,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_IKC_KeepOld_Ench.png",
 		"dbfId": 47650,
 		"goldenImage": "FB_IKC_KeepOld_Ench.gif",
 		"id": "FB_IKC_KeepOld_Ench",
@@ -22908,7 +24485,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_IKC_KeepSetUp_Ench.png",
 		"dbfId": 47839,
 		"goldenImage": "FB_IKC_KeepSetUp_Ench.gif",
 		"id": "FB_IKC_KeepSetUp_Ench",
@@ -22975,7 +24551,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LK003.png",
 		"dbfId": 46509,
 		"goldenImage": "FB_LK003.gif",
 		"id": "FB_LK003",
@@ -22986,7 +24561,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LK004.png",
 		"cost": 10,
 		"dbfId": 46510,
 		"goldenImage": "FB_LK004.gif",
@@ -23000,26 +24574,13 @@ var parseCardsText = {
 	{
 		"cardClass": "DEATHKNIGHT",
 		"cardImage": "FB_LK005.png",
-		"collectionText": {
-			"deDE": " Schaden zu. Verursacht jedes Mal 1 Schaden mehr.",
-			"enUS": " damage to the enemy hero. +1 Damage each time.",
-			"esES": " p. de daño\nal héroe enemigo.\n+1 p. de daño cada vez.",
-			"esMX": " de daño al héroe enemigo.\n+1 de daño cada vez.",
-			"frFR": " |4(point,points) de dégâts au héros adverse. +1 point de dégâts à chaque fois.",
-			"itIT": " |4(danno,danni) all'eroe nemico. +1 danno a ogni utilizzo.",
-			"jaJP": "ダメージを与える。\n使用する度ダメージが\n+1される。",
-			"koKR": " 줍니다. 사용할 때마다 피해가 +1 증가합니다.",
-			"plPL": " pkt. obrażeń wrogiemu bohaterowi. +1 pkt. obrażeń za każdym razem.",
-			"ptBR": " de dano ao herói inimigo. +1 de dano a cada vez.",
-			"ruRU": " ед. урона герою противника.\n+1 к урону с каждым использованием.",
-			"thTH": " แต้มให้ฮีโร่ศัตรู ความเสียหาย +1 ทุกครั้งที่ใช้",
-			"zhCN": "点伤害。每次使用\n+1点伤害。",
-			"zhTW": "點傷害。每次提高1點傷害"
-		},
 		"cost": 0,
 		"dbfId": 46594,
 		"goldenImage": "FB_LK005.gif",
 		"id": "FB_LK005",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Remorseless Winter",
 		"playerClass": "Deathknight",
 		"set": "Tb",
@@ -23046,6 +24607,9 @@ var parseCardsText = {
 		"dbfId": 46643,
 		"goldenImage": "FB_LK007p.gif",
 		"id": "FB_LK007p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Freezing Blast",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -23066,7 +24630,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LK009.png",
 		"dbfId": 46709,
 		"goldenImage": "FB_LK009.gif",
 		"id": "FB_LK009",
@@ -23138,8 +24701,12 @@ var parseCardsText = {
 		"type": "Hero"
 	},
 	{
-		"cardImage": "FB_LK_BossSetup001.png",
 		"dbfId": 46187,
+		"entourage": [
+			"FB_LK_BossSetup001c",
+			"FB_LK_BossSetup001b",
+			"FB_LK_BossSetup001a"
+		],
 		"goldenImage": "FB_LK_BossSetup001.gif",
 		"id": "FB_LK_BossSetup001",
 		"name": "Innkeeper Health Set",
@@ -23208,8 +24775,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "FB_LK_Druid_Ench_copy.png",
 		"dbfId": 46513,
+		"entourage": [
+			"CS2_017"
+		],
 		"goldenImage": "FB_LK_Druid_Ench_copy.gif",
 		"id": "FB_LK_Druid_Ench_copy",
 		"name": "Next Hero: Druid Ench Copy",
@@ -23220,8 +24789,18 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LK_GetClass_copy.png",
 		"dbfId": 46531,
+		"entourage": [
+			"FB_LK_Warrior_copy",
+			"FB_LK_Druid_copy",
+			"FB_LK_Hunter_copy",
+			"FB_LK_Mage_copy",
+			"FB_LK_Paladin_copy",
+			"FB_LK_Priest_copy",
+			"FB_LK_Rogue_copy",
+			"FB_LK_Shaman_copy",
+			"FB_LK_Warlock_copy"
+		],
 		"goldenImage": "FB_LK_GetClass_copy.gif",
 		"id": "FB_LK_GetClass_copy",
 		"name": "Discover Next Class Copy",
@@ -23245,8 +24824,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "FB_LK_Hunter_Ench_copy.png",
 		"dbfId": 46514,
+		"entourage": [
+			"DS1h_292"
+		],
 		"goldenImage": "FB_LK_Hunter_Ench_copy.gif",
 		"id": "FB_LK_Hunter_Ench_copy",
 		"name": "Next Hero: Hunter Ench Copy",
@@ -23271,8 +24852,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "FB_LK_Mage_Ench_copy.png",
 		"dbfId": 46515,
+		"entourage": [
+			"CS2_034"
+		],
 		"goldenImage": "FB_LK_Mage_Ench_copy.gif",
 		"id": "FB_LK_Mage_Ench_copy",
 		"name": "Next Hero: Mage Ench Copy",
@@ -23310,8 +24893,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "FB_LK_Paladin_Ench_copy.png",
 		"dbfId": 46516,
+		"entourage": [
+			"CS2_101"
+		],
 		"goldenImage": "FB_LK_Paladin_Ench_copy.gif",
 		"id": "FB_LK_Paladin_Ench_copy",
 		"name": "Next Hero: Paladin Ench Copy",
@@ -23336,8 +24921,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "FB_LK_Priest_Ench_copy.png",
 		"dbfId": 46517,
+		"entourage": [
+			"CS1h_001"
+		],
 		"goldenImage": "FB_LK_Priest_Ench_copy.gif",
 		"id": "FB_LK_Priest_Ench_copy",
 		"name": "Next Hero: Priest Ench Copy",
@@ -23386,8 +24973,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "FB_LK_Rogue_Ench_copy.png",
 		"dbfId": 46518,
+		"entourage": [
+			"CS2_083b"
+		],
 		"goldenImage": "FB_LK_Rogue_Ench_copy.gif",
 		"id": "FB_LK_Rogue_Ench_copy",
 		"name": "Next Hero: Rogue Ench Copy",
@@ -23412,8 +25001,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "FB_LK_Shaman_Ench_copy.png",
 		"dbfId": 46519,
+		"entourage": [
+			"CS2_049"
+		],
 		"goldenImage": "FB_LK_Shaman_Ench_copy.gif",
 		"id": "FB_LK_Shaman_Ench_copy",
 		"name": "Next Hero: Shaman Ench Copy",
@@ -23424,7 +25015,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LK_WaitForDiscover.png",
 		"dbfId": 46512,
 		"goldenImage": "FB_LK_WaitForDiscover.gif",
 		"id": "FB_LK_WaitForDiscover",
@@ -23449,8 +25039,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "FB_LK_Warlock_Ench_copy.png",
 		"dbfId": 46520,
+		"entourage": [
+			"CS2_056"
+		],
 		"goldenImage": "FB_LK_Warlock_Ench_copy.gif",
 		"id": "FB_LK_Warlock_Ench_copy",
 		"name": "Next Hero: Warlock Ench Copy",
@@ -23475,8 +25067,10 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "FB_LK_Warrior_Ench_copy.png",
 		"dbfId": 46521,
+		"entourage": [
+			"CS2_102"
+		],
 		"goldenImage": "FB_LK_Warrior_Ench_copy.gif",
 		"id": "FB_LK_Warrior_Ench_copy",
 		"name": "Next Hero: Warrior Ench Copy",
@@ -23487,7 +25081,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LKDebug001.png",
 		"cost": 0,
 		"dbfId": 46592,
 		"goldenImage": "FB_LKDebug001.gif",
@@ -23500,7 +25093,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LKDebug002.png",
 		"cost": 0,
 		"dbfId": 46593,
 		"goldenImage": "FB_LKDebug002.gif",
@@ -23513,8 +25105,11 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LKStats001.png",
 		"dbfId": 46540,
+		"entourage": [
+			"FB_LKStats001a",
+			"FB_LKStats002"
+		],
 		"goldenImage": "FB_LKStats001.gif",
 		"id": "FB_LKStats001",
 		"name": "Innkeeper Tools",
@@ -23538,9 +25133,13 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LKStats001d.png",
 		"cost": 0,
 		"dbfId": 46550,
+		"entourage": [
+			"FB_LKStats002a",
+			"FB_LKStats002b",
+			"FB_LKStats002c"
+		],
 		"goldenImage": "FB_LKStats001d.gif",
 		"id": "FB_LKStats001d",
 		"name": "Modify the Lich King",
@@ -23567,6 +25166,11 @@ var parseCardsText = {
 		"cardImage": "FB_LKStats002a.png",
 		"cost": 0,
 		"dbfId": 46547,
+		"entourage": [
+			"FB_LKStats002a",
+			"FB_LKStats002b",
+			"FB_LKStats002c"
+		],
 		"goldenImage": "FB_LKStats002a.gif",
 		"id": "FB_LKStats002a",
 		"name": "Increase Health",
@@ -23580,6 +25184,11 @@ var parseCardsText = {
 		"cardImage": "FB_LKStats002b.png",
 		"cost": 0,
 		"dbfId": 46548,
+		"entourage": [
+			"FB_LKStats002a",
+			"FB_LKStats002b",
+			"FB_LKStats002c"
+		],
 		"goldenImage": "FB_LKStats002b.gif",
 		"id": "FB_LKStats002b",
 		"name": "Decrease Health",
@@ -23593,6 +25202,10 @@ var parseCardsText = {
 		"cardImage": "FB_LKStats002c.png",
 		"cost": 0,
 		"dbfId": 46549,
+		"entourage": [
+			"FB_LKStats001a",
+			"00000011-f9e0-4b0b-852d-9f932641109f"
+		],
 		"goldenImage": "FB_LKStats002c.gif",
 		"id": "FB_LKStats002c",
 		"name": "Modifications Complete",
@@ -23603,8 +25216,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FB_LKStats002ench.png",
 		"dbfId": 46579,
+		"entourage": [
+			"FB_LKStats002a",
+			"FB_LKStats002b",
+			"FB_LKStats002c"
+		],
 		"goldenImage": "FB_LKStats002ench.gif",
 		"id": "FB_LKStats002ench",
 		"name": "Lich King Modifications Copy",
@@ -23616,6 +25233,9 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "FB_TagTeam_Druid_Ench.png",
 		"dbfId": 41003,
+		"entourage": [
+			"CS2_017"
+		],
 		"goldenImage": "FB_TagTeam_Druid_Ench.gif",
 		"id": "FB_TagTeam_Druid_Ench",
 		"name": "Next Hero: Druid Ench",
@@ -23628,6 +25248,9 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "FB_TagTeam_Hunter_Ench.png",
 		"dbfId": 41006,
+		"entourage": [
+			"DS1h_292"
+		],
 		"goldenImage": "FB_TagTeam_Hunter_Ench.gif",
 		"id": "FB_TagTeam_Hunter_Ench",
 		"name": "Next Hero: Hunter Ench",
@@ -23640,6 +25263,9 @@ var parseCardsText = {
 		"cardClass": "MAGE",
 		"cardImage": "FB_TagTeam_Mage_Ench.png",
 		"dbfId": 41007,
+		"entourage": [
+			"CS2_034"
+		],
 		"goldenImage": "FB_TagTeam_Mage_Ench.gif",
 		"id": "FB_TagTeam_Mage_Ench",
 		"name": "Next Hero: Mage Ench",
@@ -23652,6 +25278,9 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "FB_TagTeam_Paladin_Ench.png",
 		"dbfId": 41008,
+		"entourage": [
+			"CS2_101"
+		],
 		"goldenImage": "FB_TagTeam_Paladin_Ench.gif",
 		"id": "FB_TagTeam_Paladin_Ench",
 		"name": "Next Hero: Paladin Ench",
@@ -23664,6 +25293,9 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "FB_TagTeam_Priest_Ench.png",
 		"dbfId": 41009,
+		"entourage": [
+			"CS1h_001"
+		],
 		"goldenImage": "FB_TagTeam_Priest_Ench.gif",
 		"id": "FB_TagTeam_Priest_Ench",
 		"name": "Next Hero: Priest Ench",
@@ -23676,6 +25308,9 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "FB_TagTeam_Rogue_Ench.png",
 		"dbfId": 41010,
+		"entourage": [
+			"CS2_083b"
+		],
 		"goldenImage": "FB_TagTeam_Rogue_Ench.gif",
 		"id": "FB_TagTeam_Rogue_Ench",
 		"name": "Next Hero: Rogue Ench",
@@ -23688,6 +25323,9 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "FB_TagTeam_Shaman_Ench.png",
 		"dbfId": 41011,
+		"entourage": [
+			"CS2_049"
+		],
 		"goldenImage": "FB_TagTeam_Shaman_Ench.gif",
 		"id": "FB_TagTeam_Shaman_Ench",
 		"name": "Next Hero: Shaman Ench",
@@ -23711,6 +25349,9 @@ var parseCardsText = {
 		"cardClass": "WARLOCK",
 		"cardImage": "FB_TagTeam_Warlock_Ench.png",
 		"dbfId": 41012,
+		"entourage": [
+			"CS2_056"
+		],
 		"goldenImage": "FB_TagTeam_Warlock_Ench.gif",
 		"id": "FB_TagTeam_Warlock_Ench",
 		"name": "Next Hero: Warlock Ench",
@@ -23723,6 +25364,9 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "FB_TagTeam_Warrior_Ench.png",
 		"dbfId": 41013,
+		"entourage": [
+			"CS2_102"
+		],
 		"goldenImage": "FB_TagTeam_Warrior_Ench.gif",
 		"id": "FB_TagTeam_Warrior_Ench",
 		"name": "Next Hero: Warrior Ench",
@@ -23742,6 +25386,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_001.gif",
 		"health": 3,
 		"id": "FP1_001",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Zombie Chow",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -23760,6 +25407,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_002.gif",
 		"health": 2,
 		"id": "FP1_002",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Haunted Creeper",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -23793,6 +25443,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_003.gif",
 		"health": 2,
 		"id": "FP1_003",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Echoing Ooze",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -23811,6 +25464,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_004.gif",
 		"health": 2,
 		"id": "FP1_004",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Mad Scientist",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -23832,6 +25488,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_005.gif",
 		"health": 2,
 		"id": "FP1_005",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Shade of Naxxramas",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -23841,7 +25500,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FP1_005e.png",
 		"dbfId": 1814,
 		"goldenImage": "FP1_005e.gif",
 		"id": "FP1_005e",
@@ -23860,6 +25518,10 @@ var parseCardsText = {
 		"goldenImage": "FP1_006.gif",
 		"health": 3,
 		"id": "FP1_006",
+		"mechanics": [
+			"CHARGE",
+			"DEATHRATTLE"
+		],
 		"name": "Deathcharger",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -23877,6 +25539,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_007.gif",
 		"health": 2,
 		"id": "FP1_007",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Nerubian Egg",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -23895,7 +25560,6 @@ var parseCardsText = {
 		"id": "FP1_007t",
 		"name": "Nerubian",
 		"playerClass": "Neutral",
-		"rarity": "Rare",
 		"set": "Naxx",
 		"type": "Minion"
 	},
@@ -23910,6 +25574,10 @@ var parseCardsText = {
 		"goldenImage": "FP1_008.gif",
 		"health": 6,
 		"id": "FP1_008",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Spectral Knight",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -23928,6 +25596,10 @@ var parseCardsText = {
 		"goldenImage": "FP1_009.gif",
 		"health": 8,
 		"id": "FP1_009",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Deathlord",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -23947,6 +25619,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_010.gif",
 		"health": 8,
 		"id": "FP1_010",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Maexxna",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -23966,6 +25641,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_011.gif",
 		"health": 1,
 		"id": "FP1_011",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Webspinner",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -23985,6 +25663,10 @@ var parseCardsText = {
 		"goldenImage": "FP1_012.gif",
 		"health": 5,
 		"id": "FP1_012",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Sludge Belcher",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -24001,6 +25683,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_012t.gif",
 		"health": 2,
 		"id": "FP1_012t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Slime",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -24038,6 +25723,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_014.gif",
 		"health": 4,
 		"id": "FP1_014",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Stalagg",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -24072,6 +25760,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_015.gif",
 		"health": 7,
 		"id": "FP1_015",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Feugen",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -24090,6 +25781,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_016.gif",
 		"health": 5,
 		"id": "FP1_016",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Wailing Soul",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -24111,6 +25805,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_017.gif",
 		"health": 4,
 		"id": "FP1_017",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Nerub'ar Weblord",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -24130,6 +25827,9 @@ var parseCardsText = {
 		"dbfId": 1801,
 		"goldenImage": "FP1_018.gif",
 		"id": "FP1_018",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Duplicate",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -24176,6 +25876,9 @@ var parseCardsText = {
 		"dbfId": 1804,
 		"goldenImage": "FP1_020.gif",
 		"id": "FP1_020",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Avenge",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -24185,7 +25888,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "FP1_020e.png",
 		"dbfId": 1812,
 		"goldenImage": "FP1_020e.gif",
 		"id": "FP1_020e",
@@ -24206,6 +25908,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "FP1_021.gif",
 		"id": "FP1_021",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Death's Bite",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -24224,6 +25929,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_022.gif",
 		"health": 4,
 		"id": "FP1_022",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Voidcaller",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -24243,6 +25951,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_023.gif",
 		"health": 4,
 		"id": "FP1_023",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Dark Cultist",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -24252,7 +25963,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "FP1_023e.png",
 		"dbfId": 1815,
 		"goldenImage": "FP1_023e.gif",
 		"id": "FP1_023e",
@@ -24273,6 +25983,10 @@ var parseCardsText = {
 		"goldenImage": "FP1_024.gif",
 		"health": 3,
 		"id": "FP1_024",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Unstable Ghoul",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -24307,6 +26021,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_026.gif",
 		"health": 5,
 		"id": "FP1_026",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Anub'ar Ambusher",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -24355,7 +26072,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FP1_028e.png",
 		"dbfId": 1911,
 		"goldenImage": "FP1_028e.gif",
 		"id": "FP1_028e",
@@ -24376,6 +26092,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_029.gif",
 		"health": 4,
 		"id": "FP1_029",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Dancing Swords",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -24395,6 +26114,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_030.gif",
 		"health": 5,
 		"id": "FP1_030",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Loatheb",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -24404,7 +26126,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "FP1_030e.png",
 		"dbfId": 1917,
 		"goldenImage": "FP1_030e.gif",
 		"id": "FP1_030e",
@@ -24426,6 +26147,9 @@ var parseCardsText = {
 		"goldenImage": "FP1_031.gif",
 		"health": 7,
 		"id": "FP1_031",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Baron Rivendare",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -24438,7 +26162,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GAME_001.png",
 		"dbfId": 1732,
 		"goldenImage": "GAME_001.gif",
 		"id": "GAME_001",
@@ -24466,7 +26189,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GAME_003.png",
 		"dbfId": 1736,
 		"goldenImage": "GAME_003.gif",
 		"id": "GAME_003",
@@ -24478,7 +26200,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GAME_003e.png",
 		"dbfId": 1734,
 		"goldenImage": "GAME_003e.gif",
 		"id": "GAME_003e",
@@ -24490,7 +26211,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GAME_004.png",
 		"dbfId": 1740,
 		"goldenImage": "GAME_004.gif",
 		"id": "GAME_004",
@@ -24515,7 +26235,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GAME_005e.png",
 		"dbfId": 1747,
 		"goldenImage": "GAME_005e.gif",
 		"id": "GAME_005e",
@@ -24564,6 +26283,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_002.gif",
 		"health": 3,
 		"id": "GVG_002",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Snowchugger",
 		"playerClass": "Mage",
 		"race": "MECHANICAL",
@@ -24599,6 +26321,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_004.gif",
 		"health": 4,
 		"id": "GVG_004",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Goblin Blastmage",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -24633,6 +26358,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_006.gif",
 		"health": 3,
 		"id": "GVG_006",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Mechwarper",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -24653,6 +26381,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_007.gif",
 		"health": 7,
 		"id": "GVG_007",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Flame Leviathan",
 		"playerClass": "Mage",
 		"race": "MECHANICAL",
@@ -24688,6 +26419,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_009.gif",
 		"health": 1,
 		"id": "GVG_009",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shadowbomber",
 		"playerClass": "Priest",
 		"rarity": "Epic",
@@ -24716,7 +26450,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_010b.png",
 		"dbfId": 2164,
 		"goldenImage": "GVG_010b.gif",
 		"id": "GVG_010b",
@@ -24737,6 +26470,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_011.gif",
 		"health": 2,
 		"id": "GVG_011",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shrinkmeister",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -24746,10 +26482,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_011a.png",
 		"dbfId": 2166,
 		"goldenImage": "GVG_011a.gif",
 		"id": "GVG_011a",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Shrink Ray",
 		"playerClass": "Neutral",
 		"set": "Gvg",
@@ -24783,6 +26521,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_013.gif",
 		"health": 2,
 		"id": "GVG_013",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Cogmaster",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -24802,6 +26543,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_014.gif",
 		"health": 2,
 		"id": "GVG_014",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Vol'jin",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
@@ -24811,7 +26555,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "GVG_014a.png",
 		"dbfId": 2169,
 		"goldenImage": "GVG_014a.gif",
 		"id": "GVG_014a",
@@ -24883,6 +26626,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_018.gif",
 		"health": 4,
 		"id": "GVG_018",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Mistress of Pain",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -24909,7 +26655,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "GVG_019e.png",
 		"dbfId": 2206,
 		"goldenImage": "GVG_019e.gif",
 		"id": "GVG_019e",
@@ -24950,6 +26695,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_021.gif",
 		"health": 7,
 		"id": "GVG_021",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Mal'Ganis",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -24963,7 +26711,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "GVG_021e.png",
 		"dbfId": 2203,
 		"goldenImage": "GVG_021e.gif",
 		"id": "GVG_021e",
@@ -24982,6 +26729,9 @@ var parseCardsText = {
 		"dbfId": 2095,
 		"goldenImage": "GVG_022.gif",
 		"id": "GVG_022",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Tinker's Sharpsword Oil",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -24991,7 +26741,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_022a.png",
 		"dbfId": 2185,
 		"goldenImage": "GVG_022a.gif",
 		"id": "GVG_022a",
@@ -25003,7 +26752,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_022b.png",
 		"dbfId": 2184,
 		"goldenImage": "GVG_022b.gif",
 		"id": "GVG_022b",
@@ -25024,6 +26772,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_023.gif",
 		"health": 2,
 		"id": "GVG_023",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Goblin Auto-Barber",
 		"playerClass": "Rogue",
 		"race": "MECHANICAL",
@@ -25034,7 +26785,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_023a.png",
 		"dbfId": 2173,
 		"goldenImage": "GVG_023a.gif",
 		"id": "GVG_023a",
@@ -25055,6 +26805,9 @@ var parseCardsText = {
 		"durability": 3,
 		"goldenImage": "GVG_024.gif",
 		"id": "GVG_024",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Cogmaster's Wrench",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -25124,7 +26877,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "GVG_027e.png",
 		"dbfId": 2220,
 		"goldenImage": "GVG_027e.gif",
 		"id": "GVG_027e",
@@ -25193,6 +26945,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_030.gif",
 		"health": 2,
 		"id": "GVG_030",
+		"mechanics": [
+			"CHOOSE_ONE",
+			"TAUNT"
+		],
 		"name": "Anodized Robo Cub",
 		"playerClass": "Druid",
 		"race": "MECHANICAL",
@@ -25216,7 +26972,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "GVG_030ae.png",
 		"dbfId": 2196,
 		"goldenImage": "GVG_030ae.gif",
 		"id": "GVG_030ae",
@@ -25241,7 +26996,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "GVG_030be.png",
 		"dbfId": 2198,
 		"goldenImage": "GVG_030be.gif",
 		"id": "GVG_030be",
@@ -25278,6 +27032,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_032.gif",
 		"health": 4,
 		"id": "GVG_032",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Grove Tender",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -25335,6 +27092,15 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"dbfId": 2002,
+		"entourage": [
+			"PART_007",
+			"PART_006",
+			"PART_005",
+			"PART_001",
+			"PART_003",
+			"PART_002",
+			"PART_004"
+		],
 		"goldenImage": "GVG_034.gif",
 		"health": 6,
 		"id": "GVG_034",
@@ -25358,6 +27124,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_035.gif",
 		"health": 7,
 		"id": "GVG_035",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Malorne",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -25377,6 +27146,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "GVG_036.gif",
 		"id": "GVG_036",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Powermace",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -25386,7 +27158,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "GVG_036e.png",
 		"dbfId": 2231,
 		"goldenImage": "GVG_036e.gif",
 		"id": "GVG_036e",
@@ -25407,6 +27178,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_037.gif",
 		"health": 2,
 		"id": "GVG_037",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Whirling Zap-o-matic",
 		"playerClass": "Shaman",
 		"race": "MECHANICAL",
@@ -25424,6 +27198,9 @@ var parseCardsText = {
 		"dbfId": 2006,
 		"goldenImage": "GVG_038.gif",
 		"id": "GVG_038",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Crackle",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -25462,6 +27239,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_040.gif",
 		"health": 5,
 		"id": "GVG_040",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Siltfin Spiritwalker",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -25480,6 +27260,9 @@ var parseCardsText = {
 		"dbfId": 2009,
 		"goldenImage": "GVG_041.gif",
 		"id": "GVG_041",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Dark Wispers",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -25518,7 +27301,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "GVG_041c.png",
 		"dbfId": 2178,
 		"goldenImage": "GVG_041c.gif",
 		"id": "GVG_041c",
@@ -25540,6 +27322,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_042.gif",
 		"health": 7,
 		"id": "GVG_042",
+		"mechanics": [
+			"BATTLECRY",
+			"OVERLOAD"
+		],
 		"name": "Neptulon",
 		"overload": 3,
 		"playerClass": "Shaman",
@@ -25560,6 +27346,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "GVG_043.gif",
 		"id": "GVG_043",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Glaivezooka",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -25569,7 +27358,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "GVG_043e.png",
 		"dbfId": 2200,
 		"goldenImage": "GVG_043e.gif",
 		"id": "GVG_043e",
@@ -25639,6 +27427,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_046.gif",
 		"health": 6,
 		"id": "GVG_046",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "King of Beasts",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -25649,7 +27441,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "GVG_046e.png",
 		"dbfId": 2202,
 		"goldenImage": "GVG_046e.gif",
 		"id": "GVG_046e",
@@ -25668,6 +27459,9 @@ var parseCardsText = {
 		"dbfId": 2015,
 		"goldenImage": "GVG_047.gif",
 		"id": "GVG_047",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Sabotage",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -25686,6 +27480,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_048.gif",
 		"health": 3,
 		"id": "GVG_048",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Metaltooth Leaper",
 		"playerClass": "Hunter",
 		"race": "MECHANICAL",
@@ -25696,7 +27493,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "GVG_048e.png",
 		"dbfId": 2205,
 		"goldenImage": "GVG_048e.gif",
 		"id": "GVG_048e",
@@ -25728,7 +27524,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "GVG_049e.png",
 		"dbfId": 2204,
 		"goldenImage": "GVG_049e.gif",
 		"id": "GVG_049e",
@@ -25765,6 +27560,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_051.gif",
 		"health": 3,
 		"id": "GVG_051",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Warbot",
 		"playerClass": "Warrior",
 		"race": "MECHANICAL",
@@ -25775,7 +27573,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "GVG_051e.png",
 		"dbfId": 39809,
 		"goldenImage": "GVG_051e.gif",
 		"id": "GVG_051e",
@@ -25812,6 +27609,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_053.gif",
 		"health": 5,
 		"id": "GVG_053",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shieldmaiden",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -25848,6 +27648,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_055.gif",
 		"health": 5,
 		"id": "GVG_055",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Screwjank Clunker",
 		"playerClass": "Warrior",
 		"race": "MECHANICAL",
@@ -25858,7 +27661,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "GVG_055e.png",
 		"dbfId": 2223,
 		"goldenImage": "GVG_055e.gif",
 		"id": "GVG_055e",
@@ -25880,6 +27682,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_056.gif",
 		"health": 5,
 		"id": "GVG_056",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Iron Juggernaut",
 		"playerClass": "Warrior",
 		"race": "MECHANICAL",
@@ -25896,6 +27701,10 @@ var parseCardsText = {
 		"dbfId": 2221,
 		"goldenImage": "GVG_056t.gif",
 		"id": "GVG_056t",
+		"mechanics": [
+			"TOPDECK",
+			"ImmuneToSpellpower"
+		],
 		"name": "Burrowing Mine",
 		"playerClass": "Warrior",
 		"set": "Gvg",
@@ -25920,10 +27729,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_057a.png",
 		"dbfId": 2268,
 		"goldenImage": "GVG_057a.gif",
 		"id": "GVG_057a",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Seal of Light",
 		"playerClass": "Neutral",
 		"set": "Gvg",
@@ -25941,6 +27752,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_058.gif",
 		"health": 2,
 		"id": "GVG_058",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Shielded Minibot",
 		"playerClass": "Paladin",
 		"race": "MECHANICAL",
@@ -25960,6 +27774,9 @@ var parseCardsText = {
 		"durability": 3,
 		"goldenImage": "GVG_059.gif",
 		"id": "GVG_059",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Coghammer",
 		"playerClass": "Paladin",
 		"rarity": "Epic",
@@ -25982,6 +27799,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_060.gif",
 		"health": 5,
 		"id": "GVG_060",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Quartermaster",
 		"playerClass": "Paladin",
 		"rarity": "Epic",
@@ -25991,7 +27811,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "GVG_060e.png",
 		"dbfId": 2239,
 		"goldenImage": "GVG_060e.gif",
 		"id": "GVG_060e",
@@ -26060,7 +27879,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_063a.png",
 		"dbfId": 2404,
 		"goldenImage": "GVG_063a.gif",
 		"id": "GVG_063a",
@@ -26099,6 +27917,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_065.gif",
 		"health": 4,
 		"id": "GVG_065",
+		"mechanics": [
+			"FORGETFUL"
+		],
 		"name": "Ogre Brute",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -26117,6 +27938,11 @@ var parseCardsText = {
 		"goldenImage": "GVG_066.gif",
 		"health": 4,
 		"id": "GVG_066",
+		"mechanics": [
+			"FORGETFUL",
+			"OVERLOAD",
+			"WINDFURY"
+		],
 		"name": "Dunemaul Shaman",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -26145,10 +27971,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_067a.png",
 		"dbfId": 2273,
 		"goldenImage": "GVG_067a.gif",
 		"id": "GVG_067a",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Metabolized Magic",
 		"playerClass": "Neutral",
 		"set": "Gvg",
@@ -26175,10 +28003,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_068a.png",
 		"dbfId": 2272,
 		"goldenImage": "GVG_068a.gif",
 		"id": "GVG_068a",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Metabolized Magic",
 		"playerClass": "Neutral",
 		"set": "Gvg",
@@ -26196,6 +28026,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_069.gif",
 		"health": 3,
 		"id": "GVG_069",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Antique Healbot",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26206,7 +28039,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "GVG_069a.png",
 		"dbfId": 2174,
 		"goldenImage": "GVG_069a.gif",
 		"id": "GVG_069a",
@@ -26298,6 +28130,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_074.gif",
 		"health": 3,
 		"id": "GVG_074",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kezan Mystic",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -26337,6 +28172,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_076.gif",
 		"health": 1,
 		"id": "GVG_076",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Explosive Sheep",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26347,7 +28185,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_076a.png",
 		"dbfId": 2183,
 		"goldenImage": "GVG_076a.gif",
 		"id": "GVG_076a",
@@ -26384,9 +28221,21 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"dbfId": 2046,
+		"entourage": [
+			"PART_007",
+			"PART_006",
+			"PART_005",
+			"PART_001",
+			"PART_003",
+			"PART_002",
+			"PART_004"
+		],
 		"goldenImage": "GVG_078.gif",
 		"health": 5,
 		"id": "GVG_078",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Mechanical Yeti",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26406,6 +28255,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_079.gif",
 		"health": 7,
 		"id": "GVG_079",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Force-Tank MAX",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26425,6 +28277,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_080.gif",
 		"health": 4,
 		"id": "GVG_080",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Druid of the Fang",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -26459,6 +28314,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_081.gif",
 		"health": 3,
 		"id": "GVG_081",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Gilblin Stalker",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -26474,9 +28332,21 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"dbfId": 2050,
+		"entourage": [
+			"PART_007",
+			"PART_006",
+			"PART_005",
+			"PART_001",
+			"PART_003",
+			"PART_002",
+			"PART_004"
+		],
 		"goldenImage": "GVG_082.gif",
 		"health": 1,
 		"id": "GVG_082",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Clockwork Gnome",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26496,6 +28366,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_083.gif",
 		"health": 5,
 		"id": "GVG_083",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Upgraded Repair Bot",
 		"playerClass": "Priest",
 		"race": "MECHANICAL",
@@ -26515,6 +28388,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_084.gif",
 		"health": 4,
 		"id": "GVG_084",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Flying Machine",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26534,6 +28410,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_085.gif",
 		"health": 2,
 		"id": "GVG_085",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Annoy-o-Tron",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26563,7 +28443,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "GVG_086e.png",
 		"dbfId": 2214,
 		"goldenImage": "GVG_086e.gif",
 		"id": "GVG_086e",
@@ -26602,6 +28481,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_088.gif",
 		"health": 6,
 		"id": "GVG_088",
+		"mechanics": [
+			"FORGETFUL",
+			"STEALTH"
+		],
 		"name": "Ogre Ninja",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -26641,6 +28524,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_090.gif",
 		"health": 4,
 		"id": "GVG_090",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Madder Bomber",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -26659,6 +28545,11 @@ var parseCardsText = {
 		"goldenImage": "GVG_091.gif",
 		"health": 5,
 		"id": "GVG_091",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS",
+			"TAUNT"
+		],
 		"name": "Arcane Nullifier X-21",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26678,6 +28569,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_092.gif",
 		"health": 2,
 		"id": "GVG_092",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gnomish Experimenter",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -26711,6 +28605,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_093.gif",
 		"health": 2,
 		"id": "GVG_093",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Target Dummy",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26749,6 +28646,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_095.gif",
 		"health": 4,
 		"id": "GVG_095",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Goblin Sapper",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -26767,6 +28667,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_096.gif",
 		"health": 3,
 		"id": "GVG_096",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Piloted Shredder",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -26786,6 +28689,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_097.gif",
 		"health": 3,
 		"id": "GVG_097",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Lil' Exorcist",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -26807,6 +28714,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_098.gif",
 		"health": 4,
 		"id": "GVG_098",
+		"mechanics": [
+			"CHARGE",
+			"TAUNT"
+		],
 		"name": "Gnomeregan Infantry",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -26825,6 +28736,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_099.gif",
 		"health": 3,
 		"id": "GVG_099",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bomb Lobber",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -26853,7 +28767,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "GVG_100e.png",
 		"dbfId": 2194,
 		"goldenImage": "GVG_100e.gif",
 		"id": "GVG_100e",
@@ -26874,6 +28787,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_101.gif",
 		"health": 3,
 		"id": "GVG_101",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Scarlet Purifier",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -26886,7 +28802,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "GVG_101e.png",
 		"dbfId": 2248,
 		"goldenImage": "GVG_101e.gif",
 		"id": "GVG_101e",
@@ -26904,9 +28819,21 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"dbfId": 2070,
+		"entourage": [
+			"PART_007",
+			"PART_006",
+			"PART_005",
+			"PART_001",
+			"PART_003",
+			"PART_002",
+			"PART_004"
+		],
 		"goldenImage": "GVG_102.gif",
 		"health": 3,
 		"id": "GVG_102",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tinkertown Technician",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -26916,7 +28843,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_102e.png",
 		"dbfId": 2237,
 		"goldenImage": "GVG_102e.gif",
 		"id": "GVG_102e",
@@ -26965,7 +28891,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_104a.png",
 		"dbfId": 2238,
 		"goldenImage": "GVG_104a.gif",
 		"id": "GVG_104a",
@@ -26986,6 +28911,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_105.gif",
 		"health": 4,
 		"id": "GVG_105",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Piloted Sky Golem",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -27015,7 +28943,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "GVG_106e.png",
 		"dbfId": 2241,
 		"goldenImage": "GVG_106e.gif",
 		"id": "GVG_106e",
@@ -27036,6 +28963,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_107.gif",
 		"health": 2,
 		"id": "GVG_107",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Enhance-o Mechano",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -27060,6 +28990,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_108.gif",
 		"health": 2,
 		"id": "GVG_108",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Recombobulator",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -27078,6 +29011,10 @@ var parseCardsText = {
 		"goldenImage": "GVG_109.gif",
 		"health": 1,
 		"id": "GVG_109",
+		"mechanics": [
+			"SPELLPOWER",
+			"STEALTH"
+		],
 		"name": "Mini-Mage",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -27098,6 +29035,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_110.gif",
 		"health": 7,
 		"id": "GVG_110",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dr. Boom",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -27114,6 +29054,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_110t.gif",
 		"health": 1,
 		"id": "GVG_110t",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Boom Bot",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -27152,6 +29095,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_111t.gif",
 		"health": 8,
 		"id": "GVG_111t",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "V-07-TR-0N",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -27210,6 +29156,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_114.gif",
 		"health": 7,
 		"id": "GVG_114",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sneed's Old Shredder",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -27227,9 +29176,22 @@ var parseCardsText = {
 		"cost": 6,
 		"dbfId": 2083,
 		"elite": true,
+		"entourage": [
+			"PART_007",
+			"PART_006",
+			"PART_005",
+			"PART_003",
+			"PART_002",
+			"PART_001",
+			"PART_004"
+		],
 		"goldenImage": "GVG_115.gif",
 		"health": 7,
 		"id": "GVG_115",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Toshley",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -27307,6 +29269,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_119.gif",
 		"health": 4,
 		"id": "GVG_119",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blingtron 3000",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -27327,6 +29292,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_120.gif",
 		"health": 3,
 		"id": "GVG_120",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hemet Nesingwary",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -27364,6 +29332,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_122.gif",
 		"health": 5,
 		"id": "GVG_122",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Wee Spellstopper",
 		"playerClass": "Mage",
 		"rarity": "Epic",
@@ -27382,6 +29353,9 @@ var parseCardsText = {
 		"goldenImage": "GVG_123.gif",
 		"health": 3,
 		"id": "GVG_123",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Soot Spewer",
 		"playerClass": "Mage",
 		"race": "MECHANICAL",
@@ -27393,10 +29367,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "GVG_123e.png",
 		"dbfId": 2250,
 		"goldenImage": "GVG_123e.gif",
 		"id": "GVG_123e",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Overclocked",
 		"playerClass": "Mage",
 		"set": "Gvg",
@@ -27679,6 +29655,9 @@ var parseCardsText = {
 		"goldenImage": "hexfrog.gif",
 		"health": 1,
 		"id": "hexfrog",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Frog",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -27697,6 +29676,10 @@ var parseCardsText = {
 		"goldenImage": "HRW02_1.gif",
 		"health": 80,
 		"id": "HRW02_1",
+		"mechanics": [
+			"TAUNT",
+			"InvisibleDeathrattle"
+		],
 		"name": "Gearmaster Mechazod",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -27705,7 +29688,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "HRW02_1e.png",
 		"cost": 1,
 		"dbfId": 19955,
 		"goldenImage": "HRW02_1e.gif",
@@ -27759,6 +29741,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_018.gif",
 		"health": 3,
 		"id": "ICC_018",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Phantom Freebooter",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -27769,7 +29754,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_018e.png",
 		"dbfId": 45884,
 		"goldenImage": "ICC_018e.gif",
 		"id": "ICC_018e",
@@ -27790,6 +29774,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_019.gif",
 		"health": 2,
 		"id": "ICC_019",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Skelemancer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -27823,6 +29810,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_021.gif",
 		"health": 1,
 		"id": "ICC_021",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Exploding Bloatbat",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -27860,6 +29850,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_025.gif",
 		"health": 2,
 		"id": "ICC_025",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Rattling Rascal",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -27893,6 +29887,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_026.gif",
 		"health": 4,
 		"id": "ICC_026",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Grim Necromancer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -27926,6 +29923,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_027.gif",
 		"health": 5,
 		"id": "ICC_027",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Bone Drake",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -27945,6 +29945,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_028.gif",
 		"health": 4,
 		"id": "ICC_028",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sunborne Val'kyr",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -27954,7 +29957,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_028e.png",
 		"dbfId": 46207,
 		"goldenImage": "ICC_028e.gif",
 		"id": "ICC_028e",
@@ -27985,7 +29987,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_029e.png",
 		"dbfId": 42441,
 		"goldenImage": "ICC_029e.gif",
 		"id": "ICC_029e",
@@ -28015,7 +30016,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_031e.png",
 		"dbfId": 42444,
 		"goldenImage": "ICC_031e.gif",
 		"id": "ICC_031e",
@@ -28036,6 +30036,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_032.gif",
 		"health": 5,
 		"id": "ICC_032",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Venomancer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -28054,6 +30057,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_034.gif",
 		"health": 2,
 		"id": "ICC_034",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Arrogant Crusader",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -28072,6 +30078,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_038.gif",
 		"health": 1,
 		"id": "ICC_038",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Righteous Protector",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -28097,7 +30107,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_039e.png",
 		"dbfId": 42468,
 		"goldenImage": "ICC_039e.gif",
 		"id": "ICC_039e",
@@ -28134,6 +30143,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_047.gif",
 		"health": 3,
 		"id": "ICC_047",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Fatespinner",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -28172,7 +30184,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "ICC_047e.png",
 		"dbfId": 43434,
 		"goldenImage": "ICC_047e.gif",
 		"id": "ICC_047e",
@@ -28186,27 +30197,14 @@ var parseCardsText = {
 		"attack": 5,
 		"cardClass": "DRUID",
 		"cardImage": "ICC_047t.png",
-		"collectionText": {
-			"deDE": "[x]<b>Geheimes Todesröcheln:</b>\nFügt allen Dienern\n3 Schaden zu; oder\nverleiht ihnen +2/+2.",
-			"enUS": "<b>Secret Deathrattle:</b> Deal 3 damage to all minions; or Give them +2/+2.",
-			"esES": "<b>Último aliento oculto:\n</b> Inflige 3 p. de daño\na todos los esbirros, o bien les otorga +2/+2.",
-			"esMX": "<b>Estertor secreto:</b> inflige 3 de daño a todos los esbirros, o les otorga +2/+2.",
-			"frFR": "<b>Râle d’agonie secret :</b> inflige 3 points de dégâts à tous les serviteurs ou leur donne +2/+2.",
-			"itIT": "<b>Rantolo di Morte Nascosto:</b> infligge 3 danni a TUTTI i servitori <b>o</b> +2/+2 a TUTTI i servitori.",
-			"jaJP": "[x]<b>秘密の断末魔:</b>\n全てのミニオンに\n3ダメージを与える。\nまたは、全てのミニオンに\n+2/+2を付与する。",
-			"koKR": "<b>죽음의 메아리 (비밀):</b>\n<b>모든</b> 하수인에게\n피해를 3 줍니다. 또는 +2/+2를 부여합니다.",
-			"plPL": "<b>Skryta Agonia:</b> Zadaj 3 pkt. obrażeń wszystkim stronnikom; lub daj im +2/+2.",
-			"ptBR": "<b>Último Suspiro Secreto:</b> Cause 3 de dano a todos os lacaios; ou Conceda +2/+2 a eles.",
-			"ruRU": "<b>Тайный «Предсмертный хрип»:</b> наносит 3 ед. урона всем существам; или все существа получают +2/+2.",
-			"thTH": "<b>เสียงสุดท้ายลับ:</b>\nสร้างความเสียหาย[b] 3 แต้มให้มินเนี่ยนทั้งหมด[b]หรือมอบ +2/+2 ให้",
-			"zhCN": "<b>秘密亡语：</b>对所有随从造成3点伤害；\n或者使所有随从获得+2/+2。",
-			"zhTW": "<b>隱密死聲：</b>對全部手下造成3點傷害，或賦予全部手下+2/+2"
-		},
 		"cost": 5,
 		"dbfId": 43430,
 		"goldenImage": "ICC_047t.gif",
 		"health": 3,
 		"id": "ICC_047t",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Fatespinner",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -28223,6 +30221,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_047t2.gif",
 		"health": 3,
 		"id": "ICC_047t2",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Fatespinner",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -28251,7 +30252,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_049e.png",
 		"dbfId": 47570,
 		"goldenImage": "ICC_049e.gif",
 		"id": "ICC_049e",
@@ -28291,6 +30291,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_051.gif",
 		"health": 2,
 		"id": "ICC_051",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Druid of the Swarm",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -28339,6 +30342,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_051t.gif",
 		"health": 2,
 		"id": "ICC_051t",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Druid of the Swarm",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -28356,6 +30362,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_051t2.gif",
 		"health": 5,
 		"id": "ICC_051t2",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Druid of the Swarm",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -28374,6 +30383,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_051t3.gif",
 		"health": 5,
 		"id": "ICC_051t3",
+		"mechanics": [
+			"POISONOUS",
+			"TAUNT"
+		],
 		"name": "Druid of the Swarm",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -28429,6 +30442,9 @@ var parseCardsText = {
 		"dbfId": 42658,
 		"goldenImage": "ICC_055.gif",
 		"id": "ICC_055",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Drain Soul",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -28457,7 +30473,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_056e.png",
 		"dbfId": 42674,
 		"goldenImage": "ICC_056e.gif",
 		"id": "ICC_056e",
@@ -28478,6 +30493,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_058.gif",
 		"health": 2,
 		"id": "ICC_058",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Brrrloc",
 		"playerClass": "Shaman",
 		"race": "MURLOC",
@@ -28500,6 +30518,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_062.gif",
 		"health": 3,
 		"id": "ICC_062",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Mountainfire Armor",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -28518,6 +30539,10 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "ICC_064.gif",
 		"id": "ICC_064",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Blood Razor",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -28536,6 +30561,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_065.gif",
 		"health": 5,
 		"id": "ICC_065",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Bone Baron",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -28554,6 +30582,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_067.gif",
 		"health": 1,
 		"id": "ICC_067",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Vryghoul",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -28594,6 +30625,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_069.gif",
 		"health": 6,
 		"id": "ICC_069",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ghastly Conjurer",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -28624,7 +30658,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "ICC_071e.png",
 		"dbfId": 42734,
 		"goldenImage": "ICC_071e.gif",
 		"id": "ICC_071e",
@@ -28662,6 +30695,9 @@ var parseCardsText = {
 		"dbfId": 42747,
 		"goldenImage": "ICC_078.gif",
 		"id": "ICC_078",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Avalanche",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -28687,10 +30723,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "ICC_079e.png",
 		"dbfId": 45625,
 		"goldenImage": "ICC_079e.gif",
 		"id": "ICC_079e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Gnash",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -28709,6 +30747,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_081.gif",
 		"health": 8,
 		"id": "ICC_081",
+		"mechanics": [
+			"OVERLOAD",
+			"TAUNT"
+		],
 		"name": "Drakkari Defender",
 		"overload": 3,
 		"playerClass": "Shaman",
@@ -28726,6 +30768,9 @@ var parseCardsText = {
 		"dbfId": 42754,
 		"goldenImage": "ICC_082.gif",
 		"id": "ICC_082",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Frozen Clone",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -28744,6 +30789,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_083.gif",
 		"health": 2,
 		"id": "ICC_083",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Doomed Apprentice",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -28812,6 +30860,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_088.gif",
 		"health": 7,
 		"id": "ICC_088",
+		"mechanics": [
+			"FREEZE",
+			"TAUNT"
+		],
 		"name": "Voodoo Hexxer",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -28884,6 +30936,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_092.gif",
 		"health": 1,
 		"id": "ICC_092",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Acherus Veteran",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -28893,7 +30948,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_092e.png",
 		"dbfId": 42772,
 		"goldenImage": "ICC_092e.gif",
 		"id": "ICC_092e",
@@ -28914,6 +30968,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_093.gif",
 		"health": 3,
 		"id": "ICC_093",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tuskarr Fisherman",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -28926,7 +30983,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_093e.png",
 		"dbfId": 42774,
 		"goldenImage": "ICC_093e.gif",
 		"id": "ICC_093e",
@@ -28947,6 +31003,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_094.gif",
 		"health": 1,
 		"id": "ICC_094",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fallen Sun Cleric",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -28956,7 +31015,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_094e.png",
 		"dbfId": 42776,
 		"goldenImage": "ICC_094e.gif",
 		"id": "ICC_094e",
@@ -28977,6 +31035,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_096.gif",
 		"health": 6,
 		"id": "ICC_096",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Furnacefire Colossus",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -28986,7 +31047,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_096e.png",
 		"dbfId": 46211,
 		"goldenImage": "ICC_096e.gif",
 		"id": "ICC_096e",
@@ -29017,7 +31077,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_097e.png",
 		"dbfId": 45376,
 		"goldenImage": "ICC_097e.gif",
 		"id": "ICC_097e",
@@ -29038,6 +31097,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_098.gif",
 		"health": 3,
 		"id": "ICC_098",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tomb Lurker",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -29059,6 +31121,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_099.gif",
 		"health": 6,
 		"id": "ICC_099",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Ticking Abomination",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -29075,6 +31140,9 @@ var parseCardsText = {
 		"dbfId": 42525,
 		"goldenImage": "ICC_200.gif",
 		"id": "ICC_200",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Venomstrike Trap",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -29178,7 +31246,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "ICC_210e.png",
 		"dbfId": 45489,
 		"goldenImage": "ICC_210e.gif",
 		"id": "ICC_210e",
@@ -29199,6 +31266,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_212.gif",
 		"health": 3,
 		"id": "ICC_212",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Acolyte of Agony",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -29236,6 +31306,11 @@ var parseCardsText = {
 		"goldenImage": "ICC_214.gif",
 		"health": 8,
 		"id": "ICC_214",
+		"mechanics": [
+			"DEATHRATTLE",
+			"LIFESTEAL",
+			"TAUNT"
+		],
 		"name": "Obsidian Statue",
 		"playerClass": "Priest",
 		"rarity": "Epic",
@@ -29255,6 +31330,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_215.gif",
 		"health": 6,
 		"id": "ICC_215",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Archbishop Benedictus",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
@@ -29292,6 +31370,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_220.gif",
 		"health": 1,
 		"id": "ICC_220",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Deadscale Knight",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -29321,10 +31402,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_221e.png",
 		"dbfId": 42664,
 		"goldenImage": "ICC_221e.gif",
 		"id": "ICC_221e",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Leeching Poison",
 		"playerClass": "Rogue",
 		"set": "Icecrown",
@@ -29340,6 +31423,9 @@ var parseCardsText = {
 		"dbfId": 42801,
 		"goldenImage": "ICC_233.gif",
 		"id": "ICC_233",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Doomerang",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -29365,7 +31451,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_235e.png",
 		"dbfId": 42803,
 		"goldenImage": "ICC_235e.gif",
 		"id": "ICC_235e",
@@ -29425,6 +31510,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_240.gif",
 		"health": 3,
 		"id": "ICC_240",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Runeforge Haunter",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -29434,7 +31522,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_240e.png",
 		"dbfId": 46044,
 		"goldenImage": "ICC_240e.gif",
 		"id": "ICC_240e",
@@ -29455,6 +31542,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_243.gif",
 		"health": 6,
 		"id": "ICC_243",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Corpse Widow",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -29487,7 +31577,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "ICC_244e.png",
 		"dbfId": 42823,
 		"goldenImage": "ICC_244e.gif",
 		"id": "ICC_244e",
@@ -29526,6 +31615,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_252.gif",
 		"health": 4,
 		"id": "ICC_252",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Coldwraith",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -29547,6 +31639,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_257.gif",
 		"health": 3,
 		"id": "ICC_257",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATH_KNIGHT"
+		],
 		"name": "Corpse Raiser",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -29559,7 +31655,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_257e.png",
 		"dbfId": 45375,
 		"goldenImage": "ICC_257e.gif",
 		"id": "ICC_257e",
@@ -29616,9 +31711,22 @@ var parseCardsText = {
 		"cost": 8,
 		"dbfId": 42818,
 		"elite": true,
+		"entourage": [
+			"ICC_314t3",
+			"ICC_314t2",
+			"ICC_314t7",
+			"ICC_314t4",
+			"ICC_314t5",
+			"ICC_314t6",
+			"ICC_314t8",
+			"ICC_314t1"
+		],
 		"goldenImage": "ICC_314.gif",
 		"health": 8,
 		"id": "ICC_314",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "The Lich King",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -29637,6 +31745,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "ICC_314t1.gif",
 		"id": "ICC_314t1",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Frostmourne",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -29645,7 +31756,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_314t1e.png",
 		"dbfId": 46708,
 		"goldenImage": "ICC_314t1e.gif",
 		"id": "ICC_314t1e",
@@ -29719,6 +31829,9 @@ var parseCardsText = {
 		"dbfId": 43120,
 		"goldenImage": "ICC_314t6.gif",
 		"id": "ICC_314t6",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Obliterate",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -29733,6 +31846,10 @@ var parseCardsText = {
 		"dbfId": 45387,
 		"goldenImage": "ICC_314t7.gif",
 		"id": "ICC_314t7",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Anti-Magic Shell",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -29741,10 +31858,13 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_314t7e.png",
 		"dbfId": 45386,
 		"goldenImage": "ICC_314t7e.gif",
 		"id": "ICC_314t7e",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Anti-Magic Shell",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -29781,7 +31901,7 @@ var parseCardsText = {
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
 		"set": "Icecrown",
-		"text": "[x]Whenever this minion\nsurvives damage,\nsummon a random\n<b>Legendary</b> minion.",
+		"text": "[x]After this minion\nsurvives damage,\nsummon a random\n<b>Legendary</b> minion.",
 		"type": "Minion"
 	},
 	{
@@ -29795,6 +31915,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_407.gif",
 		"health": 3,
 		"id": "ICC_407",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gnomeferatu",
 		"playerClass": "Warlock",
 		"rarity": "Epic",
@@ -29817,7 +31940,7 @@ var parseCardsText = {
 		"playerClass": "Warrior",
 		"rarity": "Rare",
 		"set": "Icecrown",
-		"text": "[x]Whenever this minion\nsurvives damage,\nsummon a 2/2 Ghoul.",
+		"text": "[x]After this minion\nsurvives damage,\nsummon a 2/2 Ghoul.",
 		"type": "Minion"
 	},
 	{
@@ -29831,6 +31954,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_415.gif",
 		"health": 2,
 		"id": "ICC_415",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Stitched Tracker",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -29852,6 +31978,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_419.gif",
 		"health": 3,
 		"id": "ICC_419",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Bearshark",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -29871,6 +32001,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_450.gif",
 		"health": 3,
 		"id": "ICC_450",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Death Revenant",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -29880,7 +32013,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_450e.png",
 		"dbfId": 46000,
 		"goldenImage": "ICC_450e.gif",
 		"id": "ICC_450e",
@@ -29901,6 +32033,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_466.gif",
 		"health": 3,
 		"id": "ICC_466",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Saronite Chain Gang",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -29919,6 +32055,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_467.gif",
 		"health": 4,
 		"id": "ICC_467",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Deathspeaker",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -29931,10 +32070,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_467e.png",
 		"dbfId": 42393,
 		"goldenImage": "ICC_467e.gif",
 		"id": "ICC_467e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Deathward",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -29987,6 +32128,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_481.gif",
 		"health": 30,
 		"id": "ICC_481",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Thrall, Deathseer",
 		"playerClass": "Shaman",
 		"rarity": "Legendary",
@@ -30009,7 +32153,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_483e.png",
 		"dbfId": 43018,
 		"goldenImage": "ICC_483e.gif",
 		"id": "ICC_483e",
@@ -30047,6 +32190,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_701.gif",
 		"health": 6,
 		"id": "ICC_701",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Skulking Geist",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -30065,6 +32211,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_702.gif",
 		"health": 1,
 		"id": "ICC_702",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Shallow Gravedigger",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -30078,11 +32227,14 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "ICC_705.png",
 		"collectible": true,
-		"cost": 7,
+		"cost": 8,
 		"dbfId": 42790,
 		"goldenImage": "ICC_705.gif",
 		"health": 5,
 		"id": "ICC_705",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bonemare",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -30095,7 +32247,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_705e.png",
 		"dbfId": 46212,
 		"goldenImage": "ICC_705e.gif",
 		"id": "ICC_705e",
@@ -30116,6 +32267,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_706.gif",
 		"health": 5,
 		"id": "ICC_706",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Nerubian Unraveler",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -30149,6 +32303,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_801.gif",
 		"health": 2,
 		"id": "ICC_801",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Howling Commander",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -30168,6 +32325,9 @@ var parseCardsText = {
 		"dbfId": 42992,
 		"goldenImage": "ICC_802.gif",
 		"id": "ICC_802",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Spirit Lash",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -30186,6 +32346,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_807.gif",
 		"health": 3,
 		"id": "ICC_807",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Strongshell Scavenger",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -30198,7 +32361,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_807e.png",
 		"dbfId": 43023,
 		"goldenImage": "ICC_807e.gif",
 		"id": "ICC_807e",
@@ -30219,6 +32381,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_808.gif",
 		"health": 6,
 		"id": "ICC_808",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Crypt Lord",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -30228,7 +32393,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "ICC_808e.png",
 		"dbfId": 43024,
 		"goldenImage": "ICC_808e.gif",
 		"id": "ICC_808e",
@@ -30249,6 +32413,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_809.gif",
 		"health": 3,
 		"id": "ICC_809",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Plague Scientist",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -30261,7 +32428,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_809e.png",
 		"dbfId": 47533,
 		"goldenImage": "ICC_809e.gif",
 		"id": "ICC_809e",
@@ -30286,6 +32452,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_810.gif",
 		"health": 3,
 		"id": "ICC_810",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Deathaxe Punisher",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -30298,7 +32467,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_810e.png",
 		"dbfId": 46534,
 		"goldenImage": "ICC_810e.gif",
 		"id": "ICC_810e",
@@ -30320,6 +32488,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_811.gif",
 		"health": 5,
 		"id": "ICC_811",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lilian Voss",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -30338,6 +32509,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_812.gif",
 		"health": 4,
 		"id": "ICC_812",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Meat Wagon",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -30357,6 +32531,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_820.gif",
 		"health": 2,
 		"id": "ICC_820",
+		"mechanics": [
+			"CHARGE",
+			"LIFESTEAL"
+		],
 		"name": "Chillblade Champion",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -30391,6 +32569,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_825.gif",
 		"health": 7,
 		"id": "ICC_825",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Abominable Bowman",
 		"playerClass": "Hunter",
 		"rarity": "Epic",
@@ -30410,6 +32591,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_827.gif",
 		"health": 30,
 		"id": "ICC_827",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Valeera the Hollow",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -30422,7 +32606,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_827e.png",
 		"dbfId": 43390,
 		"goldenImage": "ICC_827e.gif",
 		"id": "ICC_827e",
@@ -30434,7 +32617,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_827e3.png",
 		"dbfId": 45396,
 		"goldenImage": "ICC_827e3.gif",
 		"id": "ICC_827e3",
@@ -30484,6 +32666,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_828.gif",
 		"health": 30,
 		"id": "ICC_828",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Deathstalker Rexxar",
 		"playerClass": "Hunter",
 		"rarity": "Legendary",
@@ -30493,10 +32678,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "ICC_828e.png",
 		"dbfId": 46120,
 		"goldenImage": "ICC_828e.gif",
 		"id": "ICC_828e",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
 		"name": "Stitched",
 		"playerClass": "Hunter",
 		"set": "Icecrown",
@@ -30536,27 +32723,15 @@ var parseCardsText = {
 		"attack": 1,
 		"cardClass": "NEUTRAL",
 		"cardImage": "ICC_828t2.png",
-		"collectionText": {
-			"deDE": "<b>Spott</b>, <b>Giftig</b>",
-			"enUS": "<b>Taunt</b>, <b>Poisonous</b>",
-			"esES": "<b>Provocar</b>. <b>Veneno</b>.",
-			"esMX": "<b>Provocación</b>, <b>Venenoso</b>",
-			"frFR": "<b>Provocation</b>, <b>Toxicité</b>",
-			"itIT": "<b>Provocazione</b>. <b>Veleno</b>",
-			"jaJP": "<b>挑発</b>、<b>猛毒</b>",
-			"koKR": "<b>도발</b>, <b>독성</b>",
-			"plPL": "<b>Prowokacja</b>, <b>Trucizna</b>",
-			"ptBR": "<b>Provocar</b>, <b>Venenoso</b>",
-			"ruRU": "<b>Яд</b>\n<b>Провокация</b>",
-			"thTH": "<b>ยั่วยุ</b>, <b>พิษ</b>",
-			"zhCN": "<b>嘲讽，剧毒</b>",
-			"zhTW": "<b>嘲諷</b>，<b>致命劇毒</b>"
-		},
 		"cost": 2,
 		"dbfId": 46204,
 		"goldenImage": "ICC_828t2.gif",
 		"health": 2,
 		"id": "ICC_828t2",
+		"mechanics": [
+			"POISONOUS",
+			"TAUNT"
+		],
 		"name": "Stubborn Gastropod",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -30569,27 +32744,15 @@ var parseCardsText = {
 		"attack": 2,
 		"cardClass": "NEUTRAL",
 		"cardImage": "ICC_828t3.png",
-		"collectionText": {
-			"deDE": "<b>Verstohlenheit</b>, <b>Giftig</b>",
-			"enUS": "<b>Stealth</b>, <b>Poisonous</b>",
-			"esES": "<b>Sigilo</b>. <b>Veneno</b>.",
-			"esMX": "<b>Sigilo</b>, <b>Venenoso</b>",
-			"frFR": "<b>Camouflage</b>, <b>Toxicité</b>",
-			"itIT": "<b>Furtività</b>. <b>Veleno</b>",
-			"jaJP": "<b>隠れ身</b>、<b>猛毒</b>",
-			"koKR": "<b>은신</b>, <b>독성</b>",
-			"plPL": "<b>Ukrycie</b>, <b>Trucizna</b>",
-			"ptBR": "<b>Furtividade</b>, <b>Venenoso</b>",
-			"ruRU": "<b>Яд</b>\n<b>Маскировка</b>",
-			"thTH": "<b>ซ่อนตัว</b>, <b>พิษ</b>",
-			"zhCN": "<b>潜行，剧毒</b>",
-			"zhTW": "<b>潛行</b>，<b>致命劇毒</b>"
-		},
 		"cost": 3,
 		"dbfId": 46672,
 		"goldenImage": "ICC_828t3.gif",
 		"health": 2,
 		"id": "ICC_828t3",
+		"mechanics": [
+			"POISONOUS",
+			"STEALTH"
+		],
 		"name": "Giant Wasp",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -30610,6 +32773,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_829.gif",
 		"health": 30,
 		"id": "ICC_829",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Uther of the Ebon Blade",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -30625,6 +32791,12 @@ var parseCardsText = {
 		"cardImage": "ICC_829p.png",
 		"cost": 2,
 		"dbfId": 43013,
+		"entourage": [
+			"ICC_829t2",
+			"ICC_829t3",
+			"ICC_829t4",
+			"ICC_829t5"
+		],
 		"goldenImage": "ICC_829p.gif",
 		"id": "ICC_829p",
 		"name": "The Four Horsemen",
@@ -30643,6 +32815,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "ICC_829t.gif",
 		"id": "ICC_829t",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Grave Vengeance",
 		"playerClass": "Paladin",
 		"set": "Icecrown",
@@ -30725,6 +32900,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_830.gif",
 		"health": 30,
 		"id": "ICC_830",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shadowreaper Anduin",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
@@ -30757,6 +32935,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_831.gif",
 		"health": 30,
 		"id": "ICC_831",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bloodreaver Gul'dan",
 		"playerClass": "Warlock",
 		"rarity": "Legendary",
@@ -30771,6 +32952,9 @@ var parseCardsText = {
 		"dbfId": 43181,
 		"goldenImage": "ICC_831p.gif",
 		"id": "ICC_831p",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Siphon Life",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -30789,6 +32973,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_832.gif",
 		"health": 30,
 		"id": "ICC_832",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Malfurion the Pestilent",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -30828,10 +33015,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_832e.png",
 		"dbfId": 43185,
 		"goldenImage": "ICC_832e.gif",
 		"id": "ICC_832e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Fangs",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -30845,6 +33034,9 @@ var parseCardsText = {
 		"dbfId": 43182,
 		"goldenImage": "ICC_832p.gif",
 		"id": "ICC_832p",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Plague Lord",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -30887,6 +33079,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_832t3.gif",
 		"health": 2,
 		"id": "ICC_832t3",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Frost Widow",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -30903,6 +33098,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_832t4.gif",
 		"health": 5,
 		"id": "ICC_832t4",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Scarab Beetle",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -30922,6 +33120,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_833.gif",
 		"health": 30,
 		"id": "ICC_833",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Frost Lich Jaina",
 		"playerClass": "Mage",
 		"rarity": "Legendary",
@@ -30934,10 +33135,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_833e.png",
 		"dbfId": 45608,
 		"goldenImage": "ICC_833e.gif",
 		"id": "ICC_833e",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Frost Lich",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -30946,10 +33149,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_833e2.png",
 		"dbfId": 47440,
 		"goldenImage": "ICC_833e2.gif",
 		"id": "ICC_833e2",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Icy Veins",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -30979,6 +33184,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_833t.gif",
 		"health": 6,
 		"id": "ICC_833t",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Water Elemental",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -30998,6 +33206,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_834.gif",
 		"health": 30,
 		"id": "ICC_834",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Scourgelord Garrosh",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
@@ -31047,6 +33258,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_835.gif",
 		"health": 7,
 		"id": "ICC_835",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Hadronox",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -31095,7 +33309,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_837e.png",
 		"dbfId": 45372,
 		"goldenImage": "ICC_837e.gif",
 		"id": "ICC_837e",
@@ -31117,6 +33330,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_838.gif",
 		"health": 8,
 		"id": "ICC_838",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sindragosa",
 		"playerClass": "Mage",
 		"race": "DRAGON",
@@ -31135,6 +33351,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_838t.gif",
 		"health": 1,
 		"id": "ICC_838t",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Frozen Champion",
 		"playerClass": "Mage",
 		"set": "Icecrown",
@@ -31153,6 +33372,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_841.gif",
 		"health": 6,
 		"id": "ICC_841",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Blood-Queen Lana'thel",
 		"playerClass": "Warlock",
 		"rarity": "Legendary",
@@ -31162,7 +33384,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_841e.png",
 		"dbfId": 47569,
 		"goldenImage": "ICC_841e.gif",
 		"id": "ICC_841e",
@@ -31190,7 +33411,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_849e.png",
 		"dbfId": 46099,
 		"goldenImage": "ICC_849e.gif",
 		"id": "ICC_849e",
@@ -31211,6 +33431,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "ICC_850.gif",
 		"id": "ICC_850",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shadowblade",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -31223,10 +33446,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "ICC_850e.png",
 		"dbfId": 45716,
 		"goldenImage": "ICC_850e.gif",
 		"id": "ICC_850e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Shaded",
 		"playerClass": "Rogue",
 		"set": "Icecrown",
@@ -31245,6 +33470,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_851.gif",
 		"health": 2,
 		"id": "ICC_851",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Prince Keleseth",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -31254,7 +33482,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_851e.png",
 		"dbfId": 43456,
 		"goldenImage": "ICC_851e.gif",
 		"id": "ICC_851e",
@@ -31276,6 +33503,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_852.gif",
 		"health": 3,
 		"id": "ICC_852",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Prince Taldaram",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -31285,7 +33515,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_852e.png",
 		"dbfId": 46010,
 		"goldenImage": "ICC_852e.gif",
 		"id": "ICC_852e",
@@ -31307,6 +33536,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_853.gif",
 		"health": 4,
 		"id": "ICC_853",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Prince Valanar",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -31327,9 +33559,22 @@ var parseCardsText = {
 		"cost": 4,
 		"dbfId": 45366,
 		"elite": true,
+		"entourage": [
+			"ICC_314t2",
+			"ICC_314t3",
+			"ICC_314t4",
+			"ICC_314t5",
+			"ICC_314t7",
+			"ICC_314t8",
+			"ICC_314t6",
+			"ICC_314t1"
+		],
 		"goldenImage": "ICC_854.gif",
 		"health": 2,
 		"id": "ICC_854",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Arfus",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -31349,6 +33594,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_855.gif",
 		"health": 4,
 		"id": "ICC_855",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hyldnir Frostrider",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -31370,6 +33618,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_856.gif",
 		"health": 4,
 		"id": "ICC_856",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Spellweaver",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -31390,6 +33641,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_858.gif",
 		"health": 7,
 		"id": "ICC_858",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Bolvar, Fireblood",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -31399,7 +33653,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "ICC_858e.png",
 		"dbfId": 46580,
 		"goldenImage": "ICC_858e.gif",
 		"id": "ICC_858e",
@@ -31453,6 +33706,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_901.gif",
 		"health": 5,
 		"id": "ICC_901",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Drakkari Enchanter",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -31489,6 +33745,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_903.gif",
 		"health": 1,
 		"id": "ICC_903",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sanguine Reveler",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -31498,7 +33757,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_903t.png",
 		"dbfId": 45382,
 		"goldenImage": "ICC_903t.gif",
 		"id": "ICC_903t",
@@ -31519,6 +33777,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_904.gif",
 		"health": 1,
 		"id": "ICC_904",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Wicked Skeleton",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -31528,7 +33789,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICC_904e.png",
 		"dbfId": 45323,
 		"goldenImage": "ICC_904e.gif",
 		"id": "ICC_904e",
@@ -31549,6 +33809,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_905.gif",
 		"health": 4,
 		"id": "ICC_905",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Bloodworm",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -31568,6 +33831,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_910.gif",
 		"health": 5,
 		"id": "ICC_910",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Spectral Pillager",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -31604,6 +33870,9 @@ var parseCardsText = {
 		"goldenImage": "ICC_912.gif",
 		"health": 3,
 		"id": "ICC_912",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Corpsetaker",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -31628,6 +33897,10 @@ var parseCardsText = {
 		"goldenImage": "ICC_913.gif",
 		"health": 1,
 		"id": "ICC_913",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"SPELLPOWER"
+		],
 		"name": "Tainted Zealot",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -31683,6 +33956,9 @@ var parseCardsText = {
 		"goldenImage": "ICCA01_004t.gif",
 		"health": 3,
 		"id": "ICCA01_004t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ghoul",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -31758,6 +34034,9 @@ var parseCardsText = {
 		"goldenImage": "ICCA01_010.gif",
 		"health": 2,
 		"id": "ICCA01_010",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "A. F. Kay",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -31783,6 +34062,16 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "ICCA01_013.png",
 		"dbfId": 45367,
+		"entourage": [
+			"ICC_314t2",
+			"ICC_314t3",
+			"ICC_314t4",
+			"ICC_314t1",
+			"ICC_314t6",
+			"ICC_314t5",
+			"ICC_314t7",
+			"ICC_314t8"
+		],
 		"goldenImage": "ICCA01_013.gif",
 		"health": 30,
 		"id": "ICCA01_013",
@@ -31793,7 +34082,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICCA03_001.png",
 		"dbfId": 42410,
 		"goldenImage": "ICCA03_001.gif",
 		"health": 100,
@@ -31822,6 +34110,9 @@ var parseCardsText = {
 		"dbfId": 45577,
 		"goldenImage": "ICCA04_002.gif",
 		"id": "ICCA04_002",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Unchained Magic",
 		"playerClass": "Mage",
 		"set": "Icecrown",
@@ -31838,6 +34129,9 @@ var parseCardsText = {
 		"health": 7,
 		"hideStats": true,
 		"id": "ICCA04_004",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Block of Ice",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -31850,6 +34144,9 @@ var parseCardsText = {
 		"dbfId": 43223,
 		"goldenImage": "ICCA04_008p.gif",
 		"id": "ICCA04_008p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Frost Breath",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -31909,7 +34206,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICCA05_002e.png",
 		"dbfId": 43191,
 		"goldenImage": "ICCA05_002e.gif",
 		"id": "ICCA05_002e",
@@ -31953,6 +34249,9 @@ var parseCardsText = {
 		"dbfId": 43194,
 		"goldenImage": "ICCA05_004p.gif",
 		"id": "ICCA05_004p",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Vampiric Leech",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -31966,6 +34265,9 @@ var parseCardsText = {
 		"dbfId": 45541,
 		"goldenImage": "ICCA05_020.gif",
 		"id": "ICCA05_020",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Bite of the Blood-Queen",
 		"playerClass": "Warlock",
 		"set": "Icecrown",
@@ -32020,6 +34322,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "ICCA06_003.gif",
 		"id": "ICCA06_003",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Bryn'troll, the Bone Arbiter",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -32135,7 +34440,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICCA07_004e.png",
 		"dbfId": 43073,
 		"goldenImage": "ICCA07_004e.gif",
 		"id": "ICCA07_004e",
@@ -32256,6 +34560,12 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "ICCA08_020.gif",
 		"id": "ICCA08_020",
+		"mechanics": [
+			"AI_MUST_PLAY",
+			"BATTLECRY",
+			"CANT_BE_DESTROYED",
+			"IMMUNE"
+		],
 		"name": "Frostmourne",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32269,6 +34579,9 @@ var parseCardsText = {
 		"dbfId": 45645,
 		"goldenImage": "ICCA08_021.gif",
 		"id": "ICCA08_021",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "The True Lich",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32282,6 +34595,9 @@ var parseCardsText = {
 		"dbfId": 45647,
 		"goldenImage": "ICCA08_022.gif",
 		"id": "ICCA08_022",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Fallen Champions",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32290,7 +34606,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICCA08_022e.png",
 		"dbfId": 45646,
 		"goldenImage": "ICCA08_022e.gif",
 		"id": "ICCA08_022e",
@@ -32301,7 +34616,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "ICCA08_022e2.png",
 		"dbfId": 46459,
 		"goldenImage": "ICCA08_022e2.gif",
 		"id": "ICCA08_022e2",
@@ -32318,6 +34632,9 @@ var parseCardsText = {
 		"dbfId": 45654,
 		"goldenImage": "ICCA08_023.gif",
 		"id": "ICCA08_023",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Necrotic Plague",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32326,7 +34643,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DEATHKNIGHT",
-		"cardImage": "ICCA08_023e.png",
 		"dbfId": 45653,
 		"goldenImage": "ICCA08_023e.gif",
 		"id": "ICCA08_023e",
@@ -32343,6 +34659,9 @@ var parseCardsText = {
 		"dbfId": 45648,
 		"goldenImage": "ICCA08_024.gif",
 		"id": "ICCA08_024",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "The Hunted",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32356,6 +34675,9 @@ var parseCardsText = {
 		"dbfId": 45649,
 		"goldenImage": "ICCA08_025.gif",
 		"id": "ICCA08_025",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Purge the Weak",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32369,6 +34691,9 @@ var parseCardsText = {
 		"dbfId": 45650,
 		"goldenImage": "ICCA08_026.gif",
 		"id": "ICCA08_026",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Soul Reaper",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32382,6 +34707,9 @@ var parseCardsText = {
 		"dbfId": 45651,
 		"goldenImage": "ICCA08_027.gif",
 		"id": "ICCA08_027",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "The True King",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32395,6 +34723,9 @@ var parseCardsText = {
 		"dbfId": 45652,
 		"goldenImage": "ICCA08_028.gif",
 		"id": "ICCA08_028",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "The Price of Power",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32408,6 +34739,9 @@ var parseCardsText = {
 		"dbfId": 45655,
 		"goldenImage": "ICCA08_029.gif",
 		"id": "ICCA08_029",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Shut up, Priest",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32417,26 +34751,13 @@ var parseCardsText = {
 	{
 		"cardClass": "DEATHKNIGHT",
 		"cardImage": "ICCA08_030p.png",
-		"collectionText": {
-			"deDE": " Schaden zu. Verursacht jedes Mal 1 Schaden mehr.",
-			"enUS": " damage to the enemy hero. +1 Damage each time.",
-			"esES": " p. de daño\nal héroe enemigo.\n+1 p. de daño cada vez.",
-			"esMX": " de daño al héroe enemigo.\n+1 de daño cada vez.",
-			"frFR": " |4(point,points) de dégâts au héros adverse. +1 point de dégâts à chaque fois.",
-			"itIT": " |4(danno,danni) all'eroe nemico. +1 danno a ogni utilizzo.",
-			"jaJP": "ダメージを与える。\n使用する度ダメージが\n+1される。",
-			"koKR": " 줍니다. 사용할 때마다 피해가 +1 증가합니다.",
-			"plPL": " pkt. obrażeń wrogiemu bohaterowi. +1 pkt. obrażeń za każdym razem.",
-			"ptBR": " de dano ao herói inimigo. +1 de dano a cada vez.",
-			"ruRU": " ед. урона герою противника.\n+1 к урону с каждым использованием.",
-			"thTH": " แต้มให้ฮีโร่ ความเสียหาย +1 ทุกครั้งที่ใช้",
-			"zhCN": "点伤害。每次使用\n+1点伤害。",
-			"zhTW": "點傷害。每次\n提高1點"
-		},
 		"cost": 0,
 		"dbfId": 45698,
 		"goldenImage": "ICCA08_030p.gif",
 		"id": "ICCA08_030p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Remorseless Winter",
 		"playerClass": "Deathknight",
 		"set": "Icecrown",
@@ -32551,6 +34872,9 @@ var parseCardsText = {
 		"dbfId": 45605,
 		"goldenImage": "ICCA10_009p.gif",
 		"id": "ICCA10_009p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Whisper of Death",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -32566,6 +34890,9 @@ var parseCardsText = {
 		"goldenImage": "ICCA11_001.gif",
 		"health": 3,
 		"id": "ICCA11_001",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Skeletal Knight",
 		"playerClass": "Neutral",
 		"set": "Icecrown",
@@ -32581,6 +34908,9 @@ var parseCardsText = {
 		"dbfId": 39160,
 		"goldenImage": "KAR_004.gif",
 		"id": "KAR_004",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Cat Trick",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -32602,6 +34932,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_004a.gif",
 		"health": 2,
 		"id": "KAR_004a",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Cat in a Hat",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -32620,6 +34953,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_005.gif",
 		"health": 1,
 		"id": "KAR_005",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Kindly Grandmother",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -32676,6 +35012,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_009.gif",
 		"health": 1,
 		"id": "KAR_009",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Babbling Book",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -32694,6 +35033,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_010.gif",
 		"health": 3,
 		"id": "KAR_010",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Nightbane Templar",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -32728,6 +35070,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_011.gif",
 		"health": 2,
 		"id": "KAR_011",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Pompous Thespian",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -32861,6 +35206,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_026t.gif",
 		"health": 1,
 		"id": "KAR_026t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Pawn",
 		"playerClass": "Warrior",
 		"set": "Kara",
@@ -32896,6 +35244,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_029.gif",
 		"health": 2,
 		"id": "KAR_029",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Runic Egg",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -32930,6 +35281,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_030a.gif",
 		"health": 3,
 		"id": "KAR_030a",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Pantry Spider",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -32949,6 +35303,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_033.gif",
 		"health": 6,
 		"id": "KAR_033",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Book Wyrm",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -32996,7 +35353,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_036e.png",
 		"dbfId": 39507,
 		"goldenImage": "KAR_036e.gif",
 		"id": "KAR_036e",
@@ -33017,6 +35373,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_037.gif",
 		"health": 6,
 		"id": "KAR_037",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Avian Watcher",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -33030,7 +35389,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_037t.png",
 		"dbfId": 40129,
 		"goldenImage": "KAR_037t.gif",
 		"id": "KAR_037t",
@@ -33051,6 +35409,10 @@ var parseCardsText = {
 		"goldenImage": "KAR_041.gif",
 		"health": 3,
 		"id": "KAR_041",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Moat Lurker",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -33060,8 +35422,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_041e.png",
 		"dbfId": 48363,
+		"goldenImage": "KAR_041e.gif",
 		"id": "KAR_041e",
 		"name": "Moat Lurker",
 		"playerClass": "Neutral",
@@ -33081,6 +35443,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_044.gif",
 		"health": 1,
 		"id": "KAR_044",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Moroes",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -33114,6 +35479,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_057.gif",
 		"health": 4,
 		"id": "KAR_057",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ivory Knight",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -33136,6 +35504,10 @@ var parseCardsText = {
 		"goldenImage": "KAR_061.gif",
 		"health": 6,
 		"id": "KAR_061",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "The Curator",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -33155,6 +35527,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_062.gif",
 		"health": 3,
 		"id": "KAR_062",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Netherspite Historian",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -33197,6 +35572,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_065.gif",
 		"health": 5,
 		"id": "KAR_065",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Menagerie Warden",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -33215,6 +35593,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_069.gif",
 		"health": 1,
 		"id": "KAR_069",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Swashburglar",
 		"playerClass": "Rogue",
 		"race": "PIRATE",
@@ -33234,6 +35615,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_070.gif",
 		"health": 6,
 		"id": "KAR_070",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ethereal Peddler",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -33307,7 +35691,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_077e.png",
 		"dbfId": 39717,
 		"goldenImage": "KAR_077e.gif",
 		"id": "KAR_077e",
@@ -33363,6 +35746,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_092.gif",
 		"health": 3,
 		"id": "KAR_092",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Medivh's Valet",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -33384,6 +35770,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_094.gif",
 		"health": 2,
 		"id": "KAR_094",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Deadly Fork",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -33417,6 +35806,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_095.gif",
 		"health": 3,
 		"id": "KAR_095",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Zoobot",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -33427,7 +35819,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_095e.png",
 		"dbfId": 40229,
 		"goldenImage": "KAR_095e.gif",
 		"id": "KAR_095e",
@@ -33469,6 +35860,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_097.gif",
 		"health": 7,
 		"id": "KAR_097",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Medivh, the Guardian",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -33504,6 +35898,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_114.gif",
 		"health": 4,
 		"id": "KAR_114",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Barnes",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -33513,7 +35910,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_114e.png",
 		"dbfId": 40064,
 		"goldenImage": "KAR_114e.gif",
 		"id": "KAR_114e",
@@ -33534,6 +35930,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_204.gif",
 		"health": 4,
 		"id": "KAR_204",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Onyx Bishop",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -33552,6 +35951,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_205.gif",
 		"health": 3,
 		"id": "KAR_205",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Silverware Golem",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -33588,6 +35990,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_702.gif",
 		"health": 4,
 		"id": "KAR_702",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Menagerie Magician",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -33597,7 +36002,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_702e.png",
 		"dbfId": 39270,
 		"goldenImage": "KAR_702e.gif",
 		"id": "KAR_702e",
@@ -33618,6 +36022,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_710.gif",
 		"health": 2,
 		"id": "KAR_710",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Arcanosmith",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -33638,6 +36045,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_710m.gif",
 		"health": 5,
 		"id": "KAR_710m",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Animated Shield",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -33673,6 +36083,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_712.gif",
 		"health": 3,
 		"id": "KAR_712",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Violet Illusionist",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -33724,7 +36137,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_A01_02e.png",
 		"dbfId": 42024,
 		"goldenImage": "KAR_A01_02e.gif",
 		"id": "KAR_A01_02e",
@@ -33815,6 +36227,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_03.gif",
 		"health": 1,
 		"id": "KAR_A02_03",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Fork",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -33833,6 +36248,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_03H.gif",
 		"health": 3,
 		"id": "KAR_A02_03H",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Fork",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -33852,6 +36270,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_04.gif",
 		"health": 1,
 		"id": "KAR_A02_04",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Knife",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -33870,6 +36291,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_04H.gif",
 		"health": 5,
 		"id": "KAR_A02_04H",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Knife",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -33889,6 +36313,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_05.gif",
 		"health": 1,
 		"id": "KAR_A02_05",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Cup",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -33904,6 +36331,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_05H.gif",
 		"health": 2,
 		"id": "KAR_A02_05H",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Cup",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -33920,6 +36350,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_06.gif",
 		"health": 3,
 		"id": "KAR_A02_06",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Pitcher",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -33928,7 +36361,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_A02_06e2.png",
 		"dbfId": 40766,
 		"goldenImage": "KAR_A02_06e2.gif",
 		"id": "KAR_A02_06e2",
@@ -33947,6 +36379,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A02_06H.gif",
 		"health": 5,
 		"id": "KAR_A02_06H",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Pitcher",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -33955,7 +36390,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_A02_06He.png",
 		"dbfId": 40765,
 		"goldenImage": "KAR_A02_06He.gif",
 		"id": "KAR_A02_06He",
@@ -33981,7 +36415,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_A02_09e.png",
 		"dbfId": 39848,
 		"goldenImage": "KAR_A02_09e.gif",
 		"id": "KAR_A02_09e",
@@ -33993,7 +36426,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KAR_A02_09eH.png",
 		"dbfId": 40832,
 		"goldenImage": "KAR_A02_09eH.gif",
 		"id": "KAR_A02_09eH",
@@ -34077,6 +36509,9 @@ var parseCardsText = {
 		"dbfId": 39725,
 		"goldenImage": "KAR_A02_13.gif",
 		"id": "KAR_A02_13",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Be Our Guest",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34090,6 +36525,9 @@ var parseCardsText = {
 		"dbfId": 40083,
 		"goldenImage": "KAR_A02_13H.gif",
 		"id": "KAR_A02_13H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Be Our Guest",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34198,6 +36636,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A10_07.gif",
 		"health": 3,
 		"id": "KAR_A10_07",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Black Knight",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34214,6 +36655,9 @@ var parseCardsText = {
 		"goldenImage": "KAR_A10_08.gif",
 		"health": 3,
 		"id": "KAR_A10_08",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "White Knight",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34256,6 +36700,13 @@ var parseCardsText = {
 		"cardImage": "KAR_A10_22.png",
 		"cost": 2,
 		"dbfId": 39544,
+		"entourage": [
+			"KAR_A10_09",
+			"KAR_A10_02",
+			"KAR_A10_08",
+			"KAR_A10_04",
+			"KAR_A10_05"
+		],
 		"goldenImage": "KAR_A10_22.gif",
 		"id": "KAR_A10_22",
 		"name": "Castle",
@@ -34525,10 +36976,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_00_05e.png",
 		"dbfId": 39758,
 		"goldenImage": "KARA_00_05e.gif",
 		"id": "KARA_00_05e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Insightful",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34554,10 +37007,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_00_06e.png",
 		"dbfId": 39760,
 		"goldenImage": "KARA_00_06e.gif",
 		"id": "KARA_00_06e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Arcanely Powerful",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -34712,6 +37167,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_04_05.gif",
 		"health": 2,
 		"id": "KARA_04_05",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Flying Monkey",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34727,6 +37185,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_04_05h.gif",
 		"health": 2,
 		"id": "KARA_04_05h",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Flying Monkey",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -34748,7 +37209,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_05_01e.png",
 		"dbfId": 39296,
 		"goldenImage": "KARA_05_01e.gif",
 		"id": "KARA_05_01e",
@@ -34866,7 +37326,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_06_01e.png",
 		"dbfId": 40258,
 		"goldenImage": "KARA_06_01e.gif",
 		"id": "KARA_06_01e",
@@ -34925,6 +37384,9 @@ var parseCardsText = {
 		"cardImage": "KARA_06_03hp.png",
 		"cost": 4,
 		"dbfId": 39563,
+		"entourage": [
+			"KARA_06_01"
+		],
 		"goldenImage": "KARA_06_03hp.gif",
 		"id": "KARA_06_03hp",
 		"name": "True Love",
@@ -34939,6 +37401,9 @@ var parseCardsText = {
 		"cardImage": "KARA_06_03hpheroic.png",
 		"cost": 0,
 		"dbfId": 40276,
+		"entourage": [
+			"KARA_06_01"
+		],
 		"goldenImage": "KARA_06_03hpheroic.gif",
 		"id": "KARA_06_03hpheroic",
 		"name": "True Love",
@@ -34989,7 +37454,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_07_02e.png",
 		"dbfId": 40967,
 		"goldenImage": "KARA_07_02e.gif",
 		"id": "KARA_07_02e",
@@ -35164,8 +37628,15 @@ var parseCardsText = {
 		"cardImage": "KARA_08_02.png",
 		"cost": 2,
 		"dbfId": 39680,
+		"entourage": [
+			"KARA_08_06",
+			"KARA_08_08"
+		],
 		"goldenImage": "KARA_08_02.gif",
 		"id": "KARA_08_02",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Nether Rage",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -35174,7 +37645,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_02e.png",
 		"dbfId": 39961,
 		"goldenImage": "KARA_08_02e.gif",
 		"id": "KARA_08_02e",
@@ -35186,7 +37656,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_02eH.png",
 		"dbfId": 40061,
 		"goldenImage": "KARA_08_02eH.gif",
 		"id": "KARA_08_02eH",
@@ -35201,8 +37670,15 @@ var parseCardsText = {
 		"cardImage": "KARA_08_02H.png",
 		"cost": 1,
 		"dbfId": 40062,
+		"entourage": [
+			"KARA_08_06",
+			"KARA_08_08"
+		],
 		"goldenImage": "KARA_08_02H.gif",
 		"id": "KARA_08_02H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Nether Rage",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -35225,7 +37701,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_03e.png",
 		"dbfId": 40024,
 		"goldenImage": "KARA_08_03e.gif",
 		"id": "KARA_08_03e",
@@ -35250,7 +37725,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_04.png",
 		"cost": 2,
 		"dbfId": 39682,
 		"goldenImage": "KARA_08_04.gif",
@@ -35263,10 +37737,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_04e.png",
 		"dbfId": 39741,
 		"goldenImage": "KARA_08_04e.gif",
 		"id": "KARA_08_04e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Empowered",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -35311,6 +37787,9 @@ var parseCardsText = {
 		"health": 1,
 		"hideStats": true,
 		"id": "KARA_08_06",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Blue Portal",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -35319,7 +37798,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_06e2.png",
 		"dbfId": 39702,
 		"goldenImage": "KARA_08_06e2.gif",
 		"id": "KARA_08_06e2",
@@ -35340,6 +37818,9 @@ var parseCardsText = {
 		"health": 1,
 		"hideStats": true,
 		"id": "KARA_08_08",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Red Portal",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -35351,7 +37832,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_08_08e2.png",
 		"dbfId": 39706,
 		"goldenImage": "KARA_08_08e2.gif",
 		"id": "KARA_08_08e2",
@@ -35388,7 +37868,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_09_02.png",
 		"dbfId": 39647,
 		"goldenImage": "KARA_09_02.gif",
 		"health": 30,
@@ -35422,6 +37901,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_09_03a.gif",
 		"health": 1,
 		"id": "KARA_09_03a",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Icky Imp",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -35438,6 +37920,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_09_03a_heroic.gif",
 		"health": 2,
 		"id": "KARA_09_03a_heroic",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Icky Imp",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -35563,6 +38048,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_09_08.gif",
 		"health": 6,
 		"id": "KARA_09_08",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Kil'rek",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -35579,6 +38067,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_09_08_heroic.gif",
 		"health": 8,
 		"id": "KARA_09_08_heroic",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Kil'rek",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -35687,6 +38178,10 @@ var parseCardsText = {
 		"dbfId": 40005,
 		"goldenImage": "KARA_12_03.gif",
 		"id": "KARA_12_03",
+		"mechanics": [
+			"SECRET",
+			"ImmuneToSpellpower"
+		],
 		"name": "Flame Wreath",
 		"playerClass": "Mage",
 		"set": "Kara",
@@ -35700,6 +38195,10 @@ var parseCardsText = {
 		"dbfId": 40066,
 		"goldenImage": "KARA_12_03H.gif",
 		"id": "KARA_12_03H",
+		"mechanics": [
+			"SECRET",
+			"ImmuneToSpellpower"
+		],
 		"name": "Flame Wreath",
 		"playerClass": "Mage",
 		"set": "Kara",
@@ -35782,6 +38281,9 @@ var parseCardsText = {
 		"goldenImage": "KARA_13_03H.gif",
 		"health": 3,
 		"id": "KARA_13_03H",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Orc Warrior",
 		"playerClass": "Warrior",
 		"set": "Kara",
@@ -35792,6 +38294,13 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "KARA_13_06.png",
 		"dbfId": 39775,
+		"entourage": [
+			"KAR_073",
+			"KAR_075",
+			"KAR_076",
+			"KAR_077",
+			"KAR_091"
+		],
 		"goldenImage": "KARA_13_06.gif",
 		"health": 30,
 		"id": "KARA_13_06",
@@ -35806,6 +38315,13 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "KARA_13_06H.png",
 		"dbfId": 40735,
+		"entourage": [
+			"KAR_073",
+			"KAR_075",
+			"KAR_076",
+			"KAR_077",
+			"KAR_091"
+		],
 		"goldenImage": "KARA_13_06H.gif",
 		"health": 30,
 		"id": "KARA_13_06H",
@@ -35830,7 +38346,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_13_11e.png",
 		"dbfId": 40561,
 		"goldenImage": "KARA_13_11e.gif",
 		"id": "KARA_13_11e",
@@ -35874,6 +38389,9 @@ var parseCardsText = {
 		"dbfId": 40563,
 		"goldenImage": "KARA_13_13.gif",
 		"id": "KARA_13_13",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Legion",
 		"playerClass": "Neutral",
 		"set": "Kara",
@@ -35904,6 +38422,9 @@ var parseCardsText = {
 		"health": 2,
 		"hideStats": true,
 		"id": "KARA_13_15",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Wanda Wonderhooves",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -35921,6 +38442,9 @@ var parseCardsText = {
 		"health": 2,
 		"hideStats": true,
 		"id": "KARA_13_16",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Susie Sizzlesong",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -35938,6 +38462,9 @@ var parseCardsText = {
 		"health": 2,
 		"hideStats": true,
 		"id": "KARA_13_17",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Mark Moonwalker",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -35954,6 +38481,10 @@ var parseCardsText = {
 		"goldenImage": "KARA_13_19.gif",
 		"health": 2,
 		"id": "KARA_13_19",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Red Riding Hood",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -35962,10 +38493,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "KARA_13_19e.png",
 		"dbfId": 40965,
 		"goldenImage": "KARA_13_19e.gif",
 		"id": "KARA_13_19e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Saddened",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -36075,6 +38608,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_003.gif",
 		"health": 3,
 		"id": "LOE_003",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ethereal Conjurer",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -36096,6 +38632,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_006.gif",
 		"health": 2,
 		"id": "LOE_006",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Museum Curator",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -36131,6 +38670,10 @@ var parseCardsText = {
 		"dbfId": 2998,
 		"goldenImage": "LOE_007t.gif",
 		"id": "LOE_007t",
+		"mechanics": [
+			"EVIL_GLOW",
+			"ImmuneToSpellpower"
+		],
 		"name": "Cursed!",
 		"playerClass": "Warlock",
 		"set": "Loe",
@@ -36186,7 +38729,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOE_009e.png",
 		"dbfId": 35022,
 		"goldenImage": "LOE_009e.gif",
 		"id": "LOE_009e",
@@ -36206,6 +38748,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_009t.gif",
 		"health": 1,
 		"id": "LOE_009t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Scarab",
 		"playerClass": "Warrior",
 		"race": "BEAST",
@@ -36224,6 +38769,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_010.gif",
 		"health": 1,
 		"id": "LOE_010",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Pit Snake",
 		"playerClass": "Rogue",
 		"race": "BEAST",
@@ -36244,6 +38792,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_011.gif",
 		"health": 6,
 		"id": "LOE_011",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Reno Jackson",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -36262,6 +38813,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_012.gif",
 		"health": 4,
 		"id": "LOE_012",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Tomb Pillager",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -36300,6 +38854,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_016t.gif",
 		"health": 6,
 		"id": "LOE_016t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Rock",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -36317,6 +38874,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_017.gif",
 		"health": 4,
 		"id": "LOE_017",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Keeper of Uldaman",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -36326,7 +38886,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOE_017e.png",
 		"dbfId": 9340,
 		"goldenImage": "LOE_017e.gif",
 		"id": "LOE_017e",
@@ -36359,7 +38918,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOE_018e.png",
 		"dbfId": 15001,
 		"goldenImage": "LOE_018e.gif",
 		"id": "LOE_018e",
@@ -36380,6 +38938,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_019.gif",
 		"health": 4,
 		"id": "LOE_019",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Unearthed Raptor",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -36392,7 +38953,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOE_019e.png",
 		"dbfId": 38323,
 		"goldenImage": "LOE_019e.gif",
 		"id": "LOE_019e",
@@ -36426,6 +38986,10 @@ var parseCardsText = {
 		"goldenImage": "LOE_019t2.gif",
 		"health": 6,
 		"id": "LOE_019t2",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Golden Monkey",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -36443,6 +39007,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_020.gif",
 		"health": 4,
 		"id": "LOE_020",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Desert Camel",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -36460,6 +39027,9 @@ var parseCardsText = {
 		"dbfId": 2893,
 		"goldenImage": "LOE_021.gif",
 		"id": "LOE_021",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Dart Trap",
 		"playerClass": "Hunter",
 		"rarity": "Common",
@@ -36478,6 +39048,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_022.gif",
 		"health": 4,
 		"id": "LOE_022",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Fierce Monkey",
 		"playerClass": "Warrior",
 		"race": "BEAST",
@@ -36497,6 +39070,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_023.gif",
 		"health": 2,
 		"id": "LOE_023",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dark Peddler",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -36548,6 +39124,9 @@ var parseCardsText = {
 		"dbfId": 2899,
 		"goldenImage": "LOE_027.gif",
 		"id": "LOE_027",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Sacred Trial",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -36566,6 +39145,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_029.gif",
 		"health": 1,
 		"id": "LOE_029",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Jeweled Scarab",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -36579,7 +39161,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOE_030e.png",
 		"dbfId": 15323,
 		"goldenImage": "LOE_030e.gif",
 		"id": "LOE_030e",
@@ -36600,6 +39181,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_038.gif",
 		"health": 5,
 		"id": "LOE_038",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Naga Sea Witch",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -36618,6 +39202,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_039.gif",
 		"health": 4,
 		"id": "LOE_039",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gorillabot A-3",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -36640,6 +39227,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_046.gif",
 		"health": 2,
 		"id": "LOE_046",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Huge Toad",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -36659,6 +39249,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_047.gif",
 		"health": 3,
 		"id": "LOE_047",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tomb Spider",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -36681,6 +39274,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_050.gif",
 		"health": 2,
 		"id": "LOE_050",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Mounted Raptor",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -36700,6 +39296,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_051.gif",
 		"health": 4,
 		"id": "LOE_051",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Jungle Moonkin",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -36739,6 +39338,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_061.gif",
 		"health": 4,
 		"id": "LOE_061",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Anubisath Sentinel",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -36748,7 +39350,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOE_061e.png",
 		"dbfId": 2975,
 		"goldenImage": "LOE_061e.gif",
 		"id": "LOE_061e",
@@ -36769,6 +39370,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_073.gif",
 		"health": 8,
 		"id": "LOE_073",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fossilized Devilsaur",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -36781,7 +39385,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOE_073e.png",
 		"dbfId": 17261,
 		"goldenImage": "LOE_073e.gif",
 		"id": "LOE_073e",
@@ -36803,6 +39406,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_076.gif",
 		"health": 3,
 		"id": "LOE_076",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sir Finley Mrrgglton",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -36826,6 +39432,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_077.gif",
 		"health": 4,
 		"id": "LOE_077",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Brann Bronzebeard",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -36848,6 +39457,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_079.gif",
 		"health": 5,
 		"id": "LOE_079",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Elise Starseeker",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -36884,6 +39496,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_089.gif",
 		"health": 6,
 		"id": "LOE_089",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Wobbling Runts",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -36948,6 +39563,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_092.gif",
 		"health": 8,
 		"id": "LOE_092",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Arch-Thief Rafaam",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -36995,7 +39613,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOE_105e.png",
 		"dbfId": 3000,
 		"goldenImage": "LOE_105e.gif",
 		"id": "LOE_105e",
@@ -37034,6 +39651,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_110.gif",
 		"health": 4,
 		"id": "LOE_110",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ancient Shade",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -37049,6 +39669,10 @@ var parseCardsText = {
 		"dbfId": 9082,
 		"goldenImage": "LOE_110t.gif",
 		"id": "LOE_110t",
+		"mechanics": [
+			"TOPDECK",
+			"ImmuneToSpellpower"
+		],
 		"name": "Ancient Curse",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37089,7 +39713,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOE_113e.png",
 		"dbfId": 3006,
 		"goldenImage": "LOE_113e.gif",
 		"id": "LOE_113e",
@@ -37108,6 +39731,9 @@ var parseCardsText = {
 		"dbfId": 13335,
 		"goldenImage": "LOE_115.gif",
 		"id": "LOE_115",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Raven Idol",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -37157,6 +39783,9 @@ var parseCardsText = {
 		"goldenImage": "LOE_116.gif",
 		"health": 1,
 		"id": "LOE_116",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Reliquary Seeker",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -37184,7 +39813,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOE_118e.png",
 		"dbfId": 35035,
 		"goldenImage": "LOE_118e.gif",
 		"id": "LOE_118e",
@@ -37271,6 +39899,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA01_11.gif",
 		"health": 5,
 		"id": "LOEA01_11",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Rod of the Sun",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37286,6 +39917,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA01_11h.gif",
 		"health": 5,
 		"id": "LOEA01_11h",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Rod of the Sun",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37294,7 +39928,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA01_11he.png",
 		"dbfId": 38495,
 		"goldenImage": "LOEA01_11he.gif",
 		"id": "LOEA01_11he",
@@ -37313,6 +39946,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA01_12.gif",
 		"health": 2,
 		"id": "LOEA01_12",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Tol'vir Hoplite",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37328,6 +39964,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA01_12h.gif",
 		"health": 5,
 		"id": "LOEA01_12h",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Tol'vir Hoplite",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37365,6 +40004,9 @@ var parseCardsText = {
 		"dbfId": 14203,
 		"goldenImage": "LOEA02_02.gif",
 		"id": "LOEA02_02",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Djinn’s Intuition",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37378,6 +40020,9 @@ var parseCardsText = {
 		"dbfId": 38465,
 		"goldenImage": "LOEA02_02h.gif",
 		"id": "LOEA02_02h",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Djinn’s Intuition",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37500,6 +40145,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA04_01.gif",
 		"health": 100,
 		"id": "LOEA04_01",
+		"mechanics": [
+			"APPEAR_FUNCTIONALLY_DEAD"
+		],
 		"name": "Temple Escape",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37507,7 +40155,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA04_01e.png",
 		"dbfId": 38357,
 		"goldenImage": "LOEA04_01e.gif",
 		"id": "LOEA04_01e",
@@ -37518,7 +40165,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA04_01eh.png",
 		"dbfId": 38509,
 		"goldenImage": "LOEA04_01eh.gif",
 		"id": "LOEA04_01eh",
@@ -37546,6 +40192,9 @@ var parseCardsText = {
 		"dbfId": 16231,
 		"goldenImage": "LOEA04_02.gif",
 		"id": "LOEA04_02",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Escape!",
 		"playerClass": "Neutral",
 		"rarity": "Free",
@@ -37586,6 +40235,9 @@ var parseCardsText = {
 		"dbfId": 16445,
 		"goldenImage": "LOEA04_06a.gif",
 		"id": "LOEA04_06a",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Swing Across",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37614,6 +40266,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA04_13bt.gif",
 		"health": 5,
 		"id": "LOEA04_13bt",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Orsis Guard",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37629,6 +40284,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA04_13bth.gif",
 		"health": 8,
 		"id": "LOEA04_13bth",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Orsis Guard",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37962,6 +40620,9 @@ var parseCardsText = {
 		"dbfId": 17145,
 		"goldenImage": "LOEA06_02.gif",
 		"id": "LOEA06_02",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Stonesculpting",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -37975,6 +40636,9 @@ var parseCardsText = {
 		"dbfId": 38588,
 		"goldenImage": "LOEA06_02h.gif",
 		"id": "LOEA06_02h",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Stonesculpting",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38027,7 +40691,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA06_03e.png",
 		"dbfId": 17148,
 		"goldenImage": "LOEA06_03e.gif",
 		"id": "LOEA06_03e",
@@ -38039,7 +40702,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA06_03eh.png",
 		"dbfId": 38589,
 		"goldenImage": "LOEA06_03eh.gif",
 		"id": "LOEA06_03eh",
@@ -38134,6 +40796,9 @@ var parseCardsText = {
 		"dbfId": 16205,
 		"goldenImage": "LOEA07_03.gif",
 		"id": "LOEA07_03",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Flee the Mine!",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38147,6 +40812,9 @@ var parseCardsText = {
 		"dbfId": 38676,
 		"goldenImage": "LOEA07_03h.gif",
 		"id": "LOEA07_03h",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Flee the Mine!",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38176,6 +40844,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA07_11.gif",
 		"health": 3,
 		"id": "LOEA07_11",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Debris",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38258,6 +40929,10 @@ var parseCardsText = {
 		"goldenImage": "LOEA07_24.gif",
 		"health": 6,
 		"id": "LOEA07_24",
+		"mechanics": [
+			"CANT_ATTACK",
+			"TAUNT"
+		],
 		"name": "Spiked Decoy",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -38430,6 +41105,9 @@ var parseCardsText = {
 		"dbfId": 24419,
 		"goldenImage": "LOEA09_2.gif",
 		"id": "LOEA09_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Enraged!",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38438,10 +41116,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA09_2e.png",
 		"dbfId": 24937,
 		"goldenImage": "LOEA09_2e.gif",
 		"id": "LOEA09_2e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38450,10 +41130,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA09_2eH.png",
 		"dbfId": 38743,
 		"goldenImage": "LOEA09_2eH.gif",
 		"id": "LOEA09_2eH",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38480,6 +41162,9 @@ var parseCardsText = {
 		"dbfId": 24427,
 		"goldenImage": "LOEA09_3.gif",
 		"id": "LOEA09_3",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Getting Hungry",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38488,7 +41173,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA09_3a.png",
 		"dbfId": 38636,
 		"goldenImage": "LOEA09_3a.gif",
 		"id": "LOEA09_3a",
@@ -38500,7 +41184,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA09_3aH.png",
 		"dbfId": 38742,
 		"goldenImage": "LOEA09_3aH.gif",
 		"id": "LOEA09_3aH",
@@ -38517,6 +41200,9 @@ var parseCardsText = {
 		"dbfId": 38637,
 		"goldenImage": "LOEA09_3b.gif",
 		"id": "LOEA09_3b",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Getting Hungry",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38530,6 +41216,9 @@ var parseCardsText = {
 		"dbfId": 38639,
 		"goldenImage": "LOEA09_3c.gif",
 		"id": "LOEA09_3c",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Getting Hungry",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38543,6 +41232,9 @@ var parseCardsText = {
 		"dbfId": 38638,
 		"goldenImage": "LOEA09_3d.gif",
 		"id": "LOEA09_3d",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Getting Hungry",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38556,6 +41248,9 @@ var parseCardsText = {
 		"dbfId": 38609,
 		"goldenImage": "LOEA09_3H.gif",
 		"id": "LOEA09_3H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Endless Hunger",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38629,6 +41324,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA09_6.gif",
 		"health": 2,
 		"id": "LOEA09_6",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Slithering Archer",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38644,6 +41342,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA09_6H.gif",
 		"health": 2,
 		"id": "LOEA09_6H",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Slithering Archer",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38659,6 +41360,10 @@ var parseCardsText = {
 		"goldenImage": "LOEA09_7.gif",
 		"health": 5,
 		"id": "LOEA09_7",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Cauldron",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38667,7 +41372,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA09_7e.png",
 		"dbfId": 38849,
 		"goldenImage": "LOEA09_7e.gif",
 		"id": "LOEA09_7e",
@@ -38685,6 +41389,10 @@ var parseCardsText = {
 		"goldenImage": "LOEA09_7H.gif",
 		"health": 10,
 		"id": "LOEA09_7H",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Cauldron",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38700,6 +41408,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA09_8.gif",
 		"health": 6,
 		"id": "LOEA09_8",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Slithering Guard",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38715,6 +41426,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA09_8H.gif",
 		"health": 7,
 		"id": "LOEA09_8H",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Slithering Guard",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38778,6 +41492,9 @@ var parseCardsText = {
 		"dbfId": 10045,
 		"goldenImage": "LOEA10_2.gif",
 		"id": "LOEA10_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Mrglmrgl MRGL!",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38791,6 +41508,9 @@ var parseCardsText = {
 		"dbfId": 38617,
 		"goldenImage": "LOEA10_2H.gif",
 		"id": "LOEA10_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Mrglmrgl MRGL!",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38924,6 +41644,9 @@ var parseCardsText = {
 		"dbfId": 19795,
 		"goldenImage": "LOEA13_2.gif",
 		"id": "LOEA13_2",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Ancient Power",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -38937,6 +41660,9 @@ var parseCardsText = {
 		"dbfId": 38705,
 		"goldenImage": "LOEA13_2H.gif",
 		"id": "LOEA13_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Ancient Power",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39037,6 +41763,9 @@ var parseCardsText = {
 		"dbfId": 38710,
 		"goldenImage": "LOEA15_2H.gif",
 		"id": "LOEA15_2H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Unstable Portal",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39052,6 +41781,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA15_3.gif",
 		"health": 2,
 		"id": "LOEA15_3",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Boneraptor",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39067,6 +41799,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA15_3H.gif",
 		"health": 2,
 		"id": "LOEA15_3H",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Boneraptor",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39077,6 +41812,17 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOEA16_1.png",
 		"dbfId": 19612,
+		"entourage": [
+			"LOEA16_18",
+			"LOEA16_23",
+			"LOEA16_19",
+			"LOEA16_22",
+			"LOEA16_21",
+			"LOEA16_24",
+			"LOEA16_25",
+			"LOEA16_26",
+			"LOEA16_27"
+		],
 		"goldenImage": "LOEA16_1.gif",
 		"health": 30,
 		"id": "LOEA16_1",
@@ -39105,6 +41851,9 @@ var parseCardsText = {
 		"dbfId": 25401,
 		"goldenImage": "LOEA16_11.gif",
 		"id": "LOEA16_11",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Crown of Kael'thas",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39171,6 +41920,18 @@ var parseCardsText = {
 		"cardImage": "LOEA16_16.png",
 		"cost": 0,
 		"dbfId": 35040,
+		"entourage": [
+			"LOEA16_10",
+			"LOEA16_11",
+			"LOEA16_14",
+			"LOEA16_15",
+			"LOEA16_6",
+			"LOEA16_7",
+			"LOEA16_9",
+			"LOEA16_12",
+			"LOEA16_13",
+			"LOEA16_8"
+		],
 		"goldenImage": "LOEA16_16.gif",
 		"id": "LOEA16_16",
 		"name": "Rummage",
@@ -39184,6 +41945,18 @@ var parseCardsText = {
 		"cardImage": "LOEA16_16H.png",
 		"cost": 2,
 		"dbfId": 38713,
+		"entourage": [
+			"LOEA16_10",
+			"LOEA16_11",
+			"LOEA16_14",
+			"LOEA16_15",
+			"LOEA16_6",
+			"LOEA16_7",
+			"LOEA16_9",
+			"LOEA16_12",
+			"LOEA16_13",
+			"LOEA16_8"
+		],
 		"goldenImage": "LOEA16_16H.gif",
 		"id": "LOEA16_16H",
 		"name": "Rummage",
@@ -39267,6 +42040,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA16_19H.gif",
 		"health": 10,
 		"id": "LOEA16_19H",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Sun Raider Phaerix",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -39280,6 +42056,17 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOEA16_1H.png",
 		"dbfId": 38711,
+		"entourage": [
+			"LOEA16_18H",
+			"LOEA16_19H",
+			"LOEA16_21H",
+			"LOEA16_22H",
+			"LOEA16_23H",
+			"LOEA16_24H",
+			"LOEA16_25H",
+			"LOEA16_26H",
+			"LOEA16_27H"
+		],
 		"goldenImage": "LOEA16_1H.gif",
 		"health": 30,
 		"id": "LOEA16_1H",
@@ -39320,10 +42107,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA16_20e.png",
 		"dbfId": 38688,
 		"goldenImage": "LOEA16_20e.gif",
 		"id": "LOEA16_20e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Blessed",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39332,7 +42121,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA16_20H.png",
 		"dbfId": 38815,
 		"goldenImage": "LOEA16_20H.gif",
 		"id": "LOEA16_20H",
@@ -39352,6 +42140,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA16_21.gif",
 		"health": 5,
 		"id": "LOEA16_21",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Chieftain Scarvash",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39368,6 +42159,9 @@ var parseCardsText = {
 		"goldenImage": "LOEA16_21H.gif",
 		"health": 10,
 		"id": "LOEA16_21H",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Chieftain Scarvash",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39597,7 +42391,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA16_3e.png",
 		"dbfId": 36450,
 		"goldenImage": "LOEA16_3e.gif",
 		"id": "LOEA16_3e",
@@ -39614,6 +42407,9 @@ var parseCardsText = {
 		"dbfId": 19615,
 		"goldenImage": "LOEA16_4.gif",
 		"id": "LOEA16_4",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Timepiece of Horror",
 		"playerClass": "Neutral",
 		"set": "Loe",
@@ -39688,7 +42484,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOEA16_8a.png",
 		"dbfId": 25413,
 		"goldenImage": "LOEA16_8a.gif",
 		"id": "LOEA16_8a",
@@ -39755,8 +42550,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_010e.png",
 		"dbfId": 46457,
+		"goldenImage": "LOOT_010e.gif",
 		"id": "LOOT_010e",
 		"name": "Shadowy",
 		"playerClass": "Neutral",
@@ -39775,6 +42570,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_013.gif",
 		"health": 4,
 		"id": "LOOT_013",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Vulgar Homunculus",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -39794,6 +42593,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_014.gif",
 		"health": 1,
 		"id": "LOOT_014",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kobold Librarian",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -39814,9 +42616,6 @@ var parseCardsText = {
 		"name": "Dark Pact",
 		"playerClass": "Warlock",
 		"rarity": "Common",
-		"referencedTags": [
-			"TAUNT"
-		],
 		"set": "Lootapalooza",
 		"text": "Destroy a friendly minion. Restore #8 Health to your hero.",
 		"type": "Spell"
@@ -39832,6 +42631,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_018.gif",
 		"health": 4,
 		"id": "LOOT_018",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hooked Reaver",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -39846,8 +42648,8 @@ var parseCardsText = {
 	{
 		"artist": "A.J. Nazzaro",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_018e.png",
 		"dbfId": 43132,
+		"goldenImage": "LOOT_018e.gif",
 		"id": "LOOT_018e",
 		"name": "Hooked Horror",
 		"playerClass": "Neutral",
@@ -39866,6 +42668,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_026.gif",
 		"health": 4,
 		"id": "LOOT_026",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fal'dorei Strider",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -39881,6 +42686,9 @@ var parseCardsText = {
 		"dbfId": 45870,
 		"goldenImage": "LOOT_026e.gif",
 		"id": "LOOT_026e",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Spider Ambush!",
 		"playerClass": "Rogue",
 		"set": "Lootapalooza",
@@ -39914,6 +42722,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_033.gif",
 		"health": 1,
 		"id": "LOOT_033",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Cavern Shinyfinder",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -39948,6 +42759,9 @@ var parseCardsText = {
 		"dbfId": 43272,
 		"goldenImage": "LOOT_043.gif",
 		"id": "LOOT_043",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Lesser Amethyst Spellstone",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -39963,6 +42777,9 @@ var parseCardsText = {
 		"dbfId": 43275,
 		"goldenImage": "LOOT_043t2.gif",
 		"id": "LOOT_043t2",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Amethyst Spellstone",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -39978,6 +42795,9 @@ var parseCardsText = {
 		"dbfId": 43276,
 		"goldenImage": "LOOT_043t3.gif",
 		"id": "LOOT_043t3",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Greater Amethyst Spellstone",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -40022,8 +42842,8 @@ var parseCardsText = {
 	{
 		"artist": "Lucas Graciano",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_047e.png",
 		"dbfId": 47223,
+		"goldenImage": "LOOT_047e.gif",
 		"id": "LOOT_047e",
 		"name": "Barkskin",
 		"playerClass": "Neutral",
@@ -40042,6 +42862,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_048.gif",
 		"health": 6,
 		"id": "LOOT_048",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ironwood Golem",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -40054,22 +42877,6 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "LOOT_051.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<i>(Zum Aufwerten 3 Rüstung erhalten.)</i>",
-			"enUS": "<i>(Gain 3 Armor to upgrade.)</i>",
-			"esES": "<i>(Obtén 3 p. de armadura para mejorarlo).</i>",
-			"esMX": "<i>(Obtén 3 de Armadura para mejorar esta carta).</i>",
-			"frFR": "<i>(Obtenez 3 points d’armure pour l’améliorer.)</i>",
-			"itIT": "<i>(Si potenzia ottenendo 3 Armatura)</i>",
-			"jaJP": "<i>（装甲を3獲得すると\n   アップグレード）</i>",
-			"koKR": "<i>(방어도를 +3 얻으면 강화됩니다.)</i>",
-			"plPL": "<i>(Otrzymaj 3 pkt. pancerza, aby ulepszyć.)</i>",
-			"ptBR": "<i>(Receba 3 de Armadura para aprimorar.)</i>",
-			"ruRU": "<i>(Получите 3 ед. брони для улучшения.)</i>",
-			"thTH": "<i>(รับเกราะ 3 แต้มเพื่ออัพเกรด)</i>",
-			"zhCN": "<i>（获得3点护甲值后升级。）</i>",
-			"zhTW": "<i>(獲得3點護甲值後升級)</i>"
-		},
 		"cost": 1,
 		"dbfId": 43288,
 		"goldenImage": "LOOT_051.gif",
@@ -40078,7 +42885,7 @@ var parseCardsText = {
 		"playerClass": "Druid",
 		"rarity": "Rare",
 		"set": "Lootapalooza",
-		"text": "Deal $2 damage to a minion.",
+		"text": "Deal $2 damage to a minion. @<i>(Gain 3 Armor to upgrade.)</i>",
 		"type": "Spell"
 	},
 	{
@@ -40118,6 +42925,11 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"dbfId": 43294,
+		"entourage": [
+			"LOOT_054d",
+			"LOOT_054b",
+			"LOOT_054c"
+		],
 		"goldenImage": "LOOT_054.gif",
 		"id": "LOOT_054",
 		"name": "Branching Paths",
@@ -40144,8 +42956,8 @@ var parseCardsText = {
 	{
 		"artist": "Matt Dixon",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_054be.png",
 		"dbfId": 48221,
+		"goldenImage": "LOOT_054be.gif",
 		"id": "LOOT_054be",
 		"name": "Fearless",
 		"playerClass": "Neutral",
@@ -40192,6 +43004,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_056.gif",
 		"health": 5,
 		"id": "LOOT_056",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Astral Tiger",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -40208,6 +43023,9 @@ var parseCardsText = {
 		"dbfId": 43322,
 		"goldenImage": "LOOT_060.gif",
 		"id": "LOOT_060",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Crushing Hand",
 		"overload": 3,
 		"playerClass": "Shaman",
@@ -40224,9 +43042,18 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"dbfId": 43329,
+		"entourage": [
+			"CS2_052",
+			"CS2_050",
+			"NEW1_009",
+			"CS2_051"
+		],
 		"goldenImage": "LOOT_062.gif",
 		"health": 1,
 		"id": "LOOT_062",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kobold Hermit",
 		"playerClass": "Shaman",
 		"rarity": "Common",
@@ -40239,22 +43066,6 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "LOOT_064.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<i>(Zum Aufwerten 3 Manakristalle <b>überladen</b>.)</i>",
-			"enUS": "<i>(<b>Overload</b> 3 Mana Crystals to upgrade.)</i>",
-			"esES": "<i>(<b>Sobrecarga</b> 3 cristales de maná para mejorarlo).</i>",
-			"esMX": "<i>(<b>Sobrecarga</b> 3 Cristales de maná para mejorar esta carta).</i>",
-			"frFR": "<i>(<b>Surchargez</b> 3 cristaux de mana pour l’améliorer.)</i>",
-			"itIT": "<i>(Si potenzia <b>Sovraccaricando</b> 3 Cristalli di Mana)</i>",
-			"jaJP": "<i>（マナクリスタルを3つ\n<b>オーバーロード</b>させると\nアップグレード）</i>",
-			"koKR": "<i>(내 마나 수정 3개를 <b>과부하</b>하면 강화됩니다.)</i>",
-			"plPL": "<i>(<b>Przeciąż</b> 3 kryształy many, aby ulepszyć.)</i>",
-			"ptBR": "<i>(Cause <b>Sobrecarga</b> em 3 Cristais de Mana para aprimorar.)</i>",
-			"ruRU": "<i>(<b>Перегрузите</b> 3 кристалла маны для улучшения.)</i>",
-			"thTH": "<i>(<b>โอเวอร์โหลด</b> คริสตัลมานา 3 อันเพื่ออัพเกรด)</i>",
-			"zhCN": "<i>（<b>过载</b>三个法力水晶后升级。）</i>",
-			"zhTW": "<i>(<b>超載</b>3顆法力水晶後升級)</i>"
-		},
 		"cost": 7,
 		"dbfId": 43331,
 		"goldenImage": "LOOT_064.gif",
@@ -40266,7 +43077,7 @@ var parseCardsText = {
 			"OVERLOAD"
 		],
 		"set": "Lootapalooza",
-		"text": "Summon 1 copy of a friendly minion.",
+		"text": "Summon 1 copy of a friendly minion. @<i>(<b>Overload</b> 3 Mana Crystals to upgrade.)</i>",
 		"type": "Spell"
 	},
 	{
@@ -40313,6 +43124,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_069.gif",
 		"health": 1,
 		"id": "LOOT_069",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sewer Crawler",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -40388,7 +43202,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Trent Kaniuga",
+		"artist": "Trent Kaniuga & James Martin",
 		"cardClass": "HUNTER",
 		"cardImage": "LOOT_079.png",
 		"collectible": true,
@@ -40396,6 +43210,9 @@ var parseCardsText = {
 		"dbfId": 43359,
 		"goldenImage": "LOOT_079.gif",
 		"id": "LOOT_079",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Wandering Monster",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -40450,7 +43267,7 @@ var parseCardsText = {
 		"type": "Spell"
 	},
 	{
-		"artist": "Trent Kaniuga",
+		"artist": "Trent Kaniuga & James Martin",
 		"attack": 4,
 		"cardClass": "HUNTER",
 		"cardImage": "LOOT_085.png",
@@ -40461,6 +43278,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "LOOT_085.gif",
 		"id": "LOOT_085",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Rhok'delar",
 		"playerClass": "Hunter",
 		"rarity": "Legendary",
@@ -40480,6 +43300,9 @@ var parseCardsText = {
 		"name": "Potion of Heroism",
 		"playerClass": "Paladin",
 		"rarity": "Common",
+		"referencedTags": [
+			"DIVINE_SHIELD"
+		],
 		"set": "Lootapalooza",
 		"text": "Give a minion <b>Divine Shield</b>.\nDraw a card.",
 		"type": "Spell"
@@ -40489,22 +43312,6 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "LOOT_091.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<i>(Zum Aufwerten 3 Leben wiederherstellen.)</i>",
-			"enUS": "<i>(Restore 3 Health to upgrade.)</i>",
-			"esES": "<i>(Restaura 3 p. de salud para mejorarla).</i>",
-			"esMX": "<i>(Restaura 3 de Salud para mejorar esta carta).</i>",
-			"frFR": "<i>(Rendez 3 PV pour l’améliorer.)</i>",
-			"itIT": "<i>(Si potenzia rigenerando 3 Salute)</i>",
-			"jaJP": "<i>（体力を3回復するとアップグレード）</i>",
-			"koKR": "<i>(생명력을 3 회복하면 강화됩니다.)</i>",
-			"plPL": "<i>(Przywróć 3 pkt. zdrowia, aby ulepszyć.)</i>",
-			"ptBR": "<i>(Restaure 3 de Vida para aprimorar.)</i>",
-			"ruRU": "<i>(Восстановите 3 ед. здоровья для улучшения.)</i>",
-			"thTH": "<i>(ฟื้นฟูพลังชีวิต 3 แต้มเพื่ออัพเกรด)</i>",
-			"zhCN": "<i>（恢复3点生命值后升级。）</i>",
-			"zhTW": "<i>(恢復3點生命值後升級)</i>"
-		},
 		"cost": 2,
 		"dbfId": 43382,
 		"goldenImage": "LOOT_091.gif",
@@ -40512,8 +43319,11 @@ var parseCardsText = {
 		"name": "Lesser Pearl Spellstone",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
+		"referencedTags": [
+			"TAUNT"
+		],
 		"set": "Lootapalooza",
-		"text": "Summon a 2/2 Spirit with <b>Taunt</b>.",
+		"text": "Summon a 2/2 Spirit with <b>Taunt</b>. @<i>(Restore 3 Health to upgrade.)</i>",
 		"type": "Spell"
 	},
 	{
@@ -40526,6 +43336,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_091t.gif",
 		"health": 2,
 		"id": "LOOT_091t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Guardian Spirit",
 		"playerClass": "Paladin",
 		"set": "Lootapalooza",
@@ -40543,6 +43356,9 @@ var parseCardsText = {
 		"name": "Pearl Spellstone",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
+		"referencedTags": [
+			"TAUNT"
+		],
 		"set": "Lootapalooza",
 		"text": "Summon a 4/4 Spirit with <b>Taunt</b>.",
 		"type": "Spell"
@@ -40557,6 +43373,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_091t1t.gif",
 		"health": 4,
 		"id": "LOOT_091t1t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Guardian Spirit",
 		"playerClass": "Paladin",
 		"set": "Lootapalooza",
@@ -40574,6 +43393,9 @@ var parseCardsText = {
 		"name": "Greater Pearl Spellstone",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
+		"referencedTags": [
+			"TAUNT"
+		],
 		"set": "Lootapalooza",
 		"text": "Summon a 6/6 Spirit with <b>Taunt</b>.",
 		"type": "Spell"
@@ -40588,6 +43410,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_091t2t.gif",
 		"health": 6,
 		"id": "LOOT_091t2t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Guardian Spirit",
 		"playerClass": "Paladin",
 		"set": "Lootapalooza",
@@ -40606,6 +43431,9 @@ var parseCardsText = {
 		"name": "Call to Arms",
 		"playerClass": "Paladin",
 		"rarity": "Epic",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "[x]<b>Recruit</b> 3 minions that\n cost (2) or less.",
 		"type": "Spell"
@@ -40619,6 +43447,10 @@ var parseCardsText = {
 		"dbfId": 43407,
 		"goldenImage": "LOOT_101.gif",
 		"id": "LOOT_101",
+		"mechanics": [
+			"SECRET",
+			"ImmuneToSpellpower"
+		],
 		"name": "Explosive Runes",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -40631,22 +43463,6 @@ var parseCardsText = {
 		"cardClass": "MAGE",
 		"cardImage": "LOOT_103.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<i>(Zum Aufwerten 2 Elementare ausspielen.)</i>",
-			"enUS": "<i>(Play 2 Elementals to upgrade.)</i>",
-			"esES": "<i>(Juega 2 elementales para mejorarlo.)</i>",
-			"esMX": "<i>(Juega 2 Elementales para mejorar esta carta).</i>",
-			"frFR": "<i>(Jouez 2 élémentaires pour l’améliorer.)</i>",
-			"itIT": "<i>(Si potenzia giocando due Elementali)</i>",
-			"jaJP": "<i>（エレメンタルを2体\n手札から使用すると\nアップグレード）</i>",
-			"koKR": "<i>(정령을 2장 내면 강화됩니다.)</i>",
-			"plPL": "<i>(Zagraj 2 Żywiołaki, aby ulepszyć.)</i>",
-			"ptBR": "<i>(Jogue 2 Elementais para aprimorar.)</i>",
-			"ruRU": "<i>(Разыграйте 2 элементалей для улучшения.)</i>",
-			"thTH": "<i>(เล่นวิญญาณธาตุ 2 ใบเพื่ออัพเกรด)</i>",
-			"zhCN": "<i>（使用两张元素牌后升级。）</i>",
-			"zhTW": "<i>(打出2個元素後升級)</i>"
-		},
 		"cost": 2,
 		"dbfId": 43414,
 		"goldenImage": "LOOT_103.gif",
@@ -40655,7 +43471,7 @@ var parseCardsText = {
 		"playerClass": "Mage",
 		"rarity": "Rare",
 		"set": "Lootapalooza",
-		"text": "Add 1 random Mage spell to your hand.",
+		"text": "Add 1 random Mage spell to your hand. @<i>(Play 2 Elementals to upgrade.)</i>",
 		"type": "Spell"
 	},
 	{
@@ -40708,8 +43524,8 @@ var parseCardsText = {
 	{
 		"artist": "Arthur Bozonnet",
 		"cardClass": "MAGE",
-		"cardImage": "LOOT_104e.png",
 		"dbfId": 43418,
+		"goldenImage": "LOOT_104e.gif",
 		"id": "LOOT_104e",
 		"name": "Shifting",
 		"playerClass": "Mage",
@@ -40741,6 +43557,9 @@ var parseCardsText = {
 		"dbfId": 46545,
 		"goldenImage": "LOOT_106t.gif",
 		"id": "LOOT_106t",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Scroll of Wonder",
 		"playerClass": "Mage",
 		"set": "Lootapalooza",
@@ -40759,6 +43578,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "LOOT_108.gif",
 		"id": "LOOT_108",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Aluneth",
 		"playerClass": "Mage",
 		"rarity": "Legendary",
@@ -40777,6 +43599,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_111.gif",
 		"health": 2,
 		"id": "LOOT_111",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Scorp-o-matic",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -40796,6 +43621,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_117.gif",
 		"health": 2,
 		"id": "LOOT_117",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Wax Elemental",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -40815,6 +43644,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_118.gif",
 		"health": 4,
 		"id": "LOOT_118",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ebon Dragonsmith",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -40826,8 +43658,8 @@ var parseCardsText = {
 	{
 		"artist": "Nicola Saviori",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_118e.png",
 		"dbfId": 43464,
+		"goldenImage": "LOOT_118e.gif",
 		"id": "LOOT_118e",
 		"name": "Smithing",
 		"playerClass": "Neutral",
@@ -40847,6 +43679,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_122.gif",
 		"health": 5,
 		"id": "LOOT_122",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Corrosive Sludge",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -40865,6 +43700,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_124.gif",
 		"health": 4,
 		"id": "LOOT_124",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lone Champion",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -40879,8 +43717,8 @@ var parseCardsText = {
 	{
 		"artist": "Jomaro Kindred",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_124e.png",
 		"dbfId": 43472,
+		"goldenImage": "LOOT_124e.gif",
 		"id": "LOOT_124e",
 		"name": "Lonely",
 		"playerClass": "Neutral",
@@ -40899,6 +43737,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_125.gif",
 		"health": 1,
 		"id": "LOOT_125",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"POISONOUS"
+		],
 		"name": "Stoneskin Basilisk",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -40957,6 +43799,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_131t1.gif",
 		"health": 2,
 		"id": "LOOT_131t1",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Green Ooze",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -40974,6 +43819,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_132.gif",
 		"health": 3,
 		"id": "LOOT_132",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dragonslayer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -41002,8 +43850,8 @@ var parseCardsText = {
 	{
 		"artist": "Jakub Kasber",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_134e.png",
 		"dbfId": 47513,
+		"goldenImage": "LOOT_134e.gif",
 		"id": "LOOT_134e",
 		"name": "Toothy",
 		"playerClass": "Neutral",
@@ -41023,6 +43871,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_136.gif",
 		"health": 2,
 		"id": "LOOT_136",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Sneaky Devil",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -41034,8 +43885,8 @@ var parseCardsText = {
 	{
 		"artist": "Ivan Fomin",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_136e.png",
 		"dbfId": 47892,
+		"goldenImage": "LOOT_136e.gif",
 		"id": "LOOT_136e",
 		"name": "Devilish Power",
 		"playerClass": "Neutral",
@@ -41054,6 +43905,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_137.gif",
 		"health": 12,
 		"id": "LOOT_137",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Sleepy Dragon",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -41073,6 +43927,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_144.gif",
 		"health": 6,
 		"id": "LOOT_144",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Hoarding Dragon",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -41083,7 +43940,7 @@ var parseCardsText = {
 	},
 	{
 		"artist": "Nick Southham",
-		"attack": 5,
+		"attack": 2,
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOOT_149.png",
 		"collectible": true,
@@ -41103,8 +43960,8 @@ var parseCardsText = {
 	{
 		"artist": "Nick Southham",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_149e.png",
 		"dbfId": 43514,
+		"goldenImage": "LOOT_149e.gif",
 		"id": "LOOT_149e",
 		"name": "Creepier",
 		"playerClass": "Neutral",
@@ -41124,6 +43981,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_150.gif",
 		"health": 1,
 		"id": "LOOT_150",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Furbolg Mossbinder",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -41159,6 +44019,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_152.gif",
 		"health": 2,
 		"id": "LOOT_152",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Boisterous Bard",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -41169,8 +44032,8 @@ var parseCardsText = {
 	{
 		"artist": "Ursula Dorada",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_152e.png",
 		"dbfId": 43520,
+		"goldenImage": "LOOT_152e.gif",
 		"id": "LOOT_152e",
 		"name": "Inspired",
 		"playerClass": "Neutral",
@@ -41189,6 +44052,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_153.gif",
 		"health": 7,
 		"id": "LOOT_153",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Violet Wurm",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -41224,6 +44090,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_154.gif",
 		"health": 3,
 		"id": "LOOT_154",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gravelsnout Knight",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -41242,6 +44111,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_161.gif",
 		"health": 6,
 		"id": "LOOT_161",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Carnivorous Cube",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -41252,8 +44125,8 @@ var parseCardsText = {
 	{
 		"artist": "Jakub Kasper",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_161e.png",
 		"dbfId": 48364,
+		"goldenImage": "LOOT_161e.gif",
 		"id": "LOOT_161e",
 		"name": "Carnivorous Cube",
 		"playerClass": "Neutral",
@@ -41283,8 +44156,8 @@ var parseCardsText = {
 	{
 		"artist": "J. Axer",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_165e.png",
 		"dbfId": 47633,
+		"goldenImage": "LOOT_165e.gif",
 		"id": "LOOT_165e",
 		"name": "Sonya's Shadow",
 		"playerClass": "Neutral",
@@ -41303,6 +44176,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_167.gif",
 		"health": 2,
 		"id": "LOOT_167",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fungalmancer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -41313,8 +44189,8 @@ var parseCardsText = {
 	{
 		"artist": "Matt Dixon",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_167e.png",
 		"dbfId": 45875,
+		"goldenImage": "LOOT_167e.gif",
 		"id": "LOOT_167e",
 		"name": "Magic Mushroom",
 		"playerClass": "Neutral",
@@ -41333,6 +44209,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_170.gif",
 		"health": 2,
 		"id": "LOOT_170",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Raven Familiar",
 		"playerClass": "Mage",
 		"race": "BEAST",
@@ -41368,15 +44247,21 @@ var parseCardsText = {
 		"goldenImage": "LOOT_184.gif",
 		"health": 3,
 		"id": "LOOT_184",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Silver Vanguard",
 		"playerClass": "Neutral",
 		"rarity": "Common",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Deathrattle:</b> <b>Recruit</b> an\n8-Cost minion.",
 		"type": "Minion"
 	},
 	{
-		"artist": "M. Herrera & A. Miller",
+		"artist": "Mauricio Herrera",
 		"cardClass": "PRIEST",
 		"cardImage": "LOOT_187.png",
 		"collectible": true,
@@ -41387,15 +44272,18 @@ var parseCardsText = {
 		"name": "Twilight's Call",
 		"playerClass": "Priest",
 		"rarity": "Rare",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
 		"set": "Lootapalooza",
 		"text": "Summon 1/1 copies of 2 friendly <b>Deathrattle</b> minions\nthat died this game.",
 		"type": "Spell"
 	},
 	{
-		"artist": "M. Herrera & A. Miller",
+		"artist": "Mauricio Herrera",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_187e.png",
 		"dbfId": 47457,
+		"goldenImage": "LOOT_187e.gif",
 		"id": "LOOT_187e",
 		"name": "Shadowy",
 		"playerClass": "Neutral",
@@ -41484,7 +44372,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Mauricio Herrera",
+		"artist": "Alex Horley Orlandelli",
 		"cardClass": "ROGUE",
 		"cardImage": "LOOT_204.png",
 		"collectible": true,
@@ -41492,6 +44380,9 @@ var parseCardsText = {
 		"dbfId": 45520,
 		"goldenImage": "LOOT_204.gif",
 		"id": "LOOT_204",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Cheat Death",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -41502,8 +44393,8 @@ var parseCardsText = {
 	{
 		"artist": "Mauricio Herrera",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_204e.png",
 		"dbfId": 45530,
+		"goldenImage": "LOOT_204e.gif",
 		"id": "LOOT_204e",
 		"name": "Close Call",
 		"playerClass": "Neutral",
@@ -41555,6 +44446,9 @@ var parseCardsText = {
 		"dbfId": 45529,
 		"goldenImage": "LOOT_210.gif",
 		"id": "LOOT_210",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Sudden Betrayal",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -41573,6 +44467,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_211.gif",
 		"health": 2,
 		"id": "LOOT_211",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Elven Minstrel",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -41581,7 +44478,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Alex Horley",
+		"artist": "Mauricio Herrera",
 		"cardClass": "ROGUE",
 		"cardImage": "LOOT_214.png",
 		"collectible": true,
@@ -41589,6 +44486,9 @@ var parseCardsText = {
 		"dbfId": 45535,
 		"goldenImage": "LOOT_214.gif",
 		"id": "LOOT_214",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Evasion",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -41599,9 +44499,12 @@ var parseCardsText = {
 	{
 		"artist": "Mauricio Herrera",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_214e.png",
 		"dbfId": 45534,
+		"goldenImage": "LOOT_214e.gif",
 		"id": "LOOT_214e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Evasive",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -41620,6 +44523,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_216.gif",
 		"health": 1,
 		"id": "LOOT_216",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lynessa Sunsorrow",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -41630,8 +44536,8 @@ var parseCardsText = {
 	{
 		"artist": "Tyler West Studios",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_216e.png",
 		"dbfId": 45538,
+		"goldenImage": "LOOT_216e.gif",
 		"id": "LOOT_216e",
 		"name": "Light of the Exarch",
 		"playerClass": "Neutral",
@@ -41646,6 +44552,11 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"dbfId": 45546,
+		"entourage": [
+			"NEW1_032",
+			"NEW1_033",
+			"NEW1_034"
+		],
 		"goldenImage": "LOOT_217.gif",
 		"id": "LOOT_217",
 		"name": "To My Side!",
@@ -41687,8 +44598,11 @@ var parseCardsText = {
 		"name": "Candleshot",
 		"playerClass": "Hunter",
 		"rarity": "Common",
+		"referencedTags": [
+			"IMMUNE"
+		],
 		"set": "Lootapalooza",
-		"text": "<b>Immune</b> while attacking.",
+		"text": "Your hero is <b>Immune</b> while attacking.",
 		"type": "Weapon"
 	},
 	{
@@ -41721,6 +44635,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_233.gif",
 		"health": 1,
 		"id": "LOOT_233",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Cursed Disciple",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -41768,6 +44685,12 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"dbfId": 45759,
+		"entourage": [
+			"LOOT_278t1",
+			"LOOT_278t2",
+			"LOOT_278t3",
+			"LOOT_278t4"
+		],
 		"goldenImage": "LOOT_278.gif",
 		"id": "LOOT_278",
 		"name": "Unidentified Elixir",
@@ -41779,8 +44702,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_278e.png",
 		"dbfId": 49338,
+		"goldenImage": "LOOT_278e.gif",
 		"id": "LOOT_278e",
 		"name": "Tastes Like ????",
 		"playerClass": "Neutral",
@@ -41806,9 +44729,12 @@ var parseCardsText = {
 	{
 		"artist": "Evgeniy Dlinnov",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_278t1e.png",
 		"dbfId": 45750,
+		"goldenImage": "LOOT_278t1e.gif",
 		"id": "LOOT_278t1e",
+		"mechanics": [
+			"LIFESTEAL"
+		],
 		"name": "Sanguine",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -41833,8 +44759,8 @@ var parseCardsText = {
 	{
 		"artist": "Ivan Fomin",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_278t2e.png",
 		"dbfId": 45752,
+		"goldenImage": "LOOT_278t2e.gif",
 		"id": "LOOT_278t2e",
 		"name": "Pure",
 		"playerClass": "Neutral",
@@ -41860,8 +44786,8 @@ var parseCardsText = {
 	{
 		"artist": "Vladimir Kafanov",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_278t3e.png",
 		"dbfId": 45754,
+		"goldenImage": "LOOT_278t3e.gif",
 		"id": "LOOT_278t3e",
 		"name": "Shadowtouched",
 		"playerClass": "Neutral",
@@ -41872,8 +44798,8 @@ var parseCardsText = {
 	{
 		"artist": "Vladimir Kafanov",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_278t3e2.png",
 		"dbfId": 45755,
+		"goldenImage": "LOOT_278t3e2.gif",
 		"id": "LOOT_278t3e2",
 		"name": "Shadowy",
 		"playerClass": "Neutral",
@@ -41899,8 +44825,8 @@ var parseCardsText = {
 	{
 		"artist": "Slawomir Maniak",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_278t4e.png",
 		"dbfId": 45758,
+		"goldenImage": "LOOT_278t4e.gif",
 		"id": "LOOT_278t4e",
 		"name": "Hopeful",
 		"playerClass": "Neutral",
@@ -41915,6 +44841,12 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"dbfId": 45775,
+		"entourage": [
+			"LOOT_285t",
+			"LOOT_285t2",
+			"LOOT_285t3",
+			"LOOT_285t4"
+		],
 		"goldenImage": "LOOT_285.gif",
 		"id": "LOOT_285",
 		"name": "Unidentified Shield",
@@ -42023,6 +44955,12 @@ var parseCardsText = {
 		"cost": 3,
 		"dbfId": 45782,
 		"durability": 2,
+		"entourage": [
+			"LOOT_286t2",
+			"LOOT_286t3",
+			"LOOT_286t1",
+			"LOOT_286t4"
+		],
 		"goldenImage": "LOOT_286.gif",
 		"id": "LOOT_286",
 		"name": "Unidentified Maul",
@@ -42042,6 +44980,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "LOOT_286t1.gif",
 		"id": "LOOT_286t1",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Champion's Maul",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -42059,6 +45000,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "LOOT_286t2.gif",
 		"id": "LOOT_286t2",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sacred Maul",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -42076,6 +45020,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "LOOT_286t3.gif",
 		"id": "LOOT_286t3",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blessed Maul",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -42086,8 +45033,8 @@ var parseCardsText = {
 	{
 		"artist": "Konstantin Turovec",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_286t3e.png",
 		"dbfId": 46072,
+		"goldenImage": "LOOT_286t3e.gif",
 		"id": "LOOT_286t3e",
 		"name": "Holy Blessings",
 		"playerClass": "Neutral",
@@ -42105,6 +45052,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "LOOT_286t4.gif",
 		"id": "LOOT_286t4",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Purifier's Maul",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -42123,6 +45073,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_291.gif",
 		"health": 4,
 		"id": "LOOT_291",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shroom Brewer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -42131,7 +45084,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "P. Stapleton & G. Hanna",
+		"artist": "Garrett Hanna",
 		"attack": 2,
 		"cardClass": "WARLOCK",
 		"cardImage": "LOOT_306.png",
@@ -42141,9 +45094,15 @@ var parseCardsText = {
 		"goldenImage": "LOOT_306.gif",
 		"health": 2,
 		"id": "LOOT_306",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Possessed Lackey",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Deathrattle:</b> <b>Recruit</b> a Demon.",
 		"type": "Minion"
@@ -42160,6 +45119,9 @@ var parseCardsText = {
 		"name": "Oaken Summons",
 		"playerClass": "Druid",
 		"rarity": "Common",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "Gain 6 Armor.\n<b>Recruit</b> a minion that costs (4) or less.",
 		"type": "Spell"
@@ -42175,6 +45137,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_313.gif",
 		"health": 5,
 		"id": "LOOT_313",
+		"mechanics": [
+			"DIVINE_SHIELD"
+		],
 		"name": "Crystal Lion",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -42193,10 +45158,17 @@ var parseCardsText = {
 		"goldenImage": "LOOT_314.gif",
 		"health": 5,
 		"id": "LOOT_314",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Grizzled Guardian",
 		"playerClass": "Druid",
 		"race": "BEAST",
 		"rarity": "Rare",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Taunt</b>\n<b>Deathrattle:</b> <b>Recruit</b> 2 minions that cost (4) or less.",
 		"type": "Minion"
@@ -42212,6 +45184,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_315.gif",
 		"health": 5,
 		"id": "LOOT_315",
+		"mechanics": [
+			"POISONOUS",
+			"TAUNT"
+		],
 		"name": "Trogg Gloomeater",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -42261,8 +45237,8 @@ var parseCardsText = {
 	{
 		"artist": "Wayne Reynolds",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_333e.png",
 		"dbfId": 45876,
+		"goldenImage": "LOOT_333e.gif",
 		"id": "LOOT_333e",
 		"name": "+1 Level!",
 		"playerClass": "Neutral",
@@ -42282,6 +45258,9 @@ var parseCardsText = {
 		"name": "Primal Talismans",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
 		"set": "Lootapalooza",
 		"text": "Give your minions \"<b>Deathrattle:</b> Summon a random basic Totem.\"",
 		"type": "Spell"
@@ -42289,8 +45268,8 @@ var parseCardsText = {
 	{
 		"artist": "Ivan Fomin",
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOT_344e.png",
 		"dbfId": 49064,
+		"goldenImage": "LOOT_344e.gif",
 		"id": "LOOT_344e",
 		"name": "Primal Talisman",
 		"playerClass": "Shaman",
@@ -42299,7 +45278,7 @@ var parseCardsText = {
 		"type": "Enchantment"
 	},
 	{
-		"artist": "Alex Horley",
+		"artist": "Alex Horley Orlandelli",
 		"attack": 2,
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOOT_347.png",
@@ -42309,6 +45288,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_347.gif",
 		"health": 1,
 		"id": "LOOT_347",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kobold Apprentice",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -42327,6 +45309,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_351.gif",
 		"health": 1,
 		"id": "LOOT_351",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Greedy Sprite",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -42362,6 +45347,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_357.gif",
 		"health": 6,
 		"id": "LOOT_357",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Marin the Fox",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -42377,9 +45365,18 @@ var parseCardsText = {
 		"cost": 3,
 		"dbfId": 45999,
 		"elite": true,
+		"entourage": [
+			"LOOT_998h",
+			"LOOT_998j",
+			"LOOT_998l",
+			"LOOT_998k"
+		],
 		"goldenImage": "LOOT_357l.gif",
 		"health": 8,
 		"id": "LOOT_357l",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Master Chest",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -42398,6 +45395,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_358.gif",
 		"health": 7,
 		"id": "LOOT_358",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Grumble, Worldshaker",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -42409,8 +45409,8 @@ var parseCardsText = {
 	{
 		"artist": "Hideaki Takamura",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_358e.png",
 		"dbfId": 45994,
+		"goldenImage": "LOOT_358e.gif",
 		"id": "LOOT_358e",
 		"name": "Grumbly Tumbly",
 		"playerClass": "Neutral",
@@ -42429,6 +45429,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_363.gif",
 		"health": 1,
 		"id": "LOOT_363",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Drygulch Jailor",
 		"playerClass": "Paladin",
 		"rarity": "Common",
@@ -42463,6 +45466,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_365.gif",
 		"health": 9,
 		"id": "LOOT_365",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Gemstudded Golem",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -42481,6 +45487,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_367.gif",
 		"health": 2,
 		"id": "LOOT_367",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Drywhisker Armorer",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -42499,6 +45508,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_368.gif",
 		"health": 9,
 		"id": "LOOT_368",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Voidlord",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -42519,6 +45532,9 @@ var parseCardsText = {
 		"name": "Gather Your Party",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Recruit</b> a minion.",
 		"type": "Spell"
@@ -42532,6 +45548,9 @@ var parseCardsText = {
 		"dbfId": 46067,
 		"goldenImage": "LOOT_373.gif",
 		"id": "LOOT_373",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Healing Rain",
 		"playerClass": "Shaman",
 		"rarity": "Common",
@@ -42550,9 +45569,15 @@ var parseCardsText = {
 		"goldenImage": "LOOT_375.gif",
 		"health": 4,
 		"id": "LOOT_375",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Guild Recruiter",
 		"playerClass": "Neutral",
 		"rarity": "Common",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Battlecry:</b> <b>Recruit</b> a minion that costs (4) or less.",
 		"type": "Minion"
@@ -42572,6 +45597,9 @@ var parseCardsText = {
 		"name": "Woecleaver",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "After your hero attacks, <b>Recruit</b> a minion.",
 		"type": "Weapon"
@@ -42605,6 +45633,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_383.gif",
 		"health": 10,
 		"id": "LOOT_383",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Hungry Ettin",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -42623,6 +45655,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_388.gif",
 		"health": 3,
 		"id": "LOOT_388",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fungal Enchanter",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -42631,7 +45666,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Trent Kaniuga",
+		"artist": "Trent Kaniuga & James Martin",
 		"attack": 1,
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOOT_389.png",
@@ -42641,6 +45676,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_389.gif",
 		"health": 3,
 		"id": "LOOT_389",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Rummaging Kobold",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -42660,6 +45698,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "LOOT_392.gif",
 		"id": "LOOT_392",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Twig of the World Tree",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -42705,7 +45746,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Alex Horley",
+		"artist": "Alex Horley Orlandelli",
 		"attack": 3,
 		"cardClass": "PRIEST",
 		"cardImage": "LOOT_410.png",
@@ -42715,6 +45756,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_410.gif",
 		"health": 3,
 		"id": "LOOT_410",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Duskbreaker",
 		"playerClass": "Priest",
 		"race": "DRAGON",
@@ -42724,7 +45768,7 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Alex Horley",
+		"artist": "Alex Horley Orlandelli",
 		"attack": 3,
 		"cardClass": "ROGUE",
 		"cardImage": "LOOT_412.png",
@@ -42735,6 +45779,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_412.gif",
 		"health": 3,
 		"id": "LOOT_412",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Kobold Illusionist",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -42743,10 +45790,10 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
-		"artist": "Alex Horley",
+		"artist": "Alex Horley Orlandelli",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_412e.png",
 		"dbfId": 46395,
+		"goldenImage": "LOOT_412e.gif",
 		"id": "LOOT_412e",
 		"name": "Shadowy",
 		"playerClass": "Neutral",
@@ -42765,6 +45812,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_413.gif",
 		"health": 3,
 		"id": "LOOT_413",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Plated Beetle",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -42803,6 +45853,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_415.gif",
 		"health": 6,
 		"id": "LOOT_415",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Rin, the First Disciple",
 		"playerClass": "Warlock",
 		"rarity": "Legendary",
@@ -42970,6 +46024,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_415t6.gif",
 		"health": 10,
 		"id": "LOOT_415t6",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Azari, the Devourer",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -43005,6 +46062,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "LOOT_420.gif",
 		"id": "LOOT_420",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Skull of the Man'ari",
 		"playerClass": "Warlock",
 		"rarity": "Legendary",
@@ -43024,6 +46084,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "LOOT_500.gif",
 		"id": "LOOT_500",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Val'anyr",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -43034,10 +46097,10 @@ var parseCardsText = {
 	{
 		"attack": 0,
 		"cardClass": "PALADIN",
-		"cardImage": "LOOT_500d.png",
 		"cost": 0,
 		"dbfId": 48373,
 		"durability": 0,
+		"goldenImage": "LOOT_500d.gif",
 		"id": "LOOT_500d",
 		"name": "Val'anyr Reequip Effect Dummy",
 		"playerClass": "Paladin",
@@ -43047,8 +46110,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_500e.png",
 		"dbfId": 46262,
+		"goldenImage": "LOOT_500e.gif",
 		"id": "LOOT_500e",
 		"name": "Wielding Val'anyr",
 		"playerClass": "Neutral",
@@ -43061,22 +46124,6 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOT_503.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<i>(Zum Aufwerten 3 <b>Todesröcheln</b>-Karten ausspielen.)</i>",
-			"enUS": "<i>(Play 3 <b>Deathrattle</b> cards to upgrade.)</i>",
-			"esES": "<i>(Juega 3 cartas con <b>Último aliento</b> para mejorarlo).</i>",
-			"esMX": "<i>(Juega 3 cartas con <b>Estertor</b> para mejorar esta carta).</i>",
-			"frFR": "<i>(Jouez 3 cartes avec <b>Râle d’agonie</b> pour l’améliorer.)</i>",
-			"itIT": "<i>(Si potenzia giocando 3 carte con <b>Rantolo di Morte</b>)</i>",
-			"jaJP": "<i>（<b>断末魔</b>カードを\n3枚手札から使用\nするとアップグレード）</i>",
-			"koKR": "<i>(<b>죽음의 메아리</b> 카드를 3회 내면 강화됩니다.)</i>",
-			"plPL": "<i>(Zagraj 3 karty z <b>Agonią</b>, aby ulepszyć.)</i>",
-			"ptBR": "<i>(Jogue 3 cards com <b>Último Suspiro</b> para aprimorar.)</i>",
-			"ruRU": "<i>(Разыграйте 3 карты с <b>«Предсмертным хрипом»</b> для улучшения.)</i>",
-			"thTH": "<i>(เล่นการ์ด <b>เสียงสุดท้าย</b> 3 ใบเพื่ออัพเกรด)</i>",
-			"zhCN": "<i>（使用三张<b>亡语</b>牌后升级。）</i>",
-			"zhTW": "<i>(打出3張<b>死亡之聲</b>牌後升級)</i>"
-		},
 		"cost": 5,
 		"dbfId": 46296,
 		"goldenImage": "LOOT_503.gif",
@@ -43088,7 +46135,7 @@ var parseCardsText = {
 			"DEATHRATTLE"
 		],
 		"set": "Lootapalooza",
-		"text": "Destroy 1 random enemy minion.",
+		"text": "Destroy 1 random enemy minion.\n@<i>(Play 3 <b>Deathrattle</b> cards to upgrade.)</i>",
 		"type": "Spell"
 	},
 	{
@@ -43169,6 +46216,9 @@ var parseCardsText = {
 		"name": "The Runespear",
 		"playerClass": "Shaman",
 		"rarity": "Legendary",
+		"referencedTags": [
+			"DISCOVER"
+		],
 		"set": "Lootapalooza",
 		"text": "After your hero attacks, <b>Discover</b> a spell\nand cast it with random targets.",
 		"type": "Weapon"
@@ -43178,22 +46228,6 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOT_507.png",
 		"collectible": true,
-		"collectionText": {
-			"deDE": "<i>(Zum Aufwerten 4 Zauber wirken.)</i>",
-			"enUS": "<i>(Cast 4 spells to upgrade.)</i>",
-			"esES": "<i>(Lanza 4 hechizos para mejorarlo).</i>",
-			"esMX": "<i>(Lanza 4 hechizos para mejorar esta carta.)</i>",
-			"frFR": "<i>(Lancez 4 sorts pour l’améliorer.)</i>",
-			"itIT": "<i>(Si potenzia lanciando 4 Magie)</i>",
-			"jaJP": "<i>（呪文を4回使用すると \n  アップグレード）</i>",
-			"koKR": "<i>(주문을 4회 시전하면 강화됩니다.)</i>",
-			"plPL": "<i>(Rzuć 4 zaklęcia, aby ulepszyć.)</i>",
-			"ptBR": "<i>(Lance 4 feitiços para aprimorar.)</i>",
-			"ruRU": "<i>(Разыграйте 4 заклинания для улучшения.)</i>",
-			"thTH": "<i>(ร่ายเวทมนตร์ 4 ใบ[b]เพื่ออัพเกรด)</i>",
-			"zhCN": "<i>（施放四个法术后升级。）</i>",
-			"zhTW": "<i>(施放\n4個法術後升級)</i>"
-		},
 		"cost": 7,
 		"dbfId": 46307,
 		"goldenImage": "LOOT_507.gif",
@@ -43202,7 +46236,7 @@ var parseCardsText = {
 		"playerClass": "Priest",
 		"rarity": "Rare",
 		"set": "Lootapalooza",
-		"text": "Resurrect 2 different friendly minions.",
+		"text": "Resurrect 2 different friendly minions. @<i>(Cast 4 spells to upgrade.)</i>",
 		"type": "Spell"
 	},
 	{
@@ -43247,9 +46281,16 @@ var parseCardsText = {
 		"goldenImage": "LOOT_511.gif",
 		"health": 6,
 		"id": "LOOT_511",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Kathrena Winterwisp",
 		"playerClass": "Hunter",
 		"rarity": "Legendary",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Battlecry and Deathrattle:</b> <b>Recruit</b> a Beast.",
 		"type": "Minion"
@@ -43266,6 +46307,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_516.gif",
 		"health": 2,
 		"id": "LOOT_516",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Zola the Gorgon",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -43284,6 +46328,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_517.gif",
 		"health": 1,
 		"id": "LOOT_517",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Murmuring Elemental",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -43295,8 +46342,8 @@ var parseCardsText = {
 	{
 		"artist": "Hideaki Takamura",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_517e.png",
 		"dbfId": 46431,
+		"goldenImage": "LOOT_517e.gif",
 		"id": "LOOT_517e",
 		"name": "Murmurs",
 		"playerClass": "Neutral",
@@ -43306,8 +46353,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_517e2.png",
 		"dbfId": 49219,
+		"goldenImage": "LOOT_517e2.gif",
 		"id": "LOOT_517e2",
 		"name": "Murmuring",
 		"playerClass": "Neutral",
@@ -43326,6 +46373,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_518.gif",
 		"health": 5,
 		"id": "LOOT_518",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Windshear Stormcaller",
 		"playerClass": "Shaman",
 		"rarity": "Epic",
@@ -43363,6 +46413,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_520.gif",
 		"health": 4,
 		"id": "LOOT_520",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Seeping Oozeling",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -43376,8 +46429,8 @@ var parseCardsText = {
 	{
 		"artist": "Anton Kagoukin",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_520e.png",
 		"dbfId": 46444,
+		"goldenImage": "LOOT_520e.gif",
 		"id": "LOOT_520e",
 		"name": "Albino Chameleon",
 		"playerClass": "Neutral",
@@ -43397,9 +46450,15 @@ var parseCardsText = {
 		"goldenImage": "LOOT_521.gif",
 		"health": 5,
 		"id": "LOOT_521",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Master Oakheart",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Battlecry:</b> <b>Recruit</b> a 1, 2, and 3-Attack minion.",
 		"type": "Minion"
@@ -43432,6 +46491,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_526.gif",
 		"health": 20,
 		"id": "LOOT_526",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "The Darkness",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -43451,17 +46513,20 @@ var parseCardsText = {
 		"health": 20,
 		"hideStats": true,
 		"id": "LOOT_526d",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "The Darkness",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
 		"set": "Lootapalooza",
-		"text": "",
+		"text": "@",
 		"type": "Minion"
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_526et.png",
 		"dbfId": 48694,
+		"goldenImage": "LOOT_526et.gif",
 		"id": "LOOT_526et",
 		"name": "Darkness Candle Detect",
 		"playerClass": "Neutral",
@@ -43476,6 +46541,9 @@ var parseCardsText = {
 		"dbfId": 46467,
 		"goldenImage": "LOOT_526t.gif",
 		"id": "LOOT_526t",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Darkness Candle",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -43493,6 +46561,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_528.gif",
 		"health": 4,
 		"id": "LOOT_528",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Twilight Acolyte",
 		"playerClass": "Priest",
 		"rarity": "Epic",
@@ -43503,8 +46574,8 @@ var parseCardsText = {
 	{
 		"artist": "Tooth",
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOT_528e.png",
 		"dbfId": 47891,
+		"goldenImage": "LOOT_528e.gif",
 		"id": "LOOT_528e",
 		"name": "Twilight Curse",
 		"playerClass": "Warrior",
@@ -43523,6 +46594,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_529.gif",
 		"health": 3,
 		"id": "LOOT_529",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Void Ripper",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -43534,8 +46608,8 @@ var parseCardsText = {
 	{
 		"artist": "Slawomir Maniak",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_529e.png",
 		"dbfId": 47456,
+		"goldenImage": "LOOT_529e.gif",
 		"id": "LOOT_529e",
 		"name": "Void Shift",
 		"playerClass": "Neutral",
@@ -43554,6 +46628,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_534.gif",
 		"health": 2,
 		"id": "LOOT_534",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Gilded Gargoyle",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -43573,6 +46650,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_535.gif",
 		"health": 3,
 		"id": "LOOT_535",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dragoncaller Alanna",
 		"playerClass": "Mage",
 		"rarity": "Legendary",
@@ -43607,6 +46687,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_537.gif",
 		"health": 5,
 		"id": "LOOT_537",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Leyline Manipulator",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -43627,6 +46710,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_538.gif",
 		"health": 6,
 		"id": "LOOT_538",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Temporus",
 		"playerClass": "Priest",
 		"race": "DRAGON",
@@ -43634,29 +46720,6 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"text": "<b>Battlecry:</b> Your opponent takes two turns. Then you take two turns.",
 		"type": "Minion"
-	},
-	{
-		"artist": "Daren Bader",
-		"cardClass": "PRIEST",
-		"cardImage": "LOOT_538e.png",
-		"dbfId": 46543,
-		"id": "LOOT_538e",
-		"name": "Time Spiraling",
-		"playerClass": "Priest",
-		"set": "Lootapalooza",
-		"text": "Take an extra turn.",
-		"type": "Enchantment"
-	},
-	{
-		"cardClass": "PRIEST",
-		"cardImage": "LOOT_538e2.png",
-		"dbfId": 46542,
-		"id": "LOOT_538e2",
-		"name": "Revenge",
-		"playerClass": "Priest",
-		"set": "Lootapalooza",
-		"text": "Take an extra turn.",
-		"type": "Enchantment"
 	},
 	{
 		"artist": "Peter Stapleton",
@@ -43669,6 +46732,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_539.gif",
 		"health": 4,
 		"id": "LOOT_539",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Spiteful Summoner",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -43690,6 +46756,9 @@ var parseCardsText = {
 		"name": "Dragonhatcher",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "At the end of your turn, <b>Recruit</b> a Dragon.",
 		"type": "Minion"
@@ -43706,6 +46775,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_541.gif",
 		"health": 5,
 		"id": "LOOT_541",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "King Togwaggle",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -43740,6 +46812,9 @@ var parseCardsText = {
 		"goldenImage": "LOOT_542.gif",
 		"health": 3,
 		"id": "LOOT_542",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Kingsbane",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -43749,8 +46824,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOT_542e.png",
 		"dbfId": 47070,
+		"goldenImage": "LOOT_542e.gif",
 		"id": "LOOT_542e",
 		"name": "Kingsbane Shuffle",
 		"playerClass": "Rogue",
@@ -43780,6 +46855,9 @@ var parseCardsText = {
 		"dbfId": 43180,
 		"goldenImage": "LOOT_998j.gif",
 		"id": "LOOT_998j",
+		"mechanics": [
+			"DISCOVER"
+		],
 		"name": "Zarog's Crown",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -43797,6 +46875,10 @@ var parseCardsText = {
 		"goldenImage": "LOOT_998k.gif",
 		"health": 6,
 		"id": "LOOT_998k",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Golden Kobold",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -43820,7 +46902,6 @@ var parseCardsText = {
 	{
 		"artist": "Zoltan Boros",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOT_998le.png",
 		"dbfId": 45725,
 		"goldenImage": "LOOT_998le.gif",
 		"id": "LOOT_998le",
@@ -43837,6 +46918,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_102.png",
 		"cost": 3,
 		"dbfId": 46252,
+		"goldenImage": "LOOTA_102.gif",
 		"health": 1,
 		"id": "LOOTA_102",
 		"name": "Starving Crab",
@@ -43853,8 +46935,12 @@ var parseCardsText = {
 		"cardImage": "LOOTA_103.png",
 		"cost": 0,
 		"dbfId": 46253,
+		"goldenImage": "LOOTA_103.gif",
 		"health": 1,
 		"id": "LOOTA_103",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sunken Chest",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -43868,12 +46954,13 @@ var parseCardsText = {
 		"cardImage": "LOOTA_104.png",
 		"cost": 4,
 		"dbfId": 46348,
+		"goldenImage": "LOOTA_104.gif",
 		"health": 4,
 		"id": "LOOTA_104",
 		"name": "Reverberating Ooze",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"text": "Whenever this minion\nsurvives damage, summon a copy of this minion.",
+		"text": "After this minion\nsurvives damage, summon a copy of this minion.",
 		"type": "Minion"
 	},
 	{
@@ -43883,8 +46970,12 @@ var parseCardsText = {
 		"cardImage": "LOOTA_105.png",
 		"cost": 1,
 		"dbfId": 46362,
+		"goldenImage": "LOOTA_105.gif",
 		"health": 1,
 		"id": "LOOTA_105",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Deadly Spore",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -43898,12 +46989,13 @@ var parseCardsText = {
 		"cardImage": "LOOTA_107.png",
 		"cost": 4,
 		"dbfId": 46375,
+		"goldenImage": "LOOTA_107.gif",
 		"health": 7,
 		"id": "LOOTA_107",
 		"name": "Shroomsayer",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"text": "When this minion\nsurvives damage,\ndestroy all minions.",
+		"text": "After this minion\nsurvives damage,\ndestroy all minions.",
 		"type": "Minion"
 	},
 	{
@@ -43913,6 +47005,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_109.png",
 		"cost": 3,
 		"dbfId": 46918,
+		"goldenImage": "LOOTA_109.gif",
 		"health": 3,
 		"id": "LOOTA_109",
 		"name": "Gluttonous Trogg",
@@ -43923,8 +47016,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_109e.png",
 		"dbfId": 46917,
+		"goldenImage": "LOOTA_109e.gif",
 		"id": "LOOTA_109e",
 		"name": "Delicious Magic",
 		"playerClass": "Neutral",
@@ -43938,6 +47031,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_800.png",
 		"cost": 0,
 		"dbfId": 46405,
+		"goldenImage": "LOOTA_800.gif",
 		"hideStats": true,
 		"id": "LOOTA_800",
 		"name": "Potion of Vitality",
@@ -43952,6 +47046,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_801.png",
 		"cost": 0,
 		"dbfId": 46407,
+		"goldenImage": "LOOTA_801.gif",
 		"hideStats": true,
 		"id": "LOOTA_801",
 		"name": "Crystal Gem",
@@ -43966,6 +47061,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_802.png",
 		"cost": 0,
 		"dbfId": 46408,
+		"goldenImage": "LOOTA_802.gif",
 		"hideStats": true,
 		"id": "LOOTA_802",
 		"name": "Justicar's Ring",
@@ -43976,8 +47072,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_802e.png",
 		"dbfId": 47443,
+		"goldenImage": "LOOTA_802e.gif",
 		"id": "LOOTA_802e",
 		"name": "Justicar's Ring Enchantment",
 		"playerClass": "Neutral",
@@ -43991,6 +47087,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_803.png",
 		"cost": 0,
 		"dbfId": 46410,
+		"goldenImage": "LOOTA_803.gif",
 		"hideStats": true,
 		"id": "LOOTA_803",
 		"name": "Scepter of Summoning",
@@ -44001,8 +47098,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_803e.png",
 		"dbfId": 46409,
+		"goldenImage": "LOOTA_803e.gif",
 		"id": "LOOTA_803e",
 		"name": "Scepter of Summoning Enchantment",
 		"playerClass": "Neutral",
@@ -44015,6 +47112,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_804.png",
 		"cost": 0,
 		"dbfId": 46411,
+		"goldenImage": "LOOTA_804.gif",
 		"hideStats": true,
 		"id": "LOOTA_804",
 		"name": "Small Backpacks",
@@ -44029,6 +47127,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_805.png",
 		"cost": 2,
 		"dbfId": 46412,
+		"goldenImage": "LOOTA_805.gif",
 		"id": "LOOTA_805",
 		"name": "Amulet of Domination",
 		"playerClass": "Neutral",
@@ -44042,7 +47141,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_806.png",
 		"cost": 3,
 		"dbfId": 46413,
+		"goldenImage": "LOOTA_806.gif",
 		"id": "LOOTA_806",
+		"mechanics": [
+			"SILENCE"
+		],
 		"name": "Wand of Disintegration",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44055,6 +47158,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_811.png",
 		"cost": 3,
 		"dbfId": 46414,
+		"goldenImage": "LOOTA_811.gif",
 		"id": "LOOTA_811",
 		"name": "Orb of Destruction",
 		"playerClass": "Neutral",
@@ -44068,6 +47172,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_812.png",
 		"cost": 1,
 		"dbfId": 46416,
+		"goldenImage": "LOOTA_812.gif",
 		"id": "LOOTA_812",
 		"name": "Boots of Haste",
 		"playerClass": "Neutral",
@@ -44077,9 +47182,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_812e.png",
 		"dbfId": 46415,
+		"goldenImage": "LOOTA_812e.gif",
 		"id": "LOOTA_812e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Boots of Haste Enchantment",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44092,6 +47200,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_813.png",
 		"cost": 1,
 		"dbfId": 46417,
+		"goldenImage": "LOOTA_813.gif",
 		"id": "LOOTA_813",
 		"name": "Magic Mirror",
 		"playerClass": "Neutral",
@@ -44105,6 +47214,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_814.png",
 		"cost": 10,
 		"dbfId": 46418,
+		"goldenImage": "LOOTA_814.gif",
 		"id": "LOOTA_814",
 		"name": "Wish",
 		"playerClass": "Neutral",
@@ -44119,6 +47229,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_816.png",
 		"cost": 1,
 		"dbfId": 46420,
+		"goldenImage": "LOOTA_816.gif",
 		"health": 10,
 		"id": "LOOTA_816",
 		"name": "Party Portal",
@@ -44131,24 +47242,9 @@ var parseCardsText = {
 		"artist": "Clint Langley",
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOOTA_817.png",
-		"collectionText": {
-			"deDE": "<b>Mutiert</b> einen befreundeten Diener {0}-mal.",
-			"enUS": "<b>Adapt</b> a friendly minion {0} |4(time, times).",
-			"esES": "<b>Adapta</b> a un esbirro amistoso {0} |4(vez,veces).",
-			"esMX": "<b>Adapta</b> a un esbirro aliado {0} |4(vez, veces).",
-			"frFR": "Confère <b>Adaptation</b> {0} fois à un serviteur allié.",
-			"itIT": "<b>Adatta</b> un tuo servitore {0} |4(volta,volte).",
-			"jaJP": "味方の\nミニオン1体を\n{0}回<b>適応</b>させる。",
-			"koKR": "아군 하수인 하나를 {0}번 <b>적응</b>시킵니다.",
-			"plPL": "<b>Adaptuj</b> przyjaznego stronnika {0} |4(raz,razy,razy).",
-			"ptBR": "<b>Adapte</b> um lacaio aliado {0} |4(vez, vezes).",
-			"ruRU": "Ваше существо <b>адаптируется</b> {0} р.",
-			"thTH": "<b>ปรับตัว</b> {0} ครั้ง[b]ให้มินเนี่ยนฝ่ายคุณ[b]หนึ่งตัว",
-			"zhCN": "使一个友方随从<b>进化</b>{0}次。",
-			"zhTW": "<b>演化</b>一個友方手下{0}次"
-		},
 		"cost": 4,
 		"dbfId": 46421,
+		"goldenImage": "LOOTA_817.gif",
 		"id": "LOOTA_817",
 		"name": "Primordial Wand",
 		"playerClass": "Neutral",
@@ -44165,6 +47261,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_818.png",
 		"cost": 0,
 		"dbfId": 46923,
+		"goldenImage": "LOOTA_818.gif",
 		"hideStats": true,
 		"id": "LOOTA_818",
 		"name": "Grommash's Armguards",
@@ -44175,8 +47272,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_818e.png",
 		"dbfId": 46924,
+		"goldenImage": "LOOTA_818e.gif",
 		"id": "LOOTA_818e",
 		"name": "Grom's Amguards Enchantment",
 		"playerClass": "Neutral",
@@ -44191,6 +47288,7 @@ var parseCardsText = {
 		"cost": 0,
 		"dbfId": 46422,
 		"durability": 3,
+		"goldenImage": "LOOTA_819.gif",
 		"id": "LOOTA_819",
 		"name": "Archmage Staff",
 		"playerClass": "Neutral",
@@ -44204,6 +47302,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_820.png",
 		"cost": 2,
 		"dbfId": 46423,
+		"goldenImage": "LOOTA_820.gif",
 		"id": "LOOTA_820",
 		"name": "Aleatoric Cube",
 		"playerClass": "Neutral",
@@ -44213,8 +47312,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_820e.png",
 		"dbfId": 46928,
+		"goldenImage": "LOOTA_820e.gif",
 		"id": "LOOTA_820e",
 		"name": "Mysterious Power",
 		"playerClass": "Druid",
@@ -44223,14 +47322,18 @@ var parseCardsText = {
 		"type": "Enchantment"
 	},
 	{
-		"artist": "Doug Alexander",
+		"artist": "D. Alexander Gregory",
 		"attack": 1,
 		"cardClass": "NEUTRAL",
 		"cardImage": "LOOTA_821.png",
 		"cost": 2,
 		"dbfId": 46424,
 		"durability": 4,
+		"goldenImage": "LOOTA_821.gif",
 		"id": "LOOTA_821",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Vorpal Dagger",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44243,6 +47346,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_822.png",
 		"cost": 10,
 		"dbfId": 46425,
+		"goldenImage": "LOOTA_822.gif",
 		"id": "LOOTA_822",
 		"name": "Rod of Roasting",
 		"playerClass": "Neutral",
@@ -44256,6 +47360,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_823.png",
 		"cost": 1,
 		"dbfId": 46426,
+		"goldenImage": "LOOTA_823.gif",
 		"id": "LOOTA_823",
 		"name": "Bag of Stuffing",
 		"playerClass": "Neutral",
@@ -44269,6 +47374,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_824.png",
 		"cost": 0,
 		"dbfId": 46428,
+		"goldenImage": "LOOTA_824.gif",
 		"hideStats": true,
 		"id": "LOOTA_824",
 		"name": "Khadgar's Scrying Orb",
@@ -44279,8 +47385,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_824e.png",
 		"dbfId": 46427,
+		"goldenImage": "LOOTA_824e.gif",
 		"id": "LOOTA_824e",
 		"name": "Khadgar's Scrying Orb Enchantment",
 		"playerClass": "Neutral",
@@ -44294,6 +47400,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_825.png",
 		"cost": 0,
 		"dbfId": 46430,
+		"goldenImage": "LOOTA_825.gif",
 		"hideStats": true,
 		"id": "LOOTA_825",
 		"name": "Robe of the Magi",
@@ -44307,9 +47414,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_825e.png",
 		"dbfId": 46429,
+		"goldenImage": "LOOTA_825e.gif",
 		"id": "LOOTA_825e",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Robe of the Magi Enchantment",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44324,8 +47434,14 @@ var parseCardsText = {
 		"cardImage": "LOOTA_826.png",
 		"cost": 1,
 		"dbfId": 46436,
+		"goldenImage": "LOOTA_826.gif",
 		"health": 15,
 		"id": "LOOTA_826",
+		"mechanics": [
+			"CANT_ATTACK",
+			"FREEZE",
+			"TAUNT"
+		],
 		"name": "Portable Ice Wall",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44338,6 +47454,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_827.png",
 		"cost": 3,
 		"dbfId": 46437,
+		"goldenImage": "LOOTA_827.gif",
 		"id": "LOOTA_827",
 		"name": "Embers of Ragnaros",
 		"playerClass": "Neutral",
@@ -44351,8 +47468,12 @@ var parseCardsText = {
 		"cardImage": "LOOTA_828.png",
 		"cost": 0,
 		"dbfId": 46439,
+		"goldenImage": "LOOTA_828.gif",
 		"hideStats": true,
 		"id": "LOOTA_828",
+		"mechanics": [
+			"RITUAL"
+		],
 		"name": "Captured Flag",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44361,8 +47482,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_828e.png",
 		"dbfId": 46438,
+		"goldenImage": "LOOTA_828e.gif",
 		"id": "LOOTA_828e",
 		"name": "Banner of Inspiration",
 		"playerClass": "Neutral",
@@ -44372,9 +47493,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_828e2.png",
 		"dbfId": 47622,
+		"goldenImage": "LOOTA_828e2.gif",
 		"id": "LOOTA_828e2",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Banner of Inspiration Player Enchant",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44383,9 +47507,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_828e3.png",
 		"dbfId": 49500,
+		"goldenImage": "LOOTA_828e3.gif",
 		"id": "LOOTA_828e3",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Banner of Inspiration",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44399,8 +47526,12 @@ var parseCardsText = {
 		"cardImage": "LOOTA_829.png",
 		"cost": 1,
 		"dbfId": 46921,
+		"goldenImage": "LOOTA_829.gif",
 		"health": 2,
 		"id": "LOOTA_829",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Loyal Sidekick",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44413,6 +47544,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_830.png",
 		"cost": 7,
 		"dbfId": 46922,
+		"goldenImage": "LOOTA_830.gif",
 		"id": "LOOTA_830",
 		"name": "Shifting Hourglass",
 		"playerClass": "Neutral",
@@ -44426,6 +47558,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_831.png",
 		"cost": 0,
 		"dbfId": 46925,
+		"goldenImage": "LOOTA_831.gif",
 		"hideStats": true,
 		"id": "LOOTA_831",
 		"name": "Glyph of Warding",
@@ -44436,8 +47569,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_831e.png",
 		"dbfId": 46926,
+		"goldenImage": "LOOTA_831e.gif",
 		"id": "LOOTA_831e",
 		"name": "Glyph of Warding Enchantment",
 		"playerClass": "Neutral",
@@ -44451,6 +47584,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_832.png",
 		"cost": 0,
 		"dbfId": 47020,
+		"goldenImage": "LOOTA_832.gif",
 		"hideStats": true,
 		"id": "LOOTA_832",
 		"name": "Cloak of Invisibility",
@@ -44464,8 +47598,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_832e.png",
 		"dbfId": 47019,
+		"goldenImage": "LOOTA_832e.gif",
 		"id": "LOOTA_832e",
 		"name": "Invisible",
 		"playerClass": "Neutral",
@@ -44475,9 +47609,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_832e2.png",
 		"dbfId": 47623,
+		"goldenImage": "LOOTA_832e2.gif",
 		"id": "LOOTA_832e2",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Cloak of Invisiblity Player Enchant",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44489,6 +47626,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_833.png",
 		"cost": 0,
 		"dbfId": 47021,
+		"goldenImage": "LOOTA_833.gif",
 		"hideStats": true,
 		"id": "LOOTA_833",
 		"name": "Mysterious Tome",
@@ -44506,6 +47644,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_834.png",
 		"cost": 1,
 		"dbfId": 47022,
+		"goldenImage": "LOOTA_834.gif",
 		"id": "LOOTA_834",
 		"name": "Gloves of Mugging",
 		"playerClass": "Neutral",
@@ -44521,6 +47660,7 @@ var parseCardsText = {
 		"cost": 2,
 		"dbfId": 47036,
 		"durability": 2,
+		"goldenImage": "LOOTA_835.gif",
 		"id": "LOOTA_835",
 		"name": "Greedy Pickaxe",
 		"playerClass": "Neutral",
@@ -44534,6 +47674,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_836.png",
 		"cost": 0,
 		"dbfId": 47037,
+		"goldenImage": "LOOTA_836.gif",
 		"id": "LOOTA_836",
 		"name": "Bag of Coins",
 		"playerClass": "Neutral",
@@ -44547,9 +47688,13 @@ var parseCardsText = {
 		"cardImage": "LOOTA_837.png",
 		"cost": 2,
 		"dbfId": 47038,
+		"goldenImage": "LOOTA_837.gif",
 		"id": "LOOTA_837",
 		"name": "Horn of Cenarius",
 		"playerClass": "Neutral",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Recruit</b> 3 minions.",
 		"type": "Spell"
@@ -44560,6 +47705,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_838.png",
 		"cost": 4,
 		"dbfId": 47039,
+		"goldenImage": "LOOTA_838.gif",
 		"id": "LOOTA_838",
 		"name": "Dr. Boom's Boombox",
 		"playerClass": "Neutral",
@@ -44573,6 +47719,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_839.png",
 		"cost": 0,
 		"dbfId": 47040,
+		"goldenImage": "LOOTA_839.gif",
 		"id": "LOOTA_839",
 		"name": "Scroll of Confusion",
 		"playerClass": "Neutral",
@@ -44587,8 +47734,12 @@ var parseCardsText = {
 		"cardImage": "LOOTA_840.png",
 		"cost": 3,
 		"dbfId": 47041,
+		"goldenImage": "LOOTA_840.gif",
 		"health": 1,
 		"id": "LOOTA_840",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Wax Rager",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -44602,6 +47753,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_841.png",
 		"cost": 1,
 		"dbfId": 47042,
+		"goldenImage": "LOOTA_841.gif",
 		"id": "LOOTA_841",
 		"name": "Portable Forge",
 		"playerClass": "Neutral",
@@ -44617,6 +47769,7 @@ var parseCardsText = {
 		"cost": 1,
 		"dbfId": 47044,
 		"durability": 6,
+		"goldenImage": "LOOTA_842.gif",
 		"id": "LOOTA_842",
 		"name": "Quel'Delar",
 		"playerClass": "Neutral",
@@ -44632,6 +47785,7 @@ var parseCardsText = {
 		"cost": 1,
 		"dbfId": 47045,
 		"durability": 3,
+		"goldenImage": "LOOTA_842a.gif",
 		"id": "LOOTA_842a",
 		"name": "Blade of Quel'Delar",
 		"playerClass": "Neutral",
@@ -44644,6 +47798,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_842b.png",
 		"cost": 1,
 		"dbfId": 47046,
+		"goldenImage": "LOOTA_842b.gif",
 		"id": "LOOTA_842b",
 		"name": "Hilt of Quel'Delar",
 		"playerClass": "Neutral",
@@ -44654,10 +47809,10 @@ var parseCardsText = {
 	{
 		"artist": "Joe Wilson",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_842be.png",
 		"cost": 1,
 		"dbfId": 47047,
 		"durability": 4,
+		"goldenImage": "LOOTA_842be.gif",
 		"id": "LOOTA_842be",
 		"name": "Armed?",
 		"playerClass": "Neutral",
@@ -44667,9 +47822,9 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_842t.png",
 		"cost": 0,
 		"dbfId": 49078,
+		"goldenImage": "LOOTA_842t.gif",
 		"id": "LOOTA_842t",
 		"name": "Forging Quel'Delar",
 		"playerClass": "Neutral",
@@ -44682,6 +47837,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_843.png",
 		"cost": 1,
 		"dbfId": 47251,
+		"goldenImage": "LOOTA_843.gif",
 		"id": "LOOTA_843",
 		"name": "THE CANDLE",
 		"playerClass": "Neutral",
@@ -44695,6 +47851,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_845.png",
 		"cost": 0,
 		"dbfId": 47299,
+		"goldenImage": "LOOTA_845.gif",
 		"hideStats": true,
 		"id": "LOOTA_845",
 		"name": "Totem of the Dead",
@@ -44712,6 +47869,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_846.png",
 		"cost": 0,
 		"dbfId": 47300,
+		"goldenImage": "LOOTA_846.gif",
 		"hideStats": true,
 		"id": "LOOTA_846",
 		"name": "Battle Totem",
@@ -44729,6 +47887,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_847.png",
 		"cost": 1,
 		"dbfId": 47893,
+		"goldenImage": "LOOTA_847.gif",
 		"id": "LOOTA_847",
 		"name": "Mask of Mimicry",
 		"playerClass": "Neutral",
@@ -44739,8 +47898,8 @@ var parseCardsText = {
 	{
 		"artist": "Eric Braddock",
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_04e.png",
 		"dbfId": 48839,
+		"goldenImage": "LOOTA_BOSS_04e.gif",
 		"id": "LOOTA_BOSS_04e",
 		"name": "Waxed",
 		"playerClass": "Neutral",
@@ -44753,6 +47912,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_04h.png",
 		"dbfId": 46264,
+		"goldenImage": "LOOTA_BOSS_04h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_04h",
 		"name": "Waxmancer Sturmi",
@@ -44767,6 +47927,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_04p.png",
 		"cost": 1,
 		"dbfId": 46149,
+		"goldenImage": "LOOTA_BOSS_04p.gif",
 		"id": "LOOTA_BOSS_04p",
 		"name": "Sculpt Wax",
 		"playerClass": "Neutral",
@@ -44779,6 +47940,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_05h.png",
 		"dbfId": 46269,
+		"goldenImage": "LOOTA_BOSS_05h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_05h",
 		"name": "Pathmaker Hamm",
@@ -44793,7 +47955,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_05p.png",
 		"cost": 1,
 		"dbfId": 46151,
+		"goldenImage": "LOOTA_BOSS_05p.gif",
 		"id": "LOOTA_BOSS_05p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Unstable Explosion",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -44805,6 +47971,7 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "LOOTA_BOSS_06h.png",
 		"dbfId": 46279,
+		"goldenImage": "LOOTA_BOSS_06h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_06h",
 		"name": "Blackseed",
@@ -44819,6 +47986,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_06p.png",
 		"cost": 0,
 		"dbfId": 46153,
+		"goldenImage": "LOOTA_BOSS_06p.gif",
 		"id": "LOOTA_BOSS_06p",
 		"name": "Evolvomancy",
 		"playerClass": "Neutral",
@@ -44831,6 +47999,7 @@ var parseCardsText = {
 		"cardClass": "MAGE",
 		"cardImage": "LOOTA_BOSS_09h.png",
 		"dbfId": 46915,
+		"goldenImage": "LOOTA_BOSS_09h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_09h",
 		"name": "Frostfur",
@@ -44844,6 +48013,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_09p.png",
 		"cost": 2,
 		"dbfId": 46159,
+		"goldenImage": "LOOTA_BOSS_09p.gif",
 		"id": "LOOTA_BOSS_09p",
 		"name": "Freeze",
 		"playerClass": "Neutral",
@@ -44856,6 +48026,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOTA_BOSS_10h.png",
 		"dbfId": 46310,
+		"goldenImage": "LOOTA_BOSS_10h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_10h",
 		"name": "Graves the Cleric",
@@ -44870,6 +48041,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_10p.png",
 		"cost": 0,
 		"dbfId": 46161,
+		"goldenImage": "LOOTA_BOSS_10p.gif",
 		"id": "LOOTA_BOSS_10p",
 		"name": "Light's Will",
 		"playerClass": "Neutral",
@@ -44883,6 +48055,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_110.png",
 		"cost": 0,
 		"dbfId": 47468,
+		"goldenImage": "LOOTA_BOSS_110.gif",
 		"health": 15,
 		"id": "LOOTA_BOSS_110",
 		"name": "Tag Team",
@@ -44893,8 +48066,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_11e.png",
 		"dbfId": 46316,
+		"goldenImage": "LOOTA_BOSS_11e.gif",
 		"id": "LOOTA_BOSS_11e",
 		"name": "Whipped Into Shape",
 		"playerClass": "Neutral",
@@ -44907,6 +48080,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_11h.png",
 		"dbfId": 46311,
+		"goldenImage": "LOOTA_BOSS_11h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_11h",
 		"name": "Overseer Mogark",
@@ -44921,6 +48095,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_11p.png",
 		"cost": 1,
 		"dbfId": 46163,
+		"goldenImage": "LOOTA_BOSS_11p.gif",
 		"id": "LOOTA_BOSS_11p",
 		"name": "Cruel Words",
 		"playerClass": "Neutral",
@@ -44930,12 +48105,13 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_12e.png",
 		"dbfId": 46470,
+		"goldenImage": "LOOTA_BOSS_12e.gif",
 		"id": "LOOTA_BOSS_12e",
 		"name": "Charge!",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
+		"text": "Has <b>Charge</b>.",
 		"type": "Enchantment"
 	},
 	{
@@ -44943,6 +48119,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_12h.png",
 		"dbfId": 46317,
+		"goldenImage": "LOOTA_BOSS_12h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_12h",
 		"name": "Candlebeard",
@@ -44957,6 +48134,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_12p.png",
 		"cost": 1,
 		"dbfId": 46165,
+		"goldenImage": "LOOTA_BOSS_12p.gif",
 		"id": "LOOTA_BOSS_12p",
 		"name": "Charge!",
 		"playerClass": "Neutral",
@@ -44969,6 +48147,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_13h.png",
 		"dbfId": 46321,
+		"goldenImage": "LOOTA_BOSS_13h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_13h",
 		"name": "Thaddock the Thief",
@@ -44983,6 +48162,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_13p.png",
 		"cost": 1,
 		"dbfId": 46167,
+		"goldenImage": "LOOTA_BOSS_13p.gif",
 		"id": "LOOTA_BOSS_13p",
 		"name": "Tactical Retreat",
 		"playerClass": "Neutral",
@@ -44992,8 +48172,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_BOSS_15e.png",
 		"dbfId": 47467,
+		"goldenImage": "LOOTA_BOSS_15e.gif",
 		"id": "LOOTA_BOSS_15e",
 		"name": "George and Karl Enchantment",
 		"playerClass": "Paladin",
@@ -45005,6 +48185,7 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "LOOTA_BOSS_15h.png",
 		"dbfId": 46323,
+		"goldenImage": "LOOTA_BOSS_15h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_15h",
 		"name": "George and Karl",
@@ -45019,6 +48200,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_15p.png",
 		"cost": 2,
 		"dbfId": 46170,
+		"goldenImage": "LOOTA_BOSS_15p.gif",
 		"id": "LOOTA_BOSS_15p",
 		"name": "Divinity",
 		"playerClass": "Neutral",
@@ -45031,6 +48213,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOTA_BOSS_16h.png",
 		"dbfId": 46337,
+		"goldenImage": "LOOTA_BOSS_16h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_16h",
 		"name": "Spiritspeaker Azun",
@@ -45045,6 +48228,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_16p.png",
 		"cost": 0,
 		"dbfId": 46172,
+		"goldenImage": "LOOTA_BOSS_16p.gif",
 		"hideStats": true,
 		"id": "LOOTA_BOSS_16p",
 		"name": "Totem of the Dead",
@@ -45058,6 +48242,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_17h.png",
 		"dbfId": 46338,
+		"goldenImage": "LOOTA_BOSS_17h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_17h",
 		"name": "Battlecrier Jin'zo",
@@ -45072,6 +48257,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_17p.png",
 		"cost": 0,
 		"dbfId": 46174,
+		"goldenImage": "LOOTA_BOSS_17p.gif",
 		"hideStats": true,
 		"id": "LOOTA_BOSS_17p",
 		"name": "Battle Totem",
@@ -45085,6 +48271,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_18h.png",
 		"dbfId": 47366,
+		"goldenImage": "LOOTA_BOSS_18h.gif",
 		"health": 10,
 		"id": "LOOTA_BOSS_18h",
 		"name": "Giant Rat",
@@ -45098,6 +48285,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_18p.png",
 		"cost": 2,
 		"dbfId": 45894,
+		"goldenImage": "LOOTA_BOSS_18p.gif",
 		"id": "LOOTA_BOSS_18p",
 		"name": "Rat Race",
 		"playerClass": "Neutral",
@@ -45112,6 +48300,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_18t.png",
 		"cost": 0,
 		"dbfId": 47621,
+		"goldenImage": "LOOTA_BOSS_18t.gif",
 		"health": 1,
 		"id": "LOOTA_BOSS_18t",
 		"name": "Rat",
@@ -45125,6 +48314,7 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "LOOTA_BOSS_19h.png",
 		"dbfId": 46329,
+		"goldenImage": "LOOTA_BOSS_19h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_19h",
 		"name": "Gutmook",
@@ -45139,6 +48329,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_19p.png",
 		"cost": 0,
 		"dbfId": 46205,
+		"goldenImage": "LOOTA_BOSS_19p.gif",
 		"id": "LOOTA_BOSS_19p",
 		"name": "Digest Magic",
 		"playerClass": "Neutral",
@@ -45151,6 +48342,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_20h.png",
 		"dbfId": 46339,
+		"goldenImage": "LOOTA_BOSS_20h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_20h",
 		"name": "Brimstone Warden",
@@ -45164,6 +48356,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_20p.png",
 		"cost": 5,
 		"dbfId": 46208,
+		"goldenImage": "LOOTA_BOSS_20p.gif",
 		"id": "LOOTA_BOSS_20p",
 		"name": "Dispel Ward",
 		"playerClass": "Neutral",
@@ -45178,8 +48371,13 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_20t.png",
 		"cost": 2,
 		"dbfId": 46209,
+		"goldenImage": "LOOTA_BOSS_20t.gif",
 		"health": 5,
 		"id": "LOOTA_BOSS_20t",
+		"mechanics": [
+			"CANT_ATTACK",
+			"DEATHRATTLE"
+		],
 		"name": "Stone Golem",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45191,6 +48389,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_21h.png",
 		"dbfId": 46243,
+		"goldenImage": "LOOTA_BOSS_21h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_21h",
 		"name": "Gnosh the Greatworm",
@@ -45205,7 +48404,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_21p.png",
 		"cost": 2,
 		"dbfId": 46242,
+		"goldenImage": "LOOTA_BOSS_21p.gif",
 		"id": "LOOTA_BOSS_21p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Swallow Whole",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45217,6 +48420,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_22h.png",
 		"dbfId": 46340,
+		"goldenImage": "LOOTA_BOSS_22h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_22h",
 		"name": "Tad",
@@ -45231,7 +48435,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_22p.png",
 		"cost": 0,
 		"dbfId": 46250,
+		"goldenImage": "LOOTA_BOSS_22p.gif",
 		"id": "LOOTA_BOSS_22p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Catch and Release",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45246,6 +48454,7 @@ var parseCardsText = {
 		"cost": 1,
 		"dbfId": 46251,
 		"durability": 1,
+		"goldenImage": "LOOTA_BOSS_22t.gif",
 		"id": "LOOTA_BOSS_22t",
 		"name": "Tad's Pole",
 		"playerClass": "Neutral",
@@ -45258,6 +48467,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_23h.png",
 		"dbfId": 46341,
+		"goldenImage": "LOOTA_BOSS_23h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_23h",
 		"name": "Bristlesnarl",
@@ -45272,7 +48482,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_23p.png",
 		"cost": 3,
 		"dbfId": 46342,
+		"goldenImage": "LOOTA_BOSS_23p.gif",
 		"id": "LOOTA_BOSS_23p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Hunter's Call",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45281,8 +48495,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_24e.png",
 		"dbfId": 46345,
+		"goldenImage": "LOOTA_BOSS_24e.gif",
 		"id": "LOOTA_BOSS_24e",
 		"name": "Glooped",
 		"playerClass": "Neutral",
@@ -45295,6 +48509,7 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "LOOTA_BOSS_24h.png",
 		"dbfId": 46344,
+		"goldenImage": "LOOTA_BOSS_24h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_24h",
 		"name": "The Mothergloop",
@@ -45308,7 +48523,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_24p.png",
 		"cost": 2,
 		"dbfId": 46346,
+		"goldenImage": "LOOTA_BOSS_24p.gif",
 		"id": "LOOTA_BOSS_24p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Gloop",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45320,6 +48539,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOTA_BOSS_25h.png",
 		"dbfId": 46349,
+		"goldenImage": "LOOTA_BOSS_25h.gif",
 		"health": 70,
 		"id": "LOOTA_BOSS_25h",
 		"name": "Vustrasz the Ancient",
@@ -45333,7 +48553,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_25p.png",
 		"cost": 0,
 		"dbfId": 46350,
+		"goldenImage": "LOOTA_BOSS_25p.gif",
 		"id": "LOOTA_BOSS_25p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Vindictive Breath",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45345,6 +48569,7 @@ var parseCardsText = {
 		"cardClass": "WARLOCK",
 		"cardImage": "LOOTA_BOSS_26h.png",
 		"dbfId": 47410,
+		"goldenImage": "LOOTA_BOSS_26h.gif",
 		"health": 70,
 		"id": "LOOTA_BOSS_26h",
 		"name": "Xol the Unscathed",
@@ -45359,6 +48584,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p2.png",
 		"cost": 3,
 		"dbfId": 47409,
+		"goldenImage": "LOOTA_BOSS_26p2.gif",
 		"id": "LOOTA_BOSS_26p2",
 		"name": "Beam of Frost",
 		"playerClass": "Neutral",
@@ -45372,6 +48598,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p3.png",
 		"cost": 3,
 		"dbfId": 47411,
+		"goldenImage": "LOOTA_BOSS_26p3.gif",
 		"id": "LOOTA_BOSS_26p3",
 		"name": "Beam of Death",
 		"playerClass": "Neutral",
@@ -45385,6 +48612,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p4.png",
 		"cost": 3,
 		"dbfId": 47412,
+		"goldenImage": "LOOTA_BOSS_26p4.gif",
 		"id": "LOOTA_BOSS_26p4",
 		"name": "Beam of Confusion",
 		"playerClass": "Neutral",
@@ -45398,6 +48626,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p5.png",
 		"cost": 3,
 		"dbfId": 47413,
+		"goldenImage": "LOOTA_BOSS_26p5.gif",
 		"id": "LOOTA_BOSS_26p5",
 		"name": "Beam of Fear",
 		"playerClass": "Neutral",
@@ -45411,6 +48640,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p6.png",
 		"cost": 3,
 		"dbfId": 47414,
+		"goldenImage": "LOOTA_BOSS_26p6.gif",
 		"id": "LOOTA_BOSS_26p6",
 		"name": "Beam of Fire",
 		"playerClass": "Neutral",
@@ -45424,6 +48654,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p7.png",
 		"cost": 3,
 		"dbfId": 47415,
+		"goldenImage": "LOOTA_BOSS_26p7.gif",
 		"id": "LOOTA_BOSS_26p7",
 		"name": "Beam of Decay",
 		"playerClass": "Neutral",
@@ -45437,6 +48668,15 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_26p8.png",
 		"cost": 0,
 		"dbfId": 47428,
+		"entourage": [
+			"LOOTA_BOSS_26p2",
+			"LOOTA_BOSS_26p3",
+			"LOOTA_BOSS_26p4",
+			"LOOTA_BOSS_26p5",
+			"LOOTA_BOSS_26p6",
+			"LOOTA_BOSS_26p7"
+		],
+		"goldenImage": "LOOTA_BOSS_26p8.gif",
 		"id": "LOOTA_BOSS_26p8",
 		"name": "Beam Me Up!",
 		"playerClass": "Neutral",
@@ -45449,6 +48689,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_27h.png",
 		"dbfId": 46266,
+		"goldenImage": "LOOTA_BOSS_27h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_27h",
 		"name": "Waxmancer Sturmi",
@@ -45463,6 +48704,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_27p.png",
 		"cost": 3,
 		"dbfId": 46267,
+		"goldenImage": "LOOTA_BOSS_27p.gif",
 		"id": "LOOTA_BOSS_27p",
 		"name": "Harden Sculpture",
 		"playerClass": "Neutral",
@@ -45475,6 +48717,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_28h.png",
 		"dbfId": 46270,
+		"goldenImage": "LOOTA_BOSS_28h.gif",
 		"health": 60,
 		"id": "LOOTA_BOSS_28h",
 		"name": "Pathmaker Hamm",
@@ -45489,7 +48732,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_28p.png",
 		"cost": 2,
 		"dbfId": 46271,
+		"goldenImage": "LOOTA_BOSS_28p.gif",
 		"id": "LOOTA_BOSS_28p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Unstable Demolition",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45501,6 +48748,7 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "LOOTA_BOSS_29h.png",
 		"dbfId": 46281,
+		"goldenImage": "LOOTA_BOSS_29h.gif",
 		"health": 60,
 		"id": "LOOTA_BOSS_29h",
 		"name": "Blackseed",
@@ -45515,6 +48763,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_29p.png",
 		"cost": 1,
 		"dbfId": 46282,
+		"goldenImage": "LOOTA_BOSS_29p.gif",
 		"id": "LOOTA_BOSS_29p",
 		"name": "Greater Evolution",
 		"playerClass": "Neutral",
@@ -45524,8 +48773,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_30e.png",
 		"dbfId": 46313,
+		"goldenImage": "LOOTA_BOSS_30e.gif",
 		"id": "LOOTA_BOSS_30e",
 		"name": "Whipped into Frenzy",
 		"playerClass": "Neutral",
@@ -45538,6 +48787,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_30h.png",
 		"dbfId": 46312,
+		"goldenImage": "LOOTA_BOSS_30h.gif",
 		"health": 60,
 		"id": "LOOTA_BOSS_30h",
 		"name": "Overseer Mogark",
@@ -45552,6 +48802,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_30p.png",
 		"cost": 1,
 		"dbfId": 46314,
+		"goldenImage": "LOOTA_BOSS_30p.gif",
 		"id": "LOOTA_BOSS_30p",
 		"name": "Searing Lash",
 		"playerClass": "Neutral",
@@ -45564,6 +48815,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_31h.png",
 		"dbfId": 46318,
+		"goldenImage": "LOOTA_BOSS_31h.gif",
 		"health": 60,
 		"id": "LOOTA_BOSS_31h",
 		"name": "Candlebeard",
@@ -45578,6 +48830,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_31p.png",
 		"cost": 0,
 		"dbfId": 46319,
+		"goldenImage": "LOOTA_BOSS_31p.gif",
 		"id": "LOOTA_BOSS_31p",
 		"name": "Charrrrrge!",
 		"playerClass": "Neutral",
@@ -45590,6 +48843,7 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "LOOTA_BOSS_32h.png",
 		"dbfId": 46324,
+		"goldenImage": "LOOTA_BOSS_32h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_32h",
 		"name": "Karl and George",
@@ -45603,6 +48857,7 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "LOOTA_BOSS_33h.png",
 		"dbfId": 46330,
+		"goldenImage": "LOOTA_BOSS_33h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_33h",
 		"name": "Gutmook",
@@ -45617,6 +48872,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_33p.png",
 		"cost": 0,
 		"dbfId": 46331,
+		"goldenImage": "LOOTA_BOSS_33p.gif",
 		"id": "LOOTA_BOSS_33p",
 		"name": "Metabolized Magic",
 		"playerClass": "Neutral",
@@ -45629,6 +48885,7 @@ var parseCardsText = {
 		"cardClass": "WARLOCK",
 		"cardImage": "LOOTA_BOSS_34h.png",
 		"dbfId": 46352,
+		"goldenImage": "LOOTA_BOSS_34h.gif",
 		"health": 70,
 		"id": "LOOTA_BOSS_34h",
 		"name": "Azari, the Devourer",
@@ -45643,7 +48900,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_34p.png",
 		"cost": 0,
 		"dbfId": 46353,
+		"goldenImage": "LOOTA_BOSS_34p.gif",
 		"id": "LOOTA_BOSS_34p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Devour",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45655,6 +48916,7 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "LOOTA_BOSS_35h.png",
 		"dbfId": 46357,
+		"goldenImage": "LOOTA_BOSS_35h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_35h",
 		"name": "Elder Brandlemar",
@@ -45669,6 +48931,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_35p.png",
 		"cost": 2,
 		"dbfId": 46358,
+		"goldenImage": "LOOTA_BOSS_35p.gif",
 		"id": "LOOTA_BOSS_35p",
 		"name": "Dampen Magic",
 		"playerClass": "Neutral",
@@ -45681,6 +48944,7 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "LOOTA_BOSS_36h.png",
 		"dbfId": 46361,
+		"goldenImage": "LOOTA_BOSS_36h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_36h",
 		"name": "Ixlid",
@@ -45694,7 +48958,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_36p.png",
 		"cost": 2,
 		"dbfId": 46363,
+		"goldenImage": "LOOTA_BOSS_36p.gif",
 		"id": "LOOTA_BOSS_36p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Sprouting Spore",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45706,6 +48974,7 @@ var parseCardsText = {
 		"cardClass": "MAGE",
 		"cardImage": "LOOTA_BOSS_37h.png",
 		"dbfId": 46371,
+		"goldenImage": "LOOTA_BOSS_37h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_37h",
 		"name": "Lyris the Wild Mage",
@@ -45721,6 +48990,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_37p.png",
 		"cost": 1,
 		"dbfId": 46368,
+		"goldenImage": "LOOTA_BOSS_37p.gif",
 		"id": "LOOTA_BOSS_37p",
 		"name": "Arcane Infusion",
 		"playerClass": "Neutral",
@@ -45733,6 +49003,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_38h.png",
 		"dbfId": 47001,
+		"goldenImage": "LOOTA_BOSS_38h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_38h",
 		"name": "Voodoomaster Vex",
@@ -45747,6 +49018,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_38p.png",
 		"cost": 0,
 		"dbfId": 47000,
+		"goldenImage": "LOOTA_BOSS_38p.gif",
 		"hideStats": true,
 		"id": "LOOTA_BOSS_38p",
 		"name": "Totem of Chaos",
@@ -45760,6 +49032,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_39h.png",
 		"dbfId": 47258,
+		"goldenImage": "LOOTA_BOSS_39h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_39h",
 		"name": "Kraxx",
@@ -45773,6 +49046,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_39p.png",
 		"cost": 2,
 		"dbfId": 47257,
+		"goldenImage": "LOOTA_BOSS_39p.gif",
 		"id": "LOOTA_BOSS_39p",
 		"name": "Giant Stomp",
 		"playerClass": "Neutral",
@@ -45785,6 +49059,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOTA_BOSS_40h.png",
 		"dbfId": 47261,
+		"goldenImage": "LOOTA_BOSS_40h.gif",
 		"health": 20,
 		"id": "LOOTA_BOSS_40h",
 		"name": "Seriona",
@@ -45798,6 +49073,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_40p.png",
 		"cost": 2,
 		"dbfId": 47260,
+		"goldenImage": "LOOTA_BOSS_40p.gif",
 		"id": "LOOTA_BOSS_40p",
 		"name": "Fading Light",
 		"playerClass": "Neutral",
@@ -45807,8 +49083,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_40pe.png",
 		"dbfId": 47259,
+		"goldenImage": "LOOTA_BOSS_40pe.gif",
 		"id": "LOOTA_BOSS_40pe",
 		"name": "Fading",
 		"playerClass": "Neutral",
@@ -45821,6 +49097,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR",
 		"cardImage": "LOOTA_BOSS_41h.png",
 		"dbfId": 47303,
+		"goldenImage": "LOOTA_BOSS_41h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_41h",
 		"name": "Whompwhisker",
@@ -45834,9 +49111,16 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_41p.png",
 		"cost": 2,
 		"dbfId": 47302,
+		"goldenImage": "LOOTA_BOSS_41p.gif",
 		"id": "LOOTA_BOSS_41p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Join the Fray",
 		"playerClass": "Neutral",
+		"referencedTags": [
+			"RECRUIT"
+		],
 		"set": "Lootapalooza",
 		"text": "<b>Hero Power</b>\nBoth players <b>Recruit</b> a minion.",
 		"type": "Hero_power"
@@ -45846,6 +49130,7 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "LOOTA_BOSS_42h.png",
 		"dbfId": 47305,
+		"goldenImage": "LOOTA_BOSS_42h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_42h",
 		"name": "Elder Jari",
@@ -45859,6 +49144,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_42p.png",
 		"cost": 1,
 		"dbfId": 47304,
+		"goldenImage": "LOOTA_BOSS_42p.gif",
 		"id": "LOOTA_BOSS_42p",
 		"name": "Mystic Barrier",
 		"playerClass": "Neutral",
@@ -45871,6 +49157,7 @@ var parseCardsText = {
 		"cardClass": "DRUID",
 		"cardImage": "LOOTA_BOSS_43h.png",
 		"dbfId": 47307,
+		"goldenImage": "LOOTA_BOSS_43h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_43h",
 		"name": "Jeeru",
@@ -45884,7 +49171,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_43p.png",
 		"cost": 1,
 		"dbfId": 47306,
+		"goldenImage": "LOOTA_BOSS_43p.gif",
 		"id": "LOOTA_BOSS_43p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Three Wee Wishes",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45896,6 +49187,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_44h.png",
 		"dbfId": 47309,
+		"goldenImage": "LOOTA_BOSS_44h.gif",
 		"health": 10,
 		"id": "LOOTA_BOSS_44h",
 		"name": "Wee Whelp",
@@ -45909,6 +49201,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_44p.png",
 		"cost": 2,
 		"dbfId": 47308,
+		"goldenImage": "LOOTA_BOSS_44p.gif",
 		"id": "LOOTA_BOSS_44p",
 		"name": "Baby Breath",
 		"playerClass": "Neutral",
@@ -45921,6 +49214,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_45h.png",
 		"dbfId": 47316,
+		"goldenImage": "LOOTA_BOSS_45h.gif",
 		"health": 10,
 		"id": "LOOTA_BOSS_45h",
 		"name": "Bink the Burglar",
@@ -45934,7 +49228,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_45p.png",
 		"cost": 0,
 		"dbfId": 47315,
+		"goldenImage": "LOOTA_BOSS_45p.gif",
 		"id": "LOOTA_BOSS_45p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Coin",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -45946,6 +49244,7 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "LOOTA_BOSS_46h.png",
 		"dbfId": 47320,
+		"goldenImage": "LOOTA_BOSS_46h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_46h",
 		"name": "Fungalmancer Flurgl",
@@ -45959,6 +49258,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_46p.png",
 		"cost": 2,
 		"dbfId": 47319,
+		"goldenImage": "LOOTA_BOSS_46p.gif",
 		"id": "LOOTA_BOSS_46p",
 		"name": "Fungal Infection",
 		"playerClass": "Neutral",
@@ -45968,8 +49268,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "LOOTA_BOSS_46pe.png",
 		"dbfId": 47317,
+		"goldenImage": "LOOTA_BOSS_46pe.gif",
 		"id": "LOOTA_BOSS_46pe",
 		"name": "Infected",
 		"playerClass": "Neutral",
@@ -45981,6 +49281,7 @@ var parseCardsText = {
 		"cardClass": "SHAMAN",
 		"cardImage": "LOOTA_BOSS_47h.png",
 		"dbfId": 47322,
+		"goldenImage": "LOOTA_BOSS_47h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_47h",
 		"name": "Lava-Filled Chamber",
@@ -45994,6 +49295,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_47p.png",
 		"cost": 0,
 		"dbfId": 47321,
+		"goldenImage": "LOOTA_BOSS_47p.gif",
 		"id": "LOOTA_BOSS_47p",
 		"name": "The Floor is Lava",
 		"playerClass": "Neutral",
@@ -46006,6 +49308,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER",
 		"cardImage": "LOOTA_BOSS_48h.png",
 		"dbfId": 47328,
+		"goldenImage": "LOOTA_BOSS_48h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_48h",
 		"name": "Trapped Room",
@@ -46020,6 +49323,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_48p.png",
 		"cost": 0,
 		"dbfId": 47327,
+		"goldenImage": "LOOTA_BOSS_48p.gif",
 		"id": "LOOTA_BOSS_48p",
 		"name": "Alarm",
 		"playerClass": "Neutral",
@@ -46034,6 +49338,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_48t.png",
 		"cost": 3,
 		"dbfId": 47326,
+		"goldenImage": "LOOTA_BOSS_48t.gif",
 		"health": 3,
 		"id": "LOOTA_BOSS_48t",
 		"name": "Sawblade",
@@ -46046,6 +49351,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOTA_BOSS_49h.png",
 		"dbfId": 47333,
+		"goldenImage": "LOOTA_BOSS_49h.gif",
 		"health": 70,
 		"id": "LOOTA_BOSS_49h",
 		"name": "The Darkness",
@@ -46059,7 +49365,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_49p.png",
 		"cost": 0,
 		"dbfId": 47332,
+		"goldenImage": "LOOTA_BOSS_49p.gif",
 		"id": "LOOTA_BOSS_49p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Encroaching Darkness",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -46073,6 +49383,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_49t.png",
 		"cost": 5,
 		"dbfId": 47330,
+		"goldenImage": "LOOTA_BOSS_49t.gif",
 		"health": 5,
 		"id": "LOOTA_BOSS_49t",
 		"name": "Darkspawn",
@@ -46086,6 +49397,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_49t2.png",
 		"cost": 0,
 		"dbfId": 47331,
+		"goldenImage": "LOOTA_BOSS_49t2.gif",
 		"id": "LOOTA_BOSS_49t2",
 		"name": "Luminous Candle",
 		"playerClass": "Neutral",
@@ -46098,6 +49410,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST",
 		"cardImage": "LOOTA_BOSS_50h.png",
 		"dbfId": 47361,
+		"goldenImage": "LOOTA_BOSS_50h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_50h",
 		"name": "Mushhuckster Max",
@@ -46111,7 +49424,14 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_50p.png",
 		"cost": 2,
 		"dbfId": 47360,
+		"entourage": [
+			"CFM_621t11"
+		],
+		"goldenImage": "LOOTA_BOSS_50p.gif",
 		"id": "LOOTA_BOSS_50p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Mushroom, Mushroom",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -46124,6 +49444,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_50t.png",
 		"cost": 1,
 		"dbfId": 47362,
+		"goldenImage": "LOOTA_BOSS_50t.gif",
 		"id": "LOOTA_BOSS_50t",
 		"name": "Mushroom Potion",
 		"playerClass": "Neutral",
@@ -46136,6 +49457,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_51h.png",
 		"dbfId": 47365,
+		"goldenImage": "LOOTA_BOSS_51h.gif",
 		"health": 30,
 		"id": "LOOTA_BOSS_51h",
 		"name": "Russell the Bard",
@@ -46150,6 +49472,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_51p.png",
 		"cost": 2,
 		"dbfId": 47363,
+		"goldenImage": "LOOTA_BOSS_51p.gif",
 		"id": "LOOTA_BOSS_51p",
 		"name": "Alluring Tune",
 		"playerClass": "Neutral",
@@ -46162,9 +49485,13 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_52h.png",
 		"dbfId": 47465,
+		"goldenImage": "LOOTA_BOSS_52h.gif",
 		"health": 60,
 		"hideStats": true,
 		"id": "LOOTA_BOSS_52h",
+		"mechanics": [
+			"APPEAR_FUNCTIONALLY_DEAD"
+		],
 		"name": "Treasure Vault",
 		"playerClass": "Rogue",
 		"set": "Lootapalooza",
@@ -46176,7 +49503,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_52p.png",
 		"cost": 5,
 		"dbfId": 47464,
+		"goldenImage": "LOOTA_BOSS_52p.gif",
 		"id": "LOOTA_BOSS_52p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Doors Are Closing",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -46190,8 +49521,12 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_52t.png",
 		"cost": 1,
 		"dbfId": 47466,
+		"goldenImage": "LOOTA_BOSS_52t.gif",
 		"health": 10,
 		"id": "LOOTA_BOSS_52t",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Treasure Coffer",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -46203,6 +49538,7 @@ var parseCardsText = {
 		"cardClass": "MAGE",
 		"cardImage": "LOOTA_BOSS_53h.png",
 		"dbfId": 47475,
+		"goldenImage": "LOOTA_BOSS_53h.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_53h",
 		"name": "Chronomancer Inara",
@@ -46216,6 +49552,7 @@ var parseCardsText = {
 		"cardClass": "MAGE",
 		"cardImage": "LOOTA_BOSS_53h2.png",
 		"dbfId": 47484,
+		"goldenImage": "LOOTA_BOSS_53h2.gif",
 		"health": 50,
 		"id": "LOOTA_BOSS_53h2",
 		"name": "Inara the Mage",
@@ -46229,7 +49566,11 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_53p.png",
 		"cost": 10,
 		"dbfId": 47474,
+		"goldenImage": "LOOTA_BOSS_53p.gif",
 		"id": "LOOTA_BOSS_53p",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Stolen Time",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
@@ -46241,6 +49582,7 @@ var parseCardsText = {
 		"cardClass": "PALADIN",
 		"cardImage": "LOOTA_BOSS_54h.png",
 		"dbfId": 47495,
+		"goldenImage": "LOOTA_BOSS_54h.gif",
 		"health": 40,
 		"id": "LOOTA_BOSS_54h",
 		"name": "A. F. Kay",
@@ -46254,6 +49596,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_54p.png",
 		"cost": 2,
 		"dbfId": 47494,
+		"goldenImage": "LOOTA_BOSS_54p.gif",
 		"id": "LOOTA_BOSS_54p",
 		"name": "Idle",
 		"playerClass": "Neutral",
@@ -46266,6 +49609,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE",
 		"cardImage": "LOOTA_BOSS_99h.png",
 		"dbfId": 47210,
+		"goldenImage": "LOOTA_BOSS_99h.gif",
 		"health": 70,
 		"id": "LOOTA_BOSS_99h",
 		"name": "King Togwaggle",
@@ -46280,6 +49624,25 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_99p.png",
 		"cost": 3,
 		"dbfId": 47209,
+		"entourage": [
+			"LOOTA_819",
+			"LOOTA_821",
+			"LOOTA_835",
+			"LOOTA_842b",
+			"LOOTA_806",
+			"LOOTA_812",
+			"LOOTA_823",
+			"LOOTA_847",
+			"LOOTA_836",
+			"LOOTA_839",
+			"LOOTA_816",
+			"LOOTA_827",
+			"LOOTA_843",
+			"LOOTA_826",
+			"LOOT_998k",
+			"LOOTA_838"
+		],
+		"goldenImage": "LOOTA_BOSS_99p.gif",
 		"id": "LOOTA_BOSS_99p",
 		"name": "Magic Candle",
 		"playerClass": "Neutral",
@@ -46293,6 +49656,7 @@ var parseCardsText = {
 		"cardImage": "LOOTA_BOSS_99t.png",
 		"cost": 0,
 		"dbfId": 48824,
+		"goldenImage": "LOOTA_BOSS_99t.gif",
 		"hideStats": true,
 		"id": "LOOTA_BOSS_99t",
 		"name": "Rakanishu",
@@ -46303,9 +49667,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_01.png",
 		"cost": 0,
 		"dbfId": 47444,
+		"entourage": [
+			"EX1_169",
+			"CS2_013",
+			"AT_038",
+			"LOOT_351",
+			"GVG_032",
+			"CFM_616",
+			"OG_202",
+			"LOOT_392",
+			"EX1_164",
+			"AT_043"
+		],
+		"goldenImage": "LOOTA_Druid_01.gif",
 		"id": "LOOTA_Druid_01",
 		"name": "Mana Growth",
 		"playerClass": "Druid",
@@ -46314,9 +49690,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_02.png",
 		"cost": 0,
 		"dbfId": 47445,
+		"entourage": [
+			"KAR_300",
+			"OG_048",
+			"AT_042",
+			"AT_039",
+			"GVG_080",
+			"UNG_100",
+			"CFM_816",
+			"KAR_065",
+			"AT_041",
+			"ICC_854",
+			"EX1_028",
+			"UNG_075",
+			"UNG_086",
+			"LOE_050"
+		],
+		"goldenImage": "LOOTA_Druid_02.gif",
 		"id": "LOOTA_Druid_02",
 		"name": "Jungle King",
 		"playerClass": "Druid",
@@ -46325,9 +49717,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_03.png",
 		"cost": 0,
 		"dbfId": 47446,
+		"entourage": [
+			"CS2_005",
+			"UNG_108",
+			"LOOT_051",
+			"LOOT_047",
+			"OG_047",
+			"ICC_079",
+			"LOOT_054",
+			"LOOT_048",
+			"LOOT_309",
+			"ICC_085",
+			"LOOT_413"
+		],
+		"goldenImage": "LOOTA_Druid_03.gif",
 		"id": "LOOTA_Druid_03",
 		"name": "Natural Defense",
 		"playerClass": "Druid",
@@ -46336,9 +49741,16 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_04.png",
 		"cost": 0,
 		"dbfId": 47447,
+		"entourage": [
+			"CFM_902",
+			"CFM_343",
+			"CFM_715",
+			"CFM_602",
+			"CFM_713"
+		],
+		"goldenImage": "LOOTA_Druid_04.gif",
 		"id": "LOOTA_Druid_04",
 		"name": "Jade Fangs",
 		"playerClass": "Druid",
@@ -46347,9 +49759,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_05.png",
 		"cost": 0,
 		"dbfId": 47448,
+		"entourage": [
+			"AT_037",
+			"CFM_614",
+			"EX1_160",
+			"CS2_011",
+			"ICC_808",
+			"EX1_571",
+			"UNG_111",
+			"ICC_047",
+			"LOOT_329",
+			"FP1_002",
+			"EX1_158",
+			"UNG_075",
+			"ICC_051",
+			"UNG_809"
+		],
+		"goldenImage": "LOOTA_Druid_05.gif",
 		"id": "LOOTA_Druid_05",
 		"name": "Stampede",
 		"playerClass": "Druid",
@@ -46358,9 +49786,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_06.png",
 		"cost": 0,
 		"dbfId": 47449,
+		"entourage": [
+			"UNG_116",
+			"UNG_078",
+			"UNG_109",
+			"EX1_014",
+			"LOOT_233",
+			"UNG_101",
+			"KAR_065",
+			"EX1_028",
+			"BRM_010",
+			"CFM_308",
+			"UNG_852"
+		],
+		"goldenImage": "LOOTA_Druid_06.gif",
 		"id": "LOOTA_Druid_06",
 		"name": "Jungle Quest",
 		"playerClass": "Druid",
@@ -46369,9 +49810,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_07.png",
 		"cost": 0,
 		"dbfId": 47450,
+		"entourage": [
+			"OG_293",
+			"OG_281",
+			"OG_162",
+			"OG_286",
+			"OG_283",
+			"OG_321",
+			"OG_131",
+			"OG_280",
+			"OG_255",
+			"OG_188"
+		],
+		"goldenImage": "LOOTA_Druid_07.gif",
 		"id": "LOOTA_Druid_07",
 		"name": "Cult of C'thun",
 		"playerClass": "Druid",
@@ -46380,9 +49833,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_08.png",
 		"cost": 0,
 		"dbfId": 47451,
+		"entourage": [
+			"AT_037",
+			"LOE_115",
+			"GVG_030",
+			"EX1_154",
+			"LOOT_054",
+			"EX1_166",
+			"ICC_047",
+			"EX1_164",
+			"GVG_041",
+			"EX1_178",
+			"OG_195",
+			"EX1_573",
+			"OG_044"
+		],
+		"goldenImage": "LOOTA_Druid_08.gif",
 		"id": "LOOTA_Druid_08",
 		"name": "Wise Decisions",
 		"playerClass": "Druid",
@@ -46391,9 +49859,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_09.png",
 		"cost": 0,
 		"dbfId": 47452,
+		"entourage": [
+			"CS2_008",
+			"EX1_154",
+			"NEW1_007",
+			"EX1_173",
+			"EX1_012",
+			"EX1_284",
+			"FP1_019",
+			"EX1_563",
+			"CS2_012"
+		],
+		"goldenImage": "LOOTA_Druid_09.gif",
 		"id": "LOOTA_Druid_09",
 		"name": "Balance",
 		"playerClass": "Druid",
@@ -46402,9 +49881,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_10.png",
 		"cost": 0,
 		"dbfId": 47453,
+		"entourage": [
+			"EX1_161",
+			"AT_044",
+			"CS2_007",
+			"KAR_075",
+			"GVG_031",
+			"GVG_033",
+			"CFM_120",
+			"CS2_117",
+			"AT_111",
+			"GVG_069"
+		],
+		"goldenImage": "LOOTA_Druid_10.gif",
 		"id": "LOOTA_Druid_10",
 		"name": "Restoration",
 		"playerClass": "Druid",
@@ -46413,9 +49904,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_11.png",
 		"cost": 0,
 		"dbfId": 47454,
+		"entourage": [
+			"ICC_051",
+			"ICC_808",
+			"ICC_807",
+			"EX1_165",
+			"ICC_054",
+			"ICC_832",
+			"LOOT_314",
+			"CS2_232",
+			"ICC_835",
+			"UNG_072",
+			"LOOT_383",
+			"KAR_061",
+			"UNG_848"
+		],
+		"goldenImage": "LOOTA_Druid_11.gif",
 		"id": "LOOTA_Druid_11",
 		"name": "Taunt",
 		"playerClass": "Druid",
@@ -46424,9 +49930,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "LOOTA_Druid_12.png",
 		"cost": 0,
 		"dbfId": 47455,
+		"entourage": [
+			"UNG_086",
+			"AT_045",
+			"CFM_308",
+			"UNG_852",
+			"EX1_298",
+			"ICC_314",
+			"UNG_848",
+			"OG_340",
+			"EX1_572",
+			"NEW1_030",
+			"OG_042",
+			"GVG_114",
+			"CFM_811"
+		],
+		"goldenImage": "LOOTA_Druid_12.gif",
 		"id": "LOOTA_Druid_12",
 		"name": "Stomp",
 		"playerClass": "Druid",
@@ -46435,9 +49956,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_01.png",
 		"cost": 0,
 		"dbfId": 47087,
+		"entourage": [
+			"CFM_315",
+			"DS1_175",
+			"EX1_162",
+			"FP1_002",
+			"OG_179",
+			"LOE_046",
+			"KAR_005",
+			"UNG_075",
+			"UNG_808",
+			"UNG_915",
+			"ICC_419",
+			"LOOT_078",
+			"CFM_316"
+		],
+		"goldenImage": "LOOTA_Hunter_01.gif",
 		"id": "LOOTA_Hunter_01",
 		"name": "Wee Beasts",
 		"playerClass": "Hunter",
@@ -46446,9 +49982,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_02.png",
 		"cost": 0,
 		"dbfId": 47088,
+		"entourage": [
+			"EX1_028",
+			"DS1_178",
+			"EX1_534",
+			"NEW1_041",
+			"OG_308",
+			"UNG_087",
+			"UNG_099",
+			"UNG_801",
+			"ICC_828",
+			"ICC_905",
+			"LOOT_511"
+		],
+		"goldenImage": "LOOTA_Hunter_02.gif",
 		"id": "LOOTA_Hunter_02",
 		"name": "Big Beasts",
 		"playerClass": "Hunter",
@@ -46457,9 +50006,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_03.png",
 		"cost": 0,
 		"dbfId": 47089,
+		"entourage": [
+			"CS2_084",
+			"DS1_183",
+			"EX1_537",
+			"EX1_609",
+			"DS1_185",
+			"EX1_617",
+			"GVG_073",
+			"BRM_013",
+			"AT_056",
+			"UNG_910",
+			"ICC_049",
+			"LOOT_077"
+		],
+		"goldenImage": "LOOTA_Hunter_03.gif",
 		"id": "LOOTA_Hunter_03",
 		"name": "Shots",
 		"playerClass": "Hunter",
@@ -46468,9 +50031,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_04.png",
 		"cost": 0,
 		"dbfId": 47090,
+		"entourage": [
+			"NEW1_031",
+			"EX1_595",
+			"EX1_538",
+			"EX1_531",
+			"FP1_002",
+			"AT_062",
+			"OG_045",
+			"OG_211",
+			"OG_249",
+			"CFM_315",
+			"UNG_076",
+			"LOOT_149",
+			"LOOT_511"
+		],
+		"goldenImage": "LOOTA_Hunter_04.gif",
 		"id": "LOOTA_Hunter_04",
 		"name": "Summoner",
 		"playerClass": "Hunter",
@@ -46479,9 +50057,28 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_05.png",
 		"cost": 0,
 		"dbfId": 47091,
+		"entourage": [
+			"EX1_554",
+			"EX1_611",
+			"EX1_610",
+			"AT_060",
+			"ICC_200",
+			"EX1_080",
+			"EX1_609",
+			"EX1_533",
+			"EX1_536",
+			"KAR_004",
+			"ICC_200",
+			"ICC_204",
+			"LOOT_079",
+			"LOOT_080",
+			"LOOT_222",
+			"FP1_004",
+			"KAR_006"
+		],
+		"goldenImage": "LOOTA_Hunter_05.gif",
 		"id": "LOOTA_Hunter_05",
 		"name": "Secrets",
 		"playerClass": "Hunter",
@@ -46490,9 +50087,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_06.png",
 		"cost": 0,
 		"dbfId": 47092,
+		"entourage": [
+			"EX1_539",
+			"DS1_175",
+			"DS1_178",
+			"DS1_070",
+			"AT_010",
+			"CFM_316",
+			"UNG_915",
+			"UNG_916",
+			"UNG_917"
+		],
+		"goldenImage": "LOOTA_Hunter_06.gif",
 		"id": "LOOTA_Hunter_06",
 		"name": "Beast Training",
 		"playerClass": "Hunter",
@@ -46501,9 +50109,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_07.png",
 		"cost": 0,
 		"dbfId": 47093,
+		"entourage": [
+			"DS1_188",
+			"NEW1_018",
+			"EX1_536",
+			"GVG_043",
+			"GVG_119",
+			"CFM_325",
+			"CFM_337",
+			"LOOT_118",
+			"LOOT_222",
+			"LOOT_389",
+			"ICC_096"
+		],
+		"goldenImage": "LOOTA_Hunter_07.gif",
 		"id": "LOOTA_Hunter_07",
 		"name": "Weapons",
 		"playerClass": "Hunter",
@@ -46512,9 +50133,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_08.png",
 		"cost": 0,
 		"dbfId": 47094,
+		"entourage": [
+			"EX1_096",
+			"EX1_544",
+			"DS1_184",
+			"AT_061",
+			"AT_063t",
+			"AT_058",
+			"LOE_029",
+			"LOE_105",
+			"ICC_415",
+			"ICC_828"
+		],
+		"goldenImage": "LOOTA_Hunter_08.gif",
 		"id": "LOOTA_Hunter_08",
 		"name": "Tracker",
 		"playerClass": "Hunter",
@@ -46523,9 +50156,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_09.png",
 		"cost": 0,
 		"dbfId": 47095,
+		"entourage": [
+			"EX1_534",
+			"EX1_016",
+			"GVG_026",
+			"OG_133",
+			"OG_292",
+			"OG_309",
+			"KAR_005",
+			"UNG_800",
+			"ICC_021",
+			"ICC_052",
+			"ICC_243",
+			"ICC_825",
+			"ICC_854",
+			"LOOT_520",
+			"LOOT_161",
+			"LOOT_511"
+		],
+		"goldenImage": "LOOTA_Hunter_09.gif",
 		"id": "LOOTA_Hunter_09",
 		"name": "Deathrattle",
 		"playerClass": "Hunter",
@@ -46534,9 +50185,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_10.png",
 		"cost": 0,
 		"dbfId": 47096,
+		"entourage": [
+			"EX1_543",
+			"UNG_919",
+			"EX1_116",
+			"FP1_010",
+			"GVG_110",
+			"FP1_013",
+			"ICC_314",
+			"OG_042",
+			"KAR_114",
+			"GVG_114"
+		],
+		"goldenImage": "LOOTA_Hunter_10.gif",
 		"id": "LOOTA_Hunter_10",
 		"name": "Legendary",
 		"playerClass": "Hunter",
@@ -46545,9 +50208,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_11.png",
 		"cost": 0,
 		"dbfId": 47097,
+		"entourage": [
+			"NEW1_021",
+			"EX1_611",
+			"EX1_610",
+			"EX1_093",
+			"EX1_538",
+			"FP1_009",
+			"FP1_012",
+			"GVG_069",
+			"AT_060",
+			"LOOT_522"
+		],
+		"goldenImage": "LOOTA_Hunter_11.gif",
 		"id": "LOOTA_Hunter_11",
 		"name": "Defense",
 		"playerClass": "Hunter",
@@ -46556,9 +50231,19 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "LOOTA_Hunter_12.png",
 		"cost": 0,
 		"dbfId": 47578,
+		"entourage": [
+			"CFM_335",
+			"CFM_334",
+			"CFM_026",
+			"CFM_338",
+			"CFM_336",
+			"CFM_668",
+			"CFM_685",
+			"BRM_028"
+		],
+		"goldenImage": "LOOTA_Hunter_12.gif",
 		"id": "LOOTA_Hunter_12",
 		"name": "Smugglers",
 		"playerClass": "Hunter",
@@ -46567,9 +50252,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_20.png",
 		"cost": 0,
 		"dbfId": 46829,
+		"entourage": [
+			"LOOT_104",
+			"KAR_009",
+			"UNG_028",
+			"UNG_941",
+			"GVG_003",
+			"AT_007",
+			"OG_090",
+			"LOE_003",
+			"OG_090",
+			"UNG_024",
+			"CFM_649",
+			"LOOT_537"
+		],
+		"goldenImage": "LOOTA_Mage_20.gif",
 		"id": "LOOTA_Mage_20",
 		"name": "Chaos",
 		"playerClass": "Mage",
@@ -46578,9 +50277,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_21.png",
 		"cost": 0,
 		"dbfId": 46830,
+		"entourage": [
+			"UNG_027",
+			"UNG_846",
+			"CS2_033",
+			"UNG_021",
+			"UNG_070",
+			"UNG_816",
+			"UNG_847",
+			"UNG_907",
+			"UNG_809",
+			"UNG_818",
+			"LOOT_103",
+			"EX1_298",
+			"ICC_833",
+			"EX1_249"
+		],
+		"goldenImage": "LOOTA_Mage_21.gif",
 		"id": "LOOTA_Mage_21",
 		"name": "Elementals",
 		"playerClass": "Mage",
@@ -46589,9 +50304,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_22.png",
 		"cost": 0,
 		"dbfId": 46831,
+		"entourage": [
+			"NEW1_012",
+			"BRM_002",
+			"OG_303",
+			"EX1_012",
+			"EX1_284",
+			"EX1_095",
+			"NEW1_026",
+			"AT_004",
+			"EX1_563",
+			"EX1_559",
+			"EX1_608"
+		],
+		"goldenImage": "LOOTA_Mage_22.gif",
 		"id": "LOOTA_Mage_22",
 		"name": "Magical Friends",
 		"playerClass": "Mage",
@@ -46600,9 +50328,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_23.png",
 		"cost": 0,
 		"dbfId": 46832,
+		"entourage": [
+			"EX1_275",
+			"CS2_028",
+			"CS2_024",
+			"GVG_002",
+			"UNG_205",
+			"ICC_252",
+			"ICC_836",
+			"CS2_033",
+			"CS2_026",
+			"OG_081"
+		],
+		"goldenImage": "LOOTA_Mage_23.gif",
 		"id": "LOOTA_Mage_23",
 		"name": "Frost",
 		"playerClass": "Mage",
@@ -46611,9 +50351,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_24.png",
 		"cost": 0,
 		"dbfId": 46833,
+		"entourage": [
+			"CS2_029",
+			"CS2_032",
+			"EX1_279",
+			"KAR_076",
+			"CFM_065",
+			"UNG_955",
+			"LOOT_172",
+			"LOE_002",
+			"EX1_298"
+		],
+		"goldenImage": "LOOTA_Mage_24.gif",
 		"id": "LOOTA_Mage_24",
 		"name": "Fire",
 		"playerClass": "Mage",
@@ -46622,9 +50373,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_25.png",
 		"cost": 0,
 		"dbfId": 46834,
+		"entourage": [
+			"AT_003",
+			"AT_090",
+			"AT_006",
+			"AT_099",
+			"AT_127",
+			"ICC_833",
+			"AT_119",
+			"CFM_807",
+			"AT_008"
+		],
+		"goldenImage": "LOOTA_Mage_25.gif",
 		"id": "LOOTA_Mage_25",
 		"name": "Heroic Power",
 		"playerClass": "Mage",
@@ -46633,9 +50395,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_27.png",
 		"cost": 0,
 		"dbfId": 46836,
+		"entourage": [
+			"LOOT_130",
+			"LOOT_539",
+			"LOOT_172",
+			"LOOT_535",
+			"EX1_279",
+			"CS2_032",
+			"UNG_955",
+			"CS2_028",
+			"LOOT_170",
+			"LOOT_172",
+			"LOOT_414",
+			"LOOT_106"
+		],
+		"goldenImage": "LOOTA_Mage_27.gif",
 		"id": "LOOTA_Mage_27",
 		"name": "Big Spells",
 		"playerClass": "Mage",
@@ -46644,9 +50420,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_28.png",
 		"cost": 0,
 		"dbfId": 46837,
+		"entourage": [
+			"CS2_022",
+			"EX1_277",
+			"AT_009",
+			"AT_005",
+			"CFM_620",
+			"CS2_027",
+			"LOOT_231",
+			"CS2_023",
+			"LOOT_108"
+		],
+		"goldenImage": "LOOTA_Mage_28.gif",
 		"id": "LOOTA_Mage_28",
 		"name": "Arcane",
 		"playerClass": "Mage",
@@ -46655,9 +50442,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_29.png",
 		"cost": 0,
 		"dbfId": 46852,
+		"entourage": [
+			"EX1_274",
+			"FP1_018",
+			"UNG_020",
+			"ICC_082",
+			"KAR_092",
+			"EX1_287",
+			"EX1_295",
+			"EX1_294",
+			"CFM_760",
+			"FP1_004"
+		],
+		"goldenImage": "LOOTA_Mage_29.gif",
 		"id": "LOOTA_Mage_29",
 		"name": "Lost Secrets",
 		"playerClass": "Mage",
@@ -46666,9 +50465,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_30.png",
 		"cost": 0,
 		"dbfId": 47535,
+		"entourage": [
+			"ICC_823",
+			"GVG_005",
+			"UNG_948",
+			"FP1_018",
+			"EX1_295",
+			"KAR_711",
+			"EX1_620",
+			"BRM_028",
+			"LOOT_161"
+		],
+		"goldenImage": "LOOTA_Mage_30.gif",
 		"id": "LOOTA_Mage_30",
 		"name": "Giant Army",
 		"playerClass": "Mage",
@@ -46677,9 +50487,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_31.png",
 		"cost": 0,
 		"dbfId": 47543,
+		"entourage": [
+			"CS2_026",
+			"FP1_012",
+			"ICC_314",
+			"GVG_069",
+			"EX1_295",
+			"CS2_027",
+			"LOE_119",
+			"CS2_028",
+			"NEW1_021"
+		],
+		"goldenImage": "LOOTA_Mage_31.gif",
 		"id": "LOOTA_Mage_31",
 		"name": "Defense",
 		"playerClass": "Mage",
@@ -46688,9 +50509,14 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "LOOTA_Mage_32.png",
 		"cost": 0,
 		"dbfId": 47560,
+		"entourage": [
+			"LOE_011",
+			"CFM_621",
+			"CFM_687"
+		],
+		"goldenImage": "LOOTA_Mage_32.gif",
 		"id": "LOOTA_Mage_32",
 		"name": "Unique",
 		"playerClass": "Mage",
@@ -46699,9 +50525,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_01.png",
 		"cost": 0,
 		"dbfId": 46216,
+		"entourage": [
+			"EX1_130",
+			"FP1_020",
+			"EX1_136",
+			"EX1_080",
+			"EX1_379",
+			"FP1_004",
+			"AT_073",
+			"AT_079",
+			"CFM_800",
+			"UNG_011"
+		],
+		"goldenImage": "LOOTA_Paladin_01.gif",
 		"id": "LOOTA_Paladin_01",
 		"name": "Secrets",
 		"playerClass": "Paladin",
@@ -46710,9 +50548,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_04.png",
 		"cost": 0,
 		"dbfId": 46219,
+		"entourage": [
+			"OG_229",
+			"KAR_057",
+			"GVG_069",
+			"CFM_120",
+			"LOOT_291",
+			"LOOT_398",
+			"LOOT_091",
+			"ICC_245",
+			"ICC_820",
+			"ICC_829",
+			"CFM_815"
+		],
+		"goldenImage": "LOOTA_Paladin_04.gif",
 		"id": "LOOTA_Paladin_04",
 		"name": "Healing",
 		"playerClass": "Paladin",
@@ -46721,9 +50572,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_05.png",
 		"cost": 0,
 		"dbfId": 46220,
+		"entourage": [
+			"GVG_058",
+			"EX1_067",
+			"EX1_020",
+			"EX1_590",
+			"EX1_032",
+			"EX1_383",
+			"AT_087",
+			"AT_095",
+			"OG_310",
+			"CFM_815",
+			"ICC_038",
+			"ICC_801",
+			"ICC_858",
+			"ICC_913",
+			"ICC_071"
+		],
+		"goldenImage": "LOOTA_Paladin_05.gif",
 		"id": "LOOTA_Paladin_05",
 		"name": "Divine Shield",
 		"playerClass": "Paladin",
@@ -46732,9 +50600,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_09.png",
 		"cost": 0,
 		"dbfId": 46224,
+		"entourage": [
+			"LOE_017",
+			"EX1_382",
+			"AT_081",
+			"UNG_015",
+			"EX1_619",
+			"EX1_360",
+			"CS2_094",
+			"CS2_093",
+			"EX1_384",
+			"AT_078",
+			"ICC_039"
+		],
+		"goldenImage": "LOOTA_Paladin_09.gif",
 		"id": "LOOTA_Paladin_09",
 		"name": "Justice",
 		"playerClass": "Paladin",
@@ -46743,9 +50624,19 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_11.png",
 		"cost": 0,
 		"dbfId": 46226,
+		"entourage": [
+			"CFM_639",
+			"CFM_753",
+			"CFM_305",
+			"GVG_063",
+			"CFM_650",
+			"CFM_685",
+			"CFM_853",
+			"BRM_028"
+		],
+		"goldenImage": "LOOTA_Paladin_11.gif",
 		"id": "LOOTA_Paladin_11",
 		"name": "Helping Hand",
 		"playerClass": "Paladin",
@@ -46754,9 +50645,31 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_12.png",
 		"cost": 0,
 		"dbfId": 46227,
+		"entourage": [
+			"BRM_018",
+			"BRM_020",
+			"EX1_284",
+			"BRM_026",
+			"BRM_033",
+			"BRM_034",
+			"KAR_062",
+			"CFM_806",
+			"EX1_043",
+			"BRM_025",
+			"UNG_848",
+			"BRM_031",
+			"OG_271",
+			"NEW1_030",
+			"OG_317",
+			"EX1_563",
+			"EX1_562",
+			"EX1_572",
+			"LOOT_540",
+			"LOOT_137"
+		],
+		"goldenImage": "LOOTA_Paladin_12.gif",
 		"id": "LOOTA_Paladin_12",
 		"name": "Dragonmaster",
 		"playerClass": "Paladin",
@@ -46765,9 +50678,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_14.png",
 		"cost": 0,
 		"dbfId": 46229,
+		"entourage": [
+			"OG_273",
+			"GVG_061",
+			"LOOT_363",
+			"GVG_060",
+			"AT_100",
+			"AT_075",
+			"UNG_950",
+			"UNG_960",
+			"UNG_962",
+			"LOOT_333",
+			"LOOT_313"
+		],
+		"goldenImage": "LOOTA_Paladin_14.gif",
 		"id": "LOOTA_Paladin_14",
 		"name": "Silver Hand",
 		"playerClass": "Paladin",
@@ -46776,9 +50702,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_16.png",
 		"cost": 0,
 		"dbfId": 46231,
+		"entourage": [
+			"EX1_298",
+			"ICC_314",
+			"CFM_807",
+			"LOOT_357",
+			"GVG_118",
+			"GVG_110",
+			"AT_127",
+			"BRM_028",
+			"EX1_002",
+			"KAR_061",
+			"LOOT_500"
+		],
+		"goldenImage": "LOOTA_Paladin_16.gif",
 		"id": "LOOTA_Paladin_16",
 		"name": "Legendary",
 		"playerClass": "Paladin",
@@ -46787,9 +50726,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_19.png",
 		"cost": 0,
 		"dbfId": 46234,
+		"entourage": [
+			"CFM_062",
+			"CFM_815",
+			"UNG_015",
+			"CFM_062",
+			"EX1_383",
+			"GVG_085",
+			"UNG_808",
+			"ICC_314",
+			"ICC_912",
+			"OG_145",
+			"FP1_012",
+			"LOOT_383",
+			"EX1_032",
+			"KAR_061"
+		],
+		"goldenImage": "LOOTA_Paladin_19.gif",
 		"id": "LOOTA_Paladin_19",
 		"name": "Taunt",
 		"playerClass": "Paladin",
@@ -46798,9 +50753,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_20.png",
 		"cost": 0,
 		"dbfId": 46235,
+		"entourage": [
+			"CS2_097",
+			"GVG_059",
+			"LOOT_286",
+			"GVG_061",
+			"OG_222",
+			"UNG_950",
+			"LOOT_500",
+			"LOOT_118",
+			"EX1_366",
+			"ICC_096"
+		],
+		"goldenImage": "LOOTA_Paladin_20.gif",
 		"id": "LOOTA_Paladin_20",
 		"name": "Sacred Arms",
 		"playerClass": "Paladin",
@@ -46809,9 +50776,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_21.png",
 		"cost": 0,
 		"dbfId": 46236,
+		"entourage": [
+			"AT_076",
+			"OG_006",
+			"EX1_509",
+			"EX1_508",
+			"EX1_062",
+			"EX1_506",
+			"LOE_026",
+			"OG_161",
+			"CFM_344",
+			"UNG_089",
+			"EX1_507",
+			"UNG_937",
+			"CS2_173",
+			"UNG_011"
+		],
+		"goldenImage": "LOOTA_Paladin_21.gif",
 		"id": "LOOTA_Paladin_21",
 		"name": "Murlocs",
 		"playerClass": "Paladin",
@@ -46820,9 +50803,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "LOOTA_Paladin_22.png",
 		"cost": 0,
 		"dbfId": 47579,
+		"entourage": [
+			"CS2_087",
+			"CS2_092",
+			"EX1_363",
+			"OG_223",
+			"UNG_961",
+			"AT_074",
+			"KAR_077",
+			"EX1_355",
+			"UNG_952",
+			"UNG_004",
+			"UNG_953",
+			"LOOT_216",
+			"ICC_244",
+			"LOOT_088",
+			"UNG_843",
+			"UNG_954"
+		],
+		"goldenImage": "LOOTA_Paladin_22.gif",
 		"id": "LOOTA_Paladin_22",
 		"name": "Many Blessings",
 		"playerClass": "Paladin",
@@ -46831,9 +50832,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_01.png",
 		"cost": 0,
 		"dbfId": 47367,
+		"entourage": [
+			"EX1_621",
+			"AT_055",
+			"GVG_012",
+			"CS2_235",
+			"AT_011",
+			"CS1_112",
+			"OG_234",
+			"EX1_624",
+			"EX1_001",
+			"EX1_350",
+			"KAR_035",
+			"GVG_008"
+		],
+		"goldenImage": "LOOTA_Priest_01.gif",
 		"id": "LOOTA_Priest_01",
 		"name": "Holy",
 		"playerClass": "Priest",
@@ -46842,9 +50857,33 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_02.png",
 		"cost": 0,
 		"dbfId": 47368,
+		"entourage": [
+			"LOE_006",
+			"FP1_002",
+			"FP1_009",
+			"ICC_702",
+			"FP1_031",
+			"GVG_096",
+			"UNG_900",
+			"OG_147",
+			"FP1_012",
+			"ICC_098",
+			"EX1_110",
+			"OG_133",
+			"FP1_023",
+			"UNG_032",
+			"UNG_037",
+			"OG_335",
+			"ICC_214",
+			"LOOT_161",
+			"KAR_114",
+			"UNG_940",
+			"LOOT_187",
+			"LOOT_161"
+		],
+		"goldenImage": "LOOTA_Priest_02.gif",
 		"id": "LOOTA_Priest_02",
 		"name": "Last Rites",
 		"playerClass": "Priest",
@@ -46853,9 +50892,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_03.png",
 		"cost": 0,
 		"dbfId": 47369,
+		"entourage": [
+			"UNG_032",
+			"CS2_003",
+			"CFM_603",
+			"UNG_035",
+			"EX1_339",
+			"EX1_345",
+			"EX1_334",
+			"OG_335",
+			"ICC_207",
+			"EX1_091",
+			"ICC_849",
+			"ICC_215",
+			"CS1_113",
+			"LOOT_541",
+			"LOE_104",
+			"LOOT_353"
+		],
+		"goldenImage": "LOOTA_Priest_03.gif",
 		"id": "LOOTA_Priest_03",
 		"name": "Domination",
 		"playerClass": "Priest",
@@ -46864,9 +50921,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_04.png",
 		"cost": 0,
 		"dbfId": 47370,
+		"entourage": [
+			"BRM_017",
+			"ICC_213",
+			"KAR_204",
+			"LOOT_507",
+			"CS2_181",
+			"FP1_013",
+			"LOOT_187",
+			"EX1_016",
+			"UNG_037",
+			"ICC_214"
+		],
+		"goldenImage": "LOOTA_Priest_04.gif",
 		"id": "LOOTA_Priest_04",
 		"name": "Resurrection",
 		"playerClass": "Priest",
@@ -46875,9 +50944,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_05.png",
 		"cost": 0,
 		"dbfId": 47372,
+		"entourage": [
+			"CFM_661",
+			"CS2_234",
+			"ICC_802",
+			"AT_015",
+			"GVG_011",
+			"EX1_622",
+			"LOE_111",
+			"GVG_008",
+			"LOOT_008",
+			"LOE_104",
+			"ICC_214",
+			"LOE_079",
+			"UNG_851",
+			"OG_100",
+			"CFM_657",
+			"CFM_807"
+		],
+		"goldenImage": "LOOTA_Priest_05.gif",
 		"id": "LOOTA_Priest_05",
 		"name": "Bag of Tricks",
 		"playerClass": "Priest",
@@ -46886,9 +50973,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_06.png",
 		"cost": 0,
 		"dbfId": 47374,
+		"entourage": [
+			"ICC_210",
+			"UNG_022",
+			"AT_014",
+			"EX1_625",
+			"LOOT_529",
+			"LOOT_526",
+			"GVG_014",
+			"OG_316",
+			"ICC_235",
+			"ICC_830",
+			"ICC_212",
+			"ICC_802",
+			"EX1_591",
+			"FP1_001"
+		],
+		"goldenImage": "LOOTA_Priest_06.gif",
 		"id": "LOOTA_Priest_06",
 		"name": "Shadow",
 		"playerClass": "Priest",
@@ -46897,9 +51000,30 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_07.png",
 		"cost": 0,
 		"dbfId": 47375,
+		"entourage": [
+			"BRM_004",
+			"AT_116",
+			"LOOT_410",
+			"CFM_605",
+			"CFM_662",
+			"KAR_062",
+			"BRM_033",
+			"LOOT_144",
+			"EX1_043",
+			"AT_017",
+			"EX1_284",
+			"KAR_033",
+			"ICC_027",
+			"EX1_572",
+			"OG_317",
+			"EX1_563",
+			"LOOT_137",
+			"LOOT_540",
+			"BRM_034"
+		],
+		"goldenImage": "LOOTA_Priest_07.gif",
 		"id": "LOOTA_Priest_07",
 		"name": "Dragon Priest",
 		"playerClass": "Priest",
@@ -46908,9 +51032,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_08.png",
 		"cost": 0,
 		"dbfId": 47376,
+		"entourage": [
+			"CS1_129",
+			"CS2_236",
+			"GVG_010",
+			"LOOT_278",
+			"AT_131",
+			"AT_129",
+			"UNG_843",
+			"LOE_053",
+			"CS2_004"
+		],
+		"goldenImage": "LOOTA_Priest_08.gif",
 		"id": "LOOTA_Priest_08",
 		"name": "Discipline",
 		"playerClass": "Priest",
@@ -46919,9 +51054,14 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_10.png",
 		"cost": 0,
 		"dbfId": 47378,
+		"entourage": [
+			"CFM_020",
+			"CFM_621",
+			"LOE_011"
+		],
+		"goldenImage": "LOOTA_Priest_10.gif",
 		"id": "LOOTA_Priest_10",
 		"name": "Unique",
 		"playerClass": "Priest",
@@ -46930,9 +51070,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_12.png",
 		"cost": 0,
 		"dbfId": 47380,
+		"entourage": [
+			"UNG_032",
+			"UNG_034",
+			"EX1_335",
+			"UNG_963",
+			"UNG_928",
+			"UNG_070",
+			"UNG_816",
+			"UNG_847",
+			"UNG_907",
+			"EX1_298",
+			"UNG_809"
+		],
+		"goldenImage": "LOOTA_Priest_12.gif",
 		"id": "LOOTA_Priest_12",
 		"name": "Elementals",
 		"playerClass": "Priest",
@@ -46941,9 +51094,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_13.png",
 		"cost": 0,
 		"dbfId": 47395,
+		"entourage": [
+			"OG_334",
+			"OG_096",
+			"OG_281",
+			"OG_162",
+			"OG_286",
+			"OG_283",
+			"OG_321",
+			"OG_131",
+			"OG_280",
+			"OG_255"
+		],
+		"goldenImage": "LOOTA_Priest_13.gif",
 		"id": "LOOTA_Priest_13",
 		"name": "Cult of C'Thun",
 		"playerClass": "Priest",
@@ -46952,9 +51117,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "LOOTA_Priest_9.png",
 		"cost": 0,
 		"dbfId": 47377,
+		"entourage": [
+			"LOOT_209",
+			"UNG_034",
+			"UNG_029",
+			"KAR_035",
+			"UNG_963",
+			"NEW1_020",
+			"NEW1_026",
+			"LOOT_414",
+			"CS2_004",
+			"ICC_830"
+		],
+		"goldenImage": "LOOTA_Priest_9.gif",
 		"id": "LOOTA_Priest_9",
 		"name": "Combo Caster",
 		"playerClass": "Priest",
@@ -46963,9 +51140,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_01.png",
 		"cost": 0,
 		"dbfId": 47382,
+		"entourage": [
+			"CFM_630",
+			"EX1_145",
+			"EX1_613",
+			"UNG_065",
+			"OG_080",
+			"ICC_910",
+			"EX1_044",
+			"NEW1_026",
+			"EX1_095",
+			"UNG_057",
+			"EX1_614",
+			"CS2_077",
+			"UNG_060"
+		],
+		"goldenImage": "LOOTA_Rogue_01.gif",
 		"id": "LOOTA_Rogue_01",
 		"name": "Adrenaline Rush",
 		"playerClass": "Rogue",
@@ -46974,9 +51166,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_02.png",
 		"cost": 0,
 		"dbfId": 47383,
+		"entourage": [
+			"UNG_809",
+			"EX1_049",
+			"CFM_693",
+			"EX1_144",
+			"EX1_015",
+			"LOOT_204",
+			"EX1_145",
+			"LOOT_165",
+			"UNG_067",
+			"NEW1_004"
+		],
+		"goldenImage": "LOOTA_Rogue_02.gif",
 		"id": "LOOTA_Rogue_02",
 		"name": "Evasive",
 		"playerClass": "Rogue",
@@ -46985,9 +51189,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_03.png",
 		"cost": 0,
 		"dbfId": 47384,
+		"entourage": [
+			"CS2_074",
+			"ICC_233",
+			"LOOT_542",
+			"GVG_023",
+			"ICC_221",
+			"UNG_823",
+			"ICC_850",
+			"CS2_233",
+			"ICC_240",
+			"GVG_022",
+			"ICC_097",
+			"LOOT_033",
+			"LOOT_389",
+			"ICC_096"
+		],
+		"goldenImage": "LOOTA_Rogue_03.gif",
 		"id": "LOOTA_Rogue_03",
 		"name": "Blademaster",
 		"playerClass": "Rogue",
@@ -46996,9 +51216,29 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_04.png",
 		"cost": 0,
 		"dbfId": 47385,
+		"entourage": [
+			"OG_072",
+			"ICC_201",
+			"LOE_019",
+			"EX1_012",
+			"ICC_702",
+			"ICC_854",
+			"FP1_031",
+			"OG_249",
+			"GVG_096",
+			"UNG_900",
+			"OG_272",
+			"FP1_012",
+			"OG_133",
+			"EX1_016",
+			"OG_080",
+			"OG_330",
+			"LOOT_503",
+			"LOOT_161"
+		],
+		"goldenImage": "LOOTA_Rogue_04.gif",
 		"id": "LOOTA_Rogue_04",
 		"name": "Death Dealer",
 		"playerClass": "Rogue",
@@ -47007,9 +51247,15 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_05.png",
 		"cost": 0,
 		"dbfId": 47398,
+		"entourage": [
+			"CFM_690",
+			"CFM_691",
+			"CFM_715",
+			"CFM_902"
+		],
+		"goldenImage": "LOOTA_Rogue_05.gif",
 		"id": "LOOTA_Rogue_05",
 		"name": "Jade Lotus",
 		"playerClass": "Rogue",
@@ -47018,9 +51264,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_07.png",
 		"cost": 0,
 		"dbfId": 47400,
+		"entourage": [
+			"CFM_630",
+			"AT_031",
+			"LOE_012",
+			"EX1_096",
+			"CFM_808",
+			"CFM_669",
+			"LOOT_357",
+			"EX1_050",
+			"EX1_284",
+			"LOOT_211",
+			"EX1_012"
+		],
+		"goldenImage": "LOOTA_Rogue_07.gif",
 		"id": "LOOTA_Rogue_07",
 		"name": "Greed",
 		"playerClass": "Rogue",
@@ -47029,9 +51288,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_09.png",
 		"cost": 0,
 		"dbfId": 47402,
+		"entourage": [
+			"UNG_856",
+			"KAR_069",
+			"OG_330",
+			"AT_033",
+			"CFM_781",
+			"ICC_811",
+			"UNG_061",
+			"KAR_070",
+			"GVG_028",
+			"EX1_100"
+		],
+		"goldenImage": "LOOTA_Rogue_09.gif",
 		"id": "LOOTA_Rogue_09",
 		"name": "Thief",
 		"playerClass": "Rogue",
@@ -47040,9 +51311,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_10.png",
 		"cost": 0,
 		"dbfId": 47403,
+		"entourage": [
+			"CS2_072",
+			"CS2_073",
+			"EX1_124",
+			"EX1_278",
+			"EX1_129",
+			"OG_176",
+			"CS2_076",
+			"BRM_008",
+			"EX1_522",
+			"EX1_134",
+			"UNG_064",
+			"ICC_809"
+		],
+		"goldenImage": "LOOTA_Rogue_10.gif",
 		"id": "LOOTA_Rogue_10",
 		"name": "Assassin",
 		"playerClass": "Rogue",
@@ -47051,9 +51336,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_11.png",
 		"cost": 0,
 		"dbfId": 47404,
+		"entourage": [
+			"AT_029",
+			"GVG_025",
+			"AT_032",
+			"OG_267",
+			"CFM_342",
+			"CFM_637",
+			"CFM_325",
+			"CS2_146",
+			"NEW1_018",
+			"NEW1_027",
+			"NEW1_022",
+			"ICC_018",
+			"NEW1_024",
+			"CFM_651",
+			"GVG_075"
+		],
+		"goldenImage": "LOOTA_Rogue_11.gif",
 		"id": "LOOTA_Rogue_11",
 		"name": "Outlaws",
 		"playerClass": "Rogue",
@@ -47062,9 +51364,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_13.png",
 		"cost": 0,
 		"dbfId": 47407,
+		"entourage": [
+			"EX1_126",
+			"LOOT_210",
+			"LOOT_214",
+			"BRM_007",
+			"AT_035",
+			"UNG_060",
+			"LOOT_026",
+			"OG_291",
+			"OG_073",
+			"EX1_145",
+			"EX1_144",
+			"ICC_827"
+		],
+		"goldenImage": "LOOTA_Rogue_13.gif",
 		"id": "LOOTA_Rogue_13",
 		"name": "Bag of Tricks",
 		"playerClass": "Rogue",
@@ -47073,9 +51389,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_15.png",
 		"cost": 0,
 		"dbfId": 47580,
+		"entourage": [
+			"OG_131",
+			"OG_162",
+			"OG_255",
+			"OG_281",
+			"OG_283",
+			"OG_284",
+			"OG_286",
+			"OG_321",
+			"OG_280",
+			"OG_282"
+		],
+		"goldenImage": "LOOTA_Rogue_15.gif",
 		"id": "LOOTA_Rogue_15",
 		"name": "Cult of C'thun",
 		"playerClass": "Rogue",
@@ -47084,9 +51412,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "LOOTA_Rogue_16.png",
 		"cost": 0,
 		"dbfId": 47581,
+		"entourage": [
+			"EX1_144",
+			"NEW1_004",
+			"LOE_077",
+			"FP1_009",
+			"EX1_014",
+			"EX1_581",
+			"EX1_050",
+			"KAR_712",
+			"BRM_007"
+		],
+		"goldenImage": "LOOTA_Rogue_16.gif",
 		"id": "LOOTA_Rogue_16",
 		"name": "Exhaustion",
 		"playerClass": "Rogue",
@@ -47095,9 +51434,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_01.png",
 		"cost": 0,
 		"dbfId": 47224,
+		"entourage": [
+			"UNG_025",
+			"KAR_073",
+			"OG_206",
+			"EX1_259",
+			"AT_051",
+			"GVG_038",
+			"LOOT_060",
+			"BRM_011",
+			"EX1_238",
+			"EX1_241"
+		],
+		"goldenImage": "LOOTA_Shaman_01.gif",
 		"id": "LOOTA_Shaman_01",
 		"name": "Destruction",
 		"playerClass": "Shaman",
@@ -47106,9 +51457,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_02.png",
 		"cost": 0,
 		"dbfId": 47225,
+		"entourage": [
+			"ICC_058",
+			"ICC_056",
+			"ICC_236",
+			"ICC_078",
+			"ICC_088",
+			"UNG_205",
+			"ICC_289",
+			"ICC_855",
+			"UNG_079"
+		],
+		"goldenImage": "LOOTA_Shaman_02.gif",
 		"id": "LOOTA_Shaman_02",
 		"name": "Frost",
 		"playerClass": "Shaman",
@@ -47117,9 +51479,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_03.png",
 		"cost": 0,
 		"dbfId": 47226,
+		"entourage": [
+			"LOOT_373",
+			"CS2_041",
+			"GVG_069",
+			"CFM_061",
+			"CFM_120",
+			"GVG_039",
+			"UNG_817",
+			"UNG_938",
+			"OG_209",
+			"AT_048"
+		],
+		"goldenImage": "LOOTA_Shaman_03.gif",
 		"id": "LOOTA_Shaman_03",
 		"name": "Restoration",
 		"playerClass": "Shaman",
@@ -47128,9 +51502,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_04.png",
 		"cost": 0,
 		"dbfId": 47227,
+		"entourage": [
+			"OG_027",
+			"LOOT_504",
+			"CFM_696",
+			"EX1_246",
+			"OG_328",
+			"ICC_481",
+			"EX1_083",
+			"OG_174",
+			"LOOT_150",
+			"CFM_697"
+		],
+		"goldenImage": "LOOTA_Shaman_04.gif",
 		"id": "LOOTA_Shaman_04",
 		"name": "Mutations",
 		"playerClass": "Shaman",
@@ -47139,9 +51525,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_05.png",
 		"cost": 0,
 		"dbfId": 47228,
+		"entourage": [
+			"AT_054",
+			"CS2_042",
+			"UNG_202",
+			"LOOT_358",
+			"LOOT_517",
+			"UNG_072",
+			"ICC_466",
+			"EX1_284",
+			"CFM_668",
+			"FP1_030",
+			"CFM_852",
+			"ICC_705",
+			"EX1_112",
+			"LOOT_357",
+			"BRM_012",
+			"LOE_077"
+		],
+		"goldenImage": "LOOTA_Shaman_05.gif",
 		"id": "LOOTA_Shaman_05",
 		"name": "Battlecrier",
 		"playerClass": "Shaman",
@@ -47150,9 +51554,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_06.png",
 		"cost": 0,
 		"dbfId": 47229,
+		"entourage": [
+			"UNG_211",
+			"UNG_816",
+			"UNG_928",
+			"UNG_070",
+			"UNG_907",
+			"UNG_809",
+			"UNG_202",
+			"UNG_847",
+			"UNG_845",
+			"LOOT_517",
+			"NEW1_010",
+			"EX1_298",
+			"UNG_208"
+		],
+		"goldenImage": "LOOTA_Shaman_06.gif",
 		"id": "LOOTA_Shaman_06",
 		"name": "Elementals",
 		"playerClass": "Shaman",
@@ -47161,9 +51580,29 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_07.png",
 		"cost": 0,
 		"dbfId": 47230,
+		"entourage": [
+			"UNG_942",
+			"ICC_089",
+			"CFM_310",
+			"GVG_040",
+			"LOE_113",
+			"ICC_220",
+			"EX1_509",
+			"EX1_506",
+			"CS2_173",
+			"EX1_506",
+			"UNG_073",
+			"EX1_050",
+			"EX1_103",
+			"UNG_937",
+			"UNG_089",
+			"EX1_062",
+			"CFM_344",
+			"EX1_507"
+		],
+		"goldenImage": "LOOTA_Shaman_07.gif",
 		"id": "LOOTA_Shaman_07",
 		"name": "Murlocs",
 		"playerClass": "Shaman",
@@ -47172,9 +51611,28 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_08.png",
 		"cost": 0,
 		"dbfId": 47231,
+		"entourage": [
+			"CFM_313",
+			"LOE_018",
+			"AT_053",
+			"BRM_011",
+			"OG_026",
+			"ICC_081",
+			"EX1_248",
+			"EX1_258",
+			"OG_024",
+			"EX1_250",
+			"LOOT_064",
+			"ICC_090",
+			"AT_052",
+			"LOE_018",
+			"BRM_011",
+			"OG_026",
+			"EX1_567"
+		],
+		"goldenImage": "LOOTA_Shaman_08.gif",
 		"id": "LOOTA_Shaman_08",
 		"name": "Overload",
 		"playerClass": "Shaman",
@@ -47183,9 +51641,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_09.png",
 		"cost": 0,
 		"dbfId": 47232,
+		"entourage": [
+			"OG_023",
+			"LOOT_062",
+			"LOOT_518",
+			"LOOT_344",
+			"EX1_575",
+			"AT_046",
+			"KAR_021",
+			"AT_049",
+			"OG_028",
+			"AT_052",
+			"EX1_565"
+		],
+		"goldenImage": "LOOTA_Shaman_09.gif",
 		"id": "LOOTA_Shaman_09",
 		"name": "Totems",
 		"playerClass": "Shaman",
@@ -47194,9 +51665,16 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_11.png",
 		"cost": 0,
 		"dbfId": 47234,
+		"entourage": [
+			"CFM_717",
+			"CFM_707",
+			"CFM_312",
+			"CFM_715",
+			"CFM_902"
+		],
+		"goldenImage": "LOOTA_Shaman_11.gif",
 		"id": "LOOTA_Shaman_11",
 		"name": "Jade Lotus",
 		"playerClass": "Shaman",
@@ -47205,9 +51683,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_12.png",
 		"cost": 0,
 		"dbfId": 47236,
+		"entourage": [
+			"AT_053",
+			"CS2_038",
+			"CS2_053",
+			"UNG_956",
+			"GVG_029",
+			"LOOT_506",
+			"EX1_110",
+			"FP1_025",
+			"CFM_324",
+			"EX1_016",
+			"FP1_013",
+			"ICC_257",
+			"LOOT_161"
+		],
+		"goldenImage": "LOOTA_Shaman_12.gif",
 		"id": "LOOTA_Shaman_12",
 		"name": "Farseer",
 		"playerClass": "Shaman",
@@ -47216,9 +51709,25 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "LOOTA_Shaman_13.png",
 		"cost": 0,
 		"dbfId": 47237,
+		"entourage": [
+			"GVG_036",
+			"GVG_085",
+			"EX1_556",
+			"GVG_096",
+			"GVG_105",
+			"GVG_107",
+			"OG_145",
+			"GVG_105",
+			"GVG_114",
+			"GVG_006",
+			"GVG_006",
+			"GVG_103",
+			"LOE_039",
+			"GVG_037"
+		],
+		"goldenImage": "LOOTA_Shaman_13.gif",
 		"id": "LOOTA_Shaman_13",
 		"name": "Mechanized",
 		"playerClass": "Shaman",
@@ -47227,9 +51736,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_01.png",
 		"cost": 0,
 		"dbfId": 47137,
+		"entourage": [
+			"CS2_065",
+			"EX1_319",
+			"GVG_018",
+			"CFM_611",
+			"LOOT_013",
+			"BRM_006",
+			"CFM_610",
+			"AT_019",
+			"GVG_019",
+			"BRM_005",
+			"GVG_045"
+		],
+		"goldenImage": "LOOTA_Warlock_01.gif",
 		"id": "LOOTA_Warlock_01",
 		"name": "Little Legion",
 		"playerClass": "Warlock",
@@ -47238,9 +51760,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_02.png",
 		"cost": 0,
 		"dbfId": 47139,
+		"entourage": [
+			"OG_131",
+			"OG_162",
+			"OG_255",
+			"OG_281",
+			"OG_283",
+			"OG_284",
+			"OG_286",
+			"OG_302",
+			"OG_321",
+			"OG_280"
+		],
+		"goldenImage": "LOOTA_Warlock_02.gif",
 		"id": "LOOTA_Warlock_02",
 		"name": "Cult of C'thun",
 		"playerClass": "Warlock",
@@ -47249,9 +51783,14 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_03.png",
 		"cost": 0,
 		"dbfId": 47143,
+		"entourage": [
+			"LOE_011",
+			"CFM_621",
+			"CFM_750"
+		],
+		"goldenImage": "LOOTA_Warlock_03.gif",
 		"id": "LOOTA_Warlock_03",
 		"name": "Unique",
 		"playerClass": "Warlock",
@@ -47260,9 +51799,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_04.png",
 		"cost": 0,
 		"dbfId": 47144,
+		"entourage": [
+			"EX1_310",
+			"OG_109",
+			"AT_021",
+			"KAR_205",
+			"KAR_089",
+			"UNG_829",
+			"UNG_830",
+			"UNG_833",
+			"ICC_841",
+			"EX1_308",
+			"UNG_836",
+			"LOOT_417"
+		],
+		"goldenImage": "LOOTA_Warlock_04.gif",
 		"id": "LOOTA_Warlock_04",
 		"name": "Discard",
 		"playerClass": "Warlock",
@@ -47271,9 +51824,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_05.png",
 		"cost": 0,
 		"dbfId": 47145,
+		"entourage": [
+			"CS2_061",
+			"EX1_309",
+			"GVG_018",
+			"ICC_055",
+			"ICC_220",
+			"ICC_810",
+			"LOOT_043",
+			"ICC_831",
+			"ICC_905"
+		],
+		"goldenImage": "LOOTA_Warlock_05.gif",
 		"id": "LOOTA_Warlock_05",
 		"name": "Lifesteal",
 		"playerClass": "Warlock",
@@ -47282,9 +51846,24 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_06.png",
 		"cost": 0,
 		"dbfId": 47146,
+		"entourage": [
+			"CS2_065",
+			"EX1_058",
+			"FP1_012",
+			"UNG_049",
+			"CFM_790",
+			"ICC_466",
+			"LOOT_131",
+			"LOOT_368",
+			"ICC_314",
+			"LOOT_013",
+			"UNG_928",
+			"UNG_072",
+			"LOOT_383"
+		],
+		"goldenImage": "LOOTA_Warlock_06.gif",
 		"id": "LOOTA_Warlock_06",
 		"name": "Taunt",
 		"playerClass": "Warlock",
@@ -47293,9 +51872,23 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_07.png",
 		"cost": 0,
 		"dbfId": 47147,
+		"entourage": [
+			"EX1_586",
+			"EX1_597",
+			"EX1_162",
+			"NEW1_019",
+			"FP1_002",
+			"GVG_045",
+			"BRM_006",
+			"OG_113",
+			"OG_241",
+			"UNG_076",
+			"LOOT_375",
+			"LOOT_014"
+		],
+		"goldenImage": "LOOTA_Warlock_07.gif",
 		"id": "LOOTA_Warlock_07",
 		"name": "Swarm",
 		"playerClass": "Warlock",
@@ -47304,9 +51897,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_08.png",
 		"cost": 0,
 		"dbfId": 47148,
+		"entourage": [
+			"NEW1_021",
+			"NEW1_030",
+			"EX1_312",
+			"CS2_057",
+			"GVG_015",
+			"OG_239",
+			"CFM_094",
+			"CFM_608",
+			"ICC_041",
+			"LOOT_417"
+		],
+		"goldenImage": "LOOTA_Warlock_08.gif",
 		"id": "LOOTA_Warlock_08",
 		"name": "Destruction",
 		"playerClass": "Warlock",
@@ -47315,9 +51920,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_09.png",
 		"cost": 0,
 		"dbfId": 47150,
+		"entourage": [
+			"EX1_303",
+			"EX1_316",
+			"EX1_304",
+			"AT_025",
+			"UNG_047",
+			"ICC_469",
+			"ICC_903",
+			"UNG_831",
+			"OG_239",
+			"NEW1_021",
+			"LOOT_017",
+			"FP1_007",
+			"UNG_083",
+			"LOOT_161",
+			"EX1_016"
+		],
+		"goldenImage": "LOOTA_Warlock_09.gif",
 		"id": "LOOTA_Warlock_09",
 		"name": "Sacrifice",
 		"playerClass": "Warlock",
@@ -47326,9 +51948,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_10.png",
 		"cost": 0,
 		"dbfId": 47149,
+		"entourage": [
+			"UNG_832",
+			"GVG_100",
+			"OG_121",
+			"UNG_835",
+			"CS2_062",
+			"CFM_094",
+			"EX1_620",
+			"EX1_319",
+			"LOOT_013",
+			"LOOT_043"
+		],
+		"goldenImage": "LOOTA_Warlock_10.gif",
 		"id": "LOOTA_Warlock_10",
 		"name": "Blood",
 		"playerClass": "Warlock",
@@ -47337,9 +51971,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_11.png",
 		"cost": 0,
 		"dbfId": 47582,
+		"entourage": [
+			"FP1_022",
+			"LOOT_420",
+			"EX1_310",
+			"LOOT_306",
+			"CS2_064",
+			"CFM_663",
+			"CFM_751",
+			"EX1_323",
+			"GVG_021",
+			"LOOT_368",
+			"ICC_831"
+		],
+		"goldenImage": "LOOTA_Warlock_11.gif",
 		"id": "LOOTA_Warlock_11",
 		"name": "Dire Demons",
 		"playerClass": "Warlock",
@@ -47348,9 +51995,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "LOOTA_Warlock_12.png",
 		"cost": 0,
 		"dbfId": 47583,
+		"entourage": [
+			"EX1_043",
+			"EX1_105",
+			"EX1_620",
+			"AT_127",
+			"AT_027",
+			"BRM_028",
+			"BRM_031",
+			"EX1_058",
+			"EX1_093",
+			"EX1_323"
+		],
+		"goldenImage": "LOOTA_Warlock_12.gif",
 		"id": "LOOTA_Warlock_12",
 		"name": "Huge Hand",
 		"playerClass": "Warlock",
@@ -47359,9 +52018,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_01.png",
 		"cost": 0,
 		"dbfId": 47279,
+		"entourage": [
+			"EX1_607",
+			"EX1_603",
+			"EX1_604",
+			"ICC_408",
+			"BRM_016",
+			"OG_218",
+			"ICC_405",
+			"EX1_007",
+			"OG_318",
+			"BRM_019",
+			"CS2_108",
+			"EX1_414",
+			"GVG_052",
+			"FP1_021",
+			"CS2_104"
+		],
+		"goldenImage": "LOOTA_Warrior_01.gif",
 		"id": "LOOTA_Warrior_01",
 		"name": "Berserker",
 		"playerClass": "Warrior",
@@ -47370,9 +52046,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_02.png",
 		"cost": 0,
 		"dbfId": 47280,
+		"entourage": [
+			"EX1_400",
+			"EX1_392",
+			"NEW1_036",
+			"CFM_716",
+			"OG_276",
+			"GVG_050",
+			"OG_149",
+			"ICC_064",
+			"FP1_021",
+			"EX1_407",
+			"UNG_927",
+			"UNG_933",
+			"FP1_024",
+			"UNG_848",
+			"CS2_108",
+			"ICC_834"
+		],
+		"goldenImage": "LOOTA_Warrior_02.gif",
 		"id": "LOOTA_Warrior_02",
 		"name": "Everybody Hurts",
 		"playerClass": "Warrior",
@@ -47381,9 +52075,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_03.png",
 		"cost": 0,
 		"dbfId": 47334,
+		"entourage": [
+			"CS2_103",
+			"NEW1_011",
+			"EX1_414",
+			"CS2_146",
+			"AT_087",
+			"EX1_116",
+			"EX1_067",
+			"AT_070",
+			"UNG_099",
+			"AT_125"
+		],
+		"goldenImage": "LOOTA_Warrior_03.gif",
 		"id": "LOOTA_Warrior_03",
 		"name": "Charge!",
 		"playerClass": "Warrior",
@@ -47392,9 +52098,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_04.png",
 		"cost": 0,
 		"dbfId": 47310,
+		"entourage": [
+			"EX1_409",
+			"CS2_106",
+			"ICC_281",
+			"AT_066",
+			"CS2_112",
+			"OG_033",
+			"EX1_411",
+			"LOOT_203",
+			"OG_220",
+			"LOOT_389",
+			"ICC_097",
+			"ICC_064",
+			"FP1_021",
+			"LOOT_118",
+			"ICC_096"
+		],
+		"goldenImage": "LOOTA_Warrior_04.gif",
 		"id": "LOOTA_Warrior_04",
 		"name": "Weapons",
 		"playerClass": "Warrior",
@@ -47403,9 +52126,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_05.png",
 		"cost": 0,
 		"dbfId": 47311,
+		"entourage": [
+			"EX1_410",
+			"EX1_402",
+			"LOOT_044",
+			"ICC_837",
+			"LOOT_367",
+			"ICC_062",
+			"EX1_606",
+			"CFM_756",
+			"LOOT_365",
+			"KAR_091",
+			"LOOT_364",
+			"GVG_053",
+			"LOOT_285",
+			"LOOT_519",
+			"AT_064"
+		],
+		"goldenImage": "LOOTA_Warrior_05.gif",
 		"id": "LOOTA_Warrior_05",
 		"name": "Armor",
 		"playerClass": "Warrior",
@@ -47414,9 +52154,22 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_06.png",
 		"cost": 0,
 		"dbfId": 47312,
+		"entourage": [
+			"OG_312",
+			"OG_315",
+			"CFM_637",
+			"CFM_325",
+			"NEW1_018",
+			"GVG_075",
+			"NEW1_027",
+			"NEW1_022",
+			"CFM_651",
+			"NEW1_024",
+			"AT_070"
+		],
+		"goldenImage": "LOOTA_Warrior_06.gif",
 		"id": "LOOTA_Warrior_06",
 		"name": "Pirates",
 		"playerClass": "Warrior",
@@ -47425,9 +52178,27 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_07.png",
 		"cost": 0,
 		"dbfId": 47313,
+		"entourage": [
+			"CFM_940",
+			"UNG_926",
+			"LOE_022",
+			"AT_065",
+			"OG_218",
+			"UNG_957",
+			"LOE_009",
+			"UNG_072",
+			"FP1_012",
+			"OG_340",
+			"KAR_061",
+			"UNG_848",
+			"ICC_314",
+			"LOOT_383",
+			"LOOT_137",
+			"UNG_934"
+		],
+		"goldenImage": "LOOTA_Warrior_07.gif",
 		"id": "LOOTA_Warrior_07",
 		"name": "Taunt",
 		"playerClass": "Warrior",
@@ -47436,9 +52207,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_08.png",
 		"cost": 0,
 		"dbfId": 47349,
+		"entourage": [
+			"OG_314",
+			"CS2_108",
+			"CS2_105",
+			"EX1_391",
+			"AT_064",
+			"EX1_408",
+			"KAR_028",
+			"GVG_052",
+			"CS2_114"
+		],
+		"goldenImage": "LOOTA_Warrior_08.gif",
 		"id": "LOOTA_Warrior_08",
 		"name": "Smash!",
 		"playerClass": "Warrior",
@@ -47447,9 +52229,18 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_09.png",
 		"cost": 0,
 		"dbfId": 47318,
+		"entourage": [
+			"CFM_643",
+			"CFM_755",
+			"CFM_631",
+			"CFM_754",
+			"CFM_853",
+			"BRM_028",
+			"CFM_685"
+		],
+		"goldenImage": "LOOTA_Warrior_09.gif",
 		"id": "LOOTA_Warrior_09",
 		"name": "Re-Enforcer",
 		"playerClass": "Warrior",
@@ -47458,9 +52249,30 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_10.png",
 		"cost": 0,
 		"dbfId": 48239,
+		"entourage": [
+			"AT_072",
+			"LOE_079",
+			"LOOT_516",
+			"UNG_851",
+			"FP1_030",
+			"AT_127",
+			"EX1_110",
+			"UNG_840",
+			"AT_132",
+			"LOOT_357",
+			"EX1_016",
+			"EX1_249",
+			"NEW1_038",
+			"FP1_013",
+			"EX1_298",
+			"GVG_114",
+			"OG_300",
+			"ICC_314",
+			"LOE_092"
+		],
+		"goldenImage": "LOOTA_Warrior_10.gif",
 		"id": "LOOTA_Warrior_10",
 		"name": "Legendary",
 		"playerClass": "Warrior",
@@ -47469,9 +52281,31 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_12.png",
 		"cost": 0,
 		"dbfId": 47325,
+		"entourage": [
+			"AT_071",
+			"KAR_062",
+			"BRM_033",
+			"LOOT_144",
+			"BRM_026",
+			"EX1_284",
+			"BRM_034",
+			"KAR_033",
+			"BRM_024",
+			"CFM_806",
+			"AT_123",
+			"BRM_030",
+			"EX1_572",
+			"NEW1_030",
+			"OG_317",
+			"AT_017",
+			"EX1_043",
+			"UNG_848",
+			"LOOT_137",
+			"LOOT_540"
+		],
+		"goldenImage": "LOOTA_Warrior_12.gif",
 		"id": "LOOTA_Warrior_12",
 		"name": "Dragon Heart",
 		"playerClass": "Warrior",
@@ -47480,9 +52314,20 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "LOOTA_Warrior_13.png",
 		"cost": 0,
 		"dbfId": 47329,
+		"entourage": [
+			"ICC_091",
+			"LOOT_370",
+			"LOOT_380",
+			"LOOT_184",
+			"LOOT_375",
+			"CFM_672",
+			"OG_042",
+			"LOOT_519",
+			"LOOT_521"
+		],
+		"goldenImage": "LOOTA_Warrior_13.gif",
 		"id": "LOOTA_Warrior_13",
 		"name": "Recruiter",
 		"playerClass": "Warrior",
@@ -47545,7 +52390,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "Mekka3e.png",
 		"dbfId": 346,
 		"goldenImage": "Mekka3e.gif",
 		"id": "Mekka3e",
@@ -47575,10 +52419,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "Mekka4e.png",
 		"dbfId": 1689,
 		"goldenImage": "Mekka4e.gif",
 		"id": "Mekka4e",
+		"mechanics": [
+			"MORPH"
+		],
 		"name": "Transformed",
 		"playerClass": "Neutral",
 		"set": "Hof",
@@ -47608,6 +52454,9 @@ var parseCardsText = {
 		"goldenImage": "NAX10_01.gif",
 		"health": 30,
 		"id": "NAX10_01",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Patchwerk",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47620,6 +52469,9 @@ var parseCardsText = {
 		"goldenImage": "NAX10_01H.gif",
 		"health": 45,
 		"id": "NAX10_01H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Patchwerk",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47634,6 +52486,9 @@ var parseCardsText = {
 		"durability": 8,
 		"goldenImage": "NAX10_02.gif",
 		"id": "NAX10_02",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Hook",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47649,6 +52504,10 @@ var parseCardsText = {
 		"durability": 8,
 		"goldenImage": "NAX10_02H.gif",
 		"id": "NAX10_02H",
+		"mechanics": [
+			"DEATHRATTLE",
+			"WINDFURY"
+		],
 		"name": "Hook",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47725,6 +52584,9 @@ var parseCardsText = {
 		"dbfId": 2135,
 		"goldenImage": "NAX11_02H.gif",
 		"id": "NAX11_02H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Poison Cloud",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47776,7 +52638,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX11_04e.png",
 		"dbfId": 1926,
 		"goldenImage": "NAX11_04e.gif",
 		"id": "NAX11_04e",
@@ -47828,7 +52689,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX12_02e.png",
 		"dbfId": 1894,
 		"goldenImage": "NAX12_02e.gif",
 		"id": "NAX12_02e",
@@ -47845,6 +52705,9 @@ var parseCardsText = {
 		"dbfId": 2141,
 		"goldenImage": "NAX12_02H.gif",
 		"id": "NAX12_02H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Decimate",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47897,7 +52760,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX12_03e.png",
 		"dbfId": 1895,
 		"goldenImage": "NAX12_03e.gif",
 		"id": "NAX12_03e",
@@ -47940,10 +52802,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX12_04e.png",
 		"dbfId": 1896,
 		"goldenImage": "NAX12_04e.gif",
 		"id": "NAX12_04e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Enrage",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47981,6 +52845,9 @@ var parseCardsText = {
 		"dbfId": 1897,
 		"goldenImage": "NAX13_02.gif",
 		"id": "NAX13_02",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Polarity Shift",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -47989,7 +52856,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX13_02e.png",
 		"dbfId": 1898,
 		"goldenImage": "NAX13_02e.gif",
 		"id": "NAX13_02e",
@@ -48014,7 +52880,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX13_03e.png",
 		"dbfId": 1977,
 		"goldenImage": "NAX13_03e.gif",
 		"id": "NAX13_03e",
@@ -48087,6 +52952,9 @@ var parseCardsText = {
 		"dbfId": 1905,
 		"goldenImage": "NAX14_02.gif",
 		"id": "NAX14_02",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Frost Breath",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48102,6 +52970,9 @@ var parseCardsText = {
 		"goldenImage": "NAX14_03.gif",
 		"health": 10,
 		"id": "NAX14_03",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Frozen Champion",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -48118,6 +52989,9 @@ var parseCardsText = {
 		"dbfId": 1907,
 		"goldenImage": "NAX14_04.gif",
 		"id": "NAX14_04",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Pure Cold",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48138,7 +53012,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX15_01e.png",
 		"dbfId": 1930,
 		"goldenImage": "NAX15_01e.gif",
 		"id": "NAX15_01e",
@@ -48161,7 +53034,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX15_01He.png",
 		"dbfId": 2163,
 		"goldenImage": "NAX15_01He.gif",
 		"id": "NAX15_01He",
@@ -48177,6 +53049,10 @@ var parseCardsText = {
 		"dbfId": 1901,
 		"goldenImage": "NAX15_02.gif",
 		"id": "NAX15_02",
+		"mechanics": [
+			"AI_MUST_PLAY",
+			"FREEZE"
+		],
 		"name": "Frost Blast",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48190,6 +53066,10 @@ var parseCardsText = {
 		"dbfId": 2148,
 		"goldenImage": "NAX15_02H.gif",
 		"id": "NAX15_02H",
+		"mechanics": [
+			"AI_MUST_PLAY",
+			"FREEZE"
+		],
 		"name": "Frost Blast",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48205,6 +53085,9 @@ var parseCardsText = {
 		"goldenImage": "NAX15_03n.gif",
 		"health": 3,
 		"id": "NAX15_03n",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Guardian of Icecrown",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48220,6 +53103,9 @@ var parseCardsText = {
 		"goldenImage": "NAX15_03t.gif",
 		"health": 5,
 		"id": "NAX15_03t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Guardian of Icecrown",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48241,7 +53127,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX15_04a.png",
 		"dbfId": 2215,
 		"goldenImage": "NAX15_04a.gif",
 		"id": "NAX15_04a",
@@ -48274,6 +53159,9 @@ var parseCardsText = {
 		"goldenImage": "NAX15_05.gif",
 		"health": 1,
 		"id": "NAX15_05",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Mr. Bigglesworth",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -48403,6 +53291,9 @@ var parseCardsText = {
 		"dbfId": 1840,
 		"goldenImage": "NAX2_03.gif",
 		"id": "NAX2_03",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Rain of Fire",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48416,6 +53307,9 @@ var parseCardsText = {
 		"dbfId": 2105,
 		"goldenImage": "NAX2_03H.gif",
 		"id": "NAX2_03H",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Rain of Fire",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48431,6 +53325,10 @@ var parseCardsText = {
 		"goldenImage": "NAX2_05.gif",
 		"health": 4,
 		"id": "NAX2_05",
+		"mechanics": [
+			"AURA",
+			"InvisibleDeathrattle"
+		],
 		"name": "Worshipper",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48446,6 +53344,10 @@ var parseCardsText = {
 		"goldenImage": "NAX2_05H.gif",
 		"health": 4,
 		"id": "NAX2_05H",
+		"mechanics": [
+			"AURA",
+			"InvisibleDeathrattle"
+		],
 		"name": "Worshipper",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48509,6 +53411,9 @@ var parseCardsText = {
 		"dbfId": 2107,
 		"goldenImage": "NAX3_02H.gif",
 		"id": "NAX3_02H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Web Wrap",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48663,6 +53568,9 @@ var parseCardsText = {
 		"dbfId": 2117,
 		"goldenImage": "NAX5_02H.gif",
 		"id": "NAX5_02H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Eruption",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48754,6 +53662,9 @@ var parseCardsText = {
 		"goldenImage": "NAX6_03t.gif",
 		"health": 1,
 		"id": "NAX6_03t",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Spore",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48762,7 +53673,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX6_03te.png",
 		"dbfId": 1866,
 		"goldenImage": "NAX6_03te.gif",
 		"id": "NAX6_03te",
@@ -48818,6 +53728,9 @@ var parseCardsText = {
 		"goldenImage": "NAX7_02.gif",
 		"health": 7,
 		"id": "NAX7_02",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Understudy",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48937,6 +53850,9 @@ var parseCardsText = {
 		"dbfId": 2121,
 		"goldenImage": "NAX8_02H.gif",
 		"id": "NAX8_02H",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Harvest",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48965,6 +53881,9 @@ var parseCardsText = {
 		"goldenImage": "NAX8_03.gif",
 		"health": 2,
 		"id": "NAX8_03",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Unrelenting Trainee",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -48995,6 +53914,9 @@ var parseCardsText = {
 		"goldenImage": "NAX8_04.gif",
 		"health": 4,
 		"id": "NAX8_04",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Unrelenting Warrior",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -49025,6 +53947,9 @@ var parseCardsText = {
 		"goldenImage": "NAX8_05.gif",
 		"health": 6,
 		"id": "NAX8_05",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Unrelenting Rider",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -49242,7 +54167,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NAX9_07e.png",
 		"dbfId": 1924,
 		"goldenImage": "NAX9_07e.gif",
 		"id": "NAX9_07e",
@@ -49261,6 +54185,9 @@ var parseCardsText = {
 		"goldenImage": "NAXM_001.gif",
 		"health": 6,
 		"id": "NAXM_001",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Necroknight",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -49276,6 +54203,9 @@ var parseCardsText = {
 		"goldenImage": "NAXM_002.gif",
 		"health": 3,
 		"id": "NAXM_002",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Skeletal Smith",
 		"playerClass": "Neutral",
 		"set": "Naxx",
@@ -49325,6 +54255,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_005.gif",
 		"health": 3,
 		"id": "NEW1_005",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Kidnapper",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -49341,6 +54274,9 @@ var parseCardsText = {
 		"dbfId": 86,
 		"goldenImage": "NEW1_007.gif",
 		"id": "NEW1_007",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Starfall",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -49385,6 +54321,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_008.gif",
 		"health": 5,
 		"id": "NEW1_008",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Ancient of Lore",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -49447,6 +54386,12 @@ var parseCardsText = {
 		"goldenImage": "NEW1_010.gif",
 		"health": 5,
 		"id": "NEW1_010",
+		"mechanics": [
+			"CHARGE",
+			"DIVINE_SHIELD",
+			"TAUNT",
+			"WINDFURY"
+		],
 		"name": "Al'Akir the Windlord",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -49466,6 +54411,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_011.gif",
 		"health": 3,
 		"id": "NEW1_011",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Kor'kron Elite",
 		"playerClass": "Warrior",
 		"rarity": "Free",
@@ -49493,7 +54441,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "NEW1_012o.png",
 		"dbfId": 620,
 		"goldenImage": "NEW1_012o.gif",
 		"id": "NEW1_012o",
@@ -49514,6 +54461,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_014.gif",
 		"health": 4,
 		"id": "NEW1_014",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Master of Disguise",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -49526,7 +54476,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "NEW1_014e.png",
 		"dbfId": 38405,
 		"goldenImage": "NEW1_014e.gif",
 		"id": "NEW1_014e",
@@ -49547,6 +54496,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_016.gif",
 		"health": 1,
 		"id": "NEW1_016",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Captain's Parrot",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -49566,6 +54518,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_017.gif",
 		"health": 2,
 		"id": "NEW1_017",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hungry Crab",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -49576,7 +54531,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_017e.png",
 		"dbfId": 122,
 		"goldenImage": "NEW1_017e.gif",
 		"id": "NEW1_017e",
@@ -49597,6 +54551,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_018.gif",
 		"health": 3,
 		"id": "NEW1_018",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bloodsail Raider",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -49607,7 +54564,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_018e.png",
 		"dbfId": 465,
 		"goldenImage": "NEW1_018e.gif",
 		"id": "NEW1_018e",
@@ -49682,6 +54638,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_022.gif",
 		"health": 3,
 		"id": "NEW1_022",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Dread Corsair",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -49701,6 +54660,10 @@ var parseCardsText = {
 		"goldenImage": "NEW1_023.gif",
 		"health": 2,
 		"id": "NEW1_023",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Faerie Dragon",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -49721,6 +54684,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_024.gif",
 		"health": 4,
 		"id": "NEW1_024",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Captain Greenskin",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -49731,7 +54697,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_024o.png",
 		"dbfId": 1153,
 		"goldenImage": "NEW1_024o.gif",
 		"id": "NEW1_024o",
@@ -49752,6 +54717,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_025.gif",
 		"health": 2,
 		"id": "NEW1_025",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bloodsail Corsair",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -49762,7 +54730,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_025e.png",
 		"dbfId": 1716,
 		"goldenImage": "NEW1_025e.gif",
 		"id": "NEW1_025e",
@@ -49815,6 +54782,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_027.gif",
 		"health": 3,
 		"id": "NEW1_027",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Southsea Captain",
 		"playerClass": "Neutral",
 		"race": "PIRATE",
@@ -49825,7 +54795,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_027e.png",
 		"dbfId": 1852,
 		"goldenImage": "NEW1_027e.gif",
 		"id": "NEW1_027e",
@@ -49847,6 +54816,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_029.gif",
 		"health": 4,
 		"id": "NEW1_029",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Millhouse Manastorm",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -49856,7 +54828,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_029t.png",
 		"dbfId": 1717,
 		"goldenImage": "NEW1_029t.gif",
 		"id": "NEW1_029t",
@@ -49879,6 +54850,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_030.gif",
 		"health": 12,
 		"id": "NEW1_030",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Deathwing",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -49894,6 +54868,11 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"dbfId": 437,
+		"entourage": [
+			"NEW1_032",
+			"NEW1_033",
+			"NEW1_034"
+		],
 		"goldenImage": "NEW1_031.gif",
 		"id": "NEW1_031",
 		"name": "Animal Companion",
@@ -49912,6 +54891,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_032.gif",
 		"health": 4,
 		"id": "NEW1_032",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Misha",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -49929,6 +54911,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_033.gif",
 		"health": 4,
 		"id": "NEW1_033",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Leokk",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -49939,7 +54924,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "HUNTER",
-		"cardImage": "NEW1_033o.png",
 		"dbfId": 143,
 		"goldenImage": "NEW1_033o.gif",
 		"id": "NEW1_033o",
@@ -49958,6 +54942,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_034.gif",
 		"health": 2,
 		"id": "NEW1_034",
+		"mechanics": [
+			"CHARGE"
+		],
 		"name": "Huffer",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -49984,10 +54971,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "NEW1_036e.png",
 		"dbfId": 521,
 		"goldenImage": "NEW1_036e.gif",
 		"id": "NEW1_036e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Commanding Shout",
 		"playerClass": "Warrior",
 		"set": "Expert1",
@@ -49996,10 +54985,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "NEW1_036e2.png",
 		"dbfId": 1711,
 		"goldenImage": "NEW1_036e2.gif",
 		"id": "NEW1_036e2",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Commanding Shout",
 		"playerClass": "Warrior",
 		"set": "Expert1",
@@ -50026,7 +55017,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_037e.png",
 		"dbfId": 977,
 		"goldenImage": "NEW1_037e.gif",
 		"id": "NEW1_037e",
@@ -50057,7 +55047,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "NEW1_038o.png",
 		"dbfId": 1168,
 		"goldenImage": "NEW1_038o.gif",
 		"id": "NEW1_038o",
@@ -50098,6 +55087,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_040t.gif",
 		"health": 2,
 		"id": "NEW1_040t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Gnoll",
 		"playerClass": "Neutral",
 		"set": "Expert1",
@@ -50115,6 +55107,9 @@ var parseCardsText = {
 		"goldenImage": "NEW1_041.gif",
 		"health": 5,
 		"id": "NEW1_041",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Stampeding Kodo",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -50134,6 +55129,9 @@ var parseCardsText = {
 		"goldenImage": "OG_006.gif",
 		"health": 3,
 		"id": "OG_006",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Vilefin Inquisitor",
 		"playerClass": "Paladin",
 		"race": "MURLOC",
@@ -50190,7 +55188,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_023t.png",
 		"dbfId": 39001,
 		"goldenImage": "OG_023t.gif",
 		"id": "OG_023t",
@@ -50211,6 +55208,9 @@ var parseCardsText = {
 		"goldenImage": "OG_024.gif",
 		"health": 7,
 		"id": "OG_024",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Flamewreathed Faceless",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -50230,6 +55230,9 @@ var parseCardsText = {
 		"goldenImage": "OG_026.gif",
 		"health": 2,
 		"id": "OG_026",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Eternal Sentinel",
 		"playerClass": "Shaman",
 		"rarity": "Epic",
@@ -50267,6 +55270,9 @@ var parseCardsText = {
 		"goldenImage": "OG_028.gif",
 		"health": 5,
 		"id": "OG_028",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Thing from Below",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -50285,6 +55291,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "OG_031.gif",
 		"id": "OG_031",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Hammer of Twilight",
 		"playerClass": "Shaman",
 		"rarity": "Epic",
@@ -50320,6 +55329,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "OG_033.gif",
 		"id": "OG_033",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Tentacles for Arms",
 		"playerClass": "Warrior",
 		"rarity": "Epic",
@@ -50377,6 +55389,9 @@ var parseCardsText = {
 		"goldenImage": "OG_044.gif",
 		"health": 5,
 		"id": "OG_044",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Fandral Staghelm",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -50393,6 +55408,10 @@ var parseCardsText = {
 		"goldenImage": "OG_044a.gif",
 		"health": 6,
 		"id": "OG_044a",
+		"mechanics": [
+			"CHARGE",
+			"TAUNT"
+		],
 		"name": "Druid of the Claw",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -50426,6 +55445,10 @@ var parseCardsText = {
 		"goldenImage": "OG_044c.gif",
 		"health": 2,
 		"id": "OG_044c",
+		"mechanics": [
+			"CHARGE",
+			"STEALTH"
+		],
 		"name": "Sabertooth Tiger",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -50455,7 +55478,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "OG_045a.png",
 		"dbfId": 38328,
 		"goldenImage": "OG_045a.gif",
 		"id": "OG_045a",
@@ -50475,6 +55497,9 @@ var parseCardsText = {
 		"dbfId": 38334,
 		"goldenImage": "OG_047.gif",
 		"id": "OG_047",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Feral Rage",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -50512,10 +55537,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "OG_047e.png",
 		"dbfId": 38331,
 		"goldenImage": "OG_047e.gif",
 		"id": "OG_047e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Spines",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -50541,7 +55568,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "OG_048e.png",
 		"dbfId": 38336,
 		"goldenImage": "OG_048e.gif",
 		"id": "OG_048e",
@@ -50563,6 +55589,9 @@ var parseCardsText = {
 		"goldenImage": "OG_051.gif",
 		"health": 1,
 		"id": "OG_051",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Forbidden Ancient",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -50572,7 +55601,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "OG_051e.png",
 		"dbfId": 38339,
 		"goldenImage": "OG_051e.gif",
 		"id": "OG_051e",
@@ -50640,6 +55668,9 @@ var parseCardsText = {
 		"goldenImage": "OG_070.gif",
 		"health": 2,
 		"id": "OG_070",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Bladed Cultist",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -50649,7 +55680,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "OG_070e.png",
 		"dbfId": 38390,
 		"goldenImage": "OG_070e.gif",
 		"id": "OG_070e",
@@ -50705,9 +55735,20 @@ var parseCardsText = {
 		"cost": 4,
 		"dbfId": 38403,
 		"elite": true,
+		"entourage": [
+			"OG_080d",
+			"OG_080e",
+			"OG_080f",
+			"OG_080c",
+			"OG_080b"
+		],
 		"goldenImage": "OG_080.gif",
 		"health": 2,
 		"id": "OG_080",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Xaril, Poisoned Mind",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -50717,7 +55758,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_080ae.png",
 		"dbfId": 38936,
 		"goldenImage": "OG_080ae.gif",
 		"id": "OG_080ae",
@@ -50771,7 +55811,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_080de.png",
 		"dbfId": 38941,
 		"goldenImage": "OG_080de.gif",
 		"id": "OG_080de",
@@ -50800,7 +55839,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_080ee.png",
 		"dbfId": 38939,
 		"goldenImage": "OG_080ee.gif",
 		"id": "OG_080ee",
@@ -50854,6 +55892,9 @@ var parseCardsText = {
 		"goldenImage": "OG_082.gif",
 		"health": 2,
 		"id": "OG_082",
+		"mechanics": [
+			"SPELLPOWER"
+		],
 		"name": "Evolved Kobold",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -50873,6 +55914,9 @@ var parseCardsText = {
 		"goldenImage": "OG_083.gif",
 		"health": 2,
 		"id": "OG_083",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Twilight Flamecaller",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -50928,6 +55972,9 @@ var parseCardsText = {
 		"goldenImage": "OG_087.gif",
 		"health": 4,
 		"id": "OG_087",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Servant of Yogg-Saron",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -50969,7 +56016,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PRIEST",
-		"cardImage": "OG_094e.png",
 		"dbfId": 38424,
 		"goldenImage": "OG_094e.gif",
 		"id": "OG_094e",
@@ -50990,6 +56036,10 @@ var parseCardsText = {
 		"goldenImage": "OG_096.gif",
 		"health": 5,
 		"id": "OG_096",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Twilight Darkmender",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -51040,6 +56090,9 @@ var parseCardsText = {
 		"goldenImage": "OG_102.gif",
 		"health": 6,
 		"id": "OG_102",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Darkspeaker",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -51049,7 +56102,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_102e.png",
 		"dbfId": 38435,
 		"goldenImage": "OG_102e.gif",
 		"id": "OG_102e",
@@ -51077,10 +56129,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_104e.png",
 		"dbfId": 38438,
 		"goldenImage": "OG_104e.gif",
 		"id": "OG_104e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Embracing the Shadow",
 		"playerClass": "Neutral",
 		"set": "Og",
@@ -51098,6 +56152,10 @@ var parseCardsText = {
 		"goldenImage": "OG_109.gif",
 		"health": 2,
 		"id": "OG_109",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Darkshire Librarian",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -51125,7 +56183,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARLOCK",
-		"cardImage": "OG_113e.png",
 		"dbfId": 38963,
 		"goldenImage": "OG_113e.gif",
 		"id": "OG_113e",
@@ -51175,6 +56232,9 @@ var parseCardsText = {
 		"dbfId": 38456,
 		"goldenImage": "OG_116.gif",
 		"id": "OG_116",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Spreading Madness",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -51200,7 +56260,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_118e.png",
 		"dbfId": 38460,
 		"goldenImage": "OG_118e.gif",
 		"id": "OG_118e",
@@ -51211,7 +56270,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_118f.png",
 		"dbfId": 38459,
 		"goldenImage": "OG_118f.gif",
 		"id": "OG_118f",
@@ -51233,6 +56291,9 @@ var parseCardsText = {
 		"goldenImage": "OG_120.gif",
 		"health": 6,
 		"id": "OG_120",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Anomalus",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -51253,6 +56314,9 @@ var parseCardsText = {
 		"goldenImage": "OG_121.gif",
 		"health": 7,
 		"id": "OG_121",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Cho'gall",
 		"playerClass": "Warlock",
 		"rarity": "Legendary",
@@ -51262,7 +56326,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_121e.png",
 		"dbfId": 38964,
 		"goldenImage": "OG_121e.gif",
 		"id": "OG_121e",
@@ -51284,6 +56347,9 @@ var parseCardsText = {
 		"goldenImage": "OG_122.gif",
 		"health": 5,
 		"id": "OG_122",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Mukla, Tyrant of the Vale",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -51313,7 +56379,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_123e.png",
 		"dbfId": 38474,
 		"goldenImage": "OG_123e.gif",
 		"id": "OG_123e",
@@ -51335,6 +56400,11 @@ var parseCardsText = {
 		"goldenImage": "OG_131.gif",
 		"health": 6,
 		"id": "OG_131",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL",
+			"TAUNT"
+		],
 		"name": "Twin Emperor Vek'lor",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -51354,6 +56424,9 @@ var parseCardsText = {
 		"goldenImage": "OG_133.gif",
 		"health": 7,
 		"id": "OG_133",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "N'Zoth, the Corruptor",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -51376,6 +56449,9 @@ var parseCardsText = {
 		"goldenImage": "OG_134.gif",
 		"health": 5,
 		"id": "OG_134",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Yogg-Saron, Hope's End",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -51403,7 +56479,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_138e.png",
 		"dbfId": 38515,
 		"goldenImage": "OG_138e.gif",
 		"id": "OG_138e",
@@ -51458,6 +56533,10 @@ var parseCardsText = {
 		"goldenImage": "OG_145.gif",
 		"health": 4,
 		"id": "OG_145",
+		"mechanics": [
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Psych-o-Tron",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -51477,6 +56556,9 @@ var parseCardsText = {
 		"goldenImage": "OG_147.gif",
 		"health": 6,
 		"id": "OG_147",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Corrupted Healbot",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -51496,6 +56578,9 @@ var parseCardsText = {
 		"goldenImage": "OG_149.gif",
 		"health": 3,
 		"id": "OG_149",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ravaging Ghoul",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -51514,6 +56599,9 @@ var parseCardsText = {
 		"goldenImage": "OG_150.gif",
 		"health": 5,
 		"id": "OG_150",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Aberrant Berserker",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -51523,10 +56611,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_150e.png",
 		"dbfId": 40246,
 		"goldenImage": "OG_150e.gif",
 		"id": "OG_150e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Og",
@@ -51544,6 +56634,9 @@ var parseCardsText = {
 		"goldenImage": "OG_151.gif",
 		"health": 1,
 		"id": "OG_151",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Tentacle of N'Zoth",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -51562,6 +56655,9 @@ var parseCardsText = {
 		"goldenImage": "OG_152.gif",
 		"health": 5,
 		"id": "OG_152",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Grotesque Dragonhawk",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -51581,6 +56677,9 @@ var parseCardsText = {
 		"goldenImage": "OG_153.gif",
 		"health": 8,
 		"id": "OG_153",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Bog Creeper",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -51599,6 +56698,9 @@ var parseCardsText = {
 		"goldenImage": "OG_156.gif",
 		"health": 1,
 		"id": "OG_156",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bilefin Tidehunter",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -51620,6 +56722,9 @@ var parseCardsText = {
 		"goldenImage": "OG_156a.gif",
 		"health": 1,
 		"id": "OG_156a",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Ooze",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -51638,6 +56743,9 @@ var parseCardsText = {
 		"goldenImage": "OG_158.gif",
 		"health": 1,
 		"id": "OG_158",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Zealous Initiate",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -51647,7 +56755,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_158e.png",
 		"dbfId": 38626,
 		"goldenImage": "OG_158e.gif",
 		"id": "OG_158e",
@@ -51668,6 +56775,9 @@ var parseCardsText = {
 		"goldenImage": "OG_161.gif",
 		"health": 3,
 		"id": "OG_161",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Corrupted Seer",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -51687,6 +56797,10 @@ var parseCardsText = {
 		"goldenImage": "OG_162.gif",
 		"health": 1,
 		"id": "OG_162",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Disciple of C'Thun",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -51739,6 +56853,10 @@ var parseCardsText = {
 		"goldenImage": "OG_174.gif",
 		"health": 1,
 		"id": "OG_174",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Faceless Shambler",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -51748,7 +56866,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_174e.png",
 		"dbfId": 38568,
 		"goldenImage": "OG_174e.gif",
 		"id": "OG_174e",
@@ -51785,6 +56902,9 @@ var parseCardsText = {
 		"goldenImage": "OG_179.gif",
 		"health": 1,
 		"id": "OG_179",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Fiery Bat",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -51804,6 +56924,10 @@ var parseCardsText = {
 		"goldenImage": "OG_188.gif",
 		"health": 5,
 		"id": "OG_188",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Klaxxi Amber-Weaver",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -51813,7 +56937,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_188e.png",
 		"dbfId": 39337,
 		"goldenImage": "OG_188e.gif",
 		"id": "OG_188e",
@@ -51832,6 +56955,9 @@ var parseCardsText = {
 		"dbfId": 38655,
 		"goldenImage": "OG_195.gif",
 		"id": "OG_195",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Wisps of the Old Gods",
 		"playerClass": "Druid",
 		"rarity": "Epic",
@@ -51885,7 +57011,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_195e.png",
 		"dbfId": 38651,
 		"goldenImage": "OG_195e.gif",
 		"id": "OG_195e",
@@ -51931,7 +57056,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_200e.png",
 		"dbfId": 38668,
 		"goldenImage": "OG_200e.gif",
 		"id": "OG_200e",
@@ -51952,6 +57076,9 @@ var parseCardsText = {
 		"goldenImage": "OG_202.gif",
 		"health": 3,
 		"id": "OG_202",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Mire Keeper",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -51975,7 +57102,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DRUID",
-		"cardImage": "OG_202ae.png",
 		"dbfId": 38715,
 		"goldenImage": "OG_202ae.gif",
 		"id": "OG_202ae",
@@ -52024,6 +57150,9 @@ var parseCardsText = {
 		"dbfId": 38724,
 		"goldenImage": "OG_206.gif",
 		"id": "OG_206",
+		"mechanics": [
+			"OVERLOAD"
+		],
 		"name": "Stormcrack",
 		"overload": 1,
 		"playerClass": "Shaman",
@@ -52043,6 +57172,9 @@ var parseCardsText = {
 		"goldenImage": "OG_207.gif",
 		"health": 5,
 		"id": "OG_207",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Faceless Summoner",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -52097,6 +57229,9 @@ var parseCardsText = {
 		"goldenImage": "OG_216.gif",
 		"health": 3,
 		"id": "OG_216",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Infested Wolf",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -52132,6 +57267,10 @@ var parseCardsText = {
 		"goldenImage": "OG_218.gif",
 		"health": 6,
 		"id": "OG_218",
+		"mechanics": [
+			"ENRAGED",
+			"TAUNT"
+		],
 		"name": "Bloodhoof Brave",
 		"playerClass": "Warrior",
 		"rarity": "Common",
@@ -52141,10 +57280,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_218e.png",
 		"dbfId": 40245,
 		"goldenImage": "OG_218e.gif",
 		"id": "OG_218e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Enraged",
 		"playerClass": "Neutral",
 		"set": "Og",
@@ -52163,6 +57304,9 @@ var parseCardsText = {
 		"goldenImage": "OG_220.gif",
 		"health": 5,
 		"id": "OG_220",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Malkorok",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
@@ -52181,6 +57325,9 @@ var parseCardsText = {
 		"goldenImage": "OG_221.gif",
 		"health": 1,
 		"id": "OG_221",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Selfless Hero",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -52202,6 +57349,9 @@ var parseCardsText = {
 		"durability": 2,
 		"goldenImage": "OG_222.gif",
 		"id": "OG_222",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Rallying Blade",
 		"playerClass": "Paladin",
 		"rarity": "Rare",
@@ -52214,7 +57364,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "PALADIN",
-		"cardImage": "OG_222e.png",
 		"dbfId": 38744,
 		"goldenImage": "OG_222e.gif",
 		"id": "OG_222e",
@@ -52242,7 +57391,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_223e.png",
 		"dbfId": 38748,
 		"goldenImage": "OG_223e.gif",
 		"id": "OG_223e",
@@ -52283,6 +57431,9 @@ var parseCardsText = {
 		"goldenImage": "OG_234.gif",
 		"health": 5,
 		"id": "OG_234",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Darkshire Alchemist",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -52317,6 +57468,9 @@ var parseCardsText = {
 		"goldenImage": "OG_241.gif",
 		"health": 1,
 		"id": "OG_241",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Possessed Villager",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -52350,6 +57504,9 @@ var parseCardsText = {
 		"goldenImage": "OG_247.gif",
 		"health": 1,
 		"id": "OG_247",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Twisted Worgen",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52385,6 +57542,10 @@ var parseCardsText = {
 		"goldenImage": "OG_249.gif",
 		"health": 3,
 		"id": "OG_249",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Infested Tauren",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52418,6 +57579,9 @@ var parseCardsText = {
 		"goldenImage": "OG_254.gif",
 		"health": 4,
 		"id": "OG_254",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Eater of Secrets",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -52430,7 +57594,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_254e.png",
 		"dbfId": 38959,
 		"goldenImage": "OG_254e.gif",
 		"id": "OG_254e",
@@ -52451,6 +57614,10 @@ var parseCardsText = {
 		"goldenImage": "OG_255.gif",
 		"health": 9,
 		"id": "OG_255",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Doomcaller",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -52469,6 +57636,9 @@ var parseCardsText = {
 		"goldenImage": "OG_256.gif",
 		"health": 2,
 		"id": "OG_256",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Spawn of N'Zoth",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52478,7 +57648,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_256e.png",
 		"dbfId": 38796,
 		"goldenImage": "OG_256e.gif",
 		"id": "OG_256e",
@@ -52499,6 +57668,9 @@ var parseCardsText = {
 		"goldenImage": "OG_267.gif",
 		"health": 4,
 		"id": "OG_267",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Southsea Squidface",
 		"playerClass": "Rogue",
 		"race": "PIRATE",
@@ -52509,7 +57681,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "OG_267e.png",
 		"dbfId": 39100,
 		"goldenImage": "OG_267e.gif",
 		"id": "OG_267e",
@@ -52554,7 +57725,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_271e.png",
 		"dbfId": 38831,
 		"goldenImage": "OG_271e.gif",
 		"id": "OG_271e",
@@ -52575,6 +57745,9 @@ var parseCardsText = {
 		"goldenImage": "OG_272.gif",
 		"health": 1,
 		"id": "OG_272",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Twilight Summoner",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -52658,6 +57831,9 @@ var parseCardsText = {
 		"goldenImage": "OG_280.gif",
 		"health": 6,
 		"id": "OG_280",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "C'Thun",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -52676,6 +57852,10 @@ var parseCardsText = {
 		"goldenImage": "OG_281.gif",
 		"health": 3,
 		"id": "OG_281",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Beckoner of Evil",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52685,7 +57865,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_281e.png",
 		"dbfId": 38858,
 		"goldenImage": "OG_281e.gif",
 		"id": "OG_281e",
@@ -52706,6 +57885,10 @@ var parseCardsText = {
 		"goldenImage": "OG_282.gif",
 		"health": 4,
 		"id": "OG_282",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Blade of C'Thun",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -52715,10 +57898,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_282e.png",
 		"dbfId": 38860,
 		"goldenImage": "OG_282e.gif",
 		"id": "OG_282e",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Devotion of the Blade",
 		"playerClass": "Neutral",
 		"set": "Og",
@@ -52736,6 +57921,11 @@ var parseCardsText = {
 		"goldenImage": "OG_283.gif",
 		"health": 2,
 		"id": "OG_283",
+		"mechanics": [
+			"BATTLECRY",
+			"DIVINE_SHIELD",
+			"RITUAL"
+		],
 		"name": "C'Thun's Chosen",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52754,6 +57944,11 @@ var parseCardsText = {
 		"goldenImage": "OG_284.gif",
 		"health": 4,
 		"id": "OG_284",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL",
+			"TAUNT"
+		],
 		"name": "Twilight Geomancer",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52763,7 +57958,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_284e.png",
 		"dbfId": 38948,
 		"goldenImage": "OG_284e.gif",
 		"id": "OG_284e",
@@ -52784,6 +57978,9 @@ var parseCardsText = {
 		"goldenImage": "OG_286.gif",
 		"health": 4,
 		"id": "OG_286",
+		"mechanics": [
+			"RITUAL"
+		],
 		"name": "Twilight Elder",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52811,7 +58008,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_290e.png",
 		"dbfId": 38907,
 		"goldenImage": "OG_290e.gif",
 		"id": "OG_290e",
@@ -52832,6 +58028,9 @@ var parseCardsText = {
 		"goldenImage": "OG_291.gif",
 		"health": 4,
 		"id": "OG_291",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Shadowcaster",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -52841,7 +58040,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_291e.png",
 		"dbfId": 39089,
 		"goldenImage": "OG_291e.gif",
 		"id": "OG_291e",
@@ -52862,6 +58060,9 @@ var parseCardsText = {
 		"goldenImage": "OG_292.gif",
 		"health": 2,
 		"id": "OG_292",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Forlorn Stalker",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -52874,7 +58075,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_292e.png",
 		"dbfId": 38874,
 		"goldenImage": "OG_292e.gif",
 		"id": "OG_292e",
@@ -52895,6 +58095,11 @@ var parseCardsText = {
 		"goldenImage": "OG_293.gif",
 		"health": 7,
 		"id": "OG_293",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL",
+			"TAUNT"
+		],
 		"name": "Dark Arakkoa",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -52904,7 +58109,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_293e.png",
 		"dbfId": 38881,
 		"goldenImage": "OG_293e.gif",
 		"id": "OG_293e",
@@ -52916,7 +58120,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_293f.png",
 		"dbfId": 39000,
 		"goldenImage": "OG_293f.gif",
 		"id": "OG_293f",
@@ -52937,6 +58140,9 @@ var parseCardsText = {
 		"goldenImage": "OG_295.gif",
 		"health": 4,
 		"id": "OG_295",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Cult Apothecary",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -52965,7 +58171,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_300e.png",
 		"dbfId": 38894,
 		"goldenImage": "OG_300e.gif",
 		"id": "OG_300e",
@@ -52986,6 +58191,10 @@ var parseCardsText = {
 		"goldenImage": "OG_301.gif",
 		"health": 6,
 		"id": "OG_301",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Ancient Shieldbearer",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -53004,6 +58213,9 @@ var parseCardsText = {
 		"goldenImage": "OG_302.gif",
 		"health": 6,
 		"id": "OG_302",
+		"mechanics": [
+			"RITUAL"
+		],
 		"name": "Usher of Souls",
 		"playerClass": "Warlock",
 		"rarity": "Common",
@@ -53013,7 +58225,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_302e.png",
 		"dbfId": 39006,
 		"goldenImage": "OG_302e.gif",
 		"id": "OG_302e",
@@ -53034,6 +58245,10 @@ var parseCardsText = {
 		"goldenImage": "OG_303.gif",
 		"health": 2,
 		"id": "OG_303",
+		"mechanics": [
+			"RITUAL",
+			"SPELLPOWER"
+		],
 		"name": "Cult Sorcerer",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -53044,7 +58259,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_303e.png",
 		"dbfId": 38899,
 		"goldenImage": "OG_303e.gif",
 		"id": "OG_303e",
@@ -53085,6 +58299,9 @@ var parseCardsText = {
 		"goldenImage": "OG_309.gif",
 		"health": 5,
 		"id": "OG_309",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Princess Huhuran",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -53138,7 +58355,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_311e.png",
 		"dbfId": 38912,
 		"goldenImage": "OG_311e.gif",
 		"id": "OG_311e",
@@ -53159,6 +58375,9 @@ var parseCardsText = {
 		"goldenImage": "OG_312.gif",
 		"health": 1,
 		"id": "OG_312",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "N'Zoth's First Mate",
 		"playerClass": "Warrior",
 		"race": "PIRATE",
@@ -53169,7 +58388,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "OG_312e.png",
 		"dbfId": 38973,
 		"goldenImage": "OG_312e.gif",
 		"id": "OG_312e",
@@ -53200,7 +58418,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_313e.png",
 		"dbfId": 38915,
 		"goldenImage": "OG_313e.gif",
 		"id": "OG_313e",
@@ -53251,6 +58468,9 @@ var parseCardsText = {
 		"goldenImage": "OG_315.gif",
 		"health": 4,
 		"id": "OG_315",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bloodsail Cultist",
 		"playerClass": "Warrior",
 		"race": "PIRATE",
@@ -53261,7 +58481,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_315e.png",
 		"dbfId": 38919,
 		"goldenImage": "OG_315e.gif",
 		"id": "OG_315e",
@@ -53283,6 +58502,9 @@ var parseCardsText = {
 		"goldenImage": "OG_316.gif",
 		"health": 5,
 		"id": "OG_316",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Herald Volazj",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
@@ -53292,7 +58514,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_316k.png",
 		"dbfId": 39013,
 		"goldenImage": "OG_316k.gif",
 		"id": "OG_316k",
@@ -53314,6 +58535,9 @@ var parseCardsText = {
 		"goldenImage": "OG_317.gif",
 		"health": 12,
 		"id": "OG_317",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Deathwing, Dragonlord",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -53354,6 +58578,9 @@ var parseCardsText = {
 		"goldenImage": "OG_318t.gif",
 		"health": 2,
 		"id": "OG_318t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Gnoll",
 		"playerClass": "Neutral",
 		"set": "Og",
@@ -53371,6 +58598,9 @@ var parseCardsText = {
 		"goldenImage": "OG_319.gif",
 		"health": 6,
 		"id": "OG_319",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Twin Emperor Vek'nilash",
 		"playerClass": "Neutral",
 		"set": "Og",
@@ -53388,6 +58618,9 @@ var parseCardsText = {
 		"goldenImage": "OG_320.gif",
 		"health": 4,
 		"id": "OG_320",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Midnight Drake",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -53398,7 +58631,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_320e.png",
 		"dbfId": 38956,
 		"goldenImage": "OG_320e.gif",
 		"id": "OG_320e",
@@ -53419,6 +58651,10 @@ var parseCardsText = {
 		"goldenImage": "OG_321.gif",
 		"health": 6,
 		"id": "OG_321",
+		"mechanics": [
+			"RITUAL",
+			"TAUNT"
+		],
 		"name": "Crazed Worshipper",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -53428,7 +58664,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_321e.png",
 		"dbfId": 39007,
 		"goldenImage": "OG_321e.gif",
 		"id": "OG_321e",
@@ -53468,6 +58703,9 @@ var parseCardsText = {
 		"goldenImage": "OG_323.gif",
 		"health": 2,
 		"id": "OG_323",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Polluted Hoarder",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -53522,6 +58760,9 @@ var parseCardsText = {
 		"goldenImage": "OG_327.gif",
 		"health": 4,
 		"id": "OG_327",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Squirming Tentacle",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -53540,6 +58781,9 @@ var parseCardsText = {
 		"goldenImage": "OG_328.gif",
 		"health": 5,
 		"id": "OG_328",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Master of Evolution",
 		"playerClass": "Shaman",
 		"rarity": "Rare",
@@ -53558,6 +58802,9 @@ var parseCardsText = {
 		"goldenImage": "OG_330.gif",
 		"health": 2,
 		"id": "OG_330",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Undercity Huckster",
 		"playerClass": "Rogue",
 		"rarity": "Rare",
@@ -53576,6 +58823,9 @@ var parseCardsText = {
 		"goldenImage": "OG_334.gif",
 		"health": 6,
 		"id": "OG_334",
+		"mechanics": [
+			"RITUAL"
+		],
 		"name": "Hooded Acolyte",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -53594,6 +58844,9 @@ var parseCardsText = {
 		"goldenImage": "OG_335.gif",
 		"health": 3,
 		"id": "OG_335",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Shifting Shade",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -53612,6 +58865,10 @@ var parseCardsText = {
 		"goldenImage": "OG_337.gif",
 		"health": 3,
 		"id": "OG_337",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Cyclopian Horror",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -53621,7 +58878,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_337e.png",
 		"dbfId": 39045,
 		"goldenImage": "OG_337e.gif",
 		"id": "OG_337e",
@@ -53661,6 +58917,10 @@ var parseCardsText = {
 		"goldenImage": "OG_339.gif",
 		"health": 6,
 		"id": "OG_339",
+		"mechanics": [
+			"BATTLECRY",
+			"RITUAL"
+		],
 		"name": "Skeram Cultist",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -53670,7 +58930,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "OG_339e.png",
 		"dbfId": 39135,
 		"goldenImage": "OG_339e.gif",
 		"id": "OG_339e",
@@ -53692,6 +58951,11 @@ var parseCardsText = {
 		"goldenImage": "OG_340.gif",
 		"health": 9,
 		"id": "OG_340",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS",
+			"TAUNT"
+		],
 		"name": "Soggoth the Slitherer",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -53715,7 +58979,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "PART_001e.png",
 		"dbfId": 2158,
 		"goldenImage": "PART_001e.gif",
 		"id": "PART_001e",
@@ -53775,7 +59038,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "PART_004e.png",
 		"dbfId": 2372,
 		"goldenImage": "PART_004e.gif",
 		"id": "PART_004e",
@@ -53793,6 +59055,9 @@ var parseCardsText = {
 		"dbfId": 2155,
 		"goldenImage": "PART_005.gif",
 		"id": "PART_005",
+		"mechanics": [
+			"FREEZE"
+		],
 		"name": "Emergency Coolant",
 		"playerClass": "Neutral",
 		"set": "Gvg",
@@ -53815,7 +59080,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "PART_006a.png",
 		"dbfId": 2405,
 		"goldenImage": "PART_006a.gif",
 		"id": "PART_006a",
@@ -53841,7 +59105,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "PART_007e.png",
 		"dbfId": 2160,
 		"goldenImage": "PART_007e.gif",
 		"id": "PART_007e",
@@ -53864,9 +59127,17 @@ var parseCardsText = {
 		"cost": 5,
 		"dbfId": 1754,
 		"elite": true,
+		"entourage": [
+			"PRO_001a",
+			"PRO_001b",
+			"PRO_001c"
+		],
 		"goldenImage": "PRO_001.gif",
 		"health": 5,
 		"id": "PRO_001",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Elite Tauren Chieftain",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -53920,6 +59191,14 @@ var parseCardsText = {
 		"cardImage": "PRO_001c.png",
 		"cost": 4,
 		"dbfId": 1846,
+		"entourage": [
+			"CS2_121",
+			"EX1_021",
+			"EX1_023",
+			"EX1_110",
+			"EX1_390",
+			"CS2_179"
+		],
 		"goldenImage": "PRO_001c.gif",
 		"id": "PRO_001c",
 		"name": "Power of the Horde",
@@ -53962,7 +59241,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "MAGE",
-		"cardImage": "TagTeamIceBlock.png",
 		"dbfId": 46435,
 		"goldenImage": "TagTeamIceBlock.gif",
 		"id": "TagTeamIceBlock",
@@ -53974,8 +59252,69 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_001.png",
 		"dbfId": 2643,
+		"entourage": [
+			"BRMA14_10",
+			"BRMA14_10H",
+			"BRMA09_4",
+			"BRMA09_4H",
+			"BRMA17_5",
+			"BRMA17_5H",
+			"NAX15_04",
+			"NAX15_04H",
+			"NAX12_02",
+			"NAX12_02H",
+			"BRM_027p",
+			"BRM_027pH",
+			"BRMA09_5",
+			"BRMA09_5H",
+			"BRMA16_2",
+			"BRMA16_2H",
+			"NAX5_02",
+			"NAX5_02H",
+			"BRMA11_2",
+			"BRMA11_2H",
+			"BRMA17_8",
+			"BRMA17_8H",
+			"NAX15_02",
+			"NAX15_02H",
+			"NAX14_02",
+			"NAX8_02",
+			"NAX8_02H",
+			"NAX10_03",
+			"NAX10_03H",
+			"BRMA05_2",
+			"BRMA05_2H",
+			"BRMA02_2",
+			"BRMA02_2H",
+			"BRMA04_2",
+			"BRMA07_2",
+			"BRMA07_2H",
+			"NAX6_02",
+			"NAX6_02H",
+			"BRMA09_2",
+			"BRMA09_2H",
+			"BRMA01_2",
+			"BRMA01_2H",
+			"NAX11_02",
+			"NAX11_02H",
+			"NAX13_02",
+			"NAX2_03",
+			"NAX2_03H",
+			"NAX1_04",
+			"NAX1h_04",
+			"BRMA06_2",
+			"BRMA06_2H",
+			"BRMA10_3",
+			"BRMA10_3H",
+			"NAX7_03",
+			"NAX7_03H",
+			"NAX9_06",
+			"NAX3_02",
+			"NAX3_02H",
+			"BRMA13_4",
+			"BRMA13_4H"
+		],
 		"goldenImage": "TB_001.gif",
 		"id": "TB_001",
 		"name": "Boss HP Swapper",
@@ -53998,7 +59337,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_006e.png",
 		"dbfId": 2657,
 		"goldenImage": "TB_006e.gif",
 		"id": "TB_006e",
@@ -54023,7 +59361,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_007e.png",
 		"dbfId": 10081,
 		"goldenImage": "TB_007e.gif",
 		"id": "TB_007e",
@@ -54048,8 +59385,26 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_009.png",
 		"dbfId": 2685,
+		"entourage": [
+			"FP1_020",
+			"EX1_287",
+			"FP1_018",
+			"EX1_610",
+			"EX1_132",
+			"EX1_611",
+			"EX1_289",
+			"EX1_295",
+			"EX1_294",
+			"EX1_533",
+			"EX1_130",
+			"EX1_136",
+			"EX1_379",
+			"EX1_554",
+			"EX1_609",
+			"tt_010",
+			"EX1_594"
+		],
 		"goldenImage": "TB_009.gif",
 		"id": "TB_009",
 		"name": "Create 15 Secrets",
@@ -54059,7 +59414,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_010.png",
 		"dbfId": 2699,
 		"goldenImage": "TB_010.gif",
 		"id": "TB_010",
@@ -54070,7 +59424,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_010e.png",
 		"dbfId": 2722,
 		"goldenImage": "TB_010e.gif",
 		"id": "TB_010e",
@@ -54107,8 +59460,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_013.png",
 		"dbfId": 2761,
+		"goldenImage": "TB_013.gif",
 		"id": "TB_013",
 		"name": "Player Choice Enchant",
 		"playerClass": "Neutral",
@@ -54145,7 +59498,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_100th_001.png",
 		"dbfId": 45370,
 		"goldenImage": "TB_100th_001.gif",
 		"id": "TB_100th_001",
@@ -54157,7 +59509,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_100th_BananaPlayerEnchant.png",
 		"dbfId": 45643,
 		"goldenImage": "TB_100th_BananaPlayerEnchant.gif",
 		"id": "TB_100th_BananaPlayerEnchant",
@@ -54169,7 +59520,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_AllMinionsTauntCharge.png",
 		"dbfId": 38949,
 		"goldenImage": "TB_AllMinionsTauntCharge.gif",
 		"id": "TB_AllMinionsTauntCharge",
@@ -54181,7 +59531,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_BlingBrawl_Blade1e.png",
 		"dbfId": 38977,
 		"goldenImage": "TB_BlingBrawl_Blade1e.gif",
 		"id": "TB_BlingBrawl_Blade1e",
@@ -54193,7 +59542,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_BlingBrawl_Blade2e.png",
 		"dbfId": 38984,
 		"goldenImage": "TB_BlingBrawl_Blade2e.gif",
 		"id": "TB_BlingBrawl_Blade2e",
@@ -54204,7 +59552,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "TB_BlingBrawl_Hero1e.png",
 		"dbfId": 38974,
 		"goldenImage": "TB_BlingBrawl_Hero1e.gif",
 		"id": "TB_BlingBrawl_Hero1e",
@@ -54244,7 +59591,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Blizzcon2016_GoonsEnchant.png",
 		"dbfId": 42154,
 		"goldenImage": "TB_Blizzcon2016_GoonsEnchant.gif",
 		"id": "TB_Blizzcon2016_GoonsEnchant",
@@ -54255,7 +59601,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Blizzcon2016_KabalEnchant.png",
 		"dbfId": 42153,
 		"goldenImage": "TB_Blizzcon2016_KabalEnchant.gif",
 		"id": "TB_Blizzcon2016_KabalEnchant",
@@ -54266,7 +59611,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Blizzcon2016_LotusEnchant.png",
 		"dbfId": 42152,
 		"goldenImage": "TB_Blizzcon2016_LotusEnchant.gif",
 		"id": "TB_Blizzcon2016_LotusEnchant",
@@ -54277,7 +59621,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_BoomAnnoy_001e.png",
 		"dbfId": 42207,
 		"goldenImage": "TB_BoomAnnoy_001e.gif",
 		"id": "TB_BoomAnnoy_001e",
@@ -54301,7 +59644,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_BossRumble001hpe.png",
 		"dbfId": 42666,
 		"goldenImage": "TB_BossRumble001hpe.gif",
 		"id": "TB_BossRumble001hpe",
@@ -54351,22 +59693,6 @@ var parseCardsText = {
 	{
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_BossRumble_002hp.png",
-		"collectionText": {
-			"deDE": "Ruft einen <b>Jadegolem</b> herbei.",
-			"enUS": "Summon a <b>Jade Golem</b>.",
-			"esES": "Invoca un <b>gólem de jade</b>.",
-			"esMX": "Invoca un <b>Gólem de jade</b>.",
-			"frFR": "Invoque un <b>golem de jade</b>.",
-			"itIT": "Evoca un <b>Golem di Giada</b>.",
-			"jaJP": "<b>翡翠のゴーレム</b>を1体召喚する。",
-			"koKR": "<b>비취 골렘</b>을 하나 소환합니다.",
-			"plPL": "Przyzwij <b>Nefrytowego golema</b>.",
-			"ptBR": "Evoque um <b>Golem de Jade</b>.",
-			"ruRU": "Призывает <b>нефритового голема</b>.",
-			"thTH": "เรียก <b>เจดโกเล็ม</b> หนึ่งตัว",
-			"zhCN": "召唤一个<b>青玉魔像</b>。",
-			"zhTW": "召喚一個<b>翠玉魔像</b>"
-		},
 		"cost": 4,
 		"dbfId": 42662,
 		"goldenImage": "TB_BossRumble_002hp.gif",
@@ -54430,8 +59756,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_BuildaBoss_001.png",
 		"dbfId": 47534,
+		"goldenImage": "TB_BuildaBoss_001.gif",
 		"health": 80,
 		"id": "TB_BuildaBoss_001",
 		"name": "Catacomb Boss",
@@ -54441,9 +59767,9 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_BuildaBoss_404p.png",
 		"cost": 2,
 		"dbfId": 47532,
+		"goldenImage": "TB_BuildaBoss_404p.gif",
 		"id": "TB_BuildaBoss_404p",
 		"name": "Toxic Fumes",
 		"playerClass": "Neutral",
@@ -54505,8 +59831,18 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_ClassRandom_Pick2nd_100th.png",
 		"dbfId": 45407,
+		"entourage": [
+			"TB_ClassRandom_Warrior",
+			"TB_ClassRandom_Warlock",
+			"TB_ClassRandom_Shaman",
+			"TB_ClassRandom_Rogue",
+			"TB_ClassRandom_Priest",
+			"TB_ClassRandom_Paladin",
+			"TB_ClassRandom_Mage",
+			"TB_ClassRandom_Hunter",
+			"TB_ClassRandom_Druid"
+		],
 		"goldenImage": "TB_ClassRandom_Pick2nd_100th.gif",
 		"id": "TB_ClassRandom_Pick2nd_100th",
 		"name": "Pick your second class",
@@ -54516,8 +59852,18 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_ClassRandom_PickSecondClass.png",
 		"dbfId": 40033,
+		"entourage": [
+			"TB_ClassRandom_Warrior",
+			"TB_ClassRandom_Warlock",
+			"TB_ClassRandom_Shaman",
+			"TB_ClassRandom_Rogue",
+			"TB_ClassRandom_Priest",
+			"TB_ClassRandom_Paladin",
+			"TB_ClassRandom_Mage",
+			"TB_ClassRandom_Hunter",
+			"TB_ClassRandom_Druid"
+		],
 		"goldenImage": "TB_ClassRandom_PickSecondClass.gif",
 		"id": "TB_ClassRandom_PickSecondClass",
 		"name": "Pick your second class",
@@ -54615,6 +59961,9 @@ var parseCardsText = {
 		"goldenImage": "TB_CoOp_Mechazod_OLD.gif",
 		"health": 95,
 		"id": "TB_CoOp_Mechazod_OLD",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Gearmaster Mechazod",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -54631,6 +59980,9 @@ var parseCardsText = {
 		"goldenImage": "TB_CoOp_Mechazod_V2.gif",
 		"health": 95,
 		"id": "TB_CoOp_Mechazod_V2",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Gearmaster Mechazod",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -54894,10 +60246,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_009e.png",
 		"dbfId": 40290,
 		"goldenImage": "TB_CoOpv3_009e.gif",
 		"id": "TB_CoOpv3_009e",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Going Nova",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -54913,6 +60267,9 @@ var parseCardsText = {
 		"goldenImage": "TB_Coopv3_009t.gif",
 		"health": 3,
 		"id": "TB_Coopv3_009t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Explosive Rune",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55010,7 +60367,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_101e.png",
 		"dbfId": 40524,
 		"goldenImage": "TB_CoOpv3_101e.gif",
 		"id": "TB_CoOpv3_101e",
@@ -55085,6 +60441,9 @@ var parseCardsText = {
 		"goldenImage": "TB_Coopv3_104.gif",
 		"health": 4,
 		"id": "TB_Coopv3_104",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Main Tank",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55100,6 +60459,9 @@ var parseCardsText = {
 		"goldenImage": "TB_Coopv3_104_NewClasses.gif",
 		"health": 4,
 		"id": "TB_Coopv3_104_NewClasses",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Main Tank",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55108,7 +60470,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_104e.png",
 		"dbfId": 40519,
 		"goldenImage": "TB_CoOpv3_104e.gif",
 		"id": "TB_CoOpv3_104e",
@@ -55197,6 +60558,10 @@ var parseCardsText = {
 		"goldenImage": "TB_CoOpv3_Boss.gif",
 		"health": 200,
 		"id": "TB_CoOpv3_Boss",
+		"mechanics": [
+			"TAUNT",
+			"InvisibleDeathrattle"
+		],
 		"name": "Nefarian",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -55207,10 +60572,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_BOSS2e.png",
 		"dbfId": 40533,
 		"goldenImage": "TB_CoOpv3_BOSS2e.gif",
 		"id": "TB_CoOpv3_BOSS2e",
+		"mechanics": [
+			"ENRAGED"
+		],
 		"name": "Getting Angry....",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55219,10 +60586,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_BOSS3e.png",
 		"dbfId": 40585,
 		"goldenImage": "TB_CoOpv3_BOSS3e.gif",
 		"id": "TB_CoOpv3_BOSS3e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Enough!",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55231,10 +60600,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_BOSS4e.png",
 		"dbfId": 40730,
 		"goldenImage": "TB_CoOpv3_BOSS4e.gif",
 		"id": "TB_CoOpv3_BOSS4e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Cowed",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55251,6 +60622,10 @@ var parseCardsText = {
 		"goldenImage": "TB_CoOpv3_Boss_FB.gif",
 		"health": 200,
 		"id": "TB_CoOpv3_Boss_FB",
+		"mechanics": [
+			"TAUNT",
+			"InvisibleDeathrattle"
+		],
 		"name": "Nefarian",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -55269,6 +60644,10 @@ var parseCardsText = {
 		"goldenImage": "TB_CoOpv3_Boss_NewClasses.gif",
 		"health": 200,
 		"id": "TB_CoOpv3_Boss_NewClasses",
+		"mechanics": [
+			"TAUNT",
+			"InvisibleDeathrattle"
+		],
 		"name": "Nefarian",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -55279,7 +60658,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_CoOpv3_BOSSe.png",
 		"dbfId": 40356,
 		"goldenImage": "TB_CoOpv3_BOSSe.gif",
 		"id": "TB_CoOpv3_BOSSe",
@@ -55291,7 +60669,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_DeckRecipe_MyDeckID.png",
 		"dbfId": 40427,
 		"goldenImage": "TB_DeckRecipe_MyDeckID.gif",
 		"id": "TB_DeckRecipe_MyDeckID",
@@ -55319,7 +60696,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_DiscoverMyDeck_Enchantment.png",
 		"dbfId": 42272,
 		"goldenImage": "TB_DiscoverMyDeck_Enchantment.gif",
 		"id": "TB_DiscoverMyDeck_Enchantment",
@@ -55338,6 +60714,9 @@ var parseCardsText = {
 		"health": 10,
 		"hideStats": true,
 		"id": "TB_Dorothee_001",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Dorothee",
 		"playerClass": "Neutral",
 		"referencedTags": [
@@ -55350,7 +60729,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_EndlessMinions01.png",
 		"dbfId": 17264,
 		"goldenImage": "TB_EndlessMinions01.gif",
 		"id": "TB_EndlessMinions01",
@@ -55362,7 +60740,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Face_Ench1.png",
 		"dbfId": 38995,
 		"goldenImage": "TB_Face_Ench1.gif",
 		"id": "TB_Face_Ench1",
@@ -55394,6 +60771,9 @@ var parseCardsText = {
 		"goldenImage": "TB_FireFestival_Brazier.gif",
 		"health": 1,
 		"id": "TB_FireFestival_Brazier",
+		"mechanics": [
+			"IMMUNE"
+		],
 		"name": "Brazier",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -55410,6 +60790,9 @@ var parseCardsText = {
 		"goldenImage": "TB_FireFestival_Fireworks.gif",
 		"health": 1,
 		"id": "TB_FireFestival_Fireworks",
+		"mechanics": [
+			"IMMUNE"
+		],
 		"name": "Fireworks",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -55426,6 +60809,10 @@ var parseCardsText = {
 		"goldenImage": "TB_FireFestival_MRag.gif",
 		"health": 3,
 		"id": "TB_FireFestival_MRag",
+		"mechanics": [
+			"CANT_ATTACK",
+			"IMMUNE"
+		],
 		"name": "Mini-Rag",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -55442,6 +60829,10 @@ var parseCardsText = {
 		"goldenImage": "TB_Frost_Rag.gif",
 		"health": 4,
 		"id": "TB_Frost_Rag",
+		"mechanics": [
+			"CANT_ATTACK",
+			"DEATHRATTLE"
+		],
 		"name": "Ragnaros?",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -55459,6 +60850,9 @@ var parseCardsText = {
 		"goldenImage": "TB_FW_DrBoomMega.gif",
 		"health": 9,
 		"id": "TB_FW_DrBoomMega",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Dr. Boom Boom Boom Boom",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55474,6 +60868,11 @@ var parseCardsText = {
 		"goldenImage": "TB_FW_ImbaTron.gif",
 		"health": 3,
 		"id": "TB_FW_ImbaTron",
+		"mechanics": [
+			"BATTLECRY",
+			"DIVINE_SHIELD",
+			"TAUNT"
+		],
 		"name": "Annoy-o-p-Tron",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -55505,6 +60904,10 @@ var parseCardsText = {
 		"goldenImage": "TB_FW_OmegaMax.gif",
 		"health": 10,
 		"id": "TB_FW_OmegaMax",
+		"mechanics": [
+			"BATTLECRY",
+			"DIVINE_SHIELD"
+		],
 		"name": "Force-Tank OMEGA MAX",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -55534,6 +60937,9 @@ var parseCardsText = {
 		"goldenImage": "TB_FW_Warper.gif",
 		"health": 5,
 		"id": "TB_FW_Warper",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Omegawarper",
 		"playerClass": "Neutral",
 		"race": "MECHANICAL",
@@ -55543,7 +60949,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_GiftExchange_Enchantment.png",
 		"dbfId": 38586,
 		"goldenImage": "TB_GiftExchange_Enchantment.gif",
 		"id": "TB_GiftExchange_Enchantment",
@@ -55575,6 +60980,9 @@ var parseCardsText = {
 		"goldenImage": "TB_GiftExchange_Treasure.gif",
 		"health": 4,
 		"id": "TB_GiftExchange_Treasure",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Winter's Veil Gift",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55603,6 +61011,9 @@ var parseCardsText = {
 		"dbfId": 39870,
 		"goldenImage": "TB_GP_01e.gif",
 		"id": "TB_GP_01e",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "Shadow Tower Power",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55611,10 +61022,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_GP_01e_copy1.png",
 		"dbfId": 40003,
 		"goldenImage": "TB_GP_01e_copy1.gif",
 		"id": "TB_GP_01e_copy1",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "Shadow Tower Give My minions Stealth",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55623,7 +61036,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_GP_01e_v2.png",
 		"dbfId": 40002,
 		"goldenImage": "TB_GP_01e_v2.gif",
 		"id": "TB_GP_01e_v2",
@@ -55642,6 +61054,9 @@ var parseCardsText = {
 		"goldenImage": "TB_GP_03.gif",
 		"health": 4,
 		"id": "TB_GP_03",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Shadow Tower New",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -55650,7 +61065,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_GreatCurves_01.png",
 		"dbfId": 36751,
 		"goldenImage": "TB_GreatCurves_01.gif",
 		"id": "TB_GreatCurves_01",
@@ -55738,7 +61152,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_HeadlessHorseman_005e.png",
 		"dbfId": 47471,
 		"goldenImage": "TB_HeadlessHorseman_005e.gif",
 		"id": "TB_HeadlessHorseman_005e",
@@ -55750,8 +61163,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_HeadlessHorseman_GameEnch.png",
 		"dbfId": 47301,
+		"entourage": [
+			"TB_HeadlessHorseman_s001a",
+			"TB_HeadlessHorseman_s001c",
+			"TB_HeadlessHorseman_s001b"
+		],
 		"goldenImage": "TB_HeadlessHorseman_GameEnch.gif",
 		"id": "TB_HeadlessHorseman_GameEnch",
 		"name": "Pick Costume",
@@ -55787,6 +61204,11 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_HeadlessHorseman_H2.png",
 		"dbfId": 46970,
+		"entourage": [
+			"TB_HeadlessHorseman_s001a",
+			"TB_HeadlessHorseman_s001c",
+			"TB_HeadlessHorseman_s001b"
+		],
 		"goldenImage": "TB_HeadlessHorseman_H2.gif",
 		"health": 30,
 		"id": "TB_HeadlessHorseman_H2",
@@ -55799,6 +61221,11 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_HeadlessHorseman_H2a.png",
 		"dbfId": 47540,
+		"entourage": [
+			"TB_HeadlessHorseman_s001a",
+			"TB_HeadlessHorseman_s001c",
+			"TB_HeadlessHorseman_s001b"
+		],
 		"goldenImage": "TB_HeadlessHorseman_H2a.gif",
 		"health": 30,
 		"id": "TB_HeadlessHorseman_H2a",
@@ -55811,6 +61238,11 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_HeadlessHorseman_H2b.png",
 		"dbfId": 47541,
+		"entourage": [
+			"TB_HeadlessHorseman_s001a",
+			"TB_HeadlessHorseman_s001c",
+			"TB_HeadlessHorseman_s001b"
+		],
 		"goldenImage": "TB_HeadlessHorseman_H2b.gif",
 		"health": 30,
 		"id": "TB_HeadlessHorseman_H2b",
@@ -55823,6 +61255,11 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_HeadlessHorseman_H2c.png",
 		"dbfId": 47542,
+		"entourage": [
+			"TB_HeadlessHorseman_s001a",
+			"TB_HeadlessHorseman_s001c",
+			"TB_HeadlessHorseman_s001b"
+		],
 		"goldenImage": "TB_HeadlessHorseman_H2c.gif",
 		"health": 30,
 		"id": "TB_HeadlessHorseman_H2c",
@@ -55886,7 +61323,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_HeadlessHorseman_HP5e.png",
 		"dbfId": 47034,
 		"goldenImage": "TB_HeadlessHorseman_HP5e.gif",
 		"id": "TB_HeadlessHorseman_HP5e",
@@ -55901,6 +61337,26 @@ var parseCardsText = {
 		"cardImage": "TB_HeadlessHorseman_s001a.png",
 		"cost": 0,
 		"dbfId": 46960,
+		"entourage": [
+			"EX1_246",
+			"CFM_603",
+			"LOE_046",
+			"LOE_115",
+			"KAR_300",
+			"OG_179",
+			"CS2_013",
+			"EX1_277",
+			"GVG_001",
+			"CS2_023",
+			"UNG_948",
+			"OG_090",
+			"CFM_661",
+			"DS1_233",
+			"CS2_234",
+			"UNG_029",
+			"ICC_802",
+			"CS2_053"
+		],
 		"goldenImage": "TB_HeadlessHorseman_s001a.gif",
 		"id": "TB_HeadlessHorseman_s001a",
 		"name": "Witch Costume",
@@ -55914,6 +61370,26 @@ var parseCardsText = {
 		"cardImage": "TB_HeadlessHorseman_s001b.png",
 		"cost": 0,
 		"dbfId": 46975,
+		"entourage": [
+			"CFM_315",
+			"GVG_034",
+			"EX1_165",
+			"KAR_004",
+			"KARA_05_02",
+			"CS2_005",
+			"UNG_910",
+			"EX1_570",
+			"AT_042",
+			"UNG_812",
+			"GVG_046",
+			"NAX15_05",
+			"KARA_07_05heroic",
+			"EX1_028",
+			"EX1_534",
+			"ICC_079",
+			"CS2_011",
+			"CS2_012"
+		],
 		"goldenImage": "TB_HeadlessHorseman_s001b.gif",
 		"id": "TB_HeadlessHorseman_s001b",
 		"name": "Cat Costume",
@@ -55927,6 +61403,25 @@ var parseCardsText = {
 		"cardImage": "TB_HeadlessHorseman_s001c.png",
 		"cost": 0,
 		"dbfId": 46974,
+		"entourage": [
+			"CFM_637",
+			"GVG_075",
+			"GVG_075",
+			"NEW1_027",
+			"NEW1_027",
+			"OG_315",
+			"OG_315",
+			"AT_070",
+			"GVG_025",
+			"GVG_025",
+			"AT_032",
+			"AT_032",
+			"CS2_106",
+			"ICC_018",
+			"OG_312",
+			"CS2_080",
+			"EX1_133"
+		],
 		"goldenImage": "TB_HeadlessHorseman_s001c.gif",
 		"id": "TB_HeadlessHorseman_s001c",
 		"name": "Pirate Costume",
@@ -55963,7 +61458,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_HeadlessHorseman_XXX.png",
 		"cost": 0,
 		"dbfId": 48240,
 		"goldenImage": "TB_HeadlessHorseman_XXX.gif",
@@ -55976,7 +61470,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_HealthAttackSwap_Ench.png",
 		"dbfId": 47214,
 		"goldenImage": "TB_HealthAttackSwap_Ench.gif",
 		"id": "TB_HealthAttackSwap_Ench",
@@ -56002,7 +61495,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_KaraPortal_002.png",
 		"cost": 2,
 		"dbfId": 40961,
 		"goldenImage": "TB_KaraPortal_002.gif",
@@ -56016,10 +61508,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_KaraPortal_003.png",
 		"dbfId": 40966,
 		"goldenImage": "TB_KaraPortal_003.gif",
 		"id": "TB_KaraPortal_003",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Saddened Hero Enchant",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56042,8 +61536,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_KoboldGiftEnch.png",
 		"dbfId": 49027,
+		"goldenImage": "TB_KoboldGiftEnch.gif",
 		"id": "TB_KoboldGiftEnch",
 		"name": "Great Father Kobold Enchant",
 		"playerClass": "Neutral",
@@ -56056,8 +61550,12 @@ var parseCardsText = {
 		"cardImage": "TB_KoboldGiftMinion.png",
 		"cost": 0,
 		"dbfId": 48645,
+		"goldenImage": "TB_KoboldGiftMinion.gif",
 		"health": 4,
 		"id": "TB_KoboldGiftMinion",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Large Waxy Gift",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56066,9 +61564,9 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_KoboldGiftSpell.png",
 		"cost": 0,
 		"dbfId": 49025,
+		"goldenImage": "TB_KoboldGiftSpell.gif",
 		"id": "TB_KoboldGiftSpell",
 		"name": "Great Father Kobold Spell",
 		"playerClass": "Neutral",
@@ -56127,6 +61625,19 @@ var parseCardsText = {
 		"cardImage": "TB_KTRAF_101.png",
 		"cost": 8,
 		"dbfId": 39110,
+		"entourage": [
+			"TB_KTRAF_1",
+			"TB_KTRAF_3",
+			"TB_KTRAF_4",
+			"TB_KTRAF_5",
+			"TB_KTRAF_6",
+			"TB_KTRAF_7",
+			"TB_KTRAF_8",
+			"TB_KTRAF_2",
+			"TB_KTRAF_10",
+			"TB_KTRAF_12",
+			"TB_KTRAF_11"
+		],
 		"goldenImage": "TB_KTRAF_101.gif",
 		"id": "TB_KTRAF_101",
 		"name": "Darkness Calls",
@@ -56153,7 +61664,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_KTRAF_10e.png",
 		"dbfId": 39676,
 		"goldenImage": "TB_KTRAF_10e.gif",
 		"id": "TB_KTRAF_10e",
@@ -56193,6 +61703,9 @@ var parseCardsText = {
 		"goldenImage": "TB_KTRAF_12.gif",
 		"health": 8,
 		"id": "TB_KTRAF_12",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Patchwerk",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56209,6 +61722,9 @@ var parseCardsText = {
 		"goldenImage": "TB_KTRAF_2.gif",
 		"health": 7,
 		"id": "TB_KTRAF_2",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lady Blaumeux",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56241,6 +61757,17 @@ var parseCardsText = {
 		"cost": 4,
 		"dbfId": 39067,
 		"elite": true,
+		"entourage": [
+			"FP1_001",
+			"AT_030",
+			"LOE_019",
+			"EX1_012",
+			"EX1_059",
+			"FP1_004",
+			"EX1_616",
+			"FP1_024",
+			"tt_004"
+		],
 		"goldenImage": "TB_KTRAF_3.gif",
 		"health": 4,
 		"id": "TB_KTRAF_3",
@@ -56260,6 +61787,9 @@ var parseCardsText = {
 		"goldenImage": "TB_KTRAF_4.gif",
 		"health": 4,
 		"id": "TB_KTRAF_4",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Gothik the Harvester",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56326,6 +61856,9 @@ var parseCardsText = {
 		"goldenImage": "TB_KTRAF_6m.gif",
 		"health": 2,
 		"id": "TB_KTRAF_6m",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Fallout Slime",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56358,6 +61891,9 @@ var parseCardsText = {
 		"goldenImage": "TB_KTRAF_8.gif",
 		"health": 3,
 		"id": "TB_KTRAF_8",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Instructor Razuvious",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56451,6 +61987,9 @@ var parseCardsText = {
 		"goldenImage": "TB_KTRAF_Under.gif",
 		"health": 7,
 		"id": "TB_KTRAF_Under",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Understudy",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56604,6 +62143,10 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_LethalSetup02.png",
 		"dbfId": 46142,
+		"entourage": [
+			"TB_LethalSetup001a",
+			"TB_LethalSetup001b"
+		],
 		"goldenImage": "TB_LethalSetup02.gif",
 		"id": "TB_LethalSetup02",
 		"name": "Brawl Progress Saved",
@@ -56658,6 +62201,9 @@ var parseCardsText = {
 		"dbfId": 42940,
 		"goldenImage": "TB_MammothParty_301.gif",
 		"id": "TB_MammothParty_301",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Rock Candy",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56671,6 +62217,9 @@ var parseCardsText = {
 		"dbfId": 42941,
 		"goldenImage": "TB_MammothParty_302.gif",
 		"id": "TB_MammothParty_302",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Regenerative Cookies",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56684,6 +62233,9 @@ var parseCardsText = {
 		"dbfId": 42942,
 		"goldenImage": "TB_MammothParty_303.gif",
 		"id": "TB_MammothParty_303",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Divine Sweets",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56696,9 +62248,17 @@ var parseCardsText = {
 		"cardImage": "TB_MammothParty_Boss002.png",
 		"cost": 10,
 		"dbfId": 42856,
+		"entourage": [
+			"TB_MammothParty_303",
+			"TB_MammothParty_302",
+			"TB_MammothParty_301"
+		],
 		"goldenImage": "TB_MammothParty_Boss002.gif",
 		"health": 85,
 		"id": "TB_MammothParty_Boss002",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Piñata Golem",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56740,6 +62300,9 @@ var parseCardsText = {
 		"goldenImage": "TB_MammothParty_m001.gif",
 		"health": 5,
 		"id": "TB_MammothParty_m001",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Party Crasher",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56755,6 +62318,9 @@ var parseCardsText = {
 		"goldenImage": "TB_MammothParty_m001_alt.gif",
 		"health": 5,
 		"id": "TB_MammothParty_m001_alt",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Party Crasher",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56763,10 +62329,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_MammothParty_s002ee.png",
 		"dbfId": 42917,
 		"goldenImage": "TB_MammothParty_s002ee.gif",
 		"id": "TB_MammothParty_s002ee",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Raucous",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56780,6 +62348,9 @@ var parseCardsText = {
 		"dbfId": 42896,
 		"goldenImage": "TB_MammothParty_s004.gif",
 		"id": "TB_MammothParty_s004",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Something in the Punch",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56806,6 +62377,9 @@ var parseCardsText = {
 		"dbfId": 42922,
 		"goldenImage": "TB_MammothParty_s101a.gif",
 		"id": "TB_MammothParty_s101a",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Fruit Plate",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56819,6 +62393,9 @@ var parseCardsText = {
 		"dbfId": 42923,
 		"goldenImage": "TB_MammothParty_s101b.gif",
 		"id": "TB_MammothParty_s101b",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Like a Sore Thumb",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56832,6 +62409,9 @@ var parseCardsText = {
 		"dbfId": 42897,
 		"goldenImage": "TB_MammothParty_s998.gif",
 		"id": "TB_MammothParty_s998",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Noise Complaint",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56846,6 +62426,10 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "TB_Marin_001.gif",
 		"id": "TB_Marin_001",
+		"mechanics": [
+			"QUEST",
+			"ImmuneToSpellpower"
+		],
 		"name": "Journey to the Catacombs",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -56907,8 +62491,15 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_MechWar_CommonCards.png",
 		"dbfId": 37456,
+		"entourage": [
+			"GVG_069",
+			"GVG_079",
+			"GVG_034",
+			"GVG_048",
+			"GVG_049",
+			"GVG_088"
+		],
 		"goldenImage": "TB_MechWar_CommonCards.gif",
 		"id": "TB_MechWar_CommonCards",
 		"name": "TBMechWarCommonCards",
@@ -56925,6 +62516,9 @@ var parseCardsText = {
 		"goldenImage": "TB_MechWar_Minion1.gif",
 		"health": 1,
 		"id": "TB_MechWar_Minion1",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Mech Fan",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -56933,7 +62527,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Mini_1e.png",
 		"dbfId": 38962,
 		"goldenImage": "TB_Mini_1e.gif",
 		"id": "TB_Mini_1e",
@@ -56965,7 +62558,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "WARRIOR",
-		"cardImage": "TB_MP_01e.png",
 		"dbfId": 39777,
 		"goldenImage": "TB_MP_01e.gif",
 		"id": "TB_MP_01e",
@@ -56977,7 +62569,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "DREAM",
-		"cardImage": "TB_MP_02e.png",
 		"dbfId": 39778,
 		"goldenImage": "TB_MP_02e.gif",
 		"id": "TB_MP_02e",
@@ -56989,7 +62580,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "SHAMAN",
-		"cardImage": "TB_OG_027.png",
 		"cost": 1,
 		"dbfId": 40402,
 		"goldenImage": "TB_OG_027.gif",
@@ -57003,8 +62593,13 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate.png",
 		"dbfId": 38672,
+		"entourage": [
+			"TB_PickYourFate_9",
+			"TB_PickYourFate_10",
+			"TB_PickYourFate_11b",
+			"TB_PickYourFate_8"
+		],
 		"goldenImage": "TB_PickYourFate.gif",
 		"id": "TB_PickYourFate",
 		"name": "Pick Your Fate Build Around",
@@ -57014,7 +62609,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate7Ench.png",
 		"dbfId": 38701,
 		"goldenImage": "TB_PickYourFate7Ench.gif",
 		"id": "TB_PickYourFate7Ench",
@@ -57051,7 +62645,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_10_Ench.png",
 		"dbfId": 38806,
 		"goldenImage": "TB_PickYourFate_10_Ench.gif",
 		"id": "TB_PickYourFate_10_Ench",
@@ -57062,7 +62655,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_10_EnchMinion.png",
 		"dbfId": 39016,
 		"goldenImage": "TB_PickYourFate_10_EnchMinion.gif",
 		"id": "TB_PickYourFate_10_EnchMinion",
@@ -57074,7 +62666,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_11_Ench.png",
 		"dbfId": 38808,
 		"goldenImage": "TB_PickYourFate_11_Ench.gif",
 		"id": "TB_PickYourFate_11_Ench",
@@ -57124,7 +62715,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_12_Ench.png",
 		"dbfId": 38952,
 		"goldenImage": "TB_PickYourFate_12_Ench.gif",
 		"id": "TB_PickYourFate_12_Ench",
@@ -57135,7 +62725,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_1_Ench.png",
 		"dbfId": 38691,
 		"goldenImage": "TB_PickYourFate_1_Ench.gif",
 		"id": "TB_PickYourFate_1_Ench",
@@ -57159,7 +62748,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_2_Ench.png",
 		"dbfId": 38692,
 		"goldenImage": "TB_PickYourFate_2_Ench.gif",
 		"id": "TB_PickYourFate_2_Ench",
@@ -57170,10 +62758,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_2_EnchMinion.png",
 		"dbfId": 39032,
 		"goldenImage": "TB_PickYourFate_2_EnchMinion.gif",
 		"id": "TB_PickYourFate_2_EnchMinion",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Fate",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57182,8 +62772,15 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_2nd.png",
 		"dbfId": 39024,
+		"entourage": [
+			"TB_PickYourFate_1",
+			"TB_PickYourFate_4",
+			"TB_PickYourFate_7_2nd",
+			"TB_PickYourFate_3",
+			"TB_PickYourFate_6_2nd",
+			"TB_PickYourFate_11rand"
+		],
 		"goldenImage": "TB_PickYourFate_2nd.gif",
 		"id": "TB_PickYourFate_2nd",
 		"name": "Pick Your Fate Randon 2nd",
@@ -57206,7 +62803,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_3_Ench.png",
 		"dbfId": 38693,
 		"goldenImage": "TB_PickYourFate_3_Ench.gif",
 		"id": "TB_PickYourFate_3_Ench",
@@ -57230,7 +62826,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_4_Ench.png",
 		"dbfId": 38694,
 		"goldenImage": "TB_PickYourFate_4_Ench.gif",
 		"id": "TB_PickYourFate_4_Ench",
@@ -57241,10 +62836,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_4_EnchMinion.png",
 		"dbfId": 39019,
 		"goldenImage": "TB_PickYourFate_4_EnchMinion.gif",
 		"id": "TB_PickYourFate_4_EnchMinion",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Fate",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57266,7 +62863,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_5_Ench.png",
 		"dbfId": 38695,
 		"goldenImage": "TB_PickYourFate_5_Ench.gif",
 		"id": "TB_PickYourFate_5_Ench",
@@ -57329,7 +62925,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_7_Ench_2nd.png",
 		"dbfId": 39038,
 		"goldenImage": "TB_PickYourFate_7_Ench_2nd.gif",
 		"id": "TB_PickYourFate_7_Ench_2nd",
@@ -57340,7 +62935,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_7_EnchMiniom2nd.png",
 		"dbfId": 39039,
 		"goldenImage": "TB_PickYourFate_7_EnchMiniom2nd.gif",
 		"id": "TB_PickYourFate_7_EnchMiniom2nd",
@@ -57352,7 +62946,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_7_EnchMinion.png",
 		"dbfId": 39031,
 		"goldenImage": "TB_PickYourFate_7_EnchMinion.gif",
 		"id": "TB_PickYourFate_7_EnchMinion",
@@ -57377,7 +62970,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_8_Ench.png",
 		"dbfId": 38702,
 		"goldenImage": "TB_PickYourFate_8_Ench.gif",
 		"id": "TB_PickYourFate_8_Ench",
@@ -57388,7 +62980,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_8_EnchRand.png",
 		"dbfId": 39042,
 		"goldenImage": "TB_PickYourFate_8_EnchRand.gif",
 		"id": "TB_PickYourFate_8_EnchRand",
@@ -57425,7 +63016,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_9_Ench.png",
 		"dbfId": 38804,
 		"goldenImage": "TB_PickYourFate_9_Ench.gif",
 		"id": "TB_PickYourFate_9_Ench",
@@ -57436,7 +63026,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_9_EnchMinion.png",
 		"dbfId": 39017,
 		"goldenImage": "TB_PickYourFate_9_EnchMinion.gif",
 		"id": "TB_PickYourFate_9_EnchMinion",
@@ -57448,7 +63037,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_Confused.png",
 		"dbfId": 38954,
 		"goldenImage": "TB_PickYourFate_Confused.gif",
 		"id": "TB_PickYourFate_Confused",
@@ -57460,7 +63048,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFate_Windfury.png",
 		"dbfId": 38696,
 		"goldenImage": "TB_PickYourFate_Windfury.gif",
 		"id": "TB_PickYourFate_Windfury",
@@ -57472,8 +63059,15 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_PickYourFateRandom.png",
 		"dbfId": 38851,
+		"entourage": [
+			"TB_PickYourFate_12",
+			"TB_PickYourFate_2",
+			"TB_PickYourFate_8rand",
+			"TB_PickYourFate_6",
+			"TB_PickYourFate_5",
+			"TB_PickYourFate_7"
+		],
 		"goldenImage": "TB_PickYourFateRandom.gif",
 		"id": "TB_PickYourFateRandom",
 		"name": "Pick Your Fate Random",
@@ -57483,7 +63077,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Pilot1.png",
 		"dbfId": 2703,
 		"goldenImage": "TB_Pilot1.gif",
 		"id": "TB_Pilot1",
@@ -57501,6 +63094,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "TB_Presents_001.gif",
 		"id": "TB_Presents_001",
+		"mechanics": [
+			"TOPDECK"
+		],
 		"name": "Present!",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57537,7 +63133,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_RandCardCost.png",
 		"dbfId": 37603,
 		"goldenImage": "TB_RandCardCost.gif",
 		"id": "TB_RandCardCost",
@@ -57548,8 +63143,21 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_RandHero2_001.png",
 		"dbfId": 28554,
+		"entourage": [
+			"BRMA07_2_2_TB",
+			"BRMA01_2H_2_TB",
+			"BRMA17_5_TB",
+			"NAX12_02H_2_TB",
+			"BRMA02_2_2_TB",
+			"NAX11_02H_2_TB",
+			"BRMA13_4_2_TB",
+			"BRMA09_2_TB",
+			"BRMA14_10H_TB",
+			"BRMA06_2H_TB",
+			"NAX3_02_TB",
+			"NAX8_02H_TB"
+		],
 		"goldenImage": "TB_RandHero2_001.gif",
 		"id": "TB_RandHero2_001",
 		"name": "TB_EnchWhosTheBossNow",
@@ -57559,7 +63167,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_RMC_001.png",
 		"dbfId": 28703,
 		"goldenImage": "TB_RMC_001.gif",
 		"id": "TB_RMC_001",
@@ -57584,7 +63191,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "TB_ShadowReflection_001e.png",
 		"dbfId": 48308,
 		"goldenImage": "TB_ShadowReflection_001e.gif",
 		"id": "TB_ShadowReflection_001e",
@@ -57596,7 +63202,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_Spellwrite_001.png",
 		"dbfId": 42731,
 		"goldenImage": "TB_Spellwrite_001.gif",
 		"id": "TB_Spellwrite_001",
@@ -57610,7 +63215,7 @@ var parseCardsText = {
 		"cardImage": "TB_SPT_Boss.png",
 		"dbfId": 39134,
 		"goldenImage": "TB_SPT_Boss.gif",
-		"health": 1,
+		"health": 1000,
 		"id": "TB_SPT_Boss",
 		"name": "City of Stormwind",
 		"playerClass": "Neutral",
@@ -57624,10 +63229,13 @@ var parseCardsText = {
 		"dbfId": 39537,
 		"goldenImage": "TB_SPT_BossHeroPower.gif",
 		"id": "TB_SPT_BossHeroPower",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Barracks",
 		"playerClass": "Neutral",
 		"set": "Tb",
-		"text": "<b>Hero Power</b>\nPlay a random Stormwind Soldier.",
+		"text": "<b>Hero Power</b>\nSummon a random Stormwind Soldier.",
 		"type": "Hero_power"
 	},
 	{
@@ -57677,6 +63285,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromo_Hero2.gif",
 		"health": 30,
 		"id": "TB_SPT_DPromo_Hero2",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "The Cow King",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57691,6 +63302,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromoCrate1.gif",
 		"health": 4,
 		"id": "TB_SPT_DPromoCrate1",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Weapon Rack",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57706,6 +63320,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromoCrate2.gif",
 		"health": 4,
 		"id": "TB_SPT_DPromoCrate2",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Discarded Armor",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57721,6 +63338,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromoCrate3.gif",
 		"health": 4,
 		"id": "TB_SPT_DPromoCrate3",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Chest of Gold!",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57729,7 +63349,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_DPromoEnch3.png",
 		"dbfId": 42182,
 		"goldenImage": "TB_SPT_DPromoEnch3.gif",
 		"id": "TB_SPT_DPromoEnch3",
@@ -57786,6 +63405,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromoMinion.gif",
 		"health": 2,
 		"id": "TB_SPT_DPromoMinion",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Hell Bovine",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -57802,6 +63424,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromoMinion2.gif",
 		"health": 4,
 		"id": "TB_SPT_DPromoMinion2",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "Guardian",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57814,9 +63439,22 @@ var parseCardsText = {
 		"cardImage": "TB_SPT_DPromoMinionChamp.png",
 		"cost": 5,
 		"dbfId": 42225,
+		"entourage": [
+			"AT_050",
+			"CS2_112",
+			"LOE_118",
+			"EX1_567",
+			"TB_BlingBrawl_Weapon",
+			"CS2_106",
+			"CFM_631",
+			"CS2_080"
+		],
 		"goldenImage": "TB_SPT_DPromoMinionChamp.gif",
 		"health": 4,
 		"id": "TB_SPT_DPromoMinionChamp",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Hell Bovine Champion",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -57833,6 +63471,10 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_DPromoMinionInit.gif",
 		"health": 2,
 		"id": "TB_SPT_DPromoMinionInit",
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
 		"name": "Hell Bovine",
 		"playerClass": "Neutral",
 		"race": "DEMON",
@@ -57850,6 +63492,10 @@ var parseCardsText = {
 		"health": 10,
 		"hideStats": true,
 		"id": "TB_SPT_DpromoPortal",
+		"mechanics": [
+			"BATTLECRY",
+			"IMMUNE"
+		],
 		"name": "Enigmatic Portal",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -57863,6 +63509,9 @@ var parseCardsText = {
 		"dbfId": 42176,
 		"goldenImage": "TB_SPT_DPromoSecre8.gif",
 		"id": "TB_SPT_DPromoSecre8",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of the Assassin",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57871,7 +63520,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_DPromoSecre8e.png",
 		"dbfId": 42175,
 		"goldenImage": "TB_SPT_DPromoSecre8e.gif",
 		"id": "TB_SPT_DPromoSecre8e",
@@ -57888,6 +63536,9 @@ var parseCardsText = {
 		"dbfId": 42159,
 		"goldenImage": "TB_SPT_DPromoSecret1.gif",
 		"id": "TB_SPT_DPromoSecret1",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of the Barbarian",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57901,6 +63552,9 @@ var parseCardsText = {
 		"dbfId": 42181,
 		"goldenImage": "TB_SPT_DPromoSecret10.gif",
 		"id": "TB_SPT_DPromoSecret10",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of Hate",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57914,6 +63568,9 @@ var parseCardsText = {
 		"dbfId": 42162,
 		"goldenImage": "TB_SPT_DPromoSecret2.gif",
 		"id": "TB_SPT_DPromoSecret2",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of the Crusader",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57927,6 +63584,9 @@ var parseCardsText = {
 		"dbfId": 42163,
 		"goldenImage": "TB_SPT_DPromoSecret3.gif",
 		"id": "TB_SPT_DPromoSecret3",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of Valor",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57940,6 +63600,9 @@ var parseCardsText = {
 		"dbfId": 42164,
 		"goldenImage": "TB_SPT_DPromoSecret4.gif",
 		"id": "TB_SPT_DPromoSecret4",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of Fate",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57953,6 +63616,9 @@ var parseCardsText = {
 		"dbfId": 42171,
 		"goldenImage": "TB_SPT_DPromoSecret5.gif",
 		"id": "TB_SPT_DPromoSecret5",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of the Amazon",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57966,6 +63632,9 @@ var parseCardsText = {
 		"dbfId": 42173,
 		"goldenImage": "TB_SPT_DPromoSecret6.gif",
 		"id": "TB_SPT_DPromoSecret6",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of the Sorcerer",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57979,6 +63648,9 @@ var parseCardsText = {
 		"dbfId": 42174,
 		"goldenImage": "TB_SPT_DPromoSecret7.gif",
 		"id": "TB_SPT_DPromoSecret7",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of the Necromancer",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -57992,6 +63664,9 @@ var parseCardsText = {
 		"dbfId": 42178,
 		"goldenImage": "TB_SPT_DPromoSecret9.gif",
 		"id": "TB_SPT_DPromoSecret9",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Visions of Knowledge",
 		"playerClass": "Warrior",
 		"set": "Tb",
@@ -58000,7 +63675,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_DPromoSecret9e.png",
 		"dbfId": 42366,
 		"goldenImage": "TB_SPT_DPromoSecret9e.gif",
 		"id": "TB_SPT_DPromoSecret9e",
@@ -58051,7 +63725,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_DPromoSpellBovine1e.png",
 		"dbfId": 42257,
 		"goldenImage": "TB_SPT_DPromoSpellBovine1e.gif",
 		"id": "TB_SPT_DPromoSpellBovine1e",
@@ -58096,6 +63769,10 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_Minion1.gif",
 		"health": 1,
 		"id": "TB_SPT_Minion1",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Shieldsman",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58104,7 +63781,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_Minion1e.png",
 		"dbfId": 39293,
 		"goldenImage": "TB_SPT_Minion1e.gif",
 		"id": "TB_SPT_Minion1e",
@@ -58123,6 +63799,10 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_Minion2.gif",
 		"health": 2,
 		"id": "TB_SPT_Minion2",
+		"mechanics": [
+			"ADJACENT_BUFF",
+			"AURA"
+		],
 		"name": "Battle Standard",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58131,7 +63811,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_Minion2e.png",
 		"dbfId": 39295,
 		"goldenImage": "TB_SPT_Minion2e.gif",
 		"id": "TB_SPT_Minion2e",
@@ -58150,6 +63829,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_Minion3.gif",
 		"health": 1,
 		"id": "TB_SPT_Minion3",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Swordsman",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58158,7 +63840,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SPT_Minion3e.png",
 		"dbfId": 39294,
 		"goldenImage": "TB_SPT_Minion3e.gif",
 		"id": "TB_SPT_Minion3e",
@@ -58223,10 +63904,13 @@ var parseCardsText = {
 		"dbfId": 42902,
 		"goldenImage": "TB_SPT_MTH_BossHeroPower.gif",
 		"id": "TB_SPT_MTH_BossHeroPower",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
 		"name": "Party Barracks",
 		"playerClass": "Neutral",
 		"set": "Tb",
-		"text": "<b>Hero Power</b>\nPlay a random Stormwind Partygoer.",
+		"text": "<b>Hero Power</b>\nSummon a random Stormwind Partygoer.",
 		"type": "Hero_power"
 	},
 	{
@@ -58253,6 +63937,10 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_MTH_Minion1.gif",
 		"health": 1,
 		"id": "TB_SPT_MTH_Minion1",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Happy Partygoer",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58268,6 +63956,10 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_MTH_Minion2.gif",
 		"health": 2,
 		"id": "TB_SPT_MTH_Minion2",
+		"mechanics": [
+			"ADJACENT_BUFF",
+			"AURA"
+		],
 		"name": "Party Banner",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58283,6 +63975,9 @@ var parseCardsText = {
 		"goldenImage": "TB_SPT_MTH_Minion3.gif",
 		"health": 1,
 		"id": "TB_SPT_MTH_Minion3",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ornery Partygoer",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58304,7 +63999,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "TB_Superfriends001e.png",
 		"dbfId": 39881,
 		"goldenImage": "TB_Superfriends001e.gif",
 		"id": "TB_Superfriends001e",
@@ -58316,7 +64010,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "ROGUE",
-		"cardImage": "TB_Superfriends002e.png",
 		"dbfId": 39895,
 		"goldenImage": "TB_Superfriends002e.gif",
 		"id": "TB_Superfriends002e",
@@ -58339,7 +64032,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_SwapHeroWithDeathKnight.png",
 		"dbfId": 46404,
 		"goldenImage": "TB_SwapHeroWithDeathKnight.gif",
 		"id": "TB_SwapHeroWithDeathKnight",
@@ -58350,7 +64042,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_TagTeam.png",
 		"dbfId": 41005,
 		"goldenImage": "TB_TagTeam.gif",
 		"id": "TB_TagTeam",
@@ -58388,8 +64079,18 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_TagTeam_GetClass.png",
 		"dbfId": 41000,
+		"entourage": [
+			"TB_TagTeam_Paladin",
+			"TB_TagTeam_Shaman",
+			"TB_TagTeam_Warlock",
+			"TB_TagTeam_Druid",
+			"TB_TagTeam_Hunter",
+			"TB_TagTeam_Mage",
+			"TB_TagTeam_Priest",
+			"TB_TagTeam_Rogue",
+			"TB_TagTeam_Warrior"
+		],
 		"goldenImage": "TB_TagTeam_GetClass.gif",
 		"id": "TB_TagTeam_GetClass",
 		"name": "Discover Next Class",
@@ -58525,7 +64226,6 @@ var parseCardsText = {
 	{
 		"attack": 1,
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_VoidSingularityEnch.png",
 		"dbfId": 47169,
 		"goldenImage": "TB_VoidSingularityEnch.gif",
 		"health": 1,
@@ -58551,7 +64251,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TB_YoggServant_Enchant.png",
 		"dbfId": 39957,
 		"goldenImage": "TB_YoggServant_Enchant.gif",
 		"id": "TB_YoggServant_Enchant",
@@ -58619,6 +64318,9 @@ var parseCardsText = {
 		"goldenImage": "TBST_001.gif",
 		"health": 2,
 		"id": "TBST_001",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "OLDN3wb Tank",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58679,6 +64381,9 @@ var parseCardsText = {
 		"goldenImage": "TBST_005.gif",
 		"health": 6,
 		"id": "TBST_005",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "OLDPvP Rogue",
 		"playerClass": "Neutral",
 		"set": "Tb",
@@ -58687,8 +64392,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TBST_006.png",
 		"dbfId": 20438,
+		"entourage": [
+			"TBST_003",
+			"TBST_002",
+			"TBST_001"
+		],
 		"goldenImage": "TBST_006.gif",
 		"id": "TBST_006",
 		"name": "OLDTBST Push Common Card",
@@ -58699,8 +64408,11 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TBUD_1.png",
 		"dbfId": 20642,
+		"entourage": [
+			"CS1_042",
+			"CS2_171"
+		],
 		"goldenImage": "TBUD_1.gif",
 		"id": "TBUD_1",
 		"name": "TBUD Summon Early Minion",
@@ -58742,7 +64454,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "tt_004o.png",
 		"dbfId": 1036,
 		"goldenImage": "tt_004o.gif",
 		"id": "tt_004o",
@@ -58761,6 +64472,9 @@ var parseCardsText = {
 		"dbfId": 366,
 		"goldenImage": "tt_010.gif",
 		"id": "tt_010",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Spellbender",
 		"playerClass": "Mage",
 		"rarity": "Epic",
@@ -58917,6 +64631,9 @@ var parseCardsText = {
 		"goldenImage": "TU4c_003.gif",
 		"health": 2,
 		"id": "TU4c_003",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Barrel",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -58970,7 +64687,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TU4c_006e.png",
 		"dbfId": 1502,
 		"goldenImage": "TU4c_006e.gif",
 		"id": "TU4c_006e",
@@ -59012,10 +64728,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TU4c_008e.png",
 		"dbfId": 1542,
 		"goldenImage": "TU4c_008e.gif",
 		"id": "TU4c_008e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Might of Mukla",
 		"playerClass": "Neutral",
 		"set": "Missions",
@@ -59222,7 +64940,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TU4f_004o.png",
 		"dbfId": 1676,
 		"goldenImage": "TU4f_004o.gif",
 		"id": "TU4f_004o",
@@ -59263,7 +64980,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "TU4f_006o.png",
 		"dbfId": 1678,
 		"goldenImage": "TU4f_006o.gif",
 		"id": "TU4f_006o",
@@ -59282,6 +64998,9 @@ var parseCardsText = {
 		"goldenImage": "TU4f_007.gif",
 		"health": 2,
 		"id": "TU4f_007",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Crazy Monkey",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -59300,6 +65019,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_001.gif",
 		"health": 2,
 		"id": "UNG_001",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Pterrordax Hatchling",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -59322,6 +65044,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_002.gif",
 		"health": 6,
 		"id": "UNG_002",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Volcanosaur",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -59352,7 +65077,6 @@ var parseCardsText = {
 	{
 		"artist": "Andrew Hou",
 		"cardClass": "PALADIN",
-		"cardImage": "UNG_004e.png",
 		"dbfId": 41129,
 		"goldenImage": "UNG_004e.gif",
 		"id": "UNG_004e",
@@ -59373,6 +65097,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_009.gif",
 		"health": 2,
 		"id": "UNG_009",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ravasaur Runt",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -59395,6 +65122,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_010.gif",
 		"health": 7,
 		"id": "UNG_010",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sated Threshadon",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -59414,6 +65144,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_011.gif",
 		"health": 2,
 		"id": "UNG_011",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hydrologist",
 		"playerClass": "Paladin",
 		"race": "MURLOC",
@@ -59438,6 +65171,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_015.gif",
 		"health": 7,
 		"id": "UNG_015",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Sunkeeper Tarim",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -59448,7 +65185,6 @@ var parseCardsText = {
 	{
 		"artist": "Mike Azevedo",
 		"cardClass": "PALADIN",
-		"cardImage": "UNG_015e.png",
 		"dbfId": 41144,
 		"goldenImage": "UNG_015e.gif",
 		"id": "UNG_015e",
@@ -59486,6 +65222,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_019.gif",
 		"health": 1,
 		"id": "UNG_019",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Air Elemental",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -59505,6 +65245,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_020.gif",
 		"health": 3,
 		"id": "UNG_020",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Arcanologist",
 		"playerClass": "Mage",
 		"rarity": "Common",
@@ -59526,6 +65269,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_021.gif",
 		"health": 4,
 		"id": "UNG_021",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Steam Surger",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -59545,6 +65291,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_022.gif",
 		"health": 3,
 		"id": "UNG_022",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Mirage Caller",
 		"playerClass": "Priest",
 		"rarity": "Rare",
@@ -59555,7 +65304,6 @@ var parseCardsText = {
 	{
 		"artist": "Hideaki Takamura",
 		"cardClass": "PRIEST",
-		"cardImage": "UNG_022e.png",
 		"dbfId": 42497,
 		"goldenImage": "UNG_022e.gif",
 		"id": "UNG_022e",
@@ -59574,6 +65322,9 @@ var parseCardsText = {
 		"dbfId": 41158,
 		"goldenImage": "UNG_024.gif",
 		"id": "UNG_024",
+		"mechanics": [
+			"SECRET"
+		],
 		"name": "Mana Bind",
 		"playerClass": "Mage",
 		"rarity": "Rare",
@@ -59590,6 +65341,10 @@ var parseCardsText = {
 		"dbfId": 41159,
 		"goldenImage": "UNG_025.gif",
 		"id": "UNG_025",
+		"mechanics": [
+			"OVERLOAD",
+			"ImmuneToSpellpower"
+		],
 		"name": "Volcano",
 		"overload": 2,
 		"playerClass": "Shaman",
@@ -59610,6 +65365,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_027.gif",
 		"health": 2,
 		"id": "UNG_027",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Pyros",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -59629,6 +65387,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_027t2.gif",
 		"health": 6,
 		"id": "UNG_027t2",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Pyros",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -59665,25 +65426,15 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_028.gif",
 		"id": "UNG_028",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "Open the Waygate",
 		"playerClass": "Mage",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Cast 6 spells that\ndidn't start in your deck.\n<b>Reward:</b> Time Warp.",
 		"type": "Spell"
-	},
-	{
-		"artist": "Rafael Zanchetin",
-		"cardClass": "MAGE",
-		"cardImage": "UNG_028e.png",
-		"dbfId": 41495,
-		"goldenImage": "UNG_028e.gif",
-		"id": "UNG_028e",
-		"name": "Insightful",
-		"playerClass": "Mage",
-		"set": "Ungoro",
-		"text": "Take an extra turn.",
-		"type": "Enchantment"
 	},
 	{
 		"artist": "Rafael Zanchetin",
@@ -59747,6 +65498,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_032.gif",
 		"health": 1,
 		"id": "UNG_032",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Crystalline Oracle",
 		"playerClass": "Priest",
 		"race": "ELEMENTAL",
@@ -59766,6 +65520,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_034.gif",
 		"health": 3,
 		"id": "UNG_034",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Radiant Elemental",
 		"playerClass": "Priest",
 		"race": "ELEMENTAL",
@@ -59785,6 +65542,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_035.gif",
 		"health": 3,
 		"id": "UNG_035",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Curious Glimmerroot",
 		"playerClass": "Priest",
 		"rarity": "Epic",
@@ -59803,6 +65563,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_037.gif",
 		"health": 6,
 		"id": "UNG_037",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Tortollan Shellraiser",
 		"playerClass": "Priest",
 		"rarity": "Common",
@@ -59813,7 +65577,6 @@ var parseCardsText = {
 	{
 		"artist": "Tyler Walpole",
 		"cardClass": "PRIEST",
-		"cardImage": "UNG_037e.png",
 		"dbfId": 41702,
 		"goldenImage": "UNG_037e.gif",
 		"id": "UNG_037e",
@@ -59834,6 +65597,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_047.gif",
 		"health": 4,
 		"id": "UNG_047",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Ravenous Pterrordax",
 		"playerClass": "Warlock",
 		"race": "BEAST",
@@ -59856,6 +65622,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_049.gif",
 		"health": 7,
 		"id": "UNG_049",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Tar Lurker",
 		"playerClass": "Warlock",
 		"race": "ELEMENTAL",
@@ -59905,6 +65674,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_058.gif",
 		"health": 2,
 		"id": "UNG_058",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Razorpetal Lasher",
 		"playerClass": "Rogue",
 		"rarity": "Common",
@@ -59957,6 +65729,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_063.gif",
 		"health": 1,
 		"id": "UNG_063",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Biteweed",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -59967,7 +65742,6 @@ var parseCardsText = {
 	{
 		"artist": "Craig Elliot",
 		"cardClass": "ROGUE",
-		"cardImage": "UNG_063e.png",
 		"dbfId": 41215,
 		"goldenImage": "UNG_063e.gif",
 		"id": "UNG_063e",
@@ -59988,6 +65762,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_064.gif",
 		"health": 4,
 		"id": "UNG_064",
+		"mechanics": [
+			"COMBO"
+		],
 		"name": "Vilespine Slayer",
 		"playerClass": "Rogue",
 		"rarity": "Epic",
@@ -60007,6 +65784,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_065.gif",
 		"health": 3,
 		"id": "UNG_065",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Sherazin, Corpse Flower",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -60025,6 +65805,9 @@ var parseCardsText = {
 		"health": 1,
 		"hideStats": true,
 		"id": "UNG_065t",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Sherazin, Seed",
 		"playerClass": "Rogue",
 		"set": "Ungoro",
@@ -60041,6 +65824,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_067.gif",
 		"id": "UNG_067",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "The Caverns Below",
 		"playerClass": "Rogue",
 		"rarity": "Legendary",
@@ -60057,6 +65843,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_067t1.gif",
 		"id": "UNG_067t1",
+		"mechanics": [
+			"RITUAL"
+		],
 		"name": "Crystal Core",
 		"playerClass": "Rogue",
 		"set": "Ungoro",
@@ -60066,7 +65855,6 @@ var parseCardsText = {
 	{
 		"artist": "James Ryman",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_067t1e.png",
 		"dbfId": 42991,
 		"goldenImage": "UNG_067t1e.gif",
 		"id": "UNG_067t1e",
@@ -60078,7 +65866,6 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_067t1e2.png",
 		"dbfId": 46043,
 		"goldenImage": "UNG_067t1e2.gif",
 		"id": "UNG_067t1e2",
@@ -60099,6 +65886,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_070.gif",
 		"health": 5,
 		"id": "UNG_070",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tol'vir Stoneshaper",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -60113,7 +65903,6 @@ var parseCardsText = {
 	{
 		"artist": "Mike Azevedo",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_070e.png",
 		"dbfId": 41240,
 		"goldenImage": "UNG_070e.gif",
 		"id": "UNG_070e",
@@ -60134,6 +65923,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_071.gif",
 		"health": 10,
 		"id": "UNG_071",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Giant Mastodon",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -60153,6 +65945,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_072.gif",
 		"health": 4,
 		"id": "UNG_072",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Stonehill Defender",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -60174,6 +65970,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_073.gif",
 		"health": 3,
 		"id": "UNG_073",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Rockpool Hunter",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -60185,7 +65984,6 @@ var parseCardsText = {
 	{
 		"artist": "Alex Horley Orlandelli",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_073e.png",
 		"dbfId": 41244,
 		"goldenImage": "UNG_073e.gif",
 		"id": "UNG_073e",
@@ -60228,6 +66026,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_076.gif",
 		"health": 1,
 		"id": "UNG_076",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Eggnapper",
 		"playerClass": "Neutral",
 		"rarity": "Common",
@@ -60262,6 +66063,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_078.gif",
 		"health": 2,
 		"id": "UNG_078",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tortollan Forager",
 		"playerClass": "Druid",
 		"rarity": "Common",
@@ -60302,6 +66106,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_082.gif",
 		"health": 3,
 		"id": "UNG_082",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Thunder Lizard",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -60324,6 +66131,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_083.gif",
 		"health": 3,
 		"id": "UNG_083",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Devilsaur Egg",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -60358,6 +66168,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_084.gif",
 		"health": 3,
 		"id": "UNG_084",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fire Plume Phoenix",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -60378,6 +66191,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_085.gif",
 		"health": 3,
 		"id": "UNG_085",
+		"mechanics": [
+			"AURA"
+		],
 		"name": "Emerald Hive Queen",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -60397,6 +66213,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_086.gif",
 		"health": 3,
 		"id": "UNG_086",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Giant Anaconda",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60435,6 +66254,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_088.gif",
 		"health": 4,
 		"id": "UNG_088",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tortollan Primalist",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -60456,6 +66278,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_089.gif",
 		"health": 4,
 		"id": "UNG_089",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gentle Megasaur",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -60478,6 +66303,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_099.gif",
 		"health": 7,
 		"id": "UNG_099",
+		"mechanics": [
+			"BATTLECRY",
+			"CHARGE"
+		],
 		"name": "Charged Devilsaur",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -60497,6 +66326,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_100.gif",
 		"health": 4,
 		"id": "UNG_100",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Verdant Longneck",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60519,6 +66351,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_101.gif",
 		"health": 3,
 		"id": "UNG_101",
+		"mechanics": [
+			"CHOOSE_ONE"
+		],
 		"name": "Shellshifter",
 		"playerClass": "Druid",
 		"rarity": "Rare",
@@ -60568,6 +66403,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_101t.gif",
 		"health": 3,
 		"id": "UNG_101t",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Shellshifter",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60586,6 +66424,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_101t2.gif",
 		"health": 5,
 		"id": "UNG_101t2",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Shellshifter",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60604,6 +66445,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_101t3.gif",
 		"health": 5,
 		"id": "UNG_101t3",
+		"mechanics": [
+			"STEALTH",
+			"TAUNT"
+		],
 		"name": "Shellshifter",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60650,7 +66495,6 @@ var parseCardsText = {
 	{
 		"artist": "Mike Azevedo",
 		"cardClass": "DRUID",
-		"cardImage": "UNG_108e.png",
 		"dbfId": 41951,
 		"goldenImage": "UNG_108e.gif",
 		"id": "UNG_108e",
@@ -60668,9 +66512,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"dbfId": 41086,
+		"entourage": [
+			"UNG_999t10",
+			"UNG_999t2",
+			"UNG_999t3",
+			"UNG_999t4",
+			"UNG_999t5",
+			"UNG_999t6",
+			"UNG_999t7",
+			"UNG_999t8",
+			"UNG_999t13",
+			"UNG_999t14"
+		],
 		"goldenImage": "UNG_109.gif",
 		"health": 1,
 		"id": "UNG_109",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Elder Longneck",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60708,6 +66567,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_111t1.gif",
 		"health": 2,
 		"id": "UNG_111t1",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Mana Treant",
 		"playerClass": "Druid",
 		"set": "Ungoro",
@@ -60725,6 +66587,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_113.gif",
 		"health": 4,
 		"id": "UNG_113",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Bright-Eyed Scout",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -60735,7 +66600,6 @@ var parseCardsText = {
 	{
 		"artist": "Trent Kaniuga",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_113e.png",
 		"dbfId": 41434,
 		"goldenImage": "UNG_113e.gif",
 		"id": "UNG_113e",
@@ -60755,6 +66619,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_116.gif",
 		"id": "UNG_116",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "Jungle Giants",
 		"playerClass": "Druid",
 		"rarity": "Legendary",
@@ -60773,6 +66640,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_116t.gif",
 		"health": 8,
 		"id": "UNG_116t",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Barnabus the Stomper",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -60783,7 +66653,6 @@ var parseCardsText = {
 	{
 		"artist": "Sean McNally",
 		"cardClass": "DRUID",
-		"cardImage": "UNG_116te.png",
 		"dbfId": 41953,
 		"goldenImage": "UNG_116te.gif",
 		"id": "UNG_116te",
@@ -60839,6 +66708,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_202.gif",
 		"health": 1,
 		"id": "UNG_202",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fire Plume Harbinger",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -60849,8 +66721,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_202e.png",
 		"dbfId": 49414,
+		"goldenImage": "UNG_202e.gif",
 		"id": "UNG_202e",
 		"name": "Fiery",
 		"playerClass": "Neutral",
@@ -60869,6 +66741,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_205.gif",
 		"health": 1,
 		"id": "UNG_205",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Glacial Shard",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -60891,6 +66766,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_208.gif",
 		"health": 4,
 		"id": "UNG_208",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Stone Sentinel",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -60912,6 +66790,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_208t.gif",
 		"health": 3,
 		"id": "UNG_208t",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Rock Elemental",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -60931,6 +66812,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_211.gif",
 		"health": 7,
 		"id": "UNG_211",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Kalimos, Primal Lord",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -60991,6 +66875,9 @@ var parseCardsText = {
 		"dbfId": 41335,
 		"goldenImage": "UNG_211c.gif",
 		"id": "UNG_211c",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Invocation of Fire",
 		"playerClass": "Shaman",
 		"set": "Ungoro",
@@ -61005,6 +66892,9 @@ var parseCardsText = {
 		"dbfId": 41336,
 		"goldenImage": "UNG_211d.gif",
 		"id": "UNG_211d",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
 		"name": "Invocation of Air",
 		"playerClass": "Shaman",
 		"set": "Ungoro",
@@ -61022,6 +66912,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_800.gif",
 		"health": 3,
 		"id": "UNG_800",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Terrorscale Stalker",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -61043,6 +66936,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_801.gif",
 		"health": 7,
 		"id": "UNG_801",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Nesting Roc",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61065,6 +66961,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_803.gif",
 		"health": 1,
 		"id": "UNG_803",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Emerald Reaver",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61102,6 +67001,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_807.gif",
 		"health": 3,
 		"id": "UNG_807",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Golakka Crawler",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61113,7 +67015,6 @@ var parseCardsText = {
 	{
 		"artist": "Peter Stapleton",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_807e.png",
 		"dbfId": 42807,
 		"goldenImage": "UNG_807e.gif",
 		"id": "UNG_807e",
@@ -61134,6 +67035,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_808.gif",
 		"health": 2,
 		"id": "UNG_808",
+		"mechanics": [
+			"POISONOUS",
+			"TAUNT"
+		],
 		"name": "Stubborn Gastropod",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61154,6 +67059,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_809.gif",
 		"health": 2,
 		"id": "UNG_809",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Fire Fly",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61190,6 +67098,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_810.gif",
 		"health": 6,
 		"id": "UNG_810",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Stegodon",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61209,6 +67120,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_812.gif",
 		"health": 2,
 		"id": "UNG_812",
+		"mechanics": [
+			"STEALTH"
+		],
 		"name": "Sabretooth Stalker",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61228,6 +67142,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_813.gif",
 		"health": 8,
 		"id": "UNG_813",
+		"mechanics": [
+			"WINDFURY"
+		],
 		"name": "Stormwatcher",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61247,6 +67164,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_814.gif",
 		"health": 2,
 		"id": "UNG_814",
+		"mechanics": [
+			"POISONOUS",
+			"STEALTH"
+		],
 		"name": "Giant Wasp",
 		"playerClass": "Neutral",
 		"race": "BEAST",
@@ -61266,6 +67187,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_816.gif",
 		"health": 5,
 		"id": "UNG_816",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Servant of Kalimos",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61304,6 +67228,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_818.gif",
 		"health": 1,
 		"id": "UNG_818",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Volatile Elemental",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61333,10 +67260,12 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_823e.png",
 		"dbfId": 47082,
 		"goldenImage": "UNG_823e.gif",
 		"id": "UNG_823e",
+		"mechanics": [
+			"POISONOUS"
+		],
 		"name": "Envenomed",
 		"playerClass": "Neutral",
 		"set": "Ungoro",
@@ -61345,8 +67274,8 @@ var parseCardsText = {
 	},
 	{
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_823ed.png",
 		"dbfId": 48564,
+		"goldenImage": "UNG_823ed.gif",
 		"id": "UNG_823ed",
 		"name": "Envenomed",
 		"playerClass": "Neutral",
@@ -61364,6 +67293,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_829.gif",
 		"id": "UNG_829",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "Lakkari Sacrifice",
 		"playerClass": "Warlock",
 		"rarity": "Legendary",
@@ -61398,6 +67330,9 @@ var parseCardsText = {
 		"health": 1,
 		"hideStats": true,
 		"id": "UNG_829t2",
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
 		"name": "Nether Portal",
 		"playerClass": "Warlock",
 		"set": "Ungoro",
@@ -61431,6 +67366,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_830.gif",
 		"health": 5,
 		"id": "UNG_830",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Cruel Dinomancer",
 		"playerClass": "Warlock",
 		"rarity": "Rare",
@@ -61457,7 +67395,6 @@ var parseCardsText = {
 	{
 		"artist": "Zoltan Boros",
 		"cardClass": "WARLOCK",
-		"cardImage": "UNG_831e.png",
 		"dbfId": 42347,
 		"goldenImage": "UNG_831e.gif",
 		"id": "UNG_831e",
@@ -61474,6 +67411,18 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"dbfId": 41872,
+		"entourage": [
+			"UNG_999t10",
+			"UNG_999t2",
+			"UNG_999t3",
+			"UNG_999t4",
+			"UNG_999t5",
+			"UNG_999t6",
+			"UNG_999t7",
+			"UNG_999t8",
+			"UNG_999t13",
+			"UNG_999t14"
+		],
 		"goldenImage": "UNG_832.gif",
 		"id": "UNG_832",
 		"name": "Bloodbloom",
@@ -61486,7 +67435,6 @@ var parseCardsText = {
 	{
 		"artist": "Tyler Walpole",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_832e.png",
 		"dbfId": 42091,
 		"goldenImage": "UNG_832e.gif",
 		"id": "UNG_832e",
@@ -61507,6 +67455,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_833.gif",
 		"health": 8,
 		"id": "UNG_833",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Lakkari Felhound",
 		"playerClass": "Warlock",
 		"race": "DEMON",
@@ -61558,6 +67510,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_835.gif",
 		"health": 3,
 		"id": "UNG_835",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Chittering Tunneler",
 		"playerClass": "Warlock",
 		"race": "BEAST",
@@ -61581,6 +67536,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_836.gif",
 		"health": 2,
 		"id": "UNG_836",
+		"mechanics": [
+			"InvisibleDeathrattle"
+		],
 		"name": "Clutchmother Zavas",
 		"playerClass": "Warlock",
 		"race": "BEAST",
@@ -61592,7 +67550,6 @@ var parseCardsText = {
 	{
 		"artist": "Anton Zemskov",
 		"cardClass": "WARLOCK",
-		"cardImage": "UNG_836e.png",
 		"dbfId": 41877,
 		"goldenImage": "UNG_836e.gif",
 		"id": "UNG_836e",
@@ -61613,6 +67570,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_838.gif",
 		"health": 11,
 		"id": "UNG_838",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Tar Lord",
 		"playerClass": "Warrior",
 		"race": "ELEMENTAL",
@@ -61633,6 +67593,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_840.gif",
 		"health": 6,
 		"id": "UNG_840",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Hemet, Jungle Hunter",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -61671,6 +67634,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_844.gif",
 		"health": 8,
 		"id": "UNG_844",
+		"mechanics": [
+			"CANT_ATTACK"
+		],
 		"name": "Humongous Razorleaf",
 		"playerClass": "Neutral",
 		"rarity": "Rare",
@@ -61689,6 +67655,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_845.gif",
 		"health": 3,
 		"id": "UNG_845",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Igneous Elemental",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61708,6 +67677,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_846.gif",
 		"health": 1,
 		"id": "UNG_846",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Shimmering Tempest",
 		"playerClass": "Mage",
 		"race": "ELEMENTAL",
@@ -61727,6 +67699,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_847.gif",
 		"health": 6,
 		"id": "UNG_847",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Blazecaller",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61746,6 +67721,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_848.gif",
 		"health": 8,
 		"id": "UNG_848",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Primordial Drake",
 		"playerClass": "Neutral",
 		"race": "DRAGON",
@@ -61766,6 +67745,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_851.gif",
 		"health": 5,
 		"id": "UNG_851",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Elise the Trailblazer",
 		"playerClass": "Neutral",
 		"rarity": "Legendary",
@@ -61799,6 +67781,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_852.gif",
 		"health": 12,
 		"id": "UNG_852",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Tyrantus",
 		"playerClass": "Druid",
 		"race": "BEAST",
@@ -61879,6 +67865,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_907.gif",
 		"health": 5,
 		"id": "UNG_907",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Ozruk",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -61890,7 +67880,6 @@ var parseCardsText = {
 	{
 		"artist": "Tooth",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_907e.png",
 		"dbfId": 41930,
 		"goldenImage": "UNG_907e.gif",
 		"id": "UNG_907e",
@@ -61927,6 +67916,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_912.gif",
 		"health": 1,
 		"id": "UNG_912",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Jeweled Macaw",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -61946,6 +67938,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_913.gif",
 		"health": 5,
 		"id": "UNG_913",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Tol'vir Warden",
 		"playerClass": "Hunter",
 		"rarity": "Rare",
@@ -61964,6 +67959,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_914.gif",
 		"health": 1,
 		"id": "UNG_914",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Raptor Hatchling",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -61999,6 +67997,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_915.gif",
 		"health": 2,
 		"id": "UNG_915",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Crackling Razormaw",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -62029,10 +68030,12 @@ var parseCardsText = {
 	{
 		"artist": "Daren Bader",
 		"cardClass": "HUNTER",
-		"cardImage": "UNG_916e.png",
 		"dbfId": 41359,
 		"goldenImage": "UNG_916e.gif",
 		"id": "UNG_916e",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
 		"name": "Stampeding",
 		"playerClass": "Hunter",
 		"set": "Ungoro",
@@ -62057,7 +68060,6 @@ var parseCardsText = {
 	{
 		"artist": "Arthur Bozonnet",
 		"cardClass": "HUNTER",
-		"cardImage": "UNG_917e.png",
 		"dbfId": 41361,
 		"goldenImage": "UNG_917e.gif",
 		"id": "UNG_917e",
@@ -62111,6 +68113,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_920.gif",
 		"id": "UNG_920",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "The Marsh Queen",
 		"playerClass": "Hunter",
 		"rarity": "Legendary",
@@ -62129,6 +68134,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_920t1.gif",
 		"health": 8,
 		"id": "UNG_920t1",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Queen Carnassa",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -62146,6 +68154,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_920t2.gif",
 		"health": 2,
 		"id": "UNG_920t2",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Carnassa's Brood",
 		"playerClass": "Hunter",
 		"race": "BEAST",
@@ -62216,6 +68227,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_925.gif",
 		"health": 5,
 		"id": "UNG_925",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Ornery Direhorn",
 		"playerClass": "Warrior",
 		"race": "BEAST",
@@ -62238,6 +68253,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_926.gif",
 		"health": 6,
 		"id": "UNG_926",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Cornered Sentry",
 		"playerClass": "Warrior",
 		"rarity": "Rare",
@@ -62272,6 +68291,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_928.gif",
 		"health": 5,
 		"id": "UNG_928",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Tar Creeper",
 		"playerClass": "Neutral",
 		"race": "ELEMENTAL",
@@ -62301,7 +68323,6 @@ var parseCardsText = {
 	{
 		"artist": "James Ryman",
 		"cardClass": "WARRIOR",
-		"cardImage": "UNG_929e.png",
 		"dbfId": 41419,
 		"goldenImage": "UNG_929e.gif",
 		"id": "UNG_929e",
@@ -62323,6 +68344,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_933.gif",
 		"health": 7,
 		"id": "UNG_933",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "King Mosh",
 		"playerClass": "Warrior",
 		"race": "BEAST",
@@ -62341,6 +68365,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_934.gif",
 		"id": "UNG_934",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "Fire Plume's Heart",
 		"playerClass": "Warrior",
 		"rarity": "Legendary",
@@ -62362,6 +68389,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_934t1.gif",
 		"id": "UNG_934t1",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Sulfuras",
 		"playerClass": "Warrior",
 		"set": "Ungoro",
@@ -62393,6 +68423,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_937.gif",
 		"health": 2,
 		"id": "UNG_937",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Primalfin Lookout",
 		"playerClass": "Neutral",
 		"race": "MURLOC",
@@ -62415,6 +68448,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_938.gif",
 		"health": 4,
 		"id": "UNG_938",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Hot Spring Guardian",
 		"playerClass": "Shaman",
 		"race": "ELEMENTAL",
@@ -62433,6 +68470,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_940.gif",
 		"id": "UNG_940",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "Awaken the Makers",
 		"playerClass": "Priest",
 		"rarity": "Legendary",
@@ -62454,6 +68494,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_940t8.gif",
 		"health": 8,
 		"id": "UNG_940t8",
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
 		"name": "Amara, Warden of Hope",
 		"playerClass": "Priest",
 		"set": "Ungoro",
@@ -62482,7 +68526,6 @@ var parseCardsText = {
 	{
 		"artist": "Matthew O'Connor",
 		"cardClass": "MAGE",
-		"cardImage": "UNG_941e.png",
 		"dbfId": 42118,
 		"goldenImage": "UNG_941e.gif",
 		"id": "UNG_941e",
@@ -62502,6 +68545,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_942.gif",
 		"id": "UNG_942",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "Unite the Murlocs",
 		"playerClass": "Shaman",
 		"rarity": "Legendary",
@@ -62520,6 +68566,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_942t.gif",
 		"health": 8,
 		"id": "UNG_942t",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Megafin",
 		"playerClass": "Shaman",
 		"race": "MURLOC",
@@ -62538,6 +68587,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_946.gif",
 		"health": 3,
 		"id": "UNG_946",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Gluttonous Ooze",
 		"playerClass": "Neutral",
 		"rarity": "Epic",
@@ -62601,7 +68653,6 @@ var parseCardsText = {
 	{
 		"artist": "Jim Nelson",
 		"cardClass": "PALADIN",
-		"cardImage": "UNG_952e.png",
 		"dbfId": 41862,
 		"goldenImage": "UNG_952e.gif",
 		"id": "UNG_952e",
@@ -62622,6 +68673,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_953.gif",
 		"health": 2,
 		"id": "UNG_953",
+		"mechanics": [
+			"DEATHRATTLE"
+		],
 		"name": "Primalfin Champion",
 		"playerClass": "Paladin",
 		"race": "MURLOC",
@@ -62633,7 +68687,6 @@ var parseCardsText = {
 	{
 		"artist": "Matt Dixon",
 		"cardClass": "PALADIN",
-		"cardImage": "UNG_953e.png",
 		"dbfId": 41865,
 		"goldenImage": "UNG_953e.gif",
 		"id": "UNG_953e",
@@ -62653,6 +68706,9 @@ var parseCardsText = {
 		"elite": true,
 		"goldenImage": "UNG_954.gif",
 		"id": "UNG_954",
+		"mechanics": [
+			"QUEST"
+		],
 		"name": "The Last Kaleidosaur",
 		"playerClass": "Paladin",
 		"rarity": "Legendary",
@@ -62671,6 +68727,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_954t1.gif",
 		"health": 5,
 		"id": "UNG_954t1",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Galvadon",
 		"playerClass": "Paladin",
 		"race": "BEAST",
@@ -62719,7 +68778,6 @@ var parseCardsText = {
 	{
 		"artist": "Hideaki Takamura",
 		"cardClass": "SHAMAN",
-		"cardImage": "UNG_956e.png",
 		"dbfId": 42037,
 		"goldenImage": "UNG_956e.gif",
 		"id": "UNG_956e",
@@ -62740,6 +68798,10 @@ var parseCardsText = {
 		"goldenImage": "UNG_957.gif",
 		"health": 6,
 		"id": "UNG_957",
+		"mechanics": [
+			"DEATHRATTLE",
+			"TAUNT"
+		],
 		"name": "Direhorn Hatchling",
 		"playerClass": "Warrior",
 		"race": "BEAST",
@@ -62758,6 +68820,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_957t1.gif",
 		"health": 9,
 		"id": "UNG_957t1",
+		"mechanics": [
+			"TAUNT"
+		],
 		"name": "Direhorn Matriarch",
 		"playerClass": "Warrior",
 		"race": "BEAST",
@@ -62812,6 +68877,9 @@ var parseCardsText = {
 		"goldenImage": "UNG_962.gif",
 		"health": 4,
 		"id": "UNG_962",
+		"mechanics": [
+			"BATTLECRY"
+		],
 		"name": "Lightfused Stegodon",
 		"playerClass": "Paladin",
 		"race": "BEAST",
@@ -62860,7 +68928,6 @@ var parseCardsText = {
 	{
 		"artist": "Slawomir Maniak",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t10e.png",
 		"dbfId": 41065,
 		"goldenImage": "UNG_999t10e.gif",
 		"id": "UNG_999t10e",
@@ -62887,7 +68954,6 @@ var parseCardsText = {
 	{
 		"artist": "Mauricio Herrera",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t13e.png",
 		"dbfId": 41210,
 		"goldenImage": "UNG_999t13e.gif",
 		"id": "UNG_999t13e",
@@ -62914,7 +68980,6 @@ var parseCardsText = {
 	{
 		"artist": "Rudy Siswanto",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t14e.png",
 		"dbfId": 41692,
 		"goldenImage": "UNG_999t14e.gif",
 		"id": "UNG_999t14e",
@@ -62941,7 +69006,6 @@ var parseCardsText = {
 	{
 		"artist": "Zoltan Boros",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t2e.png",
 		"dbfId": 41693,
 		"goldenImage": "UNG_999t2e.gif",
 		"id": "UNG_999t2e",
@@ -63010,7 +69074,6 @@ var parseCardsText = {
 	{
 		"artist": "Arthur Gimaldinov",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t4e.png",
 		"dbfId": 41069,
 		"goldenImage": "UNG_999t4e.gif",
 		"id": "UNG_999t4e",
@@ -63028,6 +69091,10 @@ var parseCardsText = {
 		"dbfId": 41060,
 		"goldenImage": "UNG_999t5.gif",
 		"id": "UNG_999t5",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Liquid Membrane",
 		"playerClass": "Neutral",
 		"set": "Ungoro",
@@ -63037,10 +69104,13 @@ var parseCardsText = {
 	{
 		"artist": "Jakub Kasber",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t5e.png",
 		"dbfId": 41070,
 		"goldenImage": "UNG_999t5e.gif",
 		"id": "UNG_999t5e",
+		"mechanics": [
+			"CANT_BE_TARGETED_BY_SPELLS",
+			"CANT_BE_TARGETED_BY_HERO_POWERS"
+		],
 		"name": "Liquid Membrane",
 		"playerClass": "Neutral",
 		"set": "Ungoro",
@@ -63064,7 +69134,6 @@ var parseCardsText = {
 	{
 		"artist": "Konstantin Turovec",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t6e.png",
 		"dbfId": 41071,
 		"goldenImage": "UNG_999t6e.gif",
 		"id": "UNG_999t6e",
@@ -63091,7 +69160,6 @@ var parseCardsText = {
 	{
 		"artist": "James Ryman",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t7e.png",
 		"dbfId": 41072,
 		"goldenImage": "UNG_999t7e.gif",
 		"id": "UNG_999t7e",
@@ -63118,7 +69186,6 @@ var parseCardsText = {
 	{
 		"artist": "L. Lullabi & K. Turovec",
 		"cardClass": "NEUTRAL",
-		"cardImage": "UNG_999t8e.png",
 		"dbfId": 41073,
 		"goldenImage": "UNG_999t8e.gif",
 		"id": "UNG_999t8e",
