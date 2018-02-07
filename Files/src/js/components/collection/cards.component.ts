@@ -41,7 +41,7 @@ declare var overwolf: any;
 				<li *ngFor="let page of _pages" [ngClass]="_currentPage == page ? 'active' : ''" (click)="goToPage(page)">{{page + 1}}</li>
 				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage == _numberOfPages ? 'disabled' : ''">{{'>'}}</li>
 			</ul>
-			<div>
+			<div *ngIf="!_activeCards">
 				Oh no! We couldn't find any cards matching your search
 			</div>
 		</div>
