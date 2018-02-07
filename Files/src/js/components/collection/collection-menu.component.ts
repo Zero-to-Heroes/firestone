@@ -14,7 +14,7 @@ declare var overwolf: any;
 	template: `
 		<ng-container [ngSwitch]="displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection">
-				<li class="selected">Sets</li>
+				<li class="selected" (click)="goToCollectionView()">Sets</li>
 				<li>Cards</li>
 			</ul>
 			<ng-container *ngSwitchCase="'breadcrumbs'" >
