@@ -145,7 +145,6 @@ export class IndexedDbService {
             };
 
             request.onsuccess = function (evt: Event) {
-            	console.log('request success');
                 let cursor = (<IDBOpenDBRequest>evt.target).result;
                 if (cursor && result.length < limit) {
                     result.push(cursor.value);
