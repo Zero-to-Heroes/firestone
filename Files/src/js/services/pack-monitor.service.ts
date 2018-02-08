@@ -25,6 +25,10 @@ export class PackMonitor {
 	private busy = false;
 	private hadNewCard = false;
 
+	private totalDustInPack = 0;
+	private totalDuplicateCards = 0;
+	// private timer: any;
+
 	constructor(
 		private events: Events,
 		private logListenerService: LogListenerService,
@@ -34,6 +38,8 @@ export class PackMonitor {
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
 				this.busy = true;
+				// clearTimeout(this.timer);
+
 				console.log('resetting cards for new pack');
 				let undetectedCards = [];
 				let anyUndetected = false;
@@ -48,6 +54,23 @@ export class PackMonitor {
 					console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
 					ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
 				}
+
+				if (this.totalDustInPack > 0) {
+					this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
+					this.totalDustInPack = 0;
+					this.totalDuplicateCards = 0;
+				}
+
+				// // Show dust after a short amount of time if no new pack has been opened
+				// this.timer = setTimeout(() => {
+				// 	console.log('times up, showing dust earned', this.totalDustInPack, this.totalDuplicateCards);
+				// 	if (this.totalDustInPack > 0) {
+				// 		this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
+				// 		this.totalDustInPack = 0;
+				// 		this.totalDuplicateCards = 0;
+				// 	}
+				// }, 10 * 1000)
+
 				this.busy = false;
 				this.unrevealedCards = [];
 			});
@@ -69,23 +92,17 @@ export class PackMonitor {
 				let card: Card = event.data[0];
 				let dust: number = event.data[1];
 				this.unrevealedCards.push(card.Id);
-				this.cardEvents[card.Id] = () => { this.createDustToast(card, dust); };
+				this.cardEvents[card.Id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
 
 				let dbCard = parseCardsText.getCard(card.Id);
 				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, card.Premium, false));
 			});
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
-			// if (data.onGame) this.cardClicked(data, (result) => console.log('card clicked', result));
 			if (this.unrevealedCards.length > 0 && data.onGame) {
 				console.log('Detecting revealed cards', data, this.unrevealedCards);
 				this.cardClicked(data, (index) => {
-					// console.log('bouh')
-					// We need to wait until the animation completes
-					// setTimeout(() => {
 					this.detectRevealedCard(index);
-						// this.detectRevealedCards();
-					// }, 800)
 				});
 			}
 		});
@@ -168,13 +185,14 @@ export class PackMonitor {
 		}
 		console.log('All cards revealed, resetting');
 		// All cards have been revealed, full reset
+		if (this.totalDustInPack > 0) {
+			this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
+			this.totalDustInPack = 0;
+			this.totalDuplicateCards = 0;
+		}
 		this.unrevealedCards = [];
 		this.cardEvents = {};
 		console.log('reset done');
-
-		// if (this.hadNewCard) {
-		// 	this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/collection.png"><div class="message">Click to see your collection</div></div>');
-		// }
 
 		this.hadNewCard = false;
 	}
@@ -282,12 +300,7 @@ export class PackMonitor {
 		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/rarity-' + dbCard.rarity.toLowerCase() + '.png"><div class="message">New card! ' + cardName + '</div></div>');
 	}
 
-	private createDustToast(card: Card, dust: number) {
-		let cardName: string = parseCardsText.getCard(card.Id).name;
-		if (card.Premium) {
-			cardName = 'Golden ' + cardName;
-		}
-		console.log('displaying dust toast notification for ' + cardName);
-		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/dust_small.png"><div class="message">Got ' + dust + ' dust for ' + cardName + '</div></div>');
+	private createDustToast(dust: number, numberOfCards: number) {
+		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/dust_small.png"><div class="message">Got ' + numberOfCards + ' duplicate cards for ' + dust + ' dust</div></div>');
 	}
 }
