@@ -61,6 +61,11 @@ export class AllCardsService {
 			.map((card) => new SetCard(card.id, card.name, card.rarity.toLowerCase()));
 	}
 
+	public getCard(id: string): any {
+		return parseCardsText.jsonDatabase
+			.filter((card) => card.id == id)[0];
+	}
+
 	private getSets(references, isStandard: boolean): Set[] {
 		let standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
 		parseCardsText.jsonDatabase.forEach((card) => {

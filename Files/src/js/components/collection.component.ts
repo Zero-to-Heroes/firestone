@@ -29,6 +29,7 @@ declare var ga: any;
 				<card-history></card-history>
 				<div class="ads">Ads</div>
 			</section>
+			<full-card class="full-card" [cardId]="fullCardId" (close)="this.fullCardId = null" *ngIf="fullCardId"></full-card>
 		</div>
 	`,
 })
@@ -41,6 +42,7 @@ export class CollectionComponent {
 	private _selectedFormat: string;
 
 	private _cardList: SetCard[];
+	private fullCardId: string;
 
 	constructor(private _events: Events) {
 		ga('send', 'event', 'collection', 'show');
@@ -87,6 +89,12 @@ export class CollectionComponent {
 				this._cardList = data.data[0];
 			}
 		)
+
+		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
+			(event) => {
+				this.fullCardId = event.data[0];
+			}
+		);
 
 	}
 }
