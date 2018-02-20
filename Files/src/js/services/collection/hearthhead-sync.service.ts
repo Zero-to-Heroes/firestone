@@ -4,7 +4,7 @@ import { Http, Headers, RequestOptions, RequestOptionsArgs } from "@angular/http
 import { LocalStorageService } from 'angular-2-local-storage';
 // import * as Raven from 'raven-js';
 
-import { Card } from '../models/card';
+import { Card } from '../../models/card';
 import { CollectionManager } from './collection-manager.service';
 
 declare var overwolf: any;

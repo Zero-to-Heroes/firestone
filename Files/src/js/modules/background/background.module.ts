@@ -10,20 +10,20 @@ import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage
 
 import { AppComponent }  from '../../components/app.component';
 
-import { CardHistoryStorageService }  from '../../services/card-history-storage.service';
 import { IndexedDbService }  from '../../services/indexed-db.service';
 import { LogListenerService }  from '../../services/log-listener.service';
-import { LogParserService }  from '../../services/log-parser.service';
 import { LogRegisterService }  from '../../services/log-register.service';
 import { LogStatusService }  from '../../services/log-status.service';
-import { CollectionManager }  from '../../services/collection-manager.service';
-import { PackMonitor }  from '../../services/pack-monitor.service';
 import { Events }  from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 import { DebugService } from '../../services/debug.service';
-import { HearthHeadSyncService } from '../../services/hearthhead-sync.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
+import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
+import { CollectionManager }  from '../../services/collection/collection-manager.service';
+import { HearthHeadSyncService } from '../../services/collection/hearthhead-sync.service';
+import { LogParserService }  from '../../services/collection/log-parser.service';
+import { PackMonitor }  from '../../services/collection/pack-monitor.service';
 
 // console.log('configuring Raven'),
 // Raven

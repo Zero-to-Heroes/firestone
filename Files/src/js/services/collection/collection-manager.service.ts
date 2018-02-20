@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { Card } from '../models/card';
+import { Card } from '../../models/card';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;

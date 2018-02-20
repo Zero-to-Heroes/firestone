@@ -32,13 +32,13 @@ import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component
 import { VersionComponent }  from '../../components/version.component';
 
 import { AllCardsService }  from '../../services/all-cards.service';
-import { CardHistoryStorageService }  from '../../services/card-history-storage.service';
-import { CollectionManager }  from '../../services/collection-manager.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
-import { HearthHeadSyncService }  from '../../services/hearthhead-sync.service';
 import { IndexedDbService }  from '../../services/indexed-db.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
+import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
+import { CollectionManager }  from '../../services/collection/collection-manager.service';
+import { HearthHeadSyncService }  from '../../services/collection/hearthhead-sync.service';
 
 // console.log('configuring Raven'),
 // Raven

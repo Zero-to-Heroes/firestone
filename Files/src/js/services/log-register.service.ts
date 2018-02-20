@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import * as Raven from 'raven-js';
 
 import { SimpleIOService } from './plugins/simple-io.service'
-import { LogParserService } from './log-parser.service'
+import { LogParserService } from './collection/log-parser.service'
 import { LogListenerService } from './log-listener.service'
 import { Events } from '../services/events.service';
 
@@ -23,14 +23,14 @@ export class LogRegisterService {
 
 	retriesLeft = 20;
 
-	constructor(private events: Events, private logParserService: LogParserService, private plugin: SimpleIOService) {
+	constructor(private events: Events, private collectionLogParserService: LogParserService, private plugin: SimpleIOService) {
 		this.init();
 	}
 
 	init(): void {
 		console.log('[log-register] initiating log registerservice');
 		new LogListenerService(this.plugin)
-			.configure("Achievements.log", (data) => this.logParserService.receiveLogLine(data))
+			.configure("Achievements.log", (data) => this.collectionLogParserService.receiveLogLine(data))
 			.subscribe((status) => {
 				console.log('[log-register] status for achievements', status);
 				this.events.broadcast(status, "Achiements.log");

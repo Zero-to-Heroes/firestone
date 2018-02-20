@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { Card } from '../models/card';
-import { CardHistory } from '../models/card-history';
+import { Card } from '../../models/card';
+import { CardHistory } from '../../models/card-history';
 
-import { Events } from '../services/events.service';
-import { OwNotificationsService } from '../services/notifications.service';
-import { CollectionManager } from '../services/collection-manager.service';
-import { LogRegisterService } from '../services/log-register.service';
-import { CardHistoryStorageService } from '../services/card-history-storage.service';
+import { Events } from '../../services/events.service';
+import { OwNotificationsService } from '../../services/notifications.service';
+import { CollectionManager } from './collection-manager.service';
+import { LogRegisterService } from '../../services/log-register.service';
+import { CardHistoryStorageService } from './card-history-storage.service';
 
 declare var overwolf: any;
 declare var parseCardsText: any;

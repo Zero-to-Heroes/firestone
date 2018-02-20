@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { CardHistory } from '../models/card-history';
+import { CardHistory } from '../../models/card-history';
 
-import { IndexedDbService } from '../services/indexed-db.service';
+import { IndexedDbService } from '../../services/indexed-db.service';
 
 @Injectable()
 export class CardHistoryStorageService {

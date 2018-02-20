@@ -6,7 +6,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 
 import { Events } from '../services/events.service';
 import { OwNotificationsService } from '../services/notifications.service';
-import { HearthHeadSyncService } from '../services/hearthhead-sync.service';
+import { HearthHeadSyncService } from '../services/collection/hearthhead-sync.service';
 
 declare var overwolf: any;
 

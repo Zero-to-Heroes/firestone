@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation, HostListener, NgZone } from '@angular/cor
 
 import * as Raven from 'raven-js';
 
-import { CollectionManager } from '../services/collection-manager.service';
+import { CollectionManager } from '../services/collection/collection-manager.service';
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
 

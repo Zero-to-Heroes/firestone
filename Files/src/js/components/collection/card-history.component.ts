@@ -2,10 +2,10 @@ import { Component, NgZone, OnInit } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { CollectionManager } from '../../services/collection-manager.service';
+import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
-import { CardHistoryStorageService } from '../../services/card-history-storage.service';
+import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 
 import { SetCard } from '../../models/set';
 import { CardHistory } from '../../models/card-history';
