@@ -14,6 +14,7 @@ import { CardHistoryStorageService }  from '../../services/card-history-storage.
 import { IndexedDbService }  from '../../services/indexed-db.service';
 import { LogListenerService }  from '../../services/log-listener.service';
 import { LogParserService }  from '../../services/log-parser.service';
+import { LogRegisterService }  from '../../services/log-register.service';
 import { LogStatusService }  from '../../services/log-status.service';
 import { CollectionManager }  from '../../services/collection-manager.service';
 import { PackMonitor }  from '../../services/pack-monitor.service';
@@ -21,6 +22,8 @@ import { Events }  from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 import { DebugService } from '../../services/debug.service';
 import { HearthHeadSyncService } from '../../services/hearthhead-sync.service';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -63,17 +66,20 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	],
 	providers: [
 		CardHistoryStorageService,
-		IndexedDbService,
-		LocalStorageService,
-		HearthHeadSyncService,
-		LogListenerService,
-		LogParserService,
 		CollectionManager,
-		OwNotificationsService,
-		PackMonitor,
 		Events,
 		DebugService,
+		HearthHeadSyncService,
+		IndexedDbService,
+		LogListenerService,
+		LogParserService,
+		LogRegisterService,
 		LogStatusService,
+		LocalStorageService,
+		OwNotificationsService,
+		PackMonitor,
+		SimpleIOService,
+		MemoryInspectionService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

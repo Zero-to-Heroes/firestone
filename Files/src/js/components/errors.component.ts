@@ -71,7 +71,7 @@ export class ErrorsComponent {
 					console.log('received message in errors window', message);
 					switch (message.id) {
 						case 'no_log_file':
-							this.error = 'We couldn\'t find the Achievements.log file. ' +
+							this.error = `We couldn\'t find the ${message.content} file. ` +
 								'This means we won\'t be able to detect when you open new card packs. ' +
 								'Please see <a href="" target="_blank">here (insert link to troubleshooting FAQ on OW KB)</a> for help on how to resolve this.';
 							console.log('Showing no_log_file error', this.error);

@@ -28,29 +28,29 @@ export class LogStatusService {
 			.subscribe(event => {
 				setTimeout(() => {
 					if (!this.loaded) {
-						this.createDetectingLogsToast();
+						this.createDetectingLogsToast(event.data[0]);
 					}
 				}, 1500);
 			});
 		this.events.on(Events.STREAMING_LOG_FILE)
 			.subscribe(event => {
-				this.createAppRunningToast();
+				this.createAppRunningToast(event.data[0]);
 			});
 		this.events.on(Events.NO_LOG_FILE)
 			.subscribe(event => {
-				this.error('no_log_file', 'no_log_file');
+				this.error('no_log_file', event.data[0]);
 			});
 	}
 
-	private createDetectingLogsToast() {
+	private createDetectingLogsToast(logFile: string) {
 		console.log('sending log detection start notification');
-		this.notificationService.html('<div class="message-container"><img src="/IconStore.png"><div class="message">HS Collection Companion is detecting your log files. It shouldn\'t take more than 15s</div></div>');
+		this.notificationService.html(`<div class="message-container"><img src="/IconStore.png"><div class="message">Lorekeeper is detecting your ${logFile} log file. It shouldn\'t take more than 15s</div></div>`);
 	}
 
-	private createAppRunningToast() {
+	private createAppRunningToast(monitoredObject: string) {
 		console.log('sending start notification');
 		this.loaded = true;
-		this.notificationService.html('<div class="message-container"><img src="/IconStore.png"><div class="message">HS Collection Companion is now monitoring your card packs.</div></div>');
+		this.notificationService.html(`<div class="message-container"><img src="/IconStore.png"><div class="message">Lorekeeper is now monitoring your ${monitoredObject}</div></div>`);
 	}
 
 	public error(messageId: string, message: string) {

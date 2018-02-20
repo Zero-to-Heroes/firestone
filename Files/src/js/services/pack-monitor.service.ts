@@ -8,7 +8,7 @@ import { CardHistory } from '../models/card-history';
 import { Events } from '../services/events.service';
 import { OwNotificationsService } from '../services/notifications.service';
 import { CollectionManager } from '../services/collection-manager.service';
-import { LogListenerService } from '../services/log-listener.service';
+import { LogRegisterService } from '../services/log-register.service';
 import { CardHistoryStorageService } from '../services/card-history-storage.service';
 
 declare var overwolf: any;
@@ -31,7 +31,7 @@ export class PackMonitor {
 
 	constructor(
 		private events: Events,
-		private logListenerService: LogListenerService,
+		private logRegisterService: LogRegisterService,
 		private storage: CardHistoryStorageService,
 		private notificationService: OwNotificationsService) {
 
