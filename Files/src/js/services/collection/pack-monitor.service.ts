@@ -6,6 +6,7 @@ import { Card } from '../../models/card';
 import { CardHistory } from '../../models/card-history';
 
 import { Events } from '../../services/events.service';
+import { GameEvents } from '../../services/game-events.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { CollectionManager } from './collection-manager.service';
 import { LogRegisterService } from '../../services/log-register.service';
@@ -33,7 +34,12 @@ export class PackMonitor {
 		private events: Events,
 		private logRegisterService: LogRegisterService,
 		private storage: CardHistoryStorageService,
+		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService) {
+
+		this.gameEvents.onGameStart.subscribe(() => {
+			this.unrevealedCards = [];
+		})
 
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
@@ -97,6 +103,8 @@ export class PackMonitor {
 				let dbCard = parseCardsText.getCard(card.Id);
 				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, card.Premium, false));
 			});
+
+
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
 			if (this.unrevealedCards.length > 0 && data.onGame) {

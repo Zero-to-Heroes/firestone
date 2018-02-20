@@ -4,6 +4,7 @@ import * as Raven from 'raven-js';
 
 import { SimpleIOService } from './plugins/simple-io.service'
 import { LogParserService } from './collection/log-parser.service'
+import { GameEvents } from './game-events.service'
 import { LogListenerService } from './log-listener.service'
 import { Events } from '../services/events.service';
 
@@ -23,7 +24,11 @@ export class LogRegisterService {
 
 	retriesLeft = 20;
 
-	constructor(private events: Events, private collectionLogParserService: LogParserService, private plugin: SimpleIOService) {
+	constructor(
+		private events: Events,
+		private collectionLogParserService: LogParserService,
+		private gameEvents: GameEvents,
+		private plugin: SimpleIOService) {
 		this.init();
 	}
 
@@ -38,7 +43,7 @@ export class LogRegisterService {
 			.start();
 
 		new LogListenerService(this.plugin)
-			.configure("Power.log", (data) => console.log('received power line'))
+			.configure("Power.log", (data) => this.gameEvents.receiveLogLine(data))
 			.subscribe((status) => {
 				console.log('[log-register] status for power.log', status);
 				this.events.broadcast(status, "Power.log");

@@ -18,7 +18,6 @@ export class SimpleIOService {
 		this.simpleIOPlugin.initialize((status: boolean) => {
 			if (status === false) {
 				console.warn("Plugin simple-io-plugin-zip couldn't be loaded");
-				// Raven.captureMessage('mindvision plugin could not be loaded');
 				return;
 			}
 			console.log("Plugin " + this.simpleIOPlugin.get()._PluginName_ + " was loaded!", this.simpleIOPlugin.get());

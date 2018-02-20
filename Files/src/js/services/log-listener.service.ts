@@ -129,7 +129,7 @@ export class LogListenerService {
 					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Retrying', status, data);
 					this.listenOnFileUpdate(logsLocation);
 				}
-				else {
+				else if (id === fileIdentifier) {
 					console.warn('[log-listener] [' + this.logFile + '] received an error on file: ', id, data);
 				}
 				return;
@@ -163,27 +163,27 @@ export class LogListenerService {
 
 	gameLaunched(gameInfoResult: any): boolean {
 		if (!gameInfoResult) {
-			console.log('No gameInfoResult, returning');
+			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult, returning', gameInfoResult);
 			return false;
 		}
 
 		if (!gameInfoResult.gameInfo) {
-			console.log('No gameInfoResult.gameInfo, returning');
+			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult.gameInfo, returning', gameInfoResult);
 			return false;
 		}
 
 		if (!gameInfoResult.gameInfo.isRunning) {
-			console.log('Game not running, returning');
+			console.log('[log-listener] [' + this.logFile + '] Game not running, returning', gameInfoResult);
 			return false;
 		}
 
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
 		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			console.log('Not HS, returning');
+			console.log('[log-listener] [' + this.logFile + '] Not HS, returning', gameInfoResult);
 			return false;
 		}
 
-		console.log("HS Launched");
+		console.log('[log-listener] [' + this.logFile + '] HS Launched');
 		return true;
 	}
 
@@ -202,7 +202,7 @@ export class LogListenerService {
 			return false;
 		}
 
-		console.log("HS running");
+		console.log('[log-listener] [' + this.logFile + '] HS running');
 		return true;
 	}
 }

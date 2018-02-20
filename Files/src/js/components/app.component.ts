@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { PackMonitor } from '../services/pack-monitor.service';
+import { PackMonitor } from '../services/collection/pack-monitor.service';
+import { AchievementsMonitor } from '../services/achievement/achievements-monitor.service';
 import { DebugService } from '../services/debug.service';
 import { LogStatusService } from '../services/log-status.service';
 
@@ -25,6 +26,7 @@ export class AppComponent {
 	constructor(
 		private packMonitor: PackMonitor,
 		private debugService: DebugService,
+		private achievementsMonitor: AchievementsMonitor,
 		private logStatusService: LogStatusService) {
 
 		console.error('TODO: stay logged in to HH');

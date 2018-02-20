@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import * as Raven from 'raven-js';
 
 import { Card } from '../../models/card';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -12,35 +13,11 @@ export class CollectionManager {
 	plugin: any;
 	mindvisionPlugin: any;
 
-	constructor() {
-		console.log("loading mindvision");
-		this.mindvisionPlugin = new OverwolfPlugin("mindvision", true);
-		this.mindvisionPlugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.warn("Plugin mindvision couldn't be loaded");
-				Raven.captureMessage('mindvision plugin could not be loaded');
-				return;
-			}
-			console.log("Plugin " + this.mindvisionPlugin.get()._PluginName_ + " was loaded!", this.mindvisionPlugin.get());
-			this.mindvisionPlugin.get().onGlobalEvent.addListener(function(first, second) {
-				console.log('received global event mindvision', first, second);
-			});
-
-			// this.mindvisionPlugin.get().getCollection((cards) => {
-			// 	let collection: Card[] = JSON.parse(cards);
-			// 	console.log('Collection: ', collection);
-			// })
-		});
+	constructor(private mindVision: MemoryInspectionService) {
 	}
 
 	public getCollection(callback: Function) {
-		if (!this.mindvisionPlugin.get()) {
-			setTimeout(() => this.getCollection(callback), 100);
-			return;
-		}
-		this.mindvisionPlugin.get().getCollection((cards) => {
-			// console.log('retrieve collection', cards);
-			let collection: Card[] = JSON.parse(cards);
+		this.mindVision.getCollection((collection) => {
 			callback(collection);
 		})
 	}

@@ -34,11 +34,13 @@ import { VersionComponent }  from '../../components/version.component';
 import { AllCardsService }  from '../../services/all-cards.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
-import { IndexedDbService }  from '../../services/indexed-db.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { HearthHeadSyncService }  from '../../services/collection/hearthhead-sync.service';
+import { IndexedDbService }  from '../../services/collection/indexed-db.service';
+
+import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -113,6 +115,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		IndexedDbService,
 		LocalStorageService,
 		OwNotificationsService,
+		MemoryInspectionService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

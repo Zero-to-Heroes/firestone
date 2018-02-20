@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 // import * as Raven from 'raven-js';
 
 import { DungeonInfo } from '../../models/dungeon-info'
+import { Card } from '../../models/card';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -66,8 +67,14 @@ export class MemoryInspectionService {
 
 	public getDungeonInfo(callback) {
 		this.mindvisionPlugin.get().getDungeonInfo((dungeonInfo) => {
-			console.log('received dungeonInfo callback', JSON.parse(dungeonInfo));
+			// console.log('received dungeonInfo callback', JSON.parse(dungeonInfo));
 			callback(JSON.parse(dungeonInfo));
+		});
+	}
+
+	public getCollection(callback) {
+		this.mindvisionPlugin.get().getCollection((cards) => {
+			callback(JSON.parse(cards));
 		});
 	}
 }
