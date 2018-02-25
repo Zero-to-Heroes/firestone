@@ -48,7 +48,7 @@ export class AppComponent {
 		this.startApp();
 
 		overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-			this.startApp(() => this.showWelcomePage());
+			this.startApp(() => this.showCollectionWindow());
 		})
 
 		ga('send', 'pageview');

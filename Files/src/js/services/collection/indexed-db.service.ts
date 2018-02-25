@@ -3,6 +3,7 @@ import { LocalStorageService } from 'angular-2-local-storage';
 import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
 
 import { CardHistory } from '../../models/card-history';
+import { Card } from '../../models/card';
 
 declare var OverwolfPlugin: any;
 
@@ -14,6 +15,41 @@ export class IndexedDbService {
 
 	constructor(private localStorageService: LocalStorageService) {
 		this.init();
+	}
+
+	public saveCollection(collection: Card[], callback: Function) {
+		if (!this.dbInit) {
+			setTimeout(() => {
+				console.log('[storage] db isnt initialized, waiting...');
+				this.saveCollection(collection, callback);
+			}, 50);
+			return;
+		}
+
+		this.db.add('collection', collection).then(
+			(history) => {
+				callback(collection);
+			},
+			(error) => {
+			    console.log(error);
+			}
+		);
+	}
+
+	public getCollection(callback: Function) {
+		if (!this.dbInit) {
+			setTimeout(() => {
+				console.log('[storage] db isnt initialized, waiting...');
+				this.getCollection(callback);
+			}, 50);
+			return;
+		}
+
+		this.db.getAll('collection', null)
+			.then((collection) => {
+				console.log('loaded history', collection);
+				callback(collection);
+			})
 	}
 
 	public save(history: CardHistory, callback: Function) {
@@ -80,7 +116,8 @@ export class IndexedDbService {
 				.then((histories) => {
 					console.log('loaded history', limit, histories);
 					callback(histories);
-				})
+				});
+			return;
 		}
 
 		this.getAllWithLimit('card-history', limit, {indexName: 'creationTimestamp', order: 'desc'}).then(
@@ -95,14 +132,23 @@ export class IndexedDbService {
 		console.log('[storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-collection-db', 1);
 		this.db.openDatabase(1, (evt) => {
-		    let objectStore = evt.currentTarget.result.createObjectStore(
-		    	'card-history',
-		    	{ keyPath: "id", autoIncrement: true });
-		    objectStore.createIndex("creationTimestamp", "creationTimestamp", { unique: false });
-		    objectStore.createIndex("isNewCard", "isNewCard", { unique: false });
+			console.log('upgrading db', evt);
+
+			if (evt.oldVersion < 1) {
+				console.log('[storage] upgrade to version 1');
+			    let objectStore = evt.currentTarget.result.createObjectStore(
+			    	'card-history',
+			    	{ keyPath: "id", autoIncrement: true });
+			    objectStore.createIndex("creationTimestamp", "creationTimestamp", { unique: false });
+			    objectStore.createIndex("isNewCard", "isNewCard", { unique: false });
+			}
+			if (evt.oldVersion < 2) {
+				console.log('[storage] upgrade to version 2');
+		    	let collectionStore = evt.currentTarget.result.createObjectStore('collection', {});
+		    }
 
 		    this.dbInit = true;
-		    console.log('[storage] objectstore created', objectStore);
+		    console.log('[storage] indexeddb upgraded');
 		}).then(
 			() => {
 				console.log('[storage] openDatabase successful', this.db);

@@ -73,8 +73,22 @@ export class MemoryInspectionService {
 	}
 
 	public getCollection(callback) {
-		this.mindvisionPlugin.get().getCollection((cards) => {
-			callback(JSON.parse(cards));
-		});
+		this.plugin(
+			() => {
+				this.mindvisionPlugin.get().getCollection((cards) => {
+					callback(JSON.parse(cards));
+				})
+			}
+		);
+	}
+
+	private plugin(callback) {
+		if (!this.mindvisionPlugin || !this.mindvisionPlugin.get()) {
+			setTimeout(() => {
+				this.plugin(callback);
+			}, 200);
+			return;
+		}
+		callback();
 	}
 }

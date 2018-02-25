@@ -50,7 +50,7 @@ export class LogStatusService {
 	private createAppRunningToast(monitoredObject: string) {
 		console.log('sending start notification');
 		this.loaded = true;
-		this.notificationService.html(`<div class="message-container"><img src="/IconStore.png"><div class="message">Lorekeeper is now monitoring your ${monitoredObject}</div></div>`);
+		this.notificationService.html(`<div class="message-container"><img src="/IconStore.png"><div class="message">Lorekeeper is now monitoring your ${monitoredObject} file. Press Ctrl + C to bring the main window</div></div>`);
 	}
 
 	public error(messageId: string, message: string) {

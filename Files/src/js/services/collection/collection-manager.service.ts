@@ -4,6 +4,7 @@ import * as Raven from 'raven-js';
 
 import { Card } from '../../models/card';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
+import { IndexedDbService } from './indexed-db.service';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -13,12 +14,19 @@ export class CollectionManager {
 	plugin: any;
 	mindvisionPlugin: any;
 
-	constructor(private mindVision: MemoryInspectionService) {
+	constructor(private mindVision: MemoryInspectionService, private db: IndexedDbService) {
 	}
 
 	public getCollection(callback: Function) {
 		this.mindVision.getCollection((collection) => {
-			callback(collection);
+			if (!collection) {
+				this.db.getCollection((collection) => {
+					callback(collection);
+				});
+			}
+			else {
+				this.db.saveCollection(collection, callback);
+			}
 		})
 	}
 

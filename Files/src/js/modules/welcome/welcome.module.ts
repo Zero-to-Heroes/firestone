@@ -4,11 +4,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
 
 import * as Raven from 'raven-js';
+import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 
 import { WelcomePageComponent }  from '../../components/welcome-page.component';
 import { SocialMediaComponent }  from '../../components/social-media.component';
 import { VersionComponent }  from '../../components/version.component';
 import { DebugService } from '../../services/debug.service';
+
+import { CollectionManager }  from '../../services/collection/collection-manager.service';
+import { IndexedDbService }  from '../../services/collection/indexed-db.service';
+import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -37,6 +42,10 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		HttpModule,
 		// Animations need to be imported in to your project to use the library
         BrowserAnimationsModule,
+		LocalStorageModule.withConfig({
+			prefix: 'replay-viewer',
+			storageType: 'localStorage',
+		}),
 	],
 	declarations: [
 		WelcomePageComponent,
@@ -48,6 +57,9 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	],
 	providers: [
 		DebugService,
+		CollectionManager,
+		IndexedDbService,
+		MemoryInspectionService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

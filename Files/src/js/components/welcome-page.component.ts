@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation, HostListener } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
+import { CollectionManager } from '../services/collection/collection-manager.service';
 
 import * as Raven from 'raven-js';
 
@@ -36,13 +37,21 @@ declare var overwolf: any;
 						</div>
 					</div>
 					<div class="actions">
-						<div class="action" (click)="openDescription()">
+						<div class="action" [ngClass]="emptyCollection ? 'inactive' : ''" (click)="openCollection()">
 							<i class="icon glyphicon glyphicon-home"></i>
-							<span>What is HS Collection Companion?</span>
+							<h2>Collection</h2>
+							<span>View your collection and track your set completion!</span>
+							<span *ngIf="emptyCollection" class="first-time">First-time user? Launch the game to backup your collection offline!</span>
 						</div>
-						<div class="action" (click)="openIssuesPage()">
+						<div class="action disabled">
 							<i class="icon glyphicon glyphicon-question-sign"></i>
-							<span>Get help or send us feedback</span>
+							<h2>Achievements</h2>
+							<span class="coming-soon">Coming soon</span>
+						</div>
+						<div class="action disabled">
+							<i class="icon glyphicon glyphicon-question-sign"></i>
+							<h2>Tracker</h2>
+							<span class="coming-soon">Coming soon</span>
 						</div>
 					</div>
 					<social-media></social-media>
@@ -55,7 +64,15 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class WelcomePageComponent {
 
-	constructor(private debugService: DebugService) {
+	private emptyCollection = false;
+
+	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
+		this.collectionManager.getCollection((collection) => {
+			console.log('loaded collection', collection);
+			if (!collection || collection.length == 0) {
+				this.emptyCollection = true;
+			}
+		})
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -75,11 +92,25 @@ export class WelcomePageComponent {
 		});
 	};
 
-	private openDescription() {
-		window.open('http://support.overwolf.com/knowledge-base/hs-collection-companion-faq/');
+	private openCollection() {
+		if (this.emptyCollection) {
+			return;
+		}
+
+		console.log('showing collection page');
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			console.log('got collection window', result);
+			this.closeWindow();
+
+			overwolf.windows.restore(result.window.id, (result) => {
+				console.log('CollectionWindow is on?', result);
+				this.closeWindow();
+			})
+		});
 	}
 
-	private openIssuesPage() {
-		window.open('https://docs.google.com/forms/d/e/1FAIpQLSfcGcV-kZHFshv8RIjMZYPbEHQEQwyo7e1IeXuZ4Tyyz4USiQ/viewform?usp=sf_link');
-	}
 }
