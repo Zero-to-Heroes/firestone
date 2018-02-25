@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
+import { CollectionManager } from '../services/collection/collection-manager.service';
 import { PackMonitor } from '../services/collection/pack-monitor.service';
 import { AchievementsMonitor } from '../services/achievement/achievements-monitor.service';
 import { DebugService } from '../services/debug.service';
@@ -26,6 +27,7 @@ export class AppComponent {
 	constructor(
 		private packMonitor: PackMonitor,
 		private debugService: DebugService,
+		private collectionManager: CollectionManager,
 		private achievementsMonitor: AchievementsMonitor,
 		private logStatusService: LogStatusService) {
 
@@ -46,6 +48,10 @@ export class AppComponent {
 		)
 
 		this.startApp();
+
+		this.collectionManager.getCollection((collection) => {
+			console.log('collection backed up!', collection);
+		})
 
 		overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
 			this.startApp(() => this.showCollectionWindow());
