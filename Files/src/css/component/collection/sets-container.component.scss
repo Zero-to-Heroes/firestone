@@ -1,4 +1,7 @@
+@import '../../global/fonts';
+
 .sets-container {
+	margin-top: 9px;
 
 	.category-container {
 		display: flex;
@@ -6,9 +9,8 @@
 		// align-items: center;
 
 		h2 {
-			font-size: 18px;
-			margin: 0;
-			margin-bottom: 10px;
+			@extend %sub-title;
+			margin-bottom: 11px;
 		}
 
 		ol {
@@ -16,12 +18,8 @@
 			padding: 0;
 			margin: 0;
 			width: 100%;
-		    // display: grid;
-    		// grid-template-columns: 30% 30% 30%;
-    		// grid-row-gap: 10px;
-    		// justify-content: space-between;
-		    justify-content: flex-start;
 		    display: flex;
+		    justify-content: flex-start;
 		    flex-wrap: wrap;
 
 		    li {
@@ -30,6 +28,10 @@
 		    	margin-right: 15px;
 		    	margin-bottom: 15px;
 		    	background: rgba(255, 255, 255, 0.2);
+		    }
+
+		    li:nth-child(6n) {
+		    	margin-right: 0;
 		    }
 		}
 	}
