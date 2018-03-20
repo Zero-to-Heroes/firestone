@@ -12,9 +12,9 @@ declare var overwolf: any;
 	],
 	template: `
 		<ul class="menu-selection">
-			<li class="selected">Collection</li>
+			<li class="selected">The Binder</li>
 			<li class="disabled">Achievements</li>
-			<li class="disabled">Tracker</li>
+			<li class="disabled">Deck Tracker</li>
 		</ul>
 	`,
 })

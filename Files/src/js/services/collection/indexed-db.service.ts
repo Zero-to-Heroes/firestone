@@ -18,6 +18,11 @@ export class IndexedDbService {
 	}
 
 	public saveCollection(collection: Card[], callback: Function) {
+		let dbCollection = {
+			id: 1,
+			cards: collection
+		}
+		// console.log('saving collection', dbCollection);
 		if (!this.dbInit) {
 			setTimeout(() => {
 				console.log('[storage] db isnt initialized, waiting...');
@@ -26,17 +31,18 @@ export class IndexedDbService {
 			return;
 		}
 
-		this.db.add('collection', collection).then(
+		this.db.update('collection', dbCollection).then(
 			(history) => {
 				callback(collection);
 			},
 			(error) => {
-			    console.log(error);
+				console.log(error);
 			}
 		);
 	}
 
 	public getCollection(callback: Function) {
+		// console.log('retrieving collection');
 		if (!this.dbInit) {
 			setTimeout(() => {
 				console.log('[storage] db isnt initialized, waiting...');
@@ -47,12 +53,13 @@ export class IndexedDbService {
 
 		this.db.getAll('collection', null)
 			.then((collection) => {
-				console.log('loaded history', collection);
-				callback(collection);
+				console.log('loaded collection', collection);
+				callback(collection.cards);
 			})
 	}
 
 	public save(history: CardHistory, callback: Function) {
+		console.log('saving history', history);
 		if (!this.dbInit) {
 			setTimeout(() => {
 				console.log('[storage] db isnt initialized, waiting...');
@@ -66,12 +73,13 @@ export class IndexedDbService {
 				callback(history);
 			},
 			(error) => {
-			    console.log(error);
+				console.log(error);
 			}
 		);
 	}
 
 	public countHistory(callback: Function) {
+		console.log('counting history');
 		if (!this.dbInit) {
 			setTimeout(() => {
 				console.log('[storage] db isnt initialized, waiting...');
@@ -81,24 +89,24 @@ export class IndexedDbService {
 		}
 
 		let transaction = this.db.dbWrapper.createTransaction({ storeName: 'card-history',
-            dbMode: "readonly",
-            error: (e: Event) => {
-            	console.error('counld not create transaction', e);
-            },
-            complete: (e: Event) => {
-            }
-        });
-        let objectStore: IDBObjectStore = transaction.objectStore('card-history');
-        let request = objectStore.count();
+			dbMode: "readonly",
+			error: (e: Event) => {
+				console.error('counld not create transaction', e);
+			},
+			complete: (e: Event) => {
+			}
+		});
+		let objectStore: IDBObjectStore = transaction.objectStore('card-history');
+		let request = objectStore.count();
 
-        request.onerror = function (e) {
-            console.error('counld not count', e);
-        };
+		request.onerror = function (e) {
+			console.error('counld not count', e);
+		};
 
-        request.onsuccess = function (evt: any) {
-            console.log('could count', evt);
-            callback(evt.target.result);
-        };
+		request.onsuccess = function (evt: any) {
+			console.log('could count', evt);
+			callback(evt.target.result);
+		};
 
 	}
 
@@ -136,23 +144,24 @@ export class IndexedDbService {
 
 			if (evt.oldVersion < 1) {
 				console.log('[storage] upgrade to version 1');
-			    let objectStore = evt.currentTarget.result.createObjectStore(
-			    	'card-history',
-			    	{ keyPath: "id", autoIncrement: true });
-			    objectStore.createIndex("creationTimestamp", "creationTimestamp", { unique: false });
-			    objectStore.createIndex("isNewCard", "isNewCard", { unique: false });
+				let objectStore = evt.currentTarget.result.createObjectStore(
+					'card-history',
+					{ keyPath: "id", autoIncrement: true });
+				objectStore.createIndex("creationTimestamp", "creationTimestamp", { unique: false });
+				objectStore.createIndex("isNewCard", "isNewCard", { unique: false });
 			}
 			if (evt.oldVersion < 2) {
 				console.log('[storage] upgrade to version 2');
-		    	let collectionStore = evt.currentTarget.result.createObjectStore('collection', {});
-		    }
+				let collectionStore = evt.currentTarget.result.createObjectStore(
+					'collection',
+					{ keyPath: "id", autoIncrement: false });
+			}
 
-		    this.dbInit = true;
-		    console.log('[storage] indexeddb upgraded');
+			console.log('[storage] indexeddb upgraded');
 		}).then(
 			() => {
 				console.log('[storage] openDatabase successful', this.db);
-		    	this.dbInit = true;
+				this.dbInit = true;
 			},
 			(error) => {
 				console.log('[storage] error in openDatabase', error);
@@ -162,43 +171,43 @@ export class IndexedDbService {
 	}
 
 	private getAllWithLimit(storeName: string, limit: number, indexDetails?: IndexDetails) {
-        let self = this;
-        return new Promise<any>((resolve, reject)=> {
-            self.db.dbWrapper.validateBeforeTransaction(storeName, reject);
+		let self = this;
+		return new Promise<any>((resolve, reject)=> {
+			self.db.dbWrapper.validateBeforeTransaction(storeName, reject);
 
-            let transaction = self.db.dbWrapper.createTransaction({ storeName: storeName,
-                    dbMode: "readonly",
-                    error: (e: Event) => {
-                        reject(e);
-                    },
-                    complete: (e: Event) => {
-                    }
-                }),
-                objectStore = transaction.objectStore(storeName),
-                result: Array<any> = [],
-                request: IDBRequest;
-                if(indexDetails) {
-                    let index = objectStore.index(indexDetails.indexName),
-                        order = (indexDetails.order === 'desc') ? 'prev' : 'next';
-                    request = index.openCursor(null, <IDBCursorDirection>order);
-                }
-                else {
-                    request = objectStore.openCursor(null);
-                }
+			let transaction = self.db.dbWrapper.createTransaction({ storeName: storeName,
+					dbMode: "readonly",
+					error: (e: Event) => {
+						reject(e);
+					},
+					complete: (e: Event) => {
+					}
+				}),
+				objectStore = transaction.objectStore(storeName),
+				result: Array<any> = [],
+				request: IDBRequest;
+				if(indexDetails) {
+					let index = objectStore.index(indexDetails.indexName),
+						order = (indexDetails.order === 'desc') ? 'prev' : 'next';
+					request = index.openCursor(null, <IDBCursorDirection>order);
+				}
+				else {
+					request = objectStore.openCursor(null);
+				}
 
-            request.onerror = function (e) {
-                reject(e);
-            };
+			request.onerror = function (e) {
+				reject(e);
+			};
 
-            request.onsuccess = function (evt: Event) {
-                let cursor = (<IDBOpenDBRequest>evt.target).result;
-                if (cursor && result.length < limit) {
-                    result.push(cursor.value);
-                    cursor["continue"]();
-                } else {
-                    resolve(result);
-                }
-            };
-        });
-    }
+			request.onsuccess = function (evt: Event) {
+				let cursor = (<IDBOpenDBRequest>evt.target).result;
+				if (cursor && result.length < limit) {
+					result.push(cursor.value);
+					cursor["continue"]();
+				} else {
+					resolve(result);
+				}
+			};
+		});
+	}
 }

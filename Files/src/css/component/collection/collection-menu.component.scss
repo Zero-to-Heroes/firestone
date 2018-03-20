@@ -1,15 +1,8 @@
 .menu-selection {
 
-	position: relative;
-    margin-bottom: 25px;
-    font-size: 18px;
-
-	&:before {
-		content: "";
-		border-bottom: 1px solid grey;
-	    width: 100%;
-	    position: absolute;
-	    bottom: 1px;
+	li {
+		margin-right: 15px;
+		padding-bottom: 8px;
 	}
 }
 

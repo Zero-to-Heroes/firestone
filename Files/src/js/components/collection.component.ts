@@ -14,7 +14,9 @@ declare var ga: any;
 
 @Component({
 	selector: 'collection',
-	styleUrls: [`../../css/component/collection.component.scss`],
+	styleUrls: [
+		`../../css/component/collection.component.scss`,
+	],
 	template: `
 		<div class="collection">
 			<section class="main">

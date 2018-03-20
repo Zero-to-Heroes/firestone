@@ -78,10 +78,11 @@
 			"CollectionWindow": {
 				"file": "Files/html/collection.html",
 				"transparent": true,
-				"resizable": true,
-				"show_in_taskbar": false,
-		        "size": {"width": 1100, "height": 787},
-		        "min_size": {"width": 1100, "height": 787},
+				"resizable": false,
+				"show_in_taskbar": true,
+		        "size": {"width": 1150, "height": 700},
+		        "min_size": {"width": 1150, "height": 700},
+		        "max_size": {"width": 1150, "height": 700},
 		        "block_top_window_navigation": true,
 		        "popup_blocker": true,
 		        "mute": true

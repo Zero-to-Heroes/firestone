@@ -123,11 +123,11 @@ export class LogListenerService {
 		let handler = (id: any, status: any, data: string) => {
 			if (!status) {
 				if (data === 'truncated') {
-					this.plugin.get().stopFileListen(fileIdentifier);
-					this.plugin.get().onFileListenerChanged.removeListener(handler);
-					this.fileInitiallyPresent = false;
-					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Retrying', status, data);
-					this.listenOnFileUpdate(logsLocation);
+					// this.plugin.get().stopFileListen(fileIdentifier);
+					// this.plugin.get().onFileListenerChanged.removeListener(handler);
+					// this.fileInitiallyPresent = false;
+					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Going on');
+					// this.listenOnFileUpdate(logsLocation);
 				}
 				else if (id === fileIdentifier) {
 					console.warn('[log-listener] [' + this.logFile + '] received an error on file: ', id, data);
@@ -147,7 +147,7 @@ export class LogListenerService {
 		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, prod && this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
-					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent);
+					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent, initData);
 					this.subject.next(Events.STREAMING_LOG_FILE);
 				}
 				else {

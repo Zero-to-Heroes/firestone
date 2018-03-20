@@ -1,29 +1,43 @@
-// colors -------------------------------
-$red01: rgb(194, 25, 19);
-$red02: rgb(255, 0, 0);
+@import 'variables';
 
-$brown01: rgb(58, 36, 15);
-$brown02: rgb(90, 55, 23);
-
-$light-brown01: rgb(218, 172, 118);
-$light-brown02: rgb(255, 201, 138);
-
-$gray246: rgb(246, 246, 246);
-
-// vars -----------------------
-$fast-hover: .15s;
-
-h1 {
-  font-family: 'lhf-uncial', sans-serif;
-  font-size: 22px;
+*,
+*:before,
+*:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-weight: normal;
+  -webkit-user-select: none;
+  cursor: default;
 }
 
-p {
-  font-size: 14px;
-  line-height: 16px;
+a, a:hover, a:active {
+  text-decoration: none;
 }
 
-button, i {
+i {
+  font-style: inherit;
+}
+
+// buttons
+button {
+  border: none;
+  font-family: inherit;
+  background-color: inherit;
+}
+
+button:focus {
+  outline: none;
+}
+
+i, button {
+  --icon-color: rgb(204, 162, 179);
+  --icon-bg: transparent;
+
+
+  color: var(--icon-color);
+  background-color: var(--icon-bg);
+
   position: relative;
   width: var(--size, 30px);
   height: var(--size, 30px);
@@ -43,6 +57,43 @@ button, i {
   }
 }
 
+button:hover {
+  --icon-color: var(--icon-color-hover);
+  --icon-bg: var(--icon-bg-hover);
+
+}
+
+.pink-button {
+  --icon-color-hover: #cca2b3;
+  --icon-bg-hover: #513b48;
+
+
+  // &:hover {
+  //   color: var(--icon-color-hover);
+  //   background-color: var(--icon-bg-hover);
+  // }
+}
+
+.close-button {
+  --icon-color-hover: #fff;
+  --icon-bg-hover: #c21913;
+
+  // &:hover {
+  //   color: var(--icon-color-hover);
+  //   background-color: var(--icon-bg-hover);
+  // }
+}
+
+.sound-button {
+  --icon-color-hover: #d9c3ab;
+  --icon-bg-hover: transparent;
+
+  // &:hover {
+  //   color: var(--icon-color-hover);
+  //   background-color: var(--icon-bg-hover);
+  // }
+}
+
 .svg-icon-fill {
   fill: currentcolor;
 }
@@ -52,45 +103,91 @@ button, i {
   stroke: currentcolor;
 }
 
-// window-controls
-.window-control {
-  position: absolute;
-  top: 0;
-  right: 0;
-  color: rgba($brown01, .6);
-  background-color: transparent;
-
-  &:hover {
-    color: white;
-    background-color: $red01;
-  }
+// themes
+.purple-theme {
+  --icon-color: #785f6b;
 }
 
-// buttons
-.btn {
-  position: relative;
-  font-size: 15px;
-  white-space: nowrap;
-  padding: 0 10px;
-  width: auto;
-  min-width: 120px;
+.pale-gold-theme {
+  --icon-color: #d9c3ab;
+  --icon-color-secondary: #84725f;
+}
+
+.gold-theme {
+  --icon-color: #ffb948;
+  --icon-color-secondary: #8e5b23;
+}
+
+
+i.pale-theme {
+  --icon-color: #d9c3ab;
+}
+
+.erorr-theme {
+  --icon-color: #b5043f;
+}
+
+.pale-pink-theme {
+  --icon-color: #ad899b;
+}
+
+.brown-theme {
+  --icon-color: #84725f;
+}
+
+
+
+
+
+// sizes
+.i-10X13 {
+  width: 10px;
+  height: 13px;
+}
+
+.i-20X10 {
+  width: 20px;
+  height: 10px;
+}
+
+.i-15 {
+  --size: 15px;
+}
+
+.i-35 {
+  --size: 35px;
+}
+
+.i-22X30 {
+  width: 22px;
   height: 30px;
-  color: white;
-  background-color: $brown01;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: $fast-hover;
-  cursor: pointer;
-  -webkit-user-select: none;
+}
 
-  &:hover, &.selected {
-    background-color: $brown02;
-  }
+.i-50X6 {
+  width: 50px;
+  height: 6px;
+}
 
-  &:disabled {
-    pointer-events: none;
-    opacity: .6;
-  }
+.i-54 {
+  --size: 54px;
+}
+
+.i-121x147 {
+  width: 121px;
+  height: 147px;
+}
+
+.i-167X143 {
+  width: 167px;
+  height: 143px;
+}
+
+.i-110X86 {
+  width: 110px;
+  height: 86px;
+}
+
+.i-238X167 {
+  width: 238px;
+  height: 167px;
 }

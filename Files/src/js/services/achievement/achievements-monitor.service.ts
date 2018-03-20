@@ -38,7 +38,7 @@ export class AchievementsMonitor {
 		this.newAchievements.subscribe(
 			(newAchievement: Achievement) => {
 				ga('send', 'event', 'new-achievement', newAchievement.id);
-				this.notifications.html(`<div class="message-container"><img src="${newAchievement.icon}"><div class="message">Achievement unlocked! ${newAchievement.title}</div></div>`)
+				// this.notifications.html(`<div class="message-container"><img src="${newAchievement.icon}"><div class="message">Achievement unlocked! ${newAchievement.title}</div></div>`)
 			}
 		);
 	}

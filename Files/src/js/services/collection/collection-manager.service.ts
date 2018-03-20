@@ -18,6 +18,7 @@ export class CollectionManager {
 	}
 
 	public getCollection(callback: Function) {
+		console.log('getting collection');
 		this.mindVision.getCollection((collection) => {
 			if (!collection) {
 				this.db.getCollection((collection) => {

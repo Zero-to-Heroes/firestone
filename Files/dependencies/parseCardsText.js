@@ -21,6 +21,7 @@ var parseCardsText = {
 				var card = parseCardsText.getCard(cardName);
 				if (card) {
 					var link = parseCardsText.buildCardLink(card, lang);
+					console.log('replacing', match, link);
 					result = result.replace(match, link);
 				}
 			})
@@ -51,8 +52,10 @@ var parseCardsText = {
 
 		var localizedImage = parseCardsText.localizeImage(card, lang);
 		var tooltipTemplate = '<div class=\'tooltip parse-cards-text\'><div class=\'tooltip-inner\'></div></div>';
+		console.log('tooltipTemplate', tooltipTemplate);
 		var title = '<img src=\'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + localizedImage + '\'>';
-		var link = '<span class="autocomplete card ' + cssClass + '" data-toggle="tooltip" data-template="' + tooltipTemplate + '" data-title="' + title + '"data-placement="auto left" data-html="true" data-animation="false" data-container="' + container + '">' + localizedName + '</span>';
+		console.log('title', title);
+		var link = '<span class="autocomplete card ' + cssClass + '" data-toggle="tooltip" data-template="' + tooltipTemplate + '" data-title="' + title + '" data-placement="auto left" data-html="true" data-animation="false" data-container="' + container + '">' + localizedName + '</span>';
 
 		parseCardsText.refreshTooltips()
 
@@ -4077,6 +4080,162 @@ var parseCardsText = {
 		"set": "Tgt",
 		"text": "+1/+1.",
 		"type": "Enchantment"
+	},
+	{
+		"cardClass": "HUNTER",
+		"cardImage": "BCON_001.png",
+		"cost": 2,
+		"dbfId": 49225,
+		"id": "BCON_001",
+		"name": "Deadeye",
+		"playerClass": "Hunter",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "For the rest of the game,\nyour Hero Power can target minions.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 50134,
+		"id": "BCON_001e",
+		"name": "Deadeye",
+		"playerClass": "Neutral",
+		"set": "Core",
+		"text": "Your Hero Power can target minions.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "MAGE",
+		"cardImage": "BCON_004.png",
+		"cost": 5,
+		"dbfId": 49228,
+		"id": "BCON_004",
+		"name": "Polymorph: ???",
+		"playerClass": "Mage",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "Choose a minion. <b>Discover</b> a new minion to transform it into.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "DRUID",
+		"cardImage": "BCON_008.png",
+		"cost": 3,
+		"dbfId": 49231,
+		"id": "BCON_008",
+		"name": "Nature's Champion",
+		"playerClass": "Druid",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "Return a friendly minion to your hand and give it +5/+5.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 50131,
+		"id": "BCON_008e",
+		"name": "Nature's Champion",
+		"playerClass": "Neutral",
+		"set": "Core",
+		"text": "+5/+5.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "PALADIN",
+		"cardImage": "BCON_012.png",
+		"cost": 1,
+		"dbfId": 49237,
+		"id": "BCON_012",
+		"mechanics": [
+			"SECRET"
+		],
+		"name": "Hand of Salvation",
+		"playerClass": "Paladin",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "<b>Secret:</b> When your second minion dies in a turn, return it to life.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "PRIEST",
+		"cardImage": "BCON_015.png",
+		"cost": 2,
+		"dbfId": 49240,
+		"id": "BCON_015",
+		"name": "Generous Spirit",
+		"playerClass": "Priest",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "[x]Choose a friendly minion.\nGive it to your opponent\nand draw 3 cards.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "ROGUE",
+		"cardImage": "BCON_016.png",
+		"cost": 1,
+		"dbfId": 49241,
+		"id": "BCON_016",
+		"name": "Smoke Bomb",
+		"playerClass": "Rogue",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "Give a minion <b>Stealth</b> until your next turn. Draw a card.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "ROGUE",
+		"dbfId": 50133,
+		"id": "BCON_016e",
+		"name": "Smoke Bombed",
+		"playerClass": "Rogue",
+		"set": "Core",
+		"text": "Stealthed until your next turn.",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "SHAMAN",
+		"cardImage": "BCON_021.png",
+		"cost": 0,
+		"dbfId": 49246,
+		"id": "BCON_021",
+		"mechanics": [
+			"OVERLOAD"
+		],
+		"name": "Crackling Doom",
+		"overload": 10,
+		"playerClass": "Shaman",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "Deal 12 damage to all minions.\n<b>Overload</b>: (10)",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "WARLOCK",
+		"cardImage": "BCON_024.png",
+		"cost": 0,
+		"dbfId": 49249,
+		"id": "BCON_024",
+		"name": "Bottled Madness",
+		"playerClass": "Warlock",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "Replace your hand with random Demons.",
+		"type": "Spell"
+	},
+	{
+		"attack": 2,
+		"cardClass": "WARRIOR",
+		"cardImage": "BCON_026.png",
+		"cost": 3,
+		"dbfId": 49251,
+		"durability": 3,
+		"id": "BCON_026",
+		"name": "Blazing Longsword",
+		"playerClass": "Warrior",
+		"rarity": "Free",
+		"set": "Core",
+		"text": "Also damages minions next to whomever your hero attacks.",
+		"type": "Weapon"
 	},
 	{
 		"artist": "Jaime Jones",
@@ -49053,7 +49212,7 @@ var parseCardsText = {
 		"name": "Mask of Mimicry",
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"text": "Choose a minion.\nMinions in your hand becomes copies of it.",
+		"text": "Choose a minion.\nMinions in your hand become copies of it.",
 		"type": "Spell"
 	},
 	{
@@ -62145,6 +62304,107 @@ var parseCardsText = {
 		"type": "Minion"
 	},
 	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_FoxBlessing.png",
+		"cost": 1,
+		"dbfId": 49505,
+		"hideStats": true,
+		"id": "TB_FoxBlessing",
+		"name": "Blessing of the Raven",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Each minion summoned gains either <b>Lifesteal</b>, <b>Poisonous</b>, <b>Stealth</b>, <b>Charge</b> or <b>Windfury</b>.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cost": 1,
+		"dbfId": 49506,
+		"hideStats": true,
+		"id": "TB_FoxBlessing1",
+		"name": "Leech Blessing",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "<b>Lifesteal</b>",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cost": 1,
+		"dbfId": 49507,
+		"hideStats": true,
+		"id": "TB_FoxBlessing2",
+		"mechanics": [
+			"POISONOUS"
+		],
+		"name": "Deadly Blessing",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "<b>Poisonous</b>",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cost": 1,
+		"dbfId": 49508,
+		"hideStats": true,
+		"id": "TB_FoxBlessing3",
+		"name": "Swordmaster Blessing",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "<b>Windfury</b>",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cost": 1,
+		"dbfId": 49545,
+		"hideStats": true,
+		"id": "TB_FoxBlessing4",
+		"mechanics": [
+			"WINDFURY"
+		],
+		"name": "MEGA BLESSING!",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "<b>Mega-Windfury</b>",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cost": 1,
+		"dbfId": 49547,
+		"hideStats": true,
+		"id": "TB_FoxBlessing5",
+		"name": "Stealth Blessing",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "<b>Stealth</b>",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cost": 1,
+		"dbfId": 49553,
+		"hideStats": true,
+		"id": "TB_FoxBlessing6",
+		"name": "Charge Blessing",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "<b>Charge</b>",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49554,
+		"hideStats": true,
+		"id": "TB_FoxBlessingEnch",
+		"name": "Fox Blessing Enchant",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"type": "Enchantment"
+	},
+	{
 		"attack": 1,
 		"cardClass": "NEUTRAL",
 		"cardImage": "TB_Frost_Rag.png",
@@ -64501,6 +64761,92 @@ var parseCardsText = {
 		"type": "Enchantment"
 	},
 	{
+		"cardClass": "NEUTRAL",
+		"dbfId": 49778,
+		"entourage": [
+			"TB_SC20_001a",
+			"TB_SC20_001b",
+			"TB_SC20_001c"
+		],
+		"id": "TB_SC20_001",
+		"name": "Portal Selection",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"type": "Enchantment"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_SC20_001a.png",
+		"cost": 0,
+		"dbfId": 49779,
+		"id": "TB_SC20_001a",
+		"name": "Tech Portals",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Shuffle 20 Tech\nPortals into your deck.\nDraw 2 Cards.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_SC20_001b.png",
+		"cost": 0,
+		"dbfId": 49797,
+		"id": "TB_SC20_001b",
+		"name": "Swarm Portals",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Shuffle 20 Swarm Portals into your deck.\nDraw 2 Cards.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_SC20_001c.png",
+		"cost": 0,
+		"dbfId": 49799,
+		"id": "TB_SC20_001c",
+		"name": "Mind Portals",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Shuffle 20 Mind Portals into your deck.\nDraw 2 Cards.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_SC20_002.png",
+		"cost": 1,
+		"dbfId": 49780,
+		"id": "TB_SC20_002",
+		"name": "Tech Portal",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Add a random Tech card to your hand. It costs (3) less.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_SC20_003.png",
+		"cost": 1,
+		"dbfId": 49794,
+		"id": "TB_SC20_003",
+		"name": "Swarm Portal",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Add a random Swarm card to your hand. It costs (3) less.",
+		"type": "Spell"
+	},
+	{
+		"cardClass": "NEUTRAL",
+		"cardImage": "TB_SC20_004.png",
+		"cost": 1,
+		"dbfId": 49798,
+		"id": "TB_SC20_004",
+		"name": "Mind Portal",
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"text": "Add a random Mind card to your hand. It costs (3) less.",
+		"type": "Spell"
+	},
+	{
 		"cardClass": "ROGUE",
 		"cardImage": "TB_ShadowReflection_001.png",
 		"cost": 0,
@@ -66774,6 +67120,7 @@ var parseCardsText = {
 		],
 		"name": "Open the Waygate",
 		"playerClass": "Mage",
+		"questReward": "UNG_028t",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Cast 6 spells that\ndidn't start in your deck.\n<b>Reward:</b> Time Warp.",
@@ -67188,6 +67535,7 @@ var parseCardsText = {
 		],
 		"name": "The Caverns Below",
 		"playerClass": "Rogue",
+		"questReward": "UNG_067t1",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Play five minions\nwith the same name.\n<b>Reward:</b> Crystal Core.",
@@ -68008,6 +68356,7 @@ var parseCardsText = {
 		],
 		"name": "Jungle Giants",
 		"playerClass": "Druid",
+		"questReward": "UNG_116t",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Summon\n5 minions with\n5 or more Attack.\n<b>Reward:</b> Barnabus.",
@@ -68703,6 +69052,7 @@ var parseCardsText = {
 		],
 		"name": "Lakkari Sacrifice",
 		"playerClass": "Warlock",
+		"questReward": "UNG_829t1",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Discard 6 cards.\n<b>Reward:</b> Nether Portal.",
@@ -69553,6 +69903,7 @@ var parseCardsText = {
 		],
 		"name": "The Marsh Queen",
 		"playerClass": "Hunter",
+		"questReward": "UNG_920t1",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Play seven\n1-Cost minions.\n<b>Reward:</b> Queen Carnassa.",
@@ -69814,6 +70165,7 @@ var parseCardsText = {
 		],
 		"name": "Fire Plume's Heart",
 		"playerClass": "Warrior",
+		"questReward": "UNG_934t1",
 		"rarity": "Legendary",
 		"referencedTags": [
 			"TAUNT"
@@ -69922,6 +70274,7 @@ var parseCardsText = {
 		],
 		"name": "Awaken the Makers",
 		"playerClass": "Priest",
+		"questReward": "UNG_940t8",
 		"rarity": "Legendary",
 		"referencedTags": [
 			"DEATHRATTLE"
@@ -69999,6 +70352,7 @@ var parseCardsText = {
 		],
 		"name": "Unite the Murlocs",
 		"playerClass": "Shaman",
+		"questReward": "UNG_942t",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "[x]<b>Quest:</b> Summon\n10 Murlocs.\n<b>Reward:</b> Megafin.",
@@ -70166,6 +70520,7 @@ var parseCardsText = {
 		],
 		"name": "The Last Kaleidosaur",
 		"playerClass": "Paladin",
+		"questReward": "UNG_954t1",
 		"rarity": "Legendary",
 		"set": "Ungoro",
 		"text": "<b>Quest:</b> Cast 6 spells\non your minions.\n<b>Reward:</b> Galvadon.",

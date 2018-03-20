@@ -46,7 +46,7 @@ export class LogRegisterService {
 			.configure("Power.log", (data) => this.gameEvents.receiveLogLine(data))
 			.subscribe((status) => {
 				console.log('[log-register] status for power.log', status);
-				this.events.broadcast(status, "Power.log");
+				// this.events.broadcast(status, "Power.log");
 			})
 			.start();
 	}

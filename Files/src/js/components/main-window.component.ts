@@ -11,27 +11,73 @@ declare var ga: any;
 
 @Component({
 	selector: 'main-window',
-	styleUrls: [`../../css/component/main-window.component.scss`],
+	styleUrls: [
+		`../../css/global/components-global.scss`,
+		`../../css/component/main-window.component.scss`
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="root">
+
+			<div class="shadow"></div>
+
+			<i class="i-54 gold-theme corner top-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner top-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+
 			<div class="app-container">
 				<section class="menu-bar">
 					<real-time-notifications></real-time-notifications>
 					<div class="controls">
-						<i class="glyphicon glyphicon-home" (click)="goHome()"></i>
-						<i class="glyphicon glyphicon-settings" (click)="showSettings()"></i>
-						<i class="glyphicon glyphicon-help" (click)="showHelp()"></i>
-						<i class="glyphicon glyphicon-resize-full" (click)="maximizeWindow()" *ngIf="!maximized"></i>
-						<i class="glyphicon glyphicon-resize-small" (click)="restoreWindow()" *ngIf="maximized"></i>
-						<i class="glyphicon glyphicon-remove" (click)="closeWindow()"></i>
+						<button class="i-30 pink-button" (click)="goHome()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
+							</svg>
+						</button>
+						<button class="i-30 pink-button" (click)="showSettings()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
+							</svg>
+						</button>
+						<button class="i-30 pink-button" (click)="contactSupport()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
+							</svg>
+						</button>
+						<button class="i-30 pink-button" (click)="minimizeWindow()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
+							</svg>
+						</button>
+						<button class="i-30 close-button" (click)="closeWindow()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+							</svg>
+						</button>
 					</div>
 				</section>
 				<section class="content-container">
 					<div class="navigation">
-						<img class="logo" src="/IconStore.png" />
+						<div class="logo"></div>
 						<menu-selection></menu-selection>
-						<hearthhead></hearthhead>
+						<!-- <hearthhead></hearthhead> -->
 					</div>
 					<ng-container [ngSwitch]="selectedModule">
 						<collection *ngSwitchCase="'collection'" class="main-section"></collection>
@@ -93,39 +139,11 @@ export class MainWindowComponent {
 		});
 	};
 
-	private maximizeWindow() {
+	private minimizeWindow() {
 		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				this.lastSize = {
-					width: result.window.width,
-					height: result.window.height,
-					top: result.window.top,
-					left: result.window.left
-				}
-				overwolf.windows.maximize(result.window.id, (result) => {
-					console.log('window maximized', result);
-					this.ngZone.run(() => {
-						this.maximized = true;
-					});
-				});
+			if (result.status === "success"){
+				overwolf.windows.minimize(result.window.id);
 			}
 		});
-	}
-
-	private restoreWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				let windowId = result.window.id;
-				overwolf.windows.changeSize(windowId, this.lastSize.width, this.lastSize.height, (result) => {
-					console.log('window resize', result);
-					overwolf.windows.changePosition(windowId, this.lastSize.left, this.lastSize.top, (result) => {
-						console.log('window repositioned', result);
-						this.ngZone.run(() => {
-							this.maximized = false;
-						});
-					});
-				});
-			}
-		});
-	}
+	};
 }

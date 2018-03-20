@@ -1,18 +1,26 @@
-.collection {
+@import '../global/variables';
 
+.collection {
     flex-grow: 1;
     display: flex;
+    padding-top: 15px;
 
     .main {
-    	flex-basis: 60%;
     	display: flex;
     	flex-direction: column;
-        // margin-top: 20px;
+        width: 695px;
+        padding-left: 14px;
         margin-top: 0;
+
+        collection-menu {
+            height: 30px;
+            border-bottom: 1px solid $grey03;
+            display: flex;
+            align-items: flex-end;
+        }
     }
 
     .secondary {
-    	flex-basis: 40%;
     	display: flex;
     	flex-direction: column;
     }
@@ -40,8 +48,6 @@
     			margin-right: 70px;
 			}
 		}
-
-
 	}
 }
 
