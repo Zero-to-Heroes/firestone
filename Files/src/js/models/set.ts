@@ -4,7 +4,8 @@ export class Set {
 	standard: boolean;
 	allCards: SetCard[] = [];
 
-	ownedCards = 0;
+	ownedLimitCollectibleCards = 0;
+	ownedLimitCollectiblePremiumCards = 0;
 
 	constructor(id: string, name: string, isStandard: boolean) {
 		this.id = id;
@@ -12,7 +13,7 @@ export class Set {
 		this.standard = isStandard;
 	}
 
-	numberOfCards(): number {
+	numberOfLimitCollectibleCards(): number {
 		let totalCards = 0;
 		this.allCards.forEach((card: SetCard) => {
 			totalCards += card.rarity.toLowerCase() === 'legendary' ? 1 : 2;
@@ -99,6 +100,10 @@ export class SetCard {
 
 	getNumberCollected(): number {
 		return Math.min(this.ownedPremium + this.ownedNonPremium, this.getMaxCollectible());
+	}
+
+	getNumberCollectedPremium(): number {
+		return Math.min(this.ownedPremium, this.getMaxCollectible());
 	}
 
 	getMaxCollectible(): number {

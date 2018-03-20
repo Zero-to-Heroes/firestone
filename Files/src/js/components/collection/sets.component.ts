@@ -83,19 +83,7 @@ export class SetsComponent implements OnInit {
 			})
 		})
 
-		// this.maxCards = Math.max(this.maxCards, set.numberOfCards());
-
-		set.ownedCards = set.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
+		set.ownedLimitCollectibleCards = set.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
+		set.ownedLimitCollectiblePremiumCards = set.allCards.map((card: SetCard) => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0);
 	}
-
-	// private onSetSelected(set: Set) {
-	// 	console.log('handling selected set', set);
-	// 	if (this.selectedSet === set) {
-	// 		console.log('set was previously selected, hiding');
-	// 		this.selectedSet = null;
-	// 		return;
-	// 	}
-
-	// 	this.selectedSet = set;
-	// }
 }

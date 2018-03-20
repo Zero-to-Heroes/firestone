@@ -1,9 +1,6 @@
 import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import * as Raven from 'raven-js';
-
-import { AllCardsService } from '../../services/all-cards.service';
 
 import { Card } from '../../models/card';
 import { Set, SetCard, MissingCard } from '../../models/set';
@@ -19,7 +16,64 @@ declare var overwolf: any;
 				<img src="{{'/Files/assets/images/sets/' + _cardSet.id + '.png'}}" class="set-logo" />
 				<span class="text set-name" *ngIf="_displayName">{{_cardSet.name}}</span>
 			</div>
-			<span class="cards-collected">{{_cardSet.ownedCards}}/{{_cardSet.numberOfCards()}}</span>
+			<span class="cards-collected">{{_cardSet.ownedLimitCollectibleCards}}/{{_cardSet.numberOfLimitCollectibleCards()}}</span>
+			<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
+				<i class="i-15 pale-gold-theme corner bottom-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+					</svg>
+				</i>
+				<i class="i-15 pale-gold-theme corner top-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+					</svg>
+				</i>
+				<i class="i-15 pale-gold-theme corner top-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+					</svg>
+				</i>
+				<i class="i-15 pale-gold-theme corner bottom-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+					</svg>
+				</i>
+			</div>
+			<div class="frame complete-premium" *ngIf="isPremiumComplete()">
+				<div class="outer-border"></div>
+
+				<i class="i-22X30 gold-theme corner bottom-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+					</svg>
+				</i>
+
+				<i class="i-22X30 gold-theme corner top-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+					</svg>
+				</i>
+
+				<i class="i-22X30 gold-theme corner top-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+					</svg>
+				</i>
+
+				<i class="i-22X30 gold-theme corner bottom-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+					</svg>
+				</i>
+
+				<div class="crown">
+					<i class="i-20X10 gold-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#three_gold_leaves"/>
+						</svg>
+					</i>
+				</div>
+			</div>
 		</div>
 	`,
 })
@@ -33,35 +87,18 @@ export class SetComponent {
 
 	@Input('cardSet') set cardSet(set: Set) {
 		this._cardSet = set;
-		// console.log('setting set', set, set.name)
+		console.log('setting set', set, set.name)
 		if (['Basic', 'Classic', 'Hall of Fame'].indexOf(set.name) > -1) {
 			this._displayName = true;
 		}
 	}
 
-	constructor(
-		private sanitizer: DomSanitizer,
-		private cards: AllCardsService) {
-		// console.log('constructor CollectionComponent');
+	private isSimpleComplete() {
+		return this._cardSet.ownedLimitCollectibleCards == this._cardSet.numberOfLimitCollectibleCards()
 	}
 
-
-
-	// private toggleShowRarities() {
-	// 	this._showRarities = !this._showRarities;
-	// 	this.showMissingCards = !this.showMissingCards;
-	// }
-
-	// private collectedWidth() {
-	// 	return this.maxCards == 0 ? 0 : Math.max(33, 100.0 * this.cardSet.numberOfCards() / this.maxCards);
-	// }
-
-	// private background() {
-	// 	return this.sanitizer.bypassSecurityTrustStyle('url(/Files/assets/images/set-background/' + this.cardSet.id + '.jpg)')
-	// }
-
-	// private clip() {
-	// 	return this.sanitizer.bypassSecurityTrustStyle('inset(0 ' + (100 - 100.0 * this.cardSet.ownedCards / this.cardSet.numberOfCards()) + '% 0 0)')
-	// }
+	private isPremiumComplete() {
+		return this._cardSet.ownedLimitCollectiblePremiumCards == this._cardSet.numberOfLimitCollectibleCards()
+	}
 
 }

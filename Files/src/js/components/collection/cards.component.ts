@@ -140,24 +140,4 @@ export class CardsComponent {
 			default: console.log('unknown filter', filter);
 		}
 	}
-
-
-
-	// private toggleShowRarities() {
-	// 	this._showRarities = !this._showRarities;
-	// 	this.showMissingCards = !this.showMissingCards;
-	// }
-
-	// private collectedWidth() {
-	// 	return this.maxCards == 0 ? 0 : Math.max(33, 100.0 * this.cardSet.numberOfCards() / this.maxCards);
-	// }
-
-	// private background() {
-	// 	return this.sanitizer.bypassSecurityTrustStyle('url(/Files/assets/images/set-background/' + this.cardSet.id + '.jpg)')
-	// }
-
-	// private clip() {
-	// 	return this.sanitizer.bypassSecurityTrustStyle('inset(0 ' + (100 - 100.0 * this.cardSet.ownedCards / this.cardSet.numberOfCards()) + '% 0 0)')
-	// }
-
 }

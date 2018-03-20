@@ -1,3 +1,4 @@
+@import '../../global/variables';
 @import '../../global/fonts';
 
 .set {
@@ -6,6 +7,7 @@
 	flex-direction: column;
 	height: 100%;
 	background: rgba(255, 255, 255, 0.08);
+    position: relative;
 
 	&:hover {
 		background: rgba(255, 255, 255, 0.12);
@@ -33,4 +35,95 @@
 	.cards-collected {
 		@extend %completion-number;
 	}
+
+	.frame {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		pointer-events: none;
+
+		&.complete-simple {
+			border: 1px solid $green01;
+
+			.corner {
+				position: absolute;
+
+				&.bottom-left {
+					bottom: 0;
+					left: 0;
+				    transform: rotate(0);
+				}
+
+				&.top-left {
+					top: 0;
+					left: 0;
+    				transform: rotate(90deg);
+				}
+
+				&.top-right {
+					top: 0;
+					right: 0;
+    				transform: rotate(180deg);
+				}
+
+				&.bottom-right {
+					bottom: 0;
+					right: 0;
+    				transform: rotate(270deg);
+				}
+			}
+		}
+
+		&.complete-premium {
+			border: 1px solid $yellow03;
+
+			.outer-border {
+				position: absolute;
+			    top: -5px;
+			    right: -5px;
+			    bottom: -5px;
+			    left: -5px;
+				border: 2px solid $yellow03;
+			}
+
+			.corner {
+				position: absolute;
+
+				&.bottom-left {
+					bottom: 0;
+					left: 0;
+				    transform: rotate(0);
+				}
+
+				&.top-left {
+					top: 0;
+					left: 0;
+    				transform: rotate(0) scale(1, -1);
+				}
+
+				&.top-right {
+					top: 0;
+					right: 0;
+    				transform: rotate(180deg);
+				}
+
+				&.bottom-right {
+					bottom: 0;
+					right: 0;
+    				transform: rotate(180deg) scale(1, -1);
+				}
+			}
+
+			.crown {
+				position: absolute;
+				top: -15px;
+				width: 100%;
+				display: flex;
+				justify-content: center;
+			}
+		}
+	}
+
 }
