@@ -16,10 +16,10 @@ declare var overwolf: any;
 	template: `
 		<div *ngIf="_cardSet" class="set">
 			<div class="logo-container">
-				<img src="{{'/Files/assets/images/set-logos/' + _cardSet.id + '.png'}}" class="set-logo" />
+				<img src="{{'/Files/assets/images/sets/' + _cardSet.id + '.png'}}" class="set-logo" />
 				<span class="text set-name" *ngIf="_displayName">{{_cardSet.name}}</span>
 			</div>
-			<span class="text">{{_cardSet.ownedCards}} / {{_cardSet.numberOfCards()}}</span>
+			<span class="cards-collected">{{_cardSet.ownedCards}}/{{_cardSet.numberOfCards()}}</span>
 		</div>
 	`,
 })

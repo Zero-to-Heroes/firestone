@@ -1,14 +1,14 @@
+@import '../../global/fonts';
+
 .set {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	height: 100%;
-	cursor: pointer;
+	background: rgba(255, 255, 255, 0.08);
 
-	span.text.text.text.text {
-		// margin-right: 10px;
-		font-size: 10px;
-		text-align: center;
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
 	}
 
 	.logo-container {
@@ -16,15 +16,21 @@
 	    position: relative;
 	    display: flex;
 	    flex-direction: column;
-    	height: calc(100% - 25px);
+    	height: calc(100% - 24px);
 	}
 
 	.set-logo {
-		height: 75px;
-		z-index: 1;
+
 	}
 
 	.set-name {
-		margin-top: -5px;
+		@extend %core-set-name;
+		text-align: center;
+		position: relative;
+		top: -16px;
+	}
+
+	.cards-collected {
+		@extend %completion-number;
 	}
 }
