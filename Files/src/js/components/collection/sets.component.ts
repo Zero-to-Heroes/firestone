@@ -13,7 +13,10 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'sets',
-	styleUrls: [`../../../css/component/collection/sets.component.scss`],
+	styleUrls: [
+		`../../../css/component/collection/sets.component.scss`,
+		`../../../css/global/scrollbar.scss`
+	],
 	template: `
 		<div class="sets">
 			<sets-container [sets]="standardSets" [category]="'Standard'" *ngIf="showStandard"></sets-container>

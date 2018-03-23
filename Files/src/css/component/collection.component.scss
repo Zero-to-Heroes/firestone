@@ -1,9 +1,11 @@
 @import '../global/variables';
+@import '../global/scrollbar';
 
 .collection {
     flex-grow: 1;
     display: flex;
     padding-top: 15px;
+    height: 598px;
 
     .main {
     	display: flex;
@@ -17,6 +19,11 @@
             border-bottom: 1px solid $grey03;
             display: flex;
             align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        sets {
+            display: flex;
         }
     }
 
@@ -38,6 +45,7 @@
 
 	.sets {
 		display: flex;
+        overflow: auto;
 
 		sets-container {
 			flex-basis: 50%;
