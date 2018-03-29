@@ -1,0 +1,18 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+li {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 30px;
+    padding-left: 12px;
+
+    &:hover {
+    	background: $grey03;
+    }
+}
+
+.match {
+	@extend %search-bar-auto;
+}

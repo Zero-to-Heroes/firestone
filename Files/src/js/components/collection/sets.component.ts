@@ -33,7 +33,6 @@ export class SetsComponent implements OnInit {
 	private standardSets: Set[];
 	private wildSets: Set[];
 	private selectedSet: Set;
-	// private maxCards = 0;
 
 	constructor(private _events: Events, private collectionManager: CollectionManager, private cards: AllCardsService) {
 

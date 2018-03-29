@@ -21,6 +21,7 @@ import { SetsContainer }  from '../../components/collection/sets-container.compo
 import { RarityComponent }  from '../../components/collection/rarity.component';
 import { CardComponent }  from '../../components/collection/card.component';
 import { CardSearchComponent }  from '../../components/collection/card-search.component';
+import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
 import { HearthheadComponent }  from '../../components/hearthhead.component';
 import { LoginComponent }  from '../../components/login.component';
 import { MainWindowComponent }  from '../../components/main-window.component';
@@ -84,6 +85,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		CardHistoryItemComponent,
 		CardsComponent,
 		CardSearchComponent,
+		CardSearchAutocompleteItemComponent,
 		CollectionComponent,
 		CollectionMenuComponent,
 		FullCardComponent,

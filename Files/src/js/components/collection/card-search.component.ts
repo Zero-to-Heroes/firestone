@@ -13,12 +13,26 @@ declare var ga: any;
 
 @Component({
 	selector: 'card-search',
-	styleUrls: [`../../../css/component/collection/card-search.component.scss`],
+	styleUrls: [
+		`../../../css/component/collection/card-search.component.scss`,
+		`../../../css/global/scrollbar.scss`,
+	],
 	template: `
 		<div class="card-search" (keyup)="onValidateSearch($event)" (blur)="onFocusLost()">
-			<input (input)="onSearchStringChange($event.target.value)" placeholder="Search card..." />
+			<label class="search-label" [ngClass]="{'search-active': searchString}">
+				<i class="i-30">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#search"/>
+					</svg>
+				</i>
+				<input [(ngModel)]="searchString" (input)="onSearchStringChange()" placeholder="Search card..." />
+			</label>
 			<ul *ngIf="searchResults" class="search-results">
-				<li *ngFor="let result of searchResults" (click)="showCard(result)">{{result.name}}</li>
+				<card-search-autocomplete-item *ngFor="let result of searchResults"
+					[fullString]="result.name"
+					[searchString]="searchString"
+					(click)="showCard(result)">
+				</card-search-autocomplete-item>
 			</ul>
 		</div>
 	`,
@@ -26,18 +40,19 @@ declare var ga: any;
 // 7.1.1.17994
 export class CardSearchComponent {
 
+	private searchString: string;
 	private searchResults: SetCard[];
 
 	constructor(private cards: AllCardsService, private events: Events) {
 	}
 
-	private onSearchStringChange(searchString: string) {
+	private onSearchStringChange() {
 		this.searchResults = [];
-		console.log('updating serach string', searchString);
-		if (searchString.length <= 2) {
+		console.log('updating serach string', this.searchString);
+		if (this.searchString.length <= 2) {
 			return;
 		}
-		this.searchResults = this.cards.searchCards(searchString);
+		this.searchResults = this.cards.searchCards(this.searchString);
 	}
 
 	private onValidateSearch(event: KeyboardEvent) {

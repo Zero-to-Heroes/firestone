@@ -1,21 +1,52 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
 .card-search {
 	position: relative;
 	width: 200px;
 
-	input {
+	label {
+		@extend %search-bar-inactive;
 		width: 100%;
+		border: 1px solid $grey03;
+		display: flex;
+
+		&:focus-within {
+			outline: none;
+		}
+	}
+
+	input {
+		background: transparent;
+		border: none;
+		cursor: text;
+
+		&:focus {
+			outline: none;
+			@extend %search-active;
+		}
+	}
+
+	label.search-active {
+		background: rgba(255, 255, 255, 0.08);
+
+		input {
+			outline: none;
+			@extend %search-active;
+		}
 	}
 
 	.search-results {
+		@extend %search-active;
 		position: absolute;
-		background: white;
+		margin-top: -1px;
+		background: $black;
+		border: 1px solid $grey03;
 		list-style: none;
 		padding: 0;
 		margin: 0;
 		width: 100%;
-
-		li {
-			color: black;
-		}
+	    max-height: 155px;
+	    overflow: auto;
 	}
 }
