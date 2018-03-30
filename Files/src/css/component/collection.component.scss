@@ -30,6 +30,9 @@
     .secondary {
     	display: flex;
     	flex-direction: column;
+        flex-grow: 1;
+        margin-left: 20px;
+        margin-right: 15px;
     }
 
     .full-card {

@@ -1,22 +1,59 @@
+@import '../../global/fonts';
+
 .card-history-item {
+	@extend %you-have-viewed;
 	display: flex;
 	flex-direction: row;
     align-items: center;
     cursor: pointer;
+    height: 36px;
 
 	.rarity {
 		width: 15px;
+	    margin-left: 10px;
+	    margin-right: 16px;
 	}
 
 	.name {
-		width: 150px;
+		// width: 195px;
+		flex-grow: 1;
 	    white-space: nowrap;
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	}
 
 	.dust-amount, .new {
-		width: 100px;
+		width: 95px;
 		text-align: center;
+		display: flex;
+	    justify-content: flex-end;
+	    align-items: center;
+	    margin-right: 10px;
+	}
+
+	.dust-amount {
+
+	    span {
+			margin-right: 6px;
+		}
+
+
+		&:before {
+			content: "+";
+			margin-right: 4px;
+		}
+	}
+
+	.new {
+
+	    span {
+	    	border: 1px solid;
+		    padding: 2px 8px;
+		    margin-right: 7px;
+	    }
+	}
+
+	.date {
+		margin-right: 12px;
 	}
 }

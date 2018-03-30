@@ -1,18 +1,23 @@
-ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-    max-height: 250px;
-    overflow: auto;
-}
-
-li {
-}
+@import '../../global/fonts';
 
 .card-history {
-	margin-left: 75px;
+	margin-top: 42px;
+	width: 400px;
 }
 
 .top-container {
-	margin-bottom: 20px;
+	margin-bottom: 11px;
+}
+
+.title {
+	@extend %sub-title;
+}
+
+ul {
+	background: rgba(255, 255, 255, 0.08);
+	list-style: none;
+	padding: 0;
+	margin: 0;
+    height: 160px;
+    overflow: auto;
 }

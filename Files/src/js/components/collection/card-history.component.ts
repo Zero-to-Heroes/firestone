@@ -15,12 +15,15 @@ declare var ga: any;
 
 @Component({
 	selector: 'card-history',
-	styleUrls: [`../../../css/component/collection/card-history.component.scss`],
+	styleUrls: [
+		`../../../css/component/collection/card-history.component.scss`,
+		`../../../css/global/scrollbar.scss`
+	],
 	template: `
 		<div class="card-history">
 			<div class="top-container">
 				<span class="title">My Card History</span>
-				<input type="checkbox" [checked]="showOnlyNewCards" (change)="toggleShowOnlyNewCards()" />
+				<!-- <input type="checkbox" [checked]="showOnlyNewCards" (change)="toggleShowOnlyNewCards()" /> -->
 			</div>
 			<ul class="history">
 				<li *ngFor="let historyItem of shownHistory">

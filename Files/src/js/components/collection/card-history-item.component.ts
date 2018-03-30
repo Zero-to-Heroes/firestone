@@ -17,8 +17,17 @@ declare var ga: any;
 		<div class="card-history-item">
 			<img class="rarity" src="{{rarityImg()}}" />
 			<span class="name">{{cardName()}}</span>
-			<span class="dust-amount" *ngIf="!historyItem.isNewCard">{{historyItem.dustValue}}</span>
-			<span class="new" *ngIf="historyItem.isNewCard">NEW</span>
+			<span class="dust-amount" *ngIf="!historyItem.isNewCard">
+				<span>{{historyItem.dustValue}}</span>
+				<i class="i-30 pale-theme">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#dust"/>
+					</svg>
+				</i>
+			</span>
+			<span class="new" *ngIf="historyItem.isNewCard">
+				<span>NEW</span>
+			</span>
 			<span class="date">{{creationDate()}}</span>
 		</div>
 	`,
@@ -51,7 +60,7 @@ export class CardHistoryItemComponent {
 	}
 
 	private rarityImg() {
-		return `/Files/assets/images/rarity-${this.historyItem.rarity}.png`;
+		return `/Files/assets/images/rarity/rarity-${this.historyItem.rarity}.png`;
 	}
 
 	private creationDate(): string {
