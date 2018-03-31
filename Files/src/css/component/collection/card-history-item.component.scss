@@ -8,6 +8,10 @@
     cursor: pointer;
     height: 36px;
 
+    &:hover {
+    	background: rgba(255, 255, 255, 0.08);
+    }
+
 	.rarity {
 		width: 15px;
 	    margin-left: 10px;
