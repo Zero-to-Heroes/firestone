@@ -8,7 +8,7 @@
 	label {
 		@extend %search-bar-inactive;
 		width: 100%;
-		border: 1px solid $grey03;
+		outline: 1px solid $grey03;
 		display: flex;
 
 		&:focus-within {
