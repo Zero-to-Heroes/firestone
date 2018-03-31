@@ -23,7 +23,14 @@ declare var ga: any;
 		<div class="card-history">
 			<div class="top-container">
 				<span class="title">My Card History</span>
-				<!-- <input type="checkbox" [checked]="showOnlyNewCards" (change)="toggleShowOnlyNewCards()" /> -->
+				<label class="toggle-label" [ngClass]="{'show-only-new': showOnlyNewCards}" (click)="toggleShowOnlyNewCards()">
+					<span>Show only new cards</span>
+					<i class="i-30">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#search"/>
+						</svg>
+					</i>
+				</label>
 			</div>
 			<ul class="history">
 				<li *ngFor="let historyItem of shownHistory">
@@ -31,7 +38,7 @@ declare var ga: any;
 				</li>
 				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
 					<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
-					<button (click)="loadMore()">Load More</button>
+					<button class="load-more-button" (click)="loadMore()">Load More</button>
 				</li>
 			</ul>
 		</div>

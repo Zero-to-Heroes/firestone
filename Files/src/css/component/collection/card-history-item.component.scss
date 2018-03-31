@@ -54,6 +54,7 @@
 	}
 
 	.date {
+		@extend %breadcrumbs;
 		margin-right: 12px;
 	}
 }

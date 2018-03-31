@@ -42,7 +42,7 @@ export class RealTimeNotificationsComponent {
 				if (res.ok) {
 					let status = JSON.parse(res._body);
 					this.notifications = status[0].status;
-					console.log('received status', status, this.notifications);
+					// console.log('received status', status, this.notifications);
 				}
 			}
 		)

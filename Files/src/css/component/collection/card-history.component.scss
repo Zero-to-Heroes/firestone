@@ -1,3 +1,4 @@
+@import '../../global/variables';
 @import '../../global/fonts';
 
 .card-history {
@@ -7,10 +8,28 @@
 
 .top-container {
 	margin-bottom: 11px;
-}
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-.title {
-	@extend %sub-title;
+    .toggle-label {
+    	display: flex;
+    	align-items: center;
+
+    	span {
+    		@extend %sub-title;
+    	}
+
+    	&:hover {
+    		color: $grey01;
+    	}
+    }
+
+	.title {
+		@extend %sub-title;
+    	display: flex;
+    	align-items: center;
+	}
 }
 
 ul {
@@ -21,3 +40,29 @@ ul {
     height: 160px;
     overflow: auto;
 }
+
+.more-data-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+	.more-data-text {
+		@extend %you-have-viewed;
+		margin-top: 15px;
+	}
+
+	.load-more-button {
+		@extend %button-text;
+		background: $green02;
+	    width: 80px;
+	    height: 30px;
+		padding: 7px 8px;
+		margin-top: 14px;
+		margin-bottom: 13px;
+
+		&:hover {
+			background: $green01;
+		}
+	}
+}
+
