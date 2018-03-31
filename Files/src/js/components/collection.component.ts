@@ -29,7 +29,7 @@ declare var ga: any;
 			<section class="secondary">
 				<card-search>Search card</card-search>
 				<card-history></card-history>
-				<div class="ads" id="ad-div">Ads</div>
+				<div class="ads" id="ad-div"></div>
 			</section>
 			<full-card class="full-card" [cardId]="fullCardId" (close)="this.fullCardId = null" *ngIf="fullCardId"></full-card>
 		</div>
