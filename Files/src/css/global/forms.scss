@@ -1,0 +1,82 @@
+@import "variables";
+
+// reset
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-weight: normal;
+}
+
+fieldset {
+  border: none;
+}
+
+// inner content
+label {
+  display: flex;
+  align-items: center;
+}
+
+// form-toggle
+.form-toggle,
+.form-toggle-small {
+
+  b {
+    flex-shrink: 0;
+    position: relative;
+    margin-left: auto;
+    border: 1px solid $grey03;
+    border-radius: 33.33333%/50%; // 2:3 width height ratio
+    transition: .15s;
+
+    &:before {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: $grey03;
+      transition: background .25s, transform .15s;
+    }
+  }
+
+  :checked + label b {
+    border-color: $grey01;
+
+    &:before {
+      transform: translateX(100%);
+      background: $grey01;
+    }
+  }
+}
+
+.form-toggle {
+  b {
+    width: 30px;
+    height: 20px;
+
+    &:before {
+      top: 4px;
+      left: 4px;
+      width: 10px;
+      height: 10px;
+    }
+  }
+}
+
+.form-toggle-small {
+  --inner-gap: 5px;
+
+  b {
+    align-self: center;
+    width: 24px;
+    height: 16px;
+    margin-right: 3px;
+
+    &:before {
+      top: 3px;
+      left: 3px;
+      width: 8px;
+      height: 8px;
+    }
+  }
+}

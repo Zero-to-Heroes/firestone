@@ -17,20 +17,26 @@ declare var ga: any;
 	selector: 'card-history',
 	styleUrls: [
 		`../../../css/component/collection/card-history.component.scss`,
-		`../../../css/global/scrollbar.scss`
+		`../../../css/global/scrollbar.scss`,
+		`../../../css/global/forms.scss`
 	],
 	template: `
 		<div class="card-history">
 			<div class="top-container">
 				<span class="title">My Card History</span>
-				<label class="toggle-label" [ngClass]="{'show-only-new': showOnlyNewCards}" (click)="toggleShowOnlyNewCards()">
-					<span>Show only new cards</span>
-					<i class="i-30">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#search"/>
-						</svg>
-					</i>
-				</label>
+				<section class="toggle-label">
+					<form class="settings-section form-toggle">
+						<fieldset name="">
+							<div class="form-section">
+								<input hidden type="checkbox" name="" id="a-01" (change)="toggleShowOnlyNewCards()">
+								<label for="a-01">
+									<p class="settings-p">Show only new cards</p>
+									<b></b>
+								</label>
+							</div>
+						</fieldset>
+					</form>
+				</section>
 			</div>
 			<ul class="history">
 				<li *ngFor="let historyItem of shownHistory">

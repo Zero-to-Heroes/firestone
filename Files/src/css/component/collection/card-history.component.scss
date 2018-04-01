@@ -16,12 +16,9 @@
     	display: flex;
     	align-items: center;
 
-    	span {
+    	p {
     		@extend %sub-title;
-    	}
-
-    	&:hover {
-    		color: $grey01;
+    		margin-right: 14px;
     	}
     }
 
