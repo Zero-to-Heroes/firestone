@@ -8,10 +8,12 @@
     margin: 0;
     padding: 0;
     position: relative;
-    top: 1px;
+    border-bottom: 1px solid $grey03;
+	width: 100%;
 
-	ul {
-		margin: 0;
+	li {
+		position: relative;
+		top: 1px;
 	}
 
 	.selected {

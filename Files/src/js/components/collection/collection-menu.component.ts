@@ -20,7 +20,7 @@ declare var overwolf: any;
 			<ng-container *ngSwitchCase="'breadcrumbs'" >
 				<ul class="breadcrumbs">
 					<li (click)="goToCollectionView()">Sets</li>
-					<li (click)="goToFormatView()">{{selectedFormat}}</li>
+					<li (click)="goToFormatView()">{{getSelectedFormat()}}</li>
 					<li (click)="goToSetView()" *ngIf="selectedSet">{{selectedSet.name}}</li>
 				</ul>
 			</ng-container>
@@ -37,6 +37,11 @@ export class CollectionMenuComponent {
 	constructor(private _events: Events) {
 
 	}
+
+	private getSelectedFormat() {
+		return this.selectedFormat.charAt(0).toUpperCase() + this.selectedFormat.slice(1);
+	}
+
 	private goToSetView() {
 		this._events.broadcast(Events.SET_SELECTED, this.selectedSet);
 	}

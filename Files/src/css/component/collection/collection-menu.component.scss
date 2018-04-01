@@ -1,5 +1,6 @@
-.menu-selection {
+@import '../../global/fonts';
 
+.menu-selection {
 	li {
 		margin-right: 15px;
 		padding-bottom: 8px;
@@ -7,9 +8,12 @@
 }
 
 .breadcrumbs {
+	@extend %breadcrumbs;
 	list-style: none;
 	display: flex;
 	margin: 0;
+	align-self: flex-start;
+	margin-top: -4px;
 
 	li {
 		cursor: pointer;
@@ -17,8 +21,8 @@
 
 	li:after {
 		content: ">";
-	    margin-left: 10px;
-	    margin-right: 10px;
+	    margin-left: 6px;
+	    margin-right: 6px;
 	}
 
 	li:last-child:after {
