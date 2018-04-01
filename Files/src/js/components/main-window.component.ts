@@ -18,30 +18,6 @@ declare var ga: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="root">
-
-			<div class="shadow"></div>
-
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-
 			<div class="app-container">
 				<section class="menu-bar">
 					<real-time-notifications></real-time-notifications>
@@ -85,6 +61,27 @@ declare var ga: any;
 				</section>
 			</div>
 			<tooltips></tooltips>
+
+			<i class="i-54 gold-theme corner top-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner top-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
 			<!--<card-modal></card-modal>-->
 			<login *ngIf="showLogin" (close)="showLogin = false"></login>
 		</div>
