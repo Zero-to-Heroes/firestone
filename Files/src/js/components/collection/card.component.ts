@@ -19,8 +19,23 @@ declare var overwolf: any;
 		<div class="card-container" [ngClass]="{'missing': card.ownedNonPremium + card.ownedPremium == 0}">
 			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder"/>
 			<img src="{{image()}}"/>
-			<div class="count" *ngIf="card.ownedNonPremium + card.ownedPremium > 0">
-				{{card.ownedNonPremium + ' - ' + card.ownedPremium}}
+			<div class="count">
+				<div class="non-premium" *ngIf="card.ownedNonPremium > 0">
+					<span>{{card.ownedNonPremium}}</span>
+				</div>
+				<div class="premium" *ngIf="card.ownedPremium > 0">
+					<i class="gold-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+						</svg>
+					</i>
+					<span>{{card.ownedPremium}}</span>
+					<i class="gold-theme right">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+						</svg>
+					</i>
+				</div>
 			</div>
 		</div>
 	`,

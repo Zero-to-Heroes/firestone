@@ -1,15 +1,19 @@
+@import '../../global/fonts';
+
 .cards {
 	position: relative;
+	top: -2px;
 }
 
-h1 {
+.set-title {
+	@extend %set-result;
 	display: flex;
     align-items: center;
 	margin: 0;
 
 	img {
-		width: 75px;
-		height: 75px;
+		width: 53px;
+		margin-left: 5px;
 	}
 }
 
@@ -36,9 +40,10 @@ h1 {
     flex-wrap: wrap;
 
     li {
-    	width: 104px;
-    	height: 162px; // We need this so that things are not a mess when the placeholder image is showing
+    	width: 98px;
+    	height: 152px; // We need this so that things are not a mess when the placeholder image is showing
     	margin-right: 15px;
+    	margin-bottom: 5px;
     }
 }
 

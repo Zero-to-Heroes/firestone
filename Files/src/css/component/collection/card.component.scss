@@ -1,3 +1,6 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
 .card-container {
 	position: relative;
 	width: 100%;
@@ -18,9 +21,48 @@
 	}
 
 	.count {
-	    position: absolute;
-	    bottom: 9px;
-	    left: 37px;
+		display: flex;
+    	justify-content: center;
+		align-items: center;
+		height: 20px;
+	    position: relative;
+	    top: -12px;
+
+		.non-premium, .premium {
+			@extend %dust-number;
+			border: 1px solid;
+    		border-top: none;
+    		padding: 0 5px 2px 5px;
+    		display: flex;
+    		align-items: center;
+
+			span:before {
+				content: "x";
+			}
+		}
+
+		.premium {
+			border-color: $yellow03;
+    		padding: 0 0 2px 0;
+
+    		i {
+    			width: 14px;
+    			height: 16px;
+    			margin-bottom: -4px;
+    		}
+
+    		span {
+    			margin: 0 1px 0 0;
+    		}
+
+    		.right {
+   				transform: scale(-1, 1);
+    		}
+		}
+
+		div:nth-child(2) {
+			margin-left: 5px;
+		}
 	}
 
 	.full-size {

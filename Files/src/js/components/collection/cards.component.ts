@@ -16,10 +16,10 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/collection/cards.component.scss`],
 	template: `
 		<div class="cards">
-			<h1 *ngIf="_set">
-				<img src="{{'/Files/assets/images/set-logos/' + _set.id + '.png'}}" class="set-logo" />
+			<span *ngIf="_set" class="set-title">
+				<img src="{{'/Files/assets/images/sets/' + _set.id + '.png'}}" class="set-logo" />
 				<span class="text set-name">{{_set.name}}</span>
-			</h1>
+			</span>
 			<div class="show-filter" *ngIf="_activeCards">
 				<span class="label">Show</span>
 				<ng2-dropdown (onItemClicked)="selectFilter($event)">
