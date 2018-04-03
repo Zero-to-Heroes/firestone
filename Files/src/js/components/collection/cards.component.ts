@@ -37,9 +37,21 @@ declare var overwolf: any;
 				</li>
 			</ul>
 			<ul class="pagination" *ngIf="_numberOfPages > 1">
-				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">{{'<'}}</li>
+				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">
+					<i class="i-30">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
+						</svg>
+					</i>
+				</li>
 				<li *ngFor="let page of _pages" [ngClass]="_currentPage == page ? 'active' : ''" (click)="goToPage(page)">{{page + 1}}</li>
-				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage == _numberOfPages ? 'disabled' : ''">{{'>'}}</li>
+				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage == _numberOfPages ? 'disabled' : ''">
+					<i class="i-30">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
+						</svg>
+					</i>
+				</li>
 			</ul>
 			<div *ngIf="!_activeCards">
 				Oh no! We couldn't find any cards matching your search

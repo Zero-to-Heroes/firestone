@@ -37,6 +37,12 @@
 		<main-window></main-window>
 
 		<script src="http://content.overwolf.com/libs/ads/1/owads.min.js" async onload="onOwAdReady()"></script>
-		<script>function onOwAdReady(){new OwAd(document.getElementById("ad-div"))}</script>
+		<script>
+			function onOwAdReady() {
+				setTimeout(function() {
+					new OwAd(document.getElementById("ad-div"));
+				}, 200);
+			}
+		</script>
 	</body>
 </html>

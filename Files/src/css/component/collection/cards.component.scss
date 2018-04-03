@@ -1,3 +1,4 @@
+@import '../../global/variables';
 @import '../../global/fonts';
 
 .cards {
@@ -34,6 +35,7 @@
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	margin-top: -6px;
 	width: 100%;
     justify-content: flex-start;
     display: flex;
@@ -43,33 +45,50 @@
     	width: 98px;
     	height: 152px; // We need this so that things are not a mess when the placeholder image is showing
     	margin-right: 15px;
-    	margin-bottom: 5px;
+    	margin-bottom: 4px;
     }
 }
 
 .pagination {
+	@extend %pagination-inactive;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	list-style: none;
+	margin-top: 12px;
 
 	li {
-		opacity: 0.5;
 		margin-right: 5px;
 		cursor: pointer;
 
 		&.active {
-			opacity: 1;
-			cursor: default;
-		}
-
-		&.disabled {
-			opacity: 0.5;
-			cursor: default;
+			@extend %sub-title;
 		}
 
 		&.arrow {
-			opacity: 1;
+
+			&.previous {
+				transform: rotate(90deg);
+				margin-right: 3px;
+			}
+
+			&.next {
+				transform: rotate(-90deg);
+				margin-left: 3px;
+			}
+
+			&:hover {
+				background: $grey04;
+			}
+
+			&.disabled {
+				&:hover {
+					background: none;
+				}
+				svg {
+					fill: $grey05;
+				}
+			}
 		}
 	}
 
