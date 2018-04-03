@@ -5,7 +5,7 @@ import { HttpModule }    from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
-import { Ng2DropdownModule } from 'ng2-material-dropdown';
+import { SelectModule } from 'ng-select';
 
 import * as Raven from 'raven-js';
 import { NgxPopperModule } from 'ngx-popper';
@@ -73,7 +73,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		FormsModule,
 		ReactiveFormsModule,
         NgxPopperModule,
-        Ng2DropdownModule,
+        SelectModule,
 		LocalStorageModule.withConfig({
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',

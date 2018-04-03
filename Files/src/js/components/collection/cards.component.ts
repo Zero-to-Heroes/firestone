@@ -1,8 +1,8 @@
-import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
+import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { IOption } from 'ng-select';
 import * as Raven from 'raven-js';
-import { Ng2MenuItem } from 'ng2-material-dropdown';
 
 import { AllCardsService } from '../../services/all-cards.service';
 
@@ -14,6 +14,7 @@ declare var overwolf: any;
 @Component({
 	selector: 'cards',
 	styleUrls: [`../../../css/component/collection/cards.component.scss`],
+	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="cards">
 			<span *ngIf="_set" class="set-title">
@@ -22,14 +23,22 @@ declare var overwolf: any;
 			</span>
 			<div class="show-filter" *ngIf="_activeCards">
 				<span class="label">Show</span>
-				<ng2-dropdown (onItemClicked)="selectFilter($event)">
-				    <ng2-dropdown-button>{{labelFor(_activeFilter)}}</ng2-dropdown-button>
-				    <ng2-dropdown-menu [appendToBody]="false" [width]="4">
-		                <ng2-menu-item value="{{FILTER_ALL}}">{{labelFor(FILTER_ALL)}}</ng2-menu-item>
-				        <ng2-menu-item value="{{FILTER_OWN}}">{{labelFor(FILTER_OWN)}}</ng2-menu-item>
-		                <ng2-menu-item value="{{FILTER_DONT_OWN}}">{{labelFor(FILTER_DONT_OWN)}}</ng2-menu-item>
-				    </ng2-dropdown-menu>
-				</ng2-dropdown>
+				<ng-select
+					[options]="selectOptions"
+					[(ngModel)]="_activeFilter"
+					(selected)="selectFilter($event)"
+					[noFilter]="1">
+					<ng-template
+				        #optionTemplate
+				        let-option="option">
+				        <span>{{option?.label}}</span>
+				        <i class="i-30" *ngIf="option.value == _activeFilter">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown"/>
+							</svg>
+						</i>
+				    </ng-template>
+				</ng-select>
 			</div>
 			<ul class="cards-list" *ngIf="_activeCards">
 				<li *ngFor="let card of _activeCards">
@@ -63,9 +72,17 @@ export class CardsComponent {
 
 	private readonly MAX_CARDS_DISPLAYED_PER_PAGE = 18;
 
-	private readonly FILTER_ALL = 'all';
 	private readonly FILTER_OWN = 'own';
+	private readonly FILTER_GOLDEN_OWN = 'goldenown';
 	private readonly FILTER_DONT_OWN = 'dontown';
+	private readonly FILTER_ALL = 'all';
+
+	private readonly selectOptions: Array<IOption> = [
+		{label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN},
+		{label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN},
+		{label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN},
+		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
+	]
 
 	// @Input() private maxCards: number;
 	private _cardList: SetCard[];
@@ -94,9 +111,9 @@ export class CardsComponent {
 		this.updateShownCards();
 	}
 
-	private selectFilter(event: Ng2MenuItem) {
-		this._activeFilter = event.value;
-		console.log('selected item', event, this._activeFilter);
+	private selectFilter(option: IOption) {
+		console.log('selected item', option, this._activeFilter);
+		this._activeFilter = option.value;
 		this.updateShownCards();
 	}
 
@@ -137,6 +154,8 @@ export class CardsComponent {
 				return (card: SetCard) => true;
 			case this.FILTER_OWN:
 				return (card: SetCard) => (card.ownedNonPremium + card.ownedPremium > 0);
+			case this.FILTER_GOLDEN_OWN:
+				return (card: SetCard) => (card.ownedPremium > 0);
 			case this.FILTER_DONT_OWN:
 				return (card: SetCard) => (card.ownedNonPremium + card.ownedPremium == 0);
 			default:
@@ -146,9 +165,10 @@ export class CardsComponent {
 
 	private labelFor(filter: string) {
 		switch (filter) {
-			case this.FILTER_ALL: return 'All cards';
+			case this.FILTER_ALL: return 'All existing cards';
 			case this.FILTER_OWN: return 'Only cards I have';
-			case this.FILTER_DONT_OWN: return 'Only cards I don\'t have';
+			case this.FILTER_GOLDEN_OWN: return 'Only golden cards I have';
+			case this.FILTER_DONT_OWN: return 'Only cards I do not have';
 			default: console.log('unknown filter', filter);
 		}
 	}

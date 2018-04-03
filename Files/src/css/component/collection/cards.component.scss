@@ -19,15 +19,73 @@
 }
 
 .show-filter {
+	@extend %search-active;
     position: absolute;
     right: 0;
     top: 0;
     display: flex;
     align-items: center;
 
-	// TODO: Will be deprecated, to be removed
-	/deep/ .ng2-dropdown-button {
-		max-width: none;
+    .label {
+    	margin-right: 15px;
+    }
+
+	ng-select {
+		@extend %search-active;
+		width: 190px;
+		height: 30px;
+		background: rgba(255, 255, 255, 0.08);
+
+		&:focus, &:active {
+			outline: none;
+		}
+
+		& > div {
+			border: 1px solid $grey03;
+			outline: none;
+
+			div.single > div.toggle:hover {
+				background: transparent;
+			}
+		}
+
+		select-dropdown {
+
+			& > div {
+				background: $black;
+				border: 1px solid $grey03;
+				border-top: none;
+				outline: none;
+			}
+
+			.filter {
+				display: none;
+			}
+
+			&> div .options ul li {
+				color: $grey01;
+				border-bottom: 1px solid $grey05;
+				padding: 0;
+				padding-left: 9px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 30px;
+
+				&.selected {
+    				background-color: inherit;
+    				color: inherit;
+
+					&:hover {
+						color: inherit;
+					}
+				}
+
+				&.highlighted {
+					background-color: $grey03;
+				}
+			}
+		}
 	}
 }
 
