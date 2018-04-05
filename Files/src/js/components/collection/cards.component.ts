@@ -46,7 +46,7 @@ declare var overwolf: any;
 				</li>
 			</ul>
 			<!-- Show screen when you have completed a set -->
-			<section class="no-missing-card-in-set" *ngIf="_set && !_activeCards.length > 0 && _activeFilter == FILTER_DONT_OWN">
+			<section class="empty-state no-missing-card-in-set" *ngIf="_set && !_activeCards.length > 0 && _activeFilter == FILTER_DONT_OWN">
 				<i class="i-238X167 pale-pink-theme">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"/>
@@ -54,6 +54,16 @@ declare var overwolf: any;
 				</i>
 				<span class="title">This set is complete and you have it all!</span>
 				<span class="subtitle">Keep up the good work.</span>
+			</section>
+			<!-- Show screen when you have no card in a set -->
+			<section class="empty-state no-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_OWN">
+				<i class="i-167X143 pale-pink-theme">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration"/>
+					</svg>
+				</i>
+				<span class="title">No cards from this set yet!</span>
+				<span class="subtitle">Don't worry, keep playing and get new packs.</span>
 			</section>
 			<ul class="pagination" *ngIf="_numberOfPages > 1">
 				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">
