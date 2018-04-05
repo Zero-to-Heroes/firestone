@@ -13,11 +13,8 @@
 	}
 
 	.placeholder {
-		position: absolute;
-		width: 100%;
-		// height: 151px;
-	    top: 10px;
-	    left: 0;
+	    position: relative;
+	    height: 148px;
 	}
 
 	.count {
@@ -70,6 +67,9 @@
 	}
 
 	&.missing {
-		opacity: 0.3;
+		.real-card {
+			// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
+			filter: grayscale(1) sepia() saturate(100%) hue-rotate(300deg) opacity(0.5);
+		}
 	}
 }

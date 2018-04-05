@@ -17,9 +17,9 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{'missing': card.ownedNonPremium + card.ownedPremium == 0}">
-			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder"/>
-			<img src="{{image()}}"/>
-			<div class="count">
+			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder" *ngIf="showPlaceholder"/>
+			<img src="{{image()}}" class="real-card" (load)="imageLoadedHandler()" [hidden]="showPlaceholder"/>
+			<div class="count" *ngIf="!showPlaceholder">
 				<div class="non-premium" *ngIf="card.ownedNonPremium > 0">
 					<span>{{card.ownedNonPremium}}</span>
 				</div>
@@ -44,6 +44,8 @@ declare var overwolf: any;
 export class CardComponent {
 
 	@Input() public card: SetCard;
+
+	private showPlaceholder = true;
 
 	constructor(
 		private el: ElementRef,
@@ -71,5 +73,9 @@ export class CardComponent {
 
 	private image() {
 		return 'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + this.card.id + '.png';
+	}
+
+	private imageLoadedHandler() {
+		this.showPlaceholder = false;
 	}
 }
