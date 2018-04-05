@@ -107,6 +107,25 @@
     }
 }
 
+.no-missing-card-in-set {
+	@extend %empty-state;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	align-items: center;
+
+	i {
+		margin-top: 65px;
+		margin-bottom: 30px;
+	}
+
+	.title {
+		@extend %empty-state-title;
+		margin-bottom: 15px;
+	}
+
+}
+
 .pagination {
 	@extend %pagination-inactive;
 	display: flex;
