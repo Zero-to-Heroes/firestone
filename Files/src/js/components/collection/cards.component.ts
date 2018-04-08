@@ -17,9 +17,12 @@ declare var overwolf: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="cards">
-			<span *ngIf="_set" class="set-title">
+			<span *ngIf="_set && !searchString" class="set-title">
 				<img src="{{'/Files/assets/images/sets/' + _set.id + '.png'}}" class="set-logo" />
 				<span class="text set-name">{{_set.name}}</span>
+			</span>
+			<span *ngIf="!_set && searchString" class="set-title">
+				<span class="text set-name">{{searchString}}</span>
 			</span>
 			<div class="show-filter" *ngIf="_activeCards">
 				<span class="label">Show</span>
