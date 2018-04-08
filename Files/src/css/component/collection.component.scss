@@ -5,7 +5,7 @@
     flex-grow: 1;
     display: flex;
     padding-top: 15px;
-    height: 598px;
+    height: 583px;
 
     .main {
     	display: flex;
@@ -13,6 +13,10 @@
         width: 695px;
         padding-left: 14px;
         margin-top: 0;
+
+        &.divider {
+            border-right: 1px solid $grey03;
+        }
 
         collection-menu {
             height: 30px;

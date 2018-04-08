@@ -19,7 +19,7 @@ declare var ga: any;
 	],
 	template: `
 		<div class="collection">
-			<section class="main">
+			<section class="main" [ngClass]="{'divider': _selectedView == 'cards'}">
 				<collection-menu [displayType]="_menuDisplayType" [selectedSet]="_selectedSet" [selectedFormat]="_selectedFormat"></collection-menu>
 				<ng-container [ngSwitch]="_selectedView">
 					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
