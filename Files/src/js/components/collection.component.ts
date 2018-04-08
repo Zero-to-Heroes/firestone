@@ -23,7 +23,7 @@ declare var ga: any;
 				<collection-menu [displayType]="_menuDisplayType" [selectedSet]="_selectedSet" [selectedFormat]="_selectedFormat"></collection-menu>
 				<ng-container [ngSwitch]="_selectedView">
 					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
-					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet"></cards>
+					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet" [searchString]="searchString"></cards>
 				</ng-container>
 			</section>
 			<section class="secondary">
@@ -42,6 +42,7 @@ export class CollectionComponent {
 	private _selectedView = 'sets';
 	private _selectedSet: Set;
 	private _selectedFormat: string;
+	private searchString: string;
 
 	private _cardList: SetCard[];
 	private fullCardId: string;
@@ -89,6 +90,7 @@ export class CollectionComponent {
 				this._selectedFormat = null;
 				this._selectedSet = null;
 				this._cardList = data.data[0];
+				this.searchString = data.data[1];
 			}
 		)
 

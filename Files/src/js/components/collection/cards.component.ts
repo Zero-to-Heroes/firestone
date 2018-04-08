@@ -75,6 +75,16 @@ declare var overwolf: any;
 				<span class="title">No golden cards from this set yet!</span>
 				<span class="subtitle">Don't worry, keep playing and get these shiny friends.</span>
 			</section>
+			<!-- Show screen when no result in search -->
+			<section class="empty-state no-search-result" *ngIf="_activeCards.length == 0 && searchString">
+				<i class="i-110X86 pale-pink-theme">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
+					</svg>
+				</i>
+				<span class="title">Oh No! Nothing Matches: "{{searchString}}"</span>
+				<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
+			</section>
 			<ul class="pagination" *ngIf="_numberOfPages > 1">
 				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">
 					<i class="i-30">
@@ -92,9 +102,6 @@ declare var overwolf: any;
 					</i>
 				</li>
 			</ul>
-			<div *ngIf="!_activeCards">
-				Oh no! We couldn't find any cards matching your search
-			</div>
 		</div>
 	`,
 })
@@ -114,7 +121,7 @@ export class CardsComponent {
 		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
 	]
 
-	// @Input() private maxCards: number;
+	@Input() public searchString: string;
 	private _cardList: SetCard[];
 	private _activeCards: SetCard[];
 	private _set: Set;
