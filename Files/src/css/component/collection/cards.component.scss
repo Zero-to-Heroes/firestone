@@ -22,7 +22,8 @@
 	@extend %search-active;
     position: absolute;
     right: 0;
-    top: 0;
+    top: -29px;
+    right: 20px;
     display: flex;
     align-items: center;
 
