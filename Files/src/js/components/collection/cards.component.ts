@@ -17,12 +17,12 @@ declare var overwolf: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="cards">
-			<span *ngIf="_set && !searchString" class="set-title">
+			<span *ngIf="_set && !_searchString" class="set-title">
 				<img src="{{'/Files/assets/images/sets/' + _set.id + '.png'}}" class="set-logo" />
 				<span class="text set-name">{{_set.name}}</span>
 			</span>
-			<span *ngIf="!_set && searchString" class="set-title">
-				<span class="text set-name">{{searchString}}</span>
+			<span *ngIf="!_set && _searchString" class="set-title">
+				<span class="text set-name">{{_searchString}}</span>
 			</span>
 			<div class="show-filter" *ngIf="_activeCards">
 				<span class="label">Show</span>
@@ -79,13 +79,13 @@ declare var overwolf: any;
 				<span class="subtitle">Don't worry, keep playing and get these shiny friends.</span>
 			</section>
 			<!-- Show screen when no result in search -->
-			<section class="empty-state no-search-result" *ngIf="_activeCards.length == 0 && searchString">
+			<section class="empty-state no-search-result" *ngIf="_activeCards.length == 0 && _searchString">
 				<i class="i-110X86 pale-pink-theme">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
 					</svg>
 				</i>
-				<span class="title">Oh No! Nothing Matches: "{{searchString}}"</span>
+				<span class="title">Oh No! Nothing Matches: "{{_searchString}}"</span>
 				<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
 			</section>
 			<ul class="pagination" *ngIf="_numberOfPages > 1">
@@ -124,7 +124,7 @@ export class CardsComponent {
 		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
 	]
 
-	@Input() public searchString: string;
+	private _searchString: string;
 	private _cardList: SetCard[];
 	private _activeCards: SetCard[];
 	private _set: Set;
@@ -143,12 +143,19 @@ export class CardsComponent {
 	}
 
 	@Input('set') set cardSet(set: Set) {
+		this._currentPage = 0;
 		this._set = set;
 	}
 
 	@Input('cardList') set cardList(cardList: SetCard[]) {
+		this._currentPage = 0;
 		this._cardList = cardList;
 		this.updateShownCards();
+	}
+
+	@Input('searchString') set searchString(searchString: string) {
+		this._currentPage = 0;
+		this._searchString = searchString;
 	}
 
 	private selectFilter(option: IOption) {
@@ -185,7 +192,7 @@ export class CardsComponent {
 			this._cardsIndexRangeStart,
 			this._cardsIndexRangeStart + this.MAX_CARDS_DISPLAYED_PER_PAGE);
 		// console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
-		// console.log('active cards', this._activeCards);
+		console.log('active cards', this._activeCards);
 	}
 
 	private filterFunction() {
