@@ -159,7 +159,7 @@ export class CardsComponent {
 	}
 
 	private selectFilter(option: IOption) {
-		console.log('selected item', option, this._activeFilter);
+		// console.log('selected item', option, this._activeFilter);
 		this._activeFilter = option.value;
 		this.updateShownCards();
 	}
@@ -180,12 +180,12 @@ export class CardsComponent {
 	}
 
 	private updateShownCards() {
-		console.log('updating card list', this._cardList);
+		// console.log('updating card list', this._cardList);
 		this._cardsIndexRangeStart = this._currentPage * this.MAX_CARDS_DISPLAYED_PER_PAGE;
 		let filteredCards = this._cardList.filter(this.filterFunction());
 		this._pages = [];
 		this._numberOfPages = Math.ceil(filteredCards.length / this.MAX_CARDS_DISPLAYED_PER_PAGE);
-		console.log('number of pages', this._numberOfPages, filteredCards);
+		// console.log('number of pages', this._numberOfPages, filteredCards);
 		for (let i = 0; i < this._numberOfPages; i++) {
 			this._pages.push(i);
 		}
@@ -193,7 +193,7 @@ export class CardsComponent {
 			this._cardsIndexRangeStart,
 			this._cardsIndexRangeStart + this.MAX_CARDS_DISPLAYED_PER_PAGE);
 		// console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
-		console.log('active cards', this._activeCards);
+		// console.log('active cards', this._activeCards);
 	}
 
 	private filterFunction() {

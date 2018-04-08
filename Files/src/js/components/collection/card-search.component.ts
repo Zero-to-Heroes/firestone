@@ -82,7 +82,7 @@ export class CardSearchComponent {
 	private updateSearchResults() {
 		this.searchResults = this.cards.searchCards(this.searchString);
 		this.collectionManager.getCollection((collection: Card[]) => {
-			console.log('retrieved collection', collection);
+			// console.log('retrieved collection', collection);
 			this.searchResults.forEach((card: SetCard) => {
 				let collectionCard: Card = this.findCollectionCard(collection, card);
 				if (!collectionCard) {
@@ -96,7 +96,7 @@ export class CardSearchComponent {
 					card.ownedNonPremium = collectionCard.Count;
 				}
 			})
-			console.log('Updated search results', this.searchResults);
+			// console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;
 		})
 	}
@@ -105,7 +105,7 @@ export class CardSearchComponent {
 		for (let i = 0; i < collection.length; i++) {
 			let collectionCard = collection[i];
 			if (collectionCard.Id == card.id) {
-				console.log('Matching card', collectionCard, card);
+				// console.log('Matching card', collectionCard, card);
 				return collectionCard;
 			}
 		}
