@@ -7,6 +7,7 @@ import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
+import { Card } from '../../models/card';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -18,16 +19,20 @@ declare var ga: any;
 		`../../../css/global/scrollbar.scss`,
 	],
 	template: `
-		<div class="card-search" (keyup)="onValidateSearch($event)" (blur)="onFocusLost()">
+		<div class="card-search" (keyup)="onValidateSearch($event)">
 			<label class="search-label" [ngClass]="{'search-active': searchString}">
 				<i class="i-30">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#search"/>
 					</svg>
 				</i>
-				<input [(ngModel)]="searchString" (input)="onSearchStringChange()" placeholder="Search card..." />
+				<input
+					[(ngModel)]="searchString"
+					(input)="onSearchStringChange()"
+					(blur)="onFocusLost()"
+					placeholder="Search card..." />
 			</label>
-			<ul *ngIf="searchResults.length > 0" class="search-results">
+			<ul *ngIf="showSearchResults" class="search-results">
 				<card-search-autocomplete-item *ngFor="let result of searchResults"
 					[fullString]="result.name"
 					[searchString]="searchString"
@@ -42,17 +47,18 @@ export class CardSearchComponent {
 
 	private searchString: string;
 	private searchResults: SetCard[] = [];
+	private showSearchResults = false;
 
-	constructor(private cards: AllCardsService, private events: Events) {
+	constructor(private cards: AllCardsService, private events: Events, private collectionManager: CollectionManager) {
 	}
 
 	private onSearchStringChange() {
-		this.searchResults = [];
-		console.log('updating serach string', this.searchString);
+		this.showSearchResults = false;
+		// console.log('updating serach string', this.searchString);
 		if (this.searchString.length <= 2) {
 			return;
 		}
-		this.searchResults = this.cards.searchCards(this.searchString);
+		this.updateSearchResults();
 	}
 
 	private onValidateSearch(event: KeyboardEvent) {
@@ -60,7 +66,7 @@ export class CardSearchComponent {
 			console.log('validating search', this.searchResults, this.searchString);
 
 			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
-			this.searchResults = [];
+			this.showSearchResults = false;
 		}
 	}
 
@@ -70,6 +76,40 @@ export class CardSearchComponent {
 
 	private onFocusLost() {
 		console.log('focus lost');
-		this.searchResults = [];
+		this.showSearchResults = false;
+	}
+
+	private updateSearchResults() {
+		this.searchResults = this.cards.searchCards(this.searchString);
+		this.collectionManager.getCollection((collection: Card[]) => {
+			console.log('retrieved collection', collection);
+			this.searchResults.forEach((card: SetCard) => {
+				let collectionCard: Card = this.findCollectionCard(collection, card);
+				if (!collectionCard) {
+					return;
+				}
+
+				if (collectionCard.Premium) {
+					card.ownedPremium = collectionCard.Count;
+				}
+				else {
+					card.ownedNonPremium = collectionCard.Count;
+				}
+			})
+			console.log('Updated search results', this.searchResults);
+			this.showSearchResults = this.searchResults.length > 0;
+		})
+	}
+
+	private findCollectionCard(collection: Card[], card: SetCard): Card {
+		for (let i = 0; i < collection.length; i++) {
+			let collectionCard = collection[i];
+			if (collectionCard.Id == card.id) {
+				console.log('Matching card', collectionCard, card);
+				return collectionCard;
+			}
+		}
+		// console.log('Could not find matching cards', card, collection);
+		return null;
 	}
 }

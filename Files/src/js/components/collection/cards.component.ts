@@ -180,6 +180,7 @@ export class CardsComponent {
 	}
 
 	private updateShownCards() {
+		console.log('updating card list', this._cardList);
 		this._cardsIndexRangeStart = this._currentPage * this.MAX_CARDS_DISPLAYED_PER_PAGE;
 		let filteredCards = this._cardList.filter(this.filterFunction());
 		this._pages = [];

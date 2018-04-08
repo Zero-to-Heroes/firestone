@@ -18,6 +18,7 @@ export class IndexedDbService {
 	}
 
 	public saveCollection(collection: Card[], callback: Function) {
+		// console.log('saving collection');
 		let dbCollection = {
 			id: 1,
 			cards: collection
@@ -31,12 +32,14 @@ export class IndexedDbService {
 			return;
 		}
 
+		// console.log('updating collection');
 		this.db.update('collection', dbCollection).then(
 			(history) => {
+				// console.log('callback from save collection')
 				callback(collection);
 			},
 			(error) => {
-				console.log(error);
+				console.error('could not update collection', error);
 			}
 		);
 	}

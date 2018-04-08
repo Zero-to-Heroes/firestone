@@ -24,7 +24,7 @@ export class CardSearchAutocompleteItemComponent implements OnInit {
 	private last: string;
 
 	ngOnInit() {
-		console.log('init autocomplete item', this.fullString, this.searchString);
+		// console.log('init autocomplete item', this.fullString, this.searchString);
 		let searchIndex = this.fullString.toLowerCase().indexOf(this.searchString);
 		let searchEnd = searchIndex + this.searchString.length;
 		console.log(searchIndex, searchEnd, this.fullString.length);
@@ -34,6 +34,6 @@ export class CardSearchAutocompleteItemComponent implements OnInit {
 		if (searchEnd < this.fullString.length) {
 			this.last = this.fullString.substring(searchEnd);
 		}
-		console.log(this.first, this.match, this.last);
+		// console.log(this.first, this.match, this.last);
 	}
 }
