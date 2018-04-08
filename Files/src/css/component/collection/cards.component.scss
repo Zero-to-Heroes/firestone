@@ -137,9 +137,8 @@
 
 	li {
 		margin-right: 5px;
-		cursor: pointer;
 
-		&.active {
+		&.active, &:hover {
 			@extend %sub-title;
 		}
 
