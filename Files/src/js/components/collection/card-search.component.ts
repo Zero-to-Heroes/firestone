@@ -27,7 +27,7 @@ declare var ga: any;
 				</i>
 				<input [(ngModel)]="searchString" (input)="onSearchStringChange()" placeholder="Search card..." />
 			</label>
-			<ul *ngIf="searchResults" class="search-results">
+			<ul *ngIf="searchResults.length > 0" class="search-results">
 				<card-search-autocomplete-item *ngFor="let result of searchResults"
 					[fullString]="result.name"
 					[searchString]="searchString"
@@ -59,7 +59,7 @@ export class CardSearchComponent {
 		if (event.keyCode === 13) {
 			console.log('validating search', event);
 
-			this.events.broadcast(Events.SHOW_CARDS, this.searchResults);
+			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
 			this.searchResults = [];
 		}
 	}
