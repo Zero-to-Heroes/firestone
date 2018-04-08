@@ -20,7 +20,12 @@ declare var ga: any;
 	template: `
 		<div class="collection">
 			<section class="main" [ngClass]="{'divider': _selectedView == 'cards'}">
-				<collection-menu [displayType]="_menuDisplayType" [selectedSet]="_selectedSet" [selectedFormat]="_selectedFormat"></collection-menu>
+				<collection-menu
+					[displayType]="_menuDisplayType"
+					[selectedSet]="_selectedSet"
+					[selectedFormat]="_selectedFormat"
+					[searchString]="searchString">
+				</collection-menu>
 				<ng-container [ngSwitch]="_selectedView">
 					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
 					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet" [searchString]="searchString"></cards>
@@ -85,7 +90,7 @@ export class CollectionComponent {
 
 		this._events.on(Events.SHOW_CARDS).subscribe(
 			(data) => {
-				this._menuDisplayType = 'menu';
+				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'cards';
 				this._selectedFormat = null;
 				this._selectedSet = null;

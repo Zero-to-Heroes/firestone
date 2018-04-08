@@ -41,7 +41,7 @@ declare var ga: any;
 export class CardSearchComponent {
 
 	private searchString: string;
-	private searchResults: SetCard[];
+	private searchResults: SetCard[] = [];
 
 	constructor(private cards: AllCardsService, private events: Events) {
 	}

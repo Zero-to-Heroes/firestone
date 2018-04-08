@@ -17,11 +17,16 @@ declare var overwolf: any;
 				<li class="selected" (click)="goToCollectionView()">Sets</li>
 				<li>Cards</li>
 			</ul>
-			<ng-container *ngSwitchCase="'breadcrumbs'" >
-				<ul class="breadcrumbs">
+			<ng-container *ngSwitchCase="'breadcrumbs'">
+				<ul class="breadcrumbs" *ngIf="!searchString">
 					<li (click)="goToCollectionView()">Sets</li>
 					<li (click)="goToFormatView()">{{getSelectedFormat()}}</li>
 					<li (click)="goToSetView()" *ngIf="selectedSet">{{selectedSet.name}}</li>
+				</ul>
+				<ul class="breadcrumbs" *ngIf="searchString" (click)="goToCollectionView()">
+					<li>Home</li>
+					<li>Search</li>
+					<li>{{searchString}}</li>
 				</ul>
 			</ng-container>
 		</ng-container>
@@ -33,6 +38,7 @@ export class CollectionMenuComponent {
 	@Input() public displayType: string;
 	@Input() public selectedSet: Set;
 	@Input() public selectedFormat: string;
+	@Input() public searchString: string;
 
 	constructor(private _events: Events) {
 
