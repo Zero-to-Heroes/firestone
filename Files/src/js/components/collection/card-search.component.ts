@@ -32,7 +32,8 @@ declare var ga: any;
 					(blur)="onFocusLost()"
 					placeholder="Search card..." />
 			</label>
-			<ul *ngIf="showSearchResults" class="search-results">
+			<!-- Don't show autocomplete search results for now -->
+			<ul *ngIf="false && showSearchResults" class="search-results">
 				<card-search-autocomplete-item *ngFor="let result of searchResults"
 					[fullString]="result.name"
 					[searchString]="searchString"
