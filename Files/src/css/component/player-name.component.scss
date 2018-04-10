@@ -1,0 +1,12 @@
+@import '../global/fonts';
+
+.player-name {
+	display: flex;
+	align-items: center;
+
+	span {
+		@extend %user-nickname;
+		margin-left: 9px;
+	}
+}
+

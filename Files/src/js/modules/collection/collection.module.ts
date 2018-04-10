@@ -10,6 +10,16 @@ import { SelectModule } from 'ng-select';
 import * as Raven from 'raven-js';
 import { NgxPopperModule } from 'ngx-popper';
 
+import { HearthheadComponent }  from '../../components/hearthhead.component';
+import { LoginComponent }  from '../../components/login.component';
+import { MainWindowComponent }  from '../../components/main-window.component';
+import { MenuSelectionComponent }  from '../../components/menu-selection.component';
+import { PlayerNameComponent }  from '../../components/player-name.component';
+import { RealTimeNotificationsComponent }  from '../../components/real-time-notifications.component';
+import { SocialMediaComponent }  from '../../components/social-media.component';
+import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
+import { VersionComponent }  from '../../components/version.component';
+
 import { CollectionComponent }  from '../../components/collection.component';
 import { CollectionMenuComponent }  from '../../components/collection/collection-menu.component';
 import { CardsComponent }  from '../../components/collection/cards.component';
@@ -22,26 +32,19 @@ import { RarityComponent }  from '../../components/collection/rarity.component';
 import { CardComponent }  from '../../components/collection/card.component';
 import { CardSearchComponent }  from '../../components/collection/card-search.component';
 import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
-import { HearthheadComponent }  from '../../components/hearthhead.component';
-import { LoginComponent }  from '../../components/login.component';
-import { MainWindowComponent }  from '../../components/main-window.component';
-import { MenuSelectionComponent }  from '../../components/menu-selection.component';
-import { RealTimeNotificationsComponent }  from '../../components/real-time-notifications.component';
 import { SetsComponent }  from '../../components/collection/sets.component';
-import { SocialMediaComponent }  from '../../components/social-media.component';
-import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
-import { VersionComponent }  from '../../components/version.component';
 
 import { AllCardsService }  from '../../services/all-cards.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
+import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
+import { PlayerNameService }  from '../../services/player-name.service';
+
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { HearthHeadSyncService }  from '../../services/collection/hearthhead-sync.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
-
-import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
 // console.log('configuring Raven'),
 // Raven
@@ -93,6 +96,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		LoginComponent,
 		MainWindowComponent,
 		MenuSelectionComponent,
+		PlayerNameComponent,
 		RarityComponent,
 		RealTimeNotificationsComponent,
 		SetComponent,
@@ -118,6 +122,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		LocalStorageService,
 		OwNotificationsService,
 		MemoryInspectionService,
+		PlayerNameService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

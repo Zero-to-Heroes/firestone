@@ -106,6 +106,17 @@ body {
     			flex-grow: 1;
     		}
 
+    		player-name {
+			    border-right: 1px solid $grey03;
+			    margin: 10px 11px 9px 0;
+			    padding-right: 15px;
+			    display: flex;
+			    // margin-top: 10px;
+			    // margin-bottom: 9px;
+			    // margin-right: 11px;
+			    // margin-left: 15px;
+    		}
+
 		    real-time-notifications {
 		    	height: 29px;
 				display: flex;

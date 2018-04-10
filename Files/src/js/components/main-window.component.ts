@@ -28,9 +28,7 @@ declare var ga: any;
 							<!-- <hearthhead></hearthhead> -->
 						</div>
 					</div>
-					<div class="login">
-
-					</div>
+					<player-name></player-name>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">

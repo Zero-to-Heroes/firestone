@@ -82,6 +82,17 @@ export class MemoryInspectionService {
 		);
 	}
 
+	public getBattleTag(callback) {
+		this.plugin(
+			() => {
+				this.mindvisionPlugin.get().getBattleTag((battleTag) => {
+					// console.log('retrieved battletag', battleTag);
+					callback(JSON.parse(battleTag));
+				})
+			}
+		);
+	}
+
 	private plugin(callback) {
 		if (!this.mindvisionPlugin || !this.mindvisionPlugin.get()) {
 			setTimeout(() => {
