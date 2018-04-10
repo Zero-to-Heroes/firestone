@@ -1,6 +1,8 @@
+@import '../../global/variables';
 @import '../../global/fonts';
 
 .menu-selection {
+    border-bottom: 1px solid $grey03;
 	li {
 		margin-right: 15px;
 		padding-bottom: 8px;

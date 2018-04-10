@@ -31,13 +31,13 @@ export class AppComponent {
 		private achievementsMonitor: AchievementsMonitor,
 		private logStatusService: LogStatusService) {
 
-		console.error('TODO: stay logged in to HH');
-		console.error('TODO: log in to Hearthhead when game not started - wait until game started to sync');
+		// console.error('TODO: stay logged in to HH');
+		// console.error('TODO: log in to Hearthhead when game not started - wait until game started to sync');
 
 		overwolf.settings.registerHotKey(
 			"collection",
 			(result) => {
-				console.log('hotkey pressed')
+				console.log('hotkey pressed', result)
 				if (result.status === 'success') {
 					this.startApp(() => this.showCollectionWindow());
 				}
@@ -64,6 +64,7 @@ export class AppComponent {
 
 	private startApp(showWhenStarted?: Function) {
 		overwolf.games.getRunningGameInfo((res: any) => {
+			console.log('running game info', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				if (showWhenStarted) {
 					showWhenStarted();

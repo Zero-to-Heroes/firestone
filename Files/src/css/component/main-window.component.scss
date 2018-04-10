@@ -67,22 +67,47 @@ body {
     	outline: 1px solid #785f6b;
     	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
 
+		.navigation {
+			display: flex;
+			position: relative;
+			flex-shrink: 0;
+			height: 50px;
+
+			.logo {
+				width: 170px;
+			}
+
+			menu-selection {
+			    display: flex;
+				align-items: flex-end;
+			}
+
+			.main-section {
+				display: flex;
+			}
+		}
+
 	    .menu-bar {
 	    	background: transparent;
 		    display: flex;
 		    flex-direction: row;
-		    align-items: center;
-		    justify-content: flex-end;
+		    align-items: stretch;
 		    border: none;
-		    // position: absolute;
 		    width: 100%;
 		    height: 30px;
+		    height: 80px;
 		    z-index: 400;
     		flex-shrink: 0;
+    		border-bottom: 1px solid #785f6b;
+
+    		.first {
+    			display: flex;
+    			flex-direction: column;
+    			flex-grow: 1;
+    		}
 
 		    real-time-notifications {
-		    	flex-grow: 1;
-		    	height: 100%;
+		    	height: 29px;
 				display: flex;
 			    justify-content: flex-start;
 			    align-items: center;
@@ -101,32 +126,6 @@ body {
 		    flex-grow: 1;
 		    display: flex;
     		flex-direction: column;
-
-    		.navigation {
-    			display: flex;
-    			position: relative;
-    			flex-shrink: 0;
-    			height: 50px;
-    			border-bottom: 1px solid $grey03;
-
-    			.logo {
-    				width: 170px;
-    			}
-
-    			menu-selection {
-				    display: flex;
-    				align-items: flex-end;
-    			}
-
-    			.main-section {
-    				display: flex;
-    			}
-
-    			// hearthhead {
-				   //  display: flex;
-				   //  align-items: center;
-    			// }
-    		}
 	    }
 	}
 }

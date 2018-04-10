@@ -20,7 +20,17 @@ declare var ga: any;
 		<div class="root">
 			<div class="app-container">
 				<section class="menu-bar">
-					<real-time-notifications></real-time-notifications>
+					<div class="first">
+						<real-time-notifications></real-time-notifications>
+						<div class="navigation">
+							<div class="logo"></div>
+							<menu-selection></menu-selection>
+							<!-- <hearthhead></hearthhead> -->
+						</div>
+					</div>
+					<div class="login">
+
+					</div>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">
@@ -50,11 +60,6 @@ declare var ga: any;
 					</div>
 				</section>
 				<section class="content-container">
-					<div class="navigation">
-						<div class="logo"></div>
-						<menu-selection></menu-selection>
-						<!-- <hearthhead></hearthhead> -->
-					</div>
 					<ng-container [ngSwitch]="selectedModule">
 						<collection *ngSwitchCase="'collection'" class="main-section"></collection>
 					</ng-container>
