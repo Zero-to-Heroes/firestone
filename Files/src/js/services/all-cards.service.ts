@@ -12,12 +12,10 @@ export class AllCardsService {
 	private readonly STANDARD_SETS = [
 		['core', 'Basic'],
 		['expert1', 'Classic'],
-		['og', 'Whispers of the Old Gods'],
-		['kara', 'One Night in Karazhan'],
-		['gangs', 'Mean Streets of Gadgetzan'],
 		['ungoro', 'Journey to Un\'Goro'],
 		['icecrown', 'Knights of the Frozen Throne'],
 		['lootapalooza', 'Kobolds and Catacombs'],
+		['Gilneas', 'The Witchwood'],
 	]
 
 	private readonly WILD_SETS = [
@@ -27,6 +25,9 @@ export class AllCardsService {
 		['tgt', 'The Grand Tournament'],
 		['loe', 'League of Explorers'],
 		['hof', 'Hall of Fame'],
+		['og', 'Whispers of the Old Gods'],
+		['kara', 'One Night in Karazhan'],
+		['gangs', 'Mean Streets of Gadgetzan'],
 	]
 
 	// I can't find anything in the card data that sets these apart

@@ -46,12 +46,12 @@ export class PassivePick implements Challenge {
 	public achieve(): Achievement {
 		let card = parseCardsText.getCard(this.passiveId);
 		let achievement: Achievement = new Achievement(this.achievementId, 'passive');
-		achievement.icon = `https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardart/256x/${this.passiveId}.jpg`;
+		achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.passiveId}.jpg`;
 		achievement.order = parseInt(this.passiveId);
 		achievement.title = "Passive ability: " + card.name;
 		achievement.name = card.name;
 		achievement.htmlTooltip = `
-			<img src="https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/${this.passiveId}.png" />
+			<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.passiveId}.png" />
 		`
 		return achievement;
 	}

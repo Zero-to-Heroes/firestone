@@ -23,7 +23,7 @@ export class Tooltip {
 	@HostBinding('style.position') position: string;
 
 	image() {
-		return `https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/${this.cardId}.png`;
+		return `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png`;
 	}
 }
 

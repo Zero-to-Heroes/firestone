@@ -43,7 +43,7 @@ export class FullCardComponent {
 	}
 
 	private image() {
-		return 'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + this.card.id + '.png';
+		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
 	}
 
 	private closeWindow() {
