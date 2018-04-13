@@ -305,7 +305,7 @@ export class PackMonitor {
 			cardName = 'Golden ' + cardName;
 		}
 		console.log('displaying new card toast notification for ' + cardName);
-		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/rarity-' + dbCard.rarity.toLowerCase() + '.png"><div class="message">New card! ' + cardName + '</div></div>');
+		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/rarity/rarity-' + dbCard.rarity.toLowerCase() + '.png"><div class="message">New card! ' + cardName + '</div></div>');
 	}
 
 	private createDustToast(dust: number, numberOfCards: number) {
