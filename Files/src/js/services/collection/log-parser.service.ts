@@ -60,6 +60,10 @@ export class LogParserService {
 		}
 
 		let dbCard = parseCardsText.getCard(card.Id);
+		if (!dbCard) {
+			console.warn('unknown card', card.Id, card);
+			return false;
+		}
 		// The collection is updated immediately, so when we query it the new card has already been inserted
 		if ((dbCard.rarity === 'Legendary' && card.Count >= 2) || card.Count >= 3) {
 			return true;
