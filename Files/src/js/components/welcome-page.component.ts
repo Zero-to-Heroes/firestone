@@ -31,12 +31,12 @@ declare var overwolf: any;
 								To begin, start opening packs in-game. <br />
 								HS Collection Companion will automatically show you notifications for new cards and the amount of dust in case you open duplicates.
 							</span>
-							<span class="text">
+							<!--<span class="text">
 								<b>NEW! </b>To display the Collection window in-game, press <span class="command">Alt</span> + <span class="command">C</span>.
-							</span>
+							</span>-->
 						</div>
 					</div>
-					<div class="actions">
+					<!--<div class="actions">
 						<div class="action" [ngClass]="emptyCollection ? 'inactive' : ''" (click)="openCollection()">
 							<i class="icon glyphicon glyphicon-home"></i>
 							<h2>Collection</h2>
@@ -53,7 +53,7 @@ declare var overwolf: any;
 							<h2>Tracker</h2>
 							<span class="coming-soon">Coming soon</span>
 						</div>
-					</div>
+					</div>-->
 					<social-media></social-media>
 					<version></version>
 				</div>
