@@ -15,7 +15,7 @@ export class AllCardsService {
 		['ungoro', 'Journey to Un\'Goro'],
 		['icecrown', 'Knights of the Frozen Throne'],
 		['lootapalooza', 'Kobolds and Catacombs'],
-		['Gilneas', 'The Witchwood'],
+		['gilneas', 'The Witchwood'],
 	]
 
 	private readonly WILD_SETS = [
