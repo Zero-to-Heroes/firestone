@@ -32,7 +32,7 @@ var parseCardsText = {
 		if (matches) {
 			matches.forEach(function(match) {
 				var cost = match.substring(0, match.indexOf('-'));
-				result = result.replace(match, '<img src="https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/allCards/mana/' + cost + '.png" class="parse-cards-text mana-cost">');
+				result = result.replace(match, '<img src="http://static.zerotoheroes.com/hearthstone/asset/mana/' + cost + '.png" class="parse-cards-text mana-cost">');
 			})
 		}
 
@@ -53,7 +53,7 @@ var parseCardsText = {
 		var localizedImage = parseCardsText.localizeImage(card, lang);
 		var tooltipTemplate = '<div class=\'tooltip parse-cards-text\'><div class=\'tooltip-inner\'></div></div>';
 		// console.log('tooltipTemplate', tooltipTemplate);
-		var title = '<img src=\'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + localizedImage + '\'>';
+		var title = '<img src=\'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + localizedImage + '\'>';
 		// console.log('title', title);
 		var link = '<span class="autocomplete card ' + cssClass + '" data-toggle="tooltip" data-template="' + tooltipTemplate + '" data-title="' + title + '" data-placement="auto left" data-html="true" data-animation="false" data-container="' + container + '">' + localizedName + '</span>';
 
@@ -82,7 +82,7 @@ var parseCardsText = {
 
 		lang = lang || parseCardsText.getLang()
 		var localizedImage = parseCardsText.localizeImage(card, lang)
-		return 'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + localizedImage
+		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + localizedImage
 	},
 
 	getLang: function() {
@@ -186,7 +186,7 @@ var parseCardsText = {
 			index: 0,
 			template: function(card, term) {
 				var tooltipTemplate = '<div class=\'tooltip parse-cards-text\'><div class=\'tooltip-inner\'></div></div>';
-				var title = '<img src=\'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/fullcards/en/256/' + parseCardsText.localizeImage(card) + '\'>';
+				var title = '<img src=\'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + parseCardsText.localizeImage(card) + '\'>';
 				var cssClass = card.rarity ? parseCardsText.getRarity(card).toLowerCase() : 'common';
 				return '<span class="autocomplete card ' + cssClass + '" data-toggle="tooltip" data-template="' + tooltipTemplate + '" data-title="' + title + '"data-placement="auto left" data-html="true" data-container="body" data-animation="false">' + parseCardsText.localizeName(card) + '</span>';
 			},
