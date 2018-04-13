@@ -38,7 +38,7 @@ export class OwNotificationsService {
 		// 		console.log('notifications window is on?', result);
 		// 	})
 		overwolf.windows.sendMessage(this.windowId, '' + this.messageId++, htmlMessage, (result) => {
-			console.log('sent message to notifications window', result);
+			console.log('Notification service sent message to notifications window', result);
 		});
 	}
 
@@ -57,12 +57,13 @@ export class OwNotificationsService {
 				console.warn('Could not get NotificationsWindow', result);
 			}
 			console.log('got notifications window', result);
-			this.windowId = result.window.id;
+			let windowId = result.window.id;
 
-			overwolf.windows.restore(this.windowId, (result) => {
+			overwolf.windows.restore(windowId, (result) => {
 				console.log('notifications window is on?', result);
-				overwolf.windows.minimize(this.windowId, (result) => {
-					console.log('minimized at start', result);
+				overwolf.windows.minimize(windowId, (result) => {
+					this.windowId = windowId;
+					console.log('notification window is minimized at start, now listening to notifications', result);
 				})
 			})
 		});
