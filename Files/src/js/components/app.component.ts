@@ -34,18 +34,18 @@ export class AppComponent {
 		// console.error('TODO: stay logged in to HH');
 		// console.error('TODO: log in to Hearthhead when game not started - wait until game started to sync');
 
-		overwolf.settings.registerHotKey(
-			"collection",
-			(result) => {
-				console.log('hotkey pressed', result)
-				if (result.status === 'success') {
-					this.startApp(() => this.showCollectionWindow());
-				}
-				else {
-					console.log('error registering hotkey', result);
-				}
-			}
-		)
+		// overwolf.settings.registerHotKey(
+		// 	"collection",
+		// 	(result) => {
+		// 		console.log('hotkey pressed', result)
+		// 		if (result.status === 'success') {
+		// 			this.startApp(() => this.showCollectionWindow());
+		// 		}
+		// 		else {
+		// 			console.log('error registering hotkey', result);
+		// 		}
+		// 	}
+		// )
 
 		this.startApp();
 
@@ -54,7 +54,7 @@ export class AppComponent {
 		})
 
 		overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-			this.startApp(() => this.showCollectionWindow());
+			this.startApp(() => this.showWelcomePage());
 		})
 
 		ga('send', 'pageview');
@@ -91,20 +91,20 @@ export class AppComponent {
 		});
 	}
 
-	private showCollectionWindow() {
-		console.log('showing collection page');
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-			console.log('got collection window', result);
+	// private showCollectionWindow() {
+	// 	console.log('showing collection page');
+	// 	overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+	// 		if (result.status !== 'success') {
+	// 			console.warn('Could not get CollectionWindow', result);
+	// 			return;
+	// 		}
+	// 		console.log('got collection window', result);
 
-			overwolf.windows.restore(result.window.id, (result) => {
-				console.log('CollectionWindow is on?', result);
-			})
-		});
-	}
+	// 		overwolf.windows.restore(result.window.id, (result) => {
+	// 			console.log('CollectionWindow is on?', result);
+	// 		})
+	// 	});
+	// }
 
 	private gameLaunched(gameInfoResult: any): boolean {
 		if (!gameInfoResult) {
