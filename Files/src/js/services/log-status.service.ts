@@ -69,7 +69,7 @@ export class LogStatusService {
 		}
 
 		overwolf.windows.sendMessage(this.windowId, messageId, message, (result) => {
-			console.log('sent message to notifications window', result);
+			console.log('sent message to error window', result);
 		});
 	}
 
