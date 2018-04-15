@@ -33,7 +33,7 @@ export class LogListenerService {
 	public configure(logFile: string, callback: Function): LogListenerService {
 		this.logFile = logFile;
 		this.callback = callback;
-		console.log('[log-listener] [' + this.logFile + '] initializing', this.plugin, this.logFile);
+		console.log('[log-listener] [' + this.logFile + '] initializing', this.logFile);
 		this.monitoring = false;
 		this.fileInitiallyPresent = true;
 		return this;
@@ -60,7 +60,7 @@ export class LogListenerService {
 
 		overwolf.games.getRunningGameInfo((res: any) => {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				console.log('[log-listener] [' + this.logFile + '] Game is running!', JSON.stringify(res));
+				console.log('[log-listener] [' + this.logFile + '] Game is running!');
 				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
 			}
@@ -68,11 +68,11 @@ export class LogListenerService {
 	}
 
 	registerLogMonitor() {
-		console.log('[log-listener] [' + this.logFile + '] registering hooks?', this.monitoring);
 		if (this.monitoring) {
-			console.log('[log-listener] [' + this.logFile + '] \tlog hooks already registered, returning');
+			// console.log('[log-listener] [' + this.logFile + '] \tlog hooks already registered, returning');
 			return;
 		}
+		console.log('[log-listener] [' + this.logFile + '] registering hooks?');
 		this.monitoring = true;
 
 		console.log('[log-listener] [' + this.logFile + '] getting logs from', this.logsLocation);
@@ -123,11 +123,7 @@ export class LogListenerService {
 		let handler = (id: any, status: any, data: string) => {
 			if (!status) {
 				if (data === 'truncated') {
-					// this.plugin.get().stopFileListen(fileIdentifier);
-					// this.plugin.get().onFileListenerChanged.removeListener(handler);
-					// this.fileInitiallyPresent = false;
 					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Going on');
-					// this.listenOnFileUpdate(logsLocation);
 				}
 				else if (id === fileIdentifier) {
 					console.warn('[log-listener] [' + this.logFile + '] received an error on file: ', id, data);
@@ -183,7 +179,7 @@ export class LogListenerService {
 			return false;
 		}
 
-		console.log('[log-listener] [' + this.logFile + '] HS Launched');
+		// console.log('[log-listener] [' + this.logFile + '] HS Launched');
 		return true;
 	}
 

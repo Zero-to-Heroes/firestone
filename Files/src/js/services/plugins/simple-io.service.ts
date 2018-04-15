@@ -20,7 +20,7 @@ export class SimpleIOService {
 				console.warn("Plugin simple-io-plugin-zip couldn't be loaded");
 				return;
 			}
-			console.log("Plugin " + this.simpleIOPlugin.get()._PluginName_ + " was loaded!", this.simpleIOPlugin.get());
+			console.log("Plugin " + this.simpleIOPlugin.get()._PluginName_ + " was loaded!");
 			this.simpleIOPlugin.get().onGlobalEvent.addListener(function(first, second) {
 				console.log('received global event simple-io-plugin-zip', first, second);
 			});
