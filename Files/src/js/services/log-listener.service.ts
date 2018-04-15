@@ -56,6 +56,9 @@ export class LogListenerService {
 				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
 			}
+			else if (this.exitGame(res)) {
+				this.closeWindow();
+			}
 		});
 
 		overwolf.games.getRunningGameInfo((res: any) => {
@@ -154,7 +157,7 @@ export class LogListenerService {
 	}
 
 	exitGame(gameInfoResult: any): boolean {
-		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+		return (this.monitoring && (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning));
 	}
 
 	gameLaunched(gameInfoResult: any): boolean {
@@ -200,5 +203,15 @@ export class LogListenerService {
 
 		console.log('[log-listener] [' + this.logFile + '] HS running');
 		return true;
+	}
+
+	// This whole game running info mechanism should be externalized to another script
+	closeWindow() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				overwolf.windows.close(result.window.id);
+			}
+		});
 	}
 }
