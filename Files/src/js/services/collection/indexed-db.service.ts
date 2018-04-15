@@ -163,7 +163,7 @@ export class IndexedDbService {
 			console.log('[storage] indexeddb upgraded');
 		}).then(
 			() => {
-				console.log('[storage] openDatabase successful', this.db);
+				console.log('[storage] openDatabase successful', this.db.dbWrapper.dbName);
 				this.dbInit = true;
 			},
 			(error) => {
