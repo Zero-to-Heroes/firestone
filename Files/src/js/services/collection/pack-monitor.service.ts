@@ -104,8 +104,6 @@ export class PackMonitor {
 				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, card.Premium, false));
 			});
 
-
-
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
 			if (this.unrevealedCards.length > 0 && data.onGame) {
 				console.log('Detecting revealed cards', data, this.unrevealedCards);
@@ -120,27 +118,27 @@ export class PackMonitor {
 		overwolf.games.getRunningGameInfo((result) => {
 			let x = 1.0 * data.x / result.width;
 			let y = 1.0 * data.y / result.height;
-			// console.log('clicked at ', x, y, data, result);
+			console.log('clicked at ', x, y, data, result);
 
 			// Top left
 			let ret = -1;
-			if (x <= 0.505 && y <= 0.52) {
+			if (x < 0.51 && y <= 0.53) {
 				ret = 4;
 			}
 			// Top center
-			else if (x >= 0.51 && x <= 0.65 && y <= 0.425) {
+			else if (x >= 0.51 && x < 0.66 && y <= 0.46) {
 				ret = 2;
 			}
 			// Top right
-			else if (x >= 0.66 && y <= 0.52) {
+			else if (x >= 0.66 && y <= 0.53) {
 				ret = 3;
 			}
 			// Bottom left
-			else if (x <= 0.56 && y >= 0.55) {
+			else if (x <= 0.57 && y >= 0.53) {
 				ret = 0;
 			}
 			// Bottom right
-			else if (x >= 0.59 && y >= 0.55) {
+			else if (x > 0.57 && y >= 0.53) {
 				ret = 1;
 			}
 			else {
