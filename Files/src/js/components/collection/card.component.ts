@@ -20,10 +20,10 @@ declare var overwolf: any;
 			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder" *ngIf="showPlaceholder"/>
 			<img src="{{image()}}" class="real-card" (load)="imageLoadedHandler()" [hidden]="showPlaceholder"/>
 			<div class="count" *ngIf="!showPlaceholder">
-				<div class="non-premium" *ngIf="card.ownedNonPremium > 0">
+				<div class="non-premium" *ngIf="card.ownedNonPremium > 0 || showCounts">
 					<span>{{card.ownedNonPremium}}</span>
 				</div>
-				<div class="premium" *ngIf="card.ownedPremium > 0">
+				<div class="premium" *ngIf="card.ownedPremium > 0 || showCounts">
 					<i class="gold-theme">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
@@ -45,6 +45,7 @@ export class CardComponent {
 
 	@Input() public card: SetCard;
 	@Input() public tooltips = true;
+	@Input() public showCounts = false;
 
 	private showPlaceholder = true;
 

@@ -23,7 +23,7 @@ declare var overwolf: any;
 				</svg>
 			</button>
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false">/</card-view>
+				<card-view [card]="card" [tooltips]="false" [showCounts]="true">/</card-view>
 			</div>
 			<div class="details">
 				<h1>{{card.name}}</h1>
@@ -85,6 +85,8 @@ export class FullCardComponent {
 		let card = this.cards.getCard(cardId);
 		console.log('setting full card', card);
 		this.collectionManager.getCollection((collection: Card[]) => {
+			card.ownedPremium = 0;
+			card.ownedNonPremium = 0;
 			this.updateCardWithCollection(collection, card);
 			card.owned = card.ownedPremium || card.ownedNonPremium;
 
