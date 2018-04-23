@@ -63,7 +63,6 @@ declare var ga: any;
 					</ng-container>
 				</section>
 			</div>
-			<tooltips></tooltips>
 
 			<i class="i-54 gold-theme corner top-left">
 				<svg class="svg-icon-fill">
@@ -87,6 +86,10 @@ declare var ga: any;
 			</i>
 			<!--<card-modal></card-modal>-->
 			<login *ngIf="showLogin" (close)="showLogin = false"></login>
+
+			<div class="overlay" *ngIf="fullCardId"></div>
+			<full-card class="full-card" [cardId]="fullCardId" (close)="this.fullCardId = null" *ngIf="fullCardId"></full-card>
+			<tooltips></tooltips>
 		</div>
 	`,
 })
@@ -98,6 +101,7 @@ export class MainWindowComponent {
 	private lastSize: any;
 
 	private showLogin = false;
+	private fullCardId: string;
 
 	private selectedModule = 'collection';
 
@@ -119,6 +123,12 @@ export class MainWindowComponent {
 				// console.log('selected module', this.selectedModule);
 			}
 		)
+
+		this.events.on(Events.SHOW_CARD_MODAL).subscribe(
+			(event) => {
+				this.fullCardId = event.data[0];
+			}
+		);
 
 	}
 

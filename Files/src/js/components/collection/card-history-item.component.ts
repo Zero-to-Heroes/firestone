@@ -44,6 +44,7 @@ export class CardHistoryItemComponent {
 
 	@HostListener('click') onClick() {
 		this.events.broadcast(Events.SHOW_CARD_MODAL, this.historyItem.cardId);
+		this.events.broadcast(Events.HIDE_TOOLTIP, this.historyItem.cardId);
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
@@ -54,7 +55,8 @@ export class CardHistoryItemComponent {
 		this.events.broadcast(Events.SHOW_TOOLTIP, this.historyItem.cardId, x, y);
 	}
 
-	@HostListener('mouseleave') onMouseLeave() {
+	@HostListener('mouseleave')
+	onMouseLeave() {
 		// console.log('hiding tooltip', this.cardId);
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.historyItem.cardId);
 	}

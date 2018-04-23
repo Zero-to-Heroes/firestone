@@ -44,6 +44,7 @@ declare var overwolf: any;
 export class CardComponent {
 
 	@Input() public card: SetCard;
+	@Input() public tooltips = true;
 
 	private showPlaceholder = true;
 
@@ -55,20 +56,26 @@ export class CardComponent {
 	}
 
 	@HostListener('click') onClick() {
-		this.events.broadcast(Events.SHOW_CARD_MODAL, this.card.id);
+		if (this.tooltips) {
+			this.events.broadcast(Events.SHOW_CARD_MODAL, this.card.id);
+		}
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		// console.log('mouseenter', this.card, this.el.nativeElement.getBoundingClientRect());
-		let rect = this.el.nativeElement.getBoundingClientRect();
-		let x = rect.left + rect.width - 20;
-		let y = rect.top + rect.height / 2;
-		this.events.broadcast(Events.SHOW_TOOLTIP, this.card.id, x, y);
+		if (this.tooltips) {
+			// console.log('mouseenter', this.card, this.el.nativeElement.getBoundingClientRect());
+			let rect = this.el.nativeElement.getBoundingClientRect();
+			let x = rect.left + rect.width - 20;
+			let y = rect.top + rect.height / 2;
+			this.events.broadcast(Events.SHOW_TOOLTIP, this.card.id, x, y);
+		}
 	}
 
 	@HostListener('mouseleave') onMouseLeave() {
-		// console.log('hiding tooltip', this.cardId);
-		this.events.broadcast(Events.HIDE_TOOLTIP, this.card.id);
+		if (this.tooltips) {
+			// console.log('hiding tooltip', this.cardId);
+			this.events.broadcast(Events.HIDE_TOOLTIP, this.card.id);
+		}
 	}
 
 	private image() {

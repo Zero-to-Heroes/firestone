@@ -67,6 +67,21 @@ export class AllCardsService {
 			.filter((card) => card.id == id)[0];
 	}
 
+	public setName(setId: string) {
+		setId = setId.toLowerCase();
+		for (let i = 0; i < this.STANDARD_SETS.length; i++) {
+			if (setId == this.STANDARD_SETS[i][0]) {
+				return this.STANDARD_SETS[i][1];
+			}
+		}
+		for (let i = 0; i < this.WILD_SETS.length; i++) {
+			if (setId == this.WILD_SETS[i][0]) {
+				return this.WILD_SETS[i][1];
+			}
+		}
+		return '';
+	}
+
 	private getSets(references, isStandard: boolean): Set[] {
 		let standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
 		parseCardsText.jsonDatabase.forEach((card) => {
