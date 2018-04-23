@@ -32,8 +32,7 @@ declare var ga: any;
 					(blur)="onFocusLost()"
 					placeholder="Search card..." />
 			</label>
-			<!-- Don't show autocomplete search results for now -->
-			<ul *ngIf="false && showSearchResults" class="search-results">
+			<ul *ngIf="showSearchResults" class="search-results">
 				<card-search-autocomplete-item *ngFor="let result of searchResults"
 					[fullString]="result.name"
 					[searchString]="searchString"
@@ -73,11 +72,15 @@ export class CardSearchComponent {
 
 	private showCard(result: SetCard) {
 		console.error('showing card when clicking on search proposition in search box - but what should actually happen?', result);
+		this.events.broadcast(Events.SHOW_CARD_MODAL, result.id);
+		this.events.broadcast(Events.HIDE_TOOLTIP, result.id);
 	}
 
 	private onFocusLost() {
 		console.log('focus lost');
-		this.showSearchResults = false;
+		setTimeout(() => {
+			this.showSearchResults = false;
+		}, 500);
 	}
 
 	private updateSearchResults() {

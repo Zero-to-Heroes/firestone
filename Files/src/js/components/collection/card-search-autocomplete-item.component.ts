@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 
 import * as Raven from 'raven-js';
+
+import { Events } from '../../services/events.service';
 
 @Component({
 	selector: 'card-search-autocomplete-item',
@@ -16,18 +18,21 @@ import * as Raven from 'raven-js';
 // 7.1.1.17994
 export class CardSearchAutocompleteItemComponent implements OnInit {
 
-	@Input() private fullString: string;
-	@Input() private searchString: string;
+	@Input() fullString: string;
+	@Input() searchString: string;
 
 	private first: string;
 	private match: string;
 	private last: string;
 
+	constructor(private events: Events) {
+	}
+
 	ngOnInit() {
 		// console.log('init autocomplete item', this.fullString, this.searchString);
 		let searchIndex = this.fullString.toLowerCase().indexOf(this.searchString);
 		let searchEnd = searchIndex + this.searchString.length;
-		console.log(searchIndex, searchEnd, this.fullString.length);
+		// console.log(searchIndex, searchEnd, this.fullString.length);
 
 		this.first = this.fullString.substring(0, searchIndex);
 		this.match = this.fullString.substring(searchIndex, Math.min(this.fullString.length, searchEnd));
