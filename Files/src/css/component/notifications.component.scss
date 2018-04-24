@@ -1,3 +1,6 @@
+@import '../global/variables';
+@import '../global/fonts';
+
 html {
 	// background-color: white;
 }
@@ -14,34 +17,116 @@ body {
 		bottom: auto;
 
 		.simple-notification {
-		    padding: 10px;
-		    margin-bottom: 5px;
-		    background-color: rgba(0, 0, 0, 0.8);
-    		border-radius: 5px 0 0 5px;
-
-    		.message-container {
-    			display: flex;
-    			align-items: center;
-
-    			img {
-    				margin-right: 5px;
-    				width: 24px;
-    				height: 24px;
-    			}
-
-			    .message {
-			    	padding: 0;
-			    	font-size: 14px;
-			    	line-height: 15px;
-			    }
-
-			    .command {
-				    display: inline-block;
-				    border: 1px solid white;
-				    padding: 5px 15px;
-				    border-radius: 6px;
-				}
-    		}
+		    padding: 0;
+		    background: transparent;
+		    border: none;
+		    // margin-bottom: -10px;
 		}
+	}
+}
+
+.message-container {
+	display: flex;
+	align-items: center;
+	background: radial-gradient($red01, $darkred);
+	border: 1px solid $grey03;
+	margin: 10px;
+	margin-bottom: 0;
+
+	&.message-new-card {
+		width: 260px;
+		height: 65px;
+
+		.rarity {
+			position: absolute;
+			width: 18px;
+		    top: 0;
+		    left: 3px;
+		    z-index: 1;
+		}
+
+		.art {
+			// width: 65px;
+			// height: 65px;
+			width: 87px;
+    		clip-path: inset(8% 13% 20% 13%);
+    		margin-left: -11px;
+    		margin-top: 11px;
+		}
+
+		.message {
+	    	@extend %you-have-viewed;
+	    	display: flex;
+	    	flex-direction: column;
+    		margin-left: 4px;
+		}
+
+		.new-card {
+			margin-bottom: 5px;
+		}
+	}
+
+	&.message-dust {
+	    @extend %you-have-viewed;
+		width: 260px;
+		height: 65px;
+
+		.dust {
+			margin-right: 15px;
+		    display: flex;
+		    align-items: center;
+		    justify-content: center;
+		    width: 65px;
+
+			i {
+			    width: var(--size, 45px);
+			    height: var(--size, 45px);
+			}
+		}
+
+		.text {
+			display: flex;
+			flex-direction: column;
+
+			.dust-amount:before {
+				content: "+";
+			}
+		}
+
+	}
+
+    .command {
+	    display: inline-block;
+	    border: 1px solid white;
+	    padding: 5px 15px;
+	    border-radius: 6px;
+	}
+}
+
+.message-container-app {
+	padding: 10px;
+    margin-bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+	border-radius: 5px 0 0 5px;
+	display: flex;
+    align-items: center;
+
+    img {
+		margin-right: 5px;
+		width: 24px;
+		height: 24px;
+	}
+
+	.message {
+    	padding: 0;
+    	font-size: 14px;
+    	line-height: 15px;
+    }
+
+    .command {
+	    display: inline-block;
+	    border: 1px solid white;
+	    padding: 5px 15px;
+	    border-radius: 6px;
 	}
 }

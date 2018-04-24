@@ -44,13 +44,13 @@ export class LogStatusService {
 
 	private createDetectingLogsToast(logFile: string) {
 		console.log('sending log detection start notification');
-		this.notificationService.html(`<div class="message-container"><img src="/IconStore.png"><div class="message">Lorekeeper is detecting your ${logFile} log file. It shouldn\'t take more than 15s</div></div>`);
+		this.notificationService.html({ content: `<div class="message-container-app"><img src="/IconStore.png"><div class="message">Lorekeeper is detecting your ${logFile} log file. It shouldn\'t take more than 15s</div></div>` });
 	}
 
 	private createAppRunningToast(monitoredObject: string) {
 		console.log('sending start notification');
 		this.loaded = true;
-		this.notificationService.html(`<div class="message-container"><img src="/IconStore.png"><div class="message">Lorekeeper is now monitoring your ${monitoredObject} file. Press Ctrl + C to bring the main window</div></div>`);
+		this.notificationService.html({ content: `<div class="message-container-app"><img src="/IconStore.png"><div class="message">Lorekeeper is now monitoring your ${monitoredObject} file. Press Ctrl + C to bring the main window</div></div>` });
 	}
 
 	public error(messageId: string, message: string) {
@@ -90,8 +90,8 @@ export class LogStatusService {
 		});
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
-			console.log('received ack_error', message);
 			if (message.content === 'ack_errors') {
+				console.log('received ack_error', message);
 				this.errorsWindowInit = true;
 			}
 		})

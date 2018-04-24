@@ -19,7 +19,7 @@ export class OwNotificationsService {
 		this.detectNotificationsWindow();
 	}
 
-	public html(htmlMessage: string) {
+	public html(htmlMessage: Message) {
 		console.log('trying to display html message: ', htmlMessage);
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
@@ -37,7 +37,8 @@ export class OwNotificationsService {
 		// overwolf.windows.restore(this.windowId, (result) => {
 		// 		console.log('notifications window is on?', result);
 		// 	})
-		overwolf.windows.sendMessage(this.windowId, '' + this.messageId++, htmlMessage, (result) => {
+		let strMessage = JSON.stringify(htmlMessage);
+		overwolf.windows.sendMessage(this.windowId, '' + this.messageId++, strMessage, (result) => {
 			console.log('Notification service sent message to notifications window', result);
 		});
 	}
@@ -68,4 +69,9 @@ export class OwNotificationsService {
 			})
 		});
 	}
+}
+
+export interface Message {
+	content: string,
+	cardId?: number
 }

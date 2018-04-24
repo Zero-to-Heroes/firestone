@@ -47,19 +47,27 @@ export class AppComponent {
 			}
 		)
 
-		this.startApp();
-
 		this.collectionManager.getCollection((collection) => {
 			console.log('collection backed up!', collection);
 		})
 
-		overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-			this.startApp(() => this.showCollectionWindow());
-		})
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			overwolf.windows.restore(result.window.id, (result2) => {
+				overwolf.windows.minimize(result.window.id);
 
-		ga('send', 'pageview');
-		console.log('sent pageview to ga', ga.q);
-		ga('send', 'event', 'toast', 'start-app');
+				this.startApp();
+
+				overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
+					this.startApp(() => this.showCollectionWindow());
+				})
+
+				ga('send', 'event', 'toast', 'start-app');
+			})
+		});
 	}
 
 	private startApp(showWhenStarted?: Function) {

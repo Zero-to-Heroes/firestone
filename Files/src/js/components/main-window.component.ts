@@ -103,6 +103,8 @@ export class MainWindowComponent {
 	private showLogin = false;
 	private fullCardId: string;
 
+	private windowId: string;
+
 	private selectedModule = 'collection';
 
 	constructor(
@@ -110,6 +112,12 @@ export class MainWindowComponent {
 		private debugService: DebugService,
 		private events: Events,
 		private collectionManager: CollectionManager) {
+
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success"){
+				this.windowId = result.window.id;
+			}
+		});
 
 		this.events.on(Events.HEARTHHEAD_LOGIN).subscribe(
 			(data) => {
@@ -129,7 +137,18 @@ export class MainWindowComponent {
 				this.fullCardId = event.data[0];
 			}
 		);
-
+		overwolf.windows.onMessageReceived.addListener((message) => {
+			console.log('received', message);
+			if (message.id === 'click-card') {
+				this.ngZone.run(() => {
+					this.fullCardId = message.content;
+					console.log('setting fullCardId', this.fullCardId);
+					overwolf.windows.restore(this.windowId, (result) => {
+						console.log('collection window restored');
+					});
+				})
+			}
+		})
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -144,7 +163,7 @@ export class MainWindowComponent {
 	private closeWindow() {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
-				overwolf.windows.close(result.window.id);
+				overwolf.windows.minimize(result.window.id);
 			}
 		});
 	};

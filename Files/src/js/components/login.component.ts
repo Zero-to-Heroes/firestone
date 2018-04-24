@@ -85,12 +85,12 @@ export class LoginComponent {
 		// this.infoMessage = 'Working on it';
 		console.log('logging in with', this.identifier, this.password);
 		this.sync.login(this.identifier, this.password, () => {
-			this.notificationService.html('<div class="message-container"><img src="/IconStore.png"><div class="message">You\'re logged in to Hearthhead, we\'re now syncing your collection</div></div>');
+			this.notificationService.html({ content: '<div class="message-container"><img src="/IconStore.png"><div class="message">You\'re logged in to Hearthhead, we\'re now syncing your collection</div></div>' });
 			console.log('logged in, syncing collection');
 			this.closeWindow();
 			this.sync.sync(() => {
 				console.log('sync successful');
-				this.notificationService.html('<div class="message-container"><img src="/IconStore.png"><div class="message">Your collection is now fully synced with Hearthhead</div></div>');
+				this.notificationService.html({ content: '<div class="message-container"><img src="/IconStore.png"><div class="message">Your collection is now fully synced with Hearthhead</div></div>' });
 			});
 		});
 	}

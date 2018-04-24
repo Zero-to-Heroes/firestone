@@ -9,7 +9,10 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'notifications',
-	styleUrls: [`../../css/component/notifications.component.scss`],
+	styleUrls: [
+		'../../css/global/components-global.scss',
+		'../../css/component/notifications.component.scss',
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="notifications">
@@ -19,14 +22,15 @@ declare var overwolf: any;
 })
 export class NotificationsComponent {
 
-	private timeout = 20000;
+	private timeout = 10000;
 	private windowId: string;
-	// private mainWindowId: string;
+	private mainWindowId: string;
 
 	private toastOptions = {
-		timeOut: this.timeout,
+		// timeOut: this.timeout,
 		pauseOnHover: true,
 		showProgressBar: false,
+		clickToClose: false
 	}
 
 	constructor(
@@ -37,7 +41,8 @@ export class NotificationsComponent {
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received message in notification window', message);
-			this.sendNotification(message.content);
+			let messageObject = JSON.parse(message.content);
+			this.sendNotification(messageObject.content, messageObject.cardId);
 		})
 
 		overwolf.windows.getCurrentWindow((result) => {
@@ -46,36 +51,42 @@ export class NotificationsComponent {
 			// Change position to be bottom right?
 			console.log('retrieved current notifications window', result, this.windowId);
 
-			// overwolf.windows.obtainDeclaredWindow("MainWindow", (result) => {
-			// 	if (result.status !== 'success') {
-			// 		console.warn('Could not get MainWindow', result);
-			// 	}
-			// 	this.mainWindowId = result.window.id;
+			overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+				if (result.status !== 'success') {
+					console.warn('Could not get CollectionWindow', result);
+				}
+				this.mainWindowId = result.window.id;
 
-
-			// 	overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
-			// 		console.log('ack sent to main window', result);
-			// 	});
-			// });
+				// overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
+				// 	console.log('ack sent to main window', result);
+				// });
+			});
 		})
 		console.log('notifications windows initialized')
 	}
 
-	private sendNotification(htmlMessage: string) {
+	private sendNotification(htmlMessage: string, cardId?: string) {
 		if (!this.windowId) {
-			console.log('Notification window isnt properly initialized yet, waiting');
+			// console.log('Notification window isnt properly initialized yet, waiting');
 			setTimeout(() => {
 				this.sendNotification(htmlMessage);
 			}, 100);
 			return;
 		}
-		console.log('received message, restoring notification window');
+		// console.log('received message, restoring notification window');
 		overwolf.windows.restore(this.windowId, (result) => {
-			console.log('notifications window is on?', result);
+			// console.log('notifications window is on?', result);
 
 			this.ngZone.run(() => {
 				let toast = this.notificationService.html(htmlMessage);
-				console.log('toast', toast);
+				toast.click.subscribe((event) => {
+					console.log('registered click on toast');
+					if (cardId) {
+						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
+							console.log('send click info to collection window', cardId, this.mainWindowId, result);
+						});
+					}
+				})
 			});
 		})
 	}
@@ -95,17 +106,17 @@ export class NotificationsComponent {
 		overwolf.windows.getCurrentWindow((currentWindow) => {
 			let height = wrapper.getBoundingClientRect().height + 20;
 			let width = currentWindow.window.width;
-			console.log('and current window', currentWindow);
-			console.log('rect2', wrapper.getBoundingClientRect());
+			// console.log('and current window', currentWindow);
+			// console.log('rect2', wrapper.getBoundingClientRect());
 			overwolf.games.getRunningGameInfo((gameInfo) => {
 				let gameWidth = gameInfo.width;
 				let gameHeight = gameInfo.height;
 				overwolf.windows.changeSize(currentWindow.window.id, width, height, (changeSize) => {
-					console.log('changed window size', changeSize);
+					// console.log('changed window size', changeSize);
 					overwolf.windows.changePosition(currentWindow.window.id, (gameWidth - width), (gameHeight - height), (changePosition) => {
-						console.log('changed window position', changePosition);
+						// console.log('changed window position', changePosition);
 						overwolf.windows.getCurrentWindow((tmp) => {
-							console.log('new window', tmp);
+							// console.log('new window', tmp);
 						});
 					});
 				});

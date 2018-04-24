@@ -301,14 +301,41 @@ export class PackMonitor {
 	private createNewCardToast(card: Card) {
 		let dbCard = parseCardsText.getCard(card.Id);
 		let cardName: string = dbCard.name;
+		let goldenClass = '';
 		if (card.Premium) {
 			cardName = 'Golden ' + cardName;
+			goldenClass = 'premium';
 		}
 		console.log('displaying new card toast notification for ' + cardName);
-		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/rarity-' + dbCard.rarity.toLowerCase() + '.png"><div class="message">New card! ' + cardName + '</div></div>');
+		this.notificationService.html({
+			content: `<div class="message-container message-new-card ${goldenClass}">
+					<img class="rarity" src="/Files/assets/images/rarity/rarity-${dbCard.rarity.toLowerCase()}.png">
+					<img class="art" src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
+					<div class="message">
+						<span class="new-card"><span class="new">New card:</span> ${cardName}!</span>
+						<span class="cta">Click to <span class="link">expand</span></span>
+					</div>
+				</div>`,
+			cardId: dbCard.id
+		});
 	}
 
 	private createDustToast(dust: number, numberOfCards: number) {
-		this.notificationService.html('<div class="message-container"><img src="/Files/assets/images/dust_small.png"><div class="message">Got ' + numberOfCards + ' duplicate cards for ' + dust + ' dust</div></div>');
+		this.notificationService.html({
+			content: `
+				<div class="message-container message-dust">
+					<div class="dust">
+						<i class="i-30 pale-theme">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#dust"/>
+							</svg>
+						</i>
+					</div>
+					<div class="text">
+						<span>${numberOfCards} duplicate cards</span>
+						<span class="dust-amount">${dust} Dust potential</span>
+					</div>
+				</div>`
+		});
 	}
 }
