@@ -163,7 +163,7 @@ export class MainWindowComponent {
 	private closeWindow() {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
-				overwolf.windows.minimize(result.window.id);
+				overwolf.windows.hide(result.window.id);
 			}
 		});
 	};

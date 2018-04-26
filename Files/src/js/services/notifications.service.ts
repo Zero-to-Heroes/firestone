@@ -62,7 +62,7 @@ export class OwNotificationsService {
 
 			overwolf.windows.restore(windowId, (result) => {
 				console.log('notifications window is on?', result);
-				overwolf.windows.minimize(windowId, (result) => {
+				overwolf.windows.hide(windowId, (result) => {
 					this.windowId = windowId;
 					console.log('notification window is minimized at start, now listening to notifications', result);
 				})

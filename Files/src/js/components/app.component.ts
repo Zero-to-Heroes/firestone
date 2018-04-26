@@ -57,7 +57,7 @@ export class AppComponent {
 				return;
 			}
 			overwolf.windows.restore(result.window.id, (result2) => {
-				overwolf.windows.minimize(result.window.id);
+				overwolf.windows.hide(result.window.id);
 
 				this.startApp();
 

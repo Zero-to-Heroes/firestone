@@ -83,7 +83,7 @@ export class LogStatusService {
 
 			overwolf.windows.restore(this.windowId, (result) => {
 				console.log('ErrorsWindoww is on?', result);
-				overwolf.windows.minimize(this.windowId, (result) => {
+				overwolf.windows.hide(this.windowId, (result) => {
 					console.log('minimized at start', result);
 				})
 			})
