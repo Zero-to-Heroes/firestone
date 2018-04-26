@@ -45,7 +45,7 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
-				"size": {"width": 400, "height": 500},
+				"size": {"width": 530, "height": 500},
 				"start_position": {"top": 0, "left": 0},
                 "grab_keyboard_focus": false,
                 "grab_focus_on_desktop": false,

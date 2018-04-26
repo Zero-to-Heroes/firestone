@@ -15,12 +15,19 @@ body {
 		top: 0;
 		right: 20px;
 		bottom: auto;
+		width: 400px;
 
 		.simple-notification {
 		    padding: 0;
 		    background: transparent;
 		    border: none;
 		    // margin-bottom: -10px;
+
+		    .sn-content {
+			    padding: 0;
+			    display: flex;
+			    justify-content: flex-end;
+		    }
 		}
 	}
 }
@@ -34,7 +41,7 @@ body {
 	// margin-bottom: 0;
 
 	&.message-new-card {
-		width: 260px;
+		width: 320px;
 		height: 65px;
 		position: relative;
 
@@ -108,7 +115,7 @@ body {
 
 	&.message-dust {
 	    @extend %you-have-viewed;
-		width: 260px;
+		width: 255px;
 		height: 65px;
 
 		.dust {
@@ -144,6 +151,7 @@ body {
 }
 
 .message-container-app {
+	width: 320px;
 	padding: 10px;
     margin-bottom: 5px;
     background-color: rgba(0, 0, 0, 0.8);
