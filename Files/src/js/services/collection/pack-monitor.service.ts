@@ -301,7 +301,7 @@ export class PackMonitor {
 	private createNewCardToast(card: Card) {
 		let dbCard = parseCardsText.getCard(card.Id);
 		let cardName: string = dbCard.name;
-		let goldenClass = '';
+		let goldenClass = undefined;
 		if (card.Premium) {
 			cardName = 'Golden ' + cardName;
 			goldenClass = 'premium';
@@ -309,9 +309,22 @@ export class PackMonitor {
 		console.log('displaying new card toast notification for ' + cardName);
 		this.notificationService.html({
 			content: `<div class="message-container message-new-card ${goldenClass}">
+					<div class="outer-border" *ngIf="goldenClass"></div>
 					<img class="rarity" src="/Files/assets/images/rarity/rarity-${dbCard.rarity.toLowerCase()}.png">
 					<img class="art" src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
 					<div class="message">
+						<div class="premium-deco" *ngIf="goldenClass">
+							<i class="gold-theme left">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+								</svg>
+							</i>
+							<i class="gold-theme right">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+								</svg>
+							</i>
+						</div>
 						<span class="new-card"><span class="new">New card:</span> ${cardName}!</span>
 						<span class="cta">Click to <span class="link">expand</span></span>
 					</div>
