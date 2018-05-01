@@ -6,11 +6,18 @@ import { HttpModule }    from '@angular/http';
 import * as Raven from 'raven-js';
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 
-import { WelcomePageComponent }  from '../../components/welcome-page.component';
+import { MenuSelectionComponent }  from '../../components/menu-selection.component';
+import { PlayerNameComponent }  from '../../components/player-name.component';
 import { SocialMediaComponent }  from '../../components/social-media.component';
+import { WelcomePageComponent }  from '../../components/welcome-page.component';
 import { VersionComponent }  from '../../components/version.component';
+import { HomeScreenInfoTextComponent }  from '../../components/home/home-screen-info-text.component';
+import { AppChoiceComponent }  from '../../components/home/app-choice.component';
+
 import { DebugService } from '../../services/debug.service';
 
+import { Events } from '../../services/events.service';
+import { PlayerNameService }  from '../../services/player-name.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
@@ -48,18 +55,24 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		}),
 	],
 	declarations: [
+		MenuSelectionComponent,
 		WelcomePageComponent,
+		PlayerNameComponent,
 		SocialMediaComponent,
 		VersionComponent,
+		HomeScreenInfoTextComponent,
+		AppChoiceComponent,
 	],
 	bootstrap: [
 		WelcomePageComponent,
 	],
 	providers: [
-		DebugService,
 		CollectionManager,
+		DebugService,
+		Events,
 		IndexedDbService,
 		MemoryInspectionService,
+		PlayerNameService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

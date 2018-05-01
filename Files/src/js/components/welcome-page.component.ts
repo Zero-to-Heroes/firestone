@@ -14,50 +14,68 @@ declare var overwolf: any;
 	template: `
 		<div class="root">
 			<div class="app-container">
-				<div class="menu-bar">
-					<i class="glyphicon glyphicon-remove" (click)="closeWindow()"></i>
-				</div>
-				<div class="content-container">
-					<div class="content">
-						<h1>
-							<img class="logo" src="/IconStore.png" />
-							<div class="title-text">
-								<span class="title">HS Collection Companion</span>
-								<span class="subtitle">Pack Opening & Collection Assistant</span>
-							</div>
-						</h1>
-						<div class="main-text">
-							<span class="text">
-								To begin, start opening packs in-game. <br />
-								HS Collection Companion will automatically show you notifications for new cards and the amount of dust in case you open duplicates.
-							</span>
-							<span class="text">
-								<b>NEW! </b>To display the Collection window in-game, press <span class="command">Alt</span> + <span class="command">C</span>.
-							</span>
+				<section class="menu-bar">
+					<div class="first">
+						<div class="navigation">
+							<div class="logo"></div>
+							<menu-selection></menu-selection>
 						</div>
 					</div>
-					<div class="actions">
-						<div class="action" [ngClass]="emptyCollection ? 'inactive' : ''" (click)="openCollection()">
-							<i class="icon glyphicon glyphicon-home"></i>
-							<h2>Collection</h2>
-							<span>View your collection and track your set completion!</span>
-							<span *ngIf="emptyCollection" class="first-time">First-time user? Launch the game to backup your collection offline!</span>
-						</div>
-						<div class="action disabled">
-							<i class="icon glyphicon glyphicon-question-sign"></i>
-							<h2>Achievements</h2>
-							<span class="coming-soon">Coming soon</span>
-						</div>
-						<div class="action disabled">
-							<i class="icon glyphicon glyphicon-question-sign"></i>
-							<h2>Tracker</h2>
-							<span class="coming-soon">Coming soon</span>
-						</div>
+					<player-name></player-name>
+					<div class="controls">
+						<button class="i-30 pink-button" (click)="goHome()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
+							</svg>
+						</button>
+						<button class="i-30 pink-button" (click)="showSettings()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
+							</svg>
+						</button>
+						<button class="i-30 pink-button" (click)="contactSupport()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
+							</svg>
+						</button>
+						<button class="i-30 pink-button" (click)="minimizeWindow()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
+							</svg>
+						</button>
+						<button class="i-30 close-button" (click)="closeWindow()">
+							<svg class="svg-icon-fill">
+								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+							</svg>
+						</button>
 					</div>
-					<social-media></social-media>
-					<version></version>
-				</div>
+				</section>
+				<home-screen-info-text></home-screen-info-text>
+				<app-choice></app-choice>
+				<social-media></social-media>
+				<version></version>
 			</div>
+
+			<i class="i-54 gold-theme corner top-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner top-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+				</svg>
+			</i>
 		</div>
 	`,
 })
