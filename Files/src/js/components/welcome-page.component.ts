@@ -9,18 +9,15 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'welcome-page',
-	styleUrls: [`../../css/component/welcome-page.component.scss`],
+	styleUrls: [
+		`../../css/global/components-global.scss`,
+		`../../css/component/welcome-page.component.scss`
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="root">
 			<div class="app-container">
 				<section class="menu-bar">
-					<div class="first">
-						<div class="navigation">
-							<div class="logo"></div>
-							<menu-selection></menu-selection>
-						</div>
-					</div>
 					<player-name></player-name>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
