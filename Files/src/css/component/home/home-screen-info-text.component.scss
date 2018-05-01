@@ -1,0 +1,38 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.home-screen-info {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+	margin-top: 45px;
+}
+
+.hearthlore {
+	@extend %app-title;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	width: 100%;
+	margin-bottom: 22px;
+}
+
+.sub-title {
+	@extend %sub-title;
+	margin-bottom: 52px;
+}
+
+i {
+    position: relative;
+    top: 5px;
+}
+
+.left {
+	margin-right: 10px;
+}
+
+.right {
+	transform: scale(-1, 1);
+	margin-left: 13px;
+}

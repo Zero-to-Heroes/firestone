@@ -8,9 +8,19 @@ declare var overwolf: any;
 	template: `
 		<div class="home-screen-info">
 			<div class="hearthlore">
-				<span>Hearthlore</span>
+				<i class="i-35 gold-theme left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
+					</svg>
+				</i>
+				<span class="title">Welcome to Hearthlore</span>
+				<i class="i-35 gold-theme right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
+					</svg>
+				</i>
 			</div>
-
+			<span class="sub-title">No Hearthstone session detected: <br /> Choose an ability:</span>
 		</div>
 	`,
 })

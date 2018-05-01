@@ -1,0 +1,60 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.app-choice {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.app {
+	display: flex;
+	flex-direction: column;
+	background: rgba(255, 255, 255, 0.08);
+	justify-content: center;
+	align-items: center;
+	height: 268px;
+	width: 270px;
+	margin-right: 50px;
+	position: relative;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.title {
+		@extend %app-name;
+		margin-top: 2px;
+		margin-bottom: 9px;
+	}
+
+	.sub-title {
+		@extend %app-details;
+	}
+
+	.last {
+		margin-right: 0;
+	}
+
+	.banner {
+		height: 8px;
+		width: 100%;
+		position: absolute;
+		bottom: 0;
+	}
+}
+
+i {
+	position: relative;
+	top: -10px;
+}
+
+.binder .banner {
+	background: $pink01;
+}
+.chronicler .banner {
+	background: $lila01;
+}
+.deck-tracker .banner {
+	background: $blue01;
+}
