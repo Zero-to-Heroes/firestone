@@ -1,5 +1,13 @@
 @import './variables';
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Sumana');
+
+%app-titile {
+	font-family: 'Sumana', serif;
+	font-weight: 700;
+	font-size: 25px;
+	color: $yellow03;
+}
 
 %set-result {
 	font-family: 'Open Sans', sans-serif;
@@ -8,14 +16,14 @@
 	color: $green01;
 }
 
-%card-title {
+%card-title, %app-name {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 20px;
 	color: $yellow03;
 }
 
-%user-nickname {
+%user-nickname, %coming-soon {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 16px;
@@ -43,6 +51,13 @@
 	color: $grey01;
 }
 
+%app-details {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 14px;
+	color: $green01;
+}
+
 %pagination-inactive {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
@@ -57,7 +72,7 @@
 	color: $yellow02;
 }
 
-%you-have-viewed {
+%you-have-viewed, %patch-number {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 13px;
