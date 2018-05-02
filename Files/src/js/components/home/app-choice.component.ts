@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 declare var overwolf: any;
 
@@ -10,48 +10,61 @@ declare var overwolf: any;
 	],
 	template: `
 		<div class="app-choice">
-			<div class="app binder">
-				<i class="i-150X150 gold-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#the_binder"/>
-					</svg>
-				</i>
-				<span class="title">The Binder</span>
-				<span class="sub-title">Deep dive into your card collection</span>
-				<div class="banner"></div>
+			<div class="app binder" (click)="showCollection()">
+				<div class="info">
+					<i class="i-150X150 gold-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#the_binder"/>
+						</svg>
+					</i>
+					<span class="title">The Binder</span>
+					<span class="sub-title">Deep dive into your card collection</span>
+					<div class="banner"></div>
+				</div>
 			</div>
-			<div class="app chronicler">
-				<i class="i-150X150 gold-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#achievements"/>
-					</svg>
-				</i>
-				<span class="title">Chronicler</span>
-				<span class="sub-title">Celebrate your in-game triumphs</span>
-				<div class="banner"></div>
+			<div class="app chronicler disabled">
+				<div class="coming-soon">Coming soon</div>
+				<div class="info">
+					<i class="i-150X150 gold-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#achievements"/>
+						</svg>
+					</i>
+					<span class="title">Chronicler</span>
+					<span class="sub-title">Celebrate your in-game triumphs</span>
+					<div class="banner"></div>
+				</div>
 			</div>
-			<div class="app deck-tracker last">
-				<i class="i-150X150 gold-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#deck_tracker"/>
-					</svg>
-				</i>
-				<span class="title">Deck Tracker</span>
-				<span class="sub-title">Build the best decks and track them!</span>
-				<div class="banner"></div>
+			<div class="app deck-tracker last disabled">
+				<div class="coming-soon">Coming soon</div>
+				<div class="info">
+					<i class="i-150X150 gold-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#deck_tracker"/>
+						</svg>
+					</i>
+					<span class="title">Deck Tracker</span>
+					<span class="sub-title">Build the best decks and track them!</span>
+					<div class="banner"></div>
+				</div>
 			</div>
 		</div>
 	`,
 })
 
-export class AppChoiceComponent implements OnInit {
+export class AppChoiceComponent {
 
-	private version;
+	@Output() close = new EventEmitter();
 
-	constructor(private ngZone: NgZone) {
-
-	}
-
-	ngOnInit() {
+	private showCollection() {
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			overwolf.windows.restore(result.window.id, (result2) => {
+				this.close.emit(null);
+			})
+		});
 	}
 }

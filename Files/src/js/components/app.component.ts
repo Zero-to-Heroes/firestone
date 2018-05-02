@@ -62,8 +62,8 @@ export class AppComponent {
 				this.startApp();
 
 				overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-					// this.startApp(() => this.showCollectionWindow());
-					this.startApp(() => this.showWelcomePage());
+					this.startApp(() => this.showCollectionWindow());
+					// this.startApp(() => this.showWelcomePage());
 				})
 
 				ga('send', 'event', 'toast', 'start-app');

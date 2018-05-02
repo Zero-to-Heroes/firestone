@@ -48,7 +48,7 @@ declare var overwolf: any;
 					</div>
 				</section>
 				<home-screen-info-text></home-screen-info-text>
-				<app-choice></app-choice>
+				<app-choice (close)="closeWindow()"></app-choice>
 				<social-media></social-media>
 				<version></version>
 			</div>
