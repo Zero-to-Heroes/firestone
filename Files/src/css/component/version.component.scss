@@ -1,5 +1,8 @@
+@import '../global/fonts';
+
 .version-info {
+	@extend  %patch-number;
     position: absolute;
-    bottom: 0px;
-    right: 5px;
+    bottom: 9px;
+    right: 15px;
 }

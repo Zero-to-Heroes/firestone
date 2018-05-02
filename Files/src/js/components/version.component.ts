@@ -6,7 +6,7 @@ declare var overwolf: any;
 	selector: 'version',
 	styleUrls: [`../../css/component/version.component.scss`],
 	template: `
-		<div class="version-info">v{{version}}</div>
+		<div class="version-info">v.{{version}}</div>
 	`,
 })
 
