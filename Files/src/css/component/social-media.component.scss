@@ -2,7 +2,17 @@
 
 .social-media {
     position: absolute;
-    bottom: 10px;
+    bottom: 15px;
     left: 15px;
     display: flex;
+    z-index: 1;
+
+    button {
+    	margin-right: 5px;
+    }
+
+    button:hover {
+	    --icon-color: $yellow03;
+	    color: var(--icon-color);
+    }
 }
