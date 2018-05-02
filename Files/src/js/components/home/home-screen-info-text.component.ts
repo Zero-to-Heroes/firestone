@@ -1,5 +1,7 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 
+const HEARTHSTONE_GAME_ID = 9898;
+
 declare var overwolf: any;
 
 @Component({
@@ -20,25 +22,24 @@ declare var overwolf: any;
 					</svg>
 				</i>
 			</div>
-			<span class="sub-title">No Hearthstone session detected: <br /> Choose an ability:</span>
+			<span class="sub-title" [innerHTML]="status"></span>
 		</div>
 	`,
 })
 
 export class HomeScreenInfoTextComponent implements OnInit {
 
-	private version;
-
-	constructor(private ngZone: NgZone) {
-
-	}
+	private status;
 
 	ngOnInit() {
-		overwolf.extensions.getManifest('dikgmjhafcjcgdpoakplhfjcjhfpdfkjgihpcjfh', (result) => {
-			console.log('retrieved manifest', result);
-			this.ngZone.run(() => {
-				this.version = result.meta.version;
-			});
-		})
+		overwolf.games.getRunningGameInfo((res: any) => {
+			console.log('detecting running game in welcome window', res);
+			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
+				this.status = "Hearthlore now follows your Hearthtsone session. <br /> Choose an ability:";
+			}
+			else {
+				this.status = "No Hearthstone session detected: <br /> Choose an ability:";
+			}
+		});
 	}
 }
