@@ -38,6 +38,47 @@
                 margin-right: 2px;
             }
 
+            &.audio {
+                flex-direction: column;
+
+                ul {
+                    list-style: none;
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    li {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-left: 11px;
+                        padding-right: 11px;
+                        border-right: 1px solid $yellow02;
+
+                        span {
+                            margin-right: 6px;
+                        }
+
+                        &:hover {
+                            color: $green01;
+
+                            & > button {
+                                --icon-color: $green01;
+                            }
+                        }
+
+                    }
+
+                    li:first-child {
+                        margin-left: 0;
+                    }
+
+                    li:last-child {
+                        border: none;
+                        padding-right: 0;
+                    }
+                }
+            }
+
             &.flavor-text .sub-title {
                 display: block;
             }

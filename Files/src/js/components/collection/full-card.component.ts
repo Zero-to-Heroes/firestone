@@ -13,7 +13,10 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'full-card',
-	styleUrls: [`../../../css/component/collection/full-card.component.scss`],
+	styleUrls: [
+		`../../../css/global/components-global.scss`,
+		`../../../css/component/collection/full-card.component.scss`,
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="card-details-container" [ngClass]="{'owned': card.owned, 'missing': !card.owned}" *ngIf="card">
@@ -38,6 +41,19 @@ declare var overwolf: any;
 				<div class="card-info set">
 					<span class="sub-title">Set:</span>
 					<span class="value">{{set()}}</span>
+				</div>
+				<div class="card-info audio" *ngIf="audioClips">
+					<span class="sub-title">Sound:</span>
+					<ul class="value">
+						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound.file)">
+							<span>{{sound.name}}</span>
+							<button class="i-30 brown-theme sound-button">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#sound"/>
+								</svg>
+							</button>
+						</li>
+					</ul>
 				</div>
 				<div class="card-info flavor-text">
 					<span class="sub-title">Flavor Text:</span>
@@ -73,6 +89,7 @@ export class FullCardComponent {
 	@Output() close = new EventEmitter();
 
 	private card: any;
+	private audioClips: any[];
 
 	constructor(
 		private events: Events,
@@ -96,6 +113,15 @@ export class FullCardComponent {
 				this.events.broadcast(Events.HIDE_TOOLTIP);
 			});
 		})
+		if (card.audio) {
+			this.audioClips = [];
+			Object.keys(card.audio).forEach((key,index) => {
+			    this.audioClips.push({
+			    	name: key.split("_")[0],
+			    	file: card.audio[key]
+			    });
+			});
+		}
 	}
 
 	private updateCardWithCollection(collection: Card[], card: SetCard) {
@@ -111,6 +137,13 @@ export class FullCardComponent {
 				}
 			}
 		}
+	}
+
+	private playSound(fileName: string) {
+		let audio = new Audio();
+		audio.src = `http://static.zerotoheroes.com/hearthstone/audio/${fileName}`;
+		audio.load();
+		audio.play();
 	}
 
 	private image() {
