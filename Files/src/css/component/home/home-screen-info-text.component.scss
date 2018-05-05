@@ -37,3 +37,9 @@ i {
 	transform: scale(-1, 1);
 	margin-left: 13px;
 }
+
+a, a:hover, a:active {
+    text-decoration: underline;
+    color: inherit;
+    cursor: pointer;
+}
