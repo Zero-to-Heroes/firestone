@@ -13,4 +13,10 @@
 	&.warning .warning-icon {
 		display: inherit;
 	}
+
+	a, a:hover, a:active {
+	    text-decoration: underline;
+	    color: inherit;
+	    cursor: pointer;
+	}
 }

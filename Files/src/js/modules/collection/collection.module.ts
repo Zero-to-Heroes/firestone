@@ -40,6 +40,7 @@ import { Events } from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { PlayerNameService }  from '../../services/player-name.service';
+import { RealTimeNotificationService }  from '../../services/real-time-notifications.service';
 
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
@@ -123,6 +124,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		OwNotificationsService,
 		MemoryInspectionService,
 		PlayerNameService,
+		RealTimeNotificationService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

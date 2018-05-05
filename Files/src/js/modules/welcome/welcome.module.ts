@@ -18,6 +18,7 @@ import { DebugService } from '../../services/debug.service';
 
 import { Events } from '../../services/events.service';
 import { PlayerNameService }  from '../../services/player-name.service';
+import { RealTimeNotificationService }  from '../../services/real-time-notifications.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
@@ -73,6 +74,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		IndexedDbService,
 		MemoryInspectionService,
 		PlayerNameService,
+		RealTimeNotificationService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })
