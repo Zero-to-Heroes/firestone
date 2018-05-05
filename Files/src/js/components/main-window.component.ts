@@ -160,6 +160,19 @@ export class MainWindowComponent {
 		});
 	};
 
+	private goHome() {
+		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get WelcomeWindow', result);
+				return;
+			}
+			console.log('got welcome window', result);
+			overwolf.windows.restore(result.window.id, (result) => {
+				this.closeWindow();
+			})
+		});
+	};
+
 	private closeWindow() {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){

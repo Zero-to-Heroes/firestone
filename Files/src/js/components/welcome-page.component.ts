@@ -20,11 +20,6 @@ declare var overwolf: any;
 				<section class="menu-bar">
 					<player-name></player-name>
 					<div class="controls">
-						<button class="i-30 pink-button" (click)="goHome()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
-							</svg>
-						</button>
 						<button class="i-30 pink-button" (click)="showSettings()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
@@ -99,14 +94,6 @@ export class WelcomePageComponent {
 		});
 	};
 
-	private closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.close(result.window.id);
-			}
-		});
-	};
-
 	private openCollection() {
 		if (this.emptyCollection) {
 			return;
@@ -119,7 +106,6 @@ export class WelcomePageComponent {
 				return;
 			}
 			console.log('got collection window', result);
-			this.closeWindow();
 
 			overwolf.windows.restore(result.window.id, (result) => {
 				console.log('CollectionWindow is on?', result);
@@ -127,5 +113,21 @@ export class WelcomePageComponent {
 			})
 		});
 	}
+
+	private closeWindow() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success"){
+				overwolf.windows.hide(result.window.id);
+			}
+		});
+	};
+
+	private minimizeWindow() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success"){
+				overwolf.windows.minimize(result.window.id);
+			}
+		});
+	};
 
 }
