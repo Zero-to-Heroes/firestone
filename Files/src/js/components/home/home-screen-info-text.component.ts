@@ -38,7 +38,7 @@ export class HomeScreenInfoTextComponent implements OnInit {
 				this.status = "Hearthlore now follows your Hearthtsone session. <br /> Choose an ability:";
 			}
 			else {
-				this.status = "No Hearthstone session detected: <br /> Choose an ability:";
+				this.status = "No Hearthstone session detected.<br /> Choose an ability:";
 			}
 		});
 	}
