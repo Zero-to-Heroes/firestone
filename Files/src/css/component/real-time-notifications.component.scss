@@ -2,4 +2,15 @@
 
 .real-time-notifications {
 	@extend %app-status;
+    display: flex;
+    align-items: center;
+
+	.warning-icon {
+		display: none;
+		margin-right: 6px;
+	}
+
+	&.warning .warning-icon {
+		display: inherit;
+	}
 }
