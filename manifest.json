@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"HS Collection Companion",
 		"author":"Sébastien Tromp",
-		"version":"0.0.7",
+		"version":"0.0.9",
 		"minimum-overwolf-version":"0.107.240.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.librarian",
 		"description":"A collection companion to have in-game the information you want to know",
@@ -37,8 +37,7 @@
 				"size": {"width": 0, "height": 0},
 				"start_position": {"top": 0, "left": 0},
                 "grab_keyboard_focus": false,
-                "grab_focus_on_desktop": false,
-                "block_top_window_navigation": true
+                "grab_focus_on_desktop": false
 			},
 			"NotificationsWindow": {
 				"file": "Files/html/notifications.html",
@@ -48,8 +47,7 @@
 				"size": {"width": 400, "height": 500},
 				"start_position": {"top": 0, "left": 0},
                 "grab_keyboard_focus": false,
-                "grab_focus_on_desktop": false,
-                "block_top_window_navigation": true
+                "grab_focus_on_desktop": false
 			},
 			"ErrorsWindow": {
 				"file": "Files/html/errors.html",
@@ -58,10 +56,7 @@
 				"show_in_taskbar": false,
 		        "size": {"width": 600, "height": 200},
 		        "min_size": {"width": 600, "height": 200},
-		        "max_size": {"width": 600, "height": 200},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
+		        "max_size": {"width": 600, "height": 200}
 			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
@@ -70,10 +65,7 @@
 				"show_in_taskbar": false,
 		        "size": {"width": 1316, "height": 787},
 		        "min_size": {"width": 1316, "height": 787},
-		        "max_size": {"width": 1316, "height": 787},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
+		        "max_size": {"width": 1316, "height": 787}
 			},
 			"CollectionWindow": {
 				"file": "Files/html/collection.html",
@@ -82,10 +74,7 @@
 				"show_in_taskbar": true,
 		        "size": {"width": 1150, "height": 700},
 		        "min_size": {"width": 1150, "height": 700},
-		        "max_size": {"width": 1150, "height": 700},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
+		        "max_size": {"width": 1150, "height": 700}
 			}
 		},
 		"game_targeting": {
