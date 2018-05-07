@@ -93,13 +93,13 @@ export class NotificationsComponent {
 	private resize() {
 		let wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 		overwolf.windows.getCurrentWindow((currentWindow) => {
-			let height = wrapper.getBoundingClientRect().height + 20;
-			let width = currentWindow.window.width;
+			let height = parseInt(wrapper.getBoundingClientRect().height + 20, 10);
+			let width = parseInt(currentWindow.window.width, 10);
 			console.log('and current window', currentWindow);
 			console.log('rect2', wrapper.getBoundingClientRect());
 			overwolf.games.getRunningGameInfo((gameInfo) => {
-				let gameWidth = gameInfo.width;
-				let gameHeight = gameInfo.height;
+				let gameWidth = parseInt(gameInfo.width, 10);
+				let gameHeight = parseInt(gameInfo.height, 10);
 				overwolf.windows.changeSize(currentWindow.window.id, width, height, (changeSize) => {
 					console.log('changed window size', changeSize);
 					overwolf.windows.changePosition(currentWindow.window.id, (gameWidth - width), (gameHeight - height), (changePosition) => {
