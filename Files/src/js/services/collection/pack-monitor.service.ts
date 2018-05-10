@@ -26,6 +26,8 @@ export class PackMonitor {
 	private busy = false;
 	private hadNewCard = false;
 
+	private dpi = 1;
+
 	private totalDustInPack = 0;
 	private totalDuplicateCards = 0;
 	// private timer: any;
@@ -37,12 +39,18 @@ export class PackMonitor {
 		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService) {
 
+		// You need to logout for the new dpi to take effect, so we can cache the value
+		overwolf.games.getRunningGameInfo((gameInfo) => {
+			this.dpi = gameInfo.logicalWidth / gameInfo.width;
+		});
+
 		this.gameEvents.onGameStart.subscribe(() => {
 			this.unrevealedCards = [];
 		})
 
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
+
 				this.busy = true;
 				// clearTimeout(this.timer);
 
@@ -116,9 +124,9 @@ export class PackMonitor {
 
 	private cardClicked(data, callback: Function) {
 		overwolf.games.getRunningGameInfo((result) => {
-			let x = 1.0 * data.x / result.width;
-			let y = 1.0 * data.y / result.height;
-			console.log('clicked at ', x, y, data, result);
+			let x = 1.0 * data.x / (result.width * this.dpi);
+			let y = 1.0 * data.y / (result.height * this.dpi);
+			// console.log('clicked at ', x, y, data, result);
 
 			// Top left
 			let ret = -1;
