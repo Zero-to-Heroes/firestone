@@ -105,18 +105,24 @@ export class NotificationsComponent {
 		let wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 		overwolf.windows.getCurrentWindow((currentWindow) => {
 			let height = wrapper.getBoundingClientRect().height + 20;
-			let width = currentWindow.window.width;
-			// console.log('and current window', currentWindow);
-			// console.log('rect2', wrapper.getBoundingClientRect());
+			let width = 500;
+			console.log('and current window', currentWindow);
+			console.log('rect2', wrapper.getBoundingClientRect());
 			overwolf.games.getRunningGameInfo((gameInfo) => {
-				let gameWidth = gameInfo.width;
-				let gameHeight = gameInfo.height;
+				let gameWidth = gameInfo.logicalWidth;
+				let gameHeight = gameInfo.logicalHeight;
+				let dpi = gameWidth / gameInfo.width;
+				console.log('logical info', gameWidth, gameHeight, dpi);
 				overwolf.windows.changeSize(currentWindow.window.id, width, height, (changeSize) => {
-					// console.log('changed window size', changeSize);
-					overwolf.windows.changePosition(currentWindow.window.id, (gameWidth - width), (gameHeight - height), (changePosition) => {
-						// console.log('changed window position', changePosition);
+					console.log('changed window size', changeSize);
+					let newLeft = ~~(gameWidth - width * dpi);
+					let newTop = ~~(gameHeight - height * dpi);
+					console.log('changing position', newLeft, newTop);
+					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+					overwolf.windows.changePosition(currentWindow.window.id, newLeft, newTop, (changePosition) => {
+						console.log('changed window position', changePosition);
 						overwolf.windows.getCurrentWindow((tmp) => {
-							// console.log('new window', tmp);
+							console.log('new window', tmp);
 						});
 					});
 				});
