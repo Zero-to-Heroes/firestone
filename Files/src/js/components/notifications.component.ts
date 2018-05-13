@@ -62,6 +62,12 @@ export class NotificationsComponent {
 				// });
 			});
 		})
+
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			if (this.exitGame(res)) {
+				this.closeApp();
+			}
+		});
 		console.log('notifications windows initialized')
 	}
 
@@ -127,6 +133,19 @@ export class NotificationsComponent {
 					});
 				});
 			});
+		});
+	}
+
+	private exitGame(gameInfoResult: any): boolean {
+		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	}
+
+	private closeApp() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				overwolf.windows.close(result.window.id);
+			}
 		});
 	}
 }
