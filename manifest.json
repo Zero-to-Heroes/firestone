@@ -111,13 +111,6 @@
 				"file": "Files/plugins/MindVision.dll",
 				"class": "MindVision.MindVisionPlugin"
 			}
-		},
-		"hotkeys": {
-			"collection": {
-				"title": "Show/hide collection window",
-				"action-type": "custom",
-				"default": "Alt+C"
-			}
 		}
 	}
 }
