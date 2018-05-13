@@ -57,6 +57,12 @@ export class AppComponent {
 			this.startApp(() => this.showWelcomePage());
 		})
 
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			if (this.exitGame(res)) {
+				this.closeApp();
+			}
+		});
+
 		ga('send', 'pageview');
 		console.log('sent pageview to ga', ga.q);
 		ga('send', 'event', 'toast', 'start-app');
@@ -149,5 +155,18 @@ export class AppComponent {
 
 		console.log("HS running");
 		return true;
+	}
+
+	private exitGame(gameInfoResult: any): boolean {
+		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	}
+
+	private closeApp() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				overwolf.windows.close(result.window.id);
+			}
+		});
 	}
 }

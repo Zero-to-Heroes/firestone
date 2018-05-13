@@ -45,19 +45,13 @@ export class NotificationsComponent {
 
 			// Change position to be bottom right?
 			console.log('retrieved current notifications window', result, this.windowId);
-
-			// overwolf.windows.obtainDeclaredWindow("MainWindow", (result) => {
-			// 	if (result.status !== 'success') {
-			// 		console.warn('Could not get MainWindow', result);
-			// 	}
-			// 	this.mainWindowId = result.window.id;
-
-
-			// 	overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
-			// 		console.log('ack sent to main window', result);
-			// 	});
-			// });
 		})
+
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			if (this.exitGame(res)) {
+				this.closeApp();
+			}
+		});
 		console.log('notifications windows initialized')
 	}
 
@@ -116,6 +110,19 @@ export class NotificationsComponent {
 					});
 				});
 			});
+		});
+	}
+
+	private exitGame(gameInfoResult: any): boolean {
+		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	}
+
+	private closeApp() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				overwolf.windows.close(result.window.id);
+			}
 		});
 	}
 }
