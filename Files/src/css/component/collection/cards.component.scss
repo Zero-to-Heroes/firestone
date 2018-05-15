@@ -50,6 +50,14 @@
 			}
 		}
 
+		.toggle {
+			display: none;
+		}
+
+		.open .caret {
+			transform: scale(1, -1);
+		}
+
 		select-dropdown {
 
 			& > div {

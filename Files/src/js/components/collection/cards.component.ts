@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IOption } from 'ng-select';
@@ -108,7 +108,7 @@ declare var overwolf: any;
 		</div>
 	`,
 })
-export class CardsComponent {
+export class CardsComponent implements AfterViewInit {
 
 	private readonly MAX_CARDS_DISPLAYED_PER_PAGE = 18;
 
@@ -136,10 +136,26 @@ export class CardsComponent {
 	// private _showRarities = false;
 	// private showMissingCards = false;
 
-	constructor(
-		// private sanitizer: DomSanitizer,
-		private cards: AllCardsService) {
-		// console.log('constructor CollectionComponent');
+	constructor(private cards: AllCardsService, private elRef: ElementRef) {
+
+	}
+
+	ngAfterViewInit() {
+		// let toggleEl: HTMLElement = this.elRef.nativeElement.querySelector('.toggle');
+		// toggleEl.innerHTML =
+		// 	`<i class="i-30">
+		// 		<svg class="svg-icon-fill">
+		// 			<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
+		// 		</svg>
+		// 	</i>`;
+		let singleEl: HTMLElement = this.elRef.nativeElement.querySelector('.single');
+		let caretEl = singleEl.appendChild(document.createElement('i'));
+		caretEl.innerHTML =
+			`<svg class="svg-icon-fill">
+				<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
+			</svg>`;
+		caretEl.classList.add('i-30');
+		caretEl.classList.add('caret');
 	}
 
 	@Input('set') set cardSet(set: Set) {
