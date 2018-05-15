@@ -20,8 +20,11 @@
 
 .sub-title {
 	@extend %sub-title;
-	margin-bottom: 52px;
 	text-align: center;
+
+	&.sub-title-details {
+		margin-bottom: 52px;
+	}
 }
 
 i {

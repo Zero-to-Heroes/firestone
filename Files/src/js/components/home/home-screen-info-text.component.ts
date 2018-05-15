@@ -1,5 +1,6 @@
 import { Component, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
 
+import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
 
 
@@ -27,6 +28,7 @@ declare var overwolf: any;
 				</i>
 			</div>
 			<span class="sub-title" [innerHTML]="status"></span>
+			<span class="sub-title sub-title-details" [innerHTML]="statusDetails"></span>
 		</div>
 	`,
 })
@@ -37,9 +39,11 @@ export class HomeScreenInfoTextComponent implements OnInit {
 	private notifications: any[];
 	private importantAnnouncement;
 
-	private status;
+	private status: string;
+	private statusDetails: string;
 
-	constructor(private notificationService: RealTimeNotificationService) {
+	constructor(private notificationService: RealTimeNotificationService,
+				private collectionManager: CollectionManager) {
 		setTimeout(() => this.refresh(), 1000);
 	}
 
@@ -47,12 +51,22 @@ export class HomeScreenInfoTextComponent implements OnInit {
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('detecting running game in welcome window', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				this.status = "Hearthlore now follows your Hearthtsone session. <br /> Choose an ability:";
+				this.status = "Hearthlore now follows your Hearthtsone session.";
 			}
 			else {
-				this.status = "No Hearthstone session detected.<br /> Choose an ability:";
+				this.status = "No Hearthstone session detected.";
 			}
+
 		});
+
+		this.collectionManager.getCollection((collection) => {
+			if (!collection || collection.length == 0) {
+				this.statusDetails = "No collection detected. Please launch Hearthstone to synchronize your collection.";
+			}
+			else {
+				this.statusDetails = "Choose an ability:";
+			}
+		})
 	}
 
 	private refresh() {

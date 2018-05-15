@@ -57,7 +57,7 @@ export class IndexedDbService {
 		this.db.getAll('collection', null)
 			.then((collection) => {
 				// console.log('loaded collection', collection);
-				callback(collection[0].cards);
+				callback(collection[0] ? collection[0].cards : []);
 			})
 	}
 
