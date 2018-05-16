@@ -6,6 +6,7 @@ import { CollectionManager } from '../services/collection/collection-manager.ser
 import * as Raven from 'raven-js';
 
 declare var overwolf: any;
+declare var Crate: any;
 
 @Component({
 	selector: 'welcome-page',
@@ -129,5 +130,17 @@ export class WelcomePageComponent {
 			}
 		});
 	};
+
+	private contactSupport() {
+		let crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376"
+		});
+		crate.on('toggle', open => {
+			if (!open) {
+				crate.hide();
+			}
+		})
+	}
 
 }

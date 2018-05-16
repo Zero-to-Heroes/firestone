@@ -8,6 +8,7 @@ import { Events } from '../services/events.service';
 
 declare var overwolf: any;
 declare var ga: any;
+declare var Crate: any;
 
 @Component({
 	selector: 'main-window',
@@ -188,4 +189,16 @@ export class MainWindowComponent {
 			}
 		});
 	};
+
+	private contactSupport() {
+		let crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376"
+		});
+		crate.on('toggle', open => {
+			if (!open) {
+				crate.hide();
+			}
+		})
+	}
 }
