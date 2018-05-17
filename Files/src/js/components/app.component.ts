@@ -162,11 +162,16 @@ export class AppComponent {
 	}
 
 	private closeApp() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				console.log('closing');
-				overwolf.windows.close(result.window.id);
+		overwolf.windows.getOpenWindows((openWindows) => {
+			for (let windowName in openWindows) {
+				overwolf.windows.obtainDeclaredWindow(windowName, (result) => {
+					if (result.status !== 'success') {
+						return;
+					}
+					overwolf.windows.close(result.window.id, (result) => {
+					})
+				});
 			}
-		});
+		})
 	}
 }
