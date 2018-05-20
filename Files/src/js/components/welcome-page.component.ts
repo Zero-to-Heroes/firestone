@@ -5,6 +5,8 @@ import { CollectionManager } from '../services/collection/collection-manager.ser
 
 import * as Raven from 'raven-js';
 
+const HEARTHSTONE_GAME_ID = 9898;
+
 declare var overwolf: any;
 declare var Crate: any;
 
@@ -116,9 +118,28 @@ export class WelcomePageComponent {
 	}
 
 	private closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.hide(result.window.id);
+		// If game is not running, we close all other windows
+		overwolf.games.getRunningGameInfo((res: any) => {
+			console.log('running game info', res);
+			if (!(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
+				overwolf.windows.getOpenWindows((openWindows) => {
+					for (let windowName in openWindows) {
+						overwolf.windows.obtainDeclaredWindow(windowName, (result) => {
+							if (result.status !== 'success') {
+								return;
+							}
+							overwolf.windows.close(result.window.id, (result) => {
+							})
+						});
+					}
+				})
+			}
+			else {
+				overwolf.windows.getCurrentWindow((result) => {
+					if (result.status === "success"){
+						overwolf.windows.close(result.window.id);
+					}
+				});
 			}
 		});
 	};
