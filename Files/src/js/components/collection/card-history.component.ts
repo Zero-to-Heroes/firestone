@@ -51,7 +51,7 @@ declare var ga: any;
 	`,
 })
 // 7.1.1.17994
-export class CardHistoryComponent implements OnInit {
+export class CardHistoryComponent {
 
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
@@ -62,9 +62,15 @@ export class CardHistoryComponent implements OnInit {
 	private limit = 100;
 
 	constructor(private storage: CardHistoryStorageService, private events: Events) {
+		overwolf.windows.onStateChanged.addListener((message) => {
+			console.log('state changed', message);
+			if (message.window_state == 'normal') {
+				this.refreshContents();
+			}
+		});
 	}
 
-	ngOnInit() {
+	refreshContents() {
 		console.log('request to load');
 		this.storage.loadAll(
 			(result: CardHistory[]) => {

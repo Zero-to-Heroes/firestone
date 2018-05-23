@@ -25,7 +25,7 @@ declare var overwolf: any;
 	`,
 })
 // 7.1.1.17994
-export class SetsComponent implements OnInit {
+export class SetsComponent {
 
 	private showStandard = true;
 	private showWild = true;
@@ -35,7 +35,12 @@ export class SetsComponent implements OnInit {
 	private selectedSet: Set;
 
 	constructor(private _events: Events, private collectionManager: CollectionManager, private cards: AllCardsService) {
-
+		overwolf.windows.onStateChanged.addListener((message) => {
+			console.log('state changed', message);
+			if (message.window_state == 'normal') {
+				this.refreshContents();
+			}
+		});
 	}
 
 	@Input('selectedFormat') set selectedFormat(format: string) {
@@ -55,7 +60,7 @@ export class SetsComponent implements OnInit {
 		}
 	}
 
-	ngOnInit() {
+	refreshContents() {
 		this.standardSets = this.cards.getStandardSets();
 		this.wildSets = this.cards.getWildSets();
 		// console.log('sets', this.standardSets, this.wildSets);
