@@ -38,7 +38,7 @@ declare var Crate: any;
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
 							</svg>
 						</button>
-						<button class="i-30 close-button" (click)="closeWindow()">
+						<button class="i-30 close-button" (click)="closeWindow(true)">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 							</svg>
@@ -46,7 +46,7 @@ declare var Crate: any;
 					</div>
 				</section>
 				<home-screen-info-text></home-screen-info-text>
-				<app-choice (close)="closeWindow()"></app-choice>
+				<app-choice (close)="closeWindow(false)"></app-choice>
 				<social-media></social-media>
 				<version></version>
 			</div>
@@ -78,6 +78,7 @@ declare var Crate: any;
 export class WelcomePageComponent {
 
 	private emptyCollection = false;
+	private thisWindowId: string;
 
 	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
 		this.collectionManager.getCollection((collection) => {
@@ -86,42 +87,24 @@ export class WelcomePageComponent {
 				this.emptyCollection = true;
 			}
 		})
+
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success"){
+				this.thisWindowId = result.window.id;
+			}
+		});
 	}
 
 	@HostListener('mousedown', ['$event'])
 	private dragMove(event: MouseEvent) {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.dragMove(result.window.id);
-			}
-		});
+		overwolf.windows.dragMove(this.thisWindowId);
 	};
 
-	private openCollection() {
-		if (this.emptyCollection) {
-			return;
-		}
-
-		console.log('showing collection page');
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-			console.log('got collection window', result);
-
-			overwolf.windows.restore(result.window.id, (result) => {
-				console.log('CollectionWindow is on?', result);
-				this.closeWindow();
-			})
-		});
-	}
-
-	private closeWindow() {
+	private closeWindow(quitApp: boolean) {
 		// If game is not running, we close all other windows
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('running game info', res);
-			if (!(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
+			if (quitApp && !(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
 				overwolf.windows.getOpenWindows((openWindows) => {
 					for (let windowName in openWindows) {
 						overwolf.windows.obtainDeclaredWindow(windowName, (result) => {
@@ -135,21 +118,13 @@ export class WelcomePageComponent {
 				})
 			}
 			else {
-				overwolf.windows.getCurrentWindow((result) => {
-					if (result.status === "success"){
-						overwolf.windows.close(result.window.id);
-					}
-				});
+				overwolf.windows.hide(this.thisWindowId);
 			}
 		});
 	};
 
 	private minimizeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.minimize(result.window.id);
-			}
-		});
+		overwolf.windows.minimize(this.thisWindowId);
 	};
 
 	private contactSupport() {
