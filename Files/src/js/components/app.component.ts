@@ -7,6 +7,7 @@ import { PackMonitor } from '../services/collection/pack-monitor.service';
 import { AchievementsMonitor } from '../services/achievement/achievements-monitor.service';
 import { DebugService } from '../services/debug.service';
 import { LogStatusService } from '../services/log-status.service';
+import { HsPublicEventsListener } from '../services/hs-public-events-listener.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -28,6 +29,7 @@ export class AppComponent {
 		private packMonitor: PackMonitor,
 		private debugService: DebugService,
 		private collectionManager: CollectionManager,
+		private publicEventsListener: HsPublicEventsListener,
 		private achievementsMonitor: AchievementsMonitor,
 		private logStatusService: LogStatusService) {
 

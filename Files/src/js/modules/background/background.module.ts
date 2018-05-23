@@ -13,6 +13,7 @@ import { AppComponent }  from '../../components/app.component';
 import { DebugService } from '../../services/debug.service';
 import { Events }  from '../../services/events.service';
 import { GameEvents }  from '../../services/game-events.service';
+import { HsPublicEventsListener }  from '../../services/hs-public-events-listener.service';
 import { LogListenerService }  from '../../services/log-listener.service';
 import { LogRegisterService }  from '../../services/log-register.service';
 import { LogStatusService }  from '../../services/log-status.service';
@@ -79,6 +80,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		Events,
 		DebugService,
 		HearthHeadSyncService,
+		HsPublicEventsListener,
 		GameEvents,
 		IndexedDbService,
 		LogListenerService,
