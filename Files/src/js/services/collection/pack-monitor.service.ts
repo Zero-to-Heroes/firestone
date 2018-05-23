@@ -39,13 +39,13 @@ export class PackMonitor {
 		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService) {
 
-		// You need to logout for the new dpi to take effect, so we can cache the value
-		overwolf.games.getRunningGameInfo((gameInfo) => {
-			this.dpi = gameInfo.logicalWidth / gameInfo.width;
-		});
-
 		this.gameEvents.onGameStart.subscribe(() => {
 			this.unrevealedCards = [];
+
+			// You need to logout for the new dpi to take effect, so we can cache the value
+			overwolf.games.getRunningGameInfo((gameInfo) => {
+				this.dpi = gameInfo.logicalWidth / gameInfo.width;
+			});
 		})
 
 		this.events.on(Events.NEW_PACK)
