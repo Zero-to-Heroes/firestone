@@ -2,14 +2,29 @@
 @import '../global/fonts';
 
 html {
-	// background-color: white;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 body {
 	margin: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .notifications {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+
+    simple-notifications {
+	    width: 100%;
+	    height: 100%;
+	    position: relative;
+    }
 
 	.simple-notification-wrapper.simple-notification-wrapper {
 		top: 0;
@@ -21,7 +36,12 @@ body {
 		    padding: 0;
 		    background: transparent;
 		    border: none;
+		    display: flex;
 		    // margin-bottom: -10px;
+
+		    & > div {
+		    	pointer-events: none;
+		    }
 
 		    .sn-content {
 			    padding: 0;

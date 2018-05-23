@@ -1,4 +1,4 @@
-import { Component, NgZone, ElementRef, Renderer2, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, NgZone, ElementRef, Renderer2, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
@@ -28,9 +28,10 @@ export class NotificationsComponent {
 
 	private toastOptions = {
 		// timeOut: this.timeout,
-		pauseOnHover: true,
+		pauseOnHover: false,
 		showProgressBar: false,
-		clickToClose: false
+		clickToClose: false,
+		maxStack: 5
 	}
 
 	constructor(
@@ -85,6 +86,7 @@ export class NotificationsComponent {
 
 			this.ngZone.run(() => {
 				let toast = this.notificationService.html(htmlMessage);
+				// console.log('running toast message in zone', toast);
 				toast.click.subscribe((event) => {
 					console.log('registered click on toast');
 					if (cardId) {
@@ -98,41 +100,36 @@ export class NotificationsComponent {
 	}
 
 	private created(event) {
-		console.log('created', event);
 		this.resize();
 	}
 
 	private destroyed(event) {
-		console.log('destroyed', event);
 		this.resize();
 	}
 
 	private resize() {
-		let wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
-		overwolf.windows.getCurrentWindow((currentWindow) => {
+		setTimeout(() => {
+			let wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			let height = wrapper.getBoundingClientRect().height + 20;
 			let width = 500;
-			console.log('and current window', currentWindow);
+			console.log('resizing, current window');
 			console.log('rect2', wrapper.getBoundingClientRect());
 			overwolf.games.getRunningGameInfo((gameInfo) => {
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
 				let dpi = gameWidth / gameInfo.width;
 				console.log('logical info', gameWidth, gameHeight, dpi);
-				overwolf.windows.changeSize(currentWindow.window.id, width, height, (changeSize) => {
-					console.log('changed window size', changeSize);
+				overwolf.windows.changeSize(this.windowId, width, height, (changeSize) => {
+					console.log('changed window size');
+					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 					let newLeft = ~~(gameWidth - width * dpi);
 					let newTop = ~~(gameHeight - height * dpi);
-					console.log('changing position', newLeft, newTop);
-					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-					overwolf.windows.changePosition(currentWindow.window.id, newLeft, newTop, (changePosition) => {
-						console.log('changed window position', changePosition);
-						overwolf.windows.getCurrentWindow((tmp) => {
-							console.log('new window', tmp);
-						});
+					console.log('changing position', newLeft, newTop, width, height);
+					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
+						console.log('changed window position');
 					});
 				});
-			});
+			});			
 		});
 	}
 
