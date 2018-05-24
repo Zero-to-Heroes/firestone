@@ -33,7 +33,7 @@ declare var overwolf: any;
 	`,
 })
 
-export class HomeScreenInfoTextComponent implements OnInit {
+export class HomeScreenInfoTextComponent {
 
 	private currentNotificationIndex = 0;
 	private notifications: any[];
@@ -45,9 +45,15 @@ export class HomeScreenInfoTextComponent implements OnInit {
 	constructor(private notificationService: RealTimeNotificationService,
 				private collectionManager: CollectionManager) {
 		setTimeout(() => this.refresh(), 1000);
+		overwolf.windows.onStateChanged.addListener((message) => {
+			console.log('state changed', message);
+			if (message.window_state == 'normal') {
+				this.refreshContents();
+			}
+		});
 	}
 
-	ngOnInit() {
+	private refreshContents() {
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('detecting running game in welcome window', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {

@@ -61,10 +61,19 @@ export class AppChoiceComponent {
 	private noCollection = false;
 
 	constructor(private collectionManager: CollectionManager) {
+		overwolf.windows.onStateChanged.addListener((message) => {
+			console.log('state changed', message);
+			if (message.window_state == 'normal') {
+				this.refreshContents();
+			}
+		});
+	}
+
+	private refreshContents() {
 		this.collectionManager.getCollection((collection) => {
 			console.log('retrieved collection', collection);
 			this.noCollection = !collection || collection.length == 0;
-		})
+		});
 	}
 
 	private showCollection() {
