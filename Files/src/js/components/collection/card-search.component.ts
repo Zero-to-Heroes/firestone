@@ -29,6 +29,7 @@ declare var ga: any;
 				<input
 					[(ngModel)]="searchString"
 					(input)="onSearchStringChange()"
+					(mousedown)="onMouseDown($event)"
 					(blur)="onFocusLost()"
 					placeholder="Search card..." />
 			</label>
@@ -81,6 +82,10 @@ export class CardSearchComponent {
 		setTimeout(() => {
 			this.showSearchResults = false;
 		}, 500);
+	}
+
+	private onMouseDown(event: Event) {
+		event.stopPropagation();
 	}
 
 	private updateSearchResults() {
