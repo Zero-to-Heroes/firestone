@@ -103,6 +103,11 @@ body {
 		    	width: 150px;
 		    	height: 30px;
 		    	display: flex;
+
+		    	.close-button:hover {
+		    		background: $grey01;
+		    		color: $darkred;
+		    	}
 		    }
 	    }
 
