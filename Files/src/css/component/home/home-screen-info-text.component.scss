@@ -21,6 +21,7 @@
 .sub-title {
 	@extend %sub-title;
 	text-align: center;
+	color: $green01;
 
 	&.sub-title-details {
 		margin-bottom: 52px;

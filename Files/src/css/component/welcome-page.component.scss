@@ -81,6 +81,7 @@ body {
 		    height: 80px;
 		    z-index: 400;
     		flex-shrink: 0;
+    		color: $green01;
 
     		.first {
     			display: flex;
@@ -89,7 +90,7 @@ body {
     		}
 
     		player-name {
-			    border-right: 1px solid $grey03;
+			    border-right: 1px solid $green01;
 			    margin: 10px 11px 9px 0;
 			    padding-right: 15px;
 			    display: flex;
@@ -102,6 +103,10 @@ body {
 		    .controls {
 		    	height: 30px;
 		    	display: flex;
+
+		    	button {
+		    		color: $green01;
+		    	}
 
 		    	.close-button:hover {
 		    		background: $grey01;
