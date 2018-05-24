@@ -55,18 +55,18 @@ export class HomeScreenInfoTextComponent implements OnInit {
 			}
 			else {
 				this.status = "No Hearthstone session detected.";
+				this.collectionManager.getCollection((collection) => {
+					if (!collection || collection.length == 0) {
+						this.status = "Please launch Hearthstone to synchronize your collection.";
+						this.statusDetails = null;
+					}
+					else {
+						this.statusDetails = "Choose an ability:";
+					}
+				})
 			}
 
 		});
-
-		this.collectionManager.getCollection((collection) => {
-			if (!collection || collection.length == 0) {
-				this.statusDetails = "No collection detected. Please launch Hearthstone to synchronize your collection.";
-			}
-			else {
-				this.statusDetails = "Choose an ability:";
-			}
-		})
 	}
 
 	private refresh() {
