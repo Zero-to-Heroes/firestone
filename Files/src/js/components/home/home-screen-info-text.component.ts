@@ -14,13 +14,13 @@ declare var overwolf: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="home-screen-info">
-			<div class="hearthlore">
+			<div class="app-title">
 				<i class="i-35 gold-theme left" *ngIf="!importantAnnouncement">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
 					</svg>
 				</i>
-				<span class="title">{{importantAnnouncement ? 'Update ' : 'Welcome to Hearthlore'}}</span>
+				<span class="title">{{importantAnnouncement ? 'Update ' : 'Welcome to Firestone'}}</span>
 				<i class="i-35 gold-theme right" *ngIf="!importantAnnouncement">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
@@ -51,7 +51,7 @@ export class HomeScreenInfoTextComponent implements OnInit {
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('detecting running game in welcome window', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				this.status = "Hearthlore now follows your Hearthtsone session.";
+				this.status = "Firestone now follows your Hearthstone session.";
 			}
 			else {
 				this.status = "No Hearthstone session detected.";

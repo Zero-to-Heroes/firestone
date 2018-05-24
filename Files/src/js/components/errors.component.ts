@@ -16,7 +16,7 @@ declare var overwolf: any;
 				<div class="menu-bar">
 					<span class="header">
 						<img class="logo" src="/IconStore.png" />
-						<span>HS Collection Companion - An error occured</span>
+						<span>Firestone - An error occured</span>
 					</span>
 					<i class="glyphicon glyphicon-remove" (click)="closeWindow()"></i>
 				</div>

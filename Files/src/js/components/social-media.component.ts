@@ -30,6 +30,6 @@ export class SocialMediaComponent {
 	}
 
 	private openGitHub() {
-		window.open('https://github.com/Zero-to-Heroes/overwolf-collection-companion/');
+		window.open('https://github.com/Zero-to-Heroes/firestone/');
 	}
 }
