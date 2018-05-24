@@ -35,10 +35,6 @@
 			@extend %app-details;
 		}
 
-		.last {
-			margin-right: 0;
-		}
-
 		.banner {
 			height: 8px;
 			width: 100%;
@@ -49,6 +45,10 @@
 
 	.coming-sson {
 		display: none;
+	}
+
+	&.last {
+		margin-right: 0;
 	}
 
 	&.disabled {
