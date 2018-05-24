@@ -129,6 +129,11 @@ body {
 		    	width: 150px;
 		    	height: 30px;
 		    	display: flex;
+
+		    	.close-button:hover {
+		    		background: $yellow03;
+		    		color: $darkred;
+		    	}
 		    }
 	    }
 
