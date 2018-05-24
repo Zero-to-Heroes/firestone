@@ -60,6 +60,7 @@ export class CardHistoryComponent {
 	private shownHistory: CardHistory[];
 	private totalHistoryLength: number;
 	private limit = 100;
+	private refreshing = false;
 
 	constructor(private storage: CardHistoryStorageService, private events: Events) {
 		overwolf.windows.onStateChanged.addListener((message) => {
@@ -71,12 +72,17 @@ export class CardHistoryComponent {
 	}
 
 	refreshContents() {
+		if (this.refreshing) {
+			return;
+		}
+		this.refreshing = true;
 		console.log('request to load');
 		this.storage.loadAll(
 			(result: CardHistory[]) => {
 				console.log('loaded history', result);
 				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
+				this.refreshing = false;
 			},
 			this.limit);
 

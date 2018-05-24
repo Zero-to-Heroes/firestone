@@ -34,6 +34,8 @@ export class SetsComponent {
 	private wildSets: Set[];
 	private selectedSet: Set;
 
+	private refreshing = false;
+
 	constructor(private _events: Events, private collectionManager: CollectionManager, private cards: AllCardsService) {
 		overwolf.windows.onStateChanged.addListener((message) => {
 			console.log('state changed', message);
@@ -61,6 +63,10 @@ export class SetsComponent {
 	}
 
 	refreshContents() {
+		if (this.refreshing) {
+			return;
+		}
+		this.refreshing = true;
 		this.standardSets = this.cards.getStandardSets();
 		this.wildSets = this.cards.getWildSets();
 		// console.log('sets', this.standardSets, this.wildSets);
@@ -73,6 +79,7 @@ export class SetsComponent {
 			this.wildSets.forEach((standardSet: Set) => {
 				this.updateSet(collection, standardSet);
 			})
+			this.refreshing = false;
 		})
 		// console.log('after adding owned cards', this.standardSets);
 	}
