@@ -21,13 +21,13 @@ declare var Crate: any;
 		<div class="root">
 			<div class="app-container">
 				<section class="menu-bar">
-					<player-name></player-name>
+					<!-- <player-name></player-name> -->
 					<div class="controls">
-						<button class="i-30 pink-button" (click)="showSettings()">
+						<!-- <button class="i-30 pink-button" (click)="showSettings()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
 							</svg>
-						</button>
+						</button> -->
 						<button class="i-30 pink-button" (click)="contactSupport()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
