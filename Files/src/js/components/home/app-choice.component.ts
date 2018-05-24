@@ -68,6 +68,9 @@ export class AppChoiceComponent {
 	}
 
 	private showCollection() {
+		if (this.noCollection) {
+			return;
+		}
 		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get CollectionWindow', result);
