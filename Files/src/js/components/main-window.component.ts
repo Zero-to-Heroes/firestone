@@ -29,18 +29,18 @@ declare var Crate: any;
 							<!-- <hearthhead></hearthhead> -->
 						</div>
 					</div>
-					<player-name></player-name>
+					<!-- <player-name></player-name> -->
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
 							</svg>
 						</button>
-						<button class="i-30 pink-button" (click)="showSettings()">
+						<!-- <button class="i-30 pink-button" (click)="showSettings()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
 							</svg>
-						</button>
+						</button> -->
 						<button class="i-30 pink-button" (click)="contactSupport()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
@@ -120,11 +120,11 @@ export class MainWindowComponent {
 			}
 		});
 
-		this.events.on(Events.HEARTHHEAD_LOGIN).subscribe(
-			(data) => {
-				this.showLogin = true;
-			}
-		)
+		// this.events.on(Events.HEARTHHEAD_LOGIN).subscribe(
+		// 	(data) => {
+		// 		this.showLogin = true;
+		// 	}
+		// )
 
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
@@ -149,16 +149,12 @@ export class MainWindowComponent {
 					});
 				})
 			}
-		})
+		});
 	}
 
-	@HostListener('mousedown', ['$event'])
-	private dragMove(event: MouseEvent) {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.dragMove(result.window.id);
-			}
-		});
+	@HostListener('mousedown')
+	private dragMove() {
+		overwolf.windows.dragMove(this.windowId);
 	};
 
 	private goHome() {
@@ -175,19 +171,11 @@ export class MainWindowComponent {
 	};
 
 	private closeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.hide(result.window.id);
-			}
-		});
+		overwolf.windows.hide(this.windowId);
 	};
 
 	private minimizeWindow() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				overwolf.windows.minimize(result.window.id);
-			}
-		});
+		overwolf.windows.minimize(this.windowId);
 	};
 
 	private contactSupport() {
