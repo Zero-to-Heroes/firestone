@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, ElementRef, HostListener } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
@@ -62,13 +62,17 @@ export class CardHistoryComponent {
 	private limit = 100;
 	private refreshing = false;
 
-	constructor(private storage: CardHistoryStorageService, private events: Events) {
+	constructor(
+		private storage: CardHistoryStorageService, 
+		private el: ElementRef,
+		private events: Events) {
 		overwolf.windows.onStateChanged.addListener((message) => {
 			console.log('state changed', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}
 		});
+		this.refreshContents();
 	}
 
 	refreshContents() {
@@ -109,6 +113,18 @@ export class CardHistoryComponent {
 		}
 		else {
 			this.shownHistory = this.cardHistory;
+		}
+	}
+
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	private onHistoryClick(event: MouseEvent) {
+		console.log('handling history click', event);
+		let rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
+		console.log('element rect', rect);
+		let scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
 		}
 	}
 }

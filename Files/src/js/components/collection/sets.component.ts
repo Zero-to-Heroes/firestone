@@ -43,6 +43,7 @@ export class SetsComponent {
 				this.refreshContents();
 			}
 		});
+		this.refreshContents();
 	}
 
 	@Input('selectedFormat') set selectedFormat(format: string) {
