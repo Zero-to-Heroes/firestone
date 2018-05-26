@@ -29,6 +29,11 @@
         sets {
             display: flex;
         }
+
+        cards {
+            flex-grow: 1;
+            display: flex;
+        }
     }
 
     .secondary {

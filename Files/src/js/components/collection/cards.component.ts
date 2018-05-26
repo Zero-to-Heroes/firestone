@@ -50,43 +50,51 @@ declare var overwolf: any;
 			</ul>
 			<!-- Show screen when you have completed a set -->
 			<section class="empty-state no-missing-card-in-set" *ngIf="_set && !_activeCards.length > 0 && _activeFilter == FILTER_DONT_OWN">
-				<i class="i-238X167 pale-pink-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"/>
-					</svg>
-				</i>
-				<span class="title">This set is complete and you have it all!</span>
-				<span class="subtitle">Keep up the good work.</span>
+				<div class="state-container">
+					<i class="i-238X167 pale-pink-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"/>
+						</svg>
+					</i>
+					<span class="title">This set is complete and you have it all!</span>
+					<span class="subtitle">Keep up the good work.</span>
+				</div>
 			</section>
 			<!-- Show screen when you have no card in a set -->
 			<section class="empty-state no-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_OWN">
-				<i class="i-167X143 pale-pink-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration"/>
-					</svg>
-				</i>
-				<span class="title">No cards from this set yet!</span>
-				<span class="subtitle">Don't worry, keep playing and get new packs.</span>
+				<div class="state-container">
+					<i class="i-167X143 pale-pink-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration"/>
+						</svg>
+					</i>
+					<span class="title">No cards from this set yet!</span>
+					<span class="subtitle">Don't worry, keep playing and get new packs.</span>
+				</div>
 			</section>
 			<!-- Show screen when you have no golden card in a set -->
 			<section class="empty-state no-golden-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_GOLDEN_OWN">
-				<i class="i-121x147 pale-pink-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration"/>
-					</svg>
-				</i>
-				<span class="title">No golden cards from this set yet!</span>
-				<span class="subtitle">Don't worry, keep playing and get these shiny friends.</span>
+				<div class="state-container">
+					<i class="i-121x147 pale-pink-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration"/>
+						</svg>
+					</i>
+					<span class="title">No golden cards from this set yet!</span>
+					<span class="subtitle">Don't worry, keep playing and get these shiny friends.</span>
+				</div>
 			</section>
 			<!-- Show screen when no result in search -->
 			<section class="empty-state no-search-result" *ngIf="_activeCards.length == 0 && _searchString">
-				<i class="i-110X86 pale-pink-theme">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
-					</svg>
-				</i>
-				<span class="title">Oh No! Nothing Matches: "{{_searchString}}"</span>
-				<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
+				<div class="state-container">
+					<i class="i-110X86 pale-pink-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
+						</svg>
+					</i>
+					<span class="title">Oh No! Nothing Matches: "{{_searchString}}"</span>
+					<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
+				</div>
 			</section>
 			<ul class="pagination" *ngIf="_numberOfPages > 1">
 				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">

@@ -4,6 +4,9 @@
 .cards {
 	position: relative;
 	top: -2px;
+	flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .set-title {
@@ -118,19 +121,26 @@
 
 .empty-state {
 	@extend %empty-state;
+	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
 	justify-items: center;
 	align-items: center;
 
-	i {
-		margin-top: 65px;
-		margin-bottom: 30px;
-	}
+	.state-container {
+		margin: auto;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
 
-	.title {
-		@extend %empty-state-title;
-		margin-bottom: 15px;
+		i {
+			margin-bottom: 30px;
+		}
+
+		.title {
+			@extend %empty-state-title;
+			margin-bottom: 15px;
+		}
 	}
 
 }
