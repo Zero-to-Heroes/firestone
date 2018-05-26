@@ -51,6 +51,7 @@ export class HomeScreenInfoTextComponent {
 				this.refreshContents();
 			}
 		});
+		this.refreshContents();
 	}
 
 	private refreshContents() {

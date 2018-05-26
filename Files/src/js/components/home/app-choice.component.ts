@@ -58,7 +58,7 @@ export class AppChoiceComponent {
 
 	@Output() close = new EventEmitter();
 
-	private noCollection = false;
+	private noCollection = true;
 
 	constructor(private collectionManager: CollectionManager) {
 		overwolf.windows.onStateChanged.addListener((message) => {
@@ -67,6 +67,7 @@ export class AppChoiceComponent {
 				this.refreshContents();
 			}
 		});
+		this.refreshContents();
 	}
 
 	private refreshContents() {
