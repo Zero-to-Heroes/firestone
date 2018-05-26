@@ -24,7 +24,7 @@ declare var overwolf: any;
 			<span *ngIf="!_set && _searchString" class="set-title">
 				<span class="text set-name">{{_searchString}}</span>
 			</span>
-			<div class="show-filter" *ngIf="_activeCards">
+			<div class="show-filter" *ngIf="_activeCards" [ngStyle]="{'display': _searchString ? 'none' : 'flex'}">
 				<span class="label">Show</span>
 				<ng-select
 					[options]="selectOptions"
