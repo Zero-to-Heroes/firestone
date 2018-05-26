@@ -25,8 +25,7 @@
             @extend %card-title;
             padding-bottom: 14px;
             border-bottom: 1px solid $yellow03;
-            text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 20px;
         }
 
         .card-info {
@@ -79,8 +78,12 @@
                 }
             }
 
-            &.flavor-text .sub-title {
-                display: block;
+            &.flavor-text {
+                margin-top: 20px;
+
+                .sub-title {
+                    display: block;
+                }
             }
         }
     }
