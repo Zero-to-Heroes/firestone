@@ -57,6 +57,7 @@ export class CollectionMenuComponent {
 	}
 
 	private goToCollectionView() {
+		this._events.broadcast(Events.SHOW_CARDS, null, null);
 		this._events.broadcast(Events.MODULE_SELECTED, 'collection');
 	}
 }
