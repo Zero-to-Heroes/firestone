@@ -154,7 +154,9 @@
 	align-items: center;
 	justify-content: center;
 	list-style: none;
-	margin-top: 12px;
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 
 	li {
 		margin-right: 5px;
