@@ -17,8 +17,8 @@
 	align-self: flex-start;
 	margin-top: -4px;
 
-	li {
-		cursor: pointer;
+	li:hover {
+		color: $grey02;
 	}
 
 	li:after {
