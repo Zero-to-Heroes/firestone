@@ -11,12 +11,14 @@
 		outline: 1px solid $grey03;
 		display: flex;
 
-		&:focus-within {
-			outline: none;
+		&:focus-within, &:hover {
+			// outline: none;
+			background: rgba(255, 255, 255, 0.08);
 		}
 	}
 
 	input {
+		@extend %search-bar-inactive;
 		background: transparent;
 		border: none;
 		cursor: text;
@@ -50,4 +52,8 @@
 	    overflow: auto;
 	    z-index: 1;
 	}
+}
+
+::selection {
+	background-color: $grey04;
 }
