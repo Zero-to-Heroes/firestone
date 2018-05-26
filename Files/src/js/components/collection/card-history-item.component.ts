@@ -26,7 +26,7 @@ declare var ga: any;
 				</i>
 			</span>
 			<span class="new" *ngIf="historyItem.isNewCard">
-				<span>NEW</span>
+				<span>New</span>
 			</span>
 			<span class="date">{{creationDate()}}</span>
 		</div>
