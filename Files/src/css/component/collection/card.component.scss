@@ -10,6 +10,7 @@
 	img {
 		width: 100%;
 		position: relative;
+		opacity: 0.9;
 	}
 
 	.placeholder {
@@ -70,6 +71,13 @@
 		.real-card {
 			// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
 			filter: grayscale(1) sepia() saturate(100%) hue-rotate(300deg) opacity(0.5);
+		}
+	}
+
+	&:hover {
+
+		img {
+			opacity: 1;
 		}
 	}
 }
