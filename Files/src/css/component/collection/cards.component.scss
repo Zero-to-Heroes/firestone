@@ -95,7 +95,9 @@
 				}
 
 				&.highlighted {
-					background-color: $grey03;
+					// grey03
+					background-color: rgba(120, 95, 107, 0.4);
+
 				}
 			}
 		}
