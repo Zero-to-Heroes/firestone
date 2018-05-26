@@ -64,7 +64,7 @@ body {
 	    display: flex;
 	    flex-direction: column;
     	overflow: hidden;
-    	outline: 1px solid #785f6b;
+    	outline: 1px solid $grey04;
     	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
 
 		.navigation {
@@ -98,7 +98,7 @@ body {
 		    height: 80px;
 		    z-index: 400;
     		flex-shrink: 0;
-    		border-bottom: 1px solid #785f6b;
+    		border-bottom: 1px solid $grey04;
 
     		.first {
     			display: flex;
