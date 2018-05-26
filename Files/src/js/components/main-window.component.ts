@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostListener, NgZone } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
@@ -88,8 +88,6 @@ declare var Crate: any;
 			<!--<card-modal></card-modal>-->
 			<login *ngIf="showLogin" (close)="showLogin = false"></login>
 
-			<div class="overlay" *ngIf="fullCardId"></div>
-			<full-card class="full-card" [cardId]="fullCardId" (close)="this.fullCardId = null" *ngIf="fullCardId"></full-card>
 			<tooltips></tooltips>
 		</div>
 	`,
@@ -102,14 +100,12 @@ export class MainWindowComponent {
 	private lastSize: any;
 
 	private showLogin = false;
-	private fullCardId: string;
 
 	private windowId: string;
 
 	private selectedModule = 'collection';
 
 	constructor(
-		private ngZone: NgZone,
 		private debugService: DebugService,
 		private events: Events,
 		private collectionManager: CollectionManager) {
@@ -132,24 +128,6 @@ export class MainWindowComponent {
 				// console.log('selected module', this.selectedModule);
 			}
 		)
-
-		this.events.on(Events.SHOW_CARD_MODAL).subscribe(
-			(event) => {
-				this.fullCardId = event.data[0];
-			}
-		);
-		overwolf.windows.onMessageReceived.addListener((message) => {
-			console.log('received', message);
-			if (message.id === 'click-card') {
-				this.ngZone.run(() => {
-					this.fullCardId = message.content;
-					console.log('setting fullCardId', this.fullCardId);
-					overwolf.windows.restore(this.windowId, (result) => {
-						console.log('collection window restored');
-					});
-				})
-			}
-		});
 	}
 
 	@HostListener('mousedown')

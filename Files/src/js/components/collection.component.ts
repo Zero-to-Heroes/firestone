@@ -30,6 +30,8 @@ declare var ga: any;
 					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
 					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet" [searchString]="searchString"></cards>
 				</ng-container>
+				<div class="overlay" *ngIf="fullCardId"></div>
+				<full-card class="full-card" [cardId]="fullCardId" (close)="this.fullCardId = null" *ngIf="fullCardId"></full-card>
 			</section>
 			<section class="secondary">
 				<card-search>Search card</card-search>
@@ -49,9 +51,19 @@ export class CollectionComponent {
 	private searchString: string;
 
 	private _cardList: SetCard[];
+	private fullCardId: string;
+	private windowId: string;
 
-	constructor(private _events: Events) {
+	constructor(
+		private _events: Events,
+		private ngZone: NgZone) {
 		ga('send', 'event', 'collection', 'show');
+
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success"){
+				this.windowId = result.window.id;
+			}
+		});
 
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
@@ -96,5 +108,24 @@ export class CollectionComponent {
 				this.searchString = data.data[1];
 			}
 		)
+
+
+		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
+			(event) => {
+				this.fullCardId = event.data[0];
+			}
+		);
+		overwolf.windows.onMessageReceived.addListener((message) => {
+			console.log('received', message);
+			if (message.id === 'click-card') {
+				this.ngZone.run(() => {
+					this.fullCardId = message.content;
+					console.log('setting fullCardId', this.fullCardId);
+					overwolf.windows.restore(this.windowId, (result) => {
+						console.log('collection window restored');
+					});
+				})
+			}
+		});
 	}
 }

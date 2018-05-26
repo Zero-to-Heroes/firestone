@@ -13,6 +13,7 @@
         width: 695px;
         padding-left: 14px;
         margin-top: 0;
+        position: relative;
 
         &.divider {
             border-right: 1px solid $grey03;
@@ -58,6 +59,28 @@
 			}
 		}
 	}
+}
+
+.overlay {
+    position: absolute;
+    top: -15px;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    bottom: -17px;
+}
+
+.full-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
 .ads {
