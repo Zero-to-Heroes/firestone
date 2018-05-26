@@ -118,10 +118,17 @@
                         }
                     }
 
-                    .premium {
+                    .premium.premium {
                         height: 40px;
                         width: 90px;
-                        justify-content: center;
+
+                        .left {
+                            left: -2px;
+                        }
+
+                        .right {
+                            right: -2px;
+                        }
 
                         i {
                             width: 28px !important;

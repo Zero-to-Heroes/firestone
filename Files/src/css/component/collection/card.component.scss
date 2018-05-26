@@ -41,20 +41,28 @@
 
 		.premium {
 			border-color: $yellow03;
-    		padding: 0 0 2px 0;
+    		position: relative;
+    		width: 44px;
+			justify-content: center;
 
     		i {
     			width: 14px;
     			height: 16px;
     			margin-bottom: -4px;
+    			position: absolute;
     		}
 
     		span {
     			margin: 0 1px 0 0;
     		}
 
+    		.left {
+                left: 0;
+            }
+
     		.right {
    				transform: scale(-1, 1);
+				right: 0;
     		}
 		}
 

@@ -24,7 +24,7 @@ declare var overwolf: any;
 					<span>{{card.ownedNonPremium}}</span>
 				</div>
 				<div class="premium" *ngIf="card.ownedPremium > 0 || showCounts">
-					<i class="gold-theme">
+					<i class="gold-theme left">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
 						</svg>
