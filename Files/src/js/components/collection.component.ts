@@ -36,7 +36,16 @@ declare var ga: any;
 			<section class="secondary">
 				<card-search>Search card</card-search>
 				<card-history></card-history>
-				<div class="ads" id="ad-div"></div>
+				<div class="ads-container">
+					<div class="no-ads-placeholder">
+						<i class="i-117X33 gold-theme logo">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
+							</svg>
+						</i>
+					</div>
+					<div class="ads" id="ad-div"></div>
+				</div>
 			</section>
 		</div>
 	`,
