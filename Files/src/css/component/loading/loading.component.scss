@@ -1,0 +1,206 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+body, html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color: transparent;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.root {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, .7));
+
+	.corner {
+		position: absolute;
+
+		&.top-left {
+			top: 0;
+			left: 0;
+		}
+
+		&.top-right {
+			top: 0;
+			right: 0;
+    		transform: rotate(90deg);
+		}
+
+		&.bottom-right {
+			bottom: 0;
+			right: 0;
+    		transform: rotate(180deg);
+    		top: auto;
+		}
+
+		&.bottom-left {
+			bottom: 0;
+			left: 0;
+    		transform: rotate(270deg);
+    		top: auto;
+		}
+	}
+
+    .shadow {
+    	position: absolute;
+	    top: 10px;
+	    left: 10px;
+	    bottom: 10px;
+	    right: 10px;
+	    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    }
+
+	.app-container {
+    	position: relative;
+		background-image: url('/Files/assets/images/backgrounds/loading	-bg.png');
+	    width: calc(100% - 20px);
+	    height: calc(100% - 20px);
+	    display: flex;
+	    flex-direction: column;
+    	overflow: hidden;
+    	outline: 1px solid $brown01;
+    	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+
+	    .menu-bar {
+	    	background: transparent;
+		    display: flex;
+		    flex-direction: row;
+		    align-items: stretch;
+		    justify-content: space-between;
+		    border: none;
+		    width: 100%;
+		    height: 30px;
+		    height: 80px;
+		    z-index: 400;
+    		flex-shrink: 0;
+    		color: $green01;
+
+    		.logo {
+    			top: 10px;
+    			left: 15px;
+    		}
+
+		    .controls {
+		    	height: 30px;
+		    	display: flex;
+
+		    	button {
+		    		color: $green01;
+		    	}
+
+		    	button:hover {
+		    		background-color: $brown01;
+		    	}
+
+		    	.close-button:hover {
+		    		background: $grey01;
+		    		color: $darkred;
+		    	}
+		    }
+	    }
+
+	    .content-container {
+		    position: relative;
+		    flex-grow: 1;
+		    display: flex;
+    		flex-direction: column;
+    		align-items: center;
+
+    		.left {
+    			margin-right: 15px;
+    		}
+
+    		.right {
+    			transform: scale(-1, 1);
+    			margin-left: 15px;
+    		}
+	    }
+	}
+}
+
+.app-title {
+	@extend %loading-screen-title;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sub-title {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 13px;
+
+	span {
+		@extend %hotkey-subtext;
+	}
+
+	.hotkey {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 12px;
+		margin-bottom: 13px;
+	}
+
+	.plus {
+		@extend %hotkey;
+		margin-left: 14px;
+		margin-right: 14px;
+	}
+
+	.key {
+		@extend %hotkey;
+		width: 60px;
+		height: 40px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+    	border: 1px solid;
+	}
+}
+
+.loading-icon {
+	margin-top: 30px;
+}
+
+.ads-container {
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+
+    .no-ads-placeholder {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: $black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .logo {
+        	fill: $yellow01;
+            width: 109px;
+            height: 154px;
+            opacity: 0.2;
+        }
+    }
+
+    .ads {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+}

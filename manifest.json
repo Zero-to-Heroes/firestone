@@ -41,6 +41,18 @@
                 "grab_focus_on_desktop": false,
                 "block_top_window_navigation": true
 			},
+			"LoadingWindow": {
+				"file": "Files/html/loading.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": true,
+		        "size": {"width": 450, "height": 590},
+		        "min_size": {"width": 440, "height": 580},
+		        "max_size": {"width": 440, "height": 580},
+		        "block_top_window_navigation": true,
+		        "popup_blocker": true,
+		        "mute": true
+			},
 			"NotificationsWindow": {
 				"file": "Files/html/notifications.html",
 				"transparent": true,

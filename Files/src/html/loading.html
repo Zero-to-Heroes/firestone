@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Google Analytics -->
+		<script>
+		    var _gaq = _gaq || [];
+		    _gaq.push(['_setAccount', 'UA-65945334-2']);
+		    _gaq.push(['_trackPageview']);
+
+		    (function(i, s, o, g, r, a, m) {
+		        i['GoogleAnalyticsObject'] = r;
+		        i[r] = i[r] || function() {
+		            (i[r].q = i[r].q || []).push(arguments)
+		        }, i[r].l = 1 * new Date();
+		        a = s.createElement(o),
+		            m = s.getElementsByTagName(o)[0];
+		        a.async = 1;
+		        a.src = g;
+		        m.parentNode.insertBefore(a, m)
+		    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+		    ga('create', 'UA-65945334-2', 'auto');
+		    console.log('create ga', ga.q);
+		    ga('set', 'checkProtocolTask', null);
+		</script>
+		<!-- End Google Analytics -->
+  		<script>
+  			var adsReady = false;
+  		</script>
+
+		<title>Firestone</title>
+    	<meta charset="UTF-8">
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+
+  		<script src="../plugins/overwolfplugin.js"></script>
+	</head>
+
+	<body>
+		<loading></loading>
+
+		<script src="http://content.overwolf.com/libs/ads/1/owads.min.js" async onload="onOwAdReady()"></script>
+		<script>
+			function onOwAdReady() {
+				adsReady = true;
+			}
+		</script>
+	</body>
+</html>

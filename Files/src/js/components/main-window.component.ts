@@ -90,7 +90,7 @@ declare var Crate: any;
 				</svg>
 			</i>
 			<!--<card-modal></card-modal>-->
-			<login *ngIf="showLogin" (close)="showLogin = false"></login>
+			<!--<login *ngIf="showLogin" (close)="showLogin = false"></login>-->
 
 			<tooltips></tooltips>
 		</div>

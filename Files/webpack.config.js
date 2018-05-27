@@ -17,7 +17,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeModules = path.join(process.cwd(), 'node_modules');
 const realNodeModules = fs.realpathSync(nodeModules);
 const genDirNodeModules = path.join(process.cwd(), 'src', '$$_gendir', 'node_modules');
-const entryPoints = ["inline","polyfills","sw-register","vendor","background","notifications","welcome","collection","errors"];
+const entryPoints = ["inline","polyfills","sw-register","vendor","background","notifications","welcome","loading","collection","errors"];
 const minimizeCss = false;
 const baseHref = "";
 const deployUrl = "";
@@ -85,6 +85,9 @@ module.exports = {
     ],
     "welcome": [
       "./src\\js\\modules\\welcome\\main.ts"
+    ],
+    "loading": [
+      "./src\\js\\modules\\loading\\main.ts"
     ],
     "collection": [
       "./src\\js\\modules\\collection\\main.ts"
@@ -278,8 +281,8 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["notifications","welcome","collection","errors"],
-      "title": "HS Collection Companion",
+      "excludeChunks": ["notifications","welcome","loading","collection","errors"],
+      "title": "Firestone",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -306,8 +309,36 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background","welcome","collection","errors"],
-      "title": "HS Collection Companion",
+      "excludeChunks": ["background","welcome","loading","collection","errors"],
+      "title": "Firestone",
+      "xhtml": true,
+      "chunksSortMode": function sort(left, right) {
+        let leftIndex = entryPoints.indexOf(left.names[0]);
+        let rightindex = entryPoints.indexOf(right.names[0]);
+        if (leftIndex > rightindex) {
+            return 1;
+        }
+        else if (leftIndex < rightindex) {
+            return -1;
+        }
+        else {
+            return 0;
+        }
+    }
+    }),
+    new HtmlWebpackPlugin({
+      "template": "./src\\html\\loading.html",
+      "filename": "./html\\loading.html",
+      "hash": false,
+      "inject": true,
+      "compile": true,
+      "favicon": false,
+      "minify": false,
+      "cache": true,
+      "showErrors": true,
+      "chunks": "all",
+      "excludeChunks": ["background","notifications","welcome","collection","errors"],
+      "title": "Firestone",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -334,8 +365,8 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background","notifications","collection","errors"],
-      "title": "HS Collection Companion",
+      "excludeChunks": ["background","notifications","loading","collection","errors"],
+      "title": "Firestone",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -362,8 +393,8 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background","notifications","welcome","errors"],
-      "title": "HS Collection Companion",
+      "excludeChunks": ["background","notifications","welcome","loading","errors"],
+      "title": "Firestone",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -390,8 +421,8 @@ module.exports = {
       "cache": true,
       "showErrors": true,
       "chunks": "all",
-      "excludeChunks": ["background","notifications","welcome","collection"],
-      "title": "HS Collection Companion",
+      "excludeChunks": ["background","notifications","welcome","loading","collection"],
+      "title": "Firestone",
       "xhtml": true,
       "chunksSortMode": function sort(left, right) {
         let leftIndex = entryPoints.indexOf(left.names[0]);
@@ -425,7 +456,7 @@ module.exports = {
                         || module.resource.startsWith(realNodeModules));
             },
       "chunks": [
-        "background", "notifications", "welcome", "collection", "errors"
+        "background", "notifications", "welcome", "loading", "collection", "errors"
       ]
     }),
     // new SourceMapDevToolPlugin({
@@ -451,6 +482,13 @@ module.exports = {
     new CommonsChunkPlugin({
       "name": [
         "welcome"
+      ],
+      "minChunks": 2,
+      "async": "common"
+    }),
+    new CommonsChunkPlugin({
+      "name": [
+        "loading"
       ],
       "minChunks": 2,
       "async": "common"

@@ -8,6 +8,7 @@ import { AchievementsMonitor } from '../services/achievement/achievements-monito
 import { DebugService } from '../services/debug.service';
 import { LogStatusService } from '../services/log-status.service';
 import { HsPublicEventsListener } from '../services/hs-public-events-listener.service';
+import { Events } from '../services/events.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -25,13 +26,25 @@ declare var ga: any;
 // 7.1.1.17994
 export class AppComponent {
 
+	private static readonly STATES = ['INIT', 'STREAMING_LOGS', 'READY'];
+	private static readonly LOADING_SCREEN_DURATION = 10000;
+
+	private currentState = 'INIT';
+	private loadingWindowId: string;
+
 	constructor(
 		private packMonitor: PackMonitor,
+		private events: Events,
 		private debugService: DebugService,
 		private collectionManager: CollectionManager,
 		private publicEventsListener: HsPublicEventsListener,
 		private achievementsMonitor: AchievementsMonitor,
 		private logStatusService: LogStatusService) {
+
+		this.events.on(Events.STREAMING_LOG_FILE)
+			.subscribe(event => {
+				this.currentState = 'STREAMING_LOGS';
+			});
 
 		// console.error('TODO: stay logged in to HH');
 		// console.error('TODO: log in to Hearthhead when game not started - wait until game started to sync');
@@ -44,46 +57,91 @@ export class AppComponent {
 					this.startApp(() => this.showCollectionWindow());
 				}
 				else {
-					console.log('error registering hotkey', result);
+					console.log('could not trigger hotkey', result, this.currentState);
 				}
 			}
 		)
 
-		this.collectionManager.getCollection((collection) => {
-			console.log('collection backed up!', collection);
-		})
+		overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
+			this.loadingWindowId = result.window.id;
+			console.log('retrievd loadingwindow', result);
+			overwolf.windows.restore(this.loadingWindowId, (result2) => {
+				console.log('loadingwindow restored', result2)
+				overwolf.windows.hide(this.loadingWindowId);
+				overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+					console.log('updated game', res);
+					if (this.exitGame(res)) {
+						this.closeApp();
+					}
+					else if (this.gameRunning(res.gameInfo)) {
+						this.showLoadingScreen();
+					}
+				});
+				overwolf.games.getRunningGameInfo((res: any) => {
+					console.log('running game info', res);
+					if (this.gameRunning(res)) {
+						this.showLoadingScreen();
+					}
+				});
+			});
 
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-			overwolf.windows.restore(result.window.id, (result2) => {
-				overwolf.windows.hide(result.window.id);
 
-				this.startApp();
+			overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+				if (result.status !== 'success') {
+					console.warn('Could not get CollectionWindow', result);
+					return;
+				}
+				overwolf.windows.restore(result.window.id, (result2) => {
+					overwolf.windows.hide(result.window.id);
 
-				overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-					this.startApp(() => this.showCollectionWindow());
-					// this.startApp(() => this.showWelcomePage());
+					this.startApp();
+
+					overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
+						this.startApp(() => this.showCollectionWindow());
+						// this.startApp(() => this.showWelcomePage());
+					})
+
+					ga('send', 'event', 'toast', 'start-app');
 				})
-
-				ga('send', 'event', 'toast', 'start-app');
-			})
+			});
 		});
 
-		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-			if (this.exitGame(res)) {
-				this.closeApp();
-			}
+	}
+
+	private showLoadingScreen() {
+		console.log('showing loading screen?', this.currentState, this.loadingWindowId);
+		if (this.currentState == 'READY') {
+			return;
+		}
+
+		overwolf.windows.restore(this.loadingWindowId, (result) => {
+			console.log('final restore for loadingwindow done', result);
+			setTimeout(() => {
+				this.waitForLogDetection();
+			},
+			AppComponent.LOADING_SCREEN_DURATION);
 		});
+	}
+
+	private waitForLogDetection() {
+		if (this.currentState == 'STREAMING_LOGS') {
+			this.currentState = 'READY';
+			overwolf.windows.sendMessage(this.loadingWindowId, 'ready', 'ready', (result) => {
+			});
+		}
+		else {
+			setTimeout(() => {
+				this.waitForLogDetection();
+			},
+			1000);
+		}
 	}
 
 	private startApp(showWhenStarted?: Function) {
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('running game info', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				if (showWhenStarted) {
+				if (showWhenStarted && this.currentState == 'READY') {
 					showWhenStarted();
 				}
 			}
@@ -110,6 +168,10 @@ export class AppComponent {
 
 	private showCollectionWindow() {
 		console.log('showing collection page');
+		if (this.currentState != 'READY') {
+			console.log('app not ready yet, cannot show collection window', this.currentState);
+			return;
+		}
 		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get CollectionWindow', result);

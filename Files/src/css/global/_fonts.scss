@@ -16,7 +16,7 @@
 	color: $green01;
 }
 
-%card-title, %app-name {
+%card-title, %app-name, %loading-screen-title {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 20px;
@@ -26,6 +26,13 @@
 %user-nickname, %coming-soon {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
+	font-size: 16px;
+	color: $green01;
+}
+
+%hotkey {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 700;
 	font-size: 16px;
 	color: $green01;
 }
@@ -72,7 +79,7 @@
 	color: $yellow02;
 }
 
-%you-have-viewed, %patch-number {
+%you-have-viewed, %patch-number, %hotkey-subtext {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 13px;
