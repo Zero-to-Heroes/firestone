@@ -19,7 +19,7 @@ export class VersionComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		overwolf.extensions.getManifest('dikgmjhafcjcgdpoakplhfjcjhfpdfkjgihpcjfh', (result) => {
+		overwolf.extensions.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob', (result) => {
 			console.log('retrieved manifest', result);
 			this.ngZone.run(() => {
 				this.version = result.meta.version;
