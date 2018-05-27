@@ -22,6 +22,11 @@ declare var Crate: any;
 			<div class="app-container">
 				<section class="menu-bar">
 					<!-- <player-name></player-name> -->
+					<i class="i-117X33 gold-theme logo">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
+						</svg>
+					</i>
 					<div class="controls">
 						<!-- <button class="i-30 pink-button" (click)="showSettings()">
 							<svg class="svg-icon-fill">
