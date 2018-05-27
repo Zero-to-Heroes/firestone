@@ -74,7 +74,10 @@ body {
 			height: 50px;
 
 			.logo {
-				width: 170px;
+				position: relative;
+				top: 6px;
+				margin-left: 15px;
+				margin-right: 120px;
 			}
 
 			menu-selection {

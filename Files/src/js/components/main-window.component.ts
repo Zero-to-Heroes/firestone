@@ -24,7 +24,11 @@ declare var Crate: any;
 					<div class="first">
 						<real-time-notifications></real-time-notifications>
 						<div class="navigation">
-							<div class="logo"></div>
+							<i class="i-117X33 gold-theme logo">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
+								</svg>
+							</i>
 							<menu-selection></menu-selection>
 							<!-- <hearthhead></hearthhead> -->
 						</div>
