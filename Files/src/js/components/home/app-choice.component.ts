@@ -32,7 +32,7 @@ declare var overwolf: any;
 							<use xlink:href="/Files/assets/svg/sprite.svg#achievements"/>
 						</svg>
 					</i>
-					<span class="title">Chronicler</span>
+					<span class="title">Achievements</span>
 					<span class="sub-title">Celebrate your in-game triumphs</span>
 					<div class="banner"></div>
 				</div>
