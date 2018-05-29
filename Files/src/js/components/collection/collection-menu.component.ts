@@ -15,7 +15,7 @@ declare var overwolf: any;
 		<ng-container [ngSwitch]="displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection">
 				<li class="selected" (click)="goToCollectionView()">Sets</li>
-				<li>Cards</li>
+				<!--<li>Cards</li>-->
 			</ul>
 			<ng-container *ngSwitchCase="'breadcrumbs'">
 				<ul class="breadcrumbs" *ngIf="!searchString">
