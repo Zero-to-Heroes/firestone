@@ -27,10 +27,10 @@ export class NotificationsComponent {
 	private mainWindowId: string;
 
 	private toastOptions = {
-		// timeOut: this.timeout,
+		timeOut: this.timeout,
 		pauseOnHover: false,
 		showProgressBar: false,
-		clickToClose: false,
+		clickToClose: true,
 		maxStack: 5
 	}
 
@@ -87,8 +87,13 @@ export class NotificationsComponent {
 			this.ngZone.run(() => {
 				let toast = this.notificationService.html(htmlMessage);
 				// console.log('running toast message in zone', toast);
-				toast.click.subscribe((event) => {
-					console.log('registered click on toast');
+				toast.click.subscribe((event: MouseEvent) => {
+					console.log('registered click on toast', event);
+					// Clicked on close, don't show the card
+					if (event.srcElement.className.indexOf("close") != -1) {
+						this.notificationService.remove(toast.id);
+						return;
+					}
 					if (cardId) {
 						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
 							console.log('send click info to collection window', cardId, this.mainWindowId, result);
@@ -123,13 +128,13 @@ export class NotificationsComponent {
 					console.log('changed window size');
 					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 					let newLeft = ~~(gameWidth - width * dpi);
-					let newTop = ~~(gameHeight - height * dpi);
+					let newTop = ~~(gameHeight - height * dpi - 10);
 					console.log('changing position', newLeft, newTop, width, height);
 					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
 						console.log('changed window position');
 					});
 				});
-			});			
+			});
 		});
 	}
 

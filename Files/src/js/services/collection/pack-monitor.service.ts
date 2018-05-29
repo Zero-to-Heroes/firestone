@@ -336,6 +336,11 @@ export class PackMonitor {
 						<span class="new-card"><span class="new">New card:</span> ${cardName}!</span>
 						<span class="cta">Click to <span class="link">expand</span></span>
 					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
 				</div>`,
 			cardId: dbCard.id
 		});
@@ -356,6 +361,11 @@ export class PackMonitor {
 						<span>${numberOfCards} duplicate cards</span>
 						<span class="dust-amount">${dust} Dust potential</span>
 					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
 				</div>`
 		});
 	}

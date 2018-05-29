@@ -27,10 +27,11 @@ body {
     }
 
 	.simple-notification-wrapper.simple-notification-wrapper {
-		top: 0;
+		// We need some room to let the rarity icon overflow
+		top: 10px;
 		right: 20px;
 		bottom: auto;
-		width: 400px;
+		width: 330px;
 
 		.simple-notification {
 		    padding: 0;
@@ -40,7 +41,7 @@ body {
 		    // margin-bottom: -10px;
 
 		    & > div {
-		    	pointer-events: none;
+		    	pointer-events: auto;
 		    }
 
 		    .sn-content {
@@ -57,12 +58,10 @@ body {
 	align-items: center;
 	background: radial-gradient($red01, $darkred);
 	border: 1px solid $grey03;
-	// margin: 10px;
-	// margin-bottom: 0;
+	width: 330px;
+	height: 65px;
 
 	&.message-new-card {
-		width: 320px;
-		height: 65px;
 		position: relative;
 
 		.rarity {
@@ -74,11 +73,9 @@ body {
 		}
 
 		.art {
-			// width: 65px;
-			// height: 65px;
-			width: 87px;
-    		clip-path: inset(8% 13% 20% 13%);
-    		margin-left: -11px;
+			width: 91px;
+		    clip-path: inset(9% 16% 21% 15%);
+		    margin-left: -14px;
     		margin-top: 11px;
 		}
 
@@ -86,13 +83,12 @@ body {
 	    	@extend %you-have-viewed;
 	    	display: flex;
 	    	flex-direction: column;
-    		margin-left: 4px;
     		position: relative;
 		    height: 100%;
 		    width: 100%;
 		    justify-content: center;
-    		padding-left: 18px;
-    		padding-right: 18px;
+    		padding-left: 10px;
+    		padding-right: 14px;
 		}
 
 		.new-card {
@@ -125,14 +121,14 @@ body {
 				    transform: scale(1,-1);
 				    position: absolute;
 				    left: -34px;
-				    top: 2px;
+				    top: 0;
 				}
 
 				.right {
 				    transform: scale(-1,1);
 				    position: absolute;
-				    right: 18px;
-				    bottom: 3px;
+				    right: 10px;
+				    bottom: 0;
 				}
 			}
 		}
@@ -140,19 +136,18 @@ body {
 
 	&.message-dust {
 	    @extend %you-have-viewed;
-		width: 255px;
-		height: 65px;
 
 		.dust {
 			margin-right: 15px;
 		    display: flex;
 		    align-items: center;
 		    justify-content: center;
-		    width: 65px;
+		    width: 63px;
+		    height: 100%;
+		    border-right: 1px solid $grey03;
 
 			i {
-			    width: var(--size, 45px);
-			    height: var(--size, 45px);
+			    --size: 43px;
 			}
 		}
 
@@ -172,6 +167,17 @@ body {
 	    border: 1px solid white;
 	    padding: 5px 15px;
 	    border-radius: 6px;
+	}
+
+	.close-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+  		--icon-bg-hover: #513b48;
+
+	    & :hover {
+	    	pointer-events: none;
+	    }
 	}
 }
 
