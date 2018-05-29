@@ -29,9 +29,8 @@ declare var ga: any;
 				<ng-container [ngSwitch]="_selectedView">
 					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
 					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet" [searchString]="searchString"></cards>
+					<full-card *ngSwitchCase="'card-details'" class="full-card" [cardId]="fullCardId"></full-card>
 				</ng-container>
-				<div class="overlay" *ngIf="fullCardId"></div>
-				<full-card class="full-card" [cardId]="fullCardId" (close)="this.fullCardId = null" *ngIf="fullCardId"></full-card>
 			</section>
 			<section class="secondary">
 				<card-search>Search card</card-search>
@@ -122,6 +121,7 @@ export class CollectionComponent {
 		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
 			(event) => {
 				this.fullCardId = event.data[0];
+				this._selectedView = 'card-details';
 			}
 		);
 		overwolf.windows.onMessageReceived.addListener((message) => {
@@ -129,6 +129,7 @@ export class CollectionComponent {
 			if (message.id === 'click-card') {
 				this.ngZone.run(() => {
 					this.fullCardId = message.content;
+					this._selectedView = 'card-details';
 					console.log('setting fullCardId', this.fullCardId);
 					overwolf.windows.restore(this.windowId, (result) => {
 						console.log('collection window restored');

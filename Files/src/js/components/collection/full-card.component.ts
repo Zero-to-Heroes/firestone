@@ -20,11 +20,6 @@ declare var overwolf: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="card-details-container" [ngClass]="{'owned': card.owned, 'missing': !card.owned}" *ngIf="card">
-			<button class="i-30 close-button" (click)="closeWindow()">
-				<svg class="svg-icon-fill">
-					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-				</svg>
-			</button>
 			<div class="card-view-container">
 				<card-view [card]="card" [tooltips]="false" [showCounts]="true">/</card-view>
 			</div>
@@ -60,26 +55,6 @@ declare var overwolf: any;
 					<span class="value">{{card.flavor}}</span>
 				</div>
 			</div>
-			<i class="i-50X6 gold-theme deco deco-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_decoration"/>
-				</svg>
-			</i>
-			<i class="i-50X6 gold-theme deco deco-top">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_decoration"/>
-				</svg>
-			</i>
-			<i class="i-50X6 gold-theme deco deco-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_decoration"/>
-				</svg>
-			</i>
-			<i class="i-50X6 gold-theme deco deco-bottom">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_decoration"/>
-				</svg>
-			</i>
 		</div>
 	`,
 })

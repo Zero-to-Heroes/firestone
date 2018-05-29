@@ -5,16 +5,6 @@
 
     display: flex;
     position: relative;
-    width: 598px;
-    height: 413px;
-    border: 1px solid $grey03;
-
-    &.owned {
-        background-image: url('/Files/assets/images/backgrounds/card-details-owned.png');
-    }
-    &.missing {
-        background-image: url('/Files/assets/images/backgrounds/card-details-missing.png');
-    }
 
     .details {
         width: 413px;
@@ -90,13 +80,13 @@
 
     .card-view-container {
         padding-left: 19px;
-        min-width: 280px;
         display: flex;
         align-items: flex-start;
         justify-content: center;
+        margin-right: 40px;
 
         card-view {
-            width: 233px;
+            width: 270px;
 
             .card-container {
 
