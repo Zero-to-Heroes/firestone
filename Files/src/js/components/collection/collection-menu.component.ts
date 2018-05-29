@@ -1,7 +1,9 @@
 import { Component, HostListener, Input } from '@angular/core';
 
 import { Set } from '../../models/set';
+
 import { Events } from '../../services/events.service';
+import { AllCardsService } from '../../services/all-cards.service';
 
 declare var overwolf: any;
 
@@ -22,6 +24,7 @@ declare var overwolf: any;
 					<li (click)="goToCollectionView()">Sets</li>
 					<li (click)="goToFormatView()">{{getSelectedFormat()}}</li>
 					<li (click)="goToSetView()" *ngIf="selectedSet">{{selectedSet.name}}</li>
+					<li *ngIf="selectedCard">{{selectedCard.name}}</li>
 				</ul>
 				<ul class="breadcrumbs" *ngIf="searchString" (click)="goToCollectionView()">
 					<li>Home</li>
@@ -40,8 +43,14 @@ export class CollectionMenuComponent {
 	@Input() public selectedFormat: string;
 	@Input() public searchString: string;
 
-	constructor(private _events: Events) {
+	private selectedCard: any;
 
+	constructor(private _events: Events, private cards: AllCardsService) {
+
+	}
+
+	@Input('selectedCardId') set selectedCardId(cardId: string) {
+		this.selectedCard = this.cards.getCard(cardId);
 	}
 
 	private getSelectedFormat() {

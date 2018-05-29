@@ -24,6 +24,7 @@ declare var ga: any;
 					[displayType]="_menuDisplayType"
 					[selectedSet]="_selectedSet"
 					[selectedFormat]="_selectedFormat"
+					[selectedCardId]="fullCardId"
 					[searchString]="searchString">
 				</collection-menu>
 				<ng-container [ngSwitch]="_selectedView">
@@ -64,6 +65,8 @@ export class CollectionComponent {
 
 	constructor(
 		private _events: Events,
+		private cards: AllCardsService,
+		private collectionManager: CollectionManager,
 		private ngZone: NgZone) {
 		ga('send', 'event', 'collection', 'show');
 
@@ -76,6 +79,7 @@ export class CollectionComponent {
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
 			(data) => {
+				this.reset();
 				// console.log(`selecting set, showing cards`, data);
 				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'cards';
@@ -87,43 +91,49 @@ export class CollectionComponent {
 
 		this._events.on(Events.FORMAT_SELECTED).subscribe(
 			(data) => {
+				this.reset();
 				// console.log(`selecting format in collection`, data);
 				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'sets';
 				this._selectedFormat = data.data[0];
-				this._selectedSet = null;
-				this._cardList = null;
 			}
 		)
 
 		this._events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
+				this.reset();
 				this._menuDisplayType = 'menu';
 				this._selectedView = 'sets';
-				this._selectedFormat = null;
-				this._selectedSet = null;
-				this._cardList = null;
 			}
 		)
 
 		this._events.on(Events.SHOW_CARDS).subscribe(
 			(data) => {
+				this.reset();
 				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'cards';
-				this._selectedFormat = null;
-				this._selectedSet = null;
 				this._cardList = data.data[0];
 				this.searchString = data.data[1];
 			}
 		)
 
-
 		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
 			(event) => {
-				this.fullCardId = event.data[0];
+				this.reset();
+				this._menuDisplayType = 'breadcrumbs';
 				this._selectedView = 'card-details';
+				this.fullCardId = event.data[0];
+				let newSet = this.cards.getSetFromCardId(this.fullCardId);
+				if (!this._selectedSet || this._selectedSet.id != newSet.id) {
+					this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
+					this.collectionManager.getCollection((collection: Card[]) => {
+						this.updateSet(collection, this._selectedSet);
+					})
+				}
+				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 			}
 		);
+
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received', message);
 			if (message.id === 'click-card') {
@@ -137,5 +147,33 @@ export class CollectionComponent {
 				})
 			}
 		});
+	}
+
+	private reset() {
+		this._menuDisplayType = undefined;
+		this._selectedView = undefined;
+		this._selectedSet =undefined;
+		this._selectedFormat = undefined;
+		this._cardList = undefined;
+		this.fullCardId = undefined;
+	}
+
+	private updateSet(collection: Card[], set: Set) {
+		console.log('updating set', set, collection)
+		set.allCards.forEach((card: SetCard) => {
+			let owned = collection.filter((collectionCard: Card) => collectionCard.Id === card.id);
+			owned.forEach((collectionCard: Card) => {
+				if (collectionCard.Premium) {
+					card.ownedPremium = collectionCard.Count;
+				}
+				else {
+					card.ownedNonPremium = collectionCard.Count;
+				}
+			})
+		})
+
+		set.ownedLimitCollectibleCards = set.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
+		set.ownedLimitCollectiblePremiumCards = set.allCards.map((card: SetCard) => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0);
+		console.log('updated set', set);
 	}
 }

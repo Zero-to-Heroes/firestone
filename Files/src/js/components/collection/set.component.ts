@@ -100,5 +100,4 @@ export class SetComponent {
 	private isPremiumComplete() {
 		return this._cardSet.ownedLimitCollectiblePremiumCards == this._cardSet.numberOfLimitCollectibleCards()
 	}
-
 }
