@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
 					<use xlink:href="/Files/assets/svg/sprite.svg#reddit"/>
 				</svg>
 			</button>
-			
+
 			<button class="i-30 pale-theme social-button" (click)="openGitHub()">
 				<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#github"/>
@@ -26,7 +26,7 @@ import { Component } from '@angular/core';
 export class SocialMediaComponent {
 
 	private openReddit() {
-		window.open('https://www.reddit.com/r/hscollectioncompanion/comments/7abytb/what_is_hs_collection_companion/');
+		window.open('https://www.reddit.com/r/firestoneapp/');
 	}
 
 	private openGitHub() {
