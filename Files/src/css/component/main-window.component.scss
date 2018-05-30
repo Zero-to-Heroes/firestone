@@ -1,4 +1,5 @@
 @import '../global/variables';
+@import '../global/fonts';
 
 body, html {
 	width: 100%;
@@ -106,19 +107,18 @@ body {
     		.first {
     			display: flex;
     			flex-direction: column;
-    			flex-grow: 1;
     		}
 
-    		player-name {
-			    border-right: 1px solid $grey03;
-			    margin: 10px 11px 9px 0;
-			    padding-right: 15px;
-			    display: flex;
-			    // margin-top: 10px;
-			    // margin-bottom: 9px;
-			    // margin-right: 11px;
-			    // margin-left: 15px;
-    		}
+    		// player-name {
+			   //  border-right: 1px solid $grey03;
+			   //  margin: 10px 11px 9px 0;
+			   //  padding-right: 15px;
+			   //  display: flex;
+			   //  // margin-top: 10px;
+			   //  // margin-bottom: 9px;
+			   //  // margin-right: 11px;
+			   //  // margin-left: 15px;
+    		// }
 
 		    real-time-notifications {
 		    	height: 29px;
@@ -147,6 +147,42 @@ body {
 	    }
 	}
 }
+
+.hotkey {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-grow: 1;
+    position: relative;
+    top: 16px;
+    left: 50px;
+
+	.text {
+		@extend %hotkey-label;
+		margin-right: 10px;
+		color: #a89782;
+	}
+
+	.plus {
+		@extend %hotkey;
+		font-weight: 400;
+		margin-left: 6px;
+		margin-right: 6px;
+	}
+
+	.key {
+		@extend %hotkey;
+		font-weight: 400;
+		font-size: 10px;
+		width: 30px;
+		height: 20px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+		border: 1px solid;
+	}
+}
+
 
 tooltips {
     position: absolute;

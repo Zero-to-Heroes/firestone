@@ -34,6 +34,12 @@ declare var Crate: any;
 						</div>
 					</div>
 					<!-- <player-name></player-name> -->
+					<div class="hotkey">
+						<span class="text">Hotkey:</span>
+						<span class="key">Alt</span>
+						<span class="plus">+</span>
+						<span class="key">C</span>
+					</div>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">
