@@ -1,7 +1,54 @@
+@import '../global/variables';
+
+.zth-tooltip {
+	background-color: $grey03;
+	text-align: center;
+	cursor: default;
+	opacity: 0;
+	position: absolute;
+	width: 110px;
+	height: 30px;
+	pointer-events: none;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+    bottom: -29px;
+
+	.tooltip-arrow {
+		position: absolute;
+		width: 16px;
+		height: 9px;
+		fill: $grey03;
+		overflow: visible;
+	}
+
+	p {
+		white-space: nowrap;
+		cursor: default;
+		color: $black;
+		margin: 0;
+		font-size: 13px;
+	}
+
+	&.bottom {
+
+		.tooltip-arrow {
+			top: 0px;
+		}
+	}
+}
+
 .menu-selection {
 
 	li {
     	margin-right: 25px;
     	padding-bottom: 14px;
+
+		&:hover {
+			.zth-tooltip {
+				opacity: 1;
+			}
+		}
 	}
 }

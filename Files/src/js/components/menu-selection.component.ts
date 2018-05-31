@@ -12,9 +12,27 @@ declare var overwolf: any;
 	],
 	template: `
 		<ul class="menu-selection">
-			<li class="selected">The Binder</li>
-			<li class="disabled">Achievements</li>
-			<li class="disabled">Deck Tracker</li>
+			<li class="selected">
+				<span>The Binder</span>
+			</li>
+			<li class="disabled">
+				<span>Achievements</span>
+				<div class="zth-tooltip bottom">
+					<p>Coming soon</p>
+					<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+						<polygon points="0,0 8,-9 16,0"/>
+					</svg>
+				</div>
+			</li>
+			<li class="disabled">
+				<span>Deck Tracker</span>
+				<div class="zth-tooltip bottom">
+					<p>Coming soon</p>
+					<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+						<polygon points="0,0 8,-9 16,0"/>
+					</svg>
+				</div>
+			</li>
 		</ul>
 	`,
 })
