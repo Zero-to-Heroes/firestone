@@ -12,7 +12,7 @@ declare var overwolf: any;
 	],
 	template: `
 		<div class="app-choice">
-			<div class="app binder" (click)="showCollection()" [ngClass]="{'disabled': noCollection}">
+			<div class="app binder" (click)="showCollection()">
 				<div class="no-data" *ngIf="noCollection">Launch Hearthstone to start</div>
 				<div class="info">
 					<i class="i-150X150 gold-theme">
