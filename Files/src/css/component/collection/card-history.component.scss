@@ -63,3 +63,18 @@ ul {
 	}
 }
 
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+    height: 100%;
+
+    i {
+    	margin-bottom: 10px;
+    }
+
+	span {
+		@extend %empty-card-history;
+	}
+}

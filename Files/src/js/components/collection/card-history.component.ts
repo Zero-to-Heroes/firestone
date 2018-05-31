@@ -46,6 +46,15 @@ declare var ga: any;
 					<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
 					<button class="load-more-button" (click)="loadMore()">Load More</button>
 				</li>
+				<section *ngIf="!cardHistory || cardHistory.length == 0" class="empty-state">
+					<i class="i-60x78 pale-theme">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_my_card_history"/>
+						</svg>
+					</i>
+					<span>No history yet</span>
+					<span>Open a pack to start one!</span>
+				</section>
 			</ul>
 		</div>
 	`,
@@ -63,7 +72,7 @@ export class CardHistoryComponent {
 	private refreshing = false;
 
 	constructor(
-		private storage: CardHistoryStorageService, 
+		private storage: CardHistoryStorageService,
 		private el: ElementRef,
 		private events: Events) {
 		overwolf.windows.onStateChanged.addListener((message) => {
