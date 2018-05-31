@@ -55,7 +55,7 @@
 		.info {
 			opacity: 0.6;
 			display: flex;
-			flex-direction: column;		
+			flex-direction: column;
 
 			&:hover {
 				background: rgba(255, 255, 255, 0.08);
@@ -69,6 +69,19 @@
 			width: 100%;
 			height: 47px;
 		    background: rgba(255, 255, 255, 0.15);
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		}
+
+		.no-data {
+			@extend %coming-soon;
+			position: absolute;
+			top: 0;
+			width: 100%;
+			height: 47px;
+			// $yellow03
+		    background: rgba(255, 185, 72, 0.3);
 		    display: flex;
 		    justify-content: center;
 		    align-items: center;
