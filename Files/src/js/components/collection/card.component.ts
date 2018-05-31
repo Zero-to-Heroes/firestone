@@ -17,7 +17,11 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{'missing': card.ownedNonPremium + card.ownedPremium == 0}">
-			<img src="{{'https://s3.amazonaws.com/com.zerotoheroes/plugins/hearthstone/cardbacks/blurred_cardback.png'}}" class="placeholder" *ngIf="showPlaceholder"/>
+			<i class="i-60x78 pale-theme placeholder" *ngIf="showPlaceholder">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#card_placeholder"/>
+				</svg>
+			</i>
 			<img src="{{image()}}" class="real-card" (load)="imageLoadedHandler()" [hidden]="showPlaceholder"/>
 			<div class="count" *ngIf="!showPlaceholder">
 				<div class="non-premium" *ngIf="card.ownedNonPremium > 0 || showCounts">
