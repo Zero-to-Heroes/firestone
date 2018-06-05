@@ -4,15 +4,15 @@
 	"meta":{
 		"name":"Firestone",
 		"author":"Sébastien Tromp",
-		"version":"0.9.6",
+		"version":"0.9.7",
 		"minimum-overwolf-version":"0.107.240.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.firestone",
 		"description":"A Hearthtone companion to have in-game the information you want to know about your card collection and more",
 		"dock_button_title": "Firestone",
-		"icon":"IconStore.png",
+		"icon":"IconMouseOver.png",
 		"icon_gray":"IconStore.png",
 		"launcher_icon": "launcher_icon.ico",
-		"store_icon": "IconStore.png"
+		"splash_image": "Splash_icon.png"
 	},
 	"permissions": [
 		"Logging",
