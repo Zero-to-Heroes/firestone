@@ -106,7 +106,7 @@
 		  "game_ids": [9898]
 		},
 		"force_browser": "user",
-		"game_events": ["9898"],
+		"game_events": [9898],
 		"launch_events": [
 			{
 				"event": "GameLaunch",
