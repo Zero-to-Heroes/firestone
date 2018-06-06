@@ -57,3 +57,7 @@
 ::selection {
 	background-color: $grey04;
 }
+
+::-webkit-input-placeholder {
+	@extend %search-bar-inactive;
+}
