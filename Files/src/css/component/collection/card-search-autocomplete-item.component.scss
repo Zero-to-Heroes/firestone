@@ -9,7 +9,8 @@ li {
     padding-left: 12px;
 
     &:hover {
-    	background: $grey03;
+    	// $grey03
+    	background: rgba(120,95,107,0.4);
     }
 }
 
