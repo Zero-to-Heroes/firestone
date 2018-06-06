@@ -5,11 +5,12 @@
 
     display: flex;
     position: relative;
+    top: -17px;
 
     .details {
         width: 413px;
         padding-right: 55px;
-        padding-top: 43px;
+        padding-top: 25px;
 
         h1 {
             @extend %card-title;
