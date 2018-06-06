@@ -22,7 +22,7 @@ declare var overwolf: any;
 })
 export class NotificationsComponent {
 
-	private timeout = 10000;
+	private timeout = 20000;
 	private windowId: string;
 	private mainWindowId: string;
 
