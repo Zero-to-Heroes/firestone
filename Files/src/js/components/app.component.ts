@@ -115,6 +115,8 @@ export class AppComponent {
 		}
 
 		overwolf.windows.restore(this.loadingWindowId, (result) => {
+			this.closeWelcomeWindow();
+			this.closeCollectionWindow();
 			console.log('final restore for loadingwindow done', result);
 			setTimeout(() => {
 				this.waitForLogDetection();
@@ -151,6 +153,39 @@ export class AppComponent {
 		});
 	}
 
+	private closeLoadingScreen() {
+		console.log('starting from desktop, showing welcome page');
+		overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get LoadingWindow', result);
+				return;
+			}
+			overwolf.windows.hide(result.window.id);
+		});
+	}
+
+	private closeWelcomeWindow() {
+		console.log('starting from desktop, showing welcome page');
+		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get WelcomeWindow', result);
+				return;
+			}
+			overwolf.windows.hide(result.window.id);
+		});
+	}
+
+	private closeCollectionWindow() {
+		console.log('starting from desktop, showing welcome page');
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			overwolf.windows.hide(result.window.id);
+		});
+	}
+
 	private showWelcomePage() {
 		console.log('starting from desktop, showing welcome page');
 		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
@@ -162,6 +197,7 @@ export class AppComponent {
 
 			overwolf.windows.restore(result.window.id, (result) => {
 				console.log('WelcomeWindow is on?', result);
+				this.closeLoadingScreen();
 			})
 		});
 	}
@@ -181,6 +217,7 @@ export class AppComponent {
 
 			overwolf.windows.restore(result.window.id, (result) => {
 				console.log('CollectionWindow is on?', result);
+				this.closeLoadingScreen();
 			})
 		});
 	}
