@@ -95,6 +95,10 @@ i {
 	top: -10px;
 }
 
+.app.inactive .info:hover {
+	background: rgba(255, 255, 255, 0.08);
+}
+
 .binder .banner {
 	background: $pink01;
 }
