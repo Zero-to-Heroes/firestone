@@ -11,12 +11,13 @@ declare var overwolf: any;
 @Component({
   	selector: 'tooltip',
 	styleUrls: [`../../css/component/tooltip.component.scss`],
-  	template: `<img src={{image()}} *ngIf="cardId" />`,
+  	template: `<img src={{image()}} *ngIf="cardId" [ngClass]="{'missing': missing}"/>`,
   	// template: `Hopla`,
 })
 export class Tooltip {
 
 	@Input() cardId: string;
+	@Input() missing: boolean;
 
 	@HostBinding('style.left') left: string;
 	@HostBinding('style.top') top: string;
@@ -51,7 +52,8 @@ export class TooltipsComponent {
 				let cardId: string = data.data[0];
 				let x: number = data.data[1];
 				let y: number = data.data[2];
-				// console.log('showing tooltip', cardId, x, y, data);
+				let owned: boolean = data.data[3];
+				console.log('showing tooltip', cardId, x, y, owned, data);
 
 				let top: number = Math.min(window.innerHeight - 400, y - 388 / 2);
 				// this.appendComponentToBody(Tooltip);
@@ -67,6 +69,8 @@ export class TooltipsComponent {
 			    component.instance.left = x + 'px';
 			    component.instance.top = top + 'px';
 			    component.instance.position = 'absolute';
+			    component.instance.missing = !owned;
+			    console.log('is card missing?', component.instance.missing);
 
 			    this.currentTooltip = component;
 			}

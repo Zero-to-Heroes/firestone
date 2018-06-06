@@ -1,8 +1,10 @@
 img {
 	width: 256px;
-	// filter: drop-shadow(-5px -5px 5px rgba(0, 0, 0, 0.5))
-	// 		drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.5))
-	// 		drop-shadow(-5px 5px 5px rgba(0, 0, 0, 0.5))
-	// 		drop-shadow(5px -5px 5px rgba(0, 0, 0, 0.5));
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, .75));
+
+	&.missing {
+		filter: grayscale(1) sepia() saturate(110%) hue-rotate(300deg) drop-shadow(0 0 5px rgba(0, 0, 0, .75));
+	}
 }
+
+

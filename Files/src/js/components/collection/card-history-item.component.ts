@@ -52,7 +52,7 @@ export class CardHistoryItemComponent {
 		let rect = this.el.nativeElement.getBoundingClientRect();
 		let x = rect.left - rect.width + 120;
 		let y = rect.top + rect.height / 2;
-		this.events.broadcast(Events.SHOW_TOOLTIP, this.historyItem.cardId, x, y);
+		this.events.broadcast(Events.SHOW_TOOLTIP, this.historyItem.cardId, x, y, true);
 	}
 
 	@HostListener('mouseleave')

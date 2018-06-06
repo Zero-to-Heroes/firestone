@@ -99,15 +99,19 @@ export class SetCard {
 	}
 
 	getNumberCollected(): number {
-		return Math.min(this.ownedPremium + this.ownedNonPremium, this.getMaxCollectible());
+		return ~~Math.min(this.ownedPremium + this.ownedNonPremium, this.getMaxCollectible());
 	}
 
 	getNumberCollectedPremium(): number {
-		return Math.min(this.ownedPremium, this.getMaxCollectible());
+		return ~~Math.min(this.ownedPremium, this.getMaxCollectible());
 	}
 
 	getMaxCollectible(): number {
 		return this.rarity.toLowerCase() === 'legendary' ? 1 : 2;
+	}
+
+	isOwned(): boolean {
+		return this.ownedPremium + this.ownedNonPremium > 0;
 	}
 }
 
