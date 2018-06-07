@@ -1,4 +1,4 @@
-img {
+tooltip img {
 	width: 256px;
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, .75));
 
@@ -6,5 +6,3 @@ img {
 		filter: grayscale(1) sepia() saturate(110%) hue-rotate(300deg) drop-shadow(0 0 5px rgba(0, 0, 0, .75));
 	}
 }
-
-
