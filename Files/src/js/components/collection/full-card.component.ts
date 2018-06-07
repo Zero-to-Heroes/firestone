@@ -40,7 +40,7 @@ declare var overwolf: any;
 				<div class="card-info audio" *ngIf="audioClips">
 					<span class="sub-title">Sound:</span>
 					<ul class="value">
-						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound.file)">
+						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound.audio)">
 							<span>{{sound.name}}</span>
 							<button class="i-30 brown-theme sound-button">
 								<svg class="svg-icon-fill">
@@ -93,7 +93,12 @@ export class FullCardComponent {
 			Object.keys(card.audio).forEach((key,index) => {
 			    this.audioClips.push({
 			    	name: key.split("_")[0],
-			    	file: card.audio[key]
+			    	file: card.audio[key],
+			    	audio: new Audio()
+			    });
+			    this.audioClips.forEach((sound) => {
+			    	sound.audio.src = `http://static.zerotoheroes.com/hearthstone/audio/${sound.file}`;
+			    	sound.audio.load();
 			    });
 			});
 		}
@@ -114,11 +119,16 @@ export class FullCardComponent {
 		}
 	}
 
-	private playSound(fileName: string) {
-		let audio = new Audio();
-		audio.src = `http://static.zerotoheroes.com/hearthstone/audio/${fileName}`;
-		audio.load();
+	private playSound(audio) {
+		this.cancelPlayingSounds();
 		audio.play();
+	}
+
+	private cancelPlayingSounds() {
+		this.audioClips.forEach((sound) => {
+			sound.audio.pause();
+			sound.audio.currentTime = 0;
+		})
 	}
 
 	private image() {
