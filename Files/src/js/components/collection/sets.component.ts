@@ -38,7 +38,10 @@ export class SetsComponent {
 
 	constructor(private _events: Events, private collectionManager: CollectionManager, private cards: AllCardsService) {
 		overwolf.windows.onStateChanged.addListener((message) => {
-			console.log('state changed', message);
+			if (message.window_name != "CollectionWindow") {
+				return;
+			}
+			console.log('state changed sets', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

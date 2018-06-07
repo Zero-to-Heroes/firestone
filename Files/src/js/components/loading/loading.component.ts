@@ -114,6 +114,7 @@ export class LoadingComponent implements AfterViewInit {
 	private title: string = 'Getting ready';
 	private loading = true;
 	private thisWindowId: string;
+	private adRef;
 
 	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef) {
 		console.log('in loading constructor');
@@ -134,6 +135,20 @@ export class LoadingComponent implements AfterViewInit {
 				})
 			}
 		});
+		overwolf.windows.onStateChanged.addListener((message) => {
+			if (message.window_name != "LoadingWindow") {
+				return;
+			}
+			console.log('state changed loading', message);
+			if (message.window_state != 'normal') {
+				console.log('removing ad', message.window_state);
+				this.adRef.removeAd();
+			}
+			else {
+				console.log('refreshing ad', message.window_state);
+				this.adRef.refreshAd();
+			}
+		});
 
 	}
 
@@ -149,7 +164,7 @@ export class LoadingComponent implements AfterViewInit {
 			return;
 		}
 		console.log('ads ready', adsReady, document.getElementById("ad-div"));
-		new OwAd(document.getElementById("ad-div"));
+		this.adRef = new OwAd(document.getElementById("ad-div"));
 	}
 
 

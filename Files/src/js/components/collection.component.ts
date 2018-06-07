@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, AfterViewInit } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
@@ -11,6 +11,8 @@ import { Set, SetCard } from '../models/set';
 
 declare var overwolf: any;
 declare var ga: any;
+declare var adsReady: any;
+declare var OwAd: any;
 
 @Component({
 	selector: 'collection',
@@ -51,7 +53,7 @@ declare var ga: any;
 	`,
 })
 // 7.1.1.17994
-export class CollectionComponent {
+export class CollectionComponent implements AfterViewInit {
 
 	private _menuDisplayType = 'menu';
 	private _selectedView = 'sets';
@@ -62,6 +64,7 @@ export class CollectionComponent {
 	private _cardList: SetCard[];
 	private fullCardId: string;
 	private windowId: string;
+	private adRef;
 
 	constructor(
 		private _events: Events,
@@ -69,6 +72,21 @@ export class CollectionComponent {
 		private collectionManager: CollectionManager,
 		private ngZone: NgZone) {
 		ga('send', 'event', 'collection', 'show');
+
+		overwolf.windows.onStateChanged.addListener((message) => {
+			if (message.window_name != "CollectionWindow") {
+				return;
+			}
+			console.log('state changed in collection', message);
+			if (message.window_state != 'normal') {
+				console.log('removing ad', message.window_state);
+				this.adRef.removeAd();
+			}
+			else {
+				console.log('refreshing ad', message.window_state);
+				this.adRef.refreshAd();
+			}
+		});
 
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
@@ -147,6 +165,21 @@ export class CollectionComponent {
 				})
 			}
 		});
+	}
+
+	ngAfterViewInit() {
+		this.loadAds();
+	}
+
+	private loadAds() {
+		if (!adsReady) {
+			setTimeout(() => {
+				this.loadAds()
+			}, 50);
+			return;
+		}
+		console.log('ads ready', adsReady, document.getElementById("ad-div"));
+		this.adRef = new OwAd(document.getElementById("ad-div"));
 	}
 
 	private reset() {

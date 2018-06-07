@@ -63,7 +63,10 @@ export class AppChoiceComponent {
 
 	constructor(private collectionManager: CollectionManager) {
 		overwolf.windows.onStateChanged.addListener((message) => {
-			console.log('state changed', message);
+			if (message.window_name != "WelcomeWindow") {
+				return;
+			}
+			console.log('state changed app choice', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

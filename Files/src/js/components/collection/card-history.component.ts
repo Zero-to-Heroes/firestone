@@ -76,7 +76,10 @@ export class CardHistoryComponent {
 		private el: ElementRef,
 		private events: Events) {
 		overwolf.windows.onStateChanged.addListener((message) => {
-			console.log('state changed', message);
+			if (message.window_name != "CollectionWindow") {
+				return;
+			}
+			console.log('state changed card-history', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

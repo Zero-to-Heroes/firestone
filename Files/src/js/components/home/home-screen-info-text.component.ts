@@ -46,7 +46,10 @@ export class HomeScreenInfoTextComponent {
 				private collectionManager: CollectionManager) {
 		setTimeout(() => this.refresh(), 1000);
 		overwolf.windows.onStateChanged.addListener((message) => {
-			console.log('state changed', message);
+			if (message.window_name != "WelcomeWindow") {
+				return;
+			}
+			console.log('state changed home-screen-info', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}
