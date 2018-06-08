@@ -28,6 +28,7 @@ import { AchievementsRepository } from '../../services/achievement/achievements-
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 import { IndexedDbService as AchievementsDb }  from '../../services/achievement/indexed-db.service';
 
+import { AllCardsService }  from '../../services/all-cards.service';
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { HearthHeadSyncService } from '../../services/collection/hearthhead-sync.service';
@@ -75,6 +76,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AppComponent,
 	],
 	providers: [
+		AllCardsService,
 		CardHistoryStorageService,
 		CollectionManager,
 		Events,

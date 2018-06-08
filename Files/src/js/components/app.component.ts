@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { CollectionManager } from '../services/collection/collection-manager.service';
 import { PackMonitor } from '../services/collection/pack-monitor.service';
+import { IndexedDbService } from '../services/collection/indexed-db.service';
+import { IndexedDbService as AchievementsDb } from '../services/achievement/indexed-db.service';
 import { AchievementsMonitor } from '../services/achievement/achievements-monitor.service';
 import { DebugService } from '../services/debug.service';
 import { LogStatusService } from '../services/log-status.service';
@@ -36,9 +37,10 @@ export class AppComponent {
 		private packMonitor: PackMonitor,
 		private events: Events,
 		private debugService: DebugService,
-		private collectionManager: CollectionManager,
 		private publicEventsListener: HsPublicEventsListener,
 		private achievementsMonitor: AchievementsMonitor,
+		private collectionDb: IndexedDbService,
+		private achievementsDb: AchievementsDb,
 		private logStatusService: LogStatusService) {
 
 		this.events.on(Events.STREAMING_LOG_FILE)
@@ -46,8 +48,25 @@ export class AppComponent {
 				this.currentState = 'STREAMING_LOGS';
 			});
 
-		// console.error('TODO: stay logged in to HH');
-		// console.error('TODO: log in to Hearthhead when game not started - wait until game started to sync');
+		this.init();
+	}
+
+	private init() {
+		// Wait until DB has properly been upgraded when needed
+		if (!this.collectionDb.dbInit) {
+			setTimeout(() => {
+				this.init();
+				return;
+			}, 200)
+		}
+		if (!this.achievementsDb.dbInit) {
+			setTimeout(() => {
+				this.init();
+				return;
+			}, 200)
+		}
+
+		console.log('real init starting');
 
 		overwolf.settings.registerHotKey(
 			"collection",

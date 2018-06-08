@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation, HostListener } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { CollectionManager } from '../services/collection/collection-manager.service';
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
 
@@ -117,8 +116,7 @@ export class MainWindowComponent {
 
 	constructor(
 		private debugService: DebugService,
-		private events: Events,
-		private collectionManager: CollectionManager) {
+		private events: Events) {
 
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){

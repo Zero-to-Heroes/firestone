@@ -10,6 +10,8 @@ declare var OverwolfPlugin: any;
 @Injectable()
 export class IndexedDbService {
 
+	public dbInit: boolean;
+
 	private db: AngularIndexedDB;
 	private dbInit: boolean;
 

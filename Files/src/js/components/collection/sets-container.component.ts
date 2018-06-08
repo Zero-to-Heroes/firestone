@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 
@@ -31,7 +30,7 @@ export class SetsContainer {
 	@Input() sets: Set[];
 	@Input() category: string;
 
-	constructor(private collectionManager: CollectionManager, private cards: AllCardsService, private _events: Events) {
+	constructor(private cards: AllCardsService, private _events: Events) {
 	}
 
 	selectSet(set: Set) {

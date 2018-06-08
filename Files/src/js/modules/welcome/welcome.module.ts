@@ -16,6 +16,7 @@ import { AppChoiceComponent }  from '../../components/home/app-choice.component'
 
 import { DebugService } from '../../services/debug.service';
 
+import { AllCardsService }  from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 import { PlayerNameService }  from '../../services/player-name.service';
 import { RealTimeNotificationService }  from '../../services/real-time-notifications.service';
@@ -68,6 +69,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		WelcomePageComponent,
 	],
 	providers: [
+		AllCardsService,
 		CollectionManager,
 		DebugService,
 		Events,

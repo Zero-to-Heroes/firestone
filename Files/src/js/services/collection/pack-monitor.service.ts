@@ -8,7 +8,6 @@ import { CardHistory } from '../../models/card-history';
 import { Events } from '../../services/events.service';
 import { GameEvents } from '../../services/game-events.service';
 import { OwNotificationsService } from '../../services/notifications.service';
-import { CollectionManager } from './collection-manager.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { CardHistoryStorageService } from './card-history-storage.service';
 

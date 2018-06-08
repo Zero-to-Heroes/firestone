@@ -19,55 +19,55 @@ export class HearthHeadSyncService {
 	}
 
 	public login(email: string, password: string, callback: Function) {
-		let credentials = {
-			"email": email,
-			"password": password
-		}
-		let headers = new Headers({
-		    'Content-Type': 'application/json',
-		});
-		let options = new RequestOptions({ headers: headers, withCredentials: true });
+		// let credentials = {
+		// 	"email": email,
+		// 	"password": password
+		// }
+		// let headers = new Headers({
+		//     'Content-Type': 'application/json',
+		// });
+		// let options = new RequestOptions({ headers: headers, withCredentials: true });
 
-		this.http.post("https://auth.services.zam.com/v1/login", credentials, options)
-			.subscribe(
-				(data) => {
-					console.log('login successful', data, data.headers.getAll('Set-Cookie'));
-					let xsrfToken = data.headers.get('XSRF-TOKEN');
-					this.localStorageService.set('hearthHeadXsrfToken', xsrfToken);
-					callback();
-				},
-				(err) => {
-					console.log('login error', err);
-				}
-			);
+		// this.http.post("https://auth.services.zam.com/v1/login", credentials, options)
+		// 	.subscribe(
+		// 		(data) => {
+		// 			console.log('login successful', data, data.headers.getAll('Set-Cookie'));
+		// 			let xsrfToken = data.headers.get('XSRF-TOKEN');
+		// 			this.localStorageService.set('hearthHeadXsrfToken', xsrfToken);
+		// 			callback();
+		// 		},
+		// 		(err) => {
+		// 			console.log('login error', err);
+		// 		}
+		// 	);
 	}
 
 	public sync(callback: Function) {
-		this.collectionManager.getCollection((cards: Card[]) => {
-			let collection = { };
-			cards.forEach((card: Card) => {
-				let jsonCard = collection[card.Id] || {
-					"card_id": card.Id
-				}
-				if (card.Premium) {
-					jsonCard.premium_count = card.Count
-				}
-				else {
-					jsonCard.normal_count = card.Count
-				}
-				collection[card.Id] = jsonCard;
-			})
-			console.log('collection map', collection);
+		// this.collectionManager.getCollection((cards: Card[]) => {
+		// 	let collection = { };
+		// 	cards.forEach((card: Card) => {
+		// 		let jsonCard = collection[card.Id] || {
+		// 			"card_id": card.Id
+		// 		}
+		// 		if (card.Premium) {
+		// 			jsonCard.premium_count = card.Count
+		// 		}
+		// 		else {
+		// 			jsonCard.normal_count = card.Count
+		// 		}
+		// 		collection[card.Id] = jsonCard;
+		// 	})
+		// 	console.log('collection map', collection);
 
-			let hearthheadCollection = {
-				"cards": []
-			}
-			for (let key in collection) {
-				hearthheadCollection.cards.push(collection[key]);
-			}
-			console.log('hearthhead collection', hearthheadCollection);
-			this.postCollection(hearthheadCollection, callback);
-		})
+		// 	let hearthheadCollection = {
+		// 		"cards": []
+		// 	}
+		// 	for (let key in collection) {
+		// 		hearthheadCollection.cards.push(collection[key]);
+		// 	}
+		// 	console.log('hearthhead collection', hearthheadCollection);
+		// 	this.postCollection(hearthheadCollection, callback);
+		// })
 	}
 
 	private postCollection(hearthheadCollection: any, callback: Function) {
