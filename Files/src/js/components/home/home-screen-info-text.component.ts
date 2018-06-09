@@ -13,7 +13,7 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/home/home-screen-info-text.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="home-screen-info">
+		<div class="home-screen-info" *ngIf="dataLoaded">
 			<div class="app-title">
 				<i class="i-35 gold-theme left" *ngIf="!importantAnnouncement">
 					<svg class="svg-icon-fill">
@@ -34,6 +34,8 @@ declare var overwolf: any;
 })
 
 export class HomeScreenInfoTextComponent {
+
+	private dataLoaded = false;
 
 	private currentNotificationIndex = 0;
 	private notifications: any[];
@@ -62,6 +64,7 @@ export class HomeScreenInfoTextComponent {
 			console.log('detecting running game in welcome window', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				this.status = "Firestone now follows your Hearthstone session.";
+				this.dataLoaded = true;
 			}
 			else {
 				this.status = "No Hearthstone session detected.";
@@ -73,6 +76,7 @@ export class HomeScreenInfoTextComponent {
 					else {
 						this.statusDetails = "Choose an ability:";
 					}
+					this.dataLoaded = true;
 				})
 			}
 

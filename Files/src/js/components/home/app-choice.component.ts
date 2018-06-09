@@ -11,7 +11,7 @@ declare var overwolf: any;
 		`../../../css/component/home/app-choice.component.scss`,
 	],
 	template: `
-		<div class="app-choice">
+		<div class="app-choice" *ngIf="dataLoaded">
 			<div (click)="showCollection()" [ngClass]="{'app binder': true, 'inactive': noCollection}">
 				<div class="no-data" *ngIf="noCollection">Launch Hearthstone to start</div>
 				<div class="info">
@@ -59,6 +59,7 @@ export class AppChoiceComponent {
 
 	@Output() close = new EventEmitter();
 
+	private dataLoaded = false;
 	private noCollection = true;
 
 	constructor(private collectionManager: CollectionManager) {
@@ -78,6 +79,7 @@ export class AppChoiceComponent {
 		this.collectionManager.getCollection((collection) => {
 			console.log('retrieved collection', collection);
 			this.noCollection = !collection || collection.length == 0;
+			this.dataLoaded = true;
 		});
 	}
 
