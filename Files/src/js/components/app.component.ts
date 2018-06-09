@@ -57,13 +57,15 @@ export class AppComponent {
 			setTimeout(() => {
 				this.init();
 				return;
-			}, 200)
+			}, 200);
+			return;
 		}
 		if (!this.achievementsDb.dbInit) {
 			setTimeout(() => {
 				this.init();
 				return;
-			}, 200)
+			}, 200);
+			return;
 		}
 
 		console.log('real init starting');
