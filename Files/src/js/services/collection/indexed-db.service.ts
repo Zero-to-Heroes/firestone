@@ -13,7 +13,6 @@ export class IndexedDbService {
 	public dbInit: boolean;
 
 	private db: AngularIndexedDB;
-	private dbInit: boolean;
 
 	constructor(private localStorageService: LocalStorageService) {
 		this.init();
