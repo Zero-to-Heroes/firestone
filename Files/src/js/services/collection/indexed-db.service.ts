@@ -142,11 +142,11 @@ export class IndexedDbService {
 
 	private init() {
 		console.log('[storage] starting init of indexeddb');
-		this.db = new AngularIndexedDB('hs-collection-db', 1);
-		this.db.openDatabase(1, (evt) => {
+		this.db = new AngularIndexedDB('hs-collection-db', 7);
+		this.db.openDatabase(7, (evt) => {
 			console.log('upgrading db', evt);
 
-			if (evt.oldVersion < 1) {
+			if (evt.oldVersion < 7) {
 				console.log('[storage] upgrade to version 1');
 				let objectStore = evt.currentTarget.result.createObjectStore(
 					'card-history',
