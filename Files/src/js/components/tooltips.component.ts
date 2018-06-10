@@ -20,6 +20,7 @@ export class Tooltip {
 	@Input() cardId: string;
 	@Input() missing: boolean;
 	@Input() removing: boolean;
+	public destroyed: boolean;
 
 	@HostBinding('style.left') left: string;
 	@HostBinding('style.top') top: string;
@@ -42,7 +43,9 @@ export class Tooltip {
 export class TooltipsComponent {
 
     @ViewChild('tooltips', { read: ViewContainerRef }) tooltips: ViewContainerRef;
-    private currentTooltip = null;
+    private currentTooltips = [];
+
+    private updating = false;
 
 	constructor(
 		private events: Events,
@@ -78,7 +81,7 @@ export class TooltipsComponent {
 				    component.instance.missing = !owned;
 				    // console.log('is card missing?', component.instance.missing);
 
-				    this.currentTooltip = component;
+				    this.addTooltip(component);
 				})
 			}
 		);
@@ -92,14 +95,37 @@ export class TooltipsComponent {
 	}
 
 	private destroy() {
-		if (this.currentTooltip) {
-			let tooltip = this.currentTooltip;
-			this.currentTooltip.instance.removing = true;
-			setTimeout(() => {
-				// console.log('destroying');
-				tooltip.destroy();
-				// this.currentTooltip = null;
-			}, 100);
+		if (this.currentTooltips) {
+			this.currentTooltips.forEach((tooltip) => {
+				tooltip.instance.removing = true;
+				setTimeout(() => {
+					// console.log('destroying');
+					tooltip.destroy();
+					tooltip.destroyed = true;
+					// this.currentTooltip = null;
+				}, 100);
+
+			});
 		}
+	}
+
+	private addTooltip(tooltip: any) {
+		if (this.updating) {
+			setTimeout(() => {
+				this.addTooltip(tooltip);
+			}, 10);
+			return;
+		}
+		this.updating = true;
+		console.log('cleaning tooltips', this.currentTooltips);
+		this.currentTooltips.forEach((tooltip) => {
+			if (tooltip.destroyed) {
+				tooltip.destroy();
+			}
+		});
+		this.currentTooltips = this.currentTooltips.filter((e) => !(e.destroyed == true));
+		console.log('tooltips cleaned', this.currentTooltips);
+		this.currentTooltips.push(tooltip);
+		this.updating = false;
 	}
 }
