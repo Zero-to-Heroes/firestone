@@ -63,7 +63,7 @@ export class CardSearchComponent {
 	}
 
 	private onValidateSearch(event: KeyboardEvent) {
-		if (event.keyCode === 13) {
+		if (event.keyCode === 13 && this.searchString) {
 			console.log('validating search', this.searchResults, this.searchString);
 
 			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
