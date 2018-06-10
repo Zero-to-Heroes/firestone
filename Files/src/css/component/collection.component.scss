@@ -71,7 +71,7 @@
         width: 100%;
         height: 100%;
         position: absolute;
-        background-color: $darkred;
+        background-color: $black;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -79,7 +79,7 @@
         .logo {
             width: 109px;
             height: 154px;
-            opacity: 0.2;
+            color: $darkred;
         }
     }
 
