@@ -56,14 +56,12 @@ export class AppComponent {
 		if (!this.collectionDb.dbInit) {
 			setTimeout(() => {
 				this.init();
-				return;
 			}, 200);
 			return;
 		}
 		if (!this.achievementsDb.dbInit) {
 			setTimeout(() => {
 				this.init();
-				return;
 			}, 200);
 			return;
 		}
