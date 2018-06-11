@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as achievements from './achievements_list.json';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -23,6 +24,7 @@ export class AchievementsRepository {
 	public achievementModules: Challenge[] = [];
 
 	constructor() {
+		console.log('all achievements', achievements);
 		this.registerModules();
 		this.modulesLoaded.next(true);
 	}
@@ -31,16 +33,23 @@ export class AchievementsRepository {
 		let result: AchievementSet[] = [
 			new AchievementSet('boss_encounter'),
 			new AchievementSet('boss_victory'),
-			new AchievementSet('passive'),
-			new AchievementSet('treasure'),
+			// new AchievementSet('passive'),
+			// new AchievementSet('treasure'),
 		];
-		this.achievementModules
-			.map((challenge) => challenge.achieve())
-			.forEach((achievement) => this.addAchievementToSet(achievement, result));
+		let allAchievements; //TODO load json
+		let accomplishedAchievements; /// TODO load from db
+		// result.forEach((achievementSet: AchievementSet) => {
+		// 	this.buildAchievementSet(achievementSet, allAchievements, accomplishedAchievements);
+		// });
 
-		result.forEach((set) => {
-			set.achievements = sortBy(set.achievements, 'order', 'id');
-		});
+
+		// this.achievementModules
+		// 	.map((challenge) => challenge.achieve())
+		// 	.forEach((achievement) => this.addAchievementToSet(achievement, result));
+
+		// result.forEach((set) => {
+		// 	set.achievements = sortBy(set.achievements, 'order', 'id');
+		// });
 
 		console.log('achievement sets', result);
 		return result;
@@ -52,6 +61,7 @@ export class AchievementsRepository {
 	}
 
 	private registerModules() {
+
 		for (let bossIds of Data.ALL_BOSS_IDS) {
 			this.achievementModules.push(new BossEncounter("boss_encounter_" + bossIds[0], bossIds[0], bossIds[1]));
 			this.achievementModules.push(new BossVictory("boss_victory_" + bossIds[0], bossIds[0], bossIds[1]));

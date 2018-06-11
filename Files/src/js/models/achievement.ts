@@ -4,11 +4,12 @@ export class Achievement {
 	id: string;
 	icon: string;
 	order: number;
+	difficulty: string;
 	name: string;
 	title: string;
 	htmlTooltip: string;
 
-	completed: boolean;
+	numberOfCompletions: number;
 
 	constructor(id: string, setId: string) {
 		this.id = id;
