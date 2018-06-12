@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Achievement } from '../../models/achievement';
+import { CompletedAchievement } from '../../models/completed-achievement';
 import { IndexedDbService } from './indexed-db.service';
 import { Events } from '../events.service';
 
@@ -12,14 +12,13 @@ export class AchievementsStorageService {
 		private indexedDb: IndexedDbService) {
 	}
 
-	public checkAchievement(achievement: Achievement, callback: Function) {
-		this.indexedDb.getAchievement(achievement.id, (result) => {
-			callback(result != null);
-			// callback(false);
+	public loadAchievement(achievementId: string, callback: Function) {
+		this.indexedDb.getAchievement(achievementId, (result: CompletedAchievement) => {
+			callback(result);
 		});
 	}
 
-	public claim(achievement: Achievement, callback: Function) {
+	public saveAchievement(achievement: CompletedAchievement, callback: Function) {
 		this.indexedDb.save(achievement, (result) => {
 			callback(result);
 		})

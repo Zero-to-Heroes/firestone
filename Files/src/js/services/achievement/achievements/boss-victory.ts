@@ -1,5 +1,5 @@
 import { Challenge } from './challenge';
-import { Achievement } from '../../../models/achievement';
+import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Game } from '../../../models/game';
 import { DungeonInfo } from '../../../models/dungeon-info';
@@ -12,10 +12,10 @@ export class BossVictory implements Challenge {
 	private bossId: string;
 	private bossDbfId: number;
 
-	constructor(achievementId: string, bossId: string, bossDbfId: number) {
-		this.achievementId = achievementId;
-		this.bossId = bossId;
-		this.bossDbfId = bossDbfId;
+	constructor(achievement) {
+		this.achievementId = achievement.id;
+		this.bossId = achievement.bossId;
+		this.bossDbfId = achievement.bossDbfId;
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
@@ -60,16 +60,24 @@ export class BossVictory implements Challenge {
 		});
 	}
 
-	public achieve(): Achievement {
-		let achievement: Achievement = new Achievement(this.achievementId, 'boss_victory');
-		let card = parseCardsText.getCard(this.bossId);
-		achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.bossId}.jpg`;
-		achievement.order = card.health / 10;
-		achievement.title = "Another one bites the dust: " + card.name;
-		achievement.name = card.name;
-		achievement.htmlTooltip = `
-			<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.bossId}.png" />
-		`
-		return achievement;
+	public getAchievementId() {
+		return this.achievementId;
 	}
+
+	public defaultAchievement() {
+		return new CompletedAchievement(this.achievementId);
+	}
+
+	// public achieve(): Achievement {
+	// 	let achievement: Achievement = new Achievement(this.achievementId, 'boss_victory');
+	// 	let card = parseCardsText.getCard(this.bossId);
+	// 	achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.bossId}.jpg`;
+	// 	achievement.order = card.health / 10;
+	// 	achievement.title = "Another one bites the dust: " + card.name;
+	// 	achievement.name = card.name;
+	// 	achievement.htmlTooltip = `
+	// 		<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.bossId}.png" />
+	// 	`
+	// 	return achievement;
+	// }
 }

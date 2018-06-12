@@ -1,9 +1,9 @@
-import { Achievement } from './achievement'
+import { CompletedAchievement } from './completed-achievement'
 
-export class AchievementSet {
+export class AchievementSetOld {
 
 	id: string;
-	achievements: Achievement[] = [];
+	achievements: CompletedAchievement[] = [];
 
 	constructor(id: string) {
 		this.id = id;

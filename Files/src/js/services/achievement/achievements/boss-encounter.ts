@@ -1,5 +1,5 @@
 import { Challenge } from './challenge';
-import { Achievement } from '../../../models/achievement';
+import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { DungeonInfo } from '../../../models/dungeon-info';
 
@@ -11,10 +11,10 @@ export class BossEncounter implements Challenge {
 	private bossId: string;
 	private bossDbfId: number;
 
-	constructor(achievementId: string, bossId: string, bossDbfId) {
-		this.achievementId = achievementId;
-		this.bossId = bossId;
-		this.bossDbfId = bossDbfId;
+	constructor(achievement) {
+		this.achievementId = achievement.id;
+		this.bossId = achievement.bossId;
+		this.bossDbfId = achievement.bossDbfId;
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
@@ -42,6 +42,9 @@ export class BossEncounter implements Challenge {
 
 	private inspectMemory(gameEvent: GameEvent, callback: Function) {
 		let dungeonInfo: DungeonInfo = gameEvent.data[0];
+		if (!dungeonInfo) {
+			return;
+		}
 		dungeonInfo.DefeatedBosses.forEach((cardId) => {
 			if (cardId === this.bossDbfId) {
 				callback();
@@ -49,21 +52,16 @@ export class BossEncounter implements Challenge {
 			}
 		});
 		if (dungeonInfo.NextBoss === this.bossDbfId) {
-				callback();
-				return;
+			callback();
+			return;
 		}
 	}
 
-	public achieve(): Achievement {
-		let card = parseCardsText.getCard(this.bossId);
-		let achievement: Achievement = new Achievement(this.achievementId, 'boss_encounter');
-		achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.bossId}.jpg`;
-		achievement.order = card.health / 10;
-		achievement.title = "A new encounter: " + card.name;
-		achievement.name = card.name;
-		achievement.htmlTooltip = `
-			<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.bossId}.png" />
-		`
-		return achievement;
+	public getAchievementId() {
+		return this.achievementId;
+	}
+
+	public defaultAchievement() {
+		return new CompletedAchievement(this.achievementId);
 	}
 }

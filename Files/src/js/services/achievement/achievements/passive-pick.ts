@@ -1,5 +1,5 @@
 import { Challenge } from './challenge';
-import { Achievement } from '../../../models/achievement';
+import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { DungeonInfo } from '../../../models/dungeon-info';
 
@@ -11,10 +11,10 @@ export class PassivePick implements Challenge {
 	private passiveId: string;
 	private passiveDbfId: number;
 
-	constructor(achievementId: string, passiveId: string, passiveDbfId: number) {
-		this.achievementId = achievementId;
-		this.passiveId = passiveId;
-		this.passiveDbfId = passiveDbfId;
+	constructor(achievement) {
+		this.achievementId = achievement.id;
+		this.passiveId = achievement.passiveId;
+		this.passiveDbfId = achievement.passiveDbfId;
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
@@ -43,18 +43,18 @@ export class PassivePick implements Challenge {
 		});
 	}
 
-	public achieve(): Achievement {
-		let card = parseCardsText.getCard(this.passiveId);
-		let achievement: Achievement = new Achievement(this.achievementId, 'passive');
-		achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.passiveId}.jpg`;
-		achievement.order = parseInt(this.passiveId);
-		achievement.title = "Passive ability: " + card.name;
-		achievement.name = card.name;
-		achievement.htmlTooltip = `
-			<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.passiveId}.png" />
-		`
-		return achievement;
-	}
+	// public achieve(): Achievement {
+	// 	let card = parseCardsText.getCard(this.passiveId);
+	// 	let achievement: Achievement = new Achievement(this.achievementId, 'passive');
+	// 	achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.passiveId}.jpg`;
+	// 	achievement.order = parseInt(this.passiveId);
+	// 	achievement.title = "Passive ability: " + card.name;
+	// 	achievement.name = card.name;
+	// 	achievement.htmlTooltip = `
+	// 		<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.passiveId}.png" />
+	// 	`
+	// 	return achievement;
+	// }
 
 	private getLastTreasurePick(dungeonInfo: DungeonInfo): number {
 		if (!dungeonInfo.TreasureOptions || dungeonInfo.TreasureOptions.length == 0) {
@@ -65,5 +65,13 @@ export class PassivePick implements Challenge {
 		}
 
 		return dungeonInfo.TreasureOptions[dungeonInfo.ChosenTreasure - 1];
+	}
+
+	getAchievementId() {
+		return this.achievementId;
+	}
+
+	defaultAchievement() {
+		return new CompletedAchievement(this.achievementId);
 	}
 }
