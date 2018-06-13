@@ -79,6 +79,7 @@ export class AppComponent {
 							overwolf.windows.hide(result.window.id);
 						}
 						else {
+							this.closeWelcomeWindow();
 							this.startApp(() => this.showCollectionWindow());
 						}
 					});
