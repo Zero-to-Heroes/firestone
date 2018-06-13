@@ -73,7 +73,15 @@ export class AppComponent {
 			(result) => {
 				console.log('hotkey pressed', result)
 				if (result.status === 'success') {
-					this.startApp(() => this.showCollectionWindow());
+					overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+						console.log('is CollectionWindow running?', result);
+						if (result.window.isVisible) {
+							overwolf.windows.hide(result.window.id);
+						}
+						else {
+							this.startApp(() => this.showCollectionWindow());
+						}
+					});
 				}
 				else {
 					console.log('could not trigger hotkey', result, this.currentState);
