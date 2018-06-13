@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, Input, HostBinding, AfterViewInit } from '@angular/core';
 import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
@@ -13,18 +13,17 @@ declare var overwolf: any;
 	styleUrls: [`../../css/component/tooltip.component.scss`],
 	encapsulation: ViewEncapsulation.None,
   	template: `<img src={{image()}} *ngIf="cardId" [ngClass]="{'missing': missing, 'removing': removing}"/>`,
-  	// template: `Hopla`,
 })
 export class Tooltip {
 
 	@Input() cardId: string;
 	@Input() missing: boolean;
-	@Input() removing: boolean;
-	public destroyed: boolean;
+	public removing: boolean;
 
 	@HostBinding('style.left') left: string;
 	@HostBinding('style.top') top: string;
 	@HostBinding('style.position') position: string;
+	@HostBinding('style.display') display: string;
 
 	image() {
 		return `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png`;
@@ -40,12 +39,10 @@ export class Tooltip {
 		<div class="tooltips"><ng-template #tooltips></ng-template></div>
 	`,
 })
-export class TooltipsComponent {
+export class TooltipsComponent implements AfterViewInit {
 
     @ViewChild('tooltips', { read: ViewContainerRef }) tooltips: ViewContainerRef;
-    private currentTooltips = [];
-
-    private updating = false;
+    private tooltip;
 
 	constructor(
 		private events: Events,
@@ -55,34 +52,19 @@ export class TooltipsComponent {
 			(data) => {
 				this.destroy();
 
-				// So we're sure the tooltips div is rendered empty before recreating the
-				// tooltip, thus applying the transition effect
-				setTimeout(() => {
-					let cardId: string = data.data[0];
-					let x: number = data.data[1];
-					let y: number = data.data[2];
-					let owned: boolean = data.data[3];
-					// console.log('showing tooltip', cardId, x, y, owned, data);
+				let cardId: string = data.data[0];
+				let x: number = data.data[1];
+				let y: number = data.data[2];
+				let owned: boolean = data.data[3];
+				let top: number = Math.min(window.innerHeight - 400, y - 388 / 2);
 
-					let top: number = Math.min(window.innerHeight - 400, y - 388 / 2);
-					// this.appendComponentToBody(Tooltip);
-
-				    // We create a factory out of the component we want to create
-				    let factory = this.resolver.resolveComponentFactory(Tooltip);
-				    // console.log('created facctory', factory);
-
-				    // We create the component using the factory and the injector
-				    let component = this.tooltips.createComponent(factory);
-				    // console.log('created component', component);
-				    component.instance.cardId = cardId;
-				    component.instance.left = x + 'px';
-				    component.instance.top = top + 'px';
-				    component.instance.position = 'absolute';
-				    component.instance.missing = !owned;
-				    // console.log('is card missing?', component.instance.missing);
-
-				    this.addTooltip(component);
-				})
+			    this.tooltip.instance.display = 'block';
+		    	this.tooltip.instance.removing = false;
+			    this.tooltip.instance.cardId = cardId;
+			    this.tooltip.instance.left = x + 'px';
+			    this.tooltip.instance.top = top + 'px';
+			    this.tooltip.instance.position = 'absolute';
+			    this.tooltip.instance.missing = !owned;
 			}
 		);
 
@@ -94,38 +76,18 @@ export class TooltipsComponent {
 		);
 	}
 
-	private destroy() {
-		if (this.currentTooltips) {
-			this.currentTooltips.forEach((tooltip) => {
-				tooltip.instance.removing = true;
-				setTimeout(() => {
-					// console.log('destroying');
-					tooltip.destroy();
-					tooltip.destroyed = true;
-					// this.currentTooltip = null;
-				}, 100);
+	ngAfterViewInit() {
+	    // We create a factory out of the component we want to create
+	    let factory = this.resolver.resolveComponentFactory(Tooltip);
 
-			});
-		}
+	    // We create the component using the factory and the injector
+	    this.tooltip = this.tooltips.createComponent(factory);
 	}
 
-	private addTooltip(tooltip: any) {
-		if (this.updating) {
-			setTimeout(() => {
-				this.addTooltip(tooltip);
-			}, 10);
-			return;
+	private destroy() {
+		if (this.tooltip) {
+			this.tooltip.instance.removing = true;
+			this.tooltip.instance.display = 'none';
 		}
-		this.updating = true;
-		console.log('cleaning tooltips', this.currentTooltips);
-		this.currentTooltips.forEach((tooltip) => {
-			if (tooltip.destroyed) {
-				tooltip.destroy();
-			}
-		});
-		this.currentTooltips = this.currentTooltips.filter((e) => !(e.destroyed == true));
-		console.log('tooltips cleaned', this.currentTooltips);
-		this.currentTooltips.push(tooltip);
-		this.updating = false;
 	}
 }
