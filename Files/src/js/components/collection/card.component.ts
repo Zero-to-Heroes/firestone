@@ -72,7 +72,7 @@ export class CardComponent {
 			let rect = this.el.nativeElement.getBoundingClientRect();
 			let x = rect.left + rect.width - 20;
 			let y = rect.top + rect.height / 2;
-			console.log('how many collected cards?', this.card.isOwned());
+			// console.log('how many collected cards?', this.card.isOwned());
 			this.events.broadcast(Events.SHOW_TOOLTIP, this.card.id, x, y, this.card.isOwned());
 		}
 	}
