@@ -77,11 +77,14 @@ export class TooltipsComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-	    // We create a factory out of the component we want to create
-	    let factory = this.resolver.resolveComponentFactory(Tooltip);
+		// https://blog.angularindepth.com/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error-e3fd9ce7dbb4
+		setTimeout(() => {
+		    // We create a factory out of the component we want to create
+		    let factory = this.resolver.resolveComponentFactory(Tooltip);
 
-	    // We create the component using the factory and the injector
-	    this.tooltip = this.tooltips.createComponent(factory);
+		    // We create the component using the factory and the injector
+		    this.tooltip = this.tooltips.createComponent(factory);
+		})
 	}
 
 	private destroy() {

@@ -48,6 +48,9 @@ export class CardHistoryItemComponent {
 	}
 
 	@Input('historyItem') set historyItem(history: CardHistory) {
+		if (!history) {
+			return;
+		}
 		this.cardId = history.cardId;
 		this.newCard = history.isNewCard;
 		this.rarityImg = `/Files/assets/images/rarity/rarity-${history.rarity}.png`;
