@@ -65,11 +65,7 @@ declare var OwAd: any;
 					</i>
 					<div class="sub-title" *ngIf="!loading">
 						<span>Hit</span>
-						<div class="hotkey">
-							<span class="key">Alt</span>
-							<span class="plus">+</span>
-							<span class="key">C</span>
-						</div>
+						<div class="hotkey" [innerHTML]="splitHotkey()"></div>
 						<span>to view the app</span>
 					</div>
 					<div class="ads-container">
@@ -116,6 +112,8 @@ export class LoadingComponent implements AfterViewInit {
 	private thisWindowId: string;
 	private adRef;
 
+	private hotkey = 'Alt+C';
+
 	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef) {
 		console.log('in loading constructor');
 		overwolf.windows.getCurrentWindow((result) => {
@@ -146,7 +144,14 @@ export class LoadingComponent implements AfterViewInit {
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
-				this.adRef.refreshAd();
+				this.refreshAds();
+			}
+		});
+
+		overwolf.settings.getHotKey('collection', (result) => {
+			console.log('hot key is', result);
+			if (result.status == 'success') {
+				this.hotkey = result.hotkey;
 			}
 		});
 
@@ -167,6 +172,16 @@ export class LoadingComponent implements AfterViewInit {
 		this.adRef = new OwAd(document.getElementById("ad-div"));
 	}
 
+	private refreshAds() {
+		if (!this.adRef) {
+			setTimeout(() => {
+				this.refreshAds()
+			}, 20);
+			return;
+		}
+		this.adRef.refreshAd();
+	}
+
 
 	private positionWindow() {
 		overwolf.games.getRunningGameInfo((gameInfo) => {
@@ -180,6 +195,14 @@ export class LoadingComponent implements AfterViewInit {
 				console.log('changed window position');
 			});
 		});
+	}
+
+	private splitHotkey(): string {
+		let split = this.hotkey.split('+');
+		// console.log('split hot key', split);
+		return split
+			.map((splitItem) => `<span class="key">${splitItem}</span>`)
+			.join('<span class="plus">+</span>');
 	}
 
 

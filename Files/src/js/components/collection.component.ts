@@ -84,7 +84,7 @@ export class CollectionComponent implements AfterViewInit {
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
-				this.adRef.refreshAd();
+				this.refreshAds();
 			}
 		});
 
@@ -180,6 +180,16 @@ export class CollectionComponent implements AfterViewInit {
 		}
 		console.log('ads ready', adsReady, document.getElementById("ad-div"));
 		this.adRef = new OwAd(document.getElementById("ad-div"));
+	}
+
+	private refreshAds() {
+		if (!this.adRef) {
+			setTimeout(() => {
+				this.refreshAds()
+			}, 20);
+			return;
+		}
+		this.adRef.refreshAd();
 	}
 
 	private reset() {

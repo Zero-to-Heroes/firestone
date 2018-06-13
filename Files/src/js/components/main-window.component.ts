@@ -29,16 +29,10 @@ declare var Crate: any;
 								</svg>
 							</i>
 							<menu-selection></menu-selection>
-							<!-- <hearthhead></hearthhead> -->
 						</div>
 					</div>
 					<!-- <player-name></player-name> -->
-					<div class="hotkey">
-						<span class="text">Hotkey:</span>
-						<span class="key">Alt</span>
-						<span class="plus">+</span>
-						<span class="key">C</span>
-					</div>
+					<div class="hotkey" [innerHTML]="splitHotkey()"></div>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">
@@ -114,6 +108,8 @@ export class MainWindowComponent {
 
 	private selectedModule = 'collection';
 
+	private hotkey = 'Alt+C';
+
 	constructor(
 		private debugService: DebugService,
 		private events: Events) {
@@ -124,18 +120,19 @@ export class MainWindowComponent {
 			}
 		});
 
-		// this.events.on(Events.HEARTHHEAD_LOGIN).subscribe(
-		// 	(data) => {
-		// 		this.showLogin = true;
-		// 	}
-		// )
-
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.selectedModule = data.data[0];
 				// console.log('selected module', this.selectedModule);
 			}
 		)
+
+		overwolf.settings.getHotKey('collection', (result) => {
+			console.log('hot key is', result);
+			if (result.status == 'success') {
+				this.hotkey = result.hotkey;
+			}
+		});
 	}
 
 	@HostListener('mousedown')
@@ -155,6 +152,14 @@ export class MainWindowComponent {
 			})
 		});
 	};
+
+	private splitHotkey(): string {
+		let split = this.hotkey.split('+');
+		// console.log('split hot key', split);
+		return '<span class="text">Hotkey:</span>' + split
+			.map((splitItem) => `<span class="key">${splitItem}</span>`)
+			.join('<span class="plus">+</span>');
+	}
 
 	private closeWindow() {
 		overwolf.windows.hide(this.windowId);
