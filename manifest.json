@@ -71,10 +71,7 @@
 				"show_in_taskbar": false,
 		        "size": {"width": 600, "height": 200},
 		        "min_size": {"width": 600, "height": 200},
-		        "max_size": {"width": 600, "height": 200},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
+		        "max_size": {"width": 600, "height": 200}
 			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
@@ -83,10 +80,7 @@
 				"show_in_taskbar": true,
 		        "size": {"width": 1044, "height": 660},
 		        "min_size": {"width": 1044, "height": 660},
-		        "max_size": {"width": 1044, "height": 660},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
+		        "max_size": {"width": 1044, "height": 660}
 			},
 			"CollectionWindow": {
 				"file": "Files/html/collection.html",
