@@ -142,6 +142,7 @@ export class CollectionComponent implements AfterViewInit {
 				this._selectedView = 'card-details';
 				this.fullCardId = event.data[0];
 				let newSet = this.cards.getSetFromCardId(this.fullCardId);
+				console.log('should update set', newSet, this._selectedSet);
 				if (!this._selectedSet || this._selectedSet.id != newSet.id) {
 					this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
 					this.collectionManager.getCollection((collection: Card[]) => {
@@ -156,12 +157,20 @@ export class CollectionComponent implements AfterViewInit {
 			console.log('received', message);
 			if (message.id === 'click-card') {
 				this.ngZone.run(() => {
-					this.fullCardId = message.content;
+					this.reset();
+					this._menuDisplayType = 'breadcrumbs';
 					this._selectedView = 'card-details';
-					console.log('setting fullCardId', this.fullCardId);
-					overwolf.windows.restore(this.windowId, (result) => {
-						console.log('collection window restored');
-					});
+					this.fullCardId = message.content;
+					let newSet = this.cards.getSetFromCardId(this.fullCardId);
+					console.log('should update set', newSet, this._selectedSet);
+					if (!this._selectedSet || this._selectedSet.id != newSet.id) {
+						this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
+						this.collectionManager.getCollection((collection: Card[]) => {
+							this.updateSet(collection, this._selectedSet);
+						})
+					}
+					this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+					overwolf.windows.restore(this.windowId);
 				})
 			}
 		});
