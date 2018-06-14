@@ -15,3 +15,13 @@ Please don't hesitate to request new features or report issues using the issues 
 ![Welcome page](https://i.imgur.com/tbw7Vmg.png)
 
 ![In-game notifications](https://i.imgur.com/gp4Ug22.jpg)
+
+# Contributing
+
+```
+$ git clone ...
+$ cd your_repo
+$ npm install  # You might need to have node installed
+$ cd Files
+$ npm run build
+```
