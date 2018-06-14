@@ -18,13 +18,13 @@ export class CollectionManager {
 	}
 
 	public getCollection(callback: Function) {
-		// console.log('getting collection');
+		console.log('getting collection');
 		this.mindVision.getCollection((collection) => {
-			// console.log('collection from mindvision');
-			if (!collection) {
-				// console.log('retrieving collection from db', collection);
+			console.log('collection from mindvision');
+			if (!collection || collection.length == 0) {
+				console.log('retrieving collection from db', collection);
 				this.db.getCollection((collection) => {
-					// console.log('retrieved collection form db', collection);
+					console.log('retrieved collection form db', collection);
 					callback(collection);
 				});
 			}
