@@ -71,11 +71,11 @@ export class SetsComponent {
 			return;
 		}
 		this.refreshing = true;
-		this.standardSets = this.cards.getStandardSets();
-		this.wildSets = this.cards.getWildSets();
 		// console.log('sets', this.standardSets, this.wildSets);
 
 		this.collectionManager.getCollection((collection: Card[]) => {
+			this.standardSets = this.cards.getStandardSets();
+			this.wildSets = this.cards.getWildSets();
 			// Add the number of owned cards on each card in the standard set
 			this.standardSets.forEach((standardSet: Set) => {
 				this.updateSet(collection, standardSet);
