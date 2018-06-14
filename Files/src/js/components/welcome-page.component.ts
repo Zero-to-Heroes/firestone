@@ -137,8 +137,9 @@ export class WelcomePageComponent {
 			server:"187101197767933952",
 			channel:"446045705392357376"
 		});
-		crate.on('toggle', open => {
-			if (!open) {
+		crate.toggle(true);
+		crate.store.subscribe(() => {
+			if (crate.store.getState().visible && !crate.store.getState().open) {
 				crate.hide();
 			}
 		})
