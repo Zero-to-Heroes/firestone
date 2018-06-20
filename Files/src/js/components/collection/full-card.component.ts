@@ -88,8 +88,8 @@ export class FullCardComponent {
 				this.events.broadcast(Events.HIDE_TOOLTIP);
 			});
 		})
+		this.audioClips = [];
 		if (card.audio) {
-			this.audioClips = [];
 			Object.keys(card.audio).forEach((key,index) => {
 			    this.audioClips.push({
 			    	name: key.split("_")[0],
