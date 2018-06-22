@@ -50,42 +50,46 @@ export class PackMonitor {
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
 
-				this.busy = true;
-				// clearTimeout(this.timer);
+				overwolf.games.getRunningGameInfo((gameInfo) => {
+					this.dpi = gameInfo.logicalWidth / gameInfo.width;
 
-				console.log('resetting cards for new pack');
-				let undetectedCards = [];
-				let anyUndetected = false;
-				for (let j = 0; j < 5; j++) {
-					if (this.unrevealedCards[j] !== '' && this.unrevealedCards[j]) {
-						undetectedCards.push(this.unrevealedCards[j]);
-						console.warn('undetected', this.unrevealedCards[j], JSON.stringify(this.unrevealedCards[j]));
-						anyUndetected = true;
+					this.busy = true;
+					// clearTimeout(this.timer);
+
+					console.log('resetting cards for new pack');
+					let undetectedCards = [];
+					let anyUndetected = false;
+					for (let j = 0; j < 5; j++) {
+						if (this.unrevealedCards[j] !== '' && this.unrevealedCards[j]) {
+							undetectedCards.push(this.unrevealedCards[j]);
+							console.warn('undetected', this.unrevealedCards[j], JSON.stringify(this.unrevealedCards[j]));
+							anyUndetected = true;
+						}
 					}
-				}
-				if (anyUndetected) {
-					console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
-					ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
-				}
+					if (anyUndetected) {
+						console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
+						ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
+					}
 
-				if (this.totalDustInPack > 0) {
-					this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
-					this.totalDustInPack = 0;
-					this.totalDuplicateCards = 0;
-				}
+					if (this.totalDustInPack > 0) {
+						this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
+						this.totalDustInPack = 0;
+						this.totalDuplicateCards = 0;
+					}
 
-				// // Show dust after a short amount of time if no new pack has been opened
-				// this.timer = setTimeout(() => {
-				// 	console.log('times up, showing dust earned', this.totalDustInPack, this.totalDuplicateCards);
-				// 	if (this.totalDustInPack > 0) {
-				// 		this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
-				// 		this.totalDustInPack = 0;
-				// 		this.totalDuplicateCards = 0;
-				// 	}
-				// }, 10 * 1000)
+					// // Show dust after a short amount of time if no new pack has been opened
+					// this.timer = setTimeout(() => {
+					// 	console.log('times up, showing dust earned', this.totalDustInPack, this.totalDuplicateCards);
+					// 	if (this.totalDustInPack > 0) {
+					// 		this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
+					// 		this.totalDustInPack = 0;
+					// 		this.totalDuplicateCards = 0;
+					// 	}
+					// }, 10 * 1000)
 
-				this.busy = false;
-				this.unrevealedCards = [];
+					this.busy = false;
+					this.unrevealedCards = [];
+				});
 			});
 
 		this.events.on(Events.NEW_CARD)
@@ -127,7 +131,7 @@ export class PackMonitor {
 		overwolf.games.getRunningGameInfo((result) => {
 			let x = 1.0 * data.x / (result.width * this.dpi);
 			let y = 1.0 * data.y / (result.height * this.dpi);
-			// console.log('clicked at ', x, y, data, result);
+			console.log('clicked at ', x, y, this.dpi, data, result);
 
 			// Top left
 			let ret = -1;
@@ -156,6 +160,7 @@ export class PackMonitor {
 				ga('send', 'event', 'error', 'card-unidentified', {x: x, y: y, data: data, result: result});
 				return;
 			}
+			console.log('matching card position', ret);
 
 			callback(ret);
 		});
@@ -190,7 +195,9 @@ export class PackMonitor {
 		let cardId = this.unrevealedCards[i];
 		console.log('revealing card', i, cardId, this.cardEvents[cardId], this.unrevealedCards);
 		this.unrevealedCards[i] = '';
-		this.cardEvents[cardId]();
+		if (this.cardEvents[cardId]) {
+			this.cardEvents[cardId]();			
+		}
 
 		for (let j = 0; j < 5; j++) {
 			// Not all cards have been revealed yet
