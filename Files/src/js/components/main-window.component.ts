@@ -101,13 +101,10 @@ export class MainWindowComponent {
 	private version;
 	private maximized = false;
 	private lastSize: any;
-
+	private crate;
 	private showLogin = false;
-
 	private windowId: string;
-
 	private selectedModule = 'collection';
-
 	private hotkey = 'Alt+C';
 
 	constructor(
@@ -170,14 +167,18 @@ export class MainWindowComponent {
 	};
 
 	private contactSupport() {
-		let crate = new Crate({
-			server:"187101197767933952",
-			channel:"446045705392357376"
-		});
-		crate.on('toggle', open => {
-			if (!open) {
-				crate.hide();
-			}
-		})
+		if (!this.crate) {
+			this.crate = new Crate({
+				server:"187101197767933952",
+				channel:"446045705392357376"
+			});
+			this.crate.store.subscribe(() => {
+				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+					this.crate.hide();
+				}
+			})
+		}
+		this.crate.toggle(true);
+		this.crate.show();
 	}
 }
