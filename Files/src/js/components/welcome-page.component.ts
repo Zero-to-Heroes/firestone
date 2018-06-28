@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
@@ -80,7 +80,7 @@ declare var Crate: any;
 	`,
 })
 // 7.1.1.17994
-export class WelcomePageComponent {
+export class WelcomePageComponent implements AfterViewInit {
 
 	private emptyCollection = false;
 	private thisWindowId: string;
@@ -99,6 +99,21 @@ export class WelcomePageComponent {
 				this.thisWindowId = result.window.id;
 			}
 		});
+	}
+
+	ngAfterViewInit() {
+		setTimeout(() => {
+			this.crate = new Crate({
+				server:"187101197767933952",
+				channel:"446045705392357376"
+			});
+			this.crate.store.subscribe(() => {
+				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+					this.crate.hide();
+				}
+			});
+			this.crate.hide();
+		}, 100);
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -135,15 +150,8 @@ export class WelcomePageComponent {
 
 	private contactSupport() {
 		if (!this.crate) {
-			this.crate = new Crate({
-				server:"187101197767933952",
-				channel:"446045705392357376"
-			});
-			this.crate.store.subscribe(() => {
-				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-					this.crate.hide();
-				}
-			})
+			setTimeout(() => this.contactSupport(), 50);
+			return;
 		}
 		this.crate.toggle(true);
 		this.crate.show();
