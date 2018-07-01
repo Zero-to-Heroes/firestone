@@ -64,7 +64,9 @@ export class FullCardComponent {
 	@Output() close = new EventEmitter();
 
 	private card: any;
-	private audioClips: any[];
+	private audioClips: any[] = [];
+	// Soi we can cancel a playing sound if a new card is displayed
+	private previousClips = [];
 
 	constructor(
 		private events: Events,
@@ -74,6 +76,8 @@ export class FullCardComponent {
 	}
 
 	@Input('cardId') set cardId(cardId: string) {
+		this.previousClips = this.audioClips;
+		this.audioClips = [];
 		let card = this.cards.getCard(cardId);
 		console.log('setting full card', card);
 		this.collectionManager.getCollection((collection: Card[]) => {
@@ -88,7 +92,6 @@ export class FullCardComponent {
 				this.events.broadcast(Events.HIDE_TOOLTIP);
 			});
 		})
-		this.audioClips = [];
 		if (card.audio) {
 			Object.keys(card.audio).forEach((key,index) => {
 			    this.audioClips.push({
@@ -125,6 +128,10 @@ export class FullCardComponent {
 	}
 
 	private cancelPlayingSounds() {
+		this.previousClips.forEach((sound) => {
+			sound.audio.pause();
+			sound.audio.currentTime = 0;
+		})
 		this.audioClips.forEach((sound) => {
 			sound.audio.pause();
 			sound.audio.currentTime = 0;
