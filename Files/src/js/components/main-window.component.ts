@@ -120,7 +120,7 @@ export class MainWindowComponent implements AfterViewInit {
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.selectedModule = data.data[0];
-				// console.log('selected module', this.selectedModule);
+				console.log('selected module', this.selectedModule);
 			}
 		)
 
@@ -133,6 +133,12 @@ export class MainWindowComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
+		if (!Crate) {
+			setTimeout(() => {
+				this.ngAfterViewInit();
+			}, 50);
+			return;
+		}
 		setTimeout(() => {
 			this.crate = new Crate({
 				server:"187101197767933952",
