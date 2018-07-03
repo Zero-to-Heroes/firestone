@@ -34,6 +34,10 @@ import { CardSearchComponent }  from '../../components/collection/card-search.co
 import { CardSearchAutocompleteItemComponent } from '../../components/collection/card-search-autocomplete-item.component';
 import { SetsComponent }  from '../../components/collection/sets.component';
 
+import { AchievementsComponent }  from '../../components/achievements/achievements.component';
+import { AchievementsCategoriesComponent }  from '../../components/achievements/achievements-categories.component';
+import { AchievementsMenuComponent }  from '../../components/achievements/achievements-menu.component';
+
 import { AllCardsService }  from '../../services/all-cards.service';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -103,6 +107,11 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		SetComponent,
 		SetsComponent,
 		SetsContainer,
+
+		AchievementsComponent,
+		AchievementsCategoriesComponent,
+		AchievementsMenuComponent,
+
 		SocialMediaComponent,
 		Tooltip,
 		TooltipsComponent,

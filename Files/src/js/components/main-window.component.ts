@@ -64,6 +64,7 @@ declare var Crate: any;
 				<section class="content-container">
 					<ng-container [ngSwitch]="selectedModule">
 						<collection *ngSwitchCase="'collection'" class="main-section"></collection>
+						<achievements *ngSwitchCase="'achievements'" class="main-section"></achievements>
 					</ng-container>
 				</section>
 			</div>

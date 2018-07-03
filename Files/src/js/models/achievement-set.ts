@@ -1,6 +1,6 @@
 import { CompletedAchievement } from './completed-achievement'
 
-export class AchievementSetOld {
+export class AchievementSet {
 
 	id: string;
 	achievements: CompletedAchievement[] = [];

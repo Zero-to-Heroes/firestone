@@ -37,6 +37,14 @@ export class AchievementsRepository {
 				.filter(achievement => achievement.type == 'dungeon_run_boss_victory')
 				.map(achievement => new BossVictory(achievement))
 				.forEach(challenge => this.challengeModules.push(challenge));
+		(<any>allAchievements)
+				.filter(achievement => achievement.type == 'monster_hunt_boss_encounter')
+				.map(achievement => new BossEncounter(achievement))
+				.forEach(challenge => this.challengeModules.push(challenge));
+		(<any>allAchievements)
+				.filter(achievement => achievement.type == 'monster_hunt_boss_victory')
+				.map(achievement => new BossVictory(achievement))
+				.forEach(challenge => this.challengeModules.push(challenge));
 
 		// for (let passiveIds of Data.ALL_PASSIVE_IDS) {
 		// 	this.achievementModules.push(new PassivePick("passive_" + passiveIds[0], passiveIds[0], passiveIds[1]));
