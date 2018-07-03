@@ -44,7 +44,7 @@ declare var OwAd: any;
 	`,
 })
 // 7.1.1.17994
-export class AchievementsComponent implements AfterViewInit {
+export class AchievementsComponent {
 
 	private _menuDisplayType = 'menu';
 	private _selectedView = 'categories';
@@ -81,14 +81,12 @@ export class AchievementsComponent implements AfterViewInit {
 				this.windowId = result.window.id;
 			}
 		});
-	}
 
-	ngAfterViewInit() {
 		this.loadAds();
 	}
 
 	private loadAds() {
-		if (!adsReady) {
+		if (!adsReady || !document.getElementById("ad-div-achievements")) {
 			setTimeout(() => {
 				this.loadAds()
 			}, 50);

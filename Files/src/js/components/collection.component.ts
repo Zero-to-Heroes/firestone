@@ -53,7 +53,7 @@ declare var OwAd: any;
 	`,
 })
 // 7.1.1.17994
-export class CollectionComponent implements AfterViewInit {
+export class CollectionComponent {
 
 	private _menuDisplayType = 'menu';
 	private _selectedView = 'sets';
@@ -174,14 +174,12 @@ export class CollectionComponent implements AfterViewInit {
 				})
 			}
 		});
-	}
 
-	ngAfterViewInit() {
 		this.loadAds();
 	}
 
 	private loadAds() {
-		if (!adsReady) {
+		if (!adsReady || !document.getElementById("ad-div")) {
 			setTimeout(() => {
 				this.loadAds()
 			}, 50);
