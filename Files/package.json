@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^4.2.4",
     "@angular/platform-browser-dynamic": "^4.2.4",
     "@angular/router": "^4.2.4",
-    "angular-2-local-storage": "^1.0.0",
+    "angular-2-local-storage": "1.0.0",
     "angular2-indexeddb": "^1.2.2",
     "angular2-notifications": "^1.0.1",
     "angular2-tooltip": "^3.1.0",
