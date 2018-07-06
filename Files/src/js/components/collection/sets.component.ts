@@ -27,12 +27,12 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class SetsComponent {
 
-	private showStandard = true;
-	private showWild = true;
+	showStandard = true;
+	showWild = true;
 
-	private standardSets: Set[];
-	private wildSets: Set[];
-	private selectedSet: Set;
+	standardSets: Set[];
+	wildSets: Set[];
+	selectedSet: Set;
 
 	private refreshing = false;
 

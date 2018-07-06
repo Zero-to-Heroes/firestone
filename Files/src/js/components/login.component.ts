@@ -66,10 +66,10 @@ export class LoginComponent {
 
 	@Output() close = new EventEmitter();
 
-	private errorMessage: string;
+	errorMessage: string;
 
-	private identifier: string;
-	private password: string;
+	identifier: string;
+	password: string;
 
 	constructor(
 		private http: Http,
@@ -80,7 +80,7 @@ export class LoginComponent {
 
 	}
 
-	private login() {
+	login() {
 		this.errorMessage = null;
 		// this.infoMessage = 'Working on it';
 		console.log('logging in with', this.identifier, this.password);
@@ -95,7 +95,7 @@ export class LoginComponent {
 		});
 	}
 
-	private closeWindow() {
+	closeWindow() {
 		this.close.emit(null);
 	}
 }

@@ -35,13 +35,14 @@ declare var ga: any;
 // 7.1.1.17994
 export class CardHistoryItemComponent {
 
-	private cardId: string;
-	private newCard: boolean;
-	private rarityImg: string;
-	private cardName: string;
-	private creationDate: string;
-	private dustValue: number;
+	newCard: boolean;
+	rarityImg: string;
+	cardName: string;
+	creationDate: string;
+	dustValue: number;
 
+	private cardId: string;
+	
 	constructor(
 		private el: ElementRef,
 		private events: Events) {

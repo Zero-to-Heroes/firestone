@@ -25,8 +25,8 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class RarityComponent {
 
-	@Input() private rarity: string;
-	@Input() private cardSet: Set;
+	@Input() rarity: string;
+	@Input() cardSet: Set;
 
 	constructor(
 		private sanitizer: DomSanitizer,

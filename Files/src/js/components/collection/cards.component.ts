@@ -49,7 +49,7 @@ declare var overwolf: any;
 				</li>
 			</ul>
 			<!-- Show screen when you have completed a set -->
-			<section class="empty-state no-missing-card-in-set" *ngIf="_set && !_activeCards.length > 0 && _activeFilter == FILTER_DONT_OWN">
+			<section class="empty-state no-missing-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_DONT_OWN">
 				<div class="state-container">
 					<i class="i-238X167 pale-pink-theme">
 						<svg class="svg-icon-fill">
@@ -118,29 +118,29 @@ declare var overwolf: any;
 })
 export class CardsComponent implements AfterViewInit {
 
-	private readonly MAX_CARDS_DISPLAYED_PER_PAGE = 18;
+	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 18;
 
-	private readonly FILTER_OWN = 'own';
-	private readonly FILTER_GOLDEN_OWN = 'goldenown';
-	private readonly FILTER_DONT_OWN = 'dontown';
-	private readonly FILTER_ALL = 'all';
+	readonly FILTER_OWN = 'own';
+	readonly FILTER_GOLDEN_OWN = 'goldenown';
+	readonly FILTER_DONT_OWN = 'dontown';
+	readonly FILTER_ALL = 'all';
 
-	private readonly selectOptions: Array<IOption> = [
+	readonly selectOptions: Array<IOption> = [
 		{label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN},
 		{label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN},
 		{label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN},
 		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
 	]
 
-	private _searchString: string;
-	private _cardList: SetCard[];
-	private _activeCards: SetCard[];
-	private _set: Set;
-	private _cardsIndexRangeStart = 0;
-	private _numberOfPages: number;
-	private _currentPage = 0;
-	private _pages: number[] = [];
-	private _activeFilter = this.FILTER_ALL;
+	_searchString: string;
+	_cardList: SetCard[];
+	_activeCards: SetCard[];
+	_set: Set;
+	_cardsIndexRangeStart = 0;
+	_numberOfPages: number;
+	_currentPage = 0;
+	_pages: number[] = [];
+	_activeFilter = this.FILTER_ALL;
 	// private _showRarities = false;
 	// private showMissingCards = false;
 
@@ -182,23 +182,23 @@ export class CardsComponent implements AfterViewInit {
 		this._searchString = searchString;
 	}
 
-	private selectFilter(option: IOption) {
+	selectFilter(option: IOption) {
 		// console.log('selected item', option, this._activeFilter);
 		this._activeFilter = option.value;
 		this.updateShownCards();
 	}
 
-	private previousPage() {
+	previousPage() {
 		this._currentPage = Math.max(0, this._currentPage - 1);
 		this.updateShownCards();
 	}
 
-	private nextPage() {
+	nextPage() {
 		this._currentPage = Math.min(this._numberOfPages, this._currentPage + 1);
 		this.updateShownCards();
 	}
 
-	private goToPage(page: number) {
+	goToPage(page: number) {
 		this._currentPage = page;
 		this.updateShownCards();
 	}

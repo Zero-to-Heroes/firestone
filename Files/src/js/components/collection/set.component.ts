@@ -80,10 +80,8 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class SetComponent {
 
-	@Input() private maxCards: number;
-
-	private _cardSet: Set;
-	private _displayName = false;
+	_cardSet: Set;
+	_displayName = false;
 
 	@Input('cardSet') set cardSet(set: Set) {
 		this._cardSet = set;
@@ -93,11 +91,11 @@ export class SetComponent {
 		}
 	}
 
-	private isSimpleComplete() {
+	isSimpleComplete() {
 		return this._cardSet.ownedLimitCollectibleCards == this._cardSet.numberOfLimitCollectibleCards()
 	}
 
-	private isPremiumComplete() {
+	isPremiumComplete() {
 		return this._cardSet.ownedLimitCollectiblePremiumCards == this._cardSet.numberOfLimitCollectibleCards()
 	}
 }

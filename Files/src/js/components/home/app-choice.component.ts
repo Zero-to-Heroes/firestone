@@ -59,8 +59,8 @@ export class AppChoiceComponent {
 
 	@Output() close = new EventEmitter();
 
-	private dataLoaded = false;
-	private noCollection = true;
+	dataLoaded = false;
+	noCollection = true;
 
 	constructor(private collectionManager: CollectionManager) {
 		overwolf.windows.onStateChanged.addListener((message) => {

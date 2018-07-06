@@ -46,14 +46,14 @@ declare var ga: any;
 // 7.1.1.17994
 export class CardSearchComponent {
 
-	private searchString: string;
-	private searchResults: SetCard[] = [];
-	private showSearchResults = false;
+	searchString: string;
+	searchResults: SetCard[] = [];
+	showSearchResults = false;
 
 	constructor(private cards: AllCardsService, private events: Events, private collectionManager: CollectionManager) {
 	}
 
-	private onSearchStringChange() {
+	onSearchStringChange() {
 		this.showSearchResults = false;
 		// console.log('updating serach string', this.searchString);
 		if (this.searchString.length <= 2) {
@@ -62,7 +62,7 @@ export class CardSearchComponent {
 		this.updateSearchResults();
 	}
 
-	private onValidateSearch(event: KeyboardEvent) {
+	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this.searchString) {
 			console.log('validating search', this.searchResults, this.searchString);
 
@@ -71,20 +71,20 @@ export class CardSearchComponent {
 		}
 	}
 
-	private showCard(result: SetCard) {
+	showCard(result: SetCard) {
 		console.error('showing card when clicking on search proposition in search box - but what should actually happen?', result);
 		this.events.broadcast(Events.SHOW_CARD_MODAL, result.id);
 		this.events.broadcast(Events.HIDE_TOOLTIP, result.id);
 	}
 
-	private onFocusLost() {
+	onFocusLost() {
 		console.log('focus lost');
 		setTimeout(() => {
 			this.showSearchResults = false;
 		}, 500);
 	}
 
-	private onMouseDown(event: Event) {
+	onMouseDown(event: Event) {
 		event.stopPropagation();
 	}
 

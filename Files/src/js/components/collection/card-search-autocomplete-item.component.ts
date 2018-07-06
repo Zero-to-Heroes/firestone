@@ -21,9 +21,9 @@ export class CardSearchAutocompleteItemComponent implements OnInit {
 	@Input() fullString: string;
 	@Input() searchString: string;
 
-	private first: string;
-	private match: string;
-	private last: string;
+	first: string;
+	match: string;
+	last: string;
 
 	constructor(private events: Events) {
 	}

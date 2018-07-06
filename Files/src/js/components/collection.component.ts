@@ -55,14 +55,14 @@ declare var OwAd: any;
 // 7.1.1.17994
 export class CollectionComponent {
 
-	private _menuDisplayType = 'menu';
-	private _selectedView = 'sets';
-	private _selectedSet: Set;
-	private _selectedFormat: string;
-	private searchString: string;
+	_menuDisplayType = 'menu';
+	_selectedView = 'sets';
+	_selectedSet: Set;
+	_selectedFormat: string;
+	searchString: string;
+	_cardList: SetCard[];
+	fullCardId: string;
 
-	private _cardList: SetCard[];
-	private fullCardId: string;
 	private windowId: string;
 	private adRef;
 

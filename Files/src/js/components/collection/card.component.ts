@@ -51,7 +51,7 @@ export class CardComponent {
 	@Input() public tooltips = true;
 	@Input() public showCounts = false;
 
-	private showPlaceholder = true;
+	showPlaceholder = true;
 
 	constructor(
 		private el: ElementRef,
@@ -84,11 +84,11 @@ export class CardComponent {
 		}
 	}
 
-	private image() {
+	image() {
 		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
 	}
 
-	private imageLoadedHandler() {
+	imageLoadedHandler() {
 		this.showPlaceholder = false;
 	}
 }

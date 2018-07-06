@@ -64,15 +64,6 @@
                 "grab_focus_on_desktop": false,
                 "block_top_window_navigation": true
 			},
-			"ErrorsWindow": {
-				"file": "Files/html/errors.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-		        "size": {"width": 600, "height": 200},
-		        "min_size": {"width": 600, "height": 200},
-		        "max_size": {"width": 600, "height": 200}
-			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
 				"transparent": true,

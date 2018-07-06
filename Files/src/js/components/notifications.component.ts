@@ -22,17 +22,17 @@ declare var overwolf: any;
 })
 export class NotificationsComponent {
 
-	private timeout = 20000;
-	private windowId: string;
-	private mainWindowId: string;
-
-	private toastOptions = {
+	timeout = 20000;
+	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
 		showProgressBar: false,
 		clickToClose: true,
 		maxStack: 5
 	}
+
+	private windowId: string;
+	private mainWindowId: string;
 
 	constructor(
 		private ngZone: NgZone,
@@ -72,6 +72,14 @@ export class NotificationsComponent {
 		console.log('notifications windows initialized')
 	}
 
+	created(event) {
+		this.resize();
+	}
+
+	destroyed(event) {
+		this.resize();
+	}
+
 	private sendNotification(htmlMessage: string, cardId?: string) {
 		if (!this.windowId) {
 			// console.log('Notification window isnt properly initialized yet, waiting');
@@ -102,14 +110,6 @@ export class NotificationsComponent {
 				})
 			});
 		})
-	}
-
-	private created(event) {
-		this.resize();
-	}
-
-	private destroyed(event) {
-		this.resize();
 	}
 
 	private resize() {

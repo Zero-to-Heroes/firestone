@@ -10,15 +10,15 @@ import { SelectModule } from 'ng-select';
 import * as Raven from 'raven-js';
 import { NgxPopperModule } from 'ngx-popper';
 
+import { SharedModule } from '../shared/shared.module';
+
 import { HearthheadComponent }  from '../../components/hearthhead.component';
 import { LoginComponent }  from '../../components/login.component';
 import { MainWindowComponent }  from '../../components/main-window.component';
 import { MenuSelectionComponent }  from '../../components/menu-selection.component';
 import { PlayerNameComponent }  from '../../components/player-name.component';
 import { RealTimeNotificationsComponent }  from '../../components/real-time-notifications.component';
-import { SocialMediaComponent }  from '../../components/social-media.component';
 import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
-import { VersionComponent }  from '../../components/version.component';
 
 import { CollectionComponent }  from '../../components/collection.component';
 import { CollectionMenuComponent }  from '../../components/collection/collection-menu.component';
@@ -86,6 +86,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
 		}),
+		SharedModule,
 	],
 	declarations: [
 		CardComponent,
@@ -112,10 +113,8 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AchievementsCategoriesComponent,
 		AchievementsMenuComponent,
 
-		SocialMediaComponent,
 		Tooltip,
 		TooltipsComponent,
-		VersionComponent,
 	],
 	bootstrap: [
 		MainWindowComponent,

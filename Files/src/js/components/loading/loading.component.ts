@@ -108,13 +108,14 @@ declare var Crate: any;
 // 7.1.1.17994
 export class LoadingComponent implements AfterViewInit {
 
-	private title: string = 'Getting ready';
-	private loading = true;
+	title: string = 'Getting ready';
+	loading = true;
+	hotkey = 'Alt+C';
+
 	private thisWindowId: string;
 	private adRef;
 	private crate;
 
-	private hotkey = 'Alt+C';
 
 	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef) {
 		console.log('in loading constructor');
@@ -175,6 +176,43 @@ export class LoadingComponent implements AfterViewInit {
 		}, 100);
 	}
 
+	splitHotkey(): string {
+		let split = this.hotkey.split('+');
+		// console.log('split hot key', split);
+		return split
+			.map((splitItem) => `<span class="key">${splitItem}</span>`)
+			.join('<span class="plus">+</span>');
+	}
+
+
+	@HostListener('mousedown', ['$event'])
+	dragMove(event: MouseEvent) {
+		overwolf.windows.dragMove(this.thisWindowId);
+	};
+
+	closeWindow(quitApp: boolean) {
+		// If game is not running, we close all other windows
+		overwolf.games.getRunningGameInfo((res: any) => {
+			overwolf.windows.close(this.thisWindowId);
+		});
+	};
+
+	minimizeWindow() {
+		overwolf.windows.minimize(this.thisWindowId);
+	};
+
+	contactSupport() {
+		// let crate = new Crate({
+		// 	server:"187101197767933952",
+		// 	channel:"446045705392357376"
+		// });
+		// crate.on('toggle', open => {
+		// 	if (!open) {
+		// 		crate.hide();
+		// 	}
+		// })
+	}
+
 	private loadAds() {
 		if (!adsReady) {
 			setTimeout(() => {
@@ -209,39 +247,5 @@ export class LoadingComponent implements AfterViewInit {
 				console.log('changed window position');
 			});
 		});
-	}
-
-	private splitHotkey(): string {
-		let split = this.hotkey.split('+');
-		// console.log('split hot key', split);
-		return split
-			.map((splitItem) => `<span class="key">${splitItem}</span>`)
-			.join('<span class="plus">+</span>');
-	}
-
-
-	@HostListener('mousedown', ['$event'])
-	private dragMove(event: MouseEvent) {
-		overwolf.windows.dragMove(this.thisWindowId);
-	};
-
-	private closeWindow(quitApp: boolean) {
-		// If game is not running, we close all other windows
-		overwolf.games.getRunningGameInfo((res: any) => {
-			overwolf.windows.close(this.thisWindowId);
-		});
-	};
-
-	private minimizeWindow() {
-		overwolf.windows.minimize(this.thisWindowId);
-	};
-
-	private contactSupport() {
-		if (!this.crate) {
-			setTimeout(() => this.contactSupport(), 50);
-			return;
-		}
-		this.crate.toggle(true);
-		this.crate.show();
 	}
 }

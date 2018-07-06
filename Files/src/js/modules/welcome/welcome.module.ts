@@ -6,13 +6,12 @@ import { HttpModule }    from '@angular/http';
 import * as Raven from 'raven-js';
 import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 
-import { MenuSelectionComponent }  from '../../components/menu-selection.component';
-import { PlayerNameComponent }  from '../../components/player-name.component';
-import { SocialMediaComponent }  from '../../components/social-media.component';
+import { SharedModule } from '../shared/shared.module';
+
 import { WelcomePageComponent }  from '../../components/welcome-page.component';
-import { VersionComponent }  from '../../components/version.component';
 import { HomeScreenInfoTextComponent }  from '../../components/home/home-screen-info-text.component';
 import { AppChoiceComponent }  from '../../components/home/app-choice.component';
+import { SocialMediaComponent }  from '../../components/social-media.component';
 
 import { DebugService } from '../../services/debug.service';
 
@@ -55,15 +54,13 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 			prefix: 'replay-viewer',
 			storageType: 'localStorage',
 		}),
+		SharedModule,
 	],
 	declarations: [
-		MenuSelectionComponent,
 		WelcomePageComponent,
-		PlayerNameComponent,
-		SocialMediaComponent,
-		VersionComponent,
 		HomeScreenInfoTextComponent,
 		AppChoiceComponent,
+		SocialMediaComponent,
 	],
 	bootstrap: [
 		WelcomePageComponent,

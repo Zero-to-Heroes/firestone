@@ -23,7 +23,7 @@ declare var overwolf: any;
 
 export class PlayerNameComponent {
 
-	private playerName: string;
+	playerName: string;
 
 	constructor(private playerNameService: PlayerNameService) {
 		this.playerNameService.getPlayerName((playerName) => {
