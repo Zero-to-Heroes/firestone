@@ -124,10 +124,6 @@
 			"simple-io-plugin-zip": {
 				"file": "Files/plugins/simple-io-plugin-zip.dll",
 				"class": "overwolf.plugins.SimpleIOPluginZip"
-			},
-			"mindvision": {
-				"file": "Files/plugins/MindVision.dll",
-				"class": "MindVision.MindVisionPlugin"
 			}
 		},
 		"hotkeys": {

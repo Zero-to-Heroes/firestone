@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import * as Raven from 'raven-js';
 
-import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { LocalStorageService } from 'angular-2-local-storage';
 
 declare var OverwolfPlugin: any;
@@ -12,9 +11,8 @@ declare var overwolf: any;
 export class PlayerNameService {
 
 	plugin: any;
-	mindvisionPlugin: any;
 
-	constructor(private mindVision: MemoryInspectionService, private localStorageService: LocalStorageService) {
+	constructor(private localStorageService: LocalStorageService) {
 	}
 
 	public getPlayerName(callback: Function) {

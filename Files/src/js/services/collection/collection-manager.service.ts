@@ -12,14 +12,13 @@ declare var overwolf: any;
 @Injectable()
 export class CollectionManager {
 	plugin: any;
-	mindvisionPlugin: any;
 
-	constructor(private mindVision: MemoryInspectionService, private db: IndexedDbService) {
+	constructor(private memoryReading: MemoryInspectionService, private db: IndexedDbService) {
 	}
 
 	public getCollection(callback: Function) {
 		console.log('getting collection');
-		this.mindVision.getCollection((collection) => {
+		this.memoryReading.getCollection((collection) => {
 			console.log('collection from mindvision');
 			if (!collection || collection.length == 0) {
 				console.log('retrieving collection from db', collection);
@@ -29,7 +28,6 @@ export class CollectionManager {
 				});
 			}
 			else {
-				// console.log('saving mindvision collection');
 				this.db.saveCollection(collection, callback);
 			}
 		})
