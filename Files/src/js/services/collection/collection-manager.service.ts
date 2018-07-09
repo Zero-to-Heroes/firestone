@@ -17,13 +17,13 @@ export class CollectionManager {
 	}
 
 	public getCollection(callback: Function) {
-		console.log('getting collection');
+		// console.log('getting collection');
 		this.memoryReading.getCollection((collection) => {
-			console.log('collection from mindvision');
+			// console.log('collection from mindvision');
 			if (!collection || collection.length == 0) {
-				console.log('retrieving collection from db', collection);
+				// console.log('retrieving collection from db', collection);
 				this.db.getCollection((collection) => {
-					console.log('retrieved collection form db', collection);
+					// console.log('retrieved collection form db', collection);
 					callback(collection);
 				});
 			}
@@ -33,16 +33,13 @@ export class CollectionManager {
 		})
 	}
 
-	public inCollection(collection: Card[], cardId: string, type: string): Card {
+	// type is NORMAL or GOLDEN
+	public inCollection(collection: Card[], cardId: string): Card {
 		for (let card of collection) {
-			if (card.id === cardId && this.isCorrectPremium(card.premium, type)) {
+			if (card.id === cardId) {
 				return card;
 			}
 		}
 		return null;
-	}
-
-	private isCorrectPremium(premium: boolean, type: string): boolean {
-		return (!premium && type === 'NORMAL') || (premium && type === 'GOLDEN');
 	}
 }

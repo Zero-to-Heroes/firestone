@@ -11,16 +11,21 @@ declare var parseCardsText: any;
 export class MemoryInspectionService {
 
 	public getCollection(callback) {
-		overwolf.games.events.getInfo((info) => {
-			console.log('game info', info);
-			if (!info.res || !info.res.collection) {
-				setTimeout(() => { this.getCollection(callback) }, 100);
-				return;
-			}
-			const collection: Card[] = Object.values(info.res.collection)
-					.map(strCard => JSON.parse(strCard));
-			console.log('callback', Object.values(info.res.collection), collection);
-			callback(collection);
-		})
+		// I observed some cases where the new card information was not present in the memory reading
+		// right after I had gotten it from a pack, so let's add a little delay
+		setTimeout(() => {
+			overwolf.games.events.getInfo((info) => {
+				if (!info.res || !info.res.collection) {
+					// setTimeout(() => { this.getCollection(callback) }, 100);
+					callback([]);
+					return;
+				}
+				// console.log('game info', info);
+				const collection: Card[] = Object.values(info.res.collection)
+						.map(strCard => JSON.parse(strCard));
+				// console.log('callback', collection);
+				callback(collection);
+			})
+		}, 50);
 	}
 }

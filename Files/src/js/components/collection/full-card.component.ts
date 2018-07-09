@@ -111,13 +111,8 @@ export class FullCardComponent {
 		for (let i = 0; i < collection.length; i++) {
 			let collectionCard = collection[i];
 			if (collectionCard.id == card.id) {
-				// console.log('Matching card', collectionCard, card);
-				if (collectionCard.premium) {
-					card.ownedPremium = collectionCard.count;
-				}
-				else {
-					card.ownedNonPremium = collectionCard.count;
-				}
+				card.ownedPremium = collectionCard.premiumCount;
+				card.ownedNonPremium = collectionCard.count;
 			}
 		}
 	}

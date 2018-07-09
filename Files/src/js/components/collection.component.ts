@@ -213,12 +213,8 @@ export class CollectionComponent {
 		set.allCards.forEach((card: SetCard) => {
 			let owned = collection.filter((collectionCard: Card) => collectionCard.id === card.id);
 			owned.forEach((collectionCard: Card) => {
-				if (collectionCard.premium) {
-					card.ownedPremium = collectionCard.count;
-				}
-				else {
-					card.ownedNonPremium = collectionCard.count;
-				}
+				card.ownedPremium = collectionCard.premiumCount;
+				card.ownedNonPremium = collectionCard.count;
 			})
 		})
 

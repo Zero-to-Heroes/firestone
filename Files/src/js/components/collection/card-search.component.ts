@@ -97,13 +97,8 @@ export class CardSearchComponent {
 				if (!collectionCard) {
 					return;
 				}
-
-				if (collectionCard.premium) {
-					card.ownedPremium = collectionCard.count;
-				}
-				else {
-					card.ownedNonPremium = collectionCard.count;
-				}
+				card.ownedPremium = collectionCard.premiumCount;
+				card.ownedNonPremium = collectionCard.count;
 			})
 			// console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;

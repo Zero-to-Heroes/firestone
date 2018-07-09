@@ -95,24 +95,26 @@ export class PackMonitor {
 		this.events.on(Events.NEW_CARD)
 			.subscribe(event => {
 				let card: Card = event.data[0];
+				let type: string = event.data[1];
 				this.unrevealedCards.push(card.id);
 				this.cardEvents[card.id] = () => {
 					this.hadNewCard = true;
-					this.createNewCardToast(card);
+					this.createNewCardToast(card, type);
 				};
 
 				let dbCard = parseCardsText.getCard(card.id);
-				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, card.premium, true));
+				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true));
 			});
 		this.events.on(Events.MORE_DUST)
 			.subscribe(event => {
 				let card: Card = event.data[0];
 				let dust: number = event.data[1];
+				let type: string = event.data[2];
 				this.unrevealedCards.push(card.id);
 				this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
 
 				let dbCard = parseCardsText.getCard(card.id);
-				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, card.premium, false));
+				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false));
 			});
 
 
@@ -312,11 +314,11 @@ export class PackMonitor {
 		}
 	}
 
-	private createNewCardToast(card: Card) {
+	private createNewCardToast(card: Card, type: string) {
 		let dbCard = parseCardsText.getCard(card.id);
 		let cardName: string = dbCard.name;
 		let goldenClass = undefined;
-		if (card.premium) {
+		if (type == 'GOLDEN') {
 			cardName = 'Golden ' + cardName;
 			goldenClass = 'premium';
 		}

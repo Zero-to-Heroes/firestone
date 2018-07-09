@@ -36,22 +36,22 @@ export class LogParserService {
 			// console.log('New card received!');
 			let cardId = match[1];
 			let type = match[2];
-			// TODO: add debounce
 			this.collectionManager.getCollection((collection) => {
 				ga('send', 'event', 'toast', 'revealed', cardId);
-				let cardInCollection = this.collectionManager.inCollection(collection, cardId, type);
-				if (!this.hasReachedMaxCollectibleOf(cardInCollection)) {
-					this.displayNewCardMessage(cardInCollection);
+				let cardInCollection = this.collectionManager.inCollection(collection, cardId);
+				// console.log('card in collection?', cardId, collection, type, cardInCollection);
+				if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
+					this.displayNewCardMessage(cardInCollection, type);
 				}
 				else {
-					this.displayDustMessage(cardInCollection);
+					this.displayDustMessage(cardInCollection, type);
 				}
 			})
 			this.lastLogReceivedDate = new Date();
 		}
 	}
 
-	private hasReachedMaxCollectibleOf(card: Card):boolean {
+	private hasReachedMaxCollectibleOf(card: Card, type: string):boolean {
 		// Card is not in collection at all
 		// Should never occur
 		if (!card) {
@@ -65,25 +65,28 @@ export class LogParserService {
 			return false;
 		}
 		// The collection is updated immediately, so when we query it the new card has already been inserted
-		if ((dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
+		if (type == 'NORMAL' && (dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
+			return true;
+		}
+		if (type == 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2) || card.premiumCount >= 3) {
 			return true;
 		}
 		return false;
 	}
 
-	private displayNewCardMessage(card: Card) {
-		console.log('New card!', card.id, card.premium);
-		this.events.broadcast(Events.NEW_CARD, card);
+	private displayNewCardMessage(card: Card, type: string) {
+		console.log('New card!', card.id, type);
+		this.events.broadcast(Events.NEW_CARD, card, type);
 		ga('send', 'event', 'toast', 'new-card', card.id);
 	}
 
-	private displayDustMessage(card: Card) {
+	private displayDustMessage(card: Card, type: string) {
 		let dbCard = parseCardsText.getCard(card.id);
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
-		dust = card.premium ? dust * 4 : dust;
-		this.events.broadcast(Events.MORE_DUST, card, dust);
+		dust = type == 'GOLDEN' ? dust * 4 : dust;
+		this.events.broadcast(Events.MORE_DUST, card, dust, type);
 		ga('send', 'event', 'toast', 'dust', dust);
-		console.log('Got ' + dust + ' dust', card.id, card.premium);
+		console.log('Got ' + dust + ' dust', card.id, type);
 	}
 
 	private dustFor(rarity: string): number {
