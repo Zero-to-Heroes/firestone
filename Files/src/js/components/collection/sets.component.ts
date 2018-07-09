@@ -90,13 +90,13 @@ export class SetsComponent {
 
 	private updateSet(collection: Card[], set: Set) {
 		set.allCards.forEach((card: SetCard) => {
-			let owned = collection.filter((collectionCard: Card) => collectionCard.Id === card.id);
+			let owned = collection.filter((collectionCard: Card) => collectionCard.id === card.id);
 			owned.forEach((collectionCard: Card) => {
-				if (collectionCard.Premium) {
-					card.ownedPremium = collectionCard.Count;
+				if (collectionCard.premium) {
+					card.ownedPremium = collectionCard.count;
 				}
 				else {
-					card.ownedNonPremium = collectionCard.Count;
+					card.ownedNonPremium = collectionCard.count;
 				}
 			})
 		})

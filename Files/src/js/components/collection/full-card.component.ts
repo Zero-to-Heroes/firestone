@@ -110,13 +110,13 @@ export class FullCardComponent {
 	private updateCardWithCollection(collection: Card[], card: SetCard) {
 		for (let i = 0; i < collection.length; i++) {
 			let collectionCard = collection[i];
-			if (collectionCard.Id == card.id) {
+			if (collectionCard.id == card.id) {
 				// console.log('Matching card', collectionCard, card);
-				if (collectionCard.Premium) {
-					card.ownedPremium = collectionCard.Count;
+				if (collectionCard.premium) {
+					card.ownedPremium = collectionCard.count;
 				}
 				else {
-					card.ownedNonPremium = collectionCard.Count;
+					card.ownedNonPremium = collectionCard.count;
 				}
 			}
 		}

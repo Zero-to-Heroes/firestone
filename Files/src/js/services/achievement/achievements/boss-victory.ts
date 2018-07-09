@@ -43,7 +43,7 @@ export class BossVictory implements Challenge {
 				return;
 			}
 
-			if (game.matchInfo.OpposingPlayer.CardId === this.bossId && game.matchInfo.LocalPlayer.Id === winner.Id) {
+			if (game.matchInfo.OpposingPlayer.CardId === this.bossId && game.matchInfo.LocalPlayer.id === winner.id) {
 				// console.log('Achievement unlocked!', this.achievementId, this.bossId);
 				callback();
 			}

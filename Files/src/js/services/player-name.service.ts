@@ -18,18 +18,18 @@ export class PlayerNameService {
 	}
 
 	public getPlayerName(callback: Function) {
-		this.mindVision.getBattleTag((battleTag) => {
-			console.log('retrieved battle tag from memory', battleTag);
-			if (!battleTag) {
-				console.log('Loading player name from db', this.localStorageService.get('playerName'));
-				callback(this.localStorageService.get('playerName'));
-			}
-			else {
-				let playerName = battleTag.Name;
-				this.localStorageService.set('playerName', playerName);
-				console.log('saving player name', playerName);
-				callback(playerName);
-			}
-		})
+		// this.mindVision.getBattleTag((battleTag) => {
+		// 	console.log('retrieved battle tag from memory', battleTag);
+		// 	if (!battleTag) {
+		// 		console.log('Loading player name from db', this.localStorageService.get('playerName'));
+		// 		callback(this.localStorageService.get('playerName'));
+		// 	}
+		// 	else {
+		// 		let playerName = battleTag.Name;
+		// 		this.localStorageService.set('playerName', playerName);
+		// 		console.log('saving player name', playerName);
+		// 		callback(playerName);
+		// 	}
+		// })
 	}
 }

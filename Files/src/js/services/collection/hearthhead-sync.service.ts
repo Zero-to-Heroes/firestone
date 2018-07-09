@@ -46,16 +46,16 @@ export class HearthHeadSyncService {
 		// this.collectionManager.getCollection((cards: Card[]) => {
 		// 	let collection = { };
 		// 	cards.forEach((card: Card) => {
-		// 		let jsonCard = collection[card.Id] || {
-		// 			"card_id": card.Id
+		// 		let jsonCard = collection[card.id] || {
+		// 			"card_id": card.id
 		// 		}
-		// 		if (card.Premium) {
-		// 			jsonCard.premium_count = card.Count
+		// 		if (card.premium) {
+		// 			jsonCard.premium_count = card.count
 		// 		}
 		// 		else {
-		// 			jsonCard.normal_count = card.Count
+		// 			jsonCard.normal_count = card.count
 		// 		}
-		// 		collection[card.Id] = jsonCard;
+		// 		collection[card.id] = jsonCard;
 		// 	})
 		// 	console.log('collection map', collection);
 

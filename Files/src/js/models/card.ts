@@ -1,6 +1,6 @@
 export class Card {
 
-	Id: string;
-	Count: number;
-	Premium: boolean;
+	id: string;
+	count: number;
+	premium: boolean;
 }

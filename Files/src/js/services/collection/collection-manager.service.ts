@@ -37,7 +37,7 @@ export class CollectionManager {
 
 	public inCollection(collection: Card[], cardId: string, type: string): Card {
 		for (let card of collection) {
-			if (card.Id === cardId && this.isCorrectPremium(card.Premium, type)) {
+			if (card.id === cardId && this.isCorrectPremium(card.premium, type)) {
 				return card;
 			}
 		}

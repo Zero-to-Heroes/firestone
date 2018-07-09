@@ -59,31 +59,31 @@ export class LogParserService {
 			return false;
 		}
 
-		let dbCard = parseCardsText.getCard(card.Id);
+		let dbCard = parseCardsText.getCard(card.id);
 		if (!dbCard) {
-			console.warn('unknown card', card.Id, card);
+			console.warn('unknown card', card.id, card);
 			return false;
 		}
 		// The collection is updated immediately, so when we query it the new card has already been inserted
-		if ((dbCard.rarity === 'Legendary' && card.Count >= 2) || card.Count >= 3) {
+		if ((dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
 			return true;
 		}
 		return false;
 	}
 
 	private displayNewCardMessage(card: Card) {
-		console.log('New card!', card.Id, card.Premium);
+		console.log('New card!', card.id, card.premium);
 		this.events.broadcast(Events.NEW_CARD, card);
-		ga('send', 'event', 'toast', 'new-card', card.Id);
+		ga('send', 'event', 'toast', 'new-card', card.id);
 	}
 
 	private displayDustMessage(card: Card) {
-		let dbCard = parseCardsText.getCard(card.Id);
+		let dbCard = parseCardsText.getCard(card.id);
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
-		dust = card.Premium ? dust * 4 : dust;
+		dust = card.premium ? dust * 4 : dust;
 		this.events.broadcast(Events.MORE_DUST, card, dust);
 		ga('send', 'event', 'toast', 'dust', dust);
-		console.log('Got ' + dust + ' dust', card.Id, card.Premium);
+		console.log('Got ' + dust + ' dust', card.id, card.premium);
 	}
 
 	private dustFor(rarity: string): number {
