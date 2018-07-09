@@ -1,7 +1,5 @@
 import { Component, NgZone, Input, ElementRef, HostListener } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
@@ -42,7 +40,7 @@ export class CardHistoryItemComponent {
 	dustValue: number;
 
 	private cardId: string;
-	
+
 	constructor(
 		private el: ElementRef,
 		private events: Events) {

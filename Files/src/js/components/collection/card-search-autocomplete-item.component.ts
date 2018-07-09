@@ -1,7 +1,5 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Events } from '../../services/events.service';
 
 @Component({

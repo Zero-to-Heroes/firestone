@@ -1,7 +1,5 @@
 import { Component, NgZone, ElementRef, Renderer2, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { NotificationsService } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
 

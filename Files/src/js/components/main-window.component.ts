@@ -1,7 +1,5 @@
 import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
 
@@ -31,7 +29,6 @@ declare var Crate: any;
 							<menu-selection></menu-selection>
 						</div>
 					</div>
-					<!-- <player-name></player-name> -->
 					<div class="hotkey" [innerHTML]="splitHotkey()"></div>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">

@@ -3,7 +3,6 @@ import * as allAchievements from './achievements_list.json';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-// import * as Raven from 'raven-js';
 import { CompletedAchievement } from '../../models/completed-achievement';
 // import { AchievementSet } from '../../models/achievement-set';
 
@@ -16,6 +15,7 @@ import { TreasurePick } from './achievements/treasure-pick';
 import { sortBy } from 'lodash'
 
 declare var parseCardsText;
+// declare var allAchievements;
 
 @Injectable()
 export class AchievementsRepository {

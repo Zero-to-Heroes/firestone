@@ -1,7 +1,5 @@
 import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { AllCardsService } from '../../services/all-cards.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { Events } from '../../services/events.service';

@@ -2,8 +2,6 @@ import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterVi
 
 import { DebugService } from '../../services/debug.service';
 
-import * as Raven from 'raven-js';
-
 const HEARTHSTONE_GAME_ID = 9898;
 
 declare var overwolf: any;

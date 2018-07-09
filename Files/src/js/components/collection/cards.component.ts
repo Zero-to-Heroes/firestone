@@ -2,7 +2,6 @@ import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef,
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IOption } from 'ng-select';
-import * as Raven from 'raven-js';
 
 import { AllCardsService } from '../../services/all-cards.service';
 

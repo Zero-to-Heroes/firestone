@@ -1,8 +1,6 @@
 import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import * as Raven from 'raven-js';
-
 import { AllCardsService } from '../../services/all-cards.service';
 
 import { Card } from '../../models/card';

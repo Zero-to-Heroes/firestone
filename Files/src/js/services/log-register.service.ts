@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { SimpleIOService } from './plugins/simple-io.service'
 import { LogParserService } from './collection/log-parser.service'
 import { GameEvents } from './game-events.service'

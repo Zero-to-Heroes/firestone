@@ -3,8 +3,6 @@ import { Injectable } from '@angular/core';
 import { OwNotificationsService } from '../services/notifications.service';
 import { Events } from '../services/events.service';
 
-import * as Raven from 'raven-js';
-
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
 

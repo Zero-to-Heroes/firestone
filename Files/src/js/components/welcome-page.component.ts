@@ -3,8 +3,6 @@ import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angu
 import { DebugService } from '../services/debug.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
 
-import * as Raven from 'raven-js';
-
 const HEARTHSTONE_GAME_ID = 9898;
 
 declare var overwolf: any;
@@ -21,7 +19,6 @@ declare var Crate: any;
 		<div class="root">
 			<div class="app-container">
 				<section class="menu-bar">
-					<!-- <player-name></player-name> -->
 					<i class="i-117X33 gold-theme logo">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>

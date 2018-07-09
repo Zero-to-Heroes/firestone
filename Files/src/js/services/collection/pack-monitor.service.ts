@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Card } from '../../models/card';
 import { CardHistory } from '../../models/card-history';
 

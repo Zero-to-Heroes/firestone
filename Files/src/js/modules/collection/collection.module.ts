@@ -4,19 +4,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
-import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
 import { SelectModule } from 'ng-select';
-
-import * as Raven from 'raven-js';
-import { NgxPopperModule } from 'ngx-popper';
 
 import { SharedModule } from '../shared/shared.module';
 
-import { HearthheadComponent }  from '../../components/hearthhead.component';
-import { LoginComponent }  from '../../components/login.component';
 import { MainWindowComponent }  from '../../components/main-window.component';
 import { MenuSelectionComponent }  from '../../components/menu-selection.component';
-import { PlayerNameComponent }  from '../../components/player-name.component';
 import { RealTimeNotificationsComponent }  from '../../components/real-time-notifications.component';
 import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
 
@@ -43,26 +36,11 @@ import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
-import { PlayerNameService }  from '../../services/player-name.service';
 import { RealTimeNotificationService }  from '../../services/real-time-notifications.service';
 
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
-import { HearthHeadSyncService }  from '../../services/collection/hearthhead-sync.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
-
-// console.log('configuring Raven'),
-// Raven
-//   	.config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
-//   	.install();
-// console.log('Raven configured');
-
-//  export class RavenErrorHandler implements ErrorHandler {
-//   	handleError(err: any) : void {
-// 	  	console.log('error captured by Raven', err);
-// 	    // Raven.captureException(err);
-//   	}
-// }
 
 declare var ga: any;
 export class AnalyticsErrorHandler implements ErrorHandler {
@@ -76,16 +54,10 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	imports: [
 		BrowserModule,
 		HttpModule,
-		// Animations need to be imported in to your project to use the library
         BrowserAnimationsModule,
 		FormsModule,
 		ReactiveFormsModule,
-        NgxPopperModule,
         SelectModule,
-		LocalStorageModule.withConfig({
-			prefix: 'replay-viewer',
-			storageType: 'localStorage',
-		}),
 		SharedModule,
 	],
 	declarations: [
@@ -98,11 +70,8 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		CollectionComponent,
 		CollectionMenuComponent,
 		FullCardComponent,
-		HearthheadComponent,
-		LoginComponent,
 		MainWindowComponent,
 		MenuSelectionComponent,
-		PlayerNameComponent,
 		RarityComponent,
 		RealTimeNotificationsComponent,
 		SetComponent,
@@ -126,12 +95,9 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		CollectionManager,
 		DebugService,
 		Events,
-		HearthHeadSyncService,
 		IndexedDbService,
-		LocalStorageService,
 		OwNotificationsService,
 		MemoryInspectionService,
-		PlayerNameService,
 		RealTimeNotificationService,
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],

@@ -1,7 +1,5 @@
 import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Card } from '../../models/card';
 import { Set, SetCard, MissingCard } from '../../models/set';
 

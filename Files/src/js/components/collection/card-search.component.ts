@@ -1,7 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';

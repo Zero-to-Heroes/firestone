@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
 declare var ga: any;
