@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as allAchievements from './achievements_list.json';
+import { default as allAchievements } from './achievements_list.json';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -29,6 +29,7 @@ export class AchievementsRepository {
 	}
 
 	private registerModules() {
+		console.log('allAchievements', allAchievements);
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'dungeon_run_boss_encounter')
 				.map(achievement => new BossEncounter(achievement))
