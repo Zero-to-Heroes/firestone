@@ -21,7 +21,8 @@ Please don't hesitate to request new features or report issues using the issues 
 ```
 $ git clone ...
 $ cd your_repo
-$ npm install  # You might need to have node installed
 $ cd Files
+$ npm install  # You might need to have node installed
+# Then go into node_modules/angular2-indexeddb and remove all the .ts files (there are 4-5 of them)
 $ npm run build
 ```
