@@ -14,6 +14,7 @@ function getRoot(args) {
 }
 
 module.exports = function(env, argv) {
+
   return {
     mode: env.production ? 'production' : 'development',
 
@@ -30,42 +31,39 @@ module.exports = function(env, argv) {
 
     devtool: env.production ? false : "inline-source-map",
 
+    watch: true,
+
+    watchOptions: {
+      // poll: true,
+      ignored: ['node_modules']
+    },
+
     output: {
-      path: getRoot("dist"),
+      path: getRoot("dist/Files"),
       publicPath: "/",
       filename: "[name].js"
     },
 
     resolve: {
-      extensions: [".js", ".ts", ".html"]
+      // Having ts before js is important for webpack watch to work
+      // However, angular2-indexeddb creates an issue (ts files are packaged alongside js), so
+      // you need to remove the .ts files from its node_modules folder
+      // See https://github.com/gilf/angular2-indexeddb/issues/67
+      extensions: [".ts", ".js", ".html"]
     },
 
     module: {
       rules: [
         {
-          test: /.js$/,
-          parser: {
-            system: true
-          }
-        },
-        // Typescript
-        {
           test: /\.ts$/,
           exclude: /node_modules/,
           use: "@artonge/webpack"
         },
-        // Templates
         {
-          test: /\.html$/,
-          exclude: [
-            getRoot("src/html", "background.html"),
-            getRoot("src/html", "collection.html"),
-          ],
-          use: [
-            {
-              loader: "raw-loader"
-            }
-          ]
+          test: /.js$/,
+          parser: {
+            system: true
+          }
         },
         {
           test: /\.scss$/,
@@ -80,11 +78,8 @@ module.exports = function(env, argv) {
         }
       ]
     },
+
     plugins: [
-      // new ngcWebpack.NgcWebpackPlugin({
-      //   tsConfigPath: "./tsconfig.json",
-      //   mainPath: "./src/js/modules/background/main.ts"
-      // }),
       new AngularCompilerPlugin({
         tsConfigPath: "./tsconfig.json",
         entryModules: [
@@ -102,12 +97,15 @@ module.exports = function(env, argv) {
       }),
 
       new CopyWebpackPlugin([
-        { from: getRoot("src/html", "background.html"), to: getRoot("dist/html", "background.html") },
-        { from: getRoot("src/html", "collection.html"), to: getRoot("dist/html", "collection.html") },
-        { from: getRoot("src/html", "loading.html"), to: getRoot("dist/html", "loading.html") },
-        { from: getRoot("src/html", "notifications.html"), to: getRoot("dist/html", "notifications.html") },
-        { from: getRoot("src/html", "welcome.html"), to: getRoot("dist/html", "welcome.html") },
-        { from: getRoot("src", "assets"), to: getRoot("dist", "assets") }
+        { from: path.join(process.cwd(), "src/html/background.html"), to: "html" },
+        { from: path.join(process.cwd(), "src/html/collection.html"), to: "html" },
+        { from: path.join(process.cwd(), "src/html/loading.html"), to: "html" },
+        { from: path.join(process.cwd(), "src/html/notifications.html"), to: "html" },
+        { from: path.join(process.cwd(), "src/html/welcome.html"), to: "html" },
+        { from: path.join(process.cwd(), "/../*") },
+        { from: path.join(process.cwd(), "src/assets"), to: "assets" },
+        { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
+        { from: path.join(process.cwd(), "plugins"), to: "plugins" },
       ]),
     ]
   };
