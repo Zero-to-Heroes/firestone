@@ -12,7 +12,7 @@ declare var overwolf: any;
 
 export class VersionComponent implements OnInit {
 
-	private version;
+	version;
 
 	constructor(private ngZone: NgZone) {
 

@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-// import { HearthHeadSyncService } from './hearthhead-sync.service';
-
-// import * as Raven from 'raven-js';
 
 declare var overwolf: any;
 

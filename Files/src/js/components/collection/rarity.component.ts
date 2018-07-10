@@ -1,8 +1,6 @@
 import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import * as Raven from 'raven-js';
-
 import { AllCardsService } from '../../services/all-cards.service';
 
 import { Card } from '../../models/card';
@@ -25,8 +23,8 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class RarityComponent {
 
-	@Input() private rarity: string;
-	@Input() private cardSet: Set;
+	@Input() rarity: string;
+	@Input() cardSet: Set;
 
 	constructor(
 		private sanitizer: DomSanitizer,

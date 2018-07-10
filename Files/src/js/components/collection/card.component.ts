@@ -1,9 +1,6 @@
 import { Component, NgZone, Input, SimpleChanges, Directive, ElementRef, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import * as Raven from 'raven-js';
-import { NgxPopperModule } from 'ngx-popper';
-
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 
@@ -51,7 +48,7 @@ export class CardComponent {
 	@Input() public tooltips = true;
 	@Input() public showCounts = false;
 
-	private showPlaceholder = true;
+	showPlaceholder = true;
 
 	constructor(
 		private el: ElementRef,
@@ -84,11 +81,11 @@ export class CardComponent {
 		}
 	}
 
-	private image() {
+	image() {
 		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
 	}
 
-	private imageLoadedHandler() {
+	imageLoadedHandler() {
 		this.showPlaceholder = false;
 	}
 }

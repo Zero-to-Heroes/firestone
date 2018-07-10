@@ -1,6 +1,5 @@
 import { Injectable, Output } from '@angular/core';
 
-import * as Raven from 'raven-js';
 import { Subject } from 'rxjs/Subject';
 
 import { SimpleIOService } from './plugins/simple-io.service';

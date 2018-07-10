@@ -25,11 +25,11 @@ import { Component } from '@angular/core';
 
 export class SocialMediaComponent {
 
-	private openReddit() {
+	openReddit() {
 		window.open('https://www.reddit.com/r/firestoneapp/');
 	}
 
-	private openGitHub() {
+	openGitHub() {
 		window.open('https://github.com/Zero-to-Heroes/firestone/');
 	}
 }

@@ -1,7 +1,5 @@
 import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
 
@@ -31,7 +29,6 @@ declare var Crate: any;
 							<menu-selection></menu-selection>
 						</div>
 					</div>
-					<!-- <player-name></player-name> -->
 					<div class="hotkey" [innerHTML]="splitHotkey()"></div>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
@@ -89,8 +86,6 @@ declare var Crate: any;
 					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
 				</svg>
 			</i>
-			<!--<card-modal></card-modal>-->
-			<!--<login *ngIf="showLogin" (close)="showLogin = false"></login>-->
 
 			<tooltips></tooltips>
 		</div>
@@ -99,14 +94,12 @@ declare var Crate: any;
 // 7.1.1.17994
 export class MainWindowComponent implements AfterViewInit {
 
-	private version;
-	private maximized = false;
-	private lastSize: any;
+	version;
+	selectedModule = 'collection';
+	hotkey = 'Alt+C';
+
 	private crate;
-	private showLogin = false;
 	private windowId: string;
-	private selectedModule = 'collection';
-	private hotkey = 'Alt+C';
 
 	constructor(
 		private debugService: DebugService,
@@ -155,11 +148,11 @@ export class MainWindowComponent implements AfterViewInit {
 	}
 
 	@HostListener('mousedown')
-	private dragMove() {
+	dragMove() {
 		overwolf.windows.dragMove(this.windowId);
 	};
 
-	private goHome() {
+	goHome() {
 		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get WelcomeWindow', result);
@@ -172,7 +165,7 @@ export class MainWindowComponent implements AfterViewInit {
 		});
 	};
 
-	private splitHotkey(): string {
+	splitHotkey(): string {
 		let split = this.hotkey.split('+');
 		// console.log('split hot key', split);
 		return '<span class="text">Hotkey:</span>' + split
@@ -180,20 +173,23 @@ export class MainWindowComponent implements AfterViewInit {
 			.join('<span class="plus">+</span>');
 	}
 
-	private closeWindow() {
+	closeWindow() {
 		overwolf.windows.hide(this.windowId);
 	};
 
-	private minimizeWindow() {
+	minimizeWindow() {
 		overwolf.windows.minimize(this.windowId);
 	};
 
-	private contactSupport() {
-		if (!this.crate) {
-			setTimeout(() => this.contactSupport(), 50);
-			return;
-		}
-		this.crate.toggle(true);
-		this.crate.show();
+	contactSupport() {
+		let crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376"
+		});
+		crate.on('toggle', open => {
+			if (!open) {
+				crate.hide();
+			}
+		})
 	}
 }

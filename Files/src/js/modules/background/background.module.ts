@@ -3,11 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
 
-import * as Raven from 'raven-js';
-
-// import { SimpleNotificationsModule } from 'angular2-notifications';
-import { LocalStorageService, LocalStorageModule } from 'angular-2-local-storage';
-
 import { AppComponent }  from '../../components/app.component';
 
 import { DebugService } from '../../services/debug.service';
@@ -31,49 +26,20 @@ import { IndexedDbService as AchievementsDb }  from '../../services/achievement/
 import { AllCardsService }  from '../../services/all-cards.service';
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
-import { HearthHeadSyncService } from '../../services/collection/hearthhead-sync.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { LogParserService }  from '../../services/collection/log-parser.service';
 import { PackMonitor }  from '../../services/collection/pack-monitor.service';
 
-// console.log('configuring Raven'),
-// Raven
-//   	.config('https://c08a7bdf3f174ff2b45ad33bcf8c48f6@sentry.io/202626')
-//   	.install();
-// console.log('Raven configured');
-
-//  export class RavenErrorHandler implements ErrorHandler {
-//   	handleError(err: any) : void {
-// 	  	console.log('error captured by Raven', err);
-// 	    // Raven.captureException(err);
-//   	}
-// }
-
-declare var ga: any;
-export class AnalyticsErrorHandler implements ErrorHandler {
-  	handleError(err: any) : void {
-	  	console.error('error captured and sent to GA', err);
-		ga('send', 'event', 'error', 'other', JSON.stringify(err));
-  	}
-}
 
 @NgModule({
+	bootstrap: [AppComponent],
 	imports: [
 		BrowserModule,
 		HttpModule,
-		// Animations need to be imported in to your project to use the library
-        BrowserAnimationsModule,
-        // SimpleNotificationsModule.forRoot(),
-		LocalStorageModule.withConfig({
-			prefix: 'replay-viewer',
-			storageType: 'localStorage',
-		}),
+		BrowserAnimationsModule
 	],
 	declarations: [
-		AppComponent,
-	],
-	bootstrap: [
-		AppComponent,
+		AppComponent
 	],
 	providers: [
 		AllCardsService,
@@ -81,7 +47,6 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		CollectionManager,
 		Events,
 		DebugService,
-		HearthHeadSyncService,
 		HsPublicEventsListener,
 		GameEvents,
 		IndexedDbService,
@@ -89,7 +54,6 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		LogParserService,
 		LogRegisterService,
 		LogStatusService,
-		LocalStorageService,
 		OwNotificationsService,
 		PackMonitor,
 		SimpleIOService,
@@ -99,8 +63,6 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AchievementsRepository,
 		AchievementsStorageService,
 		AchievementsDb,
-		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
-	],
+	]
 })
-
 export class AppModule { }

@@ -1,7 +1,5 @@
 import { Component, NgZone, AfterViewInit } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Events } from '../../services/events.service';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementSet } from '../../models/achievement-set';
@@ -46,9 +44,9 @@ declare var OwAd: any;
 // 7.1.1.17994
 export class AchievementsComponent {
 
-	private _menuDisplayType = 'menu';
-	private _selectedView = 'categories';
-	private _selectedCategory: AchievementSet;
+	_menuDisplayType = 'menu';
+	_selectedView = 'categories';
+	_selectedCategory: AchievementSet;
 
 	private _achievementsList: CompletedAchievement[];
 	private windowId: string;

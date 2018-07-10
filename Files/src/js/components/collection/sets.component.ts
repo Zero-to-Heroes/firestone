@@ -1,7 +1,5 @@
 import { Component, NgZone, OnInit, Input } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
@@ -27,12 +25,12 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class SetsComponent {
 
-	private showStandard = true;
-	private showWild = true;
+	showStandard = true;
+	showWild = true;
 
-	private standardSets: Set[];
-	private wildSets: Set[];
-	private selectedSet: Set;
+	standardSets: Set[];
+	wildSets: Set[];
+	selectedSet: Set;
 
 	private refreshing = false;
 

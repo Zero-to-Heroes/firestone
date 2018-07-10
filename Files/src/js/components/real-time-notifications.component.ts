@@ -24,8 +24,8 @@ import { RealTimeNotificationService } from '../services/real-time-notifications
 
 export class RealTimeNotificationsComponent {
 
-	private currentNotificationIndex = 0;
-	private notifications: any[];
+	currentNotificationIndex = 0;
+	notifications: any[];
 
 	constructor(private notificationService: RealTimeNotificationService) {
 		setInterval(() => this.refresh(), 15 * 1000);

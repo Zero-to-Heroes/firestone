@@ -1,7 +1,5 @@
 import { Component, NgZone, OnInit, Input } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Events } from '../../services/events.service';
 
 declare var overwolf: any;

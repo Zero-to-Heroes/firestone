@@ -1,7 +1,5 @@
 import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { AllCardsService } from '../../services/all-cards.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { Events } from '../../services/events.service';
@@ -63,8 +61,9 @@ export class FullCardComponent {
 
 	@Output() close = new EventEmitter();
 
-	private card: any;
-	private audioClips: any[] = [];
+	card: any;
+	audioClips: any[];
+
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
 
@@ -107,19 +106,32 @@ export class FullCardComponent {
 		}
 	}
 
-	private updateCardWithCollection(collection: Card[], card: SetCard) {
-		for (let i = 0; i < collection.length; i++) {
-			let collectionCard = collection[i];
-			if (collectionCard.id == card.id) {
-				card.ownedPremium = collectionCard.premiumCount;
-				card.ownedNonPremium = collectionCard.count;
-			}
-		}
-	}
-
-	private playSound(audio) {
+	playSound(audio) {
 		this.cancelPlayingSounds();
 		audio.play();
+	}
+
+	image() {
+		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
+	}
+
+	class() {
+		if (this.card.playerClass == 'Neutral') {
+			return 'All classes';
+		}
+		return this.card.playerClass;
+	}
+
+	type() {
+		return this.card.type;
+	}
+
+	set() {
+		return this.cards.setName(this.card.set);
+	}
+
+	closeWindow() {
+		this.close.emit(null);
 	}
 
 	private cancelPlayingSounds() {
@@ -133,27 +145,13 @@ export class FullCardComponent {
 		})
 	}
 
-	private image() {
-		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
-	}
-
-	private class() {
-		if (this.card.playerClass == 'Neutral') {
-			return 'All classes';
+	private updateCardWithCollection(collection: Card[], card: SetCard) {
+		for (let i = 0; i < collection.length; i++) {
+			let collectionCard = collection[i];
+			if (collectionCard.id == card.id) {
+				card.ownedPremium = collectionCard.premiumCount;
+				card.ownedNonPremium = collectionCard.count;
+			}
 		}
-		return this.card.playerClass;
 	}
-
-	private type() {
-		return this.card.type;
-	}
-
-	private set() {
-		return this.cards.setName(this.card.set);
-	}
-
-	private closeWindow() {
-		this.close.emit(null);
-	}
-
 }

@@ -1,7 +1,5 @@
 import { Component, NgZone, ElementRef, HostListener } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
@@ -65,11 +63,12 @@ export class CardHistoryComponent {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
 	private showOnlyNewCards: boolean;
-	private cardHistory: CardHistory[];
-	private shownHistory: CardHistory[];
-	private totalHistoryLength: number;
 	private limit = 100;
 	private refreshing = false;
+
+	cardHistory: CardHistory[];
+	shownHistory: CardHistory[];
+	totalHistoryLength: number;
 
 	constructor(
 		private storage: CardHistoryStorageService,
@@ -107,7 +106,7 @@ export class CardHistoryComponent {
 		})
 	}
 
-	private loadMore() {
+	loadMore() {
 		console.log('request to load more');
 		this.storage.loadAll(
 			(result: CardHistory[]) => {
@@ -118,7 +117,7 @@ export class CardHistoryComponent {
 			0);
 	}
 
-	private toggleShowOnlyNewCards() {
+	toggleShowOnlyNewCards() {
 		this.showOnlyNewCards = !this.showOnlyNewCards;
 		if (this.showOnlyNewCards) {
 			this.shownHistory = this.cardHistory.filter((card: CardHistory) => card.isNewCard);
@@ -130,7 +129,7 @@ export class CardHistoryComponent {
 
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
-	private onHistoryClick(event: MouseEvent) {
+	onHistoryClick(event: MouseEvent) {
 		console.log('handling history click', event);
 		let rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
 		console.log('element rect', rect);

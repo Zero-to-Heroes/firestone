@@ -43,7 +43,7 @@ export class CollectionMenuComponent {
 	@Input() public selectedFormat: string;
 	@Input() public searchString: string;
 
-	private selectedCard: any;
+	selectedCard: any;
 
 	constructor(private _events: Events, private cards: AllCardsService) {
 
@@ -53,19 +53,19 @@ export class CollectionMenuComponent {
 		this.selectedCard = this.cards.getCard(cardId);
 	}
 
-	private getSelectedFormat() {
+	getSelectedFormat() {
 		return this.selectedFormat.charAt(0).toUpperCase() + this.selectedFormat.slice(1);
 	}
 
-	private goToSetView() {
+	goToSetView() {
 		this._events.broadcast(Events.SET_SELECTED, this.selectedSet);
 	}
 
-	private goToFormatView() {
+	goToFormatView() {
 		this._events.broadcast(Events.FORMAT_SELECTED, this.selectedSet.standard ? 'standard' : 'wild');
 	}
 
-	private goToCollectionView() {
+	goToCollectionView() {
 		this._events.broadcast(Events.SHOW_CARDS, null, null);
 		this._events.broadcast(Events.MODULE_SELECTED, 'collection');
 	}

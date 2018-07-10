@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-// import * as Raven from 'raven-js';
 import { Game } from '../models/game';
 import { GameEvent } from '../models/game-event';
 import { DungeonInfo } from '../models/dungeon-info';

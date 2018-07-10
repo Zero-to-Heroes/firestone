@@ -3,8 +3,6 @@ import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolv
 
 import { Events } from '../services/events.service';
 
-import * as Raven from 'raven-js';
-
 declare var overwolf: any;
 
 

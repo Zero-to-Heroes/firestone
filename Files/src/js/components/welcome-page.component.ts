@@ -3,8 +3,6 @@ import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angu
 import { DebugService } from '../services/debug.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
 
-import * as Raven from 'raven-js';
-
 const HEARTHSTONE_GAME_ID = 9898;
 
 declare var overwolf: any;
@@ -21,7 +19,6 @@ declare var Crate: any;
 		<div class="root">
 			<div class="app-container">
 				<section class="menu-bar">
-					<!-- <player-name></player-name> -->
 					<i class="i-117X33 gold-theme logo">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
@@ -82,17 +79,17 @@ declare var Crate: any;
 // 7.1.1.17994
 export class WelcomePageComponent implements AfterViewInit {
 
-	private emptyCollection = false;
+	// private emptyCollection = false;
 	private thisWindowId: string;
 	private crate;
 
 	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
-		this.collectionManager.getCollection((collection) => {
-			console.log('loaded collection', collection);
-			if (!collection || collection.length == 0) {
-				this.emptyCollection = true;
-			}
-		})
+		// this.collectionManager.getCollection((collection) => {
+		// 	console.log('loaded collection', collection);
+		// 	if (!collection || collection.length == 0) {
+		// 		this.emptyCollection = true;
+		// 	}
+		// })
 
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
@@ -117,11 +114,11 @@ export class WelcomePageComponent implements AfterViewInit {
 	}
 
 	@HostListener('mousedown', ['$event'])
-	private dragMove(event: MouseEvent) {
+	dragMove(event: MouseEvent) {
 		overwolf.windows.dragMove(this.thisWindowId);
 	};
 
-	private closeWindow(quitApp: boolean) {
+	closeWindow(quitApp: boolean) {
 		// If game is not running, we close all other windows
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('running game info', res);
@@ -144,16 +141,20 @@ export class WelcomePageComponent implements AfterViewInit {
 		});
 	};
 
-	private minimizeWindow() {
+	minimizeWindow() {
 		overwolf.windows.minimize(this.thisWindowId);
 	};
 
-	private contactSupport() {
-		if (!this.crate) {
-			setTimeout(() => this.contactSupport(), 50);
-			return;
-		}
-		this.crate.toggle(true);
-		this.crate.show();
+	contactSupport() {
+		let crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376"
+		});
+		crate.toggle(true);
+		crate.store.subscribe(() => {
+			if (crate.store.getState().visible && !crate.store.getState().open) {
+				crate.hide();
+			}
+		})
 	}
 }

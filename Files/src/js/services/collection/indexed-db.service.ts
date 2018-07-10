@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from 'angular-2-local-storage';
 import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
 
 import { CardHistory } from '../../models/card-history';
@@ -14,7 +13,7 @@ export class IndexedDbService {
 
 	private db: AngularIndexedDB;
 
-	constructor(private localStorageService: LocalStorageService) {
+	constructor() {
 		this.init();
 	}
 

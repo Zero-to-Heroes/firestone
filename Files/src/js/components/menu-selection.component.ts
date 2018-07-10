@@ -43,7 +43,7 @@ export class MenuSelectionComponent {
 
 	}
 
-	private selectModule(module: string) {
+	selectModule(module: string) {
 		// this.events.broadcast(Events.MODULE_SELECTED, module);
 	}
 }
