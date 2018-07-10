@@ -154,12 +154,4 @@ export class FullCardComponent {
 			}
 		}
 	}
-
-	private cancelPlayingSounds() {
-		this.audioClips.forEach((sound) => {
-			sound.audio.pause();
-			sound.audio.currentTime = 0;
-		})
-	}
-
 }
