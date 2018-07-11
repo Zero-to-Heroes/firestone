@@ -1,4 +1,5 @@
 import { Component, NgZone, AfterViewInit } from '@angular/core';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { CollectionManager } from '../services/collection/collection-manager.service';
 import { AllCardsService } from '../services/all-cards.service';
@@ -6,6 +7,9 @@ import { Events } from '../services/events.service';
 
 import { Card } from '../models/card';
 import { Set, SetCard } from '../models/set';
+import { timeInterval } from 'rxjs/operator/timeInterval';
+
+const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 declare var overwolf: any;
 declare var ga: any;
@@ -19,7 +23,7 @@ declare var OwAd: any;
 	],
 	template: `
 		<div class="collection">
-			<section class="main" [ngClass]="{'divider': _selectedView == 'cards'}">
+			<section class="main" [ngClass]="{'divider': _selectedView == 'cards'}" [@viewState]="_viewState">
 				<collection-menu
 					[displayType]="_menuDisplayType"
 					[selectedSet]="_selectedSet"
@@ -49,6 +53,20 @@ declare var OwAd: any;
 			</section>
 		</div>
 	`,
+	animations: [
+		trigger('viewState', [
+			state('hidden',	style({
+				opacity: 0,
+				"pointer-events": "none",
+			})),
+			state('shown',	style({
+				opacity: 1,
+			})),
+			transition(
+				'hidden <=> shown',
+				animate(`${COLLECTION_HIDE_TRANSITION_DURATION_IN_MS}ms linear`)),
+		])
+	]
 })
 // 7.1.1.17994
 export class CollectionComponent {
@@ -58,6 +76,7 @@ export class CollectionComponent {
 	_selectedSet: Set;
 	_selectedFormat: string;
 	searchString: string;
+	_viewState = 'shown';
 	_cardList: SetCard[];
 	fullCardId: string;
 
@@ -95,85 +114,97 @@ export class CollectionComponent {
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
 			(data) => {
-				this.reset();
-				// console.log(`selecting set, showing cards`, data);
-				this._menuDisplayType = 'breadcrumbs';
-				this._selectedView = 'cards';
-				this._selectedSet = data.data[0];
-				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
-				this._cardList = this._selectedSet.allCards;
+				this.transitionState(() => {
+					this.reset();
+					// console.log(`selecting set, showing cards`, data);
+					this._menuDisplayType = 'breadcrumbs';
+					this._selectedView = 'cards';
+					this._selectedSet = data.data[0];
+					this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+					this._cardList = this._selectedSet.allCards;
+				});
 			}
 		)
 
 		this._events.on(Events.FORMAT_SELECTED).subscribe(
 			(data) => {
-				this.reset();
-				// console.log(`selecting format in collection`, data);
-				this._menuDisplayType = 'breadcrumbs';
-				this._selectedView = 'sets';
-				this._selectedFormat = data.data[0];
+				this.transitionState(() => {
+					this.reset();
+					// console.log(`selecting format in collection`, data);
+					this._menuDisplayType = 'breadcrumbs';
+					this._selectedView = 'sets';
+					this._selectedFormat = data.data[0];
+				});
 			}
 		)
 
 		this._events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
-				this.reset();
-				this._menuDisplayType = 'menu';
-				this._selectedView = 'sets';
+				this.transitionState(() => {
+					this.reset();
+					this._menuDisplayType = 'menu';
+					this._selectedView = 'sets';
+				});
 			}
 		)
 
 		this._events.on(Events.SHOW_CARDS).subscribe(
 			(data) => {
-				this.reset();
-				this._menuDisplayType = 'breadcrumbs';
-				this._selectedView = 'cards';
-				this._cardList = data.data[0];
-				this.searchString = data.data[1];
+				this.transitionState(() => {
+					this.reset();
+					this._menuDisplayType = 'breadcrumbs';
+					this._selectedView = 'cards';
+					this._cardList = data.data[0];
+					this.searchString = data.data[1];
+				})
 			}
 		)
 
 		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
 			(event) => {
-				this.reset();
-				this._menuDisplayType = 'breadcrumbs';
-				this._selectedView = 'card-details';
-				this.fullCardId = event.data[0];
-				let newSet = this.cards.getSetFromCardId(this.fullCardId);
-				console.log('should update set', newSet, this._selectedSet);
-				if (!this._selectedSet || this._selectedSet.id != newSet.id) {
-					this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
-					this.collectionManager.getCollection((collection: Card[]) => {
-						this.updateSet(collection, this._selectedSet);
-					})
-				}
-				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+				this.transitionState(() => {
+					this.selectCard(event.data[0]);
+				});
 			}
 		);
-
+		
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received', message);
 			if (message.id === 'click-card') {
 				this.ngZone.run(() => {
-					this.reset();
-					this._menuDisplayType = 'breadcrumbs';
-					this._selectedView = 'card-details';
-					this.fullCardId = message.content;
-					let newSet = this.cards.getSetFromCardId(this.fullCardId);
-					console.log('should update set', newSet, this._selectedSet);
-					if (!this._selectedSet || this._selectedSet.id != newSet.id) {
-						this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
-						this.collectionManager.getCollection((collection: Card[]) => {
-							this.updateSet(collection, this._selectedSet);
-						})
-					}
-					this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+					this.selectCard(message.content);
 					overwolf.windows.restore(this.windowId);
 				})
 			}
 		});
-
+		
 		this.loadAds();
+	}
+
+	private transitionState(changeStateCallback: Function) {
+		this._viewState = "hidden";
+		setTimeout(() => {
+			changeStateCallback();
+			this._viewState = "shown";
+		}, COLLECTION_HIDE_TRANSITION_DURATION_IN_MS);
+	}
+
+	private selectCard(fullcardId: string) {
+		this.reset();
+		this._menuDisplayType = 'breadcrumbs';
+		this._selectedView = 'card-details';
+		this.fullCardId = fullcardId;
+		let newSet = this.cards.getSetFromCardId(this.fullCardId);
+		console.log('should update set', newSet, this._selectedSet);
+		if (!this._selectedSet || this._selectedSet.id != newSet.id) {
+			this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
+			this.collectionManager.getCollection((collection: Card[]) => {
+				this.updateSet(collection, this._selectedSet);
+			})
+		}
+		this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+
+
 	}
 
 	private loadAds() {

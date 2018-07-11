@@ -69,18 +69,18 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-		        "size": {"width": 1044, "height": 660},
-		        "min_size": {"width": 1044, "height": 660},
-		        "max_size": {"width": 1044, "height": 660}
+		        "size": {"width": 1064, "height": 680},
+		        "min_size": {"width": 1064, "height": 680},
+		        "max_size": {"width": 1064, "height": 680}
 			},
 			"CollectionWindow": {
 				"file": "Files/html/collection.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-		        "size": {"width": 1150, "height": 700},
-		        "min_size": {"width": 1150, "height": 700},
-		        "max_size": {"width": 1150, "height": 700},
+		        "size": {"width": 1170, "height": 720},
+		        "min_size": {"width": 1170, "height": 720},
+		        "max_size": {"width": 1170, "height": 720},
 		        "block_top_window_navigation": true,
 		        "popup_blocker": true,
 		        "mute": true
