@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
 import { Card } from '../../models/card';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -11,7 +11,10 @@ declare var overwolf: any;
 export class CollectionManager {
 	plugin: any;
 
-	constructor(private memoryReading: MemoryInspectionService, private db: IndexedDbService) {
+	constructor(
+		private memoryReading: MemoryInspectionService,
+		private ngZone: NgZone,
+		private db: IndexedDbService) {
 	}
 
 	public getCollection(callback: Function) {
@@ -22,7 +25,9 @@ export class CollectionManager {
 				// console.log('retrieving collection from db', collection);
 				this.db.getCollection((collection) => {
 					// console.log('retrieved collection form db', collection);
-					callback(collection);
+					this.ngZone.run(() => {
+						callback(collection);
+					});
 				});
 			}
 			else {

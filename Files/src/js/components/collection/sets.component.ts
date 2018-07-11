@@ -39,7 +39,7 @@ export class SetsComponent {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed sets', message);
+			// console.log('[sets] state changed sets', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}
@@ -48,7 +48,7 @@ export class SetsComponent {
 	}
 
 	@Input('selectedFormat') set selectedFormat(format: string) {
-		// console.log('showing selected format', format);
+		// console.log('[sets] showing selected format', format);
 		switch (format) {
 			case 'standard':
 				this.showStandard = true;
@@ -69,9 +69,10 @@ export class SetsComponent {
 			return;
 		}
 		this.refreshing = true;
-		// console.log('sets', this.standardSets, this.wildSets);
+		// console.log('[sets] sets', this.standardSets, this.wildSets);
 
 		this.collectionManager.getCollection((collection: Card[]) => {
+			// console.log('[sets] Retrieved collection')
 			this.standardSets = this.cards.getStandardSets();
 			this.wildSets = this.cards.getWildSets();
 			// Add the number of owned cards on each card in the standard set
@@ -82,8 +83,8 @@ export class SetsComponent {
 				this.updateSet(collection, standardSet);
 			})
 			this.refreshing = false;
+			// console.log('[sets] after adding owned cards', this.standardSets);
 		})
-		// console.log('after adding owned cards', this.standardSets);
 	}
 
 	private updateSet(collection: Card[], set: Set) {
