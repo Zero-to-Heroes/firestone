@@ -94,7 +94,7 @@ export class CardHistoryComponent {
 		console.log('request to load');
 		this.storage.loadAll(
 			(result: CardHistory[]) => {
-				console.log('loaded history', result);
+				// console.log('loaded history', result);
 				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
 				this.refreshing = false;
@@ -110,7 +110,7 @@ export class CardHistoryComponent {
 		console.log('request to load more');
 		this.storage.loadAll(
 			(result: CardHistory[]) => {
-				console.log('loaded history', result);
+				// console.log('loaded history', result);
 				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
 			},
