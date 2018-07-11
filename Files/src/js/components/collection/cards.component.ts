@@ -104,7 +104,7 @@ declare var overwolf: any;
 					</i>
 				</li>
 				<li *ngFor="let page of _pages" [ngClass]="_currentPage == page ? 'active' : ''" (click)="goToPage(page)">{{page + 1}}</li>
-				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage == _numberOfPages ? 'disabled' : ''">
+				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage >= _numberOfPages - 1 ? 'disabled' : ''">
 					<i class="i-30">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
@@ -193,7 +193,7 @@ export class CardsComponent implements AfterViewInit {
 	}
 
 	nextPage() {
-		this._currentPage = Math.min(this._numberOfPages, this._currentPage + 1);
+		this._currentPage = Math.min(this._numberOfPages - 1, this._currentPage + 1);
 		this.updateShownCards();
 	}
 
