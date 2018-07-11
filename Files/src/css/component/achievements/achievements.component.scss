@@ -1,0 +1,71 @@
+@import '../../global/variables';
+@import '../../global/scrollbar';
+
+.achievements {
+    flex-grow: 1;
+    display: flex;
+    padding-top: 15px;
+    height: 598px;
+
+    .main {
+    	display: flex;
+    	flex-direction: column;
+        width: 695px;
+        padding-left: 14px;
+        margin-top: 0;
+        position: relative;
+
+        &.divider {
+            border-right: 1px solid $grey04;
+            height: calc(100% - 15px);
+        }
+
+        achievements-menu {
+            height: 30px;
+            display: flex;
+            align-items: flex-end;
+            flex-shrink: 0;
+        }
+
+        achievevements-categories {
+            display: flex;
+        }
+    }
+
+    .secondary {
+    	display: flex;
+    	flex-direction: column;
+        flex-grow: 1;
+        margin-left: 20px;
+        margin-right: 15px;
+    }
+}
+
+.ads-container {
+    width: 400px;
+    height: 300px;
+    margin-top: 15px;
+    position: relative;
+
+    .no-ads-placeholder {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background-color: $black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .logo {
+            width: 109px;
+            height: 154px;
+            color: $darkred;
+        }
+    }
+
+    .ads {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+}

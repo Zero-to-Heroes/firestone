@@ -1,3 +1,5 @@
 /Files/node_modules
+/Files/dist
 /npm-debug.log
 /store_release
+/Files/npm-debug.log

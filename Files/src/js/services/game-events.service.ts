@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-// import * as Raven from 'raven-js';
 import { Game } from '../models/game';
 import { GameEvent } from '../models/game-event';
 import { DungeonInfo } from '../models/dungeon-info';
@@ -26,7 +25,7 @@ export class GameEvents {
 		private events: Events,
 		private memoryInspectionService: MemoryInspectionService) {
 
-		this.detectMousePicks();
+		// this.detectMousePicks();
 	}
 
 	public receiveLogLine(data: string) {
@@ -53,8 +52,8 @@ export class GameEvents {
 			this.game = new Game();
 			this.game.fullLogs = '';
 
-			this.parseMatchInfo();
-			this.parseGameMode();
+			// this.parseMatchInfo();
+			// this.parseGameMode();
 			this.allEvents.next(new GameEvent(GameEvent.GAME_START, this.game));
 			this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
 		}
@@ -68,56 +67,56 @@ export class GameEvents {
 		this.parseVictory(data);
 	}
 
-	private detectMousePicks() {
-		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
-			if (!data.onGame || this.game) {
-				return;
-			}
+	// private detectMousePicks() {
+	// 	overwolf.games.inputTracking.onMouseUp.addListener((data) => {
+	// 		if (!data.onGame || this.game) {
+	// 			return;
+	// 		}
 
-			this.detectPick(data);
-		});
-	}
+	// 		this.detectPick(data);
+	// 	});
+	// }
 
-	private detectPick(data) {
-		overwolf.games.getRunningGameInfo((result) => {
-			let x = 1.0 * data.x / result.width;
-			let y = 1.0 * data.y / result.height;
-			// console.log('clicked at ', x, y, data, result);
+	// private detectPick(data) {
+	// 	overwolf.games.getRunningGameInfo((result) => {
+	// 		let x = 1.0 * data.x / result.width;
+	// 		let y = 1.0 * data.y / result.height;
+	// 		// console.log('clicked at ', x, y, data, result);
 
-			// Dungeon Run picks
-			let maybeDungeonRun = false;
-			if (x >= 0.17 && x <= 0.65 && y > 0.22 && y < 0.52) {
-				maybeDungeonRun = true;
-			}
+	// 		// Dungeon Run picks
+	// 		let maybeDungeonRun = false;
+	// 		if (x >= 0.17 && x <= 0.65 && y > 0.22 && y < 0.52) {
+	// 			maybeDungeonRun = true;
+	// 		}
 
-			if (maybeDungeonRun) {
-				this.memoryInspectionService.getDungeonInfo((dungeonInfo: DungeonInfo) => {
-					if (!dungeonInfo || !dungeonInfo.IsRunActive) {
-						return;
-					}
+	// 		if (maybeDungeonRun) {
+	// 			this.memoryInspectionService.getDungeonInfo((dungeonInfo: DungeonInfo) => {
+	// 				if (!dungeonInfo || !dungeonInfo.IsRunActive) {
+	// 					return;
+	// 				}
 
-					// console.log('[game-events] active run, emitting event', dungeonInfo);
-					this.allEvents.next(new GameEvent(GameEvent.MAYBE_DUNGEON_INFO_PICK, dungeonInfo));
-				});
-			}
-		});
-	}
+	// 				// console.log('[game-events] active run, emitting event', dungeonInfo);
+	// 				this.allEvents.next(new GameEvent(GameEvent.MAYBE_DUNGEON_INFO_PICK, dungeonInfo));
+	// 			});
+	// 		}
+	// 	});
+	// }
 
-	private parseMatchInfo() {
-		this.memoryInspectionService.getMatchInfo((matchInfo) => {
-			console.log('[game-events] match info is', matchInfo);
-			this.game.matchInfo = matchInfo;
-			this.allEvents.next(new GameEvent(GameEvent.PLAYER, matchInfo.LocalPlayer));
-			this.allEvents.next(new GameEvent(GameEvent.OPPONENT, matchInfo.OpposingPlayer));
-		});
-	}
+	// private parseMatchInfo() {
+	// 	this.memoryInspectionService.getMatchInfo((matchInfo) => {
+	// 		console.log('[game-events] match info is', matchInfo);
+	// 		this.game.matchInfo = matchInfo;
+	// 		this.allEvents.next(new GameEvent(GameEvent.PLAYER, matchInfo.LocalPlayer));
+	// 		this.allEvents.next(new GameEvent(GameEvent.OPPONENT, matchInfo.OpposingPlayer));
+	// 	});
+	// }
 
-	private parseGameMode() {
-		this.memoryInspectionService.getGameMode((gameMode) => {
-			console.log('[game-events] game mode is', gameMode);
-			this.game.gameMode = gameMode;
-		});
-	}
+	// private parseGameMode() {
+	// 	this.memoryInspectionService.getGameMode((gameMode) => {
+	// 		console.log('[game-events] game mode is', gameMode);
+	// 		this.game.gameMode = gameMode;
+	// 	});
+	// }
 
 	private readonly END_REGEX = /D(?:.*)TAG_CHANGE Entity=(.*) tag=PLAYSTATE value=(WON|TIE)/;
 	private parseVictory(data: string) {

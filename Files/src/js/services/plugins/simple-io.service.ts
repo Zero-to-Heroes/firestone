@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-// import * as Raven from 'raven-js';
-
 import { DungeonInfo } from '../../models/dungeon-info'
 
 declare var OverwolfPlugin: any;

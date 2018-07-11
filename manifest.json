@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"Firestone",
 		"author":"Sébastien Tromp",
-		"version":"0.9.17",
+		"version":"0.9.19",
 		"minimum-overwolf-version":"0.108.0",
 		"access-name": "com.zerotoheroes.overwolf.hs.firestone",
 		"description":"A Hearthtone companion to have in-game the information you want to know about your card collection and more",
@@ -64,15 +64,6 @@
                 "grab_focus_on_desktop": false,
                 "block_top_window_navigation": true
 			},
-			"ErrorsWindow": {
-				"file": "Files/html/errors.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-		        "size": {"width": 600, "height": 200},
-		        "min_size": {"width": 600, "height": 200},
-		        "max_size": {"width": 600, "height": 200}
-			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
 				"transparent": true,
@@ -124,10 +115,6 @@
 			"simple-io-plugin-zip": {
 				"file": "Files/plugins/simple-io-plugin-zip.dll",
 				"class": "overwolf.plugins.SimpleIOPluginZip"
-			},
-			"mindvision": {
-				"file": "Files/plugins/MindVision.dll",
-				"class": "MindVision.MindVisionPlugin"
 			}
 		},
 		"hotkeys": {

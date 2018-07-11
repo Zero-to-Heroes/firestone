@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Set, SetCard } from '../models/set';
 
 declare var parseCardsText: any;

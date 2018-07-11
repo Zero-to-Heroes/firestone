@@ -35,14 +35,14 @@ declare var overwolf: any;
 
 export class HomeScreenInfoTextComponent {
 
-	private dataLoaded = false;
+	dataLoaded = false;
+	importantAnnouncement;
+	status: string;
+	statusDetails: string;
 
 	private currentNotificationIndex = 0;
 	private notifications: any[];
-	private importantAnnouncement;
 
-	private status: string;
-	private statusDetails: string;
 
 	constructor(private notificationService: RealTimeNotificationService,
 				private collectionManager: CollectionManager) {

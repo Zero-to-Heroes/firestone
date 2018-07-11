@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import * as allAchievements from './achievements_list.json';
+import { default as allAchievements } from './achievements_list.json';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-// import * as Raven from 'raven-js';
 import { CompletedAchievement } from '../../models/completed-achievement';
 // import { AchievementSet } from '../../models/achievement-set';
 
@@ -16,6 +15,7 @@ import { TreasurePick } from './achievements/treasure-pick';
 import { sortBy } from 'lodash'
 
 declare var parseCardsText;
+// declare var allAchievements;
 
 @Injectable()
 export class AchievementsRepository {
@@ -29,12 +29,21 @@ export class AchievementsRepository {
 	}
 
 	private registerModules() {
+		console.log('allAchievements', allAchievements);
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'dungeon_run_boss_encounter')
 				.map(achievement => new BossEncounter(achievement))
 				.forEach(challenge => this.challengeModules.push(challenge));
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'dungeon_run_boss_victory')
+				.map(achievement => new BossVictory(achievement))
+				.forEach(challenge => this.challengeModules.push(challenge));
+		(<any>allAchievements)
+				.filter(achievement => achievement.type == 'monster_hunt_boss_encounter')
+				.map(achievement => new BossEncounter(achievement))
+				.forEach(challenge => this.challengeModules.push(challenge));
+		(<any>allAchievements)
+				.filter(achievement => achievement.type == 'monster_hunt_boss_victory')
 				.map(achievement => new BossVictory(achievement))
 				.forEach(challenge => this.challengeModules.push(challenge));
 

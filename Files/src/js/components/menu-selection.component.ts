@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { Events } from '../services/events.service';
 
@@ -12,10 +12,10 @@ declare var overwolf: any;
 	],
 	template: `
 		<ul class="menu-selection">
-			<li class="selected">
+			<li class="selected" (click)="selectModule('collection')">
 				<span>The Binder</span>
 			</li>
-			<li class="disabled">
+			<li class="disabled" (click)="selectModule('achievements')">
 				<span>Achievements</span>
 				<div class="zth-tooltip bottom">
 					<p>Coming soon</p>
@@ -41,5 +41,9 @@ export class MenuSelectionComponent {
 
 	constructor(private events: Events) {
 
+	}
+
+	selectModule(module: string) {
+		// this.events.broadcast(Events.MODULE_SELECTED, module);
 	}
 }

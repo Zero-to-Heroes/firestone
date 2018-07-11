@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { PackMonitor } from '../services/collection/pack-monitor.service';
 import { IndexedDbService } from '../services/collection/indexed-db.service';
 import { IndexedDbService as AchievementsDb } from '../services/achievement/indexed-db.service';
@@ -17,7 +15,7 @@ declare var overwolf: any;
 declare var ga: any;
 
 @Component({
-	selector: 'zh-app',
+	selector: 'app-root',
 	styleUrls: [`../../css/component/app.component.scss`],
 	template: `
 		<div>

@@ -1,7 +1,5 @@
 import { Component, NgZone, Input, ElementRef, HostListener } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
@@ -35,12 +33,13 @@ declare var ga: any;
 // 7.1.1.17994
 export class CardHistoryItemComponent {
 
+	newCard: boolean;
+	rarityImg: string;
+	cardName: string;
+	creationDate: string;
+	dustValue: number;
+
 	private cardId: string;
-	private newCard: boolean;
-	private rarityImg: string;
-	private cardName: string;
-	private creationDate: string;
-	private dustValue: number;
 
 	constructor(
 		private el: ElementRef,

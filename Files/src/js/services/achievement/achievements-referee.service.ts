@@ -1,7 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-// import * as Raven from 'raven-js';
-
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { Challenge } from './achievements/challenge';
 import { AchievementsStorageService } from './achievements-storage.service';

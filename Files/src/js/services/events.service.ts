@@ -30,8 +30,6 @@ export class Events {
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
 
-	public static readonly HEARTHHEAD_LOGIN = 'hearthhead-login';
-
 	private _eventBus: Subject<BroadcastEvent>;
 
 	constructor() {

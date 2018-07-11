@@ -1,7 +1,5 @@
 import { Component, NgZone, OnInit } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
@@ -46,14 +44,14 @@ declare var ga: any;
 // 7.1.1.17994
 export class CardSearchComponent {
 
-	private searchString: string;
-	private searchResults: SetCard[] = [];
-	private showSearchResults = false;
+	searchString: string;
+	searchResults: SetCard[] = [];
+	showSearchResults = false;
 
 	constructor(private cards: AllCardsService, private events: Events, private collectionManager: CollectionManager) {
 	}
 
-	private onSearchStringChange() {
+	onSearchStringChange() {
 		this.showSearchResults = false;
 		// console.log('updating serach string', this.searchString);
 		if (this.searchString.length <= 2) {
@@ -62,7 +60,7 @@ export class CardSearchComponent {
 		this.updateSearchResults();
 	}
 
-	private onValidateSearch(event: KeyboardEvent) {
+	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this.searchString) {
 			console.log('validating search', this.searchResults, this.searchString);
 
@@ -71,20 +69,20 @@ export class CardSearchComponent {
 		}
 	}
 
-	private showCard(result: SetCard) {
+	showCard(result: SetCard) {
 		console.error('showing card when clicking on search proposition in search box - but what should actually happen?', result);
 		this.events.broadcast(Events.SHOW_CARD_MODAL, result.id);
 		this.events.broadcast(Events.HIDE_TOOLTIP, result.id);
 	}
 
-	private onFocusLost() {
+	onFocusLost() {
 		console.log('focus lost');
 		setTimeout(() => {
 			this.showSearchResults = false;
 		}, 500);
 	}
 
-	private onMouseDown(event: Event) {
+	onMouseDown(event: Event) {
 		event.stopPropagation();
 	}
 
@@ -97,13 +95,8 @@ export class CardSearchComponent {
 				if (!collectionCard) {
 					return;
 				}
-
-				if (collectionCard.Premium) {
-					card.ownedPremium = collectionCard.Count;
-				}
-				else {
-					card.ownedNonPremium = collectionCard.Count;
-				}
+				card.ownedPremium = collectionCard.premiumCount;
+				card.ownedNonPremium = collectionCard.count;
 			})
 			// console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;
@@ -113,7 +106,7 @@ export class CardSearchComponent {
 	private findCollectionCard(collection: Card[], card: SetCard): Card {
 		for (let i = 0; i < collection.length; i++) {
 			let collectionCard = collection[i];
-			if (collectionCard.Id == card.id) {
+			if (collectionCard.id == card.id) {
 				// console.log('Matching card', collectionCard, card);
 				return collectionCard;
 			}

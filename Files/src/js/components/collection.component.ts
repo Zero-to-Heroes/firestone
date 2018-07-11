@@ -1,8 +1,6 @@
 import { Component, NgZone, AfterViewInit } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
-import * as Raven from 'raven-js';
-
 import { CollectionManager } from '../services/collection/collection-manager.service';
 import { AllCardsService } from '../services/all-cards.service';
 import { Events } from '../services/events.service';
@@ -71,17 +69,17 @@ declare var OwAd: any;
 	]
 })
 // 7.1.1.17994
-export class CollectionComponent implements AfterViewInit {
+export class CollectionComponent {
 
-	private _menuDisplayType = 'menu';
-	private _selectedView = 'sets';
-	private _selectedSet: Set;
-	private _selectedFormat: string;
-	private searchString: string;
-	private _viewState = 'shown';
+	_menuDisplayType = 'menu';
+	_selectedView = 'sets';
+	_selectedSet: Set;
+	_selectedFormat: string;
+	searchString: string;
+	_viewState = 'shown';
+	_cardList: SetCard[];
+	fullCardId: string;
 
-	private _cardList: SetCard[];
-	private fullCardId: string;
 	private windowId: string;
 	private adRef;
 
@@ -179,6 +177,8 @@ export class CollectionComponent implements AfterViewInit {
 				})
 			}
 		});
+		
+		this.loadAds();
 	}
 
 	private transitionState(changeStateCallback: Function) {
@@ -204,14 +204,11 @@ export class CollectionComponent implements AfterViewInit {
 		}
 		this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 
-	}
 
-	ngAfterViewInit() {
-		this.loadAds();
 	}
 
 	private loadAds() {
-		if (!adsReady) {
+		if (!adsReady || !document.getElementById("ad-div")) {
 			setTimeout(() => {
 				this.loadAds()
 			}, 50);
@@ -243,14 +240,10 @@ export class CollectionComponent implements AfterViewInit {
 	private updateSet(collection: Card[], set: Set) {
 		console.log('updating set', set, collection)
 		set.allCards.forEach((card: SetCard) => {
-			let owned = collection.filter((collectionCard: Card) => collectionCard.Id === card.id);
+			let owned = collection.filter((collectionCard: Card) => collectionCard.id === card.id);
 			owned.forEach((collectionCard: Card) => {
-				if (collectionCard.Premium) {
-					card.ownedPremium = collectionCard.Count;
-				}
-				else {
-					card.ownedNonPremium = collectionCard.Count;
-				}
+				card.ownedPremium = collectionCard.premiumCount;
+				card.ownedNonPremium = collectionCard.count;
 			})
 		})
 

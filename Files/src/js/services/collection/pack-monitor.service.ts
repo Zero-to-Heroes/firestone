@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import * as Raven from 'raven-js';
-
 import { Card } from '../../models/card';
 import { CardHistory } from '../../models/card-history';
 
@@ -95,24 +93,26 @@ export class PackMonitor {
 		this.events.on(Events.NEW_CARD)
 			.subscribe(event => {
 				let card: Card = event.data[0];
-				this.unrevealedCards.push(card.Id);
-				this.cardEvents[card.Id] = () => {
+				let type: string = event.data[1];
+				this.unrevealedCards.push(card.id);
+				this.cardEvents[card.id] = () => {
 					this.hadNewCard = true;
-					this.createNewCardToast(card);
+					this.createNewCardToast(card, type);
 				};
 
-				let dbCard = parseCardsText.getCard(card.Id);
-				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, card.Premium, true));
+				let dbCard = parseCardsText.getCard(card.id);
+				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true));
 			});
 		this.events.on(Events.MORE_DUST)
 			.subscribe(event => {
 				let card: Card = event.data[0];
 				let dust: number = event.data[1];
-				this.unrevealedCards.push(card.Id);
-				this.cardEvents[card.Id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
+				let type: string = event.data[2];
+				this.unrevealedCards.push(card.id);
+				this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
 
-				let dbCard = parseCardsText.getCard(card.Id);
-				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, card.Premium, false));
+				let dbCard = parseCardsText.getCard(card.id);
+				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false));
 			});
 
 
@@ -196,7 +196,7 @@ export class PackMonitor {
 		console.log('revealing card', i, cardId, this.cardEvents[cardId], this.unrevealedCards);
 		this.unrevealedCards[i] = '';
 		if (this.cardEvents[cardId]) {
-			this.cardEvents[cardId]();			
+			this.cardEvents[cardId]();
 		}
 
 		for (let j = 0; j < 5; j++) {
@@ -312,11 +312,11 @@ export class PackMonitor {
 		}
 	}
 
-	private createNewCardToast(card: Card) {
-		let dbCard = parseCardsText.getCard(card.Id);
+	private createNewCardToast(card: Card, type: string) {
+		let dbCard = parseCardsText.getCard(card.id);
 		let cardName: string = dbCard.name;
 		let goldenClass = undefined;
-		if (card.Premium) {
+		if (type == 'GOLDEN') {
 			cardName = 'Golden ' + cardName;
 			goldenClass = 'premium';
 		}
