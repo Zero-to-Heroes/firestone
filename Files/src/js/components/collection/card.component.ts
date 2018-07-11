@@ -1,4 +1,5 @@
 import { Component, NgZone, Input, SimpleChanges, Directive, ElementRef, HostListener } from '@angular/core';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import * as Raven from 'raven-js';
@@ -17,12 +18,9 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{'missing': card.ownedNonPremium + card.ownedPremium == 0}">
-			<i class="i-60x78 pale-theme placeholder" *ngIf="showPlaceholder">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#card_placeholder"/>
-				</svg>
-			</i>
-			<img src="{{image()}}" class="real-card" (load)="imageLoadedHandler()" [hidden]="showPlaceholder"/>
+			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
+
+			<img src="{{image()}}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder"/>
 			<div class="count" *ngIf="!showPlaceholder">
 				<div class="non-premium" *ngIf="card.ownedNonPremium > 0 || showCounts">
 					<span>{{card.ownedNonPremium}}</span>
@@ -43,6 +41,32 @@ declare var overwolf: any;
 			</div>
 		</div>
 	`,
+	animations: [
+		trigger('showPlaceholder', [
+			state('false',	style({
+				opacity: 0,
+				"pointer-events": "none",
+			})),
+			state('true',	style({
+				opacity: 1,
+			})),
+			transition(
+				'true => false',
+				animate(`150ms linear`)),
+		]), 
+		trigger('showRealCard', [
+			state('false',	style({
+				opacity: 0,
+				"pointer-events": "none",
+			})),
+			state('true',	style({
+				opacity: 1,
+			})),
+			transition(
+				'false => true',
+				animate(`150ms linear`)),
+		])
+	]
 })
 // 7.1.1.17994
 export class CardComponent {
