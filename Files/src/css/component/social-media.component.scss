@@ -9,11 +9,11 @@
 
     button {
     	margin-right: 5px;
-        --icon-color: $green01;
+        --icon-color: #d9c3ab;
     }
 
     button:hover {
-	    --icon-color: $yellow03;
+	    --icon-color: #ffb948;
 	    color: var(--icon-color);
     }
 }
