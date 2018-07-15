@@ -184,6 +184,7 @@ export class CardsComponent implements AfterViewInit {
 	selectFilter(option: IOption) {
 		// console.log('selected item', option, this._activeFilter);
 		this._activeFilter = option.value;
+		this._currentPage = 0;
 		this.updateShownCards();
 	}
 
