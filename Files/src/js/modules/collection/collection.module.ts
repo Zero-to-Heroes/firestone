@@ -30,6 +30,7 @@ import { SetsComponent }  from '../../components/collection/sets.component';
 import { AchievementsComponent }  from '../../components/achievements/achievements.component';
 import { AchievementsCategoriesComponent }  from '../../components/achievements/achievements-categories.component';
 import { AchievementsMenuComponent }  from '../../components/achievements/achievements-menu.component';
+import { AchievementSetComponent }  from '../../components/achievements/achievement-set.component';
 
 import { AllCardsService }  from '../../services/all-cards.service';
 import { DebugService } from '../../services/debug.service';
@@ -41,6 +42,10 @@ import { RealTimeNotificationService }  from '../../services/real-time-notificat
 import { CardHistoryStorageService }  from '../../services/collection/card-history-storage.service';
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
+
+import { IndexedDbService as AchievementsDbService }  from '../../services/achievement/indexed-db.service';
+import { AchievementsRepository }  from '../../services/achievement/achievements-repository.service';
+import { AchievementsStorageService }  from '../../services/achievement/achievements-storage.service';
 
 declare var ga: any;
 export class AnalyticsErrorHandler implements ErrorHandler {
@@ -81,6 +86,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AchievementsComponent,
 		AchievementsCategoriesComponent,
 		AchievementsMenuComponent,
+		AchievementSetComponent,
 
 		Tooltip,
 		TooltipsComponent,
@@ -99,6 +105,11 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		OwNotificationsService,
 		MemoryInspectionService,
 		RealTimeNotificationService,
+
+		AchievementsDbService,
+		AchievementsRepository,
+		AchievementsStorageService,
+
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })

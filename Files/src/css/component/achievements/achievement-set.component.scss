@@ -1,0 +1,34 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.achievement-set {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.08);
+    position: relative;
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.logo-container {
+	    position: relative;
+	    display: flex;
+	    flex-direction: column;
+    	height: calc(100% - 24px);
+    	width: 100%;
+	}
+
+	.set-name {
+		@extend %core-set-name;
+		text-align: center;
+		position: relative;
+		margin: auto;
+	}
+
+	.achieved {
+		@extend %completion-number;
+	}
+}

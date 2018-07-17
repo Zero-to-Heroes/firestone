@@ -1,6 +1,7 @@
 import { Component, NgZone, AfterViewInit } from '@angular/core';
 
 import { Events } from '../../services/events.service';
+import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementSet } from '../../models/achievement-set';
 
@@ -8,6 +9,7 @@ declare var overwolf: any;
 declare var ga: any;
 declare var adsReady: any;
 declare var OwAd: any;
+declare var _: any;
 
 @Component({
 	selector: 'achievements',
@@ -22,7 +24,7 @@ declare var OwAd: any;
 					[selectedCategory]="_selectedCategory">
 				</achievements-menu>
 				<ng-container [ngSwitch]="_selectedView">
-					<achievements-categories *ngSwitchCase="'categories'"></achievements-categories>
+					<achievements-categories *ngSwitchCase="'categories'" [achievementSets]="achievementCategories"></achievements-categories>
 					<!--<achievements-list *ngSwitchCase="'list'" [achievementsList]="_achievementsList" [category]="_selectedCategory"></achievements-list>-->
 				</ng-container>
 			</section>
@@ -49,11 +51,14 @@ export class AchievementsComponent {
 	_selectedCategory: AchievementSet;
 
 	private _achievementsList: CompletedAchievement[];
+	private achievementCategories: AchievementSet[];
 	private windowId: string;
 	private adRef;
+	private refreshingContent = false;
 
 	constructor(
 		private _events: Events,
+		private achievementService: AchievementsStorageService,
 		private ngZone: NgZone) {
 		ga('send', 'event', 'achievements', 'show');
 
@@ -71,6 +76,7 @@ export class AchievementsComponent {
 			else {
 				console.log('refreshing ad', message.window_state);
 				this.refreshAds();
+				this.refreshContents();
 			}
 		});
 
@@ -81,6 +87,20 @@ export class AchievementsComponent {
 		});
 
 		this.loadAds();
+		this.refreshContents();
+	}
+
+	refreshContents() {
+		if (this.refreshingContent) {
+			return;
+		}
+		this.refreshingContent = true;
+		this.achievementService.loadAggregatedAchievements()
+				.then((achievementSets: AchievementSet[]) => {
+					console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
+					this.achievementCategories = achievementSets;
+					this.refreshingContent = false;
+				});
 	}
 
 	private loadAds() {

@@ -1,4 +1,28 @@
+@import '../../global/fonts';
+
 .achievements-categories {
-	margin-top: 26px;
-	overflow: auto;
+	margin-top: 9px;
+	display: flex;
+	flex-direction: row;
+
+	ol {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+	    display: flex;
+	    justify-content: flex-start;
+	    flex-wrap: wrap;
+
+	    li {
+	    	width: 100px;
+	    	height: 130px;
+	    	margin-right: 15px;
+	    	margin-bottom: 15px;
+	    }
+
+	    li:nth-child(6n) {
+	    	margin-right: 0;
+	    }
+	}
 }

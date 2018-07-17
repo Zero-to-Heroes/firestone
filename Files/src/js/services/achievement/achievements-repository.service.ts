@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { default as allAchievements } from './achievements_list.json';
-
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { sortBy, cloneDeep } from 'lodash'
+
+import { default as allAchievements } from './achievements_list.json';
+
 import { CompletedAchievement } from '../../models/completed-achievement';
-// import { AchievementSet } from '../../models/achievement-set';
+import { Achievement } from '../../models/achievement';
+import { AchievementSet } from '../../models/achievement-set';
 
 import { Challenge } from './achievements/challenge';
 import { BossEncounter } from './achievements/boss-encounter';
 import { BossVictory } from './achievements/boss-victory';
 import { PassivePick } from './achievements/passive-pick';
 import { TreasurePick } from './achievements/treasure-pick';
-
-import { sortBy } from 'lodash'
 
 declare var parseCardsText;
 // declare var allAchievements;
@@ -23,6 +24,8 @@ export class AchievementsRepository {
 	public modulesLoaded = new BehaviorSubject<boolean>(false);
 	public challengeModules: Challenge[] = [];
 
+	private achievementSets: AchievementSet[] = [];
+
 	constructor() {
 		this.registerModules();
 		this.modulesLoaded.next(true);
@@ -32,20 +35,32 @@ export class AchievementsRepository {
 		console.log('allAchievements', allAchievements);
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'dungeon_run_boss_encounter')
-				.map(achievement => new BossEncounter(achievement))
-				.forEach(challenge => this.challengeModules.push(challenge));
+				.map(achievement => [achievement, new BossEncounter(achievement)])
+				.forEach(([achievement, challenge]) => {
+					this.addToAchievementSet(achievement);
+					this.challengeModules.push(challenge);
+				});
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'dungeon_run_boss_victory')
-				.map(achievement => new BossVictory(achievement))
-				.forEach(challenge => this.challengeModules.push(challenge));
+				.map(achievement => [achievement, new BossVictory(achievement)])
+				.forEach(([achievement, challenge]) => {
+					this.addToAchievementSet(achievement);
+					this.challengeModules.push(challenge);
+				});
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'monster_hunt_boss_encounter')
-				.map(achievement => new BossEncounter(achievement))
-				.forEach(challenge => this.challengeModules.push(challenge));
+				.map(achievement => [achievement, new BossEncounter(achievement)])
+				.forEach(([achievement, challenge]) => {
+					this.addToAchievementSet(achievement);
+					this.challengeModules.push(challenge);
+				});
 		(<any>allAchievements)
 				.filter(achievement => achievement.type == 'monster_hunt_boss_victory')
-				.map(achievement => new BossVictory(achievement))
-				.forEach(challenge => this.challengeModules.push(challenge));
+				.map(achievement => [achievement, new BossVictory(achievement)])
+				.forEach(([achievement, challenge]) => {
+					this.addToAchievementSet(achievement);
+					this.challengeModules.push(challenge);
+				});
 
 		// for (let passiveIds of Data.ALL_PASSIVE_IDS) {
 		// 	this.achievementModules.push(new PassivePick("passive_" + passiveIds[0], passiveIds[0], passiveIds[1]));
@@ -54,6 +69,31 @@ export class AchievementsRepository {
 		// 	this.achievementModules.push(new TreasurePick("treasure_" + treasureIds[0], treasureIds[0], treasureIds[1]));
 		// }
 		console.log('[achievements] modules registered', this.challengeModules);
+	}
+
+	public getAchievementSets(): AchievementSet[] {
+		console.log('retrieving achievements sets', this.achievementSets);
+		return cloneDeep(this.achievementSets);
+	}
+
+	private addToAchievementSet(achievement: any) {
+		let theSet: AchievementSet;
+		for (const set of this.achievementSets) {
+			if (set.id == achievement.type) {
+				theSet = set;
+				break;
+			}
+		}
+		if (!theSet) {
+			theSet = new AchievementSet(achievement.type);
+			this.achievementSets.push(theSet);
+		}
+		const newAchievement = new Achievement();
+		newAchievement.id = achievement.id;
+		newAchievement.type = achievement.type;
+		newAchievement.cardId = achievement.bossId;
+		newAchievement.name = achievement.name;
+		theSet.achievements.push(newAchievement);
 	}
 
 	// public getAllAchievementSets(): AchievementSet[] {
