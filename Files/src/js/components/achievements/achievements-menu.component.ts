@@ -17,6 +17,12 @@ declare var overwolf: any;
 			<ul *ngSwitchCase="'menu'" class="menu-selection">
 				<li class="selected">Achievements</li>
 			</ul>
+			<ng-container *ngSwitchCase="'breadcrumbs'">
+				<ul class="breadcrumbs">
+					<li (click)="goToAchievementsHomeView()">Achievements</li>
+					<li (click)="goToAchievementsSetsView()" *ngIf="selectedAchievementSet">{{selectedAchievementSet.displayName}}</li>
+				</ul>
+			</ng-container>
 		</ng-container>
 	`,
 })
@@ -24,9 +30,17 @@ declare var overwolf: any;
 export class AchievementsMenuComponent {
 
 	@Input() public displayType: string;
-	@Input() public selectedCategory: AchievementSet;
+	@Input() public selectedAchievementSet: AchievementSet;
 
 	constructor(private _events: Events) {
 
+	}
+
+	public goToAchievementsHomeView() {
+		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
+	}
+
+	public goToAchievementsSetsView() {
+		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, this.selectedAchievementSet);
 	}
 }

@@ -85,7 +85,7 @@ export class AchievementsRepository {
 			}
 		}
 		if (!theSet) {
-			theSet = new AchievementSet(achievement.type);
+			theSet = new AchievementSet(achievement.type, this.displayName(achievement.type));
 			this.achievementSets.push(theSet);
 		}
 		const newAchievement = new Achievement();
@@ -94,6 +94,21 @@ export class AchievementsRepository {
 		newAchievement.cardId = achievement.bossId;
 		newAchievement.name = achievement.name;
 		theSet.achievements.push(newAchievement);
+	}
+
+	displayName(achievementType: string) {
+		switch (achievementType) {
+			case 'dungeon_run_boss_encounter':
+				return 'Dungeon Run - Boss Encounters';
+			case 'dungeon_run_boss_victory':
+				return 'Dungeon Run - Boss Victories';
+			case 'monster_hunt_boss_encounter':
+				return 'Monster Hunt - Boss Encounters';
+			case 'monster_hunt_boss_victory':
+				return 'Monster Hunt - Boss Victories';
+			default:
+				return achievementType;
+		}
 	}
 
 	// public getAllAchievementSets(): AchievementSet[] {

@@ -25,7 +25,7 @@ declare var _: any;
 			<section class="main" [@viewState]="_viewState">
 				<achievements-menu
 					[displayType]="_menuDisplayType"
-					[selectedCategory]="_selectedCategory">
+					[selectedAchievementSet]="_selectedCategory">
 				</achievements-menu>
 				<ng-container [ngSwitch]="_selectedView">
 					<achievements-categories
@@ -122,6 +122,17 @@ export class AchievementsComponent {
 					this._selectedView = 'list';
 					this._selectedCategory = data.data[0];
 					this._achievementsList = this._selectedCategory.achievements;
+				});
+			}
+		)
+
+		this._events.on(Events.MODULE_SELECTED).subscribe(
+			(data) => {
+				this.transitionState(() => {
+					this.reset();
+					this._menuDisplayType = 'menu';
+					this._selectedView = 'categories';
+					this.refreshContents();
 				});
 			}
 		)
