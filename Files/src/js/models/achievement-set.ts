@@ -6,7 +6,7 @@ export class AchievementSet {
 	displayName: string;
 	achievements: Achievement[] = [];
 
-	constructor(id: string,, displayName: string) {
+	constructor(id: string, displayName: string) {
 		this.id = id;
 		this.displayName = displayName;
 	}

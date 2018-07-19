@@ -11,6 +11,7 @@ export class AchievementsRefereee {
 	}
 
 	public complete(challenge: Challenge, callback: Function, ...data: any[]) {
+		console.log('complete challenge', challenge, data);
 		this.achievementsStorage.loadAchievement(challenge.getAchievementId(), (existingAchievement: CompletedAchievement) => {
 			let unclaimed = false;
 			if (!existingAchievement) {

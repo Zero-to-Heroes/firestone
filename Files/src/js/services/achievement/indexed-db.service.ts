@@ -25,9 +25,10 @@ export class IndexedDbService {
 			return;
 		}
 
-		console.log('[achievements] Loading achievement', achievementId);
+		console.log('[achievements] [storage] Loading achievement', achievementId);
 		this.db.getByKey('achievements', achievementId).then(
 			(achievement) => {
+				console.log('[achievements] [storage] loaded completed achievement', achievement);
 				callback(achievement);
 			},
 			(error) => {
@@ -45,14 +46,27 @@ export class IndexedDbService {
 			return;
 		}
 
-		this.db.add('achievements', achievement).then(
-			(achievement) => {
-				callback(achievement);
-			},
-			(error) => {
-			    console.log(error);
-			}
-		);
+		console.log('[achievements] [storage] Saving achievement', achievement);
+		if (achievement.numberOfCompletions > 1) {
+			this.db.update('achievements', achievement).then(
+				(achievement) => {
+					callback(achievement);
+				},
+				(error) => {
+				    console.error(error);
+				}
+			);
+		}
+		else {
+			this.db.add('achievements', achievement).then(
+				(achievement) => {
+					callback(achievement);
+				},
+				(error) => {
+				    console.error(error);
+				}
+			);
+		}
 	}
 
 	public getAll(callback: Function) {

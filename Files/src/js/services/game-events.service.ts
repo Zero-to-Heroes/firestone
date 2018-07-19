@@ -13,6 +13,7 @@ declare var overwolf: any;
 @Injectable()
 export class GameEvents {
 	public allEvents = new EventEmitter<GameEvent>();
+	public newLogLineEvents = new EventEmitter<GameEvent>();
 	public onGameStart = new EventEmitter<GameEvent>();
 
 	private plugin: any;
@@ -63,6 +64,7 @@ export class GameEvents {
 		}
 
 		this.game.fullLogs += data;
+		this.newLogLineEvents.next(new GameEvent(GameEvent.NEW_LOG_LINE, data));
 
 		this.parseVictory(data);
 	}

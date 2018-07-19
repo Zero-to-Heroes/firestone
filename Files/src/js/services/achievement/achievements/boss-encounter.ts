@@ -10,6 +10,7 @@ export class BossEncounter implements Challenge {
 	private achievementId: string;
 	private bossId: string;
 	private bossDbfId: number;
+	private completed = false;
 
 	constructor(achievement) {
 		this.achievementId = achievement.id;
@@ -18,12 +19,26 @@ export class BossEncounter implements Challenge {
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
+		if (this.completed) {
+			return;
+		}
+
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
 
 		if (gameEvent.type === GameEvent.OPPONENT) {
 			this.detectOpponentEvent(gameEvent, callback);
+			return;
+		}
+		// Temp fix until we have GEP with match info
+		else if (gameEvent.type === GameEvent.NEW_LOG_LINE) {
+			// console.log('new log line', gameEvent);
+			if (gameEvent.data[0].indexOf(this.bossId) != -1) {
+				console.log('Achievement unlocked!', this.achievementId, this.bossId);
+				this.completed = true;
+				callback();
+			}
 			return;
 		}
 		// In case we miss the game start / end event, we check the info from memory
@@ -58,6 +73,7 @@ export class BossEncounter implements Challenge {
 	}
 
 	public getAchievementId() {
+		console.log('returning achievement id', this.achievementId, this);
 		return this.achievementId;
 	}
 

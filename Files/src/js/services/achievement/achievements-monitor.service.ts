@@ -34,6 +34,11 @@ export class AchievementsMonitor {
 				this.handleEvent(gameEvent);
 			}
 		);
+		this.gameEvents.newLogLineEvents.subscribe(
+			(gameEvent: GameEvent) => {
+				this.handleEvent(gameEvent);
+			}
+		);
 		this.newAchievements.subscribe(
 			(newAchievement: CompletedAchievement) => {
 				console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
@@ -44,7 +49,7 @@ export class AchievementsMonitor {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		console.log('[achievements] handling events', gameEvent);
+		// console.log('[achievements] handling events', gameEvent);
 		for (let achievement of this.repository.challengeModules) {
 			achievement.detect(gameEvent, (data) => {
 				this.achievementsReferee.complete(achievement, (newAchievement) => {

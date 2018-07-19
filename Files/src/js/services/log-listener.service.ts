@@ -9,7 +9,6 @@ declare var OverwolfPlugin: any;
 declare var overwolf: any;
 
 const HEARTHSTONE_GAME_ID = 9898;
-const prod = true;
 
 @Injectable()
 export class LogListenerService {
@@ -22,8 +21,6 @@ export class LogListenerService {
 	monitoring: boolean;
 	fileInitiallyPresent: boolean;
 	logsLocation: string;
-
-	retriesLeft = 20;
 
 	constructor(private plugin: SimpleIOService) {
 
@@ -86,30 +83,14 @@ export class LogListenerService {
 	listenOnFileCreation(logsLocation: string): void {
 		console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
 
-		if (this.retriesLeft < 0) {
-			this.subject.next(Events.NO_LOG_FILE);
-			return;
-		}
-
-		if (!this.plugin.get()) {
-			setTimeout( () => {
-				this.retriesLeft--;
-				this.listenOnFileCreation(logsLocation);
-			}, 1000);
-			return;
-		}
-
 		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
-			console.log('[log-listener] [' + this.logFile + '] fileExists?', status, message);
 			if (status === true) {
+				console.log('fileExists?', status, message);
 				this.listenOnFileUpdate(logsLocation);
 			}
 			else {
 				this.fileInitiallyPresent = false;
-				setTimeout( () => {
-					this.retriesLeft--;
-					this.listenOnFileCreation(logsLocation);
-				}, 1000);
+				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
 			}
 		});
 	}
@@ -139,7 +120,7 @@ export class LogListenerService {
 		};
 		this.plugin.get().onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, prod && this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
+		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent, initData);
