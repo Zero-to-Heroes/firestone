@@ -16,7 +16,7 @@ declare var overwolf: any;
 		<div class="achievements-categories">
 			<ol>
 				<li *ngFor="let achievementSet of achievementSets">
-					<achievement-set-view [achievementSet]="achievementSet"></achievement-set-view>
+					<achievement-set-view [achievementSet]="achievementSet" (click)="selectSet(achievementSet)"></achievement-set-view>
 				</li>
 			</ol>
 		</div>
@@ -28,5 +28,9 @@ export class AchievementsCategoriesComponent {
 	@Input() public achievementSets: AchievementSet[];
 
 	constructor(private _events: Events) {
+	}
+
+	selectSet(set: AchievementSet) {
+		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, set);
 	}
 }

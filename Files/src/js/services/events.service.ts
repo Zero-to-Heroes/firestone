@@ -18,13 +18,12 @@ export class Events {
 	public static readonly NEW_PACK = 'new-pack';
 	public static readonly NEW_CARD = 'new-card';
 	public static readonly MORE_DUST = 'more-dust';
-
 	public static readonly MODULE_SELECTED = 'module-selected';
 	public static readonly FORMAT_SELECTED = 'format-selected';
-
 	public static readonly SHOW_CARDS = 'show-cards';
-
 	public static readonly SET_SELECTED = 'set-selected';
+
+	public static readonly ACHIEVEMENT_SET_SELECTED = 'achievement-set-selected';
 
 	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';

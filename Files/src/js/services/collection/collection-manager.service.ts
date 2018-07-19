@@ -18,19 +18,20 @@ export class CollectionManager {
 	}
 
 	public getCollection(callback: Function) {
-		// console.log('getting collection');
+		console.log('getting collection');
 		this.memoryReading.getCollection((collection) => {
-			// console.log('collection from mindvision');
+			console.log('collection from GEP', collection);
 			if (!collection || collection.length == 0) {
-				// console.log('retrieving collection from db', collection);
+				console.log('retrieving collection from db', collection);
 				this.db.getCollection((collection) => {
-					// console.log('retrieved collection form db', collection);
+					console.log('retrieved collection form db', collection);
 					this.ngZone.run(() => {
 						callback(collection);
 					});
 				});
 			}
 			else {
+				console.log('updating collection in db');
 				this.db.saveCollection(collection, callback);
 			}
 		})

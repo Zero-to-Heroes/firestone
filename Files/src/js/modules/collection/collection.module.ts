@@ -28,7 +28,9 @@ import { CardSearchAutocompleteItemComponent } from '../../components/collection
 import { SetsComponent }  from '../../components/collection/sets.component';
 
 import { AchievementsComponent }  from '../../components/achievements/achievements.component';
+import { AchievementViewComponent }  from '../../components/achievements/achievement-view.component';
 import { AchievementsCategoriesComponent }  from '../../components/achievements/achievements-categories.component';
+import { AchievementsListComponent }  from '../../components/achievements/achievements-list.component';
 import { AchievementsMenuComponent }  from '../../components/achievements/achievements-menu.component';
 import { AchievementSetComponent }  from '../../components/achievements/achievement-set.component';
 
@@ -85,8 +87,10 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 
 		AchievementsComponent,
 		AchievementsCategoriesComponent,
+		AchievementsListComponent,
 		AchievementsMenuComponent,
 		AchievementSetComponent,
+		AchievementViewComponent,
 
 		Tooltip,
 		TooltipsComponent,

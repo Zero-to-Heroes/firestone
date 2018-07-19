@@ -1,0 +1,28 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.achievements-container {
+	position: relative;
+	top: -2px;
+	flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.achievements-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	margin-top: -6px;
+	width: 100%;
+    justify-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+
+    li {
+    	width: 98px;
+    	height: 152px; // We need this so that things are not a mess when the placeholder image is showing
+    	margin-right: 15px;
+    	margin-bottom: 4px;
+    }
+}

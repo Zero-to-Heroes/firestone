@@ -1,9 +1,13 @@
 import { Component, NgZone, AfterViewInit } from '@angular/core';
+import { trigger, state, transition, style, animate } from '@angular/animations';
+import { timeInterval } from 'rxjs/operator/timeInterval';
 
 import { Events } from '../../services/events.service';
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementSet } from '../../models/achievement-set';
+
+const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 declare var overwolf: any;
 declare var ga: any;
@@ -18,14 +22,21 @@ declare var _: any;
 	],
 	template: `
 		<div class="achievements">
-			<section class="main">
+			<section class="main" [@viewState]="_viewState">
 				<achievements-menu
 					[displayType]="_menuDisplayType"
 					[selectedCategory]="_selectedCategory">
 				</achievements-menu>
 				<ng-container [ngSwitch]="_selectedView">
-					<achievements-categories *ngSwitchCase="'categories'" [achievementSets]="achievementCategories"></achievements-categories>
-					<!--<achievements-list *ngSwitchCase="'list'" [achievementsList]="_achievementsList" [category]="_selectedCategory"></achievements-list>-->
+					<achievements-categories
+							*ngSwitchCase="'categories'"
+							[achievementSets]="achievementCategories">
+					</achievements-categories>
+					<achievements-list
+							*ngSwitchCase="'list'"
+							[achievementsList]="_achievementsList"
+							[achievementSet]="_selectedCategory">
+					</achievements-list>
 				</ng-container>
 			</section>
 			<section class="secondary">
@@ -42,6 +53,20 @@ declare var _: any;
 			</section>
 		</div>
 	`,
+	animations: [
+		trigger('viewState', [
+			state('hidden',	style({
+				opacity: 0,
+				"pointer-events": "none",
+			})),
+			state('shown',	style({
+				opacity: 1,
+			})),
+			transition(
+				'hidden <=> shown',
+				animate(`${ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS}ms linear`)),
+		])
+	],
 })
 // 7.1.1.17994
 export class AchievementsComponent {
@@ -49,9 +74,10 @@ export class AchievementsComponent {
 	_menuDisplayType = 'menu';
 	_selectedView = 'categories';
 	_selectedCategory: AchievementSet;
+	_achievementsList: CompletedAchievement[];
+	achievementCategories: AchievementSet[];
+	_viewState = 'shown';
 
-	private _achievementsList: CompletedAchievement[];
-	private achievementCategories: AchievementSet[];
 	private windowId: string;
 	private adRef;
 	private refreshingContent = false;
@@ -86,6 +112,20 @@ export class AchievementsComponent {
 			}
 		});
 
+		// console.log('constructing');
+		this._events.on(Events.ACHIEVEMENT_SET_SELECTED).subscribe(
+			(data) => {
+				this.transitionState(() => {
+					this.reset();
+					// console.log(`selecting set, showing cards`, data);
+					this._menuDisplayType = 'breadcrumbs';
+					this._selectedView = 'list';
+					this._selectedCategory = data.data[0];
+					this._achievementsList = this._selectedCategory.achievements;
+				});
+			}
+		)
+
 		this.loadAds();
 		this.refreshContents();
 	}
@@ -101,6 +141,22 @@ export class AchievementsComponent {
 					this.achievementCategories = achievementSets;
 					this.refreshingContent = false;
 				});
+	}
+
+	private transitionState(changeStateCallback: Function) {
+		this._viewState = "hidden";
+		setTimeout(() => {
+			changeStateCallback();
+			this._viewState = "shown";
+		}, ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS);
+	}
+
+	private reset() {
+		this._menuDisplayType = undefined;
+		this._selectedView = undefined;
+		this._selectedCategory = undefined;
+		this._achievementsList = undefined;
+		this.achievementCategories = undefined;
 	}
 
 	private loadAds() {
