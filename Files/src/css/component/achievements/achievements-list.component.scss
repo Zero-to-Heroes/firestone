@@ -26,3 +26,48 @@
     	margin-bottom: 4px;
     }
 }
+
+.pagination {
+    @extend %pagination-inactive;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style: none;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+
+    li {
+        margin-right: 5px;
+
+        &.active, &:hover {
+            @extend %sub-title;
+        }
+
+        &.arrow {
+
+            &.previous {
+                transform: rotate(90deg);
+                margin-right: 3px;
+            }
+
+            &.next {
+                transform: rotate(-90deg);
+                margin-left: 3px;
+            }
+
+            &:hover {
+                background: $grey04;
+            }
+
+            &.disabled {
+                &:hover {
+                    background: none;
+                }
+                svg {
+                    fill: $grey05;
+                }
+            }
+        }
+    }
+}
