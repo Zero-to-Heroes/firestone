@@ -5,7 +5,7 @@
 		"name":"Firestone",
 		"author":"Sébastien Tromp",
 		"version":"0.9.21",
-		"minimum-overwolf-version":"0.108.0",
+		"minimum-overwolf-version":"0.116.3.49",
 		"access-name": "com.zerotoheroes.overwolf.hs.firestone",
 		"description":"A Hearthtone companion to have in-game the information you want to know about your card collection and more",
 		"dock_button_title": "Firestone",
