@@ -75,7 +75,7 @@ export class FullCardComponent {
 	}
 
 	@Input('cardId') set cardId(cardId: string) {
-		this.previousClips = this.audioClips;
+		this.previousClips = this.audioClips || [];
 		this.audioClips = [];
 		let card = this.cards.getCard(cardId);
 		console.log('setting full card', card);
