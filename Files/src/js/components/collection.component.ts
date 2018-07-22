@@ -167,7 +167,7 @@ export class CollectionComponent {
 				});
 			}
 		);
-		
+
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received', message);
 			if (message.id === 'click-card') {
@@ -177,7 +177,7 @@ export class CollectionComponent {
 				})
 			}
 		});
-		
+
 		this.loadAds();
 	}
 
@@ -235,6 +235,7 @@ export class CollectionComponent {
 		this._selectedFormat = undefined;
 		this._cardList = undefined;
 		this.fullCardId = undefined;
+		this.searchString = undefined;
 	}
 
 	private updateSet(collection: Card[], set: Set) {
