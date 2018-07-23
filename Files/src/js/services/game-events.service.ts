@@ -30,6 +30,9 @@ export class GameEvents {
 		// this.detectMousePicks();
 	}
 
+	private logLines: string[] = [];
+	private processingLines = false;
+
 	init(): void {
 		console.log('init game events monitor');
 		let gameEventsPlugin = this.gameEventsPlugin = new OverwolfPlugin("overwolf-replay-converter", true);
@@ -38,15 +41,60 @@ export class GameEvents {
 
 		gameEventsPlugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.warn("Plugin couldn't be loaded??");
+				console.warn("[game-events] Plugin couldn't be loaded??");
 				// Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
 				return;
 			}
-			console.log("Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
-			gameEventsPlugin.get().initRealtimeLogConversion(function(first) {
-				console.log('received game events global event', first);
+			console.log("[game-events] Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
+			gameEventsPlugin.get().onGlobalEvent.addListener((first, second) => {
+				console.log('[game-events] received global event', first, second);
 			});
+			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
+				// console.log('[game-events] received game event', gameEvent);
+				this.dispatchGameEvent(JSON.parse(gameEvent));
+			});
+			gameEventsPlugin.get().initRealtimeLogConversion();
 		});
+
+		setInterval(() => {
+			if (this.processingLines) {
+				return;
+			}
+			this.processingLines = true;
+			let toProcess: string[] = [];
+			while (this.logLines.length > 0) {
+				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length)];
+			}
+			if (toProcess.length > 0) {
+				// console.log('processing start', toProcess);
+				this.gameEventsPlugin.get().realtimeLogProcessing(toProcess, () => {
+					this.processingLines = false;
+				});
+			}
+			else {
+				this.processingLines = false;
+			}
+		},
+		500);
+	}
+
+	public dispatchGameEvent(gameEvent) {
+		switch (gameEvent.Type) {
+			case 'NEW_GAME':
+				this.game = new Game();
+				this.allEvents.next(new GameEvent(GameEvent.GAME_START, this.game));
+				this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
+				break;
+			case 'LOCAL_PLAYER':
+				console.log('received local player', gameEvent.Value);
+				break;
+			case 'OPPONENT_PLAYER':
+				console.log('received opponent', gameEvent.Value);
+				this.allEvents.next(new GameEvent(GameEvent.OPPONENT, gameEvent.Value));
+				break;
+			default:
+				console.log('unsupported game event', gameEvent);
+		}
 	}
 
 	public receiveLogLine(data: string) {
@@ -67,26 +115,25 @@ export class GameEvents {
 			return;
 		}
 
-		this.gameEventsPlugin.get().realtimeLogProcessing(data);
+		this.logLines.push(data);
 
 		// New game
-		if (data.indexOf('CREATE_GAME') !== -1) {
-			console.log('[game-events] reinit game', data);
-			this.game = new Game();
-			this.game.fullLogs = '';
+		// if (data.indexOf('CREATE_GAME') !== -1) {
+		// 	console.log('[game-events] reinit game', data);
+		// 	this.game = new Game();
+		// 	this.game.fullLogs = '';
 
-			// this.parseMatchInfo();
-			// this.parseGameMode();
-			this.allEvents.next(new GameEvent(GameEvent.GAME_START, this.game));
-			this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
-		}
+		// 	// this.parseMatchInfo();
+		// 	// this.parseGameMode();
+		// 	this.allEvents.next(new GameEvent(GameEvent.GAME_START, this.game));
+		// 	this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
+		// }
 
 		if (!this.game) {
 			return;
 		}
 
 		this.game.fullLogs += data;
-		this.newLogLineEvents.next(new GameEvent(GameEvent.NEW_LOG_LINE, data));
 
 		this.parseVictory(data);
 	}
@@ -144,21 +191,21 @@ export class GameEvents {
 
 	private readonly END_REGEX = /D(?:.*)TAG_CHANGE Entity=(.*) tag=PLAYSTATE value=(WON|TIE)/;
 	private parseVictory(data: string) {
-		let match = this.END_REGEX.exec(data);
-		if (match) {
-			console.log('[game-events] match ended!');
-			switch (match[2]) {
-				case 'WON':
-					let winner = this.game.findPlayerFromName(match[1]);
-					this.allEvents.next(new GameEvent(GameEvent.GAME_RESULT, "WINNER", winner, this.game, data));
-					break;
-				case 'TIE':
-					this.allEvents.next(new GameEvent(GameEvent.GAME_RESULT, "TIE", this.game));
-					break;
-				default:
-					throw new Error("Invalid end state for victory: " + match[2]);
-			}
-			this.game = null;
-		}
+		// let match = this.END_REGEX.exec(data);
+		// if (match) {
+		// 	console.log('[game-events] match ended!');
+		// 	switch (match[2]) {
+		// 		case 'WON':
+		// 			let winner = this.game.findPlayerFromName(match[1]);
+		// 			this.allEvents.next(new GameEvent(GameEvent.GAME_RESULT, "WINNER", winner, this.game, data));
+		// 			break;
+		// 		case 'TIE':
+		// 			this.allEvents.next(new GameEvent(GameEvent.GAME_RESULT, "TIE", this.game));
+		// 			break;
+		// 		default:
+		// 			throw new Error("Invalid end state for victory: " + match[2]);
+		// 	}
+		// 	this.game = null;
+		// }
 	}
 }

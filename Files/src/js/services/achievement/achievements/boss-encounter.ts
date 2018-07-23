@@ -32,15 +32,15 @@ export class BossEncounter implements Challenge {
 			return;
 		}
 		// Temp fix until we have GEP with match info
-		else if (gameEvent.type === GameEvent.NEW_LOG_LINE) {
-			// console.log('new log line', gameEvent);
-			if (gameEvent.data[0].indexOf(this.bossId) != -1) {
-				console.log('Achievement unlocked!', this.achievementId, this.bossId);
-				this.completed = true;
-				callback();
-			}
-			return;
-		}
+		// else if (gameEvent.type === GameEvent.NEW_LOG_LINE) {
+		// 	// console.log('new log line', gameEvent);
+		// 	if (gameEvent.data[0].indexOf(this.bossId) != -1) {
+		// 		console.log('Achievement unlocked!', this.achievementId, this.bossId);
+		// 		this.completed = true;
+		// 		callback();
+		// 	}
+		// 	return;
+		// }
 		// In case we miss the game start / end event, we check the info from memory
 		else if (gameEvent.type === GameEvent.MAYBE_DUNGEON_INFO_PICK) {
 			this.inspectMemory(gameEvent, callback);
@@ -49,7 +49,7 @@ export class BossEncounter implements Challenge {
 	}
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.data[0].CardId == this.bossId) {
+		if (gameEvent.data[0].CardID == this.bossId) {
 			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			callback();
 		}

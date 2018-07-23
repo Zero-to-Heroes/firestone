@@ -1,5 +1,5 @@
 export class Game {
-	fullLogs: string;
+	fullLogs: string = '';
 	matchInfo: any;
 	gameMode: any;
 
