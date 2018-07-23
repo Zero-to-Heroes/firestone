@@ -16,7 +16,7 @@ export class GameEvents {
 	public newLogLineEvents = new EventEmitter<GameEvent>();
 	public onGameStart = new EventEmitter<GameEvent>();
 
-	private plugin: any;
+	private gameEventsPlugin: any;
 
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
@@ -25,8 +25,28 @@ export class GameEvents {
 	constructor(
 		private events: Events,
 		private memoryInspectionService: MemoryInspectionService) {
+		this.init();
 
 		// this.detectMousePicks();
+	}
+
+	init(): void {
+		console.log('init game events monitor');
+		let gameEventsPlugin = this.gameEventsPlugin = new OverwolfPlugin("overwolf-replay-converter", true);
+		// console.log('plugin', plugin);
+		// let that = this;
+
+		gameEventsPlugin.initialize((status: boolean) => {
+			if (status === false) {
+				console.warn("Plugin couldn't be loaded??");
+				// Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
+				return;
+			}
+			console.log("Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
+			gameEventsPlugin.get().initRealtimeLogConversion(function(first) {
+				console.log('received game events global event', first);
+			});
+		});
 	}
 
 	public receiveLogLine(data: string) {
@@ -46,6 +66,8 @@ export class GameEvents {
 			// For now we're not interested in spectating events, but that will come out later
 			return;
 		}
+
+		this.gameEventsPlugin.get().realtimeLogProcessing(data);
 
 		// New game
 		if (data.indexOf('CREATE_GAME') !== -1) {

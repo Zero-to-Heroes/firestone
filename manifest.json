@@ -115,6 +115,10 @@
 			"simple-io-plugin-zip": {
 				"file": "Files/plugins/simple-io-plugin-zip.dll",
 				"class": "overwolf.plugins.SimpleIOPluginZip"
+			},
+			"overwolf-replay-converter": {
+				"file": "Files/plugins/HearthstoneReplays.dll",
+				"class": "HearthstoneReplays.ReplayConverterPlugin"
 			}
 		},
 		"hotkeys": {
