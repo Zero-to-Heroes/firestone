@@ -55,6 +55,7 @@ export class AllCardsService {
 
 		return parseCardsText.jsonDatabase
 			.filter((card) => card.collectible)
+			.filter((card) => card.set != 'Hero_skins')
 			.filter((card) => card.name)
 			.filter((card) => card.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1)
 			.map((card) => new SetCard(card.id, card.name, card.rarity.toLowerCase()));
@@ -98,7 +99,7 @@ export class AllCardsService {
 				return theSet;
 			}
 		}
-		return null;
+		return new Set(setId, setId, true);
 	}
 
 	private getSets(references, isStandard: boolean): Set[] {
