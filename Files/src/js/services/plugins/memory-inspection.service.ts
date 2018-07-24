@@ -20,12 +20,12 @@ export class MemoryInspectionService {
 					callback([]);
 					return;
 				}
-				// console.log('game info', info);
+				console.log('game info', info);
 				const collection: Card[] = (<any>Object).values(info.res.collection)
 						.map(strCard => JSON.parse(strCard));
 				// console.log('callback', collection);
 				callback(collection);
 			})
-		}, 50);
+		}, 1000);
 	}
 }
