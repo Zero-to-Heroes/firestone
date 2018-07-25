@@ -115,16 +115,25 @@ export class PackMonitor {
 				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false));
 			});
 
-
-
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
-			if (this.unrevealedCards.length > 0 && data.onGame) {
-				console.log('Detecting revealed cards', data, this.unrevealedCards);
-				this.cardClicked(data, (index) => {
-					this.detectRevealedCard(index);
-				});
-			}
+			this.handleMouseUp(data);
 		});
+	}
+
+	private handleMouseUp(data) {
+		if (this.unrevealedCards.length > 0 && data.onGame) {
+			if (this.unrevealedCards.length != 5) {
+				console.log('all cards not revealed yet', this.unrevealedCards);
+				setTimeout(() => {
+					this.handleMouseUp(data);
+				}, 50);
+				return;
+			}
+			console.log('Detecting revealed cards', data, this.unrevealedCards);
+			this.cardClicked(data, (index) => {
+				this.detectRevealedCard(index);
+			});
+		}
 	}
 
 	private cardClicked(data, callback: Function) {
