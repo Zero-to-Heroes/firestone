@@ -125,7 +125,7 @@ export class IndexedDbService {
 		if (limit == 0) {
 			this.db.getAll('card-history', null, {indexName: 'creationTimestamp', order: 'desc'})
 				.then((histories) => {
-					console.log('loaded history', limit, histories);
+					// console.log('loaded history', limit, histories);
 					callback(histories);
 				});
 			return;
@@ -133,7 +133,7 @@ export class IndexedDbService {
 
 		this.getAllWithLimit('card-history', limit, {indexName: 'creationTimestamp', order: 'desc'}).then(
 			(histories) => {
-				console.log('loaded history', limit, histories);
+				// console.log('loaded history', limit, histories);
 				callback(histories);
 			}
 		)

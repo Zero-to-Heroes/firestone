@@ -195,7 +195,7 @@ export class CollectionComponent {
 		this._selectedView = 'card-details';
 		this.fullCardId = fullcardId;
 		let newSet = this.cards.getSetFromCardId(this.fullCardId);
-		console.log('should update set', newSet, this._selectedSet);
+		// console.log('should update set', newSet, this._selectedSet);
 		if (!this._selectedSet || this._selectedSet.id != newSet.id) {
 			this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
 			this.collectionManager.getCollection((collection: Card[]) => {
