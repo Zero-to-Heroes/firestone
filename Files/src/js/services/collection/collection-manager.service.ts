@@ -17,14 +17,14 @@ export class CollectionManager {
 		private db: IndexedDbService) {
 	}
 
-	public getCollection(callback: Function) {
+	public getCollection(callback: Function, delay: number = 0) {
 		console.log('getting collection');
 		this.memoryReading.getCollection((collection) => {
-			console.log('collection from GEP', collection);
+			console.log('collection from GEP');
 			if (!collection || collection.length == 0) {
-				console.log('retrieving collection from db', collection);
+				console.log('retrieving collection from db');
 				this.db.getCollection((collection) => {
-					console.log('retrieved collection form db', collection);
+					console.log('retrieved collection form db');
 					this.ngZone.run(() => {
 						callback(collection);
 					});
@@ -34,7 +34,7 @@ export class CollectionManager {
 				console.log('updating collection in db');
 				this.db.saveCollection(collection, callback);
 			}
-		})
+		}, delay);
 	}
 
 	// type is NORMAL or GOLDEN

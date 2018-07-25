@@ -44,7 +44,7 @@ export class LogParserService {
 				else {
 					this.displayDustMessage(cardInCollection, type);
 				}
-			})
+			}, 1000)
 			this.lastLogReceivedDate = new Date();
 		}
 	}
