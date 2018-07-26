@@ -20,8 +20,8 @@ declare var overwolf: any;
 })
 export class NotificationsComponent {
 
-	// timeout = 20000;
-	timeout = 999999999999;
+	timeout = 20000;
+	// timeout = 999999999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
@@ -40,7 +40,7 @@ export class NotificationsComponent {
 		private elRef: ElementRef) {
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
-			console.log('received message in notification window', message);
+			// console.log('received message in notification window', message);
 			let messageObject = JSON.parse(message.content);
 			this.sendNotification(messageObject.content, messageObject.cardId);
 		})
@@ -76,6 +76,7 @@ export class NotificationsComponent {
 	}
 
 	destroyed(event) {
+		console.log('destroyed', event);
 		this.resize();
 	}
 
@@ -95,10 +96,10 @@ export class NotificationsComponent {
 				let toast = this.notificationService.html(htmlMessage);
 				// console.log('running toast message in zone', toast);
 				toast.click.subscribe((event: MouseEvent) => {
-					console.log('registered click on toast', event);
+					console.log('registered click on toast', event, toast);
 					// Clicked on close, don't show the card
 					if (event.srcElement.className.indexOf("close") != -1) {
-						this.notificationService.remove(toast.id);
+						// this.notificationService.remove(toast.id);
 						return;
 					}
 					if (cardId) {
@@ -106,7 +107,7 @@ export class NotificationsComponent {
 							console.log('send click info to collection window', cardId, this.mainWindowId, result);
 						});
 					}
-				})
+				});
 			});
 		})
 	}
@@ -116,21 +117,21 @@ export class NotificationsComponent {
 			let wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			let height = wrapper.getBoundingClientRect().height + 20;
 			let width = 500;
-			console.log('resizing, current window');
-			console.log('rect2', wrapper.getBoundingClientRect());
+			// console.log('resizing, current window');
+			// console.log('rect2', wrapper.getBoundingClientRect());
 			overwolf.games.getRunningGameInfo((gameInfo) => {
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
 				let dpi = gameWidth / gameInfo.width;
-				console.log('logical info', gameWidth, gameHeight, dpi);
+				// console.log('logical info', gameWidth, gameHeight, dpi);
 				overwolf.windows.changeSize(this.windowId, width, height, (changeSize) => {
-					console.log('changed window size');
+					// console.log('changed window size');
 					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 					let newLeft = ~~(gameWidth - width * dpi);
 					let newTop = ~~(gameHeight - height * dpi - 10);
-					console.log('changing position', newLeft, newTop, width, height);
+					// console.log('changing position', newLeft, newTop, width, height);
 					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
-						console.log('changed window position');
+						// console.log('changed window position');
 					});
 				});
 			});
