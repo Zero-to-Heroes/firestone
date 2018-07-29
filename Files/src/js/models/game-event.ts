@@ -1,6 +1,7 @@
 export class GameEvent {
 
 	public static readonly PLAYER = 'PLAYER';
+	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
 	public static readonly GAME_RESULT = 'GAME_RESULT';
 	public static readonly MAYBE_DUNGEON_INFO_PICK = 'MAYBE_DUNGEON_INFO_PICK';

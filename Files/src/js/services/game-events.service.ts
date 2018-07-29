@@ -86,6 +86,7 @@ export class GameEvents {
 				this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
 				break;
 			case 'LOCAL_PLAYER':
+				this.allEvents.next(new GameEvent(GameEvent.LOCAL_PLAYER, gameEvent.Value));
 				console.log('received local player', gameEvent.Value);
 				break;
 			case 'OPPONENT_PLAYER':
