@@ -16,6 +16,12 @@ declare var overwolf: any;
 			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
 
 			<img src="{{image()}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
+			<div class="zth-tooltip bottom" *ngIf="achievement.numberOfCompletions > 0">
+				<p>Completed {{achievement.numberOfCompletions}} times</p>
+				<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+					<polygon points="0,0 8,-9 16,0"/>
+				</svg>
+			</div>
 		</div>
 	`,
 	animations: [
