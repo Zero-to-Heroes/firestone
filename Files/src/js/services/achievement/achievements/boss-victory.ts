@@ -23,7 +23,7 @@ export class BossVictory implements Challenge {
 			return;
 		}
 
-		if (gameEvent.type === GameEvent.GAME_RESULT) {
+		if (gameEvent.type === GameEvent.WINNER) {
 			this.detectGameResultEvent(gameEvent, callback);
 			return;
 		}
@@ -35,22 +35,13 @@ export class BossVictory implements Challenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.data[0] === 'WINNER') {
-			let winner = gameEvent.data[1];
-			let game: Game = gameEvent.data[2];
+		let winner = gameEvent.data[0];
+		let localPlayer = gameEvent.data[1];
+		let opponentPlayer = gameEvent.data[2];
 
-			if (!game.matchInfo) {
-				return;
-			}
-
-			if (game.matchInfo.OpposingPlayer.CardId === this.bossId && game.matchInfo.LocalPlayer.id === winner.id) {
-				console.log('Achievement unlocked!', this.achievementId, this.bossId);
-				callback();
-			}
-			else if (game.fullLogs.indexOf(this.bossId) != -1) {
-				console.log('Achievement unlocked!', this.achievementId, this.bossId);
-				callback();
-			}
+		if (opponentPlayer.CardId === this.bossId && localPlayer.id === winner.id) {
+			console.log('Achievement unlocked!', this.achievementId, this.bossId);
+			callback();
 		}
 	}
 
