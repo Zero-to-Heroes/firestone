@@ -171,23 +171,23 @@ export class AchievementsComponent {
 	}
 
 	private loadAds() {
-		if (!adsReady || !document.getElementById("ad-div-achievements")) {
-			setTimeout(() => {
-				this.loadAds()
-			}, 50);
-			return;
-		}
-		console.log('ads ready', adsReady);
-		this.adRef = new OwAd(document.getElementById("ad-div-achievements"));
+		// if (!adsReady || !document.getElementById("ad-div-achievements")) {
+		// 	setTimeout(() => {
+		// 		this.loadAds()
+		// 	}, 50);
+		// 	return;
+		// }
+		// console.log('ads ready', adsReady);
+		// this.adRef = new OwAd(document.getElementById("ad-div-achievements"));
 	}
 
 	private refreshAds() {
-		if (!this.adRef) {
-			setTimeout(() => {
-				this.refreshAds()
-			}, 20);
-			return;
-		}
-		this.adRef.refreshAd();
+		// if (!this.adRef) {
+		// 	setTimeout(() => {
+		// 		this.refreshAds()
+		// 	}, 20);
+		// 	return;
+		// }
+		// this.adRef.refreshAd();
 	}
 }
