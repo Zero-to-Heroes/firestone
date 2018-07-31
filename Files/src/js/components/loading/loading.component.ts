@@ -224,6 +224,14 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		console.log('ads ready', adsReady, document.getElementById("ad-div"));
 		this.adRef = new OwAd(document.getElementById("ad-div"));
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				if (!result.window.isVisible) {
+					console.log('removing ad', result.window);
+					this.adRef.removeAd();
+				}
+			}
+		});
 	}
 
 	private refreshAds() {
@@ -239,6 +247,9 @@ export class LoadingComponent implements AfterViewInit {
 
 	private positionWindow() {
 		overwolf.games.getRunningGameInfo((gameInfo) => {
+			if (!gameInfo) {
+				return;
+			}
 			let gameWidth = gameInfo.logicalWidth;
 			let gameHeight = gameInfo.logicalHeight;
 			let dpi = gameWidth / gameInfo.width;

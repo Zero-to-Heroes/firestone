@@ -105,12 +105,6 @@ export class CollectionComponent {
 			}
 		});
 
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.windowId = result.window.id;
-			}
-		});
-
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
 			(data) => {
@@ -216,6 +210,15 @@ export class CollectionComponent {
 		}
 		console.log('ads ready', adsReady, document.getElementById("ad-div"));
 		this.adRef = new OwAd(document.getElementById("ad-div"));
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success"){
+				this.windowId = result.window.id;
+				if (!result.window.isVisible) {
+					console.log('removing ad', result.window);
+					this.adRef.removeAd();
+				}
+			}
+		});
 	}
 
 	private refreshAds() {
