@@ -2,7 +2,6 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 import { Game } from '../models/game';
 import { GameEvent } from '../models/game-event';
-import { DungeonInfo } from '../models/dungeon-info';
 import { Events } from './events.service';
 import { LogListenerService } from './log-listener.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
@@ -79,19 +78,31 @@ export class GameEvents {
 	}
 
 	public dispatchGameEvent(gameEvent) {
+		console.log(gameEvent.Type + ' event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
-				this.game = new Game();
-				this.allEvents.next(new GameEvent(GameEvent.GAME_START, this.game));
-				this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
+				this.allEvents.next(new GameEvent(GameEvent.GAME_START));
+				this.onGameStart.next(new GameEvent(GameEvent.GAME_START));
 				break;
+			// case 'MATCH_METADATA':
+			// 	console.log('received opponent', gameEvent.Value);
+			// 	this.allEvents.next(new GameEvent(GameEvent.MATCH_METADATA, gameEvent.Value));
+			// 	break;
 			case 'LOCAL_PLAYER':
 				this.allEvents.next(new GameEvent(GameEvent.LOCAL_PLAYER, gameEvent.Value));
-				console.log('received local player', gameEvent.Value);
 				break;
 			case 'OPPONENT_PLAYER':
-				console.log('received opponent', gameEvent.Value);
 				this.allEvents.next(new GameEvent(GameEvent.OPPONENT, gameEvent.Value));
+				break;
+			case 'WINNER':
+				this.allEvents.next(new GameEvent(
+					GameEvent.WINNER,
+					gameEvent.Value.Winner,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
+			case 'GAME_END':
+				this.allEvents.next(new GameEvent(GameEvent.GAME_END, gameEvent.Value.Game, gameEvent.Value.ReplayXml));
 				break;
 			default:
 				console.log('unsupported game event', gameEvent);
@@ -117,96 +128,5 @@ export class GameEvents {
 		}
 
 		this.logLines.push(data);
-
-		// New game
-		// if (data.indexOf('CREATE_GAME') !== -1) {
-		// 	console.log('[game-events] reinit game', data);
-		// 	this.game = new Game();
-		// 	this.game.fullLogs = '';
-
-		// 	// this.parseMatchInfo();
-		// 	// this.parseGameMode();
-		// 	this.allEvents.next(new GameEvent(GameEvent.GAME_START, this.game));
-		// 	this.onGameStart.next(new GameEvent(GameEvent.GAME_START, this.game));
-		// }
-
-		if (!this.game) {
-			return;
-		}
-
-		this.game.fullLogs += data;
-
-		this.parseVictory(data);
-	}
-
-	// private detectMousePicks() {
-	// 	overwolf.games.inputTracking.onMouseUp.addListener((data) => {
-	// 		if (!data.onGame || this.game) {
-	// 			return;
-	// 		}
-
-	// 		this.detectPick(data);
-	// 	});
-	// }
-
-	// private detectPick(data) {
-	// 	overwolf.games.getRunningGameInfo((result) => {
-	// 		let x = 1.0 * data.x / result.width;
-	// 		let y = 1.0 * data.y / result.height;
-	// 		// console.log('clicked at ', x, y, data, result);
-
-	// 		// Dungeon Run picks
-	// 		let maybeDungeonRun = false;
-	// 		if (x >= 0.17 && x <= 0.65 && y > 0.22 && y < 0.52) {
-	// 			maybeDungeonRun = true;
-	// 		}
-
-	// 		if (maybeDungeonRun) {
-	// 			this.memoryInspectionService.getDungeonInfo((dungeonInfo: DungeonInfo) => {
-	// 				if (!dungeonInfo || !dungeonInfo.IsRunActive) {
-	// 					return;
-	// 				}
-
-	// 				// console.log('[game-events] active run, emitting event', dungeonInfo);
-	// 				this.allEvents.next(new GameEvent(GameEvent.MAYBE_DUNGEON_INFO_PICK, dungeonInfo));
-	// 			});
-	// 		}
-	// 	});
-	// }
-
-	// private parseMatchInfo() {
-	// 	this.memoryInspectionService.getMatchInfo((matchInfo) => {
-	// 		console.log('[game-events] match info is', matchInfo);
-	// 		this.game.matchInfo = matchInfo;
-	// 		this.allEvents.next(new GameEvent(GameEvent.PLAYER, matchInfo.LocalPlayer));
-	// 		this.allEvents.next(new GameEvent(GameEvent.OPPONENT, matchInfo.OpposingPlayer));
-	// 	});
-	// }
-
-	// private parseGameMode() {
-	// 	this.memoryInspectionService.getGameMode((gameMode) => {
-	// 		console.log('[game-events] game mode is', gameMode);
-	// 		this.game.gameMode = gameMode;
-	// 	});
-	// }
-
-	private readonly END_REGEX = /D(?:.*)TAG_CHANGE Entity=(.*) tag=PLAYSTATE value=(WON|TIE)/;
-	private parseVictory(data: string) {
-		// let match = this.END_REGEX.exec(data);
-		// if (match) {
-		// 	console.log('[game-events] match ended!');
-		// 	switch (match[2]) {
-		// 		case 'WON':
-		// 			let winner = this.game.findPlayerFromName(match[1]);
-		// 			this.allEvents.next(new GameEvent(GameEvent.GAME_RESULT, "WINNER", winner, this.game, data));
-		// 			break;
-		// 		case 'TIE':
-		// 			this.allEvents.next(new GameEvent(GameEvent.GAME_RESULT, "TIE", this.game));
-		// 			break;
-		// 		default:
-		// 			throw new Error("Invalid end state for victory: " + match[2]);
-		// 	}
-		// 	this.game = null;
-		// }
 	}
 }
