@@ -91,6 +91,12 @@ export class CollectionComponent {
 		private ngZone: NgZone) {
 		ga('send', 'event', 'collection', 'show');
 
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				this.windowId = result.window.id;
+			}
+		});
+
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {
 				return;
@@ -164,7 +170,7 @@ export class CollectionComponent {
 		);
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
-			console.log('received', message);
+			console.log('received', message, this.windowId);
 			if (message.id === 'click-card') {
 				this.ngZone.run(() => {
 					this.selectCard(message.content);
