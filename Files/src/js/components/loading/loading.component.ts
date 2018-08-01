@@ -113,6 +113,7 @@ export class LoadingComponent implements AfterViewInit {
 	private thisWindowId: string;
 	private adRef;
 	private crate;
+	private adInit;
 
 
 	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef) {
@@ -138,10 +139,10 @@ export class LoadingComponent implements AfterViewInit {
 			if (message.window_name != "LoadingWindow") {
 				return;
 			}
-			console.log('state changed loading', message);
+			console.log('state changed LoadingWindow', message);
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
-				this.adRef.removeAd();
+				this.removeAds();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -158,7 +159,7 @@ export class LoadingComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.loadAds();
+		this.refreshAds();
 
 		setTimeout(() => {
 			this.crate = new Crate({
@@ -215,35 +216,44 @@ export class LoadingComponent implements AfterViewInit {
 		this.crate.show();
  	}
 
-	private loadAds() {
+	private refreshAds() {
+		if (this.adInit) {
+			console.log('already initializing ads, returning');
+			return;
+		}
 		if (!adsReady) {
+			console.log('ads container not ready, returning');
 			setTimeout(() => {
-				this.loadAds()
+				this.refreshAds()
 			}, 50);
 			return;
 		}
-		console.log('ads ready', adsReady, document.getElementById("ad-div"));
-		this.adRef = new OwAd(document.getElementById("ad-div"));
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				if (!result.window.isVisible) {
-					console.log('removing ad', result.window);
-					this.adRef.removeAd();
-				}
-			}
-		});
-	}
-
-	private refreshAds() {
 		if (!this.adRef) {
-			setTimeout(() => {
-				this.refreshAds()
-			}, 20);
+			console.log('first time init ads, creating OwAd');
+			this.adInit = true;
+			overwolf.windows.getCurrentWindow((result) => {
+				if (result.status === "success") {
+					console.log('is window visible?', result);
+					if (result.window.isVisible) {
+						console.log('init OwAd');
+						this.adRef = new OwAd(document.getElementById("ad-div"));
+					}
+					this.adInit = false;
+				}
+			});
 			return;
 		}
+		console.log('refreshing ads');
 		this.adRef.refreshAd();
 	}
 
+	private removeAds() {
+		if (!this.adRef) {
+			return;
+		}
+		console.log('removing ads');
+		this.adRef.removeAd();
+	}
 
 	private positionWindow() {
 		overwolf.games.getRunningGameInfo((gameInfo) => {

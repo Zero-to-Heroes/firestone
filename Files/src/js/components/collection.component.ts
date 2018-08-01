@@ -82,6 +82,7 @@ export class CollectionComponent {
 
 	private windowId: string;
 	private adRef;
+	private adInit = false;
 
 	constructor(
 		private _events: Events,
@@ -94,10 +95,10 @@ export class CollectionComponent {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed in collection', message);
+			console.log('state changed CollectionWindow', message);
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
-				this.adRef.removeAd();
+				this.removeAds();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -172,7 +173,7 @@ export class CollectionComponent {
 			}
 		});
 
-		this.loadAds();
+		this.refreshAds();
 	}
 
 	private transitionState(changeStateCallback: Function) {
@@ -197,38 +198,45 @@ export class CollectionComponent {
 			})
 		}
 		this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
-
-
-	}
-
-	private loadAds() {
-		if (!adsReady || !document.getElementById("ad-div")) {
-			setTimeout(() => {
-				this.loadAds()
-			}, 50);
-			return;
-		}
-		console.log('ads ready', adsReady, document.getElementById("ad-div"));
-		this.adRef = new OwAd(document.getElementById("ad-div"));
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.windowId = result.window.id;
-				if (!result.window.isVisible) {
-					console.log('removing ad', result.window);
-					this.adRef.removeAd();
-				}
-			}
-		});
 	}
 
 	private refreshAds() {
-		if (!this.adRef) {
-			setTimeout(() => {
-				this.refreshAds()
-			}, 20);
+		if (this.adInit) {
+			console.log('already initializing ads, returning');
 			return;
 		}
+		if (!adsReady) {
+			console.log('ads container not ready, returning');
+			setTimeout(() => {
+				this.refreshAds()
+			}, 50);
+			return;
+		}
+		if (!this.adRef) {
+			console.log('first time init ads, creating OwAd');
+			this.adInit = true;
+			overwolf.windows.getCurrentWindow((result) => {
+				if (result.status === "success") {
+					console.log('is window visible?', result);
+					if (result.window.isVisible) {
+						console.log('init OwAd');
+						this.adRef = new OwAd(document.getElementById("ad-div"));
+					}
+					this.adInit = false;
+				}
+			});
+			return;
+		}
+		console.log('refreshing ads');
 		this.adRef.refreshAd();
+	}
+
+	private removeAds() {
+		if (!this.adRef) {
+			return;
+		}
+		console.log('removing ads');
+		this.adRef.removeAd();
 	}
 
 	private reset() {
