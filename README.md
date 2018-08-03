@@ -10,11 +10,17 @@ The long-term goal is to provide other features needed by players who want to ma
 
 Please don't hesitate to request new features or report issues using the issues link above.
 
+PS: images come from HearthHead
+
 # Screenshots
 
-![Welcome page](https://i.imgur.com/tbw7Vmg.png)
+![Welcome page](https://i.imgur.com/vrRhtLj.png)
 
-![In-game notifications](https://i.imgur.com/gp4Ug22.jpg)
+![In-game notifications](https://i.imgur.com/nCpwKGq.png)
+
+![Collection overview](https://i.imgur.com/Pr416nZ.png)
+
+![Card details](https://i.imgur.com/p2TgqZe.png)
 
 # Contributing
 
