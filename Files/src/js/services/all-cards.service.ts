@@ -14,6 +14,7 @@ export class AllCardsService {
 		['icecrown', 'Knights of the Frozen Throne'],
 		['lootapalooza', 'Kobolds and Catacombs'],
 		['gilneas', 'The Witchwood'],
+		['boomsday', 'The Boomsday Project'],
 	]
 
 	private readonly WILD_SETS = [
