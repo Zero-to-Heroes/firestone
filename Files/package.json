@@ -31,9 +31,9 @@
   "devDependencies": {
     "@angular/compiler-cli": "6.0.0",
     "@artonge/webpack": "6.0.1",
+    "@types/lodash": "4.14.112",
     "@types/node": "9.6.7",
     "@types/webpack": "4.1.4",
-    "@types/lodash": "4.14.112",
     "copy-webpack-plugin": "4.5.1",
     "css-loader": "0.28.11",
     "extract-text-webpack-plugin": "4.0.0-beta.0",
