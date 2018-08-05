@@ -98,6 +98,7 @@ export class CardHistoryComponent {
 				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
 				this.refreshing = false;
+				this.filterView();
 			},
 			this.limit);
 
@@ -119,6 +120,10 @@ export class CardHistoryComponent {
 
 	toggleShowOnlyNewCards() {
 		this.showOnlyNewCards = !this.showOnlyNewCards;
+		this.filterView();
+	}
+
+	filterView() {
 		if (this.showOnlyNewCards) {
 			this.shownHistory = this.cardHistory.filter((card: CardHistory) => card.isNewCard);
 		}
