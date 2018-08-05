@@ -23,8 +23,11 @@ declare var ga: any;
 					</svg>
 				</i>
 			</span>
-			<span class="new" *ngIf="newCard">
+			<span class="new" *ngIf="newCard && (!relevantCount || relevantCount == 1)">
 				<span>New</span>
+			</span>
+			<span class="new second" *ngIf="newCard && relevantCount > 1">
+				<span>Second</span>
 			</span>
 			<span class="date">{{creationDate}}</span>
 		</div>
@@ -34,6 +37,7 @@ declare var ga: any;
 export class CardHistoryItemComponent {
 
 	newCard: boolean;
+	relevantCount: number;
 	rarityImg: string;
 	cardName: string;
 	creationDate: string;
@@ -52,6 +56,7 @@ export class CardHistoryItemComponent {
 		}
 		this.cardId = history.cardId;
 		this.newCard = history.isNewCard;
+		this.relevantCount = history.relevantCount;
 		this.rarityImg = `/Files/assets/images/rarity/rarity-${history.rarity}.png`;
 		this.cardName = (history.isPremium ? 'Golden ' : '') + history.cardName;
 		this.dustValue = history.dustValue;

@@ -101,7 +101,8 @@ export class PackMonitor {
 				};
 
 				let dbCard = parseCardsText.getCard(card.id);
-				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true));
+				let relevantCount = type == 'GOLDEN' ? card.premiumCount : card.count;
+				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true, relevantCount));
 			});
 		this.events.on(Events.MORE_DUST)
 			.subscribe(event => {
@@ -112,7 +113,7 @@ export class PackMonitor {
 				this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
 
 				let dbCard = parseCardsText.getCard(card.id);
-				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false));
+				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false, -1));
 			});
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
@@ -325,9 +326,16 @@ export class PackMonitor {
 		let dbCard = parseCardsText.getCard(card.id);
 		let cardName: string = dbCard.name;
 		let goldenClass = undefined;
+		let newLabel = 'New card';
 		if (type == 'GOLDEN') {
 			cardName = 'Golden ' + cardName;
 			goldenClass = 'premium';
+			if (card.premiumCount >= 2) {
+				newLabel = 'Second copy';
+			}
+		}
+		else if (card.count >= 2) {
+			newLabel = 'Second copy';
 		}
 		console.log('displaying new card toast notification for ' + cardName);
 		this.notificationService.html({
@@ -348,7 +356,7 @@ export class PackMonitor {
 								</svg>
 							</i>
 						</div>
-						<span class="new-card"><span class="new">New card:</span> ${cardName}!</span>
+						<span class="new-card"><span class="new">${newLabel}:</span> ${cardName}!</span>
 						<span class="cta">Click to <span class="link">expand</span></span>
 					</div>
 					<button class="i-30 close-button">

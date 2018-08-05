@@ -52,10 +52,14 @@
 
 	    span {
 	    	border: 1px solid;
-		    width: 40px;
+		    width: 60px;
 		    height: 20px;
 		    margin-right: 7px;
     		font-size: 12px;
+	    }
+
+	    &.second span {
+
 	    }
 	}
 
