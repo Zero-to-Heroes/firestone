@@ -35,7 +35,7 @@ declare var overwolf: any;
 					<span class="sub-title">Set:</span>
 					<span class="value">{{set()}}</span>
 				</div>
-				<div class="card-info audio" *ngIf="audioClips">
+				<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
 					<span class="sub-title">Sound:</span>
 					<ul class="value">
 						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound.audio)">
