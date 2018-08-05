@@ -94,7 +94,7 @@ export class FullCardComponent {
 		if (card.audio) {
 			Object.keys(card.audio).forEach((key,index) => {
 			    this.audioClips.push({
-			    	name: key.split("_")[0],
+			    	name: card.audio[key].startsWith('SFX') ? key.split("_")[1] : key.split("_")[0],
 			    	file: card.audio[key],
 			    	audio: new Audio()
 			    });

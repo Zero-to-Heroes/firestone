@@ -317,6 +317,7 @@ var parseCardsText = {
 
 	jsonDatabase: [
 	{
+		"cardImage": "BOT_224.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -499,16 +500,21 @@ var parseCardsText = {
 	},
 	{
 		"cardImage": "EX1_tk29.png",
-		"playerClass": "Neutral",
 		"cost": 5,
 		"set": "Expert1",
 		"race": "BEAST",
-		"attack": 5,
-		"name": "Devilsaur",
 		"health": 5,
-		"id": "EX1_tk29",
 		"dbfId": 332,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 5,
+		"name": "Devilsaur",
+		"id": "EX1_tk29",
+		"audio": {
+			"Tk29_Attack": "SFX_EX1_tk29_Attack.ogg",
+			"Tk29_Death": "SFX_EX1_tk29_Death.ogg",
+			"Tk29_Enterplay": "SFX_EX1_tk29_EnterPlay.ogg"
+		},
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -836,6 +842,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_243.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -923,6 +930,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_087.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -1086,6 +1094,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_603.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -1154,6 +1163,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_238.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -1222,17 +1232,18 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOT_066t.png",
 		"cost": 7,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Phil Saunders",
-		"attack": 7,
-		"name": "Mechanical Dragon",
 		"health": 7,
-		"id": "BOT_066t",
 		"dbfId": 48897,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 7,
+		"name": "Mechanical Dragon",
+		"id": "BOT_066t",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -1692,6 +1703,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"cardImage": "BOT_448.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -2412,6 +2424,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Timber Wolf",
 		"id": "DS1_175",
+		"audio": {
+			"175_Death": "SFX_DS1_175_Death.ogg",
+			"175_Attack": "SFX_DS1_175_Attack.ogg",
+			"175_Enterplay": "SFX_DS1_175_EnterPlay.ogg"
+		},
 		"text": "Your other Beasts have +1 Attack.",
 		"cardClass": "HUNTER",
 		"rarity": "Free"
@@ -2876,6 +2893,7 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"cardImage": "BOT_563e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Wargear",
@@ -3078,6 +3096,14 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Sabertooth Lion",
 		"id": "AT_042t",
+		"audio": {
+			"042t_Enterplay": "SFX_AT_042t_EnterPlay.ogg",
+			"042t2_Enterplay": "SFX_AT_042t2_EnterPlay.ogg",
+			"042t2_Death": "SFX_AT_042t2_Death.ogg",
+			"042t2_Attack": "SFX_AT_042t2_Attack.ogg",
+			"042t_Attack": "SFX_AT_042t_Attack.ogg",
+			"042t_Death": "SFX_AT_042t_Death.ogg"
+		},
 		"text": "<b>Charge</b>",
 		"cardClass": "DRUID",
 		"rarity": "Common"
@@ -3173,6 +3199,11 @@ var parseCardsText = {
 		"faction": "ALLIANCE",
 		"name": "Ancient Watcher",
 		"id": "EX1_045",
+		"audio": {
+			"045_Death": "SFX_EX1_045_Death.ogg",
+			"045_Enterplay": "SFX_EX1_045_EnterPlay.ogg",
+			"045_Attack": "SFX_EX1_045_Attack.ogg"
+		},
 		"text": "Can't attack.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Rare"
@@ -5594,6 +5625,7 @@ var parseCardsText = {
 		"health": 30,
 		"id": "BRMA14_1",
 		"audio": {
+			"12_Attack": "SFX_BRMA14_12_Attack.ogg",
 			"Card_09": "VO_BRMA14_1_CARD_09.ogg",
 			"Hp2_04": "VO_BRMA14_1_HP2_04.ogg",
 			"Hp3_05": "VO_BRMA14_1_HP3_05.ogg",
@@ -5605,7 +5637,9 @@ var parseCardsText = {
 			"Response3_12": "VO_BRMA14_1_RESPONSE3_12.ogg",
 			"Response4_13": "VO_BRMA14_1_RESPONSE4_13.ogg",
 			"Response5_14": "VO_BRMA14_1_RESPONSE5_14.ogg",
+			"12_Death": "SFX_BRMA14_12_Death.ogg",
 			"Death_08": "VO_BRMA14_1_DEATH_08.ogg",
+			"12_Play": "SFX_BRMA14_12_Play.ogg",
 			"Hp4_06": "VO_BRMA14_1_HP4_06.ogg",
 			"Hp5_07": "VO_BRMA14_1_HP5_07.ogg"
 		},
@@ -5768,6 +5802,11 @@ var parseCardsText = {
 		"attack": 8,
 		"name": "Fossilized Devilsaur",
 		"id": "LOE_073",
+		"audio": {
+			"073_Play": "SFX_LOE_073_Play.ogg",
+			"073_Attack": "SFX_LOE_073_Attack.ogg",
+			"073_Death": "SFX_LOE_073_Death.ogg"
+		},
 		"text": "<b>Battlecry:</b> If you control a Beast, gain <b>Taunt</b>.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -5836,17 +5875,18 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOT_445t.png",
 		"cost": 1,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Eva Widermann",
-		"attack": 1,
-		"name": "Jo-E Bot",
 		"health": 1,
-		"id": "BOT_445t",
 		"dbfId": 48885,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 1,
+		"name": "Jo-E Bot",
+		"id": "BOT_445t",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -6039,6 +6079,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_312e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Replicating Menace",
@@ -6178,17 +6219,18 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
-		"playerClass": "Paladin",
+		"cardImage": "BOT_537t.png",
 		"cost": 8,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Hideaki Takamura",
-		"attack": 8,
-		"name": "Robosaur",
 		"health": 8,
-		"id": "BOT_537t",
 		"dbfId": 49168,
 		"type": "Minion",
+		"playerClass": "Paladin",
+		"attack": 8,
+		"name": "Robosaur",
+		"id": "BOT_537t",
 		"cardClass": "PALADIN"
 	},
 	{
@@ -6255,6 +6297,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "King of Beasts",
 		"id": "GVG_046",
+		"audio": {
+			"046_Attack": "SFX_GVG_046_Attack.ogg",
+			"046_Death": "SFX_GVG_046_Death.ogg",
+			"046_Enterplay": "SFX_GVG_046_EnterPlay.ogg"
+		},
 		"text": "<b>Taunt</b>. <b>Battlecry:</b> Gain +1 Attack for each other Beast you have.",
 		"cardClass": "HUNTER",
 		"rarity": "Rare"
@@ -6288,6 +6335,10 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Vitality Totem",
 		"id": "GVG_039",
+		"audio": {
+			"039_Death": "SFX_GVG_039_Death.ogg",
+			"039_Attack": "SFX_GVG_039_Attack.ogg"
+		},
 		"text": "At the end of your turn, restore #4 Health to your hero.",
 		"cardClass": "SHAMAN",
 		"rarity": "Rare"
@@ -6346,6 +6397,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_906e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Glow-Tron",
@@ -6773,6 +6825,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_906.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -7126,6 +7179,11 @@ var parseCardsText = {
 		"name": "Spectral Spider",
 		"health": 1,
 		"id": "FP1_002t",
+		"audio": {
+			"002t_Attack": "SFX_FP1_002t_Attack.ogg",
+			"002t_Death": "SFX_FP1_002t_Death.ogg",
+			"002t_Enterplay": "SFX_FP1_002t_EnterPlay.ogg"
+		},
 		"dbfId": 1782,
 		"type": "Minion",
 		"cardClass": "NEUTRAL"
@@ -7347,6 +7405,11 @@ var parseCardsText = {
 		"attack": 6,
 		"name": "Chillmaw",
 		"id": "AT_123",
+		"audio": {
+			"Play_01": "SFX_AT_123_Play_01.ogg",
+			"Death_01": "SFX_AT_123_Death_01.ogg",
+			"Attack_01": "SFX_AT_123_Attack_01.ogg"
+		},
 		"text": "[x]<b>Taunt</b>\n<b>Deathrattle:</b> If you're holding\na Dragon, deal 3 damage\nto all minions.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Legendary"
@@ -7378,6 +7441,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_069.png",
 		"collectible": true,
 		"cost": 9,
 		"set": "Boomsday",
@@ -7799,6 +7863,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Armored Warhorse",
 		"id": "AT_108",
+		"audio": {
+			"Play_01": "SFX_AT_108_Play_01.ogg",
+			"Death_01": "SFX_AT_108_Death_01.ogg",
+			"Attack_01": "SFX_AT_108_Attack_01.ogg"
+		},
 		"text": "<b>Battlecry:</b> Reveal a minion in each deck. If yours costs more, gain <b>Charge</b>.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Rare"
@@ -7854,6 +7923,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Huge Toad",
 		"id": "LOE_046",
+		"audio": {
+			"046_Play": "SFX_LOE_046_Play.ogg",
+			"046_Attack": "SFX_LOE_046_Attack.ogg",
+			"046_Death": "SFX_LOE_046_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Deal 1 damage to a random enemy.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -8059,6 +8133,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_099.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -8353,6 +8428,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_431.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -8433,6 +8509,7 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"cardImage": "BOT_911e.png",
 		"playerClass": "Paladin",
 		"set": "Boomsday",
 		"name": "Annoy-o-Module",
@@ -9099,6 +9176,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_101.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -9175,6 +9253,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_907.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -9260,6 +9339,7 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"cardImage": "BOT_270.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -9713,6 +9793,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Gorillabot A-3",
 		"id": "LOE_039",
+		"audio": {
+			"039_Death": "SFX_LOE_039_Death.ogg",
+			"039_Play": "SFX_LOE_039_Play.ogg",
+			"039_Attack": "SFX_LOE_039_Attack.ogg"
+		},
 		"text": "<b>Battlecry:</b> If you control another Mech, <b>Discover</b> a Mech.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -9969,6 +10054,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_034.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -10673,6 +10759,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_414.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -10905,6 +10992,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_913.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -11206,6 +11294,11 @@ var parseCardsText = {
 		"playerClass": "Druid",
 		"name": "Power of the Wild",
 		"id": "EX1_160",
+		"audio": {
+			"160t_Enterplay": "SFX_EX1_160t_EnterPlay.ogg",
+			"160t_Attack": "SFX_EX1_160t_Attack.ogg",
+			"160t_Death": "SFX_EX1_160t_Death.ogg"
+		},
 		"text": "<b>Choose One -</b> Give your minions +1/+1; or Summon a 3/2 Panther.",
 		"cardClass": "DRUID",
 		"rarity": "Common"
@@ -11503,6 +11596,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_443.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -11926,6 +12020,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_521.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -12040,6 +12135,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_573.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -12070,6 +12166,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_538.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -12177,6 +12274,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_429.png",
 		"collectible": true,
 		"cost": 8,
 		"set": "Boomsday",
@@ -12481,6 +12579,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_280.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -12821,6 +12920,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_312.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -13166,6 +13266,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_555.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -13308,6 +13409,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_517.png",
 		"collectible": true,
 		"cost": 0,
 		"set": "Boomsday",
@@ -13461,6 +13563,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_059.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -13724,6 +13827,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Gurubashi Berserker",
 		"id": "EX1_399",
+		"audio": {
+			"Death_02": "SFX_EX1_399_Death_02.ogg",
+			"Enterplay_02": "SFX_EX1_399_EnterPlay_02.ogg",
+			"Attack_02": "SFX_EX1_399_Attack_02.ogg"
+		},
 		"text": "Whenever this minion takes damage, gain +3 Attack.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Free"
@@ -14243,6 +14351,11 @@ var parseCardsText = {
 		"attack": 4,
 		"name": "Huffer",
 		"id": "NEW1_034",
+		"audio": {
+			"034_Death": "SFX_NEW1_034_Death.ogg",
+			"034_Enterplay": "SFX_NEW1_034_EnterPlay.ogg",
+			"034_Attack": "SFX_NEW1_034_Attack.ogg"
+		},
 		"text": "<b>Charge</b>",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -14277,6 +14390,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Starving Buzzard",
 		"id": "CS2_237",
+		"audio": {
+			"237_Death": "SFX_CS2_237_Death.ogg",
+			"237_Enterplay": "SFX_CS2_237_EnterPlay.ogg",
+			"237_Attack": "SFX_CS2_237_Attack.ogg"
+		},
 		"text": "Whenever you summon a Beast, draw a card.",
 		"cardClass": "HUNTER",
 		"rarity": "Free"
@@ -14870,7 +14988,10 @@ var parseCardsText = {
 		"id": "CS2_124",
 		"audio": {
 			"Death_03": "VO_CS2_124_Death_03.ogg",
+			"Attack_00": "SFX_CS2_124_Wolf_Attack_00.ogg",
 			"Play_01": "VO_CS2_124_Play_01.ogg",
+			"Death_00": "SFX_CS2_124_Wolf_Death_00.ogg",
+			"Enterplay_00": "SFX_CS2_124_Wolf_EnterPlay_00.ogg",
 			"Attack_02": "VO_CS2_124_Attack_02.ogg"
 		},
 		"text": "<b>Charge</b>",
@@ -16158,6 +16279,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_909.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -17106,6 +17228,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_533.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -17342,15 +17465,18 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOTA_BOSS_05h.png",
 		"set": "Boomsday",
 		"artist": "James Ryman",
 		"hideStats": true,
-		"name": "Zerek, Master Cloner",
 		"health": 30,
 		"mechanics": [
 			"APPEAR_FUNCTIONALLY_DEAD"
 		],
+		"dbfId": 50934,
+		"type": "Hero",
+		"playerClass": "Neutral",
+		"name": "Zerek, Master Cloner",
 		"id": "BOTA_BOSS_05h",
 		"audio": {
 			"Idle_01": "VO_BOTA_BOSS_05h_Male_Ethereal_Idle_01.ogg",
@@ -17390,8 +17516,6 @@ var parseCardsText = {
 			"Ui_04": "VO_BOTA_BOSS_05h_Male_Ethereal_UI_04.ogg",
 			"Ui_01": "VO_BOTA_BOSS_05h_Male_Ethereal_UI_01.ogg"
 		},
-		"dbfId": 50934,
-		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -17789,6 +17913,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Fierce Monkey",
 		"id": "LOE_022",
+		"audio": {
+			"022_Play": "SFX_LOE_022_Play.ogg",
+			"022_Death": "SFX_LOE_022_Death.ogg",
+			"022_Attack": "SFX_LOE_022_Attack.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "WARRIOR",
 		"rarity": "Common"
@@ -17987,6 +18116,11 @@ var parseCardsText = {
 		"attack": 9,
 		"name": "North Sea Kraken",
 		"id": "AT_103",
+		"audio": {
+			"103_Attack": "SFX_AT_103_Attack.ogg",
+			"103_Death": "SFX_AT_103_Death.ogg",
+			"103_Play": "SFX_AT_103_Play.ogg"
+		},
 		"text": "<b>Battlecry:</b> Deal 4 damage.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -18070,6 +18204,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_532.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -18465,6 +18600,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_447.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -18655,6 +18791,11 @@ var parseCardsText = {
 		"attack": 4,
 		"name": "Misha",
 		"id": "NEW1_032",
+		"audio": {
+			"032_Death": "SFX_NEW1_032_Death.ogg",
+			"032_Enterplay": "SFX_NEW1_032_EnterPlay.ogg",
+			"032_Attack": "SFX_NEW1_032_Attack.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -18691,6 +18832,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_576.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -18917,6 +19059,11 @@ var parseCardsText = {
 		"attack": 7,
 		"name": "Mech-Bear-Cat",
 		"id": "GVG_034",
+		"audio": {
+			"034_Death": "SFX_GVG_034_Death.ogg",
+			"034_Enterplay": "SFX_GVG_034_EnterPlay.ogg",
+			"034_Attack": "SFX_GVG_034_Attack.ogg"
+		},
 		"text": "Whenever this minion takes damage, add a <b>Spare Part</b> card to your hand.",
 		"entourage": [
 			"PART_007",
@@ -18944,6 +19091,7 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"cardImage": "BOT_537.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -19069,6 +19217,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Guardian of Icecrown",
 		"id": "NAX15_03t",
+		"audio": {
+			"03t_Attack": "SFX_NAX15_03t_Attack.ogg",
+			"03t_Death": "SFX_NAX15_03t_Death.ogg",
+			"03t_Enterplay": "SFX_NAX15_03t_EnterPlay.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "NEUTRAL"
 	},
@@ -19206,16 +19359,21 @@ var parseCardsText = {
 	},
 	{
 		"cardImage": "EX1_tk34.png",
-		"playerClass": "Warlock",
 		"cost": 6,
 		"set": "Expert1",
 		"race": "DEMON",
-		"attack": 6,
-		"name": "Infernal",
 		"health": 6,
-		"id": "EX1_tk34",
 		"dbfId": 1143,
 		"type": "Minion",
+		"playerClass": "Warlock",
+		"attack": 6,
+		"name": "Infernal",
+		"id": "EX1_tk34",
+		"audio": {
+			"Tk34_Death": "SFX_EX1_tk34_Death.ogg",
+			"Tk34_Enterplay": "SFX_EX1_tk34_EnterPlay.ogg",
+			"Tk34_Attack": "SFX_EX1_tk34_Attack.ogg"
+		},
 		"cardClass": "WARLOCK"
 	},
 	{
@@ -19246,6 +19404,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"cardImage": "BOT_020e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Skaterbot",
@@ -19656,6 +19815,11 @@ var parseCardsText = {
 		"name": "Sapling",
 		"health": 1,
 		"id": "AT_037t",
+		"audio": {
+			"037t_Death": "SFX_AT_037t_Death.ogg",
+			"037t_Attack": "SFX_AT_037t_Attack.ogg",
+			"037t_Play": "SFX_AT_037t_Play.ogg"
+		},
 		"dbfId": 2790,
 		"type": "Minion",
 		"cardClass": "DRUID"
@@ -20457,6 +20621,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOTA_BOSS_14h.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"artist": "Slawomir Maniak",
@@ -20550,6 +20715,11 @@ var parseCardsText = {
 		"name": "Giant Insect",
 		"health": 3,
 		"id": "LOEA04_23",
+		"audio": {
+			"23_Death": "SFX_LOEA04_23_Death.ogg",
+			"23_Attack": "SFX_LOEA04_23_Attack.ogg",
+			"23_Play": "SFX_LOEA04_23_Play.ogg"
+		},
 		"dbfId": 16883,
 		"type": "Minion",
 		"cardClass": "NEUTRAL"
@@ -20766,6 +20936,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_104.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -21188,6 +21359,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Anub'ar Ambusher",
 		"id": "FP1_026",
+		"audio": {
+			"026_Death": "SFX_FP1_026_Death.ogg",
+			"026_Attack": "SFX_FP1_026_Attack.ogg",
+			"026_Enterplay": "SFX_FP1_026_EnterPlay.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Return a random friendly minion to your hand.",
 		"cardClass": "ROGUE",
 		"rarity": "Common"
@@ -21279,6 +21455,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_237e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Beryllium Nullifier",
@@ -21440,7 +21617,10 @@ var parseCardsText = {
 		"id": "FP1_012",
 		"audio": {
 			"Death_03": "VO_FP1_012_Death_03.ogg",
+			"012t_Enterplay": "SFX_FP1_012t_EnterPlay.ogg",
 			"Enterplay_01": "VO_FP1_012_EnterPlay_01.ogg",
+			"012t_Attack": "SFX_FP1_012t_Attack.ogg",
+			"012t_Death": "SFX_FP1_012t_Death.ogg",
 			"Attack_02": "VO_FP1_012_Attack_02.ogg"
 		},
 		"text": "<b>Taunt\nDeathrattle:</b> Summon a 1/2 Slime with <b>Taunt</b>.",
@@ -22089,6 +22269,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_548e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Zilliax",
@@ -22395,17 +22576,18 @@ var parseCardsText = {
 		"cardClass": "DEATHKNIGHT"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOT_312t.png",
 		"cost": 1,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Vladimir Kafanov",
-		"attack": 1,
-		"name": "Microbot",
 		"health": 1,
-		"id": "BOT_312t",
 		"dbfId": 48842,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 1,
+		"name": "Microbot",
+		"id": "BOT_312t",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -22468,6 +22650,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_911.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -22568,6 +22751,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_067e.png",
 		"playerClass": "Warrior",
 		"set": "Boomsday",
 		"name": "Rocket Boots",
@@ -23396,6 +23580,7 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"cardImage": "BOT_562.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -23590,6 +23775,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_218.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -23814,6 +24000,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Ship's Cannon",
 		"id": "GVG_075",
+		"audio": {
+			"075_Attack": "SFX_GVG_075_Attack.ogg",
+			"075_Death": "SFX_GVG_075_Death.ogg",
+			"075_Enterplay": "SFX_GVG_075_EnterPlay.ogg"
+		},
 		"text": "After you summon a Pirate, deal 2 damage to a random enemy.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -23836,6 +24027,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Elite Tauren Chieftain",
 		"id": "PRO_001",
+		"audio": {
+			"001_Attack": "SFX_PRO_001_Attack.ogg",
+			"001_Death": "SFX_PRO_001_Death.ogg",
+			"001_Enterplay": "SFX_PRO_001_EnterPlay.ogg"
+		},
 		"text": "<b>Battlecry:</b> Give both players the power to ROCK! (with a Power Chord card)",
 		"entourage": [
 			"PRO_001a",
@@ -23874,6 +24070,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_263.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -24023,6 +24220,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_035.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -24300,8 +24498,12 @@ var parseCardsText = {
 		"id": "GVG_007",
 		"audio": {
 			"Death_03": "VO_GVG_007_Death_03.ogg",
+			"007_Death": "SFX_GVG_007_Death.ogg",
 			"Play_01": "VO_GVG_007_Play_01.ogg",
+			"007_Trigger": "SFX_GVG_007_Trigger.ogg",
+			"007_Enterplay": "SFX_GVG_007_EnterPlay.ogg",
 			"Trigger_04": "VO_GVG_007_Trigger_04.ogg",
+			"007_Attack": "SFX_GVG_007_Attack.ogg",
 			"Attack_02": "VO_GVG_007_Attack_02.ogg"
 		},
 		"text": "When you draw this, deal 2 damage to all characters.",
@@ -24474,6 +24676,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_066.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -24850,6 +25053,11 @@ var parseCardsText = {
 		"set": "Naxx",
 		"name": "Deathbloom",
 		"id": "NAX6_03",
+		"audio": {
+			"03t_Attack": "SFX_NAX6_03t_Attack.ogg",
+			"03t_Death": "SFX_NAX6_03t_Death.ogg",
+			"03t_Enterplay": "SFX_NAX6_03t_EnterPlay.ogg"
+		},
 		"text": "Deal $5 damage to a minion. Summon a Spore.",
 		"dbfId": 1864,
 		"type": "Spell",
@@ -25048,6 +25256,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_453.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -25315,6 +25524,11 @@ var parseCardsText = {
 		"attack": 8,
 		"name": "Sea Giant",
 		"id": "EX1_586",
+		"audio": {
+			"586_Attack": "SFX_EX1_586_Attack.ogg",
+			"586_Enterplay": "SFX_EX1_586_EnterPlay.ogg",
+			"586_Death": "SFX_EX1_586_Death.ogg"
+		},
 		"text": "Costs (1) less for each other minion on the battlefield.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Epic"
@@ -25431,7 +25645,10 @@ var parseCardsText = {
 		"name": "Hogger",
 		"id": "NEW1_040",
 		"audio": {
-			"Death_12": "VO_NEW1_040_Death_12.ogg"
+			"040t_Attack": "SFX_NEW1_040t_Attack.ogg",
+			"Death_12": "VO_NEW1_040_Death_12.ogg",
+			"040t_Enterplay": "SFX_NEW1_040t_EnterPlay.ogg",
+			"040t_Death": "SFX_NEW1_040t_Death.ogg"
 		},
 		"text": "At the end of your turn, summon a 2/2 Gnoll with <b>Taunt</b>.",
 		"cardClass": "NEUTRAL",
@@ -25467,6 +25684,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_534.png",
 		"collectible": true,
 		"cost": 9,
 		"set": "Boomsday",
@@ -25733,6 +25951,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_508.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -26094,6 +26313,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_107.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -26156,6 +26376,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_103.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -26183,6 +26404,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_254.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -26337,6 +26559,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_102t.png",
 		"cost": 1,
 		"set": "Boomsday",
 		"race": "ELEMENTAL",
@@ -26657,6 +26880,11 @@ var parseCardsText = {
 		"faction": "ALLIANCE",
 		"name": "Windfury Harpy",
 		"id": "EX1_033",
+		"audio": {
+			"033_Attack": "SFX_EX1_033_Attack.ogg",
+			"033_Death": "SFX_EX1_033_Death.ogg",
+			"033_Enterplay": "SFX_EX1_033_EnterPlay.ogg"
+		},
 		"text": "<b>Windfury</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -26766,6 +26994,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Spirit Wolf",
 		"id": "EX1_tk11",
+		"audio": {
+			"Tk11_Attack": "SFX_EX1_tk11_Attack.ogg",
+			"Tk11_Death": "SFX_EX1_tk11_Death.ogg",
+			"Tk11_Enterplay": "SFX_EX1_tk11_EnterPlay.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "SHAMAN"
 	},
@@ -26916,6 +27149,11 @@ var parseCardsText = {
 		"name": "Fallout Slime",
 		"health": 2,
 		"id": "NAX11_03",
+		"audio": {
+			"03_Attack": "SFX_NAX11_03_Attack.ogg",
+			"03_Death": "SFX_NAX11_03_Death.ogg",
+			"03_Enterplay": "SFX_NAX11_03_EnterPlay.ogg"
+		},
 		"dbfId": 1889,
 		"type": "Minion",
 		"cardClass": "NEUTRAL"
@@ -27341,6 +27579,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Metaltooth Leaper",
 		"id": "GVG_048",
+		"audio": {
+			"048_Death": "SFX_GVG_048_Death.ogg",
+			"048_Attack": "SFX_GVG_048_Attack.ogg",
+			"048_Enterplay": "SFX_GVG_048_EnterPlay.ogg"
+		},
 		"text": "<b>Battlecry:</b> Give your other Mechs +2 Attack.",
 		"cardClass": "HUNTER",
 		"rarity": "Rare"
@@ -29512,15 +29755,18 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOTA_BOSS_09h.png",
 		"set": "Boomsday",
 		"artist": "Slawomir Maniak",
 		"hideStats": true,
-		"name": "Dr. Morrigan",
 		"health": 30,
 		"mechanics": [
 			"APPEAR_FUNCTIONALLY_DEAD"
 		],
+		"dbfId": 50938,
+		"type": "Hero",
+		"playerClass": "Neutral",
+		"name": "Dr. Morrigan",
 		"id": "BOTA_BOSS_09h",
 		"audio": {
 			"Idle_01": "VO_BOTA_BOSS_09h_Female_Banshee_Idle_01.ogg",
@@ -29551,8 +29797,6 @@ var parseCardsText = {
 			"Ui_02": "VO_BOTA_BOSS_09h_Female_Banshee_UI_02.ogg",
 			"Playticking_01": "VO_BOTA_BOSS_09h_Female_Banshee_PlayTicking_01.ogg"
 		},
-		"dbfId": 50938,
-		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -30086,6 +30330,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_083.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -30390,6 +30635,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_308.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -30492,6 +30738,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_604.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -30551,16 +30798,21 @@ var parseCardsText = {
 	},
 	{
 		"cardImage": "EX1_tk28.png",
-		"playerClass": "Neutral",
 		"cost": 1,
 		"set": "Expert1",
 		"race": "BEAST",
-		"attack": 1,
-		"name": "Squirrel",
 		"health": 1,
-		"id": "EX1_tk28",
 		"dbfId": 1190,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 1,
+		"name": "Squirrel",
+		"id": "EX1_tk28",
+		"audio": {
+			"Tk28_Enterplay": "SFX_EX1_tk28_EnterPlay.ogg",
+			"Tk28_Death": "SFX_EX1_tk28_Death.ogg",
+			"Tk28_Attack": "SFX_EX1_tk28_Attack.ogg"
+		},
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -30823,6 +31075,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_543.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -30937,6 +31190,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Twilight Whelp",
 		"id": "BRM_004",
+		"audio": {
+			"Whelp_Attack": "SFX_BRM_004_Twilight_Whelp_Attack.ogg",
+			"Whelp_Death": "SFX_BRM_004_Twilight_Whelp_Death.ogg",
+			"Whelp_Enterplay": "SFX_BRM_004_Twilight_Whelp_EnterPlay.ogg"
+		},
 		"text": "<b>Battlecry:</b> If you're holding a Dragon, gain +2 Health.",
 		"cardClass": "PRIEST",
 		"rarity": "Common"
@@ -31161,6 +31419,12 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Demolisher",
 		"id": "EX1_102",
+		"audio": {
+			"102_Attack": "SFX_EX1_102_Attack.ogg",
+			"102_Enterplay": "SFX_EX1_102_EnterPlay.ogg",
+			"102_Death": "SFX_EX1_102_Death.ogg",
+			"102_Ability": "SFX_EX1_102_Ability.ogg"
+		},
 		"text": "At the start of your turn, deal 2 damage to a random enemy.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Rare"
@@ -31559,6 +31823,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Mounted Raptor",
 		"id": "LOE_050",
+		"audio": {
+			"050_Attack": "SFX_LOE_050_Attack.ogg",
+			"050_Play": "SFX_LOE_050_Play.ogg",
+			"050_Death": "SFX_LOE_050_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Summon a random 1-Cost minion.",
 		"cardClass": "DRUID",
 		"rarity": "Common"
@@ -31686,6 +31955,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Pit Snake",
 		"id": "LOE_010",
+		"audio": {
+			"010_Attack": "SFX_LOE_010_Attack.ogg",
+			"010_Death": "SFX_LOE_010_Death.ogg",
+			"010_Play": "SFX_LOE_010_Play.ogg"
+		},
 		"text": "<b>Poisonous</b>",
 		"cardClass": "ROGUE",
 		"rarity": "Common"
@@ -31787,6 +32061,11 @@ var parseCardsText = {
 		"faction": "ALLIANCE",
 		"name": "Fen Creeper",
 		"id": "CS1_069",
+		"audio": {
+			"069_Enterplay": "SFX_CS1_069_EnterPlay.ogg",
+			"069_Death": "SFX_CS1_069_Death.ogg",
+			"069_Attack": "SFX_CS1_069_Attack.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -32378,6 +32657,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Sheep",
 		"id": "CS2_tk1",
+		"audio": {
+			"Tk1_Death": "SFX_CS2_tk1_Death.ogg",
+			"Tk1_Enterplay": "SFX_CS2_tk1_EnterPlay.ogg",
+			"Tk1_Attack": "SFX_CS2_tk1_Attack.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
@@ -33011,6 +33295,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Dire Wolf Alpha",
 		"id": "EX1_162",
+		"audio": {
+			"162_Attack": "SFX_EX1_162_Attack.ogg",
+			"162_Death": "SFX_EX1_162_Death.ogg",
+			"162_Enterplay": "SFX_EX1_162_EnterPlay.ogg"
+		},
 		"text": "Adjacent minions have +1 Attack.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -33221,6 +33510,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_550.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -33509,6 +33799,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_079.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -33880,6 +34171,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_523.png",
 		"collectible": true,
 		"cost": 10,
 		"set": "Boomsday",
@@ -34404,6 +34696,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Angry Chicken",
 		"id": "EX1_009",
+		"audio": {
+			"009_Enterplay": "SFX_EX1_009_EnterPlay.ogg",
+			"009_Death": "SFX_EX1_009_Death.ogg",
+			"009_Attack": "SFX_EX1_009_Attack.ogg"
+		},
 		"text": "Has +5 Attack while damaged.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Rare"
@@ -34643,7 +34940,10 @@ var parseCardsText = {
 		"id": "FP1_007",
 		"audio": {
 			"Death_03": "VO_FP1_007t_Death_03.ogg",
+			"007_Death": "SFX_FP1_007_Death.ogg",
+			"007_Enterplay": "SFX_FP1_007_EnterPlay.ogg",
 			"Enterplay_01": "VO_FP1_007t_EnterPlay_01.ogg",
+			"007_Attack": "SFX_FP1_007_Attack.ogg",
 			"Attack_02": "VO_FP1_007t_Attack_02.ogg"
 		},
 		"text": "<b>Deathrattle:</b> Summon a 4/4 Nerubian.",
@@ -35444,6 +35744,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_413.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -35555,6 +35856,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "River Crocolisk",
 		"id": "CS2_120",
+		"audio": {
+			"120_Attack": "SFX_CS2_120_Attack.ogg",
+			"120_Death": "SFX_CS2_120_Death.ogg",
+			"120_Enterplay": "SFX_CS2_120_EnterPlay.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Free"
 	},
@@ -35730,6 +36036,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_042t.png",
 		"playerClass": "Warrior",
 		"cost": 2,
 		"set": "Boomsday",
@@ -35860,6 +36167,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "King's Elekk",
 		"id": "AT_058",
+		"audio": {
+			"058_Attack": "SFX_AT_058_Attack.ogg",
+			"058_Death": "SFX_AT_058_Death.ogg",
+			"058_Play": "SFX_AT_058_Play.ogg"
+		},
 		"text": "<b>Battlecry:</b> Reveal a minion in each deck. If yours costs more, draw it.",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -36143,6 +36455,14 @@ var parseCardsText = {
 		"attack": 4,
 		"name": "Acidmaw",
 		"id": "AT_063",
+		"audio": {
+			"063t_Death": "SFX_AT_063t_Death.ogg",
+			"063_Play": "SFX_AT_063_Play.ogg",
+			"063t_Play": "SFX_AT_063t_Play.ogg",
+			"063t_Attack": "SFX_AT_063t_Attack.ogg",
+			"063_Attack": "SFX_AT_063_Attack.ogg",
+			"063_Death": "SFX_AT_063_Death.ogg"
+		},
 		"text": "Whenever another minion takes damage, destroy it.",
 		"cardClass": "HUNTER",
 		"rarity": "Legendary"
@@ -36400,15 +36720,18 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOTA_BOSS_07h.png",
 		"set": "Boomsday",
 		"artist": "Max Greck",
 		"hideStats": true,
-		"name": "Flobbidinous Floop",
 		"health": 30,
 		"mechanics": [
 			"APPEAR_FUNCTIONALLY_DEAD"
 		],
+		"dbfId": 50936,
+		"type": "Hero",
+		"playerClass": "Neutral",
+		"name": "Flobbidinous Floop",
 		"id": "BOTA_BOSS_07h",
 		"audio": {
 			"Idle_01": "VO_BOTA_BOSS_07h_Male_Ooze_Idle_01.ogg",
@@ -36444,8 +36767,6 @@ var parseCardsText = {
 			"Ui_01": "VO_BOTA_BOSS_07h_Male_Ooze_UI_01.ogg",
 			"Ui_02": "VO_BOTA_BOSS_07h_Male_Ooze_UI_02.ogg"
 		},
-		"dbfId": 50936,
-		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -36627,6 +36948,9 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Searing Totem",
 		"id": "CS2_050",
+		"audio": {
+			"Attack_00": "SFX_CS2_050_Attack_00.ogg"
+		},
 		"cardClass": "SHAMAN",
 		"rarity": "Free"
 	},
@@ -36642,6 +36966,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_286.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -36885,6 +37210,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_401.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -37743,6 +38069,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_559.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -37892,6 +38219,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_222.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -38550,6 +38878,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Stoneskin Gargoyle",
 		"id": "FP1_027",
+		"audio": {
+			"027_Enterplay": "SFX_FP1_027_EnterPlay.ogg",
+			"027_Attack": "SFX_FP1_027_Attack.ogg",
+			"027_Death": "SFX_FP1_027_Death.ogg"
+		},
 		"text": "At the start of your turn, restore this minion to full Health.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -39030,6 +39363,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Maexxna",
 		"id": "FP1_010",
+		"audio": {
+			"010_Attack": "SFX_FP1_010_Attack.ogg",
+			"010_Enterplay": "SFX_FP1_010_EnterPlay.ogg",
+			"010_Death": "SFX_FP1_010_Death.ogg"
+		},
 		"text": "<b>Poisonous</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Legendary"
@@ -39469,6 +39807,11 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Seething Statue",
 		"id": "LOEA04_25",
+		"audio": {
+			"25_Death": "SFX_LOEA04_25_Death.ogg",
+			"25_Play": "SFX_LOEA04_25_Play.ogg",
+			"25_Attack": "SFX_LOEA04_25_Attack.ogg"
+		},
 		"text": "At the end of your turn, deal 2 damage to all enemies.",
 		"cardClass": "NEUTRAL"
 	},
@@ -39582,6 +39925,11 @@ var parseCardsText = {
 		"faction": "ALLIANCE",
 		"name": "Stranglethorn Tiger",
 		"id": "EX1_028",
+		"audio": {
+			"028_Enterplay": "SFX_EX1_028_EnterPlay.ogg",
+			"028_Attack": "SFX_EX1_028_Attack.ogg",
+			"028_Death": "SFX_EX1_028_Death.ogg"
+		},
 		"text": "<b>Stealth</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -40135,11 +40483,17 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Echoing Ooze",
 		"id": "FP1_003",
+		"audio": {
+			"003_Enterplay": "SFX_FP1_003_EnterPlay.ogg",
+			"003_Attack": "SFX_FP1_003_Attack.ogg",
+			"003_Death": "SFX_FP1_003_Death.ogg"
+		},
 		"text": "<b>Battlecry:</b> Summon an exact copy of this minion at the end of the turn.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_437.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -40279,6 +40633,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_912.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -41121,6 +41476,11 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Rod of the Sun",
 		"id": "LOEA01_11",
+		"audio": {
+			"11_Attack": "SFX_LOEA01_11_Attack.ogg",
+			"11_Death": "SFX_LOEA01_11_Death.ogg",
+			"11_Play": "SFX_LOEA01_11_Play.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Surrender this to your opponent.",
 		"cardClass": "NEUTRAL"
 	},
@@ -41263,6 +41623,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_548.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -41347,19 +41708,25 @@ var parseCardsText = {
 	},
 	{
 		"cardImage": "AT_099t.png",
-		"playerClass": "Neutral",
 		"cost": 5,
 		"set": "Tgt",
 		"race": "BEAST",
-		"attack": 3,
-		"name": "War Kodo",
 		"health": 5,
-		"id": "AT_099t",
 		"dbfId": 2799,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 3,
+		"name": "War Kodo",
+		"id": "AT_099t",
+		"audio": {
+			"099t_Play": "SFX_AT_099t_Play.ogg",
+			"099t_Attack": "SFX_AT_099t_Attack.ogg",
+			"099t_Death": "SFX_AT_099t_Death.ogg"
+		},
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_245.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -41848,6 +42215,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_419.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -41902,6 +42270,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_411.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -42207,8 +42576,14 @@ var parseCardsText = {
 		"name": "Druid of the Claw",
 		"id": "EX1_165",
 		"audio": {
+			"165t1_Death": "SFX_EX1_165t1_Death.ogg",
 			"Death_03": "VO_EX1_165_Death_03.ogg",
 			"Play_01": "VO_EX1_165_Play_01.ogg",
+			"165t1_Enterplay": "SFX_EX1_165t1_EnterPlay.ogg",
+			"165t2_Enterplay": "SFX_EX1_165t2_EnterPlay.ogg",
+			"165t1_Attack": "SFX_EX1_165t1_Attack.ogg",
+			"165t2_Attack": "SFX_EX1_165t2_Attack.ogg",
+			"165t2_Death": "SFX_EX1_165t2_Death.ogg",
 			"Attack_02": "VO_EX1_165_Attack_02.ogg"
 		},
 		"text": "[x]<b>Choose One -</b> Transform\ninto a 4/4 with <b>Charge</b>;\nor a 4/6 with <b>Taunt</b>.",
@@ -42671,6 +43046,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_404.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -42812,6 +43188,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Scavenging Hyena",
 		"id": "EX1_531",
+		"audio": {
+			"531_Enterplay": "SFX_EX1_531_EnterPlay.ogg",
+			"531_Attack": "SFX_EX1_531_Attack.ogg",
+			"531_Death": "SFX_EX1_531_Death.ogg"
+		},
 		"text": "Whenever a friendly Beast dies, gain +2/+1.",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -42866,6 +43247,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Desert Camel",
 		"id": "LOE_020",
+		"audio": {
+			"020_Attack": "SFX_LOE_020_Attack.ogg",
+			"020_Death": "SFX_LOE_020_Death.ogg",
+			"020_Play": "SFX_LOE_020_Play.ogg"
+		},
 		"text": "<b>Battlecry:</b> Put a 1-Cost minion from each deck into the battlefield.",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -43008,6 +43394,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_035e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Venomizer",
@@ -43141,6 +43528,7 @@ var parseCardsText = {
 		"type": "Spell"
 	},
 	{
+		"cardImage": "BOT_451.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -43192,6 +43580,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Harvest Golem",
 		"id": "EX1_556",
+		"audio": {
+			"556_Attack": "SFX_EX1_556_Attack.ogg",
+			"556_Enterplay": "SFX_EX1_556_EnterPlay.ogg",
+			"556_Death": "SFX_EX1_556_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Summon a 2/1 Damaged Golem.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -43371,6 +43764,7 @@ var parseCardsText = {
 		"cardClass": "MAGE"
 	},
 	{
+		"cardImage": "BOTA_BOSS_13h.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"artist": "L. Lullabi & K. Turovec",
@@ -44030,6 +44424,9 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Flametongue Totem",
 		"id": "EX1_565",
+		"audio": {
+			"Attack_00": "SFX_EX1_565_Attack_00.ogg"
+		},
 		"text": "Adjacent minions have +2 Attack.",
 		"cardClass": "SHAMAN",
 		"rarity": "Free"
@@ -44255,11 +44652,17 @@ var parseCardsText = {
 		"attack": 7,
 		"name": "Force-Tank MAX",
 		"id": "GVG_079",
+		"audio": {
+			"079_Death": "SFX_GVG_079_Death.ogg",
+			"079_Attack": "SFX_GVG_079_Attack.ogg",
+			"079_Enterplay": "SFX_GVG_079_EnterPlay.ogg"
+		},
 		"text": "<b>Divine Shield</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_021.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -44624,6 +45027,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_606.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -44799,6 +45203,11 @@ var parseCardsText = {
 		"attack": 8,
 		"name": "King Krush",
 		"id": "EX1_543",
+		"audio": {
+			"543_Enterplay": "SFX_EX1_543_EnterPlay.ogg",
+			"543_Death": "SFX_EX1_543_Death.ogg",
+			"543_Attack": "SFX_EX1_543_Attack.ogg"
+		},
 		"text": "<b>Charge</b>",
 		"cardClass": "HUNTER",
 		"rarity": "Legendary"
@@ -44873,6 +45282,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_038.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -45558,6 +45968,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_424.png",
 		"collectible": true,
 		"cost": 10,
 		"set": "Boomsday",
@@ -45868,6 +46279,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_601.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -46115,6 +46527,11 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Dragon Egg",
 		"id": "BRM_022",
+		"audio": {
+			"Blackwhelp_Attack": "SFX_BRM_022t_BlackWhelp_Attack.ogg",
+			"Blackwhelp_Death": "SFX_BRM_022t_BlackWhelp_Death.ogg",
+			"Blackwhelp_Enterplay": "SFX_BRM_022t_BlackWhelp_EnterPlay.ogg"
+		},
 		"text": "Whenever this minion takes damage, summon a 2/1 Whelp.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Rare"
@@ -46461,6 +46878,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Frost Elemental",
 		"id": "EX1_283",
+		"audio": {
+			"283_Enterplay": "SFX_EX1_283_EnterPlay.ogg",
+			"283_Death": "SFX_EX1_283_Death.ogg",
+			"283_Attack": "SFX_EX1_283_Attack.ogg"
+		},
 		"text": "<b>Battlecry:</b> <b>Freeze</b> a character.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -47274,6 +47696,7 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"cardImage": "BOT_291.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -47554,6 +47977,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"cardImage": "BOT_509.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -47747,6 +48171,11 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Firesworn",
 		"id": "BRMA04_3",
+		"audio": {
+			"3_Play": "SFX_BRMA04_3_Play.ogg",
+			"3_Attack": "SFX_BRMA04_3_Attack.ogg",
+			"3_Death": "SFX_BRMA04_3_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Deal 1 damage to the enemy hero for each Firesworn that died this turn.",
 		"cardClass": "NEUTRAL"
 	},
@@ -47966,6 +48395,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_054.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -48007,6 +48437,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Magma Rager",
 		"id": "CS2_118",
+		"audio": {
+			"118_Attack": "SFX_CS2_118_Attack.ogg",
+			"118_Enterplay": "SFX_CS2_118_EnterPlay.ogg",
+			"118_Death": "SFX_CS2_118_Death.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Free"
 	},
@@ -48235,15 +48670,18 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOTA_BOSS_16h.png",
 		"set": "Boomsday",
 		"artist": "Jomaro Kindred",
 		"hideStats": true,
-		"name": "Boommaster Flark",
 		"health": 30,
 		"mechanics": [
 			"APPEAR_FUNCTIONALLY_DEAD"
 		],
+		"dbfId": 50945,
+		"type": "Hero",
+		"playerClass": "Neutral",
+		"name": "Boommaster Flark",
 		"id": "BOTA_BOSS_16h",
 		"audio": {
 			"Idle_01": "VO_BOTA_BOSS_16h_Male_Goblin_Idle_01.ogg",
@@ -48283,8 +48721,6 @@ var parseCardsText = {
 			"Ui_02": "VO_BOTA_BOSS_16h_Male_Goblin_UI_02.ogg",
 			"Puzzlea_01": "VO_BOTA_BOSS_16h_Male_Goblin_PuzzleA_01.ogg"
 		},
-		"dbfId": 50945,
-		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -48362,6 +48798,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_258.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -48535,6 +48972,7 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"cardImage": "BOT_438.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -48797,6 +49235,7 @@ var parseCardsText = {
 		"cardClass": "MAGE"
 	},
 	{
+		"cardImage": "BOT_422.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -49216,6 +49655,11 @@ var parseCardsText = {
 		"attack": 6,
 		"name": "Savannah Highmane",
 		"id": "EX1_534",
+		"audio": {
+			"534_Attack": "SFX_EX1_534_Attack.ogg",
+			"534_Enterplay": "SFX_EX1_534_EnterPlay.ogg",
+			"534_Death": "SFX_EX1_534_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Summon two 2/2 Hyenas.",
 		"cardClass": "HUNTER",
 		"rarity": "Rare"
@@ -49305,6 +49749,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Mechanical Dragonling",
 		"id": "EX1_025t",
+		"audio": {
+			"025t_Attack": "SFX_EX1_025t_Attack.ogg",
+			"025t_Death": "SFX_EX1_025t_Death.ogg",
+			"025t_Enterplay": "SFX_EX1_025t_EnterPlay.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
@@ -49383,6 +49832,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_445.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -49465,6 +49915,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_444.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -49666,6 +50117,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_234e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Shrink Ray",
@@ -49693,6 +50145,11 @@ var parseCardsText = {
 		"attack": 10,
 		"name": "Icehowl",
 		"id": "AT_125",
+		"audio": {
+			"Play_01": "SFX_AT_125_Play_01.ogg",
+			"Death_01": "SFX_AT_125_Death_01.ogg",
+			"Attack_01": "SFX_AT_125_Attack_01.ogg"
+		},
 		"text": "<b>Charge</b>\nCan't attack heroes.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Legendary"
@@ -49731,6 +50188,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Leokk",
 		"id": "NEW1_033",
+		"audio": {
+			"033_Attack": "SFX_NEW1_033_Attack.ogg",
+			"033_Death": "SFX_NEW1_033_Death.ogg",
+			"033_Enterplay": "SFX_NEW1_033_EnterPlay.ogg"
+		},
 		"text": "Your other minions have +1 Attack.",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -50136,6 +50598,11 @@ var parseCardsText = {
 		"name": "Nerubian",
 		"health": 1,
 		"id": "NAX1_03",
+		"audio": {
+			"03_Attack": "SFX_NAX1_03_Attack.ogg",
+			"03_Death": "SFX_NAX1_03_Death.ogg",
+			"03_Enterplay": "SFX_NAX1_03_EnterPlay.ogg"
+		},
 		"dbfId": 1830,
 		"type": "Minion",
 		"cardClass": "NEUTRAL"
@@ -50418,6 +50885,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_219.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -50552,6 +51020,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Tomb Spider",
 		"id": "LOE_047",
+		"audio": {
+			"047_Attack": "SFX_LOE_047_Attack.ogg",
+			"047_Play": "SFX_LOE_047_Play.ogg",
+			"047_Death": "SFX_LOE_047_Death.ogg"
+		},
 		"text": "<b>Battlecry: Discover</b> a Beast.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -51157,6 +51630,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Unstable Ghoul",
 		"id": "FP1_024",
+		"audio": {
+			"024_Attack": "SFX_FP1_024_Attack.ogg",
+			"024_Death": "SFX_FP1_024_Death.ogg",
+			"024_Enterplay": "SFX_FP1_024_EnterPlay.ogg"
+		},
 		"text": "<b>Taunt</b>. <b>Deathrattle:</b> Deal 1 damage to all minions.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -51251,6 +51729,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_435.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -51740,6 +52219,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_236.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -51786,6 +52266,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_216.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -52431,6 +52912,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_309.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -53700,6 +54182,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_539.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -54542,6 +55025,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_558.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -54705,6 +55189,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_098.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -54974,6 +55459,11 @@ var parseCardsText = {
 		"attack": 8,
 		"name": "Fel Reaver",
 		"id": "GVG_016",
+		"audio": {
+			"016_Death": "SFX_GVG_016_Death.ogg",
+			"016_Attack": "SFX_GVG_016_Attack.ogg",
+			"016_Enterplay": "SFX_GVG_016_EnterPlay.ogg"
+		},
 		"text": "Whenever your opponent plays a card, remove the top 3 cards of your deck.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Epic"
@@ -55572,6 +56062,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_267.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -55593,6 +56084,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_251e.png",
 		"playerClass": "Hunter",
 		"set": "Boomsday",
 		"name": "Spider Bomb",
@@ -55770,6 +56262,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_237.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -56123,11 +56616,17 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Raging Worgen",
 		"id": "EX1_412",
+		"audio": {
+			"412_Attack": "SFX_EX1_412_Attack.ogg",
+			"412_Enterplay": "SFX_EX1_412_EnterPlay.ogg",
+			"412_Death": "SFX_EX1_412_Death.ogg"
+		},
 		"text": "Has +1 Attack and <b>Windfury</b> while damaged.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_433.png",
 		"collectible": true,
 		"cost": 8,
 		"set": "Boomsday",
@@ -56989,6 +57488,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_039.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -57584,6 +58084,7 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"cardImage": "BOT_567.png",
 		"collectible": true,
 		"cost": 9,
 		"set": "Boomsday",
@@ -57900,6 +58401,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_288.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -58066,6 +58568,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_420.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -58864,6 +59367,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_552.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -59025,6 +59529,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_406.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -59708,6 +60213,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_021e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Bronze Gatekeeper",
@@ -59895,6 +60401,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_299.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -60073,6 +60580,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Stonetusk Boar",
 		"id": "CS2_171",
+		"audio": {
+			"171_Attack": "SFX_CS2_171_Attack.ogg",
+			"171_Death": "SFX_CS2_171_Death.ogg",
+			"171_Enterplay": "SFX_CS2_171_EnterPlay.ogg"
+		},
 		"text": "<b>Charge</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Free"
@@ -60139,6 +60651,11 @@ var parseCardsText = {
 		"attack": 7,
 		"name": "Obsidian Destroyer",
 		"id": "LOE_009",
+		"audio": {
+			"009_Play": "SFX_LOE_009_Play.ogg",
+			"009_Death": "SFX_LOE_009_Death.ogg",
+			"009_Attack": "SFX_LOE_009_Attack.ogg"
+		},
 		"text": "At the end of your turn, summon a 1/1 Scarab with <b>Taunt</b>.",
 		"cardClass": "WARRIOR",
 		"rarity": "Common"
@@ -60591,6 +61108,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_908.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -60612,6 +61130,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_566.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -60923,6 +61442,11 @@ var parseCardsText = {
 		"faction": "HORDE",
 		"name": "Ironbeak Owl",
 		"id": "CS2_203",
+		"audio": {
+			"203_Enterplay": "SFX_CS2_203_EnterPlay.ogg",
+			"203_Death": "SFX_CS2_203_Death.ogg",
+			"203_Attack": "SFX_CS2_203_Attack.ogg"
+		},
 		"text": "<b>Battlecry:</b> <b>Silence</b> a minion.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -61953,6 +62477,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Shadowfiend",
 		"id": "AT_014",
+		"audio": {
+			"014_Death": "SFX_AT_014_Death.ogg",
+			"014_Play": "SFX_AT_014_Play.ogg",
+			"014_Attack": "SFX_AT_014_Attack.ogg"
+		},
 		"text": "Whenever you draw a card, reduce its Cost by (1).",
 		"cardClass": "PRIEST",
 		"rarity": "Epic"
@@ -62234,6 +62763,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Soot Spewer",
 		"id": "GVG_123",
+		"audio": {
+			"123_Attack": "SFX_GVG_123_Attack.ogg",
+			"123_Death": "SFX_GVG_123_Death.ogg",
+			"123_Enterplay": "SFX_GVG_123_EnterPlay.ogg"
+		},
 		"text": "<b>Spell Damage +1</b>",
 		"cardClass": "MAGE",
 		"rarity": "Rare"
@@ -62965,6 +63499,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_226.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -63139,6 +63674,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_531.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -63342,6 +63878,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"cardImage": "BOT_093.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -63702,6 +64239,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_033.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -63812,6 +64350,11 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"name": "Imp-losion",
 		"id": "GVG_045",
+		"audio": {
+			"Imp_Attack": "SFX_GVG_045t_Imp_Attack.ogg",
+			"Imp_Enterplay": "SFX_GVG_045t_Imp_EnterPlay.ogg",
+			"Imp_Death": "SFX_GVG_045t_Imp_Death.ogg"
+		},
 		"text": "Deal $2-$4 damage to a minion. Summon a 1/1 Imp for each damage dealt.",
 		"cardClass": "WARLOCK",
 		"rarity": "Rare"
@@ -64005,6 +64548,7 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"cardImage": "BOT_407.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -64803,6 +65347,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_600.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -65680,6 +66225,7 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"cardImage": "BOT_246.png",
 		"collectible": true,
 		"cost": 0,
 		"set": "Boomsday",
@@ -65699,6 +66245,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_436.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -66727,6 +67274,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_910.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -66811,6 +67359,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_251.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -66956,6 +67505,9 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Mana Tide Totem",
 		"id": "EX1_575",
+		"audio": {
+			"Attack_00": "SFX_EX1_575_Attack_00.ogg"
+		},
 		"text": "At the end of your turn, draw a card.",
 		"cardClass": "SHAMAN",
 		"rarity": "Rare"
@@ -67531,6 +68083,9 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Healing Totem",
 		"id": "NEW1_009",
+		"audio": {
+			"Attack_00": "SFX_NEW1_009_Attack_00.ogg"
+		},
 		"text": "At the end of your turn, restore #1 Health to all friendly minions.",
 		"cardClass": "SHAMAN",
 		"rarity": "Free"
@@ -67685,6 +68240,11 @@ var parseCardsText = {
 		"attack": 4,
 		"name": "Anubisath Sentinel",
 		"id": "LOE_061",
+		"audio": {
+			"061_Attack": "SFX_LOE_061_Attack.ogg",
+			"061_Death": "SFX_LOE_061_Death.ogg",
+			"061_Play": "SFX_LOE_061_Play.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Give a random friendly minion +3/+3.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -68116,6 +68676,11 @@ var parseCardsText = {
 		"attack": 8,
 		"name": "Frost Giant",
 		"id": "AT_120",
+		"audio": {
+			"Play_01": "SFX_AT_120_Play_01.ogg",
+			"Death_01": "SFX_AT_120_Death_01.ogg",
+			"Attack_01": "SFX_AT_120_Attack_01.ogg"
+		},
 		"text": "Costs (1) less for each time you used your Hero Power this game.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Epic"
@@ -68219,6 +68784,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_563.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -68564,6 +69130,11 @@ var parseCardsText = {
 		"attack": 8,
 		"name": "Clockwork Giant",
 		"id": "GVG_121",
+		"audio": {
+			"121_Enterplay": "SFX_GVG_121_EnterPlay.ogg",
+			"121_Death": "SFX_GVG_121_Death.ogg",
+			"121_Attack": "SFX_GVG_121_Attack.ogg"
+		},
 		"text": "Costs (1) less for each card in your opponent's hand.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Epic"
@@ -69418,6 +69989,11 @@ var parseCardsText = {
 		"artist": "Milivoj Ceran",
 		"name": "Map to the Golden Monkey",
 		"id": "LOE_019t",
+		"audio": {
+			"019t2_Attack": "SFX_LOE_019t2_Attack.ogg",
+			"019t2_Play": "SFX_LOE_019t2_Play.ogg",
+			"019t2_Death": "SFX_LOE_019t2_Death.ogg"
+		},
 		"text": "Shuffle the Golden Monkey into your deck. Draw a card.",
 		"dbfId": 2992,
 		"type": "Spell",
@@ -69782,6 +70358,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Captured Jormungar",
 		"id": "AT_102",
+		"audio": {
+			"102_Attack": "SFX_AT_102_Attack.ogg",
+			"102_Play": "SFX_AT_102_Play.ogg",
+			"102_Death": "SFX_AT_102_Death.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
@@ -70626,6 +71207,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_511t.png",
 		"playerClass": "Neutral",
 		"cost": 5,
 		"set": "Boomsday",
@@ -70720,6 +71302,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Guardian of Icecrown",
 		"id": "NAX15_03n",
+		"audio": {
+			"03n_Attack": "SFX_NAX15_03n_Attack.ogg",
+			"03n_Death": "SFX_NAX15_03n_Death.ogg",
+			"03n_Enterplay": "SFX_NAX15_03n_EnterPlay.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "NEUTRAL"
 	},
@@ -70997,6 +71584,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_042.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -71353,6 +71941,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Tundra Rhino",
 		"id": "DS1_178",
+		"audio": {
+			"178_Death": "SFX_DS1_178_Death.ogg",
+			"178_Attack": "SFX_DS1_178_Attack.ogg",
+			"178_Enterplay": "SFX_DS1_178_EnterPlay.ogg"
+		},
 		"text": "Your Beasts have <b>Charge</b>.",
 		"cardClass": "HUNTER",
 		"rarity": "Free"
@@ -71549,6 +72142,11 @@ var parseCardsText = {
 		"playerClass": "Hunter",
 		"name": "Unleash the Hounds",
 		"id": "EX1_538",
+		"audio": {
+			"538t_Attack": "SFX_EX1_538t_Attack.ogg",
+			"538t_Death": "SFX_EX1_538t_Death.ogg",
+			"538t_Enterplay": "SFX_EX1_538t_EnterPlay.ogg"
+		},
 		"text": "For each enemy minion, summon a 1/1 Hound with <b>Charge</b>.",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -71572,6 +72170,7 @@ var parseCardsText = {
 		"cardClass": "MAGE"
 	},
 	{
+		"cardImage": "BOT_107e.png",
 		"playerClass": "Neutral",
 		"set": "Boomsday",
 		"name": "Missile Launcher",
@@ -71961,6 +72560,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_402.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -72004,6 +72604,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_511.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -72742,6 +73343,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_296.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -72840,6 +73442,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_536.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -73175,6 +73778,9 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Stoneclaw Totem",
 		"id": "CS2_051",
+		"audio": {
+			"Attack_00": "SFX_CS2_051_Attack_00.ogg"
+		},
 		"text": "<b>Taunt</b>",
 		"cardClass": "SHAMAN",
 		"rarity": "Free"
@@ -73287,6 +73893,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_535.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -73852,6 +74459,7 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"cardImage": "BOT_507.png",
 		"collectible": true,
 		"cost": 8,
 		"set": "Boomsday",
@@ -73972,6 +74580,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_914.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -73996,6 +74605,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_544.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -74378,15 +74988,18 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOTA_BOSS_18h.png",
 		"set": "Boomsday",
 		"artist": "James Ryman",
 		"hideStats": true,
-		"name": "Crystalsmith Kangor",
 		"health": 30,
 		"mechanics": [
 			"APPEAR_FUNCTIONALLY_DEAD"
 		],
+		"dbfId": 50947,
+		"type": "Hero",
+		"playerClass": "Neutral",
+		"name": "Crystalsmith Kangor",
 		"id": "BOTA_BOSS_18h",
 		"audio": {
 			"Idle_01": "VO_BOTA_BOSS_18h_Male_Golem_Idle_01.ogg",
@@ -74413,8 +75026,6 @@ var parseCardsText = {
 			"Idle_06": "VO_BOTA_BOSS_18h_Male_Golem_Idle_06.ogg",
 			"Idle_07": "VO_BOTA_BOSS_18h_Male_Golem_Idle_07.ogg"
 		},
-		"dbfId": 50947,
-		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -75444,6 +76055,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_234.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -75877,6 +76489,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Explosive Sheep",
 		"id": "GVG_076",
+		"audio": {
+			"076_Attack": "SFX_GVG_076_Attack.ogg",
+			"076_Enterplay": "SFX_GVG_076_EnterPlay.ogg",
+			"076_Death": "SFX_GVG_076_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Deal 2 damage to all minions.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -76459,6 +77076,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_050.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -76551,6 +77169,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_257.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -77619,6 +78238,11 @@ var parseCardsText = {
 		"faction": "HORDE",
 		"name": "Jungle Panther",
 		"id": "EX1_017",
+		"audio": {
+			"017_Attack": "SFX_EX1_017_Attack.ogg",
+			"017_Death": "SFX_EX1_017_Death.ogg",
+			"017_Enterplay": "SFX_EX1_017_EnterPlay.ogg"
+		},
 		"text": "<b>Stealth</b>",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -77916,6 +78540,7 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"cardImage": "BOT_914h.png",
 		"playerClass": "Whizbang",
 		"set": "Boomsday",
 		"name": "Whizbang the Wonderful",
@@ -78155,6 +78780,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"cardImage": "BOT_067.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -79427,6 +80053,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_242.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -79913,6 +80540,7 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"cardImage": "BOT_256.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -80524,6 +81152,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Totem Golem",
 		"id": "AT_052",
+		"audio": {
+			"052_Play": "SFX_AT_052_Play.ogg",
+			"052_Attack": "SFX_AT_052_Attack.ogg",
+			"052_Death": "SFX_AT_052_Death.ogg"
+		},
 		"text": "<b>Overload:</b> (1)",
 		"cardClass": "SHAMAN",
 		"rarity": "Common"
@@ -80947,6 +81580,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_020.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -81036,6 +81670,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_529.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -81152,6 +81787,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Webspinner",
 		"id": "FP1_011",
+		"audio": {
+			"011_Attack": "SFX_FP1_011_Attack.ogg",
+			"011_Death": "SFX_FP1_011_Death.ogg",
+			"011_Enterplay": "SFX_FP1_011_EnterPlay.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Add a random Beast card to your hand.",
 		"cardClass": "HUNTER",
 		"rarity": "Common"
@@ -81168,6 +81808,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Boar",
 		"id": "CS2_boar",
+		"audio": {
+			"Boar_Enterplay": "SFX_CS2_boar_EnterPlay.ogg",
+			"Boar_Death": "SFX_CS2_boar_Death.ogg",
+			"Boar_Attack": "SFX_CS2_boar_Attack.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
@@ -81241,6 +81886,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Anodized Robo Cub",
 		"id": "GVG_030",
+		"audio": {
+			"030_Death": "SFX_GVG_030_Death.ogg",
+			"030_Enterplay": "SFX_GVG_030_EnterPlay.ogg",
+			"030_Attack": "SFX_GVG_030_Attack.ogg"
+		},
 		"text": "<b>Taunt</b>. <b>Choose One -</b>\n+1 Attack; or +1 Health.",
 		"cardClass": "DRUID",
 		"rarity": "Common"
@@ -81813,6 +82463,11 @@ var parseCardsText = {
 		"attack": 5,
 		"name": "Sneed's Old Shredder",
 		"id": "GVG_114",
+		"audio": {
+			"114_Enterplay": "SFX_GVG_114_EnterPlay.ogg",
+			"114_Death": "SFX_GVG_114_Death.ogg",
+			"114_Attack": "SFX_GVG_114_Attack.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Summon a random <b>Legendary</b> minion.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Legendary"
@@ -81833,6 +82488,9 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Wrath of Air Totem",
 		"id": "CS2_052",
+		"audio": {
+			"Attack_00": "SFX_CS2_052_Attack_00.ogg"
+		},
 		"text": "<b>Spell Damage +1</b>",
 		"cardClass": "SHAMAN",
 		"rarity": "Free"
@@ -81976,6 +82634,11 @@ var parseCardsText = {
 		"attack": 4,
 		"name": "Mechanical Yeti",
 		"id": "GVG_078",
+		"audio": {
+			"078_Enterplay": "SFX_GVG_078_EnterPlay.ogg",
+			"078_Attack": "SFX_GVG_078_Attack.ogg",
+			"078_Death": "SFX_GVG_078_Death.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Give each player a <b>Spare Part.</b>",
 		"entourage": [
 			"PART_007",
@@ -82069,6 +82732,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_102.png",
 		"collectible": true,
 		"cost": 6,
 		"set": "Boomsday",
@@ -82822,16 +83486,21 @@ var parseCardsText = {
 	},
 	{
 		"cardImage": "LOEA07_25.png",
-		"playerClass": "Neutral",
 		"cost": 1,
 		"set": "Loe",
 		"race": "MECHANICAL",
-		"attack": 3,
-		"name": "Mechanical Parrot",
 		"health": 6,
-		"id": "LOEA07_25",
 		"dbfId": 25275,
 		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 3,
+		"name": "Mechanical Parrot",
+		"id": "LOEA07_25",
+		"audio": {
+			"25_Death": "SFX_LOEA07_25_Death.ogg",
+			"25_Play": "SFX_LOEA07_25_Play.ogg",
+			"25_Attack": "SFX_LOEA07_25_Attack.ogg"
+		},
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -82968,6 +83637,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Spider Tank",
 		"id": "GVG_044",
+		"audio": {
+			"044_Death": "SFX_GVG_044_Death.ogg",
+			"044_Attack": "SFX_GVG_044_Attack.ogg",
+			"044_Enterplay": "SFX_GVG_044_EnterPlay.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
@@ -83619,6 +84293,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_283.png",
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
@@ -84786,6 +85461,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Haunted Creeper",
 		"id": "FP1_002",
+		"audio": {
+			"002_Death": "SFX_FP1_002_Death.ogg",
+			"002_Enterplay": "SFX_FP1_002_EnterPlay.ogg",
+			"002_Attack": "SFX_FP1_002_Attack.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Summon two 1/1 Spectral Spiders.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -85281,6 +85961,11 @@ var parseCardsText = {
 		"attack": 6,
 		"name": "Dread Infernal",
 		"id": "CS2_064",
+		"audio": {
+			"064_Death": "SFX_CS2_064_Death.ogg",
+			"064_Enterplay": "SFX_CS2_064_EnterPlay.ogg",
+			"064_Attack": "SFX_CS2_064_Attack.ogg"
+		},
 		"text": "<b>Battlecry:</b> Deal 1 damage to ALL other characters.",
 		"cardClass": "WARLOCK",
 		"rarity": "Free"
@@ -85320,6 +86005,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Goblin Auto-Barber",
 		"id": "GVG_023",
+		"audio": {
+			"023_Enterplay": "SFX_GVG_023_EnterPlay.ogg",
+			"023_Death": "SFX_GVG_023_Death.ogg",
+			"023_Attack": "SFX_GVG_023_Attack.ogg"
+		},
 		"text": "<b>Battlecry:</b> Give your weapon +1 Attack.",
 		"cardClass": "ROGUE",
 		"rarity": "Common"
@@ -86089,6 +86779,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOTA_BOSS_07p.png",
 		"playerClass": "Neutral",
 		"cost": 0,
 		"set": "Boomsday",
@@ -86874,6 +87565,7 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"cardImage": "BOT_423.png",
 		"collectible": true,
 		"cost": 7,
 		"set": "Boomsday",
@@ -87167,6 +87859,9 @@ var parseCardsText = {
 		"audio": {
 			"Death_04": "VO_GVG_072_Death_04.ogg",
 			"Play_01": "VO_GVG_072_Play_01.ogg",
+			"072_Death": "SFX_GVG_072_Death.ogg",
+			"072_Enterplay": "SFX_GVG_072_EnterPlay.ogg",
+			"072_Attack": "SFX_GVG_072_Attack.ogg",
 			"Attack_02": "VO_GVG_072_Attack_02.ogg"
 		},
 		"text": "Whenever a minion is healed, deal 1 damage to a random enemy.",
@@ -87204,6 +87899,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_565.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -87749,6 +88445,7 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"cardImage": "BOT_540.png",
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
@@ -88349,6 +89046,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_031.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -89212,6 +89910,11 @@ var parseCardsText = {
 		"attack": 2,
 		"name": "Deathcharger",
 		"id": "FP1_006",
+		"audio": {
+			"006_Enterplay": "SFX_FP1_006_EnterPlay.ogg",
+			"006_Attack": "SFX_FP1_006_Attack.ogg",
+			"006_Death": "SFX_FP1_006_Death.ogg"
+		},
 		"text": "<b>Charge. Deathrattle:</b> Deal 3 damage to your hero.",
 		"cardClass": "NEUTRAL"
 	},
@@ -91482,6 +92185,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"cardImage": "BOT_084.png",
 		"collectible": true,
 		"cost": 3,
 		"set": "Boomsday",
@@ -91679,6 +92383,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_087e.png",
 		"playerClass": "Rogue",
 		"set": "Boomsday",
 		"name": "Academic Espionage",
@@ -91867,15 +92572,18 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
-		"playerClass": "Neutral",
+		"cardImage": "BOTA_BOSS_04h.png",
 		"set": "Boomsday",
 		"artist": "L. Lullabi & K. Turovec",
 		"hideStats": true,
-		"name": "Stargazer Luna",
 		"health": 30,
 		"mechanics": [
 			"APPEAR_FUNCTIONALLY_DEAD"
 		],
+		"dbfId": 50933,
+		"type": "Hero",
+		"playerClass": "Neutral",
+		"name": "Stargazer Luna",
 		"id": "BOTA_BOSS_04h",
 		"audio": {
 			"Idle_01": "VO_BOTA_BOSS_04h_Female_Draenei_Idle_01.ogg",
@@ -91902,8 +92610,6 @@ var parseCardsText = {
 			"Idle_07": "VO_BOTA_BOSS_04h_Female_Draenei_Idle_07.ogg",
 			"Idle_08": "VO_BOTA_BOSS_04h_Female_Draenei_Idle_08.ogg"
 		},
-		"dbfId": 50933,
-		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -91931,6 +92637,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_434.png",
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
@@ -92017,6 +92724,7 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"cardImage": "BOT_568.png",
 		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
@@ -92300,6 +93008,11 @@ var parseCardsText = {
 		"attack": 0,
 		"name": "Summoning Portal",
 		"id": "EX1_315",
+		"audio": {
+			"Attack_00": "SFX_EX1_315_Attack_00.ogg",
+			"Death_00": "SFX_EX1_315_Death_00.ogg",
+			"Enterplay_00": "SFX_EX1_315_EnterPlay_00.ogg"
+		},
 		"text": "Your minions cost (2) less, but not less than (1).",
 		"cardClass": "WARLOCK",
 		"rarity": "Common"
@@ -92322,6 +93035,11 @@ var parseCardsText = {
 		"attack": 1,
 		"name": "Dreadsteed",
 		"id": "AT_019",
+		"audio": {
+			"019_Play": "SFX_AT_019_Play.ogg",
+			"019_Death": "SFX_AT_019_Death.ogg",
+			"019_Attack": "SFX_AT_019_Attack.ogg"
+		},
 		"text": "<b>Deathrattle:</b> At the end\n of the turn, summon a Dreadsteed.",
 		"cardClass": "WARLOCK",
 		"rarity": "Epic"
@@ -92344,6 +93062,11 @@ var parseCardsText = {
 		"attack": 4,
 		"name": "Piloted Shredder",
 		"id": "GVG_096",
+		"audio": {
+			"096_Death": "SFX_GVG_096_Death.ogg",
+			"096_Play": "SFX_GVG_096_Play.ogg",
+			"096_Attack": "SFX_GVG_096_Attack.ogg"
+		},
 		"text": "<b>Deathrattle:</b> Summon a random 2-Cost minion.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
@@ -92363,6 +93086,11 @@ var parseCardsText = {
 		"attack": 3,
 		"name": "Puddlestomper",
 		"id": "GVG_064",
+		"audio": {
+			"064_Death": "SFX_GVG_064_Death.ogg",
+			"064_Enterplay": "SFX_GVG_064_EnterPlay.ogg",
+			"064_Attack": "SFX_GVG_064_Attack.ogg"
+		},
 		"cardClass": "NEUTRAL",
 		"rarity": "Common"
 	},
