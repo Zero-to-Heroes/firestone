@@ -10,7 +10,7 @@
 		"description":"A Hearthtone companion to have in-game the information you want to know about your card collection and more",
 		"dock_button_title": "Firestone",
 		"icon":"IconMouseOver.png",
-		"icon_gray":"IconStore.png",
+		"icon_gray":"IconMouseNormal.png",
 		"launcher_icon": "launcher_icon.ico",
 		"splash_image": "Splash_icon.png"
 	},
