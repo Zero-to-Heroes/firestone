@@ -1,4 +1,4 @@
-import { Component, NgZone, ElementRef, HostListener } from '@angular/core';
+import { Component, NgZone, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
@@ -37,7 +37,7 @@ declare var ga: any;
 				</section>
 			</div>
 			<ul class="history">
-				<li *ngFor="let historyItem of shownHistory">
+				<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
 					<card-history-item [historyItem]="historyItem"></card-history-item>
 				</li>
 				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
@@ -56,9 +56,10 @@ declare var ga: any;
 			</ul>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
-export class CardHistoryComponent {
+export class CardHistoryComponent implements AfterViewInit {
 
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
@@ -73,6 +74,7 @@ export class CardHistoryComponent {
 	constructor(
 		private storage: CardHistoryStorageService,
 		private el: ElementRef,
+		private cdr: ChangeDetectorRef,
 		private events: Events) {
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {
@@ -83,6 +85,10 @@ export class CardHistoryComponent {
 				this.refreshContents();
 			}
 		});
+	}
+
+	ngAfterViewInit() {
+		this.cdr.detach();
 		this.refreshContents();
 	}
 
@@ -92,6 +98,10 @@ export class CardHistoryComponent {
 		}
 		this.refreshing = true;
 		console.log('request to load');
+		this.storage.countHistory((historySize) => {
+			this.totalHistoryLength = historySize;
+		})
+
 		this.storage.loadAll(
 			(result: CardHistory[]) => {
 				// console.log('loaded history', result);
@@ -99,12 +109,9 @@ export class CardHistoryComponent {
 				this.shownHistory = this.cardHistory;
 				this.refreshing = false;
 				this.filterView();
+				this.cdr.detectChanges();
 			},
 			this.limit);
-
-		this.storage.countHistory((historySize) => {
-			this.totalHistoryLength = historySize;
-		})
 	}
 
 	loadMore() {
@@ -114,6 +121,7 @@ export class CardHistoryComponent {
 				// console.log('loaded history', result);
 				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
+				this.cdr.detectChanges();
 			},
 			0);
 	}
@@ -121,6 +129,7 @@ export class CardHistoryComponent {
 	toggleShowOnlyNewCards() {
 		this.showOnlyNewCards = !this.showOnlyNewCards;
 		this.filterView();
+		this.cdr.detectChanges();
 	}
 
 	filterView() {
@@ -142,5 +151,9 @@ export class CardHistoryComponent {
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
+	}
+
+	trackById(index, history: CardHistory) {
+		return history.id;
 	}
 }

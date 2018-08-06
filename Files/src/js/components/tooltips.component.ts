@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, AfterViewInit } from '@angular/core';
+import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
@@ -11,6 +11,7 @@ declare var overwolf: any;
 	styleUrls: [`../../css/component/tooltip.component.scss`],
 	encapsulation: ViewEncapsulation.None,
   	template: `<img src={{image()}} *ngIf="cardId" [ngClass]="{'missing': missing, 'removing': removing}"/>`,
+	// changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Tooltip {
 
@@ -36,6 +37,7 @@ export class Tooltip {
 	template: `
 		<div class="tooltips"><ng-template #tooltips></ng-template></div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TooltipsComponent implements AfterViewInit {
 
@@ -44,10 +46,12 @@ export class TooltipsComponent implements AfterViewInit {
 
 	constructor(
 		private events: Events,
+		private cdr: ChangeDetectorRef,
 		private resolver: ComponentFactoryResolver) {
 
 		this.events.on(Events.SHOW_TOOLTIP).subscribe(
 			(data) => {
+				let start = Date.now();
 				this.destroy();
 
 				let cardId: string = data.data[0];
@@ -63,6 +67,8 @@ export class TooltipsComponent implements AfterViewInit {
 			    this.tooltip.instance.top = top + 'px';
 			    this.tooltip.instance.position = 'absolute';
 			    this.tooltip.instance.missing = !owned;
+				this.cdr.detectChanges();
+			    console.log('Created tooltip after', (Date.now() - start));
 			}
 		);
 
@@ -75,6 +81,7 @@ export class TooltipsComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
+		this.cdr.detach();
 		// https://blog.angularindepth.com/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error-e3fd9ce7dbb4
 		setTimeout(() => {
 		    // We create a factory out of the component we want to create
@@ -89,6 +96,7 @@ export class TooltipsComponent implements AfterViewInit {
 		if (this.tooltip) {
 			this.tooltip.instance.removing = true;
 			this.tooltip.instance.display = 'none';
+			this.cdr.detectChanges();
 		}
 	}
 }

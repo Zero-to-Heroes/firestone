@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, ElementRef, HostListener } from '@angular/core';
+import { Component, NgZone, Input, ElementRef, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 import { Events } from '../../services/events.service';
 
@@ -32,6 +32,7 @@ declare var ga: any;
 			<span class="date">{{creationDate}}</span>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class CardHistoryItemComponent {
@@ -71,10 +72,13 @@ export class CardHistoryItemComponent {
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
+		// const start = Date.now();
 		let rect = this.el.nativeElement.getBoundingClientRect();
 		let x = rect.left - rect.width + 120;
 		let y = rect.top + rect.height / 2;
 		this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true);
+		// console.log('broadcast event to show tooltip', (Date.now() - start));
+		// Completes after 1-2ms
 	}
 
 	@HostListener('mouseleave')
