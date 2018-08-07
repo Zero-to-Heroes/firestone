@@ -54,7 +54,7 @@ export class CardSearchComponent {
 	onSearchStringChange() {
 		this.showSearchResults = false;
 		// console.log('updating serach string', this.searchString);
-		if (this.searchString.length <= 2) {
+		if (this.searchString.length < 2) {
 			return;
 		}
 		this.updateSearchResults();
