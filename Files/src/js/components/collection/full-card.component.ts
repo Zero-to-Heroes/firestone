@@ -38,8 +38,8 @@ declare var overwolf: any;
 				<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
 					<span class="sub-title">Sound:</span>
 					<ul class="value">
-						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound.audio)">
-							<span>{{sound.name}}</span>
+						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound)">
+							<span class="label">{{sound.name}}</span>
 							<button class="i-30 brown-theme sound-button">
 								<svg class="svg-icon-fill">
 									<use xlink:href="/Files/assets/svg/sprite.svg#sound"/>
@@ -92,23 +92,29 @@ export class FullCardComponent {
 			});
 		})
 		if (card.audio) {
-			Object.keys(card.audio).forEach((key,index) => {
-			    this.audioClips.push({
-			    	name: card.audio[key].startsWith('SFX') ? key.split("_")[1] : key.split("_")[0],
-			    	file: card.audio[key],
-			    	audio: new Audio()
-			    });
-			    this.audioClips.forEach((sound) => {
-			    	sound.audio.src = `http://static.zerotoheroes.com/hearthstone/audio/${sound.file}`;
-			    	sound.audio.load();
-			    });
+			Object.keys(card.audio).forEach((key, index) => {
+				const audioClip = {
+					name: key,
+					files: [...card.audio[key]],
+					audios: []
+				}
+				for (let i = 0; i < audioClip.files.length; i++) {
+					let audio = new Audio();
+					audio.src = `http://static.zerotoheroes.com/hearthstone/audio/${audioClip.files[i]}`;
+					audio.load();
+					audioClip.audios.push(audio);
+				}
+				this.audioClips.push(audioClip);
 			});
 		}
 	}
 
-	playSound(audio) {
+	playSound(audioClip) {
 		this.cancelPlayingSounds();
-		audio.play();
+		audioClip.audios.forEach((audio) => {
+			console.log('playing', audio)
+			audio.play();
+		})
 	}
 
 	image() {
@@ -136,13 +142,17 @@ export class FullCardComponent {
 
 	private cancelPlayingSounds() {
 		this.previousClips.forEach((sound) => {
-			sound.audio.pause();
-			sound.audio.currentTime = 0;
-		})
+			sound.audios.forEach((audio) => {
+				audio.pause();
+				audio.currentTime = 0;
+			});
+		});
 		this.audioClips.forEach((sound) => {
-			sound.audio.pause();
-			sound.audio.currentTime = 0;
-		})
+			sound.audios.forEach((audio) => {
+				audio.pause();
+				audio.currentTime = 0;
+			});
+		});
 	}
 
 	private updateCardWithCollection(collection: Card[], card: SetCard) {

@@ -31,6 +31,10 @@
             &.audio {
                 flex-direction: column;
 
+                .label {
+                    text-transform: capitalize;
+                }
+
                 ul {
                     list-style: none;
                     display: flex;
