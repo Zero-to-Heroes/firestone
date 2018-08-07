@@ -28,13 +28,17 @@ declare var OwAd: any;
 					[displayType]="_menuDisplayType"
 					[selectedSet]="_selectedSet"
 					[selectedFormat]="_selectedFormat"
-					[selectedCardId]="fullCardId"
+					[selectedCardId]="selectedCard ? selectedCard.id : ''"
 					[searchString]="searchString">
 				</collection-menu>
 				<ng-container [ngSwitch]="_selectedView">
-					<sets *ngSwitchCase="'sets'" [selectedFormat]="_selectedFormat"></sets>
-					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet" [searchString]="searchString"></cards>
-					<full-card *ngSwitchCase="'card-details'" class="full-card" [cardId]="fullCardId"></full-card>
+					<sets *ngSwitchCase="'sets'" 
+							[selectedFormat]="_selectedFormat"
+							[standardSets]="standardSets"
+							[wildSets]="wildSets">
+					</sets>
+					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_" [searchString]="searchString"></cards>
+					<full-card *ngSwitchCase="'card-details'" class="full-card" [selectedCard]="selectedCard"></full-card>
 				</ng-container>
 			</section>
 			<section class="secondary">
@@ -71,18 +75,22 @@ declare var OwAd: any;
 // 7.1.1.17994
 export class CollectionComponent {
 
-	_menuDisplayType = 'menu';
-	_selectedView = 'sets';
+	standardSets: Set[];
+	wildSets: Set[];
+
+	_menuDisplayType: string = 'menu';
+	_selectedView: string = 'sets';
 	_selectedSet: Set;
 	_selectedFormat: string;
 	searchString: string;
-	_viewState = 'shown';
-	_cardList: SetCard[];
-	fullCardId: string;
+	_viewState: string = 'shown';
+	_cardList: ReadonlyArray<SetCard>;
+	selectedCard: SetCard;
 
 	private windowId: string;
 	private adRef;
 	private adInit = false;
+	private refreshing = false;
 
 	constructor(
 		private _events: Events,
@@ -109,8 +117,10 @@ export class CollectionComponent {
 			else {
 				console.log('refreshing ad', message.window_state);
 				this.refreshAds();
+				this.updateSets();
 			}
 		});
+		this.updateSets();
 
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
@@ -190,20 +200,28 @@ export class CollectionComponent {
 		}, COLLECTION_HIDE_TRANSITION_DURATION_IN_MS);
 	}
 
-	private selectCard(fullcardId: string) {
-		this.reset();
-		this._menuDisplayType = 'breadcrumbs';
-		this._selectedView = 'card-details';
-		this.fullCardId = fullcardId;
-		let newSet = this.cards.getSetFromCardId(this.fullCardId);
+	private selectCard(fullCardId: string) {
+		let newSet = this.cards.getSetFromCardId(fullCardId);
 		// console.log('should update set', newSet, this._selectedSet);
 		if (!this._selectedSet || this._selectedSet.id != newSet.id) {
-			this._selectedSet = this.cards.getSetFromCardId(this.fullCardId);
-			this.collectionManager.getCollection((collection: Card[]) => {
-				this.updateSet(collection, this._selectedSet);
-			})
+			this.buildSet(fullCardId).then((set) => {
+				this.reset();
+				this._menuDisplayType = 'breadcrumbs';
+				this._selectedView = 'card-details';
+				this._selectedSet = set;
+				this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
+				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+			});
 		}
-		this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+		else {
+			const oldSet = this._selectedSet;
+			this.reset();
+			this._selectedSet = oldSet;
+			this._menuDisplayType = 'breadcrumbs';
+			this._selectedView = 'card-details';
+			this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
+			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+		}
 	}
 
 	private refreshAds() {
@@ -251,22 +269,65 @@ export class CollectionComponent {
 		this._selectedSet =undefined;
 		this._selectedFormat = undefined;
 		this._cardList = undefined;
-		this.fullCardId = undefined;
+		this.selectedCard = undefined;
 		this.searchString = undefined;
 	}
 
-	private updateSet(collection: Card[], set: Set) {
-		console.log('updating set', set, collection)
-		set.allCards.forEach((card: SetCard) => {
-			let owned = collection.filter((collectionCard: Card) => collectionCard.id === card.id);
-			owned.forEach((collectionCard: Card) => {
-				card.ownedPremium = collectionCard.premiumCount;
-				card.ownedNonPremium = collectionCard.count;
+	private updateSets() {
+		if (this.refreshing) {
+			return;
+		}
+		this.refreshing = true;
+
+		this.collectionManager.getCollection((collection: Card[]) => {
+			this.buildSetsFromCollection(collection);
+			this.refreshing = false;
+		})
+	}
+
+	private buildSetsFromCollection(collection: Card[]) {
+		const standardSets = this.cards.getStandardSets();
+		this.standardSets = standardSets.map((set) => this.mergeSet(collection, set));
+		const wildSets = this.cards.getWildSets();
+		this.wildSets = wildSets.map((set) => this.mergeSet(collection, set));
+	}
+
+	private buildSet(fullCardId: string): Promise<Set> {
+		return new Promise<Set>((resolve) => {
+			this.collectionManager.getCollection((collection: Card[]) => {
+				console.log('building set from', fullCardId);
+				const set = this.cards.getSetFromCardId(fullCardId);
+				console.log('base set is', set);
+				const mergedSet = this.mergeSet(collection, set);
+				console.log('merged set is', mergedSet);
+				resolve(mergedSet);
 			})
 		})
+	}
 
-		set.ownedLimitCollectibleCards = set.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
-		set.ownedLimitCollectiblePremiumCards = set.allCards.map((card: SetCard) => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0);
-		console.log('updated set', set);
+	private mergeSet(collection: Card[], set: Set): Set {
+		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
+		const ownedLimitCollectibleCards = updatedCards
+			.map((card: SetCard) => card.getNumberCollected())
+			.reduce((c1, c2) => c1 + c2, 0);
+		const ownedLimitCollectiblePremiumCards = updatedCards
+			.map((card: SetCard) => card.getNumberCollectedPremium())
+			.reduce((c1, c2) => c1 + c2, 0);
+		return new Set(
+			set.id,
+			set.name,
+			set.standard,
+			updatedCards,
+			ownedLimitCollectibleCards,
+			ownedLimitCollectiblePremiumCards);
+	}
+
+	private mergeFullCards(collection: Card[], setCards: ReadonlyArray<SetCard>): SetCard[] {
+		return setCards.map((card: SetCard) => {
+			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
+			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
+			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
+			return new SetCard(card.id, card.name, card.rarity, ownedNonPremium, ownedPremium);
+		});
 	}
 }

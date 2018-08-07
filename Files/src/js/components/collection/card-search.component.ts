@@ -32,7 +32,7 @@ declare var ga: any;
 					placeholder="Search card..." />
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
-				<card-search-autocomplete-item *ngFor="let result of searchResults"
+				<card-search-autocomplete-item *ngFor="let result of searchResults; trackBy: trackById"
 					[fullString]="result.name"
 					[searchString]="searchString"
 					(click)="showCard(result)">
@@ -86,17 +86,20 @@ export class CardSearchComponent {
 		event.stopPropagation();
 	}
 
+	trackById(index, card: SetCard) {
+		return card.id;
+	}
+
 	private updateSearchResults() {
 		this.searchResults = this.cards.searchCards(this.searchString);
 		this.collectionManager.getCollection((collection: Card[]) => {
 			// console.log('retrieved collection', collection);
-			this.searchResults.forEach((card: SetCard) => {
+			this.searchResults = this.searchResults.map((card) => {
 				let collectionCard: Card = this.findCollectionCard(collection, card);
 				if (!collectionCard) {
 					return;
 				}
-				card.ownedPremium = collectionCard.premiumCount;
-				card.ownedNonPremium = collectionCard.count;
+				return new SetCard(card.id, card.name, card.rarity, collectionCard.count, collectionCard.premiumCount)
 			})
 			// console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;

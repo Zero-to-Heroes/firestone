@@ -6,6 +6,7 @@ import { Events } from '../../services/events.service';
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementSet } from '../../models/achievement-set';
+import { Achievement } from '../../models/achievement';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -74,7 +75,7 @@ export class AchievementsComponent {
 	_menuDisplayType = 'menu';
 	_selectedView = 'categories';
 	_selectedCategory: AchievementSet;
-	_achievementsList: CompletedAchievement[];
+	_achievementsList: ReadonlyArray<Achievement>;
 	achievementCategories: AchievementSet[];
 	_viewState = 'shown';
 

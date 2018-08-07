@@ -51,7 +51,7 @@ export class TooltipsComponent implements AfterViewInit {
 
 		this.events.on(Events.SHOW_TOOLTIP).subscribe(
 			(data) => {
-				let start = Date.now();
+				// let start = Date.now();
 				this.destroy();
 
 				let cardId: string = data.data[0];
@@ -68,7 +68,7 @@ export class TooltipsComponent implements AfterViewInit {
 			    this.tooltip.instance.position = 'absolute';
 			    this.tooltip.instance.missing = !owned;
 				this.cdr.detectChanges();
-			    console.log('Created tooltip after', (Date.now() - start));
+			    // console.log('Created tooltip after', (Date.now() - start));
 			}
 		);
 

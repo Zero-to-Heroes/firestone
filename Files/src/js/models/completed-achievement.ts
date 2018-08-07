@@ -1,10 +1,11 @@
 export class CompletedAchievement {
 
-	id: string;
-	numberOfCompletions: number = 0;
+	readonly id: string;
+	readonly numberOfCompletions: number = 0;
 
-	constructor(id: string) {
+	constructor(id: string, numberOfCompletions?: number) {
 		this.id = id;
+		this.numberOfCompletions = numberOfCompletions || 0;
 	}
 
 }

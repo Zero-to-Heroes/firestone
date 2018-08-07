@@ -25,15 +25,15 @@ declare var overwolf: any;
 				<h1>{{card.name}}</h1>
 				<div class="card-info class">
 					<span class="sub-title">Class:</span>
-					<span class="value">{{class()}}</span>
+					<span class="value">{{class}}</span>
 				</div>
 				<div class="card-info type">
 					<span class="sub-title">Type:</span>
-					<span class="value">{{type()}}</span>
+					<span class="value">{{type}}</span>
 				</div>
 				<div class="card-info set">
 					<span class="sub-title">Set:</span>
-					<span class="value">{{set()}}</span>
+					<span class="value">{{set}}</span>
 				</div>
 				<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
 					<span class="sub-title">Sound:</span>
@@ -61,8 +61,12 @@ export class FullCardComponent {
 
 	@Output() close = new EventEmitter();
 
-	card: any;
+	class: string;
+	type: string;
+	set: string;
 	audioClips: any[];
+	// TODO: get rid of this and use a typed model for our own components at least
+	card: any;
 
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
@@ -74,23 +78,12 @@ export class FullCardComponent {
 		private cards: AllCardsService) {
 	}
 
-	@Input('cardId') set cardId(cardId: string) {
+	@Input('selectedCard') set selectedCard(selectedCard: SetCard) {
 		this.previousClips = this.audioClips || [];
 		this.audioClips = [];
-		let card = this.cards.getCard(cardId);
-		console.log('setting full card', card);
-		this.collectionManager.getCollection((collection: Card[]) => {
-			card.ownedPremium = 0;
-			card.ownedNonPremium = 0;
-			this.updateCardWithCollection(collection, card);
-			card.owned = card.ownedPremium || card.ownedNonPremium;
-
-			this.ngZone.run(() => {
-				this.card = card;
-				console.log('set full card card', this.card, this.card.type);
-				this.events.broadcast(Events.HIDE_TOOLTIP);
-			});
-		})
+		this.events.broadcast(Events.HIDE_TOOLTIP);
+		let card = this.cards.getCard(selectedCard.id);
+		console.log('setting full card', card, selectedCard);
 		if (card.audio) {
 			Object.keys(card.audio).forEach((key, index) => {
 				const audioClip = {
@@ -107,6 +100,13 @@ export class FullCardComponent {
 				this.audioClips.push(audioClip);
 			});
 		}
+		card.ownedPremium = selectedCard.ownedPremium;
+		card.ownedNonPremium = selectedCard.ownedNonPremium;
+		card.owned = card.ownedPremium || card.ownedNonPremium;
+		this.class = card.playerClass == 'Neutral' ? 'All classes' : card.playerClass;
+		this.type = card.type;
+		this.set = this.cards.setName(card.set);
+		this.card = card;
 	}
 
 	playSound(audioClip) {
@@ -115,25 +115,6 @@ export class FullCardComponent {
 			console.log('playing', audio)
 			audio.play();
 		})
-	}
-
-	image() {
-		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
-	}
-
-	class() {
-		if (this.card.playerClass == 'Neutral') {
-			return 'All classes';
-		}
-		return this.card.playerClass;
-	}
-
-	type() {
-		return this.card.type;
-	}
-
-	set() {
-		return this.cards.setName(this.card.set);
 	}
 
 	closeWindow() {
@@ -153,15 +134,5 @@ export class FullCardComponent {
 				audio.currentTime = 0;
 			});
 		});
-	}
-
-	private updateCardWithCollection(collection: Card[], card: SetCard) {
-		for (let i = 0; i < collection.length; i++) {
-			let collectionCard = collection[i];
-			if (collectionCard.id == card.id) {
-				card.ownedPremium = collectionCard.premiumCount;
-				card.ownedNonPremium = collectionCard.count;
-			}
-		}
 	}
 }

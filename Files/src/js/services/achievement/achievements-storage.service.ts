@@ -42,25 +42,20 @@ export class AchievementsStorageService {
 				// console.log('loaded completed achievements', achievements);
 				const achievementSets = this.repository.getAchievementSets();
 				// console.log('loaded achievement sets', achievementSets);
-				achievementSets.forEach((achievementSet: AchievementSet) => {
-					this.aggregateAchievementSet(achievementSet, achievements);
-					// console.log('aggregated achievement set', achievementSet);
-				});
+				const aggregatedAchievementSets: AchievementSet[] = achievementSets.map((achievementSet) => this.aggregateAchievementSet(achievementSet, achievements));
 				// console.log('original achievements?', this.repository.getAchievementSets());
-				resolve(achievementSets);
+				resolve(aggregatedAchievementSets);
 			})
 		})
 	}
 
-	private aggregateAchievementSet(achievementSet: AchievementSet, achievements: CompletedAchievement[]) {
-		achievementSet.achievements.forEach((referenceAchievement: Achievement) => {
-			let completedAchievement = achievements
-					.filter(compl => compl.id == referenceAchievement.id)
-					.pop();
-			if (completedAchievement) {
-				console.log('completed achievement', completedAchievement);
-				referenceAchievement.numberOfCompletions = completedAchievement.numberOfCompletions;
-			}
-		});
+	private aggregateAchievementSet(achievementSet: AchievementSet, achievements: CompletedAchievement[]): AchievementSet {
+		const aggregatedAchievements: ReadonlyArray<Achievement> = achievementSet.achievements
+			.map((ref: Achievement) => {
+				let completedAchievement = achievements.filter(compl => compl.id == ref.id).pop();
+				const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
+				return new Achievement(ref.id, ref.name, ref.type, ref.cardId, numberOfCompletions);
+			});
+		return new AchievementSet(achievementSet.id, achievementSet.displayName, aggregatedAchievements);
 	}
 }

@@ -1,16 +1,25 @@
 export class Set {
-	id: string;
-	name: string;
-	standard: boolean;
-	allCards: SetCard[] = [];
+	readonly id: string;
+	readonly name: string;
+	readonly standard: boolean;
+	readonly allCards: ReadonlyArray<SetCard> = [];
 
-	ownedLimitCollectibleCards = 0;
-	ownedLimitCollectiblePremiumCards = 0;
+	readonly ownedLimitCollectibleCards: number = 0;
+	readonly ownedLimitCollectiblePremiumCards: number = 0;
 
-	constructor(id: string, name: string, isStandard: boolean) {
+	constructor(
+			id: string, 
+			name: string, 
+			isStandard: boolean, 
+			allCards?: SetCard[], 
+			ownedLimitCollectibleCards?: number, 
+			ownedLimitCollectiblePremiumCards?: number) {
 		this.id = id;
 		this.name = name;
 		this.standard = isStandard;
+		this.allCards = allCards ? [...allCards] : [];
+		this.ownedLimitCollectibleCards = ownedLimitCollectibleCards || 0;
+		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
 	}
 
 	numberOfLimitCollectibleCards(): number {
@@ -35,67 +44,69 @@ export class Set {
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
 
-	missingCards(rarity?: string): MissingCard[] {
-		return this.allCards
-			.filter((card) => !rarity || card.rarity.toLowerCase() === rarity)
-			.filter((card) => card.getNumberCollected() < card.getMaxCollectible())
-			.map(c => {
-				let newC: any = new SetCard(c.id, c.name, c.rarity);
-				newC.ownedPremium = c.ownedPremium;
-				newC.ownedNonPremium = c.ownedNonPremium;
-				switch (newC.rarity.toLowerCase()) {
-					case ('common'):
-						newC.sort = 'a';
-						break;
-					case ('rare'):
-						newC.sort = 'b';
-						break;
-					case ('epic'):
-						newC.sort = 'c';
-						break;
-					case ('legendary'):
-						newC.sort = 'd';
-						break;
-				}
-				return newC;
-			})
-			.sort((c1, c2) => {
-				if (c1.name > c2.name) {
-			        return 1;
-			    }
+	// missingCards(rarity?: string): MissingCard[] {
+	// 	return this.allCards
+	// 		.filter((card) => !rarity || card.rarity.toLowerCase() === rarity)
+	// 		.filter((card) => card.getNumberCollected() < card.getMaxCollectible())
+	// 		.map(c => {
+	// 			let newC: any = new SetCard(c.id, c.name, c.rarity);
+	// 			newC.ownedPremium = c.ownedPremium;
+	// 			newC.ownedNonPremium = c.ownedNonPremium;
+	// 			switch (newC.rarity.toLowerCase()) {
+	// 				case ('common'):
+	// 					newC.sort = 'a';
+	// 					break;
+	// 				case ('rare'):
+	// 					newC.sort = 'b';
+	// 					break;
+	// 				case ('epic'):
+	// 					newC.sort = 'c';
+	// 					break;
+	// 				case ('legendary'):
+	// 					newC.sort = 'd';
+	// 					break;
+	// 			}
+	// 			return newC;
+	// 		})
+	// 		.sort((c1, c2) => {
+	// 			if (c1.name > c2.name) {
+	// 		        return 1;
+	// 		    }
 
-			    if (c1.name < c2.name) {
-			        return -1;
-			    }
+	// 		    if (c1.name < c2.name) {
+	// 		        return -1;
+	// 		    }
 
-			    return 0;
-			})
-			.sort((c1, c2) => {
-				if (c1.sort > c2.sort) {
-			        return 1;
-			    }
+	// 		    return 0;
+	// 		})
+	// 		.sort((c1, c2) => {
+	// 			if (c1.sort > c2.sort) {
+	// 		        return 1;
+	// 		    }
 
-			    if (c1.sort < c2.sort) {
-			        return -1;
-			    }
+	// 		    if (c1.sort < c2.sort) {
+	// 		        return -1;
+	// 		    }
 
-			    return 0;
-			})
-			.map((card: any) => new MissingCard(card.id, card.name, card.getNumberCollected(), card.getMaxCollectible()));
-	}
+	// 		    return 0;
+	// 		})
+	// 		.map((card: any) => new MissingCard(card.id, card.name, card.getNumberCollected(), card.getMaxCollectible()));
+	// }
 }
 
 export class SetCard {
-	id: string;
-	name: string;
-	rarity: string;
-	ownedNonPremium = 0;
-	ownedPremium = 0;
+	readonly id: string;
+	readonly name: string;
+	readonly rarity: string;
+	readonly ownedNonPremium: number = 0;
+	readonly ownedPremium: number = 0;
 
-	constructor(id: string, name: string, rarity: string) {
+	constructor(id: string, name: string, rarity: string, ownedNonPremium?: number, ownedPremium?: number) {
 		this.id = id;
 		this.name = name;
 		this.rarity = rarity;
+		this.ownedNonPremium = ownedNonPremium || 0;
+		this.ownedPremium = ownedPremium || 0;
 	}
 
 	getNumberCollected(): number {
@@ -115,16 +126,16 @@ export class SetCard {
 	}
 }
 
-export class MissingCard {
-	id: string;
-	name: string;
-	collected: number;
-	maxCollectible: number;
+// export class MissingCard {
+// 	readonly id: string;
+// 	readonly name: string;
+// 	readonly collected: number;
+// 	readonly maxCollectible: number;
 
-	constructor(id: string, name: string, collected: number, maxCollectible: number) {
-		this.id = id;
-		this.name = name;
-		this.collected = collected;
-		this.maxCollectible = maxCollectible;
-	}
-}
+// 	constructor(id: string, name: string, collected: number, maxCollectible: number) {
+// 		this.id = id;
+// 		this.name = name;
+// 		this.collected = collected;
+// 		this.maxCollectible = maxCollectible;
+// 	}
+// }

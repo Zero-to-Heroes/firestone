@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Game } from '../models/game';
 import { GameEvent } from '../models/game-event';
 import { Events } from './events.service';
 import { LogListenerService } from './log-listener.service';
@@ -11,6 +10,7 @@ declare var overwolf: any;
 
 @Injectable()
 export class GameEvents {
+	
 	public allEvents = new EventEmitter<GameEvent>();
 	public newLogLineEvents = new EventEmitter<GameEvent>();
 	public onGameStart = new EventEmitter<GameEvent>();
@@ -19,7 +19,6 @@ export class GameEvents {
 
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
-	private game: Game;
 
 	constructor(
 		private events: Events,

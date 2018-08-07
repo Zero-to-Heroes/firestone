@@ -16,7 +16,6 @@ import { PassivePick } from './achievements/passive-pick';
 import { TreasurePick } from './achievements/treasure-pick';
 
 declare var parseCardsText;
-// declare var allAchievements;
 
 @Injectable()
 export class AchievementsRepository {
@@ -31,72 +30,39 @@ export class AchievementsRepository {
 		this.modulesLoaded.next(true);
 	}
 
-	private registerModules() {
-		console.log('allAchievements', allAchievements);
-		(<any>allAchievements)
-				.filter(achievement => achievement.type == 'dungeon_run_boss_encounter')
-				.map(achievement => [achievement, new BossEncounter(achievement)])
-				.forEach(([achievement, challenge]) => {
-					this.addToAchievementSet(achievement);
-					this.challengeModules.push(challenge);
-				});
-		(<any>allAchievements)
-				.filter(achievement => achievement.type == 'dungeon_run_boss_victory')
-				.map(achievement => [achievement, new BossVictory(achievement)])
-				.forEach(([achievement, challenge]) => {
-					this.addToAchievementSet(achievement);
-					this.challengeModules.push(challenge);
-				});
-		(<any>allAchievements)
-				.filter(achievement => achievement.type == 'monster_hunt_boss_encounter')
-				.map(achievement => [achievement, new BossEncounter(achievement)])
-				.forEach(([achievement, challenge]) => {
-					this.addToAchievementSet(achievement);
-					this.challengeModules.push(challenge);
-				});
-		(<any>allAchievements)
-				.filter(achievement => achievement.type == 'monster_hunt_boss_victory')
-				.map(achievement => [achievement, new BossVictory(achievement)])
-				.forEach(([achievement, challenge]) => {
-					this.addToAchievementSet(achievement);
-					this.challengeModules.push(challenge);
-				});
-
-		// for (let passiveIds of Data.ALL_PASSIVE_IDS) {
-		// 	this.achievementModules.push(new PassivePick("passive_" + passiveIds[0], passiveIds[0], passiveIds[1]));
-		// }
-		// for (let treasureIds of Data.ALL_TREASURE_IDS) {
-		// 	this.achievementModules.push(new TreasurePick("treasure_" + treasureIds[0], treasureIds[0], treasureIds[1]));
-		// }
-		console.log('[achievements] modules registered', this.challengeModules);
-	}
-
 	public getAchievementSets(): AchievementSet[] {
 		console.log('retrieving achievements sets', this.achievementSets);
 		return cloneDeep(this.achievementSets);
 	}
 
-	private addToAchievementSet(achievement: any) {
-		let theSet: AchievementSet;
-		for (const set of this.achievementSets) {
-			if (set.id == achievement.type) {
-				theSet = set;
-				break;
-			}
-		}
-		if (!theSet) {
-			theSet = new AchievementSet(achievement.type, this.displayName(achievement.type));
-			this.achievementSets.push(theSet);
-		}
-		const newAchievement = new Achievement();
-		newAchievement.id = achievement.id;
-		newAchievement.type = achievement.type;
-		newAchievement.cardId = achievement.bossId;
-		newAchievement.name = achievement.name;
-		theSet.achievements.push(newAchievement);
+	private registerModules() {
+		console.log('allAchievements', allAchievements)
+		const achievementTypes = [
+			{ type: 'dungeon_run_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement) },
+			{ type: 'dungeon_run_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement) },
+			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement) },
+			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement) },
+		];
+		achievementTypes.forEach((achievementType) => {
+			this.achievementSets.push(this.createAchievementSet(achievementType.type, achievementType.challengeCreationFn));
+		});
+		console.log('[achievements] achievementSets created', this.achievementSets);
+		console.log('[achievements] modules registered', this.challengeModules);
 	}
 
-	displayName(achievementType: string) {
+	private createAchievementSet(achievementType: string, challengeCreationFn: Function): AchievementSet {
+		const achievements: ReadonlyArray<Achievement> = (<any>allAchievements)
+			.filter(achievement => achievement.type == achievementType)
+			.map(achievement => [achievement, challengeCreationFn(achievement)])
+			.map(([achievement, challenge]) => {
+				this.challengeModules.push(challenge);
+				return achievement;
+			})
+			.map((achievement) => new Achievement(achievement.id, achievement.name, achievement.type, achievement.bossId));
+		return new AchievementSet(achievementType, this.displayName(achievementType), achievements);
+	}
+
+	private displayName(achievementType: string) {
 		switch (achievementType) {
 			case 'dungeon_run_boss_encounter':
 				return 'Dungeon Run - Boss Encounters';

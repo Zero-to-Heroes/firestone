@@ -7,9 +7,10 @@ declare var parseCardsText;
 
 export class BossEncounter implements Challenge {
 
-	private achievementId: string;
-	private bossId: string;
-	private bossDbfId: number;
+	private readonly achievementId: string;
+	private readonly bossId: string;
+	private readonly bossDbfId: number;
+
 	private completed = false;
 
 	constructor(achievement) {
@@ -19,7 +20,7 @@ export class BossEncounter implements Challenge {
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
-		if (this.completed) {
+		if (this.completed) {	
 			return;
 		}
 
@@ -27,22 +28,12 @@ export class BossEncounter implements Challenge {
 			return;
 		}
 
-		if (gameEvent.type === GameEvent.OPPONENT) {
+		if (gameEvent.type == GameEvent.OPPONENT) {
 			this.detectOpponentEvent(gameEvent, callback);
 			return;
 		}
-		// Temp fix until we have GEP with match info
-		// else if (gameEvent.type === GameEvent.NEW_LOG_LINE) {
-		// 	// console.log('new log line', gameEvent);
-		// 	if (gameEvent.data[0].indexOf(this.bossId) != -1) {
-		// 		console.log('Achievement unlocked!', this.achievementId, this.bossId);
-		// 		this.completed = true;
-		// 		callback();
-		// 	}
-		// 	return;
-		// }
 		// In case we miss the game start / end event, we check the info from memory
-		else if (gameEvent.type === GameEvent.MAYBE_DUNGEON_INFO_PICK) {
+		else if (gameEvent.type == GameEvent.MAYBE_DUNGEON_INFO_PICK) {
 			this.inspectMemory(gameEvent, callback);
 			return;
 		}

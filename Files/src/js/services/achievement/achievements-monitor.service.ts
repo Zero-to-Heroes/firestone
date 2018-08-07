@@ -1,6 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import { Game } from '../../models/game';
 import { GameEvent } from '../../models/game-event';
 import { CompletedAchievement } from '../../models/completed-achievement';
 
@@ -34,11 +33,6 @@ export class AchievementsMonitor {
 				this.handleEvent(gameEvent);
 			}
 		);
-		this.gameEvents.newLogLineEvents.subscribe(
-			(gameEvent: GameEvent) => {
-				this.handleEvent(gameEvent);
-			}
-		);
 		this.newAchievements.subscribe(
 			(newAchievement: CompletedAchievement) => {
 				console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
@@ -46,6 +40,7 @@ export class AchievementsMonitor {
 				// this.notifications.html(`<div class="message-container"><img src="${newAchievement.icon}"><div class="message">Achievement unlocked! ${newAchievement.title}</div></div>`)
 			}
 		);
+		console.log('listening for achievement completion events');
 	}
 
 	private handleEvent(gameEvent: GameEvent) {

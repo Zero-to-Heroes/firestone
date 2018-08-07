@@ -18,10 +18,10 @@ export class AchievementsRefereee {
 				unclaimed = true;
 			}
 			existingAchievement = existingAchievement || challenge.defaultAchievement();
-			existingAchievement.numberOfCompletions++;
-			this.achievementsStorage.saveAchievement(existingAchievement, (result) => {
+			const completedAchievement: CompletedAchievement = new CompletedAchievement(existingAchievement.id, existingAchievement.numberOfCompletions + 1);
+			this.achievementsStorage.saveAchievement(completedAchievement, (result) => {
 				console.log('[achievements] achievement saved', result);
-				callback(existingAchievement);
+				callback(completedAchievement);
 			});
 		})
 

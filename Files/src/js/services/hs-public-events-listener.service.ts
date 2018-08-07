@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from "@angular/http";
 
-import { Game } from '../models/game';
-
 declare var overwolf: any;
 declare var AWS: any;
 

@@ -111,20 +111,19 @@ export class AllCardsService {
 	}
 
 	private getSets(references, isStandard: boolean): Set[] {
-		let standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
-		parseCardsText.jsonDatabase.forEach((card) => {
-			let elligible = card.collectible;
-			elligible = elligible && card.set;
-			elligible = elligible && this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1;
+		const standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
+		return standardSets.map((set) => {
+			const setCards = this.getCollectibleSetCards(set.id);
+			return new Set(set.id, set.name, set.standard, setCards);
+		});
+	}
 
-			if (!elligible) return;
-
-			let set: Set = standardSets.find((set) => set.id === card.set.toLowerCase());
-			if (!set) return;
-
-			let setCard: SetCard = new SetCard(card.id, card.name, card.rarity.toLowerCase());
-			set.allCards.push(setCard);
-		})
-		return standardSets;
+	private getCollectibleSetCards(setId: string): SetCard[] {
+		return parseCardsText.jsonDatabase
+			.filter(card => card.collectible)
+			.filter(card => card.set)
+			.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
+			.filter(card => setId === card.set.toLowerCase())
+			.map(card => new SetCard(card.id, card.name, card.rarity.toLowerCase()));
 	}
 }

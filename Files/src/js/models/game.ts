@@ -1,7 +1,8 @@
 export class Game {
-	fullLogs: string = '';
-	matchInfo: any;
-	gameMode: any;
+
+	readonly fullLogs: string;
+	readonly matchInfo: any;
+	readonly gameMode: any;
 
 	public findPlayerFromName(name: string) {
 		console.log('finding player from name', this.matchInfo, name);

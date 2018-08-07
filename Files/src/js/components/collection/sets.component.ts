@@ -1,11 +1,6 @@
 import { Component, NgZone, OnInit, Input } from '@angular/core';
 
-import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { AllCardsService } from '../../services/all-cards.service';
-import { Events } from '../../services/events.service';
-
-import { Card } from '../../models/card';
-import { Set, SetCard } from '../../models/set';
+import { Set } from '../../models/set';
 
 declare var overwolf: any;
 
@@ -25,30 +20,13 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class SetsComponent {
 
+	@Input() standardSets: Set[];
+	@Input() wildSets: Set[];
+
 	showStandard = true;
 	showWild = true;
 
-	standardSets: Set[];
-	wildSets: Set[];
-	selectedSet: Set;
-
-	private refreshing = false;
-
-	constructor(private _events: Events, private collectionManager: CollectionManager, private cards: AllCardsService) {
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
-			}
-			// console.log('[sets] state changed sets', message);
-			if (message.window_state == 'normal') {
-				this.refreshContents();
-			}
-		});
-		this.refreshContents();
-	}
-
 	@Input('selectedFormat') set selectedFormat(format: string) {
-		// console.log('[sets] showing selected format', format);
 		switch (format) {
 			case 'standard':
 				this.showStandard = true;
@@ -62,41 +40,5 @@ export class SetsComponent {
 				this.showStandard = true;
 				this.showWild = true;
 		}
-	}
-
-	refreshContents() {
-		if (this.refreshing) {
-			return;
-		}
-		this.refreshing = true;
-		// console.log('[sets] sets', this.standardSets, this.wildSets);
-
-		this.collectionManager.getCollection((collection: Card[]) => {
-			// console.log('[sets] Retrieved collection')
-			this.standardSets = this.cards.getStandardSets();
-			this.wildSets = this.cards.getWildSets();
-			// Add the number of owned cards on each card in the standard set
-			this.standardSets.forEach((standardSet: Set) => {
-				this.updateSet(collection, standardSet);
-			})
-			this.wildSets.forEach((standardSet: Set) => {
-				this.updateSet(collection, standardSet);
-			})
-			this.refreshing = false;
-			// console.log('[sets] after adding owned cards', this.standardSets);
-		})
-	}
-
-	private updateSet(collection: Card[], set: Set) {
-		set.allCards.forEach((card: SetCard) => {
-			let owned = collection.filter((collectionCard: Card) => collectionCard.id === card.id);
-			owned.forEach((collectionCard: Card) => {
-				card.ownedPremium = collectionCard.premiumCount;
-				card.ownedNonPremium = collectionCard.count;
-			})
-		})
-
-		set.ownedLimitCollectibleCards = set.allCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
-		set.ownedLimitCollectiblePremiumCards = set.allCards.map((card: SetCard) => card.getNumberCollectedPremium()).reduce((c1, c2) => c1 + c2, 0);
 	}
 }
