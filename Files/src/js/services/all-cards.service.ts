@@ -57,10 +57,16 @@ export class AllCardsService {
 		return parseCardsText.jsonDatabase
 			.filter((card) => card.collectible)
 			.filter((card) => card.set != 'Hero_skins')
-			.filter((card) => card.type != 'Hero')
+			.filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) == -1)
 			.filter((card) => card.name)
 			.filter((card) => card.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1)
-			.map((card) => new SetCard(card.id, card.name, card.rarity.toLowerCase()));
+			.map((card) => {
+				let cardName = card.name;
+				if (card.type == 'Hero') {
+					cardName += ' (Hero)';
+				}
+				return new SetCard(card.id, cardName, card.rarity.toLowerCase())
+			});
 	}
 
 	public getCard(id: string): any {
