@@ -7,10 +7,7 @@ export class GameEvent {
 	public static readonly MAYBE_DUNGEON_INFO_PICK = 'MAYBE_DUNGEON_INFO_PICK';
 	public static readonly GAME_START = 'GAME_START';
 	public static readonly NEW_LOG_LINE = 'NEW_LOG_LINE';
-<<<<<<< HEAD
 	public static readonly WINNER = 'WINNER';
-=======
->>>>>>> 81b9c95... refactor: make collection model readonly
 	public static readonly GAME_END = 'GAME_END';
 
 	readonly type: string;

@@ -64,7 +64,7 @@ export class BossEncounter implements Challenge {
 	}
 
 	public getAchievementId() {
-		console.log('returning achievement id', this.achievementId, this);
+		// console.log('returning achievement id', this.achievementId, this);
 		return this.achievementId;
 	}
 

@@ -39,7 +39,7 @@ export class BossVictory implements Challenge {
 		let localPlayer = gameEvent.data[1];
 		let opponentPlayer = gameEvent.data[2];
 
-		if (opponentPlayer.CardId === this.bossId && localPlayer.id === winner.id) {
+		if (opponentPlayer.CardID === this.bossId && localPlayer.Id === winner.Id) {
 			console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			callback();
 		}
