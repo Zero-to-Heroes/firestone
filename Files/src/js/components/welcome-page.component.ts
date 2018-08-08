@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
@@ -25,11 +25,6 @@ declare var Crate: any;
 						</svg>
 					</i>
 					<div class="controls">
-						<!-- <button class="i-30 pink-button" (click)="showSettings()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
-							</svg>
-						</button> -->
 						<button class="i-30 pink-button" (click)="contactSupport()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
@@ -75,22 +70,14 @@ declare var Crate: any;
 			</i>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class WelcomePageComponent implements AfterViewInit {
 
-	// private emptyCollection = false;
 	private thisWindowId: string;
 	private crate;
 
 	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
-		// this.collectionManager.getCollection((collection) => {
-		// 	console.log('loaded collection', collection);
-		// 	if (!collection || collection.length == 0) {
-		// 		this.emptyCollection = true;
-		// 	}
-		// })
-
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.thisWindowId = result.window.id;
@@ -99,18 +86,22 @@ export class WelcomePageComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		setTimeout(() => {
-			this.crate = new Crate({
-				server:"187101197767933952",
-				channel:"446045705392357376"
-			});
-			this.crate.store.subscribe(() => {
-				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-					this.crate.hide();
-				}
-			});
-			this.crate.hide();
-		}, 100);
+		if (!Crate) {
+			setTimeout(() => {
+				this.ngAfterViewInit();
+			}, 20);
+			return;
+		}
+		this.crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376"
+		});
+		this.crate.store.subscribe(() => {
+			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+				this.crate.hide();
+			}
+		});
+		this.crate.hide();
 	}
 
 	@HostListener('mousedown', ['$event'])

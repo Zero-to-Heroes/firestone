@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 
@@ -53,16 +53,21 @@ declare var overwolf: any;
 			</div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class AppChoiceComponent {
+export class AppChoiceComponent implements AfterViewInit {
 
 	@Output() close = new EventEmitter();
 
 	dataLoaded = false;
 	noCollection = true;
 
-	constructor(private collectionManager: CollectionManager) {
+	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
+	}
+
+	ngAfterViewInit() {
+		this.cdr.detach();
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "WelcomeWindow") {
 				return;
@@ -80,6 +85,7 @@ export class AppChoiceComponent {
 			console.log('retrieved collection', collection);
 			this.noCollection = !collection || collection.length == 0;
 			this.dataLoaded = true;
+			this.cdr.detectChanges();
 		});
 	}
 

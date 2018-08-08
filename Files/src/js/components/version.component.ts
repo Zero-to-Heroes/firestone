@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 declare var overwolf: any;
 
@@ -8,22 +8,23 @@ declare var overwolf: any;
 	template: `
 		<div class="version-info">v.{{version}}</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class VersionComponent implements OnInit {
+export class VersionComponent implements AfterViewInit {
 
-	version;
+	version: string;
 
-	constructor(private ngZone: NgZone) {
+	constructor(private cdr: ChangeDetectorRef) {
 
 	}
 
-	ngOnInit() {
+	ngAfterViewInit() {
+		this.cdr.detach();
 		overwolf.extensions.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob', (result) => {
-			console.log('retrieved manifest', result);
-			this.ngZone.run(() => {
-				this.version = result.meta.version;
-			});
+			// console.log('retrieved manifest', result);
+			this.version = result.meta.version;
+			this.cdr.detectChanges();
 		})
 	}
 }

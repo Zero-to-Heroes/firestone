@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 @Component({
 	selector: 'social-media',
@@ -21,9 +21,18 @@ import { Component } from '@angular/core';
 			</button>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class SocialMediaComponent {
+export class SocialMediaComponent implements AfterViewInit {
+
+	constructor(private cdr: ChangeDetectorRef) {
+
+	} 
+	
+	ngAfterViewInit() {
+		this.cdr.detach();
+	}
 
 	openReddit() {
 		window.open('https://www.reddit.com/r/firestoneapp/');

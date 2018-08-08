@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
@@ -31,9 +31,10 @@ declare var overwolf: any;
 			<span class="sub-title sub-title-details" [innerHTML]="statusDetails"></span>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class HomeScreenInfoTextComponent {
+export class HomeScreenInfoTextComponent implements AfterViewInit {
 
 	dataLoaded = false;
 	importantAnnouncement;
@@ -45,8 +46,13 @@ export class HomeScreenInfoTextComponent {
 
 
 	constructor(private notificationService: RealTimeNotificationService,
+				private cdr: ChangeDetectorRef,
 				private collectionManager: CollectionManager) {
-		setTimeout(() => this.refresh(), 1000);
+	}
+
+	ngAfterViewInit() {
+		this.cdr.detach();
+		// setTimeout(() => this.refresh(), 1000);
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "WelcomeWindow") {
 				return;
@@ -65,6 +71,7 @@ export class HomeScreenInfoTextComponent {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				this.status = "Firestone now follows your Hearthstone session.";
 				this.dataLoaded = true;
+				this.cdr.detectChanges();
 			}
 			else {
 				this.status = "No Hearthstone session detected.";
@@ -77,9 +84,9 @@ export class HomeScreenInfoTextComponent {
 						this.statusDetails = "Choose an ability:";
 					}
 					this.dataLoaded = true;
+					this.cdr.detectChanges();
 				})
 			}
-
 		});
 	}
 
@@ -95,5 +102,6 @@ export class HomeScreenInfoTextComponent {
 				}
 			}
 		}
+		this.cdr.detectChanges();
 	}
 }
