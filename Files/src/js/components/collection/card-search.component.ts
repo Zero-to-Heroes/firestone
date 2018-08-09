@@ -1,4 +1,6 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { FormControl } from '@angular/forms'; 
+
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { AllCardsService } from '../../services/all-cards.service';
@@ -6,6 +8,7 @@ import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
 import { Card } from '../../models/card';
+import { debounceTime, map, distinctUntilChanged } from 'rxjs/operators';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -25,8 +28,7 @@ declare var ga: any;
 					</svg>
 				</i>
 				<input
-					[(ngModel)]="searchString"
-					(input)="onSearchStringChange()"
+					[formControl]="searchForm"
 					(mousedown)="onMouseDown($event)"
 					(blur)="onFocusLost()"
 					placeholder="Search card..." />
@@ -40,15 +42,28 @@ declare var ga: any;
 			</ul>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
-export class CardSearchComponent {
+export class CardSearchComponent implements AfterViewInit {
+
+	searchForm = new FormControl();
 
 	searchString: string;
 	searchResults: SetCard[] = [];
 	showSearchResults = false;
 
-	constructor(private cards: AllCardsService, private events: Events, private collectionManager: CollectionManager) {
+	constructor(private cards: AllCardsService, private events: Events, private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
+	}
+
+	ngAfterViewInit() {
+		this.cdr.detach();
+		this.searchForm.valueChanges
+			.pipe(debounceTime(200))
+			.pipe(distinctUntilChanged())
+			.subscribe(data => {
+				this.searchString = data;
+				this.onSearchStringChange();
+			});
 	}
 
 	onSearchStringChange() {
@@ -62,23 +77,24 @@ export class CardSearchComponent {
 
 	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this.searchString) {
-			console.log('validating search', this.searchResults, this.searchString);
+			// console.log('validating search', this.searchResults, this.searchString);
 
 			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
 			this.showSearchResults = false;
+			this.cdr.detectChanges();
 		}
 	}
 
 	showCard(result: SetCard) {
-		console.error('showing card when clicking on search proposition in search box - but what should actually happen?', result);
 		this.events.broadcast(Events.SHOW_CARD_MODAL, result.id);
 		this.events.broadcast(Events.HIDE_TOOLTIP, result.id);
 	}
 
 	onFocusLost() {
-		console.log('focus lost');
+		// console.log('focus lost');
 		setTimeout(() => {
 			this.showSearchResults = false;
+			this.cdr.detectChanges();
 		}, 500);
 	}
 
@@ -87,6 +103,7 @@ export class CardSearchComponent {
 	}
 
 	trackById(index, card: SetCard) {
+		// console.log('tracking by id', index, card);
 		return card.id;
 	}
 
@@ -101,8 +118,10 @@ export class CardSearchComponent {
 				}
 				return new SetCard(card.id, card.name, card.rarity, collectionCard.count, collectionCard.premiumCount)
 			})
+			.filter((card) => card);
 			// console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;
+			this.cdr.detectChanges();
 		})
 	}
 

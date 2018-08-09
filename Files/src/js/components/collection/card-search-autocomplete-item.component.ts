@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 import { Events } from '../../services/events.service';
 
@@ -12,6 +12,7 @@ import { Events } from '../../services/events.service';
 			<span class="no-match">{{last}}</span>
 		</li>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class CardSearchAutocompleteItemComponent implements OnInit {
