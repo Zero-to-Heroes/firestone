@@ -1,0 +1,28 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.empty-state {
+	@extend %empty-state;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	align-items: center;
+
+	.state-container {
+		margin: auto;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+
+		i {
+			margin-bottom: 30px;
+		}
+
+		.title {
+			@extend %empty-state-title;
+			margin-bottom: 15px;
+		}
+	}
+
+}

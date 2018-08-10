@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
+import { Component, NgZone, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -74,6 +74,7 @@ declare var overwolf: any;
 			</div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class SetComponent {

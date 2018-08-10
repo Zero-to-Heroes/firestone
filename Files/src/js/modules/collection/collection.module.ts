@@ -14,6 +14,7 @@ import { RealTimeNotificationsComponent }  from '../../components/real-time-noti
 import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
 
 import { CollectionComponent }  from '../../components/collection.component';
+import { CollectionEmptyStateComponent }  from '../../components/collection/collection-empty-state.component';
 import { CollectionMenuComponent }  from '../../components/collection/collection-menu.component';
 import { CardsComponent }  from '../../components/collection/cards.component';
 import { CardHistoryComponent }  from '../../components/collection/card-history.component';
@@ -75,6 +76,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		CardSearchComponent,
 		CardSearchAutocompleteItemComponent,
 		CollectionComponent,
+		CollectionEmptyStateComponent,
 		CollectionMenuComponent,
 		FullCardComponent,
 		MainWindowComponent,

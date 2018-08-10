@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, SimpleChanges, Directive, ElementRef, HostListener } from '@angular/core';
+import { Component, NgZone, Input, SimpleChanges, Directive, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -38,6 +38,7 @@ declare var overwolf: any;
 			</div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [
 		trigger('showPlaceholder', [
 			state('false',	style({
@@ -77,6 +78,7 @@ export class CardComponent {
 	constructor(
 		private el: ElementRef,
 		private events: Events,
+		private cdr: ChangeDetectorRef,
 		private cards: AllCardsService) {
 		// console.log('constructor CollectionComponent');
 	}
@@ -111,5 +113,6 @@ export class CardComponent {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
+		this.cdr.detectChanges();
 	}
 }

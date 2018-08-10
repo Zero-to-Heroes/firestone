@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
@@ -16,22 +16,33 @@ declare var overwolf: any;
 			<div class="category-container {{category.toLowerCase()}}">
 				<h2 class="category-title">{{category}}</h2>
 				<ol>
-					<li *ngFor="let set of sets" (click)="selectSet(set)"><set-view [cardSet]="set"></set-view></li>
+					<li *ngFor="let set of _sets; trackBy: trackById" (click)="selectSet(set)">
+						<set-view [cardSet]="set"></set-view>
+					</li>
 				</ol>
 			</div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class SetsContainer {
 
-	@Input() sets: Set[];
+	@Input() _sets: Set[];
 	@Input() category: string;
+
+	@Input() set sets(sets: Set[]) {
+		console.log('setting new sets', sets);
+		this._sets = sets;
+	}
 
 	constructor(private cards: AllCardsService, private _events: Events) {
 	}
 
 	selectSet(set: Set) {
 		this._events.broadcast(Events.SET_SELECTED, set);
+	}
+
+	trackById(index, set: Set) {
+		return set.id;
 	}
 }

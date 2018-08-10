@@ -1,4 +1,4 @@
-import { Component, NgZone, AfterViewInit } from '@angular/core';
+import { Component, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { CollectionManager } from '../services/collection/collection-manager.service';
@@ -37,7 +37,7 @@ declare var OwAd: any;
 							[standardSets]="standardSets"
 							[wildSets]="wildSets">
 					</sets>
-					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_" [searchString]="searchString"></cards>
+					<cards *ngSwitchCase="'cards'" [cardList]="_cardList" [set]="_selectedSet" [searchString]="searchString"></cards>
 					<full-card *ngSwitchCase="'card-details'" class="full-card" [selectedCard]="selectedCard"></full-card>
 				</ng-container>
 			</section>
@@ -57,6 +57,7 @@ declare var OwAd: any;
 			</section>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [
 		trigger('viewState', [
 			state('hidden',	style({
@@ -73,7 +74,7 @@ declare var OwAd: any;
 	]
 })
 // 7.1.1.17994
-export class CollectionComponent {
+export class CollectionComponent implements AfterViewInit {
 
 	standardSets: Set[];
 	wildSets: Set[];
@@ -96,8 +97,13 @@ export class CollectionComponent {
 		private _events: Events,
 		private cards: AllCardsService,
 		private collectionManager: CollectionManager,
+		private cdr: ChangeDetectorRef, 
 		private ngZone: NgZone) {
+	}
+
+	ngAfterViewInit() {
 		ga('send', 'event', 'collection', 'show');
+		this.cdr.detach();
 
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success") {
@@ -113,6 +119,7 @@ export class CollectionComponent {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
+				this.cdr.detectChanges();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -120,7 +127,6 @@ export class CollectionComponent {
 				this.updateSets();
 			}
 		});
-		this.updateSets();
 
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
@@ -133,6 +139,7 @@ export class CollectionComponent {
 					this._selectedSet = data.data[0];
 					this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 					this._cardList = this._selectedSet.allCards;
+					// this.cdr.detectChanges();
 				});
 			}
 		)
@@ -182,14 +189,17 @@ export class CollectionComponent {
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received', message, this.windowId);
 			if (message.id === 'click-card') {
-				this.ngZone.run(() => {
+				// this.ngZone.run(() => {
+				// this.transitionState(() => {
 					this.selectCard(message.content);
 					overwolf.windows.restore(this.windowId);
-				})
+					// this.cdr.detectChanges();
+				// })
 			}
 		});
 
 		this.refreshAds();
+		this.updateSets();
 	}
 
 	private transitionState(changeStateCallback: Function) {
@@ -197,6 +207,7 @@ export class CollectionComponent {
 		setTimeout(() => {
 			changeStateCallback();
 			this._viewState = "shown";
+			this.cdr.detectChanges();
 		}, COLLECTION_HIDE_TRANSITION_DURATION_IN_MS);
 	}
 
@@ -211,6 +222,7 @@ export class CollectionComponent {
 				this._selectedSet = set;
 				this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
 				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+				this.cdr.detectChanges();
 			});
 		}
 		else {
@@ -221,6 +233,7 @@ export class CollectionComponent {
 			this._selectedView = 'card-details';
 			this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
 			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+			this.cdr.detectChanges();
 		}
 	}
 
@@ -282,6 +295,8 @@ export class CollectionComponent {
 		this.collectionManager.getCollection((collection: Card[]) => {
 			this.buildSetsFromCollection(collection);
 			this.refreshing = false;
+			console.log('sets updated', this.standardSets, this.wildSets);
+			this.cdr.detectChanges();
 		})
 	}
 

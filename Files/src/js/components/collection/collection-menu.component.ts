@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, HostListener, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { Set } from '../../models/set';
 
@@ -34,6 +34,7 @@ declare var overwolf: any;
 			</ng-container>
 		</ng-container>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class CollectionMenuComponent {

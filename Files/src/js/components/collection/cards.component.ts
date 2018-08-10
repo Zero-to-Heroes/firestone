@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IOption } from 'ng-select';
@@ -29,6 +29,8 @@ declare var overwolf: any;
 					[options]="selectOptions"
 					[(ngModel)]="_activeFilter"
 					(selected)="selectFilter($event)"
+					(opened)="refresh()"
+					(closed)="refresh()"
 					[noFilter]="1">
 					<ng-template
 				        #optionTemplate
@@ -47,54 +49,7 @@ declare var overwolf: any;
 					<card-view [card]="card">/</card-view>
 				</li>
 			</ul>
-			<!-- Show screen when you have completed a set -->
-			<section class="empty-state no-missing-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_DONT_OWN">
-				<div class="state-container">
-					<i class="i-238X167 pale-pink-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"/>
-						</svg>
-					</i>
-					<span class="title">This set is complete and you have it all!</span>
-					<span class="subtitle">Keep up the good work.</span>
-				</div>
-			</section>
-			<!-- Show screen when you have no card in a set -->
-			<section class="empty-state no-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_OWN">
-				<div class="state-container">
-					<i class="i-167X143 pale-pink-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration"/>
-						</svg>
-					</i>
-					<span class="title">No cards from this set yet!</span>
-					<span class="subtitle">Don't worry, keep playing and get new packs.</span>
-				</div>
-			</section>
-			<!-- Show screen when you have no golden card in a set -->
-			<section class="empty-state no-golden-card-in-set" *ngIf="_set && _activeCards.length == 0 && _activeFilter == FILTER_GOLDEN_OWN">
-				<div class="state-container">
-					<i class="i-121x147 pale-pink-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration"/>
-						</svg>
-					</i>
-					<span class="title">No golden cards from this set yet!</span>
-					<span class="subtitle">Don't worry, keep playing and get these shiny friends.</span>
-				</div>
-			</section>
-			<!-- Show screen when no result in search -->
-			<section class="empty-state no-search-result" *ngIf="_activeCards.length == 0 && _searchString">
-				<div class="state-container">
-					<i class="i-110X86 pale-pink-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
-						</svg>
-					</i>
-					<span class="title">Oh No! Nothing Matches: "{{_searchString}}"</span>
-					<span class="subtitle">Don't give up - check the spelling or try less specific terms.</span>
-				</div>
-			</section>
+			<collection-empty-state [set]="_set" [activeFilter]="_activeFilter" [searchString]="_searchString" *ngIf="_activeCards.length == 0"></collection-empty-state>
 			<ul class="pagination" *ngIf="_numberOfPages > 1">
 				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">
 					<i class="i-30">
@@ -114,6 +69,7 @@ declare var overwolf: any;
 			</ul>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardsComponent implements AfterViewInit {
 
@@ -124,7 +80,7 @@ export class CardsComponent implements AfterViewInit {
 	readonly FILTER_DONT_OWN = 'dontown';
 	readonly FILTER_ALL = 'all';
 
-	readonly selectOptions: Array<IOption> = [
+	selectOptions: Array<IOption> = [
 		{label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN},
 		{label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN},
 		{label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN},
@@ -140,21 +96,12 @@ export class CardsComponent implements AfterViewInit {
 	_currentPage = 0;
 	_pages: number[] = [];
 	_activeFilter = this.FILTER_ALL;
-	// private _showRarities = false;
-	// private showMissingCards = false;
 
-	constructor(private cards: AllCardsService, private elRef: ElementRef) {
+	constructor(private cards: AllCardsService, private elRef: ElementRef, private cdr: ChangeDetectorRef) {
 
 	}
 
 	ngAfterViewInit() {
-		// let toggleEl: HTMLElement = this.elRef.nativeElement.querySelector('.toggle');
-		// toggleEl.innerHTML =
-		// 	`<i class="i-30">
-		// 		<svg class="svg-icon-fill">
-		// 			<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
-		// 		</svg>
-		// 	</i>`;
 		let singleEl: HTMLElement = this.elRef.nativeElement.querySelector('.single');
 		let caretEl = singleEl.appendChild(document.createElement('i'));
 		caretEl.innerHTML =
@@ -188,6 +135,10 @@ export class CardsComponent implements AfterViewInit {
 		this.updateShownCards();
 	}
 
+	refresh() {
+		this.cdr.detectChanges();
+	}
+
 	previousPage() {
 		this._currentPage = Math.max(0, this._currentPage - 1);
 		this.updateShownCards();
@@ -203,6 +154,10 @@ export class CardsComponent implements AfterViewInit {
 		this.updateShownCards();
 	}
 
+	trackByCardId(card: Card, index: number) {
+		return card.id;
+	}
+
 	private updateShownCards() {
 		// console.log('updating card list', this._cardList);
 		this._cardsIndexRangeStart = this._currentPage * this.MAX_CARDS_DISPLAYED_PER_PAGE;
@@ -216,8 +171,9 @@ export class CardsComponent implements AfterViewInit {
 		this._activeCards = filteredCards.slice(
 			this._cardsIndexRangeStart,
 			this._cardsIndexRangeStart + this.MAX_CARDS_DISPLAYED_PER_PAGE);
-		// console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
-		// console.log('active cards', this._activeCards);
+			console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
+			console.log('active cards', this._activeCards);
+		this.cdr.detectChanges();
 	}
 
 	private filterFunction() {

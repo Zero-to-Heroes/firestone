@@ -22,6 +22,11 @@
 	}
 }
 
+collection-empty-state {
+    flex-grow: 1;
+    display: flex;
+}
+
 .show-filter {
 	@extend %search-active;
     position: absolute;
@@ -94,10 +99,9 @@
 					}
 				}
 
-				&.highlighted {
+				&.highlighted, &:hover {
 					// grey03
 					background-color: rgba(120, 95, 107, 0.4);
-
 				}
 			}
 		}
@@ -120,32 +124,6 @@
     	margin-right: 15px;
     	margin-bottom: 4px;
     }
-}
-
-.empty-state {
-	@extend %empty-state;
-	flex-grow: 1;
-	display: flex;
-	flex-direction: column;
-	justify-items: center;
-	align-items: center;
-
-	.state-container {
-		margin: auto;
-	    display: flex;
-	    flex-direction: column;
-	    align-items: center;
-
-		i {
-			margin-bottom: 30px;
-		}
-
-		.title {
-			@extend %empty-state-title;
-			margin-bottom: 15px;
-		}
-	}
-
 }
 
 .pagination {

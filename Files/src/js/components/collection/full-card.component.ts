@@ -1,4 +1,4 @@
-import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 import { AllCardsService } from '../../services/all-cards.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
@@ -55,6 +55,7 @@ declare var overwolf: any;
 			</div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class FullCardComponent {

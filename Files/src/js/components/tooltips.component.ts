@@ -10,14 +10,15 @@ declare var overwolf: any;
   	selector: 'tooltip',
 	styleUrls: [`../../css/component/tooltip.component.scss`],
 	encapsulation: ViewEncapsulation.None,
-  	template: `<img src={{image()}} *ngIf="cardId" [ngClass]="{'missing': missing, 'removing': removing}"/>`,
+	template: `<img src={{image()}} *ngIf="cardId" [ngClass]="{'missing': missing, 'removing': removing}"/>`,
+	// I don't know how to make this work with OnPush
 	// changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Tooltip {
 
 	@Input() cardId: string;
 	@Input() missing: boolean;
-	public removing: boolean;
+	@Input() removing: boolean;
 
 	@HostBinding('style.left') left: string;
 	@HostBinding('style.top') top: string;

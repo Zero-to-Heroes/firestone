@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, SimpleChanges } from '@angular/core';
+import { Component, NgZone, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { AllCardsService } from '../../services/all-cards.service';
@@ -19,6 +19,7 @@ declare var overwolf: any;
 			</div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class RarityComponent {

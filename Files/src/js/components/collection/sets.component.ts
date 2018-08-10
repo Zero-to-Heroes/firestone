@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, Input } from '@angular/core';
+import { Component, NgZone, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { Set } from '../../models/set';
 
@@ -16,8 +16,8 @@ declare var overwolf: any;
 			<sets-container [sets]="wildSets" [category]="'Wild'" *ngIf="showWild"></sets-container>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class SetsComponent {
 
 	@Input() standardSets: Set[];
