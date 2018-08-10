@@ -31,6 +31,7 @@ $ cd Files
 $ npm install  # You might need to have node installed
 # Then go into node_modules/angular2-indexeddb and remove all the .ts files (there are 4-5 of them)
 # Clone ZeroToHeroes/ng-select and install this version locally and copy it to node_modules (hopefully not for long)
+# Same for ZeroToHeroes/angular2-notifications and install this version locally and copy it to node_modules (hopefully not for long)
 $ npm run dev # For development
 $ npm run build # For release
 ```
