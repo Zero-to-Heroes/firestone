@@ -4,6 +4,7 @@ import { DebugService } from '../../services/debug.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
+declare var ga: any;
 declare var overwolf: any;
 declare var adsReady: any;
 declare var OwAd: any;
@@ -189,6 +190,9 @@ export class LoadingComponent implements AfterViewInit {
 	};
 
 	closeWindow(quitApp: boolean) {
+		if (this.loading) {
+			ga('send', 'event', 'loading', 'closed-before-complete');
+		}
 		// If game is not running, we close all other windows
 		overwolf.games.getRunningGameInfo((res: any) => {
 			overwolf.windows.close(this.thisWindowId);
