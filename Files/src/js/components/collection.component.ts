@@ -1,4 +1,4 @@
-import { Component, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { CollectionManager } from '../services/collection/collection-manager.service';
@@ -97,8 +97,7 @@ export class CollectionComponent implements AfterViewInit {
 		private _events: Events,
 		private cards: AllCardsService,
 		private collectionManager: CollectionManager,
-		private cdr: ChangeDetectorRef, 
-		private ngZone: NgZone) {
+		private cdr: ChangeDetectorRef) {
 	}
 
 	ngAfterViewInit() {
@@ -119,7 +118,7 @@ export class CollectionComponent implements AfterViewInit {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
-				this.cdr.detectChanges();
+				// this.cdr.detectChanges();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -207,7 +206,9 @@ export class CollectionComponent implements AfterViewInit {
 		setTimeout(() => {
 			changeStateCallback();
 			this._viewState = "shown";
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}, COLLECTION_HIDE_TRANSITION_DURATION_IN_MS);
 	}
 
