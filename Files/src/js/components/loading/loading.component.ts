@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterViewInit } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
 
@@ -64,7 +64,7 @@ declare var Crate: any;
 					</i>
 					<div class="sub-title" *ngIf="!loading">
 						<span>Hit</span>
-						<div class="hotkey" [innerHTML]="splitHotkey()"></div>
+						<div class="hotkey" [innerHTML]="hotKey"></div>
 						<span>to view the app</span>
 					</div>
 					<div class="ads-container">
@@ -102,21 +102,22 @@ declare var Crate: any;
 			</i>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class LoadingComponent implements AfterViewInit {
 
 	title: string = 'Getting ready';
 	loading = true;
-	hotkey = 'Alt+C';
-
+	hotKey: string;
+	
+	// private hotkey = 'Alt+C';
 	private thisWindowId: string;
 	private adRef;
 	private crate;
 	private adInit;
 
-
-	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef) {
+	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef, private cdr: ChangeDetectorRef) {
 		console.log('in loading constructor');
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
@@ -129,10 +130,9 @@ export class LoadingComponent implements AfterViewInit {
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received', message);
 			if (message.id === 'ready') {
-				this.ngZone.run(() => {
-					this.title = 'Your abilities are ready!';
-					this.loading = false;
-				})
+				this.title = 'Your abilities are ready!';
+				this.loading = false;
+				this.cdr.detectChanges();
 			}
 		});
 		overwolf.windows.onStateChanged.addListener((message) => {
@@ -143,6 +143,7 @@ export class LoadingComponent implements AfterViewInit {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
+				this.cdr.detectChanges();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -153,34 +154,32 @@ export class LoadingComponent implements AfterViewInit {
 		overwolf.settings.getHotKey('collection', (result) => {
 			console.log('hot key is', result);
 			if (result.status == 'success') {
-				this.hotkey = result.hotkey;
+				this.hotKey = this.splitHotkey(result.hotkey);
+				this.cdr.detectChanges();
 			}
 		});
 	}
 
 	ngAfterViewInit() {
+		this.cdr.detach();
 		this.refreshAds();
 
-		setTimeout(() => {
-			this.crate = new Crate({
-				server:"187101197767933952",
-				channel:"446045705392357376"
-			});
-			this.crate.store.subscribe(() => {
-				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-					this.crate.hide();
-				}
-			});
-			this.crate.hide();
-		}, 100);
-	}
-
-	splitHotkey(): string {
-		let split = this.hotkey.split('+');
-		// console.log('split hot key', split);
-		return split
-			.map((splitItem) => `<span class="key">${splitItem}</span>`)
-			.join('<span class="plus">+</span>');
+		if (!Crate) {
+			setTimeout(() => {
+				this.ngAfterViewInit();
+			}, 20);
+			return;
+		}
+		this.crate = new Crate({
+			server: "187101197767933952",
+			channel: "446045705392357376"
+		});
+		this.crate.store.subscribe(() => {
+			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+				this.crate.hide();
+			}
+		});
+		this.crate.hide();
 	}
 
 
@@ -214,7 +213,15 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		this.crate.toggle(true);
 		this.crate.show();
- 	}
+	}
+
+	private splitHotkey(hotkey: string): string {
+		let split = hotkey.split('+');
+		// console.log('split hot key', split);
+		return split
+			.map((splitItem) => `<span class="key">${splitItem}</span>`)
+			.join('<span class="plus">+</span>');
+	}
 
 	private refreshAds() {
 		if (this.adInit) {
@@ -237,6 +244,7 @@ export class LoadingComponent implements AfterViewInit {
 					if (result.window.isVisible) {
 						console.log('init OwAd');
 						this.adRef = new OwAd(document.getElementById("ad-div"));
+						this.cdr.detectChanges();
 					}
 					this.adInit = false;
 				}
@@ -245,6 +253,7 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		console.log('refreshing ads');
 		this.adRef.refreshAd();
+		this.cdr.detectChanges();
 	}
 
 	private removeAds() {
@@ -253,6 +262,7 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		console.log('removing ads');
 		this.adRef.removeAd();
+		this.cdr.detectChanges();
 	}
 
 	private positionWindow() {
