@@ -213,28 +213,16 @@ export class CollectionComponent implements AfterViewInit {
 
 	private selectCard(fullCardId: string) {
 		let newSet = this.cards.getSetFromCardId(fullCardId);
-		// console.log('should update set', newSet, this._selectedSet);
-		if (!this._selectedSet || this._selectedSet.id != newSet.id) {
-			this.buildSet(fullCardId).then((set) => {
-				this.reset();
-				this._menuDisplayType = 'breadcrumbs';
-				this._selectedView = 'card-details';
-				this._selectedSet = set;
-				this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
-				this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
-				this.cdr.detectChanges();
-			});
-		}
-		else {
-			const oldSet = this._selectedSet;
+		// Always rebuild the set to update the card owned information
+		this.buildSet(fullCardId).then((set) => {
 			this.reset();
-			this._selectedSet = oldSet;
 			this._menuDisplayType = 'breadcrumbs';
 			this._selectedView = 'card-details';
+			this._selectedSet = set;
 			this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
 			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 			this.cdr.detectChanges();
-		}
+		});
 	}
 
 	private refreshAds() {
