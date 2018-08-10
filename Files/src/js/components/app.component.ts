@@ -26,7 +26,7 @@ declare var ga: any;
 // 7.1.1.17994
 export class AppComponent {
 
-	private static readonly STATES = ['INIT', 'STREAMING_LOGS', 'READY'];
+	private static readonly STATES = ['INIT', 'READY'];
 	private static readonly LOADING_SCREEN_DURATION = 10000;
 
 	private currentState = 'INIT';
@@ -41,11 +41,6 @@ export class AppComponent {
 		private collectionDb: IndexedDbService,
 		private achievementsDb: AchievementsDb,
 		private logStatusService: LogStatusService) {
-
-		this.events.on(Events.STREAMING_LOG_FILE)
-			.subscribe(event => {
-				this.currentState = 'STREAMING_LOGS';
-			});
 
 		this.init();
 	}
@@ -146,24 +141,16 @@ export class AppComponent {
 			this.closeCollectionWindow();
 			console.log('final restore for loadingwindow done', result);
 			setTimeout(() => {
-				this.waitForLogDetection();
+				this.notifyAbilitiesReady();
 			},
 			AppComponent.LOADING_SCREEN_DURATION);
 		});
 	}
 
-	private waitForLogDetection() {
-		if (this.currentState == 'STREAMING_LOGS') {
-			this.currentState = 'READY';
-			overwolf.windows.sendMessage(this.loadingWindowId, 'ready', 'ready', (result) => {
-			});
-		}
-		else {
-			setTimeout(() => {
-				this.waitForLogDetection();
-			},
-			1000);
-		}
+	private notifyAbilitiesReady() {
+		this.currentState = 'READY';
+		overwolf.windows.sendMessage(this.loadingWindowId, 'ready', 'ready', (result) => {
+		});
 	}
 
 	private startApp(showWhenStarted?: Function) {
