@@ -1,4 +1,4 @@
-import { Component, NgZone, ElementRef, Renderer2, ViewChild, ViewEncapsulation, HostListener } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
@@ -17,8 +17,9 @@ declare var overwolf: any;
 			<simple-notifications [options]="toastOptions" (onCreate)="created($event)" (onDestroy)="destroyed($event)"></simple-notifications>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NotificationsComponent {
+export class NotificationsComponent implements AfterViewInit {
 
 	timeout = 20000;
 	// timeout = 999999999999;
@@ -34,8 +35,8 @@ export class NotificationsComponent {
 	private mainWindowId: string;
 
 	constructor(
-		private ngZone: NgZone,
 		private notificationService: NotificationsService,
+		private cdr: ChangeDetectorRef,
 		private debugService: DebugService,
 		private elRef: ElementRef) {
 
@@ -47,8 +48,6 @@ export class NotificationsComponent {
 
 		overwolf.windows.getCurrentWindow((result) => {
 			this.windowId = result.window.id;
-
-			// Change position to be bottom right?
 			console.log('retrieved current notifications window', result, this.windowId);
 
 			overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
@@ -56,10 +55,6 @@ export class NotificationsComponent {
 					console.warn('Could not get CollectionWindow', result);
 				}
 				this.mainWindowId = result.window.id;
-
-				// overwolf.windows.sendMessage(this.mainWindowId, 'ack', 'ack', (result) => {
-				// 	console.log('ack sent to main window', result);
-				// });
 			});
 		})
 
@@ -71,12 +66,15 @@ export class NotificationsComponent {
 		console.log('notifications windows initialized')
 	}
 
+	ngAfterViewInit() {
+		this.cdr.detach();
+	}
+
 	created(event) {
 		this.resize();
 	}
 
 	destroyed(event) {
-		console.log('destroyed', event);
 		this.resize();
 	}
 
@@ -91,23 +89,22 @@ export class NotificationsComponent {
 		// console.log('received message, restoring notification window');
 		overwolf.windows.restore(this.windowId, (result) => {
 			// console.log('notifications window is on?', result);
-
-			this.ngZone.run(() => {
-				let toast = this.notificationService.html(htmlMessage);
-				// console.log('running toast message in zone', toast);
-				toast.click.subscribe((event: MouseEvent) => {
-					console.log('registered click on toast', event, toast);
-					// Clicked on close, don't show the card
-					if (event.srcElement.className.indexOf("close") != -1) {
-						// this.notificationService.remove(toast.id);
-						return;
-					}
-					if (cardId) {
-						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
-							console.log('send click info to collection window', cardId, this.mainWindowId, result);
-						});
-					}
-				});
+			let toast = this.notificationService.html(htmlMessage);
+			this.cdr.detectChanges();
+			// console.log('running toast message in zone', toast);
+			toast.click.subscribe((event: MouseEvent) => {
+				console.log('registered click on toast', event, toast);
+				this.cdr.detectChanges();
+				// Clicked on close, don't show the card
+				if (event.srcElement.className.indexOf("close") != -1) {
+					// this.notificationService.remove(toast.id);
+					return;
+				}
+				if (cardId) {
+					overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
+						console.log('send click info to collection window', cardId, this.mainWindowId, result);
+					});
+				}
 			});
 		})
 	}
