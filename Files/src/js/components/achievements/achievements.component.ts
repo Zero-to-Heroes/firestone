@@ -1,4 +1,4 @@
-import { Component, NgZone, AfterViewInit } from '@angular/core';
+import { Component, ViewRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { timeInterval } from 'rxjs/operator/timeInterval';
 
@@ -54,6 +54,7 @@ declare var _: any;
 			</section>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	animations: [
 		trigger('viewState', [
 			state('hidden',	style({
@@ -70,7 +71,7 @@ declare var _: any;
 	],
 })
 // 7.1.1.17994
-export class AchievementsComponent {
+export class AchievementsComponent implements AfterViewInit {
 
 	_menuDisplayType = 'menu';
 	_selectedView = 'categories';
@@ -86,7 +87,7 @@ export class AchievementsComponent {
 	constructor(
 		private _events: Events,
 		private achievementService: AchievementsStorageService,
-		private ngZone: NgZone) {
+		private cdr: ChangeDetectorRef) {
 		ga('send', 'event', 'achievements', 'show');
 
 		console.error('TODO; remove ads when switching between collection and achievements');
@@ -99,6 +100,7 @@ export class AchievementsComponent {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.adRef.removeAd();
+				this.cdr.detectChanges();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -137,21 +139,28 @@ export class AchievementsComponent {
 				});
 			}
 		)
-
 		this.loadAds();
 		this.refreshContents();
+	}
+
+	ngAfterViewInit() {
+		this.cdr.detach();
 	}
 
 	refreshContents() {
 		if (this.refreshingContent) {
 			return;
 		}
+		console.log('refreshing contents');
 		this.refreshingContent = true;
 		this.achievementService.loadAggregatedAchievements()
 				.then((achievementSets: AchievementSet[]) => {
 					console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
 					this.achievementCategories = achievementSets;
 					this.refreshingContent = false;
+					if (!(<ViewRef>this.cdr).destroyed) {
+						this.cdr.detectChanges();
+					}
 				});
 	}
 
@@ -160,6 +169,9 @@ export class AchievementsComponent {
 		setTimeout(() => {
 			changeStateCallback();
 			this._viewState = "shown";
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}, ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS);
 	}
 

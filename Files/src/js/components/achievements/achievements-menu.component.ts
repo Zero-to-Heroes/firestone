@@ -1,4 +1,4 @@
-import { Component, HostListener, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 
@@ -25,22 +25,23 @@ declare var overwolf: any;
 			</ng-container>
 		</ng-container>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class AchievementsMenuComponent {
 
-	@Input() public displayType: string;
-	@Input() public selectedAchievementSet: AchievementSet;
+	@Input() displayType: string;
+	@Input() selectedAchievementSet: AchievementSet;
 
 	constructor(private _events: Events) {
 
 	}
 
-	public goToAchievementsHomeView() {
+	goToAchievementsHomeView() {
 		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
 	}
 
-	public goToAchievementsSetsView() {
+	goToAchievementsSetsView() {
 		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, this.selectedAchievementSet);
 	}
 }

@@ -43,7 +43,6 @@ export class AchievementsStorageService {
 				const achievementSets = this.repository.getAchievementSets();
 				// console.log('loaded achievement sets', achievementSets);
 				const aggregatedAchievementSets: AchievementSet[] = achievementSets.map((achievementSet) => this.aggregateAchievementSet(achievementSet, achievements));
-				// console.log('original achievements?', this.repository.getAchievementSets());
 				resolve(aggregatedAchievementSets);
 			})
 		})

@@ -1,4 +1,4 @@
-import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewEncapsulation, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { Achievement } from '../../models/achievement';
 import { AchievementSet } from '../../models/achievement-set';
@@ -35,6 +35,7 @@ declare var overwolf: any;
 			</ul>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsListComponent {
 
@@ -49,6 +50,10 @@ export class AchievementsListComponent {
 
 	private achievementsIndexRangeStart = 0;
 
+	constructor(private cdr: ChangeDetectorRef) {
+
+	}
+
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		this.currentPage = 0;
 		this._achievementSet = achievementSet;
@@ -59,7 +64,6 @@ export class AchievementsListComponent {
 		this.achievements = achievementsList || [];
 		this.updateShownAchievements();
 	}
-
 
 	previousPage() {
 		this.currentPage = Math.max(0, this.currentPage - 1);
@@ -76,6 +80,10 @@ export class AchievementsListComponent {
 		this.updateShownAchievements();
 	}
 
+	trackById(achievement: Achievement, index: number) {
+		return achievement.id;
+	}
+
 	private updateShownAchievements() {
 		// console.log('updating card list', this._cardList);
 		this.achievementsIndexRangeStart = this.currentPage * this.MAX_ACHIEVEMENTS_DISPLAYED_PER_PAGE;
@@ -87,5 +95,6 @@ export class AchievementsListComponent {
 		this.activeAchievements = this.achievements.slice(
 			this.achievementsIndexRangeStart,
 			this.achievementsIndexRangeStart + this.MAX_ACHIEVEMENTS_DISPLAYED_PER_PAGE);
+		this.cdr.detectChanges();
 	}
 }

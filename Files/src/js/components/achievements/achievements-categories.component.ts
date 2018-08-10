@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 
@@ -15,12 +15,13 @@ declare var overwolf: any;
 	template: `
 		<div class="achievements-categories">
 			<ol>
-				<li *ngFor="let achievementSet of achievementSets">
+				<li *ngFor="let achievementSet of achievementSets; trackBy: trackById">
 					<achievement-set-view [achievementSet]="achievementSet" (click)="selectSet(achievementSet)"></achievement-set-view>
 				</li>
 			</ol>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class AchievementsCategoriesComponent {
@@ -32,5 +33,9 @@ export class AchievementsCategoriesComponent {
 
 	selectSet(set: AchievementSet) {
 		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, set);
+	}
+	
+	trackById(achievementSet: AchievementSet, index: number) {
+		return achievementSet.id;
 	}
 }
