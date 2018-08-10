@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostListener, AfterViewInit } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
@@ -36,11 +36,6 @@ declare var Crate: any;
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
 							</svg>
 						</button>
-						<!-- <button class="i-30 pink-button" (click)="showSettings()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
-							</svg>
-						</button> -->
 						<button class="i-30 pink-button" (click)="contactSupport()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
@@ -90,11 +85,11 @@ declare var Crate: any;
 			<tooltips></tooltips>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class MainWindowComponent implements AfterViewInit {
 
-	version;
 	selectedModule = 'collection';
 	hotkey = 'Alt+C';
 
@@ -130,21 +125,19 @@ export class MainWindowComponent implements AfterViewInit {
 		if (!Crate) {
 			setTimeout(() => {
 				this.ngAfterViewInit();
-			}, 50);
+			}, 20);
 			return;
 		}
-		setTimeout(() => {
-			this.crate = new Crate({
-				server:"187101197767933952",
-				channel:"446045705392357376"
-			});
-			this.crate.store.subscribe(() => {
-				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-					this.crate.hide();
-				}
-			});
-			this.crate.hide();
-		}, 100);
+		this.crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376"
+		});
+		this.crate.store.subscribe(() => {
+			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+				this.crate.hide();
+			}
+		});
+		this.crate.hide();
 	}
 
 	@HostListener('mousedown')

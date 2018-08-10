@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { PackMonitor } from '../services/collection/pack-monitor.service';
 import { IndexedDbService } from '../services/collection/indexed-db.service';
@@ -21,6 +21,7 @@ declare var ga: any;
 		<div>
 		</div>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class AppComponent {

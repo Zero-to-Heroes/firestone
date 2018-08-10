@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { Events } from '../services/events.service';
 
@@ -35,6 +35,7 @@ declare var overwolf: any;
 			</li>
 		</ul>
 	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class MenuSelectionComponent {
