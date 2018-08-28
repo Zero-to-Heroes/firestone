@@ -87,6 +87,9 @@ export class FullCardComponent {
 		console.log('setting full card', card, selectedCard);
 		if (card.audio) {
 			Object.keys(card.audio).forEach((key, index) => {
+				if (!card.audio[key] || card.audio[key].length == 0) {
+					return;
+				}
 				const audioClip = {
 					name: key,
 					files: [...card.audio[key]],
