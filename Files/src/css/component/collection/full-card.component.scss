@@ -44,7 +44,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        margin-left: 11px;
+                        margin-right: 11px;
                         padding-right: 11px;
                         border-right: 1px solid $yellow02;
 
@@ -62,13 +62,10 @@
 
                     }
 
-                    li:first-child {
-                        margin-left: 0;
-                    }
-
                     li:last-child {
                         border: none;
                         padding-right: 0;
+                        margin-right: 0;
                     }
 
                     li:nth-child(4) {
