@@ -95,12 +95,12 @@ export class PackMonitor {
 			.subscribe(event => {
 				let card: Card = event.data[0];
 				let type: string = event.data[1];
+				this.cardEvents[card.id] = () => {
+					this.hadNewCard = true;
+					this.createNewCardToast(card, type);
+				};
 				if (this.openingPack) {
 					this.unrevealedCards.push(card.id);
-					this.cardEvents[card.id] = () => {
-						this.hadNewCard = true;
-						this.createNewCardToast(card, type);
-					};
 				}
 				else {
 					this.revealCardById(card.id);
