@@ -29,6 +29,22 @@ export class HotkeyComponent implements AfterViewInit {
             this.detectHotKey();
         }, 5000);
 	}
+    
+    private detectHotKey() {
+		overwolf.settings.getHotKey('collection', (result) => {
+			console.log('hot key is', result);
+			if (result.status == 'success') {
+                this.hotkey = result.hotkey;
+                if (this.hotkey === 'Unassigned') {
+                    this.hotkeyHtml = '<span class="text">Hotkey:</span><span class="no-hotkey">No hotkey assigned</span>';
+                }
+                else {
+                    this.hotkeyHtml = this.splitHotkey();
+                }
+                this.cdr.detectChanges();
+			}
+		});
+    }
 
 	private splitHotkey(): string {
 		let split = this.hotkey.split('+');
@@ -36,16 +52,5 @@ export class HotkeyComponent implements AfterViewInit {
 		return '<span class="text">Hotkey:</span>' + split
 			.map((splitItem) => `<span class="key">${splitItem}</span>`)
 			.join('<span class="plus">+</span>');
-    }
-    
-    private detectHotKey() {
-		overwolf.settings.getHotKey('collection', (result) => {
-			// console.log('hot key is', result);
-			if (result.status == 'success') {
-                this.hotkey = result.hotkey;
-                this.hotkeyHtml = this.splitHotkey();
-                this.cdr.detectChanges();
-			}
-		});
     }
 }

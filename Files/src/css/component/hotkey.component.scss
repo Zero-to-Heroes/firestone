@@ -32,4 +32,10 @@
 	    justify-content: center;
 		border: 1px solid;
 	}
+
+	.no-hotkey {
+		@extend %hotkey;
+		font-weight: 400;
+		font-size: 10px;
+	}
 }
