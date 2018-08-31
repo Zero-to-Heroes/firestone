@@ -14,39 +14,87 @@ export class LogParserService {
 	plugin: any;
 
 	private cardRegex = new RegExp('.* NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d).*');
+	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
-	private lastLogReceivedDate: Date;
+	private logLines: any[][] = [];
+	private processingLines = false;
 
 	constructor(private collectionManager: CollectionManager, private events: Events) {
+		setInterval(() => {
+			if (this.processingLines) {
+				return;
+			}
+			// Make sure we're not splitting a pack opening in the middle
+			if (this.logLines.length > 0 && this.isTooSoon(this.logLines[this.logLines.length -1])) {
+				console.log('too soon, waiting before processing');
+				return;
+			}
+			this.processingLines = true;
+			let toProcess: string[] = [];
+			while (this.logLines.length > 0) {
+				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length).map(logLine => logLine[1])];
+			}
+			if (toProcess.length > 0) {
+				console.log('lines to process', toProcess);
+				this.processLines(toProcess);
+				this.processingLines = false;
+			}
+			else {
+				this.processingLines = false;
+			}
+		},
+		200);
 	}
 
 	public receiveLogLine(data: string) {
 		// console.log('received log line', data);
 		let match = this.cardRegex.exec(data);
 		if (match) {
-			// Send a message that a new pack is being opened
-			if (!this.lastLogReceivedDate || new Date().getTime() - this.lastLogReceivedDate.getTime() > 1000 * 3)  {
-				console.log('notifying new pack opening');
-				ga('send', 'event', 'toast', 'new-pack');
-				this.events.broadcast(Events.NEW_PACK);
-			}
-
-			// console.log('New card received!');
-			let cardId = match[1];
-			let type = match[2];
-			this.collectionManager.getCollection((collection) => {
-				ga('send', 'event', 'toast', 'revealed', cardId);
-				let cardInCollection = this.collectionManager.inCollection(collection, cardId);
-				// console.log('card in collection?', cardId, collection, type, cardInCollection);
-				if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
-					this.displayNewCardMessage(cardInCollection, type);
-				}
-				else {
-					this.displayDustMessage(cardInCollection, type);
-				}
-			}, 1000)
-			this.lastLogReceivedDate = new Date();
+			this.logLines.push([Date.now(), data]);
 		}
+	}
+
+	private processLines(toProcess: string[]) {
+		// Are we opening a pack?
+		console.log('processing lines', toProcess);
+		if (toProcess.length > 4) {
+			console.log('notifying new pack opening');
+			ga('send', 'event', 'toast', 'new-pack');
+			this.events.broadcast(Events.NEW_PACK);
+		}
+
+		for (let data of toProcess) {
+			console.log('considering log line', data);
+			let match = this.cardRegex.exec(data);
+			if (match) {
+				let cardId = match[1];
+				let type = match[2];
+				console.log('New card received!', data);
+				this.collectionManager.getCollection((collection) => {
+					ga('send', 'event', 'toast', 'revealed', cardId);
+					let cardInCollection = this.collectionManager.inCollection(collection, cardId);
+					console.log('card in collection?', cardId, collection, type, cardInCollection);
+					if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
+						this.displayNewCardMessage(cardInCollection, type);
+					}
+					else {
+						this.displayDustMessage(cardInCollection, type);
+					}
+				}, 1000)
+			}
+		}
+	}
+
+	private isTooSoon(logLine: any[]) {
+		let match = this.timestampRegex.exec(logLine[1]);
+		if (match) {
+			let elapsed = Date.now() - parseInt(logLine[0]);
+			console.log('elapsed', elapsed, Date.now(), logLine);
+			if (elapsed < 100) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private hasReachedMaxCollectibleOf(card: Card, type: string):boolean {
@@ -93,7 +141,7 @@ export class LogParserService {
 				return 400;
 			case 'epic':
 				return 100;
-			case 'rare':
+			case 'rare': 
 				return 20;
 			default:
 				return 5;

@@ -27,6 +27,7 @@ export class PackMonitor {
 
 	private totalDustInPack = 0;
 	private totalDuplicateCards = 0;
+	private openingPack: boolean = false;
 	// private timer: any;
 
 	constructor(
@@ -47,7 +48,7 @@ export class PackMonitor {
 
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
-
+				this.openingPack = true;
 				overwolf.games.getRunningGameInfo((gameInfo) => {
 					this.dpi = gameInfo.logicalWidth / gameInfo.width;
 
@@ -94,12 +95,16 @@ export class PackMonitor {
 			.subscribe(event => {
 				let card: Card = event.data[0];
 				let type: string = event.data[1];
-				this.unrevealedCards.push(card.id);
-				this.cardEvents[card.id] = () => {
-					this.hadNewCard = true;
-					this.createNewCardToast(card, type);
-				};
-
+				if (this.openingPack) {
+					this.unrevealedCards.push(card.id);
+					this.cardEvents[card.id] = () => {
+						this.hadNewCard = true;
+						this.createNewCardToast(card, type);
+					};
+				}
+				else {
+					this.revealCardById(card.id);
+				}
 				let dbCard = parseCardsText.getCard(card.id);
 				let relevantCount = type == 'GOLDEN' ? card.premiumCount : card.count;
 				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true, relevantCount));
@@ -109,8 +114,13 @@ export class PackMonitor {
 				let card: Card = event.data[0];
 				let dust: number = event.data[1];
 				let type: string = event.data[2];
-				this.unrevealedCards.push(card.id);
-				this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
+				if (this.openingPack) {
+					this.unrevealedCards.push(card.id);
+					this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
+				}
+				else {
+					this.createDustToast(dust, 1);
+				}
 
 				let dbCard = parseCardsText.getCard(card.id);
 				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false, -1));
@@ -203,19 +213,24 @@ export class PackMonitor {
 			return;
 		}
 		let cardId = this.unrevealedCards[i];
-		console.log('revealing card', i, cardId, this.cardEvents[cardId], this.unrevealedCards);
 		this.unrevealedCards[i] = '';
+		this.revealCardById(cardId);
+	}
+
+	private revealCardById(cardId: string) {
+		console.log('revealing card', cardId, this.cardEvents[cardId], this.unrevealedCards);
 		if (this.cardEvents[cardId]) {
 			this.cardEvents[cardId]();
 		}
 
 		for (let j = 0; j < 5; j++) {
 			// Not all cards have been revealed yet
-			if (this.unrevealedCards[j] !== '') {
+			if (this.unrevealedCards.length > j && this.unrevealedCards[j] !== '') {
 				return;
 			}
 		}
 		console.log('All cards revealed, resetting');
+		this.openingPack = false;
 		// All cards have been revealed, full reset
 		if (this.totalDustInPack > 0) {
 			this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
