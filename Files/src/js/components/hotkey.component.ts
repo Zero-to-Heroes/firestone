@@ -32,7 +32,7 @@ export class HotkeyComponent implements AfterViewInit {
     
     private detectHotKey() {
 		overwolf.settings.getHotKey('collection', (result) => {
-			console.log('hot key is', result);
+			// console.log('hot key is', result);
 			if (result.status == 'success') {
                 this.hotkey = result.hotkey;
                 if (this.hotkey === 'Unassigned') {
