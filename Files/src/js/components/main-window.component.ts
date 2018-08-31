@@ -29,7 +29,7 @@ declare var Crate: any;
 							<menu-selection></menu-selection>
 						</div>
 					</div>
-					<div class="hotkey" [innerHTML]="splitHotkey()"></div>
+					<hotkey></hotkey>
 					<div class="controls">
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">
@@ -91,7 +91,6 @@ declare var Crate: any;
 export class MainWindowComponent implements AfterViewInit {
 
 	selectedModule = 'collection';
-	hotkey = 'Alt+C';
 
 	private crate;
 	private windowId: string;
@@ -112,13 +111,6 @@ export class MainWindowComponent implements AfterViewInit {
 				console.log('selected module', this.selectedModule);
 			}
 		)
-
-		overwolf.settings.getHotKey('collection', (result) => {
-			console.log('hot key is', result);
-			if (result.status == 'success') {
-				this.hotkey = result.hotkey;
-			}
-		});
 	}
 
 	ngAfterViewInit() {
@@ -157,14 +149,6 @@ export class MainWindowComponent implements AfterViewInit {
 			})
 		});
 	};
-
-	splitHotkey(): string {
-		let split = this.hotkey.split('+');
-		// console.log('split hot key', split);
-		return '<span class="text">Hotkey:</span>' + split
-			.map((splitItem) => `<span class="key">${splitItem}</span>`)
-			.join('<span class="plus">+</span>');
-	}
 
 	closeWindow() {
 		overwolf.windows.hide(this.windowId);

@@ -1,17 +1,17 @@
-import { NgModule, ErrorHandler }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpModule }    from '@angular/http';
+import { NgModule }      from '@angular/core';
 
+import { HotkeyComponent }  from '../../components/hotkey.component';
 import { VersionComponent }  from '../../components/version.component';
 
 @NgModule({
 	imports: [
 	],
 	declarations: [
+		HotkeyComponent,
 		VersionComponent,
 	],
 	exports: [
+		HotkeyComponent,
 		VersionComponent,
 	],
 })
