@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
 
+import { SharedModule } from '../shared/shared.module';
+
 import { LoadingComponent } from '../../components/loading/loading.component';
 
 import { DebugService } from '../../services/debug.service';
@@ -12,6 +14,7 @@ import { DebugService } from '../../services/debug.service';
 		BrowserModule,
 		HttpModule,
         BrowserAnimationsModule,
+		SharedModule,
 	],
 	declarations: [
 		LoadingComponent,

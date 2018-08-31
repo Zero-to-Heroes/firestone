@@ -65,7 +65,7 @@ declare var Crate: any;
 					</i>
 					<div class="sub-title" *ngIf="!loading">
 						<span>Hit</span>
-						<div class="hotkey" [innerHTML]="hotKey"></div>
+						<hotkey></hotkey>
 						<span>to view the app</span>
 					</div>
 					<div class="ads-container">
@@ -110,9 +110,7 @@ export class LoadingComponent implements AfterViewInit {
 
 	title: string = 'Getting ready';
 	loading = true;
-	hotKey: string;
 	
-	// private hotkey = 'Alt+C';
 	private thisWindowId: string;
 	private adRef;
 	private crate;
@@ -149,14 +147,6 @@ export class LoadingComponent implements AfterViewInit {
 			else {
 				console.log('refreshing ad', message.window_state);
 				this.refreshAds();
-			}
-		});
-
-		overwolf.settings.getHotKey('collection', (result) => {
-			console.log('hot key is', result);
-			if (result.status == 'success') {
-				this.hotKey = this.splitHotkey(result.hotkey);
-				this.cdr.detectChanges();
 			}
 		});
 	}
@@ -217,14 +207,6 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		this.crate.toggle(true);
 		this.crate.show();
-	}
-
-	private splitHotkey(hotkey: string): string {
-		let split = hotkey.split('+');
-		// console.log('split hot key', split);
-		return split
-			.map((splitItem) => `<span class="key">${splitItem}</span>`)
-			.join('<span class="plus">+</span>');
 	}
 
 	private refreshAds() {
