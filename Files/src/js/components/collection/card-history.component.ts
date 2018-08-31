@@ -1,12 +1,10 @@
-import { Component, NgZone, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
-import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 
-import { SetCard } from '../../models/set';
 import { CardHistory } from '../../models/card-history';
+import { SetCard } from '../../models/set';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -38,7 +36,10 @@ declare var ga: any;
 			</div>
 			<ul class="history">
 				<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
-					<card-history-item [historyItem]="historyItem"></card-history-item>
+					<card-history-item 
+						[historyItem]="historyItem"
+						[active]="_selectedCard && _selectedCard.id == historyItem.cardId || false">
+					</card-history-item>
 				</li>
 				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
 					<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
@@ -58,18 +59,23 @@ declare var ga: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class CardHistoryComponent implements AfterViewInit {
 
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
-
+	
+	cardHistory: CardHistory[];
+	shownHistory: CardHistory[];
+	totalHistoryLength: number;
+	_selectedCard: SetCard;
+	
 	private showOnlyNewCards: boolean;
 	private limit = 100;
 	private refreshing = false;
 
-	cardHistory: CardHistory[];
-	shownHistory: CardHistory[];
-	totalHistoryLength: number;
+	@Input() set selectedCard(selectedCard: SetCard) {
+		this._selectedCard = selectedCard;
+		this.cdr.detectChanges();
+	}
 
 	constructor(
 		private storage: CardHistoryStorageService,

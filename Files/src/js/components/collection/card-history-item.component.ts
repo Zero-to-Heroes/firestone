@@ -1,8 +1,7 @@
-import { Component, NgZone, Input, ElementRef, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
 import { Events } from '../../services/events.service';
 
-import { SetCard } from '../../models/set';
 import { CardHistory } from '../../models/card-history';
 
 declare var overwolf: any;
@@ -12,7 +11,7 @@ declare var ga: any;
 	selector: 'card-history-item',
 	styleUrls: [`../../../css/component/collection/card-history-item.component.scss`],
 	template: `
-		<div class="card-history-item">
+		<div class="card-history-item" [ngClass]="{'active': active}">
 			<img class="rarity" src="{{rarityImg}}" />
 			<span class="name">{{cardName}}</span>
 			<span class="dust-amount" *ngIf="!newCard">
@@ -34,9 +33,10 @@ declare var ga: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class CardHistoryItemComponent {
 
+	@Input() active: boolean;
+	
 	newCard: boolean;
 	relevantCount: number;
 	rarityImg: string;

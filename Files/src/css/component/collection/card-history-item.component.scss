@@ -6,7 +6,11 @@
 	flex-direction: row;
     align-items: center;
     cursor: pointer;
-    height: 36px;
+	height: 36px;
+	
+	&.active {
+    	background: rgba(255, 255, 255, 0.08);
+	}
 
     &:hover {
     	background: rgba(255, 255, 255, 0.08);

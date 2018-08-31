@@ -43,7 +43,7 @@ declare var OwAd: any;
 			</section>
 			<section class="secondary">
 				<card-search>Search card</card-search>
-				<card-history></card-history>
+				<card-history [selectedCard]="selectedCard"></card-history>
 				<div class="ads-container">
 					<div class="no-ads-placeholder">
 						<i class="i-117X33 gold-theme logo">
@@ -213,7 +213,6 @@ export class CollectionComponent implements AfterViewInit {
 	}
 
 	private selectCard(fullCardId: string) {
-		let newSet = this.cards.getSetFromCardId(fullCardId);
 		// Always rebuild the set to update the card owned information
 		this.buildSet(fullCardId).then((set) => {
 			this.reset();
