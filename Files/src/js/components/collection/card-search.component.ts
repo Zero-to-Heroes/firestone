@@ -68,7 +68,7 @@ export class CardSearchComponent implements AfterViewInit {
 
 	onSearchStringChange() {
 		this.showSearchResults = false;
-		// console.log('updating serach string', this.searchString);
+		console.log('updating serach string', this.searchString);
 		if (this.searchString.length < 2) {
 			return;
 		}
@@ -77,7 +77,7 @@ export class CardSearchComponent implements AfterViewInit {
 
 	onValidateSearch(event: KeyboardEvent) {
 		if (event.keyCode === 13 && this.searchString) {
-			// console.log('validating search', this.searchResults, this.searchString);
+			console.log('validating search', this.searchResults, this.searchString);
 
 			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
 			this.showSearchResults = false;
@@ -109,17 +109,19 @@ export class CardSearchComponent implements AfterViewInit {
 
 	private updateSearchResults() {
 		this.searchResults = this.cards.searchCards(this.searchString);
+		console.log('raw search results', this.searchResults);
 		this.collectionManager.getCollection((collection: Card[]) => {
-			// console.log('retrieved collection', collection);
+			console.log('retrieved collection', collection);
 			this.searchResults = this.searchResults.map((card) => {
 				let collectionCard: Card = this.findCollectionCard(collection, card);
-				if (!collectionCard) {
-					return;
-				}
-				return new SetCard(card.id, card.name, card.rarity, collectionCard.count, collectionCard.premiumCount)
-			})
-			.filter((card) => card);
-			// console.log('Updated search results', this.searchResults);
+				return new SetCard(
+					card.id, 
+					card.name, 
+					card.rarity, 
+					collectionCard ? collectionCard.count : 0, 
+					collectionCard ? collectionCard.premiumCount : 0)
+			});
+			console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;
 			this.cdr.detectChanges();
 		})
