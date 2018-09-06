@@ -69,18 +69,17 @@ export class LogParserService {
 			if (match) {
 				let cardId = match[1];
 				let type = match[2];
-				console.log('New card received!', data);
-				this.collectionManager.getCollection((collection) => {
-					ga('send', 'event', 'toast', 'revealed', cardId);
-					let cardInCollection = this.collectionManager.inCollection(collection, cardId);
-					console.log('card in collection?', cardId, collection, type, cardInCollection);
-					if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
-						this.displayNewCardMessage(cardInCollection, type);
-					}
-					else {
-						this.displayDustMessage(cardInCollection, type);
-					}
-				}, 1000)
+				let newCount = parseInt(match[3]);
+				let normalCount: number = type === 'NORMAL' ? newCount : -1;
+				let premiumCount: number = type === 'GOLDEN' ? newCount : -1;
+				let cardInCollection = new Card(cardId, normalCount, premiumCount);
+				console.log('card in collection?', cardId, type, cardInCollection);
+				if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
+					this.displayNewCardMessage(cardInCollection, type);
+				}
+				else {
+					this.displayDustMessage(cardInCollection, type);
+				}
 			}
 		}
 	}

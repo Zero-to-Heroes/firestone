@@ -39,56 +39,38 @@ export class PackMonitor {
 
 		this.gameEvents.onGameStart.subscribe(() => {
 			this.unrevealedCards = [];
-
-			// You need to logout for the new dpi to take effect, so we can cache the value
-			overwolf.games.getRunningGameInfo((gameInfo) => {
-				this.dpi = gameInfo.logicalWidth / gameInfo.width;
-			});
+			this.updateDpi();
 		})
+
+		setInterval(() => this.updateDpi(), 10 * 1000);
 
 		this.events.on(Events.NEW_PACK)
 			.subscribe(event => {
 				this.openingPack = true;
-				overwolf.games.getRunningGameInfo((gameInfo) => {
-					this.dpi = gameInfo.logicalWidth / gameInfo.width;
-
-					this.busy = true;
-					// clearTimeout(this.timer);
-
-					console.log('resetting cards for new pack');
-					let undetectedCards = [];
-					let anyUndetected = false;
-					for (let j = 0; j < 5; j++) {
-						if (this.unrevealedCards[j] !== '' && this.unrevealedCards[j]) {
-							undetectedCards.push(this.unrevealedCards[j]);
-							console.warn('undetected', this.unrevealedCards[j], JSON.stringify(this.unrevealedCards[j]));
-							anyUndetected = true;
-						}
+				this.busy = true;
+				console.log('resetting cards for new pack');
+				let undetectedCards = [];
+				let anyUndetected = false;
+				for (let j = 0; j < 5; j++) {
+					if (this.unrevealedCards[j] !== '' && this.unrevealedCards[j]) {
+						undetectedCards.push(this.unrevealedCards[j]);
+						console.warn('undetected', this.unrevealedCards[j], JSON.stringify(this.unrevealedCards[j]));
+						anyUndetected = true;
 					}
-					if (anyUndetected) {
-						console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
-						ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
-					}
+				}
+				if (anyUndetected) {
+					console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
+					ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
+				}
 
-					if (this.totalDustInPack > 0) {
-						this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
-						this.totalDustInPack = 0;
-						this.totalDuplicateCards = 0;
-					}
+				if (this.totalDustInPack > 0) {
+					this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
+					this.totalDustInPack = 0;
+					this.totalDuplicateCards = 0;
+				}
 
-					// // Show dust after a short amount of time if no new pack has been opened
-					// this.timer = setTimeout(() => {
-					// 	console.log('times up, showing dust earned', this.totalDustInPack, this.totalDuplicateCards);
-					// 	if (this.totalDustInPack > 0) {
-					// 		this.createDustToast(this.totalDustInPack, this.totalDuplicateCards);
-					// 		this.totalDustInPack = 0;
-					// 		this.totalDuplicateCards = 0;
-					// 	}
-					// }, 10 * 1000)
-
-					this.busy = false;
-					this.unrevealedCards = [];
-				});
+				this.busy = false;
+				this.unrevealedCards = [];
 			});
 
 		this.events.on(Events.NEW_CARD)
@@ -128,6 +110,13 @@ export class PackMonitor {
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
 			this.handleMouseUp(data);
+		});
+	}
+
+	private updateDpi() {
+		// You need to logout for the new dpi to take effect, so we can cache the value
+		overwolf.games.getRunningGameInfo((gameInfo) => {
+			this.dpi = gameInfo.logicalWidth / gameInfo.width;
 		});
 	}
 
