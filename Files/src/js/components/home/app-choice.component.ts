@@ -98,9 +98,22 @@ export class AppChoiceComponent implements AfterViewInit {
 				console.warn('Could not get CollectionWindow', result);
 				return;
 			}
-			overwolf.windows.restore(result.window.id, (result2) => {
-				this.close.emit(null);
-			})
+			// overwolf.windows.restore(result.window.id, (result2) => {
+			// 	this.close.emit(null);
+			// });
+			overwolf.windows.getCurrentWindow((currentWindoResult) => {
+				// console.log('current window', currentWindoResult);
+				const center = {
+					x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
+					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
+				};
+				// console.log('center is', center);
+				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
+					overwolf.windows.restore(result.window.id, (result2) => {
+						this.close.emit(null);
+					});
+				});
+			});
 		});
 	}
 }

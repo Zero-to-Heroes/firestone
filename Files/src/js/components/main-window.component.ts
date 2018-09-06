@@ -105,6 +105,19 @@ export class MainWindowComponent implements AfterViewInit {
 			}
 		});
 
+		overwolf.windows.onMessageReceived.addListener((message) => {
+			if (message.id === 'move') {
+				overwolf.windows.getCurrentWindow((result) => {
+					if (result.status === "success"){
+						const newX = message.content.x - result.window.width / 2;
+						const newY = message.content.y - result.window.height / 2;
+						overwolf.windows.changePosition(this.windowId, newX, newY);
+					}
+				});
+				// console.log('received move message', message.content);
+			}
+		});
+
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.selectedModule = data.data[0];
@@ -143,10 +156,23 @@ export class MainWindowComponent implements AfterViewInit {
 				console.warn('Could not get WelcomeWindow', result);
 				return;
 			}
-			console.log('got welcome window', result);
-			overwolf.windows.restore(result.window.id, (result) => {
-				this.closeWindow();
-			})
+			// console.log('got welcome window', result);
+			// overwolf.windows.restore(result.window.id, (result) => {
+			// 	this.closeWindow();
+			// })
+			overwolf.windows.getCurrentWindow((currentWindoResult) => {
+				// console.log('current window', currentWindoResult);
+				const center = {
+					x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
+					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
+				};
+				// console.log('center is', center);
+				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
+					overwolf.windows.restore(result.window.id, (result2) => {
+						this.closeWindow();
+					});
+				});
+			});
 		});
 	};
 

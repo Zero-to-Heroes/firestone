@@ -102,6 +102,19 @@ export class WelcomePageComponent implements AfterViewInit {
 			}
 		});
 		this.crate.hide();
+
+		overwolf.windows.onMessageReceived.addListener((message) => {
+			if (message.id === 'move') {
+				overwolf.windows.getCurrentWindow((result) => {
+					if (result.status === "success"){
+						const newX = message.content.x - result.window.width / 2;
+						const newY = message.content.y - result.window.height / 2;
+						overwolf.windows.changePosition(this.thisWindowId, newX, newY);
+					}
+				});
+				// console.log('received move message', message.content);
+			}
+		});
 	}
 
 	@HostListener('mousedown', ['$event'])
