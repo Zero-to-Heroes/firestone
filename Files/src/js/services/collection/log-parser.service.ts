@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Card } from '../../models/card';
-import { CollectionManager } from './collection-manager.service';
+import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 
 declare var OverwolfPlugin: any;
@@ -19,7 +19,7 @@ export class LogParserService {
 	private logLines: any[][] = [];
 	private processingLines = false;
 
-	constructor(private collectionManager: CollectionManager, private events: Events) {
+	constructor(private cards: AllCardsService, private events: Events) {
 		setInterval(() => {
 			if (this.processingLines) {
 				return;
@@ -56,15 +56,16 @@ export class LogParserService {
 
 	private processLines(toProcess: string[]) {
 		// Are we opening a pack?
-		console.log('processing lines', toProcess);
-		if (toProcess.length > 4) {
-			console.log('notifying new pack opening');
+		// console.log('processing lines', toProcess);
+		let setId = this.isPack(toProcess)
+		if (setId) {
+			console.log('notifying new pack opening', setId);
 			ga('send', 'event', 'toast', 'new-pack');
-			this.events.broadcast(Events.NEW_PACK);
+			this.events.broadcast(Events.NEW_PACK, setId);
 		}
 
 		for (let data of toProcess) {
-			console.log('considering log line', data);
+			// console.log('considering log line', data);
 			let match = this.cardRegex.exec(data);
 			if (match) {
 				let cardId = match[1];
@@ -73,7 +74,7 @@ export class LogParserService {
 				let normalCount: number = type === 'NORMAL' ? newCount : -1;
 				let premiumCount: number = type === 'GOLDEN' ? newCount : -1;
 				let cardInCollection = new Card(cardId, normalCount, premiumCount);
-				console.log('card in collection?', cardId, type, cardInCollection);
+				// console.log('card in collection?', cardId, type, cardInCollection);
 				if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
 					this.displayNewCardMessage(cardInCollection, type);
 				}
@@ -82,6 +83,26 @@ export class LogParserService {
 				}
 			}
 		}
+	}
+
+	private isPack(toProcess: string[]): boolean | string {
+		const cardLogs = toProcess
+				.map(data => this.cardRegex.exec(data))
+				.filter(match => match);
+		// console.log('cardLogs', cardLogs, toProcess);
+		if (cardLogs.length !== 5) {
+			return false;
+		}
+		const setIds: string[] = cardLogs
+				.map(match => match[1])
+				.map(cardId => this.cards.getCard(cardId))
+				.map(card => card.set);
+		const uniqueSetIds = new Set(setIds);
+		// console.log('uniqueSetIds', uniqueSetIds);
+		if (uniqueSetIds.size !== 1) {
+			return false;
+		}
+		return uniqueSetIds.values().next().value;
 	}
 
 	private isTooSoon(logLine: any[]) {
@@ -121,7 +142,7 @@ export class LogParserService {
 
 	private displayNewCardMessage(card: Card, type: string) {
 		console.log('New card!', card.id, type);
-		this.events.broadcast(Events.NEW_CARD, card, type);
+		setTimeout(() => this.events.broadcast(Events.NEW_CARD, card, type), 20);
 		ga('send', 'event', 'toast', 'new-card', card.id);
 	}
 
@@ -129,7 +150,7 @@ export class LogParserService {
 		let dbCard = parseCardsText.getCard(card.id);
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
 		dust = type == 'GOLDEN' ? dust * 4 : dust;
-		this.events.broadcast(Events.MORE_DUST, card, dust, type);
+		setTimeout(() => this.events.broadcast(Events.MORE_DUST, card, dust, type), 20);
 		ga('send', 'event', 'toast', 'dust', dust);
 		console.log('Got ' + dust + ' dust', card.id, type);
 	}

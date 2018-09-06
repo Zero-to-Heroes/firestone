@@ -48,7 +48,7 @@ export class PackMonitor {
 			.subscribe(event => {
 				this.openingPack = true;
 				this.busy = true;
-				console.log('resetting cards for new pack');
+				console.log('resetting cards for new pack', event);
 				let undetectedCards = [];
 				let anyUndetected = false;
 				for (let j = 0; j < 5; j++) {
@@ -72,45 +72,54 @@ export class PackMonitor {
 				this.busy = false;
 				this.unrevealedCards = [];
 			});
-
-		this.events.on(Events.NEW_CARD)
-			.subscribe(event => {
-				let card: Card = event.data[0];
-				let type: string = event.data[1];
-				this.cardEvents[card.id] = () => {
-					this.hadNewCard = true;
-					this.createNewCardToast(card, type);
-				};
-				if (this.openingPack) {
-					this.unrevealedCards.push(card.id);
-				}
-				else {
-					this.revealCardById(card.id);
-				}
-				let dbCard = parseCardsText.getCard(card.id);
-				let relevantCount = type == 'GOLDEN' ? card.premiumCount : card.count;
-				this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true, relevantCount));
-			});
-		this.events.on(Events.MORE_DUST)
-			.subscribe(event => {
-				let card: Card = event.data[0];
-				let dust: number = event.data[1];
-				let type: string = event.data[2];
-				if (this.openingPack) {
-					this.unrevealedCards.push(card.id);
-					this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
-				}
-				else {
-					this.createDustToast(dust, 1);
-				}
-
-				let dbCard = parseCardsText.getCard(card.id);
-				this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false, -1));
-			});
+		this.events.on(Events.NEW_CARD).subscribe(event => this.handleNewCardEvent(event));
+		this.events.on(Events.MORE_DUST).subscribe(event => this.handleNewDustEvent(event));
 
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
 			this.handleMouseUp(data);
 		});
+	}
+
+	private handleNewCardEvent(event) {
+		if (this.busy) {
+			setTimeout(() => this.handleNewCardEvent(event), 50);
+			return;
+		}
+		let card: Card = event.data[0];
+		let type: string = event.data[1];
+		this.cardEvents[card.id] = () => {
+			this.hadNewCard = true;
+			this.createNewCardToast(card, type);
+		};
+		if (this.openingPack) {
+			this.unrevealedCards.push(card.id);
+		}
+		else {
+			this.revealCardById(card.id);
+		}
+		let dbCard = parseCardsText.getCard(card.id);
+		let relevantCount = type == 'GOLDEN' ? card.premiumCount : card.count;
+		this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true, relevantCount));
+	}
+
+	private handleNewDustEvent(event) {	
+		if (this.busy) {
+			setTimeout(() => this.handleNewDustEvent(event), 50);
+			return;
+		}
+		let card: Card = event.data[0];
+		let dust: number = event.data[1];
+		let type: string = event.data[2];
+		if (this.openingPack) {
+			this.unrevealedCards.push(card.id);
+			this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
+		}
+		else {
+			this.createDustToast(dust, 1);
+		}
+
+		let dbCard = parseCardsText.getCard(card.id);
+		this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false, -1));
 	}
 
 	private updateDpi() {
