@@ -15,7 +15,7 @@
 	},
 	"permissions": [
 		"Logging",
-		"GameInfo",0
+		"GameInfo",
 		"FileSystem",
 		"Extensions",
 		"Profile",
