@@ -14,6 +14,7 @@
 	display: flex;
     align-items: center;
 	margin: 0;
+    padding-bottom: 15px;
 
 	img {
 		width: 53px;
@@ -117,11 +118,13 @@ collection-empty-state {
     justify-content: flex-start;
     display: flex;
     flex-wrap: wrap;
+	overflow-y: scroll;
+	flex-grow: 1;
 
     li {
     	width: 98px;
     	height: 152px; // We need this so that things are not a mess when the placeholder image is showing
-    	margin-right: 15px;
+    	margin-right: 14px;
     	margin-bottom: 4px;
     }
 }

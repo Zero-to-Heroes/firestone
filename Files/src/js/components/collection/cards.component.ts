@@ -12,7 +12,10 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'cards',
-	styleUrls: [`../../../css/component/collection/cards.component.scss`],
+	styleUrls: [
+		`../../../css/component/collection/cards.component.scss`,
+		`../../../css/global/scrollbar.scss`,
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="cards">
@@ -73,7 +76,7 @@ declare var overwolf: any;
 })
 export class CardsComponent implements AfterViewInit {
 
-	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 18;
+	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 100000;
 
 	readonly FILTER_OWN = 'own';
 	readonly FILTER_GOLDEN_OWN = 'goldenown';
