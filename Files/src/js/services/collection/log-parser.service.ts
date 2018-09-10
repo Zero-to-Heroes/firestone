@@ -57,11 +57,13 @@ export class LogParserService {
 	private processLines(toProcess: string[]) {
 		// Are we opening a pack?
 		// console.log('processing lines', toProcess);
-		let setId = this.isPack(toProcess)
-		if (setId) {
-			console.log('notifying new pack opening', setId);
+		const cards = this.extractCards(toProcess);
+		if (this.isPack(cards)) {
+			const setId = cards[0].set;
+			const packCards = this.toPackCards(toProcess);
+			console.log('notifying new pack opening', setId, packCards);
 			ga('send', 'event', 'toast', 'new-pack');
-			this.events.broadcast(Events.NEW_PACK, setId);
+			this.events.broadcast(Events.NEW_PACK, setId, packCards);
 		}
 
 		for (let data of toProcess) {
@@ -85,24 +87,31 @@ export class LogParserService {
 		}
 	}
 
-	private isPack(toProcess: string[]): boolean | string {
-		const cardLogs = toProcess
+	private toPackCards(toProcess: string[]): any[] {
+		return toProcess
 				.map(data => this.cardRegex.exec(data))
-				.filter(match => match);
-		// console.log('cardLogs', cardLogs, toProcess);
-		if (cardLogs.length !== 5) {
-			return false;
-		}
-		const setIds: string[] = cardLogs
+				.filter(match => match)
+				.map((match) => ({
+					cardId: match[1],
+					cardType: match[2]
+				}));
+	}
+
+	private extractCards(toProcess: string[]): any[] {
+		return toProcess
+				.map(data => this.cardRegex.exec(data))
+				.filter(match => match)
 				.map(match => match[1])
-				.map(cardId => this.cards.getCard(cardId))
-				.map(card => card.set);
-		const uniqueSetIds = new Set(setIds);
-		// console.log('uniqueSetIds', uniqueSetIds);
-		if (uniqueSetIds.size !== 1) {
+				.map(cardId => this.cards.getCard(cardId));
+	}
+
+	private isPack(cards: any[]): boolean {
+		if (cards.length !== 5) {
 			return false;
 		}
-		return uniqueSetIds.values().next().value;
+		const setIds: string[] = cards.map(card => card.set);
+		const uniqueSetIds = new Set(setIds);
+		return uniqueSetIds.size === 1;
 	}
 
 	private isTooSoon(logLine: any[]) {
