@@ -125,7 +125,9 @@ export class PackMonitor {
 	private updateDpi() {
 		// You need to logout for the new dpi to take effect, so we can cache the value
 		overwolf.games.getRunningGameInfo((gameInfo) => {
-			this.dpi = gameInfo.logicalWidth / gameInfo.width;
+			if (gameInfo) {
+				this.dpi = gameInfo.logicalWidth / gameInfo.width;
+			}
 		});
 	}
 
