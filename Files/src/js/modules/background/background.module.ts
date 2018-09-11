@@ -29,6 +29,7 @@ import { CollectionManager }  from '../../services/collection/collection-manager
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { LogParserService }  from '../../services/collection/log-parser.service';
 import { PackMonitor }  from '../../services/collection/pack-monitor.service';
+import { PackHistoryService } from '../../services/collection/pack-history.service';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { PackMonitor }  from '../../services/collection/pack-monitor.service';
 		LogStatusService,
 		OwNotificationsService,
 		PackMonitor,
+		PackHistoryService,
 		SimpleIOService,
 		MemoryInspectionService,
 		AchievementsMonitor,

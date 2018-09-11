@@ -3,6 +3,8 @@ import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
 
 import { CardHistory } from '../../models/card-history';
 import { Card } from '../../models/card';
+import { PackHistory } from '../../models/pack-history';
+import { PityTimer } from '../../models/pity-timer';
 
 declare var OverwolfPlugin: any;
 
@@ -81,6 +83,59 @@ export class IndexedDbService {
 		);
 	}
 
+    public saveNewPack(newPack: PackHistory, callback: Function): any {
+		console.log('saving pack history', newPack);
+		if (!this.dbInit) {
+			setTimeout(() => {
+				console.log('[storage] db isnt initialized, waiting...');
+				this.saveNewPack(newPack, callback);
+			}, 50);
+			return;
+		}
+
+		this.db.add('pack-history', newPack).then(
+			(history) => {
+				callback(history);
+			},
+			(error) => {
+				console.log(error);
+			}
+		);
+	}
+	
+    public getPityTimer(setId: any, callback: Function): any {
+		if (!this.dbInit) {
+			setTimeout(() => {
+				console.log('[storage] db isnt initialized, waiting...');
+				this.getPityTimer(setId, callback);
+			}, 50);
+			return;
+		}
+
+		this.db.getByKey('pity-timer', setId)
+			.then((pityTimer) => {
+				callback(pityTimer);
+			});
+	}
+	
+    public savePityTimer(pityTimer: PityTimer, callback: Function) {
+		if (!this.dbInit) {
+			setTimeout(() => {
+				console.log('[storage] db isnt initialized, waiting...');
+				this.savePityTimer(pityTimer, callback);
+			}, 50);
+			return;
+		}
+		this.db.update('pity-timer', pityTimer).then(
+			(history) => {
+				callback(pityTimer);
+			},
+			(error) => {
+				console.error('could not update pity timer', pityTimer, error);
+			}
+		);
+    }
+
 	public countHistory(callback: Function) {
 		console.log('counting history');
 		if (!this.dbInit) {
@@ -141,8 +196,8 @@ export class IndexedDbService {
 
 	private init() {
 		console.log('[storage] starting init of indexeddb');
-		this.db = new AngularIndexedDB('hs-collection-db', 7);
-		this.db.openDatabase(7, (evt) => {
+		this.db = new AngularIndexedDB('hs-collection-db', 9);
+		this.db.openDatabase(9, (evt) => {
 			console.log('upgrading db', evt);
 
 			if (evt.oldVersion < 7) {
@@ -159,7 +214,17 @@ export class IndexedDbService {
 					'collection',
 					{ keyPath: "id", autoIncrement: false });
 			}
-
+			if (evt.oldVersion < 8) {
+				console.log('[storage] upgrade to version 8');
+				evt.currentTarget.result.createObjectStore(
+					'pack-history',
+					{ keyPath: "id", autoIncrement: true });
+				}
+			if (evt.oldVersion < 9) {
+				evt.currentTarget.result.createObjectStore(
+					'pity-timer',
+					{ keyPath: "setId", autoIncrement: false });
+			}
 			console.log('[storage] indexeddb upgraded');
 		}).then(
 			() => {

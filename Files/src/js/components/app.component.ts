@@ -8,6 +8,7 @@ import { DebugService } from '../services/debug.service';
 import { LogStatusService } from '../services/log-status.service';
 import { HsPublicEventsListener } from '../services/hs-public-events-listener.service';
 import { Events } from '../services/events.service';
+import { PackHistoryService } from '../services/collection/pack-history.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -34,6 +35,7 @@ export class AppComponent {
 
 	constructor(
 		private packMonitor: PackMonitor,
+		private packHistory: PackHistoryService,
 		private events: Events,
 		private debugService: DebugService,
 		private publicEventsListener: HsPublicEventsListener,
