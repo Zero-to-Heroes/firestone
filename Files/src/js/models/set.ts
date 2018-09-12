@@ -1,8 +1,11 @@
+import { PityTimer } from "./pity-timer";
+
 export class Set {
 	readonly id: string;
 	readonly name: string;
 	readonly standard: boolean;
 	readonly allCards: ReadonlyArray<SetCard> = [];
+	readonly pityTimer: PityTimer;
 
 	readonly ownedLimitCollectibleCards: number = 0;
 	readonly ownedLimitCollectiblePremiumCards: number = 0;
@@ -11,13 +14,15 @@ export class Set {
 			id: string, 
 			name: string, 
 			isStandard: boolean, 
-			allCards?: SetCard[], 
+			allCards?: SetCard[],
+			pityTimer?: PityTimer,
 			ownedLimitCollectibleCards?: number, 
 			ownedLimitCollectiblePremiumCards?: number) {
 		this.id = id;
 		this.name = name;
 		this.standard = isStandard;
 		this.allCards = allCards ? [...allCards] : [];
+		this.pityTimer = pityTimer;
 		this.ownedLimitCollectibleCards = ownedLimitCollectibleCards || 0;
 		this.ownedLimitCollectiblePremiumCards = ownedLimitCollectiblePremiumCards || 0;
 	}

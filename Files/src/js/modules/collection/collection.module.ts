@@ -49,6 +49,7 @@ import { IndexedDbService }  from '../../services/collection/indexed-db.service'
 import { IndexedDbService as AchievementsDbService }  from '../../services/achievement/indexed-db.service';
 import { AchievementsRepository }  from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService }  from '../../services/achievement/achievements-storage.service';
+import { PackHistoryService } from '../../services/collection/pack-history.service';
 
 declare var ga: any;
 export class AnalyticsErrorHandler implements ErrorHandler {
@@ -115,6 +116,7 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AchievementsDbService,
 		AchievementsRepository,
 		AchievementsStorageService,
+		PackHistoryService,
 
 		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],

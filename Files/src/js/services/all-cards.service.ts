@@ -33,6 +33,11 @@ export class AllCardsService {
 	private readonly NON_COLLECTIBLE_HEROES = [
 		'HERO_01', 'HERO_02', 'HERO_03', 'HERO_04', 'HERO_05', 'HERO_06', 'HERO_07', 'HERO_08', 'HERO_09',
 	];
+	
+    public getSetIds(): string[] {
+		return this.STANDARD_SETS.concat(this.WILD_SETS)
+				.map(([setId, setName]) => setId);
+    }
 
 	public getStandardSets(): Set[] {
 		return this.getSets(this.STANDARD_SETS, true);

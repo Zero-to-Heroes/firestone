@@ -17,6 +17,37 @@ export class PackHistoryService {
         this.events.on(Events.NEW_PACK).subscribe(event => this.addPackHistory(event));
         this.events.on(Events.NEW_PACK).subscribe(event => this.updatePityTimer(event));
     }
+
+    public getPityTimers(): Promise<PityTimer[]> {
+        return new Promise<PityTimer[]>((resolve) => {
+            this.indexedDb.getAllPityTimers().then((pityTimers: PityTimer[]) => {
+                console.log('retrieved all pity timers', pityTimers);
+                const setIds: string[] = this.allCards.getSetIds();
+                console.log('allSetIds', setIds);
+                const allPityTimers: PityTimer[] = setIds.map((setId) => this.findPityTimerOrDefault(setId, pityTimers));
+                console.log('built all pity timers', allPityTimers);
+                resolve(allPityTimers);
+            });
+        })
+    }
+
+    public getPityTimer(setId: string): Promise<PityTimer> {
+        return new Promise<PityTimer>((resolve) => {
+            this.indexedDb.getPityTimer(setId).then((pityTimer: PityTimer) => {
+                console.log('retrieved pity timer for', setId, pityTimer);
+                resolve(pityTimer);
+            });
+        })
+    }
+
+    private findPityTimerOrDefault(setId: string, pityTimers: PityTimer[]): PityTimer {
+        for (const pityTimer of pityTimers) {
+            if (pityTimer.setId == setId) {
+                return pityTimer;
+            }
+        }
+        return new PityTimer(setId, this.DEFAULT_EPIC_PITY_TIMER, this.DEFAULT_LEGENDARY_PITY_TIMER);
+    }
     
     private addPackHistory(event: any): any {
         const newPack: PackHistory = new PackHistory(event.data[0], event.data[1]);
@@ -29,12 +60,13 @@ export class PackHistoryService {
     private updatePityTimer(event: any): any {
         console.log('updatePityTimer', event);
         const setId = event.data[0];
-        this.indexedDb.getPityTimer(setId, (pityTimer: PityTimer) => {
+        this.indexedDb.getPityTimer(setId).then((pityTimer) => {
             console.log('retrieved pity timer', setId, pityTimer);
             if (!pityTimer) {
                 pityTimer = new PityTimer(setId, this.DEFAULT_EPIC_PITY_TIMER, this.DEFAULT_LEGENDARY_PITY_TIMER);
             }
             const newPityTimer = this.buildNewPityTimer(pityTimer, event.data[1]);
+            console.log('built new pity timer to save', newPityTimer);
             this.indexedDb.savePityTimer(newPityTimer, (result) => {
                 console.log('Updated pity timer', result);
             });

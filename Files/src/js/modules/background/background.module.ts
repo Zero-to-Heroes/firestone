@@ -65,6 +65,7 @@ import { PackHistoryService } from '../../services/collection/pack-history.servi
 		AchievementsRepository,
 		AchievementsStorageService,
 		AchievementsDb,
+		PackHistoryService,
 	]
 })
 export class AppModule { }

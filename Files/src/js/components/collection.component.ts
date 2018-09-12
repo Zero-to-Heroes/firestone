@@ -8,6 +8,8 @@ import { Events } from '../services/events.service';
 import { Card } from '../models/card';
 import { Set, SetCard } from '../models/set';
 import { timeInterval } from 'rxjs/operator/timeInterval';
+import { PackHistoryService } from '../services/collection/pack-history.service';
+import { PityTimer } from '../models/pity-timer';
 
 const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -97,6 +99,7 @@ export class CollectionComponent implements AfterViewInit {
 		private _events: Events,
 		private cards: AllCardsService,
 		private collectionManager: CollectionManager,
+		private pityTimer: PackHistoryService,
 		private cdr: ChangeDetectorRef) {
 	}
 
@@ -280,6 +283,7 @@ export class CollectionComponent implements AfterViewInit {
 		}
 		this.refreshing = true;
 
+
 		this.collectionManager.getCollection((collection: Card[]) => {
 			this.buildSetsFromCollection(collection);
 			this.refreshing = false;
@@ -289,10 +293,18 @@ export class CollectionComponent implements AfterViewInit {
 	}
 
 	private buildSetsFromCollection(collection: Card[]) {
-		const standardSets = this.cards.getStandardSets();
-		this.standardSets = standardSets.map((set) => this.mergeSet(collection, set));
-		const wildSets = this.cards.getWildSets();
-		this.wildSets = wildSets.map((set) => this.mergeSet(collection, set));
+		this.pityTimer.getPityTimers().then((pityTimers: PityTimer[]) => {
+			console.log('building sets from collection with pity timers', pityTimers);
+			const standardSets = this.cards.getStandardSets();
+			this.standardSets = standardSets
+					.map((set) => ({ set: set, pityTimer: pityTimers.filter(timer => timer.setId == set.id)[0]}))
+					.map((set) => this.mergeSet(collection, set.set, set.pityTimer));
+			const wildSets = this.cards.getWildSets();
+			this.wildSets = wildSets
+					.map((set) => ({ set: set, pityTimer: pityTimers.filter(timer => timer.setId == set.id)[0]}))
+					.map((set) => this.mergeSet(collection, set.set, set.pityTimer));
+			this.cdr.detectChanges();
+		});
 	}
 
 	private buildSet(fullCardId: string): Promise<Set> {
@@ -301,14 +313,16 @@ export class CollectionComponent implements AfterViewInit {
 				console.log('building set from', fullCardId);
 				const set = this.cards.getSetFromCardId(fullCardId);
 				console.log('base set is', set);
-				const mergedSet = this.mergeSet(collection, set);
-				console.log('merged set is', mergedSet);
-				resolve(mergedSet);
+				this.pityTimer.getPityTimer(set.id).then((pityTimer: PityTimer) => {
+					const mergedSet = this.mergeSet(collection, set, pityTimer);
+					console.log('merged set is', mergedSet);
+					resolve(mergedSet);
+				});
 			})
 		})
 	}
 
-	private mergeSet(collection: Card[], set: Set): Set {
+	private mergeSet(collection: Card[], set: Set, pityTimer: PityTimer): Set {
 		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
 		const ownedLimitCollectibleCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollected())
@@ -321,6 +335,7 @@ export class CollectionComponent implements AfterViewInit {
 			set.name,
 			set.standard,
 			updatedCards,
+			pityTimer,
 			ownedLimitCollectibleCards,
 			ownedLimitCollectiblePremiumCards);
 	}

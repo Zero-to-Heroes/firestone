@@ -103,19 +103,28 @@ export class IndexedDbService {
 		);
 	}
 	
-    public getPityTimer(setId: any, callback: Function): any {
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
-				this.getPityTimer(setId, callback);
-			}, 50);
-			return;
-		}
-
-		this.db.getByKey('pity-timer', setId)
-			.then((pityTimer) => {
-				callback(pityTimer);
+    public getPityTimer(setId: any): Promise<PityTimer> {
+		return new Promise<PityTimer>((resolve) => {
+			this.waitForDbInit().then(() => {
+				this.db.getByKey('pity-timer', setId).then((pityTimer: PityTimer) => {
+					resolve(pityTimer);
+				});
 			});
+		});
+	}
+	
+    public getAllPityTimers(): Promise<PityTimer[]> {
+		console.log('getting all pity timers');
+		return new Promise<PityTimer[]>((resolve) => {
+			console.log('in getAllPityTimers promise');
+			this.waitForDbInit().then(() => {
+				console.log('fetching all pity timers from db');
+				this.db.getAll('pity-timer', null).then((pityTimers: PityTimer[]) => {
+					console.log('fetched pity timers', pityTimers);
+					resolve(pityTimers);
+				});
+			});
+		});
 	}
 	
     public savePityTimer(pityTimer: PityTimer, callback: Function) {
@@ -235,7 +244,23 @@ export class IndexedDbService {
 				console.log('[storage] error in openDatabase', error);
 			}
 		);
+	}
 
+	private waitForDbInit(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				console.log('Promise waiting for db');
+				if (this.dbInit) {
+					console.log('wait for db init complete');
+					resolve();
+				} 
+				else {
+					console.log('waiting for db init');
+					setTimeout(() => dbWait(), 50);
+				}
+			}
+			dbWait();
+		});
 	}
 
 	private getAllWithLimit(storeName: string, limit: number, indexDetails?: IndexDetails) {

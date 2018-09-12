@@ -63,7 +63,7 @@ export class LogParserService {
 			const packCards = this.toPackCards(toProcess);
 			console.log('notifying new pack opening', setId, packCards);
 			ga('send', 'event', 'toast', 'new-pack');
-			this.events.broadcast(Events.NEW_PACK, setId, packCards);
+			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 		}
 
 		for (let data of toProcess) {
