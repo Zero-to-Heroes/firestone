@@ -15,9 +15,14 @@
 	}
 
 	::ng-deep span {
-		a, a:hover, a:active {
+		a, a:active {
 			text-decoration: none;
 			color: #1da1f2;
+		}
+
+		a:hover {
+			text-decoration: none;
+			color: #39c7ff;
 		}
 	}
 }
