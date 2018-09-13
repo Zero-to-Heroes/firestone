@@ -16,22 +16,22 @@ declare var overwolf: any;
 			</div>
 			<span class="cards-collected">{{_cardSet.ownedLimitCollectibleCards}}/{{_cardSet.numberOfLimitCollectibleCards()}}</span>
 			<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
-				<i class="i-15 pale-gold-theme corner bottom-left">
+				<i class="i-25 pale-gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
 					</svg>
 				</i>
-				<i class="i-15 pale-gold-theme corner top-left">
+				<i class="i-25 pale-gold-theme corner top-left">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
 					</svg>
 				</i>
-				<i class="i-15 pale-gold-theme corner top-right">
+				<i class="i-25 pale-gold-theme corner top-right">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
 					</svg>
 				</i>
-				<i class="i-15 pale-gold-theme corner bottom-right">
+				<i class="i-25 pale-gold-theme corner bottom-right">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
 					</svg>
