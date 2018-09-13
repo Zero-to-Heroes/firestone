@@ -1,8 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 
 import { Set } from '../../models/set';
-
-declare var overwolf: any;
 
 @Component({
 	selector: 'sets',
@@ -30,7 +28,7 @@ export class SetsComponent {
 	showStandard = true;
 	showWild = false;
 
-	constructor(private cdr: ChangeDetectorRef) {
+	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {
 
 	}
 
@@ -62,5 +60,16 @@ export class SetsComponent {
 		this.showStandard = false;
 		this.showWild = true;
 		this.cdr.detectChanges();
+	}
+	
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		let rect = this.elRef.nativeElement.querySelector('.sets').getBoundingClientRect();
+		let scrollbarWidth = 5;
+		console.log('mousedown on sets container', rect, event);
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 }
