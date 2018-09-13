@@ -14,9 +14,10 @@
 		display: inherit;
 	}
 
-	a, a:hover, a:active {
-	    text-decoration: underline;
-	    color: inherit;
-	    cursor: pointer;
+	::ng-deep span {
+		a, a:hover, a:active {
+			text-decoration: none;
+			color: #1da1f2;
+		}
 	}
 }
