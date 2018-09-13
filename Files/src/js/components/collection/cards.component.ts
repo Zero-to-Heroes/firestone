@@ -101,7 +101,7 @@ export class CardsComponent implements AfterViewInit {
 	_pages: number[] = [];
 	_activeFilter = this.FILTER_ALL;
 
-	constructor(private cards: AllCardsService, private elRef: ElementRef, private cdr: ChangeDetectorRef) {
+	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {
 
 	}
 
@@ -114,6 +114,7 @@ export class CardsComponent implements AfterViewInit {
 			</svg>`;
 		caretEl.classList.add('i-30');
 		caretEl.classList.add('caret');
+		setTimeout(() => this.cdr.detectChanges());
 	}
 
 	@Input('set') set cardSet(set: Set) {
