@@ -52,7 +52,11 @@ export class CardSearchComponent implements AfterViewInit {
 	searchResults: SetCard[] = [];
 	showSearchResults = false;
 
-	constructor(private cards: AllCardsService, private events: Events, private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
+	constructor(
+		private cards: AllCardsService, 
+		private events: Events, 
+		private collectionManager: CollectionManager, 
+		private cdr: ChangeDetectorRef) {
 	}
 
 	ngAfterViewInit() {
@@ -64,6 +68,10 @@ export class CardSearchComponent implements AfterViewInit {
 				this.searchString = data;
 				this.onSearchStringChange();
 			});
+		this.events.on(Events.SET_SELECTED).subscribe((data) => this.resetSearchString());
+		this.events.on(Events.FORMAT_SELECTED).subscribe((data) => this.resetSearchString());
+		this.events.on(Events.MODULE_SELECTED).subscribe((data) => this.resetSearchString());
+		this.events.on(Events.SHOW_CARD_MODAL).subscribe((data) => this.resetSearchString());
 	}
 
 	onSearchStringChange() {
@@ -105,6 +113,11 @@ export class CardSearchComponent implements AfterViewInit {
 	trackById(index, card: SetCard) {
 		// console.log('tracking by id', index, card);
 		return card.id;
+	}
+
+	private resetSearchString() {
+		console.log('resetting search string');
+		this.searchForm.setValue('');
 	}
 
 	private updateSearchResults() {
