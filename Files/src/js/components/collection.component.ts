@@ -345,7 +345,7 @@ export class CollectionComponent implements AfterViewInit {
 			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
 			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
 			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
-			return new SetCard(card.id, card.name, card.rarity, ownedNonPremium, ownedPremium);
+			return new SetCard(card.id, card.name, card.rarity, card.cost, ownedNonPremium, ownedPremium);
 		});
 	}
 }

@@ -118,6 +118,7 @@ export class CardSearchComponent implements AfterViewInit {
 					card.id, 
 					card.name, 
 					card.rarity, 
+					card.cost,
 					collectionCard ? collectionCard.count : 0, 
 					collectionCard ? collectionCard.premiumCount : 0)
 			});

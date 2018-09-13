@@ -2,6 +2,7 @@ import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef,
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { IOption } from 'ng-select';
+import { sortBy, cloneDeep } from 'lodash'
 
 import { AllCardsService } from '../../services/all-cards.service';
 
@@ -122,7 +123,7 @@ export class CardsComponent implements AfterViewInit {
 
 	@Input('cardList') set cardList(cardList: SetCard[]) {
 		this._currentPage = 0;
-		this._cardList = cardList;
+		this._cardList = sortBy(cardList, "cost", "name");
 		this.updateShownCards();
 	}
 

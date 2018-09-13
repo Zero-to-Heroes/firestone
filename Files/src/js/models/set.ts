@@ -103,13 +103,15 @@ export class SetCard {
 	readonly id: string;
 	readonly name: string;
 	readonly rarity: string;
+	readonly cost: number;
 	readonly ownedNonPremium: number = 0;
 	readonly ownedPremium: number = 0;
 
-	constructor(id: string, name: string, rarity: string, ownedNonPremium?: number, ownedPremium?: number) {
+	constructor(id: string, name: string, rarity: string, cost: number, ownedNonPremium?: number, ownedPremium?: number) {
 		this.id = id;
 		this.name = name;
 		this.rarity = rarity;
+		this.cost = cost;
 		this.ownedNonPremium = ownedNonPremium || 0;
 		this.ownedPremium = ownedPremium || 0;
 	}
@@ -130,17 +132,3 @@ export class SetCard {
 		return this.ownedPremium + this.ownedNonPremium > 0;
 	}
 }
-
-// export class MissingCard {
-// 	readonly id: string;
-// 	readonly name: string;
-// 	readonly collected: number;
-// 	readonly maxCollectible: number;
-
-// 	constructor(id: string, name: string, collected: number, maxCollectible: number) {
-// 		this.id = id;
-// 		this.name = name;
-// 		this.collected = collected;
-// 		this.maxCollectible = maxCollectible;
-// 	}
-// }
