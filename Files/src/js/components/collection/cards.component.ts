@@ -1,15 +1,10 @@
-import { Component, NgZone, Input, SimpleChanges, ViewEncapsulation, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, HostListener, Input, ViewEncapsulation, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { IOption } from 'ng-select';
-import { sortBy, cloneDeep } from 'lodash'
-
-import { AllCardsService } from '../../services/all-cards.service';
+import { sortBy } from 'lodash'
 
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
-
-declare var overwolf: any;
 
 @Component({
 	selector: 'cards',
@@ -161,6 +156,16 @@ export class CardsComponent implements AfterViewInit {
 
 	trackByCardId(card: Card, index: number) {
 		return card.id;
+	}
+
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		let rect = this.elRef.nativeElement.querySelector('.cards-list').getBoundingClientRect();
+		let scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 
 	private updateShownCards() {
