@@ -1,4 +1,23 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
 .sets {
 	margin-top: 26px;
 	overflow: auto;
+}
+
+.menu-selection {
+	display: flex;
+	align-items: center;
+	list-style: none;
+	margin-bottom: 15px;
+
+	li {
+		@extend %sets-menu;
+		margin-right: 20px;
+
+		&.active {
+			color: $grey01;
+		}
+	}
 }

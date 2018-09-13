@@ -1,4 +1,4 @@
-import { Component, NgZone, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { Set } from '../../models/set';
 
@@ -12,6 +12,10 @@ declare var overwolf: any;
 	],
 	template: `
 		<div class="sets">
+			<ul class="menu-selection">
+				<li [ngClass]="{'active': showStandard}" (click)="toggleStandard()">Standard</li>
+				<li [ngClass]="{'active': showWild}" (click)="toggleWild()">Wild</li>
+			</ul>
 			<sets-container [sets]="standardSets" [category]="'Standard'" *ngIf="showStandard"></sets-container>
 			<sets-container [sets]="wildSets" [category]="'Wild'" *ngIf="showWild"></sets-container>
 		</div>
@@ -24,7 +28,11 @@ export class SetsComponent {
 	@Input() wildSets: Set[];
 
 	showStandard = true;
-	showWild = true;
+	showWild = false;
+
+	constructor(private cdr: ChangeDetectorRef) {
+
+	}
 
 	@Input('selectedFormat') set selectedFormat(format: string) {
 		switch (format) {
@@ -38,7 +46,21 @@ export class SetsComponent {
 				break;
 			default:
 				this.showStandard = true;
-				this.showWild = true;
+				this.showWild = false;
 		}
+	}
+
+	toggleStandard() {
+		console.log('showing standard sets');
+		this.showStandard = true;
+		this.showWild = false;
+		this.cdr.detectChanges();
+	}
+
+	toggleWild() {
+		console.log('showing wild sets');
+		this.showStandard = false;
+		this.showWild = true;
+		this.cdr.detectChanges();
 	}
 }

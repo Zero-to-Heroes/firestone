@@ -14,7 +14,6 @@ declare var overwolf: any;
 	template: `
 		<div *ngIf="category" class="sets-container">
 			<div class="category-container {{category.toLowerCase()}}">
-				<h2 class="category-title">{{category}}</h2>
 				<ol>
 					<li *ngFor="let set of _sets; trackBy: trackById" (click)="selectSet(set)">
 						<set-view [cardSet]="set"></set-view>
