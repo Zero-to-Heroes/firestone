@@ -150,9 +150,9 @@ export class CardHistoryComponent implements AfterViewInit {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		console.log('handling history click', event);
+		// console.log('handling history click', event);
 		let rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
-		console.log('element rect', rect);
+		// console.log('element rect', rect);
 		let scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
