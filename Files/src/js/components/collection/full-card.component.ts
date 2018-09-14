@@ -1,7 +1,6 @@
-import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Output, Input, EventEmitter, HostListener, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
 
 import { AllCardsService } from '../../services/all-cards.service';
-import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
@@ -11,6 +10,7 @@ import { SetCard } from '../../models/set';
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
 		`../../../css/component/collection/full-card.component.scss`,
+		`../../../css/global/scrollbar.scss`,
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
@@ -20,38 +20,40 @@ import { SetCard } from '../../models/set';
 			</div>
 			<div class="details">
 				<h1>{{card.name}}</h1>
-				<div class="card-info class">
-					<span class="sub-title">Class:</span>
-					<span class="value">{{class}}</span>
-				</div>
-				<div class="card-info type">
-					<span class="sub-title">Type:</span>
-					<span class="value">{{type}}</span>
-				</div>
-				<div class="card-info set">
-					<span class="sub-title">Set:</span>
-					<span class="value">{{set}}</span>
-				</div>
-				<div class="card-info rarity">
-					<span class="sub-title">Rarity:</span>
-					<span class="value">{{rarity}}</span>
-				</div>
-				<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
-					<span class="sub-title">Sound:</span>
-					<ul class="value">
-						<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound)">
-							<span class="label">{{sound.name}}</span>
-							<button class="i-30 brown-theme sound-button">
-								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#sound"/>
-								</svg>
-							</button>
-						</li>
-					</ul>
-				</div>
-				<div class="card-info flavor-text">
-					<span class="sub-title">Flavor Text:</span>
-					<span class="value">{{card.flavor}}</span>
+				<div class="card-details">
+					<div class="card-info class">
+						<span class="sub-title">Class:</span>
+						<span class="value">{{class}}</span>
+					</div>
+					<div class="card-info type">
+						<span class="sub-title">Type:</span>
+						<span class="value">{{type}}</span>
+					</div>
+					<div class="card-info set">
+						<span class="sub-title">Set:</span>
+						<span class="value">{{set}}</span>
+					</div>
+					<div class="card-info rarity">
+						<span class="sub-title">Rarity:</span>
+						<span class="value">{{rarity}}</span>
+					</div>
+					<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
+						<span class="sub-title">Sound:</span>
+						<ul class="value">
+							<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound)">
+								<span class="label">{{sound.name}}</span>
+								<button class="i-30 brown-theme sound-button">
+									<svg class="svg-icon-fill">
+										<use xlink:href="/Files/assets/svg/sprite.svg#sound"/>
+									</svg>
+								</button>
+							</li>
+						</ul>
+					</div>
+					<div class="card-info flavor-text">
+						<span class="sub-title">Flavor Text:</span>
+						<span class="value">{{card.flavor}}</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -76,15 +78,19 @@ export class FullCardComponent {
 
 	constructor(
 		private events: Events,
+		private elRef: ElementRef,
 		private cards: AllCardsService) {
 	}
 
 	@Input('selectedCard') set selectedCard(selectedCard: SetCard) {
+		if (!selectedCard) {
+			return;
+		}
 		this.previousClips = this.audioClips || [];
 		this.audioClips = [];
 		this.events.broadcast(Events.HIDE_TOOLTIP);
 		let card = this.cards.getCard(selectedCard.id);
-		console.log('setting full card', card, selectedCard);
+		// console.log('setting full card', card, selectedCard);
 		if (card.audio) {
 			Object.keys(card.audio).forEach((key, index) => {
 				if (!card.audio[key] || card.audio[key].length == 0) {
@@ -124,6 +130,17 @@ export class FullCardComponent {
 
 	closeWindow() {
 		this.close.emit(null);
+	}
+	
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		let rect = this.elRef.nativeElement.querySelector('.card-details').getBoundingClientRect();
+		let scrollbarWidth = 5;
+		console.log('mousedown on sets container', rect, event);
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 
 	private cancelPlayingSounds() {

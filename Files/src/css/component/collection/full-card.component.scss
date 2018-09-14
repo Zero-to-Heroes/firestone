@@ -11,12 +11,18 @@
         width: 413px;
         padding-right: 55px;
         padding-top: 41px;
+        display: flex;
+        flex-direction: column;
 
         h1 {
             @extend %card-title;
             padding-bottom: 14px;
             border-bottom: 1px solid $yellow03;
             margin-bottom: 20px;
+        }
+
+        .card-details {
+            overflow-y: scroll;
         }
 
         .card-info {
@@ -38,15 +44,13 @@
                 ul {
                     list-style: none;
                     display: flex;
-                    flex-wrap: wrap;
+                    flex-direction: column;
 
                     li {
                         display: flex;
                         align-items: center;
-                        justify-content: center;
                         margin-right: 11px;
                         padding-right: 11px;
-                        border-right: 1px solid $yellow02;
 
                         span {
                             margin-right: 6px;
