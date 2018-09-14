@@ -1,34 +1,30 @@
-import { Component, NgZone, Input, SimpleChanges, Directive, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component,  Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 
-import { Card } from '../../models/card';
-import { Set, SetCard } from '../../models/set';
-
-declare var overwolf: any;
+import { SetCard } from '../../models/set';
 
 @Component({
 	selector: 'card-view',
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
-		<div class="card-container" [ngClass]="{'missing': card.ownedNonPremium + card.ownedPremium == 0}">
+		<div class="card-container" [ngClass]="{'missing': _card.ownedNonPremium + _card.ownedPremium == 0}">
 			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
 
-			<img src="{{image()}}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder"/>
+			<img src="{{image}}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder"/>
 			<div class="count" *ngIf="!showPlaceholder">
-				<div class="non-premium" *ngIf="card.ownedNonPremium > 0 || showCounts">
-					<span>{{card.ownedNonPremium}}</span>
+				<div class="non-premium" *ngIf="_card.ownedNonPremium > 0 || showCounts">
+					<span>{{_card.ownedNonPremium}}</span>
 				</div>
-				<div class="premium" *ngIf="card.ownedPremium > 0 || showCounts">
+				<div class="premium" *ngIf="_card.ownedPremium > 0 || showCounts">
 					<i class="gold-theme left">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
 						</svg>
 					</i>
-					<span>{{card.ownedPremium}}</span>
+					<span>{{_card.ownedPremium}}</span>
 					<i class="gold-theme right">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
@@ -69,46 +65,45 @@ declare var overwolf: any;
 // 7.1.1.17994
 export class CardComponent {
 
-	@Input() public card: SetCard;
 	@Input() public tooltips = true;
 	@Input() public showCounts = false;
 
 	showPlaceholder = true;
+	image: string;
+	_card: SetCard;
 
 	constructor(
 		private el: ElementRef,
 		private events: Events,
-		private cdr: ChangeDetectorRef,
-		private cards: AllCardsService) {
+		private cdr: ChangeDetectorRef) {
 		// console.log('constructor CollectionComponent');
+	}
+
+	@Input('card') set card(card: SetCard) {
+		this._card = card;
+		this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + card.id + '.png';
+		console.log('setting card in full-card', card, this.image);
 	}
 
 	@HostListener('click') onClick() {
 		if (this.tooltips) {
-			this.events.broadcast(Events.SHOW_CARD_MODAL, this.card.id);
+			this.events.broadcast(Events.SHOW_CARD_MODAL, this._card.id);
 		}
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
 		if (this.tooltips) {
-			// console.log('mouseenter', this.card, this.el.nativeElement.getBoundingClientRect());
 			let rect = this.el.nativeElement.getBoundingClientRect();
 			let x = rect.left + rect.width - 20;
 			let y = rect.top + rect.height / 2;
-			// console.log('how many collected cards?', this.card.isOwned());
-			this.events.broadcast(Events.SHOW_TOOLTIP, this.card.id, x, y, this.card.isOwned());
+			this.events.broadcast(Events.SHOW_TOOLTIP, this._card.id, x, y, this._card.isOwned());
 		}
 	}
 
 	@HostListener('mouseleave') onMouseLeave() {
 		if (this.tooltips) {
-			// console.log('hiding tooltip', this.cardId);
-			this.events.broadcast(Events.HIDE_TOOLTIP, this.card.id);
+			this.events.broadcast(Events.HIDE_TOOLTIP, this._card.id);
 		}
-	}
-
-	image() {
-		return 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + this.card.id + '.png';
 	}
 
 	imageLoadedHandler() {

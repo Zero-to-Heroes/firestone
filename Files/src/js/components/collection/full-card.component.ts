@@ -1,13 +1,10 @@
-import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Output, Input, EventEmitter, NgZone, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { AllCardsService } from '../../services/all-cards.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { Events } from '../../services/events.service';
 
-import { Card } from '../../models/card';
-import { Set, SetCard } from '../../models/set';
-
-declare var overwolf: any;
+import { SetCard } from '../../models/set';
 
 @Component({
 	selector: 'full-card',
@@ -34,6 +31,10 @@ declare var overwolf: any;
 				<div class="card-info set">
 					<span class="sub-title">Set:</span>
 					<span class="value">{{set}}</span>
+				</div>
+				<div class="card-info rarity">
+					<span class="sub-title">Rarity:</span>
+					<span class="value">{{rarity}}</span>
 				</div>
 				<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
 					<span class="sub-title">Sound:</span>
@@ -65,6 +66,7 @@ export class FullCardComponent {
 	class: string;
 	type: string;
 	set: string;
+	rarity: string;
 	audioClips: any[];
 	// TODO: get rid of this and use a typed model for our own components at least
 	card: any;
@@ -74,8 +76,6 @@ export class FullCardComponent {
 
 	constructor(
 		private events: Events,
-		private collectionManager: CollectionManager,
-		private ngZone: NgZone,
 		private cards: AllCardsService) {
 	}
 
@@ -111,6 +111,7 @@ export class FullCardComponent {
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
 		this.card = card;
+		this.rarity = card.rarity;
 	}
 
 	playSound(audioClip) {
