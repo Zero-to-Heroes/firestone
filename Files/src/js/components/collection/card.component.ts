@@ -82,7 +82,6 @@ export class CardComponent {
 	@Input('card') set card(card: SetCard) {
 		this._card = card;
 		this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + card.id + '.png';
-		console.log('setting card in full-card', card, this.image);
 	}
 
 	@HostListener('click') onClick() {
