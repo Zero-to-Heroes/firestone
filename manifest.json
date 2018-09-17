@@ -107,7 +107,8 @@
 			"matches": [
 				"http://www.zerotoheroes.com",
 				"https://www.googletagmanager.com",
-				"https://*.zam.com"
+				"https://*.zam.com",
+				"https://*.execute-api.us-west-2.amazonaws.com"
 			]
 		},
 		"extra-objects": {
