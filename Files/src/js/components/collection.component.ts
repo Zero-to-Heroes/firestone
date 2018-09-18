@@ -151,7 +151,7 @@ export class CollectionComponent implements AfterViewInit {
 				this.transitionState(() => {
 					this.reset();
 					// console.log(`selecting format in collection`, data);
-					this._menuDisplayType = 'breadcrumbs';
+					this._menuDisplayType = 'menu';
 					this._selectedView = 'sets';
 					this._selectedFormat = data.data[0];
 				});

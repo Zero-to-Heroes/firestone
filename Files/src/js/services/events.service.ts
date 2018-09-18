@@ -10,7 +10,6 @@ interface BroadcastEvent {
 
 // https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
-
 	public static readonly NO_LOG_FILE = 'no-log-file';
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
 	public static readonly STREAMING_LOG_FILE = 'streaming-log-file';
@@ -28,6 +27,10 @@ export class Events {
 	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
+
+	public static readonly SET_MOUSE_OVER = 'set-mouse-over';
+	public static readonly SHOWING_FTUE = 'showing-ftue';
+	public static readonly DISMISS_FTUE = 'dismiss-ftue';
 
 	private _eventBus: Subject<BroadcastEvent>;
 

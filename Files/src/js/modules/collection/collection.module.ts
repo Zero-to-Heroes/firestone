@@ -50,6 +50,9 @@ import { IndexedDbService as AchievementsDbService }  from '../../services/achie
 import { AchievementsRepository }  from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService }  from '../../services/achievement/achievements-storage.service';
 import { PackHistoryService } from '../../services/collection/pack-history.service';
+import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { FtueElement, FtueComponent } from '../../components/ftue.component';
 
 declare var ga: any;
 export class AnalyticsErrorHandler implements ErrorHandler {
@@ -95,22 +98,26 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AchievementSetComponent,
 		AchievementViewComponent,
 
+		FtueElement,
+		FtueComponent,
 		Tooltip,
 		TooltipsComponent,
 	],
 	bootstrap: [
 		MainWindowComponent,
 	],
-	entryComponents: [Tooltip],
+	entryComponents: [Tooltip, FtueElement],
 	providers: [
 		AllCardsService,
 		CardHistoryStorageService,
 		CollectionManager,
 		DebugService,
 		Events,
+		GenericIndexedDbService,
 		IndexedDbService,
 		OwNotificationsService,
 		MemoryInspectionService,
+		PreferencesService,
 		RealTimeNotificationService,
 
 		AchievementsDbService,

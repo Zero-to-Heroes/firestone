@@ -1,0 +1,83 @@
+@import '../global/variables';
+@import '../global/fonts';
+
+.ftue {
+    width: 100%;
+    height: 100%;
+
+    ftue-element {
+		animation: fadeIn 0.10s;
+
+		&.removing {
+			animation: fadeOut 0.1s;
+		}
+    }
+}
+
+@keyframes fadeIn {
+	from { opacity: 0}
+	to { opacity: 1}
+}
+
+@keyframes fadeOut {
+	from { opacity: 1}
+	to { opacity: 0}
+}
+
+
+.ftue-element {
+	background-color: $grey01;
+	padding: 15px;
+	width: 190px;
+	height: 172px;
+    position: absolute;
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+
+	.ftue-title {
+        @extend %ftue-title;
+        margin-bottom: 8px;
+	}
+
+	p {
+		@extend %ftue-text;
+	}
+
+	button {
+        background-color: $grey04;
+        color: $grey01;
+		width: 80px;
+        height: 30px;
+        margin-top: 17px;
+        align-self: flex-end;
+
+		&:hover {
+			background-color: $grey05;
+		}
+    }
+    
+    .ftue-arrow {
+		position: absolute;
+		width: 16px;
+		height: 9px;
+		fill: $grey01;
+		overflow: visible;
+    }
+
+    &.left {
+        .ftue-arrow {
+            transform: rotate(90deg);
+            right: -3px;
+            top: 10px;
+        }
+    }
+
+    &.right {
+        .ftue-arrow {
+            transform: rotate(-90deg);
+            top: 15px;
+            left: -3px;
+        }
+    }
+}

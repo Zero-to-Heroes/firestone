@@ -82,12 +82,12 @@ declare var Crate: any;
 				</svg>
 			</i>
 
+			<ftue></ftue>
 			<tooltips></tooltips>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class MainWindowComponent implements AfterViewInit {
 
 	selectedModule = 'collection';
