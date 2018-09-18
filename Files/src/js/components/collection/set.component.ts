@@ -1,9 +1,11 @@
-import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 import { Events } from '../../services/events.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { Preferences } from '../../models/preferences';
 
 declare var overwolf: any;
 
@@ -77,7 +79,7 @@ declare var overwolf: any;
 						</div>
 					</div>
 				</div>
-				<div class="box-side extra-info">
+				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}">
 					<div class="title">
 						<i class="i-15 pale-theme">
 							<svg class="svg-icon-fill">
@@ -125,7 +127,6 @@ declare var overwolf: any;
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class SetComponent {
 
 	private readonly MOUSE_OVER_DELAY = 300;
@@ -136,12 +137,33 @@ export class SetComponent {
 	epicFill: number = 0;
 	legendaryTimer: number = 40;
 	legendaryFill: number = 0;
+
+	showingPityTimerFtue: boolean = false;
 	flip: string = 'inactive';
+	ftueHighlight: boolean = false;
 	
 	private timeoutHandler;
 
-	constructor(private cdr: ChangeDetectorRef, private events: Events) {
-
+	constructor(
+		private cdr: ChangeDetectorRef, 
+		private elRef: ElementRef,
+		private events: Events) {
+			this.events.on(Events.SHOWING_FTUE).subscribe((event) => {
+				console.log('showing ftue', this._cardSet, event);
+				this.showingPityTimerFtue = true;
+				if (event.data[0] == this._cardSet.id) {
+					console.log('highlighting ftue');
+					this.ftueHighlight = true;
+					this.cdr.detectChanges();
+				}
+			});
+			this.events.on(Events.DISMISS_FTUE).subscribe((event) => {
+				console.log('dismissing ftue', this._cardSet);
+				this.showingPityTimerFtue = false;
+				this.flip = 'inactive';
+				this.ftueHighlight = false;
+				this.cdr.detectChanges();
+			});
 	}
 
 	@Input('cardSet') set cardSet(set: Set) {
@@ -170,15 +192,22 @@ export class SetComponent {
 
 	@HostListener('mouseenter') onMouseEnter() {
 		this.timeoutHandler = setTimeout(() => {
-			this.flip = 'active';
-			this.cdr.detectChanges();			
+			if (!this.showingPityTimerFtue) {
+				this.flip = 'active';
+				let rect = this.elRef.nativeElement.getBoundingClientRect();
+				console.log('broadcasting set mouse over', this._cardSet, rect);
+				this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);				
+				this.cdr.detectChanges();		
+			}
 		}, this.MOUSE_OVER_DELAY)
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		clearTimeout(this.timeoutHandler);
-		this.flip = 'inactive';
-		this.cdr.detectChanges();
+		if (!this.showingPityTimerFtue) {
+			this.flip = 'inactive';
+			this.cdr.detectChanges();
+		}
 	}
 }

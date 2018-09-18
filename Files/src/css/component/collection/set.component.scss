@@ -142,8 +142,8 @@
 		background: rgba(255, 255, 255, 0.08);
 		transform: rotateY(-180deg);
 
-		&[hidden] {
-			display: none;
+		&.ftue {
+			border: 1px solid $grey01;
 		}
 
 		.title {
