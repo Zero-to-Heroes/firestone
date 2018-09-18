@@ -114,7 +114,7 @@
 	color: $grey03;
 }
 
-%dust-number, %hotkey-label {
+%dust-number, %hotkey-label, %pity-timer-title {
 	font-family: 'Open Sans', sans-serif;
 	font-weight: 400;
 	font-size: 12px;
@@ -140,6 +140,13 @@
 	font-weight: 400;
 	font-size: 12px;
 	color: $darkred;
+}
+
+%pity-timer-text {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 11px;
+	color: $green01;
 }
 
 %completion-number {

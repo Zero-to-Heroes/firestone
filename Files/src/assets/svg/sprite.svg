@@ -25,6 +25,11 @@
 	<polygon points="7.5,7.5 0,15 0,0" fill="var(--icon-color, currentcolor)"/>
 </symbol>
 
+<symbol id="timer" viewBox="0 0 15 15">
+  <path d="M7.5,1A6.5,6.5,0,1,0,14,7.5,6.5,6.5,0,0,0,7.5,1Zm0,12A5.5,5.5,0,1,1,13,7.5,5.51,5.51,0,0,1,7.5,13ZM8,4H7V8h4V7H8Z" fill="var(--icon-color, currentcolor)"/>
+</symbol>
+
+
 <!-- icons 22x30 -->
 <symbol id="two_gold_leaves" viewBox="0 0 22 30">
 	<path d="M4.3,19.8c-0.1-0.6-1.2-6.4,1.4-11.3C8.5,3.3,14.3,1,14.3,1L4.3,19.8z" fill="var(--icon-color, currentcolor)"/>
