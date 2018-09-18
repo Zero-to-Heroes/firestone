@@ -209,7 +209,7 @@ export class IndexedDbService {
 		this.db.openDatabase(9, (evt) => {
 			console.log('upgrading db', evt);
 
-			if (evt.oldVersion < 7) {
+			if (evt.oldVersion < 1) {
 				console.log('[storage] upgrade to version 1');
 				let objectStore = evt.currentTarget.result.createObjectStore(
 					'card-history',
