@@ -1,4 +1,5 @@
 import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -11,107 +12,123 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/collection/set.component.scss`],
 	template: `
 		<div *ngIf="_cardSet" class="set">
-			<div [hidden]="showingExtraInfo" class="set-view" (click)="browseSet()">
-				<div class="logo-container">
-					<img src="{{'/Files/assets/images/sets/' + _cardSet.id + '.png'}}" class="set-logo" />
-					<span class="text set-name" *ngIf="_displayName">{{_cardSet.name}}</span>
-				</div>
-				<span class="cards-collected">{{_cardSet.ownedLimitCollectibleCards}}/{{_cardSet.numberOfLimitCollectibleCards()}}</span>
-				<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
-					<i class="i-25 pale-gold-theme corner bottom-left">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
-						</svg>
-					</i>
-					<i class="i-25 pale-gold-theme corner top-left">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
-						</svg>
-					</i>
-					<i class="i-25 pale-gold-theme corner top-right">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
-						</svg>
-					</i>
-					<i class="i-25 pale-gold-theme corner bottom-right">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
-						</svg>
-					</i>
-				</div>
-				<div class="frame complete-premium" *ngIf="isPremiumComplete()">
-					<div class="outer-border"></div>
-
-					<i class="i-22X30 gold-theme corner bottom-left">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
-						</svg>
-					</i>
-
-					<i class="i-22X30 gold-theme corner top-left">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
-						</svg>
-					</i>
-
-					<i class="i-22X30 gold-theme corner top-right">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
-						</svg>
-					</i>
-
-					<i class="i-22X30 gold-theme corner bottom-right">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
-						</svg>
-					</i>
-
-					<div class="crown">
-						<i class="i-20X10 gold-theme">
+			<div class="wrapper-for-flip" [@flipState]="flip">
+				<div class="box-side set-view" (click)="browseSet()">
+					<div class="logo-container">
+						<img src="{{'/Files/assets/images/sets/' + _cardSet.id + '.png'}}" class="set-logo" />
+						<span class="text set-name" *ngIf="_displayName">{{_cardSet.name}}</span>
+					</div>
+					<span class="cards-collected">{{_cardSet.ownedLimitCollectibleCards}}/{{_cardSet.numberOfLimitCollectibleCards()}}</span>
+					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
+						<i class="i-25 pale-gold-theme corner bottom-left">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#three_gold_leaves"/>
+								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+							</svg>
+						</i>
+						<i class="i-25 pale-gold-theme corner top-left">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+							</svg>
+						</i>
+						<i class="i-25 pale-gold-theme corner top-right">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
+							</svg>
+						</i>
+						<i class="i-25 pale-gold-theme corner bottom-right">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#common_set_corner"/>
 							</svg>
 						</i>
 					</div>
-				</div>
-			</div>
-			<div [hidden]="!showingExtraInfo" class="extra-info">
-				<div class="title">
-					<i class="i-15 pale-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#timer"/>
-						</svg>
-					</i>
-					<span>Next guaranteed:</span>
-				</div>
-				<div class="progression epic">
-					<div class="progress-title">
-						<img src="/Files/assets/images/rarity/rarity-epic-small.png" />
-						<span>In {{epicTimer}} packs</span>
-					</div>
-					<div class="progress-bar">
-						<div class="progress-bar-filled" [style.width.%]="epicFill">
+					<div class="frame complete-premium" *ngIf="isPremiumComplete()">
+						<div class="outer-border"></div>
+
+						<i class="i-22X30 gold-theme corner bottom-left">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+							</svg>
+						</i>
+
+						<i class="i-22X30 gold-theme corner top-left">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+							</svg>
+						</i>
+
+						<i class="i-22X30 gold-theme corner top-right">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+							</svg>
+						</i>
+
+						<i class="i-22X30 gold-theme corner bottom-right">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves"/>
+							</svg>
+						</i>
+
+						<div class="crown">
+							<i class="i-20X10 gold-theme">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#three_gold_leaves"/>
+								</svg>
+							</i>
 						</div>
 					</div>
 				</div>
-				<div class="progression legendary">
-					<div class="progress-title">
-						<img src="/Files/assets/images/rarity/rarity-legendary-small.png" />
-						<span>In {{legendaryTimer}} packs</span>
+				<div class="box-side extra-info">
+					<div class="title">
+						<i class="i-15 pale-theme">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#timer"/>
+							</svg>
+						</i>
+						<span>Next guaranteed:</span>
 					</div>
-					<div class="progress-bar">
-						<div class="progress-bar-filled" [style.width.%]="legendaryFill">
-						</div>	
+					<div class="progression epic">
+						<div class="progress-title">
+							<img src="/Files/assets/images/rarity/rarity-epic-small.png" />
+							<span>In {{epicTimer}} packs</span>
+						</div>
+						<div class="progress-bar">
+							<div class="progress-bar-filled" [style.width.%]="epicFill">
+							</div>
+						</div>
 					</div>
-					<button class="browse-set-button" (click)="browseSet()">Browse Set</button>
+					<div class="progression legendary">
+						<div class="progress-title">
+							<img src="/Files/assets/images/rarity/rarity-legendary-small.png" />
+							<span>In {{legendaryTimer}} packs</span>
+						</div>
+						<div class="progress-bar">
+							<div class="progress-bar-filled" [style.width.%]="legendaryFill">
+							</div>	
+						</div>
+						<button class="browse-set-button" (click)="browseSet()">Browse Set</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	`,
+	animations: [
+	  	trigger('flipState', [
+			state('active', style({
+		  		transform: 'rotateY(179deg)'
+			})),
+			state('inactive', style({
+		  		transform: 'rotateY(0)'
+			})),
+			transition('active => inactive', animate('500ms ease-out')),
+			transition('inactive => active', animate('500ms ease-in'))
+	  ])
+	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // 7.1.1.17994
 export class SetComponent {
+
+	private readonly MOUSE_OVER_DELAY = 300;
 
 	_cardSet: Set;
 	_displayName = false;
@@ -119,7 +136,9 @@ export class SetComponent {
 	epicFill: number = 0;
 	legendaryTimer: number = 40;
 	legendaryFill: number = 0;
-	showingExtraInfo = false;
+	flip: string = 'inactive';
+	
+	private timeoutHandler;
 
 	constructor(private cdr: ChangeDetectorRef, private events: Events) {
 
@@ -150,13 +169,16 @@ export class SetComponent {
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		this.showingExtraInfo = true;
-		this.cdr.detectChanges();
+		this.timeoutHandler = setTimeout(() => {
+			this.flip = 'active';
+			this.cdr.detectChanges();			
+		}, this.MOUSE_OVER_DELAY)
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		this.showingExtraInfo = false;
+		clearTimeout(this.timeoutHandler);
+		this.flip = 'inactive';
 		this.cdr.detectChanges();
 	}
 }

@@ -6,8 +6,8 @@
 	align-items: stretch;
 	flex-direction: column;
 	height: 100%;
-	background: rgba(255, 255, 255, 0.08);
 	position: relative;
+	perspective: 800px;
 	
 	.set-view {
 		display: flex;
@@ -15,9 +15,11 @@
 		flex-direction: column;
 		height: 100%;
 		position: relative;
+		transform: rotateY(0deg);
+		background: rgba(255, 255, 255, 0.08);
 
-		&[hidden] {
-			display: none;
+		&:hover {
+			background: rgba(255, 255, 255, 0.12);
 		}
 	}
 
@@ -137,6 +139,8 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		background: rgba(255, 255, 255, 0.08);
+		transform: rotateY(-180deg);
 
 		&[hidden] {
 			display: none;
@@ -203,4 +207,21 @@
 			}
 		}
 	}
+}
+
+.wrapper-for-flip {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	position: relative;
+	transform-style: preserve-3d;
+	transform: transform 1s;
+}
+
+.box-side {
+	width: 100%;
+   	height: 100%;
+   	position: absolute;
+	backface-visibility: hidden;
 }
