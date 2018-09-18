@@ -11,4 +11,8 @@ export class PreferencesService {
     public getPreferences(): Promise<Preferences> {
         return this.indexedDb.getUserPreferences();
     }
+    
+    public savePreferences(userPrefs: Preferences) {
+        this.indexedDb.saveUserPreferences(userPrefs);
+    }
 }

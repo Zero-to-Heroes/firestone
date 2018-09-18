@@ -99,19 +99,19 @@ export class FtueComponent implements AfterViewInit {
                     this.ftueElement.instance.text = `You can see when is your next legendary and epic scheduled for every set.
                     <br/>Have fun!`;
                     this.ftueElement.instance.buttonText = `Got it`;
-                    this.events.broadcast(Events.SHOWING_FTUE, data.data[1].id);
+                    this.events.broadcast(Events.SHOWING_FTUE, data.data[1]);
                     this.cdr.detectChanges();
+                    this.updatePreferences();
                 }
 			}
 		);
 
-		this.events.on(Events.DISMISS_FTUE).subscribe(
-			(data) => {
-				console.log('hiding ftue', data);
-                this.destroy();
-                this.showingPityTimerFtue = false;
-			}
-		);
+		this.events.on(Events.DISMISS_FTUE).subscribe(() => this.destroy());
+		this.events.on(Events.FORMAT_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		this.events.on(Events.MODULE_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		this.events.on(Events.SHOW_CARDS).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		this.events.on(Events.SET_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		this.events.on(Events.SHOW_CARD_MODAL).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
 	}
 
 	ngAfterViewInit() {
@@ -127,9 +127,15 @@ export class FtueComponent implements AfterViewInit {
 	}
 
 	private destroy() {
-		if (this.ftueElement) {
+        this.showingPityTimerFtue = false;
+		if (this.ftueElement && this.ftueElement.instance.display !== 'none') {
 			this.ftueElement.instance.display = 'none';
 			this.cdr.detectChanges();
 		}
-	}
+    }
+    
+    private updatePreferences() {
+        this.userPrefs = new Preferences(true);
+        this.preferences.savePreferences(this.userPrefs);
+    }
 }
