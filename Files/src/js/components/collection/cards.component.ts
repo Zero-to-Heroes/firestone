@@ -23,6 +23,24 @@ import { Set, SetCard } from '../../models/set';
 				<span class="text set-name">{{_searchString}}</span>
 			</span>
 			<div class="show-filter" *ngIf="_activeCards" [ngStyle]="{'display': _searchString ? 'none' : 'flex'}">
+				<!-- Rarity -->
+				<ng-select
+					class="rarity-select"
+					[options]="raritySelectOptions"
+					[(ngModel)]="rarityActiveFilter"
+					(selected)="selectRarityFilter($event)"
+					(opened)="refresh()"
+					(closed)="refresh()"
+					[noFilter]="1">
+					<ng-template #optionTemplate let-option="option">
+						<span>{{option?.label}}</span>
+						<i class="i-30" *ngIf="option.value == rarityActiveFilter">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown"/>
+							</svg>
+						</i>
+					</ng-template>
+				</ng-select>
 				<!-- Class -->
 				<ng-select
 					class="class-select"
@@ -95,11 +113,12 @@ import { Set, SetCard } from '../../models/set';
 export class CardsComponent implements AfterViewInit {
 
 	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 100000;
-
-	readonly FILTER_OWN = 'own';
-	readonly FILTER_GOLDEN_OWN = 'goldenown';
-	readonly FILTER_DONT_OWN = 'dontown';
-	readonly FILTER_ALL = 'all';
+	
+	readonly RARITY_FILTER_ALL = 'rarity-all';
+	readonly RARITY_FILTER_COMMON = 'common';
+	readonly RARITY_FILTER_RARE = 'rare';
+	readonly RARITY_FILTER_EPIC = 'epic';
+	readonly RARITY_FILTER_LEGENDARY = 'legendary';
 	
 	readonly CLASS_FILTER_ALL = 'class-all';
 	readonly CLASS_DRUID = 'druid';
@@ -112,11 +131,17 @@ export class CardsComponent implements AfterViewInit {
 	readonly CLASS_WARLOCK = 'warlock';
 	readonly CLASS_WARRIOR = 'warrior';
 
-	cardsOwnedSelectOptions: Array<IOption> = [
-		{label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN},
-		{label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN},
-		{label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN},
-		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
+	readonly FILTER_OWN = 'own';
+	readonly FILTER_GOLDEN_OWN = 'goldenown';
+	readonly FILTER_DONT_OWN = 'dontown';
+	readonly FILTER_ALL = 'all';
+
+	raritySelectOptions: Array<IOption> = [
+		{label: this.labelFor(this.RARITY_FILTER_ALL), value: this.RARITY_FILTER_ALL},
+		{label: this.labelFor(this.RARITY_FILTER_COMMON), value: this.RARITY_FILTER_COMMON},
+		{label: this.labelFor(this.RARITY_FILTER_RARE), value: this.RARITY_FILTER_RARE},
+		{label: this.labelFor(this.RARITY_FILTER_EPIC), value: this.RARITY_FILTER_EPIC},
+		{label: this.labelFor(this.RARITY_FILTER_LEGENDARY), value: this.RARITY_FILTER_LEGENDARY},
 	]
 
 	classSelectOptions: Array<IOption> = [
@@ -132,6 +157,13 @@ export class CardsComponent implements AfterViewInit {
 		{label: this.labelFor(this.CLASS_WARRIOR), value: this.CLASS_WARRIOR},
 	]
 
+	cardsOwnedSelectOptions: Array<IOption> = [
+		{label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN},
+		{label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN},
+		{label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN},
+		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
+	]
+
 	_searchString: string;
 	_cardList: SetCard[];
 	_activeCards: SetCard[];
@@ -140,8 +172,9 @@ export class CardsComponent implements AfterViewInit {
 	_numberOfPages: number;
 	_currentPage = 0;
 	_pages: number[] = [];
-	cardsOwnedActiveFilter = this.FILTER_ALL;
 	classActiveFilter = this.CLASS_FILTER_ALL;
+	rarityActiveFilter = this.RARITY_FILTER_ALL;
+	cardsOwnedActiveFilter = this.FILTER_ALL;
 
 	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {
 
@@ -177,14 +210,20 @@ export class CardsComponent implements AfterViewInit {
 		this._searchString = searchString;
 	}
 
-	selectCardsOwnedFilter(option: IOption) {
-		this.cardsOwnedActiveFilter = option.value;
+	selectRarityFilter(option: IOption) {
+		this.rarityActiveFilter = option.value;
 		this._currentPage = 0;
 		this.updateShownCards();
 	}
 
 	selectClassFilter(option: IOption) {
 		this.classActiveFilter = option.value;
+		this._currentPage = 0;
+		this.updateShownCards();
+	}
+
+	selectCardsOwnedFilter(option: IOption) {
+		this.cardsOwnedActiveFilter = option.value;
 		this._currentPage = 0;
 		this.updateShownCards();
 	}
@@ -226,8 +265,9 @@ export class CardsComponent implements AfterViewInit {
 		// console.log('updating card list', this._cardList, this.classActiveFilter);
 		this._cardsIndexRangeStart = this._currentPage * this.MAX_CARDS_DISPLAYED_PER_PAGE;
 		let filteredCards = this._cardList
-				.filter(this.filterCardsOwned())
-				.filter(this.filterClass());
+				.filter(this.filterRarity())
+				.filter(this.filterClass())
+				.filter(this.filterCardsOwned());
 		// console.log('after filter', filteredCards);
 		this._pages = [];
 		this._numberOfPages = Math.ceil(filteredCards.length / this.MAX_CARDS_DISPLAYED_PER_PAGE);
@@ -241,6 +281,24 @@ export class CardsComponent implements AfterViewInit {
 		// console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
 		// console.log('active cards', this._activeCards);
 		this.cdr.detectChanges();
+	}
+
+	private filterRarity() {
+		switch (this.rarityActiveFilter) {
+			case this.RARITY_FILTER_ALL:
+				return (card: SetCard) => true;
+			default:
+				return (card: SetCard) => card.rarity && (card.rarity.toLowerCase() == this.rarityActiveFilter);
+		}
+	}
+
+	private filterClass() {
+		switch (this.classActiveFilter) {
+			case this.CLASS_FILTER_ALL:
+				return (card: SetCard) => true;
+			default:
+				return (card: SetCard) => card.cardClass && (card.cardClass.toLowerCase() == this.classActiveFilter);
+		}
 	}
 
 	private filterCardsOwned() {
@@ -258,21 +316,13 @@ export class CardsComponent implements AfterViewInit {
 		}
 	}
 
-	private filterClass() {
-		switch (this.classActiveFilter) {
-			case this.CLASS_FILTER_ALL:
-				return (card: SetCard) => true;
-			default:
-				return (card: SetCard) => card.cardClass && (card.cardClass.toLowerCase() == this.classActiveFilter);
-		}
-	}
-
 	private labelFor(filter: string) {
 		switch (filter) {
-			case this.FILTER_ALL: return 'All existing cards';
-			case this.FILTER_OWN: return 'Only cards I have';
-			case this.FILTER_GOLDEN_OWN: return 'Only golden cards I have';
-			case this.FILTER_DONT_OWN: return 'Only cards I do not have';
+			case this.RARITY_FILTER_ALL: return 'Any rarity';
+			case this.RARITY_FILTER_COMMON: return 'Common';
+			case this.RARITY_FILTER_RARE: return 'Rare';
+			case this.RARITY_FILTER_EPIC: return 'Epic';
+			case this.RARITY_FILTER_LEGENDARY: return 'Legendary';
 			
 			case this.CLASS_FILTER_ALL: return 'All classes';
 			case this.CLASS_DRUID: return 'Druid';
@@ -284,6 +334,11 @@ export class CardsComponent implements AfterViewInit {
 			case this.CLASS_SHAMAN: return 'Shaman';
 			case this.CLASS_WARLOCK: return 'Warlock';
 			case this.CLASS_WARRIOR: return 'Warrior';
+
+			case this.FILTER_ALL: return 'All existing cards';
+			case this.FILTER_OWN: return 'Only cards I have';
+			case this.FILTER_GOLDEN_OWN: return 'Only golden cards I have';
+			case this.FILTER_DONT_OWN: return 'Only cards I do not have';
 
 			default: console.log('unknown filter', filter);
 		}
