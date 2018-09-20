@@ -130,6 +130,7 @@ export class CardSearchComponent implements AfterViewInit {
 				return new SetCard(
 					card.id, 
 					card.name, 
+					card.cardClass,
 					card.rarity, 
 					card.cost,
 					collectionCard ? collectionCard.count : 0, 

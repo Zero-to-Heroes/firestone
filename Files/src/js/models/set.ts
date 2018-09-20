@@ -102,14 +102,23 @@ export class Set {
 export class SetCard {
 	readonly id: string;
 	readonly name: string;
+	readonly cardClass: string;
 	readonly rarity: string;
 	readonly cost: number;
 	readonly ownedNonPremium: number = 0;
 	readonly ownedPremium: number = 0;
 
-	constructor(id: string, name: string, rarity: string, cost: number, ownedNonPremium?: number, ownedPremium?: number) {
+	constructor(
+		id: string, 
+		name: string, 
+		cardClass: string, 
+		rarity: string, 
+		cost: number, 
+		ownedNonPremium?: number, 
+		ownedPremium?: number) {
 		this.id = id;
 		this.name = name;
+		this.cardClass = cardClass ? cardClass.toLowerCase() : cardClass;
 		this.rarity = rarity;
 		this.cost = cost;
 		this.ownedNonPremium = ownedNonPremium || 0;

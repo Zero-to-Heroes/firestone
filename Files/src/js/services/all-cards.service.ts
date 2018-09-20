@@ -70,7 +70,7 @@ export class AllCardsService {
 				if (card.type == 'Hero') {
 					cardName += ' (Hero)';
 				}
-				return new SetCard(card.id, cardName, card.rarity.toLowerCase(), card.cost)
+				return new SetCard(card.id, cardName, card.playerClass, card.rarity.toLowerCase(), card.cost)
 			});
 	}
 
@@ -129,6 +129,6 @@ export class AllCardsService {
 			.filter(card => card.set)
 			.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
 			.filter(card => setId === card.set.toLowerCase())
-			.map(card => new SetCard(card.id, card.name, card.rarity.toLowerCase(), card.cost));
+			.map(card => new SetCard(card.id, card.name, card.playerClass, card.rarity.toLowerCase(), card.cost));
 	}
 }

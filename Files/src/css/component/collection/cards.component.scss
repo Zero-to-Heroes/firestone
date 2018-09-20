@@ -12,10 +12,10 @@
 .set-title {
 	@extend %set-result;
 	display: flex;
+    flex-shrink: 0;
     align-items: center;
 	margin: 0;
-    padding-top: 5px;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
 
 	img {
 		width: 53px;
@@ -31,22 +31,28 @@ collection-empty-state {
 
 .show-filter {
 	@extend %search-active;
-    position: absolute;
-    right: 0;
-    top: -29px;
-    right: 20px;
     display: flex;
+    flex-shrink: 0;
     align-items: center;
-
-    .label {
-    	margin-right: 15px;
-    }
+    margin-right: 20px;
+    padding-bottom: 18px;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    border-bottom: 1px solid $grey04;
 
 	ng-select {
 		@extend %search-active;
-		width: 190px;
 		height: 30px;
 		background: rgba(255, 255, 255, 0.08);
+		margin-right: 15px;
+
+		&.class-select {
+			width: 110px;
+		}
+
+		&.owned-select {
+			width: 190px;
+		}
 
 		&:focus, &:active {
 			outline: none;
