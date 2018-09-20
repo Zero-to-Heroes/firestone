@@ -121,7 +121,6 @@ export class CollectionComponent implements AfterViewInit {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
-				// this.cdr.detectChanges();
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -135,13 +134,11 @@ export class CollectionComponent implements AfterViewInit {
 			(data) => {
 				this.transitionState(() => {
 					this.reset();
-					// console.log(`selecting set, showing cards`, data);
 					this._menuDisplayType = 'breadcrumbs';
 					this._selectedView = 'cards';
 					this._selectedSet = data.data[0];
 					this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 					this._cardList = this._selectedSet.allCards;
-					// this.cdr.detectChanges();
 				});
 			}
 		)
@@ -150,7 +147,6 @@ export class CollectionComponent implements AfterViewInit {
 			(data) => {
 				this.transitionState(() => {
 					this.reset();
-					// console.log(`selecting format in collection`, data);
 					this._menuDisplayType = 'menu';
 					this._selectedView = 'sets';
 					this._selectedFormat = data.data[0];
@@ -191,12 +187,8 @@ export class CollectionComponent implements AfterViewInit {
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			console.log('received', message, this.windowId);
 			if (message.id === 'click-card') {
-				// this.ngZone.run(() => {
-				// this.transitionState(() => {
-					this.selectCard(message.content);
-					overwolf.windows.restore(this.windowId);
-					// this.cdr.detectChanges();
-				// })
+				this.selectCard(message.content);
+				overwolf.windows.restore(this.windowId);
 			}
 		});
 
