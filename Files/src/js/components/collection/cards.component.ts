@@ -202,6 +202,9 @@ export class CardsComponent implements AfterViewInit {
 	@Input('cardList') set cardList(cardList: SetCard[]) {
 		this._currentPage = 0;
 		this._cardList = sortBy(cardList, "cost", "name");
+		this.classActiveFilter = this.CLASS_FILTER_ALL;
+		this.rarityActiveFilter = this.RARITY_FILTER_ALL;
+		this.cardsOwnedActiveFilter = this.FILTER_ALL;
 		this.updateShownCards();
 	}
 
