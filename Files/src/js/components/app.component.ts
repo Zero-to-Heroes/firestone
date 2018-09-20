@@ -11,6 +11,7 @@ import { Events } from '../services/events.service';
 import { PackHistoryService } from '../services/collection/pack-history.service';
 import { PackStatsService } from '../services/collection/pack-stats.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
+import { AchievementStatsService } from '../services/achievement/achievement-stats.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -43,6 +44,7 @@ export class AppComponent {
 		private publicEventsListener: HsPublicEventsListener,
 		private achievementsMonitor: AchievementsMonitor,
 		private packStatsService: PackStatsService,
+		private achievementStatsService: AchievementStatsService,
 		private collectionDb: IndexedDbService,
 		private collectionManager: CollectionManager,
 		private achievementsDb: AchievementsDb,

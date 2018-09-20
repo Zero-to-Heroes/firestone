@@ -23,6 +23,7 @@ export class Events {
 	public static readonly SET_SELECTED = 'set-selected';
 
 	public static readonly ACHIEVEMENT_SET_SELECTED = 'achievement-set-selected';
+	public static readonly NEW_ACHIEVEMENT = 'new-achievement';
 
 	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
