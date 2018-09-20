@@ -26,7 +26,7 @@ label {
     flex-shrink: 0;
     position: relative;
     margin-left: auto;
-    border: 1px solid $grey03;
+    border: 1px solid $grey05;
     border-radius: 33.33333%/50%; // 2:3 width height ratio
     transition: .15s;
 
@@ -34,7 +34,7 @@ label {
       content: "";
       position: absolute;
       border-radius: 50%;
-      background: $grey03;
+      background: $grey05;
       transition: background .25s, transform .15s;
     }
   }
