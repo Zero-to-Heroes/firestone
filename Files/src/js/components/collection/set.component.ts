@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 import { Card } from '../../models/card';
@@ -162,7 +162,9 @@ export class SetComponent {
 				this.showingPityTimerFtue = false;
 				this.flip = 'inactive';
 				this.ftueHighlight = false;
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			});
 	}
 
