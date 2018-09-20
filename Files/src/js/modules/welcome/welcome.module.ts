@@ -19,14 +19,6 @@ import { CollectionManager }  from '../../services/collection/collection-manager
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 
-declare var ga: any;
-export class AnalyticsErrorHandler implements ErrorHandler {
-  	handleError(err: any) : void {
-	  	console.error('error captured and sent to GA', err);
-		ga('send', 'event', 'error', 'other', JSON.stringify(err));
-  	}
-}
-
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -51,7 +43,6 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		IndexedDbService,
 		MemoryInspectionService,
 		RealTimeNotificationService,
-		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })
 

@@ -8,14 +8,6 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { NotificationsComponent }  from '../../components/notifications.component';
 import { DebugService } from '../../services/debug.service';
 
-declare var ga: any;
-export class AnalyticsErrorHandler implements ErrorHandler {
-  	handleError(err: any) : void {
-	  	console.error('error captured and sent to GA', err);
-		ga('send', 'event', 'error', 'other', JSON.stringify(err));
-  	}
-}
-
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -31,7 +23,6 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 	],
 	providers: [
 		DebugService,
-		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })
 

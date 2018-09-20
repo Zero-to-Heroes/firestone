@@ -54,14 +54,6 @@ import { GenericIndexedDbService } from '../../services/generic-indexed-db.servi
 import { PreferencesService } from '../../services/preferences.service';
 import { FtueElement, FtueComponent } from '../../components/ftue.component';
 
-declare var ga: any;
-export class AnalyticsErrorHandler implements ErrorHandler {
-  	handleError(err: any) : void {
-	  	console.error('error captured and sent to GA', err);
-		ga('send', 'event', 'error', 'other', JSON.stringify(err));
-  	}
-}
-
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -124,8 +116,6 @@ export class AnalyticsErrorHandler implements ErrorHandler {
 		AchievementsRepository,
 		AchievementsStorageService,
 		PackHistoryService,
-
-		{ provide: ErrorHandler, useClass: AnalyticsErrorHandler },
 	],
 })
 
