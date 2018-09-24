@@ -40,7 +40,7 @@ export class SetsContainer {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		let rect = this.elRef.nativeElement.querySelector('.sets').getBoundingClientRect();
+		let rect = this.elRef.nativeElement.querySelector('.sets-container').getBoundingClientRect();
 		let scrollbarWidth = 5;
 		console.log('mousedown on sets container', rect, event);
 		if (event.offsetX >= rect.width - scrollbarWidth) {
