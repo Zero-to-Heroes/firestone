@@ -3,7 +3,12 @@
 
 .sets {
 	margin-top: 26px;
-	overflow: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+sets-container {
+    display: flex;
 }
 
 .menu-selection {
@@ -11,6 +16,8 @@
 	align-items: center;
 	list-style: none;
 	margin-bottom: 20px;
+    flex-shrink: 0;
+	flex-grow: 0;
 
 	li {
 		@extend %sets-menu;
