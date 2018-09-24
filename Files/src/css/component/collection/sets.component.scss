@@ -23,8 +23,16 @@ sets-container {
 		@extend %sets-menu;
 		margin-right: 20px;
 
+		&:hover {
+			color: $grey02;
+		}
+
 		&.active {
 			color: $grey01;
+
+			&:hover {
+				color: $grey01;
+			}
 		}
 	}
 }
