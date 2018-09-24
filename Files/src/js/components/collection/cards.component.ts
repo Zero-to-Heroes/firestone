@@ -78,7 +78,7 @@ import { Set, SetCard } from '../../models/set';
 					</ng-template>
 				</ng-select>
 			</div>
-			<ul class="cards-list" *ngIf="_activeCards">
+			<ul class="cards-list" *ngIf="_activeCards && _activeCards.length > 0">
 				<li *ngFor="let card of _activeCards">
 					<card-view [card]="card">/</card-view>
 				</li>
