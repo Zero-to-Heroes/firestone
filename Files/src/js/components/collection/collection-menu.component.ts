@@ -29,7 +29,7 @@ declare var overwolf: any;
 				<ul class="breadcrumbs" *ngIf="searchString" (click)="goToCollectionView()">
 					<li>Home</li>
 					<li>Search</li>
-					<li>{{searchString}}</li>
+					<li>search result for {{searchString}}</li>
 				</ul>
 			</ng-container>
 		</ng-container>
