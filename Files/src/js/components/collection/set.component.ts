@@ -142,6 +142,7 @@ export class SetComponent {
 	flip: string = 'inactive';
 	ftueHighlight: boolean = false;
 	
+	private movingToSet: boolean = false;
 	private timeoutHandler;
 
 	constructor(
@@ -149,22 +150,27 @@ export class SetComponent {
 		private elRef: ElementRef,
 		private events: Events) {
 			this.events.on(Events.SHOWING_FTUE).subscribe((event) => {
-				console.log('showing ftue', this._cardSet, event);
+				// console.log('showing ftue', this._cardSet, event);
 				this.showingPityTimerFtue = true;
 				if (event.data[0] == this._cardSet.id) {
-					console.log('highlighting ftue');
+					console.log('highlighting ftue', this._cardSet.id);
 					this.ftueHighlight = true;
 					this.cdr.detectChanges();
 				}
 			});
 			this.events.on(Events.DISMISS_FTUE).subscribe((event) => {
-				console.log('dismissing ftue', this._cardSet);
+				// console.log('dismissing ftue', this._cardSet);
 				this.showingPityTimerFtue = false;
-				this.flip = 'inactive';
-				this.ftueHighlight = false;
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
+				setTimeout(() => {
+					if (!this.movingToSet && this.flip == 'active') {
+						console.log('fliplping back from event');
+						this.flip = 'inactive';
+						this.ftueHighlight = false;
+						if (!(<ViewRef>this.cdr).destroyed) {
+							this.cdr.detectChanges();
+						}
+					}
+				});
 			});
 	}
 
@@ -190,6 +196,8 @@ export class SetComponent {
 
 	browseSet() {
 		this.events.broadcast(Events.SET_SELECTED, this._cardSet);
+		this.movingToSet = true;
+		console.log('set moving to set event');
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
@@ -208,6 +216,7 @@ export class SetComponent {
 	onMouseLeave() {
 		clearTimeout(this.timeoutHandler);
 		if (!this.showingPityTimerFtue) {
+			console.log('flipping back');
 			this.flip = 'inactive';
 			this.cdr.detectChanges();
 		}
