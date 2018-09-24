@@ -205,7 +205,7 @@ export class SetComponent {
 			if (!this.showingPityTimerFtue) {
 				this.flip = 'active';
 				let rect = this.elRef.nativeElement.getBoundingClientRect();
-				console.log('broadcasting set mouse over', this._cardSet, rect);
+				console.log('broadcasting set mouse over', this._cardSet.id, rect);
 				this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);				
 				this.cdr.detectChanges();		
 			}

@@ -87,7 +87,8 @@ export class FtueComponent implements AfterViewInit {
                         left = rect.right + 5;
                         this.ftueElement.instance.placement = 'right';
                     }
-                    const top: number = rect.top;
+                    // TODO: I think this comes from the window invisible borders, to be checked
+                    const top: number = rect.top - 10;
 
                     this.ftueElement.instance.display = 'flex';
                     this.ftueElement.instance.left = left + 'px';
