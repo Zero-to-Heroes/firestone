@@ -45,6 +45,7 @@
 	}
 
 	button {
+		@extend %ftue-button;
         background-color: $grey04;
         color: $grey01;
 		width: 80px;
