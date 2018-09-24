@@ -29,7 +29,7 @@ export class SetsContainer {
 	constructor(private elRef: ElementRef) {}
 
 	@Input() set sets(sets: Set[]) {
-		console.log('setting new sets', sets);
+		// console.log('setting new sets', sets);
 		this._sets = sets;
 	}
 
