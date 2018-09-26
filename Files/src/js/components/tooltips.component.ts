@@ -60,6 +60,10 @@ export class TooltipsComponent implements AfterViewInit {
 				let y: number = data.data[2];
 				let owned: boolean = data.data[3];
 				let top: number = Math.min(window.innerHeight - 400, y - 388 / 2);
+				if (x > 500) {
+					// Tooltip width and offset
+					x = x - 256 - 70;
+				}
 
 			    this.tooltip.instance.display = 'block';
 		    	this.tooltip.instance.removing = false;
