@@ -21,13 +21,13 @@ declare var overwolf: any;
 			</ul>
 			<ng-container *ngSwitchCase="'breadcrumbs'">
 				<ul class="breadcrumbs" *ngIf="!searchString">
-					<li (click)="goToCollectionView()">Sets</li>
-					<li (click)="goToFormatView()">{{getSelectedFormat()}}</li>
-					<li (click)="goToSetView()" *ngIf="selectedSet">{{selectedSet.name}}</li>
+					<li (click)="goToCollectionView()" class="highlight-on-hover">Sets</li>
+					<li (click)="goToFormatView()" class="highlight-on-hover">{{getSelectedFormat()}}</li>
+					<li (click)="goToSetView()" class="highlight-on-hover" *ngIf="selectedSet">{{selectedSet.name}}</li>
 					<li *ngIf="selectedCard">{{selectedCard.name}}</li>
 				</ul>
-				<ul class="breadcrumbs" *ngIf="searchString" (click)="goToCollectionView()">
-					<li>Home</li>
+				<ul class="breadcrumbs" *ngIf="searchString">
+					<li class="highlight-on-hover" (click)="goToCollectionView()">Home</li>
 					<li>Search</li>
 					<li>search result for {{searchString}}</li>
 				</ul>
