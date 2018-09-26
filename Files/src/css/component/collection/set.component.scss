@@ -142,10 +142,6 @@
 		background: rgba(255, 255, 255, 0.08);
 		transform: rotateY(-180deg);
 
-		&.ftue {
-			border: 1px solid $grey01;
-		}
-
 		.title {
 			@extend %pity-timer-title;
 			display: flex;
@@ -204,6 +200,14 @@
 
 			&:hover {
 				background-color: $yellow03;
+			}
+		}
+	
+		&.ftue {
+			border: 1px solid $grey01;
+
+			button:hover {
+				background-color: $green01;
 			}
 		}
 	}

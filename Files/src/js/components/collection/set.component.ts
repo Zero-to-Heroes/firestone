@@ -195,6 +195,9 @@ export class SetComponent {
 	}
 
 	browseSet() {
+		if (this.showingPityTimerFtue) {
+			return;
+		}
 		this.events.broadcast(Events.SET_SELECTED, this._cardSet);
 		this.movingToSet = true;
 		console.log('set moving to set event');
