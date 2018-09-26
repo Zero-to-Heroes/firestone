@@ -98,7 +98,7 @@ declare var overwolf: any;
 							</div>
 						</div>
 					</div>
-					<div class="progression legendary">
+					<div class="progression legendary" (click)="browseSet()">
 						<div class="progress-title">
 							<img src="/Files/assets/images/rarity/rarity-legendary-small.png" />
 							<span>In {{legendaryTimer}} packs</span>
@@ -107,7 +107,7 @@ declare var overwolf: any;
 							<div class="progress-bar-filled" [style.width.%]="legendaryFill">
 							</div>	
 						</div>
-						<button class="browse-set-button" (click)="browseSet()">Browse Set</button>
+						<button class="browse-set-button">Browse Set</button>
 					</div>
 				</div>
 			</div>
