@@ -14,13 +14,7 @@ PS: images come from HearthHead
 
 # Screenshots
 
-![Welcome page](https://i.imgur.com/vrRhtLj.png)
-
-![In-game notifications](https://i.imgur.com/nCpwKGq.png)
-
-![Collection overview](https://i.imgur.com/Pr416nZ.png)
-
-![Card details](https://i.imgur.com/p2TgqZe.png)
+See the full [imgur album](https://imgur.com/a/hLz4ORp)
 
 # Contributing
 
