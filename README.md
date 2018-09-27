@@ -12,6 +12,13 @@ Please don't hesitate to request new features or report issues using the issues 
 
 PS: images come from HearthHead
 
+# Features
+
+* In-game notifications whenever you receive new or duplicate cards
+* Pity timer for each set
+* In-game collection manager
+* See all the details of any cards (including the sounds it makes in game)
+
 # Screenshots
 
 See the full [imgur album](https://imgur.com/a/hLz4ORp)
