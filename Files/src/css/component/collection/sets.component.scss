@@ -15,16 +15,18 @@ sets-container {
 	display: flex;
 	align-items: center;
 	list-style: none;
-	margin-bottom: 20px;
+	margin-bottom: 10px;
     flex-shrink: 0;
 	flex-grow: 0;
 
 	li {
 		@extend %sets-menu;
-		margin-right: 20px;
+		// margin-right: 20px;
+		padding: 10px;
 
 		&:hover {
 			color: $grey02;
+			background: rgba(255, 255, 255, 0.08);
 		}
 
 		&.active {
@@ -32,6 +34,7 @@ sets-container {
 
 			&:hover {
 				color: $grey01;
+				background: transparent;
 			}
 		}
 	}
