@@ -1,5 +1,5 @@
 import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
@@ -121,8 +121,20 @@ declare var overwolf: any;
 			state('inactive', style({
 		  		transform: 'rotateY(0)'
 			})),
-			transition('active => inactive', animate('500ms ease-out')),
-			transition('inactive => active', animate('500ms ease-in'))
+			transition('active => inactive', 
+				animate('400ms ease-out', keyframes([
+					style({ transform: 'rotateY(179deg)', offset: 0}),
+					style({ transform: 'rotateY(-50deg)', offset: 0.85}),
+					style({ transform: 'rotateY(0)', offset: 1}),
+				])
+			)),
+			transition('inactive => active', 
+				animate('400ms ease-out', keyframes([
+					style({ transform: 'rotateY(0)', offset: 0}),
+					style({ transform: 'rotateY(230deg)', offset: 0.85}),
+					style({ transform: 'rotateY(179deg)', offset: 1}),
+				])
+			))
 	  ])
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
