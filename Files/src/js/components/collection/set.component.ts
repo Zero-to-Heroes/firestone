@@ -122,16 +122,14 @@ declare var overwolf: any;
 		  		transform: 'rotateY(0)'
 			})),
 			transition('active => inactive', 
-				animate('400ms ease-out', keyframes([
+				animate('600ms cubic-bezier(0.65,-0.29,0.40,1.5)', keyframes([
 					style({ transform: 'rotateY(179deg)', offset: 0}),
-					style({ transform: 'rotateY(-50deg)', offset: 0.85}),
 					style({ transform: 'rotateY(0)', offset: 1}),
 				])
 			)),
 			transition('inactive => active', 
-				animate('400ms ease-out', keyframes([
+				animate('600ms cubic-bezier(0.65,-0.29,0.40,1.5)', keyframes([
 					style({ transform: 'rotateY(0)', offset: 0}),
-					style({ transform: 'rotateY(230deg)', offset: 0.85}),
 					style({ transform: 'rotateY(179deg)', offset: 1}),
 				])
 			))
