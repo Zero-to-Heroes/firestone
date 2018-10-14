@@ -34,8 +34,8 @@ export class AchievementStatsService {
     }
     
     private publishAchievementStats(event) {
-        const completedchievement: CompletedAchievement = event.data[0];
-        const achievement: Achievement = this.findAchievement(completedchievement);
+        const completedAchievement: CompletedAchievement = event.data[0];
+        const achievement: Achievement = this.findAchievement(completedAchievement);
         const statEvent = {
             "creationDate": new Date(),
             "userId": this.userId,
@@ -44,18 +44,14 @@ export class AchievementStatsService {
             "name": achievement.name,
             "type": achievement.type,
             "cardId": achievement.cardId,
-            "numberOfCompletions": achievement.numberOfCompletions + 1
+            "numberOfCompletions": completedAchievement.numberOfCompletions + 1
         };
-        console.log('saving achievement to RDS', achievement, completedchievement, statEvent);
+        console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
         this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent)
                 .subscribe((result) => console.log('achievement stat event result', result));
     }
     
     private findAchievement(completedchievement: CompletedAchievement): Achievement {
-        const sets: AchievementSet[] = this.repository.getAchievementSets();
-        const allAchievements = sets.map(set => set.achievements)
-            .reduce((list, achievements) => list.concat(achievements, []));
-        console.log('all achievements reduced', allAchievements);
-        return allAchievements.filter(achievement => achievement.id == completedchievement.id)[0];
+        return this.repository.getAllAchievements().filter(achievement => achievement.id == completedchievement.id)[0];
     }
 }

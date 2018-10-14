@@ -45,6 +45,6 @@ export class MenuSelectionComponent {
 	}
 
 	selectModule(module: string) {
-		// this.events.broadcast(Events.MODULE_SELECTED, module);
+		this.events.broadcast(Events.MODULE_SELECTED, module);
 	}
 }

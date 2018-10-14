@@ -7,6 +7,8 @@ import { AchievementsStorageService } from '../../services/achievement/achieveme
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementSet } from '../../models/achievement-set';
 import { Achievement } from '../../models/achievement';
+import { VisualAchievement } from '../../models/visual-achievement';
+import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -76,7 +78,7 @@ export class AchievementsComponent implements AfterViewInit {
 	_menuDisplayType = 'menu';
 	_selectedView = 'categories';
 	_selectedCategory: AchievementSet;
-	_achievementsList: ReadonlyArray<Achievement>;
+	_achievementsList: ReadonlyArray<VisualAchievement>;
 	achievementCategories: AchievementSet[];
 	_viewState = 'shown';
 
@@ -86,7 +88,7 @@ export class AchievementsComponent implements AfterViewInit {
 
 	constructor(
 		private _events: Events,
-		private achievementService: AchievementsStorageService,
+		private repository: AchievementsRepository,
 		private cdr: ChangeDetectorRef) {
 		ga('send', 'event', 'achievements', 'show');
 
@@ -153,15 +155,15 @@ export class AchievementsComponent implements AfterViewInit {
 		}
 		console.log('refreshing contents');
 		this.refreshingContent = true;
-		this.achievementService.loadAggregatedAchievements()
-				.then((achievementSets: AchievementSet[]) => {
-					console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
-					this.achievementCategories = achievementSets;
-					this.refreshingContent = false;
-					if (!(<ViewRef>this.cdr).destroyed) {
-						this.cdr.detectChanges();
-					}
-				});
+		this.repository.loadAggregatedAchievements()
+			.then((achievementSets: AchievementSet[]) => {
+				console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
+				this.achievementCategories = achievementSets;
+				this.refreshingContent = false;
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	private transitionState(changeStateCallback: Function) {
