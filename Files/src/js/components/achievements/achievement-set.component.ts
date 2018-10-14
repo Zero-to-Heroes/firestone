@@ -9,10 +9,12 @@ declare var overwolf: any;
 	styleUrls: [`../../../css/component/achievements/achievement-set.component.scss`],
 	template: `
 		<div *ngIf="_achievementSet" class="achievement-set">
-			<div class="logo-container">
-				<span class="text set-name">{{_achievementSet.displayName}}</span>
-			</div>
+			<span class="text set-name">{{_achievementSet.displayName}}</span>
+			<div class="logo"></div>
 			<span class="achieved">{{achieved}}/{{total}}</span>
+			<div class="progress-bar">
+				<div class="progress" [style.width.%]="100.0 * achieved / total"></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

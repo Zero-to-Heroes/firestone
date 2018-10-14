@@ -1,12 +1,12 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
 
 @Component({
 	selector: 'menu-selection',
 	styleUrls: [
-		`../../css/component/menu-selection.component.scss`,
 		`../../css/global/menu.scss`,
+		`../../css/component/menu-selection.component.scss`,
 	],
 	template: `
 		<ul class="menu-selection">
@@ -27,13 +27,13 @@ import { Events } from '../services/events.service';
 			</li>
 		</ul>
 	`,
+	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class MenuSelectionComponent {
 
-	selectedModule: string = 'achievements';
-	// selectedModule: string = 'collection';
+	selectedModule: string = 'collection';
 
 	constructor(private events: Events) {
 		this.events.on(Events.MODULE_SELECTED).subscribe((event) => this.selectedModule = event.data[0]);

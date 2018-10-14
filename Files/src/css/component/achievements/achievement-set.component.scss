@@ -13,22 +13,39 @@
 		background: rgba(255, 255, 255, 0.12);
 	}
 
-	.logo-container {
-	    position: relative;
-	    display: flex;
-	    flex-direction: column;
-    	height: calc(100% - 24px);
-    	width: 100%;
-	}
-
 	.set-name {
-		@extend %core-set-name;
+		@extend %achievements-category-name;
 		text-align: center;
 		position: relative;
 		margin: auto;
+		flex-grow: 0;
+		flex-shrink: 0;
+	}
+
+	.logo {
+    	height: 75px;
+    	width: 100%;
+		flex-grow: 0;
+		flex-shrink: 0;
 	}
 
 	.achieved {
-		@extend %completion-number;
+		@extend %achievements-number-achieved;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 15px;
+	}
+	
+	.progress-bar {
+		width: 125px;
+		height: 5px;
+		background: rgba(217, 195, 171, 0.3);
+		display: flex;
+		flex-grow: 0;
+		flex-shrink: 0;
+	
+		.progress {
+			background: #FFB948;
+		}
 	}
 }

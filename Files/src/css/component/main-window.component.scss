@@ -77,6 +77,10 @@ body {
 			background-image: radial-gradient(340.00px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
 			background-size: 100%;
 			outline: 1px solid #7D5A87;
+
+			.navigation menu-selection .menu-selection {
+				color: #7D5A87;
+			}
 		}
 
 		.navigation {

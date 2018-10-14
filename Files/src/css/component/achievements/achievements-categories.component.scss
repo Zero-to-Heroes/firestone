@@ -1,7 +1,6 @@
 @import '../../global/fonts';
 
 .achievements-categories {
-	margin-top: 9px;
 	display: flex;
 	flex-direction: row;
 
@@ -15,10 +14,15 @@
 	    flex-wrap: wrap;
 
 	    li {
-	    	width: 100px;
-	    	height: 130px;
+	    	width: 155px;
+	    	height: 200px;
 	    	margin-right: 15px;
-	    	margin-bottom: 15px;
+			margin-bottom: 15px;
+			opacity: 0.4;
+
+			&:hover {
+				opacity: 1;
+			}
 	    }
 
 	    li:nth-child(6n) {
