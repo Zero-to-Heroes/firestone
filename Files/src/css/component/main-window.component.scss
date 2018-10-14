@@ -61,14 +61,23 @@ body {
 
 	.app-container {
     	position: relative;
-		background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
 	    width: calc(100% - 20px);
 	    height: calc(100% - 20px);
 	    display: flex;
 	    flex-direction: column;
     	overflow: hidden;
-    	outline: 1px solid $grey04;
-    	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+		box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+		
+		&.collection {
+			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
+			outline: 1px solid $grey04;
+		}
+		
+		&.achievements {
+			background-image: radial-gradient(340.00px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+			background-size: 100%;
+			outline: 1px solid #7D5A87;
+		}
 
 		.navigation {
 			display: flex;

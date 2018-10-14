@@ -16,7 +16,7 @@ declare var Crate: any;
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="root">
-			<div class="app-container">
+			<div class="app-container {{selectedModule}}">
 				<section class="menu-bar">
 					<div class="first">
 						<real-time-notifications></real-time-notifications>

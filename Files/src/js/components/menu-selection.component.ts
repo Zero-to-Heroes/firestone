@@ -32,7 +32,8 @@ import { Events } from '../services/events.service';
 
 export class MenuSelectionComponent {
 
-	selectedModule: string = 'collection';
+	selectedModule: string = 'achievements';
+	// selectedModule: string = 'collection';
 
 	constructor(private events: Events) {
 		this.events.on(Events.MODULE_SELECTED).subscribe((event) => this.selectedModule = event.data[0]);
