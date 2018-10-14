@@ -2,8 +2,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { Events } from '../services/events.service';
 
-declare var overwolf: any;
-
 @Component({
 	selector: 'menu-selection',
 	styleUrls: [
@@ -12,17 +10,11 @@ declare var overwolf: any;
 	],
 	template: `
 		<ul class="menu-selection">
-			<li class="selected" (click)="selectModule('collection')">
+			<li [ngClass]="{'selected': selectedModule == 'collection'}" (click)="selectModule('collection')">
 				<span>The Binder</span>
 			</li>
-			<li class="disabled" (click)="selectModule('achievements')">
+			<li [ngClass]="{'selected': selectedModule == 'achievements'}" (click)="selectModule('achievements')">
 				<span>Achievements</span>
-				<div class="zth-tooltip bottom">
-					<p>Coming soon</p>
-					<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-						<polygon points="0,0 8,-9 16,0"/>
-					</svg>
-				</div>
 			</li>
 			<li class="disabled">
 				<span>Deck Tracker</span>
@@ -40,8 +32,10 @@ declare var overwolf: any;
 
 export class MenuSelectionComponent {
 
-	constructor(private events: Events) {
+	selectedModule: string = 'collection';
 
+	constructor(private events: Events) {
+		this.events.on(Events.MODULE_SELECTED).subscribe((event) => this.selectedModule = event.data[0]);
 	}
 
 	selectModule(module: string) {
