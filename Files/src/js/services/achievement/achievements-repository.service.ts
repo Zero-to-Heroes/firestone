@@ -36,7 +36,6 @@ export class AchievementsRepository {
 	}
 
 	public getAllAchievements(): Achievement[] {
-		console.log('retrieving achievements', this.allAchievements);
 		return cloneDeep(this.allAchievements);
 	}
 
@@ -53,7 +52,6 @@ export class AchievementsRepository {
 	}
 
 	private registerModules() {
-		console.log('allAchievements', allAchievements);
 		// Create challenges
 		this.achievementTypes().forEach((achievementType) => this.createChallenge(achievementType.challengeCreationFn));
 		// Initialize set providers

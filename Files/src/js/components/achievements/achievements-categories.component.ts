@@ -10,7 +10,7 @@ declare var overwolf: any;
 	selector: 'achievements-categories',
 	styleUrls: [
 		`../../../css/component/achievements/achievements-categories.component.scss`,
-		`../../../css/global/scrollbar.scss`
+		`../../../css/global/scrollbar-achievements.scss`
 	],
 	template: `
 		<div class="achievements-categories">

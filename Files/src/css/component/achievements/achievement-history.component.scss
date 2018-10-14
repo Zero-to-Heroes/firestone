@@ -12,18 +12,8 @@
     justify-content: space-between;
     align-items: center;
 
-    .toggle-label {
-    	display: flex;
-    	align-items: center;
-
-    	p {
-    		@extend %sub-title;
-    		margin-right: 14px;
-    	}
-    }
-
 	.title {
-		@extend %sub-title;
+		@extend %achievements-history-header;
     	display: flex;
     	align-items: center;
 	}

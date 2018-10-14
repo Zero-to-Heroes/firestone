@@ -27,11 +27,6 @@ export class BossVictory implements Challenge {
 			this.detectGameResultEvent(gameEvent, callback);
 			return;
 		}
-		// In case we miss the game start / end event, we check the info from memory
-		else if (gameEvent.type === GameEvent.MAYBE_DUNGEON_INFO_PICK) {
-			this.inspectMemory(gameEvent, callback);
-			return;
-		}
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
@@ -43,16 +38,6 @@ export class BossVictory implements Challenge {
 			console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			callback();
 		}
-	}
-
-	private inspectMemory(gameEvent: GameEvent, callback: Function) {
-		let dungeonInfo: DungeonInfo = gameEvent.data[0];
-		dungeonInfo.DefeatedBosses.forEach((cardId) => {
-			if (cardId === this.bossDbfId) {
-				callback();
-				return;
-			}
-		});
 	}
 
 	public getAchievementId() {

@@ -79,7 +79,7 @@ export class IndexedDbService {
 
 		this.db.getAll('achievements').then(
 			(achievements) => {
-				console.log('[achievements] loaded all achievements', achievements);
+				console.log('[achievements] [storage] loaded all achievements', achievements);
 				callback(achievements);
 			}
 		)
@@ -97,7 +97,9 @@ export class IndexedDbService {
 	
 	public saveHistory(history: AchievementHistory) {
 		this.waitForDbInit().then(() => {
-			this.db.add('achievement-history', history);
+			this.db.add('achievement-history', history).then((saved) => {
+				console.log('[achievements] [storage] saved history', saved);
+			})
 		});
 	}
 

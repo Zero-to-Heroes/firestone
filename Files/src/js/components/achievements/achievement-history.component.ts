@@ -8,7 +8,7 @@ declare var overwolf: any;
 	selector: 'achievement-history',
 	styleUrls: [
 		`../../../css/component/achievements/achievement-history.component.scss`,
-		`../../../css/global/scrollbar.scss`,
+		`../../../css/global/scrollbar-achievements.scss`,
 	],
 	template: `
 		<div class="achievement-history">
