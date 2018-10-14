@@ -8,7 +8,8 @@ import { AchievementsRepository } from './achievements-repository.service';
 
 import { Events } from '../events.service';
 import { GameEvents } from '../game-events.service';
-import { OwNotificationsService } from '../notifications.service';
+import { AchievementHistoryStorageService } from './achievement-history-storage.service';
+import { AchievementHistory } from '../../models/achievement/achievement-history';
 
 declare var ga;
 
@@ -20,6 +21,7 @@ export class AchievementsMonitor {
 	constructor(
 		private gameEvents: GameEvents,
 		private achievementsReferee: AchievementsRefereee,
+		private storage: AchievementHistoryStorageService,
 		private repository: AchievementsRepository,
 		private events: Events) {
 
@@ -33,6 +35,7 @@ export class AchievementsMonitor {
 				console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
 				ga('send', 'event', 'new-achievement', newAchievement.id);
 				this.events.broadcast(Events.NEW_ACHIEVEMENT, newAchievement);
+				this.storeNewAchievement(newAchievement);
 				// this.notifications.html(`<div class="message-container"><img src="${newAchievement.icon}"><div class="message">Achievement unlocked! ${newAchievement.title}</div></div>`)
 			}
 		);
@@ -48,5 +51,16 @@ export class AchievementsMonitor {
 				}, data);
 			});
 		}
+	}
+
+	private storeNewAchievement(completedAchievement: CompletedAchievement) {
+		const achievement = this.repository.getAllAchievements()
+			.filter((ach) => ach.id == completedAchievement.id)
+			[0];
+		this.storage.save(new AchievementHistory(
+			achievement.id, 
+			achievement.name, 
+			completedAchievement.numberOfCompletions, 
+			achievement.difficulty));
 	}
 }

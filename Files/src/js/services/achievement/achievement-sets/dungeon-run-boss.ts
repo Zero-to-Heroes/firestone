@@ -18,7 +18,7 @@ export class DungeonRunBossSetProvider extends SetProvider {
                 .map((ref: Achievement) => {
                     let completedAchievement = completedAchievemnts.filter(compl => compl.id == ref.id).pop();
                     const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
-                    return new Achievement(ref.id, ref.name, ref.type, ref.cardId, numberOfCompletions);
+                    return new Achievement(ref.id, ref.name, ref.type, ref.cardId, ref.difficulty, numberOfCompletions);
                 });
         // console.log('merging achievements', completedAchievemnts, allAchievements, mergedAchievements);
         const fullAchievements: VisualAchievement[] = mergedAchievements

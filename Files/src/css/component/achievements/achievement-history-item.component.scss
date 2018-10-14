@@ -1,0 +1,27 @@
+@import '../../global/fonts';
+
+.achievement-history-item {
+	@extend %you-have-viewed;
+	display: flex;
+	flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+	height: 36px;
+	
+    &:hover {
+    	background: rgba(255, 255, 255, 0.08);
+    }
+
+	.name {
+		// width: 195px;
+		flex-grow: 1;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+    }
+    
+	.date {
+		@extend %breadcrumbs;
+		margin-right: 12px;
+	}
+}

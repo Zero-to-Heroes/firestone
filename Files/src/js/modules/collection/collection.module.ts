@@ -53,6 +53,9 @@ import { PackHistoryService } from '../../services/collection/pack-history.servi
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { FtueElement, FtueComponent } from '../../components/ftue.component';
+import { AchievementHistoryComponent } from '../../components/achievements/achievement-history.component';
+import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
+import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
 
 @NgModule({
 	imports: [
@@ -85,6 +88,8 @@ import { FtueElement, FtueComponent } from '../../components/ftue.component';
 
 		AchievementsComponent,
 		AchievementsCategoriesComponent,
+		AchievementHistoryComponent,
+		AchievementHistoryItemComponent,
 		AchievementsListComponent,
 		AchievementsMenuComponent,
 		AchievementSetComponent,
@@ -113,6 +118,7 @@ import { FtueElement, FtueComponent } from '../../components/ftue.component';
 		RealTimeNotificationService,
 
 		AchievementsDbService,
+		AchievementHistoryStorageService,
 		AchievementsRepository,
 		AchievementsStorageService,
 		PackHistoryService,

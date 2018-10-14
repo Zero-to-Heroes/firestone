@@ -43,6 +43,7 @@ declare var _: any;
 				</ng-container>
 			</section>
 			<section class="secondary">
+				<achievement-history></achievement-history>
 				<div class="ads-container">
 					<div class="no-ads-placeholder">
 						<i class="i-117X33 gold-theme logo">

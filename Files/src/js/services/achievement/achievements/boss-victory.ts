@@ -62,17 +62,4 @@ export class BossVictory implements Challenge {
 	public defaultAchievement() {
 		return new CompletedAchievement(this.achievementId);
 	}
-
-	// public achieve(): Achievement {
-	// 	let achievement: Achievement = new Achievement(this.achievementId, 'boss_victory');
-	// 	let card = parseCardsText.getCard(this.bossId);
-	// 	achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.bossId}.jpg`;
-	// 	achievement.order = card.health / 10;
-	// 	achievement.title = "Another one bites the dust: " + card.name;
-	// 	achievement.name = card.name;
-	// 	achievement.htmlTooltip = `
-	// 		<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.bossId}.png" />
-	// 	`
-	// 	return achievement;
-	// }
 }

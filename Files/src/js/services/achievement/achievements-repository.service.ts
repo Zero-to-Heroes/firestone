@@ -62,7 +62,12 @@ export class AchievementsRepository {
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
-			.map((achievement) => new Achievement(achievement.id, achievement.name, achievement.type, achievement.bossId));	
+			.map((achievement) => new Achievement(
+				achievement.id, 
+				achievement.name, 
+				achievement.type, 
+				achievement.bossId, 
+				achievement.difficulty));
 		// Create the achievement sets
 		this.loadAggregatedAchievements().then((result) => console.log('loaded aggregated achievements', result));
 		console.log('[achievements] modules registered', this.challengeModules);

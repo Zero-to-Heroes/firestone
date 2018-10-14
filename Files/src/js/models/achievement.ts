@@ -4,13 +4,15 @@ export class Achievement {
 	readonly name: string;
 	readonly type: string;
 	readonly cardId: string;
+	readonly difficulty: string;
 	readonly numberOfCompletions: number = 0;
 
-	constructor(id: string, name: string, type: string, cardId: string, numberOfCompletions: number = 0) {
+	constructor(id: string, name: string, type: string, cardId: string, difficulty: string, numberOfCompletions: number = 0) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
 		this.cardId = cardId;
+		this.difficulty = difficulty;
 		this.numberOfCompletions = numberOfCompletions;
 	}
 }

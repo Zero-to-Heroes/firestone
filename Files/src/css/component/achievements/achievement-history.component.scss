@@ -1,0 +1,55 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.achievement-history {
+	margin-top: 34px;
+	width: 400px;
+}
+
+.top-container {
+	margin-bottom: 11px;
+	display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .toggle-label {
+    	display: flex;
+    	align-items: center;
+
+    	p {
+    		@extend %sub-title;
+    		margin-right: 14px;
+    	}
+    }
+
+	.title {
+		@extend %sub-title;
+    	display: flex;
+    	align-items: center;
+	}
+}
+
+ul {
+	background: rgba(255, 255, 255, 0.08);
+	list-style: none;
+	padding: 0;
+	margin: 0;
+    height: 160px;
+    overflow-y: scroll;
+}
+
+.empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+    height: 100%;
+
+    i {
+    	margin-bottom: 10px;
+    }
+
+	span {
+		@extend %empty-card-history;
+	}
+}

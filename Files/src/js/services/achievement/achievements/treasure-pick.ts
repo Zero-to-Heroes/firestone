@@ -43,19 +43,6 @@ export class TreasurePick implements Challenge {
 		});
 	}
 
-	// public achieve(): Achievement {
-	// 	let card = parseCardsText.getCard(this.treasureId);
-	// 	let achievement: Achievement = new Achievement(this.achievementId, 'treasure');
-	// 	achievement.icon = `http://static.zerotoheroes.com/hearthstone/cardart/256/${this.treasureId}.jpg`;
-	// 	achievement.order = parseInt(this.treasureId);
-	// 	achievement.title = "Passive ability: " + card.name;
-	// 	achievement.name = card.name;
-	// 	achievement.htmlTooltip = `
-	// 		<img src="http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.treasureId}.png" />
-	// 	`
-	// 	return achievement;
-	// }
-
 	private getLastTreasurePick(dungeonInfo: DungeonInfo): number {
 		if (!dungeonInfo.TreasureOptions || dungeonInfo.TreasureOptions.length == 0) {
 			return null;
