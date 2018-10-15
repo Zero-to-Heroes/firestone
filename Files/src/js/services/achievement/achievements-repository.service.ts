@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { sortBy, cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash'
 
 import { default as allAchievements } from './achievements_list.json';
 
@@ -12,14 +12,9 @@ import { AchievementSet } from '../../models/achievement-set';
 import { Challenge } from './achievements/challenge';
 import { BossEncounter } from './achievements/boss-encounter';
 import { BossVictory } from './achievements/boss-victory';
-import { PassivePick } from './achievements/passive-pick';
-import { TreasurePick } from './achievements/treasure-pick';
 import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run-boss';
-import { IndexedDbService } from './indexed-db.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { SetProvider } from './achievement-sets/set-provider';
-
-declare var parseCardsText;
 
 @Injectable()
 export class AchievementsRepository {
@@ -53,7 +48,9 @@ export class AchievementsRepository {
 
 	private registerModules() {
 		// Create challenges
-		this.achievementTypes().forEach((achievementType) => this.createChallenge(achievementType.challengeCreationFn));
+		this.achievementTypes().forEach((achievementType) => {
+			this.createChallenge(achievementType.type, achievementType.challengeCreationFn);
+		});
 		// Initialize set providers
 		this.setProviders = [
 			new DungeonRunBossSetProvider()
@@ -71,8 +68,9 @@ export class AchievementsRepository {
 		console.log('[achievements] modules registered', this.challengeModules);
 	}
 
-	private createChallenge(challengeCreationFn: Function) {
+	private createChallenge(achievementType: string, challengeCreationFn: Function) {
 		(<any>allAchievements)
+			.filter((achievement) => achievement.type === achievementType)
 			.map(achievement => challengeCreationFn(achievement))
 			.map((challenge) => {
 				this.challengeModules.push(challenge);

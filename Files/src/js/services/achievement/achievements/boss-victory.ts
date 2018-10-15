@@ -1,10 +1,6 @@
 import { Challenge } from './challenge';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
-import { Game } from '../../../models/game';
-import { DungeonInfo } from '../../../models/dungeon-info';
-
-declare var parseCardsText;
 
 export class BossVictory implements Challenge {
 
@@ -24,6 +20,7 @@ export class BossVictory implements Challenge {
 		}
 
 		if (gameEvent.type === GameEvent.WINNER) {
+			// console.log('WINNER detected', gameEvent);
 			this.detectGameResultEvent(gameEvent, callback);
 			return;
 		}
@@ -35,7 +32,7 @@ export class BossVictory implements Challenge {
 		let opponentPlayer = gameEvent.data[2];
 
 		if (opponentPlayer.CardID === this.bossId && localPlayer.Id === winner.Id) {
-			console.log('Achievement unlocked!', this.achievementId, this.bossId);
+			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			callback();
 		}
 	}

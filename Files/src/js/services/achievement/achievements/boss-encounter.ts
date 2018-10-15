@@ -1,9 +1,6 @@
 import { Challenge } from './challenge';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
-import { DungeonInfo } from '../../../models/dungeon-info';
-
-declare var parseCardsText;
 
 export class BossEncounter implements Challenge {
 
@@ -36,7 +33,7 @@ export class BossEncounter implements Challenge {
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.data[0].CardID == this.bossId) {
-			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
+			// console.log('Meeting boss unlocked!', this.achievementId, this.bossId, this);
 			callback();
 		}
 	}

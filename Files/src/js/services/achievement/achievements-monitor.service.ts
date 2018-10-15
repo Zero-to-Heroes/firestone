@@ -32,7 +32,7 @@ export class AchievementsMonitor {
 		);
 		this.newAchievements.subscribe(
 			(newAchievement: CompletedAchievement) => {
-				console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
+				// console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
 				ga('send', 'event', 'new-achievement', newAchievement.id);
 				this.events.broadcast(Events.NEW_ACHIEVEMENT, newAchievement);
 				this.storeNewAchievement(newAchievement);
@@ -44,9 +44,10 @@ export class AchievementsMonitor {
 
 	private handleEvent(gameEvent: GameEvent) {
 		// console.log('[achievements] handling events', gameEvent);
-		for (let achievement of this.repository.challengeModules) {
-			achievement.detect(gameEvent, (data) => {
-				this.achievementsReferee.complete(achievement, (newAchievement) => {
+		for (let challenge of this.repository.challengeModules) {
+			challenge.detect(gameEvent, (data) => {
+				// console.log('[achievements] challenge completed', gameEvent, data, challenge);
+				this.achievementsReferee.complete(challenge, (newAchievement) => {
 					this.newAchievements.next(newAchievement);
 				}, data);
 			});

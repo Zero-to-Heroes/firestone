@@ -31,7 +31,7 @@ export class IndexedDbService {
 				callback(achievement);
 			},
 			(error) => {
-			    console.log(error);
+			    console.error('[achievements] [storage] error while loading achievement', achievementId, error);
 			}
 		);
 	}
@@ -52,7 +52,7 @@ export class IndexedDbService {
 					callback(achievement);
 				},
 				(error) => {
-				    console.error(error);
+				    console.error('[achievements] [storage] error while updating achievement', achievement, error);
 				}
 			);
 		}
@@ -62,7 +62,7 @@ export class IndexedDbService {
 					callback(achievement);
 				},
 				(error) => {
-				    console.error(error);
+				    console.error('[achievements] [storage] error while adding achievement', achievement, error);
 				}
 			);
 		}
@@ -99,7 +99,7 @@ export class IndexedDbService {
 		this.waitForDbInit().then(() => {
 			this.db.add('achievement-history', history).then((saved) => {
 				console.log('[achievements] [storage] saved history', saved);
-			})
+			}, (error) => console.error('[achievements] [storage] error while saving', history, error));
 		});
 	}
 
