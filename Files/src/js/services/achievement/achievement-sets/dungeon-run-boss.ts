@@ -3,11 +3,15 @@ import { SetProvider } from "./set-provider";
 import { VisualAchievement } from "../../../models/visual-achievement";
 import { Achievement } from "../../../models/achievement";
 import { CompletedAchievement } from "../../../models/completed-achievement";
+import { AllCardsService } from "../../all-cards.service";
 
 export class DungeonRunBossSetProvider extends SetProvider {
 
-    constructor() {
+    private cardsService: AllCardsService;
+
+    constructor(cardsService: AllCardsService) {
         super('dungeon_run_boss', 'Dungeon Run Boss', ['dungeon_run_boss_encounter', 'dungeon_run_boss_victory']);
+        this.cardsService = cardsService;
     }
 
     // Used only for display
@@ -28,11 +32,13 @@ export class DungeonRunBossSetProvider extends SetProvider {
                 const victoryId = 'dungeon_run_boss_victory_' + achievement.cardId;
                 const encounterAchievement = mergedAchievements.filter((ach) => ach.id == encountedId)[0];
                 const victoryAchievement = mergedAchievements.filter((ach) => ach.id == victoryId)[0];
+                const text = this.cardsService.getCard(achievement.cardId).text.replace('<i>', '').replace('</i>', '');
                 return new VisualAchievement(
                     achievement.id,
                     achievement.name, 
                     this.id, 
                     achievement.cardId,
+                    text,
                     [ encountedId, victoryId ],
                     [ encounterAchievement.numberOfCompletions, victoryAchievement.numberOfCompletions ])
             })

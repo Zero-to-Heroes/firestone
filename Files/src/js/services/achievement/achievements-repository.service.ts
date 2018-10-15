@@ -15,6 +15,7 @@ import { BossVictory } from './achievements/boss-victory';
 import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run-boss';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { SetProvider } from './achievement-sets/set-provider';
+import { AllCardsService } from '../all-cards.service';
 
 @Injectable()
 export class AchievementsRepository {
@@ -25,7 +26,7 @@ export class AchievementsRepository {
 	private allAchievements: Achievement[] = [];
 	private setProviders: SetProvider[] = [];
 
-	constructor(private storage: AchievementsStorageService) {
+	constructor(private storage: AchievementsStorageService, private cards: AllCardsService) {
 		this.registerModules();
 		this.modulesLoaded.next(true);
 	}
@@ -53,7 +54,7 @@ export class AchievementsRepository {
 		});
 		// Initialize set providers
 		this.setProviders = [
-			new DungeonRunBossSetProvider()
+			new DungeonRunBossSetProvider(this.cards)
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)

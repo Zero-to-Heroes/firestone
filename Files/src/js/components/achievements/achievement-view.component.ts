@@ -13,7 +13,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 			</div>
 			<div class="achievement-body">
 				<div class="achievement-name">{{_achievement.name}}</div>
-				<div class="achievement-text">{{achievementText}}</div>
+				<div class="achievement-text" [innerHTML]="achievementText"></div>
 				<div class="completion-progress">
 					<div class="completion-step" [ngClass]="{'completed': metTimes > 0}">
 						met
@@ -85,6 +85,7 @@ export class AchievementViewComponent {
 		this.metTimes = this._achievement.numberOfCompletions[0];
 		this.defeatedTimes = this._achievement.numberOfCompletions[1];
 		this.image = `http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg`;
+		this.achievementText = this._achievement.text;
 	}
 
 	imageLoadedHandler() {
