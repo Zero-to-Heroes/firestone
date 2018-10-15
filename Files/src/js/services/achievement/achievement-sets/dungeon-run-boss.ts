@@ -4,6 +4,7 @@ import { VisualAchievement } from "../../../models/visual-achievement";
 import { Achievement } from "../../../models/achievement";
 import { CompletedAchievement } from "../../../models/completed-achievement";
 import { AllCardsService } from "../../all-cards.service";
+import { FilterOption } from "../../../models/filter-option";
 
 export class DungeonRunBossSetProvider extends SetProvider {
 
@@ -16,6 +17,22 @@ export class DungeonRunBossSetProvider extends SetProvider {
 
     // Used only for display
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
+        const fullAchievements = this.createAchievements(allAchievements, completedAchievemnts);
+        const filterOptions: ReadonlyArray<FilterOption> = [
+            { value: 'ALL_ACHIEVEMENTS', label: 'All achievements', filterFunction: (a) => true },
+            { value: 'ONLY_COMPLETED', label: 'Only completed', filterFunction: (a: VisualAchievement) => {
+                return a.numberOfCompletions.reduce((a, b) => a + b, 0) > 0;
+            }},
+            { value: 'ONLY_MISSING', label: 'Only missing', filterFunction: (a: VisualAchievement) => {
+                return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
+            }},
+        ]
+        return new AchievementSet(this.id, this.displayName, fullAchievements, filterOptions);
+    }
+
+    private createAchievements(
+            allAchievements: Achievement[], 
+            completedAchievemnts?: CompletedAchievement[]): ReadonlyArray<VisualAchievement> {
         const mergedAchievements: Achievement[] = !completedAchievemnts
             ? allAchievements
             : allAchievements
@@ -41,7 +58,7 @@ export class DungeonRunBossSetProvider extends SetProvider {
                     text,
                     [ encountedId, victoryId ],
                     [ encounterAchievement.numberOfCompletions, victoryAchievement.numberOfCompletions ])
-            })
-        return new AchievementSet(this.id, this.displayName, fullAchievements);
+            });
+        return fullAchievements;
     }
 }

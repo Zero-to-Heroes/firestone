@@ -33,47 +33,81 @@
     }
 }
 
-.pagination {
-    @extend %pagination-inactive;
+.show-filter {
+	@extend %search-active;
     display: flex;
+    justify-content: flex-start;
+    flex-shrink: 0;
     align-items: center;
-    justify-content: center;
-    list-style: none;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    margin-right: 20px;
+    margin-bottom: 10px;
+    margin-top: 18px;
 
-    li {
-        margin-right: 5px;
+	ng-select {
+		@extend %search-active;
+		height: 30px;
+		background: rgba(255, 255, 255, 0.08);
+		margin-right: 15px;
+        width: 190px;
 
-        &.active, &:hover {
-            @extend %sub-title;
-        }
+		&:focus, &:active {
+			outline: none;
+		}
 
-        &.arrow {
+		& > div {
+			border: 1px solid #4B3052;
+			outline: none;
 
-            &.previous {
-                transform: rotate(90deg);
-                margin-right: 3px;
-            }
+			div.single > div.toggle:hover {
+				background: transparent;
+			}
+		}
 
-            &.next {
-                transform: rotate(-90deg);
-                margin-left: 3px;
-            }
+		.toggle {
+			display: none;
+		}
 
-            &:hover {
-                background: $grey04;
-            }
+		.open .caret {
+			transform: scale(1, -1);
+		}
 
-            &.disabled {
-                &:hover {
-                    background: none;
-                }
-                svg {
-                    fill: $grey05;
-                }
-            }
-        }
-    }
+		select-dropdown {
+
+			& > div {
+				background: $black;
+				border: 1px solid #4B3052;
+				border-top: none;
+				outline: none;
+			}
+
+			.filter {
+				display: none;
+			}
+
+			&> div .options ul li {
+				color: $grey01;
+				border-bottom: 1px solid $grey05;
+				padding: 0;
+				padding-left: 9px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				height: 30px;
+
+				&.selected {
+    				background-color: inherit;
+    				color: inherit;
+
+					&:hover {
+						color: inherit;
+					}
+				}
+
+				&.highlighted, &:hover {
+					// grey03
+					background-color: rgba(120, 95, 107, 0.4);
+				}
+			}
+		}
+	}
 }
