@@ -68,7 +68,10 @@ export class AchievementHistoryComponent implements AfterViewInit {
 		console.log('request to load');
 		this.storage.loadAll().then((result: AchievementHistory[]) => {
             console.log('loaded history', result);
-            this.achievementHistory = result.filter((history) => history.numberOfCompletions == 1);
+			this.achievementHistory = result
+				.filter((history) => history.numberOfCompletions == 1)
+				// We want to have the most recent at the top
+				.reverse();
             this.refreshing = false;
             this.cdr.detectChanges();
         });

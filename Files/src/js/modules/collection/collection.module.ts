@@ -56,6 +56,7 @@ import { FtueElement, FtueComponent } from '../../components/ftue.component';
 import { AchievementHistoryComponent } from '../../components/achievements/achievement-history.component';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
+import { AchievementNameService } from '../../services/achievement/achievement-name.service';
 
 @NgModule({
 	imports: [
@@ -119,6 +120,7 @@ import { AchievementHistoryItemComponent } from '../../components/achievements/a
 
 		AchievementsDbService,
 		AchievementHistoryStorageService,
+		AchievementNameService,
 		AchievementsRepository,
 		AchievementsStorageService,
 		PackHistoryService,
