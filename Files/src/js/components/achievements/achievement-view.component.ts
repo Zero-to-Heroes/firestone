@@ -1,24 +1,38 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { DomSanitizer } from '@angular/platform-browser';
-
-import { Achievement } from '../../models/achievement';
-
-declare var overwolf: any;
+import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
 	selector: 'achievement-view',
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
-		<div class="achievement-container" [ngClass]="{'missing': _achievement.numberOfCompletions == 0}">
+		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
 			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
-
 			<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
-			<div class="zth-tooltip bottom" *ngIf="_achievement.numberOfCompletions > 0">
-				<p>Completed {{_achievement.numberOfCompletions}} times</p>
-				<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-					<polygon points="0,0 8,-9 16,0"/>
-				</svg>
+
+			<div class="achievement-body">
+				<div class="achievement-name">{{_achievement.name}}</div>
+				<div class="achievement-text">{{achievementText}}</div>
+				<div class="completion-progress">
+					<div class="completion-step" [ngClass]="{'completed': metTimes > 0}">
+						met
+						<div class="zth-tooltip bottom">
+							<p>Boss encountered {{metTimes}} times</p>
+							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0"/>
+							</svg>
+						</div>
+					</div>
+					<div class="completion-step" [ngClass]="{'completed': defeatedTimes > 0}">
+						vict
+						<div class="zth-tooltip bottom">
+							<p>Boss defeated {{defeatedTimes}} times</p>
+							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0"/>
+							</svg>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -52,16 +66,23 @@ declare var overwolf: any;
 })
 export class AchievementViewComponent {
 
-	_achievement: Achievement;
+	_achievement: VisualAchievement;
 	image: string;
 	showPlaceholder = true;
+	achievementText: string = 'placeholder text';
+	achieved: boolean = false;
+	metTimes: number;
+	defeatedTimes: number;
 	
 	constructor(private cdr: ChangeDetectorRef) {
 		
 	}
 
-	@Input() set achievement(achievement: Achievement) {
+	@Input() set achievement(achievement: VisualAchievement) {
 		this._achievement = achievement;
+		this.achieved = this._achievement.numberOfCompletions.reduce((a, b) => a + b, 0) > 0;
+		this.metTimes = this._achievement.numberOfCompletions[0];
+		this.defeatedTimes = this._achievement.numberOfCompletions[1];
 		this.image = `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${achievement.cardId}.png`;
 	}
 

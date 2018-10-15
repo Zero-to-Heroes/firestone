@@ -3,7 +3,6 @@
 
 .achievements-container {
 	position: relative;
-	top: -2px;
 	flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -19,17 +18,18 @@
 	list-style: none;
 	padding: 0;
 	margin: 0;
+	margin-top: 10px;
 	width: 100%;
-    justify-content: flex-start;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     overflow: auto;
 
     li {
-    	width: 98px;
-    	height: 152px; // We need this so that things are not a mess when the placeholder image is showing
+    	// width: 98px;
+    	// height: 152px; // We need this so that things are not a mess when the placeholder image is showing
     	margin-right: 15px;
-    	margin-bottom: 4px;
+    	margin-bottom: 10px;
     }
 }
 

@@ -4,13 +4,14 @@
 .achievement-container {
 	position: relative;
 	width: 100%;
-	height: 100%;
-	// height: 151px;
+	height: 110px;
+	background: rgba(255, 255, 255, 0.08);
+	display: flex;
 
 	img {
-		width: 100%;
-		position: relative;
-		opacity: 0.7;
+		width: 85px;
+		margin-left: 10px;
+		margin-right: 20px;
 	}
 
 	.placeholder {
@@ -18,57 +19,91 @@
     	margin: auto;
 	}
 
-	.full-size {
-		width: 300px;
+	.achievement-body {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		justify-content: center;
 	}
 
-	&.missing {
-		.real-achievement {
-			// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
-			filter: grayscale(1) sepia() saturate(100%) hue-rotate(300deg) opacity(0.5);
+	.achievement-name {
+		@extend %achievement-name;
+	}
+
+	.achievement-text {
+		@extend %achievement-text;
+		margin-top: 7px;
+	}
+
+	.completion-progress {
+		display: flex;
+		margin-top: 15px;
+
+		.completion-step {
+			margin-right: 15px;
+			// For tooltip positioning
+			position: relative;
+
+			&.completed {
+				color: green;
+			}
+
+			&:hover {
+				.zth-tooltip {
+					opacity: 1;
+				}
+			}
 		}
 	}
 
-	&:hover {
-		.zth-tooltip {
-			opacity: 1;
-		}
-	}
+	// &.missing {
+	// 	.real-achievement {
+	// 		// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
+	// 		filter: grayscale(1) sepia() saturate(100%) hue-rotate(300deg) opacity(0.5);
+	// 	}
+	// }
+
+	// &:hover {
+	// 	.zth-tooltip {
+	// 		opacity: 1;
+	// 	}
+	// }
 }
 
 .zth-tooltip {
-	background-color: $grey03;
+	background-color: #7D5A87;
 	text-align: center;
 	cursor: default;
 	opacity: 0;
 	position: absolute;
-	width: 110px;
+	width: 180px;
 	height: 30px;
 	pointer-events: none;
 	z-index: 100;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-    bottom: -29px;
+	bottom: -45px;
+	// Center it
+    left: 50%;
+    transform: translateX(-50%);
 
 	.tooltip-arrow {
 		position: absolute;
 		width: 16px;
 		height: 9px;
-		fill: $grey03;
+		fill: #7D5A87;
 		overflow: visible;
 	}
 
 	p {
+		@extend %achievements-tooltip;
 		white-space: nowrap;
 		cursor: default;
-		color: $black;
 		margin: 0;
-		font-size: 13px;
 	}
 
 	&.bottom {
-
 		.tooltip-arrow {
 			top: 0px;
 		}

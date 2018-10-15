@@ -1,9 +1,7 @@
-import { Component, Input, ViewEncapsulation, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
+import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 
-import { Achievement } from '../../models/achievement';
 import { AchievementSet } from '../../models/achievement-set';
-
-declare var overwolf: any;
+import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
 	selector: 'achievements-list',
@@ -26,8 +24,8 @@ declare var overwolf: any;
 })
 export class AchievementsListComponent {
 
-	achievements: Achievement[];
-	activeAchievements: Achievement[];
+	achievements: VisualAchievement[];
+	activeAchievements: VisualAchievement[];
 	_achievementSet: AchievementSet;
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef) {
@@ -38,12 +36,12 @@ export class AchievementsListComponent {
 		this._achievementSet = achievementSet;
 	}
 
-	@Input('achievementsList') set achievementsList(achievementsList: Achievement[]) {
+	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
 		this.achievements = achievementsList || [];
 		this.updateShownAchievements();
 	}
 
-	trackById(achievement: Achievement, index: number) {
+	trackById(achievement: VisualAchievement, index: number) {
 		return achievement.id;
 	}
 
