@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 
@@ -43,6 +43,7 @@ export class AchievementHistoryComponent implements AfterViewInit {
 
 	constructor(
 		private storage: AchievementHistoryStorageService,
+		private el: ElementRef,
 		private cdr: ChangeDetectorRef) {
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {
@@ -79,5 +80,17 @@ export class AchievementHistoryComponent implements AfterViewInit {
 
 	trackById(index, history: AchievementHistory) {
 		return history.id;
+	}
+
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		// console.log('handling history click', event);
+		let rect = this.el.nativeElement.querySelector('.history').getBoundingClientRect();
+		// console.log('element rect', rect);
+		let scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 }
