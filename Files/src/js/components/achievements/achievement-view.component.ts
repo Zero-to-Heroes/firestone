@@ -7,9 +7,10 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
-			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
-			<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
-
+			<div class="image-container">
+				<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
+				<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
+			</div>
 			<div class="achievement-body">
 				<div class="achievement-name">{{_achievement.name}}</div>
 				<div class="achievement-text">{{achievementText}}</div>
@@ -83,7 +84,7 @@ export class AchievementViewComponent {
 		this.achieved = this._achievement.numberOfCompletions.reduce((a, b) => a + b, 0) > 0;
 		this.metTimes = this._achievement.numberOfCompletions[0];
 		this.defeatedTimes = this._achievement.numberOfCompletions[1];
-		this.image = `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${achievement.cardId}.png`;
+		this.image = `http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg`;
 	}
 
 	imageLoadedHandler() {

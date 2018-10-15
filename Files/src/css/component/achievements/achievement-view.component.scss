@@ -8,10 +8,16 @@
 	background: rgba(255, 255, 255, 0.08);
 	display: flex;
 
-	img {
+	.image-container {
+		display: flex;
 		width: 85px;
 		margin-left: 10px;
 		margin-right: 20px;
+	}
+
+	img {
+		width: 100%;
+		margin: auto;
 	}
 
 	.placeholder {
@@ -43,9 +49,12 @@
 			margin-right: 15px;
 			// For tooltip positioning
 			position: relative;
+			color: #D9C3AB;
+			opacity: 0.5;
 
 			&.completed {
-				color: green;
+				color: #FFB948;
+				opacity: 1;
 			}
 
 			&:hover {
@@ -53,6 +62,23 @@
 					opacity: 1;
 				}
 			}
+		}
+	}
+
+	&.missing {
+		// .image-container {
+		// 	background: #5A116C;
+		// 	opacity: 0.5;
+		// }
+		.real-achievement {
+			// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
+			filter: grayscale(1) sepia() saturate(100%) hue-rotate(240deg) opacity(0.5);;
+		}
+		.achievement-name {
+			color: #CB9FD7;
+		}
+		.achievement-text {
+			color: #7D5A87;
 		}
 	}
 
