@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewEncapsulation, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 
 import { Achievement } from '../../models/achievement';
 import { AchievementSet } from '../../models/achievement-set';
@@ -7,30 +7,17 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'achievements-list',
-	styleUrls: [`../../../css/component/achievements/achievements-list.component.scss`],
+	styleUrls: [
+		`../../../css/component/achievements/achievements-list.component.scss`,
+		`../../../css/global/scrollbar-achievements.scss`,
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="achievements-container">
+			<div class="set-title">{{_achievementSet.displayName}}</div>
 			<ul class="achievements-list" *ngIf="activeAchievements">
 				<li *ngFor="let achievement of activeAchievements">
 					<achievement-view [achievement]="achievement">/</achievement-view>
-				</li>
-			</ul>
-			<ul class="pagination" *ngIf="numberOfPages > 1">
-				<li class="arrow previous" (click)="previousPage()" [ngClass]="currentPage == 0 ? 'disabled' : ''">
-					<i class="i-30">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
-						</svg>
-					</i>
-				</li>
-				<li *ngFor="let page of pages" [ngClass]="currentPage == page ? 'active' : ''" (click)="goToPage(page)">{{page + 1}}</li>
-				<li class="arrow next" (click)="nextPage()" [ngClass]="currentPage >= numberOfPages - 1 ? 'disabled' : ''">
-					<i class="i-30">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
-						</svg>
-					</i>
 				</li>
 			</ul>
 		</div>
@@ -39,44 +26,20 @@ declare var overwolf: any;
 })
 export class AchievementsListComponent {
 
-	readonly MAX_ACHIEVEMENTS_DISPLAYED_PER_PAGE = 18;
-
 	achievements: Achievement[];
 	activeAchievements: Achievement[];
 	_achievementSet: AchievementSet;
-	numberOfPages: number;
-	currentPage = 0;
-	pages: number[] = [];
 
-	private achievementsIndexRangeStart = 0;
-
-	constructor(private cdr: ChangeDetectorRef) {
+	constructor(private cdr: ChangeDetectorRef, private el: ElementRef) {
 
 	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
-		this.currentPage = 0;
 		this._achievementSet = achievementSet;
 	}
 
 	@Input('achievementsList') set achievementsList(achievementsList: Achievement[]) {
-		this.currentPage = 0;
 		this.achievements = achievementsList || [];
-		this.updateShownAchievements();
-	}
-
-	previousPage() {
-		this.currentPage = Math.max(0, this.currentPage - 1);
-		this.updateShownAchievements();
-	}
-
-	nextPage() {
-		this.currentPage = Math.min(this.numberOfPages - 1, this.currentPage + 1);
-		this.updateShownAchievements();
-	}
-
-	goToPage(page: number) {
-		this.currentPage = page;
 		this.updateShownAchievements();
 	}
 
@@ -84,17 +47,20 @@ export class AchievementsListComponent {
 		return achievement.id;
 	}
 
-	private updateShownAchievements() {
-		// console.log('updating card list', this._cardList);
-		this.achievementsIndexRangeStart = this.currentPage * this.MAX_ACHIEVEMENTS_DISPLAYED_PER_PAGE;
-		this.pages = [];
-		this.numberOfPages = Math.ceil(this.achievements.length / this.MAX_ACHIEVEMENTS_DISPLAYED_PER_PAGE);
-		for (let i = 0; i < this.numberOfPages; i++) {
-			this.pages.push(i);
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		// console.log('handling history click', event);
+		let rect = this.el.nativeElement.querySelector('.achievements-list').getBoundingClientRect();
+		// console.log('element rect', rect);
+		let scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
 		}
-		this.activeAchievements = this.achievements.slice(
-			this.achievementsIndexRangeStart,
-			this.achievementsIndexRangeStart + this.MAX_ACHIEVEMENTS_DISPLAYED_PER_PAGE);
+	}
+
+	private updateShownAchievements() {
+		this.activeAchievements = this.achievements;
 		this.cdr.detectChanges();
 	}
 }
