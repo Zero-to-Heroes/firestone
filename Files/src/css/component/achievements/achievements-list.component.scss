@@ -111,3 +111,19 @@
 		}
 	}
 }
+
+achievement-progress-bar {
+    align-self: flex-end;
+    margin-left: auto;
+    position: relative;
+	top: 10px;
+}
+
+.achievement-progress-bar {
+	flex-direction: row;
+
+	.achieved {
+		margin-bottom: 0;
+		margin-right: 10px;
+	}
+}

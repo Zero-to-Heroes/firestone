@@ -33,6 +33,7 @@ import { IOption } from 'ng-select';
 						</i>
 					</ng-template>
 				</ng-select>
+				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 			</div>
 			<ul class="achievements-list" *ngIf="activeAchievements">
 				<li *ngFor="let achievement of activeAchievements">
