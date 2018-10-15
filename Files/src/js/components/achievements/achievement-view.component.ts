@@ -70,7 +70,7 @@ export class AchievementViewComponent {
 	_achievement: VisualAchievement;
 	image: string;
 	showPlaceholder = true;
-	achievementText: string = 'placeholder text';
+	achievementText: string;
 	achieved: boolean = false;
 	metTimes: number;
 	defeatedTimes: number;

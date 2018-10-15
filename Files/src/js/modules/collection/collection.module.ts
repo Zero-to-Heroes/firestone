@@ -57,6 +57,7 @@ import { AchievementHistoryComponent } from '../../components/achievements/achie
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
 import { AchievementNameService } from '../../services/achievement/achievement-name.service';
+import { AchievementProgressBarComponent } from 'src/js/components/achievements/achievement-progress-bar.component';
 
 @NgModule({
 	imports: [
@@ -94,6 +95,7 @@ import { AchievementNameService } from '../../services/achievement/achievement-n
 		AchievementsListComponent,
 		AchievementsMenuComponent,
 		AchievementSetComponent,
+		AchievementProgressBarComponent,
 		AchievementViewComponent,
 
 		FtueElement,
