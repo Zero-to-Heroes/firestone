@@ -8,15 +8,23 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	template: `
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
 			<div class="image-container">
-				<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
 				<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
+				<i class="i-84x89 frame">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
+					</svg>
+				</i>
 			</div>
 			<div class="achievement-body">
 				<div class="achievement-name">{{_achievement.name}}</div>
 				<div class="achievement-text" [innerHTML]="achievementText"></div>
 				<div class="completion-progress">
 					<div class="completion-step" [ngClass]="{'completed': metTimes > 0}">
-						met
+						<i class="i-30">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#boss_encounter"/>
+							</svg>
+						</i>
 						<div class="zth-tooltip bottom">
 							<p>Boss encountered {{metTimes}} times</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
@@ -25,7 +33,11 @@ import { VisualAchievement } from '../../models/visual-achievement';
 						</div>
 					</div>
 					<div class="completion-step" [ngClass]="{'completed': defeatedTimes > 0}">
-						vict
+					<i class="i-30">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#boss_defeated"/>
+						</svg>
+					</i>
 						<div class="zth-tooltip bottom">
 							<p>Boss defeated {{defeatedTimes}} times</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">

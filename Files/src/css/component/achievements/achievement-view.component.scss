@@ -10,14 +10,23 @@
 
 	.image-container {
 		display: flex;
-		width: 85px;
 		margin-left: 10px;
 		margin-right: 20px;
+		justify-content: center;
+		align-items: center;
+		position: relative;
 	}
 
 	img {
 		width: 100%;
 		margin: auto;
+		position: absolute;
+		clip-path: ellipse(40% 51% at 50% 50%);
+	}
+
+	.frame {
+		--icon-color: #ffb948;
+		--icon-color-secondary: #8e5b23;
 	}
 
 	.placeholder {
@@ -49,12 +58,17 @@
 			margin-right: 15px;
 			// For tooltip positioning
 			position: relative;
-			color: #D9C3AB;
 			opacity: 0.5;
 
+			i {
+				--icon-color: #D9C3AB;
+			}
+
 			&.completed {
-				color: #FFB948;
 				opacity: 1;
+				i {
+					--icon-color: #FFB948;
+				}
 			}
 
 			&:hover {
@@ -79,6 +93,10 @@
 		}
 		.achievement-text {
 			color: #7D5A87;
+		}
+		.frame {
+			--icon-color: #CB9FD7;
+			--icon-color-secondary: #7D5A87;
 		}
 	}
 
