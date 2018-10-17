@@ -25,8 +25,7 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div class="app chronicler disabled">
-				<div class="coming-soon">Coming soon</div>
+			<div (click)="showAchievements()" class="app achievements">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
@@ -80,16 +79,15 @@ export class AppChoiceComponent implements AfterViewInit {
 		this.refreshContents();
 	}
 
-	private refreshContents() {
-		this.collectionManager.getCollection((collection) => {
-			console.log('retrieved collection', collection);
-			this.noCollection = !collection || collection.length == 0;
-			this.dataLoaded = true;
-			this.cdr.detectChanges();
-		});
+	showCollection() {
+		this.showMainWindow('collection');
 	}
 
-	private showCollection() {
+	showAchievements() {
+		this.showMainWindow('achievements');
+	}
+
+	private showMainWindow(module: string) {
 		if (this.noCollection) {
 			return;
 		}
@@ -98,9 +96,6 @@ export class AppChoiceComponent implements AfterViewInit {
 				console.warn('Could not get CollectionWindow', result);
 				return;
 			}
-			// overwolf.windows.restore(result.window.id, (result2) => {
-			// 	this.close.emit(null);
-			// });
 			overwolf.windows.getCurrentWindow((currentWindoResult) => {
 				// console.log('current window', currentWindoResult);
 				const center = {
@@ -108,12 +103,23 @@ export class AppChoiceComponent implements AfterViewInit {
 					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
 				};
 				// console.log('center is', center);
+				overwolf.windows.sendMessage(result.window.id, 'module', module);
 				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
 					overwolf.windows.restore(result.window.id, (result2) => {
 						this.close.emit(null);
 					});
 				});
 			});
+		});
+
+	}
+
+	private refreshContents() {
+		this.collectionManager.getCollection((collection) => {
+			console.log('retrieved collection', collection);
+			this.noCollection = !collection || collection.length == 0;
+			this.dataLoaded = true;
+			this.cdr.detectChanges();
 		});
 	}
 }
