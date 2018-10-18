@@ -166,8 +166,9 @@ export class LoadingComponent implements AfterViewInit {
 			return;
 		}
 		this.crate = new Crate({
-			server: "187101197767933952",
-			channel: "446045705392357376"
+			server:"187101197767933952",
+			channel:"446045705392357376",
+			shard: 'https://cl4.widgetbot.io'
 		});
 		this.crate.store.subscribe(() => {
 			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
