@@ -8,6 +8,10 @@
 	background: rgba(255, 255, 255, 0.08);
 	display: flex;
 
+	svg {
+		fill: transparent;
+	}
+
 	.image-container {
 		display: flex;
 		margin-left: 10px;
@@ -17,11 +21,11 @@
 		position: relative;
 	}
 
-	img {
+	.real-achievement {
 		width: 100%;
 		margin: auto;
 		position: absolute;
-		clip-path: ellipse(40% 51% at 50% 50%);
+		clip-path: ellipse(34% 48% at 50% 50%);
 	}
 
 	.frame {

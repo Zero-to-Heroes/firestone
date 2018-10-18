@@ -9,8 +9,8 @@ import { VisualAchievement } from '../../models/visual-achievement';
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
 			<div class="image-container">
 				<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
-				<i class="i-84x89 frame">
-					<svg class="svg-icon-fill">
+				<i class="i-84x90 frame">
+					<svg>
 						<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
 					</svg>
 				</i>
