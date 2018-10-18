@@ -31,14 +31,14 @@ body {
 		top: 10px;
 		right: 20px;
 		bottom: auto;
-		width: 330px;
+		width: 420px;
 
 		.simple-notification {
 		    padding: 0;
 		    background: transparent;
 		    border: none;
 		    display: flex;
-		    // margin-bottom: -10px;
+			justify-content: flex-end;
 
 		    & > div {
 		    	pointer-events: auto;
@@ -53,6 +53,7 @@ body {
 	}
 }
 
+// Collection
 .message-container {
 	display: flex;
 	align-items: center;
@@ -208,4 +209,71 @@ body {
 	    padding: 5px 15px;
 	    border-radius: 6px;
 	}
+}
+
+// Achievements
+.achievement-message-container {
+	display: flex;
+	align-items: center;
+	background-image: radial-gradient(76.70px at 50% 49.54%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+	background-size: 100%;
+    background-position: center center;
+	outline: 1px solid #4B3052;
+	width: 410px;
+	height: 110px;
+
+	.achievement-image-container {
+		display: flex;
+		margin-left: 10px;
+		margin-right: 20px;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+	
+		svg {
+			fill: transparent;
+		}
+		
+		.real-achievement {
+			width: 100%;
+			margin: auto;
+			position: absolute;
+			clip-path: ellipse(34% 48% at 50% 50%);
+		}
+		
+		.frame {
+			--icon-color: #ffb948;
+			--icon-color-secondary: #8e5b23;
+		}
+		
+		.placeholder {
+			position: absolute;
+			margin: auto;
+		}
+	}
+
+	.message {
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			@extend %achievement-name;
+		}
+
+		.text {
+			@extend %achievements-notification-text;
+		}
+	}
+
+	.close-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		--icon-color: #CB9FD7;
+  		--icon-bg-hover: #513b48;
+
+	    & :hover {
+	    	pointer-events: none;
+	    }
+	}	
 }

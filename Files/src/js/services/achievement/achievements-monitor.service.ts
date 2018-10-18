@@ -10,6 +10,9 @@ import { Events } from '../events.service';
 import { GameEvents } from '../game-events.service';
 import { AchievementHistoryStorageService } from './achievement-history-storage.service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { OwNotificationsService } from '../notifications.service';
+import { Achievement } from 'src/js/models/achievement';
+import { AchievementNameService } from './achievement-name.service';
 
 declare var ga;
 
@@ -20,6 +23,8 @@ export class AchievementsMonitor {
 
 	constructor(
 		private gameEvents: GameEvents,
+		private notificationService: OwNotificationsService,
+		private nameService: AchievementNameService,
 		private achievementsReferee: AchievementsRefereee,
 		private storage: AchievementHistoryStorageService,
 		private repository: AchievementsRepository,
@@ -35,8 +40,13 @@ export class AchievementsMonitor {
 				// console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
 				ga('send', 'event', 'new-achievement', newAchievement.id);
 				this.events.broadcast(Events.NEW_ACHIEVEMENT, newAchievement);
-				this.storeNewAchievement(newAchievement);
-				// this.notifications.html(`<div class="message-container"><img src="${newAchievement.icon}"><div class="message">Achievement unlocked! ${newAchievement.title}</div></div>`)
+				const achievement: Achievement = this.repository.getAllAchievements()
+					.filter((ach) => ach.id == newAchievement.id)
+					[0];
+				this.storeNewAchievement(achievement, newAchievement.numberOfCompletions);
+				// if (newAchievement.numberOfCompletions == 1) {
+					this.sendNotification(achievement);
+				// }
 			}
 		);
 		console.log('listening for achievement completion events');
@@ -54,14 +64,38 @@ export class AchievementsMonitor {
 		}
 	}
 
-	private storeNewAchievement(completedAchievement: CompletedAchievement) {
-		const achievement = this.repository.getAllAchievements()
-			.filter((ach) => ach.id == completedAchievement.id)
-			[0];
+	private storeNewAchievement(achievement: Achievement, numberOfCompletions: number) {
 		this.storage.save(new AchievementHistory(
 			achievement.id, 
 			achievement.name, 
-			completedAchievement.numberOfCompletions, 
+			numberOfCompletions, 
 			achievement.difficulty));
+	}
+
+	private sendNotification(achievement: Achievement) {
+		const text = this.nameService.displayName(achievement.id);
+		console.log('sending new notification', text);
+		this.notificationService.html({
+			content: `
+				<div class="achievement-message-container">
+					<div class="achievement-image-container">
+						<img src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg" class="real-achievement"/>
+						<i class="i-84x90 frame">
+							<svg>
+								<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
+							</svg>
+						</i>
+					</div>
+					<div class="message">
+						<span class="title">Achievement unlocked!</span>
+						<span class="text">${text}</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`
+		});
 	}
 }
