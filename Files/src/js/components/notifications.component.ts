@@ -43,7 +43,7 @@ export class NotificationsComponent implements AfterViewInit {
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			// console.log('received message in notification window', message);
 			let messageObject = JSON.parse(message.content);
-			this.sendNotification(messageObject.content, messageObject.cardId);
+			this.sendNotification(messageObject.content, messageObject.cardId, messageObject.type);
 		})
 
 		overwolf.windows.getCurrentWindow((result) => {
@@ -78,7 +78,7 @@ export class NotificationsComponent implements AfterViewInit {
 		this.resize();
 	}
 
-	private sendNotification(htmlMessage: string, cardId?: string) {
+	private sendNotification(htmlMessage: string, cardId?: string, type?: string) {
 		if (!this.windowId) {
 			// console.log('Notification window isnt properly initialized yet, waiting');
 			setTimeout(() => {
@@ -105,9 +105,16 @@ export class NotificationsComponent implements AfterViewInit {
 					return;
 				}
 				if (cardId) {
-					overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
-						console.log('send click info to collection window', cardId, this.mainWindowId, result);
-					});
+					if (type == 'achievement') {
+						overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
+							console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
+						});
+					}
+					else {
+						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
+							console.log('send click info to collection window', cardId, this.mainWindowId, result);
+						});
+					}
 				}
 			});
 		})

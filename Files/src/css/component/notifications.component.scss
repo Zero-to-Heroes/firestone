@@ -263,6 +263,11 @@ body {
 		.text {
 			@extend %achievements-notification-text;
 		}
+
+		.recap-text {
+			@extend %achievements-recap-text;
+			margin-top: 5px;
+		}
 	}
 
 	.close-button {

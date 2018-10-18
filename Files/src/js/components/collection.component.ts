@@ -103,6 +103,25 @@ export class CollectionComponent implements AfterViewInit {
 		private cdr: ChangeDetectorRef) {
 	}
 
+	public selectCard(fullCardId: string) {
+		this._events.broadcast(Events.MODULE_SELECTED, 'collection');
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+		// Always rebuild the set to update the card owned information
+		this.buildSet(fullCardId).then((set) => {
+			this.reset();
+			this._menuDisplayType = 'breadcrumbs';
+			this._selectedView = 'card-details';
+			this._selectedSet = set;
+			this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
+			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+	}
+
 	ngAfterViewInit() {
 		ga('send', 'event', 'collection', 'show');
 		this.cdr.detach();
@@ -184,14 +203,6 @@ export class CollectionComponent implements AfterViewInit {
 			}
 		);
 
-		overwolf.windows.onMessageReceived.addListener((message) => {
-			console.log('received', message, this.windowId);
-			if (message.id === 'click-card') {
-				this.selectCard(message.content);
-				overwolf.windows.restore(this.windowId);
-			}
-		});
-
 		this.refreshAds();
 		this.updateSets();
 	}
@@ -205,21 +216,6 @@ export class CollectionComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		}, COLLECTION_HIDE_TRANSITION_DURATION_IN_MS);
-	}
-
-	private selectCard(fullCardId: string) {
-		// Always rebuild the set to update the card owned information
-		this.buildSet(fullCardId).then((set) => {
-			this.reset();
-			this._menuDisplayType = 'breadcrumbs';
-			this._selectedView = 'card-details';
-			this._selectedSet = set;
-			this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
-			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
 	}
 
 	private refreshAds() {

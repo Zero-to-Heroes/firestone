@@ -144,6 +144,24 @@ export class AchievementsComponent implements AfterViewInit {
 		this.refreshContents();
 	}
 
+	public selectAchievement(achievementId: string) {
+		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+		this.reset();
+		console.log('selecting achievement', achievementId);
+		this.repository.findCategoryForAchievement(achievementId).then((achievementSet) => {
+			console.log('achievement found', achievementSet);
+			this._menuDisplayType = 'breadcrumbs';
+			this._selectedView = 'list';
+			this._selectedCategory = achievementSet;
+			this._achievementsList = this._selectedCategory.achievements;
+			this.cdr.detectChanges();
+			console.warn('TODO: scroll achievement into view');
+		})
+	}
+
 	ngAfterViewInit() {
 		this.cdr.detach();
 	}

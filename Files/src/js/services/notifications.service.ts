@@ -71,5 +71,6 @@ export class OwNotificationsService {
 
 export interface Message {
 	content: string,
-	cardId?: number
+	cardId?: string,
+	type?: string,
 }

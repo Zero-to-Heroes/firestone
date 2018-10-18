@@ -89,13 +89,16 @@ export class AchievementsMonitor {
 					<div class="message">
 						<span class="title">Achievement unlocked!</span>
 						<span class="text">${text}</span>
+						<span class="recap-text">Click to recap</span>
 					</div>
 					<button class="i-30 close-button">
 						<svg class="svg-icon-fill">
 							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 						</svg>
 					</button>
-				</div>`
+				</div>`,
+			type: 'achievement',
+			cardId: achievement.id
 		});
 	}
 }

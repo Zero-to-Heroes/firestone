@@ -1,7 +1,9 @@
-import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ViewChild } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
+import { CollectionComponent } from './collection.component';
+import { AchievementsComponent } from './achievements/achievements.component';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -55,8 +57,8 @@ declare var Crate: any;
 				</section>
 				<section class="content-container">
 					<ng-container [ngSwitch]="selectedModule">
-						<collection *ngSwitchCase="'collection'" class="main-section"></collection>
-						<achievements *ngSwitchCase="'achievements'" class="main-section"></achievements>
+						<collection #collection *ngSwitchCase="'collection'" class="main-section"></collection>
+						<achievements #achievements *ngSwitchCase="'achievements'" class="main-section"></achievements>
 					</ng-container>
 				</section>
 			</div>
@@ -90,6 +92,11 @@ declare var Crate: any;
 })
 export class MainWindowComponent implements AfterViewInit {
 
+	@ViewChild('collection')
+	private collection: CollectionComponent;
+	@ViewChild('achievements')
+	private achievements: AchievementsComponent;
+
 	selectedModule = 'collection';
 
 	private crate;
@@ -115,12 +122,32 @@ export class MainWindowComponent implements AfterViewInit {
 			if (message.id === 'module') {
 				this.selectedModule = message.content;
 				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
-				setTimeout(() => {
-					if (!(<ViewRef>this.cdr).destroyed) {
-						this.cdr.detectChanges();
-					}
-				});
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 				console.log('showing module from message', message);
+			}
+			if (message.id === 'click-card') {
+				this.selectedModule = 'collection';
+				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
+				setTimeout(() => {
+					this.collection.selectCard(message.content);
+					overwolf.windows.restore(this.windowId);
+				})
+			}
+			if (message.id === 'click-achievement') {
+				this.selectedModule = 'achievements';
+				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
+				setTimeout(() => {
+					this.achievements.selectAchievement(message.content);
+				});
+				overwolf.windows.restore(this.windowId);
 			}
 		});
 		this.events.on(Events.MODULE_SELECTED).subscribe(
