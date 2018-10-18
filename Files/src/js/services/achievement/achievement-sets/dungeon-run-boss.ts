@@ -27,7 +27,7 @@ export class DungeonRunBossSetProvider extends SetProvider {
                 return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
             }},
         ]
-        return new AchievementSet(this.id, this.displayName, fullAchievements, filterOptions);
+        return new AchievementSet(this.id, this.displayName, 'dungeon_run_category', fullAchievements, filterOptions);
     }
 
     private createAchievements(

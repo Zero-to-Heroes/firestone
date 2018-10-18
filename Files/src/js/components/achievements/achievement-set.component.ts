@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
 	selector: 'achievement-set-view',
@@ -8,7 +9,9 @@ import { AchievementSet } from '../../models/achievement-set';
 	template: `
 		<div *ngIf="_achievementSet" class="achievement-set">
 			<span class="text set-name">{{_achievementSet.displayName}}</span>
-			<div class="logo"></div>
+			<i class="logo" [innerHTML]="svgTemplate">
+				
+			</i>
 			<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 		</div>
 	`,
@@ -17,8 +20,18 @@ import { AchievementSet } from '../../models/achievement-set';
 export class AchievementSetComponent {
 
 	_achievementSet: AchievementSet;
+	svgTemplate;
+
+	constructor(private domSanitizer: DomSanitizer) {
+
+	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		this._achievementSet = achievementSet;
+		this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
+			<svg>
+				<use xlink:href="/Files/assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
+			</svg>`
+		);
 	}
 }
