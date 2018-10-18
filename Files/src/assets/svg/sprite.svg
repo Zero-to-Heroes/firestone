@@ -1,14 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
 
-<mask id="achievement-frame-mask" viewBox="0 0 84 90" fill="white">
-	<path d="M63 11H74.375L73.5 10H63V11Z"/>
-	<path d="M21 11V10H10.5L9.625 11H21Z"/>
-	<path d="M21 80V81H10.5L9.625 80H21Z"/>
-	<path d="M63 81V80H74.375L73.5 81H63Z"/>
-	<path d="M80 17.4286L79 16.2857V74.7143L80 73.5714V17.4286Z"/>
-	<path d="M4 73.5714V17.4286L5 16.2857V74.7143L4 73.5714Z"/>
-</mask>
-
 <!-- icons 10x13 -->
 <symbol id="crystal" viewBox="0 0 10 13">
 	<polygon points="8,6.5 5,13 2,6.5 5,0" fill="var(--icon-color, currentcolor)"/>
