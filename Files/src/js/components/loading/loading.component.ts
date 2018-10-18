@@ -150,6 +150,7 @@ export class LoadingComponent implements AfterViewInit {
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
+				this.initCrate();
 				this.refreshAds();
 			}
 		});
@@ -157,25 +158,21 @@ export class LoadingComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.cdr.detach();
-		this.refreshAds();
-
 		if (!Crate) {
 			setTimeout(() => {
 				this.ngAfterViewInit();
 			}, 20);
 			return;
 		}
-		this.crate = new Crate({
-			server:"187101197767933952",
-			channel:"446045705392357376",
-			shard: 'https://cl4.widgetbot.io'
-		});
-		this.crate.store.subscribe(() => {
-			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-				this.crate.hide();
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				if (!result.window.isVisible) {
+					return;
+				}
+				this.initCrate();
 			}
 		});
-		this.crate.hide();
+		this.refreshAds();
 	}
 
 
@@ -199,20 +196,26 @@ export class LoadingComponent implements AfterViewInit {
 	};
 
 	contactSupport() {
-		if (!this.crate) {
-			this.crate = new Crate({
-				server:"187101197767933952",
-				channel:"446045705392357376",
-				shard: 'https://cl4.widgetbot.io'
-			});
-			this.crate.store.subscribe(() => {
-				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-					this.crate.hide();
-				}
-			})
-		}
-		this.crate.toggle(true);
+		this.initCrate();
+		this.crate.toggle();
 		this.crate.show();
+	}
+	 
+	private initCrate() {
+		if (this.crate) {
+			return;
+		}
+		this.crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376",
+			shard: 'https://cl4.widgetbot.io'
+		});
+		this.crate.store.subscribe(() => {
+			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+				this.crate.hide();
+			}
+		});
+		this.crate.hide();
 	}
 
 	private refreshAds() {

@@ -92,17 +92,14 @@ export class WelcomePageComponent implements AfterViewInit {
 			}, 20);
 			return;
 		}
-		this.crate = new Crate({
-			server:"187101197767933952",
-			channel:"446045705392357376",
-			shard: 'https://cl4.widgetbot.io'
-		});
-		this.crate.store.subscribe(() => {
-			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-				this.crate.hide();
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				if (!result.window.isVisible) {
+					return;
+				}
+				this.initCrate();
 			}
 		});
-		this.crate.hide();
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			if (message.id === 'move') {
@@ -151,19 +148,25 @@ export class WelcomePageComponent implements AfterViewInit {
 	};
 
 	contactSupport() {
-		if (!this.crate) {
-			this.crate = new Crate({
-				server:"187101197767933952",
-				channel:"446045705392357376",
-				shard: 'https://cl4.widgetbot.io'
-			});
-			this.crate.store.subscribe(() => {
-				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-					this.crate.hide();
-				}
-			})
-		}
-		this.crate.toggle(true);
+		this.initCrate();
+		this.crate.toggle();
 		this.crate.show();
- 	}
+	}
+	 
+	private initCrate() {
+		if (this.crate) {
+			return;
+		}
+		this.crate = new Crate({
+			server:"187101197767933952",
+			channel:"446045705392357376",
+			shard: 'https://cl4.widgetbot.io'
+		});
+		this.crate.store.subscribe(() => {
+			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
+				this.crate.hide();
+			}
+		});
+		this.crate.hide();
+	}
 }
