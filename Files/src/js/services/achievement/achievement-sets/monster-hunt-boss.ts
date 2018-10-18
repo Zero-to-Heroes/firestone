@@ -11,7 +11,7 @@ export class MonsterHuntBossSetProvider extends SetProvider {
     private cardsService: AllCardsService;
 
     constructor(cardsService: AllCardsService) {
-        super('monster_hunt_boss', 'Monster Hunt Boss', ['monster_hunt_boss_encounter', 'monster_hunt_boss_victory']);
+        super('monster_hunt_boss', 'Monster Hunt', ['monster_hunt_boss_encounter', 'monster_hunt_boss_victory']);
         this.cardsService = cardsService;
     }
 

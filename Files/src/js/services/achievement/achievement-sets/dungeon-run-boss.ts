@@ -11,7 +11,7 @@ export class DungeonRunBossSetProvider extends SetProvider {
     private cardsService: AllCardsService;
 
     constructor(cardsService: AllCardsService) {
-        super('dungeon_run_boss', 'Dungeon Run Boss', ['dungeon_run_boss_encounter', 'dungeon_run_boss_victory']);
+        super('dungeon_run_boss', 'Dungeon Boss', ['dungeon_run_boss_encounter', 'dungeon_run_boss_victory']);
         this.cardsService = cardsService;
     }
 
