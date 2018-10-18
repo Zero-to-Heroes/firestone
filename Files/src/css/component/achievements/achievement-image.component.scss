@@ -27,3 +27,14 @@
         margin: auto;
     }
 }
+
+.missing .achievement-image-container {
+    .real-achievement {
+        // https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
+        filter: grayscale(1) sepia() saturate(100%) hue-rotate(240deg) opacity(0.5);;
+    }
+    .frame {
+        --icon-color: #CB9FD7;
+        --icon-color-secondary: #7D5A87;
+    }
+}

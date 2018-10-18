@@ -21,8 +21,8 @@ export class AchievementNameService {
 
     private nameForType(type: string) {
         switch(type) {
-            case 'dungeon_run_boss_encounter': return 'Dungeon Boss met';
-            case 'dungeon_run_boss_victory': return 'Dungeon Boss defeated';
+            case 'dungeon_run_boss_encounter': return 'Boss met';
+            case 'dungeon_run_boss_victory': return 'Boss defeated';
             case 'monster_hunt_boss_encounter': return 'Monster met';
             case 'monster_hunt_boss_victory': return 'Monster defeated';
         }

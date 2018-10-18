@@ -54,19 +54,14 @@
 	}
 
 	&.missing {
-		.real-achievement {
-			// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
-			filter: grayscale(1) sepia() saturate(100%) hue-rotate(240deg) opacity(0.5);;
-		}
 		.achievement-name {
 			color: #CB9FD7;
 		}
 		.achievement-text {
 			color: #7D5A87;
 		}
-		.frame {
-			--icon-color: #CB9FD7;
-			--icon-color-secondary: #7D5A87;
+		.completion-progress .completion-step i {
+			opacity: 0.5;
 		}
 	}
 }
