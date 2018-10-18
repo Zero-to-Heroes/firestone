@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, ViewEncapsulation, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, Input, ViewEncapsulation, ElementRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { IOption } from 'ng-select';
 import { sortBy } from 'lodash'
@@ -191,7 +191,11 @@ export class CardsComponent implements AfterViewInit {
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
-		setTimeout(() => this.cdr.detectChanges());
+		setTimeout(() => {
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	@Input('set') set cardSet(set: Set) {
@@ -232,7 +236,9 @@ export class CardsComponent implements AfterViewInit {
 	}
 
 	refresh() {
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	previousPage() {
@@ -283,7 +289,9 @@ export class CardsComponent implements AfterViewInit {
 			this._cardsIndexRangeStart + this.MAX_CARDS_DISPLAYED_PER_PAGE);
 		// console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
 		// console.log('active cards', this._activeCards);
-		this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 	}
 
 	private filterRarity() {

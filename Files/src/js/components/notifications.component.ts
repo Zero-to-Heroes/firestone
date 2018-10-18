@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
@@ -90,11 +90,15 @@ export class NotificationsComponent implements AfterViewInit {
 		overwolf.windows.restore(this.windowId, (result) => {
 			// console.log('notifications window is on?', result);
 			let toast = this.notificationService.html(htmlMessage);
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 			// console.log('running toast message in zone', toast);
 			toast.click.subscribe((event: MouseEvent) => {
 				console.log('registered click on toast', event, toast);
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 				// Clicked on close, don't show the card
 				if (event.srcElement.className.indexOf("close") != -1) {
 					// this.notificationService.remove(toast.id);

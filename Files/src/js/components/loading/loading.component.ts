@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
 
@@ -131,7 +131,9 @@ export class LoadingComponent implements AfterViewInit {
 			if (message.id === 'ready') {
 				this.title = 'Your abilities are ready!';
 				this.loading = false;
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 		});
 		overwolf.windows.onStateChanged.addListener((message) => {
@@ -142,7 +144,9 @@ export class LoadingComponent implements AfterViewInit {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
@@ -230,7 +234,9 @@ export class LoadingComponent implements AfterViewInit {
 					if (result.window.isVisible) {
 						console.log('init OwAd');
 						this.adRef = new OwAd(document.getElementById("ad-div"));
-						this.cdr.detectChanges();
+						if (!(<ViewRef>this.cdr).destroyed) {
+							this.cdr.detectChanges();
+						}
 					}
 					this.adInit = false;
 				}
@@ -239,7 +245,9 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		console.log('refreshing ads');
 		this.adRef.refreshAd();
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private removeAds() {
@@ -248,7 +256,9 @@ export class LoadingComponent implements AfterViewInit {
 		}
 		console.log('removing ads');
 		this.adRef.removeAd();
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private positionWindow() {

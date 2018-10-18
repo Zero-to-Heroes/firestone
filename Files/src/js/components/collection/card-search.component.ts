@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, NgZone, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
 import { FormControl } from '@angular/forms'; 
 
 
@@ -89,7 +89,9 @@ export class CardSearchComponent implements AfterViewInit {
 
 			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
 			this.showSearchResults = false;
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
 	}
 
@@ -102,7 +104,9 @@ export class CardSearchComponent implements AfterViewInit {
 		// console.log('focus lost');
 		setTimeout(() => {
 			this.showSearchResults = false;
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}, 500);
 	}
 
@@ -138,7 +142,9 @@ export class CardSearchComponent implements AfterViewInit {
 			});
 			console.log('Updated search results', this.searchResults);
 			this.showSearchResults = this.searchResults.length > 0;
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		})
 	}
 

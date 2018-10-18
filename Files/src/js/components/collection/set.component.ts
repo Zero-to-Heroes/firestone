@@ -165,7 +165,9 @@ export class SetComponent {
 				if (event.data[0] == this._cardSet.id) {
 					console.log('highlighting ftue', this._cardSet.id);
 					this.ftueHighlight = true;
-					this.cdr.detectChanges();
+					if (!(<ViewRef>this.cdr).destroyed) {
+						this.cdr.detectChanges();
+					}
 				}
 			});
 			this.events.on(Events.DISMISS_FTUE).subscribe((event) => {
@@ -219,8 +221,10 @@ export class SetComponent {
 				this.flip = 'active';
 				let rect = this.elRef.nativeElement.getBoundingClientRect();
 				console.log('broadcasting set mouse over', this._cardSet.id, rect);
-				this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);				
-				this.cdr.detectChanges();		
+				this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);	
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 		}, this.MOUSE_OVER_DELAY)
 	}
@@ -231,7 +235,9 @@ export class SetComponent {
 		if (!this.showingPityTimerFtue) {
 			console.log('flipping back');
 			this.flip = 'inactive';
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
 	}
 }

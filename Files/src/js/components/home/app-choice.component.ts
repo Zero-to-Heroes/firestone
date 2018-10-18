@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 
@@ -62,6 +62,8 @@ export class AppChoiceComponent implements AfterViewInit {
 	dataLoaded = false;
 	noCollection = true;
 
+	private collectionWindowId;
+
 	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
 	}
 
@@ -77,6 +79,14 @@ export class AppChoiceComponent implements AfterViewInit {
 			}
 		});
 		this.refreshContents();
+
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			this.collectionWindowId = result.window.id;
+		});
 	}
 
 	showCollection() {
@@ -91,21 +101,17 @@ export class AppChoiceComponent implements AfterViewInit {
 		if (this.noCollection) {
 			return;
 		}
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
+		
+		overwolf.windows.sendMessage(this.collectionWindowId, 'module', module, () => {
+			console.log('module message sent', module);
 			overwolf.windows.getCurrentWindow((currentWindoResult) => {
-				// console.log('current window', currentWindoResult);
 				const center = {
 					x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
 					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
 				};
 				// console.log('center is', center);
-				overwolf.windows.sendMessage(result.window.id, 'module', module);
-				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
-					overwolf.windows.restore(result.window.id, (result2) => {
+				overwolf.windows.sendMessage(this.collectionWindowId, 'move', center, () => {
+					overwolf.windows.restore(this.collectionWindowId, () => {
 						this.close.emit(null);
 					});
 				});
@@ -119,7 +125,9 @@ export class AppChoiceComponent implements AfterViewInit {
 			console.log('retrieved collection', collection);
 			this.noCollection = !collection || collection.length == 0;
 			this.dataLoaded = true;
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		});
 	}
 }

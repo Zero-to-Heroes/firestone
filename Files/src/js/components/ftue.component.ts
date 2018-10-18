@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
@@ -101,7 +101,9 @@ export class FtueComponent implements AfterViewInit {
                     <br/>Have fun!`;
                     this.ftueElement.instance.buttonText = `Got it`;
                     this.events.broadcast(Events.SHOWING_FTUE, data.data[1]);
-                    this.cdr.detectChanges();
+                    if (!(<ViewRef>this.cdr).destroyed) {
+                        this.cdr.detectChanges();
+                    }
                     this.updatePreferences();
                 }
 			}
@@ -131,7 +133,9 @@ export class FtueComponent implements AfterViewInit {
         this.showingPityTimerFtue = false;
 		if (this.ftueElement && this.ftueElement.instance.display !== 'none') {
 			this.ftueElement.instance.display = 'none';
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
     }
     

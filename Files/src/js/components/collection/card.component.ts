@@ -1,4 +1,4 @@
-import { Component,  Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component,  Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { AllCardsService } from '../../services/all-cards.service';
@@ -107,6 +107,8 @@ export class CardComponent {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

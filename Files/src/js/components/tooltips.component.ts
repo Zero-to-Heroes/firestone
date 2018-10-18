@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
@@ -72,7 +72,9 @@ export class TooltipsComponent implements AfterViewInit {
 			    this.tooltip.instance.top = top + 'px';
 			    this.tooltip.instance.position = 'absolute';
 			    this.tooltip.instance.missing = !owned;
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			    // console.log('Created tooltip after', (Date.now() - start));
 			}
 		);
@@ -101,7 +103,9 @@ export class TooltipsComponent implements AfterViewInit {
 		if (this.tooltip) {
 			this.tooltip.instance.removing = true;
 			this.tooltip.instance.display = 'none';
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
 	}
 }

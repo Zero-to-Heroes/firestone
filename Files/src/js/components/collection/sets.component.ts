@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { Set } from '../../models/set';
 
@@ -51,13 +51,17 @@ export class SetsComponent {
 		console.log('showing standard sets');
 		this.showStandard = true;
 		this.showWild = false;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	toggleWild() {
 		console.log('showing wild sets');
 		this.showStandard = false;
 		this.showWild = true;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

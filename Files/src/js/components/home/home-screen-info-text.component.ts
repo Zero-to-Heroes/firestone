@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
@@ -71,7 +71,9 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				this.status = "Firestone now follows your Hearthstone session.";
 				this.dataLoaded = true;
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 			else {
 				this.status = "No Hearthstone session detected.";
@@ -84,7 +86,9 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 						this.statusDetails = "Choose an ability:";
 					}
 					this.dataLoaded = true;
-					this.cdr.detectChanges();
+					if (!(<ViewRef>this.cdr).destroyed) {
+						this.cdr.detectChanges();
+					}
 				})
 			}
 		});
@@ -102,6 +106,8 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 				}
 			}
 		}
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

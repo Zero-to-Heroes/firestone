@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { Events } from '../services/events.service';
 import { RealTimeNotificationService } from '../services/real-time-notifications.service';
@@ -41,6 +41,8 @@ export class RealTimeNotificationsComponent implements AfterViewInit {
 		if (this.notifications) {
 			this.currentNotificationIndex = (this.currentNotificationIndex + 1) % this.notifications.length;
 		}
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

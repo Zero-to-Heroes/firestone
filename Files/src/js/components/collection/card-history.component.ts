@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewRef } from '@angular/core';
 
 import { Events } from '../../services/events.service';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
@@ -74,7 +74,9 @@ export class CardHistoryComponent implements AfterViewInit {
 
 	@Input() set selectedCard(selectedCard: SetCard) {
 		this._selectedCard = selectedCard;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	constructor(
@@ -115,7 +117,9 @@ export class CardHistoryComponent implements AfterViewInit {
 				this.shownHistory = this.cardHistory;
 				this.refreshing = false;
 				this.filterView();
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			},
 			this.limit);
 	}
@@ -127,7 +131,9 @@ export class CardHistoryComponent implements AfterViewInit {
 				// console.log('loaded history', result);
 				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
 				this.shownHistory = this.cardHistory;
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			},
 			0);
 	}
@@ -135,7 +141,9 @@ export class CardHistoryComponent implements AfterViewInit {
 	toggleShowOnlyNewCards() {
 		this.showOnlyNewCards = !this.showOnlyNewCards;
 		this.filterView();
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	filterView() {

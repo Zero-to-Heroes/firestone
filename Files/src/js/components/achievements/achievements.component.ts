@@ -99,7 +99,9 @@ export class AchievementsComponent implements AfterViewInit {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.adRef.removeAd();
-				this.cdr.detectChanges();
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 			else {
 				console.log('refreshing ad', message.window_state);

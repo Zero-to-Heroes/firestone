@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 declare var overwolf: any;
 
@@ -41,7 +41,9 @@ export class HotkeyComponent implements AfterViewInit {
                 else {
                     this.hotkeyHtml = this.splitHotkey();
                 }
-                this.cdr.detectChanges();
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
 			}
 		});
     }

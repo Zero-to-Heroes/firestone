@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, AfterViewInit, ViewRef } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 import { VisualAchievement } from '../../models/visual-achievement';
@@ -67,7 +67,11 @@ export class AchievementsListComponent implements AfterViewInit {
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
-		setTimeout(() => this.cdr.detectChanges());
+		setTimeout(() => {
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
@@ -105,7 +109,9 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	refresh() {
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private updateShownAchievements() {
@@ -117,6 +123,8 @@ export class AchievementsListComponent implements AfterViewInit {
 			[0]
 			.filterFunction;
 		this.activeAchievements = this.achievements.filter(filterFunction);
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

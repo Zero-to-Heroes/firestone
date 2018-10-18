@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { VisualAchievement } from '../../models/visual-achievement';
 
@@ -102,6 +102,8 @@ export class AchievementViewComponent {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef, ViewRef } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 
@@ -74,7 +74,9 @@ export class AchievementHistoryComponent implements AfterViewInit {
 				// We want to have the most recent at the top
 				.reverse();
             this.refreshing = false;
-            this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
         });
 	}
 

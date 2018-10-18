@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
@@ -95,16 +95,12 @@ export class MainWindowComponent implements AfterViewInit {
 	private crate;
 	private windowId: string;
 
-	constructor(
-		private debugService: DebugService,
-		private events: Events) {
-
+	constructor(private events: Events, private cdr: ChangeDetectorRef) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.windowId = result.window.id;
 			}
 		});
-
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			if (message.id === 'move') {
 				overwolf.windows.getCurrentWindow((result) => {
@@ -116,8 +112,17 @@ export class MainWindowComponent implements AfterViewInit {
 				});
 				// console.log('received move message', message.content);
 			}
+			if (message.id === 'module') {
+				this.selectedModule = message.content;
+				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
+				setTimeout(() => {
+					if (!(<ViewRef>this.cdr).destroyed) {
+						this.cdr.detectChanges();
+					}
+				});
+				console.log('showing module from message', message);
+			}
 		});
-
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.selectedModule = data.data[0];

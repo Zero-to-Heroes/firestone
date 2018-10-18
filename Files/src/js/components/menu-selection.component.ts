@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
 
 import { Events } from '../services/events.service';
+
+declare var overwolf: any;
 
 @Component({
 	selector: 'menu-selection',
@@ -35,8 +37,11 @@ export class MenuSelectionComponent {
 
 	selectedModule: string = 'collection';
 
-	constructor(private events: Events) {
-		this.events.on(Events.MODULE_SELECTED).subscribe((event) => this.selectedModule = event.data[0]);
+	constructor(private events: Events, private cdr: ChangeDetectorRef) {
+		this.events.on(Events.MODULE_SELECTED).subscribe((event) => {
+			this.selectedModule = event.data[0]
+			this.cdr.detectChanges();
+		});
 	}
 
 	selectModule(module: string) {

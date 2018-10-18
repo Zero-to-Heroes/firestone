@@ -216,7 +216,9 @@ export class CollectionComponent implements AfterViewInit {
 			this._selectedSet = set;
 			this.selectedCard = this._selectedSet.allCards.filter((card) => card.id == fullCardId)[0];
 			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		});
 	}
 
@@ -280,7 +282,9 @@ export class CollectionComponent implements AfterViewInit {
 			this.buildSetsFromCollection(collection);
 			this.refreshing = false;
 			console.log('sets updated', this.standardSets, this.wildSets);
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		})
 	}
 
@@ -295,7 +299,9 @@ export class CollectionComponent implements AfterViewInit {
 			this.wildSets = wildSets
 					.map((set) => ({ set: set, pityTimer: pityTimers.filter(timer => timer.setId == set.id)[0]}))
 					.map((set) => this.mergeSet(collection, set.set, set.pityTimer));
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		});
 	}
 
