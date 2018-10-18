@@ -1,0 +1,29 @@
+.achievement-image-container {
+    display: flex;
+    margin-left: 10px;
+    margin-right: 20px;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+	svg {
+		fill: transparent;
+	}
+    
+    .real-achievement {
+        width: 100%;
+        margin: auto;
+        position: absolute;
+        clip-path: ellipse(34% 48% at 50% 50%);
+    }
+    
+    .frame {
+        --icon-color: #ffb948;
+        --icon-color-secondary: #8e5b23;
+    }
+    
+    .placeholder {
+        position: absolute;
+        margin: auto;
+    }
+}

@@ -8,36 +8,6 @@
 	background: rgba(255, 255, 255, 0.08);
 	display: flex;
 
-	svg {
-		fill: transparent;
-	}
-
-	.image-container {
-		display: flex;
-		margin-left: 10px;
-		margin-right: 20px;
-		justify-content: center;
-		align-items: center;
-		position: relative;
-	}
-
-	.real-achievement {
-		width: 100%;
-		margin: auto;
-		position: absolute;
-		clip-path: ellipse(34% 48% at 50% 50%);
-	}
-
-	.frame {
-		--icon-color: #ffb948;
-		--icon-color-secondary: #8e5b23;
-	}
-
-	.placeholder {
-	    position: absolute;
-    	margin: auto;
-	}
-
 	.achievement-body {
 		display: flex;
 		flex-direction: column;
@@ -84,10 +54,6 @@
 	}
 
 	&.missing {
-		// .image-container {
-		// 	background: #5A116C;
-		// 	opacity: 0.5;
-		// }
 		.real-achievement {
 			// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
 			filter: grayscale(1) sepia() saturate(100%) hue-rotate(240deg) opacity(0.5);;
@@ -103,19 +69,6 @@
 			--icon-color-secondary: #7D5A87;
 		}
 	}
-
-	// &.missing {
-	// 	.real-achievement {
-	// 		// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
-	// 		filter: grayscale(1) sepia() saturate(100%) hue-rotate(300deg) opacity(0.5);
-	// 	}
-	// }
-
-	// &:hover {
-	// 	.zth-tooltip {
-	// 		opacity: 1;
-	// 	}
-	// }
 }
 
 .zth-tooltip {

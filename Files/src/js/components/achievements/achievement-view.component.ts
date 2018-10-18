@@ -7,14 +7,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
-			<div class="image-container">
-				<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
-				<i class="i-84x90 frame">
-					<svg>
-						<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
-					</svg>
-				</i>
-			</div>
+			<achievement-image [imageId]="_achievement.cardId"></achievement-image>
 			<div class="achievement-body">
 				<div class="achievement-name">{{_achievement.name}}</div>
 				<div class="achievement-text" [innerHTML]="achievementText"></div>
@@ -49,61 +42,21 @@ import { VisualAchievement } from '../../models/visual-achievement';
 			</div>
 		</div>
 	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger('showPlaceholder', [
-			state('false',	style({
-				opacity: 0,
-				"pointer-events": "none",
-			})),
-			state('true',	style({
-				opacity: 1,
-			})),
-			transition(
-				'true => false',
-				animate(`150ms linear`)),
-		]),
-		trigger('showRealAchievement', [
-			state('false',	style({
-				opacity: 0,
-				"pointer-events": "none",
-			})),
-			state('true',	style({
-				opacity: 1,
-			})),
-			transition(
-				'false => true',
-				animate(`150ms linear`)),
-		])
-	]
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AchievementViewComponent {
 
 	_achievement: VisualAchievement;
-	image: string;
-	showPlaceholder = true;
 	achievementText: string;
 	achieved: boolean = false;
 	metTimes: number;
 	defeatedTimes: number;
-	
-	constructor(private cdr: ChangeDetectorRef) {
-		
-	}
 
 	@Input() set achievement(achievement: VisualAchievement) {
 		this._achievement = achievement;
 		this.achieved = this._achievement.numberOfCompletions.reduce((a, b) => a + b, 0) > 0;
 		this.metTimes = this._achievement.numberOfCompletions[0];
 		this.defeatedTimes = this._achievement.numberOfCompletions[1];
-		this.image = `http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg`;
 		this.achievementText = this._achievement.text;
-	}
-
-	imageLoadedHandler() {
-		this.showPlaceholder = false;
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 }
