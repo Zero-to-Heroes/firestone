@@ -16,6 +16,7 @@ import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run-boss';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { SetProvider } from './achievement-sets/set-provider';
 import { AllCardsService } from '../all-cards.service';
+import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -67,7 +68,8 @@ export class AchievementsRepository {
 		});
 		// Initialize set providers
 		this.setProviders = [
-			new DungeonRunBossSetProvider(this.cards)
+			new DungeonRunBossSetProvider(this.cards),
+			new MonsterHuntBossSetProvider(this.cards),
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
