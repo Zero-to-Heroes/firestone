@@ -44,9 +44,9 @@ export class AchievementsMonitor {
 					.filter((ach) => ach.id == newAchievement.id)
 					[0];
 				this.storeNewAchievement(achievement, newAchievement.numberOfCompletions);
-				// if (newAchievement.numberOfCompletions == 1) {
+				if (newAchievement.numberOfCompletions == 1) {
 					this.sendNotification(achievement);
-				// }
+				}
 			}
 		);
 		console.log('listening for achievement completion events');

@@ -14,8 +14,6 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 declare var overwolf: any;
 declare var ga: any;
-declare var adsReady: any;
-declare var OwAd: any;
 declare var _: any;
 
 @Component({
@@ -40,16 +38,6 @@ declare var _: any;
 			</section>
 			<section class="secondary">
 				<achievement-history></achievement-history>
-				<div class="ads-container">
-					<div class="no-ads-placeholder">
-						<i class="i-117X33 gold-theme logo">
-							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
-							</svg>
-						</i>
-					</div>
-					<div class="ads" id="ad-div-achievements"></div>
-				</div>
 			</section>
 		</div>
 	`,
@@ -80,7 +68,6 @@ export class AchievementsComponent implements AfterViewInit {
 	_viewState = 'shown';
 
 	private windowId: string;
-	private adRef;
 	private refreshingContent = false;
 
 	constructor(
@@ -89,23 +76,12 @@ export class AchievementsComponent implements AfterViewInit {
 		private cdr: ChangeDetectorRef) {
 		ga('send', 'event', 'achievements', 'show');
 
-		console.error('TODO; remove ads when switching between collection and achievements');
-
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
 			console.log('state changed in achievements', message);
-			if (message.window_state != 'normal') {
-				console.log('removing ad', message.window_state);
-				this.adRef.removeAd();
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-			}
-			else {
-				console.log('refreshing ad', message.window_state);
-				this.refreshAds();
+			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}
 		});
@@ -140,7 +116,6 @@ export class AchievementsComponent implements AfterViewInit {
 				});
 			}
 		)
-		this.loadAds();
 		this.refreshContents();
 	}
 
@@ -200,26 +175,5 @@ export class AchievementsComponent implements AfterViewInit {
 		this._selectedCategory = undefined;
 		this._achievementsList = undefined;
 		this.achievementCategories = undefined;
-	}
-
-	private loadAds() {
-		// if (!adsReady || !document.getElementById("ad-div-achievements")) {
-		// 	setTimeout(() => {
-		// 		this.loadAds()
-		// 	}, 50);
-		// 	return;
-		// }
-		// console.log('ads ready', adsReady);
-		// this.adRef = new OwAd(document.getElementById("ad-div-achievements"));
-	}
-
-	private refreshAds() {
-		// if (!this.adRef) {
-		// 	setTimeout(() => {
-		// 		this.refreshAds()
-		// 	}, 20);
-		// 	return;
-		// }
-		// this.adRef.refreshAd();
 	}
 }

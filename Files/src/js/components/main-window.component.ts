@@ -6,8 +6,9 @@ import { CollectionComponent } from './collection.component';
 import { AchievementsComponent } from './achievements/achievements.component';
 
 declare var overwolf: any;
-declare var ga: any;
 declare var Crate: any;
+declare var adsReady: any;
+declare var OwAd: any;
 
 @Component({
 	selector: 'main-window',
@@ -57,9 +58,19 @@ declare var Crate: any;
 				</section>
 				<section class="content-container">
 					<ng-container [ngSwitch]="selectedModule">
-						<collection #collection *ngSwitchCase="'collection'" class="main-section"></collection>
-						<achievements #achievements *ngSwitchCase="'achievements'" class="main-section"></achievements>
+						<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
+						<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
 					</ng-container>
+					<div class="ads-container">
+						<div class="no-ads-placeholder">
+							<i class="i-117X33 gold-theme logo">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
+								</svg>
+							</i>
+						</div>
+						<div class="ads" id="ad-div"></div>
+					</div>
 				</section>
 			</div>
 
@@ -101,6 +112,8 @@ export class MainWindowComponent implements AfterViewInit {
 
 	private crate;
 	private windowId: string;
+	private adRef;
+	private adInit = false;
 
 	constructor(private events: Events, private cdr: ChangeDetectorRef) {
 		overwolf.windows.getCurrentWindow((result) => {
@@ -150,12 +163,28 @@ export class MainWindowComponent implements AfterViewInit {
 				overwolf.windows.restore(this.windowId);
 			}
 		});
+
+		overwolf.windows.onStateChanged.addListener((message) => {
+			if (message.window_name != "CollectionWindow") {
+				return;
+			}
+			console.log('state changed CollectionWindow', message);
+			if (message.window_state != 'normal') {
+				console.log('removing ad', message.window_state);
+				this.removeAds();
+			}
+			else {
+				console.log('refreshing ad', message.window_state);
+				this.refreshAds();
+			}
+		});
 		this.events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.selectedModule = data.data[0];
 				console.log('selected module', this.selectedModule);
 			}
-		)
+		);
+		this.refreshAds();
 	}
 
 	ngAfterViewInit() {
@@ -221,7 +250,8 @@ export class MainWindowComponent implements AfterViewInit {
 		if (!this.crate) {
 			this.crate = new Crate({
 				server:"187101197767933952",
-				channel:"446045705392357376"
+				channel:"446045705392357376",
+				shard: 'https://cl4.widgetbot.io'
 			});
 			this.crate.store.subscribe(() => {
 				if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
@@ -232,4 +262,43 @@ export class MainWindowComponent implements AfterViewInit {
 		this.crate.toggle(true);
 		this.crate.show();
  	}
+
+	 private refreshAds() {
+		 if (this.adInit) {
+			 console.log('already initializing ads, returning');
+			 return;
+		 }
+		 if (!adsReady) {
+			 console.log('ads container not ready, returning');
+			 setTimeout(() => {
+				 this.refreshAds()
+			 }, 50);
+			 return;
+		 }
+		 if (!this.adRef) {
+			 console.log('first time init ads, creating OwAd');
+			 this.adInit = true;
+			 overwolf.windows.getCurrentWindow((result) => {
+				 if (result.status === "success") {
+					 console.log('is window visible?', result);
+					 if (result.window.isVisible) {
+						 console.log('init OwAd');
+						 this.adRef = new OwAd(document.getElementById('ad-div'));
+					 }
+					 this.adInit = false;
+				 }
+			 });
+			 return;
+		 }
+		 console.log('refreshing ads');
+		 this.adRef.refreshAd();
+	 }
+ 
+	 private removeAds() {
+		 if (!this.adRef) {
+			 return;
+		 }
+		 console.log('removing ads');
+		 this.adRef.removeAd();
+	 }
 }

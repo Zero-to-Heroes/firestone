@@ -15,8 +15,6 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 declare var overwolf: any;
 declare var ga: any;
-declare var adsReady: any;
-declare var OwAd: any;
 
 @Component({
 	selector: 'collection',
@@ -46,16 +44,6 @@ declare var OwAd: any;
 			<section class="secondary">
 				<card-search>Search card</card-search>
 				<card-history [selectedCard]="selectedCard"></card-history>
-				<div class="ads-container">
-					<div class="no-ads-placeholder">
-						<i class="i-117X33 gold-theme logo">
-							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
-							</svg>
-						</i>
-					</div>
-					<div class="ads" id="ad-div"></div>
-				</div>
 			</section>
 		</div>
 	`,
@@ -90,9 +78,6 @@ export class CollectionComponent implements AfterViewInit {
 	_cardList: ReadonlyArray<SetCard>;
 	selectedCard: SetCard;
 
-	private windowId: string;
-	private adRef;
-	private adInit = false;
 	private refreshing = false;
 
 	constructor(
@@ -125,29 +110,15 @@ export class CollectionComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		ga('send', 'event', 'collection', 'show');
 		this.cdr.detach();
-
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				this.windowId = result.window.id;
-			}
-		});
-
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
 			console.log('state changed CollectionWindow', message);
-			if (message.window_state != 'normal') {
-				console.log('removing ad', message.window_state);
-				this.removeAds();
-			}
-			else {
-				console.log('refreshing ad', message.window_state);
-				this.refreshAds();
+			if (message.window_state == 'normal') {
 				this.updateSets();
 			}
 		});
-
 		// console.log('constructing');
 		this._events.on(Events.SET_SELECTED).subscribe(
 			(data) => {
@@ -160,8 +131,7 @@ export class CollectionComponent implements AfterViewInit {
 					this._cardList = this._selectedSet.allCards;
 				});
 			}
-		)
-
+		);
 		this._events.on(Events.FORMAT_SELECTED).subscribe(
 			(data) => {
 				this.transitionState(() => {
@@ -171,8 +141,7 @@ export class CollectionComponent implements AfterViewInit {
 					this._selectedFormat = data.data[0];
 				});
 			}
-		)
-
+		);
 		this._events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
 				this.transitionState(() => {
@@ -181,8 +150,7 @@ export class CollectionComponent implements AfterViewInit {
 					this._selectedView = 'sets';
 				});
 			}
-		)
-
+		);
 		this._events.on(Events.SHOW_CARDS).subscribe(
 			(data) => {
 				this.transitionState(() => {
@@ -193,8 +161,7 @@ export class CollectionComponent implements AfterViewInit {
 					this.searchString = data.data[1];
 				})
 			}
-		)
-
+		);
 		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
 			(event) => {
 				this.transitionState(() => {
@@ -202,8 +169,6 @@ export class CollectionComponent implements AfterViewInit {
 				});
 			}
 		);
-
-		this.refreshAds();
 		this.updateSets();
 	}
 
@@ -216,45 +181,6 @@ export class CollectionComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		}, COLLECTION_HIDE_TRANSITION_DURATION_IN_MS);
-	}
-
-	private refreshAds() {
-		if (this.adInit) {
-			console.log('already initializing ads, returning');
-			return;
-		}
-		if (!adsReady) {
-			console.log('ads container not ready, returning');
-			setTimeout(() => {
-				this.refreshAds()
-			}, 50);
-			return;
-		}
-		if (!this.adRef) {
-			console.log('first time init ads, creating OwAd');
-			this.adInit = true;
-			overwolf.windows.getCurrentWindow((result) => {
-				if (result.status === "success") {
-					console.log('is window visible?', result);
-					if (result.window.isVisible) {
-						console.log('init OwAd');
-						this.adRef = new OwAd(document.getElementById("ad-div"));
-					}
-					this.adInit = false;
-				}
-			});
-			return;
-		}
-		console.log('refreshing ads');
-		this.adRef.refreshAd();
-	}
-
-	private removeAds() {
-		if (!this.adRef) {
-			return;
-		}
-		console.log('removing ads');
-		this.adRef.removeAd();
 	}
 
 	private reset() {

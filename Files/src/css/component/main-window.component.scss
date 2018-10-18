@@ -187,11 +187,46 @@ tooltips {
     z-index: 9999;
 }
 
+.ads-container {
+    width: 400px;
+    height: 300px;
+	right: 15px;
+	bottom: 15px;
+    position: absolute;
 
-// login {
-// 	position: absolute;
-// 	left: 0;
-// 	top: 0;
-// 	width: 100%;
-// 	height: 100%;
-// }
+    .no-ads-placeholder {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .logo {
+            width: 109px;
+            height: 154px;
+        }
+    }
+
+    .ads {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+	}
+}
+
+.app-container.collection .no-ads-placeholder {
+	background-color: $black;
+
+	.logo {
+		color: $darkred;
+	}
+}
+
+.app-container.achievements .no-ads-placeholder {
+	background-color: #190505;
+
+	.logo {
+		color: #2A1030;
+	}
+}
