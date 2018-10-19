@@ -32,15 +32,15 @@
 			margin-right: 15px;
 			// For tooltip positioning
 			position: relative;
-			opacity: 0.5;
 
 			i {
+				opacity: 0.5;
 				--icon-color: #D9C3AB;
 			}
 
 			&.completed {
-				opacity: 1;
 				i {
+					opacity: 1;
 					--icon-color: #FFB948;
 				}
 			}
@@ -59,9 +59,6 @@
 		}
 		.achievement-text {
 			color: #7D5A87;
-		}
-		.completion-progress .completion-step i {
-			opacity: 0.5;
 		}
 	}
 }
