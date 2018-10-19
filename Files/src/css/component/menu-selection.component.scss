@@ -49,6 +49,10 @@
 			.zth-tooltip {
 				opacity: 1;
 			}
+			
+			&:not(.disabled) {
+				color: $yellow03;
+			}
 		}
 	}
 }
