@@ -11,7 +11,10 @@ declare var overwolf: any;
 
 @Component({
 	selector: 'set-view',
-	styleUrls: [`../../../css/component/collection/set.component.scss`],
+	styleUrls: [
+		`../../../css/component/collection/set.component.scss`,
+		`../../../css/global/components-global.scss`,
+	],
 	template: `
 		<div *ngIf="_cardSet" class="set">
 			<div class="wrapper-for-flip" [@flipState]="flip">
