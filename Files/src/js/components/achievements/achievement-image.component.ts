@@ -7,7 +7,8 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	styleUrls: [`../../../css/component/achievements/achievement-image.component.scss`],
 	template: `
         <div class="achievement-image-container">
-            <img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
+			<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
+			<div class="overlay"></div>
             <i class="i-84x90 frame">
                 <svg>
                     <use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>

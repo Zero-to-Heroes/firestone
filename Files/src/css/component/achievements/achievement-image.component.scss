@@ -6,6 +6,10 @@
     align-items: center;
     position: relative;
 
+    .overlay {
+        display: none;
+    }
+
 	svg {
 		fill: transparent;
 	}
@@ -31,7 +35,17 @@
 .missing .achievement-image-container {
     .real-achievement {
         // https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
-        filter: grayscale(1) sepia() saturate(100%) hue-rotate(240deg) opacity(0.5);;
+        filter: grayscale(1);
+    }
+    .overlay {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        margin: auto;
+        background: #5A116C;
+        opacity: 0.5;
+        clip-path: ellipse(34% 48% at 50% 50%);
     }
     .frame {
         --icon-color: #CB9FD7;
