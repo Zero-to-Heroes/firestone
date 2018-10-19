@@ -2,15 +2,15 @@
 @import '../../global/fonts';
 
 .achievement-history {
-	// margin-top: 34px;
+    margin-top: 12px;
 	width: 400px;
 }
 
 .top-container {
-	margin-bottom: 15px;
 	display: flex;
     justify-content: space-between;
     align-items: center;
+	margin-bottom: 12px;
 
 	.title {
 		@extend %achievements-history-header;
@@ -25,7 +25,7 @@ ul {
 	padding: 0;
 	margin: 0;
     // height: 160px;
-    height: 220px;
+    height: 210px;
     overflow-y: scroll;
 }
 

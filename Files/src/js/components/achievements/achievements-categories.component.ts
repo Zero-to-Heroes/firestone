@@ -14,6 +14,7 @@ declare var overwolf: any;
 	],
 	template: `
 		<div class="achievements-categories">
+			<div class="title">Categories</div>
 			<ol>
 				<li *ngFor="let achievementSet of achievementSets; trackBy: trackById">
 					<achievement-set-view [achievementSet]="achievementSet" (click)="selectSet(achievementSet)"></achievement-set-view>
