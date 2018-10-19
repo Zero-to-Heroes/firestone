@@ -61,6 +61,7 @@ body {
 	border: 1px solid $grey03;
 	width: 330px;
 	height: 65px;
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
 
 	&.message-new-card {
 		position: relative;
@@ -221,6 +222,7 @@ body {
 	outline: 1px solid #4B3052;
 	width: 410px;
 	height: 110px;
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
 
 	.achievement-image-container {
 		display: flex;
