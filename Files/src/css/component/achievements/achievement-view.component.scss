@@ -77,9 +77,10 @@
 	align-items: center;
 	justify-content: center;
 	bottom: -45px;
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
 	// Center it
     left: 50%;
-    transform: translateX(-50%);
+	transform: translateX(-50%);
 
 	.tooltip-arrow {
 		position: absolute;
