@@ -26,7 +26,7 @@ import { IOption } from 'ng-select';
 					[noFilter]="1">
 					<ng-template #optionTemplate let-option="option">
 						<span>{{option?.label}}</span>
-						<i class="i-30" *ngIf="option.value == activeFilter">
+						<i class="i-30 selected-icon" *ngIf="option.value == activeFilter">
 							<svg class="svg-icon-fill">
 								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown"/>
 							</svg>

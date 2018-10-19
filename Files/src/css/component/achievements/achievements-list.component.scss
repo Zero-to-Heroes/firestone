@@ -83,6 +83,10 @@
 			display: none;
 		}
 
+		.caret, .selected-icon {
+			color: #CB9FD7;
+		}
+
 		.open .caret {
 			transform: scale(1, -1);
 		}

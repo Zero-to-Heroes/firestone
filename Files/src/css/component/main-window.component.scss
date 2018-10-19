@@ -223,10 +223,32 @@ tooltips {
 	}
 }
 
-.app-container.achievements .no-ads-placeholder {
-	background-color: #190505;
+.app-container.achievements {
 
-	.logo {
-		color: #2A1030;
+	.controls {
+
+		button {
+			color: #CB9FD7;
+			
+			&:hover {
+				color: #CB9FD7;
+				background: #4B3052;
+
+			}
+		}
+
+		.close-button:hover {
+			color: #2A1030;
+			background: #CB9FD7;
+		}
+	}
+
+	.no-ads-placeholder {
+		background-color: #190505;
+
+		.logo {
+			color: #2A1030;
+		}
+
 	}
 }
