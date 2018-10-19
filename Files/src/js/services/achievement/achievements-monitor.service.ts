@@ -43,6 +43,7 @@ export class AchievementsMonitor {
 				const achievement: Achievement = this.repository.getAllAchievements()
 					.filter((ach) => ach.id == newAchievement.id)
 					[0];
+				// We store an history item every time, but we display only the first time an achievement is unlocked
 				this.storeNewAchievement(achievement, newAchievement.numberOfCompletions);
 				if (newAchievement.numberOfCompletions == 1) {
 					this.sendNotification(achievement);
