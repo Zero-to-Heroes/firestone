@@ -64,14 +64,14 @@
 		height: 30px;
 		background: rgba(255, 255, 255, 0.08);
 		margin-right: 15px;
-        width: 190px;
+		width: 190px;
 
 		&:focus, &:active {
 			outline: none;
 		}
 
 		& > div {
-			border: 1px solid #4B3052;
+			border: 1px solid #7D5A87;
 			outline: none;
 
 			div.single > div.toggle:hover {
@@ -95,7 +95,7 @@
 
 			& > div {
 				background: $black;
-				border: 1px solid #4B3052;
+				border: 1px solid #7D5A87;
 				border-top: none;
 				outline: none;
 			}
@@ -105,8 +105,8 @@
 			}
 
 			&> div .options ul li {
-				color: $grey01;
-				border-bottom: 1px solid $grey05;
+				color: #CB9FD7;
+				border-bottom: 1px solid #3B1F42;
 				padding: 0;
 				padding-left: 9px;
 				display: flex;
@@ -124,8 +124,7 @@
 				}
 
 				&.highlighted, &:hover {
-					// grey03
-					background-color: rgba(120, 95, 107, 0.4);
+					background-color: #4B3052;
 				}
 			}
 		}
