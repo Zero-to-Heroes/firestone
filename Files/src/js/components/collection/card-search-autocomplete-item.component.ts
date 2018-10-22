@@ -6,7 +6,7 @@ import { Events } from '../../services/events.service';
 	selector: 'card-search-autocomplete-item',
 	styleUrls: [`../../../css/component/collection/card-search-autocomplete-item.component.scss`],
 	template: `
-		<li>
+		<li class="card-search-autocomplete">
 			<span class="no-match">{{first}}</span>
 			<span class="match">{{match}}</span>
 			<span class="no-match">{{last}}</span>

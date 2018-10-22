@@ -15,18 +15,18 @@ declare var overwolf: any;
 	],
 	template: `
 		<ng-container [ngSwitch]="displayType">
-			<ul *ngSwitchCase="'menu'" class="menu-selection">
+			<ul *ngSwitchCase="'menu'" class="menu-selection-collection menu-selection">
 				<li class="selected" (click)="goToCollectionView()">Sets</li>
 				<!--<li>Cards</li>-->
 			</ul>
 			<ng-container *ngSwitchCase="'breadcrumbs'">
-				<ul class="breadcrumbs" *ngIf="!searchString">
+				<ul class="menu-selection-collection breadcrumbs" *ngIf="!searchString">
 					<li (click)="goToCollectionView()" class="highlight-on-hover">Sets</li>
 					<li (click)="goToFormatView()" class="highlight-on-hover">{{getSelectedFormat()}}</li>
 					<li (click)="goToSetView()" class="highlight-on-hover" *ngIf="selectedSet">{{selectedSet.name}}</li>
 					<li *ngIf="selectedCard">{{selectedCard.name}}</li>
 				</ul>
-				<ul class="breadcrumbs" *ngIf="searchString">
+				<ul class="menu-selection-collection breadcrumbs" *ngIf="searchString">
 					<li class="highlight-on-hover" (click)="goToCollectionView()">Home</li>
 					<li>Search</li>
 					<li>search result for {{searchString}}</li>

@@ -5,37 +5,38 @@
 	margin-top: 12px;
     display: flex;
     flex-direction: column;
-}
 
-sets-container {
-    display: flex;
-}
+	sets-container {
+		display: flex;
+	}
 
-.menu-selection {
-	display: flex;
-	align-items: center;
-	list-style: none;
-	margin-bottom: 5px;
-    flex-shrink: 0;
-	flex-grow: 0;
+	.menu-selection {
+		display: flex;
+		align-items: center;
+		list-style: none;
+		margin-bottom: 5px;
+		flex-shrink: 0;
+		flex-grow: 0;
 
-	li {
-		@extend %sets-menu;
-		// margin-right: 20px;
-		padding: 10px;
-
-		&:hover {
-			color: $grey02;
-			background: rgba(255, 255, 255, 0.08);
-		}
-
-		&.active {
-			color: $grey01;
+		li {
+			@extend %sets-menu;
+			margin-right: 0;
+			padding: 10px;
 
 			&:hover {
+				color: $grey02;
+				background: rgba(255, 255, 255, 0.08);
+			}
+
+			&.active {
 				color: $grey01;
-				background: transparent;
+
+				&:hover {
+					color: $grey01;
+					background: transparent;
+				}
 			}
 		}
 	}
+
 }

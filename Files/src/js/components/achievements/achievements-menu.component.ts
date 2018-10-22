@@ -14,15 +14,13 @@ declare var overwolf: any;
 	],
 	template: `
 		<ng-container [ngSwitch]="displayType">
-			<ul *ngSwitchCase="'menu'" class="menu-selection">
+			<ul *ngSwitchCase="'menu'" class="menu-selection-achievements menu-selection">
 				<li class="selected">Achievements</li>
 			</ul>
-			<ng-container *ngSwitchCase="'breadcrumbs'">
-				<ul class="breadcrumbs">
-					<li (click)="goToAchievementsHomeView()">Achievements</li>
-					<li (click)="goToAchievementsSetsView()" *ngIf="selectedAchievementSet">{{selectedAchievementSet.displayName}}</li>
-				</ul>
-			</ng-container>
+			<ul *ngSwitchCase="'breadcrumbs'" class="menu-selection-achievements breadcrumbs">
+				<li (click)="goToAchievementsHomeView()">Achievements</li>
+				<li (click)="goToAchievementsSetsView()" *ngIf="selectedAchievementSet">{{selectedAchievementSet.displayName}}</li>
+			</ul>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

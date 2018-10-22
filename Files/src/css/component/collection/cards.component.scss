@@ -7,177 +7,131 @@
 	flex-grow: 1;
     display: flex;
     flex-direction: column;
-}
 
-.set-title {
-	@extend %set-result;
-	display: flex;
-    flex-shrink: 0;
-    align-items: center;
-	margin: 0;
-    padding-bottom: 15px;
+	.set-title {
+		@extend %set-result;
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		margin: 0;
+		padding-bottom: 15px;
 
-	img {
-		width: 53px;
-		margin-left: 5px;
-		margin-right: 11px;
+		img {
+			width: 53px;
+			margin-left: 5px;
+			margin-right: 11px;
+		}
 	}
-}
 
-collection-empty-state {
-    flex-grow: 1;
-    display: flex;
-}
+	collection-empty-state {
+		flex-grow: 1;
+		display: flex;
+	}
 
-.show-filter {
-	@extend %search-active;
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    margin-right: 20px;
-    padding-bottom: 18px;
-    justify-content: flex-start;
-    margin-bottom: 10px;
-    border-bottom: 1px solid $grey04;
-
-	ng-select {
+	.show-filter {
 		@extend %search-active;
-		height: 30px;
-		background: rgba(255, 255, 255, 0.08);
-		margin-right: 15px;
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		margin-right: 20px;
+		padding-bottom: 18px;
+		justify-content: flex-start;
+		margin-bottom: 10px;
+		border-bottom: 1px solid $grey04;
 
-		&.class-select, &.rarity-select {
-			width: 110px;
-		}
+		ng-select {
+			@extend %search-active;
+			height: 30px;
+			background: rgba(255, 255, 255, 0.08);
+			margin-right: 15px;
 
-		&.owned-select {
-			width: 190px;
-		}
-
-		&:focus, &:active {
-			outline: none;
-		}
-
-		& > div {
-			border: 1px solid $grey03;
-			outline: none;
-
-			div.single > div.toggle:hover {
-				background: transparent;
+			&.class-select, &.rarity-select {
+				width: 110px;
 			}
-		}
 
-		.toggle {
-			display: none;
-		}
+			&.owned-select {
+				width: 190px;
+			}
 
-		.open .caret {
-			transform: scale(1, -1);
-		}
-
-		select-dropdown {
-
-			& > div {
-				background: $black;
-				border: 1px solid $grey03;
-				border-top: none;
+			&:focus, &:active {
 				outline: none;
 			}
 
-			.filter {
+			& > div {
+				border: 1px solid $grey03;
+				outline: none;
+
+				div.single > div.toggle:hover {
+					background: transparent;
+				}
+			}
+
+			.toggle {
 				display: none;
 			}
 
-			&> div .options ul li {
-				color: $grey01;
-				border-bottom: 1px solid $grey05;
-				padding: 0;
-				padding-left: 9px;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				height: 30px;
+			.open .caret {
+				transform: scale(1, -1);
+			}
 
-				&.selected {
-    				background-color: inherit;
-    				color: inherit;
+			select-dropdown {
 
-					&:hover {
+				& > div {
+					background: $black;
+					border: 1px solid $grey03;
+					border-top: none;
+					outline: none;
+				}
+
+				.filter {
+					display: none;
+				}
+
+				&> div .options ul li {
+					color: $grey01;
+					border-bottom: 1px solid $grey05;
+					padding: 0;
+					padding-left: 9px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					height: 30px;
+
+					&.selected {
+						background-color: inherit;
 						color: inherit;
+
+						&:hover {
+							color: inherit;
+						}
+					}
+
+					&.highlighted, &:hover {
+						// grey03
+						background-color: rgba(120, 95, 107, 0.4);
 					}
 				}
-
-				&.highlighted, &:hover {
-					// grey03
-					background-color: rgba(120, 95, 107, 0.4);
-				}
 			}
 		}
 	}
-}
 
-.cards-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	margin-top: -6px;
-	width: 100%;
-    justify-content: flex-start;
-    display: flex;
-    flex-wrap: wrap;
-	overflow-y: scroll;
-	flex-grow: 1;
+	.cards-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		margin-top: -6px;
+		width: 100%;
+		justify-content: flex-start;
+		display: flex;
+		flex-wrap: wrap;
+		overflow-y: scroll;
+		flex-grow: 1;
 
-    li {
-    	width: 98px;
-    	height: 152px; // We need this so that things are not a mess when the placeholder image is showing
-    	margin-right: 14px;
-    	margin-bottom: 4px;
-    }
-}
-
-.pagination {
-	@extend %pagination-inactive;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	list-style: none;
-    position: absolute;
-    bottom: -12px;
-    width: 100%;
-
-	li {
-		margin-right: 5px;
-
-		&.active, &:hover {
-			@extend %sub-title;
-		}
-
-		&.arrow {
-
-			&.previous {
-				transform: rotate(90deg);
-				margin-right: 3px;
-			}
-
-			&.next {
-				transform: rotate(-90deg);
-				margin-left: 3px;
-			}
-
-			&:hover {
-				background: $grey04;
-			}
-
-			&.disabled {
-				&:hover {
-					background: none;
-				}
-				svg {
-					fill: $grey05;
-				}
-			}
+		li {
+			width: 98px;
+			height: 152px; // We need this so that things are not a mess when the placeholder image is showing
+			margin-right: 14px;
+			margin-bottom: 4px;
 		}
 	}
 }
-

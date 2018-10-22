@@ -22,109 +22,110 @@
 			margin-right: 10px;
 		}
 	}
-}
 
-.set-title {
-    @extend %achievements-category-name;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #4B3052;
-}
+	.set-title {
+		@extend %achievements-category-title;
+		padding-bottom: 5px;
+		// border-bottom: 1px solid #4B3052;
+	}
 
-.achievements-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	margin-top: 10px;
-	width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    overflow: auto;
+	.achievements-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		overflow: auto;
 
-    li {
-    	// width: 98px;
-    	// height: 152px; // We need this so that things are not a mess when the placeholder image is showing
-    	margin-right: 15px;
-    	margin-bottom: 10px;
-    }
-}
+		li {
+			// width: 98px;
+			// height: 152px; // We need this so that things are not a mess when the placeholder image is showing
+			margin-right: 15px;
+			margin-bottom: 10px;
+		}
+	}
 
-.show-filter {
-	@extend %search-active;
-    display: flex;
-    justify-content: flex-start;
-    flex-shrink: 0;
-    align-items: center;
-    margin-right: 20px;
-    margin-bottom: 10px;
-    margin-top: 18px;
-
-	ng-select {
+	.show-filter {
 		@extend %search-active;
-		height: 30px;
-		background: rgba(255, 255, 255, 0.08);
-		margin-right: 15px;
-		width: 190px;
+		display: flex;
+		justify-content: flex-start;
+		flex-shrink: 0;
+		align-items: center;
+		margin-right: 20px;
+		margin-bottom: 10px;
+		margin-top: 18px;
+		padding-bottom: 15px;
+		border-bottom: 1px solid #4B3052;
 
-		&:focus, &:active {
-			outline: none;
-		}
+		ng-select {
+			@extend %search-active;
+			height: 30px;
+			background: rgba(255, 255, 255, 0.08);
+			margin-right: 15px;
+			width: 190px;
 
-		& > div {
-			border: 1px solid #7D5A87;
-			outline: none;
-
-			div.single > div.toggle:hover {
-				background: transparent;
-			}
-		}
-
-		.toggle {
-			display: none;
-		}
-
-		.caret, .selected-icon {
-			color: #CB9FD7;
-		}
-
-		.open .caret {
-			transform: scale(1, -1);
-		}
-
-		select-dropdown {
-
-			& > div {
-				background: $black;
-				border: 1px solid #7D5A87;
-				border-top: none;
+			&:focus, &:active {
 				outline: none;
 			}
 
-			.filter {
+			& > div {
+				border: 1px solid #7D5A87;
+				outline: none;
+
+				div.single > div.toggle:hover {
+					background: transparent;
+				}
+			}
+
+			.toggle {
 				display: none;
 			}
 
-			&> div .options ul li {
+			.caret, .selected-icon {
 				color: #CB9FD7;
-				border-bottom: 1px solid #3B1F42;
-				padding: 0;
-				padding-left: 9px;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				height: 30px;
+			}
 
-				&.selected {
-    				background-color: inherit;
-    				color: inherit;
+			.open .caret {
+				transform: scale(1, -1);
+			}
 
-					&:hover {
-						color: inherit;
-					}
+			select-dropdown {
+
+				& > div {
+					background: $black;
+					border: 1px solid #7D5A87;
+					border-top: none;
+					outline: none;
 				}
 
-				&.highlighted, &:hover {
-					background-color: #4B3052;
+				.filter {
+					display: none;
+				}
+
+				&> div .options ul li {
+					color: #CB9FD7;
+					border-bottom: 1px solid #3B1F42;
+					padding: 0;
+					padding-left: 9px;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					height: 30px;
+
+					&.selected {
+						background-color: inherit;
+						color: inherit;
+
+						&:hover {
+							color: inherit;
+						}
+					}
+
+					&.highlighted, &:hover {
+						background-color: #4B3052;
+					}
 				}
 			}
 		}

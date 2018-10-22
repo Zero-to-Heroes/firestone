@@ -1,34 +1,37 @@
 @import '../../global/variables';
 @import '../../global/fonts';
 
-.menu-selection {
-    border-bottom: 1px solid $grey04;
+.menu-selection-collection {
 	
-	li {
-		margin-right: 15px;
-		padding-bottom: 8px;
-	}
-}
-
-.breadcrumbs {
-	@extend %breadcrumbs;
-	list-style: none;
-	display: flex;
-	margin: 0;
-	align-self: flex-start;
-	margin-top: -4px;
-
-	.highlight-on-hover:hover {
-		color: $grey02;
+	&.menu-selection {
+		border-bottom: 1px solid $grey04;
+		
+		li {
+			margin-right: 15px;
+			padding-bottom: 8px;
+		}
 	}
 
-	li:after {
-		content: ">";
-	    margin-left: 6px;
-	    margin-right: 6px;
-	}
+	&.breadcrumbs {
+		@extend %breadcrumbs;
+		list-style: none;
+		display: flex;
+		margin: 0;
+		align-self: flex-start;
+		margin-top: -4px;
 
-	li:last-child:after {
-		content: "";
+		.highlight-on-hover:hover {
+			color: $grey02;
+		}
+
+		li:after {
+			content: ">";
+			margin-left: 6px;
+			margin-right: 6px;
+		}
+
+		li:last-child:after {
+			content: "";
+		}
 	}
 }

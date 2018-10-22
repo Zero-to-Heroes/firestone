@@ -148,31 +148,31 @@
 
         }
     }
-}
 
-.deco {
-    position: absolute;
-
-    &.deco-left {
-        transform: rotate(90deg) scale(1,-1);
-        left: -29px;
-        top: calc(50% - 25px);
-    }
-
-    &.deco-top {
-        left: calc(50% - 25px);
-        top: -7px;
-    }
-
-    &.deco-right {
-        transform: rotate(90deg);
-        right: -29px;
-        top: calc(50% - 25px);
-    }
-
-    &.deco-bottom {
-        left: calc(50% - 25px);
-        bottom: -7px;
-        transform: scale(1, -1);
+    .deco {
+        position: absolute;
+    
+        &.deco-left {
+            transform: rotate(90deg) scale(1,-1);
+            left: -29px;
+            top: calc(50% - 25px);
+        }
+    
+        &.deco-top {
+            left: calc(50% - 25px);
+            top: -7px;
+        }
+    
+        &.deco-right {
+            transform: rotate(90deg);
+            right: -29px;
+            top: calc(50% - 25px);
+        }
+    
+        &.deco-bottom {
+            left: calc(50% - 25px);
+            bottom: -7px;
+            transform: scale(1, -1);
+        }
     }
 }

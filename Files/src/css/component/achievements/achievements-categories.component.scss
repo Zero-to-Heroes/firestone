@@ -5,10 +5,8 @@
 	flex-direction: column;
 
 	.title {
-		@extend %achievements-category-name;
-		padding-bottom: 5px;
-		border-bottom: 1px solid #4B3052;
-		margin-bottom: 15px;
+		@extend %achievements-category-title;
+		margin-bottom: 20px;
 	}
 
 	ol {
