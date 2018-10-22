@@ -102,18 +102,21 @@ export class AchievementsComponent implements AfterViewInit {
 					this._selectedView = 'list';
 					this._selectedCategory = data.data[0];
 					this._achievementsList = this._selectedCategory.achievements;
+					this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
 				});
 			}
 		)
 
 		this._events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
-				this.transitionState(() => {
-					this.reset();
-					this._menuDisplayType = 'menu';
-					this._selectedView = 'categories';
-					this.refreshContents();
-				});
+				if (data.data[0] === 'achievements') {
+					this.transitionState(() => {
+						this._menuDisplayType = 'menu';
+						this._selectedView = 'categories';
+						this.refreshContents();
+						console.log('reset achievements to categories view');
+					});
+				}
 			}
 		)
 		this.refreshContents();
@@ -132,8 +135,10 @@ export class AchievementsComponent implements AfterViewInit {
 			this._selectedView = 'list';
 			this._selectedCategory = achievementSet;
 			this._achievementsList = this._selectedCategory.achievements;
-			this.cdr.detectChanges();
-			console.warn('TODO: scroll achievement into view');
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+				this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
+			}
 		})
 	}
 
@@ -145,7 +150,7 @@ export class AchievementsComponent implements AfterViewInit {
 		if (this.refreshingContent) {
 			return;
 		}
-		console.log('refreshing contents');
+		console.log('refreshing contents in achievements');
 		this.refreshingContent = true;
 		this.repository.loadAggregatedAchievements()
 			.then((achievementSets: AchievementSet[]) => {
@@ -154,6 +159,7 @@ export class AchievementsComponent implements AfterViewInit {
 				this.refreshingContent = false;
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();
+					// this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
 				}
 			});
 	}

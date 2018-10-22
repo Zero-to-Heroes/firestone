@@ -18,6 +18,8 @@ export class Events {
 	public static readonly NEW_CARD = 'new-card';
 	public static readonly MORE_DUST = 'more-dust';
 	public static readonly MODULE_SELECTED = 'module-selected';
+	public static readonly UPDATE_CURRENT_MENU = 'update-current-menu';
+	public static readonly MODULE_IN_VIEW = 'module-in-view';
 	public static readonly FORMAT_SELECTED = 'format-selected';
 	public static readonly SHOW_CARDS = 'show-cards';
 	public static readonly SET_SELECTED = 'set-selected';

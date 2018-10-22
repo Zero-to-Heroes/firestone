@@ -39,7 +39,12 @@ export class MenuSelectionComponent {
 
 	constructor(private events: Events, private cdr: ChangeDetectorRef) {
 		this.events.on(Events.MODULE_SELECTED).subscribe((event) => {
-			this.selectedModule = event.data[0]
+			this.selectedModule = event.data[0];
+			this.cdr.detectChanges();
+		});
+		this.events.on(Events.MODULE_IN_VIEW).subscribe((event) => {
+			console.log('updating module in view', event);
+			this.selectedModule = event.data[0];
 			this.cdr.detectChanges();
 		});
 	}

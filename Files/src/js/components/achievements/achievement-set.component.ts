@@ -10,7 +10,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 		`../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div *ngIf="_achievementSet" class="achievement-set">
+		<div class="achievement-set">
 			<div class="frame complete-simple" *ngIf="complete">
 				<i class="i-25 pale-gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">
@@ -33,7 +33,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 					</svg>
 				</i>
 			</div>
-			<span class="text set-name">{{_achievementSet.displayName}}</span>
+			<span class="text set-name">{{displayName}}</span>
 			<i class="logo" [innerHTML]="svgTemplate">
 				
 			</i>
@@ -45,6 +45,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 export class AchievementSetComponent {
 
 	_achievementSet: AchievementSet;
+	displayName: string;
 	svgTemplate: SafeHtml;
 	complete: boolean = false;
 
@@ -59,6 +60,7 @@ export class AchievementSetComponent {
 				<use xlink:href="/Files/assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
 			</svg>`
 		);
+		this.displayName = achievementSet.displayName;
 		const flatCompletions = achievementSet.achievements
 				.map((achievement) => achievement.numberOfCompletions)
 				.reduce((a, b) => a.concat(b));

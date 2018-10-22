@@ -89,12 +89,13 @@ export class CollectionComponent implements AfterViewInit {
 	}
 
 	public selectCard(fullCardId: string) {
-		this._events.broadcast(Events.MODULE_SELECTED, 'collection');
+		this._events.broadcast(Events.UPDATE_CURRENT_MENU, 'collection');
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
 		// Always rebuild the set to update the card owned information
 		this.buildSet(fullCardId).then((set) => {
+			console.log('setting card deatails from selectCard');
 			this.reset();
 			this._menuDisplayType = 'breadcrumbs';
 			this._selectedView = 'card-details';
@@ -103,6 +104,7 @@ export class CollectionComponent implements AfterViewInit {
 			this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
+				this._events.broadcast(Events.MODULE_IN_VIEW, 'collection');
 			}
 		});
 	}
@@ -124,47 +126,58 @@ export class CollectionComponent implements AfterViewInit {
 			(data) => {
 				this.transitionState(() => {
 					this.reset();
+					console.log('setting set selected');
 					this._menuDisplayType = 'breadcrumbs';
 					this._selectedView = 'cards';
 					this._selectedSet = data.data[0];
 					this._selectedFormat = this._selectedSet.standard ? 'standard' : 'wild';
 					this._cardList = this._selectedSet.allCards;
+					this._events.broadcast(Events.MODULE_IN_VIEW, 'collection');
 				});
 			}
 		);
 		this._events.on(Events.FORMAT_SELECTED).subscribe(
 			(data) => {
 				this.transitionState(() => {
+					console.log('setting format selected');
 					this.reset();
 					this._menuDisplayType = 'menu';
 					this._selectedView = 'sets';
 					this._selectedFormat = data.data[0];
+					this._events.broadcast(Events.MODULE_IN_VIEW, 'collection');
 				});
 			}
 		);
 		this._events.on(Events.MODULE_SELECTED).subscribe(
 			(data) => {
-				this.transitionState(() => {
-					this.reset();
-					this._menuDisplayType = 'menu';
-					this._selectedView = 'sets';
-				});
+				if (data.data[0] === 'collection') {
+					this.transitionState(() => {
+						console.log('setting module selected');
+						this.reset();
+						this._menuDisplayType = 'menu';
+						this._selectedView = 'sets';
+						this._events.broadcast(Events.MODULE_IN_VIEW, 'collection');
+					});
+				}
 			}
 		);
 		this._events.on(Events.SHOW_CARDS).subscribe(
 			(data) => {
 				this.transitionState(() => {
+					console.log('setting show cards');
 					this.reset();
 					this._menuDisplayType = 'breadcrumbs';
 					this._selectedView = 'cards';
 					this._cardList = data.data[0];
 					this.searchString = data.data[1];
+					this._events.broadcast(Events.MODULE_IN_VIEW, 'collection');
 				})
 			}
 		);
 		this._events.on(Events.SHOW_CARD_MODAL).subscribe(
 			(event) => {
 				this.transitionState(() => {
+					console.log('setting show card modal');
 					this.selectCard(event.data[0]);
 				});
 			}
@@ -198,7 +211,6 @@ export class CollectionComponent implements AfterViewInit {
 			return;
 		}
 		this.refreshing = true;
-
 
 		this.collectionManager.getCollection((collection: Card[]) => {
 			this.buildSetsFromCollection(collection);

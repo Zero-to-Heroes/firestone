@@ -57,10 +57,8 @@ declare var OwAd: any;
 					</div>
 				</section>
 				<section class="content-container">
-					<ng-container [ngSwitch]="selectedModule">
-						<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
-						<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
-					</ng-container>
+					<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
+					<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
 					<div class="ads-container">
 						<div class="no-ads-placeholder">
 							<i class="i-117X33 gold-theme logo">
