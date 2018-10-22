@@ -1,6 +1,5 @@
 .achievement-image-container {
     display: flex;
-    margin-left: 10px;
     margin-right: 20px;
     justify-content: center;
     align-items: center;
@@ -46,7 +45,7 @@
         margin: auto;
         background: #5A116C;
         opacity: 0.5;
-        clip-path: ellipse(34% 37% at 50% 50%);    
+        clip-path: ellipse(34% 51% at 50% 50%);    
     }
     .frame {
         --icon-color: #CB9FD7;
