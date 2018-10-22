@@ -72,16 +72,6 @@ body {
 			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
 			outline: 1px solid $grey04;
 		}
-		
-		&.achievements {
-			background-image: radial-gradient(340.00px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
-			background-size: 100%;
-			outline: 1px solid #4B3052;
-
-			.navigation menu-selection .menu-selection {
-				color: #7D5A87;
-			}
-		}
 
 		.navigation {
 			display: flex;
@@ -161,6 +151,20 @@ body {
 		    	}
 		    }
 	    }
+		
+		&.achievements {
+			background-image: radial-gradient(340.00px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+			background-size: 100%;
+			outline: 1px solid #4B3052;
+
+			.navigation menu-selection .menu-selection {
+				color: #7D5A87;
+			}
+			
+			.menu-bar {
+				border-bottom-color: #4B3052;
+			}
+		}
 
 	    .content-container {
 		    position: relative;
