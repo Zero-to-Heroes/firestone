@@ -1,6 +1,5 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ViewEncapsulation } from '@angular/core';
 
-import { Events } from '../services/events.service';
 import { RealTimeNotificationService } from '../services/real-time-notifications.service';
 
 @Component({
@@ -20,6 +19,7 @@ import { RealTimeNotificationService } from '../services/real-time-notifications
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	encapsulation: ViewEncapsulation.None,
 })
 
 export class RealTimeNotificationsComponent implements AfterViewInit {
