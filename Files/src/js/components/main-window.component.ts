@@ -113,7 +113,7 @@ export class MainWindowComponent implements AfterViewInit {
 	private adRef;
 	private adInit = false;
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef) {
+	constructor(private events: Events, private cdr: ChangeDetectorRef, private debug: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.windowId = result.window.id;
