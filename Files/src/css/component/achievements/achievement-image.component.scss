@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
+    height: 100%;
 
     .overlay {
         display: none;
@@ -45,7 +46,7 @@
         margin: auto;
         background: #5A116C;
         opacity: 0.5;
-        clip-path: ellipse(34% 48% at 50% 50%);
+        clip-path: ellipse(34% 37% at 50% 50%);    
     }
     .frame {
         --icon-color: #CB9FD7;
