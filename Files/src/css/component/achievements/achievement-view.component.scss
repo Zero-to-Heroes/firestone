@@ -40,7 +40,6 @@
 
 			&.completed {
 				i {
-					opacity: 1;
 					--icon-color: #FFB948;
 				}
 			}
@@ -59,6 +58,9 @@
 		}
 		.achievement-text {
 			color: #7D5A87;
+		}
+		.completion-progress .completion-step i {
+			--icon-color: #7D5A87;
 		}
 	}
 
