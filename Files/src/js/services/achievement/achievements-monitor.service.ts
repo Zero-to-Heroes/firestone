@@ -44,7 +44,7 @@ export class AchievementsMonitor {
 					.filter((ach) => ach.id == newAchievement.id)
 					[0];
 				// We store an history item every time, but we display only the first time an achievement is unlocked
-				this.storeNewAchievement(achievement, newAchievement.numberOfCompletions);
+				this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
 				if (newAchievement.numberOfCompletions == 1) {
 					this.sendNotification(achievement);
 				}
@@ -83,6 +83,14 @@ export class AchievementsMonitor {
 		});
 	}
 
+	public storeNewAchievementHistory(achievement: Achievement, numberOfCompletions: number) {
+		this.storage.save(new AchievementHistory(
+			achievement.id, 
+			achievement.name, 
+			numberOfCompletions, 
+			achievement.difficulty));
+	}
+
 	private handleEvent(gameEvent: GameEvent) {
 		// console.log('[achievements] handling events', gameEvent);
 		for (let challenge of this.repository.challengeModules) {
@@ -93,13 +101,5 @@ export class AchievementsMonitor {
 				}, data);
 			});
 		}
-	}
-
-	private storeNewAchievement(achievement: Achievement, numberOfCompletions: number) {
-		this.storage.save(new AchievementHistory(
-			achievement.id, 
-			achievement.name, 
-			numberOfCompletions, 
-			achievement.difficulty));
 	}
 }
