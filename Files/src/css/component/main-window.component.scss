@@ -238,13 +238,12 @@ tooltips {
 	}
 }
 
-.app-container.achievements {
-	.controls {
+.root .app-container.achievements {
+	.menu-bar .controls {
 		button {
 			color: #CB9FD7;
 			
 			&:hover {
-				color: #CB9FD7;
 				background: #4B3052;
 			}
 		}
