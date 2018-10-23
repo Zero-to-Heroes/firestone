@@ -19,16 +19,44 @@ export class MonsterHuntBossSetProvider extends SetProvider {
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
         const fullAchievements = this.createAchievements(allAchievements, completedAchievemnts);
         const filterOptions: ReadonlyArray<FilterOption> = [
-            { value: 'ALL_ACHIEVEMENTS', label: 'All achievements', filterFunction: (a) => true },
-            { value: 'ONLY_MISSING', label: 'Locked achievements', filterFunction: (a: VisualAchievement) => {
-                return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
-            }},
-            { value: 'ENCOUNTERED_ONLY', label: 'Encountered only', filterFunction: (a: VisualAchievement) => {
-                return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] === 0;
-            }},
-            { value: 'ONLY_COMPLETED', label: 'Completed achievements', filterFunction: (a: VisualAchievement) => {
-                return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] > 0;
-            }},
+            { 
+                value: 'ALL_ACHIEVEMENTS', 
+                label: 'All achievements', 
+                filterFunction: (a) => true, 
+                emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
+                emptyStateTitle: 'This category is complete and you have it all!', 
+                emptyStateText: 'Keep up the good work.' 
+            },
+            { 
+                value: 'ONLY_MISSING', 
+                label: 'Locked achievements', 
+                filterFunction: (a: VisualAchievement) => {
+                    return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
+                }, 
+                emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration', 
+                emptyStateTitle: 'No achievements here yet!', 
+                emptyStateText: 'Don\'t worry, keep playing and complete achievements.'
+            },
+            { 
+                value: 'ENCOUNTERED_ONLY', 
+                label: 'Encountered only', 
+                filterFunction: (a: VisualAchievement) => {
+                    return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] === 0;
+                }, 
+                emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
+                emptyStateTitle: 'No achievements here yet!', 
+                emptyStateText: 'Don\'t worry, keep playing and complete achievements.'
+            },
+            { 
+                value: 'ONLY_COMPLETED', 
+                label: 'Completed achievements', 
+                filterFunction: (a: VisualAchievement) => {
+                    return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] > 0;
+                }, 
+                emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
+                emptyStateTitle: 'No achievements here yet!', 
+                emptyStateText: 'Don\'t worry, keep playing and complete achievements.'
+            },
         ]
         return new AchievementSet(this.id, this.displayName, 'monster_hunt_category', fullAchievements, filterOptions);
     }

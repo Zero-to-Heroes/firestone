@@ -63,7 +63,7 @@
 			height: 30px;
 			background: rgba(255, 255, 255, 0.08);
 			margin-right: 15px;
-			width: 190px;
+			width: 195px;
 
 			&:focus, &:active {
 				outline: none;
@@ -129,4 +129,33 @@
 			}
 		}
 	}
+
+	.empty-state {
+		@extend %empty-state;
+		--icon-color: #A276AF;
+		color: #A276AF;
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+		justify-items: center;
+		align-items: center;
+	
+		.state-container {
+			margin: auto;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+	
+			i {
+				margin-bottom: 30px;
+			}
+	
+			.title {
+				@extend %empty-state-title;
+				color: #CB9FD7;
+				margin-bottom: 15px;
+			}
+		}
+	
+	}	
 }

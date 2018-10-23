@@ -4,6 +4,7 @@ import { AchievementSet } from '../../models/achievement-set';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { FilterOption } from '../../models/filter-option';
 import { IOption } from 'ng-select';
+import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
 	selector: 'achievements-list',
@@ -35,11 +36,18 @@ import { IOption } from 'ng-select';
 				</ng-select>
 				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 			</div>
-			<ul class="achievements-list" *ngIf="activeAchievements">
+			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0">
 				<li *ngFor="let achievement of activeAchievements">
 					<achievement-view [achievement]="achievement">/</achievement-view>
 				</li>
 			</ul>
+			<section class="empty-state" *ngIf="!activeAchievements || activeAchievements.length === 0">
+				<div class="state-container">
+					<i class="i-238X167 pale-pink-theme" [innerHTML]="emptyStateSvgTemplate"></i>
+					<span class="title">{{emptyStateTitle}}</span>
+					<span class="subtitle">{{emptyStateText}}</span>
+				</div>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,8 +59,12 @@ export class AchievementsListComponent implements AfterViewInit {
 	_achievementSet: AchievementSet;
 	filterOptions: Array<IOption>;
 	activeFilter: string;
+	emptyStateSvgTemplate: SafeHtml;
+	emptyStateIcon: string;
+	emptyStateTitle: string;
+	emptyStateText: string;
 
-	constructor(private cdr: ChangeDetectorRef, private el: ElementRef) {
+	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
 
 	}
 
@@ -91,7 +103,11 @@ export class AchievementsListComponent implements AfterViewInit {
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
 		// console.log('handling history click', event);
-		let rect = this.el.nativeElement.querySelector('.achievements-list').getBoundingClientRect();
+		const achievementsList = this.el.nativeElement.querySelector('.achievements-list');
+		if (!achievementsList) {
+			return;
+		}
+		let rect = achievementsList.getBoundingClientRect();
 		// console.log('element rect', rect);
 		let scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
@@ -118,11 +134,20 @@ export class AchievementsListComponent implements AfterViewInit {
 		if (!this.achievements) {
 			return;
 		}
-		const filterFunction: (VisualAchievement) => boolean = this._achievementSet.filterOptions
-			.filter((option) => option.value === this.activeFilter)
-			[0]
-			.filterFunction;
+		const filterOption = this._achievementSet.filterOptions
+				.filter((option) => option.value === this.activeFilter)
+				[0];
+		const filterFunction: (VisualAchievement) => boolean = filterOption.filterFunction;
+		this.emptyStateIcon = filterOption.emptyStateIcon;
+		this.emptyStateTitle = filterOption.emptyStateTitle;
+		this.emptyStateText = filterOption.emptyStateText;
+		this.emptyStateSvgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
+			<svg class="svg-icon-fill">
+				<use xlink:href="/Files/assets/svg/sprite.svg#${this.emptyStateIcon}"/>
+			</svg>
+		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
+		console.log('selected', this.activeAchievements, filterOption);
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
