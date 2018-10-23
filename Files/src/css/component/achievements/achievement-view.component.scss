@@ -13,7 +13,7 @@
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
-		justify-content: center;
+		justify-content: space-between;
 	}
 
 	.achievement-name {
@@ -27,7 +27,7 @@
 
 	.completion-progress {
 		display: flex;
-		margin-top: 15px;
+		margin-top: 10px;
 
 		.completion-step {
 			margin-right: 10px;

@@ -9,8 +9,10 @@ import { VisualAchievement } from '../../models/visual-achievement';
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
 			<achievement-image [imageId]="_achievement.cardId"></achievement-image>
 			<div class="achievement-body">
-				<div class="achievement-name">{{_achievement.name}}</div>
-				<div class="achievement-text" [innerHTML]="achievementText"></div>
+				<div class="text">
+					<div class="achievement-name">{{_achievement.name}}</div>
+					<div class="achievement-text" [innerHTML]="achievementText"></div>
+				</div>
 				<div class="completion-progress">
 					<div class="completion-step" [ngClass]="{'completed': metTimes > 0}">
 						<i class="i-30">
