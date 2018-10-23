@@ -12,6 +12,7 @@
 	&.menu-selection {
 		margin-bottom: 14px;
 		border-bottom: 1px solid #4B3052;
+
 		li {
 			@extend %achievements-category-name;
 			padding-bottom: 10px;
@@ -27,18 +28,13 @@
 		margin-top: -4px;
 		margin-bottom: 10px;
 
-		li:not(.unclickable):hover {
+		li:not(.unclickable):not(.separator):hover {
 			color: #A276AF;
 		}
 
-		li:after {
-			content: ">";
+		li.separator {
 			margin-left: 6px;
 			margin-right: 6px;
-		}
-
-		li:last-child:after {
-			content: "";
 		}
 	}
 }

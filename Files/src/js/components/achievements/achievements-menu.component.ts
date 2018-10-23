@@ -19,6 +19,7 @@ declare var overwolf: any;
 			</ul>
 			<ul *ngSwitchCase="'breadcrumbs'" class="menu-selection-achievements breadcrumbs">
 				<li (click)="goToAchievementsCategoriesView()">Categories</li>
+				<li class="separator">></li>
 				<li class="unclickable" (click)="goToAchievementSetView()">{{selectedAchievementSet.displayName}}</li>
 			</ul>
 		</ng-container>
