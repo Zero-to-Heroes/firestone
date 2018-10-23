@@ -10,9 +10,11 @@
 .menu-selection-achievements {
 
 	&.menu-selection {
-		margin-bottom: 20px;
+		margin-bottom: 14px;
+		border-bottom: 1px solid #4B3052;
 		li {
-			@extend %achievements-category-title;
+			@extend %achievements-category-name;
+			padding-bottom: 10px;
 		}
 	}
 
