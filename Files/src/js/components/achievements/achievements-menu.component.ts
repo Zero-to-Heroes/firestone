@@ -15,11 +15,11 @@ declare var overwolf: any;
 	template: `
 		<ng-container [ngSwitch]="displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection-achievements menu-selection">
-				<li class="selected">Achievements</li>
+				<li>Categories</li>
 			</ul>
 			<ul *ngSwitchCase="'breadcrumbs'" class="menu-selection-achievements breadcrumbs">
-				<li (click)="goToAchievementsHomeView()">Achievements</li>
-				<li (click)="goToAchievementsSetsView()" *ngIf="selectedAchievementSet">{{selectedAchievementSet.displayName}}</li>
+				<li (click)="goToAchievementsCategoriesView()">Categories</li>
+				<li class="unclickable" (click)="goToAchievementSetView()">{{selectedAchievementSet.displayName}}</li>
 			</ul>
 		</ng-container>
 	`,
@@ -35,11 +35,11 @@ export class AchievementsMenuComponent {
 
 	}
 
-	goToAchievementsHomeView() {
+	goToAchievementsCategoriesView() {
 		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
 	}
 
-	goToAchievementsSetsView() {
+	goToAchievementSetView() {
 		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, this.selectedAchievementSet);
 	}
 }

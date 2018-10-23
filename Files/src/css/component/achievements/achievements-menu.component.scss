@@ -1,26 +1,32 @@
 @import '../../global/variables';
 @import '../../global/fonts';
 
+:host {
+	display: flex;
+	flex-shrink: 0;
+	flex-grow: 0;
+}
+
 .menu-selection-achievements {
 
 	&.menu-selection {
-		border-bottom: 1px solid $grey04;
+		margin-bottom: 20px;
 		li {
-			margin-right: 15px;
-			padding-bottom: 8px;
+			@extend %achievements-category-title;
 		}
 	}
 
 	&.breadcrumbs {
-		@extend %breadcrumbs;
+		@extend %achievements-menu-item;
 		list-style: none;
 		display: flex;
 		margin: 0;
 		align-self: flex-start;
 		margin-top: -4px;
+		margin-bottom: 10px;
 
-		li:hover {
-			color: $grey02;
+		li:not(.unclickable):hover {
+			color: #A276AF;
 		}
 
 		li:after {

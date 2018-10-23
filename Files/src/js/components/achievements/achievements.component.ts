@@ -23,7 +23,11 @@ declare var _: any;
 	],
 	template: `
 		<div class="achievements">
-			<section class="main" [@viewState]="_viewState">
+			<section class="main divider" [@viewState]="_viewState">
+				<achievements-menu
+					[displayType]="_menuDisplayType"
+					[selectedAchievementSet]="_selectedCategory">
+				</achievements-menu>
 				<ng-container [ngSwitch]="_selectedView">
 					<achievements-categories
 							*ngSwitchCase="'categories'"
