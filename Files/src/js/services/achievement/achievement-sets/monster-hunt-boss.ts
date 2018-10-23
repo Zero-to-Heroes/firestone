@@ -20,11 +20,14 @@ export class MonsterHuntBossSetProvider extends SetProvider {
         const fullAchievements = this.createAchievements(allAchievements, completedAchievemnts);
         const filterOptions: ReadonlyArray<FilterOption> = [
             { value: 'ALL_ACHIEVEMENTS', label: 'All achievements', filterFunction: (a) => true },
-            { value: 'ONLY_COMPLETED', label: 'Only completed', filterFunction: (a: VisualAchievement) => {
-                return a.numberOfCompletions.reduce((a, b) => a + b, 0) > 0;
-            }},
-            { value: 'ONLY_MISSING', label: 'Only missing', filterFunction: (a: VisualAchievement) => {
+            { value: 'ONLY_MISSING', label: 'Locked achievements', filterFunction: (a: VisualAchievement) => {
                 return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
+            }},
+            { value: 'ENCOUNTERED_ONLY', label: 'Encountered only', filterFunction: (a: VisualAchievement) => {
+                return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] === 0;
+            }},
+            { value: 'ONLY_COMPLETED', label: 'Completed achievements', filterFunction: (a: VisualAchievement) => {
+                return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] > 0;
             }},
         ]
         return new AchievementSet(this.id, this.displayName, 'monster_hunt_category', fullAchievements, filterOptions);
