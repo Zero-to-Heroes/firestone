@@ -34,6 +34,7 @@ import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AchievementStatsService } from '../../services/achievement/achievement-stats.service';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementNameService } from 'src/js/services/achievement/achievement-name.service';
+import { DevService } from 'src/js/services/dev.service';
 
 
 @NgModule({
@@ -52,6 +53,7 @@ import { AchievementNameService } from 'src/js/services/achievement/achievement-
 		CollectionManager,
 		Events,
 		DebugService,
+		DevService,
 		HsPublicEventsListener,
 		GameEvents,
 		IndexedDbService,
