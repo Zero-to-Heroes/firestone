@@ -53,6 +53,36 @@ export class AchievementsMonitor {
 		console.log('listening for achievement completion events');
 	}
 
+	public sendNotification(achievement: Achievement) {
+		const text = this.nameService.displayName(achievement.id);
+		console.log('sending new notification', text);
+		this.notificationService.html({
+			content: `
+				<div class="achievement-message-container">
+					<div class="achievement-image-container">
+						<img src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg" class="real-achievement"/>
+						<i class="i-84x90 frame">
+							<svg>
+								<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
+							</svg>
+						</i>
+					</div>
+					<div class="message">
+						<span class="title">Achievement unlocked!</span>
+						<span class="text">${text}</span>
+						<span class="recap-text">Click to expand</span>
+					</div>
+					<button class="i-30 close-button">
+						<svg class="svg-icon-fill">
+							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+						</svg>
+					</button>
+				</div>`,
+			type: 'achievement',
+			cardId: achievement.id
+		});
+	}
+
 	private handleEvent(gameEvent: GameEvent) {
 		// console.log('[achievements] handling events', gameEvent);
 		for (let challenge of this.repository.challengeModules) {
@@ -71,35 +101,5 @@ export class AchievementsMonitor {
 			achievement.name, 
 			numberOfCompletions, 
 			achievement.difficulty));
-	}
-
-	private sendNotification(achievement: Achievement) {
-		const text = this.nameService.displayName(achievement.id);
-		console.log('sending new notification', text);
-		this.notificationService.html({
-			content: `
-				<div class="achievement-message-container">
-					<div class="achievement-image-container">
-						<img src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg" class="real-achievement"/>
-						<i class="i-84x90 frame">
-							<svg>
-								<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
-							</svg>
-						</i>
-					</div>
-					<div class="message">
-						<span class="title">Achievement unlocked!</span>
-						<span class="text">${text}</span>
-						<span class="recap-text">Click to recap</span>
-					</div>
-					<button class="i-30 close-button">
-						<svg class="svg-icon-fill">
-							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-						</svg>
-					</button>
-				</div>`,
-			type: 'achievement',
-			cardId: achievement.id
-		});
 	}
 }
