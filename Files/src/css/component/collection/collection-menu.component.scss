@@ -25,14 +25,13 @@
 			color: $grey02;
 		}
 
-		li:after {
-			content: ">";
-			margin-left: 6px;
-			margin-right: 6px;
+		li:not(.unclickable):not(.separator):hover {
+			color: #A276AF;
 		}
 
-		li:last-child:after {
-			content: "";
+		li.separator {
+			margin-left: 6px;
+			margin-right: 6px;
 		}
 	}
 }
