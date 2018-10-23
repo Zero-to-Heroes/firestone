@@ -216,7 +216,7 @@ body {
 .achievement-message-container {
 	display: flex;
 	align-items: center;
-	background-image: radial-gradient(76.70px at 50% 49.54%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+	background-image: radial-gradient(76.70px at 50% 49.54%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievement-notif-bg.jpg');
 	background-size: 100%;
     background-position: center center;
 	outline: 1px solid #4B3052;
@@ -264,6 +264,7 @@ body {
 
 		.text {
 			@extend %achievements-notification-text;
+			margin-top: 3px;
 		}
 
 		.recap-text {
@@ -277,10 +278,10 @@ body {
 		top: 0;
 		right: 0;
 		--icon-color: #CB9FD7;
-  		--icon-bg-hover: #513b48;
 
-	    & :hover {
-	    	pointer-events: none;
+	    &:hover {
+			color: #2A1030;
+			background: #CB9FD7;
 	    }
 	}	
 }
