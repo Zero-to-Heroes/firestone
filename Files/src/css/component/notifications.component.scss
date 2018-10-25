@@ -216,7 +216,7 @@ body {
 .achievement-message-container {
 	display: flex;
 	align-items: center;
-	background-image: radial-gradient(76.70px at 50% 49.54%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievement-notif-bg.jpg');
+	background-image: url('/Files/assets/images/backgrounds/achievement-notif-bg.jpg');
 	background-size: 100%;
     background-position: center center;
 	outline: 1px solid #4B3052;
