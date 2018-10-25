@@ -132,7 +132,6 @@
 
 	.empty-state {
 		@extend %empty-state;
-		--icon-color: #A276AF;
 		color: #A276AF;
 		flex-grow: 1;
 		display: flex;
@@ -148,6 +147,7 @@
 	
 			i {
 				margin-bottom: 30px;
+				--icon-color: #A276AF;
 			}
 	
 			.title {
