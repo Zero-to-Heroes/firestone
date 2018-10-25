@@ -38,6 +38,7 @@ declare var _: any;
 							*ngSwitchCase="'list'"
 							(shortDisplay)="onShortDisplay($event)"
 							[achievementsList]="_achievementsList"
+							[achievementIdToScrollIntoView]="achievementIdToScrollIntoView"
 							[achievementSet]="_selectedCategory">
 					</achievements-list>
 				</ng-container>
@@ -73,6 +74,7 @@ export class AchievementsComponent implements AfterViewInit {
 	achievementCategories: AchievementSet[];
 	_viewState = 'shown';
 	hideMenu: boolean;
+	achievementIdToScrollIntoView: string;
 
 	private windowId: string;
 	private refreshingContent = false;
@@ -130,10 +132,6 @@ export class AchievementsComponent implements AfterViewInit {
 	}
 
 	public selectAchievement(achievementId: string) {
-		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
 		this.reset();
 		console.log('selecting achievement', achievementId);
 		this.repository.findCategoryForAchievement(achievementId).then((achievementSet) => {
@@ -142,6 +140,7 @@ export class AchievementsComponent implements AfterViewInit {
 			this._selectedView = 'list';
 			this._selectedCategory = achievementSet;
 			this._achievementsList = this._selectedCategory.achievements;
+			this.achievementIdToScrollIntoView = achievementId;
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
 				this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');

@@ -39,7 +39,10 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				*ngIf="activeAchievements && activeAchievements.length > 0" 
 				(scroll)="onScroll($event)">
 				<li *ngFor="let achievement of activeAchievements">
-					<achievement-view [achievement]="achievement">/</achievement-view>
+					<achievement-view 
+						[achievement]="achievement" 
+						[scrollIntoView]="achievementIdToScrollIntoView === achievement.id">
+					</achievement-view>
 				</li>
 			</ul>
 			<section class="empty-state" *ngIf="!activeAchievements || activeAchievements.length === 0">
@@ -56,6 +59,8 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 export class AchievementsListComponent implements AfterViewInit {
 
 	readonly SCROLL_SHRINK_START_PX = 20;
+
+	@Input() achievementIdToScrollIntoView: string;
 
 	@Output() shortDisplay = new EventEmitter<boolean>();
 

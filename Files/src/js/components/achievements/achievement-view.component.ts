@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ElementRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { VisualAchievement } from '../../models/visual-achievement';
 
@@ -53,6 +53,12 @@ export class AchievementViewComponent {
 	achieved: boolean = false;
 	metTimes: number;
 	defeatedTimes: number;
+	shouldScrollIntoView: boolean;
+
+	@Input() set scrollIntoView(scroll: boolean) {
+		this.shouldScrollIntoView = scroll;
+		this.handleScrollIntoView();
+	}
 
 	@Input() set achievement(achievement: VisualAchievement) {
 		this._achievement = achievement;
@@ -60,5 +66,18 @@ export class AchievementViewComponent {
 		this.metTimes = this._achievement.numberOfCompletions[0];
 		this.defeatedTimes = this._achievement.numberOfCompletions[1];
 		this.achievementText = this._achievement.text;
+		this.handleScrollIntoView();
+	}
+
+	constructor(private el: ElementRef) {
+
+	}
+
+	private handleScrollIntoView() {
+		if (!this._achievement || !this.shouldScrollIntoView) {
+			return;
+		}
+		console.log('scrolling into view', this._achievement.name);
+		this.el.nativeElement.scrollIntoView();
 	}
 }
