@@ -44,7 +44,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 			</ul>
 			<section class="empty-state" *ngIf="!activeAchievements || activeAchievements.length === 0">
 				<div class="state-container">
-					<i class="i-238X167 pale-pink-theme" [innerHTML]="emptyStateSvgTemplate"></i>
+					<i class="i-236X165 pale-pink-theme" [innerHTML]="emptyStateSvgTemplate"></i>
 					<span class="title">{{emptyStateTitle}}</span>
 					<span class="subtitle">{{emptyStateText}}</span>
 				</div>

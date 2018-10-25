@@ -17,7 +17,7 @@ declare var overwolf: any;
 		<ng-container [ngSwitch]="sectionSelector">
 			<section class="empty-state no-missing-card-in-set" *ngSwitchCase="NO_MISSING_CARD_IN_SET">
 				<div class="state-container">
-					<i class="i-238X167 pale-pink-theme">
+					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"/>
 						</svg>
@@ -28,7 +28,7 @@ declare var overwolf: any;
 			</section>
 			<section class="empty-state no-card-in-set" *ngSwitchCase="NO_CARD_IN_SET">
 				<div class="state-container">
-					<i class="i-167X143 pale-pink-theme">
+					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_have_illustration"/>
 						</svg>
@@ -39,7 +39,7 @@ declare var overwolf: any;
 			</section>
 			<section class="empty-state no-golden-card-in-set" *ngSwitchCase="NO_GOLDEN_IN_SET">
 				<div class="state-container">
-					<i class="i-121x147 pale-pink-theme">
+					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration"/>
 						</svg>
@@ -50,7 +50,7 @@ declare var overwolf: any;
 			</section>
 			<section class="empty-state no-search-result" *ngSwitchCase="NO_SEARCH_RESULT">
 				<div class="state-container">
-					<i class="i-110X86 pale-pink-theme">
+					<i class="i-236x165 pale-pink-theme">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
 						</svg>
