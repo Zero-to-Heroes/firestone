@@ -6,6 +6,18 @@
     display: flex;
     padding-top: 14px;
     height: 598px;
+    max-height: 598px;
+
+    achievements-menu {
+        transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, flex-shrink 0.4s ease-in-out, flex-grow 0.4s ease-in-out;
+
+        &.shrink {
+            opacity: 0;
+            visibility: hidden;
+            flex-shrink: 2;
+            flex-grow: 0;
+        }
+    }
 
     .main {
     	display: flex;

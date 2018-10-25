@@ -12,15 +12,7 @@
 		margin-left: auto;
 		position: relative;
 		top: 10px;
-	}
-
-	.achievement-progress-bar {
-		flex-direction: row;
-
-		.achieved {
-			margin-bottom: 0;
-			margin-right: 10px;
-		}
+		transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
 	}
 
 	.set-title {
@@ -33,11 +25,14 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
+		margin-top: 10px;
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
 		overflow: auto;
+		-webkit-transition: all 2s;
+		transition: all 2s;
 
 		li {
 			margin-right: 10px;
@@ -52,10 +47,10 @@
 		flex-shrink: 0;
 		align-items: center;
 		margin-right: 20px;
-		margin-bottom: 10px;
 		margin-top: 18px;
 		padding-bottom: 15px;
 		border-bottom: 1px solid #4B3052;
+		transition: margin 0.4s ease-in-out;
 
 		ng-select {
 			@extend %search-active;
@@ -64,6 +59,7 @@
 			background: rgba(255, 255, 255, 0.08);
 			margin-right: 15px;
 			width: 195px;
+			transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
 
 			&:focus, &:active {
 				outline: none;
@@ -156,6 +152,21 @@
 				margin-bottom: 15px;
 			}
 		}
-	
 	}	
+
+	&.shrink-header {
+		.show-filter {
+			margin: 0;
+			ng-select {
+				visibility: hidden;
+				max-height: 0;
+				opacity: 0;
+			}
+			achievement-progress-bar {
+				visibility: hidden;
+				max-height: 0;
+				opacity: 0;
+			}
+		}
+	}
 }

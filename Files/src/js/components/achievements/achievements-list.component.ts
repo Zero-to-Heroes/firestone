@@ -1,8 +1,7 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, AfterViewInit, ViewRef } from '@angular/core';
+import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, AfterViewInit, ViewRef, Output, EventEmitter } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { FilterOption } from '../../models/filter-option';
 import { IOption } from 'ng-select';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
@@ -14,7 +13,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="achievements-container">
+		<div class="achievements-container {{headerClass}}">
 			<div class="set-title">{{_achievementSet.displayName}}</div>
 			<div class="show-filter">
 				<ng-select
@@ -36,7 +35,9 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				</ng-select>
 				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 			</div>
-			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0">
+			<ul class="achievements-list" 
+				*ngIf="activeAchievements && activeAchievements.length > 0" 
+				(scroll)="onScroll($event)">
 				<li *ngFor="let achievement of activeAchievements">
 					<achievement-view [achievement]="achievement">/</achievement-view>
 				</li>
@@ -54,6 +55,10 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 })
 export class AchievementsListComponent implements AfterViewInit {
 
+	readonly SCROLL_SHRINK_START_PX = 20;
+
+	@Output() shortDisplay = new EventEmitter<boolean>();
+
 	achievements: VisualAchievement[];
 	activeAchievements: VisualAchievement[];
 	_achievementSet: AchievementSet;
@@ -63,6 +68,9 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateIcon: string;
 	emptyStateTitle: string;
 	emptyStateText: string;
+	headerClass: string;
+
+	private lastScrollPosition: number;
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
 
@@ -113,6 +121,26 @@ export class AchievementsListComponent implements AfterViewInit {
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
+	}
+
+	onScroll(event: Event) {
+		// console.log('scrolling event', event);
+		const elem = this.el.nativeElement.querySelector('.achievements-list');
+		// console.log('showing header?', elem.scrollTop, this.lastScrollPosition, this.headerClass);
+		if (elem.scrollTop > this.SCROLL_SHRINK_START_PX 
+				&& elem.scrollTop > this.lastScrollPosition		
+				&& !this.headerClass) {
+			this.headerClass = 'shrink-header';
+			this.shortDisplay.next(true);
+			this.cdr.detectChanges();
+		}
+		else if ((elem.scrollTop <= this.SCROLL_SHRINK_START_PX || elem.scrollTop < this.lastScrollPosition)
+				&& this.headerClass) {
+			this.headerClass = undefined;
+			this.shortDisplay.next(false);
+			this.cdr.detectChanges();
+		}
+		this.lastScrollPosition = elem.scrollTop;
 	}
 
 	selectFilter(option: IOption) {

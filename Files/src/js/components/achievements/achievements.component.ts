@@ -24,7 +24,8 @@ declare var _: any;
 	template: `
 		<div class="achievements">
 			<section class="main divider" [@viewState]="_viewState">
-				<achievements-menu
+				<achievements-menu 
+					[ngClass]="{'shrink': hideMenu}"
 					[displayType]="_menuDisplayType"
 					[selectedAchievementSet]="_selectedCategory">
 				</achievements-menu>
@@ -35,6 +36,7 @@ declare var _: any;
 					</achievements-categories>
 					<achievements-list
 							*ngSwitchCase="'list'"
+							(shortDisplay)="onShortDisplay($event)"
 							[achievementsList]="_achievementsList"
 							[achievementSet]="_selectedCategory">
 					</achievements-list>
@@ -70,6 +72,7 @@ export class AchievementsComponent implements AfterViewInit {
 	_achievementsList: ReadonlyArray<VisualAchievement>;
 	achievementCategories: AchievementSet[];
 	_viewState = 'shown';
+	hideMenu: boolean;
 
 	private windowId: string;
 	private refreshingContent = false;
@@ -166,6 +169,11 @@ export class AchievementsComponent implements AfterViewInit {
 					// this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
 				}
 			});
+	}
+
+	onShortDisplay(shrink: boolean) {
+		this.hideMenu = shrink;
+		this.cdr.detectChanges();
 	}
 
 	private transitionState(changeStateCallback: Function) {
