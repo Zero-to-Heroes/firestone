@@ -23,7 +23,7 @@ declare var _: any;
 	],
 	template: `
 		<div class="achievements">
-			<section class="main divider" [@viewState]="_viewState">
+			<section class="main" [ngClass]="{'divider': _selectedView == 'list'}" [@viewState]="_viewState">
 				<achievements-menu 
 					[ngClass]="{'shrink': hideMenu}"
 					[displayType]="_menuDisplayType"
