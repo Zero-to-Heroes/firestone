@@ -57,8 +57,8 @@ body {
 .message-container {
 	display: flex;
 	align-items: center;
-	background: radial-gradient($red01, $darkred);
-	border: 1px solid $grey03;
+	background-image: url('/Files/assets/images/backgrounds/achievement-notif-bg.jpg');
+	border: 1px solid #513B48;
 	width: 330px;
 	height: 65px;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
