@@ -89,6 +89,11 @@ export class DungeonRunBossSetProvider extends SetProvider {
                     text,
                     [ encountedId, victoryId ],
                     [ encounterAchievement.numberOfCompletions, victoryAchievement.numberOfCompletions ])
+            })
+            .sort((a, b) => {
+                const aVisibility = a.numberOfCompletions[1] > 0 ? 2 : (a.numberOfCompletions[0] > 0 ? 1 : 0);
+                const bVisibility = b.numberOfCompletions[1] > 0 ? 2 : (b.numberOfCompletions[0] > 0 ? 1 : 0);
+                return bVisibility - aVisibility;
             });
         return fullAchievements;
     }
