@@ -26,6 +26,10 @@ export class Events {
 
 	public static readonly ACHIEVEMENT_SET_SELECTED = 'achievement-set-selected';
 	public static readonly NEW_ACHIEVEMENT = 'new-achievement';
+	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
+	public static readonly ACHIEVEMENT_RECORD_STARTED = 'achievement-record-started';
+	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
+	public static readonly ACHIEVEMENT_RECORD_SAVED = 'achievement-record-saved';
 
 	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';

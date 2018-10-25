@@ -13,19 +13,21 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 import { OwNotificationsService } from '../notifications.service';
 import { Achievement } from 'src/js/models/achievement';
 import { AchievementNameService } from './achievement-name.service';
+import { AchievementsStorageService } from './achievements-storage.service';
 
 declare var ga;
 
 @Injectable()
 export class AchievementsMonitor {
 
-	public newAchievements = new EventEmitter<CompletedAchievement>();
+	private newAchievements = new EventEmitter<CompletedAchievement>();
 
 	constructor(
 		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService,
 		private nameService: AchievementNameService,
 		private achievementsReferee: AchievementsRefereee,
+		private achievementStorage: AchievementsStorageService,
 		private storage: AchievementHistoryStorageService,
 		private repository: AchievementsRepository,
 		private events: Events) {
@@ -45,11 +47,25 @@ export class AchievementsMonitor {
 					[0];
 				// We store an history item every time, but we display only the first time an achievement is unlocked
 				this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
+				this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions);
 				if (newAchievement.numberOfCompletions == 1) {
 					this.sendNotification(achievement);
 				}
 			}
 		);
+		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe((data) => {
+			const achievementId = data.data[0];
+			const replayInfo = data.data[1];
+			this.achievementStorage.loadAchievement(achievementId)
+					.then((achievement: CompletedAchievement) => {
+						const newAchievement = new CompletedAchievement(
+								achievement.id,
+								achievement.numberOfCompletions,
+								replayInfo);
+						this.achievementStorage.saveAchievement(newAchievement)
+								.then((result) => this.events.broadcast(Events.ACHIEVEMENT_RECORD_SAVED, newAchievement));
+					})
+		})
 		console.log('listening for achievement completion events');
 	}
 

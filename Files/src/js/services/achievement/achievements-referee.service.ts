@@ -12,18 +12,16 @@ export class AchievementsRefereee {
 
 	public complete(challenge: Challenge, callback: Function, ...data: any[]) {
 		console.log('complete challenge', challenge, data);
-		this.achievementsStorage.loadAchievement(challenge.getAchievementId(), (existingAchievement: CompletedAchievement) => {
-			let unclaimed = false;
-			if (!existingAchievement) {
-				unclaimed = true;
-			}
-			existingAchievement = existingAchievement || challenge.defaultAchievement();
-			const completedAchievement: CompletedAchievement = new CompletedAchievement(existingAchievement.id, existingAchievement.numberOfCompletions + 1);
-			this.achievementsStorage.saveAchievement(completedAchievement, (result) => {
-				console.log('[achievements] achievement saved', result);
-				callback(completedAchievement);
-			});
-		})
-
+		this.achievementsStorage.loadAchievement(challenge.getAchievementId())
+				.then((existingAchievement: CompletedAchievement) => {
+						existingAchievement = existingAchievement || challenge.defaultAchievement();
+						const completedAchievement: CompletedAchievement = new CompletedAchievement(
+								existingAchievement.id, 
+								existingAchievement.numberOfCompletions + 1);
+						this.achievementsStorage.saveAchievement(completedAchievement).then((result) => {
+							console.log('[achievements] achievement saved', result);
+							callback(completedAchievement);
+						});
+					});
 	}
 }

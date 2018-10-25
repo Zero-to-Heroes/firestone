@@ -13,16 +13,20 @@ export class AchievementsStorageService {
 		private indexedDb: IndexedDbService) {
 	}
 
-	public loadAchievement(achievementId: string, callback: Function) {
-		this.indexedDb.getAchievement(achievementId, (result: CompletedAchievement) => {
-			callback(result);
+	public loadAchievement(achievementId: string): Promise<CompletedAchievement> {
+		return new Promise<CompletedAchievement>((resolve) => {
+			this.indexedDb.getAchievement(achievementId, (result: CompletedAchievement) => {
+				resolve(result);
+			});
 		});
 	}
 
-	public saveAchievement(achievement: CompletedAchievement, callback: Function) {
-		this.indexedDb.save(achievement, (result) => {
-			callback(result);
-		})
+	public saveAchievement(achievement: CompletedAchievement): Promise<CompletedAchievement> {
+		return new Promise<CompletedAchievement>((resolve) => {
+			this.indexedDb.save(achievement, (result) => {
+				resolve(result);
+			})
+		});
 	}
 
 	public loadAchievements(callback: Function) {

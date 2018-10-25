@@ -33,8 +33,9 @@ import { PackHistoryService } from '../../services/collection/pack-history.servi
 import { PackStatsService } from '../../services/collection/pack-stats.service';
 import { AchievementStatsService } from '../../services/achievement/achievement-stats.service';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
-import { AchievementNameService } from 'src/js/services/achievement/achievement-name.service';
-import { DevService } from 'src/js/services/dev.service';
+import { AchievementNameService } from '../../services/achievement/achievement-name.service';
+import { DevService } from '../../services/dev.service';
+import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
 
 
 @NgModule({
@@ -74,6 +75,7 @@ import { DevService } from 'src/js/services/dev.service';
 		AchievementsRepository,
 		AchievementStatsService,
 		AchievementsStorageService,
+		AchievementsVideoCaptureService,
 		AchievementsDb,
 		PackHistoryService,
 	]
