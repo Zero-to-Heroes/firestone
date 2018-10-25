@@ -26,6 +26,23 @@
 		// height: 160px;
 		height: 212px;
 		overflow-y: scroll;
+		padding-left: 10px;
+
+		li {
+			display: flex;
+			align-items: center;
+			justify-content: stretch;
+		}
+
+		li:before {
+		   content: "•";
+		   font-size: 20px;
+		   color: #D9C3AB;
+		}
+
+		achievement-history-item {
+			flex-grow: 1;
+		}
 	}
 
 	.empty-state {

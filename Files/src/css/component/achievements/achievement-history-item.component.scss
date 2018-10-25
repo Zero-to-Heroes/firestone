@@ -6,7 +6,7 @@
 	flex-direction: row;
     align-items: center;
 	height: 36px;
-	padding-left: 25px;
+	padding-left: 10px;
 	
     // &:hover {
     // 	background: rgba(255, 255, 255, 0.08);
@@ -22,6 +22,7 @@
     
 	.date {
 		@extend %breadcrumbs;
+		color: #7D5A87;
 		margin-right: 12px;
 	}
 }
