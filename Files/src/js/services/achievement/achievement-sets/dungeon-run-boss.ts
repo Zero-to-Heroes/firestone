@@ -24,8 +24,8 @@ export class DungeonRunBossSetProvider extends SetProvider {
                 label: 'All achievements', 
                 filterFunction: (a) => true, 
                 emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
-                emptyStateTitle: 'This category is complete and you have it all!', 
-                emptyStateText: 'Keep up the good work.' 
+                emptyStateTitle: 'Holy Moly, you are epic!', 
+                emptyStateText: '100% of achievements in this category complete.' 
             },
             { 
                 value: 'ONLY_MISSING', 
@@ -34,8 +34,8 @@ export class DungeonRunBossSetProvider extends SetProvider {
                     return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
                 }, 
                 emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration', 
-                emptyStateTitle: 'No achievements here yet!', 
-                emptyStateText: 'Don\'t worry, keep playing and complete achievements.'
+                emptyStateTitle: 'Tons of achievements await you!', 
+                emptyStateText: 'Find them listed here once completed.'
             },
             { 
                 value: 'ENCOUNTERED_ONLY', 
@@ -44,8 +44,8 @@ export class DungeonRunBossSetProvider extends SetProvider {
                     return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] === 0;
                 }, 
                 emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
-                emptyStateTitle: 'No achievements here yet!', 
-                emptyStateText: 'Don\'t worry, keep playing and complete achievements.'
+                emptyStateTitle: 'Tons of achievements await you!', 
+                emptyStateText: 'Find them listed here once completed.'
             },
             { 
                 value: 'ONLY_COMPLETED', 
@@ -54,8 +54,8 @@ export class DungeonRunBossSetProvider extends SetProvider {
                     return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] > 0;
                 }, 
                 emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
-                emptyStateTitle: 'No achievements here yet!', 
-                emptyStateText: 'Don\'t worry, keep playing and complete achievements.'
+                emptyStateTitle: 'Tons of achievements await you!', 
+                emptyStateText: 'Find them listed here once completed.'
             },
         ]
         return new AchievementSet(this.id, this.displayName, 'dungeon_run_category', fullAchievements, filterOptions);
