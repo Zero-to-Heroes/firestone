@@ -46,26 +46,14 @@ export class IndexedDbService {
 		}
 
 		console.log('[achievements] [storage] Saving achievement', achievement);
-		if (achievement.numberOfCompletions > 1) {
-			this.db.update('achievements', achievement).then(
-				(achievement) => {
-					callback(achievement);
-				},
-				(error) => {
-				    console.error('[achievements] [storage] error while updating achievement', achievement, error);
-				}
-			);
-		}
-		else {
-			this.db.add('achievements', achievement).then(
-				(achievement) => {
-					callback(achievement);
-				},
-				(error) => {
-				    console.error('[achievements] [storage] error while adding achievement', achievement, error);
-				}
-			);
-		}
+		this.db.update('achievements', achievement).then(
+			(achievement) => {
+				callback(achievement);
+			},
+			(error) => {
+				console.error('[achievements] [storage] error while updating achievement', achievement, error);
+			}
+		);
 	}
 
 	public getAll(callback: Function) {
@@ -97,7 +85,7 @@ export class IndexedDbService {
 	
 	public saveHistory(history: AchievementHistory) {
 		this.waitForDbInit().then(() => {
-			this.db.add('achievement-history', history).then((saved) => {
+			this.db.update('achievement-history', history).then((saved) => {
 				console.log('[achievements] [storage] saved history', saved);
 			}, (error) => console.error('[achievements] [storage] error while saving', history, error));
 		});

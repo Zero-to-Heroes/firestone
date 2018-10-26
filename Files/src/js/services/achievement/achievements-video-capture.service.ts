@@ -4,6 +4,7 @@ import { Events } from '../events.service';
 import { GameEvents } from '../game-events.service';
 import { GameEvent } from '../../models/game-event';
 import { Achievement } from '../../models/achievement';
+import { ReplayInfo } from 'src/js/models/replay-info';
 
 declare var overwolf;
 
@@ -78,7 +79,8 @@ export class AchievementsVideoCaptureService {
                         return;
                     }
                     this.captureOngoing = false;
-                    const replayInfo = {
+                    const replayInfo: ReplayInfo = {
+                        creationTimestamp: Date.now(),
                         path: captureFinished.path,
                         thumbnail: captureFinished.thumbnail_path
                     }

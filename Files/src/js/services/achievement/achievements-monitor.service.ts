@@ -14,6 +14,7 @@ import { OwNotificationsService } from '../notifications.service';
 import { Achievement } from 'src/js/models/achievement';
 import { AchievementNameService } from './achievement-name.service';
 import { AchievementsStorageService } from './achievements-storage.service';
+import { ReplayInfo } from 'src/js/models/replay-info';
 
 declare var ga;
 
@@ -54,16 +55,20 @@ export class AchievementsMonitor {
 			}
 		);
 		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe((data) => {
-			const achievementId = data.data[0];
-			const replayInfo = data.data[1];
+			const achievementId: string = data.data[0];
+			const replayInfo: ReplayInfo = data.data[1];
 			this.achievementStorage.loadAchievement(achievementId)
 					.then((achievement: CompletedAchievement) => {
 						const newAchievement = new CompletedAchievement(
 								achievement.id,
 								achievement.numberOfCompletions,
-								replayInfo);
+								[replayInfo, ...(achievement.replayInfo || [])]);
+						console.log('[recording] saving new achievement', newAchievement);
 						this.achievementStorage.saveAchievement(newAchievement)
-								.then((result) => this.events.broadcast(Events.ACHIEVEMENT_RECORD_SAVED, newAchievement));
+								.then((result) => {
+									console.log('[recording] saved new achievement', result);
+									this.events.broadcast(Events.ACHIEVEMENT_RECORD_SAVED, newAchievement);
+								});
 					})
 		})
 		console.log('listening for achievement completion events');
