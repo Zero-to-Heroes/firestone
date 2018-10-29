@@ -29,9 +29,7 @@ export class AchievementsStorageService {
 		});
 	}
 
-	public loadAchievements(callback: Function) {
-		this.indexedDb.getAll((result) => {
-			callback(result);
-		})
+	public async loadAchievements(): Promise<CompletedAchievement[]> {
+		return await this.indexedDb.getAll();
 	}
 }

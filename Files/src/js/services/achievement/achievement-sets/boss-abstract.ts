@@ -18,6 +18,13 @@ export abstract class AbstractBossSetProvider extends SetProvider {
         this.cardsService = cardsService;
     }
 
+    public supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean {
+        const type = allAchievements
+                .find((achievement) => achievement.id == achievementId)
+                .type
+        return this.types.indexOf(type) !== -1;
+    }
+
     // Used only for display
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
         const fullAchievements = this.createAchievements(allAchievements, completedAchievemnts);

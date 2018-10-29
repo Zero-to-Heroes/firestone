@@ -13,5 +13,7 @@ export abstract class SetProvider {
         this.types = types;
     }
 
-	abstract provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet;
+    abstract provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet;
+    
+    abstract supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean;
 }

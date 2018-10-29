@@ -56,21 +56,11 @@ export class IndexedDbService {
 		);
 	}
 
-	public getAll(callback: Function) {
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[achievements] [storage] db isnt initialized, waiting...');
-				this.getAll(callback);
-			}, 50);
-			return;
-		}
-
-		this.db.getAll('achievements').then(
-			(achievements) => {
-				console.log('[achievements] [storage] loaded all achievements', achievements);
-				callback(achievements);
-			}
-		)
+	public async getAll(): Promise<CompletedAchievement[]> {
+		await this.waitForDbInit();
+		const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
+		console.log('[achievements] [storage] loaded all achievements', achievements);
+		return achievements;
 	}
 	
 	public loadAllHistory(): Promise<AchievementHistory[]> {

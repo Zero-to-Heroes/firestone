@@ -36,29 +36,20 @@ export class AchievementsRepository {
 		return cloneDeep(this.allAchievements);
 	}
 
-	public loadAggregatedAchievements(): Promise<AchievementSet[]> {
-		// console.log('loading aggregated achievements');
-		return new Promise((resolve, reject) => {
-			this.storage.loadAchievements((completedAchievements: CompletedAchievement[]) => {
-				// console.log('loaded completed achievements', achievements);
-				const achievementSets: AchievementSet[] = this.setProviders
-						.map((provider) => provider.provide(this.allAchievements, completedAchievements));
-				resolve(achievementSets);
-			});
-		});
+	public async loadAggregatedAchievements(): Promise<AchievementSet[]> {
+		const completedAchievements: CompletedAchievement[] = await this.storage.loadAchievements();
+		const achievementSets: AchievementSet[] = this.setProviders
+				.map((provider) => provider.provide(this.allAchievements, completedAchievements));
+		return achievementSets;
 	}
 
-	public findCategoryForAchievement(achievementId: string): Promise<AchievementSet> {
-		return new Promise((resolve, reject) => {
-			this.loadAggregatedAchievements().then((sets: AchievementSet[]) => {
-				console.log('loading aggregated achievements, processing', sets);
-				const achievementSet: AchievementSet = sets.find((set) => {
-					return set.achievements.filter((achievement) => achievement.id === achievementId).length > 0;
-				});
-				console.log('achievement', achievementId, 'matching set', achievementSet);
-				resolve(achievementSet);
-			});
-		});
+	public async findCategoryForAchievement(achievementId: string): Promise<AchievementSet> {
+		const completedAchievements: CompletedAchievement[] = await this.storage.loadAchievements();
+		const achievementSet: AchievementSet = this.setProviders
+				.find((provider) => provider.supportsAchievement(this.allAchievements, achievementId))
+				.provide(this.allAchievements, completedAchievements);
+		console.log('achievement', achievementId, 'matching set', achievementSet);
+		return achievementSet;
 	}
 
 	private registerModules() {
