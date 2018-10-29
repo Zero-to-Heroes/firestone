@@ -44,6 +44,6 @@ export class BossEncounter implements Challenge {
 	}
 
 	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId);
+		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 }

@@ -133,7 +133,7 @@ export class AchievementsMonitor {
 		const achievementId: string = data.data[0];
 		const replayInfo: ReplayInfo = data.data[1];
 		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
-		const realReplayInfo = [...achievement.replayInfo].slice(1, achievement.replayInfo.length - 1);
+		const realReplayInfo = achievement.replayInfo.slice(1, achievement.replayInfo.length);
 		console.log('after tmp removal', realReplayInfo, achievement.replayInfo);
 		const newAchievement = new CompletedAchievement(
 				achievement.id,

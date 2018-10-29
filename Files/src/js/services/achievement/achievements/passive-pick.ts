@@ -59,6 +59,7 @@ export class PassivePick implements Challenge {
 	}
 
 	defaultAchievement() {
-		return new CompletedAchievement(this.achievementId);
+		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 }
+ 

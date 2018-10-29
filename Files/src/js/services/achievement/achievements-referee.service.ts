@@ -17,7 +17,8 @@ export class AchievementsRefereee {
 						existingAchievement = existingAchievement || challenge.defaultAchievement();
 						const completedAchievement: CompletedAchievement = new CompletedAchievement(
 								existingAchievement.id, 
-								existingAchievement.numberOfCompletions + 1);
+								existingAchievement.numberOfCompletions + 1,
+								existingAchievement.replayInfo);
 						this.achievementsStorage.saveAchievement(completedAchievement).then((result) => {
 							console.log('[achievements] achievement saved', result);
 							callback(completedAchievement);

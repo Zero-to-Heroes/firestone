@@ -16,7 +16,7 @@ export class Achievement {
 			type: string, 
 			cardId: string, 
 			difficulty: string, 
-			numberOfCompletions: number = 0, 
+			numberOfCompletions: number, 
 			replayInfo: ReadonlyArray<ReplayInfo>) {
 		this.id = id;
 		this.name = name;
