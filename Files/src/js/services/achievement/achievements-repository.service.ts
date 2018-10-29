@@ -78,7 +78,9 @@ export class AchievementsRepository {
 				achievement.name, 
 				achievement.type, 
 				achievement.bossId, 
-				achievement.difficulty));
+				achievement.difficulty,
+				0,
+				[]));
 		// Create the achievement sets
 		this.loadAggregatedAchievements().then((result) => console.log('loaded aggregated achievements', result));
 		console.log('[achievements] modules registered', this.challengeModules);

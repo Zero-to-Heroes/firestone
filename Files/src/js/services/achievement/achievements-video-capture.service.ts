@@ -82,6 +82,7 @@ export class AchievementsVideoCaptureService {
                     const replayInfo: ReplayInfo = {
                         creationTimestamp: Date.now(),
                         path: captureFinished.path,
+                        url: captureFinished.url,
                         thumbnail: captureFinished.thumbnail_path
                     }
                     this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievement.id, replayInfo);

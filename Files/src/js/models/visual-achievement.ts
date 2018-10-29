@@ -1,3 +1,5 @@
+import { ReplayInfo } from "./replay-info";
+
 export class VisualAchievement {
 
 	readonly id: string;
@@ -7,6 +9,7 @@ export class VisualAchievement {
 	readonly text: string;
 	readonly achievementStepIds: string[];
 	readonly numberOfCompletions: number[] = [];
+	readonly replayInfo: ReadonlyArray<ReplayInfo> = [];
 
 	constructor(
 			id: string, 
@@ -15,7 +18,8 @@ export class VisualAchievement {
 			cardId: string, 
 			text: string, 
 			achievementStepIds: string[], 
-			numberOfCompletions: number[] = []) {
+			numberOfCompletions: number[] = [],
+			replayInfo: ReadonlyArray<ReplayInfo>) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -23,5 +27,6 @@ export class VisualAchievement {
 		this.text = text;
 		this.achievementStepIds = achievementStepIds;
 		this.numberOfCompletions = numberOfCompletions;
+		this.replayInfo = replayInfo;
 	}
 }

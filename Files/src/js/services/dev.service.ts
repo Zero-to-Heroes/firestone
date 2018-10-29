@@ -18,7 +18,8 @@ export class DevService {
 			'dungeon_run_boss_encounter',
 			'LOOTA_BOSS_44h',
 			'common',
-			1
+			1,
+			[]
 		)
 		window['showAchievementNotification'] = () => {			
 			this.achievementMonitor.sendNotification(achievement);
