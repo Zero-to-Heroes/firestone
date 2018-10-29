@@ -58,9 +58,9 @@ export class AchievementsMonitor {
 				// We store an history item every time, but we display only the first time an achievement is unlocked
 				this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
 				this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions);
-				// if (newAchievement.numberOfCompletions == 1) {
+				if (newAchievement.numberOfCompletions == 1) {
 					this.sendNotification(achievement);
-				// }
+				}
 			}
 		);
 		this.events.on(Events.ACHIEVEMENT_RECORD_STARTED).subscribe((data) => this.handleAchievementRecordStarted(data));
