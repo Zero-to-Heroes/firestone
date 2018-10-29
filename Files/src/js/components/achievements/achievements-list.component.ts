@@ -58,7 +58,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 })
 export class AchievementsListComponent implements AfterViewInit {
 
-	readonly SCROLL_SHRINK_START_PX = 20;
+	readonly SCROLL_SHRINK_START_PX = 5 * 100;
 
 	@Input() achievementIdToScrollIntoView: string;
 
@@ -75,7 +75,9 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateText: string;
 	headerClass: string;
 
-	private lastScrollPosition: number;
+	private lastScrollPosition: number = 0;
+	private lastScrollPositionBeforeScrollDown: number = 0;
+	private lastScrollPositionBeforeScrollUp: number = 0;
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
 
@@ -132,18 +134,11 @@ export class AchievementsListComponent implements AfterViewInit {
 		// console.log('scrolling event', event);
 		const elem = this.el.nativeElement.querySelector('.achievements-list');
 		// console.log('showing header?', elem.scrollTop, this.lastScrollPosition, this.headerClass);
-		if (elem.scrollTop > this.SCROLL_SHRINK_START_PX 
-				&& elem.scrollTop > this.lastScrollPosition		
-				&& !this.headerClass) {
-			this.headerClass = 'shrink-header';
-			this.shortDisplay.next(true);
-			this.cdr.detectChanges();
+		if (elem.scrollTop > this.lastScrollPosition) {
+			this.onScrollDown(elem.scrollTop);
 		}
-		else if ((elem.scrollTop <= this.SCROLL_SHRINK_START_PX || elem.scrollTop < this.lastScrollPosition)
-				&& this.headerClass) {
-			this.headerClass = undefined;
-			this.shortDisplay.next(false);
-			this.cdr.detectChanges();
+		else if (elem.scrollTop <= this.lastScrollPosition) {
+			this.onScrollUp(elem.scrollTop);
 		}
 		this.lastScrollPosition = elem.scrollTop;
 	}
@@ -159,6 +154,24 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	refresh() {
 		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	private onScrollDown(scrollPosition: number) {
+		this.lastScrollPositionBeforeScrollUp = scrollPosition;
+		if (scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX && !this.headerClass) {
+			this.headerClass = 'shrink-header';
+			this.shortDisplay.next(true);
+			this.cdr.detectChanges();
+		}
+	}
+
+	private onScrollUp(scrollPosition: number) {
+		this.lastScrollPositionBeforeScrollDown = scrollPosition;
+		if (this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX && this.headerClass) {
+			this.headerClass = undefined;
+			this.shortDisplay.next(false);
 			this.cdr.detectChanges();
 		}
 	}
