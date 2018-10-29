@@ -5,6 +5,7 @@ import { GameEvents } from '../game-events.service';
 import { GameEvent } from '../../models/game-event';
 import { Achievement } from '../../models/achievement';
 import { ReplayInfo } from 'src/js/models/replay-info';
+import { AchievementConfigService } from './achievement-config.service';
 
 declare var overwolf;
 
@@ -30,7 +31,7 @@ export class AchievementsVideoCaptureService {
 
     private captureOngoing: boolean = false;
 
-	constructor(private gameEvents: GameEvents, private events: Events) {
+	constructor(private gameEvents: GameEvents, private events: Events, private config: AchievementConfigService) {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
     }
@@ -62,18 +63,17 @@ export class AchievementsVideoCaptureService {
     }
 
     private capture(achievement: Achievement, numberOfCompletions: number) {
+        if (!this.captureOngoing) {
+            console.log('broadcast tmp achievement', achievement.id);
+            this.events.broadcast(Events.ACHIEVEMENT_RECORD_STARTED, achievement.id);
+        }
         overwolf.media.replays.getState((result) => {
-            // console.log('[recording] is recording on?', result);
-            if (!result.isOn) {
-                setTimeout(() => this.capture(achievement, numberOfCompletions), 50);
-                return;
-            }
             // Here we can have custom settings based on achievement
             this.captureOngoing = true;
-            this.events.broadcast(Events.ACHIEVEMENT_RECORD_STARTED, achievement.id);
+            const conf = this.config.getConfig(achievement.type);
             overwolf.media.replays.capture(
-                15000,
-                10000,
+                conf.timeToRecordBeforeInMillis,
+                conf.timeToRecordAfterInMillis,
                 (captureFinished) => {
                     if (captureFinished.status === 'error') {
                         return;
@@ -83,7 +83,8 @@ export class AchievementsVideoCaptureService {
                         creationTimestamp: Date.now(),
                         path: captureFinished.path,
                         url: captureFinished.url,
-                        thumbnail: captureFinished.thumbnail_path
+                        thumbnailUrl: captureFinished.thumbnail_url,
+                        thumbnailPath: captureFinished.thumbnail
                     }
                     this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievement.id, replayInfo);
                     console.log('[recording] capture finished', captureFinished, achievement, numberOfCompletions);

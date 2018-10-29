@@ -36,6 +36,7 @@ import { AchievementHistoryStorageService } from '../../services/achievement/ach
 import { AchievementNameService } from '../../services/achievement/achievement-name.service';
 import { DevService } from '../../services/dev.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
+import { AchievementConfigService } from 'src/js/services/achievement/achievement-config.service';
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import { AchievementsVideoCaptureService } from '../../services/achievement/achi
 		PackStatsService,
 		SimpleIOService,
 		MemoryInspectionService,
+		AchievementConfigService,
 		AchievementHistoryStorageService,
 		AchievementsMonitor,
 		AchievementNameService,

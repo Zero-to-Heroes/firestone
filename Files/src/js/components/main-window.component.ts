@@ -143,7 +143,7 @@ export class MainWindowComponent implements AfterViewInit {
 			}
 			if (message.id === 'click-card') {
 				this.selectedModule = 'collection';
-				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
+				// this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -154,7 +154,7 @@ export class MainWindowComponent implements AfterViewInit {
 			}
 			if (message.id === 'click-achievement') {
 				this.selectedModule = 'achievements';
-				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
+				// this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -162,6 +162,9 @@ export class MainWindowComponent implements AfterViewInit {
 					this.achievements.selectAchievement(message.content);
 				});
 				overwolf.windows.restore(this.windowId);
+			}
+			if (message.id === 'achievement-save-complete') {
+				this.achievements.reloadAchievement(message.content);
 			}
 		});
 

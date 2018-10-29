@@ -17,11 +17,13 @@ import { AchievementsStorageService } from './achievements-storage.service';
 import { ReplayInfo } from 'src/js/models/replay-info';
 
 declare var ga;
+declare var overwolf;
 
 @Injectable()
 export class AchievementsMonitor {
 
 	private newAchievements = new EventEmitter<CompletedAchievement>();
+	private collectionWindowId: string;
 
 	constructor(
 		private gameEvents: GameEvents,
@@ -38,6 +40,13 @@ export class AchievementsMonitor {
 				this.handleEvent(gameEvent);
 			}
 		);
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			this.collectionWindowId = result.window.id;
+		});
 		this.newAchievements.subscribe(
 			(newAchievement: CompletedAchievement) => {
 				// console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
@@ -49,28 +58,13 @@ export class AchievementsMonitor {
 				// We store an history item every time, but we display only the first time an achievement is unlocked
 				this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
 				this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions);
-				if (newAchievement.numberOfCompletions == 1) {
+				// if (newAchievement.numberOfCompletions == 1) {
 					this.sendNotification(achievement);
-				}
+				// }
 			}
 		);
-		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe((data) => {
-			const achievementId: string = data.data[0];
-			const replayInfo: ReplayInfo = data.data[1];
-			this.achievementStorage.loadAchievement(achievementId)
-					.then((achievement: CompletedAchievement) => {
-						const newAchievement = new CompletedAchievement(
-								achievement.id,
-								achievement.numberOfCompletions,
-								[replayInfo, ...(achievement.replayInfo || [])]);
-						console.log('[recording] saving new achievement', newAchievement);
-						this.achievementStorage.saveAchievement(newAchievement)
-								.then((result) => {
-									console.log('[recording] saved new achievement', result);
-									this.events.broadcast(Events.ACHIEVEMENT_RECORD_SAVED, newAchievement);
-								});
-					})
-		})
+		this.events.on(Events.ACHIEVEMENT_RECORD_STARTED).subscribe((data) => this.handleAchievementRecordStarted(data));
+		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe((data) => this.handleAchievementRecordCompleted(data));
 		console.log('listening for achievement completion events');
 	}
 
@@ -110,6 +104,45 @@ export class AchievementsMonitor {
 			achievement.name, 
 			numberOfCompletions, 
 			achievement.difficulty));
+	}
+
+	private async handleAchievementRecordStarted(data) {
+		const achievementId: string = data.data[0];
+		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
+		const achievementReplayInfo = (achievement.replayInfo || []);
+		console.log('processing tmp achievement', data, achievement, achievementReplayInfo);
+		// This happens if app is killed before we can save
+		if (achievementReplayInfo.length === 0 || achievementReplayInfo[0].url !== 'tmp') {
+			const replayInfo: ReplayInfo = {
+				url: 'tmp',
+				creationTimestamp: undefined,
+				path: undefined,
+				thumbnailPath: undefined,
+				thumbnailUrl: undefined
+			};
+			const newAchievement = new CompletedAchievement(
+					achievement.id,
+					achievement.numberOfCompletions,
+					[replayInfo, ...achievementReplayInfo]);
+			const result = await this.achievementStorage.saveAchievement(newAchievement);
+			console.log('[recording] saved new tmp achievement recording', result);
+		}
+	}
+
+	private async handleAchievementRecordCompleted(data) {
+		const achievementId: string = data.data[0];
+		const replayInfo: ReplayInfo = data.data[1];
+		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
+		const realReplayInfo = [...achievement.replayInfo].slice(1, achievement.replayInfo.length - 1);
+		console.log('after tmp removal', realReplayInfo, achievement.replayInfo);
+		const newAchievement = new CompletedAchievement(
+				achievement.id,
+				achievement.numberOfCompletions,
+				[replayInfo, ...realReplayInfo]);
+		console.log('[recording] saving new achievement', newAchievement);
+		const result = await this.achievementStorage.saveAchievement(newAchievement)
+		console.log('[recording] saved new achievement', result);
+		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});
 	}
 
 	private handleEvent(gameEvent: GameEvent) {

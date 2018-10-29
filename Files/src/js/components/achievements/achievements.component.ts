@@ -127,47 +127,61 @@ export class AchievementsComponent implements AfterViewInit {
 					});
 				}
 			}
-		)
+		);
 		this.refreshContents();
 	}
 
-	public selectAchievement(achievementId: string) {
+	public async selectAchievement(achievementId: string) {
 		this.reset();
 		console.log('selecting achievement', achievementId);
-		this.repository.findCategoryForAchievement(achievementId).then((achievementSet) => {
-			console.log('achievement found', achievementSet);
-			this._menuDisplayType = 'breadcrumbs';
-			this._selectedView = 'list';
+		const achievementSet: AchievementSet = await this.repository.findCategoryForAchievement(achievementId);
+		console.log('achievement found', achievementSet);
+		// this.refreshContents();
+		this._menuDisplayType = 'breadcrumbs';
+		this._selectedView = 'list';
+		this._selectedCategory = achievementSet;
+		this._achievementsList = this._selectedCategory.achievements;
+		this.achievementIdToScrollIntoView = achievementId;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+			this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
+		}
+	}
+
+	public async reloadAchievement(achievementId: string) {
+		console.log('reloading achievement?', achievementId);
+		const achievementSet: AchievementSet = await this.repository.findCategoryForAchievement(achievementId);
+		// If we're displaying the achievement set, we refresh it
+		if (achievementSet.id === this._selectedCategory.id) {
 			this._selectedCategory = achievementSet;
-			this._achievementsList = this._selectedCategory.achievements;
-			this.achievementIdToScrollIntoView = achievementId;
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-				this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
+			console.log('reloaded set');
+			if (this._selectedView === 'list') {
+				console.log('reloaded achievments list');
+				this._achievementsList = this._selectedCategory.achievements;
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
-		})
+		}		
 	}
 
 	ngAfterViewInit() {
 		this.cdr.detach();
 	}
 
-	refreshContents() {
+	async refreshContents() {
 		if (this.refreshingContent) {
 			return;
 		}
 		console.log('refreshing contents in achievements');
 		this.refreshingContent = true;
-		this.repository.loadAggregatedAchievements()
-			.then((achievementSets: AchievementSet[]) => {
-				console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
-				this.achievementCategories = achievementSets;
-				this.refreshingContent = false;
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-					// this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
-				}
-			});
+		const achievementSets: AchievementSet[] = await this.repository.loadAggregatedAchievements();
+		console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
+		this.achievementCategories = achievementSets;
+		this.refreshingContent = false;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	onShortDisplay(shrink: boolean) {

@@ -249,13 +249,13 @@ export class IndexedDbService {
 	private waitForDbInit(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			const dbWait = () => {
-				console.log('Promise waiting for db');
+				// console.log('Promise waiting for db');
 				if (this.dbInit) {
-					console.log('wait for db init complete');
+					// console.log('wait for db init complete');
 					resolve();
 				} 
 				else {
-					console.log('waiting for db init');
+					// console.log('waiting for db init');
 					setTimeout(() => dbWait(), 50);
 				}
 			}
