@@ -172,7 +172,7 @@ export class MainWindowComponent implements AfterViewInit {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed CollectionWindow', message);
+			// console.log('state changed CollectionWindow', message);
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();

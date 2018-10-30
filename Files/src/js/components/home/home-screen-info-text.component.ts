@@ -57,7 +57,7 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 			if (message.window_name != "WelcomeWindow") {
 				return;
 			}
-			console.log('state changed home-screen-info', message);
+			// console.log('state changed home-screen-info', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

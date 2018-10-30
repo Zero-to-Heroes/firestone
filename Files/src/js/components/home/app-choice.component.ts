@@ -73,7 +73,7 @@ export class AppChoiceComponent implements AfterViewInit {
 			if (message.window_name != "WelcomeWindow") {
 				return;
 			}
-			console.log('state changed app choice', message);
+			// console.log('state changed app choice', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

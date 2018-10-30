@@ -140,7 +140,7 @@ export class LoadingComponent implements AfterViewInit {
 			if (message.window_name != "LoadingWindow") {
 				return;
 			}
-			console.log('state changed LoadingWindow', message);
+			// console.log('state changed LoadingWindow', message);
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();

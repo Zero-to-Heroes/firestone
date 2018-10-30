@@ -49,7 +49,7 @@ export class AchievementHistoryComponent implements AfterViewInit {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed achievement-history', message);
+			// console.log('state changed achievement-history', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

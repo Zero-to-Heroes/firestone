@@ -88,7 +88,7 @@ export class CardHistoryComponent implements AfterViewInit {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed card-history', message);
+			// console.log('state changed card-history', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}

@@ -116,7 +116,7 @@ export class CollectionComponent implements AfterViewInit {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed CollectionWindow', message);
+			// console.log('state changed CollectionWindow', message);
 			if (message.window_state == 'normal') {
 				this.updateSets();
 			}

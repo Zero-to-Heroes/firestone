@@ -89,7 +89,7 @@ export class AchievementsComponent implements AfterViewInit {
 			if (message.window_name != "CollectionWindow") {
 				return;
 			}
-			console.log('state changed in achievements', message);
+			// console.log('state changed in achievements', message);
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}
