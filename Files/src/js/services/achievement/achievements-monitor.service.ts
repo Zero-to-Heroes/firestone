@@ -15,6 +15,7 @@ import { Achievement } from 'src/js/models/achievement';
 import { AchievementNameService } from './achievement-name.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { ReplayInfo } from 'src/js/models/replay-info';
+import { AchievementConfigService } from './achievement-config.service';
 
 declare var ga;
 declare var overwolf;
@@ -31,6 +32,7 @@ export class AchievementsMonitor {
 		private nameService: AchievementNameService,
 		private achievementsReferee: AchievementsRefereee,
 		private achievementStorage: AchievementsStorageService,
+		private config: AchievementConfigService,
 		private storage: AchievementHistoryStorageService,
 		private repository: AchievementsRepository,
 		private events: Events) {
@@ -101,7 +103,8 @@ export class AchievementsMonitor {
 					</button>
 				</div>`,
 			type: 'achievement-pre-record',
-			cardId: achievement.id
+			cardId: achievement.id,
+			timeout: this.config.getConfig(achievement.type).timeToRecordAfterInMillis,
 		});
 	}
 

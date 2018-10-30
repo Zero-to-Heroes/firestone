@@ -52,7 +52,7 @@ export class NotificationsComponent implements AfterViewInit {
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			// console.log('received message in notification window', message);
 			let messageObject = JSON.parse(message.content);
-			this.sendNotification(messageObject.content, messageObject.cardId, messageObject.type);
+			this.sendNotification(messageObject);
 		})
 
 		overwolf.windows.getCurrentWindow((result) => {
@@ -90,20 +90,20 @@ export class NotificationsComponent implements AfterViewInit {
 		this.resize();
 	}
 
-	private sendNotification(htmlMessage: string, cardId?: string, type?: string) {
+	private sendNotification(messageObject) {
 		if (!this.windowId) {
 			// console.log('Notification window isnt properly initialized yet, waiting');
 			setTimeout(() => {
-				this.sendNotification(htmlMessage);
+				this.sendNotification(messageObject);
 			}, 100);
 			return;
 		}
 
-		if (type === 'achievement-confirm') {
-			this.confirmAchievement(cardId);
+		if (messageObject.type === 'achievement-confirm') {
+			this.confirmAchievement(messageObject.cardId);
 		}
 		else {
-			this.showNotification(htmlMessage, cardId, type);
+			this.showNotification(messageObject);
 		}
 	}
 
@@ -122,11 +122,18 @@ export class NotificationsComponent implements AfterViewInit {
 		console.log('updated notif', notification);
 	}
 
-	private showNotification(htmlMessage: string, cardId?: string, type?: string) {
+	private showNotification(messageObject) {
+		const htmlMessage: string = messageObject.content;
+		const cardId: string = messageObject.cardId;
+		const type: string = messageObject.type;
+		const additionalTimeout: string = messageObject.timeout || 0;
 		// console.log('received message, restoring notification window');
 		overwolf.windows.restore(this.windowId, (result) => {
 			// console.log('notifications window is on?', result);
-			const override: any = { clickToClose: true };
+			const override: any = {
+				timeout: this.timeout + additionalTimeout,
+				clickToClose: true 
+			};
 			if (type === 'achievement-pre-record') {
 				override.clickToClose = false;
 			}
