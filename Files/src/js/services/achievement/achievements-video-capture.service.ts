@@ -6,6 +6,7 @@ import { GameEvent } from '../../models/game-event';
 import { Achievement } from '../../models/achievement';
 import { ReplayInfo } from 'src/js/models/replay-info';
 import { AchievementConfigService } from './achievement-config.service';
+import { keyframes } from '@angular/animations';
 
 declare var overwolf;
 
@@ -39,7 +40,40 @@ export class AchievementsVideoCaptureService {
         overwolf.media.replays.turnOn(
             this.settings, 
             (result) => console.log('[recording] turned on replay capture', result));
+
+        // setTimeout(() => {
+        //     this.setStreamingModes();
+        // });
     }
+
+    // private setStreamingModes() {
+    //     // Only capture the game window + the notification window
+	// 	overwolf.windows.getWindowsStates((result) => {
+	// 		if (result.status !== 'success') {
+	// 			console.warn('Could not get windows', result);
+	// 			return;
+    //         }
+    //         console.log('[recording] got windows', result);
+    //         Object.keys(result.result).forEach((windowName) => {
+    //             console.log('[recording] iterating', windowName);
+    //             overwolf.windows.obtainDeclaredWindow(windowName, (window) => {
+    //                 if (window.name === 'NotificationsWindow') {
+    //                     overwolf.streaming.setWindowStreamingMode(
+    //                         window.id, 
+    //                         'Always', 
+    //                         (result) => console.log('[recording] streaming mode', window, result));
+    //                 }
+    //                 // Hide all other windows in the video replay
+    //                 else {
+    //                     overwolf.streaming.setWindowStreamingMode(
+    //                         window.id, 
+    //                         'Never', 
+    //                         (result) => console.log('[recording] streaming mode', window, result));
+    //                 }
+    //             })
+    //         })
+	// 	});
+    // }
     
     // private handleRecording(gameEvent: GameEvent) {
     //     if (gameEvent.type === GameEvent.GAME_START) {

@@ -1,6 +1,7 @@
 import { Challenge } from './challenge';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
+import { Events } from '../../events.service';
 
 export class BossEncounter implements Challenge {
 
@@ -8,12 +9,23 @@ export class BossEncounter implements Challenge {
 	private readonly bossId: string;
 	private readonly bossDbfId: number;
 
+	private waitingForSceneChange: boolean = false;
 	private completed = false;
+	private callback;
 
-	constructor(achievement) {
+	constructor(achievement, events: Events) {
 		this.achievementId = achievement.id;
 		this.bossId = achievement.bossId;
 		this.bossDbfId = achievement.bossDbfId;
+		
+		events.on(Events.SCENE_CHANGED).subscribe((data) => {
+			if (this.waitingForSceneChange && this.callback && data.data[0] === 'scene_gameplay') {
+				console.log('scene changed, completing achievement', data, this.waitingForSceneChange, this.callback);
+				this.waitingForSceneChange = false;
+				this.callback();
+				this.callback = undefined;
+			}
+		})
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
@@ -33,8 +45,10 @@ export class BossEncounter implements Challenge {
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.data[0].CardID == this.bossId) {
-			// console.log('Meeting boss unlocked!', this.achievementId, this.bossId, this);
-			callback();
+			console.log('achievement completed, waiting for detection');
+			this.callback = callback;
+			this.waitingForSceneChange = true;
+			// callback();
 		}
 	}
 

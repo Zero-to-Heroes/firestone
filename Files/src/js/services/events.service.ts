@@ -31,6 +31,8 @@ export class Events {
 	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
 	public static readonly ACHIEVEMENT_RECORD_SAVED = 'achievement-record-saved';
 
+	public static readonly SCENE_CHANGED = "scene-changed";
+
 	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';

@@ -11,7 +11,7 @@ export class AchievementConfigService {
                 return { timeToRecordBeforeInMillis: 500, timeToRecordAfterInMillis: 12000 };
             case 'dungeon_run_boss_victory':
             case 'monster_hunt_boss_victory':
-                return { timeToRecordBeforeInMillis: 20000, timeToRecordAfterInMillis: 5000 };
+                return { timeToRecordBeforeInMillis: 20000, timeToRecordAfterInMillis: 15000 };
         }
     }
 }

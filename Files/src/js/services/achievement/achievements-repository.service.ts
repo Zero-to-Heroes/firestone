@@ -17,6 +17,7 @@ import { AchievementsStorageService } from './achievements-storage.service';
 import { SetProvider } from './achievement-sets/set-provider';
 import { AllCardsService } from '../all-cards.service';
 import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss.js';
+import { Events } from '../events.service.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -27,7 +28,7 @@ export class AchievementsRepository {
 	private allAchievements: Achievement[] = [];
 	private setProviders: SetProvider[] = [];
 
-	constructor(private storage: AchievementsStorageService, private cards: AllCardsService) {
+	constructor(private storage: AchievementsStorageService, private cards: AllCardsService, private events: Events) {
 		this.registerModules();
 		this.modulesLoaded.next(true);
 	}
@@ -88,9 +89,9 @@ export class AchievementsRepository {
 
 	private achievementTypes() {
 		return [
-			{ type: 'dungeon_run_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement) },
+			{ type: 'dungeon_run_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, this.events) },
 			{ type: 'dungeon_run_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement) },
-			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement) },
+			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, this.events) },
 			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement) },
 		];
 	}

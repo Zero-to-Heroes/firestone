@@ -22,7 +22,7 @@ export class DevService {
 			[]
 		)
 		window['showAchievementNotification'] = () => {			
-			this.achievementMonitor.sendNotification(achievement);
+			this.achievementMonitor.sendPreRecordNotification(achievement);
 		}
 		window['addAchievementHistory'] = () => {
 			this.achievementMonitor.storeNewAchievementHistory(achievement, 1);

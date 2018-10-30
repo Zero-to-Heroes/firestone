@@ -1,7 +1,9 @@
 import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService, Notification } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
+import { NG_MODEL_WITH_FORM_CONTROL_WARNING } from '@angular/forms/src/directives';
+import { not } from 'rxjs/internal/util/not';
 
 declare var overwolf: any;
 
@@ -9,15 +11,20 @@ declare var overwolf: any;
 	selector: 'notifications',
 	styleUrls: [
 		'../../css/global/components-global.scss',
-		'../../css/component/notifications.component.scss',
+		'../../css/component/notifications/notifications.component.scss',
+		'../../css/component/notifications/notifications-achievements.scss',
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="notifications">
-			<simple-notifications [options]="toastOptions" (onCreate)="created($event)" (onDestroy)="destroyed($event)"></simple-notifications>
+			<simple-notifications 
+				[options]="toastOptions" 
+				(onCreate)="created($event)" 
+				(onDestroy)="destroyed($event)">
+			</simple-notifications>
 		</div>
 	`,
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	// changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsComponent implements AfterViewInit {
 
@@ -27,12 +34,14 @@ export class NotificationsComponent implements AfterViewInit {
 		timeOut: this.timeout,
 		pauseOnHover: false,
 		showProgressBar: false,
-		clickToClose: true,
+		// clickToClose: true,
+		// clickToClose: false,
 		maxStack: 5
 	}
 
 	private windowId: string;
 	private mainWindowId: string;
+	// private activeNotifications: ActiveNotification[] = [];
 
 	constructor(
 		private notificationService: NotificationsService,
@@ -48,7 +57,7 @@ export class NotificationsComponent implements AfterViewInit {
 
 		overwolf.windows.getCurrentWindow((result) => {
 			this.windowId = result.window.id;
-			console.log('retrieved current notifications window', result, this.windowId);
+			// console.log('retrieved current notifications window', result, this.windowId);
 
 			overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 				if (result.status !== 'success') {
@@ -63,18 +72,21 @@ export class NotificationsComponent implements AfterViewInit {
 				this.closeApp();
 			}
 		});
-		console.log('notifications windows initialized')
 	}
 
 	ngAfterViewInit() {
-		this.cdr.detach();
+		// this.cdr.detach();
 	}
 
 	created(event) {
+		// console.log('notif created', event, this.notificationService, this.activeNotifications);
 		this.resize();
 	}
 
 	destroyed(event) {
+		// console.log('notif destroyed', event, this.notificationService, this.activeNotifications);
+		// this.activeNotifications = this.activeNotifications
+		// 		.filter((notif) => notif.toast.id != event.id);
 		this.resize();
 	}
 
@@ -86,10 +98,39 @@ export class NotificationsComponent implements AfterViewInit {
 			}, 100);
 			return;
 		}
+
+		if (type === 'achievement-confirm') {
+			this.confirmAchievement(cardId);
+		}
+		else {
+			this.showNotification(htmlMessage, cardId, type);
+		}
+	}
+
+	private confirmAchievement(cardId: string) {
+		// console.log('in confirml achievement', cardId);
+		// const activeNotif = this.activeNotifications.find((notif) => notif.cardId === cardId);
+		// if (activeNotif != null) {
+		// 	const toast = activeNotif.toast;
+		// 	toast.theClass = 'active';
+		// 	console.log('active notif found', activeNotif, toast);
+		// 	this.cdr.detectChanges();
+		// }
+		const notification = this.elRef.nativeElement.querySelector('.' + cardId);
+		console.log('got notif', notification);
+		notification.classList.add('active');
+		console.log('updated notif', notification);
+	}
+
+	private showNotification(htmlMessage: string, cardId?: string, type?: string) {
 		// console.log('received message, restoring notification window');
 		overwolf.windows.restore(this.windowId, (result) => {
 			// console.log('notifications window is on?', result);
-			let toast = this.notificationService.html(htmlMessage);
+			const override: any = { clickToClose: true };
+			if (type === 'achievement-pre-record') {
+				override.clickToClose = false;
+			}
+			let toast = this.notificationService.html(htmlMessage, 'success', override);
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -100,16 +141,25 @@ export class NotificationsComponent implements AfterViewInit {
 					this.cdr.detectChanges();
 				}
 				// Clicked on close, don't show the card
-				if (event.srcElement.className.indexOf("close") != -1) {
+				if (event.srcElement.className.indexOf("close") !== -1) {
+					// Force close if it's not configured to auto close
+					if (override.clickToClose === false) {
+						this.notificationService.remove(toast.id);
+					}
 					// this.notificationService.remove(toast.id);
 					return;
 				}
 				if (cardId) {
-					if (type == 'achievement') {
-						overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
-							console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
-						});
+					if (type === 'achievement-pre-record') {
+						if (toast.theClass === 'active') {
+							overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
+								console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
+							});
+							this.notificationService.remove(toast.id);
+						}
+						// Otherwise do nothing
 					}
+					// Collection
 					else {
 						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
 							console.log('send click info to collection window', cardId, this.mainWindowId, result);
@@ -117,6 +167,13 @@ export class NotificationsComponent implements AfterViewInit {
 					}
 				}
 			});
+
+			// const activeNotif: ActiveNotification = {
+			// 	toast: toast,
+			// 	cardId: cardId,
+			// 	type: type
+			// };
+			// this.activeNotifications.push(activeNotif);
 		})
 	}
 
@@ -159,3 +216,9 @@ export class NotificationsComponent implements AfterViewInit {
 		});
 	}
 }
+
+// interface ActiveNotification {
+// 	readonly toast: Notification;
+// 	readonly cardId?: string;
+// 	readonly type?: string;
+// }

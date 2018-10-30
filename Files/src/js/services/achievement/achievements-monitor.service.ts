@@ -59,7 +59,7 @@ export class AchievementsMonitor {
 				this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
 				this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions);
 				if (newAchievement.numberOfCompletions == 1) {
-					this.sendNotification(achievement);
+					this.sendPreRecordNotification(achievement);
 				}
 			}
 		);
@@ -68,14 +68,18 @@ export class AchievementsMonitor {
 		console.log('listening for achievement completion events');
 	}
 
-	public sendNotification(achievement: Achievement) {
+	public sendPreRecordNotification(achievement: Achievement) {
 		const text = this.nameService.displayName(achievement.id);
 		console.log('sending new notification', text);
 		this.notificationService.html({
+			// The achievement.id is used in the notification service to uniquely get the right notification
+			// HTML element
 			content: `
-				<div class="achievement-message-container">
+				<div class="achievement-message-container ${achievement.id}">
 					<div class="achievement-image-container">
-						<img src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg" class="real-achievement"/>
+						<img 
+							src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
+							class="real-achievement"/>
 						<i class="i-84x90 frame">
 							<svg>
 								<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
@@ -85,7 +89,10 @@ export class AchievementsMonitor {
 					<div class="message">
 						<span class="title">Achievement unlocked!</span>
 						<span class="text">${text}</span>
-						<span class="recap-text">Click to expand</span>
+						<div class="recap-text">
+							<span class="pending">Your replay is being recorded...</span>
+							<span class="active">Replay saved! Click to recap</span>
+						</div>
 					</div>
 					<button class="i-30 close-button">
 						<svg class="svg-icon-fill">
@@ -93,7 +100,17 @@ export class AchievementsMonitor {
 						</svg>
 					</button>
 				</div>`,
-			type: 'achievement',
+			type: 'achievement-pre-record',
+			cardId: achievement.id
+		});
+	}
+
+	public sendPostRecordNotification(achievement: Achievement) {
+		const text = this.nameService.displayName(achievement.id);
+		console.log('sending new notification', text);
+		this.notificationService.html({
+			content: undefined,
+			type: 'achievement-confirm',
 			cardId: achievement.id
 		});
 	}
@@ -143,6 +160,13 @@ export class AchievementsMonitor {
 		const result = await this.achievementStorage.saveAchievement(newAchievement)
 		console.log('[recording] saved new achievement', result);
 		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});
+
+		const originalAchievement: Achievement = this.repository.getAllAchievements()
+			.filter((ach) => ach.id == newAchievement.id)
+			[0];
+		if (newAchievement.numberOfCompletions == 1) {
+			this.sendPostRecordNotification(originalAchievement)
+		}
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
