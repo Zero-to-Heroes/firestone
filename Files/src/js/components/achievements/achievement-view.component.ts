@@ -74,7 +74,6 @@ export class AchievementViewComponent {
 	}
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {
-
 	}
 
 	toggleRecordings() {
@@ -90,6 +89,9 @@ export class AchievementViewComponent {
 			return;
 		}
 		console.log('scrolling into view', this._achievement.name);
-		this.el.nativeElement.scrollIntoView();
+		setTimeout(() => {
+			this.el.nativeElement.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+			this.cdr.detectChanges();
+		})
 	}
 }

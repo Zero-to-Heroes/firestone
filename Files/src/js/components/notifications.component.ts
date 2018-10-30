@@ -24,7 +24,7 @@ declare var overwolf: any;
 			</simple-notifications>
 		</div>
 	`,
-	// changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsComponent implements AfterViewInit {
 
@@ -41,7 +41,7 @@ export class NotificationsComponent implements AfterViewInit {
 
 	private windowId: string;
 	private mainWindowId: string;
-	// private activeNotifications: ActiveNotification[] = [];
+	private activeNotifications: ActiveNotification[] = [];
 
 	constructor(
 		private notificationService: NotificationsService,
@@ -75,7 +75,7 @@ export class NotificationsComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		// this.cdr.detach();
+		this.cdr.detach();
 	}
 
 	created(event) {
@@ -85,8 +85,8 @@ export class NotificationsComponent implements AfterViewInit {
 
 	destroyed(event) {
 		// console.log('notif destroyed', event, this.notificationService, this.activeNotifications);
-		// this.activeNotifications = this.activeNotifications
-		// 		.filter((notif) => notif.toast.id != event.id);
+		this.activeNotifications = this.activeNotifications
+				.filter((notif) => notif.toast.id != event.id);
 		this.resize();
 	}
 
@@ -108,14 +108,14 @@ export class NotificationsComponent implements AfterViewInit {
 	}
 
 	private confirmAchievement(cardId: string) {
-		// console.log('in confirml achievement', cardId);
-		// const activeNotif = this.activeNotifications.find((notif) => notif.cardId === cardId);
-		// if (activeNotif != null) {
-		// 	const toast = activeNotif.toast;
-		// 	toast.theClass = 'active';
-		// 	console.log('active notif found', activeNotif, toast);
-		// 	this.cdr.detectChanges();
-		// }
+		console.log('in confirml achievement', cardId);
+		const activeNotif = this.activeNotifications.find((notif) => notif.cardId === cardId);
+		if (activeNotif != null) {
+			const toast = activeNotif.toast;
+			toast.theClass = 'active';
+			console.log('active notif found', activeNotif, toast);
+			this.cdr.detectChanges();
+		}
 		const notification = this.elRef.nativeElement.querySelector('.' + cardId);
 		console.log('got notif', notification);
 		notification.classList.add('active');
@@ -136,7 +136,7 @@ export class NotificationsComponent implements AfterViewInit {
 			}
 			// console.log('running toast message in zone', toast);
 			toast.click.subscribe((event: MouseEvent) => {
-				console.log('registered click on toast', event, toast);
+				console.log('registered click on toast', event, toast, toast.theClass);
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -152,6 +152,7 @@ export class NotificationsComponent implements AfterViewInit {
 				if (cardId) {
 					if (type === 'achievement-pre-record') {
 						if (toast.theClass === 'active') {
+							console.log('sending message', this.mainWindowId);
 							overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
 								console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
 							});
@@ -168,12 +169,12 @@ export class NotificationsComponent implements AfterViewInit {
 				}
 			});
 
-			// const activeNotif: ActiveNotification = {
-			// 	toast: toast,
-			// 	cardId: cardId,
-			// 	type: type
-			// };
-			// this.activeNotifications.push(activeNotif);
+			const activeNotif: ActiveNotification = {
+				toast: toast,
+				cardId: cardId,
+				type: type
+			};
+			this.activeNotifications.push(activeNotif);
 		})
 	}
 
@@ -185,6 +186,9 @@ export class NotificationsComponent implements AfterViewInit {
 			// console.log('resizing, current window');
 			// console.log('rect2', wrapper.getBoundingClientRect());
 			overwolf.games.getRunningGameInfo((gameInfo) => {
+				if (!gameInfo) {
+					return;
+				}
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
 				let dpi = gameWidth / gameInfo.width;
@@ -217,8 +221,8 @@ export class NotificationsComponent implements AfterViewInit {
 	}
 }
 
-// interface ActiveNotification {
-// 	readonly toast: Notification;
-// 	readonly cardId?: string;
-// 	readonly type?: string;
-// }
+interface ActiveNotification {
+	readonly toast: Notification;
+	readonly cardId?: string;
+	readonly type?: string;
+}

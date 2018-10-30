@@ -41,7 +41,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				<li *ngFor="let achievement of activeAchievements">
 					<achievement-view 
 						[achievement]="achievement" 
-						[scrollIntoView]="achievementIdToScrollIntoView === achievement.id">
+						[scrollIntoView]="_achievementIdToScrollIntoView === achievement.id">
 					</achievement-view>
 				</li>
 			</ul>
@@ -60,8 +60,6 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	readonly SCROLL_SHRINK_START_PX = 5 * 100;
 
-	@Input() achievementIdToScrollIntoView: string;
-
 	@Output() shortDisplay = new EventEmitter<boolean>();
 
 	achievements: VisualAchievement[];
@@ -74,6 +72,8 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateTitle: string;
 	emptyStateText: string;
 	headerClass: string;
+
+	_achievementIdToScrollIntoView: string;
 
 	private lastScrollPosition: number = 0;
 	private lastScrollPositionBeforeScrollDown: number = 0;
@@ -99,6 +99,10 @@ export class AchievementsListComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		});
+		this.shortDisplay.subscribe((data) => {
+			this.headerClass = data ? 'shrink-header': undefined;
+			this.cdr.detectChanges();
+		})
 	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
@@ -112,6 +116,14 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
 		this.achievements = achievementsList || [];
 		this.updateShownAchievements();
+	}
+
+	@Input('achievementIdToScrollIntoView') set achievementIdToScrollIntoView(achievementIdToScrollIntoView: string) {
+		console.log('setting achievementIdToScrollIntoView', achievementIdToScrollIntoView, this._achievementIdToScrollIntoView);
+		if (this._achievementIdToScrollIntoView !== achievementIdToScrollIntoView) {
+			this._achievementIdToScrollIntoView = achievementIdToScrollIntoView;
+			this.updateShownAchievements();
+		}
 	}
 	
 	// Prevent the window from being dragged around if user scrolls with click
@@ -161,18 +173,17 @@ export class AchievementsListComponent implements AfterViewInit {
 	private onScrollDown(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollUp = scrollPosition;
 		if (scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX && !this.headerClass) {
-			this.headerClass = 'shrink-header';
 			this.shortDisplay.next(true);
-			this.cdr.detectChanges();
+			// this.cdr.detectChanges();
 		}
 	}
 
 	private onScrollUp(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollDown = scrollPosition;
 		if (this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX && this.headerClass) {
-			this.headerClass = undefined;
+			// this.headerClass = undefined;
 			this.shortDisplay.next(false);
-			this.cdr.detectChanges();
+			// this.cdr.detectChanges();
 		}
 	}
 
@@ -194,6 +205,9 @@ export class AchievementsListComponent implements AfterViewInit {
 		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
 		console.log('selected', this.activeAchievements, filterOption);
+		if (this._achievementIdToScrollIntoView) {
+			this.shortDisplay.next(true); 
+		}
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}

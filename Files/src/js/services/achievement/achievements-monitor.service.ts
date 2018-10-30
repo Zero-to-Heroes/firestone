@@ -105,13 +105,11 @@ export class AchievementsMonitor {
 		});
 	}
 
-	public sendPostRecordNotification(achievement: Achievement) {
-		const text = this.nameService.displayName(achievement.id);
-		console.log('sending new notification', text);
+	public sendPostRecordNotification(achievementId: string) {
 		this.notificationService.html({
 			content: undefined,
 			type: 'achievement-confirm',
-			cardId: achievement.id
+			cardId: achievementId
 		});
 	}
 
@@ -161,11 +159,8 @@ export class AchievementsMonitor {
 		console.log('[recording] saved new achievement', result);
 		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});
 
-		const originalAchievement: Achievement = this.repository.getAllAchievements()
-			.filter((ach) => ach.id == newAchievement.id)
-			[0];
 		if (newAchievement.numberOfCompletions == 1) {
-			this.sendPostRecordNotification(originalAchievement)
+			this.sendPostRecordNotification(newAchievement.id)
 		}
 	}
 
