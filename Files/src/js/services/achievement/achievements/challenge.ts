@@ -9,4 +9,10 @@ export interface Challenge {
 	getAchievementId(): string;
 
 	defaultAchievement(): CompletedAchievement;
+
+	getRecordPastDurationMillis(): number;
+
+	broadcastEndOfCapture(): void;
+
+	notificationTimeout(): number;
 }

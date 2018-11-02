@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler }      from '@angular/core';
+import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
@@ -36,7 +36,6 @@ import { AchievementHistoryStorageService } from '../../services/achievement/ach
 import { AchievementNameService } from '../../services/achievement/achievement-name.service';
 import { DevService } from '../../services/dev.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
-import { AchievementConfigService } from 'src/js/services/achievement/achievement-config.service';
 
 
 @NgModule({
@@ -69,7 +68,6 @@ import { AchievementConfigService } from 'src/js/services/achievement/achievemen
 		PackStatsService,
 		SimpleIOService,
 		MemoryInspectionService,
-		AchievementConfigService,
 		AchievementHistoryStorageService,
 		AchievementsMonitor,
 		AchievementNameService,

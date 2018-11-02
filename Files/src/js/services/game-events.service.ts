@@ -93,6 +93,15 @@ export class GameEvents {
 			case 'OPPONENT_PLAYER':
 				this.allEvents.next(new GameEvent(GameEvent.OPPONENT, gameEvent.Value));
 				break;
+			case 'MULLIGAN_INPUT':
+				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_INPUT));
+				break;
+			case 'MULLIGAN_DONE':
+				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_DONE));
+				break;
+			case 'TURN_START':
+				this.allEvents.next(new GameEvent(GameEvent.TURN_START, gameEvent.Value));
+				break;
 			case 'WINNER':
 				this.allEvents.next(new GameEvent(
 					GameEvent.WINNER,

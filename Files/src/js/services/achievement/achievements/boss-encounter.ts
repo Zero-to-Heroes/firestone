@@ -8,8 +8,9 @@ export class BossEncounter implements Challenge {
 	private readonly achievementId: string;
 	private readonly bossId: string;
 	private readonly bossDbfId: number;
+	private readonly events:Events;
 
-	private waitingForSceneChange: boolean = false;
+	private sceneChanged: boolean = false;
 	private completed = false;
 	private callback;
 
@@ -17,23 +18,19 @@ export class BossEncounter implements Challenge {
 		this.achievementId = achievement.id;
 		this.bossId = achievement.bossId;
 		this.bossDbfId = achievement.bossDbfId;
+		this.events = events;
 		
 		events.on(Events.SCENE_CHANGED).subscribe((data) => {
-			if (this.waitingForSceneChange && this.callback && data.data[0] === 'scene_gameplay') {
-				console.log('scene changed, completing achievement', data, this.waitingForSceneChange, this.callback);
-				this.waitingForSceneChange = false;
-				this.callback();
-				this.callback = undefined;
+			if (data.data[0] === 'scene_gameplay') {
+				this.sceneChanged = true;
+				this.handleCompletion();
 			}
 		})
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
-		if (this.completed) {	
-			return;
-		}
-
-		if (!gameEvent.data || gameEvent.data.length == 0) {
+		if (gameEvent.type == GameEvent.MULLIGAN_DONE) {
+			this.broadcastEndOfCapture();
 			return;
 		}
 
@@ -43,12 +40,15 @@ export class BossEncounter implements Challenge {
 		}
 	}
 
-	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.data[0].CardID == this.bossId) {
-			console.log('achievement completed, waiting for detection');
-			this.callback = callback;
-			this.waitingForSceneChange = true;
-			// callback();
+	public getRecordPastDurationMillis(): number {
+		return 100;
+	}
+
+	public broadcastEndOfCapture() {
+		if (this.completed) {
+			this.completed = false;
+			console.log('broadcasting end of capture', this);
+			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId);
 		}
 	}
 
@@ -59,5 +59,32 @@ export class BossEncounter implements Challenge {
 
 	public defaultAchievement() {
 		return new CompletedAchievement(this.achievementId, 0, []);
+	}
+
+	public notificationTimeout(): number {
+		// Since we stop recording only when mulligan is done, it could take some time
+		return 25000;
+	}
+
+	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
+		if (!gameEvent.data || gameEvent.data.length == 0) {
+			return;
+		}
+
+		if (gameEvent.data[0].CardID == this.bossId) {
+			console.log('achievement completed, waiting for detection');
+			this.callback = callback;
+			this.handleCompletion();
+		}
+	}
+
+	private handleCompletion() {
+		if (this.sceneChanged && this.callback) {
+			console.log('scene changed, completing achievement');
+			this.callback();
+			this.sceneChanged = false;
+			this.completed = true;
+			this.callback = undefined;
+		}
 	}
 }

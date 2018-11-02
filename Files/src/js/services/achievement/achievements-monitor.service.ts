@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { GameEvent } from '../../models/game-event';
 import { CompletedAchievement } from '../../models/completed-achievement';
@@ -15,7 +15,7 @@ import { Achievement } from 'src/js/models/achievement';
 import { AchievementNameService } from './achievement-name.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { ReplayInfo } from 'src/js/models/replay-info';
-import { AchievementConfigService } from './achievement-config.service';
+import { Challenge } from './achievements/challenge';
 
 declare var ga;
 declare var overwolf;
@@ -23,7 +23,6 @@ declare var overwolf;
 @Injectable()
 export class AchievementsMonitor {
 
-	private newAchievements = new EventEmitter<CompletedAchievement>();
 	private collectionWindowId: string;
 
 	constructor(
@@ -32,7 +31,6 @@ export class AchievementsMonitor {
 		private nameService: AchievementNameService,
 		private achievementsReferee: AchievementsRefereee,
 		private achievementStorage: AchievementsStorageService,
-		private config: AchievementConfigService,
 		private storage: AchievementHistoryStorageService,
 		private repository: AchievementsRepository,
 		private events: Events) {
@@ -49,28 +47,12 @@ export class AchievementsMonitor {
 			}
 			this.collectionWindowId = result.window.id;
 		});
-		this.newAchievements.subscribe(
-			(newAchievement: CompletedAchievement) => {
-				// console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
-				ga('send', 'event', 'new-achievement', newAchievement.id);
-				this.events.broadcast(Events.NEW_ACHIEVEMENT, newAchievement);
-				const achievement: Achievement = this.repository.getAllAchievements()
-					.filter((ach) => ach.id == newAchievement.id)
-					[0];
-				// We store an history item every time, but we display only the first time an achievement is unlocked
-				this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
-				this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions);
-				if (newAchievement.numberOfCompletions == 1) {
-					this.sendPreRecordNotification(achievement);
-				}
-			}
-		);
 		this.events.on(Events.ACHIEVEMENT_RECORD_STARTED).subscribe((data) => this.handleAchievementRecordStarted(data));
 		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe((data) => this.handleAchievementRecordCompleted(data));
 		console.log('listening for achievement completion events');
 	}
 
-	public sendPreRecordNotification(achievement: Achievement) {
+	public sendPreRecordNotification(achievement: Achievement, notificationTimeout: number) {
 		const text = this.nameService.displayName(achievement.id);
 		console.log('sending new notification', text);
 		this.notificationService.html({
@@ -104,7 +86,7 @@ export class AchievementsMonitor {
 				</div>`,
 			type: 'achievement-pre-record',
 			cardId: achievement.id,
-			timeout: this.config.getConfig(achievement.type).timeToRecordAfterInMillis,
+			timeout: notificationTimeout,
 		});
 	}
 
@@ -173,9 +155,24 @@ export class AchievementsMonitor {
 			challenge.detect(gameEvent, (data) => {
 				// console.log('[achievements] challenge completed', gameEvent, data, challenge);
 				this.achievementsReferee.complete(challenge, (newAchievement) => {
-					this.newAchievements.next(newAchievement);
+					this.completeAchievement(newAchievement, challenge);
 				}, data);
 			});
+		}
+	}
+
+	private completeAchievement(newAchievement: CompletedAchievement, challenge: Challenge) {
+		// console.log('[achievements] WOOOOOOHOOOOOOOOO!!!! New achievement!', newAchievement);
+		ga('send', 'event', 'new-achievement', newAchievement.id);
+		this.events.broadcast(Events.NEW_ACHIEVEMENT, newAchievement);
+		const achievement: Achievement = this.repository.getAllAchievements()
+			.filter((ach) => ach.id == newAchievement.id)
+			[0];
+		// We store an history item every time, but we display only the first time an achievement is unlocked
+		this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
+		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions, challenge);
+		if (newAchievement.numberOfCompletions == 1) {
+			this.sendPreRecordNotification(achievement, challenge.notificationTimeout());
 		}
 	}
 }
