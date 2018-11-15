@@ -74,4 +74,5 @@ export interface Message {
 	cardId?: string,
 	type?: string,
 	timeout?: number,
+	theClass?: string,
 }

@@ -63,7 +63,7 @@ export class BossEncounter implements Challenge {
 
 	public notificationTimeout(): number {
 		// Since we stop recording only when mulligan is done, it could take some time
-		return 25000;
+		return 15000;
 	}
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {

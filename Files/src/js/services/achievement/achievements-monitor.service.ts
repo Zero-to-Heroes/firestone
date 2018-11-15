@@ -92,11 +92,38 @@ export class AchievementsMonitor {
 		});
 	}
 
-	public sendPostRecordNotification(achievementId: string) {
+	public sendPostRecordNotification(achievement: Achievement) {
+		// In case the pre-record notification has already timed out, we need to send a full notif
+		const text = this.nameService.displayName(achievement.id);
 		this.notificationService.html({
-			content: undefined,
+			content: `
+			<div class="achievement-message-container ${achievement.id}">
+				<div class="achievement-image-container">
+					<img 
+						src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
+						class="real-achievement"/>
+					<i class="i-84x90 frame">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
+						</svg>
+					</i>
+				</div>
+				<div class="message">
+					<span class="title">Achievement unlocked!</span>
+					<span class="text">${text}</span>
+					<div class="recap-text">
+						<span>Replay saved! Click to recap</span>
+					</div>
+				</div>
+				<button class="i-30 close-button">
+					<svg class="svg-icon-fill">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+					</svg>
+				</button>
+			</div>`,
+			theClass: 'active',
 			type: 'achievement-confirm',
-			cardId: achievementId
+			cardId: achievement.id
 		});
 	}
 
@@ -147,7 +174,10 @@ export class AchievementsMonitor {
 		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});
 
 		if (newAchievement.numberOfCompletions == 1 && this.flags.achievements()) {
-			this.sendPostRecordNotification(newAchievement.id)
+			const achievement: Achievement = this.repository.getAllAchievements()
+				.filter((ach) => ach.id == newAchievement.id)
+				[0];
+			this.sendPostRecordNotification(achievement)
 		}
 	}
 

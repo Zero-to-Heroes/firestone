@@ -99,24 +99,23 @@ export class NotificationsComponent implements AfterViewInit {
 			return;
 		}
 
-		if (messageObject.type === 'achievement-confirm') {
-			this.confirmAchievement(messageObject.cardId);
+		const activeNotif = this.activeNotifications.find((notif) => notif.cardId === messageObject.cardId);
+		const notification = this.elRef.nativeElement.querySelector('.' + messageObject.cardId);
+		if (messageObject.type === 'achievement-confirm' && notification && activeNotif) {
+			this.confirmAchievement(messageObject.cardId, notification);
 		}
 		else {
 			this.showNotification(messageObject);
 		}
 	}
 
-	private confirmAchievement(cardId: string) {
-		console.log('in confirml achievement', cardId);
+	private confirmAchievement(cardId: string, notification) {
+		console.log('in confirm achievement', cardId);
 		const activeNotif = this.activeNotifications.find((notif) => notif.cardId === cardId);
-		if (activeNotif != null) {
-			const toast = activeNotif.toast;
-			toast.theClass = 'active';
-			console.log('active notif found', activeNotif, toast);
-			this.cdr.detectChanges();
-		}
-		const notification = this.elRef.nativeElement.querySelector('.' + cardId);
+		const toast = activeNotif.toast;
+		console.log('active notif found', activeNotif, toast);
+		toast.theClass = 'active';
+		this.cdr.detectChanges();
 		console.log('got notif', notification);
 		notification.classList.add('active');
 		console.log('updated notif', notification);
@@ -138,6 +137,7 @@ export class NotificationsComponent implements AfterViewInit {
 				override.clickToClose = false;
 			}
 			let toast = this.notificationService.html(htmlMessage, 'success', override);
+			toast.theClass = messageObject.theClass;
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -157,15 +157,14 @@ export class NotificationsComponent implements AfterViewInit {
 					return;
 				}
 				if (cardId) {
-					if (type === 'achievement-pre-record') {
-						if (toast.theClass === 'active') {
-							console.log('sending message', this.mainWindowId);
-							overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
-								console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
-							});
-							this.notificationService.remove(toast.id);
-						}
-						// Otherwise do nothing
+					const isAchievement = (type === 'achievement-pre-record' && toast.theClass === 'active')
+							|| type === 'achievement-confirm';
+					if (isAchievement) {
+						console.log('sending message', this.mainWindowId);
+						overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
+							console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
+						});
+						this.notificationService.remove(toast.id);
 					}
 					// Collection
 					else {

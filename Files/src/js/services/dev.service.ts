@@ -23,7 +23,7 @@ export class DevService {
 		)
 		window['showAchievementNotification'] = () => {			
 			this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
-			setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement.id), 500);
+			setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		}
 		window['addAchievementHistory'] = () => {
 			this.achievementMonitor.storeNewAchievementHistory(achievement, 1);
