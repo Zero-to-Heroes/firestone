@@ -5,6 +5,7 @@ import { Achievement } from '../../models/achievement';
 import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
 import { FeatureFlags } from '../feature-flags.service';
+import { AchievementConfService } from './achievement-conf.service';
 
 declare var overwolf;
 
@@ -31,7 +32,7 @@ export class AchievementsVideoCaptureService {
     private captureOngoing: boolean = false;
     private currentReplayId: string;
 
-	constructor(private events: Events, private flags: FeatureFlags) {
+	constructor(private events: Events, private achievementConf: AchievementConfService, private flags: FeatureFlags) {
         if (!this.flags.achievements()) {
             return;
         }
@@ -54,6 +55,10 @@ export class AchievementsVideoCaptureService {
     }
 
     private capture(achievement: Achievement, challenge: Challenge) {
+        if (!this.achievementConf.shouldRecord(achievement)) {
+            console.log('[recording] Not recording achievement', achievement);
+            return;
+        }
         if (this.captureOngoing) {
             return;
         }

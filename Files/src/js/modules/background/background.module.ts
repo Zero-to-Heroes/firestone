@@ -37,6 +37,7 @@ import { AchievementNameService } from '../../services/achievement/achievement-n
 import { DevService } from '../../services/dev.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
+import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { FeatureFlags } from '../../services/feature-flags.service';
 		PackStatsService,
 		SimpleIOService,
 		MemoryInspectionService,
+		AchievementConfService,
 		AchievementHistoryStorageService,
 		AchievementsMonitor,
 		AchievementNameService,
