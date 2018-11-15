@@ -60,6 +60,7 @@ import { AchievementNameService } from '../../services/achievement/achievement-n
 import { AchievementProgressBarComponent } from 'src/js/components/achievements/achievement-progress-bar.component';
 import { AchievementImageComponent } from 'src/js/components/achievements/achievement-image.component';
 import { AchievementRecordingsComponent } from 'src/js/components/achievements/achievement-recordings.component';
+import { FeatureFlags } from '../../services/feature-flags.service';
 
 @NgModule({
 	imports: [
@@ -116,6 +117,7 @@ import { AchievementRecordingsComponent } from 'src/js/components/achievements/a
 		CardHistoryStorageService,
 		CollectionManager,
 		DebugService,
+		FeatureFlags,
 		Events,
 		GenericIndexedDbService,
 		IndexedDbService,

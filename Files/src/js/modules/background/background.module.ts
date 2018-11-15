@@ -36,6 +36,7 @@ import { AchievementHistoryStorageService } from '../../services/achievement/ach
 import { AchievementNameService } from '../../services/achievement/achievement-name.service';
 import { DevService } from '../../services/dev.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
+import { FeatureFlags } from '../../services/feature-flags.service';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { AchievementsVideoCaptureService } from '../../services/achievement/achi
 		Events,
 		DebugService,
 		DevService,
+		FeatureFlags,
 		HsPublicEventsListener,
 		GameEvents,
 		IndexedDbService,

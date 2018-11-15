@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
+import { FeatureFlags } from '../../services/feature-flags.service';
 
 declare var overwolf: any;
 
@@ -25,7 +26,11 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div (click)="showAchievements()" class="app achievements">
+			<div 
+				(click)="showAchievements()" 
+				class="app achievements" 
+				[ngClass]="{'disabled': !achievementsOn}">
+				<div class="coming-soon" *ngIf="!achievementsOn">Coming soon</div>
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
@@ -61,10 +66,12 @@ export class AppChoiceComponent implements AfterViewInit {
 
 	dataLoaded = false;
 	noCollection = true;
+	achievementsOn: boolean;
 
 	private collectionWindowId;
 
-	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
+	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private flags: FeatureFlags) {
+		this.achievementsOn = this.flags.achievements();
 	}
 
 	ngAfterViewInit() {
@@ -94,7 +101,9 @@ export class AppChoiceComponent implements AfterViewInit {
 	}
 
 	showAchievements() {
-		this.showMainWindow('achievements');
+		if (this.achievementsOn) {
+			this.showMainWindow('achievements');
+		}
 	}
 
 	private showMainWindow(module: string) {

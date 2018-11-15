@@ -18,6 +18,7 @@ import { RealTimeNotificationService }  from '../../services/real-time-notificat
 import { CollectionManager }  from '../../services/collection/collection-manager.service';
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
+import { FeatureFlags } from '../../services/feature-flags.service';
 
 @NgModule({
 	imports: [
@@ -39,6 +40,7 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 		AllCardsService,
 		CollectionManager,
 		DebugService,
+		FeatureFlags,
 		Events,
 		IndexedDbService,
 		MemoryInspectionService,

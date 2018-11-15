@@ -16,6 +16,7 @@ import { AchievementNameService } from './achievement-name.service';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
+import { FeatureFlags } from '../feature-flags.service';
 
 declare var ga;
 declare var overwolf;
@@ -33,6 +34,7 @@ export class AchievementsMonitor {
 		private achievementStorage: AchievementsStorageService,
 		private storage: AchievementHistoryStorageService,
 		private repository: AchievementsRepository,
+		private flags: FeatureFlags,
 		private events: Events) {
 
 		this.gameEvents.allEvents.subscribe(
@@ -144,7 +146,7 @@ export class AchievementsMonitor {
 		console.log('[recording] saved new achievement', result);
 		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});
 
-		if (newAchievement.numberOfCompletions == 1) {
+		if (newAchievement.numberOfCompletions == 1 && this.flags.achievements()) {
 			this.sendPostRecordNotification(newAchievement.id)
 		}
 	}
@@ -171,7 +173,7 @@ export class AchievementsMonitor {
 		// We store an history item every time, but we display only the first time an achievement is unlocked
 		this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions, challenge);
-		if (newAchievement.numberOfCompletions == 1) {
+		if (newAchievement.numberOfCompletions == 1 && this.flags.achievements()) {
 			this.sendPreRecordNotification(achievement, challenge.notificationTimeout());
 		}
 	}

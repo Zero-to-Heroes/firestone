@@ -4,6 +4,7 @@ import { Events } from '../events.service';
 import { Achievement } from '../../models/achievement';
 import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
+import { FeatureFlags } from '../feature-flags.service';
 
 declare var overwolf;
 
@@ -30,7 +31,10 @@ export class AchievementsVideoCaptureService {
     private captureOngoing: boolean = false;
     private currentReplayId: string;
 
-	constructor(private events: Events) {
+	constructor(private events: Events, private flags: FeatureFlags) {
+        if (!this.flags.achievements()) {
+            return;
+        }
 		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
         this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => this.onAchievementRecordEnd(data));
