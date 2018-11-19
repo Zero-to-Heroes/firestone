@@ -140,6 +140,11 @@ i.pale-theme {
 
 
 // sizes
+.i-13X7 {
+  width: 13px;
+  height: 7px;
+}
+
 .i-10X13 {
   width: 10px;
   height: 13px;
@@ -160,6 +165,11 @@ i.pale-theme {
 
 .i-30 {
   --size: 30px;
+}
+
+.i-30x20 {
+  width: 30px;
+  height: 20px;
 }
 
 .i-35 {

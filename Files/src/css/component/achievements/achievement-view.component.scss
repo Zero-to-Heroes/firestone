@@ -31,6 +31,25 @@
 		margin-top: 7px;
 	}
 
+	.completion-date {
+		position: absolute;
+		bottom: 8px;
+		right: 15px;
+		color: #7D5A87;
+		font-size: 12px;
+	}
+
+	.collapse {
+		position: absolute;
+		top: 12px;
+		right: 9px;
+		--icon-color: #CB9FD7;
+
+		&.open {
+			transform: scaleY(-1);
+		}
+	}
+
 	.completion-progress {
 		display: flex;
 		margin-top: 10px;
@@ -60,6 +79,25 @@
 		}
 	}
 
+	.recordings {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #D9C3AB;
+		padding-right: 15px;
+		border-right: 1px solid;
+		margin-right: 15px;
+
+		.number {
+			margin-right: 10px;
+			font-size: 12px;
+		}
+
+		i {
+			--icon-color: #D9C3AB;
+		}
+	}
+
 	&.missing {
 		.achievement-name {
 			color: #CB9FD7;
@@ -69,6 +107,9 @@
 		}
 		.completion-progress .completion-step i {
 			--icon-color: #7D5A87;
+		}
+		.recordings {
+			color: #7D5A87;
 		}
 	}
 

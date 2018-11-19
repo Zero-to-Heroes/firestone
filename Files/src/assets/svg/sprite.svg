@@ -1,5 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
 
+<symbol id="collapse_caret" viewBox="0 0 13 7">
+	<path d="M6.00005 7.00001L0.200049 1.80001C4.86374e-05 1.60001 4.86374e-05 1.30001 0.200049 1.10001C0.400049 0.900013 0.700048 0.900013 0.900048 1.10001L6.10005 5.70001L11.3 1.10001C11.5 0.900013 11.8 0.900013 12 1.10001C12.2 1.30001 12.2 1.60001 12 1.80001L6.00005 7.00001Z" fill="var(--icon-color, currentcolor)"/>
+</symbol>
+
 <!-- icons 10x13 -->
 <symbol id="crystal" viewBox="0 0 10 13">
 	<polygon points="8,6.5 5,13 2,6.5 5,0" fill="var(--icon-color, currentcolor)"/>
@@ -29,6 +33,11 @@
   <path d="M7.5,1A6.5,6.5,0,1,0,14,7.5,6.5,6.5,0,0,0,7.5,1Zm0,12A5.5,5.5,0,1,1,13,7.5,5.51,5.51,0,0,1,7.5,13ZM8,4H7V8h4V7H8Z" fill="var(--icon-color, currentcolor)"/>
 </symbol>
 
+<!-- icons 30x20 -->
+<symbol id="video" viewBox="0 0 30 20">
+	<path d="M12 14L19 10L12 6V14Z" fill="var(--icon-color, currentcolor)"/>
+	<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H30V20H0V0ZM1 1H29V19H1V1Z" fill="var(--icon-color, currentcolor)"/>
+</symbol>
 
 <!-- icons 22x30 -->
 <symbol id="two_gold_leaves" viewBox="0 0 22 30">
