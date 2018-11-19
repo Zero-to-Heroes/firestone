@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Key } from 'ts-keycode-enum';
 
 import { Card } from '../../models/card';
 import { CardHistory } from '../../models/card-history';
@@ -78,6 +79,9 @@ export class PackMonitor {
 		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
 			this.handleMouseUp(data);
 		});
+		overwolf.games.inputTracking.onKeyUp.addListener((data) => {
+			this.handleKeyUp(data);
+		});
 	}
 
 	private handleNewCardEvent(event) {
@@ -144,6 +148,25 @@ export class PackMonitor {
 			this.cardClicked(data, (index) => {
 				this.detectRevealedCard(index);
 			});
+		}
+	}
+
+	private handleKeyUp(data) {
+		console.log('key pressed', data, this.unrevealedCards);
+		if (this.unrevealedCards.length > 0 && data.onGame && parseInt(data.key) === Key.Space) {
+			if (this.unrevealedCards.length != 5) {
+				console.log('all cards not revealed yet', this.unrevealedCards);
+				setTimeout(() => {
+					this.handleKeyUp(data);
+				}, 50);
+				return;
+			}
+			
+			for (let i = 0; i < this.unrevealedCards.length; i++) {
+				if (this.unrevealedCards[i]) {
+					this.detectRevealedCard(i);
+				}
+			}
 		}
 	}
 

@@ -47,7 +47,7 @@ export class LogParserService {
 	}
 
 	public receiveLogLine(data: string) {
-		// console.log('received log line', data);
+		console.log('received log line', data);
 		let match = this.cardRegex.exec(data);
 		if (match) {
 			this.logLines.push([Date.now(), data]);
