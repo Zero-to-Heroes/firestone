@@ -20,9 +20,8 @@ export class PackMonitor {
 
 	private unrevealedCards: string[] = [];
 	private cardEvents = {};
-	private detecting = false;
 	private busy = false;
-	private hadNewCard = false;
+	private spacePressed: number;
 
 	private dpi = 1;
 
@@ -49,6 +48,7 @@ export class PackMonitor {
 			.subscribe(event => {
 				this.openingPack = true;
 				this.busy = true;
+				this.spacePressed = 0;
 				console.log('resetting cards for new pack', event);
 				let undetectedCards = [];
 				let anyUndetected = false;
@@ -92,7 +92,6 @@ export class PackMonitor {
 		let card: Card = event.data[0];
 		let type: string = event.data[1];
 		this.cardEvents[card.id] = () => {
-			this.hadNewCard = true;
 			this.createNewCardToast(card, type);
 		};
 		if (this.openingPack) {
@@ -159,6 +158,13 @@ export class PackMonitor {
 				setTimeout(() => {
 					this.handleKeyUp(data);
 				}, 50);
+				return;
+			}
+			this.spacePressed++;
+			const cardsToBeRevealed: number = this.unrevealedCards
+					.filter((card) => card)
+					.length;
+			if (cardsToBeRevealed != this.spacePressed) {
 				return;
 			}
 			
@@ -263,8 +269,6 @@ export class PackMonitor {
 		this.unrevealedCards = [];
 		this.cardEvents = {};
 		console.log('reset done');
-
-		this.hadNewCard = false;
 	}
 
 	private createNewCardToast(card: Card, type: string) {
