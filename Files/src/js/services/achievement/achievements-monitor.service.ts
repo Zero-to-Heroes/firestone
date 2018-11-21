@@ -136,38 +136,39 @@ export class AchievementsMonitor {
 	}
 
 	private async handleAchievementRecordStarted(data) {
-		const achievementId: string = data.data[0];
-		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
-		const achievementReplayInfo = (achievement.replayInfo || []);
-		console.log('processing tmp achievement', data, achievement, achievementReplayInfo);
-		// This happens if app is killed before we can save
-		if (achievementReplayInfo.length === 0 || achievementReplayInfo[0].url !== 'tmp') {
-			const replayInfo: ReplayInfo = {
-				url: 'tmp',
-				creationTimestamp: undefined,
-				path: undefined,
-				thumbnailPath: undefined,
-				thumbnailUrl: undefined
-			};
-			const newAchievement = new CompletedAchievement(
-					achievement.id,
-					achievement.numberOfCompletions,
-					[replayInfo, ...achievementReplayInfo]);
-			const result = await this.achievementStorage.saveAchievement(newAchievement);
-			console.log('[recording] saved new tmp achievement recording', result);
-		}
+		// const achievementId: string = data.data[0];
+		// const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
+		// const achievementReplayInfo = (achievement.replayInfo || []);
+		// console.log('processing tmp achievement', data, achievement, achievementReplayInfo);
+		// // This happens if app is killed before we can save
+		// if (achievementReplayInfo.length === 0 || achievementReplayInfo[0].url !== 'tmp') {
+		// 	const replayInfo: ReplayInfo = {
+		// 		url: 'tmp',
+		// 		creationTimestamp: undefined,
+		// 		path: undefined,
+		// 		thumbnailPath: undefined,
+		// 		thumbnailUrl: undefined,
+		// 		achievementStepId: achievementId,
+		// 	};
+		// 	const newAchievement = new CompletedAchievement(
+		// 			achievement.id,
+		// 			achievement.numberOfCompletions,
+		// 			[replayInfo, ...achievementReplayInfo]);
+		// 	const result = await this.achievementStorage.saveAchievement(newAchievement);
+		// 	console.log('[recording] saved new tmp achievement recording', result);
+		// }
 	}
 
 	private async handleAchievementRecordCompleted(data) {
 		const achievementId: string = data.data[0];
 		const replayInfo: ReplayInfo = data.data[1];
 		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
-		const realReplayInfo = achievement.replayInfo.slice(1, achievement.replayInfo.length);
-		console.log('after tmp removal', realReplayInfo, achievement.replayInfo);
+		// const realReplayInfo = achievement.replayInfo.slice(1, achievement.replayInfo.length);
+		// console.log('after tmp removal', realReplayInfo, achievement.replayInfo);
 		const newAchievement = new CompletedAchievement(
 				achievement.id,
 				achievement.numberOfCompletions,
-				[replayInfo, ...realReplayInfo]);
+				[replayInfo, ...achievement.replayInfo]);
 		console.log('[recording] saving new achievement', newAchievement);
 		const result = await this.achievementStorage.saveAchievement(newAchievement)
 		console.log('[recording] saved new achievement', result);

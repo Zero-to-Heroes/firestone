@@ -1,0 +1,69 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.completion-step {
+    margin-right: 10px;
+    // For tooltip positioning
+    position: relative;
+
+    i {
+        opacity: 0.5;
+        --icon-color: #D9C3AB;
+    }
+
+    &.completed {
+        i {
+            opacity: 1;
+            --icon-color: #FFB948;
+        }
+    }
+
+    &:hover {
+        .zth-tooltip {
+            opacity: 1;
+        }
+    }
+
+    .zth-tooltip {
+        background-color: #7D5A87;
+        text-align: center;
+        cursor: default;
+        opacity: 0;
+        position: absolute;
+        width: auto;
+        height: 30px;
+        padding-left: 15px;
+        padding-right: 15px;
+        pointer-events: none;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        bottom: -45px;
+        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
+        // Center it
+        left: 50%;
+        transform: translateX(-50%);
+    
+        .tooltip-arrow {
+            position: absolute;
+            width: 16px;
+            height: 9px;
+            fill: #7D5A87;
+            overflow: visible;
+        }
+    
+        p {
+            @extend %achievements-tooltip;
+            white-space: nowrap;
+            cursor: default;
+            margin: 0;
+        }
+    
+        &.bottom {
+            .tooltip-arrow {
+                top: 0px;
+            }
+        }
+    }
+}

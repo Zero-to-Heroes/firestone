@@ -1,11 +1,10 @@
 import { AchievementSet } from "../../../models/achievement-set";
 import { SetProvider } from "./set-provider";
-import { VisualAchievement } from "../../../models/visual-achievement";
+import { VisualAchievement, CompletionStep } from "../../../models/visual-achievement";
 import { Achievement } from "../../../models/achievement";
 import { CompletedAchievement } from "../../../models/completed-achievement";
 import { AllCardsService } from "../../all-cards.service";
 import { FilterOption } from "../../../models/filter-option";
-import { literalMap } from "@angular/compiler/src/output/output_ast";
 
 export abstract class AbstractBossSetProvider extends SetProvider {
 
@@ -41,7 +40,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                 value: 'ONLY_MISSING', 
                 label: 'Locked achievements', 
                 filterFunction: (a: VisualAchievement) => {
-                    return a.numberOfCompletions.reduce((a, b) => a + b, 0) === 0;
+                    return a.completionSteps.map((step) => step.numberOfCompletions).reduce((a, b) => a + b, 0) === 0;
                 }, 
                 emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration', 
                 emptyStateTitle: 'Tons of achievements await you!', 
@@ -51,7 +50,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                 value: 'ENCOUNTERED_ONLY', 
                 label: 'Encountered only', 
                 filterFunction: (a: VisualAchievement) => {
-                    return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] === 0;
+                    return a.completionSteps[0].numberOfCompletions > 0 && a.completionSteps[1].numberOfCompletions === 0;
                 }, 
                 emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
                 emptyStateTitle: 'Tons of achievements await you!', 
@@ -61,7 +60,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                 value: 'ONLY_COMPLETED', 
                 label: 'Completed achievements', 
                 filterFunction: (a: VisualAchievement) => {
-                    return a.numberOfCompletions[0] > 0 && a.numberOfCompletions[1] > 0;
+                    return a.completionSteps[0].numberOfCompletions > 0 && a.completionSteps[1].numberOfCompletions > 0;
                 }, 
                 emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
                 emptyStateTitle: 'Tons of achievements await you!', 
@@ -94,15 +93,32 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                 const text = cardText.replace('<i>', '').replace('</i>', '');
                 const replayInfo = [ ...(encounterAchievement.replayInfo || []), ...(victoryAchievement.replayInfo || [])]
                         .sort((a, b) => a.creationTimestamp - b.creationTimestamp);
-                return { 
+                const completionSteps = [
+                    { 
+                        id: encountedId, 
+                        numberOfCompletions: encounterAchievement.numberOfCompletions,
+                        iconSvgSymbol: 'boss_encounter',
+                        text(): string {
+                            return `You met ${achievement.name} ${encounterAchievement.numberOfCompletions} times`;
+                        },
+                    } as CompletionStep,
+                    { 
+                        id: victoryId, 
+                        numberOfCompletions: victoryAchievement.numberOfCompletions,
+                        iconSvgSymbol: 'boss_defeated',
+                        text(): string {
+                            return `You defeated ${achievement.name} ${victoryAchievement.numberOfCompletions} times`;
+                        },
+                    } as CompletionStep,
+                ]
+                return {
                     achievement: new VisualAchievement(
                         achievement.id,
                         achievement.name, 
                         this.id, 
                         achievement.cardId,
                         text,
-                        [ encountedId, victoryId ],
-                        [ encounterAchievement.numberOfCompletions, victoryAchievement.numberOfCompletions ],
+                        completionSteps,
                         replayInfo),
                     index: index }
             })
@@ -116,10 +132,10 @@ export abstract class AbstractBossSetProvider extends SetProvider {
     }
 
     private sortPriority(achievement: VisualAchievement): number {
-        if (achievement.numberOfCompletions[1] > 0) {
+        if (achievement.completionSteps[1].numberOfCompletions > 0) {
             return 2;
         }
-        if (achievement.numberOfCompletions[0] > 0) {
+        if (achievement.completionSteps[0].numberOfCompletions > 0) {
             return 1;
         }
         return 0;

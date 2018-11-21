@@ -1,5 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AchievementSet } from '../../models/achievement-set';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -62,10 +61,10 @@ export class AchievementSetComponent {
 		);
 		this.displayName = achievementSet.displayName;
 		const flatCompletions = achievementSet.achievements
-				.map((achievement) => achievement.numberOfCompletions)
+				.map((achievement) => achievement.completionSteps)
 				.reduce((a, b) => a.concat(b));
 		const total = flatCompletions.length;
-		const achieved = flatCompletions.filter((a) => a > 0).length;
+		const achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
 		this.complete = total === achieved;
 	}
 }

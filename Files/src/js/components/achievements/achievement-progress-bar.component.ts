@@ -23,10 +23,10 @@ export class AchievementProgressBarComponent {
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		const flatCompletions = achievementSet.achievements
-				.map((achievement) => achievement.numberOfCompletions)
+				.map((achievement) => achievement.completionSteps)
 				.reduce((a, b) => a.concat(b));
 		this.total = flatCompletions.length;
-		this.achieved = flatCompletions.filter((a) => a > 0).length;
+		this.achieved = flatCompletions.map((step) => step.numberOfCompletions).filter((a) => a > 0).length;
 		console.log('set achievement in progress bar', achievementSet);
 	}
 }
