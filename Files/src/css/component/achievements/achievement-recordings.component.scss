@@ -1,6 +1,250 @@
 .achievement-recordings {
+    vg-player {
+        width: 80%;
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    ::ng-deep .title {
+        pointer-events: none;
+        background: linear-gradient(0, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.6) 45.86%, #000000 100%);
+        display: flex;
+        align-items: center;
+        position: absolute;
+        width: 100%;
+        height: 40px;
+
+        i {
+            --icon-color: #FFB948;
+            margin-left: 13px;
+            margin-right: 13px;
+        }
+
+        .text, .date {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: bold;
+            font-size: 13px;
+            color: #D9C3AB;
+        }
+
+        .text {
+            padding-right: 5px;
+            margin-right: 5px;
+            border-right: 1px solid;
+        }
+    }
+
+    vg-controls {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.66) 44.8%, #000000 100%);
+        padding: 10px;
+
+        vg-play-pause {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+
+            ::ng-deep .vg-icon-play_arrow {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                
+                &::before {
+                    content: "";
+                    background: url(/Files/assets/svg/video_play.svg) center center;
+                    background-size: 11px 14px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-repeat: no-repeat;
+                }
+            }
+
+            ::ng-deep .vg-icon-pause {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                
+                &::before {
+                    content: "";
+                    background: url(/Files/assets/svg/video_pause.svg) center center;
+                    background-size: 20px 20px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+
+        vg-time-display {
+            font-family: 'Open Sans', sans-serif;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #D9C3AB;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: 0px 0px 4px #000000;
+            width: auto;
+
+            &:nth-of-type(1):after {
+                content: "/";
+            }
+        }
+
+        vg-scrub-bar {
+            height: 100%;
+            width: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 17px;
+            margin-left: 20px;
+
+            &:focus {
+                outline: none;
+            }
+
+            ::ng-deep .scrubBar {
+                height: 2px;
+                background: rgba(217, 195, 171, 0.5);
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            vg-scrub-bar-current-time {
+                top: 0;
+                height: 2px;
+
+                ::ng-deep .background {
+                    background-color: #FFB948;
+                    border: 0;
+                }
+
+                ::ng-deep .slider {
+                    height: 8px;
+                    width: 8px;
+                    box-shadow: inherit;
+                    background: #FFB948;
+                    margin-top: -3px;
+                    margin-left: -6px;
+                }
+            }
+        }
+
+        vg-mute {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+
+            ::ng-deep .icon {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                
+                &::before {
+                    content: "";
+                    background: url(/Files/assets/svg/video_sound_on.svg) center center;
+                    background-size: 20px 20px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-repeat: no-repeat;
+                }
+            }
+
+            ::ng-deep .vg-icon-volume_off {
+                &::before {
+                    background: url(/Files/assets/svg/video_sound_off.svg) center center;
+                }
+            }
+        }
+
+        vg-volume {
+            height: 100%;
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 22px;
+
+            &:focus {
+                outline: none;
+            }
+
+            ::ng-deep .volumeBar {
+                height: 2px;
+                background: rgba(217, 195, 171, 0.3);
+
+                &:focus {
+                    outline: none;
+                }
+
+                .volumeBackground {
+                    height: 100%;
+                }
+
+                .volumeValue {
+                    height: 100%;
+                    background: #D9C3AB;
+                }
+
+                .volumeKnob {
+                    background: #D9C3AB;
+                    height: 8px;
+                    width: 8px;
+                }
+            }
+        }
+
+        .video-folder {
+            --icon-color: #A89782;
+            cursor: pointer;
+            margin-right: 25px;
+            width: 26px;
+            height: 18px;
+        }
+
+        vg-fullscreen {
+            width: 20px;
+            height: 20px;
+
+            ::ng-deep .icon {
+                width: 100%;
+                height: 100%;
+                position: relative;
+                
+                &::before {
+                    content: "";
+                    background: url(/Files/assets/svg/video_full_screen.svg) center center;
+                    background-size: 20px 20px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+    }
+
     video {
-        width: 70%;
+        width: 100%;
+        height: 100%;
     }
 
     .thumbnails {

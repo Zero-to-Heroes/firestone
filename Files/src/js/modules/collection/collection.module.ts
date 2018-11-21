@@ -1,10 +1,14 @@
-import { NgModule, ErrorHandler }      from '@angular/core';
+import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { SelectModule } from 'ng-select';
+import { VgCoreModule } from 'videogular2/core';
+import { VgControlsModule } from 'videogular2/controls';
+import { VgOverlayPlayModule } from 'videogular2/overlay-play';
+import { VgBufferingModule } from 'videogular2/buffering';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -61,6 +65,7 @@ import { AchievementProgressBarComponent } from 'src/js/components/achievements/
 import { AchievementImageComponent } from 'src/js/components/achievements/achievement-image.component';
 import { AchievementRecordingsComponent } from 'src/js/components/achievements/achievement-recordings.component';
 import { FeatureFlags } from '../../services/feature-flags.service';
+import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
 
 @NgModule({
 	imports: [
@@ -71,6 +76,10 @@ import { FeatureFlags } from '../../services/feature-flags.service';
 		ReactiveFormsModule,
         SelectModule,
 		SharedModule,
+        VgCoreModule,
+        VgControlsModule,
+        VgOverlayPlayModule,
+        VgBufferingModule,
 	],
 	declarations: [
 		CardComponent,
@@ -92,6 +101,7 @@ import { FeatureFlags } from '../../services/feature-flags.service';
 		SetsContainer,
 
 		AchievementsComponent,
+		AchievementCompletionStepComponent,
 		AchievementsCategoriesComponent,
 		AchievementHistoryComponent,
 		AchievementHistoryItemComponent,
