@@ -29,7 +29,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 						</achievement-completion-step>
 					</div>
 				</div>
-				<i class="i-13X7 collapse" [ngClass]="{'open': showRecordings}">
+				<i class="i-13X7 collapse" [ngClass]="{'open': showRecordings}" *ngIf="numberOfRecordings > 0">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
 					</svg>

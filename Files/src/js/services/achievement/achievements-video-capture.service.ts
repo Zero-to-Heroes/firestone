@@ -95,7 +95,7 @@ export class AchievementsVideoCaptureService {
                 url: result.url,
                 thumbnailUrl: result.thumbnail_url,
                 thumbnailPath: result.thumbnail_path,
-                achievementStepId: achievementId,
+                completionStepId: achievementId,
             }
             this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementId, replayInfo);
             console.log('[recording] capture finished', result, achievementId);

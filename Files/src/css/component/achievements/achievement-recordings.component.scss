@@ -18,6 +18,8 @@
             --icon-color: #FFB948;
             margin-left: 13px;
             margin-right: 13px;
+            width: 30px;
+            height: 30px;
         }
 
         .text, .date {
@@ -28,8 +30,8 @@
         }
 
         .text {
-            padding-right: 5px;
-            margin-right: 5px;
+            padding-right: 10px;
+            margin-right: 10px;
             border-right: 1px solid;
         }
     }

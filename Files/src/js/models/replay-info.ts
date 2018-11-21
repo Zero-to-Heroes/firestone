@@ -4,5 +4,5 @@ export interface ReplayInfo {
     readonly url: string;
     readonly thumbnailPath: string;
     readonly thumbnailUrl: string;
-    readonly achievementStepId: string;
+    readonly completionStepId: string;
 }

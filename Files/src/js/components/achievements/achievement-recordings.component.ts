@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ElementRef, SimpleChanges, OnChanges, AfterViewInit, HostListener } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 
 declare var overwolf;
 
@@ -10,20 +10,7 @@ declare var overwolf;
 	template: `
         <div class="achievement-recordings">
             <vg-player>
-                <div class="title">
-                    <i class="i-30" *ngIf="currentClass === 'met'">
-                        <svg class="svg-icon-fill">
-                            <use xlink:href="/Files/assets/svg/sprite.svg#boss_encounter"/>
-                        </svg>
-                    </i>
-                    <i class="i-30" *ngIf="currentClass === 'defeated'">
-                        <svg class="svg-icon-fill">
-                            <use xlink:href="/Files/assets/svg/sprite.svg#boss_defeated"/>
-                        </svg>
-                    </i>
-                    <div class="text">Bla bla</div>
-                    <div class="date">the date</div>
-                </div>
+                <div class="title" [innerHTML]="title"></div>
                 <vg-overlay-play></vg-overlay-play>
 
                 <vg-controls>
@@ -69,7 +56,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     currentThumbnail: ThumbnailInfo;
     currentReplayLocation: string;
     currentReplay: SafeUrl;
-    currentClass: string;
+    title: SafeHtml;
 
     private player;
 
@@ -81,7 +68,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                     videoLocation: info.url,
                     videoUrl: this.sanitizer.bypassSecurityTrustUrl(info.url),
                     thumbnail: this.sanitizer.bypassSecurityTrustUrl(info.thumbnailUrl),
-                    stepId: info.achievementStepId,
+                    stepId: info.completionStepId,
                 } as ThumbnailInfo))
                 .sort((a, b) => b.timestamp - a.timestamp);
         this.updateThumbnail(this.thumbnails[0]);
@@ -121,9 +108,34 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.currentThumbnail = thumbnail;
         this.currentReplayLocation = this.currentThumbnail.videoLocation;
         this.currentReplay = this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation);
-        // this.currentClass = (thumbnail.stepId === this._achievement.achievementStepIds[0])
-        //         ? 'met'
-        //         : 'defeated';
+        this.updateTitle();
+    }
+
+    private updateTitle() {
+        const date = new Date(this.currentThumbnail.timestamp).toLocaleDateString(
+                "en-GB",
+                { day: "2-digit", month: "2-digit", year: "2-digit"} );
+        this.title = this.sanitizer.bypassSecurityTrustHtml(`
+            <i class="icon">
+                <svg class="svg-icon-fill">
+                    <use xlink:href="/Files/assets/svg/sprite.svg#${this.buildIcon()}"/>
+                </svg>
+            </i>
+            <div class="text">${this.buildText()}</div>
+            <div class="date">${date}</div>
+        `);
+    }
+
+    private buildIcon(): string {
+        return this._achievement.completionSteps
+                .find((step) => step.id === this.currentThumbnail.stepId)
+                .iconSvgSymbol;
+    }
+
+    private buildText(): string {
+        return this._achievement.completionSteps
+                .find((step) => step.id === this.currentThumbnail.stepId)
+                .text(false);
     }
 }
 

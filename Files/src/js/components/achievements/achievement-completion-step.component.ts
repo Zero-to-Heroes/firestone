@@ -31,7 +31,7 @@ export class AchievementCompletionStepComponent {
                 </svg>
             </i>
             <div class="zth-tooltip bottom">
-                <p>${step.text()}</p>
+                <p>${step.text(true)}</p>
                 <svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
                     <polygon points="0,0 8,-9 16,0"/>
                 </svg>

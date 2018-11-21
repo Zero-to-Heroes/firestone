@@ -151,7 +151,7 @@ export class PackMonitor {
 	}
 
 	private handleKeyUp(data) {
-		console.log('key pressed', data, this.unrevealedCards);
+		// console.log('key pressed', data, this.unrevealedCards);
 		if (this.unrevealedCards.length > 0 && data.onGame && parseInt(data.key) === Key.Space) {
 			if (this.unrevealedCards.length != 5) {
 				console.log('all cards not revealed yet', this.unrevealedCards);

@@ -47,5 +47,5 @@ export interface CompletionStep {
 	readonly numberOfCompletions: number;
 	readonly iconSvgSymbol: string;
 
-	text(): string;
+	text(showTimes?: boolean): string;
 }

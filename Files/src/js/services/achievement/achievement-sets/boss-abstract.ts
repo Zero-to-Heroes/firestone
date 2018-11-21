@@ -98,16 +98,18 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                         id: encountedId, 
                         numberOfCompletions: encounterAchievement.numberOfCompletions,
                         iconSvgSymbol: 'boss_encounter',
-                        text(): string {
-                            return `You met ${achievement.name} ${encounterAchievement.numberOfCompletions} times`;
+                        text(showTimes: boolean = false): string {
+                            const times = showTimes ? `${encounterAchievement.numberOfCompletions} times` : ``;
+                            return `You met ${achievement.name} ${times}`;
                         },
                     } as CompletionStep,
                     { 
                         id: victoryId, 
                         numberOfCompletions: victoryAchievement.numberOfCompletions,
                         iconSvgSymbol: 'boss_defeated',
-                        text(): string {
-                            return `You defeated ${achievement.name} ${victoryAchievement.numberOfCompletions} times`;
+                        text(showTimes: boolean = false): string {
+                            const times = showTimes ? `${encounterAchievement.numberOfCompletions} times` : ``;
+                            return `You defeated ${achievement.name} ${times}`;
                         },
                     } as CompletionStep,
                 ]
