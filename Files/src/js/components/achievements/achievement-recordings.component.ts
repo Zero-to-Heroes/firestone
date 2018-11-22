@@ -1,6 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ElementRef, SimpleChanges, OnChanges, AfterViewInit, HostListener } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
+import { ReplayInfo } from '../../models/replay-info';
 
 declare var overwolf;
 
@@ -41,7 +42,14 @@ declare var overwolf;
 
             <ul class="thumbnails">
                 <li *ngFor="let thumbnail of thumbnails" (click)="showReplay(thumbnail)">
-                    <img [src]="thumbnail.thumbnail">
+                    <div class="thumbnail">
+                        <img [src]="thumbnail.thumbnail">
+                        <div class="overlay"></div>
+                        <div class="icon" [innerHTML]="thumbnail.iconSvg"></div>
+                    </div>
+                    <div class="completion-date">
+                        {{ thumbnail.completionDate }}
+                    </div>
                 </li>
             </ul>
 		</div>
@@ -65,10 +73,14 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.thumbnails = achievement.replayInfo
                 .map((info) => ({
                     timestamp: info.creationTimestamp,
+                    completionDate: new Date(info.creationTimestamp).toLocaleDateString(
+                        "en-GB",
+                        { day: "2-digit", month: "2-digit", year: "2-digit"} ),
                     videoLocation: info.url,
                     videoUrl: this.sanitizer.bypassSecurityTrustUrl(info.url),
                     thumbnail: this.sanitizer.bypassSecurityTrustUrl(info.thumbnailUrl),
                     stepId: info.completionStepId,
+                    iconSvg: this.buildIconSvg(info.completionStepId),
                 } as ThumbnailInfo))
                 .sort((a, b) => b.timestamp - a.timestamp);
         this.updateThumbnail(this.thumbnails[0]);
@@ -118,7 +130,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.title = this.sanitizer.bypassSecurityTrustHtml(`
             <i class="icon">
                 <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#${this.buildIcon()}"/>
+                    <use xlink:href="/Files/assets/svg/sprite.svg#${this.buildIcon(this.currentThumbnail.stepId)}"/>
                 </svg>
             </i>
             <div class="text">${this.buildText()}</div>
@@ -126,9 +138,18 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         `);
     }
 
-    private buildIcon(): string {
+    private buildIconSvg(stepId: string) {
+        return this.sanitizer.bypassSecurityTrustHtml(`
+            <i class="icon-svg">
+                <svg class="svg-icon-fill">
+                    <use xlink:href="/Files/assets/svg/sprite.svg#${this.buildIcon(stepId)}"/>
+                </svg>
+            </i>`);
+    }
+
+    private buildIcon(stepId: string): string {
         return this._achievement.completionSteps
-                .find((step) => step.id === this.currentThumbnail.stepId)
+                .find((step) => step.id === stepId)
                 .iconSvgSymbol;
     }
 
@@ -141,8 +162,10 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
 interface ThumbnailInfo {
     readonly timestamp: number;
+    readonly completionDate: string;
     readonly videoLocation: string;
     readonly thumbnail: SafeUrl;
     readonly videoUrl: SafeUrl;
+    readonly iconSvg: SafeHtml;
     readonly stepId: string;
 }

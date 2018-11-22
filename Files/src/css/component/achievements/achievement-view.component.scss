@@ -16,6 +16,7 @@
 	}
 
 	.achievement-body {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
@@ -33,8 +34,8 @@
 
 	.completion-date {
 		position: absolute;
-		bottom: 8px;
-		right: 15px;
+		bottom: 0;
+		right: 0;
 		color: #7D5A87;
 		font-size: 12px;
 	}
