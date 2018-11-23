@@ -267,6 +267,17 @@ export class CardsComponent implements AfterViewInit {
 		let scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
+			return;
+		}
+
+		const optionsDropDown = this.elRef.nativeElement.querySelector('.options');
+		// If not hidden
+		if (optionsDropDown) {
+			let rect2 = optionsDropDown.getBoundingClientRect();
+			if (event.offsetX >= rect2.width - scrollbarWidth) {
+				event.stopPropagation();
+				return;
+			}
 		}
 	}
 
