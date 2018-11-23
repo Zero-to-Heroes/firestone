@@ -1,18 +1,12 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-
-import { IOption } from 'ng-select';
-
-import { AllCardsService } from '../../services/all-cards.service';
-
-import { Card } from '../../models/card';
-import { Set, SetCard } from '../../models/set';
-
-declare var overwolf: any;
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Set } from '../../models/set';
 
 @Component({
 	selector: 'collection-empty-state',
-	styleUrls: [`../../../css/component/collection/collection-empty-state.component.scss`],
+	styleUrls: [
+		`../../../css/global/components-global.scss`,
+		`../../../css/component/collection/collection-empty-state.component.scss`,
+	],
 	template: `
 		<ng-container [ngSwitch]="sectionSelector">
 			<section class="empty-state no-missing-card-in-set" *ngSwitchCase="NO_MISSING_CARD_IN_SET">
@@ -50,7 +44,7 @@ declare var overwolf: any;
 			</section>
 			<section class="empty-state no-search-result" *ngSwitchCase="NO_SEARCH_RESULT">
 				<div class="state-container">
-					<i class="i-236x165 pale-pink-theme">
+					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#No_result_illustration"/>
 						</svg>
