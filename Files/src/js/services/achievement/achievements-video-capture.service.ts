@@ -60,6 +60,7 @@ export class AchievementsVideoCaptureService {
             return;
         }
         if (this.captureOngoing) {
+            console.log('[recording] capture ongoing, doing nothing');
             return;
         }
         this.events.broadcast(Events.ACHIEVEMENT_RECORD_STARTED, achievement.id);
@@ -77,7 +78,7 @@ export class AchievementsVideoCaptureService {
     }
 
     private onAchievementRecordEnd(data) {
-        console.log('stopping capture?', this.currentReplayId, this.captureOngoing);
+        console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
         if (!this.currentReplayId || !this.captureOngoing) {
             setTimeout(() => this.onAchievementRecordEnd(data), 50);
             return;
