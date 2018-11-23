@@ -33,6 +33,14 @@
   <path d="M7.5,1A6.5,6.5,0,1,0,14,7.5,6.5,6.5,0,0,0,7.5,1Zm0,12A5.5,5.5,0,1,1,13,7.5,5.51,5.51,0,0,1,7.5,13ZM8,4H7V8h4V7H8Z" fill="var(--icon-color, currentcolor)"/>
 </symbol>
 
+<symbol id="delete" viewBox="0 0 15 15">
+	<path d="M5 5V12H6V5H5Z" fill="var(--icon-color, currentcolor)"/>
+	<path d="M9 12V5H10V12H9Z" fill="var(--icon-color, currentcolor)"/>
+	<path d="M7 5V12H8V5H7Z" fill="var(--icon-color, currentcolor)"/>
+	<path fill-rule="evenodd" clip-rule="evenodd" d="M4 0H11V2H15V3H13V15H2V3H0V2H4V0ZM10 1V2H5V1H10ZM12 3H3V14H12V3Z" fill="var(--icon-color, currentcolor)"/>
+</symbol>
+
+
 <!-- icons 30x20 -->
 <symbol id="video" viewBox="0 0 30 20">
 	<path d="M12 14L19 10L12 6V14Z" fill="var(--icon-color, currentcolor)"/>

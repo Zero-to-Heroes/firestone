@@ -2,6 +2,8 @@ import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, 
 import { VisualAchievement } from '../../models/visual-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { ReplayInfo } from '../../models/replay-info';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 
 declare var overwolf;
 
@@ -41,11 +43,24 @@ declare var overwolf;
             </vg-player>
 
             <ul class="thumbnails">
-                <li *ngFor="let thumbnail of thumbnails" (click)="showReplay(thumbnail)">
+                <li *ngFor="let thumbnail of thumbnails" 
+                    (click)="showReplay(thumbnail)" 
+                    [ngClass]="{'active': thumbnail === currentThumbnail}">
                     <div class="thumbnail">
                         <img [src]="thumbnail.thumbnail">
                         <div class="overlay"></div>
                         <div class="icon" [innerHTML]="thumbnail.iconSvg"></div>
+                        <i class="delete-icon" (click)="deleteMedia(thumbnail, $event)" *ngIf="thumbnail !== currentThumbnail">
+                            <svg>
+                                <use xlink:href="/Files/assets/svg/sprite.svg#delete"/>
+                            </svg>
+                            <div class="zth-tooltip right">
+                                <p>Delete media</p>
+                                <svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+                                    <polygon points="0,0 8,-9 16,0"/>
+                                </svg>
+                            </div>
+                        </i>
                     </div>
                     <div class="completion-date">
                         {{ thumbnail.completionDate }}
@@ -59,7 +74,7 @@ declare var overwolf;
 export class AchievementRecordingsComponent implements AfterViewInit {
 
     _achievement: VisualAchievement;
-    thumbnails: ThumbnailInfo[];
+    thumbnails: ThumbnailInfo[] = [];
 
     currentThumbnail: ThumbnailInfo;
     currentReplayLocation: string;
@@ -70,23 +85,15 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
-        this.thumbnails = achievement.replayInfo
-                .map((info) => ({
-                    timestamp: info.creationTimestamp,
-                    completionDate: new Date(info.creationTimestamp).toLocaleDateString(
-                        "en-GB",
-                        { day: "2-digit", month: "2-digit", year: "2-digit"} ),
-                    videoLocation: info.url,
-                    videoUrl: this.sanitizer.bypassSecurityTrustUrl(info.url),
-                    thumbnail: this.sanitizer.bypassSecurityTrustUrl(info.thumbnailUrl),
-                    stepId: info.completionStepId,
-                    iconSvg: this.buildIconSvg(info.completionStepId),
-                } as ThumbnailInfo))
-                .sort((a, b) => b.timestamp - a.timestamp);
-        this.updateThumbnail(this.thumbnails[0]);
+        this.updateThumbnails(achievement.replayInfo);
     }
 
-    constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) { 
+    constructor(
+        private io: SimpleIOService,
+        private storage: AchievementsStorageService,
+        private elRef: ElementRef, 
+        private cdr: ChangeDetectorRef, 
+        private sanitizer: DomSanitizer) { 
     }
     
     ngAfterViewInit() {
@@ -103,6 +110,27 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     openVideoFolder() {
         overwolf.utils.openWindowsExplorer(this.currentReplayLocation, (result) => { console.log('opened', result) });
     }
+
+    async deleteMedia(thumbnail: ThumbnailInfo, event: MouseEvent) {
+        event.preventDefault();
+        if (this.currentThumbnail === thumbnail) {
+            this.player.pause();
+            setTimeout(() => {
+                this.updateThumbnail(undefined);
+                this.cdr.detectChanges();
+                setTimeout(() => {
+                    this.deleteMedia(thumbnail, event);
+                }, 200);
+            });
+            return;
+        }
+        const result: boolean = await this.io.deleteFile(thumbnail.videoPath);
+        if (result) {
+            const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
+            console.log('updated achievement after deletion', updatedAchievement);
+            this.updateThumbnails(updatedAchievement.replayInfo);
+        }
+    }
     
 	// Prevent the window from being dragged around if user drags controls
 	@HostListener('mousedown', ['$event'])
@@ -115,15 +143,43 @@ export class AchievementRecordingsComponent implements AfterViewInit {
             }
         }
     }
+
+    private updateThumbnails(replayInfo: ReadonlyArray<ReplayInfo>) {
+        this.thumbnails = replayInfo
+                .map((info) => ({
+                    timestamp: info.creationTimestamp,
+                    completionDate: new Date(info.creationTimestamp).toLocaleDateString(
+                        "en-GB",
+                        { day: "2-digit", month: "2-digit", year: "2-digit"} ),
+                    videoLocation: info.url,
+                    videoPath: info.path,
+                    videoUrl: this.sanitizer.bypassSecurityTrustUrl(info.url),
+                    thumbnail: this.sanitizer.bypassSecurityTrustUrl(info.thumbnailUrl),
+                    stepId: info.completionStepId,
+                    iconSvg: this.buildIconSvg(info.completionStepId),
+                } as ThumbnailInfo))
+                .sort((a, b) => b.timestamp - a.timestamp);
+        console.log('updated thumbnails', this.thumbnails);
+        this.updateThumbnail(this.thumbnails[0]);
+        this.cdr.detectChanges();
+    }
     
     private updateThumbnail(thumbnail: ThumbnailInfo) {
+        console.log('updating thumbnail', thumbnail);
         this.currentThumbnail = thumbnail;
-        this.currentReplayLocation = this.currentThumbnail.videoLocation;
-        this.currentReplay = this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation);
+        this.currentReplayLocation = this.currentThumbnail 
+                ? this.currentThumbnail.videoLocation 
+                : undefined;
+        this.currentReplay = this.currentReplayLocation 
+                ? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation) 
+                : undefined;
         this.updateTitle();
     }
 
     private updateTitle() {
+        if (!this.currentThumbnail) {
+            return;
+        }
         const date = new Date(this.currentThumbnail.timestamp).toLocaleDateString(
                 "en-GB",
                 { day: "2-digit", month: "2-digit", year: "2-digit"} );
@@ -164,6 +220,7 @@ interface ThumbnailInfo {
     readonly timestamp: number;
     readonly completionDate: string;
     readonly videoLocation: string;
+    readonly videoPath: string;
     readonly thumbnail: SafeUrl;
     readonly videoUrl: SafeUrl;
     readonly iconSvg: SafeHtml;

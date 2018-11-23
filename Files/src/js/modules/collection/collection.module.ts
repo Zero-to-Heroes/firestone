@@ -66,6 +66,7 @@ import { AchievementImageComponent } from 'src/js/components/achievements/achiev
 import { AchievementRecordingsComponent } from 'src/js/components/achievements/achievement-recordings.component';
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
 
 @NgModule({
 	imports: [
@@ -135,6 +136,7 @@ import { AchievementCompletionStepComponent } from '../../components/achievement
 		MemoryInspectionService,
 		PreferencesService,
 		RealTimeNotificationService,
+		SimpleIOService,
 
 		AchievementsDbService,
 		AchievementHistoryStorageService,

@@ -8,6 +8,7 @@ declare var parseCardsText: any;
 
 @Injectable()
 export class SimpleIOService {
+
 	simpleIOPlugin: any;
 
 	constructor() {
@@ -27,5 +28,14 @@ export class SimpleIOService {
 
 	public get() {
 		return this.simpleIOPlugin.get();
+	}
+
+	public async deleteFile(filePath: string): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+			this.get().deleteFile(filePath, (result, message) => {
+				console.log('deletion completed', result, message);
+				resolve(result);
+			});
+		});
 	}
 }
