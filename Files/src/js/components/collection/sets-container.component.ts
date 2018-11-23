@@ -42,7 +42,7 @@ export class SetsContainer {
 	onHistoryClick(event: MouseEvent) {
 		let rect = this.elRef.nativeElement.querySelector('.sets-container').getBoundingClientRect();
 		let scrollbarWidth = 5;
-		console.log('mousedown on sets container', rect, event);
+		// console.log('mousedown on sets container', rect, event);
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}

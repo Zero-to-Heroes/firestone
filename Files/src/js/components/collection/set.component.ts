@@ -1,11 +1,8 @@
 import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
-import { Card } from '../../models/card';
-import { Set, SetCard } from '../../models/set';
+import { Set } from '../../models/set';
 import { Events } from '../../services/events.service';
-import { PreferencesService } from '../../services/preferences.service';
-import { Preferences } from '../../models/preferences';
 
 declare var overwolf: any;
 
@@ -16,14 +13,16 @@ declare var overwolf: any;
 		`../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div *ngIf="_cardSet" class="set">
+		<div *ngIf="_cardSet" class="set" [ngClass]="{'coming-soon': !released}">
 			<div class="wrapper-for-flip" [@flipState]="flip">
 				<div class="box-side set-view" (click)="browseSet()">
 					<div class="logo-container">
 						<img src="{{'/Files/assets/images/sets/' + _cardSet.id + '.png'}}" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName">{{_cardSet.name}}</span>
 					</div>
-					<span class="cards-collected">{{_cardSet.ownedLimitCollectibleCards}}/{{_cardSet.numberOfLimitCollectibleCards()}}</span>
+					<span class="cards-collected" *ngIf="released">
+						{{_cardSet.ownedLimitCollectibleCards}}/{{_cardSet.numberOfLimitCollectibleCards()}}
+					</span>
 					<div class="frame complete-simple" *ngIf="isSimpleComplete() && !isPremiumComplete()">
 						<i class="i-25 pale-gold-theme corner bottom-left">
 							<svg class="svg-icon-fill">
@@ -81,8 +80,14 @@ declare var overwolf: any;
 							</i>
 						</div>
 					</div>
+					<div class="zth-tooltip bottom" *ngIf="!achievementsOn">
+						<p>Coming soon</p>
+						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+							<polygon points="0,0 8,-9 16,0"/>
+						</svg>
+					</div>
 				</div>
-				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}">
+				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}" *ngIf="released">
 					<div class="title">
 						<i class="i-15 pale-theme">
 							<svg class="svg-icon-fill">
@@ -146,6 +151,7 @@ export class SetComponent {
 
 	_cardSet: Set;
 	_displayName = false;
+	released = true;
 	epicTimer: number = 10;
 	epicFill: number = 0;
 	legendaryTimer: number = 40;
@@ -191,6 +197,10 @@ export class SetComponent {
 
 	@Input('cardSet') set cardSet(set: Set) {
 		this._cardSet = set;
+		if (set.id === 'rumble') {
+			this.released = false;
+			return;
+		}
 		// console.log('setting set', set, set.name)
 		if (['Basic', 'Classic', 'Hall of Fame'].indexOf(set.name) > -1) {
 			this._displayName = true;
@@ -202,15 +212,17 @@ export class SetComponent {
 	}
 
 	isSimpleComplete() {
+		if (!this.released) return false;
 		return this._cardSet.ownedLimitCollectibleCards == this._cardSet.numberOfLimitCollectibleCards()
 	}
 
 	isPremiumComplete() {
+		if (!this.released) return false;
 		return this._cardSet.ownedLimitCollectiblePremiumCards == this._cardSet.numberOfLimitCollectibleCards()
 	}
 
 	browseSet() {
-		if (this.showingPityTimerFtue) {
+		if (this.showingPityTimerFtue || !this.released) {
 			return;
 		}
 		this.events.broadcast(Events.SET_SELECTED, this._cardSet);
@@ -219,6 +231,7 @@ export class SetComponent {
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
+		if (!this.released) return;
 		this.timeoutHandler = setTimeout(() => {
 			if (!this.showingPityTimerFtue) {
 				this.flip = 'active';
@@ -234,6 +247,7 @@ export class SetComponent {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
+		if (!this.released) return;
 		clearTimeout(this.timeoutHandler);
 		if (!this.showingPityTimerFtue) {
 			console.log('flipping back');
