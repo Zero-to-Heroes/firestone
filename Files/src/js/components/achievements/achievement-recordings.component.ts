@@ -4,6 +4,7 @@ import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { ReplayInfo } from '../../models/replay-info';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
+import { Events } from '../../services/events.service';
 
 declare var overwolf;
 
@@ -11,8 +12,8 @@ declare var overwolf;
 	selector: 'achievement-recordings',
 	styleUrls: [`../../../css/component/achievements/achievement-recordings.component.scss`],
 	template: `
-        <div class="achievement-recordings">
-            <vg-player>
+        <div class="achievement-recordings" *ngIf="currentThumbnail">
+            <vg-player [ngClass]="{'deleted': currentThumbnail.isDeleted}">
                 <div class="title" [innerHTML]="title"></div>
                 <vg-overlay-play></vg-overlay-play>
 
@@ -41,15 +42,25 @@ declare var overwolf;
                     <source [src]="currentReplay" type="video/mp4">
                 </video>
             </vg-player>
+            <div class="no-media" *ngIf="currentThumbnail.isDeleted">
+                <i>
+                    <svg>
+                        <use xlink:href="/Files/assets/svg/sprite.svg#no_media"/>
+                    </svg>
+                </i>
+                <span>Media deleted</span>
+            </div>
 
             <ul class="thumbnails">
-                <li *ngFor="let thumbnail of thumbnails" 
-                    (click)="showReplay(thumbnail)" 
+                <li *ngFor="let thumbnail of thumbnails"
+                    (click)="showReplay(thumbnail, $event)" 
                     [ngClass]="{'active': thumbnail === currentThumbnail}">
-                    <div class="thumbnail">
-                        <img [src]="thumbnail.thumbnail">
+                    <div class="thumbnail" [ngClass]="{'missing': thumbnail.isDeleted}">
+                        <img [src]="thumbnail.thumbnail" *ngIf="!thumbnail.isDeleted">
+                        <div class="media-missing" *ngIf="thumbnail.isDeleted"></div>
                         <div class="overlay"></div>
                         <div class="icon" [innerHTML]="thumbnail.iconSvg"></div>
+                        <div class="media-missing-text" *ngIf="thumbnail.isDeleted">Media missing</div>
                         <i class="delete-icon" (click)="deleteMedia(thumbnail, $event)" *ngIf="thumbnail !== currentThumbnail">
                             <svg>
                                 <use xlink:href="/Files/assets/svg/sprite.svg#delete"/>
@@ -85,12 +96,16 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
-        this.updateThumbnails(achievement.replayInfo);
+        setTimeout(() => {
+            this.updateThumbnails(achievement.replayInfo);
+            this.cdr.detectChanges();            
+        })
     }
 
     constructor(
         private io: SimpleIOService,
         private storage: AchievementsStorageService,
+        private events: Events,
         private elRef: ElementRef, 
         private cdr: ChangeDetectorRef, 
         private sanitizer: DomSanitizer) { 
@@ -98,9 +113,20 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     
     ngAfterViewInit() {
         this.player = this.elRef.nativeElement.querySelector('video');
+        if (!this.player) {
+            setTimeout(() => this.ngAfterViewInit(), 50);
+        }
     }
 
-    showReplay(thumbnail: ThumbnailInfo) {
+    showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
+        event.stopPropagation();
+        // const isDeleteClicked = event["path"]
+        //         .map((element) => element.className)
+        //         .find((className) => className.indexOf('delete-icon') !== -1);
+        // if (isDeleteClicked) {
+        //     return;
+        // }
+        console.log('showing replay', thumbnail, event);
         this.updateThumbnail(thumbnail);
         this.player.load();
         this.player.play();
@@ -112,24 +138,39 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     }
 
     async deleteMedia(thumbnail: ThumbnailInfo, event: MouseEvent) {
+        console.log('deleting media', thumbnail, event);
         event.preventDefault();
-        if (this.currentThumbnail === thumbnail) {
-            this.player.pause();
-            setTimeout(() => {
-                this.updateThumbnail(undefined);
-                this.cdr.detectChanges();
-                setTimeout(() => {
-                    this.deleteMedia(thumbnail, event);
-                }, 200);
-            });
-            return;
-        }
-        const result: boolean = await this.io.deleteFile(thumbnail.videoPath);
+        event.stopPropagation();
+        const result: boolean = thumbnail.isDeleted || await this.io.deleteFile(thumbnail.videoPath);
         if (result) {
             const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
             console.log('updated achievement after deletion', updatedAchievement);
-            this.updateThumbnails(updatedAchievement.replayInfo);
+            const replayInfoAfterDeletion = this._achievement.replayInfo
+                    .filter((info) => info.path !== thumbnail.videoPath);
+            console.log('replay info after deletion', replayInfoAfterDeletion);
+            this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
+            // this.updateThumbnails(replayInfoAfterDeletion);
         }
+    }
+
+    private async isDeleted(path: string): Promise<boolean> {
+        const fileExists = await this.io.fileExists(path);
+        console.log('fileExists in component?', fileExists);
+        return !fileExists;
+    }
+
+    private async buildDeletedPaths(replayInfo: ReadonlyArray<ReplayInfo>): Promise<string[]> {
+        const deletedPaths: string[] = [];
+        for (let info of replayInfo) {
+            console.log('considering delete', info, info.path);
+            const isDeleted: boolean = await this.isDeleted(info.path);
+            console.log('is deleted?', isDeleted);
+            if (isDeleted) {
+                deletedPaths.push(info.path);
+            }
+        }
+        console.log('deleted', deletedPaths);
+        return deletedPaths;
     }
     
 	// Prevent the window from being dragged around if user drags controls
@@ -144,20 +185,24 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         }
     }
 
-    private updateThumbnails(replayInfo: ReadonlyArray<ReplayInfo>) {
+    private async updateThumbnails(replayInfo: ReadonlyArray<ReplayInfo>) {
+        const deletedPaths: string[] = await this.buildDeletedPaths(replayInfo);
         this.thumbnails = replayInfo
-                .map((info) => ({
-                    timestamp: info.creationTimestamp,
-                    completionDate: new Date(info.creationTimestamp).toLocaleDateString(
-                        "en-GB",
-                        { day: "2-digit", month: "2-digit", year: "2-digit"} ),
-                    videoLocation: info.url,
-                    videoPath: info.path,
-                    videoUrl: this.sanitizer.bypassSecurityTrustUrl(info.url),
-                    thumbnail: this.sanitizer.bypassSecurityTrustUrl(info.thumbnailUrl),
-                    stepId: info.completionStepId,
-                    iconSvg: this.buildIconSvg(info.completionStepId),
-                } as ThumbnailInfo))
+                .map((info) => {
+                    return {
+                        timestamp: info.creationTimestamp,
+                        completionDate: new Date(info.creationTimestamp).toLocaleDateString(
+                            "en-GB",
+                            { day: "2-digit", month: "2-digit", year: "2-digit"} ),
+                        videoLocation: info.url,
+                        videoPath: info.path,
+                        videoUrl: this.sanitizer.bypassSecurityTrustUrl(info.url),
+                        thumbnail: this.sanitizer.bypassSecurityTrustUrl(info.thumbnailUrl),
+                        stepId: info.completionStepId,
+                        iconSvg: this.buildIconSvg(info.completionStepId),
+                        isDeleted: deletedPaths.indexOf(info.path) !== -1,
+                    } as ThumbnailInfo
+                })
                 .sort((a, b) => b.timestamp - a.timestamp);
         console.log('updated thumbnails', this.thumbnails);
         this.updateThumbnail(this.thumbnails[0]);
@@ -225,4 +270,5 @@ interface ThumbnailInfo {
     readonly videoUrl: SafeUrl;
     readonly iconSvg: SafeHtml;
     readonly stepId: string;
+    readonly isDeleted: boolean;
 }

@@ -4,6 +4,7 @@ import { DebugService } from '../services/debug.service';
 import { Events } from '../services/events.service';
 import { CollectionComponent } from './collection.component';
 import { AchievementsComponent } from './achievements/achievements.component';
+import { SimpleIOService } from '../services/plugins/simple-io.service';
 
 declare var overwolf: any;
 declare var Crate: any;
@@ -116,6 +117,7 @@ export class MainWindowComponent implements AfterViewInit {
 	constructor(
 		private events: Events, 
 		private cdr: ChangeDetectorRef,
+		private io: SimpleIOService,
 		private debug: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){

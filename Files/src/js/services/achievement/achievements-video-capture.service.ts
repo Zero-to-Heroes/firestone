@@ -56,11 +56,11 @@ export class AchievementsVideoCaptureService {
 
     private capture(achievement: Achievement, challenge: Challenge) {
         if (!this.achievementConf.shouldRecord(achievement)) {
-            console.log('[recording] Not recording achievement', achievement);
+            console.warn('[recording] Not recording achievement', achievement);
             return;
         }
         if (this.captureOngoing) {
-            console.log('[recording] capture ongoing, doing nothing');
+            console.warn('[recording] capture ongoing, doing nothing');
             return;
         }
         this.events.broadcast(Events.ACHIEVEMENT_RECORD_STARTED, achievement.id);
@@ -78,7 +78,7 @@ export class AchievementsVideoCaptureService {
     }
 
     private onAchievementRecordEnd(data) {
-        console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
+        // console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
         if (!this.currentReplayId || !this.captureOngoing) {
             setTimeout(() => this.onAchievementRecordEnd(data), 50);
             return;

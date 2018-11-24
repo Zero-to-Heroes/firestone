@@ -128,6 +128,12 @@ export class AchievementsComponent implements AfterViewInit {
 				}
 			}
 		);
+
+		this._events.on(Events.ACHIEVEMENT_UPDATED).subscribe(
+			(data) => {
+				this.reloadAchievement(data.data[0]);
+			}
+		)
 		this.refreshContents();
 	}
 

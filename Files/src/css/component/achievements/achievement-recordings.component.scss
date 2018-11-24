@@ -1,10 +1,43 @@
 .achievement-recordings {
     padding-bottom: 10px;
 
+    .no-media {
+        background: #1B071F;
+        width: 540px;
+        height: 300px;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            font-family: 'Open Sans';
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 13px;
+            text-align: center;
+            color: #A276AF;
+            margin-top: 15px;
+        }
+
+        i {
+            width: 25px;
+            height: 30px;
+            --icon-color: #A276AF;
+        }
+    }
+
     vg-player {
         width: 80%;
         margin-left: 10px;
         margin-bottom: 10px;
+
+        &.deleted {
+            display: none;
+        }
     }
 
     ::ng-deep .title {
@@ -285,10 +318,33 @@
         .thumbnail {
             position: relative;
             height: 55px;
+
+            &.missing .icon ::ng-deep .icon-svg {
+                width: 24px;
+                top: -8px;
+            }
         }
 
         img {
             width: 100px;
+        }
+
+        .media-missing {
+            width: 100px;
+            background: #1B071F;
+        }
+
+        .media-missing-text {
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 12px;
+            text-align: center;
+            color: #7D5A87;
+            width: 100%;
+            position: absolute;
+            bottom: 4px;
         }
 
         .overlay {

@@ -40,7 +40,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				(scroll)="onScroll($event)">
 				<li *ngFor="let achievement of activeAchievements">
 					<achievement-view 
-						[achievement]="achievement" 
+						[achievement]="achievement"
 						[scrollIntoView]="_achievementIdToScrollIntoView === achievement.id">
 					</achievement-view>
 				</li>

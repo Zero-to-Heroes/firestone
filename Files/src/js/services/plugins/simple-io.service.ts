@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { DungeonInfo } from '../../models/dungeon-info'
-
 declare var OverwolfPlugin: any;
-declare var overwolf: any;
-declare var parseCardsText: any;
 
 @Injectable()
 export class SimpleIOService {
 
 	simpleIOPlugin: any;
+	initialized: boolean = false;
 
 	constructor() {
+		this.initialized = false;
 		console.log("loading simple-io-plugin-zip");
 		this.simpleIOPlugin = new OverwolfPlugin("simple-io-plugin-zip", true);
 		this.simpleIOPlugin.initialize((status: boolean) => {
@@ -23,6 +21,7 @@ export class SimpleIOService {
 			this.simpleIOPlugin.get().onGlobalEvent.addListener(function(first, second) {
 				console.log('received global event simple-io-plugin-zip', first, second);
 			});
+			this.initialized = true;
 		});
 	}
 
@@ -30,12 +29,40 @@ export class SimpleIOService {
 		return this.simpleIOPlugin.get();
 	}
 
-	public async deleteFile(filePath: string): Promise<boolean> {
+	public fileExists(filePath: string): Promise<boolean> {
+		// await this.waitForInit();
 		return new Promise<boolean>((resolve) => {
-			this.get().deleteFile(filePath, (result, message) => {
-				console.log('deletion completed', result, message);
+			this.get().fileExists(filePath, (result, message) => {
+				console.log('file exists?', filePath, result, message);
 				resolve(result);
 			});
 		});
 	}
+
+	public deleteFile(filePath: string): Promise<boolean> {
+		// await this.waitForInit();
+		return new Promise<boolean>((resolve) => {
+			this.get().deleteFile(filePath, (result, message) => {
+				console.log('deletion completed', filePath, result, message);
+				resolve(result);
+			});
+		});
+	}
+
+	// private waitForInit(): Promise<void> {
+	// 	return new Promise<void>((resolve) => {
+	// 		const waitInit = () => {
+	// 			// console.log('Promise waiting for io-plugin');
+	// 			if (this.initialized) {
+	// 				// console.log('wait for io-plugin init complete');
+	// 				resolve();
+	// 			} 
+	// 			else {
+	// 				// console.log('waiting for db init');
+	// 				setTimeout(() => waitInit(), 50);
+	// 			}
+	// 		}
+	// 		waitInit();
+	// 	});
+	// }
 }

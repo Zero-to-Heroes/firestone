@@ -56,6 +56,13 @@
 	<path d="M13.6,26C9.5,26,6,23,6,23h15C20.5,23.4,17.3,26,13.6,26z" fill="var(--icon-color-secondary, currentcolor)"/>
 </symbol>
 
+<!-- icons 25x30 -->
+<symbol id="no_media" viewBox="0 0 25 30">
+	<path d="M15.6709 22.3536L12.2432 18.9259L8.81543 22.3536L8.10833 21.6465L11.5361 18.2188L7.83398 14.5167L8.54109 13.8096L12.2432 17.5116L15.9452 13.8096L16.6523 14.5167L12.9503 18.2188L16.378 21.6465L15.6709 22.3536Z" fill="var(--icon-color, currentcolor)"/>
+	<path fill-rule="evenodd" clip-rule="evenodd" d="M25 0H7L0 7V30H25V0ZM24 1H7V7H1V29H24V1Z" fill="var(--icon-color, currentcolor)"/>
+</symbol>
+
+
 <!-- icons 30x30 -->
 <symbol id="window-control_close" viewBox="0 0 30 30">
 	<path d="M15.71,15l4.15-4.15a.5.5,0,0,0-.71-.71L15,14.29l-4.15-4.15a.5.5,0,1,0-.71.71L14.29,15l-4.15,4.15a.5.5,0,1,0,.71.71L15,15.71l4.15,4.15a.5.5,0,1,0,.71-.71Z" />

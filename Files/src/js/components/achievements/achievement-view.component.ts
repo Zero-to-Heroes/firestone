@@ -52,7 +52,7 @@ export class AchievementViewComponent {
 
 	@Input() set scrollIntoView(scroll: boolean) {
 		this.shouldScrollIntoView = scroll;
-		this.showRecordings = scroll;
+		this.showRecordings = this.showRecordings || scroll;
 		this.handleScrollIntoView();
 	}
 
