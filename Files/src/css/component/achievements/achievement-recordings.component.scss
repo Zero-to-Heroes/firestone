@@ -48,6 +48,7 @@
         position: absolute;
         width: 100%;
         height: 40px;
+        cursor: default;
 
         i {
             --icon-color: #FFB948;
@@ -78,11 +79,13 @@
         justify-content: center;
         background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.66) 44.8%, #000000 100%);
         padding: 10px;
+        cursor: default;
 
         vg-play-pause {
             width: 20px;
             height: 20px;
             margin-right: 10px;
+            cursor: default;
 
             ::ng-deep .vg-icon-play_arrow {
                 width: 100%;
@@ -117,6 +120,16 @@
                     right: 0;
                     bottom: 0;
                     background-repeat: no-repeat;
+                    --icon-color: #A89782;
+                }
+            }
+
+            &:hover {
+                ::ng-deep .vg-icon-play_arrow:before {
+                    background-image: url(/Files/assets/svg/video_play_hover.svg);
+                }
+                ::ng-deep .vg-icon-pause:before {
+                    background-image: url(/Files/assets/svg/video_pause_hover.svg);
                 }
             }
         }
@@ -132,6 +145,7 @@
             font-weight: bold;
             text-shadow: 0px 0px 4px #000000;
             width: auto;
+            cursor: default;
 
             &:nth-of-type(1):after {
                 content: "/";
@@ -146,6 +160,7 @@
             justify-content: center;
             margin-right: 17px;
             margin-left: 20px;
+            cursor: default;
 
             &:focus {
                 outline: none;
@@ -163,6 +178,7 @@
             vg-scrub-bar-current-time {
                 top: 0;
                 height: 2px;
+                cursor: default;
 
                 ::ng-deep .background {
                     background-color: #FFB948;
@@ -170,13 +186,18 @@
                 }
 
                 ::ng-deep .slider {
-                    height: 8px;
-                    width: 8px;
+                    height: 0;
+                    width: 0;
                     box-shadow: inherit;
                     background: #FFB948;
                     margin-top: -3px;
                     margin-left: -6px;
                 }
+            }
+
+            &:hover vg-scrub-bar-current-time ::ng-deep .slider {
+                height: 8px;
+                width: 8px;
             }
         }
 
@@ -184,6 +205,7 @@
             width: 20px;
             height: 20px;
             margin-right: 12px;
+            cursor: default;
 
             ::ng-deep .icon {
                 width: 100%;
@@ -200,6 +222,7 @@
                     right: 0;
                     bottom: 0;
                     background-repeat: no-repeat;
+                    --icon-color: #D9C3AB;
                 }
             }
 
@@ -217,6 +240,7 @@
             align-items: center;
             justify-content: center;
             margin-right: 22px;
+            cursor: default;
 
             &:focus {
                 outline: none;
@@ -249,15 +273,20 @@
 
         .video-folder {
             --icon-color: #A89782;
-            cursor: pointer;
+            cursor: default;
             margin-right: 25px;
             width: 25px;
             height: 25px;
+
+            &:hover {
+                --icon-color: #D9C3AB;
+            }
         }
 
         vg-fullscreen {
             width: 20px;
             height: 20px;
+            cursor: default;
 
             ::ng-deep .icon {
                 width: 100%;
@@ -274,11 +303,21 @@
                     right: 0;
                     bottom: 0;
                     background-repeat: no-repeat;
+                    --icon-color: #A89782;
                 }
             }
 
             &.fullscreen ::ng-deep .icon::before {
                 background: url(/Files/assets/svg/video_exit_full_screen.svg) center center;
+            }
+
+            &:hover {
+                ::ng-deep .icon::before {
+                    background-image: url(/Files/assets/svg/video_full_screen_hover.svg);
+                }
+                &.fullscreen ::ng-deep .icon::before {
+                    background-image: url(/Files/assets/svg/video_exit_full_screen_hover.svg);
+                }
             }
         }
     }
