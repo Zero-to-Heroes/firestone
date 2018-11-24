@@ -276,6 +276,10 @@
                     background-repeat: no-repeat;
                 }
             }
+
+            &.fullscreen ::ng-deep .icon::before {
+                background: url(/Files/assets/svg/video_exit_full_screen.svg) center center;
+            }
         }
     }
 

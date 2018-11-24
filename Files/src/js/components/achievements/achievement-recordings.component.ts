@@ -35,7 +35,7 @@ declare var overwolf;
                         </svg>
                     </i>
             
-                    <vg-fullscreen></vg-fullscreen>
+                    <vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen>
                 </vg-controls>
 
                 <video [vgMedia]="media" #media id="singleVideo" preload="auto">
@@ -91,6 +91,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     currentReplayLocation: string;
     currentReplay: SafeUrl;
     title: SafeHtml;
+    fullscreen: boolean = false;
 
     private player;
 
@@ -183,6 +184,12 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                 return;
             }
         }
+    }
+
+	@HostListener('document:webkitfullscreenchange', ['$event'])
+	onFullScreenChange(event) {
+        this.fullscreen = !this.fullscreen;
+        this.cdr.detectChanges();
     }
 
     private async updateThumbnails(replayInfo: ReadonlyArray<ReplayInfo>) {
