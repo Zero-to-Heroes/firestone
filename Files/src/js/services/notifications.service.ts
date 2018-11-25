@@ -42,7 +42,7 @@ export class OwNotificationsService {
 	}
 
 	private detectNotificationsWindow() {
-		console.log('initializing notifications service');
+		// console.log('initializing notifications service');
 
 		// overwolf.windows.onMessageReceived.addListener((message) => {
 		// 	console.log('received notifications ack', message);
@@ -55,11 +55,11 @@ export class OwNotificationsService {
 			if (result.status !== 'success') {
 				console.warn('Could not get NotificationsWindow', result);
 			}
-			console.log('got notifications window', result);
+			// console.log('got notifications window', result);
 			let windowId = result.window.id;
 
 			overwolf.windows.restore(windowId, (result) => {
-				console.log('notifications window is on?', result);
+				// console.log('notifications window is on?', result);
 				overwolf.windows.hide(windowId, (result) => {
 					this.windowId = windowId;
 					console.log('notification window is minimized at start, now listening to notifications', result);

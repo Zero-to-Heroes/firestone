@@ -28,7 +28,7 @@ export class IndexedDbService {
 		// console.log('saving collection', dbCollection);
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.saveCollection(collection, callback);
 			}, 50);
 			return;
@@ -50,7 +50,7 @@ export class IndexedDbService {
 		// console.log('retrieving collection');
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.getCollection(callback);
 			}, 50);
 			return;
@@ -64,10 +64,10 @@ export class IndexedDbService {
 	}
 
 	public save(history: CardHistory, callback: Function) {
-		console.log('saving history', history);
+		console.log('[collection] [storage] saving history', history);
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.save(history, callback);
 			}, 50);
 			return;
@@ -84,10 +84,10 @@ export class IndexedDbService {
 	}
 
     public saveNewPack(newPack: PackHistory, callback: Function): any {
-		console.log('saving pack history', newPack);
+		console.log('[collection] [storage] saving pack history', newPack);
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.saveNewPack(newPack, callback);
 			}, 50);
 			return;
@@ -98,7 +98,7 @@ export class IndexedDbService {
 				callback(history);
 			},
 			(error) => {
-				console.log(error);
+				console.log('[collection] [storage] error', error);
 			}
 		);
 	}
@@ -114,13 +114,13 @@ export class IndexedDbService {
 	}
 	
     public getAllPityTimers(): Promise<PityTimer[]> {
-		console.log('getting all pity timers');
+		// console.log('getting all pity timers');
 		return new Promise<PityTimer[]>((resolve) => {
-			console.log('in getAllPityTimers promise');
+			// console.log('in getAllPityTimers promise');
 			this.waitForDbInit().then(() => {
-				console.log('fetching all pity timers from db');
+				// console.log('fetching all pity timers from db');
 				this.db.getAll('pity-timer', null).then((pityTimers: PityTimer[]) => {
-					console.log('fetched pity timers', pityTimers);
+					// console.log('fetched pity timers', pityTimers);
 					resolve(pityTimers);
 				});
 			});
@@ -130,7 +130,7 @@ export class IndexedDbService {
     public savePityTimer(pityTimer: PityTimer, callback: Function) {
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.savePityTimer(pityTimer, callback);
 			}, 50);
 			return;
@@ -140,16 +140,16 @@ export class IndexedDbService {
 				callback(pityTimer);
 			},
 			(error) => {
-				console.error('could not update pity timer', pityTimer, error);
+				console.error('[collection] [storage] could not update pity timer', pityTimer, error);
 			}
 		);
     }
 
 	public countHistory(callback: Function) {
-		console.log('counting history');
+		// console.log('counting history');
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.countHistory(callback);
 			}, 50);
 			return;
@@ -158,7 +158,7 @@ export class IndexedDbService {
 		let transaction = this.db.dbWrapper.createTransaction({ storeName: 'card-history',
 			dbMode: "readonly",
 			error: (e: Event) => {
-				console.error('counld not create transaction', e);
+				console.error('[collection] [storage] counld not create transaction', e);
 			},
 			complete: (e: Event) => {
 			}
@@ -167,11 +167,11 @@ export class IndexedDbService {
 		let request = objectStore.count();
 
 		request.onerror = function (e) {
-			console.error('counld not count', e);
+			console.error('[collection] [storage] counld not count', e);
 		};
 
 		request.onsuccess = function (evt: any) {
-			console.log('could count', evt);
+			// console.log('could count', evt);
 			callback(evt.target.result);
 		};
 
@@ -180,7 +180,7 @@ export class IndexedDbService {
 	public getAll(callback: Function, limit: number) {
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[storage] db isnt initialized, waiting...');
+				console.log('[collection] [storage] db isnt initialized, waiting...');
 				this.getAll(callback, limit);
 			}, 50);
 			return;
@@ -204,13 +204,13 @@ export class IndexedDbService {
 	}
 
 	private init() {
-		console.log('[storage] starting init of indexeddb');
+		console.log('[collection] [storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-collection-db', 9);
 		this.db.openDatabase(9, (evt) => {
-			console.log('upgrading db', evt);
+			console.log('[collection] [storage] upgrading db', evt);
 
 			if (evt.oldVersion < 1) {
-				console.log('[storage] upgrade to version 1');
+				console.log('[collection] [storage] upgrade to version 1');
 				let objectStore = evt.currentTarget.result.createObjectStore(
 					'card-history',
 					{ keyPath: "id", autoIncrement: true });
@@ -218,30 +218,31 @@ export class IndexedDbService {
 				objectStore.createIndex("isNewCard", "isNewCard", { unique: false });
 			}
 			if (evt.oldVersion < 2) {
-				console.log('[storage] upgrade to version 2');
+				console.log('[collection] [storage] upgrade to version 2');
 				let collectionStore = evt.currentTarget.result.createObjectStore(
 					'collection',
 					{ keyPath: "id", autoIncrement: false });
 			}
 			if (evt.oldVersion < 8) {
-				console.log('[storage] upgrade to version 8');
+				console.log('[collection] [storage] upgrade to version 8');
 				evt.currentTarget.result.createObjectStore(
 					'pack-history',
 					{ keyPath: "id", autoIncrement: true });
 				}
 			if (evt.oldVersion < 9) {
+				console.log('[collection] [storage] upgrade to version 9');
 				evt.currentTarget.result.createObjectStore(
 					'pity-timer',
 					{ keyPath: "setId", autoIncrement: false });
 			}
-			console.log('[storage] indexeddb upgraded');
+			console.log('[collection] [storage] indexeddb upgraded');
 		}).then(
 			() => {
-				console.log('[storage] openDatabase successful', this.db.dbWrapper.dbName);
+				console.log('[collection] [storage] openDatabase successful', this.db.dbWrapper.dbName);
 				this.dbInit = true;
 			},
 			(error) => {
-				console.log('[storage] error in openDatabase', error);
+				console.log('[collection] [storage] error in openDatabase', error);
 			}
 		);
 	}

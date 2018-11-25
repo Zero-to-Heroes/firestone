@@ -263,18 +263,21 @@ export class CardsComponent implements AfterViewInit {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		let rect = this.elRef.nativeElement.querySelector('.cards-list').getBoundingClientRect();
-		let scrollbarWidth = 5;
-		if (event.offsetX >= rect.width - scrollbarWidth) {
-			event.stopPropagation();
-			return;
+		const scrollbarWidth = 5;
+		const cardsList = this.elRef.nativeElement.querySelector('.cards-list');
+		if (cardsList) {
+			let rect = cardsList.getBoundingClientRect();
+			if (event.offsetX >= rect.width - scrollbarWidth) {
+				event.stopPropagation();
+				return;
+			}
 		}
 
 		const optionsDropDown = this.elRef.nativeElement.querySelector('.options');
 		// If not hidden
 		if (optionsDropDown) {
-			let rect2 = optionsDropDown.getBoundingClientRect();
-			if (event.offsetX >= rect2.width - scrollbarWidth) {
+			let rect = optionsDropDown.getBoundingClientRect();
+			if (event.offsetX >= rect.width - scrollbarWidth) {
 				event.stopPropagation();
 				return;
 			}

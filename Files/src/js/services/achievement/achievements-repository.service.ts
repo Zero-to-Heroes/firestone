@@ -74,8 +74,8 @@ export class AchievementsRepository {
 				0,
 				[]));
 		// Create the achievement sets
-		this.loadAggregatedAchievements().then((result) => console.log('loaded aggregated achievements', result));
-		console.log('[achievements] modules registered', this.challengeModules);
+		this.loadAggregatedAchievements().then((result) => console.log('loaded aggregated achievements'));
+		console.log('[achievements] modules registered');
 	}
 
 	private createChallenge(achievementType: string, challengeCreationFn: Function) {

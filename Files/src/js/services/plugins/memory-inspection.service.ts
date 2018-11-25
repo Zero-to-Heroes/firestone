@@ -22,14 +22,14 @@ export class MemoryInspectionService {
 			  	this.registerEvents();
 			  	setTimeout(() => this.setFeatures(), 1000);
 			}
-			console.log("[memory service] onGameInfoUpdated: ", res);
+			// console.log("[memory service] onGameInfoUpdated: ", res);
 		});
 		overwolf.games.getRunningGameInfo((res) => {
 			if (this.gameRunning(res)) {
 			  	this.registerEvents();
 			  	setTimeout(() => this.setFeatures(), 1000);
 			}
-			console.log("[memory service] getRunningGameInfo: ", res);
+			// console.log("[memory service] getRunningGameInfo: ", res);
 		});
 	}
 

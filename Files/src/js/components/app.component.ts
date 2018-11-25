@@ -72,7 +72,7 @@ export class AppComponent {
 			return;
 		}
 
-		console.log('real init starting');
+		console.log('app init starting');
 
 		overwolf.settings.registerHotKey(
 			"collection",
@@ -98,12 +98,12 @@ export class AppComponent {
 
 		overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
 			this.loadingWindowId = result.window.id;
-			console.log('retrievd loadingwindow', result);
+			// console.log('retrievd loadingwindow', result);
 			overwolf.windows.restore(this.loadingWindowId, (result2) => {
-				console.log('loadingwindow restored', result2)
+				// console.log('loadingwindow restored', result2)
 				overwolf.windows.hide(this.loadingWindowId);
 				overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-					console.log('updated game', res);
+					// console.log('updated game', res);
 					if (this.exitGame(res)) {
 						this.closeApp();
 					}
@@ -112,7 +112,7 @@ export class AppComponent {
 					}
 				});
 				overwolf.games.getRunningGameInfo((res: any) => {
-					console.log('running game info', res);
+					// console.log('running game info', res);
 					if (this.gameRunning(res)) {
 						this.showLoadingScreen();
 					}
@@ -143,7 +143,7 @@ export class AppComponent {
 	}
 
 	private showLoadingScreen() {
-		console.log('showing loading screen?', this.currentState, this.loadingWindowId);
+		// console.log('showing loading screen?', this.currentState, this.loadingWindowId);
 		if (this.currentState == 'READY') {
 			return;
 		}
@@ -151,7 +151,7 @@ export class AppComponent {
 		overwolf.windows.restore(this.loadingWindowId, (result) => {
 			this.closeWelcomeWindow();
 			this.closeCollectionWindow();
-			console.log('final restore for loadingwindow done', result);
+			// console.log('final restore for loadingwindow done', result);
 			setTimeout(() => {
 				this.notifyAbilitiesReady();
 			},
@@ -167,7 +167,7 @@ export class AppComponent {
 
 	private startApp(showWhenStarted?: Function) {
 		overwolf.games.getRunningGameInfo((res: any) => {
-			console.log('running game info', res);
+			// console.log('running game info', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				if (showWhenStarted && this.currentState == 'READY') {
 					showWhenStarted();
@@ -180,7 +180,6 @@ export class AppComponent {
 	}
 
 	private closeLoadingScreen() {
-		console.log('starting from desktop, showing welcome page');
 		overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get LoadingWindow', result);
@@ -191,7 +190,6 @@ export class AppComponent {
 	}
 
 	private closeWelcomeWindow() {
-		console.log('starting from desktop, showing welcome page');
 		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get WelcomeWindow', result);
@@ -202,7 +200,6 @@ export class AppComponent {
 	}
 
 	private closeCollectionWindow() {
-		console.log('starting from desktop, showing welcome page');
 		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get CollectionWindow', result);
@@ -213,23 +210,22 @@ export class AppComponent {
 	}
 
 	private showWelcomePage() {
-		console.log('starting from desktop, showing welcome page');
 		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get WelcomeWindow', result);
 				return;
 			}
-			console.log('got welcome window', result);
+			// console.log('got welcome window', result);
 
 			overwolf.windows.restore(result.window.id, (result) => {
-				console.log('WelcomeWindow is on?', result);
+				// console.log('WelcomeWindow is on?', result);
 				this.closeLoadingScreen();
 			})
 		});
 	}
 
 	private showCollectionWindow() {
-		console.log('showing collection page');
+		// console.log('showing collection page');
 		if (this.currentState != 'READY') {
 			console.log('app not ready yet, cannot show collection window', this.currentState);
 			return;
@@ -239,10 +235,10 @@ export class AppComponent {
 				console.warn('Could not get CollectionWindow', result);
 				return;
 			}
-			console.log('got collection window', result);
+			// console.log('got collection window', result);
 
 			overwolf.windows.restore(result.window.id, (result) => {
-				console.log('CollectionWindow is on?', result);
+				// console.log('CollectionWindow is on?', result);
 				this.closeLoadingScreen();
 			})
 		});

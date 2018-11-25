@@ -12,37 +12,37 @@ export class HsPublicEventsListener {
 	constructor(private http: Http) {
 		let port = 4766;
 
-		setTimeout(() => {
-			overwolf.web.createServer(port, serverInfo => {
-			    if (serverInfo.status == "error") {
-			        console.log("Failed to create server");
-			        return;
-			    } 
-			    else {
-			        let server = serverInfo.server;
-			        server.onRequest.addListener((info) => this.onRequest(info));
+		// setTimeout(() => {
+		// 	overwolf.web.createServer(port, serverInfo => {
+		// 	    if (serverInfo.status == "error") {
+		// 	        console.log("Failed to create server");
+		// 	        return;
+		// 	    } 
+		// 	    else {
+		// 	        let server = serverInfo.server;
+		// 	        server.onRequest.addListener((info) => this.onRequest(info));
 
-			        server.listen(info => {
-			            console.log("Server listening status on port ", port, info);
-			        });
+		// 	        server.listen(info => {
+		// 	            console.log("Server listening status on port ", port, info);
+		// 	        });
 
-					let headers = new Headers({ 'Content-Type': 'text/plain' });
-			    	let options = new RequestOptions({ headers: headers });
-			        let registerRequest = {
-			        	requestType: 'register',
-			        	callbackUrl: 'http://localhost:' + port
-			        }
-			        this.http
-			        		.post('http://localhost:4765', registerRequest, options)
-							.map((res) => res.json())
-							.subscribe((success) => console.log('success', success), (error) => console.log('error', error));
-			    }
-			});
-		}, 1000)
+		// 			let headers = new Headers({ 'Content-Type': 'text/plain' });
+		// 	    	let options = new RequestOptions({ headers: headers });
+		// 	        let registerRequest = {
+		// 	        	requestType: 'register',
+		// 	        	callbackUrl: 'http://localhost:' + port
+		// 	        }
+		// 	        this.http
+		// 	        		.post('http://localhost:4765', registerRequest, options)
+		// 					.map((res) => res.json())
+		// 					.subscribe((success) => console.log('success', success), (error) => console.log('error', error));
+		// 	    }
+		// 	});
+		// }, 1000)
 	}
 
 	private onRequest(info) {
-	    console.log('request: ', info);
+	    // console.log('request: ', info);
 	    // info = { "content": "{'hello': 'world'}", "contentType": "application/json", "url": "http://localhost:59873/"}
 	}
 }
