@@ -1,10 +1,19 @@
 .achievement-thumbnail {
-    &.active, &:hover {
+    &:hover {
         .thumbnail {
             outline: 1px solid #D9C3AB;
         }
         .completion-date {
             color: #D9C3AB;
+        }
+    }
+
+    &.active {
+        .thumbnail {
+            outline: 1px solid #FFB948;
+        }
+        .completion-date {
+            color: #FFB948;
         }
     }
 
@@ -79,6 +88,7 @@
         font-family: 'Open Sans', sans-serif;
         font-size: 12px;
         color: #7D5A87;
+        text-align: center;
     }
 
     .delete-icon {
