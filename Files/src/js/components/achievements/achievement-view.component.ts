@@ -47,13 +47,23 @@ export class AchievementViewComponent {
 	achieved: boolean = false;
 	completionDate: string;
 	numberOfRecordings: number;
-	shouldScrollIntoView: boolean;
+	// shouldScrollIntoView: boolean;
 	showRecordings: boolean;
 
-	@Input() set scrollIntoView(scroll: boolean) {
-		this.shouldScrollIntoView = scroll;
-		this.showRecordings = this.showRecordings || scroll;
-		this.handleScrollIntoView();
+	// @Input() set scrollIntoView(scroll: boolean) {
+	// 	this.shouldScrollIntoView = scroll;
+	// 	if (scroll) {
+	// 		this.showRecordings = true;
+	// 	}
+	// 	console.log('setting scroll', this._achievement ? this._achievement.id : '', scroll, this.showRecordings);
+	// 	this.handleScrollIntoView();
+	// }
+
+	@Input() set showReplays(showReplays: boolean) {
+		// We just want to trigger the opening of the replay windows, not hide it
+		if (showReplays) {
+			this.showRecordings = true;
+		}
 	}
 
 	@Input() set achievement(achievement: VisualAchievement) {
@@ -73,28 +83,28 @@ export class AchievementViewComponent {
 					{ day: "2-digit", month: "2-digit", year: "2-digit"} );
 			}
 		}
-		this.handleScrollIntoView();
+		// this.handleScrollIntoView();
 	}
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {
 	}
 
 	toggleRecordings() {
-		console.log('toggling recordings?', this._achievement);
 		if (this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
+			console.log('show recording?', this._achievement.id, this.showRecordings);
 			this.cdr.detectChanges();
 		}
 	}
 
-	private handleScrollIntoView() {
-		if (!this._achievement || !this.shouldScrollIntoView) {
-			return;
-		}
-		console.log('scrolling into view', this._achievement.name);
-		setTimeout(() => {
-			this.el.nativeElement.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
-			this.cdr.detectChanges();
-		})
-	}
+	// private handleScrollIntoView() {
+	// 	if (!this._achievement || !this.shouldScrollIntoView) {
+	// 		return;
+	// 	}
+	// 	console.log('scrolling into view', this._achievement.name);
+	// 	setTimeout(() => {
+	// 		this.el.nativeElement.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+	// 		this.cdr.detectChanges();
+	// 	})
+	// }
 }

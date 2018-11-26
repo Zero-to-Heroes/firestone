@@ -68,6 +68,7 @@ import { FeatureFlags } from '../../services/feature-flags.service';
 import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { AchievementThumbnailComponent } from '../../components/achievements/achievement-thumbnail.component';
 
 @NgModule({
 	imports: [
@@ -113,6 +114,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		AchievementRecordingsComponent,
 		AchievementSetComponent,
 		AchievementProgressBarComponent,
+		AchievementThumbnailComponent,
 		AchievementViewComponent,
 
 		FtueElement,

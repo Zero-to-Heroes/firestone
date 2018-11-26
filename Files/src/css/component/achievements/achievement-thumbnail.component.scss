@@ -1,0 +1,218 @@
+.achievement-thumbnail {
+    &.active, &:hover {
+        .thumbnail {
+            outline: 1px solid #D9C3AB;
+        }
+        .completion-date {
+            color: #D9C3AB;
+        }
+    }
+
+    &:hover {
+        .delete-icon {
+            display: block;
+        }
+    }
+
+    .thumbnail {
+        position: relative;
+        height: 55px;
+
+        &.missing .icon ::ng-deep .icon-svg {
+            width: 24px;
+            top: -8px;
+        }
+    }
+
+    img {
+        width: 100px;
+    }
+
+    .media-missing {
+        width: 100px;
+        background: #1B071F;
+    }
+
+    .media-missing-text {
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 12px;
+        text-align: center;
+        color: #7D5A87;
+        width: 100%;
+        position: absolute;
+        bottom: 4px;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        pointer-events: none;
+    }
+
+    .icon {
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        opacity: 0.7;
+
+        ::ng-deep .icon-svg {
+            margin: auto;
+            --icon-color: #FFB948;
+        }
+    }
+
+    .completion-date {
+        margin-top: 5px;
+        font-family: 'Open Sans', sans-serif;
+        font-size: 12px;
+        color: #7D5A87;
+    }
+
+    .delete-icon {
+        display: none;
+        position: absolute;
+        bottom: 7px;
+        right: 7px;
+        width: 15px;
+        height: 15px;
+        --icon-color: #A89782;
+
+        &.displayed {
+            display: block;
+        }
+
+        &:hover, &.displayed {
+            --icon-color: #D9C3AB;
+            .zth-tooltip {
+                opacity: 1;
+            }
+        }        
+    }
+        
+    .zth-tooltip {
+        background-color: #7D5A87;
+        text-align: center;
+        cursor: default;
+        opacity: 0;
+        position: absolute;
+        width: 110px;
+        height: 30px;
+        pointer-events: none;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        // Center it
+        left: 50%;
+        transform: translateX(-50%);
+    
+        .tooltip-arrow {
+            position: absolute;
+            width: 16px;
+            height: 9px;
+            fill: #7D5A87;
+            overflow: visible;
+        }
+    
+        p {
+            white-space: nowrap;
+            cursor: default;
+            color: #1B071F;
+            margin: 0;
+            font-size: 13px;
+        }
+    
+        &.right {
+            left: 85px;
+            bottom: -8px;
+    
+            .tooltip-arrow {
+                left: -3px;
+                transform: rotate(-90deg);
+            }
+        }
+    }
+
+    .confirmation-popup {
+        opacity: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 200px;
+        height: 125px;
+        pointer-events: all;
+        z-index: 300;
+        padding: 15px;
+        
+        &.right {
+            left: 214px;
+            bottom: -50px;
+        }
+
+        p {
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 13px;
+            text-align: center;
+            color: #1B071F;
+        }
+
+        .buttons {
+            display: flex;
+
+            button {
+                width: 80px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .cancel {
+                outline: 1px solid #2F0D0D;
+                font-family: Open Sans;
+                font-style: normal;
+                font-weight: normal;
+                line-height: normal;
+                font-size: 12px;
+                text-align: center;
+                color: #2F0D0D;
+                margin-right: 10px;
+
+                &:hover {
+                    background-color: #A276AF;
+                }
+            }
+
+            .confirm {
+                background: #4B3052;
+                font-family: Open Sans;
+                font-style: normal;
+                font-weight: normal;
+                line-height: normal;
+                font-size: 12px;
+                text-align: center;                
+                color: #A276AF;
+
+                &:hover {
+                    background-color: #3B1F42;
+                }
+            }
+        }
+    }
+}

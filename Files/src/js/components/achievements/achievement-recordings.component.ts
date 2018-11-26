@@ -1,10 +1,9 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ElementRef, SimpleChanges, OnChanges, AfterViewInit, HostListener } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { ReplayInfo } from '../../models/replay-info';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
-import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
-import { Events } from '../../services/events.service';
+import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
 
 declare var overwolf;
 
@@ -52,31 +51,12 @@ declare var overwolf;
             </div>
 
             <ul class="thumbnails">
-                <li *ngFor="let thumbnail of thumbnails"
-                    (click)="showReplay(thumbnail, $event)" 
-                    [ngClass]="{'active': thumbnail === currentThumbnail}">
-                    <div class="thumbnail" [ngClass]="{'missing': thumbnail.isDeleted}">
-                        <img [src]="thumbnail.thumbnail" *ngIf="!thumbnail.isDeleted">
-                        <div class="media-missing" *ngIf="thumbnail.isDeleted"></div>
-                        <div class="overlay"></div>
-                        <div class="icon" [innerHTML]="thumbnail.iconSvg"></div>
-                        <div class="media-missing-text" *ngIf="thumbnail.isDeleted">Media missing</div>
-                        <i class="delete-icon" (click)="deleteMedia(thumbnail, $event)" *ngIf="thumbnail !== currentThumbnail">
-                            <svg>
-                                <use xlink:href="/Files/assets/svg/sprite.svg#delete"/>
-                            </svg>
-                            <div class="zth-tooltip right">
-                                <p>Delete media</p>
-                                <svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-                                    <polygon points="0,0 8,-9 16,0"/>
-                                </svg>
-                            </div>
-                        </i>
-                    </div>
-                    <div class="completion-date">
-                        {{ thumbnail.completionDate }}
-                    </div>
-                </li>
+                <achievement-thumbnail 
+                        *ngFor="let thumbnail of thumbnails"
+                        (click)="showReplay(thumbnail, $event)" 
+                        [thumbnail]="thumbnail" 
+                        [currentThumbnail]="currentThumbnail">
+                </achievement-thumbnail>
             </ul>
 		</div>
 	`,
@@ -105,8 +85,6 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
     constructor(
         private io: SimpleIOService,
-        private storage: AchievementsStorageService,
-        private events: Events,
         private elRef: ElementRef, 
         private cdr: ChangeDetectorRef, 
         private sanitizer: DomSanitizer) { 
@@ -121,12 +99,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
     showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
         event.stopPropagation();
-        // const isDeleteClicked = event["path"]
-        //         .map((element) => element.className)
-        //         .find((className) => className.indexOf('delete-icon') !== -1);
-        // if (isDeleteClicked) {
-        //     return;
-        // }
+        if (this.currentThumbnail === thumbnail) {
+            return;
+        }
         console.log('showing replay', thumbnail, event);
         this.updateThumbnail(thumbnail);
         this.player.load();
@@ -136,22 +111,6 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
     openVideoFolder() {
         overwolf.utils.openWindowsExplorer(this.currentReplayLocation, (result) => { console.log('opened', result) });
-    }
-
-    async deleteMedia(thumbnail: ThumbnailInfo, event: MouseEvent) {
-        console.log('deleting media', thumbnail, event);
-        event.preventDefault();
-        event.stopPropagation();
-        const result: boolean = thumbnail.isDeleted || await this.io.deleteFile(thumbnail.videoPath);
-        if (result) {
-            const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
-            console.log('updated achievement after deletion', updatedAchievement);
-            const replayInfoAfterDeletion = this._achievement.replayInfo
-                    .filter((info) => info.path !== thumbnail.videoPath);
-            console.log('replay info after deletion', replayInfoAfterDeletion);
-            this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
-            // this.updateThumbnails(replayInfoAfterDeletion);
-        }
     }
 
     private async isDeleted(path: string): Promise<boolean> {
@@ -266,16 +225,4 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                 .find((step) => step.id === this.currentThumbnail.stepId)
                 .text(false);
     }
-}
-
-interface ThumbnailInfo {
-    readonly timestamp: number;
-    readonly completionDate: string;
-    readonly videoLocation: string;
-    readonly videoPath: string;
-    readonly thumbnail: SafeUrl;
-    readonly videoUrl: SafeUrl;
-    readonly iconSvg: SafeHtml;
-    readonly stepId: string;
-    readonly isDeleted: boolean;
 }

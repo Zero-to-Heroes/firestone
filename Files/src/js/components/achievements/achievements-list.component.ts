@@ -38,10 +38,11 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 			<ul class="achievements-list" 
 				*ngIf="activeAchievements && activeAchievements.length > 0" 
 				(scroll)="onScroll($event)">
-				<li *ngFor="let achievement of activeAchievements">
+				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId ">
 					<achievement-view 
-						[achievement]="achievement"
-						[scrollIntoView]="_achievementIdToScrollIntoView === achievement.id">
+							[attr.data-achievement-id]="achievement.id.toLowerCase()"
+							[showReplays]="_achievementIdToScrollIntoView === achievement.id"
+							[achievement]="achievement">
 					</achievement-view>
 				</li>
 			</ul>
@@ -78,6 +79,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	private lastScrollPosition: number = 0;
 	private lastScrollPositionBeforeScrollDown: number = 0;
 	private lastScrollPositionBeforeScrollUp: number = 0;
+	private updatePending: boolean = false;
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
 
@@ -110,20 +112,20 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.filterOptions = this._achievementSet.filterOptions
 			.map((option) => ({ label: option.label, value: option.value }));
 		this.activeFilter = this.filterOptions[0].value;
+		console.log('updated achievementSet', achievementSet.id);
 		this.updateShownAchievements();
 	}
 
 	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
 		this.achievements = achievementsList || [];
+		console.log('updated achievementsList');
 		this.updateShownAchievements();
 	}
 
 	@Input('achievementIdToScrollIntoView') set achievementIdToScrollIntoView(achievementIdToScrollIntoView: string) {
 		console.log('setting achievementIdToScrollIntoView', achievementIdToScrollIntoView, this._achievementIdToScrollIntoView);
-		if (this._achievementIdToScrollIntoView !== achievementIdToScrollIntoView) {
-			this._achievementIdToScrollIntoView = achievementIdToScrollIntoView;
-			this.updateShownAchievements();
-		}
+		this._achievementIdToScrollIntoView = achievementIdToScrollIntoView;
+		this.updateShownAchievements();
 	}
 	
 	// Prevent the window from being dragged around if user scrolls with click
@@ -160,7 +162,7 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.updateShownAchievements();
 	}
 
-	trackById(achievement: VisualAchievement, index: number) {
+	trackByAchievementId(achievement: VisualAchievement, index: number) {
 		return achievement.id;
 	}
 
@@ -188,9 +190,16 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	private updateShownAchievements() {
-		if (!this.achievements) {
+		if (!this.achievements || this.updatePending) {
 			return;
 		}
+		this.updatePending = true;
+		// Delay update so that it only runs once, once all inputs have been set
+		// There probably is a better way of doing this though...
+		setTimeout(() => this.doRealUpdate(), 100);
+	}
+
+	private doRealUpdate() {
 		const filterOption = this._achievementSet.filterOptions
 				.filter((option) => option.value === this.activeFilter)
 				[0];
@@ -206,8 +215,16 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.activeAchievements = this.achievements.filter(filterFunction);
 		console.log('selected', this.activeAchievements, filterOption);
 		if (this._achievementIdToScrollIntoView) {
-			this.shortDisplay.next(true); 
+			this.shortDisplay.next(true);
+			// Do the scrolling here
+			const targetId = this._achievementIdToScrollIntoView.toLowerCase();
+			const achievementToShow: Element = this.el.nativeElement.querySelector(`achievement-view[data-achievement-id=${targetId}]`);
+			console.log('scrolling into view', this._achievementIdToScrollIntoView, achievementToShow);
+			// const listElement: Element = this.el.nativeElement.querySelector('.achievements-list');
+			// console.log('list element', listElement);
+			achievementToShow.scrollIntoView(true);
 		}
+		this.updatePending = false;
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
