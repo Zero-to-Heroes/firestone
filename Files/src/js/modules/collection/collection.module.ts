@@ -67,6 +67,7 @@ import { AchievementRecordingsComponent } from 'src/js/components/achievements/a
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { AchievementCompletionStepComponent } from '../../components/achievements/achievement-completion-step.component';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { OverwolfService } from '../../services/overwolf.service';
 
 @NgModule({
 	imports: [
@@ -132,8 +133,9 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 		Events,
 		GenericIndexedDbService,
 		IndexedDbService,
-		OwNotificationsService,
 		MemoryInspectionService,
+		OwNotificationsService,
+		OverwolfService,
 		PreferencesService,
 		RealTimeNotificationService,
 		SimpleIOService,

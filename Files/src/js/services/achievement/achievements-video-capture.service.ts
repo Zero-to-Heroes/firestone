@@ -6,6 +6,7 @@ import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
 import { FeatureFlags } from '../feature-flags.service';
 import { AchievementConfService } from './achievement-conf.service';
+import { OverwolfService } from '../overwolf.service';
 
 declare var overwolf;
 
@@ -32,13 +33,26 @@ export class AchievementsVideoCaptureService {
     private captureOngoing: boolean = false;
     private currentReplayId: string;
 
-	constructor(private events: Events, private achievementConf: AchievementConfService, private flags: FeatureFlags) {
+	constructor(
+        private events: Events, 
+        private achievementConf: AchievementConfService, 
+        private owService: OverwolfService,
+        private flags: FeatureFlags) {
         if (!this.flags.achievements()) {
             return;
         }
 		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
         this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => this.onAchievementRecordEnd(data));
+
+        this.turnOnRecording();
+    }
+
+    private async turnOnRecording() {
+        if (!await this.owService.inGame()) {
+            setTimeout(() => this.turnOnRecording(), 50);
+            return;
+        }
         
         // Keep recording on, as otherwise it makes it more difficult to calibrate the achievement timings
         overwolf.media.replays.turnOn(

@@ -38,6 +38,7 @@ import { DevService } from '../../services/dev.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
+import { OverwolfService } from '../../services/overwolf.service';
 
 
 @NgModule({
@@ -65,6 +66,7 @@ import { AchievementConfService } from '../../services/achievement/achievement-c
 		LogParserService,
 		LogRegisterService,
 		LogStatusService,
+		OverwolfService,
 		OwNotificationsService,
 		PackMonitor,
 		PackHistoryService,
