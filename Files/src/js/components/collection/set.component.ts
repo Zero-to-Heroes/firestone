@@ -80,11 +80,13 @@ declare var overwolf: any;
 							</i>
 						</div>
 					</div>
-					<div class="zth-tooltip bottom" *ngIf="!achievementsOn">
-						<p>Coming soon</p>
-						<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-							<polygon points="0,0 8,-9 16,0"/>
-						</svg>
+					<div class="coming-soon-info" *ngIf="!released">
+						<i>
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#coming_soon"/>
+							</svg>
+						</i>
+						<p>Coming soon!</p>
 					</div>
 				</div>
 				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}" *ngIf="released">
@@ -250,7 +252,7 @@ export class SetComponent {
 		if (!this.released) return;
 		clearTimeout(this.timeoutHandler);
 		if (!this.showingPityTimerFtue) {
-			console.log('flipping back');
+			// console.log('flipping back');
 			this.flip = 'inactive';
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();

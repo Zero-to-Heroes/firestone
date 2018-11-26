@@ -27,46 +27,23 @@
 		.set-view, .set-view:hover {
 			background: rgba(255, 255, 255, 0.08);
 		}
-		.zth-tooltip {
-			background-color: $grey03;
-			text-align: center;
-			cursor: default;
-			position: absolute;
-			width: 110px;
-			height: 30px;
-			pointer-events: none;
-			z-index: 100;
+		.coming-soon-info {
+			@extend %completion-number;
 			display: flex;
+			flex-direction: column;
+			position: relative;
+			top: -40px;
 			align-items: center;
 			justify-content: center;
-			bottom: -29px;
-			box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.8);
-			// Center it
-    		top: 60%;
-			left: 50%;
-			transform: translateX(-50%);
-			opacity: 1;
-		
-			.tooltip-arrow {
-				position: absolute;
-				width: 16px;
-				height: 9px;
-				fill: $grey03;
-				overflow: visible;
+
+			i {
+				width: 62px;
+				height: 22px;
+				--icon-color: #d9c3ab;
 			}
-		
+
 			p {
-				white-space: nowrap;
-				cursor: default;
-				color: $black;
-				margin: 0;
-				font-size: 13px;
-			}
-		
-			&.bottom {
-				.tooltip-arrow {
-					top: 0px;
-				}
+				margin-top: 5px;
 			}
 		}
 	}
