@@ -1,5 +1,5 @@
 import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
+import { ViewContainerRef, ViewChild, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
 
@@ -10,7 +10,11 @@ declare var overwolf: any;
   	selector: 'tooltip',
 	styleUrls: [`../../css/component/tooltip.component.scss`],
 	encapsulation: ViewEncapsulation.None,
-	template: `<img src={{image()}} *ngIf="cardId" [ngClass]="{'missing': missing, 'removing': removing}"/>`,
+	template: `
+	<div class="tooltip-container" [ngClass]="{'missing': missing}">
+		<img src={{image()}} *ngIf="cardId" [ngClass]="{'removing': removing}"/>
+		<div class="overlay" [ngStyle]="{'-webkit-mask-image': overlayMaskImage()}"></div>
+	</div>`,
 	// I don't know how to make this work with OnPush
 	// changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,6 +31,9 @@ export class Tooltip {
 
 	image() {
 		return `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png`;
+	}
+	overlayMaskImage() {
+		return `url('http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png')`;
 	}
 }
 

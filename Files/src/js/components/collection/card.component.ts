@@ -1,7 +1,6 @@
 import { Component,  Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
-import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
@@ -12,8 +11,9 @@ import { SetCard } from '../../models/set';
 	template: `
 		<div class="card-container" [ngClass]="{'missing': _card.ownedNonPremium + _card.ownedPremium == 0}">
 			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
-
 			<img src="{{image}}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder"/>
+			<div class="overlay" [ngStyle]="{'-webkit-mask-image': overlayMaskImage}"></div>
+
 			<div class="count" *ngIf="!showPlaceholder">
 				<div class="non-premium" *ngIf="_card.ownedNonPremium > 0 || showCounts">
 					<span>{{_card.ownedNonPremium}}</span>
@@ -70,6 +70,7 @@ export class CardComponent {
 
 	showPlaceholder = true;
 	image: string;
+	overlayMaskImage: string;
 	_card: SetCard;
 
 	constructor(
@@ -82,6 +83,7 @@ export class CardComponent {
 	@Input('card') set card(card: SetCard) {
 		this._card = card;
 		this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + card.id + '.png';
+		this.overlayMaskImage = `url('${this.image}')`;
 	}
 
 	@HostListener('click') onClick() {
