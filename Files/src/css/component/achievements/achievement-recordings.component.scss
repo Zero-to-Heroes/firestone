@@ -352,6 +352,7 @@
             }
 
             &.disabled {
+                opacity: 0.5;
                 &:hover {
                     --icon-color: #A89782;
                 }
