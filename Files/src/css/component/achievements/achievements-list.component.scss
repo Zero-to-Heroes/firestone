@@ -21,6 +21,22 @@
 		// border-bottom: 1px solid #4B3052;
 	}
 
+	.collapse-menu {
+		position: absolute;
+		top: -35px;
+		right: 8px;
+		transform: scaleY(-1);
+		padding: 15px;
+		width: 43px;
+		height: 37px;
+		--icon-color: #CB9FD7;
+
+		&.shrink-header {
+			transform: scaleY(1);
+			top: -5px;
+		}
+	}
+
 	.achievements-list {
 		list-style: none;
 		padding: 0;

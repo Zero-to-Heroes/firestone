@@ -35,6 +35,11 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				</ng-select>
 				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 			</div>
+			<i class="i-13X7 collapse-menu {{headerClass}}" (click)="toggleMenu()">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
+				</svg>
+			</i>
 			<ul class="achievements-list" 
 				*ngIf="activeAchievements && activeAchievements.length > 0" 
 				(scroll)="onScroll($event)">
@@ -126,6 +131,17 @@ export class AchievementsListComponent implements AfterViewInit {
 		console.log('setting achievementIdToScrollIntoView', achievementIdToScrollIntoView, this._achievementIdToScrollIntoView);
 		this._achievementIdToScrollIntoView = achievementIdToScrollIntoView;
 		this.updateShownAchievements();
+	}
+
+	toggleMenu() {
+		if (this.headerClass) {
+			this.shortDisplay.next(false);
+			// this.headerClass = "";
+		} 
+		else {
+			this.shortDisplay.next(true);
+			// this.headerClass = 'shrink-header';
+		}
 	}
 	
 	// Prevent the window from being dragged around if user scrolls with click
