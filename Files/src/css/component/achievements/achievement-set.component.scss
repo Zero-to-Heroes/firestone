@@ -36,6 +36,15 @@
         margin-bottom: 15px;
 	}
 
+	&.empty {
+		.set-name {
+			color: #CB9FD7;
+		}
+		::ng-deep achievement-progress-bar .achieved {
+			color: #A276AF;
+		}
+	}
+
 	.frame {
 		position: absolute;
 		top: 0;

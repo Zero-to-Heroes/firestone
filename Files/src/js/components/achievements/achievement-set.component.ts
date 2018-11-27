@@ -9,7 +9,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 		`../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div class="achievement-set">
+		<div class="achievement-set" [ngClass]="{'empty': empty}">
 			<div class="frame complete-simple" *ngIf="complete">
 				<i class="i-25 pale-gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">
@@ -47,6 +47,7 @@ export class AchievementSetComponent {
 	displayName: string;
 	svgTemplate: SafeHtml;
 	complete: boolean = false;
+	empty: boolean = false;
 
 	constructor(private domSanitizer: DomSanitizer) {
 
@@ -66,5 +67,6 @@ export class AchievementSetComponent {
 		const total = flatCompletions.length;
 		const achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
 		this.complete = total === achieved;
+		this.empty = achieved === 0;
 	}
 }
