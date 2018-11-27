@@ -18,8 +18,8 @@ declare var overwolf;
 
                 <vg-controls>
                     <vg-play-pause></vg-play-pause>            
-                    <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
-                    <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+                    <fs-time-display vgProperty="current" vgFormat="mm:ss"></fs-time-display>
+                    <fs-time-display vgProperty="total" vgFormat="mm:ss"></fs-time-display>
             
                     <vg-scrub-bar [vgSlider]="true">
                         <vg-scrub-bar-current-time [vgSlider]="true"></vg-scrub-bar-current-time>

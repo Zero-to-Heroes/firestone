@@ -70,6 +70,7 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AchievementThumbnailComponent } from '../../components/achievements/achievement-thumbnail.component';
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
+import { FsTimeDisplay, FsUtcPipe } from '../../components/single-minute-time.component';
 
 @NgModule({
 	imports: [
@@ -86,6 +87,9 @@ import { AchievementConfService } from '../../services/achievement/achievement-c
         VgBufferingModule,
 	],
 	declarations: [
+		FsTimeDisplay,
+		FsUtcPipe,
+		
 		CardComponent,
 		CardHistoryComponent,
 		CardHistoryItemComponent,
