@@ -15,4 +15,16 @@ export class PreferencesService {
     public savePreferences(userPrefs: Preferences) {
         this.indexedDb.saveUserPreferences(userPrefs);
     }
+    
+    public async setDontConfirmVideoDeletion(dontAsk: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk} as Preferences;
+        this.savePreferences(newPrefs);
+    }
+    
+    public async setHasSeenPityTimerFtue(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, hasSeenPityTimerFtue: pref} as Preferences;
+        this.savePreferences(newPrefs);
+    }
 }

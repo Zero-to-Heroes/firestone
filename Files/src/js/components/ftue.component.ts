@@ -140,7 +140,6 @@ export class FtueComponent implements AfterViewInit {
     }
     
     private updatePreferences() {
-        this.userPrefs = new Preferences(true);
-        this.preferences.savePreferences(this.userPrefs);
+        this.preferences.setHasSeenPityTimerFtue(true);
     }
 }

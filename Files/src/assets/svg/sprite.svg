@@ -41,6 +41,16 @@
 </symbol>
 
 
+<symbol id="unchecked_box" viewBox="0 0 20 20">
+	<rect x="0.5" y="0.5" width="19" height="19" stroke="var(--icon-color, currentcolor)"/>
+</symbol>
+<symbol id="checked_box" viewBox="0 0 20 20">
+	<rect x="0.5" y="0.5" width="19" height="19" stroke="var(--icon-color, currentcolor)"/>
+	<path d="M5 11L8 14L14 6" stroke="var(--icon-color-secondary, currentcolor)" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+</symbol>
+
+
+
 <!-- icons 30x20 -->
 <symbol id="video" viewBox="0 0 30 20">
 	<path d="M12 14L19 10L12 6V14Z" fill="var(--icon-color, currentcolor)"/>
