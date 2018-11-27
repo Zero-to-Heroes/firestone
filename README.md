@@ -36,3 +36,24 @@ $ npm install  # You might need to have node installed
 $ npm run dev # For development
 $ npm run build # For release
 ```
+
+## Commit guidelines
+
+Commits should be like `type(component): commit message`. Still figuring out exactly how to break up the types.
+
+### Commit types
+
+* feature: a new feature the user can interact with. The idea is that if we want to tell the users what's new, we just look at these commits
+* tech: some new stuff that has no direct user value (like a new API)
+* visual: changes in how things look like
+* ux: changes in how the user interacts with the app
+* refactor: technical changes that don't modify the behavior and don't add anything new
+* perf: performance improvements
+* log: add/remove logs
+* release: stuff linked to releasing, like version bumps
+* doc: add/update documentation (readme, code comments, etc.)
+
+### Components
+
+* coll: collection (binder) related stuff
+* achv: achievements stuff
