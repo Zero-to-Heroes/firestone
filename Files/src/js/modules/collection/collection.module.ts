@@ -69,6 +69,7 @@ import { AchievementCompletionStepComponent } from '../../components/achievement
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AchievementThumbnailComponent } from '../../components/achievements/achievement-thumbnail.component';
+import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 
 @NgModule({
 	imports: [
@@ -143,6 +144,7 @@ import { AchievementThumbnailComponent } from '../../components/achievements/ach
 		SimpleIOService,
 
 		AchievementsDbService,
+		AchievementConfService,
 		AchievementHistoryStorageService,
 		AchievementNameService,
 		AchievementsRepository,

@@ -17,6 +17,7 @@ import { AchievementsStorageService } from './achievements-storage.service';
 import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
 import { FeatureFlags } from '../feature-flags.service';
+import { AchievementConfService } from './achievement-conf.service';
 
 declare var ga;
 declare var overwolf;
@@ -33,6 +34,7 @@ export class AchievementsMonitor {
 		private achievementsReferee: AchievementsRefereee,
 		private achievementStorage: AchievementsStorageService,
 		private storage: AchievementHistoryStorageService,
+		private conf: AchievementConfService,
 		private repository: AchievementsRepository,
 		private flags: FeatureFlags,
 		private events: Events) {
@@ -73,7 +75,14 @@ export class AchievementsMonitor {
 						</i>
 					</div>
 					<div class="message">
-						<span class="title">Achievement unlocked!</span>
+						<div class="title">
+							<i class="icon-svg">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#${this.conf.icon(achievement.type)}"/>
+								</svg>
+							</i>
+							<span>Achievement unlocked!</span>
+						</div>
 						<span class="text">${text}</span>
 						<div class="recap-text">
 							<span class="pending">Your replay is being recorded...</span>
@@ -109,7 +118,14 @@ export class AchievementsMonitor {
 					</i>
 				</div>
 				<div class="message">
-					<span class="title">Achievement unlocked!</span>
+					<div class="title">
+						<i class="icon-svg">
+							<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#${this.conf.icon(achievement.type)}"/>
+							</svg>
+						</i>
+						<span>Achievement unlocked!</span>
+					</div>
 					<span class="text">${text}</span>
 					<div class="recap-text">
 						<span>Replay saved! Click to recap</span>

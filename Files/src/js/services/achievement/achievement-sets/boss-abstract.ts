@@ -5,16 +5,24 @@ import { Achievement } from "../../../models/achievement";
 import { CompletedAchievement } from "../../../models/completed-achievement";
 import { AllCardsService } from "../../all-cards.service";
 import { FilterOption } from "../../../models/filter-option";
+import { AchievementConfService } from "../achievement-conf.service";
 
 export abstract class AbstractBossSetProvider extends SetProvider {
 
     private cardsService: AllCardsService;
     private categoryId: string;
+    private conf: AchievementConfService;
 
-    constructor(id: string, categoryId, displayName: string, types: string[], cardsService: AllCardsService) {
+    constructor(
+            id: string, categoryId, 
+            displayName: string, 
+            types: string[], 
+            cardsService: AllCardsService, 
+            conf: AchievementConfService) {
         super(id, displayName, types);
         this.categoryId = categoryId;
         this.cardsService = cardsService;
+        this.conf = conf;
     }
 
     public supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean {
@@ -97,7 +105,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                     { 
                         id: encountedId, 
                         numberOfCompletions: encounterAchievement.numberOfCompletions,
-                        iconSvgSymbol: 'boss_encounter',
+                        iconSvgSymbol: this.conf.icon(encounterAchievement.type),
                         text(showTimes: boolean = false): string {
                             const times = showTimes ? `${encounterAchievement.numberOfCompletions} times` : ``;
                             return `You met ${achievement.name} ${times}`;
@@ -106,7 +114,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                     { 
                         id: victoryId, 
                         numberOfCompletions: victoryAchievement.numberOfCompletions,
-                        iconSvgSymbol: 'boss_defeated',
+                        iconSvgSymbol: this.conf.icon(victoryAchievement.type),
                         text(showTimes: boolean = false): string {
                             const times = showTimes ? `${encounterAchievement.numberOfCompletions} times` : ``;
                             return `You defeated ${achievement.name} ${times}`;

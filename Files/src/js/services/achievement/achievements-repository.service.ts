@@ -18,6 +18,7 @@ import { SetProvider } from './achievement-sets/set-provider';
 import { AllCardsService } from '../all-cards.service';
 import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss.js';
 import { Events } from '../events.service.js';
+import { AchievementConfService } from './achievement-conf.service.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -28,7 +29,11 @@ export class AchievementsRepository {
 	private allAchievements: Achievement[] = [];
 	private setProviders: SetProvider[] = [];
 
-	constructor(private storage: AchievementsStorageService, private cards: AllCardsService, private events: Events) {
+	constructor(
+			private storage: AchievementsStorageService, 
+			private cards: AllCardsService, 
+			private conf: AchievementConfService,
+			private events: Events) {
 		this.registerModules();
 		this.modulesLoaded.next(true);
 	}
@@ -60,8 +65,8 @@ export class AchievementsRepository {
 		});
 		// Initialize set providers
 		this.setProviders = [
-			new DungeonRunBossSetProvider(this.cards),
-			new MonsterHuntBossSetProvider(this.cards),
+			new DungeonRunBossSetProvider(this.cards, this.conf),
+			new MonsterHuntBossSetProvider(this.cards, this.conf),
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)

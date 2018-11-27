@@ -48,6 +48,13 @@
 
 		.title {
 			@extend %achievement-name;
+			display: flex;
+			align-items: center;
+
+			i {
+				--icon-color: #FFB948;
+				margin-right: 10px;
+			}
 		}
 
 		.text {
@@ -58,7 +65,8 @@
 		.recap-text {
 			@extend %achievements-recap-text;
             margin-top: 5px;
-            position: relative;
+			position: relative;
+			color: #A89782;
 		}
 	}
 

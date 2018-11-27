@@ -27,4 +27,13 @@ export class AchievementConfService {
         console.log('[recording] should record?', achievement.type, true, completedAchievement.replayInfo);
         return true;
     }
+
+    public icon(achievementType: string) {
+        if (['dungeon_run_boss_encounter', 'monster_hunt_boss_encounter'].indexOf(achievementType) !== -1) {
+            return 'boss_encounter';
+        }
+        if (['dungeon_run_boss_victory', 'monster_hunt_boss_victory'].indexOf(achievementType) !== -1) {
+            return 'boss_victory';
+        }
+    }
 }
