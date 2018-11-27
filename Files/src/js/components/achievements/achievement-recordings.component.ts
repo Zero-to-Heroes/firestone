@@ -51,12 +51,28 @@ declare var overwolf;
             </div>
 
             <ul class="thumbnails">
+                <i class="page-arrow previous-page"  
+                        [ngClass]="{'disabled': indexOfFirstShown === 0}"
+                        (click)="goToPreviousPage()"
+                        *ngIf="thumbnails.length > THUMBNAILS_PER_PAGE">
+                    <svg>
+                        <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
+                    </svg>
+                </i>
                 <achievement-thumbnail 
-                        *ngFor="let thumbnail of thumbnails"
+                        *ngFor="let thumbnail of activeThumbnails"
                         (click)="showReplay(thumbnail, $event)" 
                         [thumbnail]="thumbnail" 
                         [currentThumbnail]="currentThumbnail">
                 </achievement-thumbnail>
+                <i class="page-arrow next-page" 
+                        [ngClass]="{'disabled': indexOfFirstShown === thumbnails.length - THUMBNAILS_PER_PAGE}" 
+                        (click)="goToNextPage()"
+                        *ngIf="thumbnails.length > THUMBNAILS_PER_PAGE">
+                    <svg>
+                        <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
+                    </svg>
+                </i>
             </ul>
 		</div>
 	`,
@@ -64,16 +80,20 @@ declare var overwolf;
 })
 export class AchievementRecordingsComponent implements AfterViewInit {
 
+    private readonly THUMBNAILS_PER_PAGE = 5;
+
     _achievement: VisualAchievement;
-    thumbnails: ThumbnailInfo[] = [];
+    activeThumbnails: ThumbnailInfo[];
 
     currentThumbnail: ThumbnailInfo;
     currentReplayLocation: string;
     currentReplay: SafeUrl;
     title: SafeHtml;
     fullscreen: boolean = false;
+    indexOfFirstShown = 0;
 
     private player;
+    private thumbnails: ThumbnailInfo[] = [];
 
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
@@ -113,24 +133,22 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         overwolf.utils.openWindowsExplorer(this.currentReplayLocation, (result) => { console.log('opened', result) });
     }
 
-    private async isDeleted(path: string): Promise<boolean> {
-        const fileExists = await this.io.fileExists(path);
-        console.log('fileExists in component?', fileExists);
-        return !fileExists;
+    goToPreviousPage() {
+        this.indexOfFirstShown = Math.max(0, this.indexOfFirstShown - this.THUMBNAILS_PER_PAGE);
+        this.activeThumbnails = this.thumbnails.slice(
+                this.indexOfFirstShown, 
+                Math.min(this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, this.thumbnails.length));
+        this.cdr.detectChanges();
     }
 
-    private async buildDeletedPaths(replayInfo: ReadonlyArray<ReplayInfo>): Promise<string[]> {
-        const deletedPaths: string[] = [];
-        for (let info of replayInfo) {
-            console.log('considering delete', info, info.path);
-            const isDeleted: boolean = await this.isDeleted(info.path);
-            console.log('is deleted?', isDeleted);
-            if (isDeleted) {
-                deletedPaths.push(info.path);
-            }
-        }
-        console.log('deleted', deletedPaths);
-        return deletedPaths;
+    goToNextPage() {
+        this.indexOfFirstShown = Math.min(
+            this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, 
+            this.thumbnails.length - this.THUMBNAILS_PER_PAGE);
+        this.activeThumbnails = this.thumbnails.slice(
+                this.indexOfFirstShown, 
+                Math.min(this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, this.thumbnails.length));
+        this.cdr.detectChanges();
     }
     
 	// Prevent the window from being dragged around if user drags controls
@@ -170,8 +188,11 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                     } as ThumbnailInfo
                 })
                 .sort((a, b) => b.timestamp - a.timestamp);
+        this.activeThumbnails = this.thumbnails.slice(
+                this.indexOfFirstShown, 
+                Math.min(this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, this.thumbnails.length));
         console.log('updated thumbnails', this.thumbnails);
-        this.updateThumbnail(this.thumbnails[0]);
+        this.updateThumbnail(this.activeThumbnails[0]);
         this.cdr.detectChanges();
     }
     
@@ -185,6 +206,26 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                 ? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation) 
                 : undefined;
         this.updateTitle();
+    }
+
+    private async isDeleted(path: string): Promise<boolean> {
+        const fileExists = await this.io.fileExists(path);
+        console.log('fileExists in component?', fileExists);
+        return !fileExists;
+    }
+
+    private async buildDeletedPaths(replayInfo: ReadonlyArray<ReplayInfo>): Promise<string[]> {
+        const deletedPaths: string[] = [];
+        for (let info of replayInfo) {
+            console.log('considering delete', info, info.path);
+            const isDeleted: boolean = await this.isDeleted(info.path);
+            console.log('is deleted?', isDeleted);
+            if (isDeleted) {
+                deletedPaths.push(info.path);
+            }
+        }
+        console.log('deleted', deletedPaths);
+        return deletedPaths;
     }
 
     private updateTitle() {

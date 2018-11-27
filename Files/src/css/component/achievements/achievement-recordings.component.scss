@@ -31,7 +31,7 @@
     }
 
     vg-player {
-        width: 80%;
+        width: 548px;
         margin-left: 10px;
         margin-bottom: 10px;
 
@@ -339,6 +339,31 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            top: 1px;
+        }
+
+        .page-arrow {
+            width: 15px;
+            height: 52px;
+            --icon-color: #A89782;
+
+            &:hover {
+                --icon-color: #D9C3AB;
+            }
+
+            &.disabled {
+                &:hover {
+                    --icon-color: #A89782;
+                }
+            }
+        }
+
+        .previous-page {
+            margin-right: 10px;
+        }
+
+        .next-page {
+            transform: scaleX(-1);
         }
     }
 }
