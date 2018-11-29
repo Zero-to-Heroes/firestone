@@ -19,6 +19,7 @@ import { CollectionManager }  from '../../services/collection/collection-manager
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
+import { ControlHelpComponent } from '../../components/controls/control-help.component';
 
 @NgModule({
 	imports: [
@@ -29,6 +30,9 @@ import { FeatureFlags } from '../../services/feature-flags.service';
 	],
 	declarations: [
 		WelcomePageComponent,
+		
+		ControlHelpComponent,
+		
 		HomeScreenInfoTextComponent,
 		AppChoiceComponent,
 		SocialMediaComponent,

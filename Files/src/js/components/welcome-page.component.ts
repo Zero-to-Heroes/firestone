@@ -6,7 +6,6 @@ import { CollectionManager } from '../services/collection/collection-manager.ser
 const HEARTHSTONE_GAME_ID = 9898;
 
 declare var overwolf: any;
-declare var Crate: any;
 
 @Component({
 	selector: 'welcome-page',
@@ -25,11 +24,7 @@ declare var Crate: any;
 						</svg>
 					</i>
 					<div class="controls">
-						<button class="i-30 pink-button" (click)="contactSupport()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
-							</svg>
-						</button>
+						<control-help></control-help>
 						<button class="i-30 pink-button" (click)="minimizeWindow()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
@@ -75,7 +70,6 @@ declare var Crate: any;
 export class WelcomePageComponent implements AfterViewInit {
 
 	private thisWindowId: string;
-	private crate;
 
 	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
 		overwolf.windows.getCurrentWindow((result) => {
@@ -86,21 +80,6 @@ export class WelcomePageComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		if (!Crate) {
-			setTimeout(() => {
-				this.ngAfterViewInit();
-			}, 20);
-			return;
-		}
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				if (!result.window.isVisible) {
-					return;
-				}
-				this.initCrate();
-			}
-		});
-
 		overwolf.windows.onMessageReceived.addListener((message) => {
 			if (message.id === 'move') {
 				overwolf.windows.getCurrentWindow((result) => {
@@ -146,27 +125,4 @@ export class WelcomePageComponent implements AfterViewInit {
 	minimizeWindow() {
 		overwolf.windows.minimize(this.thisWindowId);
 	};
-
-	contactSupport() {
-		this.initCrate();
-		this.crate.toggle();
-		this.crate.show();
-	}
-	 
-	private initCrate() {
-		if (this.crate) {
-			return;
-		}
-		this.crate = new Crate({
-			server:"187101197767933952",
-			channel:"446045705392357376",
-			shard: 'https://widgetbot.io'
-		});
-		this.crate.store.subscribe(() => {
-			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-				this.crate.hide();
-			}
-		});
-		this.crate.hide();
-	}
 }

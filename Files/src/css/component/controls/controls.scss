@@ -1,0 +1,9 @@
+@import '../../global/variables';
+
+button {
+    color: $green01;
+}
+
+button:hover {
+    background-color: $brown01;
+}
