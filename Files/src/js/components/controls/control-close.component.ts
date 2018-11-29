@@ -23,13 +23,14 @@ declare var overwolf: any;
 })
 export class ControlCloseComponent {
 
-    @Input() windowId: string;
+	@Input() windowId: string;
+	@Input() closeAll: boolean;
 
 	closeWindow() {
 		// If game is not running, we close all other windows
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('running game info', res);
-			if (!(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
+			if (this.closeAll && !(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
 				overwolf.windows.getOpenWindows((openWindows) => {
 					for (let windowName in openWindows) {
 						overwolf.windows.obtainDeclaredWindow(windowName, (result) => {

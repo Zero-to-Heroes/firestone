@@ -24,7 +24,7 @@ declare var overwolf: any;
 					<div class="controls">
 						<control-help></control-help>
 						<control-minimize [windowId]="thisWindowId"></control-minimize>
-						<control-close [windowId]="thisWindowId"></control-close>
+						<control-close [windowId]="thisWindowId" [closeAll]="true"></control-close>
 					</div>
 				</section>
 				<home-screen-info-text></home-screen-info-text>

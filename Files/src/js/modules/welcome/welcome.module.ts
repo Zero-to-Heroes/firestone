@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler }      from '@angular/core';
+import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
@@ -19,9 +19,6 @@ import { CollectionManager }  from '../../services/collection/collection-manager
 import { IndexedDbService }  from '../../services/collection/indexed-db.service';
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
-import { ControlHelpComponent } from '../../components/controls/control-help.component';
-import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
-import { ControlCloseComponent } from '../../components/controls/control-close.component';
 
 @NgModule({
 	imports: [
@@ -32,10 +29,6 @@ import { ControlCloseComponent } from '../../components/controls/control-close.c
 	],
 	declarations: [
 		WelcomePageComponent,
-		
-		ControlHelpComponent,
-		ControlMinimizeComponent,
-		ControlCloseComponent,
 		
 		HomeScreenInfoTextComponent,
 		AppChoiceComponent,

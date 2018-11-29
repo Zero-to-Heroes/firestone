@@ -7,7 +7,6 @@ import { AchievementsComponent } from './achievements/achievements.component';
 import { SimpleIOService } from '../services/plugins/simple-io.service';
 
 declare var overwolf: any;
-declare var Crate: any;
 declare var adsReady: any;
 declare var OwAd: any;
 
@@ -40,21 +39,9 @@ declare var OwAd: any;
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
 							</svg>
 						</button>
-						<button class="i-30 pink-button" (click)="contactSupport()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
-							</svg>
-						</button>
-						<button class="i-30 pink-button" (click)="minimizeWindow()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
-							</svg>
-						</button>
-						<button class="i-30 close-button" (click)="closeWindow()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-							</svg>
-						</button>
+						<control-help></control-help>
+						<control-minimize [windowId]="windowId"></control-minimize>
+						<control-close [windowId]="windowId"></control-close>
 					</div>
 				</section>
 				<section class="content-container">
@@ -108,9 +95,8 @@ export class MainWindowComponent implements AfterViewInit {
 	private achievements: AchievementsComponent;
 
 	selectedModule = 'collection';
-
-	private crate;
-	private windowId: string;
+	windowId: string;
+	
 	private adRef;
 	private adInit = false;
 
@@ -181,7 +167,6 @@ export class MainWindowComponent implements AfterViewInit {
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
-				this.initCrate();
 				this.refreshAds();
 			}
 		});
@@ -194,20 +179,6 @@ export class MainWindowComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		if (!Crate) {
-			setTimeout(() => {
-				this.ngAfterViewInit();
-			}, 20);
-			return;
-		}
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				if (!result.window.isVisible) {
-					return;
-				}
-				this.initCrate();
-			}
-		});
 		this.refreshAds();
 	}
 
@@ -235,80 +206,49 @@ export class MainWindowComponent implements AfterViewInit {
 				// console.log('center is', center);
 				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
 					overwolf.windows.restore(result.window.id, (result2) => {
-						this.closeWindow();
+						overwolf.windows.hide(this.windowId);
 					});
 				});
 			});
 		});
 	};
 
-	closeWindow() {
-		overwolf.windows.hide(this.windowId);
-	};
-
-	minimizeWindow() {
-		overwolf.windows.minimize(this.windowId);
-	};
-
-	contactSupport() {
-		this.initCrate();
-		this.crate.toggle();
-		this.crate.show();
-	}
-	 
-	private initCrate() {
-		if (this.crate) {
-			return;
-		}
-		this.crate = new Crate({
-			server:"187101197767933952",
-			channel:"446045705392357376",
-			shard: 'https://widgetbot.io'
-		});
-		this.crate.store.subscribe(() => {
-			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-				this.crate.hide();
-			}
-		});
-		this.crate.hide();
-	}
-
 	private refreshAds() {
-		 if (this.adInit) {
-			 console.log('already initializing ads, returning');
-			 return;
-		 }
-		 if (!adsReady) {
-			 console.log('ads container not ready, returning');
-			 setTimeout(() => {
-				 this.refreshAds()
-			 }, 50);
-			 return;
-		 }
-		 if (!this.adRef) {
-			 console.log('first time init ads, creating OwAd');
-			 this.adInit = true;
-			 overwolf.windows.getCurrentWindow((result) => {
-				 if (result.status === "success") {
-					 console.log('is window visible?', result);
-					 if (result.window.isVisible) {
-						 console.log('init OwAd');
-						 this.adRef = new OwAd(document.getElementById('ad-div'));
-					 }
-					 this.adInit = false;
-				 }
-			 });
-			 return;
-		 }
-		 console.log('refreshing ads');
-		 this.adRef.refreshAd();
-	 }
+		if (this.adInit) {
+		 	console.log('already initializing ads, returning');
+		 	return;
+		}
+		if (!adsReady) {
+		 	console.log('ads container not ready, returning');
+		 	setTimeout(() => {
+			 	this.refreshAds()
+		 	}, 50);
+		 	return;
+		}
+		if (!this.adRef) {
+		 	console.log('first time init ads, creating OwAd');
+		 	this.adInit = true;
+		 	overwolf.windows.getCurrentWindow((result) => {
+				if (result.status === "success") {
+					console.log('is window visible?', result);
+					if (result.window.isVisible) {
+						console.log('init OwAd');
+						this.adRef = new OwAd(document.getElementById('ad-div'));
+					}
+					this.adInit = false;
+				}
+			});
+		 	return;
+		}
+		console.log('refreshing ads');
+		this.adRef.refreshAd();
+	}
  
-	 private removeAds() {
-		 if (!this.adRef) {
-			 return;
-		 }
-		 console.log('removing ads');
-		 this.adRef.removeAd();
-	 }
+	private removeAds() {
+		if (!this.adRef) {
+		 	return;
+		}
+		console.log('removing ads');
+		this.adRef.removeAd();
+	}
 }
