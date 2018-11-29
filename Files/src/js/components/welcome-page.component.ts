@@ -3,8 +3,6 @@ import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetect
 import { DebugService } from '../services/debug.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
 
-const HEARTHSTONE_GAME_ID = 9898;
-
 declare var overwolf: any;
 
 @Component({
@@ -25,20 +23,12 @@ declare var overwolf: any;
 					</i>
 					<div class="controls">
 						<control-help></control-help>
-						<button class="i-30 pink-button" (click)="minimizeWindow()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
-							</svg>
-						</button>
-						<button class="i-30 close-button" (click)="closeWindow(true)">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-							</svg>
-						</button>
+						<control-minimize [windowId]="thisWindowId"></control-minimize>
+						<control-close [windowId]="thisWindowId"></control-close>
 					</div>
 				</section>
 				<home-screen-info-text></home-screen-info-text>
-				<app-choice (close)="closeWindow(false)"></app-choice>
+				<app-choice (close)="hideWindow()"></app-choice>
 				<social-media></social-media>
 				<version></version>
 			</div>
@@ -69,7 +59,7 @@ declare var overwolf: any;
 })
 export class WelcomePageComponent implements AfterViewInit {
 
-	private thisWindowId: string;
+	thisWindowId: string;
 
 	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
 		overwolf.windows.getCurrentWindow((result) => {
@@ -89,7 +79,6 @@ export class WelcomePageComponent implements AfterViewInit {
 						overwolf.windows.changePosition(this.thisWindowId, newX, newY);
 					}
 				});
-				// console.log('received move message', message.content);
 			}
 		});
 	}
@@ -99,30 +88,7 @@ export class WelcomePageComponent implements AfterViewInit {
 		overwolf.windows.dragMove(this.thisWindowId);
 	};
 
-	closeWindow(quitApp: boolean) {
-		// If game is not running, we close all other windows
-		overwolf.games.getRunningGameInfo((res: any) => {
-			console.log('running game info', res);
-			if (quitApp && !(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
-				overwolf.windows.getOpenWindows((openWindows) => {
-					for (let windowName in openWindows) {
-						overwolf.windows.obtainDeclaredWindow(windowName, (result) => {
-							if (result.status !== 'success') {
-								return;
-							}
-							overwolf.windows.close(result.window.id, (result) => {
-							})
-						});
-					}
-				})
-			}
-			else {
-				overwolf.windows.hide(this.thisWindowId);
-			}
-		});
-	};
-
-	minimizeWindow() {
-		overwolf.windows.minimize(this.thisWindowId);
+	hideWindow() {
+		overwolf.windows.hide(this.thisWindowId);
 	};
 }

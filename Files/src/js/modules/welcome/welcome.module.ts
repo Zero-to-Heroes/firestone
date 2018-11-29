@@ -20,6 +20,8 @@ import { IndexedDbService }  from '../../services/collection/indexed-db.service'
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { ControlHelpComponent } from '../../components/controls/control-help.component';
+import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
+import { ControlCloseComponent } from '../../components/controls/control-close.component';
 
 @NgModule({
 	imports: [
@@ -32,6 +34,8 @@ import { ControlHelpComponent } from '../../components/controls/control-help.com
 		WelcomePageComponent,
 		
 		ControlHelpComponent,
+		ControlMinimizeComponent,
+		ControlCloseComponent,
 		
 		HomeScreenInfoTextComponent,
 		AppChoiceComponent,
