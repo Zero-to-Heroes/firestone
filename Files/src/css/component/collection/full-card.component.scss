@@ -105,6 +105,14 @@
                     opacity: 1;
                 }
 
+                .overlay.overlay {
+                    display: none;
+                }
+
+                .real-card.real-card {
+                    filter: none;
+                }
+
                 .count {
                     height: 40px;
                     top: -26px;
