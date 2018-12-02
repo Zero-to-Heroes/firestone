@@ -33,9 +33,6 @@ export class ControlHelpComponent implements AfterViewInit {
 		}
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success") {
-				if (!result.window.isVisible) {
-					return;
-				}
 				this.initCrate();
 			}
 		});
@@ -51,6 +48,7 @@ export class ControlHelpComponent implements AfterViewInit {
 		if (this.crate) {
 			return;
 		}
+		console.log('initializing Crate');
 		this.crate = new Crate({
 			server:"187101197767933952",
 			channel:"446045705392357376",
