@@ -61,7 +61,6 @@ export class FtueComponent implements AfterViewInit {
     ftueElement;
     
     private showingPityTimerFtue: boolean = false;
-	private userPrefs: Preferences;
 
 	constructor(
 		private events: Events,
@@ -69,46 +68,7 @@ export class FtueComponent implements AfterViewInit {
         private resolver: ComponentFactoryResolver,
         private preferences: PreferencesService) {
 
-		this.preferences.getPreferences().then((preferences) => {
-			this.userPrefs = preferences;
-		});
-
-		this.events.on(Events.SET_MOUSE_OVER).subscribe(
-			(data) => {
-                console.log('showing set FTUE?', this.userPrefs, this.showingPityTimerFtue);
-                if (!this.userPrefs.hasSeenPityTimerFtue && !this.showingPityTimerFtue) {
-                    this.showingPityTimerFtue = true;
-                    this.destroy();
-
-                    const rect: any = data.data[0];
-                    let left: number = rect.left - 215;
-                    this.ftueElement.instance.placement = 'left';
-                    if (left < 20) {
-                        left = rect.right + 5;
-                        this.ftueElement.instance.placement = 'right';
-                    }
-                    // TODO: I think this comes from the window invisible borders, to be checked
-                    const top: number = rect.top - 10;
-
-                    this.ftueElement.instance.display = 'flex';
-                    this.ftueElement.instance.left = left + 'px';
-                    this.ftueElement.instance.top = top + 'px';
-                    this.ftueElement.instance.position = 'absolute';
-
-                    this.ftueElement.instance.removing = false;
-                    this.ftueElement.instance.title = `We've added Pity Timers!`;
-                    this.ftueElement.instance.text = `You can see when is your next legendary and epic scheduled for every set.
-                    <br/>Have fun!`;
-                    this.ftueElement.instance.buttonText = `Got it`;
-                    this.events.broadcast(Events.SHOWING_FTUE, data.data[1]);
-                    if (!(<ViewRef>this.cdr).destroyed) {
-                        this.cdr.detectChanges();
-                    }
-                    this.updatePreferences();
-                }
-			}
-		);
-
+		this.events.on(Events.SET_MOUSE_OVER).subscribe((data) => this.handleSetMouseOver(data));
 		this.events.on(Events.DISMISS_FTUE).subscribe(() => this.destroy());
 		this.events.on(Events.FORMAT_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
 		this.events.on(Events.MODULE_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
@@ -127,7 +87,41 @@ export class FtueComponent implements AfterViewInit {
 		    // We create the component using the factory and the injector
 		    this.ftueElement = this.ftue.createComponent(factory);
 		})
-	}
+    }
+    
+    private async handleSetMouseOver(data) {
+        const userPrefs: Preferences = await this.preferences.getPreferences();
+        if (!userPrefs.hasSeenPityTimerFtue && !this.showingPityTimerFtue) {
+            this.showingPityTimerFtue = true;
+            this.destroy();
+
+            const rect: any = data.data[0];
+            let left: number = rect.left - 215;
+            this.ftueElement.instance.placement = 'left';
+            if (left < 20) {
+                left = rect.right + 5;
+                this.ftueElement.instance.placement = 'right';
+            }
+            // TODO: I think this comes from the window invisible borders, to be checked
+            const top: number = rect.top - 10;
+
+            this.ftueElement.instance.display = 'flex';
+            this.ftueElement.instance.left = left + 'px';
+            this.ftueElement.instance.top = top + 'px';
+            this.ftueElement.instance.position = 'absolute';
+
+            this.ftueElement.instance.removing = false;
+            this.ftueElement.instance.title = `We've added Pity Timers!`;
+            this.ftueElement.instance.text = `You can see when is your next legendary and epic scheduled for every set.
+            <br/>Have fun!`;
+            this.ftueElement.instance.buttonText = `Got it`;
+            this.events.broadcast(Events.SHOWING_FTUE, data.data[1]);
+            if (!(<ViewRef>this.cdr).destroyed) {
+                this.cdr.detectChanges();
+            }
+            this.updatePreferences();
+        }
+    }
 
 	private destroy() {
         this.showingPityTimerFtue = false;
