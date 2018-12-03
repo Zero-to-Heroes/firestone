@@ -223,6 +223,10 @@ export class SetComponent {
 		if (this.showingPityTimerFtue || !this.released) {
 			return;
 		}
+		if (this.timeoutHandler) {
+			clearTimeout(this.timeoutHandler);
+			this.timeoutHandler = null;
+		}
 		this.events.broadcast(Events.SET_SELECTED, this._cardSet);
 		this.movingToSet = true;
 		console.log('set moving to set event');
