@@ -6,6 +6,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'settings-achievements-video-quality',
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
+		`../../../css/component/settings/settings-common.component.scss`,
 		`../../../css/component/settings/settings-achievements-video-quality.component.scss`
 	],
 	template: `

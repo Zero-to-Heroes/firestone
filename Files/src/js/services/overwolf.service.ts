@@ -34,6 +34,22 @@ export class OverwolfService {
         });
 	}
 
+	public async setAudioCaptureSettings(captureSystemSound: boolean, captureMicrophoneSound: boolean): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.settings.setAudioCaptureSettings(captureSystemSound, captureMicrophoneSound, (res: any) => {
+                resolve(res);
+            });
+        });
+	}
+	
+	public async getAudioCaptureSettings(): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.settings.getAudioCaptureSettings((res: any) => {
+                resolve(res);
+            });
+        });
+	}
+
 	public async sendMessage(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<void>((resolve) => {

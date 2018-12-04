@@ -8,7 +8,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	],
 	template: `
 		<div class="achievements-body">
-			<settings-achievements-video-quality></settings-achievements-video-quality>
+		<settings-achievements-video-quality></settings-achievements-video-quality>
+		<settings-achievements-sound-capture></settings-achievements-sound-capture>
         </div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

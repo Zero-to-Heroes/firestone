@@ -1,0 +1,84 @@
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { OverwolfService } from '../../services/overwolf.service';
+
+@Component({
+	selector: 'settings-achievements-sound-capture',
+	styleUrls: [
+		`../../../css/global/components-global.scss`,
+		`../../../css/component/settings/settings-common.component.scss`,
+		`../../../css/component/settings/settings-achievements-sound-capture.component.scss`,
+	],
+	template: `
+        <div class="sound-capture">
+            <div class="title">Sound capture</div>
+            <div class="sound-capture-form">
+                <input type="checkbox" name="system-capture" id="system-capture-checkbox">
+                <label for="system-capture-checkbox" (click)="toggleSystemSoundCapture($event)">
+                    <i class="unselected" *ngIf="!captureSystemSound">
+                        <svg>
+                            <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>
+                        </svg>
+                    </i>
+                    <i class="checked" *ngIf="captureSystemSound">
+                        <svg>
+                            <use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
+                        </svg>
+                    </i>
+                    <p>Capture system sound</p>
+				</label>
+				
+                <input type="checkbox" name="microphone-capture" id="microphone-capture-checkbox">
+                <label for="microphone-capture-checkbox" (click)="toggleMicrophoneSoundCapture($event)">
+                    <i class="unselected" *ngIf="!captureMicrophoneSound">
+                        <svg>
+                            <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>
+                        </svg>
+                    </i>
+                    <i class="checked" *ngIf="captureMicrophoneSound">
+                        <svg>
+                            <use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
+                        </svg>
+                    </i>
+                    <p>Capture microphone sound</p>
+                </label>
+            </div>
+            <a href="overwolf://settings/sound">Advanced sound settings</a>
+        </div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SettingsAchievementsSoundCaptureComponent {
+	
+	captureSystemSound: boolean;
+	captureMicrophoneSound: boolean;
+
+	constructor(private owService: OverwolfService, private cdr: ChangeDetectorRef) {
+		this.updateDefaultValues();
+	}
+
+	toggleSystemSoundCapture(event) {
+		this.captureSystemSound = !this.captureSystemSound;
+		this.changeSoundCaptureSettings();
+        this.cdr.detectChanges();
+	}
+
+	toggleMicrophoneSoundCapture(event) {
+		this.captureMicrophoneSound = !this.captureMicrophoneSound;
+		this.changeSoundCaptureSettings();
+        this.cdr.detectChanges();
+	}
+
+	private async changeSoundCaptureSettings() {
+		console.log('changing settings with', this.captureSystemSound, this.captureMicrophoneSound);
+		const result = await this.owService.setAudioCaptureSettings(this.captureSystemSound, this.captureMicrophoneSound);
+		console.log('recording settings changed', result);
+	}
+
+	private async updateDefaultValues() {
+		const result = await this.owService.getAudioCaptureSettings();
+		console.log('sound default values', result);
+		this.captureSystemSound = result.sound_enabled;
+		this.captureMicrophoneSound = result.microphone_enabled;
+        this.cdr.detectChanges();
+	}
+}
