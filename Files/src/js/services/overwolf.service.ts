@@ -34,6 +34,30 @@ export class OverwolfService {
         });
 	}
 
+	public async sendMessage(windowName: string, messageType: string, messageBody?: string): Promise<void> {
+		const window = await this.obtainDeclaredWindow(windowName);
+		return new Promise<void>((resolve) => {
+			overwolf.windows.sendMessage(window.id,messageType, messageBody, (result) => {
+				resolve();
+			});
+        });
+
+	}
+
+	public async obtainDeclaredWindow(windowName: string): Promise<any> {
+		return new Promise<any>((resolve, reject) => {
+            overwolf.windows.obtainDeclaredWindow(windowName, (res: any) => {
+				if (res.status === 'success') {
+					resolve(res.window);
+				}
+				else {
+					reject(res);
+				}
+            });
+        });
+
+	}
+
 	private gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {
 			return false;

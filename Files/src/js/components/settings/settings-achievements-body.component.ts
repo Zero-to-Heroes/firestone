@@ -85,6 +85,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						</div>
 					</label>
 				</form>
+				<a href="overwolf://settings/capture">Advanced video settings</a>
 			</div>
         </div>
 	`,
@@ -149,6 +150,7 @@ export class SettingsAchievementsBodyComponent {
 		}
 		console.log('changing settings with', settings);
 		const result = await this.owService.setVideoCaptureSettings(settings.resolution, settings.fps);
+		await this.owService.sendMessage('MainWindow', 'capture-settings-updated');
 		this.updatePending = false;
 		console.log('recording settings changed', result);
 	}
