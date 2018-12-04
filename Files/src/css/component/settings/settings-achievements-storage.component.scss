@@ -1,0 +1,69 @@
+:host {
+    padding-left: 15px;
+    flex-grow: 1;
+}
+
+.achievements-storage {
+    height: 220px;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 15px;
+
+    .input-label {
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 14px;
+        color: #A89782;
+    }
+
+    input, input:focus, input:active {
+        display: block;
+        background: transparent;
+        border: 1px solid #A89782;
+        outline: none;
+        height: 30px;
+        padding-left: 15px;
+    }
+
+    .media-folder-input {
+        display: block;
+        width: 100%;
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 14px;        
+        color: #A89782;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 15px;
+
+        button, a {
+            width: 80px;
+            height: 30px;
+            background: #A89782;
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 12px;
+            color: #2F0D0D;
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover, a:hover {
+            background: #D9C3AB;
+        }
+    }
+
+    .used-storage {
+        margin-top: 30px;
+    }
+}

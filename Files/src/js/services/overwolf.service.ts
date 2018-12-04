@@ -71,7 +71,30 @@ export class OverwolfService {
 				}
             });
         });
+	}
 
+	public async getAppVideoCaptureFolderSize(): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.media.getAppVideoCaptureFolderSize((res: any) => {
+                resolve(res);
+            });
+        });
+	}
+
+	public async getOverwolfVideosFolder(): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.settings.getOverwolfVideosFolder((res: any) => {
+                resolve(res);
+            });
+        });
+	}
+
+	public async openWindowsExplorer(path: string): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.utils.openWindowsExplorer(path, (res: any) => {
+                resolve(res);
+            });
+        });
 	}
 
 	private gameRunning(gameInfo: any): boolean {

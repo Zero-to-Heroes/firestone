@@ -14,7 +14,6 @@ import { PityTimer } from '../models/pity-timer';
 const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 declare var overwolf: any;
-declare var ga: any;
 
 @Component({
 	selector: 'collection',
@@ -110,7 +109,6 @@ export class CollectionComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		ga('send', 'event', 'collection', 'show');
 		this.cdr.detach();
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {

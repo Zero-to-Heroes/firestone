@@ -9,6 +9,7 @@ import { SimpleIOService } from '../services/plugins/simple-io.service';
 declare var overwolf: any;
 declare var adsReady: any;
 declare var OwAd: any;
+declare var ga: any;
 
 @Component({
 	selector: 'main-window',
@@ -180,6 +181,7 @@ export class MainWindowComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.refreshAds();
+		ga('send', 'event', 'collection', 'show');
 	}
 
 	@HostListener('mousedown')

@@ -16,16 +16,6 @@ export class AchievementsVideoCaptureService {
     readonly settings = {
         "settings": {
             "video": { "buffer_length": 40000 },
-            "audio": {
-                "mic": {
-                    "volume": 100,
-                    "enabled": true
-                },
-                "game": {
-                    "volume": 75,
-                    "enabled": true
-                }
-            },
             "peripherals": { "capture_mouse_cursor": "both" }
         }
     }

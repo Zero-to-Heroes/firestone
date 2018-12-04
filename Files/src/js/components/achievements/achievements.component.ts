@@ -83,7 +83,6 @@ export class AchievementsComponent implements AfterViewInit {
 		private _events: Events,
 		private repository: AchievementsRepository,
 		private cdr: ChangeDetectorRef) {
-		ga('send', 'event', 'achievements', 'show');
 
 		overwolf.windows.onStateChanged.addListener((message) => {
 			if (message.window_name != "CollectionWindow") {
