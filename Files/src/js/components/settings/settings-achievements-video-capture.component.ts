@@ -3,14 +3,14 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
-	selector: 'settings-achievements-video-quality',
+	selector: 'settings-achievements-video-capture',
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/settings-achievements-video-quality.component.scss`
+		`../../../css/component/settings/settings-achievements-video-capture.component.scss`
 	],
 	template: `
-        <div class="video-quality">
+        <div class="video-capture">
             <div class="title">Video quality</div>
             <form class="video-quality-form" [formGroup]="settingsForm">
                 <input type="radio" formControlName="videoQuality" value="low" id="video-quality-low">
@@ -90,7 +90,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAchievementsVideoQualityComponent {
+export class SettingsAchievementsVideoCaptureComponent {
 
 	private readonly DEBOUNCE_DURATION_IN_MS = 600;
 	

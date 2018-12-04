@@ -9,11 +9,12 @@ import { DebugService } from '../../services/debug.service';
 import { SettingsAppSelectionComponent } from '../../components/settings/settings-app-selection.component';
 import { SettingsAchievementsComponent } from '../../components/settings/settings-achievements.component';
 import { SettingsAchievementsMenuComponent } from '../../components/settings/settings-achievements-menu.component';
-import { SettingsAchievementsBodyComponent } from '../../components/settings/settings-achievements-body.component';
+import { SettingsAchievementsCaptureComponent } from '../../components/settings/settings-achievements-capture.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OverwolfService } from '../../services/overwolf.service';
-import { SettingsAchievementsVideoQualityComponent } from '../../components/settings/settings-achievements-video-quality.component';
+import { SettingsAchievementsVideoCaptureComponent } from '../../components/settings/settings-achievements-video-capture.component';
 import { SettingsAchievementsSoundCaptureComponent } from '../../components/settings/settings-achievements-sound-capture.component';
+import { SettingsAchievementsStorageComponent } from '../../components/settings/settings-achievements-storage.component';
 
 @NgModule({
 	imports: [
@@ -29,9 +30,10 @@ import { SettingsAchievementsSoundCaptureComponent } from '../../components/sett
 		SettingsAppSelectionComponent,
 		SettingsAchievementsComponent,
 		SettingsAchievementsMenuComponent,
-		SettingsAchievementsBodyComponent,
-		SettingsAchievementsVideoQualityComponent,
+		SettingsAchievementsCaptureComponent,
+		SettingsAchievementsVideoCaptureComponent,
 		SettingsAchievementsSoundCaptureComponent,
+		SettingsAchievementsStorageComponent,
 	],
 	bootstrap: [
 		SettingsComponent,

@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
 	selector: 'settings-achievements-menu',
@@ -8,10 +8,10 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/
 	],
 	template: `
         <ul class="achievements-menu">
-            <li [ngClass]="{'selected': selectedMenu === 'capture'}">
+            <li [ngClass]="{'selected': selectedMenu === 'capture'}" (click)="selectMenu('capture')">
                 <span>Capture</span>
             </li>
-            <li [ngClass]="{'selected': selectedMenu === 'storage'}">
+            <li [ngClass]="{'selected': selectedMenu === 'storage'}" (click)="selectMenu('storage')">
                 <span>Storage</span>
             </li>
         </ul>
@@ -20,5 +20,10 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/
 })
 export class SettingsAchievementsMenuComponent {
 
-    selectedMenu: string = 'capture';
+    @Output() onMenuSelected = new EventEmitter<string>();
+    @Input() selectedMenu: string;
+
+    selectMenu(menu: string) {
+        this.onMenuSelected.next(menu);
+    }
 }
