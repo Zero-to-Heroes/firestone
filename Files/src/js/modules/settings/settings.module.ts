@@ -12,6 +12,7 @@ import { SettingsAchievementsMenuComponent } from '../../components/settings/set
 import { SettingsAchievementsBodyComponent } from '../../components/settings/settings-achievements-body.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OverwolfService } from '../../services/overwolf.service';
+import { SettingsAchievementsVideoQualityComponent } from '../../components/settings/settings-achievements-video-quality.component';
 
 @NgModule({
 	imports: [
@@ -28,6 +29,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		SettingsAchievementsComponent,
 		SettingsAchievementsMenuComponent,
 		SettingsAchievementsBodyComponent,
+		SettingsAchievementsVideoQualityComponent,
 	],
 	bootstrap: [
 		SettingsComponent,
