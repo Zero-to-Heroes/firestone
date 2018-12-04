@@ -1,0 +1,15 @@
+@import '../../global/variables';
+
+.menu-selection {
+	border-bottom: 1px solid #472406;
+	padding-left: 15px;
+
+	li {
+    	margin-right: 25px;
+    	padding-bottom: 14px;
+
+		&.disabled {
+			color: #8E5B23;
+		}
+	}
+}

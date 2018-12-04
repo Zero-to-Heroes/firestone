@@ -16,7 +16,23 @@ export class OverwolfService {
                 resolve(false);
             });
         });
-    }
+	}
+	
+	public async setVideoCaptureSettings(resolution: string, fps: number): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.settings.setVideoCaptureSettings(resolution, fps, (res: any) => {
+                resolve(res);
+            });
+        });
+	}
+	
+	public async getVideoCaptureSettings(): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.settings.getVideoCaptureSettings((res: any) => {
+                resolve(res);
+            });
+        });
+	}
 
 	private gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {

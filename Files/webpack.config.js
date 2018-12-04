@@ -23,6 +23,7 @@ module.exports = function(env, argv) {
       collection: "./src/js/modules/collection/main.ts",
       loading: "./src/js/modules/loading/main.ts",
       notifications: "./src/js/modules/notifications/main.ts",
+      settings: "./src/js/modules/settings/main.ts",
       welcome: "./src/js/modules/welcome/main.ts",
       polyfills: "./src/polyfills.ts"
     },
@@ -100,6 +101,7 @@ module.exports = function(env, argv) {
           "./src/js/modules/collection/collection.module#CollectionModule",
           "./src/js/modules/loading/loading.module#LoadingModule",
           "./src/js/modules/notifications/notifications.module#NotificationsModule",
+          "./src/js/modules/settings/settings.module#SettingsModule",
           "./src/js/modules/welcome/welcome.module#WelcomeModule",
         ],
         sourceMap: true
@@ -114,6 +116,7 @@ module.exports = function(env, argv) {
         { from: path.join(process.cwd(), "src/html/collection.html"), to: "html" },
         { from: path.join(process.cwd(), "src/html/loading.html"), to: "html" },
         { from: path.join(process.cwd(), "src/html/notifications.html"), to: "html" },
+        { from: path.join(process.cwd(), "src/html/settings.html"), to: "html" },
         { from: path.join(process.cwd(), "src/html/welcome.html"), to: "html" },
         { from: path.join(process.cwd(), "/../*") },
         { from: path.join(process.cwd(), "src/assets"), to: "assets" },

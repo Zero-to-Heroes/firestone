@@ -20,6 +20,7 @@
 		"Extensions",
 		"Profile",
 		"Hotkeys",
+		"VideoCaptureSettings",
         "Streaming"
 	],
 	"disable_dockbutton": false,
@@ -62,6 +63,15 @@
                 "grab_keyboard_focus": false,
                 "grab_focus_on_desktop": false,
                 "block_top_window_navigation": true
+			},
+			"SettingsWindow": {
+				"file": "Files/html/settings.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": true,
+		        "size": {"width": 660, "height": 600},
+		        "min_size": {"width": 660, "height": 600},
+		        "max_size": {"width": 660, "height": 600}
 			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
