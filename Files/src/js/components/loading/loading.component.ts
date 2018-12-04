@@ -1,6 +1,7 @@
 import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
+import { FeatureFlags } from '../../services/feature-flags.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -27,6 +28,7 @@ declare var Crate: any;
 						</svg>
 					</i>
 					<div class="controls">
+						<control-settings [windowId]="thisWindowId" *ngIf="achievementsOn"></control-settings>
 						<button class="i-30 pink-button" (click)="contactSupport()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
@@ -110,13 +112,19 @@ export class LoadingComponent implements AfterViewInit {
 
 	title: string = 'Getting ready';
 	loading = true;
+	achievementsOn: boolean;
 	
 	private thisWindowId: string;
 	private adRef;
 	private crate;
 	private adInit;
 
-	constructor(private debugService: DebugService, private ngZone: NgZone, private elRef: ElementRef, private cdr: ChangeDetectorRef) {
+	constructor(
+			private debugService: DebugService, 
+			private ngZone: NgZone, 
+			private elRef: ElementRef, 
+			private flags: FeatureFlags,
+			private cdr: ChangeDetectorRef) {
 		console.log('in loading constructor');
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
@@ -124,6 +132,7 @@ export class LoadingComponent implements AfterViewInit {
 			}
 		});
 
+		this.achievementsOn = this.flags.achievements();
 		this.positionWindow();
 
 		overwolf.windows.onMessageReceived.addListener((message) => {

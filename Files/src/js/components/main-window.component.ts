@@ -5,6 +5,7 @@ import { Events } from '../services/events.service';
 import { CollectionComponent } from './collection.component';
 import { AchievementsComponent } from './achievements/achievements.component';
 import { SimpleIOService } from '../services/plugins/simple-io.service';
+import { FeatureFlags } from '../services/feature-flags.service';
 
 declare var overwolf: any;
 declare var adsReady: any;
@@ -35,6 +36,7 @@ declare var ga: any;
 					</div>
 					<hotkey></hotkey>
 					<div class="controls">
+						<control-settings [windowId]="windowId" *ngIf="achievementsOn"></control-settings>
 						<button class="i-30 pink-button" (click)="goHome()">
 							<svg class="svg-icon-fill">
 								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
@@ -97,6 +99,7 @@ export class MainWindowComponent implements AfterViewInit {
 
 	selectedModule = 'collection';
 	windowId: string;
+	achievementsOn: boolean;
 	
 	private adRef;
 	private adInit = false;
@@ -105,6 +108,7 @@ export class MainWindowComponent implements AfterViewInit {
 		private events: Events, 
 		private cdr: ChangeDetectorRef,
 		private io: SimpleIOService,
+		private flags: FeatureFlags,
 		private debug: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
@@ -177,6 +181,7 @@ export class MainWindowComponent implements AfterViewInit {
 				console.log('selected module', this.selectedModule);
 			}
 		);
+		this.achievementsOn = this.flags.achievements();
 	}
 
 	ngAfterViewInit() {

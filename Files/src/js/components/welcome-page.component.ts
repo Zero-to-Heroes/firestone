@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetect
 
 import { DebugService } from '../services/debug.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
+import { FeatureFlags } from '../services/feature-flags.service';
 
 declare var overwolf: any;
 
@@ -22,6 +23,7 @@ declare var overwolf: any;
 						</svg>
 					</i>
 					<div class="controls">
+						<control-settings [windowId]="thisWindowId" *ngIf="achievementsOn"></control-settings>
 						<control-help></control-help>
 						<control-minimize [windowId]="thisWindowId"></control-minimize>
 						<control-close [windowId]="thisWindowId" [closeAll]="true"></control-close>
@@ -60,13 +62,15 @@ declare var overwolf: any;
 export class WelcomePageComponent implements AfterViewInit {
 
 	thisWindowId: string;
+	achievementsOn: boolean;
 
-	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
+	constructor(private debugService: DebugService, private collectionManager: CollectionManager, private flags: FeatureFlags) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.thisWindowId = result.window.id;
 			}
 		});
+		this.achievementsOn = flags.achievements();
 	}
 
 	ngAfterViewInit() {
