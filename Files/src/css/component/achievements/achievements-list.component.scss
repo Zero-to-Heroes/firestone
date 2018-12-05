@@ -33,7 +33,7 @@
 
 		&.shrink-header {
 			transform: scaleY(1);
-			top: -5px;
+			top: -2px;
 		}
 	}
 
@@ -183,6 +183,9 @@
 				max-height: 0;
 				opacity: 0;
 			}
+		}
+		.set-title {
+			padding-bottom: 3px;
 		}
 	}
 }
