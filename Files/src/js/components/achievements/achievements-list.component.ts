@@ -35,7 +35,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				</ng-select>
 				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 			</div>
-			<i class="i-13X7 collapse-menu {{headerClass}}" (click)="toggleMenu()">
+			<i class="i-13X7 collapse-menu {{headerClass}}" (click)="toggleMenu()" *ngIf="showCollapse">
 				<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
 				</svg>
@@ -78,6 +78,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateTitle: string;
 	emptyStateText: string;
 	headerClass: string;
+	showCollapse: boolean;
 
 	_achievementIdToScrollIntoView: string;
 
@@ -240,6 +241,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			// console.log('list element', listElement);
 			achievementToShow.scrollIntoView(true);
 		}
+		this.showCollapse = this.activeAchievements.length > 0;
 		this.updatePending = false;
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
