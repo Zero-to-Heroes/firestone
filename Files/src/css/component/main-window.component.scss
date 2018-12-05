@@ -20,7 +20,6 @@ body {
 	justify-content: center;
 	align-items: center;
 	height: 100%;
-	// filter: drop-shadow(0 0 5px rgba(0, 0, 0, .7));
     overflow: hidden;
 
 	.corner {
@@ -49,15 +48,6 @@ body {
     		transform: rotate(270deg);
 		}
 	}
-
-    .shadow {
-    	position: absolute;
-	    top: 10px;
-	    left: 10px;
-	    bottom: 10px;
-	    right: 10px;
-	    box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
-    }
 
 	.app-container {
     	position: relative;
