@@ -28,8 +28,8 @@ declare var overwolf: any;
 })
 export class NotificationsComponent implements AfterViewInit {
 
-	// timeout = 20000;
-	timeout = 999999999999;
+	timeout = 20000;
+	// timeout = 999999999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
