@@ -116,7 +116,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                         numberOfCompletions: victoryAchievement.numberOfCompletions,
                         iconSvgSymbol: this.conf.icon(victoryAchievement.type),
                         text(showTimes: boolean = false): string {
-                            const times = showTimes ? `${encounterAchievement.numberOfCompletions} times` : ``;
+                            const times = showTimes ? `${victoryAchievement.numberOfCompletions} times` : ``;
                             return `You defeated ${achievement.name} ${times}`;
                         },
                     } as CompletionStep,
