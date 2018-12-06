@@ -9,6 +9,7 @@ import { GameEvents } from '../../services/game-events.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { CardHistoryStorageService } from './card-history-storage.service';
+import { captureEvent } from '@sentry/core';
 
 declare var overwolf: any;
 declare var parseCardsText: any;
@@ -207,6 +208,16 @@ export class PackMonitor {
 				console.log('[WARN] Could not detect the clicked on card', x, y, data, result);
 				console.log('could not identify card');
 				ga('send', 'event', 'error', 'card-unidentified', {x: x, y: y, data: data, result: result});
+				captureEvent({
+					message: 'could not identify the card the user clicked on',
+					extra: {
+						x: x, 
+						y: y, 
+						data: data, 
+						result: result,
+						dpi: this.dpi
+					}
+				})
 				return;
 			}
 			console.log('matching card position', ret);
