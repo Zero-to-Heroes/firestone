@@ -7,10 +7,14 @@
     align-items: center;
 	height: 36px;
 	padding-left: 10px;
+
+    &:hover {
+    	background: rgba(255, 255, 255, 0.04);
+    }
 	
-    // &:hover {
-    // 	background: rgba(255, 255, 255, 0.08);
-    // }
+	&.active {
+    	background: rgba(255, 255, 255, 0.08);
+	}
 
 	.name {
 		// width: 195px;
