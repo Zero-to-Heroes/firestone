@@ -32,6 +32,7 @@ export class Events {
 	public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
 	public static readonly ACHIEVEMENT_RECORD_SAVED = 'achievement-record-saved';
 	public static readonly ACHIEVEMENT_UPDATED = 'achievement-updated';
+	public static readonly SHOW_ACHIEVEMENT = 'show-achievement';
 
 	public static readonly SCENE_CHANGED = "scene-changed";
 

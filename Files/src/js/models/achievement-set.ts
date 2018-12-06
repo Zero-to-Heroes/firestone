@@ -2,7 +2,6 @@ import { VisualAchievement } from './visual-achievement';
 import { FilterOption } from './filter-option';
 
 export class AchievementSet {
-
 	readonly id: string;
 	readonly displayName: string;
 	readonly logoName: string;
@@ -21,4 +20,11 @@ export class AchievementSet {
 		this.achievements = achievements;
 		this.filterOptions = filterOptions;
 	}
+
+	public findAchievementId(achievementId: string): string {
+		return this.achievements
+				.find((achievement) => achievement.completionSteps.map((step) => step.id).indexOf(achievementId) !== -1)
+				.completionSteps[0].id;
+	}
+
 }

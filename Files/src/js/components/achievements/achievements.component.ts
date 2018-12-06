@@ -146,7 +146,7 @@ export class AchievementsComponent implements AfterViewInit {
 		this._selectedView = 'list';
 		this._selectedCategory = achievementSet;
 		this._achievementsList = this._selectedCategory.achievements;
-		this.achievementIdToScrollIntoView = achievementId;
+		this.achievementIdToScrollIntoView = achievementSet.findAchievementId(achievementId);
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 			this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');

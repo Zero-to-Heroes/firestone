@@ -181,6 +181,9 @@ export class MainWindowComponent implements AfterViewInit {
 				console.log('selected module', this.selectedModule);
 			}
 		);
+		this.events.on(Events.SHOW_ACHIEVEMENT).subscribe((data) => {
+			this.achievements.selectAchievement(data.data[0]);
+		});
 		this.achievementsOn = this.flags.achievements();
 	}
 

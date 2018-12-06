@@ -240,6 +240,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			// const listElement: Element = this.el.nativeElement.querySelector('.achievements-list');
 			// console.log('list element', listElement);
 			achievementToShow.scrollIntoView(true);
+			this._achievementIdToScrollIntoView = undefined;
 		}
 		this.showCollapse = this.activeAchievements.length > 0;
 		this.updatePending = false;
