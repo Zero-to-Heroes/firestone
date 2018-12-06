@@ -231,6 +231,15 @@
                     background: url(/Files/assets/svg/video_sound_off.svg) center center;
                 }
             }
+
+            &:hover {
+                ::ng-deep .icon:before {
+                    background-image: url(/Files/assets/svg/video_sound_on_hover.svg);
+                }
+                ::ng-deep .vg-icon-volume_off:before {
+                    background-image: url(/Files/assets/svg/video_sound_off_hover.svg);
+                }
+            }
         }
 
         vg-volume {
