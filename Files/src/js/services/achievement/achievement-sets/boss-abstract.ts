@@ -98,7 +98,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
                 const encounterAchievement = mergedAchievements.filter((ach) => ach.id == encountedId)[0];
                 const victoryAchievement = mergedAchievements.filter((ach) => ach.id == victoryId)[0];
                 const cardText = this.cardsService.getCard(achievement.cardId).text || '...';
-                const text = cardText.replace('<i>', '').replace('</i>', '');
+                const text = cardText.replace('<i>', '').replace('</i>', '').replace('[x]', '');
                 const replayInfo = [ ...(encounterAchievement.replayInfo || []), ...(victoryAchievement.replayInfo || [])]
                         .sort((a, b) => a.creationTimestamp - b.creationTimestamp);
                 const completionSteps = [
