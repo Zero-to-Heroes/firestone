@@ -36,7 +36,12 @@
                 text-align: center;
 
                 &:hover {
-                    color: #D9C3AB;
+                    border-color: #D9C3AB;
+                }
+
+                &::selection {
+                    background: #FFB948;
+                    color: #472406;
                 }
             }
         }
