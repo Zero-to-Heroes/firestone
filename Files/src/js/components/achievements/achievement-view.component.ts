@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
@@ -42,22 +42,14 @@ import { VisualAchievement } from '../../models/visual-achievement';
 })
 export class AchievementViewComponent {
 
+	@Output() requestGlobalHeaderCollapse = new EventEmitter<boolean>();
+
 	_achievement: VisualAchievement;
 	achievementText: string;
 	achieved: boolean = false;
 	completionDate: string;
 	numberOfRecordings: number;
-	// shouldScrollIntoView: boolean;
 	showRecordings: boolean;
-
-	// @Input() set scrollIntoView(scroll: boolean) {
-	// 	this.shouldScrollIntoView = scroll;
-	// 	if (scroll) {
-	// 		this.showRecordings = true;
-	// 	}
-	// 	console.log('setting scroll', this._achievement ? this._achievement.id : '', scroll, this.showRecordings);
-	// 	this.handleScrollIntoView();
-	// }
 
 	@Input() set showReplays(showReplays: boolean) {
 		// We just want to trigger the opening of the replay windows, not hide it
@@ -83,7 +75,6 @@ export class AchievementViewComponent {
 					{ day: "2-digit", month: "2-digit", year: "2-digit"} );
 			}
 		}
-		// this.handleScrollIntoView();
 	}
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {
@@ -93,18 +84,11 @@ export class AchievementViewComponent {
 		if (this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
 			console.log('show recording?', this._achievement.id, this.showRecordings);
+			if (this.showRecordings) {
+				this.requestGlobalHeaderCollapse.next(true);
+				console.log('requested global header collapse');
+			}
 			this.cdr.detectChanges();
 		}
 	}
-
-	// private handleScrollIntoView() {
-	// 	if (!this._achievement || !this.shouldScrollIntoView) {
-	// 		return;
-	// 	}
-	// 	console.log('scrolling into view', this._achievement.name);
-	// 	setTimeout(() => {
-	// 		this.el.nativeElement.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
-	// 		this.cdr.detectChanges();
-	// 	})
-	// }
 }

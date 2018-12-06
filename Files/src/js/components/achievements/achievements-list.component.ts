@@ -41,12 +41,13 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				</svg>
 			</i>
 			<ul class="achievements-list" 
-				*ngIf="activeAchievements && activeAchievements.length > 0" 
-				(scroll)="onScroll($event)">
+					*ngIf="activeAchievements && activeAchievements.length > 0" 
+					(scroll)="onScroll($event)">
 				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId ">
 					<achievement-view 
 							[attr.data-achievement-id]="achievement.id.toLowerCase()"
 							[showReplays]="_achievementIdToScrollIntoView === achievement.id"
+							(requestGlobalHeaderCollapse)="onRequestGlobalHeaderCollapse($event)"
 							[achievement]="achievement">
 					</achievement-view>
 				</li>
@@ -137,11 +138,9 @@ export class AchievementsListComponent implements AfterViewInit {
 	toggleMenu() {
 		if (this.headerClass) {
 			this.shortDisplay.next(false);
-			// this.headerClass = "";
 		} 
 		else {
 			this.shortDisplay.next(true);
-			// this.headerClass = 'shrink-header';
 		}
 	}
 	
@@ -174,6 +173,11 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.lastScrollPosition = elem.scrollTop;
 	}
 
+	onRequestGlobalHeaderCollapse(request: boolean) {
+		console.log('gloal header collapse request received', request);
+		this.shortDisplay.next(request);
+	}
+
 	selectFilter(option: IOption) {
 		this.activeFilter = option.value;
 		this.updateShownAchievements();
@@ -193,16 +197,13 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.lastScrollPositionBeforeScrollUp = scrollPosition;
 		if (scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX && !this.headerClass) {
 			this.shortDisplay.next(true);
-			// this.cdr.detectChanges();
 		}
 	}
 
 	private onScrollUp(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollDown = scrollPosition;
 		if (this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX && this.headerClass) {
-			// this.headerClass = undefined;
 			this.shortDisplay.next(false);
-			// this.cdr.detectChanges();
 		}
 	}
 
