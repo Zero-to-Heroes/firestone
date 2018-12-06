@@ -3,17 +3,27 @@ import { AchievementsMonitor } from './achievement/achievements-monitor.service'
 import { Achievement } from '../models/achievement';
 import { AchievementsStorageService } from './achievement/achievements-storage.service';
 import { CompletedAchievement } from '../models/completed-achievement';
+import { PackMonitor } from './collection/pack-monitor.service';
+import { Card } from '../models/card';
 
 declare var overwolf: any;
 
 @Injectable()
 export class DevService {
 
-	constructor(private achievementMonitor: AchievementsMonitor, private storage: AchievementsStorageService) {
+	constructor(
+		private achievementMonitor: AchievementsMonitor, 
+		private packMonitor: PackMonitor,
+		private storage: AchievementsStorageService) {
 		this.addTestCommands();
 	}
 
 	private addTestCommands() {
+		this.addCollectionCommands();
+		this.addAchievementCommands();
+	}
+
+	private addAchievementCommands() {
 		const achievement = new Achievement(
 			'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
 			'Fake Wee Whelp',
@@ -51,6 +61,13 @@ export class DevService {
 			);
 			const updated = await this.storage.saveAchievement(newAchievement);
 			console.log('added lots of replays to achievement', updated.id, updated);
+		}
+	}
+
+	private addCollectionCommands() {	
+		window['showCardNotification'] = () => {
+			const card: Card = new Card('AT_001', 1, 1);
+			this.packMonitor.createNewCardToast(card, 'GOLDEN');
 		}
 	}
 }

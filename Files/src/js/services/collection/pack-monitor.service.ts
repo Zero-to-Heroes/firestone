@@ -271,7 +271,7 @@ export class PackMonitor {
 		console.log('reset done');
 	}
 
-	private createNewCardToast(card: Card, type: string) {
+	public createNewCardToast(card: Card, type: string) {
 		let dbCard = parseCardsText.getCard(card.id);
 		let cardName: string = dbCard.name;
 		let goldenClass = undefined;
