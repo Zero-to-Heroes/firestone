@@ -46,6 +46,10 @@
 			transform: scaleY(1);
 			top: -2px;
 		}
+
+		&:hover {
+			background-color: #4B3052;
+		}
 	}
 
 	.achievements-list {
