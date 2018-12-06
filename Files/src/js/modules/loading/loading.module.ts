@@ -8,6 +8,7 @@ import { SharedModule } from '../shared/shared.module';
 import { LoadingComponent } from '../../components/loading/loading.component';
 
 import { DebugService } from '../../services/debug.service';
+import { FeatureFlags } from '../../services/feature-flags.service';
 
 @NgModule({
 	imports: [
@@ -24,6 +25,7 @@ import { DebugService } from '../../services/debug.service';
 	],
 	providers: [
 		DebugService,
+		FeatureFlags,
 	],
 })
 
