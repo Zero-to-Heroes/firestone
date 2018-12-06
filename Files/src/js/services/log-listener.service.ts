@@ -139,23 +139,23 @@ export class LogListenerService {
 
 	gameLaunched(gameInfoResult: any): boolean {
 		if (!gameInfoResult) {
-			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult, returning', gameInfoResult);
+			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult, returning');
 			return false;
 		}
 
 		if (!gameInfoResult.gameInfo) {
-			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult.gameInfo, returning', gameInfoResult);
+			console.log('[log-listener] [' + this.logFile + '] No gameInfoResult.gameInfo, returning');
 			return false;
 		}
 
 		if (!gameInfoResult.gameInfo.isRunning) {
-			console.log('[log-listener] [' + this.logFile + '] Game not running, returning', gameInfoResult);
+			console.log('[log-listener] [' + this.logFile + '] Game not running, returning');
 			return false;
 		}
 
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
 		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			console.log('[log-listener] [' + this.logFile + '] Not HS, returning', gameInfoResult);
+			console.log('[log-listener] [' + this.logFile + '] Not HS, returning');
 			return false;
 		}
 
