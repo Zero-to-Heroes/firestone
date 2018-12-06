@@ -2,6 +2,8 @@ import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/
 import { FormGroup, FormControl } from '@angular/forms';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare var overwolf;
+
 @Component({
 	selector: 'settings-achievements-video-capture',
 	styleUrls: [
@@ -93,6 +95,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class SettingsAchievementsVideoCaptureComponent {
 
 	private readonly DEBOUNCE_DURATION_IN_MS = 600;
+	private readonly RESOLUTION_ENUM = {
+		0: overwolf.settings.enums.ResolutionSettings.Original,
+		1: overwolf.settings.enums.ResolutionSettings.R1080p,
+		2: overwolf.settings.enums.ResolutionSettings.R720p,
+		3: overwolf.settings.enums.ResolutionSettings.R480p
+	  };
 	
 	settingsForm = new FormGroup({
 		videoQuality: new FormControl('low'), // TODO: update with actual settings
@@ -129,22 +137,29 @@ export class SettingsAchievementsVideoCaptureComponent {
 	}
 
 	private async changeVideoCaptureSettings(value: string) {
+		let owResolution;
 		switch (value) {
 			case 'low':
 				this.resolution = 480;
 				this.fps = 10;
+				owResolution = this.RESOLUTION_ENUM[3];
 				break;
 			case 'medium':
 				this.resolution = 720;
 				this.fps = 30;
+				owResolution = this.RESOLUTION_ENUM[2];
 				break;
 			case 'high':
 				this.resolution = 1080;
 				this.fps = 60;
+				owResolution = this.RESOLUTION_ENUM[1];
+				break;
+			case 'custom':
+				owResolution = 'R' + this.resolution;
 				break;
 		}
 		const settings = {
-			resolution: `${this.resolution}`,
+			resolution: owResolution,
 			fps: this.fps
 		}
 		console.log('changing settings with', settings);
@@ -156,7 +171,7 @@ export class SettingsAchievementsVideoCaptureComponent {
 
 	private async updateDefaultValues() {
 		const settings = await this.owService.getVideoCaptureSettings();
-		this.resolution = settings.resolution || 480;
+		this.resolution = this.convertToResolution(settings.resolution)
 		this.fps = settings.fps || 10;
 		if (this.resolution === 480 && this.fps === 10) {
 			this.settingsForm.controls['videoQuality'].setValue('low');
@@ -173,5 +188,13 @@ export class SettingsAchievementsVideoCaptureComponent {
 		console.log('set default capture values', settings, this.resolution, this.fps, this.settingsForm.controls['videoQuality'].value);
 		this.cdr.detectChanges();
 		this.settingsForm.controls['videoQuality'].valueChanges.subscribe((value) => this.changeVideoCaptureSettings(value));
+	}
+
+	private convertToResolution(from: number): number {
+		if (from >= 0 && from <= 3) {
+			const resolutionEnum = this.RESOLUTION_ENUM[from] as string;
+			return parseInt(resolutionEnum.substring(1, resolutionEnum.length - 1));
+		}
+		return from || 480;
 	}
 }
