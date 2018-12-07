@@ -22,6 +22,7 @@ export class AchievementsVideoCaptureService {
 
     private captureOngoing: boolean = false;
     private currentReplayId: string;
+    private settingsChanged: boolean = false;
 
 	constructor(
         private events: Events, 
@@ -43,11 +44,33 @@ export class AchievementsVideoCaptureService {
             setTimeout(() => this.turnOnRecording(), 50);
             return;
         }
+
+        overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange());
         
         // Keep recording on, as otherwise it makes it more difficult to calibrate the achievement timings
         overwolf.media.replays.turnOn(
             this.settings, 
             (result) => console.log('[recording] turned on replay capture', result));
+    }
+
+    private handleVideoSettingsChange() {
+        console.log('[recording] video capture settings changed');
+        if (this.settingsChanged) {
+            return;
+        }
+        this.settingsChanged = true;
+        if (this.captureOngoing) {
+            console.log('[recording] capture ongoing, marking for setting change once capture is over');
+        }
+        else {
+            overwolf.media.replays.turnOff((result) => {
+                console.log('[recording] recording turned off, turning it on again to activate new settings', result);
+                overwolf.media.replays.turnOn(this.settings, (result) => {
+                    this.settingsChanged = false;
+                    console.log('[recording] turned on replay capture', result);
+                });
+            });
+        }
     }
 
     private onAchievementComplete(data) {
@@ -103,6 +126,9 @@ export class AchievementsVideoCaptureService {
                 completionStepId: achievementId,
             }
             this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementId, replayInfo);
+            if (this.settingsChanged) {
+                this.handleVideoSettingsChange();
+            }
             console.log('[recording] capture finished', result, achievementId);
         });
     }
