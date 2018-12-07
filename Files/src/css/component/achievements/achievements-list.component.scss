@@ -2,7 +2,9 @@
 @import '../../global/fonts';
 
 .achievements-container {
-	position: relative;
+	// We want positioning to happen based on the parent, to make the 
+	// collapse header transition smoother
+	// position: relative;
 	flex-grow: 1;
     display: flex;
 	flex-direction: column;
@@ -34,8 +36,8 @@
 
 	.collapse-menu {
 		position: absolute;
-		top: -35px;
-		right: 8px;
+		top: 0px;
+		right: 15px;
 		transform: scaleY(-1);
 		padding: 15px;
 		width: 43px;
@@ -44,7 +46,6 @@
 
 		&.shrink-header {
 			transform: scaleY(1);
-			top: -2px;
 		}
 
 		&:hover {
