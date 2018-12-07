@@ -50,7 +50,7 @@ declare var overwolf;
                 <span>Media deleted</span>
             </div>
 
-            <ul class="thumbnails">
+            <div class="thumbnails">
                 <i class="page-arrow previous-page"  
                         [ngClass]="{'disabled': indexOfFirstShown === 0}"
                         (click)="goToPreviousPage()"
@@ -59,12 +59,15 @@ declare var overwolf;
                         <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
                     </svg>
                 </i>
-                <achievement-thumbnail 
-                        *ngFor="let thumbnail of activeThumbnails"
-                        (click)="showReplay(thumbnail, $event)" 
-                        [thumbnail]="thumbnail" 
-                        [currentThumbnail]="currentThumbnail">
-                </achievement-thumbnail>
+                <ul>
+                    <div class="offset" [style.marginLeft.px]="thumbnailsOffsetX"></div>
+                    <achievement-thumbnail 
+                            *ngFor="let thumbnail of thumbnails"
+                            (click)="showReplay(thumbnail, $event)" 
+                            [thumbnail]="thumbnail" 
+                            [currentThumbnail]="currentThumbnail">
+                    </achievement-thumbnail>
+                </ul>
                 <i class="page-arrow next-page" 
                         [ngClass]="{'disabled': indexOfFirstShown === thumbnails.length - THUMBNAILS_PER_PAGE}" 
                         (click)="goToNextPage()"
@@ -73,7 +76,7 @@ declare var overwolf;
                         <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
                     </svg>
                 </i>
-            </ul>
+            </div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -83,7 +86,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     private readonly THUMBNAILS_PER_PAGE = 5;
 
     _achievement: VisualAchievement;
-    activeThumbnails: ThumbnailInfo[];
+    thumbnails: ThumbnailInfo[] = [];
 
     currentThumbnail: ThumbnailInfo;
     currentReplayLocation: string;
@@ -91,9 +94,10 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     title: SafeHtml;
     fullscreen: boolean = false;
     indexOfFirstShown = 0;
+    thumbnailsOffsetX: number = 0;
+    thumbnailWidth: number = 102; // TODO: retrieve this from actual size
 
     private player;
-    private thumbnails: ThumbnailInfo[] = [];
 
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
@@ -135,9 +139,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
     goToPreviousPage() {
         this.indexOfFirstShown = Math.max(0, this.indexOfFirstShown - this.THUMBNAILS_PER_PAGE);
-        this.activeThumbnails = this.thumbnails.slice(
-                this.indexOfFirstShown, 
-                Math.min(this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, this.thumbnails.length));
+        this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
         this.cdr.detectChanges();
     }
 
@@ -145,9 +147,8 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.indexOfFirstShown = Math.min(
             this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, 
             this.thumbnails.length - this.THUMBNAILS_PER_PAGE);
-        this.activeThumbnails = this.thumbnails.slice(
-                this.indexOfFirstShown, 
-                Math.min(this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, this.thumbnails.length));
+        this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
+        console.log('thumnailOffset', this.thumbnailsOffsetX);
         this.cdr.detectChanges();
     }
     
@@ -188,11 +189,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                     } as ThumbnailInfo
                 })
                 .sort((a, b) => b.timestamp - a.timestamp);
-        this.activeThumbnails = this.thumbnails.slice(
-                this.indexOfFirstShown, 
-                Math.min(this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE, this.thumbnails.length));
+        this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
         console.log('updated thumbnails', this.thumbnails);
-        this.updateThumbnail(this.activeThumbnails[0]);
+        this.updateThumbnail(this.thumbnails[this.indexOfFirstShown]);
         this.cdr.detectChanges();
     }
     

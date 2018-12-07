@@ -340,16 +340,29 @@
     .thumbnails {
         display: flex;
         padding-left: 10px;
-        list-style: none;
+        width: 557px;
 
-        achievement-thumbnail {
-            margin-right: 12px;
-            margin-bottom: 0;
-            position: relative;
+        .offset {
+            transition: margin-left 0.4s cubic-bezier(.39, .22, .36, 1.2);
+        }
+
+        ul {
+            list-style: none;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            top: 1px;
+            width: auto;
+            overflow: hidden;
+            padding-left: 1px;
+            flex-grow: 1;
+
+            achievement-thumbnail {
+                margin-right: 12px;
+                margin-bottom: 0;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                top: 1px;
+            }
         }
 
         .page-arrow {
@@ -367,14 +380,14 @@
                     --icon-color: #A89782;
                 }
             }
-        }
 
-        .previous-page {
-            margin-right: 10px;
-        }
-
-        .next-page {
-            transform: scaleX(-1);
+            &.previous-page {
+                margin-right: 10px;
+            }
+        
+            &.next-page {
+                transform: scaleX(-1);
+            }
         }
     }
 }
