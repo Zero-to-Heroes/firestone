@@ -190,7 +190,7 @@
 
 	&.shrink-header {
 		.show-filter {
-			margin: 0;
+			margin: 0 15px 0 0;
 			ng-select {
 				visibility: hidden;
 				max-height: 0;
