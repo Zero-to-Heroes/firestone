@@ -46,7 +46,7 @@
 </symbol>
 <symbol id="checked_box" viewBox="0 0 20 20">
 	<rect x="0.5" y="0.5" width="19" height="19" stroke="var(--icon-color, currentcolor)"/>
-	<path d="M5 11L8 14L14 6" stroke="var(--icon-secondary-color, currentcolor)" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
+	<path d="M5 11L8 14L14 6" stroke="var(--icon-color-secondary, currentcolor)" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round"/>
 </symbol>
 
 <symbol id="radio_unselected" viewBox="0 0 20 20">
