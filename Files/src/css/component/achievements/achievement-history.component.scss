@@ -26,12 +26,16 @@
 		// height: 160px;
 		height: 212px;
 		overflow-y: scroll;
-		padding-left: 10px;
 
 		li {
 			display: flex;
 			align-items: center;
 			justify-content: stretch;
+			padding-left: 10px;
+
+			&:hover {
+				background: rgba(255, 255, 255, 0.04);
+			}
 		}
 
 		li:before {
