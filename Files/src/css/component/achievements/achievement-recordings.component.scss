@@ -353,6 +353,12 @@
             overflow: hidden;
             padding-left: 1px;
             flex-grow: 1;
+            // A hack to be able to handle the overflow issues: 
+            // https://stackoverflow.com/questions/6421966/css-overflow-x-visible-and-overflow-y-hidden-causing-scrollbar-issue
+            padding-bottom: 250px;
+            margin-bottom: -250px;
+            padding-top: 250px;
+            margin-top: -250px;
 
             achievement-thumbnail {
                 margin-right: 12px;
@@ -387,6 +393,139 @@
         
             &.next-page {
                 transform: scaleX(-1);
+            }
+        }
+    }
+
+    .confirmation-popup {
+        opacity: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        width: 200px;
+        height: 125px;
+        pointer-events: all;
+        z-index: 300;
+        padding: 15px;
+        background-color: #7D5A87;
+        text-align: center;
+        cursor: default;
+        position: absolute;
+        align-items: center;
+        // Center it
+        left: 50%;
+        transform: translateX(-50%);
+    
+        .tooltip-arrow {
+            position: absolute;
+            width: 16px;
+            height: 9px;
+            fill: #7D5A87;
+            overflow: visible;
+        }
+    
+        &.right {    
+            .tooltip-arrow {
+                left: -3px;
+                top: calc(50% - 5px);
+                transform: rotate(-90deg);
+            }
+        }
+        
+        &.right {
+            left: 200px;
+            bottom: -48px;
+        }
+
+        p {
+            white-space: nowrap;
+            cursor: default;
+            margin: 0;
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 13px;
+            text-align: center;
+            color: #1B071F;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+        }
+
+        .buttons {
+            display: flex;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+
+            button {
+                width: 80px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .cancel {
+                outline: 1px solid #2F0D0D;
+                font-family: Open Sans;
+                font-style: normal;
+                font-weight: normal;
+                line-height: normal;
+                font-size: 13px;
+                text-align: center;
+                color: #2F0D0D;
+                margin-right: 10px;
+
+                &:hover {
+                    background-color: #A276AF;
+                }
+            }
+
+            .confirm {
+                background: #4B3052;
+                font-family: Open Sans;
+                font-style: normal;
+                font-weight: normal;
+                line-height: normal;
+                font-size: 13px;
+                text-align: center;                
+                color: #A276AF;
+
+                &:hover {
+                    background-color: #3B1F42;
+                }
+            }
+        }
+
+        .dont-ask {
+            align-self: flex-start;
+
+            label {
+                display: flex;
+                align-items: center;
+            }
+    
+            i {
+                margin-right: 10px;
+                width: 20px;
+                height: 20px;
+            }
+
+            p {
+                margin: 0;
+            }
+    
+            svg {
+                fill: transparent;
+            }
+    
+            .unchecked {
+                --icon-color: #4B3052;
+            }
+    
+            .checked {
+                --icon-color: #4B3052;
+                --icon-secondary-color: #2F0D0D;
             }
         }
     }

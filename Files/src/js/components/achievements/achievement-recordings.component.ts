@@ -4,6 +4,9 @@ import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { ReplayInfo } from '../../models/replay-info';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
+import { PreferencesService } from '../../services/preferences.service';
+import { Events } from '../../services/events.service';
+import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 
 declare var overwolf;
 
@@ -63,7 +66,9 @@ declare var overwolf;
                     <div class="offset" [style.marginLeft.px]="thumbnailsOffsetX"></div>
                     <achievement-thumbnail 
                             *ngFor="let thumbnail of thumbnails"
-                            (click)="showReplay(thumbnail, $event)" 
+                            (click)="showReplay(thumbnail, $event)"
+                            (deletionRequest)="onDeletionRequest(thumbnail, $event)"
+                            [highlighted]="pendingDeletion === thumbnail"
                             [thumbnail]="thumbnail" 
                             [currentThumbnail]="currentThumbnail">
                     </achievement-thumbnail>
@@ -76,6 +81,35 @@ declare var overwolf;
                         <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
                     </svg>
                 </i>
+            </div>
+            <div class="zth-tooltip confirmation-popup right" 
+                    *ngIf="showConfirmationPopup"
+                    [style.top.px]="confirmationTop"
+                    [style.left.px]="confirmationLeft">
+                <p>Are you sure?</p>
+                <div class="buttons">
+                    <button (click)="hideConfirmationPopup($event)" class="cancel"><span>Cancel</span></button>
+                    <button (click)="deleteMedia(pendingDeletion)" class="confirm"><span>Delete</span></button>
+                </div>
+                <div class="dont-ask" (click)="toggleDontAsk($event)">
+                    <input hidden type="checkbox" name="" id="a-01">
+                    <label for="a-01">
+                        <i class="unchecked" *ngIf="!dontAsk">
+                            <svg>
+                                <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>
+                            </svg>
+                        </i>
+                        <i class="checked" *ngIf="dontAsk">
+                            <svg>
+                                <use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
+                            </svg>
+                        </i>
+                        <p>Don't ask me again</p>
+                    </label>
+                </div>
+                <svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+                    <polygon points="0,0 8,-9 16,0"/>
+                </svg>
             </div>
 		</div>
 	`,
@@ -96,6 +130,12 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     indexOfFirstShown = 0;
     thumbnailsOffsetX: number = 0;
     thumbnailWidth: number = 102; // TODO: retrieve this from actual size
+    
+    pendingDeletion: ThumbnailInfo;
+    showConfirmationPopup: boolean;
+    dontAsk: boolean = false;
+    confirmationTop: number = 0;
+    confirmationLeft: number = 0;
 
     private player;
 
@@ -111,6 +151,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         private io: SimpleIOService,
         private elRef: ElementRef, 
         private cdr: ChangeDetectorRef, 
+        private storage: AchievementsStorageService,
+        private prefs: PreferencesService,
+        private events: Events,
         private sanitizer: DomSanitizer) { 
     }
     
@@ -149,6 +192,47 @@ export class AchievementRecordingsComponent implements AfterViewInit {
             this.thumbnails.length - this.THUMBNAILS_PER_PAGE);
         this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
         console.log('thumnailOffset', this.thumbnailsOffsetX);
+        this.cdr.detectChanges();
+    }
+
+    async onDeletionRequest(thumbnail: ThumbnailInfo, event) {
+        console.log('on deletionRequest', thumbnail, event);
+        this.dontAsk = (await this.prefs.getPreferences()).dontConfirmVideoReplayDeletion;
+        if (this.dontAsk) {
+            await this.deleteMedia(thumbnail);
+        }
+        else {
+            this.showConfirmationPopup = true;
+            this.pendingDeletion = thumbnail;
+            const container = this.elRef.nativeElement.querySelector('.achievement-recordings').getBoundingClientRect();
+            this.confirmationTop = event.top - container.top + 55;
+            this.confirmationLeft = event.left - container.left + 130;
+        }
+        this.cdr.detectChanges();
+    }
+
+    async deleteMedia(thumbnail: ThumbnailInfo) {
+        console.log('deleting media', thumbnail);
+        const result: boolean = thumbnail.isDeleted || await this.io.deleteFile(thumbnail.videoPath);
+        if (result) {
+            const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
+            // console.log('updated achievement after deletion', updatedAchievement);
+            this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
+        }
+    }
+
+    toggleDontAsk(event: Event) {
+        event.stopPropagation();
+        this.dontAsk = !this.dontAsk;
+        this.prefs.setDontConfirmVideoDeletion(this.dontAsk);
+        this.cdr.detectChanges();
+    }
+
+    hideConfirmationPopup(event: MouseEvent) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.showConfirmationPopup = false;
+        this.pendingDeletion = undefined;
         this.cdr.detectChanges();
     }
     
