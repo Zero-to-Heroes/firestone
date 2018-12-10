@@ -29,11 +29,13 @@ import { VisualAchievement } from '../../models/visual-achievement';
 						</achievement-completion-step>
 					</div>
 				</div>
-				<i class="i-13X7 collapse" [ngClass]="{'open': showRecordings}" *ngIf="numberOfRecordings > 0">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
-					</svg>
-				</i>
+				<div class="collapse">
+					<i class="i-13X7" [ngClass]="{'open': showRecordings}" *ngIf="numberOfRecordings > 0">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
+						</svg>
+					</i>
+				</div>
 			</div>
 			<achievement-recordings *ngIf="showRecordings" [achievement]="_achievement"></achievement-recordings>
 		</div>

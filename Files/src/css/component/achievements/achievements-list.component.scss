@@ -39,13 +39,18 @@
 		position: absolute;
 		top: 0px;
 		right: 15px;
-		transform: scaleY(-1);
-		padding: 15px;
-		width: 43px;
-		height: 37px;
-		--icon-color: #CB9FD7;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		
+		i {
+			--icon-color: #CB9FD7;
+			transform: scaleY(-1);
+		}
 
-		&.shrink-header {
+		&.shrink-header i {
 			transform: scaleY(1);
 		}
 

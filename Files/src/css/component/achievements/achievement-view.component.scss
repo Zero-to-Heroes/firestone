@@ -48,10 +48,15 @@
 		position: absolute;
 		top: 0px;
 		right: 0px;
-		--icon-color: #CB9FD7;
-		padding: 15px;
-		width: 43px;
-		height: 37px;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		
+		i {
+			--icon-color: #CB9FD7;			
+		}
 
 		&.open {
 			transform: scaleY(-1);

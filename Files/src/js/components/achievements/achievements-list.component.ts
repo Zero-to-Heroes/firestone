@@ -35,11 +35,13 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				</ng-select>
 				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
 			</div>
-			<i class="i-13X7 collapse-menu {{headerClass}}" (click)="toggleMenu()" *ngIf="showCollapse">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
-				</svg>
-			</i>
+			<div class="collapse-menu {{headerClass}}" (click)="toggleMenu()">
+				<i class="i-13X7" *ngIf="showCollapse">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
+					</svg>
+				</i>
+			</div>
 			<ul class="achievements-list" 
 					*ngIf="activeAchievements && activeAchievements.length > 0" 
 					(scroll)="onScroll($event)">
