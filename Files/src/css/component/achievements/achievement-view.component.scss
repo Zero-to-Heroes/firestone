@@ -55,11 +55,11 @@
 		align-items: center;
 		
 		i {
-			--icon-color: #CB9FD7;			
-		}
+			--icon-color: #CB9FD7;
 
-		&.open {
-			transform: scaleY(-1);
+			&.open {
+				transform: scaleY(-1);
+			}		
 		}
 
 		&:hover {
