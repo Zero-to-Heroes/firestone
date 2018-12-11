@@ -21,6 +21,7 @@ body {
 	align-items: center;
 	height: 100%;
     overflow: hidden;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
 
 	.corner {
 		position: absolute;
@@ -56,7 +57,7 @@ body {
 	    display: flex;
 	    flex-direction: column;
     	overflow: hidden;
-		box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+		// box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
 		
 		&.collection {
 			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');

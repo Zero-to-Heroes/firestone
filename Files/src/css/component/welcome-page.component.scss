@@ -19,6 +19,7 @@ body {
 	justify-content: center;
 	align-items: center;
 	height: 100%;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
 
 	.corner {
 		position: absolute;
@@ -58,7 +59,7 @@ body {
 	    flex-direction: column;
     	overflow: hidden;
     	outline: 1px solid $brown01;
-    	box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+    	// box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
 
 	    .menu-bar {
 	    	background: transparent;
