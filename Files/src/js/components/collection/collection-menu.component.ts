@@ -64,14 +64,17 @@ export class CollectionMenuComponent {
 	}
 
 	goToSetView() {
+		this._events.broadcast(Events.HIDE_TOOLTIP);
 		this._events.broadcast(Events.SET_SELECTED, this.selectedSet);
 	}
 
 	goToFormatView() {
+		this._events.broadcast(Events.HIDE_TOOLTIP);
 		this._events.broadcast(Events.FORMAT_SELECTED, this.selectedSet.standard ? 'standard' : 'wild');
 	}
 
 	goToCollectionView() {
+		this._events.broadcast(Events.HIDE_TOOLTIP);
 		this._events.broadcast(Events.MODULE_SELECTED, 'collection');
 	}
 }

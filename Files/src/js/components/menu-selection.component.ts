@@ -49,6 +49,7 @@ export class MenuSelectionComponent {
 	constructor(private events: Events, private cdr: ChangeDetectorRef, private flags: FeatureFlags) {
 		this.events.on(Events.MODULE_SELECTED).subscribe((event) => {
 			this.selectedModule = event.data[0];
+			this.events.broadcast(Events.HIDE_TOOLTIP);
 			this.cdr.detectChanges();
 		});
 		this.events.on(Events.MODULE_IN_VIEW).subscribe((event) => {
