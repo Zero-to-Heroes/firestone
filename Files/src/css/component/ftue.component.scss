@@ -28,7 +28,7 @@
 .ftue-element {
 	background-color: $grey01;
 	padding: 15px;
-	width: 190px;
+	width: 195px;
 	height: 172px;
     position: absolute;
     pointer-events: all;
@@ -42,6 +42,7 @@
 
 	p {
 		@extend %ftue-text;
+        flex-grow: 1;
 	}
 
 	button {
@@ -52,6 +53,7 @@
         height: 30px;
         margin-top: 5px;
         align-self: flex-end;
+        font-size: 13px;
 
 		&:hover {
 			background-color: $grey05;
