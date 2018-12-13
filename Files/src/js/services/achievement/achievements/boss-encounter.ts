@@ -29,11 +29,6 @@ export class BossEncounter implements Challenge {
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.MULLIGAN_DONE) {
-			this.broadcastEndOfCapture();
-			return;
-		}
-
 		if (gameEvent.type == GameEvent.OPPONENT) {
 			this.detectOpponentEvent(gameEvent, callback);
 			return;
@@ -42,14 +37,6 @@ export class BossEncounter implements Challenge {
 
 	public getRecordPastDurationMillis(): number {
 		return 100;
-	}
-
-	public broadcastEndOfCapture() {
-		if (this.completed) {
-			this.completed = false;
-			console.log('broadcasting end of capture', this);
-			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId);
-		}
 	}
 
 	public getAchievementId() {
@@ -64,6 +51,12 @@ export class BossEncounter implements Challenge {
 	public notificationTimeout(): number {
 		// Since we stop recording only when mulligan is done, it could take some time
 		return 15000;
+	}
+
+	public broadcastEndOfCapture() {
+		this.completed = false;
+		setTimeout(() => this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId), 5000);
+
 	}
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
@@ -85,6 +78,7 @@ export class BossEncounter implements Challenge {
 			this.sceneChanged = false;
 			this.completed = true;
 			this.callback = undefined;
+			this.broadcastEndOfCapture();
 		}
 	}
 }
