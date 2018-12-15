@@ -99,6 +99,14 @@ export class GameEvents {
 			case 'MULLIGAN_DONE':
 				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_DONE));
 				break;
+			case 'CARD_PLAYED':
+				this.allEvents.next(new GameEvent(
+					GameEvent.CARD_PLAYED, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'TURN_START':
 				this.allEvents.next(new GameEvent(GameEvent.TURN_START, gameEvent.Value));
 				break;

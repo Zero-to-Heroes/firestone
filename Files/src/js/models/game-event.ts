@@ -12,6 +12,7 @@ export class GameEvent {
 	public static readonly NEW_LOG_LINE = 'NEW_LOG_LINE';
 	public static readonly WINNER = 'WINNER';
 	public static readonly GAME_END = 'GAME_END';
+	public static readonly CARD_PLAYED = 'CARD_PLAYED';
 
 	readonly type: string;
 	readonly data: any[];
