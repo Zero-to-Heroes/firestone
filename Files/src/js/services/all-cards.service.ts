@@ -15,7 +15,7 @@ export class AllCardsService {
 		['lootapalooza', 'Kobolds and Catacombs'],
 		['gilneas', 'The Witchwood'],
 		['boomsday', 'The Boomsday Project'],
-		['rumble', 'Rastakhan\'s Rumble'],
+		['troll', 'Rastakhan\'s Rumble'],
 	]
 
 	private readonly WILD_SETS = [

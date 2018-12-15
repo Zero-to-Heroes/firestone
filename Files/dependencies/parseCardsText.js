@@ -10020,6 +10020,7 @@ var parseCardsText = {
 		"set": "Boomsday",
 		"name": "Slimed",
 		"mechanics": [
+			"TAG_ONE_TURN_EFFECT",
 			"TRIGGER_VISUAL"
 		],
 		"id": "BOT_437e",
@@ -16258,11 +16259,11 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Brm",
 		"race": "BEAST",
-		"health": 5,
+		"health": 2,
 		"dbfId": 2293,
 		"type": "Minion",
 		"playerClass": "Druid",
-		"attack": 2,
+		"attack": 5,
 		"name": "Firecat Form",
 		"id": "BRM_010a",
 		"audio": {
@@ -16277,11 +16278,11 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Brm",
 		"race": "BEAST",
-		"health": 2,
+		"health": 5,
 		"dbfId": 2294,
 		"type": "Minion",
 		"playerClass": "Druid",
-		"attack": 5,
+		"attack": 2,
 		"name": "Fire Hawk Form",
 		"id": "BRM_010b",
 		"audio": {
@@ -42834,6 +42835,7 @@ var parseCardsText = {
 		"set": "Hof",
 		"name": "Power Overwhelming",
 		"mechanics": [
+			"TAG_ONE_TURN_EFFECT",
 			"TRIGGER_VISUAL"
 		],
 		"id": "EX1_316e",
@@ -93720,9 +93722,6 @@ var parseCardsText = {
 			"play": [
 				"VO_LOOT_150_Female_Furbolg_Play_01.ogg"
 			],
-			"DKThrall_HeroPower_Idle_Loop": [
-				"DKThrall_HeroPower_Idle_Loop.ogg"
-			],
 			"death": [
 				"VO_LOOT_150_Female_Furbolg_Death_01.ogg"
 			],
@@ -93731,9 +93730,6 @@ var parseCardsText = {
 			],
 			"DKThrall_HeroPower_Impact_Sound": [
 				"DKThrall_HeroPower_Impact_Sound.ogg"
-			],
-			"DKThrall_HeroPower_Start_Sound": [
-				"DKThrall_HeroPower_Start_Sound.ogg"
 			]
 		},
 		"text": "<b>Battlecry:</b> Transform a friendly minion into a 6/6 Elemental.",
@@ -97192,16 +97188,10 @@ var parseCardsText = {
 		"id": "LOOT_504",
 		"audio": {
 			"play": [],
-			"DKThrall_HeroPower_Idle_Loop": [
-				"DKThrall_HeroPower_Idle_Loop.ogg"
-			],
 			"death": [],
 			"attack": [],
 			"DKThrall_HeroPower_Impact_Sound": [
 				"DKThrall_HeroPower_Impact_Sound.ogg"
-			],
-			"DKThrall_HeroPower_Start_Sound": [
-				"DKThrall_HeroPower_Start_Sound.ogg"
 			]
 		},
 		"text": "Transform a friendly minion into\none that costs (1) more. Repeatable this turn.",
@@ -97217,16 +97207,10 @@ var parseCardsText = {
 		"id": "LOOT_504t",
 		"audio": {
 			"play": [],
-			"DKThrall_HeroPower_Idle_Loop": [
-				"DKThrall_HeroPower_Idle_Loop.ogg"
-			],
 			"death": [],
 			"attack": [],
 			"DKThrall_HeroPower_Impact_Sound": [
 				"DKThrall_HeroPower_Impact_Sound.ogg"
-			],
-			"DKThrall_HeroPower_Start_Sound": [
-				"DKThrall_HeroPower_Start_Sound.ogg"
 			]
 		},
 		"text": "Transform a friendly minion into\none that costs (1) more. Repeatable this turn.",
@@ -126137,7 +126121,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"health": 5,
 		"mechanics": [
@@ -126168,7 +126152,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "L. Lullabi & K. Turovec",
 		"dbfId": 49051,
 		"type": "Spell",
@@ -126197,7 +126181,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "David Kegg",
 		"health": 3,
@@ -126226,7 +126210,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jiajun Tian",
 		"health": 4,
 		"mechanics": [
@@ -126256,7 +126240,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jiajun Tian",
 		"health": 1,
@@ -126282,7 +126266,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "TOTEM",
 		"artist": "Cicily He",
 		"health": 2,
@@ -126314,7 +126298,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"referencedTags": [
 			"DISCOVER"
@@ -126336,7 +126320,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Visions",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -126355,7 +126339,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "ELEMENTAL",
 		"artist": "James Ryman",
 		"health": 3,
@@ -126389,7 +126373,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Sloshed",
 		"id": "TRL_059e",
 		"audio": {
@@ -126405,7 +126389,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"health": 3,
 		"mechanics": [
@@ -126435,7 +126419,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 10,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Orlandelli",
 		"health": 30,
 		"mechanics": [
@@ -126467,7 +126451,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Orlandelli",
 		"name": "Berserker Throw",
 		"id": "TRL_065h",
@@ -126517,7 +126501,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "Patrik Bjorkstrom",
 		"health": 1,
@@ -126555,7 +126539,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Bloody Sails",
 		"id": "TRL_071e",
 		"audio": {
@@ -126571,7 +126555,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Grace Liu",
 		"durability": 3,
 		"mechanics": [
@@ -126595,7 +126579,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Carnassial",
 		"id": "TRL_074e",
 		"audio": {
@@ -126611,7 +126595,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"health": 7,
 		"mechanics": [
@@ -126641,7 +126625,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Hype!",
 		"id": "TRL_077e",
 		"audio": {
@@ -126657,7 +126641,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "L. Lullabi & K. Turovec",
 		"referencedTags": [
 			"DEATHRATTLE"
@@ -126682,7 +126666,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Voodoo",
 		"id": "TRL_082e",
 		"audio": {
@@ -126698,7 +126682,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Evgeniy Zagumyenny",
 		"health": 3,
 		"mechanics": [
@@ -126724,12 +126708,12 @@ var parseCardsText = {
 				"VO_TRL_085_Male_Troll_Attack_02.ogg"
 			]
 		},
-		"text": "[x]Whenever you target a\nminion with a spell, it also\ntargets adjacent ones.",
+		"text": "[x]Whenever you target a\nminion with a spell, cast it\nagain on its neighbors.",
 		"cardClass": "SHAMAN",
 		"rarity": "Legendary"
 	},
 	{
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Zentimo Spellsurge",
 		"id": "TRL_085e",
 		"text": "Whenever you target a minion with a spell, it also targets adjacent minions.",
@@ -126739,7 +126723,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"health": 3,
 		"mechanics": [
@@ -126768,7 +126752,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Power of the Shark",
 		"id": "TRL_092e",
 		"audio": {
@@ -126784,7 +126768,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"health": 5,
 		"mechanics": [
@@ -126825,7 +126809,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"health": 5,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -126847,7 +126831,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Skan Srisuwan",
 		"dbfId": 50278,
 		"type": "Spell",
@@ -126876,7 +126860,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"durability": 2,
 		"mechanics": [
@@ -126903,7 +126887,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Headhunter's Hatchet",
 		"id": "TRL_111e1",
 		"audio": {
@@ -126919,7 +126903,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "L. Lullabi & K. Turovec",
 		"dbfId": 50644,
 		"type": "Spell",
@@ -126941,7 +126925,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "The Beast Within",
 		"id": "TRL_119e",
 		"audio": {
@@ -126957,7 +126941,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jim Nelson",
 		"mechanics": [
 			"COMBO"
@@ -126983,7 +126967,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "Matt Dixon",
 		"health": 3,
@@ -127020,7 +127004,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"dbfId": 50779,
 		"type": "Spell",
@@ -127049,7 +127033,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"dbfId": 50794,
 		"type": "Spell",
@@ -127075,7 +127059,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 3,
 		"mechanics": [
@@ -127108,7 +127092,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 1,
 		"mechanics": [
@@ -127137,7 +127121,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Peter Stapleton",
 		"health": 1,
 		"mechanics": [
@@ -127168,7 +127152,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Mike Azevedo",
 		"attack": 5,
 		"name": "Hotshot",
@@ -127192,7 +127176,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "L. Lullabi & K. Turovec",
 		"referencedTags": [
 			"DISCOVER"
@@ -127215,7 +127199,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"dbfId": 50766,
 		"type": "Spell",
@@ -127241,7 +127225,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Christopher Hayes",
 		"health": 3,
 		"mechanics": [
@@ -127271,7 +127255,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Luca Zontini",
 		"health": 7,
@@ -127299,7 +127283,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Luca Zontini",
 		"health": 5,
@@ -127325,7 +127309,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jesper Ejsing",
 		"health": 3,
 		"mechanics": [
@@ -127359,7 +127343,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Christopher Hayes",
 		"health": 9,
@@ -127393,7 +127377,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Rudy Siswanto",
 		"dbfId": 49990,
 		"type": "Spell",
@@ -127424,7 +127408,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Pounce",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -127443,7 +127427,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Clint Langley",
 		"dbfId": 49994,
 		"type": "Spell",
@@ -127465,7 +127449,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Predatory Instincts",
 		"id": "TRL_244e",
 		"audio": {
@@ -127481,7 +127465,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Mauricio Herrera",
 		"dbfId": 50002,
 		"type": "Spell",
@@ -127507,7 +127491,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Orlandelli",
 		"dbfId": 50004,
 		"type": "Spell",
@@ -127533,7 +127517,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Garner",
 		"health": 6,
 		"mechanics": [
@@ -127570,7 +127554,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Skan Srisuwan",
 		"dbfId": 50012,
 		"type": "Spell",
@@ -127604,7 +127588,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Grim Rally",
 		"id": "TRL_249e",
 		"audio": {
@@ -127620,7 +127604,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Slawomir Maniak",
 		"health": 3,
 		"mechanics": [
@@ -127649,7 +127633,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Hir'eek's Offering",
 		"id": "TRL_251e",
 		"audio": {
@@ -127665,7 +127649,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 4,
 		"mechanics": [
@@ -127700,7 +127684,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Slawomir Maniak",
 		"health": 1,
@@ -127752,7 +127736,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Mauricio Herrera",
 		"mechanics": [
 			"CHOOSE_ONE"
@@ -127775,7 +127759,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"name": "Gonk's Resilience",
 		"id": "TRL_254a",
@@ -127791,7 +127775,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Mark of the Loa",
 		"id": "TRL_254ae",
 		"audio": {
@@ -127807,7 +127791,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Luke Mancini",
 		"name": "Raptor Pack",
 		"id": "TRL_254b",
@@ -127823,7 +127807,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Mauricio Herrera",
 		"health": 2,
@@ -127849,7 +127833,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Andrew Hou",
 		"dbfId": 50044,
 		"type": "Spell",
@@ -127868,7 +127852,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Stampede!",
 		"id": "TRL_255e",
 		"text": "Has <b>Rush</b>.",
@@ -127879,7 +127863,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Luke Mancini",
 		"health": 8,
 		"mechanics": [
@@ -127910,7 +127894,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Vladimir Kafanov",
 		"dbfId": 50071,
 		"type": "Spell",
@@ -127936,7 +127920,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Ormandelli",
 		"health": 5,
 		"mechanics": [
@@ -127972,7 +127956,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 7,
 		"mechanics": [
@@ -128011,7 +127995,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 25,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Arthur Gimaldinov",
 		"health": 5,
@@ -128047,7 +128031,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"referencedTags": [
 			"IMMUNE"
@@ -128075,7 +128059,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Paladin",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Time Out!",
 		"id": "TRL_302e",
 		"audio": {
@@ -128091,7 +128075,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "M. Alvares & M. Azevedo",
 		"durability": 3,
 		"dbfId": 50014,
@@ -128112,7 +128096,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Battle Ready",
 		"id": "TRL_304e",
 		"audio": {
@@ -128128,7 +128112,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"referencedTags": [
 			"DISCOVER",
@@ -128156,7 +128140,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Maria Trepalina",
 		"health": 3,
 		"mechanics": [
@@ -128187,7 +128171,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Zoltan Boros",
 		"dbfId": 50028,
 		"type": "Spell",
@@ -128222,7 +128206,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 4,
 		"mechanics": [
@@ -128258,7 +128242,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Gimaldinov",
 		"health": 3,
 		"mechanics": [
@@ -128287,7 +128271,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Ursula Dorada",
 		"health": 1,
@@ -128313,7 +128297,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"dbfId": 50120,
 		"type": "Spell",
@@ -128338,7 +128322,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Mage",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Elemental Evocation",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -128358,7 +128342,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "ELEMENTAL",
 		"artist": "Ware Lee",
 		"health": 3,
@@ -128396,7 +128380,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"health": 3,
 		"referencedTags": [
@@ -128426,7 +128410,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Power of Gurubashi",
 		"mechanics": [
 			"ENRAGED"
@@ -128445,7 +128429,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Zoltan Boros",
 		"dbfId": 50122,
 		"type": "Spell",
@@ -128471,7 +128455,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"health": 4,
 		"mechanics": [
@@ -128502,7 +128486,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jakub Kasber",
 		"health": 4,
@@ -128538,7 +128522,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "ELEMENTAL",
 		"health": 8,
 		"mechanics": [
@@ -128571,7 +128555,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "J. Axer",
 		"dbfId": 50086,
 		"type": "Spell",
@@ -128594,7 +128578,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Mike Sass",
 		"health": 5,
 		"mechanics": [
@@ -128633,7 +128617,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jakub Kasber",
 		"health": 3,
 		"mechanics": [
@@ -128662,7 +128646,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Power of the Dragonhawk",
 		"id": "TRL_319e",
 		"audio": {
@@ -128678,7 +128662,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Slawomir Maniak",
 		"dbfId": 50040,
 		"type": "Spell",
@@ -128713,7 +128697,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "DRAGON",
 		"artist": "Alex Horley Orlandelli",
 		"health": 5,
@@ -128748,7 +128732,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Orlandelli",
 		"dbfId": 50054,
 		"type": "Spell",
@@ -128774,7 +128758,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jason Kang",
 		"durability": 4,
 		"dbfId": 50056,
@@ -128796,7 +128780,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 2,
 		"mechanics": [
@@ -128842,7 +128826,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jim Nelson",
 		"health": 3,
 		"mechanics": [
@@ -128875,7 +128859,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Protected by Spirit of the Rhino",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -128894,7 +128878,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Slawomir Maniak",
 		"health": 3,
 		"mechanics": [
@@ -128930,7 +128914,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jim Nelson",
 		"health": 5,
@@ -128963,7 +128947,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rhino Skin",
 		"id": "TRL_329e",
 		"audio": {
@@ -128979,7 +128963,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Rudy Siswanto",
 		"referencedTags": [
 			"DISCOVER"
@@ -129008,7 +128992,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "J. Axer",
 		"health": 4,
 		"mechanics": [
@@ -129042,7 +129026,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Charlene Le Scanff",
 		"attack": 5,
 		"name": "Ancient",
@@ -129066,7 +129050,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Zoltan Boros",
 		"health": 2,
 		"mechanics": [
@@ -129098,7 +129082,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"health": 6,
@@ -129130,7 +129114,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"health": 6,
 		"mechanics": [
@@ -129139,6 +129123,7 @@ var parseCardsText = {
 		"dbfId": 54599,
 		"type": "Minion",
 		"playerClass": "Druid",
+		"elite": true,
 		"attack": 1,
 		"name": "Wardruid Loti",
 		"id": "TRL_343at2",
@@ -129153,7 +129138,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"health": 2,
@@ -129185,7 +129170,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"health": 2,
 		"mechanics": [
@@ -129194,6 +129179,7 @@ var parseCardsText = {
 		"dbfId": 54600,
 		"type": "Minion",
 		"playerClass": "Druid",
+		"elite": true,
 		"attack": 4,
 		"name": "Wardruid Loti",
 		"id": "TRL_343bt2",
@@ -129208,7 +129194,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"spellDamage": 1,
@@ -129244,12 +129230,13 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"health": 4,
 		"dbfId": 54601,
 		"type": "Minion",
 		"playerClass": "Druid",
+		"elite": true,
 		"attack": 1,
 		"name": "Wardruid Loti",
 		"id": "TRL_343ct2",
@@ -129264,7 +129251,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"health": 2,
@@ -129297,7 +129284,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"health": 2,
 		"mechanics": [
@@ -129307,6 +129294,7 @@ var parseCardsText = {
 		"dbfId": 54602,
 		"type": "Minion",
 		"playerClass": "Druid",
+		"elite": true,
 		"attack": 1,
 		"name": "Wardruid Loti",
 		"id": "TRL_343dt2",
@@ -129321,7 +129309,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"spellDamage": 1,
@@ -129359,7 +129347,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Konstantin Turovec",
 		"health": 6,
@@ -129399,7 +129387,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Anton Zemskov",
 		"dbfId": 50466,
 		"type": "Spell",
@@ -129448,7 +129436,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Anton Zemskov",
 		"health": 5,
@@ -129474,7 +129462,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Vladimir Kafanov",
 		"health": 1,
@@ -129515,7 +129503,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Lemon Sky",
 		"health": 1,
@@ -129545,7 +129533,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Gonzalo Ordonez",
 		"health": 4,
 		"mechanics": [
@@ -129579,7 +129567,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Cicily He",
 		"mechanics": [
 			"OVERLOAD"
@@ -129608,7 +129596,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Cicily He",
 		"health": 4,
@@ -129638,7 +129626,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jakub Kasber",
 		"durability": 3,
 		"mechanics": [
@@ -129666,7 +129654,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"durability": 4,
 		"mechanics": [
@@ -129691,7 +129679,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Slawomir Maniak",
 		"dbfId": 50602,
 		"type": "Spell",
@@ -129717,7 +129705,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Sean McNally",
 		"health": 3,
 		"mechanics": [
@@ -129750,7 +129738,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Sean McNally",
 		"health": 3,
 		"mechanics": [
@@ -129779,7 +129767,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jesper Ejsing",
 		"health": 1,
 		"mechanics": [
@@ -129808,7 +129796,7 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Flameweaving",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -129820,7 +129808,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Flameweaving",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -129839,7 +129827,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "L. Lullabi & K. Turovec",
 		"mechanics": [
 			"SECRET"
@@ -129862,7 +129850,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "E. Kenji & M. Azevedo",
 		"health": 4,
 		"mechanics": [
@@ -129892,7 +129880,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Warpaint",
 		"id": "TRL_405e",
 		"audio": {
@@ -129908,7 +129896,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Sean McNally",
 		"health": 4,
 		"mechanics": [
@@ -129938,7 +129926,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Wrong Side of Da Bed",
 		"mechanics": [
 			"ENRAGED"
@@ -129952,7 +129940,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ekaterina Shapovalova",
 		"health": 1,
 		"mechanics": [
@@ -129985,7 +129973,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "High Quality H2O",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -130004,7 +129992,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 12,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 8,
 		"mechanics": [
@@ -130035,7 +130023,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Anton Zemskov",
 		"health": 2,
@@ -130072,7 +130060,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Rogue",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Blood in the Water",
 		"id": "TRL_409e",
 		"audio": {
@@ -130088,7 +130076,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Maria Trepalina",
 		"dbfId": 50282,
 		"type": "Spell",
@@ -130113,7 +130101,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Absolutely Mad!",
 		"id": "TRL_500e",
 		"audio": {
@@ -130129,7 +130117,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Lemon Sky",
 		"health": 2,
 		"mechanics": [
@@ -130159,7 +130147,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Dark Soul",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -130178,7 +130166,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 3,
 		"mechanics": [
@@ -130207,7 +130195,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Prayer to Bwonsamdi",
 		"id": "TRL_502e",
 		"audio": {
@@ -130223,7 +130211,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jim Nelson",
 		"health": 2,
 		"mechanics": [
@@ -130253,7 +130241,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jim Nelson",
 		"health": 1,
@@ -130279,7 +130267,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"health": 3,
 		"mechanics": [
@@ -130316,7 +130304,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Matt Dixon",
 		"health": 1,
@@ -130350,7 +130338,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Avenger",
 		"id": "TRL_505e",
 		"audio": {
@@ -130366,7 +130354,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Ivan Fomin",
 		"health": 1,
@@ -130394,7 +130382,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Ready to Strike",
 		"id": "TRL_506e",
 		"audio": {
@@ -130410,7 +130398,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "Peter Stapleton",
 		"health": 2,
@@ -130441,7 +130429,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "Max Greck",
 		"health": 1,
@@ -130467,7 +130455,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"health": 5,
 		"mechanics": [
@@ -130498,7 +130486,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jim Nelson",
 		"health": 2,
 		"mechanics": [
@@ -130532,7 +130520,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Bananas",
 		"id": "TRL_509t",
 		"audio": {
@@ -130562,7 +130550,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Bananas",
 		"id": "TRL_509te",
 		"audio": {
@@ -130578,7 +130566,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ekaterina Shapovalova",
 		"health": 1,
 		"mechanics": [
@@ -130613,7 +130601,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dan Scott",
 		"health": 14,
 		"mechanics": [
@@ -130625,7 +130613,7 @@ var parseCardsText = {
 		"flavor": "Can’t break the rules if you can’t read ‘em.",
 		"playerClass": "Neutral",
 		"attack": 2,
-		"name": "Mosh'ogg Enforcer",
+		"name": "Mosh'Ogg Enforcer",
 		"id": "TRL_513",
 		"audio": {
 			"play": [
@@ -130645,7 +130633,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Brian Despain",
 		"health": 4,
 		"mechanics": [
@@ -130682,7 +130670,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Belligerent",
 		"id": "TRL_514e",
 		"audio": {
@@ -130698,7 +130686,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Paul Mafayon",
 		"health": 7,
 		"mechanics": [
@@ -130729,7 +130717,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Izzy Hoover",
 		"health": 2,
 		"mechanics": [
@@ -130760,7 +130748,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"health": 3,
 		"mechanics": [
@@ -130793,7 +130781,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "WHOOOOO!",
 		"id": "TRL_517e2",
 		"audio": {
@@ -130809,7 +130797,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "MURLOC",
 		"artist": "Matt Dixon",
 		"health": 2,
@@ -130841,7 +130829,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Eric Braddock",
 		"health": 3,
 		"dbfId": 50403,
@@ -130869,7 +130857,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "J. Axer",
 		"health": 1,
 		"mechanics": [
@@ -130900,7 +130888,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Eva Widermann",
 		"health": 2,
 		"mechanics": [
@@ -130934,7 +130922,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "David Devries",
 		"health": 1,
 		"mechanics": [
@@ -130984,7 +130972,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 4,
 		"mechanics": [
@@ -131015,7 +131003,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "DRAGON",
 		"artist": "Maurico Herrera",
 		"health": 6,
@@ -131056,7 +131044,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Cicily He",
 		"health": 4,
 		"mechanics": [
@@ -131090,7 +131078,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Paul Mafayon",
 		"health": 10,
 		"dbfId": 50416,
@@ -131117,7 +131105,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Crazed",
 		"id": "TRL_528e",
 		"audio": {
@@ -131133,7 +131121,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Ormandelli",
 		"health": 4,
 		"mechanics": [
@@ -131167,7 +131155,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Sam Nielsen",
 		"health": 2,
 		"mechanics": [
@@ -131198,7 +131186,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Sam Nielsen",
 		"attack": 3,
 		"name": "Rumbletusk Breaker",
@@ -131222,7 +131210,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Steve Prescott",
 		"health": 5,
 		"mechanics": [
@@ -131253,7 +131241,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"health": 5,
 		"mechanics": [
@@ -131296,7 +131284,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"health": 8,
 		"mechanics": [
@@ -131327,7 +131315,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Clint Langley",
 		"health": 5,
 		"mechanics": [
@@ -131362,7 +131350,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Undatakah Deathrattles",
 		"id": "TRL_537e",
 		"audio": {
@@ -131377,7 +131365,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 10,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Izzy Hoover",
 		"health": 6,
 		"mechanics": [
@@ -131410,7 +131398,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Mauricio Herrera",
 		"name": "Corrupted Blood",
 		"mechanics": [
@@ -131433,7 +131421,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 9,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "James Ryman",
 		"health": 7,
@@ -131467,7 +131455,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"durability": 2,
 		"mechanics": [
@@ -131498,7 +131486,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 4,
 		"mechanics": [
@@ -131537,7 +131525,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rejuvenated",
 		"id": "TRL_545e",
 		"audio": {
@@ -131553,7 +131541,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"health": 5,
@@ -131591,7 +131579,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Vlad Botos",
 		"health": 7,
@@ -131626,7 +131614,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"health": 6,
 		"mechanics": [
@@ -131658,7 +131646,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"dbfId": 50991,
 		"type": "Spell",
@@ -131693,7 +131681,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "J. Axer",
 		"health": 5,
 		"mechanics": [
@@ -131741,7 +131729,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"dbfId": 51159,
 		"type": "Spell",
@@ -131764,7 +131752,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 7,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "DRAGON",
 		"artist": "Mike Sass",
 		"health": 4,
@@ -131811,7 +131799,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Sean McNally",
 		"health": 4,
 		"mechanics": [
@@ -131842,7 +131830,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Arthur Bozonnet",
 		"health": 2,
@@ -131885,7 +131873,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"health": 3,
 		"mechanics": [
@@ -131917,7 +131905,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Blessing of Halazzi",
 		"id": "TRL_901e",
 		"audio": {
@@ -131933,7 +131921,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Steady Throw",
 		"id": "TRLA_065p",
 		"audio": {
@@ -131981,7 +131969,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Grace Liu",
 		"health": 8,
 		"mechanics": [
@@ -132005,7 +131993,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132027,7 +132015,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Cicily He",
 		"health": 4,
 		"mechanics": [
@@ -132055,7 +132043,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132077,7 +132065,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jason Kang",
 		"health": 2,
 		"mechanics": [
@@ -132105,7 +132093,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Rogue",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Bottled Terror",
 		"id": "TRLA_106e",
 		"audio": {
@@ -132120,7 +132108,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132142,7 +132130,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Evgeniy Zagumyenny",
 		"health": 1,
 		"mechanics": [
@@ -132171,7 +132159,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132193,7 +132181,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jakub Kasber",
 		"spellDamage": 1,
 		"health": 5,
@@ -132219,7 +132207,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 10,
 		"mechanics": [
@@ -132241,7 +132229,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Lemon Sky",
 		"health": 2,
 		"mechanics": [
@@ -132269,7 +132257,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Overcharged",
 		"health": 9,
 		"id": "TRLA_109e",
@@ -132285,7 +132273,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132307,7 +132295,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Anton Zemskov",
 		"health": 8,
 		"mechanics": [
@@ -132332,7 +132320,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132354,7 +132342,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Christopher Hayes",
 		"health": 5,
 		"mechanics": [
@@ -132379,7 +132367,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132401,7 +132389,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Daria Tuzova",
 		"health": 10,
 		"mechanics": [
@@ -132426,7 +132414,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warlock",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Blood Pact Player Enchantment",
 		"id": "TRLA_113e",
 		"audio": {
@@ -132441,7 +132429,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132463,7 +132451,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Anton Zemskov",
 		"health": 3,
 		"mechanics": [
@@ -132490,7 +132478,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Bwonsamdi's Sanctum Player Enchant",
 		"id": "TRLA_114e",
 		"dbfId": 53956,
@@ -132499,7 +132487,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132521,7 +132509,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Steve Prescott",
 		"health": 3,
 		"mechanics": [
@@ -132546,7 +132534,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Gonk's Mark",
 		"id": "TRLA_115e",
 		"text": "+1/+1.",
@@ -132556,7 +132544,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132578,7 +132566,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"health": 7,
 		"mechanics": [
@@ -132603,14 +132591,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Gonk's Bond",
 		"id": "TRLA_116e",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"text": "Increased Attack.",
 		"dbfId": 54788,
 		"type": "Enchantment",
@@ -132618,7 +132601,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132640,7 +132623,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "ELEMENTAL",
 		"artist": "Akkapoj T.",
 		"health": 1,
@@ -132670,7 +132653,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Vladimir Kafanov",
 		"health": 6,
@@ -132699,7 +132682,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Daren Bader",
 		"health": 4,
@@ -132728,7 +132711,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Vladimir Kafanov",
 		"health": 5,
 		"mechanics": [
@@ -132756,7 +132739,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Empowered",
 		"id": "TRLA_124e",
 		"audio": {
@@ -132771,7 +132754,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Zoltan Boros",
 		"health": 10,
@@ -132797,7 +132780,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "The Fan Favorite",
 		"mechanics": [
 			"TAG_ONE_TURN_EFFECT"
@@ -132815,7 +132798,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Christopher Hayes",
 		"health": 3,
 		"mechanics": [
@@ -132843,7 +132826,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"health": 8,
 		"mechanics": [
@@ -132869,7 +132852,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Jan'alai's Flame Player Enchant",
 		"id": "TRLA_128e",
 		"text": "Your Hero Power costs (0) this turn.",
@@ -132879,7 +132862,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132901,7 +132884,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"health": 7,
 		"mechanics": [
@@ -132927,7 +132910,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Frostfire",
 		"id": "TRLA_129s",
 		"audio": {
@@ -132957,7 +132940,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -132979,7 +132962,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "L. Lullabi & K. Turovec",
 		"health": 5,
 		"mechanics": [
@@ -133017,7 +133000,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "DRAGON",
 		"artist": "Konstantin Turovec",
 		"health": 6,
@@ -133050,7 +133033,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Empowered Glyph",
 		"id": "TRLA_131e",
 		"text": "Increased Spell Damage.",
@@ -133060,7 +133043,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Vladimir Kafanov",
 		"health": 5,
 		"mechanics": [
@@ -133091,7 +133074,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Anton Zemskov",
 		"health": 3,
 		"mechanics": [
@@ -133119,7 +133102,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "David Kegg",
 		"health": 5,
 		"mechanics": [
@@ -133147,7 +133130,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "ELEMENTAL",
 		"artist": "Wayne Wu",
 		"health": 2,
@@ -133180,7 +133163,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jim Nelson",
 		"health": 5,
 		"mechanics": [
@@ -133205,7 +133188,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -133227,7 +133210,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Danny Dai",
 		"health": 5,
 		"mechanics": [
@@ -133252,7 +133235,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -133274,7 +133257,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"health": 3,
 		"mechanics": [
@@ -133303,7 +133286,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Vladimir Kafanov",
 		"health": 5,
 		"mechanics": [
@@ -133343,7 +133326,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Luca Zontini",
 		"health": 6,
 		"mechanics": [
@@ -133371,7 +133354,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "M. Alvares & M. Azevedo",
 		"health": 5,
 		"mechanics": [
@@ -133400,7 +133383,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Cicily He",
 		"health": 1,
 		"mechanics": [
@@ -133428,7 +133411,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "M. Alvares & M. Azevedo",
 		"health": 7,
 		"mechanics": [
@@ -133456,7 +133439,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Efrem Palacios",
 		"health": 5,
 		"mechanics": [
@@ -133481,7 +133464,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -133503,7 +133486,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Vlad Botos",
 		"health": 8,
 		"mechanics": [
@@ -133528,7 +133511,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -133550,7 +133533,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 3,
 		"mechanics": [
@@ -133579,7 +133562,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Repurposed Steel",
 		"id": "TRLA_148e",
 		"audio": {
@@ -133594,7 +133577,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jim Nelson",
 		"health": 7,
@@ -133623,7 +133606,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ware Lee",
 		"health": 5,
 		"mechanics": [
@@ -133663,7 +133646,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Cicily He",
 		"health": 5,
 		"mechanics": [
@@ -133694,7 +133677,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"health": 6,
 		"mechanics": [
@@ -133722,7 +133705,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Vladimir Kafanov",
 		"health": 5,
 		"mechanics": [
@@ -133750,7 +133733,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Attentive Conjuring",
 		"id": "TRLA_153e",
 		"text": "Costs (2) less.",
@@ -133760,7 +133743,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Daria Tuzova",
 		"health": 3,
 		"mechanics": [
@@ -133787,7 +133770,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -133809,7 +133792,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Konstantin Turovec",
 		"health": 10,
 		"mechanics": [
@@ -133833,7 +133816,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -133855,7 +133838,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "MURLOC",
 		"artist": "Akkapoj T.",
 		"health": 2,
@@ -133888,7 +133871,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Andrew Hou",
 		"health": 6,
@@ -133917,7 +133900,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "TOTEM",
 		"artist": "Brandon Kitkouski",
 		"health": 4,
@@ -133949,7 +133932,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Andrew Hou",
 		"health": 5,
 		"mechanics": [
@@ -133984,7 +133967,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Daren Bader",
 		"health": 4,
 		"mechanics": [
@@ -134015,7 +133998,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Evgeniy Dlinnov",
 		"health": 5,
 		"mechanics": [
@@ -134043,7 +134026,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dan Scott",
 		"health": 5,
 		"mechanics": [
@@ -134067,7 +134050,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Halazzi's Hunt",
 		"id": "TRLA_162e",
 		"audio": {
@@ -134082,7 +134065,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Halazzi's Hunt Enchantment",
 		"id": "TRLA_162e2",
 		"dbfId": 54573,
@@ -134091,7 +134074,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -134113,7 +134096,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Arthur Bozonnet",
 		"health": 6,
 		"mechanics": [
@@ -134143,7 +134126,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Halazzi's Haste",
 		"id": "TRLA_163e",
 		"audio": {
@@ -134158,7 +134141,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Halazzi's Protector",
 		"id": "TRLA_163e3",
 		"text": "<b>Taunt</b>.",
@@ -134168,7 +134151,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Halazzi's Wrath",
 		"mechanics": [
 			"POISONOUS"
@@ -134181,7 +134164,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -134203,7 +134186,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Vladimir Kafanov",
 		"health": 3,
@@ -134235,7 +134218,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Panther's Lead",
 		"id": "TRLA_164e",
 		"text": "Has <b>Rush</b>.",
@@ -134245,7 +134228,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Cicily He",
 		"health": 4,
@@ -134286,7 +134269,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Peter Stapleton",
 		"health": 8,
 		"mechanics": [
@@ -134315,7 +134298,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jakub Kasber",
 		"health": 1,
@@ -134345,7 +134328,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Anton Zemskov",
 		"health": 5,
 		"mechanics": [
@@ -134373,7 +134356,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Adam Byrne",
 		"health": 5,
 		"mechanics": [
@@ -134404,7 +134387,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Slamm'd N Jamm'd",
 		"id": "TRLA_169e",
 		"audio": {
@@ -134419,7 +134402,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Luca Zontini",
 		"health": 8,
 		"mechanics": [
@@ -134444,7 +134427,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -134466,7 +134449,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Anton Zemskov",
 		"health": 5,
 		"mechanics": [
@@ -134490,7 +134473,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Fury of the Rhino",
 		"id": "TRLA_171e",
 		"audio": {
@@ -134505,7 +134488,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -134527,7 +134510,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "E. Kenji & M. Azevedo",
 		"health": 4,
 		"mechanics": [
@@ -134558,7 +134541,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Quilboar Rally",
 		"id": "TRLA_172e",
 		"audio": {
@@ -134573,7 +134556,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 1,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Paul Mafayon",
 		"health": 4,
 		"mechanics": [
@@ -134604,7 +134587,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"health": 4,
 		"dbfId": 52927,
@@ -134638,7 +134621,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rocking Out",
 		"id": "TRLA_174e",
 		"audio": {
@@ -134653,7 +134636,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "DRAGON",
 		"artist": "Nicola Saviori",
 		"health": 6,
@@ -134682,7 +134665,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "DRAGON",
 		"artist": "Mauricio Herrera",
 		"health": 7,
@@ -134714,7 +134697,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Flamed",
 		"id": "TRLA_176e",
 		"audio": {
@@ -134729,7 +134712,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 8,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"health": 10,
 		"mechanics": [
@@ -134775,7 +134758,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 4,
 		"mechanics": [
@@ -134800,7 +134783,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -134822,7 +134805,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jason Kang",
 		"health": 8,
 		"mechanics": [
@@ -134847,7 +134830,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -134869,7 +134852,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "E. Kenji & M. Azevedo",
 		"health": 3,
@@ -134901,7 +134884,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Leering",
 		"id": "TRLA_180e",
 		"text": "Player Enchant",
@@ -134911,7 +134894,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Cicily He",
 		"health": 4,
@@ -134940,7 +134923,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 5,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 6,
 		"mechanics": [
@@ -134972,7 +134955,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Rudy Siswanto",
 		"health": 5,
@@ -135001,7 +134984,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 5,
 		"mechanics": [
@@ -135038,7 +135021,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Akkapoj T.",
 		"health": 6,
 		"mechanics": [
@@ -135066,7 +135049,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ian Ameling",
 		"health": 2,
 		"mechanics": [
@@ -135091,7 +135074,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -135113,7 +135096,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Jiajun Tian",
 		"health": 5,
 		"mechanics": [
@@ -135138,7 +135121,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"health": 0,
 		"mechanics": [
@@ -135160,7 +135143,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"health": 1,
 		"mechanics": [
@@ -135191,7 +135174,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 3,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jakub Kasber",
 		"health": 2,
@@ -135226,7 +135209,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "A. J. Nazzaro",
 		"health": 6,
@@ -135256,7 +135239,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 2,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "Steve Prescott",
 		"health": 3,
@@ -135288,7 +135271,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 4,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "BEAST",
 		"artist": "Jiajun Tian",
 		"health": 3,
@@ -135317,7 +135300,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 6,
-		"set": "Rumble",
+		"set": "Troll",
 		"race": "PIRATE",
 		"artist": "Matt Dixon",
 		"health": 4,
@@ -135347,7 +135330,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Slawomir Maniak",
 		"name": "War Master Voone",
 		"health": 10,
@@ -135366,7 +135349,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Evgeniy Zagumyenny",
 		"name": "Zentimo",
 		"health": 10,
@@ -135385,7 +135368,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Rogue",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Matt Dixon",
 		"name": "Captain Hooktusk",
 		"health": 10,
@@ -135404,7 +135387,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Paladin",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"name": "High Priest Thekal",
 		"health": 10,
@@ -135423,7 +135406,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Orlandelli",
 		"name": "Zul'jin",
 		"health": 10,
@@ -135442,7 +135425,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Zoltan Boros",
 		"name": "Wardruid Loti",
 		"health": 10,
@@ -135461,7 +135444,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warlock",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "James Ryman",
 		"name": "High Priestess Jeklik",
 		"health": 10,
@@ -135480,7 +135463,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Mage",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Mike Sass",
 		"name": "Hex Lord Malacrass",
 		"health": 10,
@@ -135499,7 +135482,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Alex Horley Ormandelli",
 		"name": "Princess Talanji",
 		"health": 10,
@@ -135518,7 +135501,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h",
@@ -135537,7 +135520,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Druid",
@@ -135556,7 +135539,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Hunter",
@@ -135575,7 +135558,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Mage",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Mage",
@@ -135594,7 +135577,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Paladin",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Paladin",
@@ -135613,7 +135596,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Priest",
@@ -135632,7 +135615,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Rogue",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Rogue",
@@ -135651,7 +135634,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Shaman",
@@ -135670,7 +135653,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warlock",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Warlock",
@@ -135689,7 +135672,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Warrior",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rikkar",
 		"health": 20,
 		"id": "TRLA_209h_Warrior",
@@ -135708,7 +135691,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Esad Ribic",
 		"hideStats": true,
 		"mechanics": [
@@ -135765,7 +135748,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Sacred",
 		"id": "TRLA_801e",
 		"text": "Your spells cost (1) less.",
@@ -135775,7 +135758,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Sacred Ritual Player Enchant",
 		"mechanics": [
@@ -135789,7 +135772,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Filip Acovic",
 		"hideStats": true,
 		"mechanics": [
@@ -135849,7 +135832,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Favored",
 		"id": "TRLA_802e",
 		"text": "Adjacent minions gain <b>Taunt</b>.",
@@ -135859,7 +135842,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Favor of the Gods Player Enchant",
 		"mechanics": [
@@ -135872,7 +135855,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Zoltan Boros",
 		"hideStats": true,
 		"mechanics": [
@@ -135929,7 +135912,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Zoltan Boros",
 		"name": "Fortified",
 		"id": "TRLA_803e",
@@ -135945,7 +135928,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Fortified Spirit Player Enchant",
 		"mechanics": [
@@ -135963,7 +135946,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Raymond Swanland",
 		"hideStats": true,
 		"mechanics": [
@@ -136020,7 +136003,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Imaginary Friends",
 		"hideStats": true,
 		"mechanics": [
@@ -136077,7 +136060,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Pact with the Loa Player Enchant",
 		"mechanics": [
@@ -136095,7 +136078,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Dan Scott",
 		"hideStats": true,
 		"mechanics": [
@@ -136155,7 +136138,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Wrath of the Loa Player Enchant",
 		"mechanics": [
@@ -136173,7 +136156,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Wrath of the Loas",
 		"mechanics": [
@@ -136192,7 +136175,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Gonzalo Ordonez",
 		"hideStats": true,
 		"mechanics": [
@@ -136252,7 +136235,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Boon Reaper Player Enchant",
 		"mechanics": [
@@ -136270,7 +136253,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Boon Reaper",
 		"mechanics": [
@@ -136289,7 +136272,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Raymond Swanland",
 		"hideStats": true,
 		"mechanics": [
@@ -136349,7 +136332,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Roaring Edifice Player Enchant",
 		"mechanics": [
@@ -136367,7 +136350,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Roaring Edifice",
 		"mechanics": [
@@ -136386,7 +136369,7 @@ var parseCardsText = {
 	},
 	{
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"artist": "Trent Kaniuga",
 		"hideStats": true,
 		"mechanics": [
@@ -136446,7 +136429,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Windfall Blessing Player Enchant",
 		"mechanics": [
@@ -136464,7 +136447,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"hideStats": true,
 		"name": "Windfall Glyph",
 		"mechanics": [
@@ -136483,7 +136466,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Windfall Blessing",
 		"id": "TRLA_809e3",
 		"text": "+1/+1.",
@@ -136494,7 +136477,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Natural Defense",
 		"id": "TRLA_Druid_01",
 		"dbfId": 50988,
@@ -136516,7 +136499,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Feral",
 		"id": "TRLA_Druid_02",
 		"dbfId": 50989,
@@ -136539,7 +136522,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Nature's Blessing",
 		"id": "TRLA_Druid_03",
 		"dbfId": 50990,
@@ -136559,7 +136542,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Saplings",
 		"id": "TRLA_Druid_04",
 		"dbfId": 52917,
@@ -136582,7 +136565,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Big Draws",
 		"id": "TRLA_Druid_05",
 		"dbfId": 52918,
@@ -136605,7 +136588,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Wise Decisions",
 		"id": "TRLA_Druid_06",
 		"dbfId": 52919,
@@ -136628,7 +136611,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Beasts",
 		"id": "TRLA_Druid_07",
 		"dbfId": 52920,
@@ -136653,7 +136636,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Nature's Wrath",
 		"id": "TRLA_Druid_10",
 		"dbfId": 52961,
@@ -136676,7 +136659,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rumble Kings",
 		"id": "TRLA_Druid_13",
 		"dbfId": 52964,
@@ -136698,7 +136681,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Druid",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Going Wild",
 		"id": "TRLA_Druid_14",
 		"dbfId": 52965,
@@ -136722,7 +136705,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Fresh Meat",
 		"id": "TRLA_Hunter_01",
 		"dbfId": 53261,
@@ -136750,7 +136733,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Big Beasts",
 		"id": "TRLA_Hunter_02",
 		"dbfId": 53262,
@@ -136775,7 +136758,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Trick Shots",
 		"id": "TRLA_Hunter_03",
 		"dbfId": 53263,
@@ -136800,7 +136783,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Beast Caller",
 		"id": "TRLA_Hunter_04",
 		"dbfId": 53264,
@@ -136831,7 +136814,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Secrets",
 		"id": "TRLA_Hunter_05",
 		"dbfId": 53265,
@@ -136861,7 +136844,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Beast Training",
 		"id": "TRLA_Hunter_06",
 		"dbfId": 53266,
@@ -136888,7 +136871,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Deathrattle",
 		"id": "TRLA_Hunter_09",
 		"dbfId": 53267,
@@ -136919,7 +136902,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Legendary",
 		"id": "TRLA_Hunter_10",
 		"dbfId": 53268,
@@ -136947,7 +136930,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Survival Tactics",
 		"id": "TRLA_Hunter_11",
 		"dbfId": 53269,
@@ -136972,7 +136955,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Scrapyard",
 		"id": "TRLA_Hunter_12",
 		"dbfId": 54102,
@@ -136997,7 +136980,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Heroic Power",
 		"id": "TRLA_Mage_01",
 		"dbfId": 52155,
@@ -137021,7 +137004,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Elementals",
 		"id": "TRLA_Mage_02",
 		"dbfId": 52157,
@@ -137047,7 +137030,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Big Spells",
 		"id": "TRLA_Mage_03",
 		"dbfId": 53204,
@@ -137068,7 +137051,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Fire",
 		"id": "TRLA_Mage_04",
 		"dbfId": 53205,
@@ -137094,7 +137077,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Frost",
 		"id": "TRLA_Mage_05",
 		"dbfId": 53206,
@@ -137116,7 +137099,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Magical Friends",
 		"id": "TRLA_Mage_06",
 		"dbfId": 53207,
@@ -137138,7 +137121,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Spell Power",
 		"id": "TRLA_Mage_07",
 		"dbfId": 53208,
@@ -137159,7 +137142,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Hand Power",
 		"id": "TRLA_Mage_08",
 		"dbfId": 53209,
@@ -137183,7 +137166,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Gurubashi Legends",
 		"id": "TRLA_Mage_09",
 		"dbfId": 53210,
@@ -137207,7 +137190,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Mage",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Chaos",
 		"id": "TRLA_Mage_10",
 		"dbfId": 53211,
@@ -137229,7 +137212,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Magnetic",
 		"id": "TRLA_Paladin_01",
 		"dbfId": 53110,
@@ -137252,7 +137235,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Healing",
 		"id": "TRLA_Paladin_02",
 		"dbfId": 53112,
@@ -137277,7 +137260,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Recruits",
 		"id": "TRLA_Paladin_03",
 		"dbfId": 53113,
@@ -137299,7 +137282,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Self-Sacrifice",
 		"id": "TRLA_Paladin_04",
 		"dbfId": 53114,
@@ -137321,7 +137304,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Teambuilding",
 		"id": "TRLA_Paladin_05",
 		"dbfId": 53115,
@@ -137345,7 +137328,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Reinforce",
 		"id": "TRLA_Paladin_06",
 		"dbfId": 53116,
@@ -137368,7 +137351,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Holy Arsenal",
 		"id": "TRLA_Paladin_07",
 		"dbfId": 53117,
@@ -137389,7 +137372,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Secrets",
 		"id": "TRLA_Paladin_08",
 		"dbfId": 53118,
@@ -137414,7 +137397,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Dragons",
 		"id": "TRLA_Paladin_09",
 		"dbfId": 53119,
@@ -137438,7 +137421,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Paladin",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Divine Legends",
 		"id": "TRLA_Paladin_10",
 		"dbfId": 53120,
@@ -137462,7 +137445,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Dying Words",
 		"id": "TRLA_Priest_01",
 		"dbfId": 52220,
@@ -137490,7 +137473,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Healing",
 		"id": "TRLA_Priest_02",
 		"dbfId": 52221,
@@ -137511,7 +137494,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Inspired by the Light",
 		"id": "TRLA_Priest_03",
 		"dbfId": 54181,
@@ -137533,7 +137516,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Double Down",
 		"id": "TRLA_Priest_04",
 		"dbfId": 54182,
@@ -137559,7 +137542,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Elementals",
 		"id": "TRLA_Priest_05",
 		"dbfId": 54183,
@@ -137582,7 +137565,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Inner Strength",
 		"id": "TRLA_Priest_06",
 		"dbfId": 54184,
@@ -137601,7 +137584,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Resilient",
 		"id": "TRLA_Priest_07",
 		"dbfId": 54185,
@@ -137625,7 +137608,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Army of the Dead",
 		"id": "TRLA_Priest_08",
 		"dbfId": 54186,
@@ -137647,7 +137630,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Wrath",
 		"id": "TRLA_Priest_09",
 		"dbfId": 54187,
@@ -137668,7 +137651,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Legends of the Light",
 		"id": "TRLA_Priest_10",
 		"dbfId": 54188,
@@ -137690,7 +137673,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Burgle",
 		"id": "TRLA_Rogue_01",
 		"dbfId": 53126,
@@ -137713,7 +137696,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Pirates",
 		"id": "TRLA_Rogue_02",
 		"dbfId": 53127,
@@ -137740,7 +137723,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Battlecry",
 		"id": "TRLA_Rogue_03",
 		"dbfId": 53128,
@@ -137765,7 +137748,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Aggressive Tactics",
 		"id": "TRLA_Rogue_04",
 		"dbfId": 53129,
@@ -137789,7 +137772,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Tricks of the Trade",
 		"id": "TRLA_Rogue_05",
 		"dbfId": 53130,
@@ -137813,7 +137796,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Weapons",
 		"id": "TRLA_Rogue_06",
 		"dbfId": 53131,
@@ -137836,7 +137819,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Deathrattle",
 		"id": "TRLA_Rogue_07",
 		"dbfId": 53132,
@@ -137860,7 +137843,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "For the Money",
 		"id": "TRLA_Rogue_08",
 		"dbfId": 53133,
@@ -137882,7 +137865,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Bounce",
 		"id": "TRLA_Rogue_09",
 		"dbfId": 53134,
@@ -137906,7 +137889,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Misfits",
 		"id": "TRLA_Rogue_10",
 		"dbfId": 53135,
@@ -137930,7 +137913,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Elemental Fury",
 		"id": "TRLA_Shaman_01",
 		"dbfId": 52977,
@@ -137955,7 +137938,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Spellchasers",
 		"id": "TRLA_Shaman_02",
 		"dbfId": 52978,
@@ -137979,7 +137962,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Blessings",
 		"id": "TRLA_Shaman_03",
 		"dbfId": 52979,
@@ -138001,7 +137984,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Mutations",
 		"id": "TRLA_Shaman_04",
 		"dbfId": 52980,
@@ -138024,7 +138007,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Battlecrier",
 		"id": "TRLA_Shaman_05",
 		"dbfId": 52981,
@@ -138053,7 +138036,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Elementals",
 		"id": "TRLA_Shaman_06",
 		"dbfId": 52982,
@@ -138085,7 +138068,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Murlocs",
 		"id": "TRLA_Shaman_07",
 		"dbfId": 52983,
@@ -138112,7 +138095,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Overload",
 		"id": "TRLA_Shaman_08",
 		"dbfId": 52984,
@@ -138145,7 +138128,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Totems",
 		"id": "TRLA_Shaman_09",
 		"dbfId": 52985,
@@ -138170,7 +138153,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Jade Lotus",
 		"id": "TRLA_Shaman_11",
 		"dbfId": 52986,
@@ -138187,7 +138170,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Farseer",
 		"id": "TRLA_Shaman_12",
 		"dbfId": 52987,
@@ -138215,7 +138198,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Shaman",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Mechanized",
 		"id": "TRLA_Shaman_13",
 		"dbfId": 52988,
@@ -138241,7 +138224,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Hir'eek's Legion",
 		"id": "TRLA_Warlock_01",
 		"audio": {
@@ -138272,7 +138255,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Discard",
 		"id": "TRLA_Warlock_02",
 		"audio": {
@@ -138305,7 +138288,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Life Takers",
 		"id": "TRLA_Warlock_03",
 		"audio": {
@@ -138333,7 +138316,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Taunt",
 		"id": "TRLA_Warlock_04",
 		"audio": {
@@ -138363,7 +138346,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Wrath",
 		"id": "TRLA_Warlock_06",
 		"audio": {
@@ -138388,7 +138371,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Sacrifice",
 		"id": "TRLA_Warlock_07",
 		"audio": {
@@ -138416,7 +138399,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Blood",
 		"id": "TRLA_Warlock_08",
 		"audio": {
@@ -138444,7 +138427,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Dire Demons",
 		"id": "TRLA_Warlock_09",
 		"audio": {
@@ -138473,7 +138456,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "A Dark Hand",
 		"id": "TRLA_Warlock_10",
 		"audio": {
@@ -138502,7 +138485,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Jinx",
 		"id": "TRLA_Warlock_11",
 		"audio": {
@@ -138529,7 +138512,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Tank Up!",
 		"id": "TRLA_Warrior_01",
 		"dbfId": 54171,
@@ -138561,7 +138544,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Berserker",
 		"id": "TRLA_Warrior_02",
 		"dbfId": 54172,
@@ -138587,7 +138570,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Legendary",
 		"id": "TRLA_Warrior_03",
 		"dbfId": 54173,
@@ -138619,7 +138602,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Smash",
 		"id": "TRLA_Warrior_04",
 		"dbfId": 54174,
@@ -138642,7 +138625,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Metalhead",
 		"id": "TRLA_Warrior_05",
 		"dbfId": 54175,
@@ -138668,7 +138651,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Rush",
 		"id": "TRLA_Warrior_06",
 		"dbfId": 54176,
@@ -138691,7 +138674,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Fervent Fans",
 		"id": "TRLA_Warrior_07",
 		"dbfId": 54177,
@@ -138722,7 +138705,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Protection",
 		"id": "TRLA_Warrior_08",
 		"dbfId": 54178,
@@ -138749,7 +138732,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Dragon Heart",
 		"id": "TRLA_Warrior_09",
 		"dbfId": 54179,
@@ -138787,7 +138770,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"cost": 0,
-		"set": "Rumble",
+		"set": "Troll",
 		"name": "Overkill",
 		"id": "TRLA_Warrior_10",
 		"dbfId": 54180,
