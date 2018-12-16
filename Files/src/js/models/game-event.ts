@@ -13,6 +13,7 @@ export class GameEvent {
 	public static readonly WINNER = 'WINNER';
 	public static readonly GAME_END = 'GAME_END';
 	public static readonly CARD_PLAYED = 'CARD_PLAYED';
+	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
 
 	readonly type: string;
 	readonly data: any[];

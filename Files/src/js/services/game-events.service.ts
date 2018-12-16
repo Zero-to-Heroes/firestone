@@ -99,6 +99,9 @@ export class GameEvents {
 			case 'MULLIGAN_DONE':
 				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_DONE));
 				break;
+			case 'RUMBLE_RUN_STEP':
+				this.allEvents.next(new GameEvent(GameEvent.RUMBLE_RUN_STEP, gameEvent.Value));
+				break;
 			case 'CARD_PLAYED':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_PLAYED, 

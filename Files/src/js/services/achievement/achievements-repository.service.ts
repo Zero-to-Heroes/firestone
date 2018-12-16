@@ -21,6 +21,8 @@ import { Events } from '../events.service.js';
 import { AchievementConfService } from './achievement-conf.service.js';
 import { RumbleRunShrinePlaySetProvider } from './achievement-sets/rumble-shrine-play.js';
 import { ShrinePlay } from './achievements/shrine-play.js';
+import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progression.js';
+import { RumbleProgression } from './achievements/rumble-progression.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -70,6 +72,7 @@ export class AchievementsRepository {
 			new DungeonRunBossSetProvider(this.cards, this.conf),
 			new MonsterHuntBossSetProvider(this.cards, this.conf),
 			new RumbleRunShrinePlaySetProvider(this.cards, this.conf),
+			new RumbleRunProgressionSetProvider(this.cards, this.conf),
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
@@ -102,6 +105,7 @@ export class AchievementsRepository {
 			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, this.events) },
 			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, this.events) },
+			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, this.events) },
 		];
 	}
 }

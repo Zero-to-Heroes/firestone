@@ -36,6 +36,6 @@ export class AchievementConfService {
         if (['dungeon_run_boss_victory', 'monster_hunt_boss_victory'].indexOf(achievementType) !== -1) {
             return 'boss_victory';
         }
-        return 'missing_icon';
+        return 'boss_victory';
     }
 }

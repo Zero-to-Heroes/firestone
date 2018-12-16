@@ -78,7 +78,7 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
         // Useful to make sure we have some consistency in the number of comletions
         let maxNumberOfCompletions: number = 0;
         const invertedCompletionSteps = [];
-        for (let i = 0; i < achievementForCompletionSteps.length; i++) {
+        for (let i = achievementForCompletionSteps.length - 1; i >= 0; i--) {
             const achv = achievementForCompletionSteps[i];
             const completions: number = Math.max(maxNumberOfCompletions, achv.numberOfCompletions);
             maxNumberOfCompletions = completions;
