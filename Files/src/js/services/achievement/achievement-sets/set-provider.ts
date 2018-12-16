@@ -17,6 +17,7 @@ export abstract class SetProvider {
     public abstract provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet;
     protected abstract convertToVisual(achievement: Achievement, index: number, mergedAchievements: Achievement[]): IndexedVisualAchievement;
     protected abstract filterOptions();
+    protected abstract isAchievementVisualRoot(achievement: Achievement): boolean;
     
     public supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean {
         const type = allAchievements
@@ -38,7 +39,7 @@ export abstract class SetProvider {
 					return new Achievement(ref.id, ref.name, ref.type, ref.cardId, ref.difficulty, numberOfCompletions, replayInfo);
 				})
 		const fullAchievements: VisualAchievement[] = mergedAchievements
-            .filter(achievement => achievement.type == this.types[0])
+            .filter(achievement => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
 			.sort((a, b) => {
 				const aVisibility = this.sortPriority(a.achievement);

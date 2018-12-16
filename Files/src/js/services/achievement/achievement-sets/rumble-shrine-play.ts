@@ -88,4 +88,8 @@ export class RumbleRunShrinePlaySetProvider extends SetProvider {
             index: index 
         };
     }
+
+    protected isAchievementVisualRoot(achievement: Achievement): boolean {
+        return achievement.type == this.types[0];
+    }
 }
