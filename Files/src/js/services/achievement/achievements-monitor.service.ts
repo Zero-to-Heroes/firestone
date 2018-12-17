@@ -63,7 +63,7 @@ export class AchievementsMonitor {
 			// The achievement.id is used in the notification service to uniquely get the right notification
 			// HTML element
 			content: `
-				<div class="achievement-message-container ${achievement.id}">
+				<div class="achievement-message-container ${achievement.id} unclickable">
 					<div class="achievement-image-container">
 						<img 
 							src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
@@ -85,7 +85,7 @@ export class AchievementsMonitor {
 						</div>
 						<span class="text">${text}</span>
 						<div class="recap-text">
-							<span class="pending">Your replay is being recorded...</span>
+							<span class="pending">Your replay is being recorded...<span class="loader"></span></span>
 							<span class="active">Replay saved! Click to recap</span>
 						</div>
 					</div>

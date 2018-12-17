@@ -143,7 +143,7 @@ export class NotificationsComponent implements AfterViewInit {
 			}
 			// console.log('running toast message in zone', toast);
 			toast.click.subscribe((event: MouseEvent) => {
-				console.log('registered click on toast', event, toast, toast.theClass);
+				console.log('registered click on toast', event, toast);
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -156,10 +156,21 @@ export class NotificationsComponent implements AfterViewInit {
 					// this.notificationService.remove(toast.id);
 					return;
 				}
+				let currentElement = event.srcElement;
+				while (!currentElement.classList.contains("unclickable") && currentElement.parentElement) {
+					currentElement = currentElement.parentElement;
+				}
+				if (currentElement.classList.contains("unclickable")) {
+					currentElement.classList.add("shake");
+					setTimeout(() => {
+						currentElement.classList.remove("shake");
+					}, 500);
+				}
 				if (cardId) {
-					const isAchievement = (type === 'achievement-pre-record' && toast.theClass === 'active')
+					const isAchievement = type === 'achievement-pre-record' || type === 'achievement-confirm';
+					const isActiveAchievement = (type === 'achievement-pre-record' && toast.theClass === 'active')
 							|| type === 'achievement-confirm';
-					if (isAchievement) {
+					if (isActiveAchievement) {
 						console.log('sending message', this.mainWindowId);
 						overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
 							console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
@@ -167,7 +178,7 @@ export class NotificationsComponent implements AfterViewInit {
 						this.notificationService.remove(toast.id);
 					}
 					// Collection
-					else {
+					else if (!isAchievement) {
 						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
 							console.log('send click info to collection window', cardId, this.mainWindowId, result);
 						});

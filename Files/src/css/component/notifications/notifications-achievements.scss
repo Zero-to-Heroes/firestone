@@ -67,6 +67,34 @@
             margin-top: 5px;
 			position: relative;
 			color: #A89782;
+
+			.pending {				
+				display: flex;
+				align-items: center;
+			}
+
+			.loader {
+				width: 10px;
+				height: 10px;
+				position: relative;
+				margin-left: 5px;
+				animation-name: spin;
+				animation-duration: 1500ms;
+				animation-iteration-count: infinite;
+				animation-timing-function: linear;
+				
+				&::before {
+					content: "";
+					background: url(/Files/assets/svg/loader.svg) center center;
+					background-size: 10px 10px;
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background-repeat: no-repeat;
+				}
+			}
 		}
 	}
 
@@ -101,5 +129,14 @@
             opacity: 1;
             position: absolute;
         }
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }
