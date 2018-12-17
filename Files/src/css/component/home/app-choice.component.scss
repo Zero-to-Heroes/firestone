@@ -99,6 +99,20 @@ i {
 	background: rgba(255, 255, 255, 0.08);
 }
 
+.app.inactive .info {
+	opacity: 0.5;
+}
+
+.app.inactive {
+	
+	.coming-soon {
+		height: 30px;
+		background: rgba(255, 255, 255, 0.05);
+		font-size: 13px;
+		color: rgba(217, 195, 171, 0.7);
+	}
+}
+
 .binder .banner {
 	background: $pink01;
 }

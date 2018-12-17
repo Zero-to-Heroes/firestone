@@ -27,7 +27,7 @@ declare var overwolf: any;
 					</svg>
 				</i>
 			</div>
-			<span class="sub-title" [innerHTML]="status"></span>
+			<span class="sub-title" [innerHTML]="status" [ngClass]="{'ftue': ftue}"></span>
 			<span class="sub-title sub-title-details" [innerHTML]="statusDetails"></span>
 		</div>
 	`,
@@ -40,6 +40,7 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 	importantAnnouncement;
 	status: string;
 	statusDetails: string;
+	ftue: boolean;
 
 	private currentNotificationIndex = 0;
 	private notifications: any[];
@@ -81,6 +82,7 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 					if (!collection || collection.length == 0) {
 						this.status = "Please launch Hearthstone to synchronize your collection.";
 						this.statusDetails = null;
+						this.ftue = true;
 					}
 					else {
 						this.statusDetails = "Choose an ability:";

@@ -13,8 +13,8 @@ declare var overwolf: any;
 	],
 	template: `
 		<div class="app-choice" *ngIf="dataLoaded">
-			<div (click)="showCollection()" [ngClass]="{'app binder': true, 'inactive': noCollection}">
-				<div class="no-data" *ngIf="noCollection">Launch Hearthstone to start</div>
+			<div (click)="showCollection()" 
+					[ngClass]="{'app binder': true, 'inactive': noCollection}">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
@@ -26,10 +26,9 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div 
-				(click)="showAchievements()" 
-				class="app achievements" 
-				[ngClass]="{'disabled': !achievementsOn}">
+			<div (click)="showAchievements()" 
+					class="app achievements" 
+					[ngClass]="{'disabled': !achievementsOn, 'inactive': noCollection}">
 				<div class="coming-soon" *ngIf="!achievementsOn">Coming soon</div>
 				<div class="info">
 					<i class="i-150X150 gold-theme">
@@ -42,7 +41,7 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div class="app deck-tracker last disabled">
+			<div class="app deck-tracker last disabled inactive">
 				<div class="coming-soon">Coming soon</div>
 				<div class="info">
 					<i class="i-150X150 gold-theme">
@@ -101,6 +100,9 @@ export class AppChoiceComponent implements AfterViewInit {
 	}
 
 	showAchievements() {
+		if (this.noCollection) {
+			return;
+		}
 		if (this.achievementsOn) {
 			this.showMainWindow('achievements');
 		}
