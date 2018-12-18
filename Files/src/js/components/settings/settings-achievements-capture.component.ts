@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 
 declare var ga;
@@ -51,7 +51,7 @@ export class SettingsAchievementsCaptureComponent {
 
 	captureVideo: boolean = true;
 
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef) {
+	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
 		this.updateDefaultValues();
 	}
 
@@ -60,6 +60,22 @@ export class SettingsAchievementsCaptureComponent {
 		this.changeVideoSettings();
 		this.cdr.detectChanges();
 		ga('send', 'event', 'video-capture-toggle', this.captureVideo);
+	}
+	
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		// console.log('handling history click', event);
+		const achievementsList = this.el.nativeElement.querySelector('.achievements-capture');
+		if (!achievementsList) {
+			return;
+		}
+		let rect = achievementsList.getBoundingClientRect();
+		// console.log('element rect', rect);
+		let scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 
 	private async updateDefaultValues() {
