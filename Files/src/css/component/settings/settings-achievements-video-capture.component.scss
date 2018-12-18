@@ -1,5 +1,5 @@
 .video-capture {
-    height: 227px;
+    height: 222px;
     background: rgba(255, 255, 255, 0.08);
     padding: 15px;
 
@@ -10,10 +10,8 @@
         line-height: normal;
         font-size: 14px;        
         color: #A89782;
-    }
-
-    .custom-video-quality {
         display: flex;
+        margin-bottom: 10px;
 
         input, input:focus, input:active {
             display: block;
@@ -26,24 +24,19 @@
 
         .custom-info {
             display: flex;
-            align-items: center;
-            position: relative;
-            top: -5px;
+            margin-left: 5px;
+        }
 
-            input {
-                margin-left: 10px;
-                margin-right: 5px;
-                text-align: center;
+        &.unselected .label-custom {
+            color: #D9C3AB;
+            text-decoration: underline;
+        }
 
-                &:hover {
-                    border-color: #D9C3AB;
-                }
-
-                &::selection {
-                    background: #FFB948;
-                    color: #472406;
-                }
-            }
+        a {
+            margin-top: 0;
+            text-decoration: underline;
+            align-self: center;
+            margin-left: 5px;
         }
     }
 
@@ -52,7 +45,7 @@
         flex-direction: column;
     }
 
-    a {
+    a.advanced {
         margin-top: -5px;
     }
 }

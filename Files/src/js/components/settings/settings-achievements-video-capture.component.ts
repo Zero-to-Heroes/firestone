@@ -72,22 +72,16 @@ declare var overwolf;
                             <use xlink:href="/Files/assets/svg/sprite.svg#radio_selected"/>
                         </svg>
                     </i>
-                    <div class="custom-video-quality"> 
-                        Custom<span *ngIf="settingsForm.value.videoQuality === 'custom'">:</span>
-                        <div class="custom-info" *ngIf="settingsForm.value.videoQuality === 'custom'"> 
-                            <input class="custom-resolution" 
-                                    [(ngModel)]="resolution" 
-                                    (input)="onCustomVideoResolutionChange($event.target.value)"
-                                    [ngModelOptions]="{standalone: true}">P
-                            <input class="custom-input" 
-                                    [(ngModel)]="fps" 
-                                    (input)="onCustomVideoFpsChange($event.target.value)"
-                                    [ngModelOptions]="{standalone: true}">FPS
-                        </div>
+                    <div class="custom-video-quality" [ngClass]="{'unselected': settingsForm.value.videoQuality !== 'custom'}"> 
+						<div class="label-custom">Custom</div>
+						<div *ngIf="settingsForm.value.videoQuality === 'custom'" class="custom-info">
+							<div>({{resolution}}p {{fps}}fps).</div> 
+							<a href="overwolf://settings/capture">Edit</a>
+						</div>
                     </div>
                 </label>
             </form>
-            <a href="overwolf://settings/capture">Advanced video settings</a>
+            <a class="advanced" href="overwolf://settings/capture">Advanced video settings</a>
         </div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -113,6 +107,8 @@ export class SettingsAchievementsVideoCaptureComponent {
 
 	constructor(private owService: OverwolfService, private cdr: ChangeDetectorRef) {
 		this.updateDefaultValues();
+		overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange(data));
+		this.settingsForm.controls['videoQuality'].valueChanges.subscribe((value) => this.changeVideoCaptureSettings(value));
 	}
 
 	onCustomVideoResolutionChange(newResolution: string) {
@@ -137,29 +133,22 @@ export class SettingsAchievementsVideoCaptureComponent {
 	}
 
 	private async changeVideoCaptureSettings(value: string) {
-		let owResolution;
 		switch (value) {
 			case 'low':
 				this.resolution = 480;
 				this.fps = 10;
-				owResolution = this.RESOLUTION_ENUM[3];
 				break;
 			case 'medium':
 				this.resolution = 720;
 				this.fps = 30;
-				owResolution = this.RESOLUTION_ENUM[2];
 				break;
 			case 'high':
 				this.resolution = 1080;
 				this.fps = 60;
-				owResolution = this.RESOLUTION_ENUM[1];
-				break;
-			case 'custom':
-				owResolution = 'R' + this.resolution;
 				break;
 		}
 		const settings = {
-			resolution: owResolution,
+			resolution: this.owResolution(),
 			fps: this.fps
 		}
 		console.log('changing settings with', settings);
@@ -169,25 +158,37 @@ export class SettingsAchievementsVideoCaptureComponent {
 		console.log('recording settings changed', result);
 	}
 
+	private owResolution() {
+		switch (this.resolution) {
+			case 480: return this.RESOLUTION_ENUM[3];
+			case 720: return this.RESOLUTION_ENUM[2];
+			case 1080: return this.RESOLUTION_ENUM[1];
+			default: console.error('Unexpected resolution', this.resolution);
+		}
+	}
+
 	private async updateDefaultValues() {
 		const settings = await this.owService.getVideoCaptureSettings();
-		this.resolution = this.convertToResolution(settings.resolution)
+		const oldResolution = this.resolution;
+		const oldFps = this.fps;
+		this.resolution = this.convertToResolution(settings.resolution);
 		this.fps = settings.fps || 10;
-		if (this.resolution === 480 && this.fps === 10) {
-			this.settingsForm.controls['videoQuality'].setValue('low');
+		if (oldResolution !== this.resolution || oldFps !== this.fps) {
+			if (this.resolution === 480 && this.fps === 10) {
+				this.settingsForm.controls['videoQuality'].setValue('low');
+			}
+			else if (this.resolution === 720 && this.fps === 30) {
+				this.settingsForm.controls['videoQuality'].setValue('medium');
+			}
+			else if (this.resolution === 1080 && this.fps === 60) {
+				this.settingsForm.controls['videoQuality'].setValue('high');
+			}
+			else {
+				this.settingsForm.controls['videoQuality'].setValue('custom');
+			}
+			console.log('set default capture values', settings, this.resolution, this.fps, this.settingsForm.controls['videoQuality'].value);
+			this.cdr.detectChanges();
 		}
-		else if (this.resolution === 720 && this.fps === 30) {
-			this.settingsForm.controls['videoQuality'].setValue('medium');
-		}
-		else if (this.resolution === 1080 && this.fps === 60) {
-			this.settingsForm.controls['videoQuality'].setValue('high');
-		}
-		else {
-			this.settingsForm.controls['videoQuality'].setValue('custom');
-		}
-		console.log('set default capture values', settings, this.resolution, this.fps, this.settingsForm.controls['videoQuality'].value);
-		this.cdr.detectChanges();
-		this.settingsForm.controls['videoQuality'].valueChanges.subscribe((value) => this.changeVideoCaptureSettings(value));
 	}
 
 	private convertToResolution(from: number): number {
@@ -197,4 +198,9 @@ export class SettingsAchievementsVideoCaptureComponent {
 		}
 		return from || 480;
 	}
+
+    private handleVideoSettingsChange(data) {
+		console.log('[recording] video capture settings changed', data);
+		this.updateDefaultValues();
+    }
 }
