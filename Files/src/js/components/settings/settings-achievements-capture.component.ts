@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
+
+declare var ga;
 
 @Component({
 	selector: 'settings-achievements-capture',
@@ -58,6 +59,7 @@ export class SettingsAchievementsCaptureComponent {
 		this.captureVideo = !this.captureVideo;
 		this.changeVideoSettings();
 		this.cdr.detectChanges();
+		ga('send', 'event', 'video-capture-toggle', this.captureVideo);
 	}
 
 	private async updateDefaultValues() {
