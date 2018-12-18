@@ -97,6 +97,22 @@ export class OverwolfService {
         });
 	}
 
+    public async turnOffReplays(): Promise<void> {
+		return new Promise<void>((resolve) => {
+            overwolf.media.replays.turnOff((res: any) => {
+				console.log('[recording] replays turned off', res);
+                resolve();
+            });
+        });
+    }
+    public async getReplayMediaState(): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.media.replays.getState((res: any) => {
+                resolve(res.isOn);
+            });
+        });
+    }
+
 	private gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {
 			return false;

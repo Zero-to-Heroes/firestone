@@ -41,6 +41,8 @@ import { AchievementsVideoCaptureService } from '../../services/achievement/achi
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -69,9 +71,6 @@ export class SentryErrorHandler implements ErrorHandler {
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 
-		AllCardsService,
-		CardHistoryStorageService,
-		CollectionManager,
 		Events,
 		DebugService,
 		DevService,
@@ -79,17 +78,24 @@ export class SentryErrorHandler implements ErrorHandler {
 		HsPublicEventsListener,
 		GameEvents,
 		IndexedDbService,
+		GenericIndexedDbService,
 		LogListenerService,
 		LogParserService,
 		LogRegisterService,
 		LogStatusService,
 		OverwolfService,
 		OwNotificationsService,
+		PreferencesService,
+		SimpleIOService,
+		MemoryInspectionService,
+
+		AllCardsService,
+		CardHistoryStorageService,
+		CollectionManager,
 		PackMonitor,
 		PackHistoryService,
 		PackStatsService,
-		SimpleIOService,
-		MemoryInspectionService,
+
 		AchievementConfService,
 		AchievementHistoryStorageService,
 		AchievementsMonitor,
@@ -100,7 +106,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementsStorageService,
 		AchievementsVideoCaptureService,
 		AchievementsDb,
-		PackHistoryService,
 	]
 })
 export class AppModule { }

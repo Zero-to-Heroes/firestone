@@ -26,7 +26,7 @@ export class GenericIndexedDbService {
 		return new Promise<Preferences>((resolve) => {
 			this.waitForDbInit().then(() => {
 				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
-					resolve(preferences[0] || new Preferences(false, false));
+					resolve(preferences[0] || new Preferences(false, false, false));
 				});
 			});
 		});
@@ -35,13 +35,13 @@ export class GenericIndexedDbService {
 	private waitForDbInit(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			const dbWait = () => {
-				console.log('Promise waiting for db');
+				// console.log('Promise waiting for db');
 				if (this.dbInit) {
-					console.log('wait for db init complete');
+					// console.log('wait for db init complete');
 					resolve();
 				} 
 				else {
-					console.log('waiting for db init');
+					// console.log('waiting for db init');
 					setTimeout(() => dbWait(), 50);
 				}
 			}

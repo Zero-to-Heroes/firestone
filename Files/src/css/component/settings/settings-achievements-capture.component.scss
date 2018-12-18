@@ -3,6 +3,19 @@
     height: 100%;
     overflow-y: scroll;
 
+    .record-video {
+        margin-top: 15px;
+
+        p {
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: 600;
+            line-height: normal;
+            font-size: 14px;
+            color: #D9C3AB;
+        }
+    }
+
     ::ng-deep settings-achievements-video-capture .video-capture {
         margin-bottom: 15px;
     }

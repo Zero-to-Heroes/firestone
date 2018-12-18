@@ -15,6 +15,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 import { SettingsAchievementsVideoCaptureComponent } from '../../components/settings/settings-achievements-video-capture.component';
 import { SettingsAchievementsSoundCaptureComponent } from '../../components/settings/settings-achievements-sound-capture.component';
 import { SettingsAchievementsStorageComponent } from '../../components/settings/settings-achievements-storage.component';
+import { PreferencesService } from '../../services/preferences.service';
+import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 
 @NgModule({
 	imports: [
@@ -40,7 +42,9 @@ import { SettingsAchievementsStorageComponent } from '../../components/settings/
 	],
 	providers: [
 		DebugService,
+		GenericIndexedDbService,
 		OverwolfService,
+		PreferencesService,
 	],
 })
 

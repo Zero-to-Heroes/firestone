@@ -7,6 +7,7 @@ import { Challenge } from './achievements/challenge';
 import { FeatureFlags } from '../feature-flags.service';
 import { AchievementConfService } from './achievement-conf.service';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 
 declare var overwolf;
 
@@ -23,9 +24,11 @@ export class AchievementsVideoCaptureService {
     private captureOngoing: boolean = false;
     private currentReplayId: string;
     private settingsChanged: boolean = false;
+    private listenerRegistered: boolean = false;
 
 	constructor(
         private events: Events, 
+        private prefs: PreferencesService,
         private achievementConf: AchievementConfService, 
         private owService: OverwolfService,
         private flags: FeatureFlags) {
@@ -37,6 +40,26 @@ export class AchievementsVideoCaptureService {
         this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => this.onAchievementRecordEnd(data));
 
         this.turnOnRecording();
+        this.listenToRecordingPrefUpdates()
+    }
+
+    private async listenToRecordingPrefUpdates() {
+        // Do nothing while a capture is ongoing, we'll update the prefs with the next 
+        // tick
+        const isInGame: boolean = await this.owService.inGame();
+        if (!this.captureOngoing && isInGame) {
+            const isOn: boolean = await this.owService.getReplayMediaState();
+            const recordingEnabled: boolean = !(await this.prefs.getPreferences()).dontRecordAchievements;
+            if (isOn && !recordingEnabled) {
+                console.log('[recording] turning off replay recording');
+                await this.owService.turnOffReplays();
+            }
+            else if (!isOn && recordingEnabled) {
+                console.log('[recording] turning on replay recording');
+                this.actuallyTurnOnRecording();                
+            }
+        }
+        setTimeout(() => this.listenToRecordingPrefUpdates(), 3000);
     }
 
     private async turnOnRecording() {
@@ -45,7 +68,17 @@ export class AchievementsVideoCaptureService {
             return;
         }
 
-        overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange());
+        if ((await this.prefs.getPreferences()).dontRecordAchievements) {
+            return;
+        }
+        this.actuallyTurnOnRecording();
+    }
+
+    private actuallyTurnOnRecording() {
+        if (!this.listenerRegistered) {
+            overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange());
+            this.listenerRegistered = true;
+        }
         
         // Keep recording on, as otherwise it makes it more difficult to calibrate the achievement timings
         overwolf.media.replays.turnOn(
