@@ -26,7 +26,7 @@ export class GenericIndexedDbService {
 		return new Promise<Preferences>((resolve) => {
 			this.waitForDbInit().then(() => {
 				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
-					resolve(preferences[0] || new Preferences(false, false, false));
+					resolve(preferences[0] || new Preferences(false, false, false, false));
 				});
 			});
 		});

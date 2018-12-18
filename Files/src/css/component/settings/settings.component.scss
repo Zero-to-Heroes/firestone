@@ -66,10 +66,14 @@
 			flex-shrink: 0;
 		}
 
-		.controls {
+		::ng-deep .controls {
 			height: 30px;
 			display: flex;
 			z-index: 1;
+
+			.close-button {
+				--icon-color: #D9C3AB;
+			}
 
 			.close-button:hover {
 				background: #D9C3AB;

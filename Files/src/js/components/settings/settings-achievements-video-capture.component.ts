@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { OverwolfService } from '../../services/overwolf.service';
+import { Events } from '../../services/events.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 declare var overwolf;
 
@@ -88,7 +90,6 @@ declare var overwolf;
 })
 export class SettingsAchievementsVideoCaptureComponent {
 
-	private readonly DEBOUNCE_DURATION_IN_MS = 600;
 	private readonly RESOLUTION_ENUM = {
 		0: overwolf.settings.enums.ResolutionSettings.Original,
 		1: overwolf.settings.enums.ResolutionSettings.R1080p,
@@ -103,33 +104,14 @@ export class SettingsAchievementsVideoCaptureComponent {
 	resolution: number;
 	fps: number;
 
-	private updatePending: boolean;
-
-	constructor(private owService: OverwolfService, private cdr: ChangeDetectorRef) {
+	constructor(
+			private owService: OverwolfService, 
+			private prefs: PreferencesService, 
+			private cdr: ChangeDetectorRef, 
+			private events: Events) {
 		this.updateDefaultValues();
 		overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange(data));
 		this.settingsForm.controls['videoQuality'].valueChanges.subscribe((value) => this.changeVideoCaptureSettings(value));
-	}
-
-	onCustomVideoResolutionChange(newResolution: string) {
-		this.resolution = parseInt(newResolution);
-		if (!this.updatePending) {
-			this.updatePending = true;
-			setTimeout(() => {
-				this.changeVideoCaptureSettings('custom');
-			}, this.DEBOUNCE_DURATION_IN_MS);
-		}
-	}
-
-	onCustomVideoFpsChange(newFps: string) {
-		console.log('update for fps', newFps)
-		this.fps = parseInt(newFps);
-		if (!this.updatePending) {
-			this.updatePending = true;
-			setTimeout(() => {
-				this.changeVideoCaptureSettings('custom');
-			}, this.DEBOUNCE_DURATION_IN_MS);
-		}
 	}
 
 	private async changeVideoCaptureSettings(value: string) {
@@ -154,8 +136,10 @@ export class SettingsAchievementsVideoCaptureComponent {
 		console.log('changing settings with', settings);
 		const result = await this.owService.setVideoCaptureSettings(settings.resolution, settings.fps);
 		await this.owService.sendMessage('MainWindow', 'capture-settings-updated');
-		this.updatePending = false;
 		console.log('recording settings changed', result);
+		if (!(await this.prefs.getPreferences()).hasSeenVideoCaptureChangeNotif) {
+			this.events.broadcast(Events.SETTINGS_DISPLAY_MODAL, 'video-capture');
+		}
 	}
 
 	private owResolution() {
@@ -175,16 +159,16 @@ export class SettingsAchievementsVideoCaptureComponent {
 		this.fps = settings.fps || 10;
 		if (oldResolution !== this.resolution || oldFps !== this.fps) {
 			if (this.resolution === 480 && this.fps === 10) {
-				this.settingsForm.controls['videoQuality'].setValue('low');
+				this.settingsForm.controls['videoQuality'].setValue('low', {emitEvent: false});
 			}
 			else if (this.resolution === 720 && this.fps === 30) {
-				this.settingsForm.controls['videoQuality'].setValue('medium');
+				this.settingsForm.controls['videoQuality'].setValue('medium', {emitEvent: false});
 			}
 			else if (this.resolution === 1080 && this.fps === 60) {
-				this.settingsForm.controls['videoQuality'].setValue('high');
+				this.settingsForm.controls['videoQuality'].setValue('high', {emitEvent: false});
 			}
 			else {
-				this.settingsForm.controls['videoQuality'].setValue('custom');
+				this.settingsForm.controls['videoQuality'].setValue('custom', {emitEvent: false});
 			}
 			console.log('set default capture values', settings, this.resolution, this.fps, this.settingsForm.controls['videoQuality'].value);
 			this.cdr.detectChanges();

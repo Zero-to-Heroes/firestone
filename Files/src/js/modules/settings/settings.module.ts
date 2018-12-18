@@ -17,6 +17,9 @@ import { SettingsAchievementsSoundCaptureComponent } from '../../components/sett
 import { SettingsAchievementsStorageComponent } from '../../components/settings/settings-achievements-storage.component';
 import { PreferencesService } from '../../services/preferences.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
+import { Events } from '../../services/events.service';
+import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 
 @NgModule({
 	imports: [
@@ -36,12 +39,15 @@ import { GenericIndexedDbService } from '../../services/generic-indexed-db.servi
 		SettingsAchievementsVideoCaptureComponent,
 		SettingsAchievementsSoundCaptureComponent,
 		SettingsAchievementsStorageComponent,
+		SettingsModalComponent,
+		ModalVideoSettingsChangedComponent,
 	],
 	bootstrap: [
 		SettingsComponent,
 	],
 	providers: [
 		DebugService,
+		Events,
 		GenericIndexedDbService,
 		OverwolfService,
 		PreferencesService,

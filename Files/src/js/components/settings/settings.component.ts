@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, HostListener, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
 
@@ -20,7 +20,8 @@ declare var overwolf: any;
                     </div>
                 </section>
                 <settings-app-selection></settings-app-selection>
-                <settings-achievements></settings-achievements> 
+                <settings-achievements></settings-achievements>
+				<settings-modal></settings-modal>
 			</div>
 
 			<i class="i-54 gold-theme corner top-left">

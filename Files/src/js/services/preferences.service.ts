@@ -33,4 +33,10 @@ export class PreferencesService {
         const newPrefs = { ...prefs, dontRecordAchievements: pref} as Preferences;
         this.savePreferences(newPrefs);
     }
+    
+    public async setHasSeenVideoCaptureChangeNotif(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, hasSeenVideoCaptureChangeNotif: pref} as Preferences;
+        this.savePreferences(newPrefs);
+    }
 }

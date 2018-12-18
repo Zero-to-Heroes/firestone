@@ -43,6 +43,8 @@ export class Events {
 	public static readonly SET_MOUSE_OVER = 'set-mouse-over';
 	public static readonly SHOWING_FTUE = 'showing-ftue';
 	public static readonly DISMISS_FTUE = 'dismiss-ftue';
+	
+	public static readonly SETTINGS_DISPLAY_MODAL = 'settings-display-modal';	
 
 	private _eventBus: Subject<BroadcastEvent>;
 
