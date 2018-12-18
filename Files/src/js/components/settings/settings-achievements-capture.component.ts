@@ -24,7 +24,20 @@ import { PreferencesService } from '../../services/preferences.service';
 						<use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
 					</svg>
 				</i>
-				<p>Record achievements</p>
+				<p>
+					Record achievements
+					<i class="info">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#info"/>
+						</svg>
+						<div class="zth-tooltip right">
+							<p>Disabling it prevents automated video recording. Uncheck if the game's performances are affected.</p>
+							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0"/>
+							</svg>
+						</div>
+					</i>
+				</p>
 			</label>
 			<settings-achievements-video-capture></settings-achievements-video-capture>
 			<settings-achievements-sound-capture></settings-achievements-sound-capture>
