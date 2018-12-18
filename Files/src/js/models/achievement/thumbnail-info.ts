@@ -10,4 +10,5 @@ export interface ThumbnailInfo {
     readonly iconSvg: SafeHtml;
     readonly stepId: string;
     readonly isDeleted: boolean;
+    inDeletion: boolean;
 }

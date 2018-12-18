@@ -66,6 +66,7 @@ declare var overwolf;
                     <div class="offset" [style.marginLeft.px]="thumbnailsOffsetX"></div>
                     <achievement-thumbnail 
                             *ngFor="let thumbnail of thumbnails"
+                            [ngClass]="{'inDeletion': thumbnail.inDeletion}"
                             (click)="showReplay(thumbnail, $event)"
                             (deletionRequest)="onDeletionRequest(thumbnail, $event)"
                             [highlighted]="pendingDeletion === thumbnail"
@@ -111,6 +112,9 @@ declare var overwolf;
                     <polygon points="0,0 8,-9 16,0"/>
                 </svg>
             </div>
+            <div class="delete-notification" [ngClass]="{'hidden': !showDeleteNotification}">
+                Replay deleted
+            </div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -136,6 +140,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     dontAsk: boolean = false;
     confirmationTop: number = 0;
     confirmationLeft: number = 0;
+    showDeleteNotification: boolean;
 
     private player;
 
@@ -215,9 +220,20 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         console.log('deleting media', thumbnail);
         const result: boolean = thumbnail.isDeleted || await this.io.deleteFile(thumbnail.videoPath);
         if (result) {
-            const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
-            // console.log('updated achievement after deletion', updatedAchievement);
-            this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
+            thumbnail.inDeletion = true;
+            this.showDeleteNotification = true;
+            this.cdr.detectChanges();
+            setTimeout(async () => {
+                thumbnail.inDeletion = false;
+                const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
+                // console.log('updated achievement after deletion', updatedAchievement);
+                this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
+                this.cdr.detectChanges();
+            }, 1500);
+            setTimeout(() => {
+                this.showDeleteNotification = false;
+                this.cdr.detectChanges();
+            }, 2500);
         }
     }
 
