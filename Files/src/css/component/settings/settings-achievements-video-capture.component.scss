@@ -13,15 +13,6 @@
         display: flex;
         margin-bottom: 10px;
 
-        input, input:focus, input:active {
-            display: block;
-            background: transparent;
-            border: 1px solid #A89782;
-            outline: none;
-            width: 40px;
-            height: 30px;
-        }
-
         .custom-info {
             display: flex;
             margin-left: 5px;
@@ -37,6 +28,14 @@
             text-decoration: underline;
             align-self: center;
             margin-left: 5px;
+            
+            &:hover {
+                color: #FFB948;
+            }
+        }
+
+        &.unselected:hover .label-custom,  {
+            color: #FFB948;
         }
     }
 
