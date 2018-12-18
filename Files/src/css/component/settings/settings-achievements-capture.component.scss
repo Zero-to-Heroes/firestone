@@ -15,6 +15,16 @@
             color: #D9C3AB;
         }
     }
+    
+
+    &.disabled {
+        ::ng-deep settings-achievements-video-capture .video-capture,
+        ::ng-deep settings-achievements-sound-capture .sound-capture,
+        ::ng-deep settings-achievements-storage .achievements-storage {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    }
 
     ::ng-deep settings-achievements-video-capture .video-capture {
         margin-bottom: 15px;

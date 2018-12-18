@@ -11,7 +11,7 @@ import { PreferencesService } from '../../services/preferences.service';
 		`../../../css/component/settings/settings-achievements-capture.component.scss`
 	],
 	template: `
-		<div class="achievements-capture">
+		<div class="achievements-capture" [ngClass]="{'disabled': !captureVideo}">
 			<input type="checkbox" name="video-capture" id="video-capture-checkbox">
 			<label class="record-video" for="video-capture-checkbox" (click)="toggleVideoCapture($event)">
 				<i class="unselected" *ngIf="!captureVideo">
