@@ -14,7 +14,6 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 			</settings-achievements-menu>
 			<ng-container [ngSwitch]="selectedMenu">
 				<settings-achievements-capture *ngSwitchCase="'capture'"></settings-achievements-capture>
-				<settings-achievements-storage *ngSwitchCase="'storage'"></settings-achievements-storage>
 			</ng-container>
 		</ul>
 	`,

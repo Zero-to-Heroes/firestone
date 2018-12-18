@@ -9,10 +9,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, E
 	template: `
         <ul class="achievements-menu">
             <li [ngClass]="{'selected': selectedMenu === 'capture'}" (click)="selectMenu('capture')">
-                <span>Capture</span>
-            </li>
-            <li [ngClass]="{'selected': selectedMenu === 'storage'}" (click)="selectMenu('storage')">
-                <span>Storage</span>
+                <span>Video options</span>
             </li>
         </ul>
 	`,

@@ -1,5 +1,7 @@
 .achievements-capture {
     padding-left: 15px;
+    height: 100%;
+    overflow-y: scroll;
 
     ::ng-deep settings-achievements-video-capture .video-capture {
         margin-bottom: 15px;
