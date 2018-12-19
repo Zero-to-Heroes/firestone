@@ -83,7 +83,7 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
             const completions: number = Math.max(maxNumberOfCompletions, achv.numberOfCompletions);
             maxNumberOfCompletions = completions;
             if (completions > 0 && !alreadyDefinedText) {
-                text = achv.name;
+                text = achv.name.split(' - ')[1];
                 alreadyDefinedText = true;
             }
             invertedCompletionSteps.push({ 

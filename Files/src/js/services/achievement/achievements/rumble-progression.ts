@@ -39,7 +39,6 @@ export class RumbleProgression implements Challenge {
 	}
 
 	public getRecordPastDurationMillis(): number {
-		console.log('[recording] recording ', Date.now() - this.currentTurnStartTime, 'ms in the past');
 		return Date.now() - this.currentTurnStartTime;
 	}
 
@@ -63,7 +62,7 @@ export class RumbleProgression implements Challenge {
 		let localPlayer = gameEvent.data[1];
 
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
-			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
+			// console.log('completed rumble progression', this);
 			callback();
 			this.completed = true;
 			setTimeout(() => this.broadcastEndOfCapture(), 5000);
