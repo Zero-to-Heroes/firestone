@@ -25,6 +25,8 @@ import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progr
 import { RumbleProgression } from './achievements/rumble-progression.js';
 import { RumbleRunTeammatesSetProvider } from './achievement-sets/rumble-teammate.js';
 import { RumbleTeammatePlay } from './achievements/rumble-teammate-play.js';
+import { RumbleRunPassivesSetProvider } from './achievement-sets/rumble-passive.js';
+import { RumblePassivePlay } from './achievements/rumble-passive-play.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -76,6 +78,7 @@ export class AchievementsRepository {
 			new RumbleRunShrinePlaySetProvider(this.cards, this.conf),
 			new RumbleRunProgressionSetProvider(this.cards, this.conf),
 			new RumbleRunTeammatesSetProvider(this.cards, this.conf),
+			new RumbleRunPassivesSetProvider(this.cards, this.conf),
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
@@ -110,6 +113,7 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, this.events) },
 			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, this.events) },
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, this.events) },
+			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, this.events) },
 		];
 	}
 }

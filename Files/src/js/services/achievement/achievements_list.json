@@ -278,6 +278,16 @@
 	{ "type": "rumble_run_teammate_play", "id": "rumble_run_teammate_play_TRLA_192", "cardId": "TRLA_192", "cardDbfId": 53031, "name": "Lobstrok Tastetester", "difficulty": "rare"},
 	{ "type": "rumble_run_teammate_play", "id": "rumble_run_teammate_play_TRLA_193", "cardId": "TRLA_193", "cardDbfId": 53032, "name": "Raging Contender", "difficulty": "rare"},
 	
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_801", "cardId": "TRLA_801", "cardDbfId": 50957, "name": "Sacred Ritual", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_802", "cardId": "TRLA_802", "cardDbfId": 50961, "name": "Favor of the Gods", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_803", "cardId": "TRLA_803", "cardDbfId": 50963, "name": "Fortified Spirit", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_804", "cardId": "TRLA_804", "cardDbfId": 53038, "name": "Everlasting Devotion", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_805", "cardId": "TRLA_805", "cardDbfId": 53041, "name": "Pact with the Loa", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_806", "cardId": "TRLA_806", "cardDbfId": 53045, "name": "Wrath of the Loas", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_807", "cardId": "TRLA_807", "cardDbfId": 53050, "name": "Boon Reaper", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_808", "cardId": "TRLA_808", "cardDbfId": 53053, "name": "Roaring Edifice", "difficulty": "rare"},
+	{ "type": "rumble_run_passive_play", "id": "rumble_run_passive_play_TRLA_809", "cardId": "TRLA_809", "cardDbfId": 53056, "name": "Windfall Blessing", "difficulty": "rare"},
+	
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Druid_0", "cardId": "TRLA_209h_Druid", "cardDbfId": 54057, "step": 0, "name": "Rikkar (Druid) - Cleared round 1", "difficulty": "free"},
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Druid_1", "cardId": "TRLA_209h_Druid", "cardDbfId": 54057, "step": 1, "name": "Rikkar (Druid) - Cleared round 2", "difficulty": "free"},
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Druid_2", "cardId": "TRLA_209h_Druid", "cardDbfId": 54057, "step": 2, "name": "Rikkar (Druid) - Cleared round 3", "difficulty": "free"},
