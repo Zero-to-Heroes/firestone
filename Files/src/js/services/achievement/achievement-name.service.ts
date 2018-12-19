@@ -25,6 +25,10 @@ export class AchievementNameService {
             case 'dungeon_run_boss_victory': return 'Boss defeated';
             case 'monster_hunt_boss_encounter': return 'Monster met';
             case 'monster_hunt_boss_victory': return 'Monster defeated';
+            case 'rumble_run_shrine_play': return 'Shrine played';
+            case 'rumble_run_teammate_play': return 'Teammate joined';
+            case 'rumble_run_passive_play': return 'Passive ability triggered';
+            case 'rumble_run_progression': return 'Round cleared';
         }
         return 'unknown';
     }
