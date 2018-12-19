@@ -23,6 +23,8 @@ import { RumbleRunShrinePlaySetProvider } from './achievement-sets/rumble-shrine
 import { ShrinePlay } from './achievements/shrine-play.js';
 import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progression.js';
 import { RumbleProgression } from './achievements/rumble-progression.js';
+import { RumbleRunTeammatesSetProvider } from './achievement-sets/rumble-teammate.js';
+import { RumbleTeammatePlay } from './achievements/rumble-teammate-play.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -73,6 +75,7 @@ export class AchievementsRepository {
 			new MonsterHuntBossSetProvider(this.cards, this.conf),
 			new RumbleRunShrinePlaySetProvider(this.cards, this.conf),
 			new RumbleRunProgressionSetProvider(this.cards, this.conf),
+			new RumbleRunTeammatesSetProvider(this.cards, this.conf),
 		];
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
@@ -106,6 +109,7 @@ export class AchievementsRepository {
 			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, this.events) },
 			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, this.events) },
+			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, this.events) },
 		];
 	}
 }
