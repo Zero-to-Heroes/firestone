@@ -100,11 +100,22 @@ export class GameEvents {
 				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_DONE));
 				break;
 			case 'RUMBLE_RUN_STEP':
-				this.allEvents.next(new GameEvent(GameEvent.RUMBLE_RUN_STEP, gameEvent.Value));
+				this.allEvents.next(new GameEvent(GameEvent.RUMBLE_RUN_STEP, gameEvent.Value - 1));
+				break;
+			case 'DUNGEON_RUN_STEP':
+				this.allEvents.next(new GameEvent(GameEvent.DUNGEON_RUN_STEP, gameEvent.Value - 1));
 				break;
 			case 'CARD_PLAYED':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_PLAYED, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
+			case 'PASSIVE_BUFF':
+				this.allEvents.next(new GameEvent(
+					GameEvent.PASSIVE_BUFF, 
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,

@@ -18,7 +18,7 @@ export class OwNotificationsService {
 	}
 
 	public html(htmlMessage: Message) {
-		console.log('trying to display html message: ', htmlMessage);
+		// console.log('trying to display html message: ', htmlMessage);
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
 				throw new Error("NotificationsWindow was not identified at app start");
@@ -37,7 +37,7 @@ export class OwNotificationsService {
 		// 	})
 		let strMessage = JSON.stringify(htmlMessage);
 		overwolf.windows.sendMessage(this.windowId, '' + this.messageId++, strMessage, (result) => {
-			console.log('Notification service sent message to notifications window', result);
+			// console.log('Notification service sent message to notifications window', result);
 		});
 	}
 

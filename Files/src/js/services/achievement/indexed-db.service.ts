@@ -24,10 +24,10 @@ export class IndexedDbService {
 			return;
 		}
 
-		console.log('[achievements] [storage] Loading achievement', achievementId);
+		// console.log('[achievements] [storage] Loading achievement', achievementId);
 		this.db.getByKey('achievements', achievementId).then(
 			(achievement) => {
-				console.log('[achievements] [storage] loaded completed achievement', achievement);
+				// console.log('[achievements] [storage] loaded completed achievement', achievement);
 				callback(achievement);
 			},
 			(error) => {
@@ -39,13 +39,13 @@ export class IndexedDbService {
 	public save(achievement: CompletedAchievement, callback: Function) {
 		if (!this.dbInit) {
 			setTimeout(() => {
-				console.log('[achievements] [storage] db isnt initialized, waiting...');
+				// console.log('[achievements] [storage] db isnt initialized, waiting...');
 				this.save(achievement, callback);
 			}, 50);
 			return;
 		}
 
-		console.log('[achievements] [storage] Saving achievement', achievement);
+		// console.log('[achievements] [storage] Saving achievement', achievement);
 		this.db.update('achievements', achievement).then(
 			(achievement) => {
 				callback(achievement);
@@ -59,7 +59,7 @@ export class IndexedDbService {
 	public async getAll(): Promise<CompletedAchievement[]> {
 		await this.waitForDbInit();
 		const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
-		console.log('[achievements] [storage] loaded all achievements', achievements);
+		// console.log('[achievements] [storage] loaded all achievements', achievements);
 		return achievements;
 	}
 	

@@ -12,14 +12,6 @@ export class AchievementConfService {
 
     public async shouldRecord(achievement: Achievement): Promise<boolean> {
         const completedAchievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievement.id);
-        
-        // Only record free achievements once
-        if (achievement.difficulty === 'free') {
-            const result = !completedAchievement.replayInfo || completedAchievement.replayInfo.length < 2;
-            console.log('[recording] should record?', achievement.type, result, completedAchievement.replayInfo);
-            return result;
-        }
-
         // Only record the first time for an encounter
         const recordOnlyOnce = [
             'dungeon_run_boss_encounter', 
@@ -29,7 +21,8 @@ export class AchievementConfService {
             'rumble_run_passive_play',
             'rumble_run_progression',
         ];
-        if (recordOnlyOnce.indexOf(achievement.type) !== -1) {
+        // Only record free achievements once
+        if (recordOnlyOnce.indexOf(achievement.type) !== -1 || achievement.difficulty === 'free') {
             const result = !completedAchievement.replayInfo || completedAchievement.replayInfo.length === 0;
             console.log('[recording] should record?', achievement.type, result, completedAchievement.replayInfo);
             return result;
@@ -45,7 +38,7 @@ export class AchievementConfService {
         if (['dungeon_run_boss_victory', 'monster_hunt_boss_victory'].indexOf(achievementType) !== -1) {
             return 'boss_victory';
         }
-        console.warn('missing icon for achievement', achievementType);
+        // console.warn('missing icon for achievement', achievementType);
         return 'boss_victory';
     }
 }

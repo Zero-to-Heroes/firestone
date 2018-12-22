@@ -65,7 +65,7 @@ export class BossEncounter implements Challenge {
 		}
 
 		if (gameEvent.data[0].CardID == this.bossId) {
-			console.log('achievement completed, waiting for detection');
+			// console.log('achievement completed, waiting for detection');
 			this.callback = callback;
 			this.handleCompletion();
 		}
@@ -73,7 +73,7 @@ export class BossEncounter implements Challenge {
 
 	private handleCompletion() {
 		if (this.sceneChanged && this.callback) {
-			console.log('scene changed, completing achievement');
+			// console.log('scene changed, completing achievement');
 			this.callback();
 			this.sceneChanged = false;
 			this.completed = true;

@@ -3,7 +3,7 @@ import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 
-export class RumblePassivePlay implements Challenge {
+export class DungeonRunTreasurePlay implements Challenge {
 
 	private readonly achievementId: string;
 	private readonly cardId: string;

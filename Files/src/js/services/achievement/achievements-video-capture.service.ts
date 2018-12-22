@@ -23,6 +23,7 @@ export class AchievementsVideoCaptureService {
 
     private captureOngoing: boolean = false;
     private currentReplayId: string;
+    private achievementsBeingRecorded: string[] = [];
     private settingsChanged: boolean = false;
     private listenerRegistered: boolean = false;
 
@@ -114,22 +115,23 @@ export class AchievementsVideoCaptureService {
         this.capture(achievement, challenge);
     }
 
-    private capture(achievement: Achievement, challenge: Challenge) {
-        if (!this.achievementConf.shouldRecord(achievement)) {
-            console.warn('[recording] Not recording achievement', achievement);
+    private async capture(achievement: Achievement, challenge: Challenge) {
+        if (!(await this.achievementConf.shouldRecord(achievement))) {
+            console.log('[recording] Not recording achievement', achievement);
             return;
         }
+        this.achievementsBeingRecorded.push(achievement.id);
         if (this.captureOngoing) {
-            console.warn('[recording] capture ongoing, doing nothing');
+            // console.warn('[recording] capture ongoing, doing nothing');
             return;
         }
         this.events.broadcast(Events.ACHIEVEMENT_RECORD_STARTED, achievement.id);
         // Here we can have custom settings based on achievement
         this.captureOngoing = true;
         // const conf = this.config.getConfig(achievement.type);
-        console.log('[recording] start recording achievement', achievement);
+        console.log('[recording] start recording achievement', achievement, challenge.getRecordPastDurationMillis());
         overwolf.media.replays.startCapture(
-            challenge.getRecordPastDurationMillis(),
+            Math.floor(challenge.getRecordPastDurationMillis()),
             (status) => {
                 console.log('[recording] capture started', status);
                 this.currentReplayId = status.url;
@@ -144,25 +146,28 @@ export class AchievementsVideoCaptureService {
             return;
         }
         console.log('[recording] stopping capture');
-        const achievementId: string = data.data[0];
+        // const achievementId: string = data.data[0];
 
         overwolf.media.replays.stopCapture(this.currentReplayId, (result) => {
             console.log('[recording] stopped capture', result);
             this.captureOngoing = false;
             this.currentReplayId = undefined;
-            const replayInfo: ReplayInfo = {
-                creationTimestamp: Date.now(),
-                path: result.path,
-                url: result.url,
-                thumbnailUrl: result.thumbnail_url,
-                thumbnailPath: result.thumbnail_path,
-                completionStepId: achievementId,
+            for (let achievementId of this.achievementsBeingRecorded) {
+                const replayInfo: ReplayInfo = {
+                    creationTimestamp: Date.now(),
+                    path: result.path,
+                    url: result.url,
+                    thumbnailUrl: result.thumbnail_url,
+                    thumbnailPath: result.thumbnail_path,
+                    completionStepId: achievementId,
+                }
+                this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementId, replayInfo);
+                if (this.settingsChanged) {
+                    this.handleVideoSettingsChange();
+                }
+                console.log('[recording] capture finished', result, achievementId, replayInfo);
             }
-            this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementId, replayInfo);
-            if (this.settingsChanged) {
-                this.handleVideoSettingsChange();
-            }
-            console.log('[recording] capture finished', result, achievementId);
+            this.achievementsBeingRecorded = [];
         });
     }
 }

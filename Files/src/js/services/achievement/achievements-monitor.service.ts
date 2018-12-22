@@ -185,7 +185,7 @@ export class AchievementsMonitor {
 				achievement.id,
 				achievement.numberOfCompletions,
 				[replayInfo, ...achievement.replayInfo]);
-		console.log('[recording] saving new achievement', newAchievement);
+		// console.log('[recording] saving new achievement', newAchievement);
 		const result = await this.achievementStorage.saveAchievement(newAchievement)
 		console.log('[recording] saved new achievement', result);
 		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});

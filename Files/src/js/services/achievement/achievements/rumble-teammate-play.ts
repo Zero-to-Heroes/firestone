@@ -53,7 +53,6 @@ export class RumbleTeammatePlay implements Challenge {
 		const controllerId = gameEvent.data[1];
 		const localPlayer = gameEvent.data[2];
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
-			console.log('achievement completed, waiting for mulligan done');
 			this.callback = callback;
 			this.callback();
 			this.broadcastEndOfCapture();

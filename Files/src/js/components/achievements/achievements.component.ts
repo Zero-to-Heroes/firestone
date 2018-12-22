@@ -154,14 +154,14 @@ export class AchievementsComponent implements AfterViewInit {
 	}
 
 	public async reloadAchievement(achievementId: string) {
-		console.log('reloading achievement?', achievementId);
+		// console.log('reloading achievement?', achievementId);
 		const achievementSet: AchievementSet = await this.repository.findCategoryForAchievement(achievementId);
 		// If we're displaying the achievement set, we refresh it
 		if (!this._selectedCategory || achievementSet.id === this._selectedCategory.id) {
 			this._selectedCategory = achievementSet;
-			console.log('reloaded set');
+			// console.log('reloaded set');
 			if (!this._selectedView || this._selectedView === 'list') {
-				console.log('reloaded achievments list');
+				// console.log('reloaded achievments list');
 				this._achievementsList = this._selectedCategory.achievements;
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();

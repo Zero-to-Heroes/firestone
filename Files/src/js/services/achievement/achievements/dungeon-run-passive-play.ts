@@ -3,13 +3,11 @@ import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 
-export class RumblePassivePlay implements Challenge {
+export class DungeonRunPassivePlay implements Challenge {
 
 	private readonly achievementId: string;
 	private readonly cardId: string;
 	private readonly events:Events;
-
-	private callback;
 
 	constructor(achievement, events: Events) {
 		this.achievementId = achievement.id;
@@ -18,7 +16,8 @@ export class RumblePassivePlay implements Challenge {
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type == GameEvent.PASSIVE_BUFF) {
+			// console.log('handling passive buff event', this.cardId, gameEvent, this);
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
@@ -53,8 +52,8 @@ export class RumblePassivePlay implements Challenge {
 		const controllerId = gameEvent.data[1];
 		const localPlayer = gameEvent.data[2];
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
-			this.callback = callback;
-			this.callback();
+			// console.log('Passive buff achievement complete');
+			callback();
 			this.broadcastEndOfCapture();
 		}
 	}

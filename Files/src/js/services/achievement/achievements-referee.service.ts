@@ -20,7 +20,7 @@ export class AchievementsRefereee {
 								existingAchievement.numberOfCompletions + 1,
 								existingAchievement.replayInfo);
 						this.achievementsStorage.saveAchievement(completedAchievement).then((result) => {
-							console.log('[achievements] achievement saved', result);
+							// console.log('[achievements] achievement saved', result);
 							callback(completedAchievement);
 						});
 					});

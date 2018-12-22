@@ -46,7 +46,7 @@ export class AchievementStatsService {
             "cardId": achievement.cardId,
             "numberOfCompletions": completedAchievement.numberOfCompletions + 1
         };
-        console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
+        // console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
         this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent)
                 .subscribe((result) => console.log('achievement stat event result', result));
     }
