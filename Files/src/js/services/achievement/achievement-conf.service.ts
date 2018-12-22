@@ -15,11 +15,14 @@ export class AchievementConfService {
         // Only record the first time for an encounter
         const recordOnlyOnce = [
             'dungeon_run_boss_encounter', 
+            'dungeon_run_treasure_play', 
+            'dungeon_run_passive_play', 
             'monster_hunt_boss_encounter', 
+            'monster_hunt_treasure_play', 
+            'monster_hunt_passive_play', 
             'rumble_run_shrine_play',
             'rumble_run_teammate_play',
             'rumble_run_passive_play',
-            'rumble_run_progression',
         ];
         // Only record free achievements once
         if (recordOnlyOnce.indexOf(achievement.type) !== -1 || achievement.difficulty === 'free') {
