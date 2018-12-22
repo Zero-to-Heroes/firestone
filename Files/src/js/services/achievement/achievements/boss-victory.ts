@@ -41,7 +41,7 @@ export class BossVictory implements Challenge {
 	public broadcastEndOfCapture() {
 		if (this.completed) {
 			this.completed = false;
-			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId);
+			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
 		}
 	}
 
@@ -62,7 +62,7 @@ export class BossVictory implements Challenge {
 			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			callback();
 			this.completed = true;
-			setTimeout(() => this.broadcastEndOfCapture(), 5000);
+			this.broadcastEndOfCapture(), 5000;
 		}
 	}
 

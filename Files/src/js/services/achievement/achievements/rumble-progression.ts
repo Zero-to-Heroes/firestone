@@ -45,7 +45,7 @@ export class RumbleProgression implements Challenge {
 	public broadcastEndOfCapture() {
 		if (this.completed) {
 			this.completed = false;
-			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId);
+			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
 		}
 	}
 
@@ -65,7 +65,7 @@ export class RumbleProgression implements Challenge {
 			// console.log('completed rumble progression', this);
 			callback();
 			this.completed = true;
-			setTimeout(() => this.broadcastEndOfCapture(), 5000);
+			this.broadcastEndOfCapture();
 		}
 	}
 

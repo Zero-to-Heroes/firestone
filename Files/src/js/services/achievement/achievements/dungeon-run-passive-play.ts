@@ -40,7 +40,8 @@ export class DungeonRunPassivePlay implements Challenge {
 	}
 
 	public broadcastEndOfCapture() {
-		setTimeout(() => this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId), 10000);
+		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 10000);
+		// setTimeout(() => this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId), 10000);
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {

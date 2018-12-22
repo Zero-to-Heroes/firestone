@@ -51,7 +51,7 @@ export class ShrinePlay implements Challenge {
 
 	public broadcastEndOfCapture() {
 		this.completed = false;
-		setTimeout(() => this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId), 15000);
+		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 15000);
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {

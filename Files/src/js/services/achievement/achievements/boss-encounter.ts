@@ -55,8 +55,9 @@ export class BossEncounter implements Challenge {
 
 	public broadcastEndOfCapture() {
 		this.completed = false;
-		setTimeout(() => this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId), 15000);
-
+		console.log('broadcasting end of capture');
+		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 10000);
+		// setTimeout(() => this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId), 10000);
 	}
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
