@@ -6,8 +6,7 @@ import { Events } from '../../events.service';
 export class BossEncounter implements Challenge {
 
 	private readonly achievementId: string;
-	private readonly bossId: string;
-	private readonly bossDbfId: number;
+	private readonly cardId: string;
 	private readonly events:Events;
 
 	private sceneChanged: boolean = false;
@@ -16,8 +15,7 @@ export class BossEncounter implements Challenge {
 
 	constructor(achievement, events: Events) {
 		this.achievementId = achievement.id;
-		this.bossId = achievement.bossId;
-		this.bossDbfId = achievement.bossDbfId;
+		this.cardId = achievement.cardId;
 		this.events = events;
 		
 		events.on(Events.SCENE_CHANGED).subscribe((data) => {
@@ -65,7 +63,7 @@ export class BossEncounter implements Challenge {
 			return;
 		}
 
-		if (gameEvent.data[0].CardID == this.bossId) {
+		if (gameEvent.data[0].CardID == this.cardId) {
 			// console.log('achievement completed, waiting for detection');
 			this.callback = callback;
 			this.handleCompletion();

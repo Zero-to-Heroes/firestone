@@ -105,6 +105,9 @@ export class GameEvents {
 			case 'DUNGEON_RUN_STEP':
 				this.allEvents.next(new GameEvent(GameEvent.DUNGEON_RUN_STEP, gameEvent.Value - 1));
 				break;
+			case 'MONSTER_HUNT_STEP':
+				this.allEvents.next(new GameEvent(GameEvent.MONSTER_HUNT_STEP, gameEvent.Value - 1));
+				break;
 			case 'CARD_PLAYED':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_PLAYED, 

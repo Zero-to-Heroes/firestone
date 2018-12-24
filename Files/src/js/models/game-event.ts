@@ -16,6 +16,7 @@ export class GameEvent {
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';
+	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
 
 	readonly type: string;
 	readonly data: any[];
