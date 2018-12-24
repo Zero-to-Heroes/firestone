@@ -35,6 +35,10 @@ import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run
 import { DungeonRunProgression } from './achievements/dungeon-run-progression.js';
 import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster-hunt-progression.js';
 import { MonsterHuntProgression } from './achievements/monster-hunt-progression.js';
+import { MonsterHuntTreasureSetProvider } from './achievement-sets/monster-hunt-treasure.js';
+import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-passive.js';
+import { MonsterHuntTreasurePlay } from './achievements/monster-hunttreasure-play.js';
+import { MonsterHuntPassivePlay } from './achievements/monster-hunt-passive-play.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -87,6 +91,8 @@ export class AchievementsRepository {
 			new DungeonRunPassivesSetProvider(this.cards, this.conf),
 			new MonsterHuntProgressionSetProvider(this.cards, this.conf),
 			new MonsterHuntBossSetProvider(this.cards, this.conf),
+			new MonsterHuntTreasureSetProvider(this.cards, this.conf),
+			new MonsterHuntPassivesSetProvider(this.cards, this.conf),
 			new RumbleRunProgressionSetProvider(this.cards, this.conf),
 			new RumbleRunShrinePlaySetProvider(this.cards, this.conf),
 			new RumbleRunTeammatesSetProvider(this.cards, this.conf),
@@ -127,6 +133,8 @@ export class AchievementsRepository {
 			{ type: 'monster_hunt_final_boss', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
 			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, this.events) },
 			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
+			{ type: 'monster_hunt_treasure_play', challengeCreationFn: (achievement) => new MonsterHuntTreasurePlay(achievement, this.events) },
+			{ type: 'monster_hunt_passive_play', challengeCreationFn: (achievement) => new MonsterHuntPassivePlay(achievement, this.events) },
 			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, this.events) },
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, this.events) },
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, this.events) },
