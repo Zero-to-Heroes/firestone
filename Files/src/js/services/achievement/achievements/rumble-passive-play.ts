@@ -18,7 +18,7 @@ export class RumblePassivePlay implements Challenge {
 	}
 
 	public detect(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type == GameEvent.PASSIVE_BUFF) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
