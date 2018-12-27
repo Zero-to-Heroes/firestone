@@ -16,19 +16,28 @@ export class AchievementNameService {
     }
 
     private buildName(type: string, name: string) {
-        return this.nameForType(type) + ': ' + name;
+        return this.nameForType(type) + name;
     }
 
     private nameForType(type: string) {
         switch(type) {
-            case 'dungeon_run_boss_encounter': return 'Boss met';
-            case 'dungeon_run_boss_victory': return 'Boss defeated';
-            case 'monster_hunt_boss_encounter': return 'Monster met';
-            case 'monster_hunt_boss_victory': return 'Monster defeated';
-            case 'rumble_run_shrine_play': return 'Shrine played';
-            case 'rumble_run_teammate_play': return 'Teammate joined';
-            case 'rumble_run_passive_play': return 'Passive ability triggered';
-            case 'rumble_run_progression': return 'Round cleared';
+            case 'dungeon_run_boss_encounter': return 'Boss met: ';
+            case 'dungeon_run_boss_victory': return 'Boss defeated: ';
+            case 'dungeon_run_treasure_play': 
+            case 'monster_hunt_treasure_play': 
+                return 'Treasure played: ';
+            case 'dungeon_run_passive_play': 
+            case 'monster_hunt_passive_play': 
+                return 'Passive triggered: ';
+            case 'monster_hunt_boss_encounter': return 'Monster met: ';
+            case 'monster_hunt_boss_victory': return 'Monster defeated: ';
+            case 'rumble_run_shrine_play': return 'Shrine played: ';
+            case 'rumble_run_teammate_play': return 'Teammate joined: ';
+            case 'rumble_run_passive_play': return 'Passive ability triggered: ';
+            case 'rumble_run_progression': 
+            case 'dungeon_run_progression': 
+            case 'monster_hunt_progression':             
+                return '';
         }
         return 'unknown';
     }
