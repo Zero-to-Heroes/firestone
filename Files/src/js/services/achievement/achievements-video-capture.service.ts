@@ -43,7 +43,8 @@ export class AchievementsVideoCaptureService {
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
         this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => this.onAchievementRecordEnd(data));
 
-        this.turnOnRecording();
+        // This is handled already by the regular query
+        // this.turnOnRecording();
         this.listenToRecordingPrefUpdates()
     }
 
@@ -54,6 +55,7 @@ export class AchievementsVideoCaptureService {
         if (!this.captureOngoing && isInGame) {
             const isOn: boolean = await this.owService.getReplayMediaState();
             const recordingEnabled: boolean = !(await this.prefs.getPreferences()).dontRecordAchievements;
+            // console.log('pinging', isOn, recordingEnabled);
             if (isOn && !recordingEnabled) {
                 console.log('[recording] turning off replay recording');
                 await this.owService.turnOffReplays();
@@ -80,6 +82,7 @@ export class AchievementsVideoCaptureService {
 
     private actuallyTurnOnRecording() {
         if (!this.listenerRegistered) {
+            console.log('registered listeners?', overwolf.settings.OnVideoCaptureSettingsChanged);
             overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange());
             this.listenerRegistered = true;
         }
