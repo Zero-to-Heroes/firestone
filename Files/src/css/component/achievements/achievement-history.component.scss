@@ -26,6 +26,7 @@
 		// height: 160px;
 		height: 212px;
 		overflow-y: scroll;
+		overflow-x: hidden;
 
 		li {
 			display: flex;
@@ -46,6 +47,7 @@
 
 		achievement-history-item {
 			flex-grow: 1;
+			max-width: calc(100% - 5px);
 		}
 	}
 
