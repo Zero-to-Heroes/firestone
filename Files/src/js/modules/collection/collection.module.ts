@@ -70,7 +70,8 @@ import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { AchievementThumbnailComponent } from '../../components/achievements/achievement-thumbnail.component';
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
-import { FsTimeDisplay, FsUtcPipe } from '../../components/single-minute-time.component';
+import { FsTimeDisplay, FsUtcPipe } from '../../components/video-controls/single-minute-time.component';
+import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-double-click';
 
 @NgModule({
 	imports: [
@@ -89,6 +90,7 @@ import { FsTimeDisplay, FsUtcPipe } from '../../components/single-minute-time.co
 	declarations: [
 		FsTimeDisplay,
 		FsUtcPipe,
+		FsOverlayPlay,
 		
 		CardComponent,
 		CardHistoryComponent,

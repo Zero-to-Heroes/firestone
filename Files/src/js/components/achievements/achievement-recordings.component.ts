@@ -17,7 +17,7 @@ declare var overwolf;
         <div class="achievement-recordings" *ngIf="currentThumbnail">
             <vg-player [ngClass]="{'deleted': currentThumbnail.isDeleted}">
                 <div class="title" [innerHTML]="title"></div>
-                <vg-overlay-play></vg-overlay-play>
+                <fs-overlay-play></fs-overlay-play>
 
                 <vg-controls>
                     <vg-play-pause></vg-play-pause>            
