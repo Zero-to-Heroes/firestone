@@ -7,16 +7,18 @@ export class RumbleProgression implements Challenge {
 
 	private readonly achievementId: string;
 	private readonly heroId: string;
+	private readonly shrineId: string;
 	private readonly events: Events;
 
-	private completed: boolean = false;
 	private currentTurnStartTime: number;
 	private rumbleStep: number;
 	private currentRumbleStep: number;
+	private shrinePlayed: boolean = false;
 
 	constructor(achievement, events: Events) {
 		this.achievementId = achievement.id;
 		this.heroId = achievement.cardId;
+		this.shrineId = achievement.secondaryCardId;
 		this.rumbleStep = achievement.step;
 		this.events = events;
 	}
@@ -26,12 +28,22 @@ export class RumbleProgression implements Challenge {
 			this.currentRumbleStep = gameEvent.data[0];
 		}
 
+		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+			const cardId = gameEvent.data[0];
+			const controllerId = gameEvent.data[1];
+			const localPlayer = gameEvent.data[2];
+			if (cardId == this.shrineId && controllerId == localPlayer.PlayerId) {
+				this.shrinePlayed = true;
+			}
+			return;
+		}
+
 		if (this.currentRumbleStep === this.rumbleStep && gameEvent.type == GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}
 
-		if (this.currentRumbleStep === this.rumbleStep && gameEvent.type === GameEvent.WINNER) {
+		if (this.currentRumbleStep === this.rumbleStep && this.shrinePlayed && gameEvent.type === GameEvent.WINNER) {
 			// console.log('WINNER detected', gameEvent);
 			this.detectGameResultEvent(gameEvent, callback);
 			return;
@@ -43,10 +55,8 @@ export class RumbleProgression implements Challenge {
 	}
 
 	public broadcastEndOfCapture() {
-		if (this.completed) {
-			this.completed = false;
-			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
-		}
+		this.shrinePlayed = false;
+		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
 	}
 
 	public notificationTimeout(): number {
@@ -62,9 +72,8 @@ export class RumbleProgression implements Challenge {
 		let localPlayer = gameEvent.data[1];
 
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
-			// console.log('completed rumble progression', this);
-			callback();
-			this.completed = true;
+			console.log('completed rumble progression', this);
+			callback()
 			this.broadcastEndOfCapture();
 		}
 	}

@@ -71,9 +71,11 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
                 .filter((achv) => achv.id.startsWith(rootId))
                 .sort((a, b) => parseInt(a.id.split(rootId)[1]) - parseInt(b.id.split(rootId)[1]));
         // console.log('achievements for completion steps', achievementForCompletionSteps);
-        const playerClass = /.*\((.*)\).*/.exec(achievement.name)[1];
+        const match = /(.*) \((.*)\).*/.exec(achievement.name);
+        const shrineName = match[1];
+        const playerClass = match[2];
         // console.log('playerClass', /.*\((.*)\).*/.exec(achievement.name));
-        let text = `Clear the first round with ${playerClass} to get started`;
+        let text = `Clear the first round with ${shrineName} (${playerClass} shrine) to get started`;
         let alreadyDefinedText: boolean = false;
         // Useful to make sure we have some consistency in the number of comletions
         let maxNumberOfCompletions: number = 0;
@@ -96,7 +98,7 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
                 },
             } as CompletionStep);
         }
-        const name = `Rumble run progression - ${playerClass}`;
+        const name = `Rumble run progression - ${shrineName} (${playerClass})`;
         return {
             achievement: new VisualAchievement(
                 achievement.id,
