@@ -134,6 +134,7 @@ export class CardsComponent implements AfterViewInit {
 	readonly FILTER_OWN = 'own';
 	readonly FILTER_GOLDEN_OWN = 'goldenown';
 	readonly FILTER_DONT_OWN = 'dontown';
+	readonly FILTER_NON_PREMIUM_NOT_COMPLETED = 'notpremiumnotcompleted';
 	readonly FILTER_NOT_COMPLETED = 'notcompleted';
 	readonly FILTER_ALL = 'all';
 
@@ -162,6 +163,7 @@ export class CardsComponent implements AfterViewInit {
 		{label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN},
 		{label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN},
 		{label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN},
+		{label: this.labelFor(this.FILTER_NON_PREMIUM_NOT_COMPLETED), value: this.FILTER_NON_PREMIUM_NOT_COMPLETED},
 		{label: this.labelFor(this.FILTER_NOT_COMPLETED), value: this.FILTER_NOT_COMPLETED},
 		{label: this.labelFor(this.FILTER_ALL), value: this.FILTER_ALL},
 	]
@@ -336,8 +338,10 @@ export class CardsComponent implements AfterViewInit {
 				return (card: SetCard) => (card.ownedNonPremium + card.ownedPremium > 0);
 			case this.FILTER_GOLDEN_OWN:
 				return (card: SetCard) => (card.ownedPremium > 0);
+			case this.FILTER_NON_PREMIUM_NOT_COMPLETED:
+				return (card: SetCard) => (card.ownedNonPremium < card.getMaxCollectible());
 			case this.FILTER_NOT_COMPLETED:
-				return (card: SetCard) => (card.ownedPremium < card.getMaxCollectible() && card.ownedNonPremium < card.getMaxCollectible());
+				return (card: SetCard) => (card.ownedPremium < card.getMaxCollectible() || card.ownedNonPremium < card.getMaxCollectible());
 			case this.FILTER_DONT_OWN:
 				return (card: SetCard) => (card.ownedNonPremium + card.ownedPremium == 0);
 			default:
@@ -367,7 +371,8 @@ export class CardsComponent implements AfterViewInit {
 			case this.FILTER_ALL: return 'All existing cards';
 			case this.FILTER_OWN: return 'Only cards I have';
 			case this.FILTER_GOLDEN_OWN: return 'Only golden cards I have';
-			case this.FILTER_NOT_COMPLETED: return 'Only cards I miss copies';
+			case this.FILTER_NON_PREMIUM_NOT_COMPLETED: return 'Only cards with missing non-golden copies';
+			case this.FILTER_NOT_COMPLETED: return 'Only cards with missing copies';
 			case this.FILTER_DONT_OWN: return 'Only cards I do not have';
 
 			default: console.log('unknown filter', filter);
