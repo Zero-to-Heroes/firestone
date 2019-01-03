@@ -14,7 +14,7 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('rumble_run_progression', 'Rumble Clears', ['rumble_run_progression']);
+        super('rumble_run_progression', 'Progression', ['rumble_run_progression']);
         this.categoryId = 'rumble_run_progression';
         this.cardsService = cardsService;
         this.conf = conf;

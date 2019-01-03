@@ -14,7 +14,7 @@ export class DungeonRunPassivesSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('dungeon_run_passive', 'Dungeon Passives', ['dungeon_run_passive_play']);
+        super('dungeon_run_passive', 'Passives', ['dungeon_run_passive_play']);
         this.categoryId = 'dungeon_run_passive';
         this.cardsService = cardsService;
         this.conf = conf;

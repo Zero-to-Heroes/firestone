@@ -14,7 +14,7 @@ export class RumbleRunShrinePlaySetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('rumble_run_shrine_play', 'Rumble Shrines', ['rumble_run_shrine_play']);
+        super('rumble_run_shrine_play', 'Shrines played', ['rumble_run_shrine_play']);
         this.categoryId = 'rumble_shrine_play';
         this.cardsService = cardsService;
         this.conf = conf;

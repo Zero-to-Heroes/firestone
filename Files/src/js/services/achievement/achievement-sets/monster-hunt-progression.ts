@@ -14,7 +14,7 @@ export class MonsterHuntProgressionSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('monster_hunt_progression', 'Monster Clears', ['monster_hunt_progression', 'monster_hunt_final_boss']);
+        super('monster_hunt_progression', 'Progression', ['monster_hunt_progression', 'monster_hunt_final_boss']);
         this.categoryId = 'monster_hunt_progression';
         this.cardsService = cardsService;
         this.conf = conf;

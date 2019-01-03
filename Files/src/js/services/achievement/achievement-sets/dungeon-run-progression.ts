@@ -14,7 +14,7 @@ export class DungeonRunProgressionSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('dungeon_run_progression', 'Dungeon Clears', ['dungeon_run_progression']);
+        super('dungeon_run_progression', 'Progression', ['dungeon_run_progression']);
         this.categoryId = 'dungeon_run_progression';
         this.cardsService = cardsService;
         this.conf = conf;

@@ -14,7 +14,7 @@ export class RumbleRunTeammatesSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('rumble_run_teammate', 'Rumble Teammates', ['rumble_run_teammate_play']);
+        super('rumble_run_teammate', 'Teammates', ['rumble_run_teammate_play']);
         this.categoryId = 'rumble_run_teammate';
         this.cardsService = cardsService;
         this.conf = conf;

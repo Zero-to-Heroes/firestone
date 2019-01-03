@@ -14,7 +14,7 @@ export class RumbleRunPassivesSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('rumble_run_passive', 'Rumble Passives', ['rumble_run_passive_play']);
+        super('rumble_run_passive', 'Passives', ['rumble_run_passive_play']);
         this.categoryId = 'rumble_run_passive';
         this.cardsService = cardsService;
         this.conf = conf;

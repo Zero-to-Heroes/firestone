@@ -8,7 +8,7 @@ export class MonsterHuntBossSetProvider extends AbstractBossSetProvider {
         super(
             'monster_hunt_boss',
             'monster_hunt_category',
-            'Monster Boss',
+            'Bosses',
             ['monster_hunt_boss_encounter', 'monster_hunt_boss_victory'],
             cardsService,
             conf);

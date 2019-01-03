@@ -14,7 +14,7 @@ export class MonsterHuntPassivesSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('monster_hunt_passive', 'Monster Passives', ['monster_hunt_passive_play']);
+        super('monster_hunt_passive', 'Passives', ['monster_hunt_passive_play']);
         this.categoryId = 'monster_hunt_passive';
         this.cardsService = cardsService;
         this.conf = conf;

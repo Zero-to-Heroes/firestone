@@ -8,7 +8,7 @@ export class DungeonRunBossSetProvider extends AbstractBossSetProvider {
         super(
             'dungeon_run_boss', 
             'dungeon_run_category',
-            'Dungeon Boss', 
+            'Bosses', 
             ['dungeon_run_boss_encounter', 'dungeon_run_boss_victory'],
             cardsService,
             conf);
