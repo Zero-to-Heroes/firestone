@@ -1,6 +1,7 @@
 import { Component, Input, SimpleChanges, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
+import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
 	selector: 'achievement-progress-bar',
@@ -21,12 +22,12 @@ export class AchievementProgressBarComponent {
 	achieved: number;
 	total: number;
 
-	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
-		const flatCompletions = achievementSet.achievements
+	@Input('achievements') set achievements(achievements: ReadonlyArray<VisualAchievement>) {
+		const flatCompletions = achievements
 				.map((achievement) => achievement.completionSteps)
 				.reduce((a, b) => a.concat(b));
 		this.total = flatCompletions.length;
 		this.achieved = flatCompletions.map((step) => step.numberOfCompletions).filter((a) => a > 0).length;
-		console.log('set achievement in progress bar', achievementSet);
+		console.log('set achievement in progress bar', this.total, this.achieved, achievements);
 	}
 }

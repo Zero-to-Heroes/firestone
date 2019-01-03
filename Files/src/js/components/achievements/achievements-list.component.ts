@@ -33,7 +33,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 						</i>
 					</ng-template>
 				</ng-select>
-				<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
+				<achievement-progress-bar [achievements]="_achievementSet.achievements"></achievement-progress-bar>
 			</div>
 			<div class="collapse-menu {{headerClass}}" (click)="toggleMenu()">
 				<i class="i-13X7" *ngIf="showCollapse">

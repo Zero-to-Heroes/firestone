@@ -36,7 +36,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 			<i class="logo" [innerHTML]="svgTemplate">
 				
 			</i>
-			<achievement-progress-bar [achievementSet]="_achievementSet"></achievement-progress-bar>
+			<achievement-progress-bar [achievements]="_achievementSet.achievements"></achievement-progress-bar>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
