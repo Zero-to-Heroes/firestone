@@ -41,7 +41,7 @@ export class AchievementsVideoCaptureService {
         }
 		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
-        this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => this.onAchievementRecordEnd(data));
+        this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => setTimeout(() => this.onAchievementRecordEnd(data), 500));
 
         // This is handled already by the regular query
         // this.turnOnRecording();
@@ -82,7 +82,7 @@ export class AchievementsVideoCaptureService {
 
     private actuallyTurnOnRecording() {
         if (!this.listenerRegistered) {
-            console.log('registered listeners?', overwolf.settings.OnVideoCaptureSettingsChanged);
+            console.log('[recording] registered listeners?', overwolf.settings.OnVideoCaptureSettingsChanged);
             overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange());
             this.listenerRegistered = true;
         }
@@ -105,9 +105,11 @@ export class AchievementsVideoCaptureService {
         else {
             overwolf.media.replays.turnOff((result) => {
                 console.log('[recording] recording turned off, turning it on again to activate new settings', result);
-                overwolf.media.replays.turnOn(this.settings, (result) => {
-                    this.settingsChanged = false;
-                    console.log('[recording] turned on replay capture', result);
+                setTimeout(() => {
+                        overwolf.media.replays.turnOn(this.settings, (result) => {
+                            this.settingsChanged = false;
+                            console.log('[recording] turned on replay capture after settings changed', result);
+                        });
                 });
             });
         }
@@ -146,28 +148,34 @@ export class AchievementsVideoCaptureService {
     }
 
     private onAchievementRecordEnd(data) {
-        console.log('on achievementrecordend', data);
+        console.log('[recording] on achievementrecordend', data);
+        const achievementId = data.data[0];
+        if (this.achievementsBeingRecorded.indexOf(achievementId) === -1) {
+            console.log('[recording] Not recording achievement, so not planning capture stop', achievementId, this.achievementsBeingRecorded)
+            return;
+        }
         const requestedTime: number = data.data[1];
         this.lastRecordingDate = Math.max(
             this.lastRecordingDate,
             Date.now() + requestedTime);
         if (this.currentRecordEndTimer) {
-            console.log('clearing timeout', this.currentRecordEndTimer);
+            console.log('[recording] clearing timeout', this.currentRecordEndTimer);
             clearTimeout(this.currentRecordEndTimer);
         }
-        console.log('[recording] will stop recording in ', this.lastRecordingDate - Date.now(), data);
-        this.currentRecordEndTimer = setTimeout(() => this.performStopCapture(), this.lastRecordingDate - Date.now());
+        const stopCaptureTime = this.lastRecordingDate - Date.now();
+        console.log('[recording] will stop recording in ', stopCaptureTime, data);
+        this.currentRecordEndTimer = setTimeout(() => this.performStopCapture(), stopCaptureTime);
     }
 
     private performStopCapture() {
+        clearTimeout(this.currentRecordEndTimer);
+        this.currentRecordEndTimer = undefined;
         // console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
         if (!this.currentReplayId || !this.captureOngoing) {
             setTimeout(() => this.performStopCapture(), 50);
             return;
         }
-        console.log('[recording] stopping capture');
-        this.currentRecordEndTimer = undefined;
-        // const achievementId: string = data.data[0];
+        console.log('[recording] stopping capture, was scheduled for', this.lastRecordingDate, Date.now());
 
         overwolf.media.replays.stopCapture(this.currentReplayId, (result) => {
             console.log('[recording] stopped capture', result);
