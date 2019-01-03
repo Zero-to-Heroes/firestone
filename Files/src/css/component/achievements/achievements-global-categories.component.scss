@@ -1,0 +1,34 @@
+@import '../../global/fonts';
+
+:host {
+	height: 100%;
+	display: flex;
+}
+
+.achievements-global-categories {
+	display: flex;
+	flex-direction: column;
+    flex-grow: 1;
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 100%;
+	    display: flex;
+	    justify-content: flex-start;
+		flex-wrap: wrap;
+		overflow-y: scroll;
+
+	    li {
+	    	width: 155px;
+	    	height: 200px;
+	    	margin-right: 15px;
+			margin-bottom: 15px;
+
+			&:nth-of-type(4n) {
+				margin-right: 0;
+			}
+	    }
+	}
+}

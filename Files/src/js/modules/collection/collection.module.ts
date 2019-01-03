@@ -72,6 +72,8 @@ import { AchievementThumbnailComponent } from '../../components/achievements/ach
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 import { FsTimeDisplay, FsUtcPipe } from '../../components/video-controls/single-minute-time.component';
 import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-double-click';
+import { AchievementsGlobalCategoriesComponent } from '../../components/achievements/achievements-global-categories.component';
+import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 
 @NgModule({
 	imports: [
@@ -113,6 +115,8 @@ import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-dou
 		AchievementsComponent,
 		AchievementCompletionStepComponent,
 		AchievementsCategoriesComponent,
+		AchievementsGlobalCategoriesComponent,
+		AchievementsGlobalCategoryComponent,
 		AchievementHistoryComponent,
 		AchievementHistoryItemComponent,
 		AchievementImageComponent,

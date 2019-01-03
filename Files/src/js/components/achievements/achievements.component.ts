@@ -9,6 +9,8 @@ import { AchievementSet } from '../../models/achievement-set';
 import { Achievement } from '../../models/achievement';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
+import { AchievementCategory } from '../../models/achievement-category';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -27,11 +29,17 @@ declare var _: any;
 				<achievements-menu 
 					[ngClass]="{'shrink': hideMenu}"
 					[displayType]="_menuDisplayType"
+					[selectedCategory]="_selectedGlobalCategory"
 					[selectedAchievementSet]="_selectedCategory">
 				</achievements-menu>
 				<ng-container [ngSwitch]="_selectedView">
-					<achievements-categories
+					<achievements-global-categories
 							*ngSwitchCase="'categories'"
+							[categories]="globalCategories"
+							[achievementSets]="achievementCategories">
+					</achievements-global-categories>
+					<achievements-categories
+							*ngSwitchCase="'category'"
 							[achievementSets]="achievementCategories">
 					</achievements-categories>
 					<achievements-list
@@ -70,8 +78,10 @@ export class AchievementsComponent implements AfterViewInit {
 	_menuDisplayType = 'menu';
 	_selectedView = 'categories';
 	_selectedCategory: AchievementSet;
+	_selectedGlobalCategory: VisualAchievementCategory;
 	_achievementsList: ReadonlyArray<VisualAchievement>;
 	achievementCategories: AchievementSet[];
+	globalCategories: AchievementCategory[];
 	_viewState = 'shown';
 	hideMenu: boolean;
 	achievementIdToScrollIntoView: string;
@@ -101,6 +111,19 @@ export class AchievementsComponent implements AfterViewInit {
 		});
 
 		// console.log('constructing');
+		this._events.on(Events.ACHIEVEMENT_CATEGORY_SELECTED).subscribe(
+			(data) => {
+				this.transitionState(() => {
+					this.reset();
+					// console.log(`selecting set, showing cards`, data);
+					this._menuDisplayType = 'breadcrumbs';
+					this._selectedView = 'category';
+					this._selectedGlobalCategory = data.data[0];
+					this.achievementCategories = this._selectedGlobalCategory.achievementSets;
+					this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
+				});
+			}
+		)
 		this._events.on(Events.ACHIEVEMENT_SET_SELECTED).subscribe(
 			(data) => {
 				this.transitionState(() => {
@@ -180,8 +203,9 @@ export class AchievementsComponent implements AfterViewInit {
 		}
 		console.log('refreshing contents in achievements');
 		this.refreshingContent = true;
+		this.globalCategories = this.repository.getCategories();
 		const achievementSets: AchievementSet[] = await this.repository.loadAggregatedAchievements();
-		console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets);
+		console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets, this.globalCategories);
 		this.achievementCategories = achievementSets;
 		this.refreshingContent = false;
 		if (!(<ViewRef>this.cdr).destroyed) {
@@ -211,5 +235,6 @@ export class AchievementsComponent implements AfterViewInit {
 		this._selectedCategory = undefined;
 		this._achievementsList = undefined;
 		this.achievementCategories = undefined;
+		this.globalCategories = undefined;
 	}
 }

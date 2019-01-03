@@ -3,6 +3,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AchievementSet } from '../../models/achievement-set';
 
 import { Events } from '../../services/events.service';
+import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 
 declare var overwolf: any;
 
@@ -20,7 +21,12 @@ declare var overwolf: any;
 			<ul *ngSwitchCase="'breadcrumbs'" class="menu-selection-achievements breadcrumbs">
 				<li (click)="goToAchievementsCategoriesView()">Categories</li>
 				<li class="separator">></li>
-				<li class="unclickable" (click)="goToAchievementSetView()">{{selectedAchievementSet.displayName}}</li>
+				<li (click)="goToAchievementsCategoryView()">{{selectedCategory.name}}</li>
+				<li class="separator" *ngIf="selectedAchievementSet">></li>
+				<li class="unclickable" *ngIf="selectedAchievementSet" 
+						(click)="goToAchievementSetView()">
+					{{selectedAchievementSet.displayName}}
+				</li>
 			</ul>
 		</ng-container>
 	`,
@@ -30,6 +36,7 @@ declare var overwolf: any;
 export class AchievementsMenuComponent {
 
 	@Input() displayType: string;
+	@Input() selectedCategory: VisualAchievementCategory;
 	@Input() selectedAchievementSet: AchievementSet;
 
 	constructor(private _events: Events) {
@@ -38,6 +45,10 @@ export class AchievementsMenuComponent {
 
 	goToAchievementsCategoriesView() {
 		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
+	}
+
+	goToAchievementsCategoryView() {
+		this._events.broadcast(Events.ACHIEVEMENT_CATEGORY_SELECTED, this.selectedCategory);
 	}
 
 	goToAchievementSetView() {

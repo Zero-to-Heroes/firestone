@@ -24,6 +24,7 @@ export class Events {
 	public static readonly SHOW_CARDS = 'show-cards';
 	public static readonly SET_SELECTED = 'set-selected';
 
+	public static readonly ACHIEVEMENT_CATEGORY_SELECTED = 'achievement-category-selected';
 	public static readonly ACHIEVEMENT_SET_SELECTED = 'achievement-set-selected';
 	public static readonly NEW_ACHIEVEMENT = 'new-achievement';
 	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
