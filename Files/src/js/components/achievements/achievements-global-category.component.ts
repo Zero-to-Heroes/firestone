@@ -70,7 +70,7 @@ export class AchievementsGlobalCategoryComponent {
 				.reduce((a, b) => a.concat(b), []);
 		const total = flatCompletions.length;
 		const achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
-		this.complete = total === achieved;
+		this.complete = total === achieved && total > 0;
 		this.empty = achieved === 0;
 	}
 }
