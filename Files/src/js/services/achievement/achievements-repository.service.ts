@@ -39,6 +39,7 @@ import { MonsterHuntTreasureSetProvider } from './achievement-sets/monster-hunt-
 import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-passive.js';
 import { MonsterHuntTreasurePlay } from './achievements/monster-hunttreasure-play.js';
 import { MonsterHuntPassivePlay } from './achievements/monster-hunt-passive-play.js';
+import { AchievementCategory } from '../../models/achievement-category.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -48,6 +49,7 @@ export class AchievementsRepository {
 
 	private allAchievements: Achievement[] = [];
 	private setProviders: SetProvider[] = [];
+	private categories: AchievementCategory[] = [];
 
 	constructor(
 			private storage: AchievementsStorageService, 
@@ -78,26 +80,77 @@ export class AchievementsRepository {
 		return achievementSet;
 	}
 
+	public getCategories(): AchievementCategory[] {
+		return this.categories;
+	}
+
 	private registerModules() {
 		// Create challenges
 		this.achievementTypes().forEach((achievementType) => {
 			this.createChallenge(achievementType.type, achievementType.challengeCreationFn);
 		});
 		// Initialize set providers
+		const dungeonRunProgressionProvider = new DungeonRunProgressionSetProvider(this.cards, this.conf);
+		const dungeonRunBossProvider = new DungeonRunBossSetProvider(this.cards, this.conf);
+		const dungeonRunTreasureProvider = new DungeonRunTreasureSetProvider(this.cards, this.conf);
+		const dungeonRunPassivesProvider = new DungeonRunPassivesSetProvider(this.cards, this.conf);
+		const monsterHuntProgressProvider = new MonsterHuntProgressionSetProvider(this.cards, this.conf);
+		const monsterHuntBossProvider = new MonsterHuntBossSetProvider(this.cards, this.conf);
+		const monsterHuntTreasureProvider = new MonsterHuntTreasureSetProvider(this.cards, this.conf);
+		const monsterHuntPassiveProvider = new MonsterHuntPassivesSetProvider(this.cards, this.conf);
+		const rumbleRunProgressionProvider = new RumbleRunProgressionSetProvider(this.cards, this.conf);
+		const rumbleRunShrinePlayProvider = new RumbleRunShrinePlaySetProvider(this.cards, this.conf);
+		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.cards, this.conf);
+		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.cards, this.conf);
 		this.setProviders = [
-			new DungeonRunProgressionSetProvider(this.cards, this.conf),
-			new DungeonRunBossSetProvider(this.cards, this.conf),
-			new DungeonRunTreasureSetProvider(this.cards, this.conf),
-			new DungeonRunPassivesSetProvider(this.cards, this.conf),
-			new MonsterHuntProgressionSetProvider(this.cards, this.conf),
-			new MonsterHuntBossSetProvider(this.cards, this.conf),
-			new MonsterHuntTreasureSetProvider(this.cards, this.conf),
-			new MonsterHuntPassivesSetProvider(this.cards, this.conf),
-			new RumbleRunProgressionSetProvider(this.cards, this.conf),
-			new RumbleRunShrinePlaySetProvider(this.cards, this.conf),
-			new RumbleRunTeammatesSetProvider(this.cards, this.conf),
-			new RumbleRunPassivesSetProvider(this.cards, this.conf),
+			dungeonRunProgressionProvider,
+			dungeonRunBossProvider,
+			dungeonRunTreasureProvider,
+			dungeonRunPassivesProvider,
+			monsterHuntProgressProvider,
+			monsterHuntBossProvider,
+			monsterHuntTreasureProvider,
+			monsterHuntPassiveProvider,
+			rumbleRunProgressionProvider,
+			rumbleRunShrinePlayProvider,
+			rumbleRunTeammateProvider,
+			rumbleRunPassiveProvider,
 		];
+		this.categories = [
+			new AchievementCategory(
+				'dungeon_run',
+				'Dungeon Run',
+				'',
+				[
+					dungeonRunProgressionProvider.id,
+					dungeonRunBossProvider.id,
+					dungeonRunTreasureProvider.id,
+					dungeonRunPassivesProvider.id,
+				]
+			),
+			new AchievementCategory(
+				'monster_hunt',
+				'Monster Hunt',
+				'',
+				[
+					monsterHuntProgressProvider.id,
+					monsterHuntBossProvider.id,
+					monsterHuntTreasureProvider.id,
+					monsterHuntPassiveProvider.id,
+				]
+			),
+			new AchievementCategory(
+				'rumble_run',
+				'Rumble Run',
+				'',
+				[
+					rumbleRunProgressionProvider.id,
+					rumbleRunShrinePlayProvider.id,
+					rumbleRunTeammateProvider.id,
+					rumbleRunPassiveProvider.id,
+				]
+			),
+		]
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
 			.map((achievement) => new Achievement(
