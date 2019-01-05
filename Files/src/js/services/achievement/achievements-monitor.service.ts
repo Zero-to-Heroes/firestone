@@ -18,6 +18,8 @@ import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
 import { FeatureFlags } from '../feature-flags.service';
 import { AchievementConfService } from './achievement-conf.service';
+import { Preferences } from '../../models/preferences';
+import { PreferencesService } from '../preferences.service';
 
 declare var ga;
 declare var overwolf;
@@ -34,6 +36,7 @@ export class AchievementsMonitor {
 		private achievementsReferee: AchievementsRefereee,
 		private achievementStorage: AchievementsStorageService,
 		private storage: AchievementHistoryStorageService,
+		private prefs: PreferencesService,
 		private conf: AchievementConfService,
 		private repository: AchievementsRepository,
 		private flags: FeatureFlags,
@@ -56,14 +59,20 @@ export class AchievementsMonitor {
 		console.log('listening for achievement completion events');
 	}
 
-	public sendPreRecordNotification(achievement: Achievement, notificationTimeout: number) {
+	public async sendPreRecordNotification(achievement: Achievement, notificationTimeout: number) {
 		const text = this.nameService.displayName(achievement.id);
 		console.log('sending new notification', text);
+		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
+		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
+		if (recordingOff) {
+			recapText = `Recording is disabled - <a class="open-settings">click here</a> to turn it on`;
+		}
+		const unclickable = recordingOff ? '' : 'unclickable';
 		this.notificationService.html({
 			// The achievement.id is used in the notification service to uniquely get the right notification
 			// HTML element
 			content: `
-				<div class="achievement-message-container ${achievement.id} unclickable">
+				<div class="achievement-message-container ${achievement.id} ${unclickable}">
 					<div class="achievement-image-container">
 						<img 
 							src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
@@ -85,7 +94,7 @@ export class AchievementsMonitor {
 						</div>
 						<span class="text">${text}</span>
 						<div class="recap-text">
-							<span class="pending">Your replay is being recorded...<span class="loader"></span></span>
+							<span class="pending">${recapText}</span>
 							<span class="active">Replay saved! Click to recap</span>
 						</div>
 					</div>
@@ -98,6 +107,7 @@ export class AchievementsMonitor {
 			type: 'achievement-pre-record',
 			cardId: achievement.id,
 			timeout: notificationTimeout,
+			theClass: recordingOff ? 'active' : undefined
 		});
 	}
 

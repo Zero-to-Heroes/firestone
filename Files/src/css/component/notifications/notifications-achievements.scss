@@ -103,6 +103,16 @@
 		}
 	}
 
+	a.open-settings {
+		margin-left: 5px;
+		margin-right: 5px;
+		color: #D9C3AB;
+
+		&:hover {
+			color: #ffb948;
+		}
+	}
+
 	.close-button {
 		position: absolute;
 		top: 0;

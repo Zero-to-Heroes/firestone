@@ -2,8 +2,6 @@ import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectio
 
 import { NotificationsService, Notification } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
-import { NG_MODEL_WITH_FORM_CONTROL_WARNING } from '@angular/forms/src/directives';
-import { not } from 'rxjs/internal/util/not';
 
 declare var overwolf: any;
 
@@ -156,6 +154,13 @@ export class NotificationsComponent implements AfterViewInit {
 					// this.notificationService.remove(toast.id);
 					return;
 				}
+				// Clicked on settings, don't show the card and don't close
+				if (event.srcElement.className.indexOf("open-settings") !== -1) {
+					event.preventDefault();
+					event.stopPropagation();
+					this.showSettings();
+					return;
+				}
 				let currentElement = event.srcElement;
 				while (!currentElement.classList.contains("unclickable") && currentElement.parentElement) {
 					currentElement = currentElement.parentElement;
@@ -234,6 +239,17 @@ export class NotificationsComponent implements AfterViewInit {
 				console.log('closing');
 				overwolf.windows.close(result.window.id);
 			}
+		});
+	}
+	
+	private showSettings() {
+        console.log('showing settings');
+        overwolf.windows.obtainDeclaredWindow("SettingsWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get SettingsWindow', result);
+				return;
+			}
+			overwolf.windows.restore(result.window.id, (result2) => { });
 		});
 	}
 }
