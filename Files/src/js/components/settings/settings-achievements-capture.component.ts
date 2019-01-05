@@ -80,6 +80,7 @@ export class SettingsAchievementsCaptureComponent {
 
 	private async updateDefaultValues() {
 		this.captureVideo = !(await this.prefs.getPreferences()).dontRecordAchievements;
+		this.cdr.detectChanges();
 	}
 
 	private async changeVideoSettings() {
