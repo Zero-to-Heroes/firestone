@@ -158,6 +158,7 @@ export class AchievementsRepository {
 				achievement.name, 
 				achievement.type, 
 				achievement.bossId || achievement.cardId, 
+				achievement.cardType,
 				achievement.difficulty,
 				0,
 				[]));

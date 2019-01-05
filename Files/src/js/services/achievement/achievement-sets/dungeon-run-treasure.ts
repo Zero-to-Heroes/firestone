@@ -82,6 +82,7 @@ export class DungeonRunTreasureSetProvider extends SetProvider {
                 achievement.name, 
                 this.id, 
                 achievement.cardId,
+                achievement.cardType,
                 text,
                 completionSteps,
                 replayInfo),

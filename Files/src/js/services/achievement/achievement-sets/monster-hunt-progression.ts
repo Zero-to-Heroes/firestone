@@ -119,6 +119,7 @@ export class MonsterHuntProgressionSetProvider extends SetProvider {
                 name, 
                 this.id, 
                 achievement.cardId,
+                achievement.cardType,
                 text,
                 invertedCompletionSteps.reverse(),
                 replayInfo),

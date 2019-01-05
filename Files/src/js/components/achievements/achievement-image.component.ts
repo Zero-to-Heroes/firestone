@@ -7,7 +7,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	styleUrls: [`../../../css/component/achievements/achievement-image.component.scss`],
 	template: `
         <div class="achievement-image-container">
-			<img src="{{image}}" class="real-achievement" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
+			<img src="{{image}}" class="real-achievement {{_imageType}}" (load)="imageLoadedHandler()" [@showRealAchievement]="!showPlaceholder"/>
 			<div class="overlay"></div>
             <i class="i-84x90 frame">
                 <svg>
@@ -48,6 +48,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 export class AchievementImageComponent {
 
 	image: string;
+	_imageType: string;
 	showPlaceholder = true;
 	
 	constructor(private cdr: ChangeDetectorRef) {
@@ -56,6 +57,10 @@ export class AchievementImageComponent {
 
 	@Input() set imageId(imageId: string) {
 		this.image = `http://static.zerotoheroes.com/hearthstone/cardart/256x/${imageId}.jpg`;
+	}
+
+	@Input() set imageType(imageType: string) {
+		this._imageType = imageType;
 	}
 
 	imageLoadedHandler() {

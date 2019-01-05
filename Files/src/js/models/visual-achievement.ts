@@ -7,6 +7,7 @@ export class VisualAchievement {
 	readonly name: string;
 	readonly type: string;
 	readonly cardId: string;
+	readonly cardType: string;
 	readonly text: string;
 	readonly completionSteps: CompletionStep[];
 	// readonly achievementStepIds: string[];
@@ -18,6 +19,7 @@ export class VisualAchievement {
 			name: string, 
 			type: string, 
 			cardId: string, 
+			cardType: string,
 			text: string, 
 			completionSteps: CompletionStep[],
 			// achievementStepIds: string[], 
@@ -27,6 +29,7 @@ export class VisualAchievement {
 		this.name = name;
 		this.type = type;
 		this.cardId = cardId;
+		this.cardType = cardType;
 		this.text = text;
 		this.completionSteps = completionSteps;
 		// this.achievementStepIds = achievementStepIds;

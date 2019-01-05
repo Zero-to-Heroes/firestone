@@ -29,6 +29,7 @@ export class DevService {
 			'Fake Wee Whelp',
 			'dungeon_run_boss_encounter',
 			'LOOTA_BOSS_44h',
+			'minion',
 			'common',
 			1,
 			[]

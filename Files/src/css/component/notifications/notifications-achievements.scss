@@ -29,6 +29,11 @@
 			margin: auto;
 			position: absolute;
 			clip-path: ellipse(34% 48% at 50% 50%);
+			
+			&.spell {
+				width: 120%;
+				clip-path: ellipse(28% 40% at 50% 50%);
+			}
 		}
 		
 		.frame {

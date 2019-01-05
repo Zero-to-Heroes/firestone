@@ -7,7 +7,10 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	template: `
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
 			<div class="stripe" (click)="toggleRecordings()">
-				<achievement-image [imageId]="_achievement.cardId"></achievement-image>
+				<achievement-image 
+						[imageId]="_achievement.cardId" 
+						[imageType]="_achievement.cardType">
+				</achievement-image>
 				<div class="achievement-body">
 					<div class="text">
 						<div class="achievement-name">{{_achievement.name}}</div>

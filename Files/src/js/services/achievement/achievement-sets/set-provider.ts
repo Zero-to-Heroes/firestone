@@ -27,8 +27,8 @@ export abstract class SetProvider {
     }
 
     protected visualAchievements(
-        allAchievements: Achievement[], 
-        completedAchievemnts?: CompletedAchievement[]): ReadonlyArray<VisualAchievement> {
+            allAchievements: Achievement[], 
+            completedAchievemnts?: CompletedAchievement[]): ReadonlyArray<VisualAchievement> {
 		const mergedAchievements: Achievement[] = !completedAchievemnts
 			? allAchievements
 			: allAchievements
@@ -36,7 +36,7 @@ export abstract class SetProvider {
 					let completedAchievement = completedAchievemnts.filter(compl => compl.id == ref.id).pop();
 					const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
 					const replayInfo = completedAchievement ? completedAchievement.replayInfo : [];
-					return new Achievement(ref.id, ref.name, ref.type, ref.cardId, ref.difficulty, numberOfCompletions, replayInfo);
+					return new Achievement(ref.id, ref.name, ref.type, ref.cardId, ref.cardType, ref.difficulty, numberOfCompletions, replayInfo);
 				})
 		const fullAchievements: VisualAchievement[] = mergedAchievements
             .filter(achievement => this.isAchievementVisualRoot(achievement))

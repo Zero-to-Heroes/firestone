@@ -6,6 +6,7 @@ export class Achievement {
 	readonly name: string;
 	readonly type: string;
 	readonly cardId: string;
+	readonly cardType: string;
 	readonly difficulty: string;
 	readonly numberOfCompletions: number = 0;
 	readonly replayInfo: ReadonlyArray<ReplayInfo> = [];
@@ -15,6 +16,7 @@ export class Achievement {
 			name: string, 
 			type: string, 
 			cardId: string, 
+			cardType: string,
 			difficulty: string, 
 			numberOfCompletions: number, 
 			replayInfo: ReadonlyArray<ReplayInfo>) {
@@ -22,6 +24,7 @@ export class Achievement {
 		this.name = name;
 		this.type = type;
 		this.cardId = cardId;
+		this.cardType = cardType;
 		this.difficulty = difficulty;
 		this.numberOfCompletions = numberOfCompletions;
 		this.replayInfo = replayInfo;
