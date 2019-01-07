@@ -93,6 +93,9 @@ export class AchievementViewComponent {
 				this.requestGlobalHeaderCollapse.next(true);
 				console.log('requested global header collapse');
 			}
+			else {
+				this.requestGlobalHeaderCollapse.next(false);
+			}
 			this.cdr.detectChanges();
 		}
 	}
