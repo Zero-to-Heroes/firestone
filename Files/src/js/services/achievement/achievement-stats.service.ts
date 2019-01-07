@@ -33,7 +33,11 @@ export class AchievementStatsService {
         });
     }
     
-    private publishAchievementStats(event) {
+    private publishAchievementStats(event, retriesLeft = 5) {
+        if (retriesLeft <= 0) {
+            console.error('Could not upload achievemnt stats after 5 retries');
+            return;
+        }
         const completedAchievement: CompletedAchievement = event.data[0];
         const achievement: Achievement = this.findAchievement(completedAchievement);
         const statEvent = {
@@ -48,7 +52,12 @@ export class AchievementStatsService {
         };
         // console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
         this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent)
-                .subscribe((result) => console.log('achievement stat event result', result));
+                .subscribe(
+                    (result) => console.log('achievement stat event result', result),
+                    (error) => {
+                        console.warn('Could not upload achievemnt stats, retrying', error);
+                        setTimeout(() => this.publishAchievementStats(event, retriesLeft--), 5000);
+                    });
     }
     
     private findAchievement(completedchievement: CompletedAchievement): Achievement {
