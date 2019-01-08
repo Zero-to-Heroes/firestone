@@ -159,6 +159,8 @@ export class AchievementsRepository {
 				achievement.type, 
 				achievement.bossId || achievement.cardId, 
 				achievement.cardType,
+				achievement.secondaryCardId,
+				achievement.secodaryCardType,
 				achievement.difficulty,
 				0,
 				[]));

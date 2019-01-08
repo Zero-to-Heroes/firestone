@@ -30,6 +30,8 @@ export class DevService {
 			'dungeon_run_boss_encounter',
 			'LOOTA_BOSS_44h',
 			'minion',
+			null,
+			null,
 			'common',
 			1,
 			[]

@@ -36,7 +36,17 @@ export abstract class SetProvider {
 					let completedAchievement = completedAchievemnts.filter(compl => compl.id == ref.id).pop();
 					const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
 					const replayInfo = completedAchievement ? completedAchievement.replayInfo : [];
-					return new Achievement(ref.id, ref.name, ref.type, ref.cardId, ref.cardType, ref.difficulty, numberOfCompletions, replayInfo);
+					return new Achievement(
+                        ref.id, 
+                        ref.name, 
+                        ref.type, 
+                        ref.cardId, 
+                        ref.cardType, 
+                        ref.secondaryCardId,
+                        ref.secondaryCardType,
+                        ref.difficulty, 
+                        numberOfCompletions, 
+                        replayInfo);
 				})
 		const fullAchievements: VisualAchievement[] = mergedAchievements
             .filter(achievement => this.isAchievementVisualRoot(achievement))
