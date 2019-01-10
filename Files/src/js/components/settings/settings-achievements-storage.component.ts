@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare var overwolf;
+
 @Component({
 	selector: 'settings-achievements-storage',
 	styleUrls: [
@@ -28,7 +30,14 @@ export class SettingsAchievementsStorageComponent {
 	usedSizeInGB: number;
 
 	constructor(private owService: OverwolfService, private cdr: ChangeDetectorRef) {
-		this.loadStorageInfo();
+		this.loadStorageInfo();		
+
+		overwolf.windows.onStateChanged.addListener((message) => {
+			if (message.window_name != "SettingsWindow") {
+				return;
+			}
+			this.loadStorageInfo();
+		});
 	}
 
 	openVideoFolder() {
