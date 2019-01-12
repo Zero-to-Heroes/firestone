@@ -14,6 +14,7 @@ export class LogParserService {
 	plugin: any;
 
 	private cardRegex = new RegExp('.* NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d).*');
+	private rewardRegex = new RegExp('.*CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*');
 	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
 	private logLines: any[][] = [];
@@ -48,7 +49,7 @@ export class LogParserService {
 
 	public receiveLogLine(data: string) {
 		// console.log('received log line', data);
-		let match = this.cardRegex.exec(data);
+		let match = this.cardRegex.exec(data) || this.rewardRegex.exec(data);
 		if (match) {
 			this.logLines.push([Date.now(), data]);
 		}
@@ -69,21 +70,36 @@ export class LogParserService {
 		for (let data of toProcess) {
 			// console.log('considering log line', data);
 			let match = this.cardRegex.exec(data);
+			let multipleCopies = false;
+			if (!match) {
+				match = this.rewardRegex.exec(data);
+				multipleCopies = true;
+			}
 			if (match) {
 				let cardId = match[1];
 				let type = match[2];
 				let newCount = parseInt(match[3]);
-				let normalCount: number = type === 'NORMAL' ? newCount : -1;
-				let premiumCount: number = type === 'GOLDEN' ? newCount : -1;
-				let cardInCollection = new Card(cardId, normalCount, premiumCount);
 				// console.log('card in collection?', cardId, type, cardInCollection);
-				if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
-					this.displayNewCardMessage(cardInCollection, type);
+				if (multipleCopies) {
+					for (let i = 0; i < newCount; i++) {
+						this.handleNotification(cardId, type, i + 1);
+					}
+					return;
 				}
-				else {
-					this.displayDustMessage(cardInCollection, type);
-				}
+				this.handleNotification(cardId, type, newCount);
 			}
+		}
+	}
+
+	private handleNotification(cardId, type, count) {
+		let normalCount: number = type === 'NORMAL' ? count : -1;
+		let premiumCount: number = type === 'GOLDEN' ? count : -1;
+		let cardInCollection = new Card(cardId, normalCount, premiumCount);
+		if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
+			this.displayNewCardMessage(cardInCollection, type);
+		}
+		else {
+			this.displayDustMessage(cardInCollection, type);
 		}
 	}
 
@@ -99,7 +115,7 @@ export class LogParserService {
 
 	private extractCards(toProcess: string[]): any[] {
 		return toProcess
-				.map(data => this.cardRegex.exec(data))
+				.map(data => this.cardRegex.exec(data) || this.rewardRegex.exec(data))
 				.filter(match => match)
 				.map(match => match[1])
 				.map(cardId => this.cards.getCard(cardId));
