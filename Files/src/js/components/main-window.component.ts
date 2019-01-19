@@ -244,6 +244,9 @@ export class MainWindowComponent implements AfterViewInit {
 					if (result.window.isVisible) {
 						console.log('init OwAd');
 						this.adRef = new OwAd(document.getElementById('ad-div'));
+						this.adRef.addEventListener('impression', (data) => {
+							ga('send', 'event', 'ad', 'main-window');
+						})
 					}
 					this.adInit = false;
 				}

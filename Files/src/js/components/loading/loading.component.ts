@@ -248,6 +248,9 @@ export class LoadingComponent implements AfterViewInit {
 					if (result.window.isVisible) {
 						console.log('init OwAd');
 						this.adRef = new OwAd(document.getElementById("ad-div"));
+						this.adRef.addEventListener('impression', (data) => {
+							ga('send', 'event', 'ad', 'loading-window');
+						})
 						if (!(<ViewRef>this.cdr).destroyed) {
 							this.cdr.detectChanges();
 						}
