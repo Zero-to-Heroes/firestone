@@ -89,7 +89,7 @@ declare var overwolf: any;
 						<p>Coming soon!</p>
 					</div>
 				</div>
-				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}" *ngIf="released">
+				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}" *ngIf="released" (click)="browseSet()">
 					<div class="title">
 						<i class="i-15 pale-theme">
 							<svg class="svg-icon-fill">
@@ -108,7 +108,7 @@ declare var overwolf: any;
 							</div>
 						</div>
 					</div>
-					<div class="progression legendary" (click)="browseSet()">
+					<div class="progression legendary">
 						<div class="progress-title">
 							<img src="/Files/assets/images/rarity/rarity-legendary-small.png" />
 							<span>In {{legendaryTimer}} packs</span>
@@ -117,8 +117,8 @@ declare var overwolf: any;
 							<div class="progress-bar-filled" [style.width.%]="legendaryFill">
 							</div>	
 						</div>
-						<button class="browse-set-button">Browse Set</button>
 					</div>
+					<button class="browse-set-button">Browse Set</button>
 				</div>
 			</div>
 		</div>
