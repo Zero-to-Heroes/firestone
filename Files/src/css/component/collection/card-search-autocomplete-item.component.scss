@@ -2,18 +2,15 @@
 @import '../../global/fonts';
 
 .card-search-autocomplete {
-    
-    li {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        height: 30px;
-        padding-left: 12px;
-    
-        &:hover {
-            // $grey03
-            background: rgba(120,95,107,0.4);
-        }
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 30px;
+    padding-left: 12px;
+
+    &:hover {
+        // $grey03
+        background: rgba(120,95,107,0.4);
     }
     
     span {
