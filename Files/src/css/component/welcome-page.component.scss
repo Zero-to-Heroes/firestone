@@ -99,7 +99,20 @@ body {
 
 		    .controls {
 		    	height: 30px;
-		    	display: flex;
+				display: flex;
+				
+				button {
+					color: #D9C3AB;
+
+					&:hover {
+						background-color: #472406;
+					}
+
+					&.close-button:hover {
+						color: #2F0D0D;
+						background-color: #D9C3AB;
+					}
+				}
 		    }
 	    }
 
