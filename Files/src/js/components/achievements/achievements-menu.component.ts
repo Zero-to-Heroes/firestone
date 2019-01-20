@@ -18,7 +18,9 @@ declare var overwolf: any;
 			<ul *ngSwitchCase="'menu'" class="menu-selection-achievements menu-selection">
 				<li>Categories</li>
 			</ul>
-			<ul *ngSwitchCase="'breadcrumbs'" class="menu-selection-achievements breadcrumbs">
+			<ul *ngSwitchCase="'breadcrumbs'" 
+					class="menu-selection-achievements breadcrumbs"
+					[ngClass]="{'big': !selectedAchievementSet}">
 				<li (click)="goToAchievementsCategoriesView()">Categories</li>
 				<li class="separator">></li>
 				<li (click)="goToAchievementsCategoryView()">{{selectedCategory.name}}</li>

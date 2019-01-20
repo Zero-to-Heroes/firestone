@@ -36,5 +36,29 @@
 			margin-left: 6px;
 			margin-right: 6px;
 		}
+
+		&.big {
+			margin-top: 0;
+			margin-bottom: 14px;
+			border-bottom: 1px solid #4B3052;
+			padding-bottom: 10px;
+			width: 100%;
+
+			li {
+				font-size: 16px;
+
+				&:hover {
+					color: #A276AF;
+				}
+
+				&:last-of-type {
+					color: #FFB948;
+
+					&:hover {
+						color: #FFB948;
+					}
+				}
+			}
+		}
 	}
 }
