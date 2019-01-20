@@ -218,6 +218,8 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
     async deleteMedia(thumbnail: ThumbnailInfo) {
         console.log('deleting media', thumbnail);
+        this.showDeleteNotification = false;
+        this.cdr.detectChanges();
         const result: boolean = thumbnail.isDeleted || await this.io.deleteFile(thumbnail.videoPath);
         if (result) {
             thumbnail.inDeletion = true;
@@ -230,10 +232,6 @@ export class AchievementRecordingsComponent implements AfterViewInit {
                 this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
                 this.cdr.detectChanges();
             }, 1500);
-            setTimeout(() => {
-                this.showDeleteNotification = false;
-                this.cdr.detectChanges();
-            }, 2500);
         }
     }
 
