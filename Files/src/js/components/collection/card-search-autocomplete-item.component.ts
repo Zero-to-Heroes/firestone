@@ -29,7 +29,7 @@ export class CardSearchAutocompleteItemComponent implements OnInit {
 
 	ngOnInit() {
 		// console.log('init autocomplete item', this.fullString, this.searchString);
-		let searchIndex = this.fullString.toLowerCase().indexOf(this.searchString);
+		let searchIndex = this.fullString.toLowerCase().indexOf(this.searchString.toLowerCase());
 		let searchEnd = searchIndex + this.searchString.length;
 		// console.log(searchIndex, searchEnd, this.fullString.length);
 
