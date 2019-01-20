@@ -4,7 +4,7 @@
 	"meta":{
 		"name":"Firestone",
 		"author":"Sébastien Tromp",
-		"version":"2.0.14",
+		"version":"2.0.15",
 		"minimum-overwolf-version":"0.116.3.49",
 		"description":"A Hearthtone companion to have in-game the information you want to know about your card collection and more",
 		"dock_button_title": "Firestone",
@@ -69,9 +69,9 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-		        "size": {"width": 660, "height": 600},
-		        "min_size": {"width": 660, "height": 600},
-		        "max_size": {"width": 660, "height": 600}
+		        "size": {"width": 680, "height": 620},
+		        "min_size": {"width": 680, "height": 620},
+		        "max_size": {"width": 680, "height": 620}
 			},
 			"WelcomeWindow": {
 				"file": "Files/html/welcome.html",
