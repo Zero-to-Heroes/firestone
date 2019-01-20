@@ -36,6 +36,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
                 
                     .tooltip-arrow {
                         position: absolute;
