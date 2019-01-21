@@ -59,6 +59,10 @@
             white-space: nowrap;
             cursor: default;
             margin: 0;
+
+            .number-of-times {
+                font-weight: 600;
+            }
         }
     
         &.bottom {

@@ -89,7 +89,7 @@ export class DungeonRunProgressionSetProvider extends SetProvider {
                 iconSvgSymbol: this.conf.icon(`${achv.type}_${i}`),
                 text(showTimes: boolean = false): string {
                     const times = showTimes ? `${completions} times` : ``;
-                    return `You cleared Dungeon Run's round ${i + 1} ${times}`;
+                    return `You cleared Dungeon Run's round ${i + 1} <span class="number-of-times">${times}</span>`;
                 },
             } as CompletionStep);
         }

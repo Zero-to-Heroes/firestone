@@ -104,7 +104,7 @@ export class MonsterHuntProgressionSetProvider extends SetProvider {
                     if (achievement.id === 'monster_hunt_final_boss') {
                         return `You defeated Hagatha the Witch ${times}`;
                     }
-                    return `You cleared Dungeon Run's round ${i + 1} ${times}`;
+                    return `You cleared Dungeon Run's round ${i + 1} <span class="number-of-times">${times}</span>`;
                 },
             } as CompletionStep);
         }
