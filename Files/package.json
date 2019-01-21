@@ -24,6 +24,7 @@
     "angular2-indexeddb": "1.2.2",
     "angular2-notifications": "1.0.2",
     "lodash": "4.17.10",
+    "ng-inline-svg": "8.3.0",
     "ng-select": "1.0.0",
     "rxjs": "6.0.0",
     "rxjs-compat": "6.2.1",
@@ -34,7 +35,7 @@
   "devDependencies": {
     "@angular/compiler-cli": "6.0.0",
     "@artonge/webpack": "6.0.1",
-    "@types/core-js": "^2.5.0",
+    "@types/core-js": "2.5.0",
     "@types/lodash": "4.14.112",
     "@types/node": "9.6.7",
     "@types/webpack": "4.1.4",
