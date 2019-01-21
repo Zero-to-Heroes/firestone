@@ -10,12 +10,12 @@ import { AchievementConfService } from "../achievement-conf.service";
 export class DungeonRunTreasureSetProvider extends SetProvider {
 
     private cardsService: AllCardsService;
-    private categoryId: string;
+    private logoName: string;
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
         super('dungeon_run_treasure', 'Treasures', ['dungeon_run_treasure_play']);
-        this.categoryId = 'dungeon_run_treasure';
+        this.logoName = 'achievements_treasure';
         this.cardsService = cardsService;
         this.conf = conf;
     }
@@ -24,7 +24,7 @@ export class DungeonRunTreasureSetProvider extends SetProvider {
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
         const fullAchievements = this.visualAchievements(allAchievements, completedAchievemnts);
         const filterOptions: ReadonlyArray<FilterOption> = this.filterOptions(); 
-        return new AchievementSet(this.id, this.displayName, this.categoryId, fullAchievements, filterOptions);
+        return new AchievementSet(this.id, this.displayName, this.logoName, fullAchievements, filterOptions);
     }
 
     protected filterOptions(): ReadonlyArray<FilterOption> {

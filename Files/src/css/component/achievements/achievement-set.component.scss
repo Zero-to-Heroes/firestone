@@ -26,10 +26,12 @@
 
 	.logo {
     	height: 100px;
-    	width: 100px;
+    	width: 101px;
 		flex-grow: 0;
 		flex-shrink: 0;
 		margin-bottom: 5px;
+		color: #FFB948;
+		--icon-color: #FFB948;
 	}
 
 	achievement-progress-bar {
@@ -39,6 +41,10 @@
 	&.empty {
 		.set-name {
 			color: #CB9FD7;
+		}
+		.logo {
+			color: #CB9FD7;
+			--icon-color: #CB9FD7;
 		}
 		::ng-deep achievement-progress-bar .achieved {
 			color: #A276AF;

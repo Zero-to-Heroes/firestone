@@ -10,12 +10,12 @@ import { AchievementConfService } from "../achievement-conf.service";
 export class MonsterHuntPassivesSetProvider extends SetProvider {
 
     private cardsService: AllCardsService;
-    private categoryId: string;
+    private logoName: string;
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
         super('monster_hunt_passive', 'Passives', ['monster_hunt_passive_play']);
-        this.categoryId = 'monster_hunt_passive';
+        this.logoName = 'achievements_passive';
         this.cardsService = cardsService;
         this.conf = conf;
     }
@@ -24,7 +24,7 @@ export class MonsterHuntPassivesSetProvider extends SetProvider {
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
         const fullAchievements = this.visualAchievements(allAchievements, completedAchievemnts);
         const filterOptions: ReadonlyArray<FilterOption> = this.filterOptions(); 
-        return new AchievementSet(this.id, this.displayName, this.categoryId, fullAchievements, filterOptions);
+        return new AchievementSet(this.id, this.displayName, this.logoName, fullAchievements, filterOptions);
     }
 
     protected filterOptions(): ReadonlyArray<FilterOption> {

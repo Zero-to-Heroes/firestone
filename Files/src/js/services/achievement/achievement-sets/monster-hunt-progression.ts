@@ -10,12 +10,12 @@ import { AchievementConfService } from "../achievement-conf.service";
 export class MonsterHuntProgressionSetProvider extends SetProvider {
 
     private cardsService: AllCardsService;
-    private categoryId: string;
+    private logoName: string;
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
         super('monster_hunt_progression', 'Progression', ['monster_hunt_progression', 'monster_hunt_final_boss']);
-        this.categoryId = 'monster_hunt_progression';
+        this.logoName = 'achievements_progression';
         this.cardsService = cardsService;
         this.conf = conf;
     }
@@ -24,7 +24,7 @@ export class MonsterHuntProgressionSetProvider extends SetProvider {
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
         const fullAchievements = this.visualAchievements(allAchievements, completedAchievemnts);
         const filterOptions: ReadonlyArray<FilterOption> = this.filterOptions(); 
-        return new AchievementSet(this.id, this.displayName, this.categoryId, fullAchievements, filterOptions);
+        return new AchievementSet(this.id, this.displayName, this.logoName, fullAchievements, filterOptions);
     }
 
     protected filterOptions(): ReadonlyArray<FilterOption> {

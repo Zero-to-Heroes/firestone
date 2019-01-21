@@ -7,7 +7,7 @@ export class DungeonRunBossSetProvider extends AbstractBossSetProvider {
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
         super(
             'dungeon_run_boss', 
-            'dungeon_run_category',
+            'achievements_boss',
             'Bosses', 
             ['dungeon_run_boss_encounter', 'dungeon_run_boss_victory'],
             cardsService,

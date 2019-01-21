@@ -10,7 +10,7 @@ import { AchievementConfService } from "../achievement-conf.service";
 export abstract class AbstractBossSetProvider extends SetProvider {
 
     private cardsService: AllCardsService;
-    private categoryId: string;
+    private logoName: string;
     private conf: AchievementConfService;
 
     constructor(
@@ -20,7 +20,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
             cardsService: AllCardsService, 
             conf: AchievementConfService) {
         super(id, displayName, types);
-        this.categoryId = categoryId;
+        this.logoName = categoryId;
         this.cardsService = cardsService;
         this.conf = conf;
     }
@@ -29,7 +29,7 @@ export abstract class AbstractBossSetProvider extends SetProvider {
     public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
         const fullAchievements = this.visualAchievements(allAchievements, completedAchievemnts);
         const filterOptions: ReadonlyArray<FilterOption> = this.filterOptions();
-        return new AchievementSet(this.id, this.displayName, this.categoryId, fullAchievements, filterOptions);
+        return new AchievementSet(this.id, this.displayName, this.logoName, fullAchievements, filterOptions);
     }
 
     protected filterOptions(): ReadonlyArray<FilterOption> {
