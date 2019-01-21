@@ -120,7 +120,7 @@ export class AchievementsRepository {
 			new AchievementCategory(
 				'dungeon_run',
 				'Dungeon Run',
-				'',
+				'dungeon_run',
 				[
 					dungeonRunProgressionProvider.id,
 					dungeonRunBossProvider.id,
@@ -131,7 +131,7 @@ export class AchievementsRepository {
 			new AchievementCategory(
 				'monster_hunt',
 				'Monster Hunt',
-				'',
+				'monster_hunt',
 				[
 					monsterHuntProgressProvider.id,
 					monsterHuntBossProvider.id,
@@ -142,7 +142,7 @@ export class AchievementsRepository {
 			new AchievementCategory(
 				'rumble_run',
 				'Rumble Run',
-				'',
+				'rumble_run',
 				[
 					rumbleRunProgressionProvider.id,
 					rumbleRunShrinePlayProvider.id,

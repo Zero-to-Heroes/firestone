@@ -2,6 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpModule }    from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
 import { SelectModule } from 'ng-select';
@@ -9,6 +10,7 @@ import { VgCoreModule } from 'videogular2/core';
 import { VgControlsModule } from 'videogular2/controls';
 import { VgOverlayPlayModule } from 'videogular2/overlay-play';
 import { VgBufferingModule } from 'videogular2/buffering';
+import { InlineSVGModule } from 'ng-inline-svg';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -79,6 +81,8 @@ import { AchievementsGlobalCategoryComponent } from '../../components/achievemen
 	imports: [
 		BrowserModule,
 		HttpModule,
+		HttpClientModule,
+		InlineSVGModule.forRoot(),
         BrowserAnimationsModule,
 		FormsModule,
 		ReactiveFormsModule,

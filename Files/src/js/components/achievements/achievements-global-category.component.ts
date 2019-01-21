@@ -35,7 +35,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 				</i>
 			</div>
 			<span class="text category-name">{{displayName}}</span>
-			<i class="logo" [innerHTML]="svgTemplate"></i>
+			<div class="logo" [inlineSVG]="categoryIcon"></div>
 			<achievement-progress-bar [achievements]="allAchievements"></achievement-progress-bar>
 		</div>
 	`,
@@ -46,7 +46,8 @@ export class AchievementsGlobalCategoryComponent {
 	_category: VisualAchievementCategory;
 	allAchievements: ReadonlyArray<VisualAchievement>;
 	displayName: string;
-	svgTemplate: SafeHtml;
+	categoryIcon: string;
+	// svgTemplate: SafeHtml;
 	complete: boolean = false;
 	empty: boolean = false;
 
@@ -56,11 +57,12 @@ export class AchievementsGlobalCategoryComponent {
 
 	@Input('category') set category(category: VisualAchievementCategory) {
 		this._category = category;
-		this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
-			<svg>
-				<use xlink:href="/Files/assets/svg/sprite.svg#${category.icon}"/>
-			</svg>`
-		);
+		this.categoryIcon = `/Files/assets/svg/achievements/categories/${category.icon}.svg`;
+		// this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
+		// 	<svg>
+		// 		<use xlink:href="/Files/assets/svg/achievements/categories/${category.icon}.svg"/>
+		// 	</svg>`
+		// );
 		this.displayName = category.name;
 		this.allAchievements = category.achievementSets
 				.map((set) => set.achievements)
