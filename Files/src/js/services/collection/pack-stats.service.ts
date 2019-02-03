@@ -16,6 +16,7 @@ export class PackStatsService {
 
     private userId: string;
     private userMachineId: string;
+    private username: string;
 
 	constructor(private events: Events, private allCards: AllCardsService, private http: Http) {
         this.events.on(Events.NEW_PACK).subscribe(event => this.publishPackStat(event));
@@ -26,8 +27,10 @@ export class PackStatsService {
 
     private retrieveUserInfo() {
         overwolf.profile.getCurrentUser((user) => {
+            console.log('retrieved user', user);
             this.userId = user.userId;
             this.userMachineId = user.machineId;
+            this.username = user.username;
         });
     }
     
@@ -38,6 +41,7 @@ export class PackStatsService {
             "creationDate": new Date(),
             "userId": this.userId,
             "userMachineId": this.userMachineId,
+            "userName": this.username,
             "setId": setId
         };
         for (let i = 0; i < cards.length; i++) {
@@ -56,6 +60,7 @@ export class PackStatsService {
             "creationDate": new Date(),
             "userId": this.userId,
             "userMachineId": this.userMachineId,
+            "userName": this.username,
             "cardId": card.id,
             "type": type.toLowerCase(),
             "rarity": this.allCards.getCard(card.id).rarity.toLowerCase(),

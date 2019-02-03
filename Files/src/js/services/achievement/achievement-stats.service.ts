@@ -17,6 +17,7 @@ export class AchievementStatsService {
 
     private userId: string;
     private userMachineId: string;
+    private username: string;
 
 	constructor(
         private events: Events,
@@ -30,6 +31,7 @@ export class AchievementStatsService {
         overwolf.profile.getCurrentUser((user) => {
             this.userId = user.userId;
             this.userMachineId = user.machineId;
+            this.username = user.username;
         });
     }
     
@@ -44,6 +46,7 @@ export class AchievementStatsService {
             "creationDate": new Date(),
             "userId": this.userId,
             "userMachineId": this.userMachineId,
+            "userName": this.username,
             "achievementId": achievement.id,
             "name": achievement.name,
             "type": achievement.type,
