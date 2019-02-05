@@ -53,11 +53,10 @@ export class GenericIndexedDbService {
 		console.log('[storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-generic-db', 1);
 		this.db.openDatabase(1, (evt) => {
-			console.log('upgrading db', evt);
-
+			console.log('[storage] upgrading db', evt);
 			if (evt.oldVersion < 1) {
 				console.log('[storage] upgrade to version 1');
-				let objectStore = evt.currentTarget.result.createObjectStore(
+				evt.currentTarget.result.createObjectStore(
 					'user-preferences',
 					{ keyPath: "id", autoIncrement: false });
 			}
@@ -68,7 +67,7 @@ export class GenericIndexedDbService {
 				this.dbInit = true;
 			},
 			(error) => {
-				console.log('[storage] error in openDatabase', error);
+				console.error('[storage] error in openDatabase', error);
 			}
 		);
 	}
