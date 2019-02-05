@@ -22,7 +22,7 @@ export class LogListenerService {
 	fileInitiallyPresent: boolean;
 	logsLocation: string;
 
-	constructor(private plugin: SimpleIOService) {
+	constructor(private io: SimpleIOService) {
 
 	}
 
@@ -80,22 +80,19 @@ export class LogListenerService {
 		this.listenOnFileCreation(logsLocation);
 	}
 
-	listenOnFileCreation(logsLocation: string): void {
+	async listenOnFileCreation(logsLocation: string) {
 		console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
-
-		this.plugin.get().fileExists(logsLocation, (status: boolean, message: string) => {
-			if (status === true) {
-				console.log('fileExists?', status, message);
-				this.listenOnFileUpdate(logsLocation);
-			}
-			else {
-				this.fileInitiallyPresent = false;
-				setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
-			}
-		});
+		const fileExists = await this.io.fileExists(logsLocation);
+		if (fileExists) {
+			this.listenOnFileUpdate(logsLocation);
+		}
+		else {
+			this.fileInitiallyPresent = false;
+			setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
+		}
 	}
 
-	listenOnFileUpdate(logsLocation: string): void {
+	async listenOnFileUpdate(logsLocation: string) {
 		let fileIdentifier = this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
@@ -118,16 +115,17 @@ export class LogListenerService {
 				// This happens frequently when listening to several files at the same time, don't do anything about it
 			}
 		};
-		this.plugin.get().onFileListenerChanged.addListener(handler);
+		const plugin = await this.io.get();
+		plugin.onFileListenerChanged.addListener(handler);
 
-		this.plugin.get().listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
+		plugin.listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
 					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent, initData);
 					this.subject.next(Events.STREAMING_LOG_FILE);
 				}
 				else {
-					console.warn("something bad happened with: " + id);
+					console.error('[log-listener] [' + this.logFile + '] something bad happened with: ', id);
 				}
 			}
 		});

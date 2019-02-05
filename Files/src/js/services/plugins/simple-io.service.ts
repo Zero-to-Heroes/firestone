@@ -25,44 +25,47 @@ export class SimpleIOService {
 		});
 	}
 
-	public get() {
-		return this.simpleIOPlugin.get();
-	}
-
-	public fileExists(filePath: string): Promise<boolean> {
-		// await this.waitForInit();
+	public async fileExists(filePath: string): Promise<boolean> {
+		await this.waitForInit();
+		const plugin = await this.get();
 		return new Promise<boolean>((resolve) => {
-			this.get().fileExists(filePath, (result, message) => {
+			plugin.fileExists(filePath, (result, message) => {
 				console.log('file exists?', filePath, result, message);
 				resolve(result);
 			});
 		});
 	}
 
-	public deleteFile(filePath: string): Promise<boolean> {
-		// await this.waitForInit();
+	public async deleteFile(filePath: string): Promise<boolean> {
+		await this.waitForInit();
+		const plugin = await this.get();
 		return new Promise<boolean>((resolve) => {
-			this.get().deleteFile(filePath, (result, message) => {
+			plugin.deleteFile(filePath, (result, message) => {
 				console.log('deletion completed', filePath, result, message);
 				resolve(result);
 			});
 		});
 	}
 
-	// private waitForInit(): Promise<void> {
-	// 	return new Promise<void>((resolve) => {
-	// 		const waitInit = () => {
-	// 			// console.log('Promise waiting for io-plugin');
-	// 			if (this.initialized) {
-	// 				// console.log('wait for io-plugin init complete');
-	// 				resolve();
-	// 			} 
-	// 			else {
-	// 				// console.log('waiting for db init');
-	// 				setTimeout(() => waitInit(), 50);
-	// 			}
-	// 		}
-	// 		waitInit();
-	// 	});
-	// }
+	public async get() {
+		await this.waitForInit();
+		return this.simpleIOPlugin.get();
+	}
+
+	private waitForInit(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			const dbWait = () => {
+				// console.log('Promise waiting for db');
+				if (this.initialized) {
+					// console.log('wait for db init complete');
+					resolve();
+				} 
+				else {
+					// console.log('waiting for db init');
+					setTimeout(() => dbWait(), 50);
+				}
+			}
+			dbWait();
+		});
+	}
 }
