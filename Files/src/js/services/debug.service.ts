@@ -9,7 +9,7 @@ export class DebugService {
 		let debugMode = true;
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
-		console.error = this.override(console.error, debugMode);
+		// console.error = this.override(console.error, debugMode);
 
 		// this.addTestCommands();
 	}
