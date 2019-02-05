@@ -10,27 +10,21 @@ export class CardHistoryStorageService {
 	constructor(private indexedDb: IndexedDbService) {
 	}
 
-	public loadAll(callback: Function, limit: number) {
-		this.indexedDb.getAll(
-			(result) => {
-				callback(result);
-			},
-			limit);
+	public async loadAll(limit: number): Promise<CardHistory[]> {
+		return this.indexedDb.getAll(limit);
 	}
 
-	public countHistory(callback: Function) {
-		this.indexedDb.countHistory(callback);
+	public async countHistory(): Promise<number> {
+		return this.indexedDb.countHistory();
 	}
 
-	public newCard(history: CardHistory) {
-		this.indexedDb.save(history, (result) => {
-			console.log('new card history saved', result);
-		})
+	public async newCard(history: CardHistory) {
+		const result = await this.indexedDb.save(history);
+		console.log('new card history saved', result);
 	}
 
-	public newDust(history: CardHistory) {
-		this.indexedDb.save(history, (result) => {
-			console.log('new dust history saved', result);
-		})
+	public async newDust(history: CardHistory) {
+		const result = await this.indexedDb.save(history)
+		console.log('new dust history saved', result);
 	}
 }

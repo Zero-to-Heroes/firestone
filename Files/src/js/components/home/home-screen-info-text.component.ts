@@ -67,7 +67,7 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 	}
 
 	private refreshContents() {
-		overwolf.games.getRunningGameInfo((res: any) => {
+		overwolf.games.getRunningGameInfo(async (res: any) => {
 			console.log('detecting running game in welcome window', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 				this.status = "Firestone now follows your Hearthstone session.";
@@ -78,20 +78,19 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 			}
 			else {
 				this.status = "No Hearthstone session detected.";
-				this.collectionManager.getCollection((collection) => {
-					if (!collection || collection.length == 0) {
-						this.status = "Please launch Hearthstone to synchronize your collection.";
-						this.statusDetails = null;
-						this.ftue = true;
-					}
-					else {
-						this.statusDetails = "Choose an ability:";
-					}
-					this.dataLoaded = true;
-					if (!(<ViewRef>this.cdr).destroyed) {
-						this.cdr.detectChanges();
-					}
-				})
+				const collection = await this.collectionManager.getCollection();
+				if (!collection || collection.length == 0) {
+					this.status = "Please launch Hearthstone to synchronize your collection.";
+					this.statusDetails = null;
+					this.ftue = true;
+				}
+				else {
+					this.statusDetails = "Choose an ability:";
+				}
+				this.dataLoaded = true;
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 		});
 	}

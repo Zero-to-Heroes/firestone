@@ -124,28 +124,27 @@ export class CardSearchComponent implements AfterViewInit {
 		this.searchForm.setValue('');
 	}
 
-	private updateSearchResults() {
+	private async updateSearchResults() {
 		this.searchResults = this.cards.searchCards(this.searchString);
 		console.log('raw search results', this.searchResults);
-		this.collectionManager.getCollection((collection: Card[]) => {
-			console.log('retrieved collection', collection);
-			this.searchResults = this.searchResults.map((card) => {
-				let collectionCard: Card = this.findCollectionCard(collection, card);
-				return new SetCard(
-					card.id, 
-					card.name, 
-					card.cardClass,
-					card.rarity, 
-					card.cost,
-					collectionCard ? collectionCard.count : 0, 
-					collectionCard ? collectionCard.premiumCount : 0)
-			});
-			console.log('Updated search results', this.searchResults);
-			this.showSearchResults = this.searchResults.length > 0;
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-		})
+		const collection = await this.collectionManager.getCollection();
+		console.log('retrieved collection', collection);
+		this.searchResults = this.searchResults.map((card) => {
+			let collectionCard: Card = this.findCollectionCard(collection, card);
+			return new SetCard(
+				card.id, 
+				card.name, 
+				card.cardClass,
+				card.rarity, 
+				card.cost,
+				collectionCard ? collectionCard.count : 0, 
+				collectionCard ? collectionCard.premiumCount : 0)
+		});
+		console.log('Updated search results', this.searchResults);
+		this.showSearchResults = this.searchResults.length > 0;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private findCollectionCard(collection: Card[], card: SetCard): Card {

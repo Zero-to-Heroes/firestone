@@ -19,188 +19,135 @@ export class IndexedDbService {
 		this.init();
 	}
 
-	public saveCollection(collection: Card[], callback: Function) {
-		// console.log('saving collection');
+	public async saveCollection(collection: Card[]): Promise<Card[]> {
+		await this.waitForDbInit();
 		let dbCollection = {
 			id: 1,
 			cards: collection
+		};
+		try {
+			await this.db.update('collection', dbCollection);
+			return collection;
 		}
-		// console.log('saving collection', dbCollection);
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.saveCollection(collection, callback);
-			}, 50);
-			return;
+		catch (e) {
+			console.error('[collection] [storage] could not update collection', e);
 		}
-
-		// console.log('updating collection');
-		this.db.update('collection', dbCollection).then(
-			(history) => {
-				// console.log('callback from save collection')
-				callback(collection);
-			},
-			(error) => {
-				console.error('could not update collection', error);
-			}
-		);
 	}
 
-	public getCollection(callback: Function) {
-		// console.log('retrieving collection');
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.getCollection(callback);
-			}, 50);
-			return;
+	public async getCollection(): Promise<Card[]> {
+		await this.waitForDbInit();
+		try {
+			const collection = await this.db.getAll('collection', null);
+			return collection[0] ? collection[0].cards : [];
 		}
-
-		this.db.getAll('collection', null)
-			.then((collection) => {
-				// console.log('loaded collection', collection);
-				callback(collection[0] ? collection[0].cards : []);
-			})
+		catch (e) {
+			console.error('[collection] [storage] could not get collection', e);
+		}
 	}
 
-	public save(history: CardHistory, callback: Function) {
-		console.log('[collection] [storage] saving history', history);
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.save(history, callback);
-			}, 50);
-			return;
+	public async save(history: CardHistory): Promise<CardHistory> {
+		await this.waitForDbInit();
+		try {
+			const result = await this.db.add('card-history', history);
+			return result;
 		}
-
-		this.db.add('card-history', history).then(
-			(history) => {
-				callback(history);
-			},
-			(error) => {
-				console.log(error);
-			}
-		);
+		catch (e) {
+			console.error('[collection] [storage] error while saving history', e);
+		}
 	}
 
-    public saveNewPack(newPack: PackHistory, callback: Function): any {
-		console.log('[collection] [storage] saving pack history', newPack);
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.saveNewPack(newPack, callback);
-			}, 50);
-			return;
+    public async saveNewPack(newPack: PackHistory): Promise<PackHistory> {
+		await this.waitForDbInit();
+		try {
+			console.log('[collection] [storage] saving pack history', newPack);
+			const history = await this.db.add('pack-history', newPack);
+			return history;
 		}
-
-		this.db.add('pack-history', newPack).then(
-			(history) => {
-				callback(history);
-			},
-			(error) => {
-				console.log('[collection] [storage] error', error);
-			}
-		);
+		catch (e) {
+			console.error('[collection] [storage] error while saving new pack', e);
+		}
 	}
 	
-    public getPityTimer(setId: any): Promise<PityTimer> {
-		return new Promise<PityTimer>((resolve) => {
-			this.waitForDbInit().then(() => {
-				this.db.getByKey('pity-timer', setId).then((pityTimer: PityTimer) => {
-					resolve(pityTimer);
-				});
-			});
-		});
-	}
-	
-    public getAllPityTimers(): Promise<PityTimer[]> {
-		// console.log('getting all pity timers');
-		return new Promise<PityTimer[]>((resolve) => {
-			// console.log('in getAllPityTimers promise');
-			this.waitForDbInit().then(() => {
-				// console.log('fetching all pity timers from db');
-				this.db.getAll('pity-timer', null).then((pityTimers: PityTimer[]) => {
-					// console.log('fetched pity timers', pityTimers);
-					resolve(pityTimers);
-				});
-			});
-		});
-	}
-	
-    public savePityTimer(pityTimer: PityTimer, callback: Function) {
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.savePityTimer(pityTimer, callback);
-			}, 50);
-			return;
+    public async getPityTimer(setId: any): Promise<PityTimer> {
+		await this.waitForDbInit();
+		try {
+			const pityTimer = await this.db.getByKey('pity-timer', setId);
+			return pityTimer;
 		}
-		this.db.update('pity-timer', pityTimer).then(
-			(history) => {
-				callback(pityTimer);
-			},
-			(error) => {
-				console.error('[collection] [storage] could not update pity timer', pityTimer, error);
-			}
-		);
+		catch (e) {
+			console.error('[collection] [storage] could not get pity timer', e);
+		}
+	}
+	
+    public async getAllPityTimers(): Promise<PityTimer[]> {
+		await this.waitForDbInit();
+		try {
+			const pityTimers = await this.db.getAll('pity-timer', null);
+			return pityTimers;
+		}
+		catch (e) {
+			console.error('[collection] [storage] could not get pity timers', e);
+		}
+	}
+	
+    public async savePityTimer(pityTimer: PityTimer): Promise<PityTimer> {
+		await this.waitForDbInit();
+		try {
+			await this.db.update('pity-timer', pityTimer);
+			return pityTimer;
+		}
+		catch (e) {
+			console.error('[collection] [storage] could not update pity timer', pityTimer, e);
+		}
     }
 
-	public countHistory(callback: Function) {
-		// console.log('counting history');
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.countHistory(callback);
-			}, 50);
-			return;
-		}
+	public async countHistory(): Promise<number> {
+		await this.waitForDbInit();
+		return new Promise<number>((resolve) => {
+			let transaction = this.db.dbWrapper.createTransaction({ storeName: 'card-history',
+				dbMode: "readonly",
+				error: (e: Event) => {
+					console.error('[collection] [storage] counld not create transaction', e);
+				},
+				complete: (e: Event) => {
+				}
+			});
+			let objectStore: IDBObjectStore = transaction.objectStore('card-history');
+			let request = objectStore.count();
 
-		let transaction = this.db.dbWrapper.createTransaction({ storeName: 'card-history',
-			dbMode: "readonly",
-			error: (e: Event) => {
-				console.error('[collection] [storage] counld not create transaction', e);
-			},
-			complete: (e: Event) => {
-			}
+			request.onerror = function (e) {
+				console.error('[collection] [storage] counld not count', e);
+			};
+
+			request.onsuccess = function (evt: any) {
+				// console.log('could count', evt);
+				resolve(evt.target.result);
+			};
 		});
-		let objectStore: IDBObjectStore = transaction.objectStore('card-history');
-		let request = objectStore.count();
-
-		request.onerror = function (e) {
-			console.error('[collection] [storage] counld not count', e);
-		};
-
-		request.onsuccess = function (evt: any) {
-			// console.log('could count', evt);
-			callback(evt.target.result);
-		};
-
 	}
 
-	public getAll(callback: Function, limit: number) {
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[collection] [storage] db isnt initialized, waiting...');
-				this.getAll(callback, limit);
-			}, 50);
-			return;
-		}
-
-		if (limit == 0) {
-			this.db.getAll('card-history', null, {indexName: 'creationTimestamp', order: 'desc'})
-				.then((histories) => {
-					// console.log('loaded history', limit, histories);
-					callback(histories);
-				});
-			return;
-		}
-
-		this.getAllWithLimit('card-history', limit, {indexName: 'creationTimestamp', order: 'desc'}).then(
-			(histories) => {
-				// console.log('loaded history', limit, histories);
-				callback(histories);
+	public async getAll(limit: number): Promise<CardHistory[]> {
+		await this.waitForDbInit();
+		return new Promise<CardHistory[]>((resolve) => {
+			if (limit == 0) {
+				this.db.getAll('card-history', null, {indexName: 'creationTimestamp', order: 'desc'}).then(
+					(histories) => {
+						resolve(histories);
+					},
+					(error) => {
+						console.error('[collection] [storage] could not get all card history', error);
+					});
+				return;
 			}
-		)
+			this.getAllWithLimit('card-history', limit, {indexName: 'creationTimestamp', order: 'desc'}).then(
+				(histories) => {
+					resolve(histories);
+				},
+				(error) => {
+					console.error('[collection] [storage] could not get all card history with limit', error, limit);
+				}
+			)
+		});
 	}
 
 	private init() {
@@ -208,7 +155,6 @@ export class IndexedDbService {
 		this.db = new AngularIndexedDB('hs-collection-db', 9);
 		this.db.openDatabase(9, (evt) => {
 			console.log('[collection] [storage] upgrading db', evt);
-
 			if (evt.oldVersion < 1) {
 				console.log('[collection] [storage] upgrade to version 1');
 				let objectStore = evt.currentTarget.result.createObjectStore(
@@ -219,7 +165,7 @@ export class IndexedDbService {
 			}
 			if (evt.oldVersion < 2) {
 				console.log('[collection] [storage] upgrade to version 2');
-				let collectionStore = evt.currentTarget.result.createObjectStore(
+				evt.currentTarget.result.createObjectStore(
 					'collection',
 					{ keyPath: "id", autoIncrement: false });
 			}
@@ -242,7 +188,7 @@ export class IndexedDbService {
 				this.dbInit = true;
 			},
 			(error) => {
-				console.log('[collection] [storage] error in openDatabase', error);
+				console.error('[collection] [storage] error in openDatabase', error);
 			}
 		);
 	}
@@ -250,13 +196,10 @@ export class IndexedDbService {
 	private waitForDbInit(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			const dbWait = () => {
-				// console.log('Promise waiting for db');
 				if (this.dbInit) {
-					// console.log('wait for db init complete');
 					resolve();
 				} 
 				else {
-					// console.log('waiting for db init');
 					setTimeout(() => dbWait(), 50);
 				}
 			}

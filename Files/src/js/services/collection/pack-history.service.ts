@@ -49,28 +49,25 @@ export class PackHistoryService {
         return new PityTimer(setId, this.DEFAULT_EPIC_PITY_TIMER, this.DEFAULT_LEGENDARY_PITY_TIMER);
     }
     
-    private addPackHistory(event: any): any {
+    private async addPackHistory(event: any) {
         const newPack: PackHistory = new PackHistory(event.data[0], event.data[1]);
         console.log('adding pack history', newPack);
-        this.indexedDb.saveNewPack(newPack, (result) => {
-			console.log('new pack history saved', result);
-		})
+        const result = await this.indexedDb.saveNewPack(newPack);
+        console.log('new pack history saved', result);
     }
     
-    private updatePityTimer(event: any): any {
+    private async updatePityTimer(event: any) {
         console.log('updatePityTimer', event);
         const setId = event.data[0];
-        this.indexedDb.getPityTimer(setId).then((pityTimer) => {
-            console.log('retrieved pity timer', setId, pityTimer);
-            if (!pityTimer) {
-                pityTimer = new PityTimer(setId, this.DEFAULT_EPIC_PITY_TIMER, this.DEFAULT_LEGENDARY_PITY_TIMER);
-            }
-            const newPityTimer = this.buildNewPityTimer(pityTimer, event.data[1]);
-            console.log('built new pity timer to save', newPityTimer);
-            this.indexedDb.savePityTimer(newPityTimer, (result) => {
-                console.log('Updated pity timer', result);
-            });
-        });
+        let pityTimer = await this.indexedDb.getPityTimer(setId);
+        console.log('retrieved pity timer', setId, pityTimer);
+        if (!pityTimer) {
+            pityTimer = new PityTimer(setId, this.DEFAULT_EPIC_PITY_TIMER, this.DEFAULT_LEGENDARY_PITY_TIMER);
+        }
+        const newPityTimer = this.buildNewPityTimer(pityTimer, event.data[1]);
+        console.log('built new pity timer to save', newPityTimer);
+        const result = await this.indexedDb.savePityTimer(newPityTimer);
+        console.log('Updated pity timer', result);
     }
 
     private buildNewPityTimer(pityTimer: PityTimer, cards: any[]): any {

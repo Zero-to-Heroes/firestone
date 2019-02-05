@@ -100,42 +100,33 @@ export class CardHistoryComponent implements AfterViewInit {
 		this.refreshContents();
 	}
 
-	refreshContents() {
+	async refreshContents() {
 		if (this.refreshing) {
 			return;
 		}
 		this.refreshing = true;
 		console.log('request to load');
-		this.storage.countHistory((historySize) => {
-			this.totalHistoryLength = historySize;
-		})
-
-		this.storage.loadAll(
-			(result: CardHistory[]) => {
-				// console.log('loaded history', result);
-				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
-				this.shownHistory = this.cardHistory;
-				this.refreshing = false;
-				this.filterView();
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-			},
-			this.limit);
+		this.totalHistoryLength = await this.storage.countHistory();
+		const result = await this.storage.loadAll(this.limit);
+		// console.log('loaded history', result);
+		this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
+		this.shownHistory = this.cardHistory;
+		this.refreshing = false;
+		this.filterView();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
-	loadMore() {
+	async loadMore() {
 		console.log('request to load more');
-		this.storage.loadAll(
-			(result: CardHistory[]) => {
-				// console.log('loaded history', result);
-				this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
-				this.shownHistory = this.cardHistory;
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-			},
-			0);
+		const result = await this.storage.loadAll(0);
+		// console.log('loaded history', result);
+		this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
+		this.shownHistory = this.cardHistory;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	toggleShowOnlyNewCards() {

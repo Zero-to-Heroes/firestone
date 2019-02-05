@@ -204,20 +204,18 @@ export class CollectionComponent implements AfterViewInit {
 		this.searchString = undefined;
 	}
 
-	private updateSets() {
+	private async updateSets() {
 		if (this.refreshing) {
 			return;
 		}
 		this.refreshing = true;
-
-		this.collectionManager.getCollection((collection: Card[]) => {
-			this.buildSetsFromCollection(collection);
-			this.refreshing = false;
-			console.log('sets updated', this.standardSets, this.wildSets);
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-		})
+		const collection = await this.collectionManager.getCollection();
+		this.buildSetsFromCollection(collection);
+		this.refreshing = false;
+		console.log('sets updated', this.standardSets, this.wildSets);
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private buildSetsFromCollection(collection: Card[]) {
@@ -237,19 +235,14 @@ export class CollectionComponent implements AfterViewInit {
 		});
 	}
 
-	private buildSet(fullCardId: string): Promise<Set> {
-		return new Promise<Set>((resolve) => {
-			this.collectionManager.getCollection((collection: Card[]) => {
-				console.log('building set from', fullCardId);
-				const set = this.cards.getSetFromCardId(fullCardId);
-				console.log('base set is', set);
-				this.pityTimer.getPityTimer(set.id).then((pityTimer: PityTimer) => {
-					const mergedSet = this.mergeSet(collection, set, pityTimer);
-					console.log('merged set is', mergedSet);
-					resolve(mergedSet);
-				});
-			})
-		})
+	private async buildSet(fullCardId: string): Promise<Set> {
+		const collection = await this.collectionManager.getCollection();
+		console.log('building set from', fullCardId);
+		const set = this.cards.getSetFromCardId(fullCardId);
+		console.log('base set is', set);
+		const pityTimer = await this.pityTimer.getPityTimer(set.id);
+		const mergedSet = this.mergeSet(collection, set, pityTimer);
+		return mergedSet;
 	}
 
 	private mergeSet(collection: Card[], set: Set, pityTimer: PityTimer): Set {

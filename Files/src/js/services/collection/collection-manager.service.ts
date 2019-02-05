@@ -4,6 +4,7 @@ import { Card } from '../../models/card';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
 import { Events } from '../events.service';
+import { resolve } from 'url';
 
 @Injectable()
 export class CollectionManager {
@@ -17,24 +18,26 @@ export class CollectionManager {
 			this.events.on(Events.NEW_CARD).subscribe((event) => this.updateCollection(event));
 	}
 
-	public getCollection(callback: Function, delay: number = 0) {
-		console.log('getting collection');
-		this.memoryReading.getCollection((collection) => {
-			console.log('collection from GEP');
+	public async getCollection(delay: number = 0): Promise<Card[]> {
+		// Apparently this is an anti-pattern, but it works for now
+		return new Promise<Card[]>(async (resolve) => {
+			console.log('[collection-manager] getting collection');
+			const collection = await this.memoryReading.getCollection(delay);
+			console.log('[collection-manager] collection from GEP');
 			if (!collection || collection.length == 0) {
-				console.log('retrieving collection from db');
-				this.db.getCollection((collection) => {
-					console.log('retrieved collection form db');
-					this.ngZone.run(() => {
-						callback(collection);
-					});
+				console.log('[collection-manager] retrieving collection from db');
+				const collectionFromDb = await this.db.getCollection();
+				console.log('[collection-manager] retrieved collection from db');
+				this.ngZone.run(() => {
+					resolve(collectionFromDb);
 				});
 			}
 			else {
-				console.log('updating collection in db');
-				this.db.saveCollection(collection, callback);
+				console.log('[collection-manager] updating collection in db');
+				const savedCollection =	await this.db.saveCollection(collection);
+				resolve(savedCollection);
 			}
-		}, delay);
+		});
 	}
 
 	// type is NORMAL or GOLDEN
@@ -57,12 +60,11 @@ export class CollectionManager {
 		setTimeout(() => this.reallyUpdateCollection(), 3000);
 	}
 
-	private reallyUpdateCollection() {
-		this.memoryReading.getCollection((collection) => {
-			if (collection && collection.length > 0) {
-				this.db.saveCollection(collection, () => {});
-			}
-			this.udpatingCollection = false;
-		})
+	private async reallyUpdateCollection() {
+		const collection = await this.memoryReading.getCollection();
+		if (collection && collection.length > 0) {
+			await this.db.saveCollection(collection);
+		}
+		this.udpatingCollection = false;
 	}
 }

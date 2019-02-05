@@ -131,14 +131,13 @@ export class AppChoiceComponent implements AfterViewInit {
 
 	}
 
-	private refreshContents() {
-		this.collectionManager.getCollection((collection) => {
-			console.log('retrieved collection', collection);
-			this.noCollection = !collection || collection.length == 0;
-			this.dataLoaded = true;
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+	private async refreshContents() {
+		const collection = await this.collectionManager.getCollection();
+		console.log('retrieved collection', collection);
+		this.noCollection = !collection || collection.length == 0;
+		this.dataLoaded = true;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
