@@ -21,7 +21,7 @@
     "@angular/platform-server": "6.0.0",
     "@angular/router": "6.0.0",
     "@sentry/browser": "4.4.1",
-    "angular2-indexeddb": "1.2.2",
+    "angular2-indexeddb": "1.2.3",
     "angular2-notifications": "1.0.2",
     "lodash": "4.17.10",
     "ng-inline-svg": "8.3.0",
