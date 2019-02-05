@@ -52,7 +52,7 @@ export class ControlHelpComponent implements AfterViewInit {
 		this.crate = new Crate({
 			server:"187101197767933952",
 			channel:"446045705392357376",
-			shard: 'https://widgetbot.io'
+			shard: 'https://cl2.widgetbot.io'
 		});
 		this.crate.store.subscribe(() => {
 			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
