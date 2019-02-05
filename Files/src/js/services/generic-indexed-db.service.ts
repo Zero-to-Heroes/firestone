@@ -12,22 +12,20 @@ export class GenericIndexedDbService {
 		this.init();
 	}
 	
-    public saveUserPreferences(preferences: Preferences): Promise<Preferences> {
+    public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
+		await this.waitForDbInit();
 		return new Promise<Preferences>((resolve) => {
-			this.waitForDbInit().then(() => {
-				this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
-					resolve(preferences);
-				});
+			this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
+				resolve(preferences);
 			});
 		});
 	}
 	
-    public getUserPreferences(): Promise<Preferences> {
+    public async getUserPreferences(): Promise<Preferences> {
+		await this.waitForDbInit();
 		return new Promise<Preferences>((resolve) => {
-			this.waitForDbInit().then(() => {
-				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
-					resolve(preferences[0] || new Preferences(false, false, false, false));
-				});
+			this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
+				resolve(preferences[0] || new Preferences(false, false, false, false));
 			});
 		});
 	}
