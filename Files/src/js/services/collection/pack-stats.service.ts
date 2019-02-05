@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { captureEvent } from '@sentry/core';
 import { Events } from '../events.service';
-import { PackHistory } from '../../models/pack-history';
 import { AllCardsService } from '../all-cards.service';
 import { Http } from '@angular/http';
 import { Card } from '../../models/card';
@@ -51,7 +51,18 @@ export class PackStatsService {
         }
         console.log('posting pack stat event', statEvent);
         this.http.post(this.PACK_STAT_URL, statEvent)
-                .subscribe((result) => console.log('pack stat event result', result));
+                .subscribe(
+                    (result) => console.log('pack stat event result', result),
+                    (error) => {
+                        console.error('Could not send pack stats info', error);
+                        captureEvent({
+                            message: 'Could not send pack stats info',
+                            extra: {
+                                error: error, 
+                                statEvent: statEvent
+                            }
+                        })
+                    });
     }
     
     private publishCardStat(card: Card, type: string, isNew: boolean) {
@@ -68,6 +79,16 @@ export class PackStatsService {
         };
         console.log('posting card stat event', statEvent);
         this.http.post(this.CARD_STAT_URL, statEvent)
-                .subscribe((result) => console.log('card stat event result', result));
+                .subscribe((result) => console.log('card stat event result', result),
+                (error) => {
+                    console.error('Could not send card stats info', error);
+                    captureEvent({
+                        message: 'Could not send card stats info',
+                        extra: {
+                            error: error, 
+                            statEvent: statEvent
+                        }
+                    })
+                });
     }
 }
