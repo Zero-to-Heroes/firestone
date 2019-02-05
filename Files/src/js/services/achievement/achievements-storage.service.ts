@@ -14,24 +14,16 @@ export class AchievementsStorageService {
 		private indexedDb: IndexedDbService) {
 	}
 
-	public loadAchievement(achievementId: string): Promise<CompletedAchievement> {
-		return new Promise<CompletedAchievement>((resolve) => {
-			this.indexedDb.getAchievement(achievementId, (result: CompletedAchievement) => {
-				resolve(result);
-			});
-		});
+	public async loadAchievement(achievementId: string): Promise<CompletedAchievement> {
+		return this.indexedDb.getAchievement(achievementId);
 	}
 
-	public saveAchievement(achievement: CompletedAchievement): Promise<CompletedAchievement> {
-		return new Promise<CompletedAchievement>((resolve) => {
-			this.indexedDb.save(achievement, (result) => {
-				resolve(result);
-			})
-		});
+	public async saveAchievement(achievement: CompletedAchievement): Promise<CompletedAchievement> {
+		return this.indexedDb.save(achievement);
 	}
 
 	public async loadAchievements(): Promise<CompletedAchievement[]> {
-		return await this.indexedDb.getAll();
+		return this.indexedDb.getAll();
 	}
 
 	public async removeReplay(achievementId: string, videoPath: string): Promise<CompletedAchievement> {

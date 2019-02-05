@@ -15,70 +15,59 @@ export class IndexedDbService {
 		this.init();
 	}
 
-	public getAchievement(achievementId: string, callback: Function) {
-		if (!this.dbInit) {
-			setTimeout(() => {
-				console.log('[achievements] [storage] db isnt initialized, waiting...');
-				this.getAchievement(achievementId, callback);
-			}, 50);
-			return;
+	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
+		await this.waitForDbInit();
+		try {
+			const achievement = await this.db.getByKey('achievements', achievementId);
+			return achievement;
 		}
-
-		// console.log('[achievements] [storage] Loading achievement', achievementId);
-		this.db.getByKey('achievements', achievementId).then(
-			(achievement) => {
-				// console.log('[achievements] [storage] loaded completed achievement', achievement);
-				callback(achievement);
-			},
-			(error) => {
-			    console.error('[achievements] [storage] error while loading achievement', achievementId, error);
-			}
-		);
+		catch (e) {
+			console.error('[achievements] [storage] error while loading completed achievement', e);
+		}
 	}
 
-	public save(achievement: CompletedAchievement, callback: Function) {
-		if (!this.dbInit) {
-			setTimeout(() => {
-				// console.log('[achievements] [storage] db isnt initialized, waiting...');
-				this.save(achievement, callback);
-			}, 50);
-			return;
+	public async save(achievement: CompletedAchievement): Promise<CompletedAchievement> {
+		await this.waitForDbInit();
+		try {
+			const result = await this.db.update('achievements', achievement);
+			return result;
 		}
-
-		// console.log('[achievements] [storage] Saving achievement', achievement);
-		this.db.update('achievements', achievement).then(
-			(achievement) => {
-				callback(achievement);
-			},
-			(error) => {
-				console.error('[achievements] [storage] error while updating achievement', achievement, error);
-			}
-		);
+		catch (e) {
+			console.error('[achievements] [storage] error while saving completed achievement', e);
+		}
 	}
 
 	public async getAll(): Promise<CompletedAchievement[]> {
 		await this.waitForDbInit();
-		const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
-		// console.log('[achievements] [storage] loaded all achievements', achievements);
-		return achievements;
+		try {
+			const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
+			return achievements;
+		}
+		catch (e) {
+			console.error('[achievements] [storage] error while getting all completed achievements', e);
+		}
 	}
 	
-	public loadAllHistory(): Promise<AchievementHistory[]> {
-		return new Promise<AchievementHistory[]>((resolve) => {
-			this.waitForDbInit().then(() => {
-				this.db.getAll('achievement-history', null).then((history: AchievementHistory[]) => {
-					resolve(history);
-				});
-			});
-		});
+	public async loadAllHistory(): Promise<AchievementHistory[]> {
+		await this.waitForDbInit();
+		try {
+			const history = await this.db.getAll('achievement-history', null);
+			return history;
+		}
+		catch (e) {
+			console.error('[achievements] [storage] error while loading all history', e);
+		}
 	}
 	
-	public saveHistory(history: AchievementHistory) {
-		this.waitForDbInit().then(() => {
-			this.db.update('achievement-history', history).then((saved) => {
-				console.log('[achievements] [storage] saved history', saved);
-			}, (error) => console.error('[achievements] [storage] error while saving', history, error));
-		});
+	public async saveHistory(history: AchievementHistory) {
+		await this.waitForDbInit();
+		try {
+			const saved = await this.db.update('achievement-history', history);
+			console.log('[achievements] [storage] saved history', saved);
+		}
+		catch (e) {
+			console.error('[achievements] [storage] error while saving history', history, e);
+		}
 	}
 
 	private init() {
@@ -94,6 +83,7 @@ export class IndexedDbService {
 				console.log('[achievements] [storage] upgrade to version 2');
 				evt.currentTarget.result.createObjectStore('achievement-history', { keyPath: "id", autoIncrement: true });
 			}
+			console.log('[achievements] [storage] indexeddb upgraded');
 		    this.dbInit = true;
 		}).then(
 			() => {
