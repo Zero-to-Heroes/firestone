@@ -205,8 +205,7 @@ export class PackMonitor {
 				ret = 1;
 			}
 			else {
-				console.log('[WARN] Could not detect the clicked on card', x, y, data, result);
-				console.log('could not identify card');
+				console.warn('[WARN] Could not detect the clicked on card', x, y, data, result);
 				ga('send', 'event', 'error', 'card-unidentified', {x: x, y: y, data: data, result: result});
 				captureEvent({
 					message: 'could not identify the card the user clicked on',
@@ -215,7 +214,8 @@ export class PackMonitor {
 						y: y, 
 						data: data, 
 						result: result,
-						dpi: this.dpi
+						dpi: this.dpi,
+						unrevealedCards: this.unrevealedCards
 					}
 				})
 				return;
