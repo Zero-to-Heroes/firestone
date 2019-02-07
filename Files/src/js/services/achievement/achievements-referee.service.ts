@@ -11,7 +11,7 @@ export class AchievementsRefereee {
 	}
 
 	public complete(challenge: Challenge, callback: Function, ...data: any[]) {
-		console.log('complete challenge', challenge, data);
+		console.log('complete challenge', challenge.getAchievementId(), data);
 		this.achievementsStorage.loadAchievement(challenge.getAchievementId())
 				.then((existingAchievement: CompletedAchievement) => {
 						existingAchievement = existingAchievement || challenge.defaultAchievement();
