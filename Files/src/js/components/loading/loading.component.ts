@@ -19,90 +19,92 @@ declare var Crate: any;
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="root">
-			<div class="app-container">
-				<section class="menu-bar">
-					<i class="i-117X33 gold-theme logo">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
-						</svg>
-					</i>
-					<div class="controls">
-						<control-settings [windowId]="thisWindowId" *ngIf="achievementsOn"></control-settings>
-						<button class="i-30 pink-button" (click)="contactSupport()">
+		<div class="top">
+			<div class="root">
+				<div class="app-container">
+					<section class="menu-bar">
+						<i class="i-117X33 gold-theme logo">
 							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
-							</svg>
-						</button>
-						<button class="i-30 pink-button" (click)="minimizeWindow()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
-							</svg>
-						</button>
-						<button class="i-30 close-button" (click)="closeWindow(true)">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-							</svg>
-						</button>
-					</div>
-				</section>
-				<section class="content-container">
-					<div class="app-title">
-						<i class="i-35 gold-theme left">
-							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
+								<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
 							</svg>
 						</i>
-						<span class="title">{{title}}</span>
-						<i class="i-35 gold-theme right">
-							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
-							</svg>
-						</i>
-					</div>
-					<i class="i-54 loading-icon gold-theme" *ngIf="loading">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral"/>
-						</svg>
-					</i>
-					<div class="sub-title" *ngIf="!loading">
-						<span>Hit</span>
-						<hotkey></hotkey>
-						<span>to view the app</span>
-					</div>
-					<div class="ads-container">
-						<div class="no-ads-placeholder">
-							<i class="i-117X33 gold-theme logo">
+						<div class="controls">
+							<control-settings [windowId]="thisWindowId" *ngIf="achievementsOn"></control-settings>
+							<button class="i-30 pink-button" (click)="contactSupport()">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
+									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
+								</svg>
+							</button>
+							<button class="i-30 pink-button" (click)="minimizeWindow()">
+								<svg class="svg-icon-fill">
+									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
+								</svg>
+							</button>
+							<button class="i-30 close-button" (click)="closeWindow(true)">
+								<svg class="svg-icon-fill">
+									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+								</svg>
+							</button>
+						</div>
+					</section>
+					<section class="content-container">
+						<div class="app-title">
+							<i class="i-35 gold-theme left">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
+								</svg>
+							</i>
+							<span class="title">{{title}}</span>
+							<i class="i-35 gold-theme right">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#title_decor"/>
 								</svg>
 							</i>
 						</div>
-						<div class="ads" id="ad-div" #ads></div>
-					</div>
-				</section>
-			</div>
+						<i class="i-54 loading-icon gold-theme" *ngIf="loading">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#loading_spiral"/>
+							</svg>
+						</i>
+						<div class="sub-title" *ngIf="!loading">
+							<span>Hit</span>
+							<hotkey></hotkey>
+							<span>to view the app</span>
+						</div>
+					</section>
+				</div>
 
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
+				<i class="i-54 gold-theme corner top-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner top-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner bottom-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner bottom-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+			</div>
+			<div class="ads-container">
+				<div class="no-ads-placeholder">
+					<i class="i-117X33 gold-theme logo">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
+						</svg>
+					</i>
+				</div>
+				<div class="ads" id="ad-div" #ads></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

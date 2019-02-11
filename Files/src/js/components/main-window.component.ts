@@ -20,72 +20,74 @@ declare var ga: any;
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="root">
-			<div class="app-container {{selectedModule}}">
-				<section class="menu-bar">
-					<div class="first">
-						<real-time-notifications></real-time-notifications>
-						<div class="navigation">
-							<i class="i-117X33 gold-theme logo">
-								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
-								</svg>
-							</i>
-							<menu-selection></menu-selection>
+		<div class="top {{selectedModule}}">
+			<div class="root">
+				<div class="app-container {{selectedModule}}">
+					<section class="menu-bar">
+						<div class="first">
+							<real-time-notifications></real-time-notifications>
+							<div class="navigation">
+								<i class="i-117X33 gold-theme logo">
+									<svg class="svg-icon-fill">
+										<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
+									</svg>
+								</i>
+								<menu-selection></menu-selection>
+							</div>
 						</div>
-					</div>
-					<hotkey></hotkey>
-					<div class="controls">
-						<control-settings [windowId]="windowId" *ngIf="achievementsOn"></control-settings>
-						<button class="i-30 pink-button" (click)="goHome()">
-							<svg class="svg-icon-fill">
-								<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
-							</svg>
-						</button>
-						<control-help></control-help>
-						<control-minimize [windowId]="windowId"></control-minimize>
-						<control-close [windowId]="windowId"></control-close>
-					</div>
-				</section>
-				<section class="content-container">
-					<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
-					<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
-					<div class="ads-container">
-						<div class="no-ads-placeholder">
-							<i class="i-117X33 gold-theme logo">
+						<hotkey></hotkey>
+						<div class="controls">
+							<control-settings [windowId]="windowId" *ngIf="achievementsOn"></control-settings>
+							<button class="i-30 pink-button" (click)="goHome()">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
+									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
 								</svg>
-							</i>
+							</button>
+							<control-help></control-help>
+							<control-minimize [windowId]="windowId"></control-minimize>
+							<control-close [windowId]="windowId"></control-close>
 						</div>
-						<div class="ads" id="ad-div"></div>
-					</div>
-				</section>
+					</section>
+					<section class="content-container">
+						<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
+						<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
+					</section>
+				</div>
+
+				<i class="i-54 gold-theme corner top-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner top-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner bottom-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner bottom-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					</svg>
+				</i>
+
+				<ftue></ftue>
+				<tooltips></tooltips>
 			</div>
-
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-				</svg>
-			</i>
-
-			<ftue></ftue>
-			<tooltips></tooltips>
+			<div class="ads-container">
+				<div class="no-ads-placeholder">
+					<i class="i-117X33 gold-theme logo">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder"/>
+						</svg>
+					</i>
+				</div>
+				<div class="ads" id="ad-div"></div>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

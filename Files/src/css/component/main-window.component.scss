@@ -14,6 +14,12 @@ body {
     overflow: hidden;
 }
 
+.top {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+}
+
 .root {
 	position: relative;
 	display: flex;
@@ -199,8 +205,8 @@ tooltips {
 .ads-container {
     width: 400px;
     height: 300px;
-	right: 15px;
-	bottom: 15px;
+    right: 25px;
+    bottom: 25px;
     position: absolute;
 
     .no-ads-placeholder {
@@ -224,14 +230,6 @@ tooltips {
 	}
 }
 
-.app-container.collection .no-ads-placeholder {
-	background-color: $black;
-
-	.logo {
-		color: $darkred;
-	}
-}
-
 .root .app-container.achievements {
 	.menu-bar .controls {
 		button {
@@ -247,7 +245,17 @@ tooltips {
 			background: #CB9FD7;
 		}
 	}
+}
 
+.top.collection .no-ads-placeholder {
+	background-color: $black;
+
+	.logo {
+		color: $darkred;
+	}
+}
+
+.top.achievements {
 	.no-ads-placeholder {
 		background-color: #190505;
 
