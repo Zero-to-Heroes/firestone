@@ -2,28 +2,28 @@ import { Challenge } from './challenge';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
+import { AbstractChallenge } from './abstract-challenge';
 
-export class BossVictory implements Challenge {
+export class BossVictory extends AbstractChallenge {
 
-	private readonly achievementId: string;
 	private readonly cardId: string;
-	private readonly events: Events;
 
-	private completed: boolean = false;
 	private currentTurnStartTime: number;
 
-	constructor(achievement, events: Events) {
-		this.achievementId = achievement.id;
+	constructor(achievement, scenarioId: number, events: Events) {
+		super(achievement, scenarioId, events, [GameEvent.GAME_START]);
 		this.cardId = achievement.cardId;
-		this.events = events;
 	}
 
-	public detect(gameEvent: GameEvent, callback: Function) {
+	protected resetState() {
+		this.currentTurnStartTime = undefined;
+	}
+
+	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}
-
 		if (gameEvent.type === GameEvent.WINNER) {
 			// console.log('WINNER detected', gameEvent);
 			this.detectGameResultEvent(gameEvent, callback);
@@ -32,15 +32,11 @@ export class BossVictory implements Challenge {
 	}
 
 	public getRecordPastDurationMillis(): number {
-		console.log('[recording] recording ', Date.now() - this.currentTurnStartTime, 'ms in the past');
 		return Date.now() - this.currentTurnStartTime;
 	}
 
 	public broadcastEndOfCapture() {
-		if (this.completed) {
-			this.completed = false;
-			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
-		}
+		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
 	}
 
 	public notificationTimeout(): number {
@@ -51,24 +47,13 @@ export class BossVictory implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-
 		let winner = gameEvent.data[0];
 		let localPlayer = gameEvent.data[1];
 		let opponentPlayer = gameEvent.data[2];
-
 		if (opponentPlayer.CardID === this.cardId && localPlayer.Id === winner.Id) {
 			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
-			callback();
-			this.completed = true;
-			this.broadcastEndOfCapture(), 5000;
+			this.callback = callback;
+			this.handleCompletion();
 		}
-	}
-
-	public getAchievementId() {
-		return this.achievementId;
-	}
-
-	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 }

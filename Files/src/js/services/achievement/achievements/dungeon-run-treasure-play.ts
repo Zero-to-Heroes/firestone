@@ -1,23 +1,21 @@
-import { Challenge } from './challenge';
-import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
+import { AbstractChallenge } from './abstract-challenge';
 
-export class DungeonRunTreasurePlay implements Challenge {
+export class DungeonRunTreasurePlay extends AbstractChallenge {
 
-	private readonly achievementId: string;
 	private readonly cardId: string;
-	private readonly events:Events;
 
-	private callback;
-
-	constructor(achievement, events: Events) {
-		this.achievementId = achievement.id;
+	constructor(achievement, scenarioId: number, events: Events) {
+		super(achievement, scenarioId, events, [GameEvent.GAME_START, GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
-		this.events = events;
 	}
 
-	public detect(gameEvent: GameEvent, callback: Function) {
+	protected resetState() {
+		// No specific state
+	}
+
+	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.CARD_PLAYED) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
@@ -26,14 +24,6 @@ export class DungeonRunTreasurePlay implements Challenge {
 
 	public getRecordPastDurationMillis(): number {
 		return 1000;
-	}
-
-	public getAchievementId() {
-		return this.achievementId;
-	}
-
-	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 
 	public notificationTimeout(): number {
@@ -48,14 +38,12 @@ export class DungeonRunTreasurePlay implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-
 		const cardId = gameEvent.data[0];
 		const controllerId = gameEvent.data[1];
 		const localPlayer = gameEvent.data[2];
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
 			this.callback = callback;
-			this.callback();
-			this.broadcastEndOfCapture();
+			this.handleCompletion();
 		}
 	}
 }

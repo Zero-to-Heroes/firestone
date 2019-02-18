@@ -1,30 +1,27 @@
-import { Challenge } from './challenge';
-import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
+import { AbstractChallenge } from './abstract-challenge';
 
-export class ShrinePlay implements Challenge {
+export class ShrinePlay extends AbstractChallenge {
 
-	private readonly achievementId: string;
 	private readonly cardId: string;
-	private readonly events:Events;
 
 	private mulliganOver: boolean = false;
-	private completed = false;
-	private callback;
 
-	constructor(achievement, events: Events) {
-		this.achievementId = achievement.id;
+	constructor(achievement, scenarioId: number, events: Events) {
+		super(achievement, scenarioId, events, [GameEvent.GAME_START, GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
-		this.events = events;
 	}
 
-	public detect(gameEvent: GameEvent, callback: Function) {
+	protected resetState() {
+		this.mulliganOver = false;
+	}
+
+	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.CARD_PLAYED) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
-
 		if (gameEvent.type == GameEvent.MULLIGAN_DONE) {
 			this.mulliganOver = true;
 			this.handleCompletion();
@@ -35,22 +32,12 @@ export class ShrinePlay implements Challenge {
 		return 100;
 	}
 
-	public getAchievementId() {
-		// console.log('returning achievement id', this.achievementId, this);
-		return this.achievementId;
-	}
-
-	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId, 0, []);
-	}
-
 	public notificationTimeout(): number {
 		// Since we stop recording only when mulligan is done, it could take some time
 		return 15000;
 	}
 
 	public broadcastEndOfCapture() {
-		this.completed = false;
 		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 15000);
 	}
 
@@ -58,7 +45,6 @@ export class ShrinePlay implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-
 		const cardId = gameEvent.data[0];
 		const controllerId = gameEvent.data[1];
 		const localPlayer = gameEvent.data[2];
@@ -69,14 +55,8 @@ export class ShrinePlay implements Challenge {
 		}
 	}
 
-	private handleCompletion() {
-		if (this.mulliganOver && this.callback) {
-			console.log('completing achievement', this.achievementId, this);
-			this.callback();
-			this.mulliganOver = false;
-			this.completed = true;
-			this.callback = undefined;
-			this.broadcastEndOfCapture();
-		}
+	// There is an implicit check on having the right scenarioID and the presence of a callback
+	protected additionalCheckForCompletion(): boolean {
+		return this.mulliganOver;
 	}
 }

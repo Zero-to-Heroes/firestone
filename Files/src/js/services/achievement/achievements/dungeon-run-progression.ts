@@ -2,26 +2,28 @@ import { Challenge } from './challenge';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
+import { AbstractChallenge } from './abstract-challenge';
 
-export class DungeonRunProgression implements Challenge {
+export class DungeonRunProgression extends AbstractChallenge {
 
-	private readonly achievementId: string;
 	private readonly heroId: string;
-	private readonly events: Events;
+	private readonly dungeonStep: number;
 
-	private completed: boolean = false;
 	private currentTurnStartTime: number;
-	private dungeonStep: number;
 	private currentDungeonStep: number;
 
-	constructor(achievement, events: Events) {
-		this.achievementId = achievement.id;
+	constructor(achievement, scenarioId: number, events: Events) {
+		super(achievement, scenarioId, events, [GameEvent.GAME_START]);
 		this.heroId = achievement.cardId;
 		this.dungeonStep = achievement.step;
-		this.events = events;
 	}
 
-	public detect(gameEvent: GameEvent, callback: Function) {
+	protected resetState() {
+		this.currentTurnStartTime = undefined;
+		this.currentDungeonStep = undefined;
+	}
+
+	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.DUNGEON_RUN_STEP) {
 			this.currentDungeonStep = gameEvent.data[0];
 		}
@@ -43,10 +45,7 @@ export class DungeonRunProgression implements Challenge {
 	}
 
 	public broadcastEndOfCapture() {
-		if (this.completed) {
-			this.completed = false;
-			this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
-		}
+		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
 	}
 
 	public notificationTimeout(): number {
@@ -57,23 +56,12 @@ export class DungeonRunProgression implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-
 		let winner = gameEvent.data[0];
 		let localPlayer = gameEvent.data[1];
-
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
 			console.log('completed dungeon progression', this);
-			callback();
-			this.completed = true;
-			this.broadcastEndOfCapture();
+			this.callback = callback;
+			this.handleCompletion();
 		}
-	}
-
-	public getAchievementId() {
-		return this.achievementId;
-	}
-
-	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 }

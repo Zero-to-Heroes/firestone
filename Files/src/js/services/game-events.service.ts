@@ -2,11 +2,10 @@ import { Injectable, EventEmitter } from '@angular/core';
 
 import { GameEvent } from '../models/game-event';
 import { Events } from './events.service';
-import { LogListenerService } from './log-listener.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
+import { captureEvent } from '@sentry/core';
 
 declare var OverwolfPlugin: any;
-declare var overwolf: any;
 
 @Injectable()
 export class GameEvents {
@@ -44,8 +43,17 @@ export class GameEvents {
 				return;
 			}
 			console.log("[game-events] Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
-			gameEventsPlugin.get().onGlobalEvent.addListener((first, second) => {
+			gameEventsPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
+				if (first.toLowerCase().indexOf("exception") !== -1) {
+					captureEvent({
+						message: 'Exception while running plugin: ' + first,
+						extra: {
+							first: first,
+							second: second,
+						}
+					})
+				}
 			});
 			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
 				// console.log('[game-events] received game event', gameEvent);
@@ -83,10 +91,9 @@ export class GameEvents {
 				this.allEvents.next(new GameEvent(GameEvent.GAME_START));
 				this.onGameStart.next(new GameEvent(GameEvent.GAME_START));
 				break;
-			// case 'MATCH_METADATA':
-			// 	console.log('received opponent', gameEvent.Value);
-			// 	this.allEvents.next(new GameEvent(GameEvent.MATCH_METADATA, gameEvent.Value));
-			// 	break;
+			case 'MATCH_METADATA':
+				this.allEvents.next(new GameEvent(GameEvent.MATCH_METADATA, gameEvent.Value));
+				break;
 			case 'LOCAL_PLAYER':
 				this.allEvents.next(new GameEvent(GameEvent.LOCAL_PLAYER, gameEvent.Value));
 				break;

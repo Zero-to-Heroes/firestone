@@ -40,6 +40,7 @@ import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-
 import { MonsterHuntTreasurePlay } from './achievements/monster-hunttreasure-play.js';
 import { MonsterHuntPassivePlay } from './achievements/monster-hunt-passive-play.js';
 import { AchievementCategory } from '../../models/achievement-category.js';
+import { ScenarioId } from '../../models/scenario-id.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -180,22 +181,21 @@ export class AchievementsRepository {
 
 	private achievementTypes() {
 		return [
-			{ type: 'dungeon_run_progression', challengeCreationFn: (achievement) => new DungeonRunProgression(achievement, this.events) },
-			{ type: 'dungeon_run_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, this.events) },
-			{ type: 'dungeon_run_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
-			{ type: 'dungeon_run_treasure_play', challengeCreationFn: (achievement) => new DungeonRunTreasurePlay(achievement, this.events) },
-			{ type: 'dungeon_run_passive_play', challengeCreationFn: (achievement) => new DungeonRunPassivePlay(achievement, this.events) },
-			{ type: 'monster_hunt_progression', challengeCreationFn: (achievement) => new MonsterHuntProgression(achievement, this.events) },
-			{ type: 'monster_hunt_final_boss', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
-			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, this.events) },
-			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, this.events) },
-			{ type: 'monster_hunt_treasure_play', challengeCreationFn: (achievement) => new MonsterHuntTreasurePlay(achievement, this.events) },
-			{ type: 'monster_hunt_passive_play', challengeCreationFn: (achievement) => new MonsterHuntPassivePlay(achievement, this.events) },
-			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, this.events) },
-			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, this.events) },
-			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, this.events) },
-			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, this.events) },
-			
+			{ type: 'dungeon_run_progression', challengeCreationFn: (achievement) => new DungeonRunProgression(achievement, ScenarioId.DUNGEON_RUN, this.events) },
+			{ type: 'dungeon_run_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, ScenarioId.DUNGEON_RUN, this.events) },
+			{ type: 'dungeon_run_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, ScenarioId.DUNGEON_RUN, this.events) },
+			{ type: 'dungeon_run_treasure_play', challengeCreationFn: (achievement) => new DungeonRunTreasurePlay(achievement, ScenarioId.DUNGEON_RUN, this.events) },
+			{ type: 'dungeon_run_passive_play', challengeCreationFn: (achievement) => new DungeonRunPassivePlay(achievement, ScenarioId.DUNGEON_RUN, this.events) },
+			{ type: 'monster_hunt_progression', challengeCreationFn: (achievement) => new MonsterHuntProgression(achievement, ScenarioId.MONSTER_HUNT, this.events) },
+			{ type: 'monster_hunt_final_boss', challengeCreationFn: (achievement) => new BossVictory(achievement, ScenarioId.MONSTER_HUNT, this.events) },
+			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, ScenarioId.MONSTER_HUNT, this.events) },
+			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, ScenarioId.MONSTER_HUNT, this.events) },
+			{ type: 'monster_hunt_treasure_play', challengeCreationFn: (achievement) => new MonsterHuntTreasurePlay(achievement, ScenarioId.MONSTER_HUNT, this.events) },
+			{ type: 'monster_hunt_passive_play', challengeCreationFn: (achievement) => new MonsterHuntPassivePlay(achievement, ScenarioId.MONSTER_HUNT, this.events) },
+			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, ScenarioId.RUMBLE_RUN, this.events) },
+			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
+			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
+			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 		];
 	}
 }

@@ -2,32 +2,35 @@ import { Challenge } from './challenge';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
+import { AbstractChallenge } from './abstract-challenge';
 
-export class RumbleProgression implements Challenge {
+export class RumbleProgression extends AbstractChallenge {
 
-	private readonly achievementId: string;
 	private readonly heroId: string;
 	private readonly shrineId: string;
-	private readonly events: Events;
+	private readonly rumbleStep: number;
 
 	private currentTurnStartTime: number;
-	private rumbleStep: number;
 	private currentRumbleStep: number;
 	private shrinePlayed: boolean = false;
 
-	constructor(achievement, events: Events) {
-		this.achievementId = achievement.id;
+	constructor(achievement, scenarioId: number, events: Events) {
+		super(achievement, scenarioId, events, [GameEvent.GAME_START]);
 		this.heroId = achievement.cardId;
 		this.shrineId = achievement.secondaryCardId;
 		this.rumbleStep = achievement.step;
-		this.events = events;
 	}
 
-	public detect(gameEvent: GameEvent, callback: Function) {
+	protected resetState() {
+		this.currentTurnStartTime = undefined;
+		this.currentRumbleStep = undefined;
+		this.shrinePlayed = undefined;
+	}
+
+	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.RUMBLE_RUN_STEP) {
 			this.currentRumbleStep = gameEvent.data[0];
 		}
-
 		if (gameEvent.type == GameEvent.CARD_PLAYED) {
 			const cardId = gameEvent.data[0];
 			const controllerId = gameEvent.data[1];
@@ -37,12 +40,10 @@ export class RumbleProgression implements Challenge {
 			}
 			return;
 		}
-
 		if (this.currentRumbleStep === this.rumbleStep && gameEvent.type == GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}
-
 		if (this.currentRumbleStep === this.rumbleStep && this.shrinePlayed && gameEvent.type === GameEvent.WINNER) {
 			// console.log('WINNER detected', gameEvent);
 			this.detectGameResultEvent(gameEvent, callback);
@@ -55,7 +56,6 @@ export class RumbleProgression implements Challenge {
 	}
 
 	public broadcastEndOfCapture() {
-		this.shrinePlayed = false;
 		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
 	}
 
@@ -67,22 +67,11 @@ export class RumbleProgression implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-
 		let winner = gameEvent.data[0];
 		let localPlayer = gameEvent.data[1];
-
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
-			console.log('completed rumble progression', this);
-			callback()
-			this.broadcastEndOfCapture();
+			this.callback = callback;
+			this.handleCompletion();
 		}
-	}
-
-	public getAchievementId() {
-		return this.achievementId;
-	}
-
-	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 }
