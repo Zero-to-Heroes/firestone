@@ -60,10 +60,7 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
         ];
     }
 
-    protected convertToVisual(achievement: Achievement, index: number, allAchievements: Achievement[]): IndexedVisualAchievement {
-        const replayInfo = [ ...(achievement.replayInfo || [])]
-                .sort((a, b) => a.creationTimestamp - b.creationTimestamp);
-        
+    protected convertToVisual(achievement: Achievement, index: number, allAchievements: Achievement[]): IndexedVisualAchievement {      
         const rootId = achievement.id.substring(0, achievement.id.length - 2);
         // console.log('rootId', rootId);
         const achievementForCompletionSteps: Achievement[] = allAchievements
@@ -98,6 +95,11 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
                 },
             } as CompletionStep);
         }
+        let replayInfo = [];
+        for (let i = 0; i < achievementForCompletionSteps.length; i++) {
+            replayInfo = [...(achievementForCompletionSteps[i].replayInfo || []), ...replayInfo];
+        }
+        replayInfo = replayInfo.sort((a, b) => a.creationTimestamp - b.creationTimestamp);  
         const name = `Rumble run progression - ${shrineName} (${playerClass})`;
         return {
             achievement: new VisualAchievement(
