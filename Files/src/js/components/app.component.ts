@@ -14,6 +14,8 @@ import { CollectionManager } from '../services/collection/collection-manager.ser
 import { AchievementStatsService } from '../services/achievement/achievement-stats.service';
 import { DevService } from '../services/dev.service';
 import { AchievementsVideoCaptureService } from '../services/achievement/achievements-video-capture.service';
+import { DeckParserService } from '../services/decktracker/deck-parser.service';
+import { GameStateService } from '../services/decktracker/game-state.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -52,6 +54,8 @@ export class AppComponent {
 		private collectionDb: IndexedDbService,
 		private collectionManager: CollectionManager,
 		private achievementsDb: AchievementsDb,
+		private deckParserService: DeckParserService,
+		private gameStateService: GameStateService,
 		private logStatusService: LogStatusService) {
 
 		this.init();

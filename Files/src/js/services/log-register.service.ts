@@ -5,13 +5,7 @@ import { LogParserService } from './collection/log-parser.service'
 import { GameEvents } from './game-events.service'
 import { LogListenerService } from './log-listener.service'
 import { Events } from '../services/events.service';
-
-declare var OverwolfPlugin: any;
-declare var overwolf: any;
-
-const HEARTHSTONE_GAME_ID = 9898;
-const LOG_FILE_NAME = "Achievements.log";
-const prod = true;
+import { DeckParserService } from './decktracker/deck-parser.service';
 
 @Injectable()
 export class LogRegisterService {
@@ -24,6 +18,7 @@ export class LogRegisterService {
 
 	constructor(
 		private events: Events,
+		private decksService: DeckParserService,
 		private collectionLogParserService: LogParserService,
 		private gameEvents: GameEvents,
 		private plugin: SimpleIOService) {
@@ -39,12 +34,17 @@ export class LogRegisterService {
 				this.events.broadcast(status, "Achiements.log");
 			})
 			.start();
-
 		new LogListenerService(this.plugin)
 			.configure("Power.log", (data) => this.gameEvents.receiveLogLine(data))
 			.subscribe((status) => {
 				console.log('[log-register] status for power.log', status);
 				// this.events.broadcast(status, "Power.log");
+			})
+			.start();
+		new LogListenerService(this.plugin)
+			.configure("Decks.log", (data) => this.decksService.parseActiveDeck(data))
+			.subscribe((status) => {
+				console.log('[log-register] status for decks', status);
 			})
 			.start();
 	}

@@ -43,6 +43,8 @@ import { AchievementConfService } from '../../services/achievement/achievement-c
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { DeckParserService } from '../../services/decktracker/deck-parser.service';
+import { GameStateService } from '../../services/decktracker/game-state.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -106,6 +108,9 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementsStorageService,
 		AchievementsVideoCaptureService,
 		AchievementsDb,
+
+		DeckParserService,
+		GameStateService,
 	]
 })
 export class AppModule { }
