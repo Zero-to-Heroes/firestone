@@ -115,17 +115,18 @@ var parseCardsText = {
 	},
 
 	localizeImage: function(card) {
-		var lang;
-		try {
-			lang = window.localStorage.language;
-		}
-		catch (e) {
-			lang = 'en';
-		}
-		if (!lang) return card.cardImage;
-		if (!card[lang]) return card.cardImage;
-		// console.log('localized image', lang + '/' + card.cardImage);
-		return lang + '/' + card.cardImage;
+		return card.id + '.png';
+		// var lang;
+		// try {
+		// 	lang = window.localStorage.language;
+		// }
+		// catch (e) {
+		// 	lang = 'en';
+		// }
+		// if (!lang) return card.cardImage;
+		// if (!card[lang]) return card.cardImage;
+		// // console.log('localized image', lang + '/' + card.cardImage);
+		// return lang + '/' + card.cardImage;
 	},
 
 	localizeKeyword: function(key, lang) {
@@ -143,20 +144,22 @@ var parseCardsText = {
 		element.textcomplete([{
 			match: /\[\[[a-zA-Z\-\s0-9\.\:\']{3,}$/,
 			search: function (term, callback, match) {
+				// console.log('searching', term, callback, match);
 				var cards = $.map(parseCardsText.jsonDatabase, function(card) {
 					if (!card.name)	return null
 
+					// console.log('card', card);
 					var localizeName = parseCardsText.localizeName(card);
 					var res = S(localizeName.toLowerCase()).latinise().s.indexOf(S(term).latinise().s.substring(2).toLowerCase()) !== -1;
 					// add search on english term
 					res = res || card.name.toLowerCase().indexOf(term.substring(2).toLowerCase()) === 0;
 					// Keep only valid cards
-					res = res && card.cardImage && card.type != 'Enchantment'
+					res = res && card.type != 'Enchantment'
 					// Death Knight shenanigans
 					res = res && (card.set == 'Icecrown' || card.type != 'Hero')
 					res = res && card.set != 'Hero_skins' && card.set != 'Cheat' && card.set != 'Tb'
 					res = res ? card : null
-					// if (debug) console.log('res4', term, localizeName, res);
+					// if (res) console.log('res4', term, localizeName, res);
 					return res;
 				})
 				// Remove duplicates
@@ -896,7 +899,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Tgt",
-		"artist": "Sean O'Danield",
+		"artist": "Sean O’Daniels",
 		"dbfId": 2564,
 		"type": "Spell",
 		"flavor": "This minion is really powerful!",
@@ -1487,6 +1490,22 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Zoltan Boros",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1 point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -2118,7 +2137,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "<b>Stealth</b>.",
+		"text": "<b>Stealth</b>",
 		"cardClass": "DRUID",
 		"rarity": "Common"
 	},
@@ -2758,6 +2777,22 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Tyson Murphy",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Conceda <b>Imunidade</b> neste turno.",
+			"zhCN": "在本回合中，获得<b>免疫</b>。",
+			"itIT": "Fornisce <b>Immune</b> per questo turno.",
+			"enUS": "Grant <b>Immune</b> this turn.",
+			"frFR": "Confère <b>Insensible</b> pendant ce tour.",
+			"zhTW": "本回合獲得<b>免疫</b>",
+			"deDE": "Macht in diesem Zug <b>immun</b>.",
+			"jaJP": "このターンの間<b>無敵</b>。",
+			"plPL": "Daje <b>Niewrażliwość</b> w tej turze.",
+			"esES": "<b>Inmune</b> este turno.",
+			"ruRU": "<b>Неуязвимость</b> до конца хода.",
+			"esMX": "Otorga <b>Inmunidad</b> durante este turno.",
+			"koKR": "이번 턴에 <b>면역</b>",
+			"thTH": "มอบ <b>คงกระพัน</b> ในเทิร์นนี้"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -3232,8 +3267,26 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Jim Nelson",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Concede <b>Provocar</b>.",
+			"zhCN": "获得<b>嘲讽</b>。",
+			"itIT": "Fornisce <b>Provocazione</b>.",
+			"enUS": "Grant <b>Taunt</b>.",
+			"frFR": "Confère <b>Provocation</b>.",
+			"zhTW": "賦予<b>嘲諷</b>",
+			"deDE": "Verleiht <b>Spott</b>.",
+			"jaJP": "<b>挑発</b>を付与する。",
+			"plPL": "Daj <b>Prowokację</b>.",
+			"esES": "Otorga <b>Provocar</b>.",
+			"ruRU": "<b>Провокация</b>.",
+			"esMX": "Otorga <b>Provocación</b>.",
+			"koKR": "<b>도발</b>",
+			"thTH": "มอบ <b>ยั่วยุ</b>"
+		},
 		"mechanics": [
-			"BATTLECRY",
+			"BATTLECRY"
+		],
+		"referencedTags": [
 			"TAUNT"
 		],
 		"dbfId": 2733,
@@ -3319,7 +3372,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Tgt",
-		"artist": "Evgeniy Zagumennyy",
+		"artist": "Evgeniy Zaqumyenny",
 		"health": 3,
 		"mechanics": [
 			"BATTLECRY"
@@ -3883,6 +3936,22 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Tyson Murphy",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2 de Ataque.",
+			"zhCN": "获得+2攻击力。",
+			"itIT": "Fornisce +2 Attacco.",
+			"enUS": "Give +2 Attack.",
+			"frFR": "Donne +2 ATQ.",
+			"zhTW": "賦予+2攻擊力",
+			"deDE": "Verleiht +2 Angriff.",
+			"jaJP": "攻撃力+2を付与する。",
+			"plPL": "Daj +2 do ataku.",
+			"esES": "Otorga +2 p. de ataque.",
+			"ruRU": "+2 к атаке",
+			"esMX": "Otorga +2 de Ataque.",
+			"koKR": "공격력 +2",
+			"thTH": "มอบพลังโจมตี +2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -4035,7 +4104,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Tgt",
-		"artist": "Evgeniy Zagumennyy",
+		"artist": "Evgeniy Zaqumyenny",
 		"health": 1,
 		"mechanics": [
 			"CHARGE",
@@ -4379,6 +4448,22 @@ var parseCardsText = {
 		"race": "MECHANICAL",
 		"artist": "Skan Srisuwan",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1/+1.",
+			"zhCN": "使其获得+1/+1。",
+			"itIT": "Fornisce +1/+1.",
+			"enUS": "Give +1/+1.",
+			"frFR": "Donne_+1/+1.",
+			"zhTW": "賦予+1/+1",
+			"deDE": "Verleiht +1/+1.",
+			"jaJP": "+1/+1を付与する。",
+			"plPL": "Daj +1/+1.",
+			"esES": "Otorga +1/+1.",
+			"ruRU": "Добавить +1/+1.",
+			"esMX": "Otorga +1/+1.",
+			"koKR": "+1/+1",
+			"thTH": "มอบ +1/+1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -4647,6 +4732,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Seamus Gallagher",
 		"health": 7,
+		"targetingArrowText": {
+			"ptBR": "Cause 4 de dano.",
+			"zhCN": "造成4点伤害。",
+			"itIT": "Infligge 4 danni.",
+			"enUS": "Deal 4 damage.",
+			"frFR": "Inflige 4 points de dégâts.",
+			"zhTW": "造成4點傷害",
+			"deDE": "Verursacht 4 Schaden.",
+			"jaJP": "4ダメージを与える。",
+			"plPL": "Zadaj 4 pkt. obrażeń.",
+			"esES": "Inflige 4 p. de daño.",
+			"ruRU": "Нанести 4 ед. урона.",
+			"esMX": "Inflige 4 de daño.",
+			"koKR": "피해 4",
+			"thTH": "สร้างความเสียหาย_4_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -4767,6 +4868,22 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Andrea Uderzo",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "<b>Silencie</b> um Demônio.",
+			"zhCN": "<b>沉默</b>一个恶魔。",
+			"itIT": "<b>Silenzia</b> un Demone.",
+			"enUS": "<b>Silence</b> a Demon.",
+			"frFR": "Réduit au <b>Silence</b> un démon.",
+			"zhTW": "<b>沉默</b>一個惡魔",
+			"deDE": "Bringt einen Dämon zum <b>Schweigen</b>.",
+			"jaJP": "悪魔1体を<b>沈黙</b>させる。",
+			"plPL": "<b>Wycisz</b> Demona.",
+			"esES": "<b>Silencia</b> a un demonio.",
+			"ruRU": "Наложить <b>немоту</b> на демона.",
+			"esMX": "<b>Silencia</b> a un Demonio.",
+			"koKR": "악마 <b>침묵</b>",
+			"thTH": "<b>ผนึกความสามารถ</b> ของปีศาจหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -4846,7 +4963,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Tgt",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 4,
 		"mechanics": [
 			"CANT_ATTACK",
@@ -5401,6 +5518,22 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Nutthapon Petchthai",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Cause 4 de dano.",
+			"zhCN": "造成4点伤害。",
+			"itIT": "Infligge 4 danni.",
+			"enUS": "Deal 4 damage.",
+			"frFR": "Inflige 4 points de dégâts.",
+			"zhTW": "造成4點傷害",
+			"deDE": "Verursacht 4 Schaden.",
+			"jaJP": "4ダメージを与える。",
+			"plPL": "Zadaj 4 pkt. obrażeń.",
+			"esES": "Inflige 4 p. de daño.",
+			"ruRU": "Нанести 4 ед. урона.",
+			"esMX": "Inflige 4 de daño.",
+			"koKR": "피해 4",
+			"thTH": "สร้างความเสียหาย_4_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -5542,7 +5675,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 5,
 		"set": "Tgt",
-		"artist": "Marcleo Vignali",
+		"artist": "Marcelo Vignali",
 		"health": 5,
 		"mechanics": [
 			"INSPIRE"
@@ -5804,6 +5937,21 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
+		"collectionText": {
+			"ptBR": "<b>Poder Heroico</b>\nCause $3 de dano.",
+			"zhCN": "<b>英雄技能</b>\n造成$3点伤害。",
+			"itIT": "<b>Potere Eroe</b>\nInfligge $3 danni.",
+			"enUS": "<b>Hero Power</b>\nDeal $3 damage.",
+			"frFR": "<b>Pouvoir héroïque</b>\nInflige $3 points de dégâts.",
+			"zhTW": "<b>英雄能力</b>\n造成$3點傷害",
+			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $3 Schaden.",
+			"jaJP": "<b>ヒーローパワー</b>\n$3ダメージを\n与える。",
+			"plPL": "<b>Moc specjalna</b>\nZadaj $3 pkt. obrażeń.",
+			"esES": "<b>Poder de héroe</b>\nInflige $3 p. de daño.",
+			"ruRU": "<b>Сила героя</b>\nНаносит $3 ед. урона.",
+			"esMX": "<b>Poder de héroe</b>\nInflige $3 de daño.",
+			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $3 แต้ม"
+		},
 		"cost": 2,
 		"set": "Tgt",
 		"name": "Ballista Shot",
@@ -6022,7 +6170,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"cost": 0,
+		"cost": 1,
 		"set": "Tgt",
 		"attack": 0,
 		"name": "Healing Totem",
@@ -6040,7 +6188,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"cost": 0,
+		"cost": 1,
 		"set": "Tgt",
 		"attack": 1,
 		"name": "Searing Totem",
@@ -6057,7 +6205,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"cost": 0,
+		"cost": 1,
 		"set": "Tgt",
 		"attack": 0,
 		"name": "Stoneclaw Totem",
@@ -6075,7 +6223,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Shaman",
-		"cost": 0,
+		"cost": 1,
 		"set": "Tgt",
 		"attack": 0,
 		"name": "Wrath of Air Totem",
@@ -6560,7 +6708,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
-		"artist": "Ursula dorada",
+		"artist": "Ursula Dorada",
 		"health": 5,
 		"mechanics": [
 			"MODULAR",
@@ -7164,6 +7312,22 @@ var parseCardsText = {
 		"race": "MECHANICAL",
 		"artist": "Zero",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1/+1.",
+			"zhCN": "获得+1/+1。",
+			"itIT": "Fornisce +1/+1.",
+			"enUS": "Give +1/+1.",
+			"frFR": "Donne_+1/+1.",
+			"zhTW": "賦予+1/+1",
+			"deDE": "Verleiht +1/+1.",
+			"jaJP": "+1/+1を付与する。",
+			"plPL": "Daj +1/+1.",
+			"esES": "Otorga +1/+1.",
+			"ruRU": "Добавить +1/+1.",
+			"esMX": "Otorga +1/+1.",
+			"koKR": "+1/+1",
+			"thTH": "มอบ +1/+1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -7432,7 +7596,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"dbfId": 47978,
 		"type": "Spell",
 		"flavor": "Let's see what's behind rift number one!",
@@ -7742,7 +7906,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"health": 3,
 		"mechanics": [
 			"TAUNT"
@@ -9098,6 +9262,22 @@ var parseCardsText = {
 		"race": "MECHANICAL",
 		"artist": "L. Lullabi & K. Turovec",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2_points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -9796,7 +9976,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Boomsday",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 1,
 		"mechanics": [
 			"BATTLECRY"
@@ -9866,7 +10046,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Boomsday",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"health": 4,
 		"dbfId": 48757,
 		"type": "Minion",
@@ -11104,6 +11284,22 @@ var parseCardsText = {
 		"set": "Boomsday",
 		"artist": "Mauricio Herrera",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Destrua um Mecanoide.",
+			"zhCN": "消灭一个机械。",
+			"itIT": "Distrugge un Robot.",
+			"enUS": "Destroy a Mech.",
+			"frFR": "Détruit un Méca.",
+			"zhTW": "摧毀一個機械",
+			"deDE": "Vernichtet einen Mech.",
+			"jaJP": "メカ1体を破壊する。",
+			"plPL": "Zniszcz Mecha.",
+			"esES": "Destruye un robot.",
+			"ruRU": "Уничтожить механизм.",
+			"esMX": "Destruye un Meca.",
+			"koKR": "기계 처치",
+			"thTH": "ทำลายมินเนี่ยน[b]เครื่องจักรหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -11737,6 +11933,7 @@ var parseCardsText = {
 		"set": "Boomsday",
 		"name": "Reckless Experiment",
 		"mechanics": [
+			"TAG_ONE_TURN_EFFECT",
 			"TRIGGER_VISUAL"
 		],
 		"id": "BOT_566e",
@@ -11898,8 +12095,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 5,
 		"set": "Boomsday",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Conceda +4 de Ataque.",
+			"zhCN": "获得+4攻击力。",
+			"itIT": "Fornisce +4 Attacco.",
+			"enUS": "Give +4 Attack.",
+			"frFR": "Donne +4_ATQ.",
+			"zhTW": "賦予+4攻擊力",
+			"deDE": "Verleiht +4 Angriff.",
+			"jaJP": "攻撃力+4を付与する。",
+			"plPL": "Daj +4 do ataku.",
+			"esES": "Otorga +4 p. de ataque.",
+			"ruRU": "+4 к атаке.",
+			"esMX": "Otorga +4 de Ataque.",
+			"koKR": "공격력 +4",
+			"thTH": "มอบพลังโจมตี +4"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -12100,7 +12313,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 2,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -15403,7 +15616,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Boomsday",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"hideStats": true,
 		"name": "Flobbidinous Floop",
 		"health": 30,
@@ -15815,7 +16028,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 0,
 		"set": "Boomsday",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"hideStats": true,
 		"name": "Kadoom Bot",
 		"id": "BOTA_BOSS_20p3",
@@ -15848,10 +16061,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中開放合成。",
+			"deDE": "Herstellung wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で作成可能になる。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Laboratorio Secreto, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Тайной лаборатории (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Brm",
 		"artist": "Jaime Jones",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁。",
+			"itIT": "Sbloccata nel Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中解鎖。",
+			"deDE": "Wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で入手。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Laboratorio Secreto de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Тайной лаборатории в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"dbfId": 2274,
 		"type": "Spell",
 		"flavor": "Each year, folk gather in front of Blackrock Mountain to mourn those who were mind-controlled into the lava.",
@@ -15892,11 +16137,43 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Brm",
 		"artist": "Alex Horley Orlandelli",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -15923,10 +16200,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中開放合成。",
+			"deDE": "Herstellung wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で作成可能になる。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en las Profundidades de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Глубинах Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Brm",
 		"artist": "Mauricio Herrera",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁。",
+			"itIT": "Sbloccata nei Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中解鎖。",
+			"deDE": "Wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で入手。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en las Profundidades de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Глубин Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 잠금 해제",
+			"thTH": "ปลดล็อคในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"dbfId": 2284,
 		"type": "Spell",
 		"flavor": "Dragons breathe fire, sure, but did you know they can also breathe Cotton Candy?  It's harder to give them a reason to do that, though.",
@@ -15964,12 +16273,44 @@ var parseCardsText = {
 		"cardClass": "MAGE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中開放合成。",
+			"deDE": "Herstellung wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Cumbre de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Пике Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Sam Nielson",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁。",
+			"itIT": "Sbloccata nei Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中解鎖。",
+			"deDE": "Wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で入手。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Cumbre de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Пика Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -16040,10 +16381,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Brm",
 		"artist": "Raymond Swanland",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"AFFECTED_BY_SPELL_POWER"
 		],
@@ -16069,12 +16442,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中開放合成。",
+			"deDE": "Herstellung wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で作成可能になる。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Núcleo de Magma, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Огненных Недрах (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Brm",
 		"race": "DEMON",
 		"artist": "Steve Prescott",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁。",
+			"itIT": "Sbloccata nel Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中解鎖。",
+			"deDE": "Wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で入手。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Núcleo de Magma de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Огненных Недр в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 잠금 해제",
+			"thTH": "ปลดล็อคในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -16125,10 +16530,42 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中開放合成。",
+			"deDE": "Herstellung wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で作成可能になる。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en las Profundidades de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Глубинах Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Brm",
 		"artist": "Jim Nelson",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁。",
+			"itIT": "Sbloccata nei Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中解鎖。",
+			"deDE": "Wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で入手。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en las Profundidades de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Глубин Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 잠금 해제",
+			"thTH": "ปลดล็อคในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"dbfId": 2304,
 		"type": "Spell",
 		"flavor": "If you are thinking about visiting Moonbrook, you better roll deep.",
@@ -16145,11 +16582,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Brm",
 		"artist": "Eric Braddock",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -16188,11 +16657,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中開放合成。",
+			"deDE": "Herstellung wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Cumbre de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Пике Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 9,
 		"set": "Brm",
 		"artist": "Trent Kaniuga",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁。",
+			"itIT": "Sbloccata nei Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中解鎖。",
+			"deDE": "Wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で入手。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Cumbre de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Пика Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TAUNT"
 		],
@@ -16219,11 +16720,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中開放合成。",
+			"deDE": "Herstellung wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で作成可能になる。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Núcleo de Magma, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Огненных Недрах (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Brm",
 		"artist": "Stanley Lau",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁。",
+			"itIT": "Sbloccata nel Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中解鎖。",
+			"deDE": "Wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で入手。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Núcleo de Magma de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Огненных Недр в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 잠금 해제",
+			"thTH": "ปลดล็อคในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"CHOOSE_ONE"
 		],
@@ -16297,7 +16830,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Brm",
 		"race": "BEAST",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 2,
 		"dbfId": 2310,
 		"type": "Minion",
@@ -16346,10 +16879,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中開放合成。",
+			"deDE": "Herstellung wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で作成可能になる。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Núcleo de Magma, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Огненных Недрах (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Brm",
 		"artist": "Zoltan Boros",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁。",
+			"itIT": "Sbloccata nel Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中解鎖。",
+			"deDE": "Wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で入手。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Núcleo de Magma de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Огненных Недр в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 잠금 해제",
+			"thTH": "ปลดล็อคในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"referencedTags": [
 			"OVERLOAD"
 		],
@@ -16402,12 +16967,44 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Brm",
 		"race": "ELEMENTAL",
 		"artist": "Paul Mafayon",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"OVERLOAD"
@@ -16460,10 +17057,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中開放合成。",
+			"deDE": "Herstellung wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で作成可能になる。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en las Profundidades de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Глубинах Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Brm",
 		"artist": "Jonboy Meyers",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁。",
+			"itIT": "Sbloccata nei Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中解鎖。",
+			"deDE": "Wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で入手。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en las Profundidades de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Глубин Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 잠금 해제",
+			"thTH": "ปลดล็อคในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"AFFECTED_BY_SPELL_POWER"
 		],
@@ -16486,12 +17115,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中開放合成。",
+			"deDE": "Herstellung wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Cumbre de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Пике Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Brm",
 		"race": "BEAST",
 		"artist": "Jomaro Kindred",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁。",
+			"itIT": "Sbloccata nei Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中解鎖。",
+			"deDE": "Wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で入手。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Cumbre de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Пика Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -16542,10 +17203,42 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Brm",
 		"artist": "Ben Olson",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"dbfId": 2296,
 		"type": "Spell",
 		"flavor": "This is better than Arcane Explosion, so I guess warriors are finally getting revenge on mages for Mortal Strike being worse than Fireball.",
@@ -16574,11 +17267,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中開放合成。",
+			"deDE": "Herstellung wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で作成可能になる。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Núcleo de Magma, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Огненных Недрах (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Brm",
 		"artist": "Efrem Palacios",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁。",
+			"itIT": "Sbloccata nel Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中解鎖。",
+			"deDE": "Wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で入手。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Núcleo de Magma de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Огненных Недр в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 잠금 해제",
+			"thTH": "ปลดล็อคในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -16605,10 +17330,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中開放合成。",
+			"deDE": "Herstellung wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で作成可能になる。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en las Profundidades de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Глубинах Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Brm",
 		"artist": "Luke Mancini",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁。",
+			"itIT": "Sbloccata nei Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中解鎖。",
+			"deDE": "Wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で入手。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en las Profundidades de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Глубин Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 잠금 해제",
+			"thTH": "ปลดล็อคในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"dbfId": 2298,
 		"type": "Spell",
 		"flavor": "I walked into the dungeon and noticed a slain adventurer. In his final moments, he had scrawled out a message in the dust on the wall beside him. Two words: \"rez plz\"",
@@ -16628,12 +17385,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中開放合成。",
+			"deDE": "Herstellung wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Cumbre de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Пике Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Raymond Swanland",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁。",
+			"itIT": "Sbloccata nei Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中解鎖。",
+			"deDE": "Wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で入手。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Cumbre de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Пика Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -16690,11 +17479,43 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中開放合成。",
+			"deDE": "Herstellung wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で作成可能になる。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en las Profundidades de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Глубинах Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Brm",
 		"artist": "Bobby Chiu",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁。",
+			"itIT": "Sbloccata nei Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中解鎖。",
+			"deDE": "Wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で入手。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en las Profundidades de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Глубин Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 잠금 해제",
+			"thTH": "ปลดล็อคในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -16721,12 +17542,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中開放合成。",
+			"deDE": "Herstellung wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で作成可能になる。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Laboratorio Secreto, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Тайной лаборатории (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Edouard Guiton & Stuido HIVE",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁。",
+			"itIT": "Sbloccata nel Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中解鎖。",
+			"deDE": "Wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で入手。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Laboratorio Secreto de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Тайной лаборатории в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -16768,11 +17621,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中開放合成。",
+			"deDE": "Herstellung wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Cumbre de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Пике Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Brm",
 		"artist": "Jaemin Kim",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁。",
+			"itIT": "Sbloccata nei Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中解鎖。",
+			"deDE": "Wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で入手。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Cumbre de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Пика Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -16824,12 +17709,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中開放合成。",
+			"deDE": "Herstellung wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で作成可能になる。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Laboratorio Secreto, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Тайной лаборатории (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Slawomir Maniak",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁。",
+			"itIT": "Sbloccata nel Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中解鎖。",
+			"deDE": "Wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で入手。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Laboratorio Secreto de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Тайной лаборатории в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -16880,12 +17797,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中開放合成。",
+			"deDE": "Herstellung wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で作成可能になる。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Laboratorio Secreto, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Тайной лаборатории (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Lucas Graciano",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁。",
+			"itIT": "Sbloccata nel Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中解鎖。",
+			"deDE": "Wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で入手。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Laboratorio Secreto de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Тайной лаборатории в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"dbfId": 2258,
 		"type": "Minion",
 		"flavor": "Volcanic Drakes breathe lava instead of fire. The antacid vendor at Thorium Point does a brisk business with them.",
@@ -16909,12 +17858,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "John Polidora",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra, en la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -16941,11 +17922,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中開放合成。",
+			"deDE": "Herstellung wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で作成可能になる。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Núcleo de Magma, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Огненных Недрах (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 9,
 		"set": "Brm",
 		"artist": "Alex Horley Orlandelli",
 		"health": 7,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁。",
+			"itIT": "Sbloccata nel Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中解鎖。",
+			"deDE": "Wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で入手。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Núcleo de Magma de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Огненных Недр в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 잠금 해제",
+			"thTH": "ปลดล็อคในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -17055,11 +18068,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中開放合成。",
+			"deDE": "Herstellung wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で作成可能になる。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en las Profundidades de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Глубинах Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Brm",
 		"artist": "Wayne Reynolds",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Abismo Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石深渊中解锁。",
+			"itIT": "Sbloccata nei Sotterranei di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Depths, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile profondeurs de Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石深淵中解鎖。",
+			"deDE": "Wird in den Schwarzfelstiefen im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロックの地下」で入手。",
+			"plPL": "Do odblokowania w Otchłani Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en las Profundidades de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Глубин Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en las Profundidades de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 나락에서 잠금 해제",
+			"thTH": "ปลดล็อคในหุบเหวแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -17103,11 +18148,59 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato i Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中開放合成。",
+			"deDE": "Herstellung wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Cumbre de Roca Negra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Пике Черной горы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Brm",
 		"artist": "Alex Horley Orlandelli",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Destrua uma Lenda.",
+			"zhCN": "消灭一个传说随从。",
+			"itIT": "Distrugge un servitore <b>Leggendario</b>.",
+			"enUS": "Destroy a Legend.",
+			"frFR": "Détruit une légende.",
+			"zhTW": "摧毀一個傳說手下",
+			"deDE": "Vernichtet einen legendären Diener.",
+			"jaJP": "レジェンドのミニオン1体を破壊する。",
+			"plPL": "Zniszcz legendę.",
+			"esES": "Destruye a una leyenda.",
+			"ruRU": "Уничтожить легендарное существо.",
+			"esMX": "Destruye una Leyenda.",
+			"koKR": "전설 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยน[b]ระดับตำนานหนึ่งตัว"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pico da Rocha Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑石塔中解锁。",
+			"itIT": "Sbloccata nei Bastioni di Roccianera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackrock Spire, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile pic Rochenoire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑石塔中解鎖。",
+			"deDE": "Wird in der Schwarzfelsspitze im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックロック山」で入手。",
+			"plPL": "Do odblokowania w Iglicy Czarnej Góry,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Cumbre de Roca Negra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Пика Черной горы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Cumbre de Roca Negra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은바위 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคในยอดเขาแบล็คร็อค ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -17139,12 +18232,44 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中開放合成。",
+			"deDE": "Herstellung wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で作成可能になる。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Laboratorio Secreto, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Тайной лаборатории (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 9,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Ruan Jia",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁。",
+			"itIT": "Sbloccata nel Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中解鎖。",
+			"deDE": "Wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で入手。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Laboratorio Secreto de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Тайной лаборатории в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -17210,12 +18335,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato la Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中開放合成。",
+			"deDE": "Herstellung wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en la Guarida de Alanegra, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Логове Крыла Тьмы (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Brm",
 		"race": "DRAGON",
 		"artist": "Todd Lockwood",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil Asa Negra, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在黑翼之巢中解锁。",
+			"itIT": "Sbloccata nella Fortezza dell'Ala Nera (Massiccio Roccianera).",
+			"enUS": "Unlocked in Blackwing Lair, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile repaire de l’Aile noire de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的黑翼之巢中解鎖。",
+			"deDE": "Wird im Pechschwingenhort im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「ブラックウィングの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Czarnoskrzydłego,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en la Guarida de Alanegra de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Логова Крыла Тьмы в приключении «Черная гора».",
+			"esMX": "Se desbloquea en la Guarida de Alanegra, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 검은날개 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในรังแบล็ควิง ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -17244,11 +18401,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中開放合成。",
+			"deDE": "Herstellung wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で作成可能になる。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Núcleo de Magma, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Огненных Недр (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Brm",
 		"artist": "Matt Dixon",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Núcleo Derretido, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在熔火之心中解锁。",
+			"itIT": "Sbloccata nel Nucleo Ardente (Massiccio Roccianera).",
+			"enUS": "Unlocked in Molten Core, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile cœur du Magma de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的熔火之心中解鎖。",
+			"deDE": "Wird im Geschmolzenen Kern im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「モルテン・コア」で入手。",
+			"plPL": "Do odblokowania w Ognistej Czeluści,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Núcleo de Magma de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Огненных Недр в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Núcleo de magma, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 화산 심장부에서 잠금 해제",
+			"thTH": "ปลดล็อคในแกนหลอมเหลว ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -17299,11 +18488,59 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato il Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Crafting unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中開放合成。",
+			"deDE": "Herstellung wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で作成可能になる。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se puede crear tras jugar en el Laboratorio Secreto, en la aventura de la Montaña Roca Negra.",
+			"ruRU": "Можно создать после получения в Тайной лаборатории (приключение «Черная гора»).",
+			"esMX": "La creación se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Brm",
 		"artist": "Greg Staples",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Cause 3 de dano.",
+			"zhCN": "造成3点伤害。",
+			"itIT": "Infligge 3 danni.",
+			"enUS": "Deal 3 damage.",
+			"frFR": "Inflige 3 points de dégâts.",
+			"zhTW": "造成3點傷害",
+			"deDE": "Verursacht 3 Schaden.",
+			"jaJP": "3ダメージを与える。",
+			"plPL": "Zadaj 3 pkt. obrażeń.",
+			"esES": "Inflige 3 p. de daño.",
+			"ruRU": "Нанести 3 ед. урона.",
+			"esMX": "Inflige 3 de daño.",
+			"koKR": "피해 3",
+			"thTH": "สร้างความเสียหาย_3_แต้ม"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Laboratório Oculto, na aventura da Montanha Rocha Negra.",
+			"zhCN": "加入“黑石山的火焰”冒险模式，在秘密实验室中解锁。",
+			"itIT": "Sbloccata nel Laboratorio Segreto (Massiccio Roccianera).",
+			"enUS": "Unlocked in Hidden Laboratory, in the Blackrock Mountain adventure.",
+			"frFR": "Obtenue dans l’aile laboratoire secret de l’aventure Mont Rochenoire.",
+			"zhTW": "在《勇闖黑石山》的隱藏的實驗室中解鎖。",
+			"deDE": "Wird im Geheimlabor im Schwarzfels freigeschaltet.",
+			"jaJP": "ブラックロック・マウンテン・アドベンチャーの「秘密の研究室」で入手。",
+			"plPL": "Do odblokowania w Ukrytym Laboratorium,\nw przygodzie Czarna Góra.",
+			"esES": "Se desbloquea en el Laboratorio Secreto de la Montaña Roca Negra.",
+			"ruRU": "Можно получить в ходе прохождения Тайной лаборатории в приключении «Черная гора».",
+			"esMX": "Se desbloquea en el Laboratorio oculto, en la aventura Montaña Roca Negra.",
+			"koKR": "검은바위 산 모험의 숨겨진 연구실에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องทดลองลับ ในการผจญภัย Blackrock Mountain"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -19904,6 +21141,22 @@ var parseCardsText = {
 		"cost": 0,
 		"set": "Brm",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 6 de dano.",
+			"zhCN": "造成6点伤害。",
+			"itIT": "Infligge 6 danni.",
+			"enUS": "Deal 6 damage.",
+			"frFR": "Inflige 6 points de dégâts.",
+			"zhTW": "造成6點傷害",
+			"deDE": "Verursacht 6 Schaden.",
+			"jaJP": "6ダメージを与える。",
+			"plPL": "Zadaj 6 pkt. obrażeń.",
+			"esES": "Inflige 6 p. de daño.",
+			"ruRU": "Нанести 6 ед. урона.",
+			"esMX": "Inflige 6 de daño.",
+			"koKR": "피해 6",
+			"thTH": "สร้างความเสียหาย_6_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -21632,6 +22885,22 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Tb",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 6 de dano.",
+			"zhCN": "造成6点伤害。",
+			"itIT": "Infligge 6 danni.",
+			"enUS": "Deal 6 damage.",
+			"frFR": "Inflige 6 points de dégâts.",
+			"zhTW": "造成6點傷害",
+			"deDE": "Verursacht 6 Schaden.",
+			"jaJP": "6ダメージを与える。",
+			"plPL": "Zadaj 6 pkt. obrażeń.",
+			"esES": "Inflige 6 p. de daño.",
+			"ruRU": "Нанести 6 ед. урона.",
+			"esMX": "Inflige 6 de daño.",
+			"koKR": "피해 6",
+			"thTH": "สร้างความเสียหาย_6_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -22259,6 +23528,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Jaemin Kim",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Restaure 6 de Vida.",
+			"zhCN": "恢复6点生命值。",
+			"itIT": "Rigenera 6 Salute.",
+			"enUS": "Restore 6 Health.",
+			"frFR": "Rend 6_PV.",
+			"zhTW": "恢復6點生命值",
+			"deDE": "Stellt 6 Leben wieder her.",
+			"jaJP": "体力を6回復する。",
+			"plPL": "Przywróć 6 pkt. zdrowia.",
+			"esES": "Restaura 6 p. de salud.",
+			"ruRU": "Восстановить 6 ед. здоровья.",
+			"esMX": "Restaura 6 de Salud.",
+			"koKR": "생명력 6 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 6 แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"OVERLOAD"
@@ -22349,6 +23634,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Dave Allsop",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Troque o Ataque pela Vida de um lacaio.",
+			"zhCN": "使一个随从的攻击力和生命值互换。",
+			"itIT": "Scambia Attacco e Salute di un servitore.",
+			"enUS": "Swap Attack and Health of a minion.",
+			"frFR": "Échange l’Attaque et la Vie d’un serviteur.",
+			"zhTW": "對調一個手下的攻擊力和生命值",
+			"deDE": "Vertauscht Angriff und Leben eines Dieners.",
+			"jaJP": "ミニオン1体の攻撃力と体力を入れ替える。",
+			"plPL": "Zamień atak i zdrowie stronnika.",
+			"esES": "Intercambia el ataque y la salud de un esbirro.",
+			"ruRU": "Поменять местами атаку и здоровье существа.",
+			"esMX": "Intercambia el Ataque y la Salud de un esbirro.",
+			"koKR": "하수인의 공격력과 생명력 바꾸기",
+			"thTH": "สลับพลังโจมตีและพลังชีวิต[b]ของมินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -22541,8 +23842,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Gangs",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Restaure toda a Vida de um lacaio.",
+			"zhCN": "为一个随从恢复所有生命值。",
+			"itIT": "Rigenera la Salute di un servitore al massimo.",
+			"enUS": "Restore a minion to full Health.",
+			"frFR": "Rend tous ses PV à un serviteur.",
+			"zhTW": "使一個手下的生命值恢復全滿",
+			"deDE": "Stellt das volle Leben eines Dieners wieder her.",
+			"jaJP": "ミニオン1体の体力を上限まで回復する。",
+			"plPL": "Przywróć stronnika do pełni zdrowia.",
+			"esES": "Restaura toda la salud de un esbirro.",
+			"ruRU": "Полностью восстановить здоровье существу.",
+			"esMX": "Restaura toda la Salud a un esbirro.",
+			"koKR": "하수인 생명력 모두 회복",
+			"thTH": "ฟื้นฟูพลังชีวิตให้[b]มินเนี่ยน_1_ตัวจนเต็ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -22646,7 +23963,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 2,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -22819,7 +24136,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Gangs",
-		"artist": "Mike Saas",
+		"artist": "Mike Sass",
 		"dbfId": 40419,
 		"type": "Spell",
 		"flavor": "When you really need a job done… but you don't really care if it gets done right.",
@@ -22842,7 +24159,7 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Gangs",
 		"race": "MURLOC",
-		"artist": "Mike Saas",
+		"artist": "Mike Sass",
 		"health": 1,
 		"dbfId": 42223,
 		"type": "Minion",
@@ -22865,9 +24182,25 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>. Conceda <b>Provocar</b> a ele.",
+			"zhCN": "<b>战吼：</b>召唤一个<b>青玉魔像</b>，使其获得\n<b>嘲讽</b>。",
+			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b> e gli fornisce <b>Provocazione</b>.",
+			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>. Give it <b>Taunt</b>.",
+			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>. Lui confère <b>Provocation</b>.",
+			"zhTW": "<b>戰吼：</b>召喚一個<b>翠玉魔像</b>並賦予<b>嘲諷</b>",
+			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei. Verleiht ihm <b>Spott</b>.",
+			"jaJP": "<b>雄叫び:</b>  \n<b>翡翠のゴーレム</b>を\n1体召喚し\n<b>挑発</b>を付与する。",
+			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>. Daj mu <b>Prowokację</b>.",
+			"esES": "<b>Grito de batalla:</b> Invoca un <b>gólem de jade</b> y le otorga <b>Provocar</b>.",
+			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b> с <b>«Провокацией»</b>.",
+			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b> y le otorgas <b>Provocación</b>.",
+			"koKR": "<b>전투의 함성:</b> <b>비취 골렘</b>을 소환하고 <b>도발</b>을 부여합니다.",
+			"thTH": "<b>คำรามสู้ศึก:</b> เรียก<b>เจดโกเล็ม</b> และมอบ[b]<b>ยั่วยุ</b> ให้มัน"
+		},
 		"cost": 7,
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 5,
 		"mechanics": [
 			"BATTLECRY"
@@ -22902,7 +24235,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Gangs",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"mechanics": [
 			"OVERLOAD"
 		],
@@ -23235,7 +24568,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Gangs",
 		"race": "BEAST",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"health": 7,
 		"mechanics": [
 			"FINISH_ATTACK_SPELL_ON_DAMAGE",
@@ -23314,6 +24647,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Luca Zontini",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Cause dano equivalente ao Ataque deste lacaio.",
+			"zhCN": "造成等同于该随从攻击力的伤害。",
+			"itIT": "Infligge danni pari al proprio Attacco.",
+			"enUS": "Deal damage equal to this minion's Attack.",
+			"frFR": "Inflige des dégâts d’un montant égal à l’Attaque de ce serviteur.",
+			"zhTW": "造成等同此手下攻擊力的傷害",
+			"deDE": "Verursacht Schaden, der dem Angriff dieses Dieners entspricht.",
+			"jaJP": "このミニオンの攻撃力に等しいダメージを与える。",
+			"plPL": "Zadaj obrażenia równe atakowi tego stronnika.",
+			"esES": "Inflige un daño\nequivalente al ataque\nde_este_esbirro.",
+			"ruRU": "Нанести урон, равный атаке существа.",
+			"esMX": "Inflige un daño equivalente al Ataque de este esbirro.",
+			"koKR": "이 하수인의 공격력만큼 피해",
+			"thTH": "สร้างความเสียหาย[b]เท่าพลังโจมตี[b]ของมินเนี่ยนตัวนี้"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -23602,6 +24951,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "[x]<b>Provocar</b>\n<b>Grito de Guerra:</b> Evoque um \n<b>Golem de Jade</b>.",
+			"zhCN": "<b>嘲讽，战吼：</b>召唤一个<b>青玉魔像</b>。",
+			"itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>.",
+			"enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon a\n<b>Jade Golem</b>.",
+			"frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.",
+			"zhTW": "<b>嘲諷</b>\n<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>",
+			"deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "<b>挑発</b>、<b>雄叫び:</b>\n <b>翡翠のゴーレム</b>を\n1体召喚する。     ",
+			"plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "[x]<b>Provocar</b>. <b>Grito de batalla:</b>\nInvoca un <b>gólem de jade</b>.",
+			"ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b> призывает <b>нефритового голема</b>.",
+			"esMX": "<b>Provocación</b>\n<b>Grito de batalla:</b> Invoca un <b>Gólem de jade</b>.",
+			"koKR": "<b>도발</b>, <b>전투의 함성:</b>\n<b>비취 골렘</b>을 소환합니다.",
+			"thTH": "[x]<b>ยั่วยุ</b>\n<b>คำรามสู้ศึก:</b> \nเรียก <b>เจดโกเล็ม</b>"
+		},
 		"cost": 6,
 		"set": "Gangs",
 		"artist": "Zoltan Boros",
@@ -23675,6 +25040,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Escolha Um -</b> Evoque um <b>Golem de Jade</b>; ou Coloque 3 cópias deste card no seu deck.",
+			"zhCN": "<b>抉择：</b>召唤一个<b>青玉魔像</b>；或者将该牌的三个复制洗入你的\n牌库。",
+			"itIT": "<b>Scegli:</b> evoca un <b>Golem di Giada</b> <b>o</b> mette tre copie di questa carta nel tuo mazzo.",
+			"enUS": "<b>Choose One -</b> Summon a <b>Jade Golem</b>; or Shuffle 3 copies of this card into your deck.",
+			"frFR": "<b>Choix des armes :</b> invoque un <b>golem de jade</b> ou place 3 copies de cette carte dans votre deck.",
+			"zhTW": "<b>二選一：</b>召喚\n一個<b>翠玉魔像</b>，或將三張<b>翠玉塑像</b>洗入你的牌堆",
+			"deDE": "<b>Wählt aus:</b> Ruft einen <b>Jadegolem</b> herbei; oder mischt 3 Kopien dieser Karte in Euer Deck.",
+			"jaJP": "[x]<b>選択:</b>\n<b>翡翠のゴーレム</b>\nを1体召喚する。\nまたは、このカードのコピー\n3枚を自分のデッキに混ぜる。",
+			"plPL": "<b>Wybierz jedno:</b> Przyzwij <b>Nefrytowego golema</b>; lub wtasuj 3 kopie tej karty do twojej talii.",
+			"esES": "<b>Elige una:</b> Invoca un <b>gólem de jade</b>,\no bien mete 3 copias de esta carta en tu mazo.",
+			"ruRU": "<b>Выберите эффект:</b> призывает <b>нефритового голема</b>; или замешивает 3 копии этой карты в колоду.",
+			"esMX": "<b>Elige una opción:</b> invoca un <b>Gólem de jade</b> o coloca 3 copias de esta carta en tu mazo.",
+			"koKR": "<b>선택 -</b> <b>비취 골렘</b>을 소환합니다. 또는\n이 카드를 3장 복사하여 내 덱에 섞어 넣습니다.",
+			"thTH": "<b>เลือกหนึ่งอย่าง -</b> เรียก <b>เจดโกเล็ม</b> หรือสับการ์ดนี้ 3 ใบ เข้าไปในเด็คของคุณ"
+		},
 		"cost": 1,
 		"set": "Gangs",
 		"artist": "Matthew O'Connor",
@@ -23794,7 +25175,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Gangs",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"dbfId": 40375,
 		"type": "Spell",
 		"flavor": "Filled with electrolytes!",
@@ -23862,7 +25243,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Gangs",
 		"race": "ELEMENTAL",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -23893,7 +25274,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Gangs",
 		"race": "ELEMENTAL",
-		"artist": "J. Cranford & A.J. Nazzaro",
+		"artist": "J. Cranford & A. J. Nazzaro",
 		"health": 2,
 		"dbfId": 42053,
 		"type": "Minion",
@@ -24790,6 +26171,22 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": "Transforma um lacaio inimigo aleatório.",
+			"zhCN": "随机使一个敌方随从变形。",
+			"itIT": "Trasforma un servitore nemico casuale in una pecora.",
+			"enUS": "Polymorph a random enemy minion.",
+			"frFR": "Métamorphose un serviteur adverse aléatoire.",
+			"zhTW": "將一個隨機敵方手下變成羊",
+			"deDE": "Verwandelt einen zufälligen feindlichen Diener.",
+			"jaJP": "ランダムな[b]敵の[b]ミニオン1体を[b]変身させる。",
+			"plPL": "Przemień losowego wrogiego stronnika w Owcę.",
+			"esES": "Transforma\na un esbirro enemigo aleatorio.",
+			"ruRU": "Превращает случайное существо противника.",
+			"esMX": "Lanza Polimorfia sobre un esbirro enemigo aleatorio.",
+			"koKR": "무작위 적 하수인을 변이시킵니다.",
+			"thTH": "สุ่มเปลี่ยนร่าง[b]มินเนี่ยนศัตรูหนึ่งตัว"
+		},
 		"cost": 5,
 		"set": "Gangs",
 		"artist": "Konstantin Turovec",
@@ -25347,6 +26744,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Dave Allsop",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Conceda +3 de Vida.",
+			"zhCN": "获得+3生命值。",
+			"itIT": "Fornisce +3 Salute a un tuo servitore.",
+			"enUS": "Give +3 Health.",
+			"frFR": "Donne +3_PV.",
+			"zhTW": "賦予+3生命值",
+			"deDE": "Verleiht +3 Leben.",
+			"jaJP": "体力+3を付与する。",
+			"plPL": "Daj +3 do zdrowia.",
+			"esES": "Otorga +3 p. de salud.",
+			"ruRU": "+3 к здоровью.",
+			"esMX": "Otorga +3 de Salud.",
+			"koKR": "생명력 +3",
+			"thTH": "มอบพลังชีวิต +3"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -25421,7 +26834,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Gangs",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"durability": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -25445,7 +26858,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Gangs",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"name": "Smuggling",
 		"id": "CFM_631e",
 		"audio": {
@@ -25465,8 +26878,10 @@ var parseCardsText = {
 		"artist": "Garrett Hanna",
 		"health": 5,
 		"mechanics": [
-			"STEALTH",
 			"TRIGGER_VISUAL"
+		],
+		"referencedTags": [
+			"STEALTH"
 		],
 		"dbfId": 40441,
 		"type": "Minion",
@@ -25612,7 +27027,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 2,
 		"mechanics": [
 			"BATTLECRY"
@@ -25650,7 +27065,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Smuggling",
 		"id": "CFM_643e",
 		"audio": {
@@ -25718,8 +27133,24 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Gangs",
 		"race": "MURLOC",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1_point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -25779,7 +27210,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 1,
 		"mechanics": [
 			"BATTLECRY"
@@ -25815,7 +27246,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 6,
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"attack": 6,
 		"name": "\"Little Friend\"",
 		"health": 6,
@@ -26087,7 +27518,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Gangs",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"health": 3,
 		"mechanics": [
 			"BATTLECRY"
@@ -26165,6 +27596,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Alex Alexandrov",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Silencie um lacaio.",
+			"zhCN": "沉默一个随从。",
+			"itIT": "<b>Silenzia</b> un servitore.",
+			"enUS": "Silence a minion.",
+			"frFR": "Réduit au Silence un serviteur.",
+			"zhTW": "沉默一個手下",
+			"deDE": "Bringt einen Diener zum Schweigen.",
+			"jaJP": "ミニオン1体を沈黙させる。",
+			"plPL": "Wycisz stronnika.",
+			"esES": "Silencia a un esbirro.",
+			"ruRU": "Наложить на существо немоту.",
+			"esMX": "Silencia a un esbirro.",
+			"koKR": "하수인 침묵",
+			"thTH": "ผนึกความสามารถ[b]มินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -26259,8 +27706,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Gangs",
-		"artist": "Eva Wildermann",
+		"artist": "Eva Widermann",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Restaure 2 de Vida.",
+			"zhCN": "恢复2点生命值。",
+			"itIT": "Rigenera 2 Salute.",
+			"enUS": "Restore 2 Health.",
+			"frFR": "Rend 2_points de vie.",
+			"zhTW": "恢復2點生命值",
+			"deDE": "Stellt 2 Leben wieder her.",
+			"jaJP": "体力を2回復する。",
+			"plPL": "Przywróć 2 pkt. zdrowia.",
+			"esES": "Restaura 2 p. de salud.",
+			"ruRU": "Восстановить 2 ед. здоровья.",
+			"esMX": "Restaura 2 de Salud.",
+			"koKR": "생명력 2 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 2 แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -26298,6 +27761,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "J. Ejsing & E. Amundsen",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Coloque uma cópia no seu deck.",
+			"zhCN": "将一个复制洗入你的牌库。",
+			"itIT": "Mette una copia di un tuo servitore nel tuo mazzo.",
+			"enUS": "Shuffle a copy into your deck.",
+			"frFR": "Place une copie dans votre deck.",
+			"zhTW": "將一張相同的牌洗入你的牌堆",
+			"deDE": "Mischt eine Kopie in Euer Deck.",
+			"jaJP": "コピー1枚を自分のデッキに混ぜる。",
+			"plPL": "Wtasuj kopię do twojej talii.",
+			"esES": "Mete una copia en tu mazo.",
+			"ruRU": "Замешать копию существа в колоду.",
+			"esMX": "Coloca una copia en tu mazo.",
+			"koKR": "복사하여 내 덱에 섞어 넣음",
+			"thTH": "สับ_1_ก๊อปปี้เข้าเด็คคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -26509,6 +27988,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Mauricio Herrera",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 5 de dano.",
+			"zhCN": "造成5点伤害。",
+			"itIT": "Infligge 5 danni.",
+			"enUS": "Deal 5 damage.",
+			"frFR": "Inflige 5_points de dégâts.",
+			"zhTW": "造成5點傷害",
+			"deDE": "Verursacht 5 Schaden.",
+			"jaJP": "5ダメージを与える。",
+			"plPL": "Zadaj 5 pkt. obrażeń.",
+			"esES": "Inflige 5 p. de daño.",
+			"ruRU": "Нанести 5 ед. урона.",
+			"esMX": "Inflige 5 de daño.",
+			"koKR": "피해 5",
+			"thTH": "สร้างความเสียหาย[b]5_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"DEATHRATTLE"
@@ -26718,7 +28213,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 5,
 		"set": "Gangs",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 5,
 		"mechanics": [
 			"BATTLECRY"
@@ -26757,7 +28252,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Gangs",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "We All Scream",
 		"id": "CFM_671e",
 		"audio": {
@@ -26776,6 +28271,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Jakub Kasper",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Troque por um lacaio do seu deck.",
+			"zhCN": "与你牌库中的一个随从交换。",
+			"itIT": "Scambia questo servitore con un servitore nel tuo mazzo.",
+			"enUS": "Swap with a minion in your deck.",
+			"frFR": "L’échange avec un serviteur de votre deck.",
+			"zhTW": "與你牌堆中的手下交換",
+			"deDE": "Tauscht diesen Diener gegen einen anderen in Eurem Deck aus.",
+			"jaJP": "自分のデッキのミニオン1体と入れ替える。",
+			"plPL": "Wymień na stronnika z_twojej talii.",
+			"esES": "Intercambia a este esbirro por uno de tu mazo.",
+			"ruRU": "Заменить существом из колоды.",
+			"esMX": "Intercámbialo por un esbirro de tu mazo.",
+			"koKR": "내 덱의 하수인과 교체",
+			"thTH": "สลับกับมินเนี่ยน[b]หนึ่งตัวในเด็คของคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -26968,6 +28479,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Cause $2 de dano.\n<b>Combo:</b> Evoque um <b>Golem de Jade</b>.",
+			"zhCN": "造成$2点伤害。\n<b>连击：</b>召唤一个<b>青玉魔像</b>。",
+			"itIT": "Infligge $2 danni. <b>Combo:</b> evoca un <b>Golem di Giada</b>.",
+			"enUS": "Deal $2 damage.\n<b>Combo:</b> Summon a <b>Jade Golem</b>.",
+			"frFR": "Inflige $2 |4(point,points) de dégâts. <b>Combo :</b> invoque un <b>golem de jade</b>.",
+			"zhTW": "造成$2點傷害。<b>連擊：</b>召喚一個\n<b>翠玉魔像</b>",
+			"deDE": "Verursacht $2 Schaden. <b>Combo:</b> Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "[x]  $2ダメージを与える。\n<b>コンボ:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
+			"plPL": "Zadaj $2 pkt. obrażeń.\n<b>Kombinacja:</b> Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "Inflige $2 p. de daño.\n<b>Combo:</b> Invoca un <b>gólem de jade</b>.",
+			"ruRU": "Наносит $2 ед. урона. <b>Серия приемов:</b> призывает\n<b>нефритового голема</b>.",
+			"esMX": "Inflige $2 de daño.\n<b>Combo:</b> invoca un <b>Gólem de jade</b>.",
+			"koKR": "[x]피해를 $2 줍니다.\n<b>연계:</b> <b>비취 골렘</b>을\n소환합니다.",
+			"thTH": "สร้างความเสียหาย $2 แต้ม\n<b>คอมโบ:</b> เรียก <b>เจดโกเล็ม</b>"
+		},
 		"cost": 2,
 		"set": "Gangs",
 		"artist": "Izzy Hoover",
@@ -27001,6 +28528,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Furtividade</b>.\n<b>Último Suspiro:</b> Evoque um <b>Golem de Jade</b>.",
+			"zhCN": "<b>潜行，亡语：</b>召唤一个<b>青玉魔像</b>。",
+			"itIT": "<b>Furtività</b>. <b>Rantolo di Morte:</b> evoca un <b>Golem di Giada</b>.",
+			"enUS": "<b>Stealth</b>\n<b>Deathrattle:</b> Summon a <b>Jade Golem</b>.",
+			"frFR": "<b>Camouflage</b>. <b>Râle d’agonie :</b> invoque un <b>golem de jade</b>.",
+			"zhTW": "<b>潛行</b>\n<b>死亡之聲：</b>召喚一個<b>翠玉魔像</b>",
+			"deDE": "<b>Verstohlenheit</b>. <b>Todesröcheln:</b> Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "[x]<b>隠れ身</b>、 <b>断末魔:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
+			"plPL": "<b>Ukrycie</b>\n<b>Agonia:</b> Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "<b>Sigilo</b>.\n<b>Último aliento:</b> Invoca un <b>gólem de jade</b>.",
+			"ruRU": "<b>Маскировка</b>. <b>Предсмертный хрип:</b> призывает   <b>нефритового голема</b>.",
+			"esMX": "<b>Sigilo</b>\n<b>Estertor:</b> invoca un <b>Gólem de jade</b>.",
+			"koKR": "<b>은신</b>, <b>죽음의 메아리:</b>\n<b>비취 골렘</b>을 소환합니다.",
+			"thTH": "<b>ซ่อนตัว</b>\n<b>เสียงสุดท้าย:</b> เรียก <b>เจดโกเล็ม</b>"
+		},
 		"cost": 2,
 		"set": "Gangs",
 		"artist": "Slawomir Maniak",
@@ -27043,6 +28586,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Zoltan Boros",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Devolva à sua mão.",
+			"zhCN": "移回你的手牌。",
+			"itIT": "Fa tornare un tuo servitore nella tua mano.",
+			"enUS": "Return to your hand.",
+			"frFR": "Est renvoyé dans votre main.",
+			"zhTW": "返回你的手中",
+			"deDE": "Lasst diesen Diener auf Eure Hand zurückkehren.",
+			"jaJP": "自分の手札に戻す。",
+			"plPL": "Cofnij do twojej ręki.",
+			"esES": "Lo devuelve a tu mano.",
+			"ruRU": "Вернуть существо в руку.",
+			"esMX": "Devuelve un esbirro a tu mano.",
+			"koKR": "내 손으로 하수인 가져오기",
+			"thTH": "นำกลับขึ้นมือคุณ"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -27080,6 +28639,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Andrew Hou",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2/+2.",
+			"zhCN": "获得+2/+2。",
+			"itIT": "Fornisce +2/+2.",
+			"enUS": "Give +2/+2.",
+			"frFR": "Donne_+2/+2.",
+			"zhTW": "賦予+2/+2",
+			"deDE": "Verleiht +2/+2.",
+			"jaJP": "+2/+2を付与する。",
+			"plPL": "Daj +2/+2.",
+			"esES": "Otorga +2/+2.",
+			"ruRU": "Добавить +2/+2.",
+			"esMX": "Otorga +2/+2.",
+			"koKR": "+2/+2",
+			"thTH": "มอบ +2/+2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -27241,6 +28816,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Cause $4 de dano. Evoque um <b>Golem de Jade</b>.",
+			"zhCN": "造成$4点伤害，召唤一个<b>青玉魔像</b>。",
+			"itIT": "Infligge $4 danni. Evoca un <b>Golem di Giada</b>.",
+			"enUS": "Deal $4 damage. Summon a <b>Jade Golem</b>.",
+			"frFR": "Inflige $4 |4(point,points) de dégâts. Invoque un <b>golem de jade</b>.",
+			"zhTW": "造成$4點傷害。召喚一個\n<b>翠玉魔像</b>",
+			"deDE": "Verursacht $4 Schaden. Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "[x]$4ダメージを与える。\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
+			"plPL": "Zadaj $4 pkt. obrażeń. Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "Inflige $4 p. de daño. Invoca un <b>gólem de jade</b>.",
+			"ruRU": "Наносит $4 ед. урона. Призывает <b>нефритового голема</b>.",
+			"esMX": "Inflige $4 de daño. Invoca un <b>Gólem de jade</b>.",
+			"koKR": "[x]피해를 $4 줍니다.\n<b>비취 골렘</b>을 소환합니다.",
+			"thTH": "สร้างความเสียหาย $4 แต้ม\nเรียก <b>เจดโกเล็ม</b>"
+		},
 		"cost": 4,
 		"set": "Gangs",
 		"artist": "Phil Saunders",
@@ -28095,6 +29686,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Evoque um <b>Golem de Jade</b>. Receba um Cristal de Mana vazio.",
+			"zhCN": "召唤一个<b>青玉魔像</b>，获得一个空的法力水晶。",
+			"itIT": "Evoca un <b>Golem di Giada</b>. Fornisce 1 Cristallo di Mana vuoto",
+			"enUS": "Summon a <b>Jade Golem</b>. Gain an empty Mana Crystal.",
+			"frFR": "Invoque un <b>golem de jade</b>. Gagne un cristal de mana vide.",
+			"zhTW": "召喚一個\n<b>翠玉魔像</b>。獲得\n1顆空的法力水晶",
+			"deDE": "Ruft einen <b>Jadegolem</b> herbei. Erhaltet einen leeren Manakristall.",
+			"jaJP": "[x]<b>翡翠のゴーレム</b>\nを1体召喚する。\n空のマナクリスタル\nを1つ獲得する。",
+			"plPL": "Przyzwij <b>Nefrytowego golema</b>. Otrzymujesz pusty kryształ many.",
+			"esES": "Invoca un\n<b>gólem de jade</b>. Obtienes un cristal de maná vacío.",
+			"ruRU": "Призывает <b>нефритового голема</b>. Вы получаете\n[x]пустой кристалл маны.",
+			"esMX": "Invoca un <b>Gólem de jade</b>. Obtienes un Cristal de maná vacío.",
+			"koKR": "<b>비취 골렘</b>을 소환합니다. 빈 마나 수정을 얻습니다.",
+			"thTH": "เรียก <b>เจดโกเล็ม</b> ได้รับคริสตัลมานาเปล่า[b]หนึ่งอัน"
+		},
 		"cost": 3,
 		"set": "Gangs",
 		"artist": "Zoltan Boros",
@@ -28124,6 +29731,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>.",
+			"zhCN": "<b>战吼：</b>召唤一个\n<b>青玉魔像</b>。",
+			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>.",
+			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.",
+			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.",
+			"zhTW": "<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>",
+			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "[x]<b>雄叫び:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
+			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "[x]<b>Grito de batalla:</b>\nInvoca un\n<b>gólem de jade</b>.",
+			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b>.",
+			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b>.",
+			"koKR": "<b>전투의 함성:</b>\n<b>비취 골렘</b>을 소환합니다.",
+			"thTH": "<b>คำรามสู้ศึก:</b> \nเรียก <b>เจดโกเล็ม</b>"
+		},
 		"cost": 4,
 		"set": "Gangs",
 		"race": "ELEMENTAL",
@@ -28190,9 +29813,25 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
+			"zhCN": "<b>战吼：</b>召唤一个<b>青玉魔像</b>。\n<b>过载：</b>（1）",
+			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>. <b>Sovraccarico:</b> (1)",
+			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.\n<b><b>Overload</b>:</b> (1)",
+			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.\n<b><b>Surcharge :</b></b> (1)",
+			"zhTW": "[x]<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>\n<b><b>超載</b>：</b>(1)",
+			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei. <b>Überladung:</b> (1)",
+			"jaJP": "[x]<b>雄叫び:</b> \n<b>翡翠のゴーレム</b>を\n1体召喚する。\n     <b>オーバーロード</b>:（1）",
+			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.\n<b>Przeciążenie:</b> (1)",
+			"esES": "[x]<b>Grito de batalla:</b> Invoca un\n<b>gólem de jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
+			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b>.\n<b>Перегрузка:</b> (1)",
+			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
+			"koKR": "[x]<b>전투의 함성:</b>\n<b>비취 골렘</b>을 소환합니다.\n<b>과부하:</b> (1)",
+			"thTH": "<b>คำรามสู้ศึก:</b>\nเรียก <b>เจดโกเล็ม</b> \n<b><b>โอเวอร์โหลด</b>:</b> (1)"
+		},
 		"cost": 2,
 		"set": "Gangs",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"durability": 2,
 		"mechanics": [
 			"BATTLECRY",
@@ -28947,6 +30586,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Dany Orizio",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2/+2.",
+			"zhCN": "获得+2/+2。",
+			"itIT": "Fornisce +2/+2.",
+			"enUS": "Give +2/+2.",
+			"frFR": "Donne_+2/+2.",
+			"zhTW": "賦予+2/+2",
+			"deDE": "Verleiht +2/+2.",
+			"jaJP": "+2/+2を付与する。",
+			"plPL": "Daj +2/+2.",
+			"esES": "Otorga +2/+2.",
+			"ruRU": "Добавить +2/+2.",
+			"esMX": "Otorga +2/+2.",
+			"koKR": "+2/+2",
+			"thTH": "มอบ +2/+2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -29183,6 +30838,22 @@ var parseCardsText = {
 		"set": "Gangs",
 		"artist": "Gonzalo Ordonez",
 		"health": 7,
+		"targetingArrowText": {
+			"ptBR": "Silencie um lacaio com Último Suspiro.",
+			"zhCN": "<b>沉默</b>一个具有<b>亡语</b>的随从。",
+			"itIT": "<b>Silenzia</b> un servitore con <b>Rantolo di Morte</b>.",
+			"enUS": "Silence a minion with Deathrattle.",
+			"frFR": "Réduit au Silence un serviteur avec Râle d’agonie.",
+			"zhTW": "沉默一個有死亡之聲的手下",
+			"deDE": "Bringt einen Diener mit Todesröcheln zum Schweigen.",
+			"jaJP": "断末魔を持つミニオン1体を沈黙させる。",
+			"plPL": "Wycisz stronnika z Agonią.",
+			"esES": "Silencia a un esbirro con Último aliento.",
+			"ruRU": "Наложить немоту на существо с «Предсмертным хрипом».",
+			"esMX": "Silencia a un esbirro con Estertor.",
+			"koKR": "죽음의 메아리 하수인 침묵",
+			"thTH": "ผนึกความสามารถ[b]มินเนี่ยนที่มี[b]เสียงสุดท้ายหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -29267,6 +30938,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": " <b>Grito de Guerra e Último Suspiro:</b> Evoque um <b>Golem de Jade</b>.",
+			"zhCN": "<b>战吼，亡语：</b>召唤一个<b>青玉魔像</b>。",
+			"itIT": "<b>Grido di Battaglia</b> e <b>Rantolo di Morte:</b> evoca un <b>Golem di Giada</b>.",
+			"enUS": " <b>Battlecry and Deathrattle:</b> Summon a <b>Jade Golem</b>.",
+			"frFR": "<b>Cri de guerre et Râle d’agonie :</b> invoque un <b>golem de jade</b>.",
+			"zhTW": "<b>戰吼及死亡之聲：</b>召喚一個<b>翠玉魔像</b>",
+			"deDE": "<b>Kampfschrei und Todesröcheln:</b> Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "[x]<b>雄叫び＆断末魔:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
+			"plPL": "<b>Okrzyk bojowy i Agonia:</b> Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "<b>Grito de batalla y\nÚltimo aliento:</b>\nInvoca un\n<b>gólem de jade</b>.",
+			"ruRU": "<b>Боевой клич и предсмертный хрип:</b> призывает   <b>нефритового голема</b>.",
+			"esMX": "<b>Grito de batalla y Estertor:</b> invoca un <b>Gólem de jade</b>.",
+			"koKR": "[x]<b>전투의 함성과\n죽음의 메아리:</b>\n<b>비취 골렘</b>을 소환합니다.",
+			"thTH": "<b>คำรามสู้ศึกและเสียงสุดท้าย:</b> เรียก <b>เจดโกเล็ม</b>"
+		},
 		"cost": 6,
 		"set": "Gangs",
 		"artist": "Glenn Rane",
@@ -29332,7 +31019,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Gangs",
-		"artist": "Kan Lui",
+		"artist": "Kan Liu",
 		"mechanics": [
 			"DISCOVER"
 		],
@@ -31702,6 +33389,22 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Paladino no nível 57.",
+			"zhCN": "圣骑士达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Paladino.",
+			"enUS": "Unlocked at Paladin Level 57.",
+			"frFR": "Débloquée au niveau 57 du paladin.",
+			"zhTW": "於聖騎士57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Paladin Stufe 57 erreicht.",
+			"jaJP": "パラディンレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie paladyna.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el paladín.",
+			"ruRU": "Доступна по достижении 57-го уровня паладином.",
+			"esMX": "Se desbloquea en nivel 57 de Paladín.",
+			"koKR": "성기사 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพาลาดินมีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
@@ -31766,10 +33469,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"artist": "Luca Zontini",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 841,
 		"type": "Spell",
 		"flavor": "If the Holy Light forsakes you, good luck casting this spell.  Also, you're probably a jerk.",
@@ -31789,10 +33524,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 10,
 		"set": "Core",
 		"artist": "Sean O’Daniels",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"dbfId": 8,
 		"type": "Spell",
 		"flavor": "Nominated as \"Spell Most Likely to Make Your Opponent Punch the Wall.\"",
@@ -31874,10 +33641,42 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Steve Ellis",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 279,
 		"type": "Spell",
 		"flavor": "It doesn't matter how pious you are.  Everyone needs a good smiting now and again.",
@@ -31992,10 +33791,42 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Michael Komarck",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"dbfId": 1099,
 		"type": "Spell",
 		"flavor": "I see what you did there.",
@@ -32015,10 +33846,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Jessica Jung",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 613,
 		"type": "Spell",
 		"flavor": "Sure the extra protection is nice, but the shield really reduces visibility.",
@@ -32065,10 +33928,42 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Dany Orizio",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 1050,
 		"type": "Spell",
 		"flavor": "The claw decides who will stay and who will go.",
@@ -32106,10 +34001,42 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Cyril Van Der Haegen",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 773,
 		"type": "Spell",
 		"flavor": "8 Health, no waiting.",
@@ -32144,10 +34071,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Core",
 		"artist": "Richard Wright",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 467,
 		"type": "Spell",
 		"flavor": "\"Cast Moonfire, and never stop.\" - How to Be a Druid, Chapter 5, Section 3",
@@ -32170,10 +34129,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Brad Vancata",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"referencedTags": [
 			"TAUNT"
 		],
@@ -32223,10 +34214,42 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Grace Liu",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"dbfId": 742,
 		"type": "Spell",
 		"flavor": "What do they roar? Nobody can quite tell, but it sounds like \"Elephant Macho Breeze\".  It's probably not that, though.",
@@ -32273,10 +34296,42 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Sean O’Daniels",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"dbfId": 64,
 		"type": "Spell",
 		"flavor": "When a bear rears back and extends his arms, he's about to Swipe!  ... or hug.",
@@ -32308,10 +34363,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
-		"cost": 2,
+		"cost": 3,
 		"set": "Core",
 		"artist": "James Ryman",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 1124,
 		"type": "Spell",
 		"flavor": "Grow your own mana crystals with this Mana Crystal Growth Kit, only 39.99!",
@@ -32406,10 +34493,42 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Vance Kovacs",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 77,
 		"type": "Spell",
 		"flavor": "There was going to be a pun in this flavor text, but it just came out baa-d.",
@@ -32460,10 +34579,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Dave Berggren",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 555,
 		"type": "Spell",
 		"flavor": "Playing this card makes you SMARTER.  And let's face it: we could all stand to be a little smarter.",
@@ -32483,10 +34634,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Steve Ellis",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"mechanics": [
 			"FREEZE"
 		],
@@ -32521,10 +34704,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Howard Lyon",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 447,
 		"type": "Spell",
 		"flavor": "This spell is much better than Arcane Implosion.",
@@ -32547,10 +34762,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Josh Tallman",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"mechanics": [
 			"FREEZE"
 		],
@@ -32579,10 +34826,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Jim Nelson",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"referencedTags": [
 			"TAUNT"
 		],
@@ -32643,10 +34922,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 44.",
+			"zhCN": "达到44级后解锁。",
+			"itIT": "Sbloccata al livello 44.",
+			"enUS": "Unlocked at Level 44.",
+			"frFR": "Débloquée au niveau 44.",
+			"zhTW": "於44級時解鎖。",
+			"deDE": "Wird auf Stufe 44 freigeschaltet.",
+			"jaJP": "レベル44で入手。",
+			"plPL": "Odblokowane na poziomie 44.",
+			"esES": "Se desbloquea al alcanzar el nivel 44.",
+			"ruRU": "Доступна с 44-го уровня.",
+			"esMX": "Se desbloquea en nivel 44.",
+			"koKR": "44 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 44"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Ralph Horsley",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 315,
 		"type": "Spell",
 		"flavor": "This spell is useful for burning things.  If you're looking for spells that toast things, or just warm them a little, you're in the wrong place.",
@@ -32716,10 +35027,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 51.",
+			"zhCN": "达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51.",
+			"enUS": "Unlocked at Level 51.",
+			"frFR": "Débloquée au niveau 51.",
+			"zhTW": "於51級時解鎖。",
+			"deDE": "Wird auf Stufe 51 freigeschaltet.",
+			"jaJP": "レベル51で入手。",
+			"plPL": "Odblokowane na poziomie 51.",
+			"esES": "Se desbloquea al alcanzar el nivel 51.",
+			"ruRU": "Доступна с 51-го уровня.",
+			"esMX": "Se desbloquea en nivel 51.",
+			"koKR": "51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 51"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Core",
 		"artist": "Romain De Santi",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"dbfId": 1004,
 		"type": "Spell",
 		"flavor": "When the ground is on fire, you should <i>not</i> stop, drop, and roll.",
@@ -32745,12 +35088,44 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"race": "ELEMENTAL",
 		"artist": "John Avon",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"mechanics": [
 			"FREEZE"
 		],
@@ -32781,6 +35156,22 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Core",
 		"name": "Fireblast",
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1 point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"id": "CS2_034",
 		"audio": {
 			"play": [],
@@ -32816,6 +35207,22 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Hero_skins",
 		"name": "Fireblast",
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1 point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"id": "CS2_034_H1",
 		"audio": {
 			"play": [],
@@ -32879,6 +35286,22 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Hero_skins",
 		"name": "Fireblast",
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1 point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"id": "CS2_034_H2",
 		"audio": {
 			"play": [],
@@ -32980,10 +35403,42 @@ var parseCardsText = {
 		"cardClass": "MAGE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Alex Horley Orlandelli",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"FREEZE"
 		],
@@ -33074,10 +35529,42 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Justin Sweet",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"referencedTags": [
 			"WINDFURY"
 		],
@@ -33115,10 +35602,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Core",
 		"artist": "Dan Scott",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"referencedTags": [
 			"TAUNT"
 		],
@@ -33171,12 +35690,60 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
 		"race": "ELEMENTAL",
 		"artist": "Ralph Horsley",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Cause 3 de dano.",
+			"zhCN": "造成3点伤害。",
+			"itIT": "Infligge 3 danni.",
+			"enUS": "Deal 3 damage.",
+			"frFR": "Inflige 3 points de dégâts.",
+			"zhTW": "造成3點傷害",
+			"deDE": "Verursacht 3 Schaden.",
+			"jaJP": "3ダメージを与える。",
+			"plPL": "Zadaj 3 pkt. obrażeń.",
+			"esES": "Inflige 3 p. de daño.",
+			"ruRU": "Нанести 3 ед. урона.",
+			"esMX": "Inflige 3 de daño.",
+			"koKR": "피해 3",
+			"thTH": "สร้างความเสียหาย_3_แต้ม"
+		},
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -33221,10 +35788,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Alex Horley Orlandelli",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 239,
 		"type": "Spell",
 		"flavor": "This would be real handy if your enemy is made of rock.",
@@ -33274,10 +35873,42 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"artist": "Luca Zontini",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 1171,
 		"type": "Spell",
 		"flavor": "blaarghghLLGHRHARAAHAHHH!!",
@@ -33625,10 +36256,42 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Dave Allsop",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 914,
 		"type": "Spell",
 		"flavor": "It’s a Bolt.   It's made out of Shadow.   What more do you need to know!",
@@ -33708,10 +36371,42 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Alex Horley Orlandelli",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 919,
 		"type": "Spell",
 		"flavor": "\"I've just sucked one year of your life away.\"",
@@ -33749,10 +36444,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Chippy",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 950,
 		"type": "Spell",
 		"flavor": "It's spells like these that make it hard for Warlocks to get decent help.",
@@ -33772,10 +36499,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Wayne Reynolds",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 982,
 		"type": "Spell",
 		"flavor": "It starts with stealing a pen from work, and before you know it, BOOOM!  Corrupted!",
@@ -33822,12 +36581,44 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
 		"race": "DEMON",
 		"artist": "Zoltan & Gabor",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -33860,12 +36651,44 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"race": "DEMON",
 		"artist": "Alex Horley Orlandelli",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"TAUNT"
 		],
@@ -33892,10 +36715,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Core",
 		"artist": "Michael Sutfin",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 180,
 		"type": "Spell",
 		"flavor": "It's funny how often yelling \"Look over there!\" gets your opponent to turn around.",
@@ -33925,7 +36780,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 1,
+		"cost": 2,
 		"set": "Expert1",
 		"artist": "Alex Horley Orlandelli",
 		"mechanics": [
@@ -33989,10 +36844,42 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Trevor Jacobs",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 459,
 		"type": "Spell",
 		"flavor": "Rogues guard the secrets to poison-making carefully, lest magi start incorporating poison into their spells.  Poisonbolt? Rain of Poison?  Poison Elemental?  Nobody wants that.",
@@ -34030,10 +36917,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Frank Cho",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 710,
 		"type": "Spell",
 		"flavor": "There's something about this strike that just feels off.  Sinister, even.",
@@ -34062,10 +36981,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"artist": "Glenn Rane",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 345,
 		"type": "Spell",
 		"flavor": "If you don't want to be assassinated, move to the Barrens and change your name. Good luck!",
@@ -34091,10 +37042,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Core",
 		"artist": "James Zhang",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"dbfId": 630,
 		"type": "Spell",
 		"flavor": "Rogues are not good joggers.",
@@ -34114,11 +37097,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"artist": "Brian Huang",
 		"durability": 4,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 421,
 		"type": "Weapon",
 		"flavor": "Guaranteed to have been owned by a real assassin.   Certificate of authenticity included.",
@@ -34229,10 +37244,42 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
-		"cost": 1,
+		"cost": 2,
 		"set": "Core",
 		"artist": "Jimmy Lo",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 141,
 		"type": "Spell",
 		"flavor": "Never play 'Hide and Go Seek' with a Hunter.",
@@ -34267,10 +37314,42 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Zoltan Boros",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 70,
 		"type": "Spell",
 		"flavor": "\"As in, you MIGHT want to get out of my way.\" - Toad Mackle, recently buffed.",
@@ -34314,11 +37393,43 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Core",
-		"artist": "E.M. Gist",
+		"artist": "E. M. Gist",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -34360,10 +37471,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Zoltan & Gabor",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 291,
 		"type": "Spell",
 		"flavor": "If you are often bathed in Holy Light, you should consider wearing sunscreen.",
@@ -34395,11 +37538,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Glenn Rane",
 		"durability": 4,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 383,
 		"type": "Weapon",
 		"flavor": "Prince Malchezaar was a collector of rare weapons. He'd animate them and have them dance for him.",
@@ -34416,10 +37591,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Lucas Graciano",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"dbfId": 943,
 		"type": "Spell",
 		"flavor": "Given the number of kings who have been assassinated, are you sure you want their blessing?",
@@ -34463,10 +37670,42 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Vance Kovacs",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"dbfId": 476,
 		"type": "Spell",
 		"flavor": "Consecrated ground glows with Holy energy.  But it smells a little, too.",
@@ -34495,10 +37734,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Efrem Palacios",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 250,
 		"type": "Spell",
 		"flavor": "A good paladin has many tools.  Hammer of Wrath, Pliers of Vengeance, Hacksaw of Justice, etc.",
@@ -34530,11 +37801,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Ryan Sook",
 		"durability": 2,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -34811,10 +38114,42 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Alex Horley Orlandelli",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"referencedTags": [
 			"CHARGE"
 		],
@@ -34908,10 +38243,42 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Jonboy Meyers",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 1007,
 		"type": "Spell",
 		"flavor": "Really, if you're a hero, this is <i>every</i> strike.",
@@ -34949,11 +38316,43 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Lucas Graciano",
 		"durability": 2,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 401,
 		"type": "Weapon",
 		"flavor": "During times of tranquility and harmony, this weapon was called by its less popular name, Chilly Peace Axe.",
@@ -34970,10 +38369,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Dany Orizio",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 785,
 		"type": "Spell",
 		"flavor": "It's okay, he deserved it.",
@@ -35005,11 +38436,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 51.",
+			"zhCN": "达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51.",
+			"enUS": "Unlocked at Level 51.",
+			"frFR": "Débloquée au niveau 51.",
+			"zhTW": "於51級時解鎖。",
+			"deDE": "Wird auf Stufe 51 freigeschaltet.",
+			"jaJP": "レベル51で入手。",
+			"plPL": "Odblokowane na poziomie 51.",
+			"esES": "Se desbloquea al alcanzar el nivel 51.",
+			"ruRU": "Доступна с 51-го уровня.",
+			"esMX": "Se desbloquea en nivel 51.",
+			"koKR": "51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 51"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"artist": "Stefan Kopinski",
 		"durability": 2,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"dbfId": 304,
 		"type": "Weapon",
 		"flavor": "No… actually you should fear the Reaper.",
@@ -35026,10 +38489,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Phroilan Gardner",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 940,
 		"type": "Spell",
 		"flavor": "Hey you two…could you stand next to each other for a second…",
@@ -35066,6 +38561,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Alex Horley Orlandelli",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Restaure 3 de Vida.",
+			"zhCN": "恢复3点生命值。",
+			"itIT": "Rigenera 3 Salute.",
+			"enUS": "Restore 3 Health.",
+			"frFR": "Rend 3 points de vie.",
+			"zhTW": "恢復3點生命值",
+			"deDE": "Stellt 3 Leben wieder her.",
+			"jaJP": "体力を3回復する。",
+			"plPL": "Przywróć 3 pkt. zdrowia.",
+			"esES": "Restaura 3 p. de salud.",
+			"ruRU": "Восстановить 3 ед. здоровья.",
+			"esMX": "Restaura 3 de Salud.",
+			"koKR": "생명력 3 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 3_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -35101,6 +38612,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Xamã no nível 51.",
+			"zhCN": "萨满祭司达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 dello Sciamano.",
+			"enUS": "Unlocked at Shaman Level 51.",
+			"frFR": "Débloquée au niveau 51 du chaman.",
+			"zhTW": "於薩滿51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schamane Stufe 51 erreicht.",
+			"jaJP": "シャーマンレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie szamana.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el chamán.",
+			"ruRU": "Доступна по достижении 51-го уровня шаманом.",
+			"esMX": "Se desbloquea en nivel 51 de Chamán.",
+			"koKR": "주술사 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อชาแมนมีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -35129,6 +38656,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Druida no nível 51.",
+			"zhCN": "德鲁伊达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 del Druido.",
+			"enUS": "Unlocked at Druid Level 51.",
+			"frFR": "Débloquée au niveau 51 du druide.",
+			"zhTW": "於德魯伊51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Druide Stufe 51 erreicht.",
+			"jaJP": "ドルイドレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie druida.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el druida.",
+			"ruRU": "Доступна по достижении 51-го уровня друидом.",
+			"esMX": "Se desbloquea en nivel 51 de Druida.",
+			"koKR": "드루이드 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อดรูอิดมีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -35157,6 +38700,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Druida no nível 55.",
+			"zhCN": "德鲁伊达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Druido.",
+			"enUS": "Unlocked at Druid Level 55.",
+			"frFR": "Débloquée au niveau 55 du druide.",
+			"zhTW": "於德魯伊55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Druide Stufe 55 erreicht.",
+			"jaJP": "ドルイドレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie druida.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el druida.",
+			"ruRU": "Доступна по достижении 55-го уровня друидом.",
+			"esMX": "Se desbloquea en nivel 55 de Druida.",
+			"koKR": "드루이드 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อดรูอิดมีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -35185,6 +38744,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Xamã no nível 57.",
+			"zhCN": "萨满祭司达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 dello Sciamano.",
+			"enUS": "Unlocked at Shaman Level 57.",
+			"frFR": "Débloquée au niveau 57 du chaman.",
+			"zhTW": "於薩滿57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schamane Stufe 57 erreicht.",
+			"jaJP": "シャーマンレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie szamana.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el chamán.",
+			"ruRU": "Доступна по достижении 57-го уровня шаманом.",
+			"esMX": "Se desbloquea en nivel 57 de Chamán.",
+			"koKR": "주술사 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อชาแมนมีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -35216,6 +38791,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Guerreiro no nível 57.",
+			"zhCN": "战士达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Guerriero.",
+			"enUS": "Unlocked at Warrior Level 57.",
+			"frFR": "Débloquée au niveau 57 du guerrier.",
+			"zhTW": "於戰士57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Krieger Stufe 57 erreicht.",
+			"jaJP": "ウォリアーレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie wojownika.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el guerrero.",
+			"ruRU": "Доступна по достижении 57-го уровня воином.",
+			"esMX": "Se desbloquea en nivel 57 de Guerrero.",
+			"koKR": "전사 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอริเออร์มีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -35262,6 +38853,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Guerreiro no nível 59.",
+			"zhCN": "战士达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Guerriero.",
+			"enUS": "Unlocked at Warrior Level 59.",
+			"frFR": "Débloquée au niveau 59 du guerrier.",
+			"zhTW": "於戰士59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Krieger Stufe 59 erreicht.",
+			"jaJP": "ウォリアーレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie wojownika.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el guerrero.",
+			"ruRU": "Доступна по достижении 59-го уровня воином.",
+			"esMX": "Se desbloquea en nivel 59 de Guerrero.",
+			"koKR": "전사 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอริเออร์มีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -35297,6 +38904,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Caçador no nível 59.",
+			"zhCN": "猎人达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Cacciatore.",
+			"enUS": "Unlocked at Hunter Level 59.",
+			"frFR": "Débloquée au niveau 59 du chasseur.",
+			"zhTW": "於獵人59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Jäger Stufe 59 erreicht.",
+			"jaJP": "ハンターレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie łowcy.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el cazador.",
+			"ruRU": "Доступна по достижении 59-го уровня охотником.",
+			"esMX": "Se desbloquea en nivel 59 de Cazador.",
+			"koKR": "사냥꾼 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อฮันเตอร์มีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -35329,6 +38952,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Guerreiro no nível 53.",
+			"zhCN": "战士达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Guerriero.",
+			"enUS": "Unlocked at Warrior Level 53.",
+			"frFR": "Débloquée au niveau 53 du guerrier.",
+			"zhTW": "於戰士53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Krieger Stufe 53 erreicht.",
+			"jaJP": "ウォリアーレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie wojownika.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el guerrero.",
+			"ruRU": "Доступна по достижении 53-го уровня воином.",
+			"esMX": "Se desbloquea en nivel 53 de Guerrero.",
+			"koKR": "전사 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอริเออร์มีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -35362,6 +39001,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Paladino no nível 55.",
+			"zhCN": "圣骑士达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Paladino.",
+			"enUS": "Unlocked at Paladin Level 55.",
+			"frFR": "Débloquée au niveau 55 du paladin.",
+			"zhTW": "於聖騎士55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Paladin Stufe 55 erreicht.",
+			"jaJP": "パラディンレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie paladyna.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el paladín.",
+			"ruRU": "Доступна по достижении 55-го уровня паладином.",
+			"esMX": "Se desbloquea en nivel 55 de Paladín.",
+			"koKR": "성기사 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพาลาดินมีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -35394,11 +39049,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Mago no nível 55.",
+			"zhCN": "法师达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Mago.",
+			"enUS": "Unlocked at Mage Level 55.",
+			"frFR": "Débloquée au niveau 55 du mage.",
+			"zhTW": "於法師55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Magier Stufe 55 erreicht.",
+			"jaJP": "レベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie maga.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el mago.",
+			"ruRU": "Доступна по достижении 55-го уровня магом.",
+			"esMX": "Se desbloquea en nivel 55 de Mago.",
+			"koKR": "마법사 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเมจมีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Tooth",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1 point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -35438,6 +39125,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Bruxo no nível 59.",
+			"zhCN": "术士达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 dello Stregone.",
+			"enUS": "Unlocked at Warlock Level 59.",
+			"frFR": "Débloquée au niveau 59 du démoniste.",
+			"zhTW": "於術士59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Hexenmeister Stufe 59 erreicht.",
+			"jaJP": "ウォーロックレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie czarnoksiężnika.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el brujo.",
+			"ruRU": "Доступна по достижении 59-го уровня чернокнижником.",
+			"esMX": "Se desbloquea en nivel 59 de Brujo.",
+			"koKR": "흑마법사 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอร์ล็อคมีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -35504,6 +39207,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Sacerdote no nível 57.",
+			"zhCN": "牧师达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Sacerdote.",
+			"enUS": "Unlocked at Priest Level 57.",
+			"frFR": "Débloquée au niveau 57 du prêtre.",
+			"zhTW": "於牧師57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Priester Stufe 57 erreicht.",
+			"jaJP": "プリーストレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie kapłana.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el sacerdote.",
+			"ruRU": "Доступна по достижении 57-го уровня жрецом.",
+			"esMX": "Se desbloquea en nivel 57 de Sacerdote.",
+			"koKR": "사제 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพรีสต์มีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -35536,11 +39255,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Paladino no nível 51.",
+			"zhCN": "圣骑士达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 del Paladino.",
+			"enUS": "Unlocked at Paladin Level 51.",
+			"frFR": "Débloquée au niveau 51 du paladin.",
+			"zhTW": "於聖騎士51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Paladin Stufe 51 erreicht.",
+			"jaJP": "パラディンレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie paladyna.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el paladín.",
+			"ruRU": "Доступна по достижении 51-го уровня паладином.",
+			"esMX": "Se desbloquea en nivel 51 de Paladín.",
+			"koKR": "성기사 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพาลาดินมีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"artist": "Kev Walker",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2 points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -35636,6 +39387,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Mago no nível 57.",
+			"zhCN": "法师达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Mago.",
+			"enUS": "Unlocked at Mage Level 57.",
+			"frFR": "Débloquée au niveau 57 du mage.",
+			"zhTW": "於法師57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Magier Stufe 57 erreicht.",
+			"jaJP": "レベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie maga.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el mago.",
+			"ruRU": "Доступна по достижении 57-го уровня магом.",
+			"esMX": "Se desbloquea en nivel 57 de Mago.",
+			"koKR": "마법사 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเมจมีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
@@ -35701,10 +39468,26 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Sacerdote no nível 59.",
+			"zhCN": "牧师达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Sacerdote.",
+			"enUS": "Unlocked at Priest Level 59.",
+			"frFR": "Débloquée au niveau 59 du prêtre.",
+			"zhTW": "於牧師59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Priester Stufe 59 erreicht.",
+			"jaJP": "プリーストレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie kapłana.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el sacerdote.",
+			"ruRU": "Доступна по достижении 59-го уровня жрецом.",
+			"esMX": "Se desbloquea en nivel 59 de Sacerdote.",
+			"koKR": "사제 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพรีสต์มีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
-		"artist": "E.M. Gist",
+		"artist": "E. M. Gist",
 		"health": 5,
 		"mechanics": [
 			"TAUNT"
@@ -35733,6 +39516,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Sacerdote no nível 51.",
+			"zhCN": "牧师达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 del Sacerdote.",
+			"enUS": "Unlocked at Priest Level 51.",
+			"frFR": "Débloquée au niveau 51 du prêtre.",
+			"zhTW": "於牧師51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Priester Stufe 51 erreicht.",
+			"jaJP": "プリーストレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie kapłana.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el sacerdote.",
+			"ruRU": "Доступна по достижении 51-го уровня жрецом.",
+			"esMX": "Se desbloquea en nivel 51 de Sacerdote.",
+			"koKR": "사제 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพรีสต์มีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
@@ -35798,6 +39597,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Caçador no nível 53.",
+			"zhCN": "猎人达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Cacciatore.",
+			"enUS": "Unlocked at Hunter Level 53.",
+			"frFR": "Débloquée au niveau 53 du chasseur.",
+			"zhTW": "於獵人53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Jäger Stufe 53 erreicht.",
+			"jaJP": "ハンターレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie łowcy.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el cazador.",
+			"ruRU": "Доступна по достижении 53-го уровня охотником.",
+			"esMX": "Se desbloquea en nivel 53 de Cazador.",
+			"koKR": "사냥꾼 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อฮันเตอร์มีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
@@ -35830,6 +39645,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Caçador no nível 57.",
+			"zhCN": "猎人达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Cacciatore.",
+			"enUS": "Unlocked at Hunter Level 57.",
+			"frFR": "Débloquée au niveau 57 du chasseur.",
+			"zhTW": "於獵人57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Jäger Stufe 57 erreicht.",
+			"jaJP": "ハンターレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie łowcy.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el cazador.",
+			"ruRU": "Доступна по достижении 57-го уровня охотником.",
+			"esMX": "Se desbloquea en nivel 57 de Cazador.",
+			"koKR": "사냥꾼 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อฮันเตอร์มีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -35859,6 +39690,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Paladino nível 53.",
+			"zhCN": "圣骑士达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Paladino.",
+			"enUS": "Unlocked at Paladin Level 53.",
+			"frFR": "Débloquée au niveau 53 du paladin.",
+			"zhTW": "於聖騎士53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Paladin Stufe 53 erreicht.",
+			"jaJP": "パラディンレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie paladyna.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el paladín.",
+			"ruRU": "Доступна по достижении 53-го уровня паладином.",
+			"esMX": "Se desbloquea en nivel 53 de Paladín.",
+			"koKR": "성기사 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพาลาดินมีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -35891,6 +39738,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Ladino no nível 59.",
+			"zhCN": "潜行者达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Ladro.",
+			"enUS": "Unlocked at Rogue Level 59.",
+			"frFR": "Débloquée au niveau 59 du voleur.",
+			"zhTW": "於盜賊59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schurke Stufe 59 erreicht.",
+			"jaJP": "ローグレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie łotra.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el pícaro.",
+			"ruRU": "Доступна по достижении 59-го уровня разбойником.",
+			"esMX": "Se desbloquea en nivel 59 de Pícaro.",
+			"koKR": "도적 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อโร้กมีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -35982,6 +39845,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Guerreiro no nível 55.",
+			"zhCN": "战士达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Guerriero.",
+			"enUS": "Unlocked at Warrior Level 55.",
+			"frFR": "Débloquée au niveau 55 du guerrier.",
+			"zhTW": "於戰士55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Krieger Stufe 55 erreicht.",
+			"jaJP": "ウォリアーレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie wojownika.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el guerrero.",
+			"ruRU": "Доступна по достижении 55-го уровня воином.",
+			"esMX": "Se desbloquea en nivel 55 de Guerrero.",
+			"koKR": "전사 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอริเออร์มีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -36009,6 +39888,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Ladino no nível 51.",
+			"zhCN": "潜行者达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 del Ladro.",
+			"enUS": "Unlocked at Rogue Level 51.",
+			"frFR": "Débloquée au niveau 51 du voleur.",
+			"zhTW": "於盜賊51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schurke Stufe 51 erreicht.",
+			"jaJP": "ローグレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie łotra.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el pícaro.",
+			"ruRU": "Доступна по достижении 51-го уровня разбойником.",
+			"esMX": "Se desbloquea en nivel 51 de Pícaro.",
+			"koKR": "도적 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อโร้กมีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Core",
@@ -36036,6 +39931,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Xamã no nível 55.",
+			"zhCN": "萨满祭司达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 dello Sciamano.",
+			"enUS": "Unlocked at Shaman Level 55.",
+			"frFR": "Débloquée au niveau 55 du chaman.",
+			"zhTW": "於薩滿55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schamane Stufe 55 erreicht.",
+			"jaJP": "シャーマンレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie szamana.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el chamán.",
+			"ruRU": "Доступна по достижении 55-го уровня шаманом.",
+			"esMX": "Se desbloquea en nivel 55 de Chamán.",
+			"koKR": "주술사 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อชาแมนมีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
@@ -36073,6 +39984,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Luca Zontini",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2 de Ataque neste turno.",
+			"zhCN": "本回合中获得+2攻击力。",
+			"itIT": "Fornisce +2 Attacco per questo turno.",
+			"enUS": "Give +2 Attack this turn.",
+			"frFR": "Donne +2_ATQ pendant ce tour.",
+			"zhTW": "賦予本回合+2攻擊力",
+			"deDE": "Verleiht +2 Angriff in diesem Zug.",
+			"jaJP": "このターンの間、攻撃力+2を付与する。",
+			"plPL": "Daj +2 do ataku w tej turze.",
+			"esES": "Otorga +2 p. de ataque este turno.",
+			"ruRU": "+2 к атаке до конца хода.",
+			"esMX": "Otorga +2 de Ataque en este turno.",
+			"koKR": "이번 턴에 공격력 +2",
+			"thTH": "มอบพลังโจมตี +2 จนจบเทิร์น"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -36118,11 +40045,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Druida no nível 57.",
+			"zhCN": "德鲁伊达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Druido.",
+			"enUS": "Unlocked at Druid Level 57.",
+			"frFR": "Débloquée au niveau 57 du druide.",
+			"zhTW": "於德魯伊57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Druide Stufe 57 erreicht.",
+			"jaJP": "ドルイドレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie druida.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el druida.",
+			"ruRU": "Доступна по достижении 57-го уровня друидом.",
+			"esMX": "Se desbloquea en nivel 57 de Druida.",
+			"koKR": "드루이드 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อดรูอิดมีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Steve Prescott",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1 point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -36180,6 +40139,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Caçador no nível 55.",
+			"zhCN": "猎人达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Cacciatore.",
+			"enUS": "Unlocked at Hunter Level 55.",
+			"frFR": "Débloquée au niveau 55 du chasseur.",
+			"zhTW": "於獵人55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Jäger Stufe 55 erreicht.",
+			"jaJP": "ハンターレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie łowcy.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el cazador.",
+			"ruRU": "Доступна по достижении 55-го уровня охотником.",
+			"esMX": "Se desbloquea en nivel 55 de Cazador.",
+			"koKR": "사냥꾼 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อฮันเตอร์มีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -36212,6 +40187,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Bruxo no nível 55.",
+			"zhCN": "术士达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 dello Stregone.",
+			"enUS": "Unlocked at Warlock Level 55.",
+			"frFR": "Débloquée au niveau 55 du démoniste.",
+			"zhTW": "於術士55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Hexenmeister Stufe 55 erreicht.",
+			"jaJP": "ウォーロックレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie czarnoksiężnika.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el brujo.",
+			"ruRU": "Доступна по достижении 55-го уровня чернокнижником.",
+			"esMX": "Se desbloquea en nivel 55 de Brujo.",
+			"koKR": "흑마법사 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอร์ล็อคมีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -36244,6 +40235,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Bruxo no nível 51.",
+			"zhCN": "术士达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 dello Stregone.",
+			"enUS": "Unlocked at Warlock Level 51.",
+			"frFR": "Débloquée au niveau 51 du démoniste.",
+			"zhTW": "於術士51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Hexenmeister Stufe 51 erreicht.",
+			"jaJP": "ウォーロックレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie czarnoksiężnika.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el brujo.",
+			"ruRU": "Доступна по достижении 51-го уровня чернокнижником.",
+			"esMX": "Se desbloquea en nivel 51 de Brujo.",
+			"koKR": "흑마법사 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอร์ล็อคมีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
@@ -36271,11 +40278,27 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Caçador no nível 51.",
+			"zhCN": "猎人达到51级后解锁。",
+			"itIT": "Sbloccata al livello 51 del Cacciatore.",
+			"enUS": "Unlocked at Hunter Level 51.",
+			"frFR": "Débloquée au niveau 51 du chasseur.",
+			"zhTW": "於獵人51級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Jäger Stufe 51 erreicht.",
+			"jaJP": "ハンターレベル51で入手。",
+			"plPL": "Odblokowane na 51 poziomie łowcy.",
+			"esES": "Se desbloquea al alcanzar el nivel 51 con el cazador.",
+			"ruRU": "Доступна по достижении 51-го уровня охотником.",
+			"esMX": "Se desbloquea en nivel 51 de Cazador.",
+			"koKR": "사냥꾼 51 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อฮันเตอร์มีเลเวล 51"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Core",
 		"race": "BEAST",
-		"artist": "E.M. Gist",
+		"artist": "E. M. Gist",
 		"health": 5,
 		"dbfId": 1687,
 		"type": "Minion",
@@ -36305,6 +40328,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Trevor Jacobs",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "<b>Silencie</b> um lacaio.",
+			"zhCN": "<b>沉默</b>一个随从。",
+			"itIT": "<b>Silenzia</b> un servitore.",
+			"enUS": "<b>Silence</b> a minion.",
+			"frFR": "Réduit au <b>Silence</b> un serviteur.",
+			"zhTW": "<b>沉默</b>一個手下",
+			"deDE": "Bringt einen Diener zum <b>Schweigen</b>.",
+			"jaJP": "ミニオン1体を<b>沈黙</b>させる。",
+			"plPL": "Wycisz stronnika.",
+			"esES": "<b>Silencia</b> a un esbirro.",
+			"ruRU": "Наложить <b>немоту</b>.",
+			"esMX": "<b>Silencia</b> a un esbirro.",
+			"koKR": "하수인 <b>침묵</b>",
+			"thTH": "<b>ผนึกความสามารถ</b> มินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -36350,6 +40389,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Xamã no nível 59.",
+			"zhCN": "萨满祭司达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 dello Sciamano.",
+			"enUS": "Unlocked at Shaman Level 59.",
+			"frFR": "Débloquée au niveau 59 du chaman.",
+			"zhTW": "於薩滿59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schamane Stufe 59 erreicht.",
+			"jaJP": "シャーマンレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie szamana.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el chamán.",
+			"ruRU": "Доступна по достижении 59-го уровня шаманом.",
+			"esMX": "Se desbloquea en nivel 59 de Chamán.",
+			"koKR": "주술사 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อชาแมนมีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
@@ -36429,6 +40484,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Paladino no nível 59.",
+			"zhCN": "圣骑士达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Paladino.",
+			"enUS": "Unlocked at Paladin Level 59.",
+			"frFR": "Débloquée au niveau 59 du paladin.",
+			"zhTW": "於聖騎士59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Paladin Stufe 59 erreicht.",
+			"jaJP": "パラディンレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie paladyna.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el paladín.",
+			"ruRU": "Доступна по достижении 59-го уровня паладином.",
+			"esMX": "Se desbloquea en nivel 59 de Paladín.",
+			"koKR": "성기사 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพาลาดินมีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Core",
@@ -36476,6 +40547,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Xamã no nível 53.",
+			"zhCN": "萨满祭司达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 dello Sciamano.",
+			"enUS": "Unlocked at Shaman Level 53.",
+			"frFR": "Débloquée au niveau 53 du chaman.",
+			"zhTW": "於薩滿53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schamane Stufe 53 erreicht.",
+			"jaJP": "シャーマンレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie szamana.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el chamán.",
+			"ruRU": "Доступна по достижении 53-го уровня шаманом.",
+			"esMX": "Se desbloquea en nivel 53 de Chamán.",
+			"koKR": "주술사 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อชาแมนมีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
@@ -36597,11 +40684,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Core",
 		"artist": "Dave Allsop",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"mechanics": [
 			"TAUNT"
 		],
@@ -36672,10 +40791,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Raymond Swanland",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 1367,
 		"type": "Spell",
 		"flavor": "A step up from a spell cast by many beginning acolytes: \"Shadow Word: Annoy\".",
@@ -36707,11 +40858,43 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Terese Nielsen",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -36738,10 +40921,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Jim Pavelec",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 1361,
 		"type": "Spell",
 		"flavor": "Double the trouble. Double the fun!",
@@ -36788,12 +41003,44 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"race": "BEAST",
 		"artist": "Bernie Kang",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -37055,6 +41302,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Sacerdote no nível 55.",
+			"zhCN": "牧师达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Sacerdote.",
+			"enUS": "Unlocked at Priest Level 55.",
+			"frFR": "Débloquée au niveau 55 du prêtre.",
+			"zhTW": "於牧師55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Priester Stufe 55 erreicht.",
+			"jaJP": "プリーストレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie kapłana.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el sacerdote.",
+			"ruRU": "Доступна по достижении 55-го уровня жрецом.",
+			"esMX": "Se desbloquea en nivel 55 de Sacerdote.",
+			"koKR": "사제 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพรีสต์มีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
@@ -37095,11 +41358,59 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Dan Brereton",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2/+2 e Provocar a uma Fera.",
+			"zhCN": "使一只野兽获得+2/+2并具有嘲讽。",
+			"itIT": "Fornisce +2/+2 e <b>Provocazione</b> a una tua Bestia.",
+			"enUS": "Give a Beast +2/+2 and Taunt.",
+			"frFR": "Donne_+2/+2 et Provocation à une Bête.",
+			"zhTW": "賦予一隻野獸+2/+2及嘲諷",
+			"deDE": "Verleiht einem Wildtier +2/+2 und Spott.",
+			"jaJP": "獣1体に+2/+2と挑発を付与する。",
+			"plPL": "Daj Bestii +2/+2 oraz Prowokację.",
+			"esES": "Otorga +2/+2 y Provocar a una bestia.",
+			"ruRU": "Добавить зверю +2/+2 и <b>«Провокацию»</b>.",
+			"esMX": "Otorga +2/+2 y Provocación a una Bestia.",
+			"koKR": "야수에게 +2/+2, 도발",
+			"thTH": "มอบ +2/+2 และยั่วยุ ให้สัตว์หนึ่งตัว"
+		},
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -37153,12 +41464,44 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"race": "BEAST",
 		"artist": "Malcolm Davis",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -37200,12 +41543,44 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
 		"race": "BEAST",
 		"artist": "Lars Grant-West",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -37250,10 +41625,42 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 292,
 		"type": "Spell",
 		"flavor": "You see, it's all about <i>throughput</i>.",
@@ -37300,10 +41707,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Mauro Cascioli",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 1047,
 		"type": "Spell",
 		"flavor": "For the person who just cannot decide what card to put into a deck!",
@@ -37326,10 +41765,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Luca Zontini",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 877,
 		"type": "Spell",
 		"flavor": "Magi conjured arcane arrows to sell to hunters, until hunters learned just enough magic to do it themselves.  The resulting loss of jobs sent Stormwind into a minor recession.",
@@ -37430,10 +41901,42 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Dave Allsop",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 545,
 		"type": "Spell",
 		"flavor": "This spell blasts you directly in the MIND.",
@@ -37490,6 +41993,21 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
+		"collectionText": {
+			"ptBR": "<b>Poder Heroico</b>\nCause $2 de dano.",
+			"zhCN": "<b>英雄技能</b>\n造成$2点伤害。",
+			"itIT": "<b>Potere Eroe</b>\nInfligge $2 danni.",
+			"enUS": "<b>Hero Power</b>\nDeal $2 damage.",
+			"frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts.",
+			"zhTW": "<b>英雄能力</b>\n造成$2點傷害",
+			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden.",
+			"jaJP": "<b>ヒーローパワー</b>\n$2ダメージを\n与える。",
+			"plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń.",
+			"esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño.",
+			"ruRU": "<b>Сила героя</b>\nНаносит $2 ед. урона.",
+			"esMX": "<b>Poder de héroe</b>\nInflige $2 de daño.",
+			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $2 แต้ม"
+		},
 		"cost": 2,
 		"set": "Core",
 		"name": "Steady Shot",
@@ -37537,6 +42055,21 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
+		"collectionText": {
+			"ptBR": "<b>Poder Heroico</b>\nCause $2 de dano.",
+			"zhCN": "<b>英雄技能</b>\n造成$2点伤害。",
+			"itIT": "<b>Potere Eroe</b>\nInfligge $2 danni.",
+			"enUS": "<b>Hero Power</b>\nDeal $2 damage.",
+			"frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts.",
+			"zhTW": "<b>英雄能力</b>\n造成$2點傷害",
+			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden.",
+			"jaJP": "<b>ヒーローパワー</b>\n$2ダメージを\n与える。",
+			"plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń.",
+			"esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño.",
+			"ruRU": "<b>Сила героя</b>\nНаносит $2 ед. урона.",
+			"esMX": "<b>Poder de héroe</b>\nInflige $2 de daño.",
+			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $2 แต้ม"
+		},
 		"cost": 2,
 		"set": "Hero_skins",
 		"name": "Steady Shot",
@@ -37569,6 +42102,21 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
+		"collectionText": {
+			"ptBR": "<b>Poder Heroico</b>\nCause $3 de dano.",
+			"zhCN": "<b>英雄技能</b>\n造成$3点伤害。",
+			"itIT": "<b>Potere Eroe</b>\nInfligge $3 danni.",
+			"enUS": "<b>Hero Power</b>\nDeal $3 damage.",
+			"frFR": "<b>Pouvoir héroïque</b>\nInflige $3 points de dégâts.",
+			"zhTW": "<b>英雄能力</b>\n造成$3點傷害",
+			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $3 Schaden.",
+			"jaJP": "<b>ヒーローパワー</b>\n$3ダメージを\n与える。",
+			"plPL": "<b>Moc specjalna</b>\nZadaj $3 pkt. obrażeń.",
+			"esES": "<b>Poder de héroe</b>\nInflige $3 p. de daño.",
+			"ruRU": "<b>Сила героя</b>\nНаносит $3 ед. урона.",
+			"esMX": "<b>Poder de héroe</b>\nInflige $3 de daño.",
+			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $3 แต้ม"
+		},
 		"cost": 2,
 		"set": "Hero_skins",
 		"name": "Ballista Shot",
@@ -37650,6 +42198,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Alex Horley Orlandelli",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio com Provocar.",
+			"zhCN": "消灭一个具有嘲讽的随从。",
+			"itIT": "Distrugge un servitore con <b>Provocazione</b>.",
+			"enUS": "Destroy a minion with Taunt.",
+			"frFR": "Détruit un serviteur avec Provocation.",
+			"zhTW": "摧毀一個有嘲諷的手下",
+			"deDE": "Vernichtet einen Diener mit Spott.",
+			"jaJP": "挑発を持つミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika z Prowokacją.",
+			"esES": "Destruye a un esbirro con Provocar.",
+			"ruRU": "Уничтожить существо с <b>«Провокацией»</b>.",
+			"esMX": "Destruye un esbirro con Provocación.",
+			"koKR": "도발 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว[b]ที่มียั่วยุ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -37744,6 +42308,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Chris Seaman",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio com 7 ou mais de Ataque.",
+			"zhCN": "消灭一个攻击力大于或等于7的随从。",
+			"itIT": "Distrugge un servitore con Attacco pari a 7 o superiore.",
+			"enUS": "Destroy a minion with an Attack of 7 or more.",
+			"frFR": "Détruit un serviteur avec 7 Attaque ou plus.",
+			"zhTW": "摧毀一個攻擊力7點以上的手下",
+			"deDE": "Vernichtet einen Diener mit mind. 7 Angriff.",
+			"jaJP": "攻撃力7以上のミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika z atakiem 7 lub większym.",
+			"esES": "Destruye a un esbirro con 7 p. de ataque o más.",
+			"ruRU": "Уничтожить существо с атакой 7 или больше.",
+			"esMX": "Destruye a un esbirro con 7 de Ataque o más.",
+			"koKR": "공격력 7 이상의 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว[b]ที่มีพลังโจมตี_7_แต้ม[b]หรือสูงกว่า"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -37959,11 +42539,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Ladino no nível 55.",
+			"zhCN": "潜行者达到55级后解锁。",
+			"itIT": "Sbloccata al livello 55 del Ladro.",
+			"enUS": "Unlocked at Rogue Level 55.",
+			"frFR": "Débloquée au niveau 55 du voleur.",
+			"zhTW": "於盜賊55級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schurke Stufe 55 erreicht.",
+			"jaJP": "ローグレベル55で入手。",
+			"plPL": "Odblokowane na 55 poziomie łotra.",
+			"esES": "Se desbloquea al alcanzar el nivel 55 con el pícaro.",
+			"ruRU": "Доступна по достижении 55-го уровня разбойником.",
+			"esMX": "Se desbloquea en nivel 55 de Pícaro.",
+			"koKR": "도적 55 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อโร้กมีเลเวล 55"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Karl Richardson",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Restaure 2 de Vida.",
+			"zhCN": "恢复2点生命值。",
+			"itIT": "Rigenera 2 Salute.",
+			"enUS": "Restore 2 Health.",
+			"frFR": "Rend 2 points de vie.",
+			"zhTW": "恢復2點生命值",
+			"deDE": "Stellt 2 Leben wieder her.",
+			"jaJP": "体力を2回復する。",
+			"plPL": "Przywróć 2 pkt. zdrowia.",
+			"esES": "Restaura 2 p. de salud.",
+			"ruRU": "Восстановить 2 ед. здоровья.",
+			"esMX": "Restaura 2 de Salud.",
+			"koKR": "생명력 2 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -38121,6 +42733,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Druida no nível 59.",
+			"zhCN": "德鲁伊达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Druido.",
+			"enUS": "Unlocked at Druid Level 59.",
+			"frFR": "Débloquée au niveau 59 du druide.",
+			"zhTW": "於德魯伊59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Druide Stufe 59 erreicht.",
+			"jaJP": "ドルイドレベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie druida.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el druida.",
+			"ruRU": "Доступна по достижении 59-го уровня друидом.",
+			"esMX": "Se desbloquea en nivel 59 de Druida.",
+			"koKR": "드루이드 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อดรูอิดมีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -38219,11 +42847,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Sacerdote no nível 53.",
+			"zhCN": "牧师达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Sacerdote.",
+			"enUS": "Unlocked at Priest Level 53.",
+			"frFR": "Débloquée au niveau 53 du prêtre.",
+			"zhTW": "於牧師53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Priester Stufe 53 erreicht.",
+			"jaJP": "プリーストレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie kapłana.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el sacerdote.",
+			"ruRU": "Доступна по достижении 53-го уровня жрецом.",
+			"esMX": "Se desbloquea en nivel 53 de Sacerdote.",
+			"koKR": "사제 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อพรีสต์มีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Doug Alexander",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1/+1.",
+			"zhCN": "使其获得+1/+1。",
+			"itIT": "Fornisce +1/+1.",
+			"enUS": "Give +1/+1.",
+			"frFR": "Donne_+1/+1.",
+			"zhTW": "賦予+1/+1",
+			"deDE": "Verleiht +1/+1.",
+			"jaJP": "+1/+1を付与する。",
+			"plPL": "Daj +1/+1.",
+			"esES": "Otorga +1/+1.",
+			"ruRU": "Добавить +1/+1.",
+			"esMX": "Otorga +1/+1.",
+			"koKR": "+1/+1",
+			"thTH": "มอบ +1/+1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -38376,6 +43036,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Mago no nível 53.",
+			"zhCN": "法师达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Mago.",
+			"enUS": "Unlocked at Mage Level 53.",
+			"frFR": "Débloquée au niveau 53 du mage.",
+			"zhTW": "於法師53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Magier Stufe 53 erreicht.",
+			"jaJP": "レベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie maga.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el mago.",
+			"ruRU": "Доступна по достижении 53-го уровня магом.",
+			"esMX": "Se desbloquea en nivel 53 de Mago.",
+			"koKR": "마법사 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเมจมีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
@@ -38693,6 +43369,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Scott Hampton",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2 de Ataque.",
+			"zhCN": "使其获得+2攻击力。",
+			"itIT": "Fornisce +2 Attacco.",
+			"enUS": "Give +2 Attack.",
+			"frFR": "Donne +2 ATQ.",
+			"zhTW": "賦予+2攻擊力",
+			"deDE": "Verleiht +2 Angriff.",
+			"jaJP": "攻撃力+2を付与する。",
+			"plPL": "Daj +2 do ataku.",
+			"esES": "Otorga +2 p. de ataque.",
+			"ruRU": "Добавить +2 к атаке.",
+			"esMX": "Otorga +2 de Ataque.",
+			"koKR": "공격력 +2",
+			"thTH": "มอบพลังโจมตี +2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -38746,6 +43438,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Matt Cavotta",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "<b>Silencie</b> um lacaio.",
+			"zhCN": "<b>沉默</b>一个随从。",
+			"itIT": "<b>Silenzia</b> un servitore.",
+			"enUS": "<b>Silence</b> a minion.",
+			"frFR": "Réduit au <b>Silence</b> un serviteur.",
+			"zhTW": "<b>沉默</b>一個手下",
+			"deDE": "Bringt einen Diener zum <b>Schweigen</b>.",
+			"jaJP": "ミニオン1体を<b>沈黙</b>させる。",
+			"plPL": "Wycisz stronnika.",
+			"esES": "<b>Silencia</b> a un esbirro.",
+			"ruRU": "Наложить <b>немоту</b>.",
+			"esMX": "<b>Silencia</b> a un esbirro.",
+			"koKR": "하수인 <b>침묵</b>",
+			"thTH": "<b>ผนึกความสามารถ</b> มินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -38796,6 +43504,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Wei Wang",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Devolva um lacaio à sua mão.",
+			"zhCN": "将一个随从移回你的手牌。",
+			"itIT": "Fa tornare un tuo servitore nella tua mano.",
+			"enUS": "Return a minion to your hand.",
+			"frFR": "Renvoie un serviteur dans votre main.",
+			"zhTW": "使一個手下返回你的手中",
+			"deDE": "Lasst einen Diener auf Eure Hand zurückkehren.",
+			"jaJP": "味方のミニオン1体を自分の手札に戻す。",
+			"plPL": "Cofnij stronnika do ręki.",
+			"esES": "Devuelve a un esbirro a tu mano.",
+			"ruRU": "Вернуть существо в вашу руку.",
+			"esMX": "Devuelve un esbirro a tu mano.",
+			"koKR": "내 손으로 하수인 가져오기",
+			"thTH": "นำมินเนี่ยนหนึ่งตัวกลับขึ้นมือ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -38916,6 +43640,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Bernie Kang",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Devolva um lacaio à sua mão.",
+			"zhCN": "将一个随从移回你的手牌。",
+			"itIT": "Fa tornare un tuo servitore nella tua mano.",
+			"enUS": "Return a minion to your hand.",
+			"frFR": "Renvoie un serviteur dans votre main.",
+			"zhTW": "使一個手下返回你的手中",
+			"deDE": "Lasst einen Diener auf Eure Hand zurückkehren.",
+			"jaJP": "味方のミニオン1体を自分の手札に戻す。",
+			"plPL": "Cofnij stronnika do ręki.",
+			"esES": "Devuelve a un esbirro a tu mano.",
+			"ruRU": "Вернуть существо в вашу руку.",
+			"esMX": "Devuelve un esbirro a tu mano.",
+			"koKR": "내 손으로 하수인 가져오기",
+			"thTH": "นำมินเนี่ยนหนึ่งตัวกลับขึ้นมือ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -38989,6 +43729,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Tom Fleming",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Troque o Ataque pela Vida de um lacaio.",
+			"zhCN": "将一个随从的攻击力和生命值互换。",
+			"itIT": "Scambia Attacco e Salute di un servitore.",
+			"enUS": "Swap Attack and Health of a minion.",
+			"frFR": "Échange l’Attaque et la Vie d’un serviteur.",
+			"zhTW": "對調一個手下的攻擊力和生命值",
+			"deDE": "Vertauscht Angriff und Leben eines Dieners.",
+			"jaJP": "ミニオン1体の攻撃力と体力を入れ替える。",
+			"plPL": "Zamień atak i zdrowie stronnika.",
+			"esES": "Intercambia el ataque y la salud de un esbirro.",
+			"ruRU": "Поменять местами атаку и здоровье существа.",
+			"esMX": "Intercambia el Ataque y la Salud de un esbirro.",
+			"koKR": "하수인의 공격력과 생명력 바꾸기",
+			"thTH": "สลับพลังโจมตีและพลังชีวิต[b]ของมินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -39039,12 +43795,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível ao colecionar todos os Murlocs Dourados do Conjunto de Perito.",
+			"zhCN": "集齐所有金色经典和基本鱼人牌后解锁。",
+			"itIT": "Sbloccata ottenendo tutti i Murloc Dorati dei set Base e Avanzato.",
+			"enUS": "Unlocked when you have all the Golden Murlocs from the Expert and Basic Sets.",
+			"frFR": "Débloquée lorsque vous avez tous les murlocs dorés du jeu Expert et du jeu de base.",
+			"zhTW": "當你獲得全部基本及專家系列的魚人金卡後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr alle goldenen Murlocs des Basis- und des Klassiksets besitzt.",
+			"jaJP": "基本とクラシックカードの、ゴールデンのマーロックカードを全て所持すると入手。",
+			"plPL": "Odblokowane kiedy zdobędziesz wszystkie złote Murloki z zestawu eksperckiego.",
+			"esES": "Se desbloquea cuando consigues todos los múrlocs dorados de los conjuntos básico y experto.",
+			"ruRU": "Доступна при наличии всех золотых карт мурлоков из базового набора и набора эксперта.",
+			"esMX": "Se desbloquea cuando tienes a todos los múrlocs dorados de los kits experto y básico.",
+			"koKR": "기본 세트와 고급 세트의 모든 멀록을 수집하면 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อคุณมีการ์ดเมอร์ล็อคสีทองในชุดเอ็กซ์เปิร์ตและชุดพื้นฐานครบทั้งหมด"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Hof",
 		"race": "MURLOC",
 		"artist": "Dan Scott",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado quando você obtém todos os Murlocs do Pacote Clássico.",
+			"zhCN": "集齐所有经典鱼人牌后解锁。",
+			"itIT": "Sbloccata ottenendo tutti i Murloc del set Classico.",
+			"enUS": "Unlocked when you have all the Murlocs from the Classic Set.",
+			"frFR": "Débloquée lorsque vous avez tous les murlocs du jeu classique.",
+			"zhTW": "當你獲得全部經典系列的魚人卡後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr alle Murlocs des Klassiksets besitzt.",
+			"jaJP": "クラシックのマーロックカードを全て所持すると入手。",
+			"plPL": "Odblokowane kiedy zdobędziesz wszystkie Murloki z zestawu klasycznego.",
+			"esES": "Se desbloquea cuando consigues todos los múrlocs del conjunto clásico.",
+			"ruRU": "Доступна при наличии всех мурлоков из классического набора.",
+			"esMX": "Se desbloquea cuando tienes todos los múrlocs del kit clásico.",
+			"koKR": "오리지널 세트의 모든 멀록을 수집하면 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อคุณมีการ์ดเมอร์ล็อคในชุดคลาสสิคครบทั้งหมด"
+		},
 		"mechanics": [
 			"CHARGE"
 		],
@@ -39073,6 +43861,22 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Ladino no nível 57.",
+			"zhCN": "潜行者达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 del Ladro.",
+			"enUS": "Unlocked at Rogue Level 57.",
+			"frFR": "Débloquée au niveau 57 du voleur.",
+			"zhTW": "於盜賊57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schurke Stufe 57 erreicht.",
+			"jaJP": "ローグレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie łotra.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el pícaro.",
+			"ruRU": "Доступна по достижении 57-го уровня разбойником.",
+			"esMX": "Se desbloquea en nivel 57 de Pícaro.",
+			"koKR": "도적 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อโร้กมีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -39289,6 +44093,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Tom Baxa",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Transforma um lacaio em 5/5 ou em 1/1 aleatoriamente.",
+			"zhCN": "随机将一个随从变形成为5/5或者1/1。",
+			"itIT": "Trasforma un servitore in un Gigantosauro 5/5 o in uno Scoiattolo 1/1.",
+			"enUS": "Transform a minion into a 5/5 or a 1/1 at random.",
+			"frFR": "Transforme au hasard un serviteur en 5/5 ou 1/1.",
+			"zhTW": "隨機把一個手下變形成5/5或1/1",
+			"deDE": "Verwandelt einen Diener zufällig in eine Kreatur mit 5/5 oder 1/1.",
+			"jaJP": "ランダムなミニオン1体を、5/5か1/1のミニオンにランダムに変身させる。",
+			"plPL": "Losowo przemień stronnika w Diabłozaura 5/5 lub Wiewiórkę 1/1.",
+			"esES": "Transforma a un esbirro en 5/5 o 1/1, al azar.",
+			"ruRU": "Случайно превратить существо в 5/5 или 1/1.",
+			"esMX": "Transforma a un esbirro en un 5/5 o un 1/1 aleatoriamente.",
+			"koKR": "하수인을 5/5 또는 1/1 하수인으로 변신시키기",
+			"thTH": "สุ่มเปลี่ยนมินเนี่ยนหนึ่งตัวเป็น 5/5 หรือ 1/1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -39324,11 +44144,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Wei Wang",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -39444,6 +44296,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Chippy",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Roube um lacaio que tenha 2 ou menos de Ataque.",
+			"zhCN": "偷取一个攻击力小于或等于2的敌方随从。",
+			"itIT": "Ruba un servitore con Attacco pari a 2 o inferiore.",
+			"enUS": "Steal a minion that has 2 or less Attack.",
+			"frFR": "Vole un serviteur qui a 2 Attaque ou moins.",
+			"zhTW": "偷取一個攻擊力2點以下的手下",
+			"deDE": "Stehlt einen Diener mit max. 2 Angriff.",
+			"jaJP": "攻撃力2以下のミニオン1体を味方にする。",
+			"plPL": "Przejmij wrogiego stronnika z atakiem 2 lub mniejszym.",
+			"esES": "Se adueña de un esbirro con 2 p. de ataque o menos.",
+			"ruRU": "Украсть существо с атакой 2 или меньше.",
+			"esMX": "Toma control de un esbirro que tenga 2 de Ataque o menos.",
+			"koKR": "공격력 2 이하 하수인 가져오기",
+			"thTH": "ควบคุมมินเนี่ยนหนึ่งตัว[b]ที่มีพลังโจมตี_2 หรือต่ำกว่า"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -39822,6 +44690,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Este card foi dado como recompensa aos jogadores que ajudaram a testar a Loja durante o Beta.",
+			"zhCN": "所有在测试阶段参与测试牌店功能的玩家都能获得此项奖励。",
+			"itIT": "Ricompensa per aver collaudato il negozio nella fase beta.",
+			"enUS": "This was rewarded to players who helped test the Store during the Beta.",
+			"frFR": "Cette récompense a été attribuée aux joueurs qui ont participé au test de la boutique lors de la bêta.",
+			"zhTW": "在測試期間幫忙測試商店交易的玩家所獲得的獎勵。",
+			"deDE": "Belohnung für Spieler, die in der Betaphase dabei halfen, den Shop zu testen.",
+			"jaJP": "ベータテスト中にストアのテストに協力したプレイヤーへの報酬カード。",
+			"plPL": "Nagroda dla graczy, którzy pomogli testować sklep podczas bety.",
+			"esES": "Esta carta fue una recompensa para los jugadores que ayudaron a probar la tienda durante la beta.",
+			"ruRU": "Награда игрокам, помогавшим в тестировании магазина на стадии бета-тестирования.",
+			"esMX": "Esta carta se otorgó como recompensa a los jugadores que ayudaron a probar la Tienda durante la beta.",
+			"koKR": "베타 때 상점 테스트를 도와주신 플레이어들께 드리는 보상",
+			"thTH": "การ์ดใบนี้เป็นรางวัลสำหรับผู้เล่นที่ช่วยทดสอบระบบร้านค้าในช่วงเบต้า"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Hof",
@@ -40029,10 +44913,42 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Andrew Robinson",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"dbfId": 667,
 		"type": "Spell",
 		"flavor": "I wouldn't say I LOVE knives, but I'm definitely a fan.",
@@ -40192,6 +45108,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Daren Bader",
 		"durability": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano. Combo: 2.",
+			"zhCN": "造成1点伤害。<b>连击：</b>改为造成2点伤害。",
+			"itIT": "Infligge 1 danno. Combo: infligge 2 danni.",
+			"enUS": "Deal 1 damage.  Combo: 2 instead.",
+			"frFR": "Inflige 1 point de dégâts. Combo : en inflige 2.",
+			"zhTW": "造成1點傷害\n連擊：改為造成2點傷害",
+			"deDE": "Verursacht 1 Schaden. Combo: Verursacht stattdessen 2 Schaden.",
+			"jaJP": "1ダメージを与える。コンボの場合は2ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń. Kombinacja: 2 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño. Combo: Inflige 2 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона. <b>Серия приемов:</b> нанести 2 ед. урона.",
+			"esMX": "Inflige 1 de daño. Combo: 2 de daño.",
+			"koKR": "피해 1. 연계: 대신 피해 2",
+			"thTH": "สร้างความเสียหาย_1_แต้ม คอมโบ: เปลี่ยนเป็น 2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"COMBO"
@@ -40227,6 +45159,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Chris Moeller",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2 points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -40838,7 +45786,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 5,
+		"cost": 6,
 		"set": "Expert1",
 		"artist": "Terese Nielsen",
 		"mechanics": [
@@ -41121,10 +46069,42 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 36.",
+			"zhCN": "达到36级后解锁。",
+			"itIT": "Sbloccata al livello 36.",
+			"enUS": "Unlocked at Level 36.",
+			"frFR": "Débloquée au niveau 36.",
+			"zhTW": "於36級時解鎖。",
+			"deDE": "Wird auf Stufe 36 freigeschaltet.",
+			"jaJP": "レベル36で入手。",
+			"plPL": "Odblokowane na poziomie 36.",
+			"esES": "Se desbloquea al alcanzar el nivel 36.",
+			"ruRU": "Доступна с 36-го уровня.",
+			"esMX": "Se desbloquea en nivel 36.",
+			"koKR": "36 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 36"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Core",
 		"artist": "Doug Alexander",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 254,
 		"type": "Spell",
 		"flavor": "Some druids still have flashbacks from strangers yelling \"Innervate me!!\" at them.",
@@ -41176,10 +46156,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
 		"artist": "Alex Horley Orlandelli",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 823,
 		"type": "Spell",
 		"flavor": "Balance is important to druids.  This card is perfectly balanced.",
@@ -41547,10 +46559,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Core",
 		"artist": "Trent Kaniuga",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 830,
 		"type": "Spell",
 		"flavor": "Totem-stomping is no longer recommended.",
@@ -41591,7 +46635,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Expert1",
-		"artist": "Kevin Chin",
+		"artist": "Kevin Chen",
 		"mechanics": [
 			"SILENCE"
 		],
@@ -41632,10 +46676,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 47.",
+			"zhCN": "达到47级后解锁。",
+			"itIT": "Sbloccata al livello 47.",
+			"enUS": "Unlocked at Level 47.",
+			"frFR": "Débloquée au niveau 47.",
+			"zhTW": "於47級時解鎖。",
+			"deDE": "Wird auf Stufe 47 freigeschaltet.",
+			"jaJP": "レベル47で入手。",
+			"plPL": "Odblokowane na poziomie 47.",
+			"esES": "Se desbloquea al alcanzar el nivel 47.",
+			"ruRU": "Доступна с 47-го уровня.",
+			"esMX": "Se desbloquea en nivel 47.",
+			"koKR": "47 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 47"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Steve Hui",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"referencedTags": [
 			"TAUNT"
 		],
@@ -42033,10 +47109,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Warren Mahy",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"ImmuneToSpellpower"
 		],
@@ -42077,10 +47185,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Alex Garner",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 573,
 		"type": "Spell",
 		"flavor": "Rogues are experts at SHIV-al-ry.",
@@ -42150,6 +47290,22 @@ var parseCardsText = {
 		"race": "ELEMENTAL",
 		"artist": "Dan Scott",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Congele um personagem.",
+			"zhCN": "冻结一个角色。",
+			"itIT": "<b>Congela</b> un personaggio.",
+			"enUS": "Freeze a character.",
+			"frFR": "Gèle un personnage.",
+			"zhTW": "凍結一個角色",
+			"deDE": "Friert einen Charakter ein.",
+			"jaJP": "キャラクター1体を凍結させる。",
+			"plPL": "Zamroź postać.",
+			"esES": "Congela a un personaje.",
+			"ruRU": "Заморозить персонажа.",
+			"esMX": "Congela a un personaje.",
+			"koKR": "캐릭터 빙결",
+			"thTH": "แช่แข็งตัวละครหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"FREEZE"
@@ -42196,7 +47352,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Hof",
 		"race": "DRAGON",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"spellDamage": 1,
 		"health": 4,
 		"mechanics": [
@@ -42410,10 +47566,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Matt Gaser",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"dbfId": 1092,
 		"type": "Spell",
 		"flavor": "If your spells look like horrifying skulls, let's be honest, you should get to draw some cards.",
@@ -42484,7 +47672,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Expert1",
 		"race": "DEMON",
-		"artist": "Alexander Alexandrov",
+		"artist": "Alex Alexandrov",
 		"health": 3,
 		"mechanics": [
 			"BATTLECRY"
@@ -42539,12 +47727,44 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"race": "DEMON",
 		"artist": "Matt Dixon",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -42571,10 +47791,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Raymond Swanland",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 974,
 		"type": "Spell",
 		"flavor": "Are you lighting a soul on fire? Or burning someone with your OWN soul? This seems like an important distinction.",
@@ -43422,10 +48674,42 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Daren Bader",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 854,
 		"type": "Spell",
 		"flavor": "This card makes something really damp.  Oh wait.  That's \"Humidity.\"",
@@ -43474,6 +48758,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Doug Alexander",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Conceda <b>Escudo Divino</b>.",
+			"zhCN": "使其获得<b>圣盾</b>。",
+			"itIT": "Fornisce <b>Scudo Divino</b>.",
+			"enUS": "Give <b>Divine Shield</b>.",
+			"frFR": "Confère <b>Bouclier divin</b>.",
+			"zhTW": "賦予<b>聖盾術</b>",
+			"deDE": "Verleiht <b>Gottesschild</b>.",
+			"jaJP": "<b>聖なる盾</b>を付与する。",
+			"plPL": "Daj Boską tarczę.",
+			"esES": "Otorga <b>Escudo divino</b>.",
+			"ruRU": "Дать <b>«Божественный щит»</b>.",
+			"esMX": "Otorga <b>Escudo divino</b>.",
+			"koKR": "<b>천상의 보호막</b>",
+			"thTH": "มอบ <b>โล่ศักดิ์สิทธิ์</b>"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -43676,10 +48976,42 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Clint Langley",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"referencedTags": [
 			"DIVINE_SHIELD"
 		],
@@ -43757,6 +49089,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Dany Orizio",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Mude o Ataque para 1.",
+			"zhCN": "使其攻击力变为1。",
+			"itIT": "Imposta l'Attacco a 1.",
+			"enUS": "Change Attack to 1.",
+			"frFR": "L’Attaque passe à 1.",
+			"zhTW": "將攻擊力改為1點",
+			"deDE": "Setzt den Angriff auf 1.",
+			"jaJP": "攻撃力を1に変える。",
+			"plPL": "Zmień atak na 1.",
+			"esES": "Cambiar ataque a 1 p.",
+			"ruRU": "Сделать атаку равной 1.",
+			"esMX": "Cambia el Ataque a 1.",
+			"koKR": "공격력 1로 바꾸기",
+			"thTH": "เปลี่ยนพลังโจมตีเป็น 1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -43942,7 +49290,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Expert1",
-		"artist": "E.M. Gist",
+		"artist": "E. M. Gist",
 		"dbfId": 1074,
 		"type": "Spell",
 		"flavor": "\"Dun da dun, dun da dun\": if you've heard an ogre sing this, it's too late.",
@@ -44125,6 +49473,22 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Bruxo no nível 57.",
+			"zhCN": "术士达到57级后解锁。",
+			"itIT": "Sbloccata al livello 57 dello Stregone.",
+			"enUS": "Unlocked at Warlock Level 57.",
+			"frFR": "Débloquée au niveau 57 du démoniste.",
+			"zhTW": "於術士57級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Hexenmeister Stufe 57 erreicht.",
+			"jaJP": "ウォーロックレベル57で入手。",
+			"plPL": "Odblokowane na 57 poziomie czarnoksiężnika.",
+			"esES": "Se desbloquea al alcanzar el nivel 57 con el brujo.",
+			"ruRU": "Доступна по достижении 57-го уровня чернокнижником.",
+			"esMX": "Se desbloquea en nivel 57 de Brujo.",
+			"koKR": "흑마법사 57 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอร์ล็อคมีเลเวล 57"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
@@ -44171,10 +49535,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 32.",
+			"zhCN": "达到32级后解锁。",
+			"itIT": "Sbloccata al livello 32.",
+			"enUS": "Unlocked at Level 32.",
+			"frFR": "Débloquée au niveau 32.",
+			"zhTW": "於32級時解鎖。",
+			"deDE": "Wird auf Stufe 32 freigeschaltet.",
+			"jaJP": "レベル32で入手。",
+			"plPL": "Odblokowane na poziomie 32.",
+			"esES": "Se desbloquea al alcanzar el nivel 32.",
+			"ruRU": "Доступна с 32-го уровня.",
+			"esMX": "Se desbloquea en nivel 32.",
+			"koKR": "32 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 32"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
 		"artist": "Jonboy Meyers",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 6.",
+			"zhCN": "达到6级后解锁。",
+			"itIT": "Sbloccata al livello 6.",
+			"enUS": "Unlocked at Level 6.",
+			"frFR": "Débloquée au niveau 6.",
+			"zhTW": "於6級時解鎖。",
+			"deDE": "Wird auf Stufe 6 freigeschaltet.",
+			"jaJP": "レベル6で入手。",
+			"plPL": "Odblokowane na poziomie 6.",
+			"esES": "Se desbloquea al alcanzar el nivel 6.",
+			"ruRU": "Доступна с 6-го уровня.",
+			"esMX": "Se desbloquea en nivel 6.",
+			"koKR": "6 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 6"
+		},
 		"dbfId": 636,
 		"type": "Spell",
 		"flavor": "The way to tell seasoned warriors from novice ones: the novices yell \"wheeeee\" while whirlwinding.",
@@ -44596,6 +49992,22 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Ladino no nível 53.",
+			"zhCN": "潜行者达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Ladro.",
+			"enUS": "Unlocked at Rogue Level 53.",
+			"frFR": "Débloquée au niveau 53 du voleur.",
+			"zhTW": "於盜賊53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Schurke Stufe 53 erreicht.",
+			"jaJP": "ローグレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie łotra.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el pícaro.",
+			"ruRU": "Доступна по достижении 53-го уровня разбойником.",
+			"esMX": "Se desbloquea en nivel 53 de Pícaro.",
+			"koKR": "도적 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อโร้กมีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
@@ -44700,6 +50112,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Bruxo no nível 53.",
+			"zhCN": "术士达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 dello Stregone.",
+			"enUS": "Unlocked at Warlock Level 53.",
+			"frFR": "Débloquée au niveau 53 du démoniste.",
+			"zhTW": "於術士53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Hexenmeister Stufe 53 erreicht.",
+			"jaJP": "ウォーロックレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie czarnoksiężnika.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el brujo.",
+			"ruRU": "Доступна по достижении 53-го уровня чернокнижником.",
+			"esMX": "Se desbloquea en nivel 53 de Brujo.",
+			"koKR": "흑마법사 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อวอร์ล็อคมีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Core",
@@ -45091,10 +50519,42 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 49.",
+			"zhCN": "达到49级后解锁。",
+			"itIT": "Sbloccata al livello 49.",
+			"enUS": "Unlocked at Level 49.",
+			"frFR": "Débloquée au niveau 49.",
+			"zhTW": "於49級時解鎖。",
+			"deDE": "Wird auf Stufe 49 freigeschaltet.",
+			"jaJP": "レベル49で入手。",
+			"plPL": "Odblokowane na poziomie 49.",
+			"esES": "Se desbloquea al alcanzar el nivel 49.",
+			"ruRU": "Доступна с 49-го уровня.",
+			"esMX": "Se desbloquea en nivel 49.",
+			"koKR": "49 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 49"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Gabe from Penny Arcade",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 10.",
+			"zhCN": "达到10级后解锁。",
+			"itIT": "Sbloccata al livello 10.",
+			"enUS": "Unlocked at Level 10.",
+			"frFR": "Débloquée au niveau 10.",
+			"zhTW": "於10級時解鎖。",
+			"deDE": "Wird auf Stufe 10 freigeschaltet.",
+			"jaJP": "レベル10で入手。",
+			"plPL": "Odblokowane na poziomie 10.",
+			"esES": "Se desbloquea al alcanzar el nivel 10.",
+			"ruRU": "Доступна с 10-го уровня.",
+			"esMX": "Se desbloquea en nivel 10.",
+			"koKR": "10 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 10"
+		},
 		"dbfId": 296,
 		"type": "Spell",
 		"flavor": "\"Kill!\", he commanded.",
@@ -45461,6 +50921,22 @@ var parseCardsText = {
 		"race": "DRAGON",
 		"artist": "Raymond Swanland",
 		"health": 8,
+		"targetingArrowText": {
+			"ptBR": "Defina a Vida para 15.",
+			"zhCN": "将生命值变为15点。",
+			"itIT": "Imposta la Salute a 15.",
+			"enUS": "Set Health to 15.",
+			"frFR": "Fixe les PV à 15.",
+			"zhTW": "將生命值改為15點",
+			"deDE": "Setzt das Leben auf 15.",
+			"jaJP": "体力を15にする。",
+			"plPL": "Ustaw zdrowie na 15.",
+			"esES": "Establece la salud en 15 p.",
+			"ruRU": "Текущее здоровье этого героя будет равно 15.",
+			"esMX": "Establece la Salud en 15.",
+			"koKR": "생명력 15로 만들기",
+			"thTH": "เปลี่ยนพลังชีวิตเป็น 15"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -45581,6 +51057,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Raymond Swanland",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Torne-se uma cópia de um lacaio.",
+			"zhCN": "成为一个随从的复制。",
+			"itIT": "Diventa la copia di un servitore.",
+			"enUS": "Become a copy of a minion.",
+			"frFR": "Devient une copie d’un serviteur.",
+			"zhTW": "成為一個手下的分身",
+			"deDE": "Wird zur Kopie eines Dieners.",
+			"jaJP": "ミニオン1体のコピーになる。",
+			"plPL": "Wybierz stronnika do skopiowania.",
+			"esES": "Se convierte en una copia de un esbirro.",
+			"ruRU": "Превратить в копию существа.",
+			"esMX": "Se convierte en una copia de un esbirro.",
+			"koKR": "선택한 하수인으로 변신",
+			"thTH": "เปลี่ยนร่างเป็นมินเนี่ยน"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -45613,12 +51105,44 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
-		"cost": 2,
+		"cost": 3,
 		"set": "Core",
 		"race": "TOTEM",
 		"artist": "Jonathan Ryder",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"mechanics": [
 			"ADJACENT_BUFF",
 			"AURA"
@@ -46013,10 +51537,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 40.",
+			"zhCN": "达到40级后解锁。",
+			"itIT": "Sbloccata al livello 40.",
+			"enUS": "Unlocked at Level 40.",
+			"frFR": "Débloquée au niveau 40.",
+			"zhTW": "於40級時解鎖。",
+			"deDE": "Wird auf Stufe 40 freigeschaltet.",
+			"jaJP": "レベル40で入手。",
+			"plPL": "Odblokowane na poziomie 40.",
+			"esES": "Se desbloquea al alcanzar el nivel 40.",
+			"ruRU": "Доступна с 40-го уровня.",
+			"esMX": "Se desbloquea en nivel 40.",
+			"koKR": "40 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 40"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Core",
 		"artist": "Scott Altmann",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 1.",
+			"zhCN": "达到1级后解锁。",
+			"itIT": "Sbloccata al livello 1.",
+			"enUS": "Unlocked at Level 1.",
+			"frFR": "Débloquée au niveau 1.",
+			"zhTW": "於1級時解鎖。",
+			"deDE": "Wird auf Stufe 1 freigeschaltet.",
+			"jaJP": "レベル1で入手。",
+			"plPL": "Odblokowane na poziomie 1.",
+			"esES": "Se desbloquea al alcanzar el nivel 1.",
+			"ruRU": "Доступна с 1-го уровня.",
+			"esMX": "Se desbloquea en nivel 1.",
+			"koKR": "1 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 1"
+		},
 		"dbfId": 461,
 		"type": "Spell",
 		"flavor": "Rogues love sappy movies.",
@@ -46045,6 +51601,22 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Mago no nível 59.",
+			"zhCN": "法师达到59级后解锁。",
+			"itIT": "Sbloccata al livello 59 del Mago.",
+			"enUS": "Unlocked at Mage Level 59.",
+			"frFR": "Débloquée au niveau 59 du mage.",
+			"zhTW": "於法師59級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Magier Stufe 59 erreicht.",
+			"jaJP": "レベル59で入手。",
+			"plPL": "Odblokowane na 59 poziomie maga.",
+			"esES": "Se desbloquea al alcanzar el nivel 59 con el mago.",
+			"ruRU": "Доступна по достижении 59-го уровня магом.",
+			"esMX": "Se desbloquea en nivel 59 de Mago.",
+			"koKR": "마법사 59 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเมจมีเลเวล 59"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
@@ -46209,11 +51781,59 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Vance Kovacs",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda <b>Fúria dos Ventos</b>.",
+			"zhCN": "使一个随从获得<b>风怒</b>。",
+			"itIT": "Fornisce <b>Furia del Vento</b>.",
+			"enUS": "Give <b>Windfury</b>.",
+			"frFR": "Confère <b>Furie des vents</b>.",
+			"zhTW": "賦予<b>風怒</b>",
+			"deDE": "Verleiht <b>Windzorn</b>.",
+			"jaJP": "<b>疾風</b>を付与する。",
+			"plPL": "Daj <b>Furię wichru</b>.",
+			"esES": "Otorga <b>Viento furioso</b>.",
+			"ruRU": "Дать <b>«Неистовство ветра»</b>.",
+			"esMX": "Otorga <b>Viento furioso</b>.",
+			"koKR": "<b>질풍</b>",
+			"thTH": "มอบ <b>วายุพิโรธ</b>"
+		},
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -46319,9 +51939,6 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Doug Alexander",
 		"health": 5,
-		"mechanics": [
-			"AURA"
-		],
 		"dbfId": 237,
 		"type": "Minion",
 		"flavor": "The Auchenai know the end is coming, but they're not sure when.",
@@ -46360,6 +51977,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível para Druida no nível 53.",
+			"zhCN": "德鲁伊达到53级后解锁。",
+			"itIT": "Sbloccata al livello 53 del Druido.",
+			"enUS": "Unlocked at Druid Level 53.",
+			"frFR": "Débloquée au niveau 53 du druide.",
+			"zhTW": "於德魯伊53級時解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr als Druide Stufe 53 erreicht.",
+			"jaJP": "ドルイドレベル53で入手。",
+			"plPL": "Odblokowane na 53 poziomie druida.",
+			"esES": "Se desbloquea al alcanzar el nivel 53 con el druida.",
+			"ruRU": "Доступна по достижении 53-го уровня друидом.",
+			"esMX": "Se desbloquea en nivel 53 de Druida.",
+			"koKR": "드루이드 53 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อดรูอิดมีเลเวล 53"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Core",
@@ -46562,6 +52195,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Phroilan Gardner",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano e conceda +2 de Ataque.",
+			"zhCN": "造成1点伤害并使其获得+2攻击力。",
+			"itIT": "Infligge 1 danno e fornisce +2 Attacco.",
+			"enUS": "Deal 1 damage and grant +2 Attack.",
+			"frFR": "Inflige 1_point de dégâts et donne +2_ATQ.",
+			"zhTW": "造成1點傷害並賦予+2攻擊力",
+			"deDE": "Verursacht 1 Schaden und verleiht +2 Angriff.",
+			"jaJP": "1ダメージを与え、攻撃力+2を付与する。",
+			"plPL": "Zadaj 1 pkt. obrażeń i daj +2 do ataku.",
+			"esES": "Inflige 1 p. de daño y otorga +2 p. de ataque.",
+			"ruRU": "Нанести 1 ед. урона и увеличить атаку на 2.",
+			"esMX": "Inflige 1 de daño y otorga +2 de Ataque.",
+			"koKR": "피해 1, 공격력 +2",
+			"thTH": "สร้างความเสียหาย_1_แต้ม และมอบพลังโจมตี +2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -46664,10 +52313,42 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 28.",
+			"zhCN": "达到28级后解锁。",
+			"itIT": "Sbloccata al livello 28.",
+			"enUS": "Unlocked at Level 28.",
+			"frFR": "Débloquée au niveau 28.",
+			"zhTW": "於28級時解鎖。",
+			"deDE": "Wird auf Stufe 28 freigeschaltet.",
+			"jaJP": "レベル28で入手。",
+			"plPL": "Odblokowane na poziomie 28.",
+			"esES": "Se desbloquea al alcanzar el nivel 28.",
+			"ruRU": "Доступна с 28-го уровня.",
+			"esMX": "Se desbloquea en nivel 28.",
+			"koKR": "28 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 28"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Michael Komarck",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"dbfId": 1023,
 		"type": "Spell",
 		"flavor": "Shields were invented because Face Block is USELESS.",
@@ -47119,7 +52800,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 2,
+		"cost": 4,
 		"set": "Expert1",
 		"artist": "Michal Ivan",
 		"dbfId": 756,
@@ -47226,10 +52907,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 43.",
+			"zhCN": "达到43级后解锁。",
+			"itIT": "Sbloccata al livello 43.",
+			"enUS": "Unlocked at Level 43.",
+			"frFR": "Débloquée au niveau 43.",
+			"zhTW": "於43級時解鎖。",
+			"deDE": "Wird auf Stufe 43 freigeschaltet.",
+			"jaJP": "レベル43で入手。",
+			"plPL": "Odblokowane na poziomie 43.",
+			"esES": "Se desbloquea al alcanzar el nivel 43.",
+			"ruRU": "Доступна с 43-го уровня.",
+			"esMX": "Se desbloquea en nivel 43.",
+			"koKR": "43 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 43"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Raymond Swanland",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"dbfId": 1363,
 		"type": "Spell",
 		"flavor": "If you miss, it leaves a lightning-bolt-shaped scar on your target.",
@@ -47266,6 +52979,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Daren Bader",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Conceda +3 de Vida.",
+			"zhCN": "使其获得+3生命值。",
+			"itIT": "Fornisce +3 Salute.",
+			"enUS": "Give +3 Health.",
+			"frFR": "Donne +3 PV.",
+			"zhTW": "賦予+3生命值",
+			"deDE": "Verleiht +3 Leben.",
+			"jaJP": "体力+3を付与する。",
+			"plPL": "Daj +3 do zdrowia.",
+			"esES": "Otorga +3 p. de salud.",
+			"ruRU": "+3 к здоровью.",
+			"esMX": "Otorga +3 de Salud.",
+			"koKR": "생명력 +3",
+			"thTH": "มอบพลังชีวิต +3"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -47442,7 +53171,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Expert1",
-		"artist": "Sean O'Daniels",
+		"artist": "Sean O’Daniels",
 		"mechanics": [
 			"SILENCE"
 		],
@@ -48129,6 +53858,22 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Tb",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2 de Ataque neste turno.",
+			"zhCN": "本回合中获得+2攻击力。",
+			"itIT": "Fornisce +2 Attacco per questo turno.",
+			"enUS": "Give +2 Attack this turn.",
+			"frFR": "Donne +2_ATQ pendant ce tour.",
+			"zhTW": "賦予本回合+2攻擊力",
+			"deDE": "Verleiht +2 Angriff in diesem Zug.",
+			"jaJP": "このターンの間、攻撃力+2を付与する。",
+			"plPL": "Daj +2 do ataku w tej turze.",
+			"esES": "Otorga +2 p. de ataque este turno.",
+			"ruRU": "+2 к атаке до конца хода.",
+			"esMX": "Otorga +2 de Ataque en este turno.",
+			"koKR": "이번 턴에 공격력 +2",
+			"thTH": "มอบพลังโจมตี +2 จนจบเทิร์น"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -48173,6 +53918,22 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Tb",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio com 7 ou mais de Ataque.",
+			"zhCN": "消灭一个攻击力大于或等于7的随从。",
+			"itIT": "Distrugge un servitore con Attacco pari a 7 o superiore.",
+			"enUS": "Destroy a minion with an Attack of 7 or more.",
+			"frFR": "Détruit un serviteur avec 7_Attaque ou plus.",
+			"zhTW": "摧毀一個攻擊力7點以上的手下",
+			"deDE": "Vernichtet einen Diener mit mind. 7 Angriff.",
+			"jaJP": "攻撃力7以上のミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika z atakiem 7 lub większym.",
+			"esES": "Destruye a un esbirro con 7 p. de ataque o más.",
+			"ruRU": "Уничтожить существо с атакой 7 или больше.",
+			"esMX": "Destruye un esbirro con 7 de Ataque o más.",
+			"koKR": "공격력 7 이상의 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว[b]ที่มีพลังโจมตี_7_แต้ม[b]หรือสูงกว่า"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -49809,6 +55570,22 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Deathknight",
+		"collectionText": {
+			"ptBR": " de dano ao herói inimigo. +1 de dano a cada vez.",
+			"zhCN": "点伤害。每次使用\n+1点伤害。",
+			"itIT": " |4(danno,danni) all'eroe nemico. +1 danno a ogni utilizzo.",
+			"enUS": " damage to the enemy hero. +1 Damage each time.",
+			"frFR": " |4(point,points) de dégâts au héros adverse. +1 point de dégâts à chaque fois.",
+			"zhTW": "點傷害。每次提高1點傷害",
+			"deDE": " Schaden zu. Verursacht jedes Mal 1 Schaden mehr.",
+			"jaJP": "ダメージを与える。\n使用する度ダメージが\n+1される。",
+			"plPL": " pkt. obrażeń wrogiemu bohaterowi. +1 pkt. obrażeń za każdym razem.",
+			"esES": " p. de daño\nal héroe enemigo.\n+1 p. de daño cada vez.",
+			"ruRU": " ед. урона герою противника.\n+1 к урону с каждым использованием.",
+			"esMX": " de daño al héroe enemigo.\n+1 de daño cada vez.",
+			"koKR": " 줍니다. 사용할 때마다 피해가 +1 증가합니다.",
+			"thTH": " แต้มให้ฮีโร่ศัตรู ความเสียหาย +1 ทุกครั้งที่ใช้"
+		},
 		"cost": 0,
 		"set": "Tb",
 		"name": "Remorseless Winter",
@@ -51501,11 +57278,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Naxx",
 		"artist": "E. M. Gist",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -51532,12 +57341,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Crafting unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中開放合成。",
+			"deDE": "Herstellung wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Паучьем квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"race": "BEAST",
 		"artist": "Jeremy Cranford",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁。",
+			"itIT": "Sbloccata nell'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中解鎖。",
+			"deDE": "Wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Arácnido de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Паучьего квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -51587,11 +57428,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Antro del Gelo (Naxxramas).",
+			"enUS": "Crafting unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中開放合成。",
+			"deDE": "Herstellung wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Логове ледяного змея (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"artist": "Eric Browning",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁。",
+			"itIT": "Sbloccata nell'Antro del Gelo (Naxxramas).",
+			"enUS": "Unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中解鎖。",
+			"deDE": "Wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en la Guarida de la Vermis de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Логова ледяного змея в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -51618,11 +57491,43 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"artist": "James Ryman",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -51652,11 +57557,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Antro del Gelo (Naxxramas).",
+			"enUS": "Crafting unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中開放合成。",
+			"deDE": "Herstellung wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Логове ледяного змея (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Naxx",
 		"artist": "Ittoku",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁。",
+			"itIT": "Sbloccata nell'Antro del Gelo (Naxxramas).",
+			"enUS": "Unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中解鎖。",
+			"deDE": "Wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en la Guarida de la Vermis de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Логова ледяного змея в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"STEALTH",
 			"TRIGGER_VISUAL"
@@ -51727,11 +57664,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Crafting unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中開放合成。",
+			"deDE": "Herstellung wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Паучьем квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"artist": "Justin Thavirat",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁。",
+			"itIT": "Sbloccata nell'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中解鎖。",
+			"deDE": "Wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Arácnido de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Паучьего квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -51781,11 +57750,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中開放合成。",
+			"deDE": "Herstellung wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Militar, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Военном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Naxx",
 		"artist": "Chris Rahn",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中解鎖。",
+			"deDE": "Wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Militar de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Военного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"CANT_BE_TARGETED_BY_SPELLS",
 			"CANT_BE_TARGETED_BY_HERO_POWERS"
@@ -51813,11 +57814,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中開放合成。",
+			"deDE": "Herstellung wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Militar, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Военном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Naxx",
 		"artist": "Ben Olson",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中解鎖。",
+			"deDE": "Wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Militar de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Военного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE",
 			"TAUNT"
@@ -51845,12 +57878,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Crafting unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中開放合成。",
+			"deDE": "Herstellung wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Паучьем квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Naxx",
 		"race": "BEAST",
 		"artist": "Howard Lyon",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁。",
+			"itIT": "Sbloccata nell'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中解鎖。",
+			"deDE": "Wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Arácnido de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Паучьего квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"POISONOUS"
 		],
@@ -51879,12 +57944,44 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Crafting unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中開放合成。",
+			"deDE": "Herstellung wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Чумном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Naxx",
 		"race": "BEAST",
 		"artist": "Dan Brereton",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁。",
+			"itIT": "Sbloccata nell'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中解鎖。",
+			"deDE": "Wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de la Peste de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Чумного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -51911,11 +58008,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Crafting unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中開放合成。",
+			"deDE": "Herstellung wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Чумном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Naxx",
 		"artist": "Nate Bowden",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁。",
+			"itIT": "Sbloccata nell'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中解鎖。",
+			"deDE": "Wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de la Peste de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Чумного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE",
 			"TAUNT"
@@ -51970,11 +58099,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Antro del Gelo (Naxxramas).",
+			"enUS": "Crafting unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中開放合成。",
+			"deDE": "Herstellung wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Логове ледяного змея (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Naxx",
 		"artist": "Chris Robinson",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁。",
+			"itIT": "Sbloccata nell'Antro del Gelo (Naxxramas).",
+			"enUS": "Unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中解鎖。",
+			"deDE": "Wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en la Guarida de la Vermis de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Логова ледяного змея в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -52003,11 +58164,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Naxx",
 		"artist": "Dany Orizio",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52061,11 +58254,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Naxx",
 		"artist": "Dany Orizio",
 		"health": 7,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52094,11 +58319,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Naxx",
 		"artist": "Glenn Rane",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -52131,11 +58388,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Crafting unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中開放合成。",
+			"deDE": "Herstellung wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Паучьем квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"artist": "Alex Horley Orlandelli",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁。",
+			"itIT": "Sbloccata nell'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中解鎖。",
+			"deDE": "Wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Arácnido de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Паучьего квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -52180,10 +58469,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Crafting unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中開放合成。",
+			"deDE": "Herstellung wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Чумном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Naxx",
 		"artist": "Alex Garner",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁。",
+			"itIT": "Sbloccata nell'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中解鎖。",
+			"deDE": "Wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de la Peste de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Чумного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"SECRET"
 		],
@@ -52203,10 +58524,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Crafting unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中開放合成。",
+			"deDE": "Herstellung wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Паучьем квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Naxx",
 		"artist": "Brian Despain",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁。",
+			"itIT": "Sbloccata nell'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中解鎖。",
+			"deDE": "Wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Arácnido de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Паучьего квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"dbfId": 1802,
 		"type": "Spell",
 		"flavor": "\"Poisonseed Bagel\" is the least popular bagel at McTiggin's Druidic Bagel Emporium.",
@@ -52258,10 +58611,42 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Antro del Gelo (Naxxramas).",
+			"enUS": "Crafting unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中開放合成。",
+			"deDE": "Herstellung wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で作成可能になる。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Логове ледяного змея (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Naxx",
 		"artist": "Zoltan & Gabor",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Covil da Serpe Gélida, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在冰龙巢穴中解锁。",
+			"itIT": "Sbloccata nell'Antro del Gelo (Naxxramas).",
+			"enUS": "Unlocked in Frostwyrm Lair, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile antre du Wyrm de givre de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的冰霜巨龍巢穴中解鎖。",
+			"deDE": "Wird in der Spitze der Nekropole in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「フロストワームの巣」で入手。",
+			"plPL": "Do odblokowania w Leżu Żmija Mrozu,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en la Guarida de la Vermis de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Логова ледяного змея в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en la Guarida de la Vermis, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 서리고룡 둥지에서 잠금 해제",
+			"thTH": "ปลดล็อคในถ้ำฟรอสต์เวิร์ม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"SECRET"
 		],
@@ -52296,11 +58681,43 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Naxx",
 		"artist": "Jim Nelson",
 		"durability": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52321,12 +58738,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中開放合成。",
+			"deDE": "Herstellung wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Militar, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Военном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Naxx",
 		"race": "DEMON",
 		"artist": "Robb Shoberg",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中解鎖。",
+			"deDE": "Wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Militar de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Военного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตทหาร ภายในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52353,11 +58802,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Naxx",
 		"artist": "Phroilan Gardner",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52399,11 +58880,43 @@ var parseCardsText = {
 		"cardClass": "PRIEST"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Crafting unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中開放合成。",
+			"deDE": "Herstellung wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Чумном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"artist": "Mike Nicholson",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁。",
+			"itIT": "Sbloccata nell'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中解鎖。",
+			"deDE": "Wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de la Peste de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Чумного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE",
 			"TAUNT"
@@ -52431,10 +58944,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中開放合成。",
+			"deDE": "Herstellung wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Militar, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Военном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Naxx",
 		"artist": "Dan Scott",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中解鎖。",
+			"deDE": "Wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Militar de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Военного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตทหาร ภายในการผจญภัย Naxxramas"
+		},
 		"dbfId": 1809,
 		"type": "Spell",
 		"flavor": "It's like birth, except you're an adult and you were just dead a second ago.",
@@ -52466,11 +59011,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Crafting unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中開放合成。",
+			"deDE": "Herstellung wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Паучьем квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Naxx",
 		"artist": "Nate Bowden",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Aracnídeos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在蜘蛛区中解锁。",
+			"itIT": "Sbloccata nell'Ala degli Aracnidi (Naxxramas).",
+			"enUS": "Unlocked in The Arachnid Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Arachnides de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的蜘蛛區中解鎖。",
+			"deDE": "Wird im Arachnidenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「蜘蛛区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Arachnidów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Arácnido de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Паучьего квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Arácnido, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 거미 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตแมงมุม ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52497,11 +59074,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Crafting unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中開放合成。",
+			"deDE": "Herstellung wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Чумном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Naxx",
 		"artist": "Matt Smith",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁。",
+			"itIT": "Sbloccata nell'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中解鎖。",
+			"deDE": "Wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de la Peste de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Чумного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -52528,11 +59137,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中開放合成。",
+			"deDE": "Herstellung wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Квартале Мерзости (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Naxx",
 		"artist": "Jonboy Meyers",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito dos Constructos, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在构造区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Costrutti (Naxxramas).",
+			"enUS": "Unlocked in The Construct Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier des Assemblages de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的傀儡區中解鎖。",
+			"deDE": "Wird im Konstruktviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「人造区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Konstruktów,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de los Ensamblajes de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Квартала Мерзости в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de los Ensamblajes, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 피조물 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตอสูรกาย ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -52577,11 +59218,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中開放合成。",
+			"deDE": "Herstellung wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Militar, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Военном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Naxx",
 		"artist": "Jon McConnell",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中解鎖。",
+			"deDE": "Wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Militar de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Военного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -52608,11 +59281,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Crafting unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中開放合成。",
+			"deDE": "Herstellung wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Чумном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Naxx",
 		"artist": "Samwise",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito da Peste, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在瘟疫区中解锁。",
+			"itIT": "Sbloccata nell'Ala della Pestilenza (Naxxramas).",
+			"enUS": "Unlocked in The Plague Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier de la Peste de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的瘟疫區中解鎖。",
+			"deDE": "Wird im Seuchenviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「疫病区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zarazy,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal de la Peste de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Чумного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal de la Peste, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 역병 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตโรคระบาด ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -52659,11 +59364,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁制作。",
+			"itIT": "Può essere creata dopo aver completato l'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Crafting unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Peut être créée après avoir été débloquée dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中開放合成。",
+			"deDE": "Herstellung wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で作成可能になる。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se puede crear tras jugar en el Arrabal Militar, en la aventura de Naxxramas.",
+			"ruRU": "Можно создать после получения в Военном квартале (приключение «Наксрамас»).",
+			"esMX": "La creación se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Naxx",
 		"artist": "Ralph Horsley",
 		"health": 7,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Distrito Militar, na aventura de Naxxramas.",
+			"zhCN": "加入“纳克萨玛斯的诅咒”冒险模式，在军事区中解锁。",
+			"itIT": "Sbloccata nell'Ala dei Combattenti (Naxxramas).",
+			"enUS": "Unlocked in The Military Quarter, in the Naxxramas adventure.",
+			"frFR": "Obtenue dans l’aile quartier Militaire de l’aventure La malédiction de Naxxramas.",
+			"zhTW": "在《納克薩瑪斯》的軍事區中解鎖。",
+			"deDE": "Wird im Militärviertel in Naxxramas freigeschaltet.",
+			"jaJP": "ナクスラーマス・アドベンチャーの「軍隊区画」で入手。",
+			"plPL": "Do odblokowania w Rewirze Zbrojnych,\nw przygodzie Naxxramas.",
+			"esES": "Se desbloquea en el Arrabal Militar de Naxxramas.",
+			"ruRU": "Можно получить в ходе прохождения Военного квартала в приключении «Наксрамас».",
+			"esMX": "Se desbloquea en el Arrabal Militar, en la aventura de Naxxramas.",
+			"koKR": "낙스라마스 모험의 군사 지구에서 잠금 해제",
+			"thTH": "ปลดล็อคในเขตทหาร ในการผจญภัย Naxxramas"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -53603,7 +60340,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Gilneas",
-		"artist": "Milvoj Ceran",
+		"artist": "Milivoj Ceran",
 		"mechanics": [
 			"ECHO"
 		],
@@ -55098,6 +61835,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Luca Zontini",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2 points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -55190,7 +61943,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -56296,6 +63049,22 @@ var parseCardsText = {
 		"set": "Gilneas",
 		"artist": "Charlene Le Scanff",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Amaldiçoe um lacaio.",
+			"zhCN": "诅咒一个随从。",
+			"itIT": "Maledice un servitore.",
+			"enUS": "Curse a minion.",
+			"frFR": "Maudit un serviteur.",
+			"zhTW": "詛咒一個手下",
+			"deDE": "Verflucht einen Diener.",
+			"jaJP": "ミニオン1体に呪いをかける。",
+			"plPL": "Przeklnij stronnika.",
+			"esES": "Maldice a un esbirro.",
+			"ruRU": "Проклясть существо.",
+			"esMX": "Maldice a un esbirro.",
+			"koKR": "하수인 저주",
+			"thTH": "สาปมินเนี่ยน"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"DEATHRATTLE"
@@ -57121,6 +63890,22 @@ var parseCardsText = {
 		"set": "Gilneas",
 		"artist": "Craig Elliott",
 		"health": 8,
+		"targetingArrowText": {
+			"ptBR": "Adicione uma cópia 10/10 à sua mão.",
+			"zhCN": "将一个10/10复制置入你的手牌。",
+			"itIT": "Mette nella tua mano una copia 10/10 di un tuo servitore.",
+			"enUS": "Add a 10/10 copy to your hand.",
+			"frFR": "Ajoute une copie_10/10 à votre main.",
+			"zhTW": "放一個10/10的分身到你的手中",
+			"deDE": "Erhaltet eine Kopie (10/10) auf die Hand.",
+			"jaJP": "10/10のコピー1体を自分の手札に追加する。",
+			"plPL": "Dodaj kopię 10/10 do twojej ręki.",
+			"esES": "Añade una copia 10/10\na tu mano.",
+			"ruRU": "Добавить в руку копию 10/10.",
+			"esMX": "Agrega una copia 10/10 a tu mano.",
+			"koKR": "10/10 하수인으로 복사하여 내 손으로 가져옴",
+			"thTH": "เพิ่มก๊อปปี้ 10/10 หนึ่งใบในมือคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -57254,7 +64039,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Gilneas",
 		"race": "BEAST",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -58197,6 +64982,22 @@ var parseCardsText = {
 		"set": "Gilneas",
 		"artist": "Dave Allsop",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Coloque uma cópia no seu deck.",
+			"zhCN": "将一个复制洗入你的牌库。",
+			"itIT": "Mette una copia di un tuo servitore nel tuo mazzo.",
+			"enUS": "Shuffle a copy into your deck.",
+			"frFR": "Place une copie dans votre deck.",
+			"zhTW": "將一張相同的牌洗入你的牌堆",
+			"deDE": "Mischt eine Kopie in Euer Deck.",
+			"jaJP": "コピー1枚を自分のデッキに混ぜる。",
+			"plPL": "Wtasuj kopię do twojej talii.",
+			"esES": "Mete una copia en tu mazo.",
+			"ruRU": "Замешать копию существа в колоду.",
+			"esMX": "Coloca una copia en tu mazo.",
+			"koKR": "복사하여 내 덱에 섞어 넣음",
+			"thTH": "สับ_1_ก๊อปปี้เข้าเด็คคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -58434,7 +65235,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Gilneas",
 		"race": "BEAST",
-		"artist": "Eva Wildermann",
+		"artist": "Eva Widermannn",
 		"health": 3,
 		"mechanics": [
 			"BATTLECRY"
@@ -58659,7 +65460,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Gilneas",
 		"race": "BEAST",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"spellDamage": 1,
 		"health": 3,
 		"mechanics": [
@@ -59007,7 +65808,7 @@ var parseCardsText = {
 		"cost": 7,
 		"set": "Gilneas",
 		"race": "BEAST",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"health": 9,
 		"mechanics": [
 			"BATTLECRY"
@@ -59049,7 +65850,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Gilneas",
 		"race": "BEAST",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"health": 5,
 		"mechanics": [
 			"BATTLECRY"
@@ -59082,7 +65883,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 5,
 		"set": "Gilneas",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"name": "Princess's Bone",
 		"id": "GILA_411e",
 		"audio": {
@@ -59683,7 +66484,7 @@ var parseCardsText = {
 	{
 		"cost": 1,
 		"set": "Gilneas",
-		"artist": "Anton Kagoukin",
+		"artist": "Anton Kagounkin",
 		"durability": 2,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -59907,7 +66708,7 @@ var parseCardsText = {
 	{
 		"cost": 5,
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 5,
 		"mechanics": [
 			"BATTLECRY"
@@ -60403,6 +67204,22 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"collectionText": {
+			"ptBR": " de dano aos inimigos em frente \na este lacaio.",
+			"zhCN": "点伤害。",
+			"itIT": " |4(danno,danni) ai\nnemici di fronte.",
+			"enUS": " damage to the enemies opposite of this minion.",
+			"frFR": " |4(point,points) de dégâts aux adversaires en face de ce serviteur.",
+			"zhTW": "點傷害",
+			"deDE": " Schaden zu.",
+			"jaJP": "ダメージを与える。",
+			"plPL": " pkt. obrażeń wrogom naprzeciw tego stronnika.",
+			"esES": " p. de daño a los enemigos en frente de este esbirro.",
+			"ruRU": " ед. урона противникам перед собой.",
+			"esMX": " de daño a los enemigos frente a este esbirro.",
+			"koKR": " 줍니다.",
+			"thTH": " แต้มให้ศัตรูที่อยู่[b]ตรงข้ามมินเนี่ยนตัวนี้"
+		},
 		"cost": 0,
 		"set": "Gilneas",
 		"artist": "Arthur Bozonnet",
@@ -60872,6 +67689,22 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Gilneas",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio e encha sua mão de Moedas.",
+			"zhCN": "消灭一个随从，并将幸运币置入你的手牌，直到你的手牌数量达到上限。",
+			"itIT": "Distrugge un servitore, riempiendo la tua mano di Monete.",
+			"enUS": "Destroy a minion and fill your hand with Coins.",
+			"frFR": "Détruit un serviteur et remplit votre main de cartes La pièce.",
+			"zhTW": "摧毀一個手下，用幸運幣塞滿你的手牌",
+			"deDE": "Vernichtet einen Diener und füllt Eure Hand mit Münzen.",
+			"jaJP": "ミニオンを1体破壊し自分の手札を「コイン」でいっぱいにする。",
+			"plPL": "Zniszcz stronnika i zapełnij twoją rękę Monetami.",
+			"esES": "Destruye a un esbirro y_llena tu mano de monedas.",
+			"ruRU": "Уничтожить существо и заполнить руку «Монетками».",
+			"esMX": "Destruye un esbirro y llena tu mano con monedas.",
+			"koKR": "하수인을 처치하고 내 손을 동전으로 가득 채움",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว[b]แล้วเพิ่มการ์ดเหรียญ[b]จนเต็มมือคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -60908,7 +67741,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 6,
 		"set": "Gilneas",
-		"artist": "Anton Kagoukin",
+		"artist": "Anton Kagounkin",
 		"name": "Holy Book",
 		"mechanics": [
 			"SILENCE"
@@ -61453,7 +68286,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 2,
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Surly Mob",
 		"id": "GILA_821a",
 		"audio": {
@@ -61485,7 +68318,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 2,
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Angry Mob",
 		"id": "GILA_821b",
 		"audio": {
@@ -61517,7 +68350,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 2,
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Crazed Mob",
 		"referencedTags": [
 			"SILENCE"
@@ -62234,7 +69067,7 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Gilneas",
 		"race": "MECHANICAL",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 1,
 		"dbfId": 48620,
 		"type": "Minion",
@@ -62621,7 +69454,7 @@ var parseCardsText = {
 	{
 		"cost": 1,
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 3,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -63171,7 +70004,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"set": "Gilneas",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "The Scarecrow",
 		"health": 40,
 		"id": "GILA_BOSS_33h",
@@ -64954,7 +71787,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"set": "Gilneas",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"name": "Gobbles",
 		"health": 10,
 		"id": "GILA_BOSS_65h",
@@ -65836,7 +72669,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Gvg",
-		"artist": "Sean O'Daniels",
+		"artist": "Sean O’Daniels",
 		"dbfId": 1929,
 		"type": "Spell",
 		"flavor": "The denizens of Azeroth have no idea how much work goes into stabilizing portals.  We spend like 30% of GDP on portal upkeep.",
@@ -66139,6 +72972,22 @@ var parseCardsText = {
 		"set": "Gvg",
 		"artist": "Jim Nelson",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Concede -2 de Ataque neste turno.",
+			"zhCN": "在本回合中，使其获得-2攻击力。",
+			"itIT": "Fornisce -2 Attacco per questo turno.",
+			"enUS": "Give -2 Attack this turn.",
+			"frFR": "-2 ATQ pendant ce tour.",
+			"zhTW": "使其本回合-2攻擊力",
+			"deDE": "Verleiht -2 Angriff in diesem Zug.",
+			"jaJP": "このターンの間、攻撃力-2を付与する。",
+			"plPL": "Daj -2 do ataku w tej turze.",
+			"esES": "Aplica -2 p. de ataque este turno.",
+			"ruRU": "-2 к атаке до конца хода.",
+			"esMX": "Otorga -2 de Ataque en este turno.",
+			"koKR": "이번 턴에 공격력 -2",
+			"thTH": "พลังโจมตี -2 ในเทิร์นนี้"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -66266,6 +73115,22 @@ var parseCardsText = {
 		"set": "Gvg",
 		"artist": "Raymond Swanland",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Trocar Vida.",
+			"zhCN": "交换生命值。",
+			"itIT": "Scambia la Salute.",
+			"enUS": "Swap Health.",
+			"frFR": "Échange sa Vie.",
+			"zhTW": "對調生命值",
+			"deDE": "Vertauscht Leben.",
+			"jaJP": "体力を入れ替える。",
+			"plPL": "Zamień zdrowie.",
+			"esES": "Intercambiar salud.",
+			"ruRU": "Поменяться здоровьем.",
+			"esMX": "Intercambia Salud.",
+			"koKR": "생명력 바꾸기",
+			"thTH": "สลับพลังชีวิต"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -66391,7 +73256,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Gvg",
-		"artist": "E.M. Gist",
+		"artist": "E. M. Gist",
 		"dbfId": 2094,
 		"type": "Spell",
 		"flavor": "Real hunters tame hungry crabs.",
@@ -66640,7 +73505,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Gvg",
 		"race": "MECHANICAL",
-		"artist": "Zolton Boros",
+		"artist": "Zoltan Boros",
 		"health": 2,
 		"mechanics": [
 			"BATTLECRY"
@@ -67993,6 +74858,22 @@ var parseCardsText = {
 		"race": "MECHANICAL",
 		"artist": "Jesper Ejsing",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2/+2.",
+			"zhCN": "使一个友方机械获得+2/+2。",
+			"itIT": "Fornisce +2/+2.",
+			"enUS": "Give +2/+2.",
+			"frFR": "Donne_+2/+2.",
+			"zhTW": "賦予+2/+2",
+			"deDE": "Verleiht +2/+2.",
+			"jaJP": "+2/+2を付与する。",
+			"plPL": "Daj +2/+2.",
+			"esES": "Otorga +2/+2.",
+			"ruRU": "Добавить +2/+2.",
+			"esMX": "Otorga +2/+2.",
+			"koKR": "+2/+2",
+			"thTH": "มอบ +2/+2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -68703,7 +75584,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Gvg",
 		"race": "BEAST",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 4,
 		"dbfId": 2039,
 		"type": "Minion",
@@ -69178,6 +76059,22 @@ var parseCardsText = {
 		"race": "MECHANICAL",
 		"artist": "Nutchapol Thitinunthakorn",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Conceda +4 de Vida a um Mecanoide.",
+			"zhCN": "使一个机械获得+4生命值。",
+			"itIT": "Fornisce +4 Salute a un tuo Robot.",
+			"enUS": "Give a Mech +4 Health.",
+			"frFR": "Donne +4 PV à un Méca.",
+			"zhTW": "賦予機械+4生命值",
+			"deDE": "Verleiht einem Mech +4 Leben.",
+			"jaJP": "メカ1体に体力+4を付与する。",
+			"plPL": "Daj Mechowi +4 do zdrowia.",
+			"esES": "Otorga +4 p. de salud a un robot.",
+			"ruRU": "Добавить механизму +4 к здоровью.",
+			"esMX": "Otorga +4 de Salud a un Meca.",
+			"koKR": "기계에게 생명력 +4",
+			"thTH": "มอบพลังชีวิต +4 ให้เครื่องจักรหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -69303,7 +76200,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Gvg",
 		"race": "MECHANICAL",
-		"artist": "Zero Yue",
+		"artist": "Zero",
 		"health": 5,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -69485,7 +76382,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Gvg",
 		"race": "MECHANICAL",
-		"artist": "Zero Yue",
+		"artist": "Zero",
 		"health": 5,
 		"mechanics": [
 			"CANT_BE_TARGETED_BY_SPELLS",
@@ -70035,7 +76932,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Gvg",
-		"artist": "Laurel D. Austin",
+		"artist": "Laurel Austin",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -70208,6 +77105,22 @@ var parseCardsText = {
 		"set": "Gvg",
 		"artist": "Ben Olson",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Transformar!",
+			"zhCN": "变形！出发！",
+			"itIT": "Trasformazione!",
+			"enUS": "Transform!",
+			"frFR": "Transformation !",
+			"zhTW": "轉化！",
+			"deDE": "Verwandlung!",
+			"jaJP": "変身！",
+			"plPL": "Przemiana!",
+			"esES": "¡Transformar!",
+			"ruRU": "Трансформация!",
+			"esMX": "¡Transformación!",
+			"koKR": "변신!",
+			"thTH": "แปลงร่าง!"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -70720,6 +77633,22 @@ var parseCardsText = {
 		"set": "Gvg",
 		"artist": "Ralph Horsley",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Destrua uma Fera.",
+			"zhCN": "消灭一只野兽。",
+			"itIT": "Distrugge una Bestia.",
+			"enUS": "Destroy a Beast.",
+			"frFR": "Détruit une Bête.",
+			"zhTW": "摧毀一隻野獸",
+			"deDE": "Vernichtet ein Wildtier.",
+			"jaJP": "獣1体を破壊する。",
+			"plPL": "Zniszcz Bestię.",
+			"esES": "Destruye a una bestia.",
+			"ruRU": "Уничтожить зверя.",
+			"esMX": "Destruye una Bestia.",
+			"koKR": "야수 처치",
+			"thTH": "ทำลายมินเนี่ยนสัตว์หนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -70847,6 +77776,22 @@ var parseCardsText = {
 		"artist": "Phil Saunders",
 		"spellDamage": 1,
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2 de <b>Dano Mágico</b>.",
+			"zhCN": "使其获得<b>法术伤害+2</b>。",
+			"itIT": "Fornisce <b>+2 Danni Magici</b>.",
+			"enUS": "Give <b>Spell Damage +2</b>.",
+			"frFR": "Donne <b>+2 aux dégâts des sorts</b>.",
+			"zhTW": "賦予<b>法術傷害+2</b>",
+			"deDE": "Verleiht <b>Zauberschaden +2</b>.",
+			"jaJP": "<b>呪文ダメージ+2</b>を付与する。",
+			"plPL": "Daj <b>Obrażenia zaklęć +2</b>.",
+			"esES": "Otorga <b>+2 p. de daño con hechizos</b>.",
+			"ruRU": "<b>Урон от заклинаний +2</b>.",
+			"esMX": "Otorga <b>Daño de hechizo +2</b>.",
+			"koKR": "<b>주문 공격력 +2</b> 부여",
+			"thTH": "มอบ <b>ความเสียหายเวท +2</b>"
+		},
 		"mechanics": [
 			"SPELLPOWER"
 		],
@@ -71709,7 +78654,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 5,
 		"set": "Icecrown",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"attack": 5,
 		"name": "Skeletal Enforcer",
 		"health": 5,
@@ -72070,7 +79015,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Icecrown",
-		"artist": "Arthur Gimalinov",
+		"artist": "Arthur Gimaldinov",
 		"dbfId": 42469,
 		"type": "Spell",
 		"flavor": "In his court, Uther is judge, jury, AND executioner…",
@@ -72221,6 +79166,22 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Último Suspiro Secreto:</b> Cause 3 de dano a todos os lacaios; ou Conceda +2/+2 a eles.",
+			"zhCN": "<b>秘密亡语：</b>对所有随从造成3点伤害；\n或者使所有随从获得+2/+2。",
+			"itIT": "<b>Rantolo di Morte Nascosto:</b> infligge 3 danni a TUTTI i servitori <b>o</b> +2/+2 a TUTTI i servitori.",
+			"enUS": "<b>Secret Deathrattle:</b> Deal 3 damage to all minions; or Give them +2/+2.",
+			"frFR": "<b>Râle d’agonie secret :</b> inflige 3 points de dégâts à tous les serviteurs ou leur donne +2/+2.",
+			"zhTW": "<b>隱密死聲：</b>對全部手下造成3點傷害，或賦予全部手下+2/+2",
+			"deDE": "[x]<b>Geheimes Todesröcheln:</b>\nFügt allen Dienern\n3 Schaden zu; oder\nverleiht ihnen +2/+2.",
+			"jaJP": "[x]<b>秘密の断末魔:</b>\n全てのミニオンに\n3ダメージを与える。\nまたは、全てのミニオンに\n+2/+2を付与する。",
+			"plPL": "<b>Skryta Agonia:</b> Zadaj 3 pkt. obrażeń wszystkim stronnikom; lub daj im +2/+2.",
+			"esES": "<b>Último aliento oculto:\n</b> Inflige 3 p. de daño\na todos los esbirros, o bien les otorga +2/+2.",
+			"ruRU": "<b>Тайный «Предсмертный хрип»:</b> наносит 3 ед. урона всем существам; или все существа получают +2/+2.",
+			"esMX": "<b>Estertor secreto:</b> inflige 3 de daño a todos los esbirros, o les otorga +2/+2.",
+			"koKR": "<b>죽음의 메아리 (비밀):</b>\n<b>모든</b> 하수인에게\n피해를 3 줍니다. 또는 +2/+2를 부여합니다.",
+			"thTH": "<b>เสียงสุดท้ายลับ:</b>\nสร้างความเสียหาย[b] 3 แต้มให้มินเนี่ยนทั้งหมด[b]หรือมอบ +2/+2 ให้"
+		},
 		"cost": 5,
 		"set": "Icecrown",
 		"health": 3,
@@ -72422,7 +79383,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "<b>Taunt</b>.",
+		"text": "<b>Taunt</b>",
 		"cardClass": "DRUID",
 		"rarity": "Rare"
 	},
@@ -72612,7 +79573,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Icecrown",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"referencedTags": [
 			"FREEZE"
 		],
@@ -72668,6 +79629,22 @@ var parseCardsText = {
 		"race": "MURLOC",
 		"artist": "Jaemin Kim",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Congele um inimigo.",
+			"zhCN": "冻结一个敌人。",
+			"itIT": "<b>Congela</b> un nemico.",
+			"enUS": "Freeze an enemy.",
+			"frFR": "Gèle un adversaire.",
+			"zhTW": "凍結一個敵人",
+			"deDE": "Friert einen Feind ein.",
+			"jaJP": "敵1体を\n__凍結させる。",
+			"plPL": "Zamroź wroga.",
+			"esES": "Congela a un enemigo.",
+			"ruRU": "Заморозить противника.",
+			"esMX": "Congela a un enemigo.",
+			"koKR": "적 빙결",
+			"thTH": "แช่แข็งศัตรูหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -73411,6 +80388,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Luke Mancini",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1 de Ataque.",
+			"zhCN": "获得+1攻击力。",
+			"itIT": "Fornisce +1 Attacco.",
+			"enUS": "Give +1 Attack.",
+			"frFR": "Donne +1_ATQ.",
+			"zhTW": "賦予+1攻擊力",
+			"deDE": "Verleiht +1 Angriff.",
+			"jaJP": "攻撃力+1を付与する。",
+			"plPL": "Daj +1 do ataku.",
+			"esES": "Otorga +1 p. de ataque.",
+			"ruRU": "+1 к атаке.",
+			"esMX": "Otorga +1 de Ataque.",
+			"koKR": "공격력 +1",
+			"thTH": "มอบพลังโจมตี +1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -73463,6 +80456,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Matt Dixon",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1 de Dano Mágico.",
+			"zhCN": "获得<b>法术伤害+1</b>。",
+			"itIT": "Fornisce <b>+1 Danni Magici</b>.",
+			"enUS": "Give Spell Damage +1.",
+			"frFR": "Donne +1_aux dégâts des sorts.",
+			"zhTW": "賦予法術傷害+1",
+			"deDE": "Verleiht Zauberschaden +1.",
+			"jaJP": "呪文ダメージ+1を付与する。",
+			"plPL": "Daj Obrażenia zaklęć +1.",
+			"esES": "Otorga +1 p. de daño con hechizos.",
+			"ruRU": "+1 к урону от заклинаний.",
+			"esMX": "Otorga Daño de hechizo +1.",
+			"koKR": "주문 공격력 +1 부여",
+			"thTH": "มอบความเสียหาย[b]เวท +1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -73518,6 +80527,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "J. Axer",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1/+1.",
+			"zhCN": "获得+1/+1。",
+			"itIT": "Fornisce +1/+1.",
+			"enUS": "Give +1/+1.",
+			"frFR": "Donne_+1/+1.",
+			"zhTW": "賦予+1/+1",
+			"deDE": "Verleiht +1/+1.",
+			"jaJP": "+1/+1を付与する。",
+			"plPL": "Daj +1/+1.",
+			"esES": "Otorga +1/+1.",
+			"ruRU": "Добавить +1/+1.",
+			"esMX": "Otorga +1/+1.",
+			"koKR": "+1/+1",
+			"thTH": "มอบ +1/+1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -73993,7 +81018,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 9,
 		"set": "Icecrown",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 8,
 		"mechanics": [
 			"DEATHRATTLE",
@@ -74127,7 +81152,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 2,
+		"cost": 1,
 		"set": "Icecrown",
 		"artist": "Ben Thompson",
 		"referencedTags": [
@@ -74150,7 +81175,7 @@ var parseCardsText = {
 				"Shared_Physical_Cast.ogg"
 			]
 		},
-		"text": "Give your weapon <b>Lifesteal</b>.",
+		"text": "Give your weapon <b>Lifesteal</b> this turn.",
 		"cardClass": "ROGUE",
 		"rarity": "Common"
 	},
@@ -74159,7 +81184,8 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"name": "Leeching Poison",
 		"mechanics": [
-			"LIFESTEAL"
+			"LIFESTEAL",
+			"TAG_ONE_TURN_EFFECT"
 		],
 		"id": "ICC_221e",
 		"audio": {
@@ -74167,7 +81193,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "<b>Lifesteal</b>",
+		"text": "Has <b>Lifesteal</b> this turn.",
 		"dbfId": 42664,
 		"type": "Enchantment",
 		"cardClass": "ROGUE"
@@ -74512,6 +81538,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Jim Nelson",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda \"Último Suspiro: Evoque este lacaio novamente.\"",
+			"zhCN": "获得“<b>亡语：</b>再次召唤该随从。”",
+			"itIT": "Fornisce \"<b>Rantolo di Morte:</b> rievoca questo servitore\".",
+			"enUS": "Give \"Deathrattle: Resummon this minion.\"",
+			"frFR": "Confère «_Râle d’agonie_: réinvoque ce serviteur._»",
+			"zhTW": "賦予「死亡之聲：重新召喚這個手下」",
+			"deDE": "Verleiht „Todesröcheln: Ruft diesen Diener erneut herbei“.",
+			"jaJP": "「断末魔: このミニオンを再度召喚する」を付与する。",
+			"plPL": "Daj opis: „Agonia: Przywróć tego stronnika na pole bitwy”.",
+			"esES": "Otorga «Último aliento: Vuelve a invocar a este esbirro».",
+			"ruRU": "Добавить «Предсмертный хрип: когда это существо умирает, вы заново призываете его».",
+			"esMX": "Otorga \"Estertor: reinvoca a este esbirro\".",
+			"koKR": "\"죽음의 메아리: 이 하수인을 다시 소환함\" 능력 부여",
+			"thTH": "มอบ \"เสียงสุดท้าย: เรียกมินเนี่ยนตัวนี้อีกครั้ง\""
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"DEATH_KNIGHT"
@@ -75139,7 +82181,7 @@ var parseCardsText = {
 				"VO_ICC_466_Male_Draenei_Attack_01.ogg"
 			]
 		},
-		"text": "<b>Taunt</b>\n<b>Battlecry:</b> Summon a copy of this minion.",
+		"text": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon another\nSaronite Chain Gang.",
 		"cardClass": "NEUTRAL",
 		"rarity": "Rare"
 	},
@@ -75149,6 +82191,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Luca Zontini",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Conceda Imune neste turno.",
+			"zhCN": "在本回合中获得<b>免疫</b>。",
+			"itIT": "Fornisce <b>Immune</b> per questo turno.",
+			"enUS": "Give Immune this turn.",
+			"frFR": "Confère Insensible pendant ce tour.",
+			"zhTW": "賦予本回合免疫",
+			"deDE": "Macht in diesem Zug immun.",
+			"jaJP": "このターンの間、無敵を付与する。",
+			"plPL": "Daj Niewrażliwość w tej turze.",
+			"esES": "Otorga «Inmune este turno».",
+			"ruRU": "Дать неуязвимость до конца хода.",
+			"esMX": "Otorga Inmune durante este turno.",
+			"koKR": "이번 턴에 피해 면역",
+			"thTH": "มอบคงกระพันจนจบเทิร์น"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -75438,8 +82496,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 8,
 		"set": "Icecrown",
-		"artist": "Ralph Horsely",
+		"artist": "Ralph Horsley",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Conceda +4/+4 e Provocar.",
+			"zhCN": "获得+4/+4并具有<b>嘲讽</b>。",
+			"itIT": "Fornisce +4/+4 e <b>Provocazione</b>.",
+			"enUS": "Give +4/+4 and Taunt.",
+			"frFR": "Donne_+4/+4 et Provocation.",
+			"zhTW": "賦予+4/+4及嘲諷",
+			"deDE": "Verleiht einem Diener +4/+4 und Spott.",
+			"jaJP": "+4/+4、挑発を付与する。",
+			"plPL": "Daj +4/+4 oraz Prowokację.",
+			"esES": "Otorga +4/+4 y Provocar.",
+			"ruRU": "Добавить +4/+4 и «Провокацию».",
+			"esMX": "Otorga +4/+4 y Provocación.",
+			"koKR": "+4/+4, 도발",
+			"thTH": "มอบ +4/+4\nและยั่วยุ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -75675,7 +82749,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Icecrown",
-		"artist": "Konstanin Turovec",
+		"artist": "Konstantin Turovec",
 		"health": 6,
 		"mechanics": [
 			"TAUNT",
@@ -75724,6 +82798,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Dave Allsop",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda Venenoso.",
+			"zhCN": "获得<b>剧毒</b>。",
+			"itIT": "Fornisce <b>Veleno</b>.",
+			"enUS": "Give Poisonous.",
+			"frFR": "Confère Toxicité.",
+			"zhTW": "賦予致命劇毒",
+			"deDE": "Macht giftig.",
+			"jaJP": "猛毒を付与する。",
+			"plPL": "Daj Truciznę.",
+			"esES": "Otorga Veneno.",
+			"ruRU": "Добавить «Яд».",
+			"esMX": "Otorga Venenoso.",
+			"koKR": "독성",
+			"thTH": "มอบพิษ"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -76184,6 +83274,22 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Provocar</b>, <b>Venenoso</b>",
+			"zhCN": "<b>嘲讽，剧毒</b>",
+			"itIT": "<b>Provocazione</b>. <b>Veleno</b>",
+			"enUS": "<b>Taunt</b>, <b>Poisonous</b>",
+			"frFR": "<b>Provocation</b>, <b>Toxicité</b>",
+			"zhTW": "<b>嘲諷</b>，<b>致命劇毒</b>",
+			"deDE": "<b>Spott</b>, <b>Giftig</b>",
+			"jaJP": "<b>挑発</b>、<b>猛毒</b>",
+			"plPL": "<b>Prowokacja</b>, <b>Trucizna</b>",
+			"esES": "<b>Provocar</b>. <b>Veneno</b>.",
+			"ruRU": "<b>Яд</b>\n<b>Провокация</b>",
+			"esMX": "<b>Provocación</b>, <b>Venenoso</b>",
+			"koKR": "<b>도발</b>, <b>독성</b>",
+			"thTH": "<b>ยั่วยุ</b>, <b>พิษ</b>"
+		},
 		"cost": 2,
 		"set": "Ungoro",
 		"race": "BEAST",
@@ -76214,6 +83320,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Furtividade</b>, <b>Venenoso</b>",
+			"zhCN": "<b>潜行，剧毒</b>",
+			"itIT": "<b>Furtività</b>. <b>Veleno</b>",
+			"enUS": "<b>Stealth</b>, <b>Poisonous</b>",
+			"frFR": "<b>Camouflage</b>, <b>Toxicité</b>",
+			"zhTW": "<b>潛行</b>，<b>致命劇毒</b>",
+			"deDE": "<b>Verstohlenheit</b>, <b>Giftig</b>",
+			"jaJP": "<b>隠れ身</b>、<b>猛毒</b>",
+			"plPL": "<b>Ukrycie</b>, <b>Trucizna</b>",
+			"esES": "<b>Sigilo</b>. <b>Veneno</b>.",
+			"ruRU": "<b>Яд</b>\n<b>Маскировка</b>",
+			"esMX": "<b>Sigilo</b>, <b>Venenoso</b>",
+			"koKR": "<b>은신</b>, <b>독성</b>",
+			"thTH": "<b>ซ่อนตัว</b>, <b>พิษ</b>"
+		},
 		"cost": 3,
 		"set": "Ungoro",
 		"race": "BEAST",
@@ -76244,6 +83366,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Escudo Divino</b>, <b>Venenoso</b>",
+			"zhCN": "<b>圣盾，剧毒</b>",
+			"itIT": "<b>Scudo Divino</b>. <b>Veleno</b>",
+			"enUS": "<b>Divine Shield</b>, <b>Poisonous</b>",
+			"frFR": "<b>Bouclier divin</b>, <b>Toxicité</b>",
+			"zhTW": "<b>聖盾術</b>，<b>致命劇毒</b>",
+			"deDE": "<b>Gottesschild</b>, <b>Giftig</b>",
+			"jaJP": "<b>聖なる盾</b>、<b>猛毒</b>",
+			"plPL": "<b>Boska tarcza</b>, <b>Trucizna</b>",
+			"esES": "<b>Escudo divino</b>. <b>Veneno</b>.",
+			"ruRU": "<b>Яд</b>, <b>Божественный щит</b>.",
+			"esMX": "<b>Escudo divino</b>, <b>Venenoso</b>",
+			"koKR": "<b>천상의 보호막</b>, <b>독성</b>",
+			"thTH": "<b>โล่ศักดิ์สิทธิ์</b>, <b>พิษ</b>"
+		},
 		"cost": 3,
 		"set": "Lootapalooza",
 		"race": "BEAST",
@@ -76274,6 +83412,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Eco</b>, <b>Rapidez</b>",
+			"zhCN": "<b>回响，突袭</b>",
+			"itIT": "<b>Eco</b>. <b>Assalto</b>",
+			"enUS": "<b>Echo</b>, <b>Rush</b>",
+			"frFR": "<b>Écho</b>, <b>Ruée</b>",
+			"zhTW": "<b>回音</b>，<b>衝刺</b>",
+			"deDE": "<b>Echo</b>, <b>Eifer</b>",
+			"jaJP": "<b>木霊</b>、<b>急襲</b>",
+			"plPL": "<b>Echo</b>, <b>Zryw</b>",
+			"esES": "<b>Eco</b>. <b>Embestir</b>.",
+			"ruRU": "<b>Эхо</b>, <b>Натиск</b>.",
+			"esMX": "<b>Eco</b>, <b>Acometida</b>",
+			"koKR": "<b>잔상</b>, <b>속공</b>",
+			"thTH": "<b>เสียงสะท้อน</b>, <b>จู่โจม</b>"
+		},
 		"cost": 2,
 		"set": "Gilneas",
 		"race": "BEAST",
@@ -76304,6 +83458,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Venenoso</b>, <b>Rapidez</b>",
+			"zhCN": "<b>剧毒，突袭</b>",
+			"itIT": "<b>Veleno</b>. <b>Assalto</b>",
+			"enUS": "<b>Poisonous</b>, <b>Rush</b>",
+			"frFR": "<b>Toxicité</b>, <b>Ruée</b>",
+			"zhTW": "<b>致命劇毒</b>，<b>衝刺</b>",
+			"deDE": "<b>Giftig</b>, <b>Eifer</b>",
+			"jaJP": "<b>猛毒</b>、<b>急襲</b>",
+			"plPL": "<b>Trucizna</b>, <b>Zryw</b>",
+			"esES": "<b>Veneno</b>. <b>Embestir</b>.",
+			"ruRU": "<b>Яд</b>, <b>Натиск</b>.",
+			"esMX": "<b>Venenoso</b>, <b>Acometida</b>",
+			"koKR": "<b>독성</b>, <b>속공</b>",
+			"thTH": "<b>พิษ</b>, <b>จู่โจม</b>"
+		},
 		"cost": 5,
 		"set": "Gilneas",
 		"race": "BEAST",
@@ -76334,6 +83504,22 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"collectionText": {
+			"ptBR": "<b>Roubar Vida</b>, <b>Rapidez</b>",
+			"zhCN": "<b>吸血，突袭</b>",
+			"itIT": "<b>Furto Vitale</b>. <b>Assalto</b>",
+			"enUS": "<b>Lifesteal</b>, <b>Rush</b>",
+			"frFR": "<b>Vol de vie</b>, <b>Ruée</b>",
+			"zhTW": "<b>生命竊取</b>，<b>衝刺</b>",
+			"deDE": "<b>Lebensentzug</b>, <b>Eifer</b>",
+			"jaJP": "<b>生命奪取</b>、<b>急襲</b>",
+			"plPL": "<b>Kradzież życia</b>, <b>Zryw</b>",
+			"esES": "<b>Robo de vida</b>. <b>Embestir</b>.",
+			"ruRU": "<b>Похищение жизни</b>, <b>Натиск</b>",
+			"esMX": "<b>Robavida</b>, <b>Acometida</b>",
+			"koKR": "<b>생명력 흡수</b>, <b>속공</b>",
+			"thTH": "<b>สูบชีวิต</b>, <b>จู่โจม</b>"
+		},
 		"cost": 2,
 		"set": "Gilneas",
 		"race": "BEAST",
@@ -77345,7 +84531,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"set": "Icecrown",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"dbfId": 45308,
 		"type": "Spell",
 		"flavor": "Once you both get comfortable, darkness is actually pretty snuggly.",
@@ -77494,6 +84680,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Arthur Gimaldinov",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Transforme em uma cópia.",
+			"zhCN": "变形成为一个复制。",
+			"itIT": "Si trasforma in una copia di un servitore.",
+			"enUS": "Transform into a copy.",
+			"frFR": "Se transforme en une copie.",
+			"zhTW": "變形為一個手下的分身",
+			"deDE": "Verwandelt sich in eine Kopie dieses Dieners.",
+			"jaJP": "コピーに変身する。",
+			"plPL": "Przemień w kopię.",
+			"esES": "Copia a un esbirro.",
+			"ruRU": "Превратить в копию существа.",
+			"esMX": "Se transforma en una copia.",
+			"koKR": "이 하수인으로 변신",
+			"thTH": "เปลี่ยนเป็นร่าง[b]ก๊อปปี้ของการ์ดนั้น"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -77885,6 +85087,22 @@ var parseCardsText = {
 		"set": "Icecrown",
 		"artist": "Arthur Bozonnet",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio aliado.",
+			"zhCN": "消灭一个友方随从。",
+			"itIT": "Distrugge un tuo servitore.",
+			"enUS": "Destroy a friendly minion.",
+			"frFR": "Détruit un serviteur allié.",
+			"zhTW": "摧毀一個友方手下",
+			"deDE": "Vernichtet einen befreundeten Diener.",
+			"jaJP": "味方のミニオン1体を破壊する。",
+			"plPL": "Zniszcz przyjaznego stronnika.",
+			"esES": "Destruye a un esbirro amistoso.",
+			"ruRU": "Уничтожить ваше существо.",
+			"esMX": "Destruye un esbirro aliado.",
+			"koKR": "아군 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยน[b]ฝ่ายคุณหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -78025,8 +85243,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"set": "Icecrown",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano para cada card jogado neste turno.",
+			"zhCN": "在本回合中，你每使用一张其他牌，便造成1点伤害。",
+			"itIT": "Infligge danni pari al numero di carte giocate precedentemente in questo turno.",
+			"enUS": "Deal 1 damage for each other card played this turn.",
+			"frFR": "Inflige 1_point de dégâts pour chaque autre carte jouée pendant ce tour.",
+			"zhTW": "造成等同本回合打出卡牌數量的傷害",
+			"deDE": "Verursacht 1 Schaden für jede andere Karte, die in diesem Zug ausgespielt wurde.",
+			"jaJP": "このターン中で先に手札から使用されたカード1枚につき1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń za każdą inną kartę już zagraną w tej turze.",
+			"esES": "Inflige 1 p. de daño por cada carta jugada este turno aparte de esta.",
+			"ruRU": "Нанести 1 ед. урона за каждую другую карту, разыгранную на этом ходу.",
+			"esMX": "Inflige 1 de daño por cada carta que hayas jugado este turno excepto esta.",
+			"koKR": "앞서 낸 카드의 수만큼 피해",
+			"thTH": "สร้างความเสียหาย 1 แต้มต่อ[b]การ์ดอื่นแต่ละใบที่เล่นเทิร์นนี้"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -78073,7 +85307,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Icecrown",
-		"artist": "Jesper Esjing",
+		"artist": "Jesper Ejsing",
 		"health": 5,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -78147,7 +85381,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Icecrown",
-		"artist": "Jesper Esjing",
+		"artist": "Jesper Ejsing",
 		"spellDamage": 1,
 		"health": 1,
 		"mechanics": [
@@ -79484,6 +86718,22 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Deathknight",
+		"collectionText": {
+			"ptBR": " de dano ao herói inimigo. +1 de dano a cada vez.",
+			"zhCN": "点伤害。每次使用\n+1点伤害。",
+			"itIT": " |4(danno,danni) all'eroe nemico. +1 danno a ogni utilizzo.",
+			"enUS": " damage to the enemy hero. +1 Damage each time.",
+			"frFR": " |4(point,points) de dégâts au héros adverse. +1 point de dégâts à chaque fois.",
+			"zhTW": "點傷害。每次\n提高1點",
+			"deDE": " Schaden zu. Verursacht jedes Mal 1 Schaden mehr.",
+			"jaJP": "ダメージを与える。\n使用する度ダメージが\n+1される。",
+			"plPL": " pkt. obrażeń wrogiemu bohaterowi. +1 pkt. obrażeń za każdym razem.",
+			"esES": " p. de daño\nal héroe enemigo.\n+1 p. de daño cada vez.",
+			"ruRU": " ед. урона герою противника.\n+1 к урону с каждым использованием.",
+			"esMX": " de daño al héroe enemigo.\n+1 de daño cada vez.",
+			"koKR": " 줍니다. 사용할 때마다 피해가 +1 증가합니다.",
+			"thTH": " แต้ม[b]ให้ฮีโร่ศัตรู ความเสียหาย +1 ทุกครั้งที่ใช้"
+		},
 		"cost": 0,
 		"set": "Icecrown",
 		"name": "Remorseless Winter",
@@ -79712,10 +86962,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Mike Sass",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"SECRET"
 		],
@@ -79768,12 +87050,44 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"race": "BEAST",
 		"artist": "Matt Dixon",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -79825,11 +87139,43 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Arthur Bozonnet",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"referencedTags": [
 			"SECRET"
 		],
@@ -79859,11 +87205,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Kara",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -79899,11 +87277,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Luke Mancini",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -79958,11 +87368,43 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Matt Dixon",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"TAUNT"
 		],
@@ -79989,10 +87431,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Rafael Zanchetin",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"referencedTags": [
 			"SILENCE"
 		],
@@ -80027,11 +87501,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Kara",
 		"artist": "Rafael Zanchetin",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -80058,10 +87564,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Jakub Kasper",
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"dbfId": 39197,
 		"type": "Spell",
 		"flavor": "This is what happens when you tell Khadgar to set the table.",
@@ -80129,7 +87667,7 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"cost": 3,
 		"set": "Kara",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"attack": 3,
 		"name": "Teapot",
 		"health": 3,
@@ -80150,10 +87688,42 @@ var parseCardsText = {
 		"cardClass": "WARLOCK"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Jim Nelson",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"referencedTags": [
 			"TAUNT"
 		],
@@ -80206,11 +87776,43 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Anton Zemskov",
 		"durability": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"dbfId": 39417,
 		"type": "Weapon",
 		"flavor": "A fool and his bane are soon parted.",
@@ -80228,11 +87830,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Kara",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -80284,12 +87918,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"race": "BEAST",
 		"artist": "Dave Allsop",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80316,12 +87982,60 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Kara",
 		"race": "DRAGON",
 		"artist": "Dave Allsop",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio inimigo com 3 ou menos de Ataque.",
+			"zhCN": "消灭一个攻击力小于或等于3的敌方随从。",
+			"itIT": "Distrugge un servitore nemico con Attacco pari a 3 o inferiore.",
+			"enUS": "Destroy an enemy minion with 3 or less Attack.",
+			"frFR": "Détruit un serviteur adverse avec 3_ATQ ou moins.",
+			"zhTW": "摧毀一個攻擊力3點以下的敵方手下",
+			"deDE": "Vernichtet einen feindlichen Diener mit max. 3 Angriff.",
+			"jaJP": "攻撃力3以下の敵のミニオン1体を破壊する。",
+			"plPL": "Zniszcz wrogiego stronnika z atakiem 3 lub mniejszym.",
+			"esES": "Destruye a un esbirro enemigo con 3 p. de ataque o menos.",
+			"ruRU": "Уничтожить вражеское существо с атакой 3 или меньше.",
+			"esMX": "Destruye un esbirro enemigo con 3 o menos de Ataque.",
+			"koKR": "공격력 3 이하인 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนศัตรู[b]หนึ่งตัวที่มีพลังโจมตี[b]_3_หรือต่ำกว่า"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80363,11 +88077,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Kara",
 		"artist": "Paul Mafayon",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -80394,12 +88140,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Kara",
 		"race": "ELEMENTAL",
-		"artist": "Alex Aleksandrov",
+		"artist": "Alex Alexandrov",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -80441,11 +88219,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Jim Nelson",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80500,11 +88310,59 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Kara",
 		"artist": "Jerry Mascho",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio.",
+			"zhCN": "消灭一个随从。",
+			"itIT": "Distrugge un servitore.",
+			"enUS": "Destroy a minion.",
+			"frFR": "Détruit un serviteur.",
+			"zhTW": "摧毀一個手下",
+			"deDE": "Vernichtet einen Diener.",
+			"jaJP": "ミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika.",
+			"esES": "Destruye a un esbirro.",
+			"ruRU": "Уничтожить существо.",
+			"esMX": "Destruye un esbirro.",
+			"koKR": "하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"DEATHRATTLE"
@@ -80550,11 +88408,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Sean McNally",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"STEALTH",
 			"TRIGGER_VISUAL"
@@ -80611,11 +88501,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Kara",
 		"artist": "Zoltan Boros",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80651,12 +88573,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Kara",
 		"race": "MECHANICAL",
 		"artist": "Wei Wang",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"TAUNT"
@@ -80689,11 +88643,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Ralph Horsley",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80726,11 +88712,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Ralph Horsley",
 		"durability": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"referencedTags": [
 			"SPELLPOWER"
 		],
@@ -80751,11 +88769,59 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Kara",
 		"artist": "Alex Horley Orlandelli",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Evoque uma cópia.",
+			"zhCN": "召唤一个复制。",
+			"itIT": "Evoca una copia di un servitore.",
+			"enUS": "Summon a copy.",
+			"frFR": "Invoque une copie.",
+			"zhTW": "召喚一個分身",
+			"deDE": "Ruft eine Kopie herbei.",
+			"jaJP": "コピーを1体召喚する。",
+			"plPL": "Przyzwij kopię.",
+			"esES": "Invoca una copia.",
+			"ruRU": "Призвать копию.",
+			"esMX": "Invoca una copia.",
+			"koKR": "복사하여 소환",
+			"thTH": "เรียกร่างก๊อปปี้"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80782,12 +88848,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Kara",
 		"race": "PIRATE",
 		"artist": "Zoltan Boros",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80820,11 +88918,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Alex Horley Orlandelli",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -80851,10 +88981,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Daria Tuzova",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"dbfId": 39712,
 		"type": "Spell",
 		"flavor": "They bill this as a popular resort attraction, but they try and get your money up front.",
@@ -80889,10 +89051,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Kara",
 		"artist": "Evgeniy Zaqumyenny",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"dbfId": 39714,
 		"type": "Spell",
 		"flavor": "Ain't no party like a Moonglade party ‘cause a Moonglade party got bears.",
@@ -80921,10 +89115,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Prólogo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在序章中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Prologo (Karazhan).",
+			"enUS": "Crafting unlocked in the Prologue, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du prologue dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的序章中開放合成。",
+			"deDE": "Herstellung wird im Prolog in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・プロローグ」で作成可能になる。",
+			"plPL": "Do odblokowania w Prologu, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Prólogo, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в прологе (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el prólogo, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 프롤로그에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในบทนำ ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Kara",
 		"artist": "Gustav Schmidt",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Prólogo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在序章中\n解锁。",
+			"itIT": "Sbloccata nel Prologo (Karazhan).",
+			"enUS": "Unlocked in the Prologue, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du prologue dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的序章中解鎖。",
+			"deDE": "Wird im Prolog in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・プロローグ」で入手。",
+			"plPL": "Do odblokowania w Prologu, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Prólogo, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения пролога в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el prólogo, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 프롤로그에서 잠금 해제",
+			"thTH": "ปลดล็อคบทนำ ใน One Night in Karazhan"
+		},
 		"dbfId": 39715,
 		"type": "Spell",
 		"flavor": "Come to beautiful Firelands! Where it's <i>\"Way nicer than the Abyssal Maw!\"</i>",
@@ -80953,10 +89179,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Kara",
 		"artist": "Jimmy Lo",
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"dbfId": 39716,
 		"type": "Spell",
 		"flavor": "What's Millhouse Manastorm doing in Silvermoon?",
@@ -81003,12 +89261,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Kara",
 		"race": "DEMON",
 		"artist": "Peter Stapleton",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -81038,10 +89328,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Nate Bowden",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"dbfId": 39747,
 		"type": "Spell",
 		"flavor": "Come to beautiful Ironforge! Where irons are forged and the forges are iron!",
@@ -81067,11 +89389,59 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Kara",
 		"artist": "Sean McNally",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 3 de dano.",
+			"zhCN": "造成3点伤害。",
+			"itIT": "Infligge 3 danni.",
+			"enUS": "Deal 3 damage.",
+			"frFR": "Inflige 3_points de dégâts.",
+			"zhTW": "造成3點傷害",
+			"deDE": "Verursacht 3 Schaden.",
+			"jaJP": "3ダメージを与える。",
+			"plPL": "Zadaj 3 pkt. obrażeń.",
+			"esES": "Inflige 3 p. de daño.",
+			"ruRU": "Нанести 3 ед. урона.",
+			"esMX": "Inflige 3 de daño.",
+			"koKR": "피해 3",
+			"thTH": "สร้างความเสียหาย_3_แต้ม"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81122,11 +89492,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Konstantin Turovec",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -81174,12 +89576,44 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"race": "MECHANICAL",
 		"artist": "Matt Dixon",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81230,12 +89664,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"race": "DEMON",
 		"artist": "Joe Madureira & Grace Liu",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"START_OF_GAME"
 		],
@@ -81264,11 +89730,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Kara",
 		"artist": "James Ryman",
 		"health": 7,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81319,11 +89817,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Kara",
 		"artist": "Garrett Hanna",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81372,11 +89902,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Arthur Gimaldinov",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81407,11 +89969,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Daren Bader",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"InvisibleDeathrattle"
 		],
@@ -81441,12 +90035,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Prólogo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在序章中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Prologo (Karazhan).",
+			"enUS": "Crafting unlocked in the Prologue, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du prologue dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的序章中開放合成。",
+			"deDE": "Herstellung wird im Prolog in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・プロローグ」で作成可能になる。",
+			"plPL": "Do odblokowania w Prologu, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Prólogo, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в прологе (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el prólogo, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 프롤로그에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในบทนำ ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Kara",
 		"race": "BEAST",
 		"artist": "Daria Tuzova",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Prólogo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在序章中\n解锁。",
+			"itIT": "Sbloccata nel Prologo (Karazhan).",
+			"enUS": "Unlocked in the Prologue, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du prologue dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的序章中解鎖。",
+			"deDE": "Wird im Prolog in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・プロローグ」で入手。",
+			"plPL": "Do odblokowania w Prologu, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Prólogo, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения пролога в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el prólogo, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 프롤로그에서 잠금 해제",
+			"thTH": "ปลดล็อคบทนำ ใน One Night in Karazhan"
+		},
 		"dbfId": 39350,
 		"type": "Minion",
 		"flavor": "Once upon a midnight restive, Medivh pondered, feeling festive!",
@@ -81469,11 +90095,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Crafting unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中開放合成。",
+			"deDE": "Herstellung wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で作成可能になる。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зверинце (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Kara",
 		"artist": "Garrett Hanna",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Viveiro, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在展览馆中\n解锁。",
+			"itIT": "Sbloccata nel Serraglio (Karazhan).",
+			"enUS": "Unlocked in the Menagerie, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Ménagerie dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的展覽廳中解鎖。",
+			"deDE": "Wird in der Menagerie in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・ミナジェリ」で入手。",
+			"plPL": "Do odblokowania w Menażerii, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Sala de las Fieras, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зверинца в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la sala de las fieras, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 박물관에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องจัดแสดง ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81524,11 +90182,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salotto (Karazhan).",
+			"enUS": "Crafting unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中開放合成。",
+			"deDE": "Herstellung wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で作成可能になる。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Зале (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Kara",
 		"artist": "Anton Zemskov",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在宴会厅中\n解锁。",
+			"itIT": "Sbloccata nel Salotto (Karazhan).",
+			"enUS": "Unlocked in the Parlor, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage du salon dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的迎客廳中解鎖。",
+			"deDE": "Wird im Salon in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・パーラー」で入手。",
+			"plPL": "Do odblokowania w Salonie, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en el Salón, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Зала в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en el salón, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 객실에서 잠금 해제",
+			"thTH": "ปลดล็อคห้องโถงรับแขก ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -81592,11 +90282,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Teatro (Karazhan).",
+			"enUS": "Crafting unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中開放合成。",
+			"deDE": "Herstellung wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で作成可能になる。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Оперном театре (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 12,
 		"set": "Kara",
 		"artist": "Dan Scott",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Ópera, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在歌剧院中\n解锁。",
+			"itIT": "Sbloccata nel Teatro (Karazhan).",
+			"enUS": "Unlocked in the Opera, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de l’Opéra dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的歌劇院中解鎖。",
+			"deDE": "Wird im Theater in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ジ・オペラ」で入手。",
+			"plPL": "Do odblokowania w Operze, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en la Ópera, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Оперного театра в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la ópera, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 오페라에서 잠금 해제",
+			"thTH": "ปลดล็อคโรงละครโอเปร่า ใน One Night in Karazhan"
+		},
 		"dbfId": 39426,
 		"type": "Minion",
 		"flavor": "Claims to be drawn to Karazhan because of the ley lines. Actually, just loves Moroes’ cooking.",
@@ -81620,11 +90342,43 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Guglia (Karazhan).",
+			"enUS": "Crafting unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Peut être créée à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中開放合成。",
+			"deDE": "Herstellung wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で作成可能になる。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se puede crear tras jugar en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно создать после получения в Шпиле (приключение «Вечеринка в Каражане»).",
+			"esMX": "La creación se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในหอคอย ใน One Night in Karazhan"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Kara",
 		"artist": "Eric Braddock",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Pináculo, em Uma Noite em Karazhan.",
+			"zhCN": "加入“卡拉赞之夜”冒险模式，在上层塔中\n解锁。",
+			"itIT": "Sbloccata nella Guglia (Karazhan).",
+			"enUS": "Unlocked in the Spire, in One Night in Karazhan.",
+			"frFR": "Obtenue à l’étage de la Flèche dans l’aventure Une nuit à Karazhan.",
+			"zhTW": "在《夜夜卡拉贊》的法師塔中解鎖。",
+			"deDE": "Wird in der Turmspitze in Karazhan freigeschaltet.",
+			"jaJP": "ワン・ナイト・イン・カラザンの「ザ・スパイア」で入手。",
+			"plPL": "Do odblokowania w Iglicy, w przygodzie Pewnej nocy w Karazhanie.",
+			"esES": "Se desbloquea en La Aguja, en Una Noche en Karazhan.",
+			"ruRU": "Можно получить в ходе прохождения Шпиля в приключении «Вечеринка в Каражане».",
+			"esMX": "Se desbloquea en la cumbre, en la aventura Una Noche en Karazhan.",
+			"koKR": "한여름 밤의 카라잔 모험의 첨탑에서 잠금 해제",
+			"thTH": "ปลดล็อคหอคอย ใน One Night in Karazhan"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -81674,7 +90428,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Kara",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Magic Mirror",
 		"health": 30,
 		"id": "KAR_A01_01",
@@ -81706,7 +90460,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 0,
 		"set": "Kara",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Reflections",
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -82100,6 +90854,22 @@ var parseCardsText = {
 		"set": "Kara",
 		"artist": "L. Lullabi & N. Thitinunthakorn",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda +2/+2.",
+			"zhCN": "获得+2/+2。",
+			"itIT": "Fornisce +2/+2.",
+			"enUS": "Give +2/+2.",
+			"frFR": "Donne_+2/+2.",
+			"zhTW": "賦予+2/+2",
+			"deDE": "Verleiht +2/+2.",
+			"jaJP": "+2/+2を付与する。",
+			"plPL": "Daj +2/+2.",
+			"esES": "Otorga +2/+2.",
+			"ruRU": "Добавить +2/+2.",
+			"esMX": "Otorga +2/+2.",
+			"koKR": "+2/+2",
+			"thTH": "มอบ +2/+2"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -82145,6 +90915,22 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Kara",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Conceda +3/+3.",
+			"zhCN": "获得+3/+3。",
+			"itIT": "Fornisce +3/+3.",
+			"enUS": "Give +3/+3.",
+			"frFR": "Donne_+3/+3.",
+			"zhTW": "賦予+3/+3",
+			"deDE": "Verleiht +3/+3.",
+			"jaJP": "+3/+3を付与する。",
+			"plPL": "Daj +3/+3.",
+			"esES": "Otorga +3/+3.",
+			"ruRU": "Добавить +3/+3.",
+			"esMX": "Otorga +3/+3.",
+			"koKR": "+3/+3",
+			"thTH": "มอบ +3/+3"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -83793,7 +92579,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Kara",
-		"artist": "Alex Aleksandrov",
+		"artist": "Alex Alexandrov",
 		"name": "Stampeding Beast!",
 		"id": "KARA_07_05",
 		"audio": {
@@ -85405,10 +94191,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Pode ser criado depois de iniciar a aventura Liga dos Exploradores.",
+			"zhCN": "在开始“探险者协会”冒险模式后能够制作。",
+			"itIT": "Può essere creata dopo aver iniziato l'avventura della Lega degli Esploratori.",
+			"enUS": "Can be crafted after starting the League of Explorers adventure.",
+			"frFR": "Peut être créée après avoir commencé l’aventure la Ligue des explorateurs.",
+			"zhTW": "加入探險者協會的冒險即可合成。",
+			"deDE": "Herstellung wird freigeschaltet, nachdem Ihr das Forscherliga-Abenteuer begonnen habt.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーを開始すると作成可能になる。",
+			"plPL": "Można wytworzyć po rozpoczęciu przygody Liga Odkrywców.",
+			"esES": "Se puede crear tras empezar la aventura de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать в ходе прохождения приключения «Лига исследователей».",
+			"esMX": "Puede crearse luego de comenzar la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험을 시작한 후 제작 가능",
+			"thTH": "สร้างได้หลังจากเริ่มต้นการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Loe",
 		"artist": "Richard Wright",
+		"howToEarn": {
+			"ptBR": "Desbloqueado ao iniciar a aventura Liga dos Exploradores.",
+			"zhCN": "在开始“探险者协会”冒险模式后解锁。",
+			"itIT": "Sbloccata iniziando l'avventura della Lega degli Esploratori.",
+			"enUS": "Unlocked by starting the League of Explorers adventure.",
+			"frFR": "Obtenue avec l’aventure la Ligue des explorateurs.",
+			"zhTW": "加入探險者協會的冒險即可解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr das Forscherliga-Abenteuer beginnt.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーを開始すると入手。",
+			"plPL": "Do odblokowania przez rozpoczęcie przygody Liga Odkrywców.",
+			"esES": "Se desbloquea al empezar la aventura de la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в начале приключения «Лига исследователей».",
+			"esMX": "Se desbloquea al comenzar la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험을 시작하여 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเริ่มต้นการผจญภัย League of Explorers"
+		},
 		"dbfId": 2874,
 		"type": "Spell",
 		"flavor": "Why does a forgotten torch turn into a roaring torch with no provocation?  It's one of life's many mysteries.",
@@ -85484,11 +94302,43 @@ var parseCardsText = {
 		"cardClass": "MAGE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Loe",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -85524,11 +94374,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"artist": "Steve Prescott",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -85559,10 +94441,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"artist": "Alex Horley Orlandelli",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs, de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 2879,
 		"type": "Spell",
 		"flavor": "This is what happens when Rafaam stubs his toe unexpectedly.",
@@ -85643,11 +94557,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Loe",
 		"artist": "Anton Zemskov",
 		"health": 7,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -85727,12 +94673,44 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
 		"race": "BEAST",
 		"artist": "Bernie Kang",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"POISONOUS"
 		],
@@ -85759,11 +94737,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храма Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Loe",
 		"artist": "Tyson Murphy",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -85795,11 +94805,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "Dave Allsop",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -85826,12 +94868,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"race": "ELEMENTAL",
 		"artist": "Cole Eastburn",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -85888,11 +94962,59 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "James Ryman",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Mude para 3/3.",
+			"zhCN": "变成3/3。",
+			"itIT": "Imposta Attacco e Salute a 3.",
+			"enUS": "Change to 3/3.",
+			"frFR": "Change en 3/3.",
+			"zhTW": "改為3/3",
+			"deDE": "Setzt Angriff und Leben auf 3.",
+			"jaJP": "3/3に変える。",
+			"plPL": "Zmień na 3/3.",
+			"esES": "Cambia a 3/3.",
+			"ruRU": "Изменить характеристики на 3/3.",
+			"esMX": "Cambiar a 3/3.",
+			"koKR": "3/3으로 바꾸기",
+			"thTH": "เปลี่ยนเป็น 3/3"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -85937,11 +95059,43 @@ var parseCardsText = {
 		"cardClass": "PALADIN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
 		"artist": "Andrew Hou",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -85986,11 +95140,59 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Loe",
 		"artist": "Trent Kaniuga",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Receba um Último Suspiro.",
+			"zhCN": "获得一个<b>亡语</b>。",
+			"itIT": "Ottiene il <b>Rantolo di Morte</b> di un tuo servitore.",
+			"enUS": "Gain a Deathrattle.",
+			"frFR": "Confère un Râle d’agonie.",
+			"zhTW": "獲得死亡之聲",
+			"deDE": "Kopiert das Todesröcheln.",
+			"jaJP": "断末魔を獲得する。",
+			"plPL": "Wybierz <b>Agonię</b>.",
+			"esES": "Obtiene un Último aliento.",
+			"ruRU": "Получить «Предсмертный хрип».",
+			"esMX": "Obtiene un Estertor.",
+			"koKR": "죽음의 메아리 복사",
+			"thTH": "ได้รับเสียงสุดท้าย"
+		},
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86060,7 +95262,7 @@ var parseCardsText = {
 	{
 		"cost": 4,
 		"set": "Loe",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 6,
 		"mechanics": [
 			"BATTLECRY",
@@ -86099,12 +95301,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Loe",
 		"race": "BEAST",
 		"artist": "Matt Dixon",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86134,10 +95368,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"artist": "Zoltan Boros",
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"SECRET"
 		],
@@ -86157,12 +95423,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Loe",
 		"race": "BEAST",
 		"artist": "Peter Stapleton",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TAUNT"
 		],
@@ -86189,11 +95487,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"artist": "George Davis",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86251,10 +95581,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 10,
 		"set": "Loe",
 		"artist": "Ryan Metcalf",
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 2898,
 		"type": "Spell",
 		"flavor": "Theme song by Ellie Goldfin and Blagghghlrlrl Harris.",
@@ -86274,10 +95636,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
 		"artist": "Zoltan Boros",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"SECRET"
 		],
@@ -86297,12 +95691,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"race": "BEAST",
 		"artist": "Jaemin Kim",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86347,11 +95773,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Loe",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -86393,12 +95851,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"race": "MECHANICAL",
 		"artist": "Skan Srisuwan",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86428,12 +95918,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"race": "BEAST",
 		"artist": "Matt Dixon",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -86460,12 +95982,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"race": "BEAST",
 		"artist": "Turovec Konstantin",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86495,12 +96049,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Loe",
 		"race": "BEAST",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 2,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -86530,12 +96116,44 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "Mike Sass",
 		"spellDamage": 2,
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"SPELLPOWER"
 		],
@@ -86562,12 +96180,44 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Loe",
 		"race": "ELEMENTAL",
 		"artist": "Jakub Kasper",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -86594,11 +96244,43 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Loe",
 		"artist": "Paul Mafayon",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -86640,11 +96322,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Loe",
 		"artist": "Trent Kaniuga",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86695,12 +96409,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
 		"race": "MURLOC",
 		"artist": "Matt Dixon",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86732,11 +96478,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Loe",
 		"artist": "Sam Nielson",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"AURA"
 		],
@@ -86783,11 +96561,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "Luke Mancini",
 		"health": 5,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86816,11 +96626,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Loe",
 		"artist": "Jason Kang",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -86847,11 +96689,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Loe",
 		"artist": "Sam Nielson",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"DEATHRATTLE"
 		],
@@ -86950,11 +96824,43 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 9,
 		"set": "Loe",
 		"artist": "Alex Horley Orlandelli",
 		"health": 8,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -86989,10 +96895,42 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Loe",
 		"artist": "Alex Konstad",
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 3015,
 		"type": "Spell",
 		"flavor": "It's perfectly safe as long as you remember to put in air holes.",
@@ -87012,10 +96950,42 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Pode ser criado depois de iniciar a aventura Liga dos Exploradores.",
+			"zhCN": "在开始“探险者协会”冒险模式后能够制作。",
+			"itIT": "Può essere creata dopo aver iniziato l'avventura della Lega degli Esploratori.",
+			"enUS": "Can be crafted after starting the League of Explorers adventure.",
+			"frFR": "Peut être créée après avoir commencé l’aventure la Ligue des explorateurs.",
+			"zhTW": "加入探險者協會的冒險即可合成。",
+			"deDE": "Herstellung wird freigeschaltet, nachdem Ihr das Forscherliga-Abenteuer begonnen habt.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーを開始すると作成可能になる。",
+			"plPL": "Można wytworzyć po rozpoczęciu przygody Liga Odkrywców.",
+			"esES": "Se puede crear tras empezar la aventura de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать в ходе прохождения приключения «Лига исследователей».",
+			"esMX": "Puede crearse luego de comenzar la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험을 시작한 후 제작 가능",
+			"thTH": "สร้างได้หลังจากเริ่มต้นการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Loe",
 		"artist": "Joe Wilson",
+		"howToEarn": {
+			"ptBR": "Desbloqueado ao iniciar a aventura Liga dos Exploradores.",
+			"zhCN": "在开始“探险者协会”冒险模式后解锁。",
+			"itIT": "Sbloccata iniziando l'avventura della Lega degli Esploratori.",
+			"enUS": "Unlocked by starting the League of Explorers adventure.",
+			"frFR": "Obtenue avec l’aventure la Ligue des explorateurs.",
+			"zhTW": "加入探險者協會的冒險即可解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr das Forscherliga-Abenteuer beginnt.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーを開始すると入手。",
+			"plPL": "Do odblokowania przez rozpoczęcie przygody Liga Odkrywców.",
+			"esES": "Se desbloquea al empezar la aventura de la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в начале приключения «Лига исследователей».",
+			"esMX": "Se desbloquea al comenzar la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험을 시작하여 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเริ่มต้นการผจญภัย League of Explorers"
+		},
 		"referencedTags": [
 			"DEATHRATTLE"
 		],
@@ -87056,11 +97026,43 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "Jim Nelson",
 		"health": 7,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 9107,
 		"type": "Minion",
 		"flavor": "Don't blink!  Don't turn your back, don't look away, and DON'T BLINK.",
@@ -87084,11 +97086,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中開放合成。",
+			"deDE": "Herstellung wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で作成可能になる。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en el Templo de Orsis de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Храме Орсиса (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "Slawomir Maniak",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Templo de Orsis, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥西斯神庙中解锁。",
+			"itIT": "Sbloccata nel Tempio di Orsis (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Temple of Orsis, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Temple d’Orsis de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧爾希斯神殿中解鎖。",
+			"deDE": "Wird im Tempel von Orsis im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「オルシスの寺院」で入手。",
+			"plPL": "Do odblokowania w Świątyni Oryzysa,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en el Templo de Orsis, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Храма Орсиса в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en el Templo de Orsis, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 오르시스의 사원에서 잠금 해제",
+			"thTH": "ปลดล็อคในวิหารแห่งออร์ซิส ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -87139,10 +97173,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Loe",
 		"artist": "Raymond Swanland",
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 2999,
 		"type": "Spell",
 		"flavor": "MOM! DAD! DON'T TOUCH IT! IT'S EVIL!!!!!!",
@@ -87162,10 +97228,42 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 7,
 		"set": "Loe",
 		"artist": "Andrius Matijoshius",
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 3007,
 		"type": "Spell",
 		"flavor": "Everyfin is cool when you're part of a murloc team!",
@@ -87203,10 +97301,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"CHOOSE_ONE"
 		],
@@ -87244,7 +97374,7 @@ var parseCardsText = {
 		"playerClass": "Druid",
 		"cost": 0,
 		"set": "Loe",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Raven Idol",
 		"id": "LOE_115a",
 		"audio": {
@@ -87261,7 +97391,7 @@ var parseCardsText = {
 		"playerClass": "Druid",
 		"cost": 0,
 		"set": "Loe",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Raven Idol",
 		"id": "LOE_115b",
 		"audio": {
@@ -87275,11 +97405,43 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中開放合成。",
+			"deDE": "Herstellung wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で作成可能になる。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Ульдамане (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
 		"artist": "Wayne Reynolds",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado em Uldaman, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在奥达曼中解锁。",
+			"itIT": "Sbloccata a Uldaman (Lega degli Esploratori).",
+			"enUS": "Unlocked in Uldaman, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Uldaman de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的奧達曼中解鎖。",
+			"deDE": "Wird in Uldaman im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「ウルダマン」で入手。",
+			"plPL": "Do odblokowania w Uldamanie,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en Uldaman, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Ульдамана в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en Uldaman, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 울다만에서 잠금 해제",
+			"thTH": "ปลดล็อคในอุลดามาน ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -87306,11 +97468,43 @@ var parseCardsText = {
 		"rarity": "Rare"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 1,
 		"set": "Loe",
 		"artist": "Craig Mullins",
 		"durability": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 35025,
 		"type": "Weapon",
 		"flavor": "The Curse is that you have to listen to \"MMMBop\" on repeat.",
@@ -87343,11 +97537,43 @@ var parseCardsText = {
 		"cardClass": "WARRIOR"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中開放合成。",
+			"deDE": "Herstellung wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で作成可能になる。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Sala de Expedicionarios de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Зале Исследователей (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Loe",
 		"artist": "Mike Sass",
 		"health": 4,
+		"howToEarn": {
+			"ptBR": "Desbloqueado no Salão dos Exploradores, na aventura Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在探险者大厅中解锁。",
+			"itIT": "Sbloccata nel Salone degli Esploratori (Lega degli Esploratori).",
+			"enUS": "Unlocked in the Hall of Explorers, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Hall des Explorateurs de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的探險者大廳中解鎖。",
+			"deDE": "Wird in der Halle der Forscher im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「探検家の殿堂」で入手。",
+			"plPL": "Do odblokowania w Sali Odkrywców,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Sala de Expedicionarios, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Зала Исследователей в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Sala de los Expedicionarios, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 탐험가의 전당에서 잠금 해제",
+			"thTH": "ปลดล็อคในห้องโถงแห่งนักสำรวจ ในการผจญภัย League of Explorers"
+		},
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -89508,6 +99734,22 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Loe",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1_point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย_1_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -89853,12 +100095,44 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁制作。",
+			"itIT": "Può essere creata dopo averla sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Crafting unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Peut être créée dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中開放合成。",
+			"deDE": "Herstellung wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で作成可能になる。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se puede crear tras jugar en la Ciudad en Ruinas de la Liga de Expedicionarios.",
+			"ruRU": "Можно создать после получения в Разрушенном городе (приключение «Лига исследователей»).",
+			"esMX": "La creación se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Loe",
 		"race": "MURLOC",
 		"artist": "Oliver Chipping",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado na Cidade Arruinada, na aventura da Liga dos Exploradores.",
+			"zhCN": "加入“探险者协会”冒险模式，在废墟之城中解锁。",
+			"itIT": "Sbloccata nella Città Fatiscente (Lega degli Esploratori).",
+			"enUS": "Unlocked in The Ruined City, in the League of Explorers adventure.",
+			"frFR": "Obtenue dans l’aile Ville en ruines de l’aventure la Ligue des explorateurs.",
+			"zhTW": "在《探險者協會》的古城遺蹟中解鎖。",
+			"deDE": "Wird in der Verfallenen Stadt im Forscherliga-Abenteuer freigeschaltet.",
+			"jaJP": "リーグ・オブ・エクスプローラー・アドベンチャーの「廃墟の都市」で入手。",
+			"plPL": "Do odblokowania w Zrujnowanym Mieście,\nw przygodzie Liga Odkrywców.",
+			"esES": "Se desbloquea en la Ciudad en Ruinas, en la Liga de Expedicionarios.",
+			"ruRU": "Можно получить в ходе прохождения Разрушенного города в приключении «Лига исследователей».",
+			"esMX": "Se desbloquea en la Ciudad en ruinas, en la aventura Liga de Expedicionarios.",
+			"koKR": "탐험가 연맹 모험의 폐허가 된 도시에서 잠금 해제",
+			"thTH": "ปลดล็อคในนครร้าง ในการผจญภัย League of Explorers"
+		},
 		"dbfId": 13879,
 		"type": "Minion",
 		"flavor": "High mortality rate, from often being hugged to death.",
@@ -91622,7 +101896,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Lootapalooza",
 		"race": "DEMON",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 4,
 		"mechanics": [
 			"BATTLECRY"
@@ -91658,7 +101932,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Hooked Horror",
 		"id": "LOOT_018e",
 		"audio": {
@@ -91675,7 +101949,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 4,
 		"mechanics": [
 			"BATTLECRY"
@@ -91706,7 +101980,7 @@ var parseCardsText = {
 		"playerClass": "Rogue",
 		"cost": 4,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Spider Ambush!",
 		"mechanics": [
 			"TOPDECK"
@@ -91732,7 +102006,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Lootapalooza",
 		"race": "BEAST",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 4,
 		"dbfId": 45869,
 		"type": "Minion",
@@ -92031,6 +102305,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Cause $2 de dano a um lacaio. <i>(Receba 3 de Armadura para aprimorar.)</i>",
+			"zhCN": "对一个随从造成$2点伤害。<i>（获得3点护甲值后升级。）</i>",
+			"itIT": "Infligge $2 danni a un servitore. <i>(Si potenzia ottenendo 3 Armatura)</i>",
+			"enUS": "Deal $2 damage to a minion. <i>(Gain 3 Armor to upgrade.)</i>",
+			"frFR": "Inflige $2 |4(point,points) de dégâts à un serviteur. <i>(Obtenez 3 points d’armure pour l’améliorer.)</i>",
+			"zhTW": "對一個手下造成$2點傷害<i>(獲得3點護甲值後升級)</i>",
+			"deDE": "Fügt einem Diener $2 Schaden zu. <i>(Zum Aufwerten 3 Rüstung erhalten.)</i>",
+			"jaJP": "[x]ミニオン1体に\n$2ダメージを与える。\n<i>（装甲を3獲得すると\n   アップグレード）</i>",
+			"plPL": "Zadaj $2 pkt. obrażeń stronnikowi. <i>(Otrzymaj 3 pkt. pancerza, aby ulepszyć.)</i>",
+			"esES": "Inflige $2 p. de daño a un esbirro. <i>(Obtén 3 p. de armadura para mejorarlo).</i>",
+			"ruRU": "Наносит $2 ед. урона выбранному существу. <i>(Получите 3 ед. брони для улучшения.)</i>",
+			"esMX": "Inflige $2 de daño a un esbirro. <i>(Obtén 3 de Armadura para mejorar esta carta).</i>",
+			"koKR": "하수인에게 피해를 $2 줍니다. <i>(방어도를 +3 얻으면 강화됩니다.)</i>",
+			"thTH": "สร้างความเสียหาย $2 แต้มให้มินเนี่ยนหนึ่งตัว <i>(รับเกราะ 3 แต้มเพื่ออัพเกรด)</i>"
+		},
 		"cost": 1,
 		"set": "Lootapalooza",
 		"artist": "Jim Nelson",
@@ -92238,7 +102528,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 5,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -92340,6 +102630,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Evoque 1 cópia de um lacaio aliado. <i>(Cause <b>Sobrecarga</b> em 3 Cristais de Mana para aprimorar.)</i>",
+			"zhCN": "选择一个友方随从，召唤一个它的复制。<i>（<b>过载</b>三个法力水晶后升级。）</i>",
+			"itIT": "Evoca una copia di un tuo servitore. <i>(Si potenzia <b>Sovraccaricando</b> 3 Cristalli di Mana)</i>",
+			"enUS": "Summon 1 copy of a friendly minion. <i>(<b>Overload</b> 3 Mana Crystals to upgrade.)</i>",
+			"frFR": "Invoque 1 copie d’un serviteur allié. <i>(<b>Surchargez</b> 3 cristaux de mana pour l’améliorer.)</i>",
+			"zhTW": "召喚1個友方手下的分身<i>(<b>超載</b>3顆法力水晶後升級)</i>",
+			"deDE": "Ruft 1 Kopie eines befreundeten Dieners herbei. <i>(Zum Aufwerten 3 Manakristalle <b>überladen</b>.)</i>",
+			"jaJP": "[x]味方のミニオン1体の\nコピーを1体召喚する。\n<i>（マナクリスタルを3つ\n<b>オーバーロード</b>させると\nアップグレード）</i>",
+			"plPL": "Przyzwij 1 kopię przyjaznego stronnika. <i>(<b>Przeciąż</b> 3 kryształy many, aby ulepszyć.)</i>",
+			"esES": "Invoca 1 copia de un esbirro amistoso. <i>(<b>Sobrecarga</b> 3 cristales de maná para mejorarlo).</i>",
+			"ruRU": "Призывает 1 копию вашего выбранного существа. <i>(<b>Перегрузите</b> 3 кристалла маны для улучшения.)</i>",
+			"esMX": "Invoca 1 copia de un esbirro aliado. <i>(<b>Sobrecarga</b> 3 Cristales de maná para mejorar esta carta).</i>",
+			"koKR": "아군 하수인을 복사하여 소환합니다. <i>(내 마나 수정 3개를 <b>과부하</b>하면 강화됩니다.)</i>",
+			"thTH": "เรียกก๊อปปี้ของ[b]มินเนี่ยนฝ่ายคุณ 1 ตัว <i>(<b>โอเวอร์โหลด</b> คริสตัลมานา 3 อันเพื่ออัพเกรด)</i>"
+		},
 		"cost": 7,
 		"set": "Lootapalooza",
 		"artist": "Jason Kang",
@@ -92594,7 +102900,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 5,
+		"cost": 6,
 		"set": "Lootapalooza",
 		"artist": "Joe Wilson",
 		"dbfId": 43363,
@@ -92617,7 +102923,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"cost": 5,
+		"cost": 6,
 		"set": "Lootapalooza",
 		"artist": "Joe Wilson",
 		"name": "Emerald Spellstone",
@@ -92638,7 +102944,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"cost": 5,
+		"cost": 6,
 		"set": "Lootapalooza",
 		"artist": "Joe Wilson",
 		"name": "Greater Emerald Spellstone",
@@ -92723,6 +103029,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Evoque um Espírito 2/2 com <b>Provocar</b>. <i>(Restaure 3 de Vida para aprimorar.)</i>",
+			"zhCN": "召唤一个2/2并具有<b>嘲讽</b>的灵魂。<i>（恢复3点生命值后升级。）</i>",
+			"itIT": "Evoca uno Spirito 2/2 con <b>Provocazione</b>. <i>(Si potenzia rigenerando 3 Salute)</i>",
+			"enUS": "Summon a 2/2 Spirit with <b>Taunt</b>. <i>(Restore 3 Health to upgrade.)</i>",
+			"frFR": "Invoque un esprit 2/2 avec <b>Provocation</b>. <i>(Rendez 3 PV pour l’améliorer.)</i>",
+			"zhTW": "召喚一個有<b>嘲諷</b>的2/2聖靈<i>(恢復3點生命值後升級)</i>",
+			"deDE": "Ruft einen Geist (2/2) mit <b>Spott</b> herbei. <i>(Zum Aufwerten 3 Leben wiederherstellen.)</i>",
+			"jaJP": "<b>挑発</b>を持つ\n2/2の精霊を\n1体召喚する。\n<i>（体力を3回復するとアップグレード）</i>",
+			"plPL": "Przyzwij Ducha 2/2 z <b>Prowokacją</b>. <i>(Przywróć 3 pkt. zdrowia, aby ulepszyć.)</i>",
+			"esES": "Invoca un espíritu 2/2 con <b>Provocar</b>. <i>(Restaura 3 p. de salud para mejorarla).</i>",
+			"ruRU": "Призывает духа 2/2 с <b>«Провокацией»</b>. <i>(Восстановите 3 ед. здоровья для улучшения.)</i>",
+			"esMX": "Invoca un Espíritu 2/2 con <b>Provocación</b>. <i>(Restaura 3 de Salud para mejorar esta carta).</i>",
+			"koKR": "<b>도발</b> 능력이 있는 2/2 영혼을 소환합니다. <i>(생명력을 3 회복하면 강화됩니다.)</i>",
+			"thTH": "เรียกวิญญาณ 2/2 ที่มี <b>ยั่วยุ</b> <i>(ฟื้นฟูพลังชีวิต 3 แต้มเพื่ออัพเกรด)</i>"
+		},
 		"cost": 2,
 		"set": "Lootapalooza",
 		"artist": "Konstantin Turovec",
@@ -92931,6 +103253,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Adicione 1 feitiço de Mago aleatório à sua mão. <i>(Jogue 2 Elementais para aprimorar.)</i>",
+			"zhCN": "随机将一张法师的法术牌置入你的手牌。<i>（使用两张元素牌后升级。）</i>",
+			"itIT": "Mette nella tua mano una Magia casuale del Mago. <i>(Si potenzia giocando due Elementali)</i>",
+			"enUS": "Add 1 random Mage spell to your hand. <i>(Play 2 Elementals to upgrade.)</i>",
+			"frFR": "Place 1 sort de mage aléatoire dans votre main. <i>(Jouez 2 élémentaires pour l’améliorer.)</i>",
+			"zhTW": "放1張隨機法師法術到你的手中<i>(打出2個元素後升級)</i>",
+			"deDE": "Erhaltet 1 zufälligen Magierzauber auf die Hand. <i>(Zum Aufwerten 2 Elementare ausspielen.)</i>",
+			"jaJP": "[x]ランダムなメイジの\n呪文カード1枚を\n自分の手札に追加する。\n<i>（エレメンタルを2体\n手札から使用すると\nアップグレード）</i>",
+			"plPL": "Dodaj 1 losowe zaklęcie maga do twojej ręki. <i>(Zagraj 2 Żywiołaki, aby ulepszyć.)</i>",
+			"esES": "Añade 1 hechizo de mago aleatorio a tu mano. <i>(Juega 2 elementales para mejorarlo.)</i>",
+			"ruRU": "Вы кладете в руку 1 случайное заклинание мага. <i>(Разыграйте 2 элементалей для улучшения.)</i>",
+			"esMX": "Agrega 1 hechizo de mago aleatorio a tu mano. <i>(Juega 2 Elementales para mejorar esta carta).</i>",
+			"koKR": "무작위 마법사 주문을 내 손으로 가져옵니다. <i>(정령을 2장 내면 강화됩니다.)</i>",
+			"thTH": "สุ่มเพิ่มการ์ดเวทมนตร์[b]ของเมจ 1 ใบในมือคุณ <i>(เล่นวิญญาณธาตุ 2 ใบเพื่ออัพเกรด)</i>"
+		},
 		"cost": 2,
 		"set": "Lootapalooza",
 		"artist": "Zoltan Boros",
@@ -93128,6 +103466,22 @@ var parseCardsText = {
 		"race": "MECHANICAL",
 		"artist": "Phil Saunders",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio com 1 ou menos de Ataque.",
+			"zhCN": "消灭一个攻击力小于或等于1的随从。",
+			"itIT": "Distrugge un servitore con Attacco pari a 1 o inferiore.",
+			"enUS": "Destroy a minion with 1 or less Attack.",
+			"frFR": "Détruit un serviteur avec 1_Attaque ou moins.",
+			"zhTW": "摧毀一個攻擊力1點以下的手下",
+			"deDE": "Vernichtet einen Diener mit max. 1 Angriff.",
+			"jaJP": "攻撃力1以下のミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika z atakiem 1 lub mniejszym.",
+			"esES": "Destruye a un esbirro con 1_p. de ataque o menos.",
+			"ruRU": "Уничтожить существо с атакой 1 или меньше.",
+			"esMX": "Destruye un esbirro con 1 o menos de Ataque.",
+			"koKR": "공격력 1 이하인 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยน[b]หนึ่งตัวที่มีพลังโจมตี[b]_1_หรือต่ำกว่า"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -93401,7 +103755,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "Anton Kagoukin",
+		"artist": "Anton Kagounkin",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -93434,7 +103788,7 @@ var parseCardsText = {
 	{
 		"cost": 2,
 		"set": "Lootapalooza",
-		"artist": "Anton Kagoukin",
+		"artist": "Anton Kagounkin",
 		"health": 2,
 		"mechanics": [
 			"TAUNT"
@@ -93465,6 +103819,22 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"artist": "Jim Nelson",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 6 de dano.",
+			"zhCN": "造成6点伤害。",
+			"itIT": "Infligge 6 danni.",
+			"enUS": "Deal 6 damage.",
+			"frFR": "Inflige 6_points de dégâts.",
+			"zhTW": "造成6點傷害",
+			"deDE": "Verursacht 6 Schaden.",
+			"jaJP": "6ダメージを与える。",
+			"plPL": "Zadaj 6 pkt. obrażeń.",
+			"esES": "Inflige 6 p. de daño.",
+			"ruRU": "Нанести 6 ед. урона.",
+			"esMX": "Inflige 6 de daño.",
+			"koKR": "피해 6",
+			"thTH": "สร้างความเสียหาย_6_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -93500,7 +103870,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 4,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -93530,7 +103900,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"name": "Toothy",
 		"id": "LOOT_134e",
 		"audio": {
@@ -93707,6 +104077,22 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"artist": "Steve Prescott",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Transforme um lacaio.",
+			"zhCN": "将一个随从变形。",
+			"itIT": "Trasforma un tuo servitore.",
+			"enUS": "Transform a minion.",
+			"frFR": "Transforme un serviteur.",
+			"zhTW": "變形一個手下",
+			"deDE": "Verwandelt einen Diener.",
+			"jaJP": "ミニオン1体を変身させる。",
+			"plPL": "Przemień stronnika.",
+			"esES": "Transforma a un esbirro.",
+			"ruRU": "Превратить существо.",
+			"esMX": "Transforma a un esbirro.",
+			"koKR": "하수인 변신",
+			"thTH": "เปลี่ยนร่างมินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -93918,6 +104304,22 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"artist": "Jakub Kasper",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio aliado.",
+			"zhCN": "消灭一个友方随从。",
+			"itIT": "Distrugge un tuo servitore.",
+			"enUS": "Destroy a friendly minion.",
+			"frFR": "Détruit un serviteur allié.",
+			"zhTW": "摧毀一個友方手下",
+			"deDE": "Vernichtet einen befreundeten Diener.",
+			"jaJP": "味方のミニオン1体を破壊する。",
+			"plPL": "Zniszcz przyjaznego stronnika.",
+			"esES": "Destruye a un esbirro amistoso.",
+			"ruRU": "Уничтожить ваше существо.",
+			"esMX": "Destruye un esbirro aliado.",
+			"koKR": "아군 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยน[b]ฝ่ายคุณหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"DEATHRATTLE"
@@ -94070,7 +104472,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Lootapalooza",
 		"race": "BEAST",
-		"artist": "Eva Wildermann",
+		"artist": "Eva Widermannn",
 		"health": 2,
 		"mechanics": [
 			"BATTLECRY"
@@ -94216,7 +104618,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Lootapalooza",
 		"race": "BEAST",
-		"artist": "Eva Wildermann",
+		"artist": "Eva Widermannn",
 		"health": 3,
 		"dbfId": 46892,
 		"type": "Minion",
@@ -94244,7 +104646,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"dbfId": 45519,
 		"type": "Spell",
 		"flavor": "To dwarves of stone the demon called\nWith promises of might, enthralled\nIn grasping greed they found their doom\nForever bound in mithril tombs.",
@@ -94267,7 +104669,7 @@ var parseCardsText = {
 		"playerClass": "Warrior",
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Mithril Spellstone",
 		"id": "LOOT_203t2",
 		"audio": {
@@ -94288,7 +104690,7 @@ var parseCardsText = {
 		"playerClass": "Warrior",
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Greater Mithril Spellstone",
 		"id": "LOOT_203t3",
 		"audio": {
@@ -94309,7 +104711,7 @@ var parseCardsText = {
 		"playerClass": "Warrior",
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"attack": 5,
 		"name": "Mithril Golem",
 		"health": 5,
@@ -94519,7 +104921,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"health": 1,
 		"mechanics": [
 			"BATTLECRY"
@@ -94554,7 +104956,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Light of the Exarch",
 		"id": "LOOT_216e",
 		"audio": {
@@ -94633,7 +105035,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Lootapalooza",
-		"artist": "Anton Magdalin",
+		"artist": "Anton Kagounkin",
 		"durability": 3,
 		"referencedTags": [
 			"IMMUNE"
@@ -95380,6 +105782,22 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"artist": "Andrew Hou",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Restaure 4 de Vida.",
+			"zhCN": "恢复4点生命值。",
+			"itIT": "Rigenera 4 Salute.",
+			"enUS": "Restore 4 Health.",
+			"frFR": "Rend 4_PV.",
+			"zhTW": "恢復4點生命值",
+			"deDE": "Stellt 4 Leben wieder her.",
+			"jaJP": "体力を4回復する。",
+			"plPL": "Przywróć 4 pkt. zdrowia.",
+			"esES": "Restaura 4 p. de salud.",
+			"ruRU": "Восстановить 4 ед. здоровья.",
+			"esMX": "Restaura 4 de Salud.",
+			"koKR": "생명력 4 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 4 แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -95611,7 +106029,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 5,
+		"cost": 6,
 		"set": "Lootapalooza",
 		"artist": "Wayne Reynolds",
 		"referencedTags": [
@@ -95800,11 +106218,43 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Desbloqueado com o ingresso virtual da Blizzcon 2017.",
+			"zhCN": "通过2017年暴雪嘉年华的虚拟门票解锁获得。",
+			"itIT": "Sbloccata con il biglietto virtuale BlizzCon 2017.",
+			"enUS": "Unlocked with the BlizzCon 2017 virtual ticket.",
+			"frFR": "Obtenue avec le billet virtuel de la BlizzCon 2017.",
+			"zhTW": "以BlizzCon 2017虛擬門票解鎖。",
+			"deDE": "Wird mit dem virtuellen Ticket zur BlizzCon_2017 freigeschaltet.",
+			"jaJP": "BlizzCon 2017バーチャルチケットにより入手。",
+			"plPL": "Odblokowano za pomocą wirtualnego biletu na BlizzCon 2017.",
+			"esES": "Se desbloquea con la entrada virtual de la BlizzCon 2017.",
+			"ruRU": "Награда за покупку виртуального билета на BlizzCon 2017.",
+			"esMX": "Desbloqueada con el boleto virtual de la BlizzCon 2017.",
+			"koKR": "블리즈컨 2017 가상 입장권을 구입하여 잠금 해제",
+			"thTH": "ปลดล็อคด้วยบัตรเข้าชมออนไลน์ BlizzCon 2017"
+		},
 		"collectible": true,
 		"cost": 8,
 		"set": "Lootapalooza",
 		"artist": "Zoltan Boros",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado ao abrir um pacote de Kobolds & Catacumbas.",
+			"zhCN": "打开“狗头人与地下世界”卡牌包后可解锁。",
+			"itIT": "Sbloccata aprendo una busta di Coboldi & Catacombe.",
+			"enUS": "Unlocked by opening a Kobolds & Catacombs pack.",
+			"frFR": "Obtenue en ouvrant un paquet de cartes de Kobolds et Catacombes.",
+			"zhTW": "打開《狗頭人與地下城》卡牌包後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr eine Packung aus „Kobolde & Katakomben“ öffnet.",
+			"jaJP": "「コボルトと秘宝の迷宮」パックを開封すると入手。",
+			"plPL": "Do odblokowania przez otwarcie pakietu Koboldów i katakumb.",
+			"esES": "Se desbloquea al abrir un sobre de\nKóbolds & Catacumbas.",
+			"ruRU": "Награда за открытие комплекта карт «Кобольды и катакомбы».",
+			"esMX": "Para desbloquearla, se debe abrir un paquete de Kóbolds & Catacumbas.",
+			"koKR": "코볼트와 지하 미궁 팩을 개봉하여 잠금 해제",
+			"thTH": "ปลดล็อคด้วยการเปิดซองการ์ด Kobolds & Catacombs"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -96228,7 +106678,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Lootapalooza",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"health": 6,
 		"dbfId": 46079,
 		"type": "Minion",
@@ -96291,7 +106741,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"health": 3,
 		"mechanics": [
 			"BATTLECRY"
@@ -96600,7 +107050,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 6,
 		"mechanics": [
 			"DEATHRATTLE",
@@ -96634,7 +107084,7 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "The First Seal",
 		"id": "LOOT_415t1",
 		"audio": {
@@ -96679,7 +107129,7 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "The Second Seal",
 		"id": "LOOT_415t2",
 		"audio": {
@@ -96724,7 +107174,7 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "The Third Seal",
 		"id": "LOOT_415t3",
 		"audio": {
@@ -96769,7 +107219,7 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "The Fourth Seal",
 		"id": "LOOT_415t4",
 		"audio": {
@@ -96814,7 +107264,7 @@ var parseCardsText = {
 		"playerClass": "Warlock",
 		"cost": 5,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "The Final Seal",
 		"id": "LOOT_415t5",
 		"audio": {
@@ -97043,6 +107493,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Destrua 1 lacaio inimigo aleatório. <i>(Jogue 3 cards com <b>Último Suspiro</b> para aprimorar.)</i>",
+			"zhCN": "随机消灭一个敌方随从。<i>（使用三张<b>亡语</b>牌后升级。）</i>",
+			"itIT": "Distrugge un servitore nemico casuale. <i>(Si potenzia giocando 3 carte con <b>Rantolo di Morte</b>)</i>",
+			"enUS": "Destroy 1 random enemy minion.\n<i>(Play 3 <b>Deathrattle</b> cards to upgrade.)</i>",
+			"frFR": "Détruit 1 serviteur adverse aléatoire. <i>(Jouez 3 cartes avec <b>Râle d’agonie</b> pour l’améliorer.)</i>",
+			"zhTW": "摧毀1個隨機敵方手下<i>(打出3張<b>死亡之聲</b>牌後升級)</i>",
+			"deDE": "Vernichtet 1 zufälligen feindlichen Diener. <i>(Zum Aufwerten 3 <b>Todesröcheln</b>-Karten ausspielen.)</i>",
+			"jaJP": "[x]ランダムな敵の\nミニオン1体を破壊する。\n<i>（<b>断末魔</b>カードを\n3枚手札から使用\nするとアップグレード）</i>",
+			"plPL": "Zniszcz jednego losowego wrogiego stronnika. <i>(Zagraj 3 karty z <b>Agonią</b>, aby ulepszyć.)</i>",
+			"esES": "Destruye 1 esbirro enemigo aleatorio. <i>(Juega 3 cartas con <b>Último aliento</b> para mejorarlo).</i>",
+			"ruRU": "Уничтожает 1 случайное существо противника. <i>(Разыграйте 3 карты с <b>«Предсмертным хрипом»</b> для улучшения.)</i>",
+			"esMX": "Destruye 1 esbirro enemigo aleatorio. <i>(Juega 3 cartas con <b>Estertor</b> para mejorar esta carta).</i>",
+			"koKR": "무작위 적 하수인을 처치합니다.\n<i>(<b>죽음의 메아리</b> 카드를 3회 내면 강화됩니다.)</i>",
+			"thTH": "สุ่มทำลายมินเนี่ยนศัตรู 1 ตัว <i>(เล่นการ์ด <b>เสียงสุดท้าย</b> 3 ใบเพื่ออัพเกรด)</i>"
+		},
 		"cost": 5,
 		"set": "Lootapalooza",
 		"artist": "Arthur Bozonnet",
@@ -97249,9 +107715,25 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "Ressuscite 2 lacaios aliados diferentes. <i>(Lance 4 feitiços para aprimorar.)</i>",
+			"zhCN": "复活两个不同的友方随从。<i>（施放四个法术后升级。）</i>",
+			"itIT": "Evoca due tuoi servitori diversi morti in questa partita. <i>(Si potenzia lanciando 4 Magie)</i>",
+			"enUS": "Resurrect 2 different friendly minions. <i>(Cast 4 spells to upgrade.)</i>",
+			"frFR": "Ressuscite 2 serviteurs alliés différents. <i>(Lancez 4 sorts pour l’améliorer.)</i>",
+			"zhTW": "復活2個不同的友方手下<i>(施放\n4個法術後升級)</i>",
+			"deDE": "Belebt 2 verschiedene befreundete Diener wieder. <i>(Zum Aufwerten 4 Zauber wirken.)</i>",
+			"jaJP": "[x]味方のミニオン\n2種を復活させる。\n<i>（呪文を4回使用すると \n  アップグレード）</i>",
+			"plPL": "Wskrześ dwóch różnych przyjaznych stronników. <i>(Rzuć 4 zaklęcia, aby ulepszyć.)</i>",
+			"esES": "Resucita a 2 esbirros amistosos diferentes. <i>(Lanza 4 hechizos para mejorarlo).</i>",
+			"ruRU": "Воскрешает 2 ваших различных существ. <i>(Разыграйте 4 заклинания для улучшения.)</i>",
+			"esMX": "Revive 2 esbirros aliados diferentes. <i>(Lanza 4 hechizos para mejorar esta carta.)</i>",
+			"koKR": "서로 다른 아군 하수인 둘을 부활시킵니다. <i>(주문을 4회 시전하면 강화됩니다.)</i>",
+			"thTH": "ชุบชีวิตมินเนี่ยน[b]ฝ่ายคุณที่ต่างกัน 2 ตัว <i>(ร่ายเวทมนตร์ 4 ใบ[b]เพื่ออัพเกรด)</i>"
+		},
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"dbfId": 46307,
 		"type": "Spell",
 		"flavor": "A diamond, white, this stone the eighth\nA precious jewel for those of faith\nA whispered prayer restores the lost\nBut none among them know the cost.",
@@ -97274,7 +107756,7 @@ var parseCardsText = {
 		"playerClass": "Priest",
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Diamond Spellstone",
 		"id": "LOOT_507t",
 		"audio": {
@@ -97295,7 +107777,7 @@ var parseCardsText = {
 		"playerClass": "Priest",
 		"cost": 7,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Greater Diamond Spellstone",
 		"id": "LOOT_507t2",
 		"audio": {
@@ -97358,6 +107840,22 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"artist": "Sean McNally",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Adicione uma cópia Dourada à sua mão.",
+			"zhCN": "将一个金色复制置入你的手牌。",
+			"itIT": "Mette una copia Dorata di un tuo servitore nella tua mano.",
+			"enUS": "Add a Golden copy to your hand.",
+			"frFR": "Place une copie dorée dans votre main.",
+			"zhTW": "放一張相同的金卡到你的手中",
+			"deDE": "Erhaltet eine goldene Kopie auf die Hand.",
+			"jaJP": "ゴールデンのコピー1体を自分の手札に追加する。",
+			"plPL": "Dodaj złotą kopię do twojej ręki.",
+			"esES": "Añade una copia dorada a tu mano.",
+			"ruRU": "Добавить в руку золотую копию существа.",
+			"esMX": "Agrega una copia dorada a tu mano.",
+			"koKR": "황금 카드로 복사하여 내 손으로 가져옴",
+			"thTH": "เพิ่มก๊อปปี้สีทอง[b]หนึ่งใบในมือคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -97528,7 +108026,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"set": "Lootapalooza",
-		"artist": "Anton Kagoukin",
+		"artist": "Anton Kagounkin",
 		"health": 4,
 		"mechanics": [
 			"BATTLECRY"
@@ -97564,7 +108062,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Lootapalooza",
-		"artist": "Anton Kagoukin",
+		"artist": "Anton Kagounkin",
 		"name": "Albino Chameleon",
 		"id": "LOOT_520e",
 		"audio": {
@@ -97739,6 +108237,22 @@ var parseCardsText = {
 		"set": "Lootapalooza",
 		"artist": "Tooth",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Troque o Ataque.",
+			"zhCN": "交换攻击力。",
+			"itIT": "Scambia l'Attacco.",
+			"enUS": "Swap Attack.",
+			"frFR": "Échange l’ATQ.",
+			"zhTW": "對調攻擊力",
+			"deDE": "Vertauscht Angriff.",
+			"jaJP": "攻撃力を入れ替える。",
+			"plPL": "Zamień atak.",
+			"esES": "Intercambia el ataque.",
+			"ruRU": "Поменяться атакой с существом.",
+			"esMX": "Intercambia el Ataque.",
+			"koKR": "공격력 바꾸기",
+			"thTH": "สลับพลังโจมตี"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -97844,7 +108358,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "Erik Gist",
+		"artist": "E. M. Gist",
 		"health": 2,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -98457,7 +108971,7 @@ var parseCardsText = {
 	{
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "Zero Yue",
+		"artist": "Zero",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -98853,14 +109367,32 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": "<b>Adapte</b> um lacaio aliado {0} |4(vez, vezes).",
+			"zhCN": "使一个友方随从<b>进化</b>{0}次。",
+			"itIT": "<b>Adatta</b> un tuo servitore {0} |4(volta,volte).",
+			"enUS": "<b>Adapt</b> a friendly minion {0} |4(time, times).",
+			"frFR": "Confère <b>Adaptation</b> {0} fois à un serviteur allié.",
+			"zhTW": "<b>演化</b>一個友方手下{0}次",
+			"deDE": "<b>Mutiert</b> einen befreundeten Diener {0}-mal.",
+			"jaJP": "味方の\nミニオン1体を\n{0}回<b>適応</b>させる。",
+			"plPL": "<b>Adaptuj</b> przyjaznego stronnika {0} |4(raz,razy,razy).",
+			"esES": "<b>Adapta</b> a un esbirro amistoso {0} |4(vez,veces).",
+			"ruRU": "Ваше существо <b>адаптируется</b> {0} р.",
+			"esMX": "<b>Adapta</b> a un esbirro aliado {0} |4(vez, veces).",
+			"koKR": "아군 하수인을 {0}번 <b>적응</b>시킵니다.",
+			"thTH": "<b>ปรับตัว</b> {0} ครั้ง[b]ให้มินเนี่ยนฝ่ายคุณ[b]หนึ่งตัว"
+		},
 		"cost": 4,
 		"set": "Lootapalooza",
 		"artist": "Clint Langley",
-		"name": "Primordial Wand",
 		"referencedTags": [
 			"ADAPT"
 		],
+		"dbfId": 46421,
+		"type": "Spell",
+		"playerClass": "Neutral",
+		"name": "Primordial Wand",
 		"id": "LOOTA_817",
 		"audio": {
 			"play": [],
@@ -98871,8 +109403,6 @@ var parseCardsText = {
 			]
 		},
 		"text": "[x]<b>Adapt</b> a friendly minion.\nRepeat for each boss\nyou've defeated this run.",
-		"dbfId": 46421,
-		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -100016,7 +110546,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"set": "Lootapalooza",
-		"artist": "Eva Wildermann",
+		"artist": "Eva Widermannn",
 		"name": "Graves the Cleric",
 		"health": 20,
 		"id": "LOOTA_BOSS_10h",
@@ -100034,7 +110564,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 0,
 		"set": "Lootapalooza",
-		"artist": "Eva Wildermann",
+		"artist": "Eva Widermannn",
 		"name": "Light's Will",
 		"id": "LOOTA_BOSS_10p",
 		"audio": {
@@ -100557,7 +111087,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Hunter",
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Tad",
 		"health": 20,
 		"id": "LOOTA_BOSS_22h",
@@ -100761,7 +111291,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warlock",
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Xol the Unscathed",
 		"health": 70,
 		"id": "LOOTA_BOSS_26h",
@@ -100779,7 +111309,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Beam of Frost",
 		"id": "LOOTA_BOSS_26p2",
 		"audio": {
@@ -100814,7 +111344,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Beam of Death",
 		"id": "LOOTA_BOSS_26p3",
 		"audio": {
@@ -100834,7 +111364,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Beam of Confusion",
 		"id": "LOOTA_BOSS_26p4",
 		"audio": {
@@ -100869,7 +111399,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Beam of Fear",
 		"id": "LOOTA_BOSS_26p5",
 		"audio": {
@@ -100901,7 +111431,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Beam of Fire",
 		"id": "LOOTA_BOSS_26p6",
 		"audio": {
@@ -100921,7 +111451,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Beam of Decay",
 		"id": "LOOTA_BOSS_26p7",
 		"audio": {
@@ -100952,7 +111482,7 @@ var parseCardsText = {
 	{
 		"cost": 0,
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -101441,7 +111971,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"set": "Lootapalooza",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"name": "Kraxx",
 		"health": 30,
 		"id": "LOOTA_BOSS_39h",
@@ -101889,7 +112419,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 3,
 		"set": "Lootapalooza",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"attack": 3,
 		"name": "Sawblade",
 		"health": 3,
@@ -101995,7 +112525,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Priest",
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Mushhuckster Max",
 		"health": 40,
 		"id": "LOOTA_BOSS_50h",
@@ -102041,7 +112571,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 1,
 		"set": "Lootapalooza",
-		"artist": "Tyler West Studios",
+		"artist": "Tyler West Studio",
 		"name": "Mushroom Potion",
 		"id": "LOOTA_BOSS_50t",
 		"audio": {
@@ -102137,7 +112667,7 @@ var parseCardsText = {
 	{
 		"cost": 1,
 		"set": "Lootapalooza",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 10,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -107862,10 +118392,42 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 15.",
+			"zhCN": "达到15级后解锁。",
+			"itIT": "Sbloccata al livello 15.",
+			"enUS": "Unlocked at Level 15.",
+			"frFR": "Débloquée au niveau 15.",
+			"zhTW": "於15級時解鎖。",
+			"deDE": "Wird auf Stufe 15 freigeschaltet.",
+			"jaJP": "レベル15で入手。",
+			"plPL": "Odblokowane na poziomie 15.",
+			"esES": "Se desbloquea al alcanzar el nivel 15.",
+			"ruRU": "Доступна с 15-го уровня.",
+			"esMX": "Se desbloquea en nivel 15.",
+			"koKR": "15 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 15"
+		},
 		"collectible": true,
 		"cost": 0,
 		"set": "Core",
 		"artist": "Jim Nelson",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"dbfId": 163,
 		"type": "Spell",
 		"flavor": "This is the reason that Demons never really become friends with Warlocks.",
@@ -107903,10 +118465,42 @@ var parseCardsText = {
 		"rarity": "Free"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 23.",
+			"zhCN": "达到23级后解锁。",
+			"itIT": "Sbloccata al livello 23.",
+			"enUS": "Unlocked at Level 23.",
+			"frFR": "Débloquée au niveau 23.",
+			"zhTW": "於23級時解鎖。",
+			"deDE": "Wird auf Stufe 23 freigeschaltet.",
+			"jaJP": "レベル23で入手。",
+			"plPL": "Odblokowane na poziomie 23.",
+			"esES": "Se desbloquea al alcanzar el nivel 23.",
+			"ruRU": "Доступна с 23-го уровня.",
+			"esMX": "Se desbloquea en nivel 23.",
+			"koKR": "23 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 23"
+		},
 		"collectible": true,
 		"cost": 6,
 		"set": "Core",
 		"artist": "Sean O’Daniels",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 8.",
+			"zhCN": "达到8级后解锁。",
+			"itIT": "Sbloccata al livello 8.",
+			"enUS": "Unlocked at Level 8.",
+			"frFR": "Débloquée au niveau 8.",
+			"zhTW": "於8級時解鎖。",
+			"deDE": "Wird auf Stufe 8 freigeschaltet.",
+			"jaJP": "レベル8で入手。",
+			"plPL": "Odblokowane na poziomie 8.",
+			"esES": "Se desbloquea al alcanzar el nivel 8.",
+			"ruRU": "Доступна с 8-го уровня.",
+			"esMX": "Se desbloquea en nivel 8.",
+			"koKR": "8 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 8"
+		},
 		"dbfId": 196,
 		"type": "Spell",
 		"playerClass": "Rogue",
@@ -107930,6 +118524,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Dave Allsop",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Devolva um lacaio à mão.",
+			"zhCN": "将一个随从移回手牌。",
+			"itIT": "Fa tornare un servitore nella mano di chi lo controlla.",
+			"enUS": "Return a minion to hand.",
+			"frFR": "Renvoie un serviteur dans la main.",
+			"zhTW": "使一個手下返回手中",
+			"deDE": "Lasst einen Diener auf die Hand des Besitzers zurückkehren.",
+			"jaJP": "ミニオン1体を手札に戻す。",
+			"plPL": "Cofnij stronnika do ręki.",
+			"esES": "Devuelve a un esbirro a la mano.",
+			"ruRU": "Вернуть существо в руку.",
+			"esMX": "Devuelve un esbirro a la mano.",
+			"koKR": "손으로 하수인 돌려보내기",
+			"thTH": "ส่งมินเนี่ยนหนึ่งตัว[b]กลับขึ้นมือ"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -108158,11 +118768,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 44.",
+			"zhCN": "达到44级后解锁。",
+			"itIT": "Sbloccata al livello 44.",
+			"enUS": "Unlocked at Level 44.",
+			"frFR": "Débloquée au niveau 44.",
+			"zhTW": "於44級時解鎖。",
+			"deDE": "Wird auf Stufe 44 freigeschaltet.",
+			"jaJP": "レベル44で入手。",
+			"plPL": "Odblokowane na poziomie 44.",
+			"esES": "Se desbloquea al alcanzar el nivel 44.",
+			"ruRU": "Доступна с 44-го уровня.",
+			"esMX": "Se desbloquea en nivel 44.",
+			"koKR": "44 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 44"
+		},
 		"collectible": true,
 		"cost": 4,
 		"set": "Core",
 		"artist": "Alex Horley Orlandelli",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Disponível no nível 4.",
+			"zhCN": "达到4级后解锁。",
+			"itIT": "Sbloccata al livello 4.",
+			"enUS": "Unlocked at Level 4.",
+			"frFR": "Débloquée au niveau 4.",
+			"zhTW": "於4級時解鎖。",
+			"deDE": "Wird auf Stufe 4 freigeschaltet.",
+			"jaJP": "レベル4で入手。",
+			"plPL": "Odblokowane na poziomie 4.",
+			"esES": "Se desbloquea al alcanzar el nivel 4.",
+			"ruRU": "Доступна с 4-го уровня.",
+			"esMX": "Se desbloquea en nivel 4.",
+			"koKR": "4 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 4"
+		},
 		"mechanics": [
 			"CHARGE"
 		],
@@ -108240,6 +118882,22 @@ var parseCardsText = {
 		"set": "Expert1",
 		"artist": "Ron Spencer",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Conceda <b>Furtividade</b>.",
+			"zhCN": "使一个友方随从获得<b>潜行</b>。",
+			"itIT": "Fornisce <b>Furtività</b> fino al tuo turno successivo.",
+			"enUS": "Give <b>Stealth</b>.",
+			"frFR": "Confère <b>Camouflage</b>.",
+			"zhTW": "賦予<b>潛行</b>",
+			"deDE": "Verleiht <b>Verstohlenheit</b>.",
+			"jaJP": "<b>隠れ身</b>を付与する。",
+			"plPL": "Daj <b>Ukrycie</b>.",
+			"esES": "Otorga <b>Sigilo</b>.",
+			"ruRU": "Дать <b>«Маскировку»</b>.",
+			"esMX": "Otorga <b>Sigilo</b>.",
+			"koKR": "<b>은신</b>",
+			"thTH": "มอบ <b>ซ่อนตัว</b>"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -108287,12 +118945,44 @@ var parseCardsText = {
 		"cardClass": "ROGUE"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível ao colecionar todos os Piratas Dourados do Conjunto de Perito.",
+			"zhCN": "集齐所有金色经典海盗牌后解锁。",
+			"itIT": "Sbloccata ottenendo tutti i Pirati Dorati del set Avanzato.",
+			"enUS": "Unlocked when you have all the Golden Pirates from the Expert Set.",
+			"frFR": "Débloquée lorsque vous avez tous les pirates dorés du jeu Expert.",
+			"zhTW": "當你獲得全部專家系列的海盜金卡後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr alle goldenen Piraten des Klassiksets besitzt.",
+			"jaJP": "クラシックカードの、ゴールデンの海賊カードを全て所持すると入手。",
+			"plPL": "Odblokowane kiedy zdobędziesz wszystkich złotych Piratów z zestawu eksperckiego.",
+			"esES": "Se desbloquea cuando consigues todos los piratas dorados del conjunto experto.",
+			"ruRU": "Доступна при наличии всех золотых карт пиратов из набора эксперта.",
+			"esMX": "Se desbloquea cuando tienes a todos los piratas dorados del kit experto.",
+			"koKR": "고급 세트의 모든 황금 해적을 수집하면 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อคุณมีการ์ดโจรสลัดสีทองในชุดเอ็กซ์เปิร์ตครบทั้งหมด"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Hof",
 		"race": "BEAST",
 		"artist": "Daren Bader",
 		"health": 1,
+		"howToEarn": {
+			"ptBR": "Desbloqueado quando você obtém todos os Piratas do Pacote Clássico.",
+			"zhCN": "集齐所有经典海盗牌后解锁。",
+			"itIT": "Sbloccata ottenendo tutti i Pirati del set Classico.",
+			"enUS": "Unlocked when you have all the Pirates from the Classic Set.",
+			"frFR": "Débloquée lorsque vous avez tous les pirates du jeu classique.",
+			"zhTW": "當你獲得全部經典系列的海盜卡後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr alle Piraten des Klassiksets besitzt.",
+			"jaJP": "クラシックの海賊カードを全て所持すると入手。",
+			"plPL": "Odblokowane kiedy zdobędziesz wszystkich Piratów z zestawu klasycznego.",
+			"esES": "Se desbloquea cuando consigues todos los piratas del conjunto clásico.",
+			"ruRU": "Доступна при наличии всех пиратов из классического набора.",
+			"esMX": "Se desbloquea cuando tienes todos los piratas del kit clásico.",
+			"koKR": "오리지널 세트의 모든 해적을 수집하면 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อคุณมีการ์ดโจรสลัดในชุดคลาสสิคครบทั้งหมด"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -108325,6 +119015,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Jaemin Kim",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Destrua um Murloc.",
+			"zhCN": "消灭一个<b>鱼人</b>。",
+			"itIT": "Distrugge un Murloc.",
+			"enUS": "Destroy a Murloc.",
+			"frFR": "Détruit un murloc.",
+			"zhTW": "摧毀一個魚人",
+			"deDE": "Vernichtet einen Murloc.",
+			"jaJP": "マーロック1体を破壊する。",
+			"plPL": "Zniszcz Murloka.",
+			"esES": "Destruye un múrloc.",
+			"ruRU": "Уничтожить мурлока.",
+			"esMX": "Destruye un Múrloc.",
+			"koKR": "멀록 처치",
+			"thTH": "ทำลายเมอร์ล็อค[b]หนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -108872,10 +119578,42 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Disponível no nível 45.",
+			"zhCN": "达到45级后解锁。",
+			"itIT": "Sbloccata al livello 45.",
+			"enUS": "Unlocked at Level 45.",
+			"frFR": "Débloquée au niveau 45.",
+			"zhTW": "於45級時解鎖。",
+			"deDE": "Wird auf Stufe 45 freigeschaltet.",
+			"jaJP": "レベル45で入手。",
+			"plPL": "Odblokowane na poziomie 45.",
+			"esES": "Se desbloquea al alcanzar el nivel 45.",
+			"ruRU": "Доступна с 45-го уровня.",
+			"esMX": "Se desbloquea en nivel 45.",
+			"koKR": "45 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 45"
+		},
 		"collectible": true,
 		"cost": 3,
 		"set": "Core",
 		"artist": "Wei Wang",
+		"howToEarn": {
+			"ptBR": "Disponível no nível 2.",
+			"zhCN": "达到2级后解锁。",
+			"itIT": "Sbloccata al livello 2.",
+			"enUS": "Unlocked at Level 2.",
+			"frFR": "Débloquée au niveau 2.",
+			"zhTW": "於2級時解鎖。",
+			"deDE": "Wird auf Stufe 2 freigeschaltet.",
+			"jaJP": "レベル2で入手。",
+			"plPL": "Odblokowane na poziomie 2.",
+			"esES": "Se desbloquea al alcanzar el nivel 2.",
+			"ruRU": "Доступна со 2-го уровня.",
+			"esMX": "Se desbloquea en nivel 2.",
+			"koKR": "2 레벨에 잠금 해제",
+			"thTH": "ปลดล็อคที่เลเวล 2"
+		},
 		"dbfId": 437,
 		"type": "Spell",
 		"flavor": "You could summon Misha, Leokk, or Huffer!  Huffer is more trouble than he's worth.",
@@ -109073,7 +119811,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Expert1",
-		"artist": "E.M. Gist",
+		"artist": "E. M. Gist",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -109167,7 +119905,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 6,
 		"set": "Expert1",
-		"artist": "Laurel D. Austin",
+		"artist": "Laurel Austin",
 		"health": 4,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -109597,7 +120335,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Og",
 		"race": "BEAST",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 5,
 		"dbfId": 38304,
 		"type": "Minion",
@@ -109983,7 +120721,7 @@ var parseCardsText = {
 				"Nature_Impact_Leaves_01_Sound.ogg"
 			]
 		},
-		"text": "<b>Battlecry:</b> Spend all your Mana. Gain +1/+1 for each mana spent.",
+		"text": "<b>Battlecry:</b> Spend all your Mana. Gain +1/+1 for each Mana spent.",
 		"cardClass": "DRUID",
 		"rarity": "Epic"
 	},
@@ -110099,7 +120837,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Og",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 2,
 		"mechanics": [
 			"COMBO"
@@ -110771,7 +121509,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 0,
 		"set": "Og",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"dbfId": 38434,
 		"type": "Spell",
 		"flavor": "But the minion arrives covered in goo.",
@@ -110794,8 +121532,24 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 5,
 		"set": "Og",
-		"artist": "Phroi Gardner",
+		"artist": "Phroilan Gardner",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Troque os atributos.",
+			"zhCN": "交换属性值。",
+			"itIT": "Scambia le statistiche.",
+			"enUS": "Swap stats.",
+			"frFR": "Échange les caractéristiques.",
+			"zhTW": "對調體質",
+			"deDE": "Vertauscht Werte.",
+			"jaJP": "攻撃力・体力を入れ替える。",
+			"plPL": "Zamień statystyki.",
+			"esES": "Intercambia las estadísticas.",
+			"ruRU": "Поменяться характеристиками.",
+			"esMX": "Intercambia estadísticas.",
+			"koKR": "능력치 바꾸기",
+			"thTH": "สลับค่าพลัง"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -110965,7 +121719,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 0,
 		"set": "Og",
-		"artist": "Evgeniy Zagumennyy",
+		"artist": "Evgeniy Zaqumyenny",
 		"dbfId": 38454,
 		"type": "Spell",
 		"flavor": "Actually, C'Thun gives his full support for this ritual.",
@@ -111507,7 +122261,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Og",
 		"race": "MECHANICAL",
-		"artist": "Jesper Esjing",
+		"artist": "Jesper Ejsing",
 		"health": 6,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -111761,7 +122515,7 @@ var parseCardsText = {
 	{
 		"cost": 1,
 		"set": "Og",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"health": 1,
 		"mechanics": [
 			"TAUNT"
@@ -111879,6 +122633,22 @@ var parseCardsText = {
 		"set": "Og",
 		"artist": "Dan Scott",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2_points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"RITUAL"
@@ -111969,6 +122739,22 @@ var parseCardsText = {
 		"set": "Og",
 		"artist": "Alex Alexandrov",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Copie o Ataque e a Vida de um lacaio aliado.",
+			"zhCN": "复制一个友方随从的攻击力和生命值。",
+			"itIT": "Copia Attacco e Salute di un tuo servitore.",
+			"enUS": "Copy a friendly minion's Attack and Health.",
+			"frFR": "Copie l’Attaque et la Vie d’un serviteur allié.",
+			"zhTW": "複製一個友方手下的攻擊力和生命值",
+			"deDE": "Kopiert Angriff und Leben eines befreundeten Dieners.",
+			"jaJP": "味方のミニオン1体の攻撃力と体力をコピーする。",
+			"plPL": "Skopiuj atak i zdrowie przyjaznego stronnika.",
+			"esES": "Copia el ataque y la salud de un esbirro amistoso.",
+			"ruRU": "Копировать атаку и здоровье вашего существа.",
+			"esMX": "Copia el Ataque y la Salud de un esbirro aliado.",
+			"koKR": "아군 하수인의 공격력과 생명력 복사",
+			"thTH": "ก๊อปปี้พลังโจมตีและ[b]พลังชีวิตของมินเนี่ยน[b]ฝ่ายคุณหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"TAUNT"
@@ -112271,7 +123057,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 5,
 		"set": "Og",
-		"artist": "Dan Orizio",
+		"artist": "Dany Orizio",
 		"health": 7,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -112404,7 +123190,7 @@ var parseCardsText = {
 		"playerClass": "Druid",
 		"cost": 2,
 		"set": "Og",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"attack": 2,
 		"name": "Slime",
 		"health": 2,
@@ -112428,7 +123214,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Og",
-		"artist": "Maurico Herrera",
+		"artist": "Mauricio Herrera",
 		"mechanics": [
 			"OVERLOAD"
 		],
@@ -112799,7 +123585,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Og",
-		"artist": "Eva Wilderman",
+		"artist": "Eva Widermann",
 		"dbfId": 38749,
 		"type": "Spell",
 		"flavor": "Every year a few paladins get disqualified from the Westfall weight lifting championship for using Divine Strength.",
@@ -112885,6 +123671,22 @@ var parseCardsText = {
 		"set": "Og",
 		"artist": "Chris Seaman",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Restaure 5 de Vida.",
+			"zhCN": "恢复5点生命值。",
+			"itIT": "Rigenera 5 Salute.",
+			"enUS": "Restore 5 Health.",
+			"frFR": "Rend 5_points de vie.",
+			"zhTW": "恢復5點生命值",
+			"deDE": "Stellt 5 Leben wieder her.",
+			"jaJP": "体力を5回復する。",
+			"plPL": "Przywróć 5 pkt. zdrowia.",
+			"esES": "Restaura 5 p. de salud.",
+			"ruRU": "Восстановить 5 ед. здоровья.",
+			"esMX": "Restaura 5 de Salud.",
+			"koKR": "생명력 5 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 5_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -113094,7 +123896,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 2,
 		"set": "Og",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"attack": 2,
 		"name": "Slime",
 		"health": 2,
@@ -113170,7 +123972,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 8,
 		"set": "Og",
-		"artist": "Benjamin Zhang",
+		"artist": "Ben Zhang",
 		"health": 9,
 		"mechanics": [
 			"BATTLECRY",
@@ -113440,7 +124242,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Og",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"dbfId": 38848,
 		"type": "Spell",
 		"flavor": "They have an uneasy rivalry with the Blood Paladins.",
@@ -113483,11 +124285,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada após a abertura de um pacote de Sussurros dos Deuses Antigos.",
+			"zhCN": "打开“上古之神的低语”卡牌包后可解锁制作。",
+			"itIT": "Può essere creata dopo aver aperto una busta dei Sussurri degli Dei Antichi.",
+			"enUS": "Crafting unlocked after opening a Whispers of the Old Gods pack.",
+			"frFR": "Peut être créée après l’ouverture d’un paquet de cartes des Murmures des Dieux très anciens.",
+			"zhTW": "打開《古神碎碎念》卡牌包後開放合成。",
+			"deDE": "Herstellung wird freigeschaltet, wenn Ihr eine Packung aus „Das Flüstern der Alten Götter“ öffnet.",
+			"jaJP": "「旧神のささやき」パックの開封後に作成可能になる。",
+			"plPL": "Do odblokowania przy otwarciu pakietu kart Przedwieczni Bogowie.",
+			"esES": "Se puede crear tras abrir un sobre de Susurros de los Dioses Antiguos.",
+			"ruRU": "Можно создать после открытия комплекта карт «Пробуждение древних богов».",
+			"esMX": "La creación se desbloquea al abrir un paquete de Susurros de los Dioses Antiguos.",
+			"koKR": "고대 신의 속삭임 카드 팩을 개봉하면 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างเมื่อเปิดซองการ์ด Whispers of the Old Gods"
+		},
 		"collectible": true,
 		"cost": 10,
 		"set": "Og",
 		"artist": "James Ryman",
 		"health": 6,
+		"howToEarn": {
+			"ptBR": "Desbloqueado com a abertura de um pacote de Sussurros dos Deuses Antigos.",
+			"zhCN": "打开“上古之神的低语”卡牌包后可解锁。",
+			"itIT": "Sbloccata aprendo una busta dei Sussurri degli Dei Antichi.",
+			"enUS": "Unlocked when opening a Whispers of the Old Gods pack.",
+			"frFR": "Débloquée à l’ouverture d’un paquet de cartes des Murmures des Dieux très anciens.",
+			"zhTW": "打開《古神碎碎念》卡牌包後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr eine Packung aus „Das Flüstern der Alten Götter“ öffnet.",
+			"jaJP": "「旧神のささやき」パックを開封すると入手。",
+			"plPL": "Do odblokowania przy otwarciu pakietu kart Przedwieczni Bogowie.",
+			"esES": "Se desbloquea al abrir un sobre de Susurros de los Dioses Antiguos.",
+			"ruRU": "Откройте комплект дополнения «Пробуждение древних богов», чтобы получить доступ к этой карте.",
+			"esMX": "Se desbloquea al abrir un paquete de Susurros de los Dioses Antiguos.",
+			"koKR": "고대 신의 속삭임 카드 팩을 개봉하면 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเปิดซองการ์ด Whispers of the Old Gods"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -113519,11 +124353,43 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Criação desbloqueada após a abertura de um pacote de Sussurros dos Deuses Antigos.",
+			"zhCN": "打开“上古之神的低语”卡牌包后可解锁制作。",
+			"itIT": "Può essere creata dopo aver aperto una busta dei Sussurri degli Dei Antichi.",
+			"enUS": "Crafting unlocked after opening a Whispers of the Old Gods pack.",
+			"frFR": "Peut être créée après l’ouverture d’un paquet de cartes des Murmures des Dieux très anciens.",
+			"zhTW": "打開《古神碎碎念》卡牌包後開放合成。",
+			"deDE": "Herstellung wird freigeschaltet, wenn Ihr eine Packung aus „Das Flüstern der Alten Götter“ öffnet.",
+			"jaJP": "「旧神のささやき」パックの開封後に作成可能になる。",
+			"plPL": "Wytwarzanie odblokowane po otwarciu pakietu kart Przedwieczni Bogowie.",
+			"esES": "Se puede crear tras abrir un sobre de Susurros de los Dioses Antiguos.",
+			"ruRU": "Можно создать после открытия комплекта карт «Пробуждение древних богов».",
+			"esMX": "La creación se desbloquea al abrir un paquete de Susurros de los Dioses Antiguos.",
+			"koKR": "고대 신의 속삭임 카드 팩을 개봉하면 제작 잠금 해제",
+			"thTH": "ปลดล็อคการสร้างเมื่อเปิดซองการ์ด Whispers of the Old Gods"
+		},
 		"collectible": true,
 		"cost": 2,
 		"set": "Og",
-		"artist": "Eva Wilderman",
+		"artist": "Eva Widermann",
 		"health": 3,
+		"howToEarn": {
+			"ptBR": "Desbloqueado com a abertura de um pacote de Sussurros dos Deuses Antigos.",
+			"zhCN": "打开“上古之神的低语”卡牌包后可解锁。",
+			"itIT": "Sbloccata aprendo una busta dei Sussurri degli Dei Antichi.",
+			"enUS": "Unlocked when opening a Whispers of the Old Gods pack.",
+			"frFR": "Débloquée à l’ouverture d’un paquet de cartes des Murmures des Dieux très anciens.",
+			"zhTW": "打開《古神碎碎念》卡牌包後解鎖。",
+			"deDE": "Wird freigeschaltet, wenn Ihr eine Packung aus „Das Flüstern der Alten Götter“ öffnet.",
+			"jaJP": "「旧神のささやき」パックを開封すると入手。",
+			"plPL": "Odblokowane przy otwarciu pakietu kart Przedwieczni Bogowie.",
+			"esES": "Se desbloquea al abrir un sobre de Susurros de los Dioses Antiguos.",
+			"ruRU": "Откройте комплект дополнения «Пробуждение древних богов», чтобы получить доступ к этой карте.",
+			"esMX": "Se desbloquea al abrir un paquete de Susurros de los Dioses Antiguos.",
+			"koKR": "고대 신의 속삭임 카드 팩을 개봉하면 잠금 해제",
+			"thTH": "ปลดล็อคเมื่อเปิดซองการ์ด Whispers of the Old Gods"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"RITUAL"
@@ -113571,6 +124437,22 @@ var parseCardsText = {
 		"set": "Og",
 		"artist": "Steve Prescott",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio.",
+			"zhCN": "消灭一个随从。",
+			"itIT": "Distrugge un servitore.",
+			"enUS": "Destroy a minion.",
+			"frFR": "Détruit un serviteur.",
+			"zhTW": "摧毀一個手下",
+			"deDE": "Vernichtet einen Diener.",
+			"jaJP": "ミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika.",
+			"esES": "Destruye a un esbirro.",
+			"ruRU": "Уничтожить существо.",
+			"esMX": "Destruye un esbirro.",
+			"koKR": "하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"RITUAL"
@@ -113628,7 +124510,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Og",
-		"artist": "Jesper Esjing",
+		"artist": "Jesper Ejsing",
 		"health": 2,
 		"mechanics": [
 			"BATTLECRY",
@@ -113792,6 +124674,22 @@ var parseCardsText = {
 		"set": "Og",
 		"artist": "J. Meyers & A. Bozonnet",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Adicione uma cópia 1/1 à sua mão.",
+			"zhCN": "将一个1/1的复制置入你的手牌。",
+			"itIT": "Mette nella tua mano una copia 1/1 di un tuo servitore.",
+			"enUS": "Add a 1/1 copy to your hand.",
+			"frFR": "Place une copie_1/1 dans votre main.",
+			"zhTW": "放一個1/1的分身到你的手中",
+			"deDE": "Erhaltet eine Kopie (1/1) auf die Hand.",
+			"jaJP": "1/1のコピー1体を自分の手札に追加する。",
+			"plPL": "Dodaj kopię 1/1 do twojej ręki.",
+			"esES": "Añade una copia 1/1 a tu mano.",
+			"ruRU": "Добавить в руку копию 1/1.",
+			"esMX": "Agrega una copia 1/1 a tu mano.",
+			"koKR": "1/1 하수인으로 복사하여 내 손으로 가져옴",
+			"thTH": "เพิ่มก๊อปปี้ 1/1 หนึ่งใบในมือคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -114211,6 +125109,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Jaemin Kim",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Ative um Último Suspiro.",
+			"zhCN": "触发一个<b>亡语</b>。",
+			"itIT": "Attiva il <b>Rantolo di Morte</b> di un tuo servitore.",
+			"enUS": "Trigger a Deathrattle.",
+			"frFR": "Déclenche un Râle d’agonie.",
+			"zhTW": "觸發一個手下的死亡之聲",
+			"deDE": "Löst das Todesröcheln aus.",
+			"jaJP": "断末魔を発動させる。",
+			"plPL": "Aktywuj <b>Agonię</b>.",
+			"esES": "Activa un Último aliento.",
+			"ruRU": "Заставить сработать «Предсмертный хрип».",
+			"esMX": "Activa un Estertor.",
+			"koKR": "죽음의 메아리 발동",
+			"thTH": "บังคับใช้เสียงสุดท้าย"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -114248,7 +125162,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Og",
-		"artist": "Phroi Gardner",
+		"artist": "Phroilan Gardner",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -115585,10 +126499,26 @@ var parseCardsText = {
 		"id": "PlaceholderCard"
 	},
 	{
+		"howToEarnGolden": {
+			"ptBR": "Concedido na BlizzCon 2013.",
+			"zhCN": "2013年暴雪嘉年华参与奖励。",
+			"itIT": "Ricompensa della BlizzCon 2013.",
+			"enUS": "Awarded at BlizzCon 2013.",
+			"frFR": "Obtenue à la BlizzCon 2013.",
+			"zhTW": "參加BlizzCon 2013的獎勵",
+			"deDE": "Belohnung für die Teilnahme an der BlizzCon 2013.",
+			"jaJP": "BlizzCon 2013の参加特典。",
+			"plPL": "Nagroda za BlizzCon 2013",
+			"esES": "Se entregó en la BlizzCon 2013.",
+			"ruRU": "Награда за посещение или приобретение виртуального билета BlizzCon 2013.",
+			"esMX": "Otorgada en la BlizzCon 2013.",
+			"koKR": "블리즈컨 2013 참가 보상",
+			"thTH": "มอบให้เป็นรางวัลในงาน BlizzCon 2013"
+		},
 		"collectible": true,
 		"cost": 5,
 		"set": "Hof",
-		"artist": "Samwise Didier",
+		"artist": "Samwise",
 		"health": 5,
 		"mechanics": [
 			"BATTLECRY"
@@ -116430,6 +127360,22 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": "Evoque um <b>Golem de Jade</b>.",
+			"zhCN": "召唤一个<b>青玉魔像</b>。",
+			"itIT": "Evoca un <b>Golem di Giada</b>.",
+			"enUS": "Summon a <b>Jade Golem</b>.",
+			"frFR": "Invoque un <b>golem de jade</b>.",
+			"zhTW": "召喚一個<b>翠玉魔像</b>",
+			"deDE": "Ruft einen <b>Jadegolem</b> herbei.",
+			"jaJP": "<b>翡翠のゴーレム</b>を1体召喚する。",
+			"plPL": "Przyzwij <b>Nefrytowego golema</b>.",
+			"esES": "Invoca un <b>gólem de jade</b>.",
+			"ruRU": "Призывает <b>нефритового голема</b>.",
+			"esMX": "Invoca un <b>Gólem de jade</b>.",
+			"koKR": "<b>비취 골렘</b>을 소환합니다.",
+			"thTH": "เรียก <b>เจดโกเล็ม</b> หนึ่งตัว"
+		},
 		"cost": 4,
 		"set": "Tb",
 		"name": "Construct Golem",
@@ -125670,6 +136616,22 @@ var parseCardsText = {
 		"set": "Taverns_of_time",
 		"race": "ELEMENTAL",
 		"health": 5,
+		"targetingArrowText": {
+			"ptBR": "Congele um lacaio.",
+			"zhCN": "冻结一个随从。",
+			"itIT": "<b>Congela</b> un servitore.",
+			"enUS": "Freeze a minion.",
+			"frFR": "Gèle un serviteur.",
+			"zhTW": "凍結一個手下",
+			"deDE": "Friert einen Diener ein.",
+			"jaJP": "ミニオン1体を凍結させる。",
+			"plPL": "Zamroź stronnika.",
+			"esES": "Congela a un esbirro.",
+			"ruRU": "Заморозить существо.",
+			"esMX": "Congela a un esbirro.",
+			"koKR": "하수인 빙결",
+			"thTH": "แช่แข็งมินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -126343,6 +137305,22 @@ var parseCardsText = {
 		"race": "ELEMENTAL",
 		"artist": "James Ryman",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Devolva um lacaio à sua mão.",
+			"zhCN": "将一个随从移回你的手牌。",
+			"itIT": "Fa tornare un tuo servitore nella tua mano.",
+			"enUS": "Return a minion to your hand.",
+			"frFR": "Renvoie un serviteur dans votre main.",
+			"zhTW": "使一個手下返回你的手中",
+			"deDE": "Lasst einen Diener auf Eure Hand zurückkehren.",
+			"jaJP": "味方のミニオン1体を自分の手札に戻す。",
+			"plPL": "Cofnij stronnika do ręki.",
+			"esES": "Devuelve a un esbirro a tu mano.",
+			"ruRU": "Вернуть существо в руку.",
+			"esMX": "Devuelve un esbirro a tu mano.",
+			"koKR": "내 손으로 하수인 가져오기",
+			"thTH": "นำมินเนี่ยนหนึ่งตัว[b]กลับขึ้นมือคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -127312,6 +138290,22 @@ var parseCardsText = {
 		"set": "Troll",
 		"artist": "Jesper Ejsing",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause dano equivalente ao seu Ataque.",
+			"zhCN": "造成等同于英雄攻击力的伤害。",
+			"itIT": "Infligge danni pari all'Attacco del tuo eroe.",
+			"enUS": "Deal damage equal to your Attack.",
+			"frFR": "Inflige des dégâts d’un montant égal à votre Attaque.",
+			"zhTW": "造成等同你攻擊力的傷害",
+			"deDE": "Verursacht Schaden, der Eurem Angriff entspricht.",
+			"jaJP": "自分のヒーローの攻撃力に等しいダメージを与える。",
+			"plPL": "Zadaj obrażenia równe twojemu atakowi.",
+			"esES": "Inflige un daño\nigual a tu ataque.",
+			"ruRU": "Нанести урон, равный атаке вашего героя.",
+			"esMX": "Inflige daño equivalente a tu Ataque.",
+			"koKR": "내 영웅의 공격력만큼 피해",
+			"thTH": "สร้างความเสียหาย[b]เท่าพลังโจมตีของคุณ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -128485,10 +139479,26 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Grito de Guerra:</b> Se seu Poder Heroico causou 8 de dano nesta partida, evoque Ragnaros, o Senhor do Fogo.\n",
+			"zhCN": "<b>战吼：</b>\n在本局对战中，如果你的英雄技能累计造成了8点伤害，则召唤炎魔之王拉格纳罗斯。",
+			"itIT": "[x]<b>Grido di Battaglia:</b> se il tuo\nPotere Eroe ha inflitto 8 danni in\nquesta partita, evoca Ragnaros.\n",
+			"enUS": "[x]<b>Battlecry:</b> If your Hero Power\ndealt 8 damage this game,\nsummon Ragnaros the\nFirelord.",
+			"frFR": "<b>Cri de guerre :</b> si votre pouvoir héroïque inflige 8 points de dégâts pendant cette partie, invoque Ragnaros, seigneur du feu.",
+			"zhTW": "[x]<b>戰吼：</b>若你的英雄能力\n已在本賽局造成8點\n傷害，召喚拉格納羅斯\n",
+			"deDE": "<b>Kampfschrei:</b> Ruft Ragnaros den\nFeuerfürsten herbei, wenn Eure\nHeldenfähigkeit in diesem Spiel\n8 Schaden verursacht hat.",
+			"jaJP": "[x]<b>雄叫び:</b> この対戦で自分の\nヒーローパワーが8ダメージ\n以上与えていた場合「炎の王\nラグナロス」を召喚する。\n",
+			"plPL": "<b>Okrzyk bojowy:</b> Jeśli twoja moc specjalna zadała w tej grze 8 pkt. obrażeń, przyzwij Ragnarosa, Władcę Ognia.\n",
+			"esES": "[x]<b>Grito de batalla:</b> Si tu poder\nde héroe ha infligido 8 p. de daño\nen esta partida, invoca a\nRagnaros, Señor del Fuego.\n",
+			"ruRU": "<b>Боевой клич:</b> если ваша сила героя нанесла 8 ед. урона в этом матче, призывает Рагнароса.",
+			"esMX": "<b>Grito de batalla:</b> si tu Poder de héroe infligió 8 de daño en esta partida, invoca a Ragnaros, el Señor del Fuego.",
+			"koKR": "<b>전투의 함성:</b> 이번 게임에서\n내 영웅 능력으로 피해를 8 이상 줬다면, 불의 군주 라그나로스를 소환합니다.",
+			"thTH": "<b>คำรามสู้ศึก:</b> ถ้าในเกมนี้พลังฮีโร่[b]ของคุณสร้างความเสียหายไป[b]แล้ว 8 แต้ม เรียกแร็กนารอส เจ้าแห่งเพลิง"
+		},
 		"cost": 7,
 		"set": "Troll",
 		"race": "BEAST",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 4,
 		"mechanics": [
 			"BATTLECRY"
@@ -128618,7 +139628,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Troll",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 3,
 		"mechanics": [
 			"AURA",
@@ -128783,6 +139793,22 @@ var parseCardsText = {
 		"set": "Troll",
 		"artist": "Dave Allsop",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio ferido.",
+			"zhCN": "消灭一个受伤的随从。",
+			"itIT": "Distrugge un servitore danneggiato.",
+			"enUS": "Destroy a damaged minion.",
+			"frFR": "Détruit un serviteur blessé.",
+			"zhTW": "摧毀一個受傷的手下",
+			"deDE": "Vernichtet einen verletzten Diener.",
+			"jaJP": "ダメージを受けているミニオン1体を破壊する。",
+			"plPL": "Zniszcz rannego wrogiego stronnika.",
+			"esES": "Destruye\na un esbirro dañado.",
+			"ruRU": "Уничтожить существо противника с неполным здоровьем.",
+			"esMX": "Destruye un esbirro dañado.",
+			"koKR": "피해를 받은 적 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว[b]ที่พลังชีวิตไม่เต็ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -129627,7 +140653,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Troll",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"durability": 3,
 		"mechanics": [
 			"AURA"
@@ -130431,7 +141457,7 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Troll",
 		"race": "PIRATE",
-		"artist": "Max Greck",
+		"artist": "Max Grecke",
 		"health": 1,
 		"dbfId": 50833,
 		"type": "Minion",
@@ -130569,6 +141595,22 @@ var parseCardsText = {
 		"set": "Troll",
 		"artist": "Ekaterina Shapovalova",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Cause 1 de dano.",
+			"zhCN": "造成1点伤害。",
+			"itIT": "Infligge 1 danno.",
+			"enUS": "Deal 1 damage.",
+			"frFR": "Inflige 1_point de dégâts.",
+			"zhTW": "造成1點傷害",
+			"deDE": "Verursacht 1 Schaden.",
+			"jaJP": "1ダメージを与える。",
+			"plPL": "Zadaj 1 pkt. obrażeń.",
+			"esES": "Inflige 1 p. de daño.",
+			"ruRU": "Нанести 1 ед. урона.",
+			"esMX": "Inflige 1 de daño.",
+			"koKR": "피해 1",
+			"thTH": "สร้างความเสียหาย 1_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"LIFESTEAL"
@@ -130860,6 +141902,22 @@ var parseCardsText = {
 		"set": "Troll",
 		"artist": "J. Axer",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2_points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -130925,6 +141983,22 @@ var parseCardsText = {
 		"set": "Troll",
 		"artist": "David Devries",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "<b>Silencie</b> um lacaio com <b>Provocar</b>.",
+			"zhCN": "<b>沉默</b>一个具有\n<b>嘲讽</b>的随从。",
+			"itIT": "<b>Silenzia</b> un servitore con <b>Provocazione</b>.",
+			"enUS": "<b>Silence</b> a minion with <b>Taunt</b>.",
+			"frFR": "Réduit au <b>Silence</b> un serviteur adverse avec <b>Provocation</b>.",
+			"zhTW": "<b>沉默</b>一個有<b>嘲諷</b>的手下",
+			"deDE": "Bringt einen Diener mit <b>Spott</b> zum <b>Schweigen</b>.",
+			"jaJP": "<b>挑発</b>を持つミニオン1体を<b>沈黙</b>させる。",
+			"plPL": "<b>Wycisz</b> stronnika z <b>Prowokacją</b>.",
+			"esES": "[x]<b>Silencia</b> a un esbirro\ncon <b>Provocar</b>.",
+			"ruRU": "Наложить <b>немоту</b> на существо с <b>«Провокацией»</b>.",
+			"esMX": "<b>Silencia</b> a un esbirro con <b>Provocación</b>.",
+			"koKR": "<b>도발</b> 하수인 <b>침묵</b>",
+			"thTH": "<b>ผนึกความสามารถ</b> มินเนี่ยน <b>ยั่วยุ</b> หนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -131005,7 +142079,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Troll",
 		"race": "DRAGON",
-		"artist": "Maurico Herrera",
+		"artist": "Mauricio Herrera",
 		"health": 6,
 		"mechanics": [
 			"BATTLECRY"
@@ -131156,7 +142230,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Troll",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"health": 2,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -131187,7 +142261,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 2,
 		"set": "Troll",
-		"artist": "Sam Nielsen",
+		"artist": "Sam Nielson",
 		"attack": 3,
 		"name": "Rumbletusk Breaker",
 		"health": 2,
@@ -131402,7 +142476,8 @@ var parseCardsText = {
 		"artist": "Mauricio Herrera",
 		"name": "Corrupted Blood",
 		"mechanics": [
-			"TOPDECK"
+			"TOPDECK",
+			"ImmuneToSpellpower"
 		],
 		"id": "TRL_541t",
 		"audio": {
@@ -131485,6 +142560,22 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"collectionText": {
+			"ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.",
+			"zhCN": "<b>战吼：</b>在本局对战中，如果你累计恢复了10点生命值，则获得+4/+4和<b>嘲讽</b>。",
+			"itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.",
+			"enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.",
+			"frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.",
+			"zhTW": "<b>戰吼：</b>若你在本賽局中已恢復10點生命值，獲得+4/+4和<b>嘲諷</b>",
+			"deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.",
+			"jaJP": "[x]<b>雄叫び:</b>\nこの対戦で自分が体力を\n10以上回復していた場合\n+4/+4と<b>挑発</b>を獲得する。\n",
+			"plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.",
+			"esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtienes\n+4/+4 y <b>Provocar</b>.",
+			"ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.",
+			"esMX": "<b>Grito de batalla:</b> si has restaurado 10 de salud en esta partida, obtiene +4/+4 y <b>Provocación</b>.",
+			"koKR": "<b>전투의 함성:</b> 이번 게임에서 생명력을 10 이상 회복했으면, +4/+4와 <b>도발</b>을 얻습니다.",
+			"thTH": "<b>คำรามสู้ศึก:</b> ถ้าในเกมนี้คุณ[b]ฟื้นฟูพลังชีวิตไปแล้ว 10 แต้ม ได้รับ +4/+4 และ <b>ยั่วยุ</b>"
+		},
 		"cost": 4,
 		"set": "Troll",
 		"artist": "James Ryman",
@@ -131756,6 +142847,22 @@ var parseCardsText = {
 		"race": "DRAGON",
 		"artist": "Mike Sass",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Cause 7 de dano a um lacaio inimigo.",
+			"zhCN": "对一个敌方随从\n造成7点伤害。",
+			"itIT": "Infligge 7 danni a un servitore nemico.",
+			"enUS": "Deal 7 damage to an enemy minion.",
+			"frFR": "Inflige 7_points de dégâts à un serviteur adverse.",
+			"zhTW": "對一個敵方手下造成7點傷害",
+			"deDE": "Fügt einem feindlichen Diener 7 Schaden zu.",
+			"jaJP": "[x]敵のミニオン1体に\n__7ダメージを与える。",
+			"plPL": "Zadaj 7 pkt. obrażeń wrogiemu stronnikowi.",
+			"esES": "Inflige 7 p. de daño\na un esbirro enemigo.",
+			"ruRU": "Нанести 7 ед. урона существу противника.",
+			"esMX": "Inflige 7 de daño a un esbirro enemigo.",
+			"koKR": "적 하수인에게 피해 7",
+			"thTH": "สร้างความเสียหาย_7_แต้ม[b]ให้มินเนี่ยน[b]ศัตรู[b]หนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -131920,6 +143027,22 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
+		"collectionText": {
+			"ptBR": "<b>Poder Heroico</b>\nCause $2 de dano.",
+			"zhCN": "<b>英雄技能</b>\n造成$2点伤害。",
+			"itIT": "<b>Potere Eroe</b>\nInfligge $2 danni.",
+			"enUS": "<b>Hero Power</b>\nDeal $2 damage.",
+			"frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts.",
+			"zhTW": "<b>英雄能力</b>\n造成$2點傷害",
+			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden.",
+			"jaJP": "<b>ヒーローパワー</b>\n$2ダメージを\n与える。",
+			"plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń.",
+			"esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño.",
+			"ruRU": "<b>Сила героя</b>\nНаносит $2 ед. урона.",
+			"esMX": "<b>Poder de héroe</b>\nInflige $2 de daño.",
+			"koKR": "<b>영웅 능력</b>\n피해를 $2 줍니다.",
+			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $2 แต้ม"
+		},
 		"cost": 2,
 		"set": "Troll",
 		"name": "Steady Throw",
@@ -132182,7 +143305,7 @@ var parseCardsText = {
 	{
 		"cost": 0,
 		"set": "Troll",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"spellDamage": 1,
 		"health": 5,
 		"mechanics": [
@@ -134300,7 +145423,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Troll",
 		"race": "BEAST",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 1,
 		"mechanics": [
 			"DEATHRATTLE",
@@ -135176,7 +146299,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Troll",
 		"race": "BEAST",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 2,
 		"mechanics": [
 			"COMBO"
@@ -139997,7 +151120,7 @@ var parseCardsText = {
 		"cost": 4,
 		"set": "Ungoro",
 		"race": "ELEMENTAL",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 4,
 		"mechanics": [
 			"BATTLECRY"
@@ -140036,6 +151159,22 @@ var parseCardsText = {
 		"set": "Ungoro",
 		"artist": "Hideaki Takamura",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Evoque uma cópia 1/1.",
+			"zhCN": "召唤一个1/1的复制。",
+			"itIT": "Evoca una copia 1/1 di un tuo servitore.",
+			"enUS": "Summon a 1/1 copy.",
+			"frFR": "Invoque une copie_1/1.",
+			"zhTW": "召喚一個1/1的分身",
+			"deDE": "Ruft eine Kopie (1/1) herbei.",
+			"jaJP": "1/1のコピーを1体召喚する。",
+			"plPL": "Przyzwij kopię 1/1.",
+			"esES": "Invoca una copia 1/1.",
+			"ruRU": "Призвать копию 1/1.",
+			"esMX": "Invoca una copia 1/1.",
+			"koKR": "1/1 하수인으로 복사하여 소환",
+			"thTH": "เรียกร่างก๊อปปี้ 1/1 หนึ่งใบ"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -140394,7 +151533,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Ungoro",
 		"race": "ELEMENTAL",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 3,
 		"mechanics": [
 			"AURA"
@@ -140522,6 +151661,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Slawomir Maniak",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio aliado.",
+			"zhCN": "消灭一个友方随从。",
+			"itIT": "Distrugge un tuo servitore.",
+			"enUS": "Destroy a friendly minion.",
+			"frFR": "Détruit un serviteur allié.",
+			"zhTW": "摧毀一個友方手下",
+			"deDE": "Vernichtet einen befreundeten Diener.",
+			"jaJP": "味方のミニオン1体を破壊する。",
+			"plPL": "Zniszcz przyjaznego stronnika.",
+			"esES": "Destruye a un esbirro amistoso.",
+			"ruRU": "Уничтожить ваше существо.",
+			"esMX": "Destruye un esbirro aliado.",
+			"koKR": "아군 하수인 처치",
+			"thTH": "ทำลายมินเนี่ยน[b]ฝ่ายคุณหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -140723,7 +151878,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 2,
 		"set": "Ungoro",
-		"artist": "Craig Elliot",
+		"artist": "Craig Elliott",
 		"health": 1,
 		"mechanics": [
 			"COMBO"
@@ -140756,7 +151911,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Rogue",
 		"set": "Ungoro",
-		"artist": "Craig Elliot",
+		"artist": "Craig Elliott",
 		"name": "Sprout",
 		"id": "UNG_063e",
 		"audio": {
@@ -140775,6 +151930,22 @@ var parseCardsText = {
 		"set": "Ungoro",
 		"artist": "Efrem Palacios",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Destrua um lacaio.",
+			"zhCN": "消灭一个随从。",
+			"itIT": "Distrugge un servitore.",
+			"enUS": "Destroy a minion.",
+			"frFR": "Détruit un serviteur.",
+			"zhTW": "摧毀一個手下",
+			"deDE": "Vernichtet einen Diener.",
+			"jaJP": "ミニオン1体を破壊する。",
+			"plPL": "Zniszcz stronnika.",
+			"esES": "Destruye a un esbirro.",
+			"ruRU": "Уничтожить существо.",
+			"esMX": "Destruye un esbirro.",
+			"koKR": "하수인 처치",
+			"thTH": "ทำลายมินเนี่ยนหนึ่งตัว"
+		},
 		"mechanics": [
 			"COMBO"
 		],
@@ -141076,6 +152247,22 @@ var parseCardsText = {
 		"race": "MURLOC",
 		"artist": "Alex Horley Orlandelli",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda +1/+1.",
+			"zhCN": "获得+1/+1。",
+			"itIT": "Fornisce +1/+1 a un tuo Murloc.",
+			"enUS": "Give +1/+1.",
+			"frFR": "Donne_+1/+1.",
+			"zhTW": "賦予+1/+1",
+			"deDE": "Verleiht +1/+1.",
+			"jaJP": "+1/+1を付与する。",
+			"plPL": "Daj +1/+1.",
+			"esES": "Otorga +1/+1.",
+			"ruRU": "Добавить +1/+1.",
+			"esMX": "Otorga +1/+1.",
+			"koKR": "+1/+1",
+			"thTH": "มอบ +1/+1"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -141390,6 +152577,22 @@ var parseCardsText = {
 		"race": "ELEMENTAL",
 		"artist": "Dan Scott",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Cause 2 de dano.",
+			"zhCN": "造成2点伤害。",
+			"itIT": "Infligge 2 danni.",
+			"enUS": "Deal 2 damage.",
+			"frFR": "Inflige 2_points de dégâts.",
+			"zhTW": "造成2點傷害",
+			"deDE": "Verursacht 2 Schaden.",
+			"jaJP": "2ダメージを与える。",
+			"plPL": "Zadaj 2 pkt. obrażeń.",
+			"esES": "Inflige 2 p. de daño.",
+			"ruRU": "Нанести 2 ед. урона.",
+			"esMX": "Inflige 2 de daño.",
+			"koKR": "피해 2",
+			"thTH": "สร้างความเสียหาย_2_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -141755,7 +152958,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "<b>Taunt</b>.",
+		"text": "<b>Taunt</b>",
 		"cardClass": "DRUID",
 		"rarity": "Rare"
 	},
@@ -141884,6 +153087,22 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Ungoro",
 		"artist": "Mike Azevedo",
+		"targetingArrowText": {
+			"ptBR": "Conceda +1/+1.",
+			"zhCN": "使其获得+1/+1。",
+			"itIT": "Fornisce +1/+1.",
+			"enUS": "Give +1/+1.",
+			"frFR": "Donne_+1/+1.",
+			"zhTW": "賦予+1/+1",
+			"deDE": "Verleiht +1/+1.",
+			"jaJP": "+1/+1を付与する。",
+			"plPL": "Daj +1/+1.",
+			"esES": "Otorga +1/+1.",
+			"ruRU": "Добавить +1/+1.",
+			"esMX": "Otorga +1/+1.",
+			"koKR": "+1/+1",
+			"thTH": "มอบ +1/+1"
+		},
 		"dbfId": 41081,
 		"type": "Spell",
 		"flavor": "You can make your own Earthen Scales at home. Step 1: Roll around in the dirt. Step 2: Magic.",
@@ -142140,7 +153359,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Ungoro",
 		"race": "TOTEM",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 3,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -142171,7 +153390,7 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Ungoro",
 		"race": "MURLOC",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"health": 1,
 		"dbfId": 41523,
 		"type": "Minion",
@@ -142246,6 +153465,22 @@ var parseCardsText = {
 		"race": "ELEMENTAL",
 		"artist": "Paul Mafayon",
 		"health": 1,
+		"targetingArrowText": {
+			"ptBR": "Congele um inimigo.",
+			"zhCN": "冻结一个敌人。",
+			"itIT": "<b>Congela</b> un nemico.",
+			"enUS": "Freeze an enemy.",
+			"frFR": "Gèle un adversaire.",
+			"zhTW": "凍結一個敵人",
+			"deDE": "Friert einen Feind ein.",
+			"jaJP": "敵1体を\n__凍結させる。",
+			"plPL": "Zamroź wroga.",
+			"esES": "Congela a un enemigo.",
+			"ruRU": "Заморозить противника.",
+			"esMX": "Congela a un enemigo.",
+			"koKR": "적 빙결",
+			"thTH": "แช่แข็งศัตรูหนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -142534,6 +153769,22 @@ var parseCardsText = {
 		"set": "Ungoro",
 		"artist": "Chris Seaman",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Ative um Último Suspiro.",
+			"zhCN": "触发一个<b>亡语</b>。",
+			"itIT": "Attiva il <b>Rantolo di Morte</b> di un tuo servitore.",
+			"enUS": "Trigger a Deathrattle.",
+			"frFR": "Déclenche un Râle d’agonie.",
+			"zhTW": "觸發一個手下的死亡之聲",
+			"deDE": "Löst das Todesröcheln aus.",
+			"jaJP": "断末魔を発動させる。",
+			"plPL": "Aktywuj <b>Agonię</b>.",
+			"esES": "Activa un Último aliento.",
+			"ruRU": "Заставить сработать «Предсмертный хрип».",
+			"esMX": "Activa un Estertor.",
+			"koKR": "죽음의 메아리 발동",
+			"thTH": "บังคับใช้เสียงสุดท้าย"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -142685,6 +153936,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "Peter Stapleton",
 		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Destrua um Pirata.",
+			"zhCN": "消灭一个<b>海盗</b>。",
+			"itIT": "Distrugge un Pirata.",
+			"enUS": "Destroy a Pirate.",
+			"frFR": "Détruit un pirate.",
+			"zhTW": "摧毀一個海盜",
+			"deDE": "Vernichtet einen Piraten.",
+			"jaJP": "海賊1体を破壊する。",
+			"plPL": "Zniszcz Pirata.",
+			"esES": "Destruye a un pirata.",
+			"ruRU": "Уничтожить пирата.",
+			"esMX": "Destruye un Pirata.",
+			"koKR": "해적 처치",
+			"thTH": "ทำลายโจรสลัด[b]หนึ่งตัว"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -143706,6 +154973,22 @@ var parseCardsText = {
 		"race": "ELEMENTAL",
 		"artist": "Dave Allsop",
 		"health": 6,
+		"targetingArrowText": {
+			"ptBR": "Cause 5 de dano.",
+			"zhCN": "造成5点伤害。",
+			"itIT": "Infligge 5 danni.",
+			"enUS": "Deal 5 damage.",
+			"frFR": "Inflige 5_points de dégâts.",
+			"zhTW": "造成5點傷害",
+			"deDE": "Verursacht 5 Schaden.",
+			"jaJP": "5ダメージを与える。",
+			"plPL": "Zadaj 5 pkt. obrażeń.",
+			"esES": "Inflige 5 p. de daño.",
+			"ruRU": "Нанести 5 ед. урона.",
+			"esMX": "Inflige 5 de daño.",
+			"koKR": "피해 5",
+			"thTH": "สร้างความเสียหาย[b]5_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -143886,7 +155169,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 8,
 		"set": "Ungoro",
-		"artist": "Anton Magdalina",
+		"artist": "Anton Kagounkina",
 		"referencedTags": [
 			"DISCOVER"
 		],
@@ -144174,6 +155457,22 @@ var parseCardsText = {
 		"race": "BEAST",
 		"artist": "L. Lullabi & K. Turovec",
 		"health": 2,
+		"targetingArrowText": {
+			"ptBR": "Adapte uma Fera.",
+			"zhCN": "<b>进化</b>一个野兽。",
+			"itIT": "<b>Adatta</b> una tua bestia.",
+			"enUS": "Adapt a Beast.",
+			"frFR": "Adapte une Bête.",
+			"zhTW": "演化一個野獸",
+			"deDE": "Mutiert ein Wildtier.",
+			"jaJP": "獣1体を適応させる。",
+			"plPL": "Adaptuj Bestię.",
+			"esES": "Adapta a una bestia.",
+			"ruRU": "Адаптировать зверя.",
+			"esMX": "Adapta una Bestia.",
+			"koKR": "야수 적응",
+			"thTH": "ปรับตัวให้สัตว์"
+		},
 		"mechanics": [
 			"BATTLECRY"
 		],
@@ -144338,7 +155637,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Ungoro",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"mechanics": [
 			"QUEST"
 		],
@@ -144362,7 +155661,7 @@ var parseCardsText = {
 		"cost": 5,
 		"set": "Ungoro",
 		"race": "BEAST",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 8,
 		"mechanics": [
 			"BATTLECRY"
@@ -144396,7 +155695,7 @@ var parseCardsText = {
 		"cost": 1,
 		"set": "Ungoro",
 		"race": "BEAST",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 2,
 		"mechanics": [
 			"BATTLECRY"
@@ -144825,6 +156124,22 @@ var parseCardsText = {
 		"race": "ELEMENTAL",
 		"artist": "Gustav Schmidt",
 		"health": 4,
+		"targetingArrowText": {
+			"ptBR": "Restaure 3 de Vida.",
+			"zhCN": "恢复3点生命值。",
+			"itIT": "Rigenera 3 Salute.",
+			"enUS": "Restore 3 Health.",
+			"frFR": "Rend 3_points de vie.",
+			"zhTW": "恢復3點生命值",
+			"deDE": "Stellt 3 Leben wieder her.",
+			"jaJP": "体力を3回復する。",
+			"plPL": "Przywróć 3 pkt. zdrowia.",
+			"esES": "Restaura 3 p. de salud.",
+			"ruRU": "Восстановить 3 ед. здоровья.",
+			"esMX": "Restaura 3 de Salud.",
+			"koKR": "생명력 3 회복",
+			"thTH": "ฟื้นฟูพลังชีวิต 3_แต้ม"
+		},
 		"mechanics": [
 			"BATTLECRY",
 			"TAUNT"
@@ -145036,7 +156351,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Ungoro",
-		"artist": "A.J. Nazzaro",
+		"artist": "A. J. Nazzaro",
 		"health": 3,
 		"mechanics": [
 			"BATTLECRY"
@@ -145771,7 +157086,7 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"cost": 0,
 		"set": "Ungoro",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"name": "Liquid Membrane",
 		"mechanics": [
 			"CANT_BE_TARGETED_BY_SPELLS",
@@ -145794,7 +157109,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Ungoro",
-		"artist": "Jakub Kasber",
+		"artist": "Jakub Kasper",
 		"name": "Liquid Membrane",
 		"mechanics": [
 			"CANT_BE_TARGETED_BY_SPELLS",
