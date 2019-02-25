@@ -81,7 +81,6 @@ export class LogListenerService {
 	}
 
 	async listenOnFileCreation(logsLocation: string) {
-		console.log('[log-listener] [' + this.logFile + '] starting to listen on file', logsLocation);
 		const fileExists = await this.io.fileExists(logsLocation);
 		if (fileExists) {
 			this.listenOnFileUpdate(logsLocation);

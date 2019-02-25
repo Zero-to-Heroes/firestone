@@ -5,56 +5,40 @@ import { GameState } from '../../models/decktracker/game-state';
 import { DeckParserService } from './deck-parser.service';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { AllCardsService } from '../all-cards.service';
+import { EventParser } from './event-parser/event-parser';
+import { GameStartParser } from './event-parser/game-start-parser';
+import { CardDrawParser } from './event-parser/card-draw-parser';
 
 @Injectable()
 export class GameStateService {
 
 	private state: GameState;
+	private eventParsers: ReadonlyArray<EventParser>;
 
 	constructor(
 			private gameEvents: GameEvents, 
 			private allCards: AllCardsService,
 			private deckParser: DeckParserService) {
+		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 	}
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			console.log('receiving event', gameEvent);
-			switch (gameEvent.type) {
-				case GameEvent.GAME_START:
-					console.log('startGame event');
-					this.startGame();
-					break;
+			for (let parser of this.eventParsers) {
+				if (parser.applies(gameEvent)) {
+					console.log('[game-state] applying parser', parser);
+					this.state = parser.parse(this.state, gameEvent);
+					console.log('[game-state] new game state is', this.state, parser);
+				}
 			}
 		})
 	}
 
-	private startGame() {
-		const currentDeck = this.deckParser.currentDeck;
-		console.log('[game-state] current deck', currentDeck);
-		// Parse the deck to the right format
-		const deckList: ReadonlyArray<DeckCard> = this.buildDeckList(currentDeck);
-		this.state = Object.assign(new GameState(), { 
-			playerDeck: { deckList: deckList }
-		});
-		console.log('[game-state] current state', this.state);
-	}
-	
-	private buildDeckList(currentDeck: any): ReadonlyArray<DeckCard> {
-		return currentDeck.deck.cards
-				// [dbfid, count] pair
-				.map((pair) => this.buildDeckCard(pair))
-				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost);
-	}
-
-	private buildDeckCard(pair): DeckCard {
-		const card = this.allCards.getCardFromDbfId(pair[0]);
-		return Object.assign(new DeckCard(), { 
-			cardId: card.id,
-			cardName: card.name,
-			manaCost: card.cost,
-			totalQuantity: pair[1],
-		} as DeckCard);
+	buildEventParsers(): ReadonlyArray<EventParser> {
+		return [
+			new GameStartParser(this.deckParser, this.allCards),
+			new CardDrawParser(this.deckParser, this.allCards),
+		];
 	}
 }

@@ -30,7 +30,7 @@ export class SimpleIOService {
 		const plugin = await this.get();
 		return new Promise<boolean>((resolve) => {
 			plugin.fileExists(filePath, (result, message) => {
-				console.log('file exists?', filePath, result, message);
+				// console.log('file exists?', filePath, result, message);
 				resolve(result);
 			});
 		});
