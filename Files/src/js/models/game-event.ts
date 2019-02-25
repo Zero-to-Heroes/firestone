@@ -14,6 +14,7 @@ export class GameEvent {
 	public static readonly WINNER = 'WINNER';
 	public static readonly GAME_END = 'GAME_END';
 	public static readonly CARD_PLAYED = 'CARD_PLAYED';
+	public static readonly CARD_ON_BOARD_AT_GAME_START = 'CARD_ON_BOARD_AT_GAME_START';
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';

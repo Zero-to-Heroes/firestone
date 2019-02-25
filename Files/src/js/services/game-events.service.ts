@@ -123,6 +123,14 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+			case 'CARD_ON_BOARD_AT_GAME_START':
+				this.allEvents.next(new GameEvent(
+					GameEvent.CARD_ON_BOARD_AT_GAME_START, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'PASSIVE_BUFF':
 				this.allEvents.next(new GameEvent(
 					GameEvent.PASSIVE_BUFF, 

@@ -31,7 +31,7 @@ export class RumbleProgression extends AbstractChallenge {
 		if (gameEvent.type == GameEvent.RUMBLE_RUN_STEP) {
 			this.currentRumbleStep = gameEvent.data[0];
 		}
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START) {
 			const cardId = gameEvent.data[0];
 			const controllerId = gameEvent.data[1];
 			const localPlayer = gameEvent.data[2];

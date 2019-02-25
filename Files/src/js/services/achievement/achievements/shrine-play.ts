@@ -18,13 +18,14 @@ export class ShrinePlay extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
-		if (gameEvent.type == GameEvent.MULLIGAN_DONE) {
+		if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
 			this.mulliganOver = true;
 			this.handleCompletion();
+			return;
 		}
 	}
 
