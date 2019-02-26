@@ -17,15 +17,15 @@ export class DeckParserService {
 			this.currentDeck = {
 				name: match[1]
 			};
-			console.log('[decks] deck init', this.currentDeck);
+			// console.log('[decks] deck init', this.currentDeck);
 			return;
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
 			this.currentDeck.deckstring = match[1];
-			console.log('[decks] deck updated', this.currentDeck);
+			// console.log('[decks] deck updated', this.currentDeck);
 			const deck = decode(this.currentDeck.deckstring);
-			console.log('[decks] deck decoded', deck);
+			// console.log('[decks] deck decoded', deck);
 			this.currentDeck.deck = deck;
 			return;
 		}
