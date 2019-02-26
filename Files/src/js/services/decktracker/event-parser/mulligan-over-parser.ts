@@ -3,6 +3,7 @@ import { GameEvent } from "../../../models/game-event";
 import { GameState } from "../../../models/decktracker/game-state";
 import { DeckParserService } from "../deck-parser.service";
 import { AllCardsService } from "../../all-cards.service";
+import { DeckEvents } from "./deck-events";
 
 export class MulliganOverParser implements EventParser {
 
@@ -17,4 +18,8 @@ export class MulliganOverParser implements EventParser {
 			mulliganOver: true
 		} as GameState);
     }
+
+	event(): string {
+		return DeckEvents.MULLIGAN_OVER;
+	}
 }

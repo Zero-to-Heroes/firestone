@@ -5,6 +5,7 @@ import { DeckCard } from "../../../models/decktracker/deck-card";
 import { DeckParserService } from "../deck-parser.service";
 import { AllCardsService } from "../../all-cards.service";
 import { DeckState } from "../../../models/decktracker/deck-state";
+import { DeckEvents } from "./deck-events";
 
 export class GameStartParser implements EventParser {
 
@@ -16,16 +17,21 @@ export class GameStartParser implements EventParser {
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
         const currentDeck = this.deckParser.currentDeck;
-		console.log('[game-state] current deck', currentDeck);
-		// Parse the deck to the right format
 		const deckList: ReadonlyArray<DeckCard> = this.buildDeckList(currentDeck);
 		return Object.assign(new GameState(), { 
 			playerDeck: { 
 				deckList: deckList,
 				deck: deckList,
+				graveyard: [],
+				hand: [],
+				otherZone: [],
 			} as DeckState
 		});
     }
+
+	event(): string {
+		return DeckEvents.GAME_START;
+	}
 	
 	private buildDeckList(currentDeck: any): ReadonlyArray<DeckCard> {
 		return currentDeck.deck.cards

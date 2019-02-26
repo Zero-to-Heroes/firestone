@@ -5,6 +5,8 @@ import { DeckCard } from "../../../models/decktracker/deck-card";
 import { DeckParserService } from "../deck-parser.service";
 import { AllCardsService } from "../../all-cards.service";
 import { DeckState } from "../../../models/decktracker/deck-state";
+import { DeckEvents } from "./deck-events";
+import { DeckManipulationHelper } from "./deck-manipulation-helper";
 
 export class CardDrawParser implements EventParser {
 
@@ -22,40 +24,23 @@ export class CardDrawParser implements EventParser {
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
 		const cardId: string = gameEvent.data[0];
-		console.log('drawing card', cardId, currentState.playerDeck, gameEvent);
-
+		const card = currentState.playerDeck.deck.find((card) => card.cardId === cardId);
 		const previousDeck = currentState.playerDeck.deck;
-		const deckAfterDraw: ReadonlyArray<DeckCard> = previousDeck
-				.map((card: DeckCard) => card.cardId === cardId ? this.removeCard(card) : card)
-				.filter((card) => card);
-		console.log('new deck', deckAfterDraw);
-
+		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, card.cardId);
 		const previousHand = currentState.playerDeck.hand;
-		const handAfterDraw: ReadonlyArray<DeckCard> = previousHand
-				.map((card: DeckCard) => card.cardId === cardId ? this.increaseCardCount(card) : card);
-		console.log('new hand', handAfterDraw);
+		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousHand, card);
+		const newPlayerDeck = Object.assign(new DeckState(), {
+			deckList: currentState.playerDeck.deckList,
+			deck: newDeck,
+			hand: newHand
+		});
 		return Object.assign(new GameState(), currentState, 
 			{ 
-				playerDeck: { 
-					deckList: currentState.playerDeck.deckList,
-					deck: deckAfterDraw,
-					hand: handAfterDraw,
-				} as DeckState
+				playerDeck: newPlayerDeck
 			});
 	}
-	
-	private removeCard(card: DeckCard): DeckCard {
-		if (card.totalQuantity == 1) {
-			return null;
-		}
-		return Object.assign(new DeckCard(), card, {
-			totalQuantity: card.totalQuantity - 1,
-		});
-	}
-	
-	private increaseCardCount(card: DeckCard): DeckCard {
-		return Object.assign(new DeckCard(), card, {
-			totalQuantity: card.totalQuantity + 1,
-		});
+
+	event(): string {
+		return DeckEvents.CARD_DRAW;
 	}
 }
