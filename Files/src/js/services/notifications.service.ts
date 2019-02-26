@@ -42,15 +42,6 @@ export class OwNotificationsService {
 	}
 
 	private detectNotificationsWindow() {
-		// console.log('initializing notifications service');
-
-		// overwolf.windows.onMessageReceived.addListener((message) => {
-		// 	console.log('received notifications ack', message);
-		// 	if (message.content === 'ack') {
-		// 		this.notificationWindowInit = true;
-		// 	}
-		// })
-
 		overwolf.windows.obtainDeclaredWindow("NotificationsWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get NotificationsWindow', result);

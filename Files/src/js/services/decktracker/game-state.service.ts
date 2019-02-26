@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { Queue } from 'queue-typescript';
 import { GameEvents } from '../game-events.service';
 import { GameEvent } from '../../models/game-event';
@@ -11,6 +11,8 @@ import { CardDrawParser } from './event-parser/card-draw-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 
+declare var overwolf: any;
+
 @Injectable()
 export class GameStateService {
 
@@ -19,6 +21,7 @@ export class GameStateService {
 	// We need to get through a queue to avoid race conditions when two events are close together, 
 	// so that we're sure teh state is update sequentially
 	private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
+	private deckEventBus = new EventEmitter<any>();
 
 	constructor(
 			private gameEvents: GameEvents, 
@@ -26,6 +29,8 @@ export class GameStateService {
 			private deckParser: DeckParserService) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
+		window['deckEventBus'] = this.deckEventBus;
+		this.loadDecktrackerWindow();
 	}
 
 	private registerGameEvents() {
@@ -45,17 +50,40 @@ export class GameStateService {
 			if (parser.applies(gameEvent)) {
 				console.log('[game-state] applying parser', parser);
 				this.state = parser.parse(this.state, gameEvent);
-				console.log('[game-state] new game state is', this.state, parser);
+				console.log('[game-state] new state computed, sending event to eventBus')
+				this.deckEventBus.next({ 
+					state: this.state, 
+					event: {
+						name: parser.event() 
+					}
+				});
+				console.log('[game-state] sent new state to event bus', this.state);
 			}
 		}
 	}
 
-	buildEventParsers(): ReadonlyArray<EventParser> {
+	private buildEventParsers(): ReadonlyArray<EventParser> {
 		return [
 			new GameStartParser(this.deckParser, this.allCards),
 			new MulliganOverParser(this.deckParser, this.allCards),
 			new CardDrawParser(this.deckParser, this.allCards),
 			new CardBackToDeckParser(this.deckParser, this.allCards),
 		];
+	}
+
+	private loadDecktrackerWindow() {
+		overwolf.windows.obtainDeclaredWindow("DeckTrackerWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get DeckTrackerWindow', result);
+			}
+			// console.log('got notifications window', result);
+			let windowId = result.window.id;
+
+			overwolf.windows.restore(windowId, (result) => {
+				// console.log('notifications window is on?', result);
+				overwolf.windows.hide(windowId, (result) => {
+				})
+			})
+		});
 	}
 }

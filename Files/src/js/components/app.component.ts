@@ -123,7 +123,6 @@ export class AppComponent {
 				});
 			});
 
-
 			overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 				if (result.status !== 'success') {
 					console.warn('Could not get CollectionWindow', result);
