@@ -131,6 +131,23 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+			case 'CARD_BACK_TO_DECK':
+				this.allEvents.next(new GameEvent(
+					GameEvent.CARD_BACK_TO_DECK, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.InitialZone,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
+			case 'MULLIGAN_INITIAL_OPTION':
+				this.allEvents.next(new GameEvent(
+					GameEvent.MULLIGAN_INITIAL_OPTION, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_ON_BOARD_AT_GAME_START, 

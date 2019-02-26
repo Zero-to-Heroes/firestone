@@ -28,6 +28,7 @@
     "lodash": "4.17.10",
     "ng-inline-svg": "8.3.0",
     "ng-select": "1.0.0",
+    "queue-typescript": "1.0.1",
     "rxjs": "6.0.0",
     "rxjs-compat": "6.2.1",
     "ts-keycode-enum": "1.0.6",

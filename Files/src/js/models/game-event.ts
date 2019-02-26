@@ -5,6 +5,7 @@ export class GameEvent {
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
 	public static readonly MULLIGAN_INPUT = 'MULLIGAN_INPUT';
+	public static readonly MULLIGAN_INITIAL_OPTION = 'MULLIGAN_INITIAL_OPTION';
 	public static readonly MULLIGAN_DONE = 'MULLIGAN_DONE';
 	public static readonly TURN_START = 'TURN_START';
 	public static readonly GAME_RESULT = 'GAME_RESULT';
@@ -15,6 +16,7 @@ export class GameEvent {
 	public static readonly GAME_END = 'GAME_END';
 	public static readonly CARD_PLAYED = 'CARD_PLAYED';
 	public static readonly CARD_DRAW_FROM_DECK = 'CARD_DRAW_FROM_DECK';
+	public static readonly CARD_BACK_TO_DECK = 'CARD_BACK_TO_DECK';
 	public static readonly CARD_ON_BOARD_AT_GAME_START = 'CARD_ON_BOARD_AT_GAME_START';
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
