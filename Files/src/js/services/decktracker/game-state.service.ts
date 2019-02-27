@@ -19,15 +19,15 @@ export class GameStateService {
 	}
 
 	private registerGameEvents() {
-		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			console.log('receiving event', gameEvent);
-			switch (gameEvent.type) {
-				case GameEvent.GAME_START:
-					console.log('startGame event');
-					this.startGame();
-					break;
-			}
-		})
+		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+		// 	console.log('receiving event', gameEvent);
+		// 	switch (gameEvent.type) {
+		// 		case GameEvent.GAME_START:
+		// 			console.log('startGame event');
+		// 			this.startGame();
+		// 			break;
+		// 	}
+		// })
 	}
 
 	private startGame() {
