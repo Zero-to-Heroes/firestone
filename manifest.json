@@ -56,13 +56,10 @@
 			"DeckTrackerWindow": {
 				"file": "Files/html/decktracker.html",
 				"transparent": true,
-				"resizable": false,
+				"resizable": true,
 				"show_in_taskbar": false,
 				"size": {"width": 530, "height": 800},
-				"start_position": {"top": 0, "left": 0},
-                "grab_keyboard_focus": false,
-                "grab_focus_on_desktop": false,
-                "block_top_window_navigation": true
+				"start_position": {"top": 0, "left": 0}
 			},
 			"NotificationsWindow": {
 				"file": "Files/html/notifications.html",
