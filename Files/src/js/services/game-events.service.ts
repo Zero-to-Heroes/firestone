@@ -33,13 +33,9 @@ export class GameEvents {
 	init(): void {
 		console.log('init game events monitor');
 		let gameEventsPlugin = this.gameEventsPlugin = new OverwolfPlugin("overwolf-replay-converter", true);
-		// console.log('plugin', plugin);
-		// let that = this;
-
 		gameEventsPlugin.initialize((status: boolean) => {
 			if (status === false) {
-				console.warn("[game-events] Plugin couldn't be loaded??");
-				// Raven.captureMessage('overwolf-replay-converter plugin could not be loaded');
+				console.error("[game-events] Plugin couldn't be loaded??");
 				return;
 			}
 			console.log("[game-events] Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
@@ -56,7 +52,6 @@ export class GameEvents {
 				}
 			});
 			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
-				// console.log('[game-events] received game event', gameEvent);
 				this.dispatchGameEvent(JSON.parse(gameEvent));
 			});
 			gameEventsPlugin.get().initRealtimeLogConversion();
