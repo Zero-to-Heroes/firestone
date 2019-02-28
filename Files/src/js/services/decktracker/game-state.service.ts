@@ -10,13 +10,15 @@ import { GameStartParser } from './event-parser/game-start-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
+import { GameEndParser } from './event-parser/game-end-parser';
+import { FeatureFlags } from '../feature-flags.service';
 
 declare var overwolf: any;
 
 @Injectable()
 export class GameStateService {
 
-	private state: GameState;
+	public state: GameState;
 	private eventParsers: ReadonlyArray<EventParser>;
 	// We need to get through a queue to avoid race conditions when two events are close together, 
 	// so that we're sure teh state is update sequentially
@@ -26,10 +28,15 @@ export class GameStateService {
 	constructor(
 			private gameEvents: GameEvents, 
 			private allCards: AllCardsService,
+			private flags: FeatureFlags,
 			private deckParser: DeckParserService) {
+		if (!flags.decktracker) {
+			return;
+		}
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 		window['deckEventBus'] = this.deckEventBus;
+		window['deckDebug'] = this;
 		this.loadDecktrackerWindow();
 	}
 
@@ -48,16 +55,13 @@ export class GameStateService {
 	private processEvent(gameEvent: GameEvent) {
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
-				console.log('[game-state] applying parser', parser);
 				this.state = parser.parse(this.state, gameEvent);
-				console.log('[game-state] new state computed, sending event to eventBus')
 				this.deckEventBus.next({ 
 					state: this.state, 
 					event: {
 						name: parser.event() 
 					}
 				});
-				console.log('[game-state] sent new state to event bus', this.state);
 			}
 		}
 	}
@@ -68,6 +72,7 @@ export class GameStateService {
 			new MulliganOverParser(this.deckParser, this.allCards),
 			new CardDrawParser(this.deckParser, this.allCards),
 			new CardBackToDeckParser(this.deckParser, this.allCards),
+			new GameEndParser(this.deckParser, this.allCards),
 		];
 	}
 
@@ -80,8 +85,9 @@ export class GameStateService {
 			let windowId = result.window.id;
 
 			overwolf.windows.restore(windowId, (result) => {
-				// console.log('notifications window is on?', result);
+				console.log('DeckTrackerWindow is on?', result);
 				overwolf.windows.hide(windowId, (result) => {
+					console.log('DeckTrackerWindow hidden', result);
 				})
 			})
 		});
