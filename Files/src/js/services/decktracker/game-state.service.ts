@@ -30,7 +30,7 @@ export class GameStateService {
 			private allCards: AllCardsService,
 			private flags: FeatureFlags,
 			private deckParser: DeckParserService) {
-		if (!flags.decktracker) {
+		if (!flags.decktracker()) {
 			return;
 		}
 		this.eventParsers = this.buildEventParsers();

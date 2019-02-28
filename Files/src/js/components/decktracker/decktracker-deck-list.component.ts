@@ -12,10 +12,10 @@ declare var overwolf: any;
 	template: `
 		<div class="deck-list">
 			<ng-container [ngSwitch]="_displayMode">
-				<deck-list-by-mana 
-					*ngSwitchCase="'DISPLAY_MODE_MANA'" 
+				<deck-list-by-zone 
+					*ngSwitchCase="'DISPLAY_MODE_ZONE'" 
 					[deckState]="_deckState">
-				</deck-list-by-mana>
+				</deck-list-by-zone>
 			</ng-container>
 		</div>
 	`,
@@ -24,7 +24,7 @@ declare var overwolf: any;
 export class DeckTrackerDeckListComponent {
 
 	_deckState: DeckState;
-	_displayMode: string = 'DISPLAY_MODE_MANA';
+	_displayMode: string = 'DISPLAY_MODE_ZONE';
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
