@@ -10,6 +10,6 @@ export class FeatureFlags {
     }
 
 	public achievements() {
-        return false;
+        return true;
     }
 }
