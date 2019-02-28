@@ -20,6 +20,7 @@ export class GameStartParser implements EventParser {
 		const deckList: ReadonlyArray<DeckCard> = this.buildDeckList(currentDeck);
 		return Object.assign(new GameState(), { 
 			playerDeck: { 
+				name: currentDeck.name,
 				deckList: deckList,
 				deck: deckList,
 				graveyard: [],
@@ -46,7 +47,7 @@ export class GameStartParser implements EventParser {
 			cardId: card.id,
 			cardName: card.name,
 			manaCost: card.cost,
-			totalQuantity: pair[1],
+			totalQuantity: pair[1]
 		} as DeckCard);
 	}    
 }
