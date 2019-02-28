@@ -42,6 +42,9 @@ export class GameStateService {
 
 	private registerGameEvents() {
 		setInterval(() => {
+			if (!this.deckParser.currentDeck) {
+				return;
+			}
 			let gameEvent: GameEvent;
 			while (gameEvent = this.eventQueue.dequeue()) {
 				this.processEvent(gameEvent);
