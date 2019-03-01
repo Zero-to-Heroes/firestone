@@ -178,11 +178,6 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string) {
-		// Don't use the PowerTaskList
-		if (data.indexOf('PowerTaskList') !== -1 || data.indexOf('PowerProcessor') !== -1) {
-			return;
-		}
-
 		if (data.indexOf('Begin Spectating') !== -1) {
 			this.spectating = true;
 		}
