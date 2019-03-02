@@ -9,7 +9,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 		'../../../css/component/decktracker/deck-zone.component.scss',
 	],
 	template: `
-		<div class="deck-zone">
+		<div class="deck-zone {{className}}">
 			<div class="zone-name-container">
 				<span class="zone-name">{{zoneName}}</span>
 				<!-- TODO: collapse caret -->
@@ -25,10 +25,12 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 })
 export class DeckZoneComponent {
 
+	className: string;
 	zoneName: string;
 	cards: ReadonlyArray<DeckCard>;
 
 	@Input('zone') set zone(zone: DeckZone) {
+		this.className = zone.id;
 		this.zoneName = zone.name;
 		this.cards = zone.cards;
 	}

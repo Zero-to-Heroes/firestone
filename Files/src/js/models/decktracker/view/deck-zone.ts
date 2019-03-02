@@ -1,6 +1,7 @@
 import { DeckCard } from "../deck-card";
 
 export interface DeckZone {
-    readonly name;
+    readonly id: string;
+    readonly name: string;
     readonly cards: ReadonlyArray<DeckCard>;
 }

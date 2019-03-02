@@ -19,4 +19,10 @@
     .card-list li {
         margin-bottom: 3px;
     }
+
+    &.other {
+        .card-list li {
+            opacity: 0.5;
+        }
+    }
 }
