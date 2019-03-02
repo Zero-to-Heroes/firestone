@@ -8,7 +8,9 @@ import { DeckTrackerComponent } from '../../components/decktracker/decktracker.c
 import { DeckTrackerTitleBarComponent } from '../../components/decktracker/decktracker-title-bar.component';
 import { DeckTrackerDeckNameComponent } from '../../components/decktracker/decktracker-deck-name.component';
 import { DeckTrackerDeckListComponent } from '../../components/decktracker/decktracker-deck-list.component';
-import { DeckListByManaComponent } from '../../components/decktracker/deck-list-by-zone.component';
+import { DeckListByZoneComponent } from '../../components/decktracker/deck-list-by-zone.component';
+import { DeckZoneComponent } from '../../components/decktracker/deck-zone.component';
+import { DeckCardComponent } from '../../components/decktracker/deck-card.component';
 
 @NgModule({
 	imports: [
@@ -19,7 +21,9 @@ import { DeckListByManaComponent } from '../../components/decktracker/deck-list-
 	declarations: [
 		DeckTrackerComponent,
 		DeckTrackerDeckListComponent,
-		DeckListByManaComponent,
+		DeckListByZoneComponent,
+		DeckCardComponent,
+		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerTitleBarComponent,
 	],

@@ -1,0 +1,81 @@
+.deck-card {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    position: relative;
+
+    .gradiant {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, #090A0D 44%, rgba(9, 10, 13, 0) 75%);
+    }
+
+    .mana-cost {
+        width: 30px;
+        height: 100%;
+        background: #BFC1C4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+
+        span {
+            font-family: Sumana;
+            font-style: normal;
+            font-weight: bold;
+            line-height: normal;
+            font-size: 16px;            
+            color: #07081F;
+        }
+    }
+
+    .card-name {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 10px;
+        z-index: 1;
+
+        span {
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 13px;        
+            color: #FFE3BA;
+        }
+    }
+
+    .number-of-copies {
+        width: 23px;
+        height: 100%;
+        background: #131010;
+        border: 1px solid #264D91;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1px;
+
+        .inner-border {
+            height: 100%;
+            flex-grow: 1;
+            border: 1px solid #264D91;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        span {
+            font-family: Sumana;
+            font-style: normal;
+            font-weight: bold;
+            line-height: normal;
+            font-size: 15px;
+            color: #FFB948;
+        }
+    }
+}

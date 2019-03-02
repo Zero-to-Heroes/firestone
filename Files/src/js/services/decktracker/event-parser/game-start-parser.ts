@@ -6,6 +6,7 @@ import { DeckParserService } from "../deck-parser.service";
 import { AllCardsService } from "../../all-cards.service";
 import { DeckState } from "../../../models/decktracker/deck-state";
 import { DeckEvents } from "./deck-events";
+import { HeroCard } from "../../../models/decktracker/hero-card";
 
 export class GameStartParser implements EventParser {
 
@@ -18,9 +19,11 @@ export class GameStartParser implements EventParser {
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
         const currentDeck = this.deckParser.currentDeck;
 		const deckList: ReadonlyArray<DeckCard> = this.buildDeckList(currentDeck);
+		const hero: HeroCard = this.buildHero(currentDeck);
 		return Object.assign(new GameState(), { 
 			playerDeck: { 
 				name: currentDeck.name,
+				hero: hero,
 				deckList: deckList,
 				deck: deckList,
 				graveyard: [],
@@ -32,6 +35,16 @@ export class GameStartParser implements EventParser {
 
 	event(): string {
 		return DeckEvents.GAME_START;
+	}
+
+	private buildHero(currentDeck: any): HeroCard {
+		return currentDeck.deck.heroes
+				.map((hero) => this.allCards.getCardFromDbfId(hero))
+				.map((heroCard) => Object.assign(new HeroCard(), { 
+					cardId: heroCard.id,
+					name: heroCard.name
+				} as HeroCard))
+				[0];
 	}
 	
 	private buildDeckList(currentDeck: any): ReadonlyArray<DeckCard> {

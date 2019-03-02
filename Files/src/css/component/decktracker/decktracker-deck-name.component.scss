@@ -1,4 +1,27 @@
 .deck-name {
     height: 45px;
     border: 2px solid #FFB948;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px;
+
+    .inner-border {
+        height: 100%;
+        flex-grow: 1;
+        border: 1px solid #FFB948;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 20px;
+
+        span {
+            font-family: Sumana;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 18px;            
+            color: #FFB948;
+        }
+    }
 }

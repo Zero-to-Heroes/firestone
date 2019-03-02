@@ -29,7 +29,7 @@ export class CardDrawParser implements EventParser {
 		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, card.cardId);
 		const previousHand = currentState.playerDeck.hand;
 		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousHand, card);
-		const newPlayerDeck = Object.assign(new DeckState(), {
+		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
 			deckList: currentState.playerDeck.deckList,
 			deck: newDeck,
 			hand: newHand

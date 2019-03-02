@@ -11,11 +11,11 @@ export class DeckManipulationHelper {
     }
 
 	public static addSingleCardToZone(zone: ReadonlyArray<DeckCard>, cardTemplate: DeckCard): ReadonlyArray<DeckCard> {
-        console.log('adding single card to zone', zone, cardTemplate);
-        console.log('got it with filter', zone.filter((card) => card.cardId === cardTemplate.cardId));
-        console.log('got it with find', zone.find((card) => card.cardId === cardTemplate.cardId));
+        // console.log('adding single card to zone', zone, cardTemplate);
+        // console.log('got it with filter', zone.filter((card) => card.cardId === cardTemplate.cardId));
+        // console.log('got it with find', zone.find((card) => card.cardId === cardTemplate.cardId));
         let inZone = zone.find((card) => card.cardId === cardTemplate.cardId);
-        console.log('is in zone?', inZone);
+        // console.log('is in zone?', inZone);
         if (!inZone) {
             const result = [
                 ...zone, 
@@ -30,7 +30,7 @@ export class DeckManipulationHelper {
             return result;
         }
         else {
-            console.log('in zone', zone);
+            // console.log('in zone', zone);
             return zone.map((card) => card.cardId === cardTemplate.cardId 
                     ? DeckManipulationHelper.addSingleCard(card) 
                     : card);

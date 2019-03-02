@@ -16,7 +16,10 @@ declare var overwolf: any;
 		<div class="root">
 			<div class="decktracker" *ngIf="gameState">
 				<decktracker-title-bar></decktracker-title-bar>
-				<decktracker-deck-name [deckName]="gameState.playerDeck.name"></decktracker-deck-name>
+				<decktracker-deck-name 
+					[hero]="gameState.playerDeck.hero"
+					[deckName]="gameState.playerDeck.name">				
+				</decktracker-deck-name>
 				<decktracker-deck-list [deckState]="gameState.playerDeck"></decktracker-deck-list>
 			</div>
 
@@ -76,7 +79,9 @@ export class DeckTrackerComponent implements AfterViewInit {
 		})
 		console.warn("Should remove the restoreWindow from prod code");
 		this.restoreWindow();
-		this.gameState = overwolf.windows.getMainWindow().state;
+		this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
+		console.log('game state', this.gameState);
+		this.cdr.detectChanges();
 	}
 
 	@HostListener('mousedown')

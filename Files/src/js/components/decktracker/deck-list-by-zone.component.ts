@@ -1,5 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { DeckState } from '../../models/decktracker/deck-state';
+import { DeckZone } from '../../models/decktracker/view/deck-zone';
+import { DeckCard } from '../../models/decktracker/deck-card';
 
 declare var overwolf: any;
 
@@ -10,25 +12,31 @@ declare var overwolf: any;
 		'../../../css/component/decktracker/deck-list-by-zone.component.scss',
 	],
 	template: `
-		<div class="deck-list">
-		
-		</div>
+		<ul class="deck-list">
+			<li *ngFor="let zone of zones">
+				<deck-zone [zone]="zone"></deck-zone>
+			</li>
+		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckListByManaComponent {
+export class DeckListByZoneComponent {
 
-	allCards: ReadonlyArray<VisualDeckCard>;
+	zones: ReadonlyArray<DeckZone>;
 
 	@Input('deckState') set deckState(deckState: DeckState) {
-		// this._deckState = deckState;
+		this.zones = [
+			this.buildZone(deckState.deck, 'In deck'),
+			this.buildZone(deckState.graveyard, 'Graveyard'),
+			this.buildZone(deckState.hand, 'In your hand'),
+			this.buildZone(deckState.otherZone, 'Other'),
+		]
 	}
-}
 
-export interface VisualDeckCard {
-	readonly cardId: string;
-	readonly name: string;
-	readonly zone: string;
-    readonly manaCost: number;
-	readonly quantity: number;
+	private buildZone(cards: ReadonlyArray<DeckCard>, name: string): DeckZone {
+		return {
+			name: name,
+			cards: cards,
+		} as DeckZone;
+	}
 }

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { HeroCard } from '../../models/decktracker/hero-card';
 
 declare var overwolf: any;
 
@@ -9,14 +10,22 @@ declare var overwolf: any;
 		'../../../css/component/decktracker/decktracker-deck-name.component.scss',
 	],
 	template: `
-		<div class="deck-name">
-			{{deckName}}
+		<div class="deck-name" [style.background-image]="deckImage">
+			<div class="inner-border">
+				<span>{{deckName}}</span>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerDeckNameComponent {
 
+	deckImage: string;
+
 	@Input() deckName: string;
+
+	@Input("hero") set hero(hero: HeroCard) {
+		this.deckImage = `url(http://static.zerotoheroes.com/hearthstone/cardart/tiles/${hero.cardId}.jpg)`;
+	}
 
 }

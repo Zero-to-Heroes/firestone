@@ -12,6 +12,7 @@ import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { FeatureFlags } from '../feature-flags.service';
+import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 
 declare var overwolf: any;
 
@@ -75,6 +76,7 @@ export class GameStateService {
 			new MulliganOverParser(this.deckParser, this.allCards),
 			new CardDrawParser(this.deckParser, this.allCards),
 			new CardBackToDeckParser(this.deckParser, this.allCards),
+			new CardPlayedFromHandParser(this.deckParser, this.allCards),
 			new GameEndParser(this.deckParser, this.allCards),
 		];
 	}

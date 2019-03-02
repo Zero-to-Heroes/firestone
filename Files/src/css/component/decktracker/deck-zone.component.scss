@@ -1,0 +1,22 @@
+.deck-zone {
+    .zone-name-container {
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #07081F;
+
+        .zone-name {
+            font-family: Sumana;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 15px;
+            color: #9FB6D7;            
+        }
+    }
+
+    .card-list li {
+        margin-bottom: 3px;
+    }
+}

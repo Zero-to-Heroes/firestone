@@ -1,0 +1,35 @@
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { DeckZone } from '../../models/decktracker/view/deck-zone';
+import { DeckCard } from '../../models/decktracker/deck-card';
+
+@Component({
+	selector: 'deck-zone',
+	styleUrls: [
+		'../../../css/global/components-global.scss',
+		'../../../css/component/decktracker/deck-zone.component.scss',
+	],
+	template: `
+		<div class="deck-zone">
+			<div class="zone-name-container">
+				<span class="zone-name">{{zoneName}}</span>
+				<!-- TODO: collapse caret -->
+			</div>
+			<ul class="card-list">
+				<li *ngFor="let card of cards">
+					<deck-card [card]="card"></deck-card>
+				</li>
+			</ul>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DeckZoneComponent {
+
+	zoneName: string;
+	cards: ReadonlyArray<DeckCard>;
+
+	@Input('zone') set zone(zone: DeckZone) {
+		this.zoneName = zone.name;
+		this.cards = zone.cards;
+	}
+}
