@@ -26,17 +26,18 @@ export class DeckListByZoneComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this.zones = [
-			this.buildZone(deckState.deck, 'In deck'),
-			this.buildZone(deckState.graveyard, 'Graveyard'),
-			this.buildZone(deckState.hand, 'In your hand'),
-			this.buildZone(deckState.otherZone, 'Other'),
+			this.buildZone(deckState.deck, 'deck', 'In deck'),
+			// this.buildZone(deckState.graveyard, 'Graveyard'),
+			this.buildZone(deckState.hand, 'hand', 'In your hand'),
+			this.buildZone(deckState.otherZone, 'other', 'Other'),
 		]
 	}
 
-	private buildZone(cards: ReadonlyArray<DeckCard>, name: string): DeckZone {
+	private buildZone(cards: ReadonlyArray<DeckCard>, id: string, name: string): DeckZone {
 		return {
+			id: id,
 			name: name,
-			cards: cards,
+			cards: [...cards].sort((card: DeckCard) => card.manaCost),
 		} as DeckZone;
 	}
 }
