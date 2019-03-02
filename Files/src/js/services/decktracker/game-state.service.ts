@@ -34,14 +34,17 @@ export class GameStateService {
 		if (!flags.decktracker()) {
 			return;
 		}
-		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
+		this.eventParsers = this.buildEventParsers();
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckDebug'] = this;
 		this.loadDecktrackerWindow();
 	}
 
 	private registerGameEvents() {
+		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+			this.eventQueue.enqueue(gameEvent);
+		});
 		setInterval(() => {
 			if (!this.deckParser.currentDeck) {
 				return;
@@ -51,12 +54,10 @@ export class GameStateService {
 				this.processEvent(gameEvent);
 			}
 		}, 100);
-		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			this.eventQueue.enqueue(gameEvent);
-		});
 	}
 
 	private processEvent(gameEvent: GameEvent) {
+		console.log('[game-state] Processing event', gameEvent);
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
 				this.state = parser.parse(this.state, gameEvent);
