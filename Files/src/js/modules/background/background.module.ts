@@ -45,6 +45,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { GameStateService } from '../../services/decktracker/game-state.service';
+import { S3FileUploadService } from '../../services/s3-file-upload.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -90,6 +91,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		PreferencesService,
 		SimpleIOService,
 		MemoryInspectionService,
+		S3FileUploadService,
 
 		AllCardsService,
 		CardHistoryStorageService,

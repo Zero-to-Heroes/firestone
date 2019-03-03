@@ -4,6 +4,7 @@ import { GameEvent } from '../models/game-event';
 import { Events } from './events.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { captureEvent } from '@sentry/core';
+import { S3FileUploadService } from './s3-file-upload.service';
 
 declare var OverwolfPlugin: any;
 
@@ -21,6 +22,7 @@ export class GameEvents {
 
 	constructor(
 		private events: Events,
+		private s3: S3FileUploadService,
 		private memoryInspectionService: MemoryInspectionService) {
 		this.init();
 
@@ -42,13 +44,7 @@ export class GameEvents {
 			gameEventsPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
 				if (first.toLowerCase().indexOf("exception") !== -1) {
-					captureEvent({
-						message: 'Exception while running plugin: ' + first,
-						extra: {
-							first: first,
-							second: second,
-						}
-					})
+					this.uploadLogsAndSendException(first, second);
 				}
 			});
 			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
@@ -191,5 +187,23 @@ export class GameEvents {
 		}
 
 		this.logLines.push(data);
+	}
+
+	private async uploadLogsAndSendException(first, second) {
+		try {
+			const s3LogFileKey = await this.s3.postLogs(second);
+			console.log('uploaded logs to S3', s3LogFileKey);
+			captureEvent({
+				message: 'Exception while running plugin: ' + first,
+				extra: {
+					first: first,
+					logFileKey: s3LogFileKey,
+				}
+			});
+			console.log('uploaded event to sentry');
+		}
+		catch (e) {
+			console.error('Exception while uploading logs for troubleshooting', e);
+		}
 	}
 }
