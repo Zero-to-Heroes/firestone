@@ -10,7 +10,9 @@ declare var overwolf: any;
 		'../../../css/component/decktracker/decktracker-deck-name.component.scss',
 	],
 	template: `
-		<div class="deck-name" [style.background-image]="deckImage">
+		<div class="deck-name">
+			<div class="background-image" [style.background-image]="deckImage"></div>
+			<div class="gradiant"></div>
 			<div class="inner-border">
 				<span>{{deckName}}</span>
 			</div>

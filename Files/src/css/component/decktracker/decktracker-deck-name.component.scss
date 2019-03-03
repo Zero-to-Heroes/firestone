@@ -5,6 +5,24 @@
     align-items: center;
     justify-content: center;
     padding: 1px;
+    position: relative;
+
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .gradiant {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90.62deg, #020407 25.55%, rgba(2, 4, 7, 0) 99.11%);
+    }
 
     .inner-border {
         height: 100%;
@@ -14,6 +32,7 @@
         align-items: center;
         justify-content: flex-start;
         padding-left: 20px;
+        z-index: 1;
 
         span {
             font-family: Sumana;
