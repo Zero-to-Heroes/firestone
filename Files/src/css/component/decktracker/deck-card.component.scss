@@ -4,13 +4,21 @@
     height: 30px;
     position: relative;
 
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
     .gradiant {
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: linear-gradient(90deg, #090A0D 44%, rgba(9, 10, 13, 0) 75%);
+        background: linear-gradient(89.48deg, #090A0D 36.89%, rgba(9, 10, 13, 0) 99.92%);
     }
 
     .mana-cost {
@@ -54,16 +62,17 @@
         width: 23px;
         height: 100%;
         background: #131010;
-        border: 1px solid #264D91;
+        border: 1px solid #9FB6D7;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 1px;
+        z-index: 1;    
 
         .inner-border {
             height: 100%;
             flex-grow: 1;
-            border: 1px solid #264D91;
+            border: 1px solid #9FB6D7;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -75,7 +84,7 @@
             font-weight: bold;
             line-height: normal;
             font-size: 15px;
-            color: #FFB948;
+            color: #9FB6D7;
         }
     }
 }

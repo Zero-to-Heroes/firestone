@@ -8,7 +8,8 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 		'../../../css/component/decktracker/deck-card.component.scss',
 	],
 	template: `
-		<div class="deck-card" [style.background-image]="cardImage">
+		<div class="deck-card">
+			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
 			<div class="mana-cost"><span>{{manaCost}}</span></div>
 			<div class="card-name"><span>{{cardName}}</span></div>
