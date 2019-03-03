@@ -9,6 +9,10 @@
 	<polygon points="8,6.5 5,13 2,6.5 5,0" fill="var(--icon-color, currentcolor)"/>
 </symbol>
 
+<symbol id="legendary_star" viewBox="0 0 13 12">
+	<path d="M6.5 0L7.95934 4.49139H12.6819L8.86126 7.26722L10.3206 11.7586L6.5 8.98278L2.6794 11.7586L4.13874 7.26722L0.318133 4.49139H5.04066L6.5 0Z" fill="#FFB948"/>
+</symbol>
+
 <!-- icons 20x10 -->
 <symbol id="three_gold_leaves" viewBox="0 0 20 10">
 	<path d="M10,10C9.8,9.8,8,7.6,8,5c0-2.7,2-5,2-5V10z" fill="var(--icon-color, currentcolor)"/>

@@ -60,6 +60,7 @@ export class GameStartParser implements EventParser {
 			cardId: card.id,
 			cardName: card.name,
 			manaCost: card.cost,
+			rarity: card.rarity ? card.rarity.toLowerCase() : null,
 			totalQuantity: pair[1]
 		} as DeckCard);
 	}    

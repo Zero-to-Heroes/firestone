@@ -23,6 +23,7 @@ export class DeckManipulationHelper {
                     cardId: cardTemplate.cardId,
                     cardName: cardTemplate.cardName,
                     manaCost: cardTemplate.manaCost,
+                    rarity: cardTemplate.rarity,
                     totalQuantity: 1,
                 } as DeckCard)
             ];

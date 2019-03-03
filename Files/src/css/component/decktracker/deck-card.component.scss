@@ -58,7 +58,7 @@
         }
     }
 
-    .number-of-copies {
+    .number-of-copies, .legendary-symbol {
         width: 23px;
         height: 100%;
         background: #131010;
@@ -85,6 +85,11 @@
             line-height: normal;
             font-size: 15px;
             color: #9FB6D7;
+        }
+
+        i {
+            width: 13px;
+            height: 12px;
         }
     }
 }
