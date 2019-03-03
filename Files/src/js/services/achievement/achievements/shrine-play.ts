@@ -22,7 +22,7 @@ export class ShrinePlay extends AbstractChallenge {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
-		if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
+		if (gameEvent.type === GameEvent.MULLIGAN_DONE && !this.mulliganOver) {
 			this.mulliganOver = true;
 			this.handleCompletion();
 			return;
