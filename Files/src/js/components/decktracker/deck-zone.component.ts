@@ -15,7 +15,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 				<!-- TODO: collapse caret -->
 			</div>
 			<ul class="card-list">
-				<li *ngFor="let card of cards">
+				<li *ngFor="let card of cards; trackBy: trackCard">
 					<deck-card [card]="card"></deck-card>
 				</li>
 			</ul>
@@ -32,6 +32,12 @@ export class DeckZoneComponent {
 	@Input('zone') set zone(zone: DeckZone) {
 		this.className = zone.id;
 		this.zoneName = zone.name;
-		this.cards = zone.cards;
+		this.cards = zone.sortingFunction
+				? [...zone.cards].sort(zone.sortingFunction)
+				: zone.cards;
+	}
+
+	trackCard(index, card: DeckCard) {
+		return card.cardId;
 	}
 }

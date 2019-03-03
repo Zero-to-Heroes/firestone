@@ -13,7 +13,7 @@ declare var overwolf: any;
 	],
 	template: `
 		<ul class="deck-list">
-			<li *ngFor="let zone of zones">
+			<li *ngFor="let zone of zones; trackBy: trackZone">
 				<deck-zone [zone]="zone"></deck-zone>
 			</li>
 		</ul>
@@ -26,18 +26,27 @@ export class DeckListByZoneComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this.zones = [
-			this.buildZone(deckState.deck, 'deck', 'In deck'),
+			this.buildZone(deckState.deck, 'deck', 'In deck', (a, b) => a.manaCost - b.manaCost),
 			// this.buildZone(deckState.graveyard, 'Graveyard'),
-			this.buildZone(deckState.hand, 'hand', 'In your hand'),
-			this.buildZone(deckState.otherZone, 'other', 'Other'),
+			this.buildZone(deckState.hand, 'hand', 'In your hand', null),
+			this.buildZone(deckState.otherZone, 'other', 'Other', null),
 		]
 	}
 
-	private buildZone(cards: ReadonlyArray<DeckCard>, id: string, name: string): DeckZone {
+	trackZone(index, zone: DeckZone) {
+		return zone.id;
+	}
+
+	private buildZone(
+			cards: ReadonlyArray<DeckCard>, 
+			id: string, 
+			name: string, 
+			sortingFunction: (a: DeckCard, b: DeckCard) => number): DeckZone {
 		return {
 			id: id,
 			name: name,
-			cards: [...cards].sort((card: DeckCard) => card.manaCost),
+			cards: cards,
+			sortingFunction: sortingFunction,
 		} as DeckZone;
 	}
 }
