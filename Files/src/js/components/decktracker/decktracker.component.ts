@@ -103,8 +103,6 @@ export class DeckTrackerComponent implements AfterViewInit {
 
 	private restoreWindow() {
 		overwolf.windows.restore(this.windowId, (result) => {
-			// let wrapper = this.elRef.nativeElement.querySelector('.decktracker');
-			// let height = wrapper.getBoundingClientRect().height + 20;
 			let width = 270;
 			overwolf.games.getRunningGameInfo((gameInfo) => {
 				if (!gameInfo) {
@@ -113,14 +111,14 @@ export class DeckTrackerComponent implements AfterViewInit {
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
 				let dpi = gameWidth / gameInfo.width;
-				console.log('computed stuff', gameWidth, gameHeight, dpi);
+				// console.log('computed stuff', gameWidth, gameHeight, dpi);
 				overwolf.windows.changeSize(this.windowId, width, gameHeight, (changeSize) => {
 					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 					let newLeft = ~~(gameWidth - width * dpi);
 					let newTop = 0;
-					console.log('changing position', newLeft, newTop, width, gameHeight, changeSize);
+					// console.log('changing position', newLeft, newTop, width, gameHeight, changeSize);
 					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
-						console.log('changed window position', changePosition);
+						// console.log('changed window position', changePosition);
 					});
 				});
 			});
@@ -139,7 +137,7 @@ export class DeckTrackerComponent implements AfterViewInit {
 	private closeApp() {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success") {
-				console.log('closing');
+				// console.log('closing');
 				overwolf.windows.close(result.window.id);
 			}
 		});
