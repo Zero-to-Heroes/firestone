@@ -18,16 +18,14 @@ export class CardRemovedFromDeckParser implements EventParser {
 		}
 		const cardId: string = gameEvent.data[0];
 		const controllerId: string = gameEvent.data[1];
-		const localPlayer = gameEvent.data[3];
+		const localPlayer = gameEvent.data[2];
 		return cardId && controllerId === localPlayer.PlayerId
     }    
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
 		const cardId: string = gameEvent.data[0];
-		const initialZone: string = gameEvent.data[2];
-		const card = this.findCard(initialZone, currentState.playerDeck, cardId);
 		const previousDeck = currentState.playerDeck.deck;
-		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, card.cardId);
+		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId);
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
 			deck: newDeck,
 		});
@@ -39,12 +37,5 @@ export class CardRemovedFromDeckParser implements EventParser {
 
 	event(): string {
 		return DeckEvents.CARD_REMOVED_FROM_DECK;
-	}
-	
-	private findCard(initialZone: string, deckState: DeckState, cardId: string): DeckCard {
-		if (initialZone === 'HAND') {
-			return deckState.hand.find((card) => card.cardId === cardId);
-		}
-		return null;
 	}
 }
