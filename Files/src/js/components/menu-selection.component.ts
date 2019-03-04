@@ -16,15 +16,9 @@ declare var overwolf: any;
 			<li [ngClass]="{'selected': selectedModule == 'collection'}" (click)="selectModule('collection')">
 				<span>The Binder</span>
 			</li>
-			<li [ngClass]="{'selected': selectedModule == 'achievements', 'disabled': !achievementsOn}" 
+			<li [ngClass]="{'selected': selectedModule == 'achievements'}" 
 				(click)="selectModule('achievements')">
 				<span>Achievements</span>
-				<div class="zth-tooltip bottom" *ngIf="!achievementsOn">
-					<p>Coming soon</p>
-					<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-						<polygon points="0,0 8,-9 16,0"/>
-					</svg>
-				</div>
 			</li>
 			<li class="disabled">
 				<span>Deck Tracker</span>
@@ -44,9 +38,8 @@ declare var overwolf: any;
 export class MenuSelectionComponent {
 
 	selectedModule: string = 'collection';
-	achievementsOn: boolean;
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef, private flags: FeatureFlags) {
+	constructor(private events: Events, private cdr: ChangeDetectorRef) {
 		this.events.on(Events.MODULE_SELECTED).subscribe((event) => {
 			this.selectedModule = event.data[0];
 			this.events.broadcast(Events.HIDE_TOOLTIP);
@@ -57,12 +50,9 @@ export class MenuSelectionComponent {
 			this.selectedModule = event.data[0];
 			this.cdr.detectChanges();
 		});
-		this.achievementsOn = this.flags.achievements();
 	}
 
 	selectModule(module: string) {
-		if (this.achievementsOn) {
-			this.events.broadcast(Events.MODULE_SELECTED, module);
-		}
+		this.events.broadcast(Events.MODULE_SELECTED, module);
 	}
 }

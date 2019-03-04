@@ -34,11 +34,7 @@ export class AchievementsVideoCaptureService {
         private events: Events, 
         private prefs: PreferencesService,
         private achievementConf: AchievementConfService, 
-        private owService: OverwolfService,
-        private flags: FeatureFlags) {
-        if (!this.flags.achievements()) {
-            return;
-        }
+        private owService: OverwolfService) {
 		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
         this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => setTimeout(() => this.onAchievementRecordEnd(data), 500));

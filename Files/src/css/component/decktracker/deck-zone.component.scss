@@ -25,4 +25,18 @@
             opacity: 0.5;
         }
     }
+
+    &.hand {
+        ::ng-deep deck-card {
+            .deck-card {
+                background: #BFC1C4;
+            }
+
+            .background-image {
+                top: 2px;
+                bottom: 2px;
+                right: 2px;
+            }
+        }
+    }
 }

@@ -28,8 +28,7 @@ declare var overwolf: any;
 			</div>
 			<div (click)="showAchievements()" 
 					class="app achievements" 
-					[ngClass]="{'disabled': !achievementsOn, 'inactive': noCollection}">
-				<div class="coming-soon" *ngIf="!achievementsOn">Coming soon</div>
+					[ngClass]="{'inactive': noCollection}">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
@@ -65,12 +64,10 @@ export class AppChoiceComponent implements AfterViewInit {
 
 	dataLoaded = false;
 	noCollection = true;
-	achievementsOn: boolean;
 
 	private collectionWindowId;
 
-	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private flags: FeatureFlags) {
-		this.achievementsOn = this.flags.achievements();
+	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
 	}
 
 	ngAfterViewInit() {
@@ -103,9 +100,7 @@ export class AppChoiceComponent implements AfterViewInit {
 		if (this.noCollection) {
 			return;
 		}
-		if (this.achievementsOn) {
-			this.showMainWindow('achievements');
-		}
+		this.showMainWindow('achievements');
 	}
 
 	private showMainWindow(module: string) {

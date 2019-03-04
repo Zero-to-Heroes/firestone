@@ -6,8 +6,4 @@ export class FeatureFlags {
 	public decktracker() {
         return false;
     }
-
-	public achievements() {
-        return true;
-    }
 }

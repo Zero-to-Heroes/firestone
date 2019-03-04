@@ -37,7 +37,7 @@ declare var ga: any;
 						</div>
 						<hotkey></hotkey>
 						<div class="controls">
-							<control-settings [windowId]="windowId" *ngIf="achievementsOn"></control-settings>
+							<control-settings [windowId]="windowId"></control-settings>
 							<button class="i-30 pink-button" (click)="goHome()">
 								<svg class="svg-icon-fill">
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
@@ -101,7 +101,6 @@ export class MainWindowComponent implements AfterViewInit {
 
 	selectedModule = 'collection';
 	windowId: string;
-	achievementsOn: boolean;
 	
 	private adRef;
 	private adInit = false;
@@ -110,7 +109,6 @@ export class MainWindowComponent implements AfterViewInit {
 		private events: Events, 
 		private cdr: ChangeDetectorRef,
 		private io: SimpleIOService,
-		private flags: FeatureFlags,
 		private debug: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
@@ -186,7 +184,6 @@ export class MainWindowComponent implements AfterViewInit {
 		this.events.on(Events.SHOW_ACHIEVEMENT).subscribe((data) => {
 			this.achievements.selectAchievement(data.data[0]);
 		});
-		this.achievementsOn = this.flags.achievements();
 	}
 
 	ngAfterViewInit() {

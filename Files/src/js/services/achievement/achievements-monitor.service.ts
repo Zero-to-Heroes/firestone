@@ -39,7 +39,6 @@ export class AchievementsMonitor {
 		private prefs: PreferencesService,
 		private conf: AchievementConfService,
 		private repository: AchievementsRepository,
-		private flags: FeatureFlags,
 		private events: Events) {
 
 		this.gameEvents.allEvents.subscribe(
@@ -200,7 +199,7 @@ export class AchievementsMonitor {
 		console.log('[recording] saved new achievement', result);
 		overwolf.windows.sendMessage(this.collectionWindowId, 'achievement-save-complete', newAchievement.id, () => {});
 
-		if (newAchievement.numberOfCompletions == 1 && this.flags.achievements()) {
+		if (newAchievement.numberOfCompletions == 1) {
 			const achievement: Achievement = this.repository.getAllAchievements()
 				.filter((ach) => ach.id == newAchievement.id)
 				[0];
@@ -230,7 +229,7 @@ export class AchievementsMonitor {
 		// We store an history item every time, but we display only the first time an achievement is unlocked
 		this.storeNewAchievementHistory(achievement, newAchievement.numberOfCompletions);
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, newAchievement.numberOfCompletions, challenge);
-		if (newAchievement.numberOfCompletions == 1 && this.flags.achievements()) {
+		if (newAchievement.numberOfCompletions == 1) {
 			this.sendPreRecordNotification(achievement, challenge.notificationTimeout());
 		}
 	}
