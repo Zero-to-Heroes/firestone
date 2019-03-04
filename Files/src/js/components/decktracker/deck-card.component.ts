@@ -11,7 +11,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 		<div class="deck-card" [ngClass]="{'legendary': rarity === 'legendary'}">
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
-			<div class="mana-cost"><span>{{manaCost}}</span></div>
+			<div class="mana-cost"><span>{{manaCost ? manaCost : '?'}}</span></div>
 			<div class="card-name"><span>{{cardName}}</span></div>
 			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
 				<div class="inner-border">
