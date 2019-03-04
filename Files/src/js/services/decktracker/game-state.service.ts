@@ -16,6 +16,7 @@ import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-p
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
+import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 
 declare var overwolf: any;
 
@@ -82,6 +83,7 @@ export class GameStateService {
 			new CardDrawParser(this.deckParser, this.allCards),
 			new ReceiveCardInHandParser(this.deckParser, this.allCards),
 			new CardBackToDeckParser(this.deckParser, this.allCards),
+			new CreateCardInDeckParser(this.deckParser, this.allCards),
 			new CardRemovedFromDeckParser(this.deckParser, this.allCards),
 			new CardPlayedFromHandParser(this.deckParser, this.allCards),
 			new SecretPlayedFromHandParser(this.deckParser, this.allCards),

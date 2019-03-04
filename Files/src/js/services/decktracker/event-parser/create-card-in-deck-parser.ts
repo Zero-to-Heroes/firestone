@@ -8,12 +8,12 @@ import { DeckState } from "../../../models/decktracker/deck-state";
 import { DeckEvents } from "./deck-events";
 import { DeckManipulationHelper } from "./deck-manipulation-helper";
 
-export class ReceiveCardInHandParser implements EventParser {
+export class CreateCardInDeckParser implements EventParser {
 
     constructor(private deckParser: DeckParserService, private allCards: AllCardsService) { }
 
     applies(gameEvent: GameEvent): boolean {
-        if (gameEvent.type !== GameEvent.RECEIVE_CARD_IN_HAND) {
+        if (gameEvent.type !== GameEvent.CREATE_CARD_IN_DECK) {
 			return false;
 		}
 		const cardId: string = gameEvent.data[0];
@@ -28,15 +28,16 @@ export class ReceiveCardInHandParser implements EventParser {
 		const card = Object.assign(new DeckCard(), {
 			cardId: cardId,
 			totalQuantity: 1,
-			cardName: cardData.name,
+			cardName: this.buildCardName(cardData, gameEvent.data[4]),
 			manaCost: cardData.cost,
 			rarity: cardData.rarity ? cardData.rarity.toLowerCase() : null,
 		} as DeckCard);
-		const previousHand = currentState.playerDeck.hand;
-		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousHand, card);
+		const previousDeck = currentState.playerDeck.deck;
+		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
-			hand: newHand
+			deck: newDeck
 		});
+		console.log('received card in deck', cardId, newPlayerDeck);
 		return Object.assign(new GameState(), currentState, 
 			{ 
 				playerDeck: newPlayerDeck
@@ -44,6 +45,17 @@ export class ReceiveCardInHandParser implements EventParser {
 	}
 
 	event(): string {
-		return DeckEvents.RECEIVE_CARD_IN_HAND;
+		return DeckEvents.CREATE_CARD_IN_DECK;
+	}
+
+	private buildCardName(card: any, creatorCardId: string): string {
+		if (card) {
+			return card.name;
+		}
+		if (creatorCardId) {
+			const creator = this.allCards.getCard(creatorCardId);
+			return `Created by ${creator.name}`;
+		}
+		return "Unkown card";
 	}
 }
