@@ -13,6 +13,9 @@ import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { FeatureFlags } from '../feature-flags.service';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
+import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
+import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
+import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
 
 declare var overwolf: any;
 
@@ -57,7 +60,7 @@ export class GameStateService {
 	}
 
 	private processEvent(gameEvent: GameEvent) {
-		console.log('[game-state] Processing event', gameEvent);
+		// console.log('[game-state] Processing event', gameEvent);
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
 				this.state = parser.parse(this.state, gameEvent);
@@ -67,6 +70,7 @@ export class GameStateService {
 						name: parser.event() 
 					}
 				});
+				console.log('applied parser', parser);
 			}
 		}
 	}
@@ -76,8 +80,11 @@ export class GameStateService {
 			new GameStartParser(this.deckParser, this.allCards),
 			new MulliganOverParser(this.deckParser, this.allCards),
 			new CardDrawParser(this.deckParser, this.allCards),
+			new ReceiveCardInHandParser(this.deckParser, this.allCards),
 			new CardBackToDeckParser(this.deckParser, this.allCards),
+			new CardRemovedFromDeckParser(this.deckParser, this.allCards),
 			new CardPlayedFromHandParser(this.deckParser, this.allCards),
+			new SecretPlayedFromHandParser(this.deckParser, this.allCards),
 			new GameEndParser(this.deckParser, this.allCards),
 		];
 	}

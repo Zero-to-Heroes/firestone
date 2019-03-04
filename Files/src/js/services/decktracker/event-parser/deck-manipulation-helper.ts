@@ -27,7 +27,7 @@ export class DeckManipulationHelper {
                     totalQuantity: 1,
                 } as DeckCard)
             ];
-            console.log('returning', result);
+            // console.log('returning', result);
             return result;
         }
         else {

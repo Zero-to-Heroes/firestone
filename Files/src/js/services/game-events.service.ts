@@ -114,6 +114,22 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+			case 'RECEIVE_CARD_IN_HAND':
+				this.allEvents.next(new GameEvent(
+					GameEvent.RECEIVE_CARD_IN_HAND, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
+			case 'SECRET_PLAYED':
+				this.allEvents.next(new GameEvent(
+					GameEvent.SECRET_PLAYED, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'CARD_DRAW_FROM_DECK':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_DRAW_FROM_DECK, 
@@ -128,6 +144,14 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.InitialZone,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
+			case 'CARD_REMOVED_FROM_DECK':
+				this.allEvents.next(new GameEvent(
+					GameEvent.CARD_REMOVED_FROM_DECK, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
