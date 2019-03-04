@@ -18,6 +18,7 @@ export class GameEvent {
 	public static readonly SECRET_PLAYED = 'SECRET_PLAYED';
 	public static readonly CARD_DRAW_FROM_DECK = 'CARD_DRAW_FROM_DECK';
 	public static readonly RECEIVE_CARD_IN_HAND = 'RECEIVE_CARD_IN_HAND';
+	public static readonly END_OF_ECHO_IN_HAND = 'END_OF_ECHO_IN_HAND';
 	public static readonly CREATE_CARD_IN_DECK = 'CREATE_CARD_IN_DECK';
 	public static readonly CARD_BACK_TO_DECK = 'CARD_BACK_TO_DECK';
 	public static readonly CARD_REMOVED_FROM_DECK = 'CARD_REMOVED_FROM_DECK';

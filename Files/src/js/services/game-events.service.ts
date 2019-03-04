@@ -122,6 +122,14 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+			case 'END_OF_ECHO_IN_HAND':
+				this.allEvents.next(new GameEvent(
+					GameEvent.END_OF_ECHO_IN_HAND, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'CREATE_CARD_IN_DECK':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CREATE_CARD_IN_DECK, 
