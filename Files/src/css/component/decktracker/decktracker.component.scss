@@ -47,7 +47,6 @@
 	    display: flex;
 	    flex-direction: column;
         overflow: hidden;
-		padding-bottom: 30px;
         
         decktracker-title-bar {
             flex-grow: 0;
@@ -60,8 +59,11 @@
         }
 
         decktracker-deck-list {
-            flex-grow: 1;
-            flex-shrink: 1;
+			flex-grow: 1;
+			flex-shrink: 1;
+			display: flex;
+			position: relative;
+			height: 100%;
         }
 	}
 }

@@ -1,0 +1,25 @@
+@import 'variables';
+
+::-webkit-scrollbar {
+	width: 5px;
+}
+
+::-webkit-scrollbar-track {
+	display: none;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #5A5F87;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #767FAF;
+}
+
+::-webkit-scrollbar-button {
+	display: none;
+}
+
+::-webkit-scrollbar-track-piece {
+	display: none;
+}
