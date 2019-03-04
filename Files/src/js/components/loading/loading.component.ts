@@ -114,8 +114,8 @@ export class LoadingComponent implements AfterViewInit {
 
 	title: string = 'Getting ready';
 	loading = true;
+	thisWindowId: string;
 	
-	private thisWindowId: string;
 	private adRef;
 	private crate;
 	private adInit;
