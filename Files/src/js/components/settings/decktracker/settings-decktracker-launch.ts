@@ -76,6 +76,36 @@ declare var ga;
 						</div>
 					</fieldset>
 				</form>
+				<form class="settings-section form-toggle">
+					<fieldset name="">
+						<div class="form-section">
+							<input hidden type="checkbox" 
+									[checked]="showFriendly" 
+									name="" 
+									id="a-05" 
+									(change)="toggleFriendly()">
+							<label for="a-05" [ngClass]="{'enabled': showFriendly}">
+								<p class="settings-p">Friendly</p>
+								<b></b>
+							</label>
+						</div>
+					</fieldset>
+				</form>
+				<form class="settings-section form-toggle">
+					<fieldset name="">
+						<div class="form-section">
+							<input hidden type="checkbox" 
+									[checked]="showCasual" 
+									name="" 
+									id="a-06" 
+									(change)="toggleCasual()">
+							<label for="a-06" [ngClass]="{'enabled': showCasual}">
+								<p class="settings-p">Casual</p>
+								<b></b>
+							</label>
+						</div>
+					</fieldset>
+				</form>
 			</section>
         </div>
 	`,
@@ -87,6 +117,8 @@ export class SettingsDecktrackerLaunchComponent {
 	showArena: boolean;
 	showTavernBrawl: boolean;
 	showPractice: boolean;
+	showFriendly: boolean;
+	showCasual: boolean;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
 		this.cdr.detach();
@@ -125,12 +157,30 @@ export class SettingsDecktrackerLaunchComponent {
 		}
 	}
 
+	toggleFriendly() {
+		this.showFriendly = !this.showFriendly;
+		this.prefs.setDecktrackerShowFriendly(this.showFriendly);
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	toggleCasual() {
+		this.showCasual = !this.showCasual;
+		this.prefs.setDecktrackerShowCasual(this.showCasual);
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.showArena = prefs.decktrackerShowArena;
 		this.showRanked = prefs.decktrackerShowRanked;
 		this.showTavernBrawl = prefs.decktrackerShowTavernBrawl;
 		this.showPractice = prefs.decktrackerShowPractice;
+		this.showFriendly = prefs.decktrackerShowFriendly;
+		this.showCasual = prefs.decktrackerShowCasual;
 		console.log('loaded prefs', prefs);
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();

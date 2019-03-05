@@ -9,4 +9,6 @@ export class Preferences {
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowTavernBrawl: boolean = true;
 	readonly decktrackerShowPractice: boolean = true;
+	readonly decktrackerShowFriendly: boolean = true;
+	readonly decktrackerShowCasual: boolean = true;
 }
