@@ -3,6 +3,9 @@ import { Component, AfterViewInit, ElementRef, ChangeDetectionStrategy, ChangeDe
 import { DebugService } from '../../services/debug.service';
 import { GameState } from '../../models/decktracker/game-state';
 import { DeckEvents } from '../../services/decktracker/event-parser/deck-events';
+import { Preferences } from '../../models/preferences';
+import { PreferencesService } from '../../services/preferences.service';
+import { GameType } from '../../models/enums/game-type';
 
 declare var overwolf: any;
 
@@ -53,6 +56,7 @@ export class DeckTrackerComponent implements AfterViewInit {
 	windowId: string;
 
 	constructor(
+			private prefs: PreferencesService,
 			private cdr: ChangeDetectorRef,
 			private debugService: DebugService,
 			private elRef: ElementRef) {
@@ -76,10 +80,17 @@ export class DeckTrackerComponent implements AfterViewInit {
 			this.processEvent(event.event);
 			this.cdr.detectChanges();
 		})
+		const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+		preferencesEventBus.subscribe((event) => {
+			console.log('received pref event', event);
+			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+				this.handleDisplayPreferences(event.preferences);
+			}
+		})
 		console.warn("Should remove the restoreWindow from prod code");
-		this.restoreWindow();
 		this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
 		console.log('game state', this.gameState);
+		this.handleDisplayPreferences();
 		this.cdr.detectChanges();
 	}
 
@@ -90,14 +101,47 @@ export class DeckTrackerComponent implements AfterViewInit {
 
 	private processEvent(event) {
 		switch(event.name) {
-			case DeckEvents.GAME_START:
-				// TODO: handle settings based on game mode here
-				this.restoreWindow();
+			case DeckEvents.MATCH_METADATA:
+				this.handleDisplayPreferences();
 				break;
 			case DeckEvents.GAME_END:
 				this.hideWindow();
 				break;
 		}
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		if (await this.shouldDisplayOverlay(preferences)) {
+			this.restoreWindow();
+		}
+		else {
+			this.hideWindow();
+		}
+	}
+
+	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
+		const prefs = preferences || await this.prefs.getPreferences();
+		switch (this.gameState.metadata.gameType as GameType) {
+			case GameType.ARENA: 
+				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowArena;
+			case GameType.CASUAL: 
+				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowCasual;
+			case GameType.RANKED: 
+				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowRanked;
+			case GameType.VS_AI: 
+				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowPractice;
+			case GameType.VS_FRIEND: 
+				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly;
+			case GameType.FSG_BRAWL: 
+			case GameType.FSG_BRAWL_1P_VS_AI: 
+			case GameType.FSG_BRAWL_2P_COOP: 
+			case GameType.FSG_BRAWL_VS_FRIEND: 
+			case GameType.TB_1P_VS_AI: 
+			case GameType.TB_2P_COOP: 
+			case GameType.TAVERNBRAWL: 
+				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowTavernBrawl;
+		}
+		return this.gameState.playerDeck.deckList.length > 0;
 	}
 
 	private restoreWindow() {

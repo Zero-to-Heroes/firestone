@@ -12,6 +12,8 @@ import { DeckListByZoneComponent } from '../../components/decktracker/deck-list-
 import { DeckZoneComponent } from '../../components/decktracker/deck-zone.component';
 import { DeckCardComponent } from '../../components/decktracker/deck-card.component';
 import { SharedModule } from '../shared/shared.module';
+import { PreferencesService } from '../../services/preferences.service';
+import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 
 @NgModule({
 	imports: [
@@ -34,6 +36,8 @@ import { SharedModule } from '../shared/shared.module';
 	],
 	providers: [
 		DebugService,
+		GenericIndexedDbService,
+		PreferencesService,
 	],
 })
 

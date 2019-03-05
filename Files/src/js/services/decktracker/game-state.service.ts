@@ -18,6 +18,7 @@ import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-par
 import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
+import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 
 declare var overwolf: any;
 
@@ -80,6 +81,7 @@ export class GameStateService {
 	private buildEventParsers(): ReadonlyArray<EventParser> {
 		return [
 			new GameStartParser(this.deckParser, this.allCards),
+			new MatchMetadataParser(this.deckParser, this.allCards),
 			new MulliganOverParser(this.deckParser, this.allCards),
 			new CardDrawParser(this.deckParser, this.allCards),
 			new ReceiveCardInHandParser(this.deckParser, this.allCards),
