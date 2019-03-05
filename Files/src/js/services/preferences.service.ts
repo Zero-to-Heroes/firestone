@@ -37,20 +37,31 @@ export class PreferencesService {
     }
 
 	public async setDecktrackerShowArena(pref: boolean) {
-        // TODO: send event to prefs event bus
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, decktrackerShowArena: pref} as Preferences;
         this.savePreferences(newPrefs);
     }
     
 	public async setDecktrackerShowRanked(pref: boolean) {
-        // TODO: send event to prefs event bus
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, decktrackerShowRanked: pref} as Preferences;
         this.savePreferences(newPrefs);
 	}
     
+	public async setDecktrackerShowTavernBrawl(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, decktrackerShowTavernBrawl: pref} as Preferences;
+        this.savePreferences(newPrefs);
+	}
+    
+	public async setDecktrackerShowPractice(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, decktrackerShowPractice: pref} as Preferences;
+        this.savePreferences(newPrefs);
+	}
+    
     private savePreferences(userPrefs: Preferences) {
         this.indexedDb.saveUserPreferences(userPrefs);
+        // TODO: send event to prefs event bus
     }
 }
