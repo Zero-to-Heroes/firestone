@@ -27,13 +27,14 @@ export class CardBackToDeckParser implements EventParser {
 		const initialZone: string = gameEvent.data[2];
 		const card = this.findCard(initialZone, currentState.playerDeck, cardId);
 		const newHand: ReadonlyArray<DeckCard> = this.buildNewHand(initialZone, currentState.playerDeck.hand, card);
+		const newOther: ReadonlyArray<DeckCard> = this.buildNewOther(initialZone, currentState.playerDeck.otherZone, card);
 		const previousDeck = currentState.playerDeck.deck;
 		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
-			deckList: currentState.playerDeck.deckList,
 			deck: newDeck,
-			hand: newHand
-		});
+			hand: newHand,
+			otherZone: newOther
+		} as DeckState);
 		return Object.assign(new GameState(), currentState, 
 			{ 
 				playerDeck: newPlayerDeck
@@ -48,6 +49,9 @@ export class CardBackToDeckParser implements EventParser {
 		if (initialZone === 'HAND') {
 			return deckState.hand.find((card) => card.cardId === cardId);
 		}
+		if (['PLAY', 'GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
+			return deckState.otherZone.find((card) => card.cardId === cardId);
+		}
 		return null;
 	}
 	
@@ -56,5 +60,12 @@ export class CardBackToDeckParser implements EventParser {
 			return previousHand;
 		}
 		return DeckManipulationHelper.removeSingleCardFromZone(previousHand, movedCard.cardId);
+	}
+	
+	private buildNewOther(initialZone: string, previousOther: ReadonlyArray<DeckCard>, movedCard: DeckCard): ReadonlyArray<DeckCard> {
+		if (['PLAY', 'GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
+			return DeckManipulationHelper.removeSingleCardFromZone(previousOther, movedCard.cardId);
+		}
+		return previousOther;
 	}
 }
