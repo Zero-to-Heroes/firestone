@@ -12,10 +12,6 @@ export class PreferencesService {
         return this.indexedDb.getUserPreferences();
     }
     
-    public savePreferences(userPrefs: Preferences) {
-        this.indexedDb.saveUserPreferences(userPrefs);
-    }
-    
     public async setDontConfirmVideoDeletion(dontAsk: boolean) {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk} as Preferences;
@@ -38,5 +34,23 @@ export class PreferencesService {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, hasSeenVideoCaptureChangeNotif: pref} as Preferences;
         this.savePreferences(newPrefs);
+    }
+
+	public async setDecktrackerShowArena(pref: boolean) {
+        // TODO: send event to prefs event bus
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, decktrackerShowArena: pref} as Preferences;
+        this.savePreferences(newPrefs);
+    }
+    
+	public async setDecktrackerShowRanked(pref: boolean) {
+        // TODO: send event to prefs event bus
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, decktrackerShowRanked: pref} as Preferences;
+        this.savePreferences(newPrefs);
+	}
+    
+    private savePreferences(userPrefs: Preferences) {
+        this.indexedDb.saveUserPreferences(userPrefs);
     }
 }
