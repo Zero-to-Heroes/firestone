@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 
 @Component({
 	selector: 'settings-app-selection',
@@ -13,10 +13,10 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/
                 <span>The Binder</span>
             </li>
             <li [ngClass]="{'selected': selectedApp == 'achievements'}">
-                <span>Achievements</span>
+                <span (click)="changeSelection('achievements')">Achievements</span>
             </li>
-            <li class="disabled">
-                <span>Deck Tracker</span>
+            <li [ngClass]="{'selected': selectedApp == 'decktracker'}">
+                <span (click)="changeSelection('decktracker')">Deck Tracker</span>
             </li>
         </ul>
 	`,
@@ -25,4 +25,10 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/
 export class SettingsAppSelectionComponent {
 
     selectedApp: string = 'achievements';
+    @Output() onAppSelected = new EventEmitter<string>();
+
+    changeSelection(selection: string) {
+        this.selectedApp = selection;
+        this.onAppSelected.next(selection);
+    }
 }

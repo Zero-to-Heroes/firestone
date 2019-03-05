@@ -1,14 +1,14 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { OverwolfService } from '../../services/overwolf.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 declare var overwolf;
 
 @Component({
 	selector: 'settings-achievements-storage',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/settings-achievements-storage.component.scss`
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/settings-common.component.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-storage.component.scss`
 	],
 	template: `
 		<div class="achievements-storage">

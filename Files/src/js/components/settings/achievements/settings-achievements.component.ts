@@ -3,8 +3,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 @Component({
 	selector: 'settings-achievements',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/settings-achievements.component.scss`
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements.component.scss`
 	],
 	template: `
 		<ul class="achievements">

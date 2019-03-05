@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { OverwolfService } from '../../services/overwolf.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'settings-achievements-sound-capture',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/settings-achievements-sound-capture.component.scss`,
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/settings-common.component.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-sound-capture.component.scss`,
 	],
 	template: `
         <div class="sound-capture">

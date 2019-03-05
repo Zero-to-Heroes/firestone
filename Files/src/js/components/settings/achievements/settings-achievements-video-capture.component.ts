@@ -1,17 +1,17 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { OverwolfService } from '../../services/overwolf.service';
-import { Events } from '../../services/events.service';
-import { PreferencesService } from '../../services/preferences.service';
+import { OverwolfService } from '../../../services/overwolf.service';
+import { Events } from '../../../services/events.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 declare var overwolf;
 
 @Component({
 	selector: 'settings-achievements-video-capture',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/settings-achievements-video-capture.component.scss`
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/settings-common.component.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-video-capture.component.scss`
 	],
 	template: `
         <div class="video-capture">

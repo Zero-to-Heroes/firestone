@@ -19,8 +19,11 @@ declare var overwolf: any;
                         <control-close [windowId]="thisWindowId"></control-close>
                     </div>
                 </section>
-                <settings-app-selection></settings-app-selection>
-                <settings-achievements></settings-achievements>
+                <settings-app-selection (onAppSelected)="onAppSelected($event)"></settings-app-selection>
+				<ng-container [ngSwitch]="selectedApp">
+					<settings-achievements *ngSwitchCase="'achievements'"></settings-achievements>
+					<settings-decktracker *ngSwitchCase="'decktracker'"></settings-decktracker>
+				</ng-container>
 				<settings-modal></settings-modal>
 			</div>
 
@@ -51,6 +54,7 @@ declare var overwolf: any;
 export class SettingsComponent implements AfterViewInit {
 
 	thisWindowId: string;
+	selectedApp: string = 'achievements';
 
 	constructor(private debugService: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
@@ -72,6 +76,10 @@ export class SettingsComponent implements AfterViewInit {
 				});
 			}
 		});
+	}
+
+	onAppSelected(selectedApp: string) {
+		this.selectedApp = selectedApp;
 	}
 
 	@HostListener('mousedown', ['$event'])

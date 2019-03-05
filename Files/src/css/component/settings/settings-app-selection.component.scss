@@ -6,10 +6,15 @@
 
 	li {
     	margin-right: 25px;
-    	padding-bottom: 14px;
+		padding-bottom: 14px;
+		color: #FFB948;
 
 		&.disabled {
 			color: #8E5B23;
+		}
+
+		&:hover:not(.disabled) {
+			border-bottom: 1px solid;
 		}
 	}
 }

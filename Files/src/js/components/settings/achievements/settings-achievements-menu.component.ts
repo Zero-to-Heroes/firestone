@@ -3,8 +3,8 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, E
 @Component({
 	selector: 'settings-achievements-menu',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/settings-achievements-menu.component.scss`
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-menu.component.scss`
 	],
 	template: `
         <ul class="achievements-menu">

@@ -1,15 +1,15 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
-import { PreferencesService } from '../../services/preferences.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga;
 
 @Component({
 	selector: 'settings-achievements-capture',
 	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/global/scrollbar-settings.scss`,
-		`../../../css/component/settings/settings-common.component.scss`,
-		`../../../css/component/settings/settings-achievements-capture.component.scss`
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/global/scrollbar-settings.scss`,
+		`../../../../css/component/settings/settings-common.component.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-capture.component.scss`
 	],
 	template: `
 		<div class="achievements-capture" [ngClass]="{'disabled': !captureVideo}">
