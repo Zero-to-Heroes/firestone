@@ -1,4 +1,8 @@
 .decktracker {
     display: flex;
     width: 100%;
+
+    settings-decktracker-launch {
+        flex-grow: 1;
+    }
 }

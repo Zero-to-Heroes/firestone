@@ -21,6 +21,8 @@ import { SettingsModalComponent } from '../../components/settings/modal/settings
 import { Events } from '../../services/events.service';
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsDecktrackerComponent } from '../../components/settings/decktracker/settings-decktracker.component';
+import { SettingsDecktrackerMenuComponent } from '../../components/settings/decktracker/settings-decktracker-menu.component';
+import { SettingsDecktrackerLaunchComponent } from '../../components/settings/decktracker/settings-decktracker-launch';
 
 @NgModule({
 	imports: [
@@ -45,6 +47,8 @@ import { SettingsDecktrackerComponent } from '../../components/settings/decktrac
 		ModalVideoSettingsChangedComponent,
 		
 		SettingsDecktrackerComponent,
+		SettingsDecktrackerMenuComponent,
+		SettingsDecktrackerLaunchComponent,
 	],
 	bootstrap: [
 		SettingsComponent,
