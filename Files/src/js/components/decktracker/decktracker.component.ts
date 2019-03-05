@@ -15,7 +15,7 @@ declare var overwolf: any;
 	template: `
 		<div class="root">
 			<div class="decktracker" *ngIf="gameState">
-				<decktracker-title-bar></decktracker-title-bar>
+				<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 				<decktracker-deck-name 
 					[hero]="gameState.playerDeck.hero"
 					[deckName]="gameState.playerDeck.name">				
@@ -50,8 +50,7 @@ declare var overwolf: any;
 export class DeckTrackerComponent implements AfterViewInit {
 
 	gameState: GameState;
-
-	private windowId: string;
+	windowId: string;
 
 	constructor(
 			private cdr: ChangeDetectorRef,

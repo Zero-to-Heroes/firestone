@@ -11,7 +11,7 @@ export class DeckState {
     // can be interacted with, which means dead minions for Priest, or 
     // discarded cards for warlock (if the warlock decks contains specific
     // cards)
-    readonly graveyard: ReadonlyArray<DeckCard> = [];
+    // readonly graveyard: ReadonlyArray<DeckCard> = [];
     readonly hand: ReadonlyArray<DeckCard> = [];
     readonly deck: ReadonlyArray<DeckCard> = [];
     readonly otherZone: ReadonlyArray<DeckCard> = [];

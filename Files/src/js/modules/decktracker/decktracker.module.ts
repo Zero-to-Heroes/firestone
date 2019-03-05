@@ -11,12 +11,14 @@ import { DeckTrackerDeckListComponent } from '../../components/decktracker/deckt
 import { DeckListByZoneComponent } from '../../components/decktracker/deck-list-by-zone.component';
 import { DeckZoneComponent } from '../../components/decktracker/deck-zone.component';
 import { DeckCardComponent } from '../../components/decktracker/deck-card.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
 	imports: [
 		BrowserModule,
 		HttpModule,
         BrowserAnimationsModule,
+		SharedModule,
 	],
 	declarations: [
 		DeckTrackerComponent,
