@@ -4,6 +4,6 @@ import { Injectable } from '@angular/core';
 export class FeatureFlags {
     
 	public decktracker() {
-        return true;
+        return false;
     }
 }

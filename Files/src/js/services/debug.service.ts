@@ -6,7 +6,7 @@ declare var overwolf: any;
 export class DebugService {
 
 	constructor() {
-		let debugMode = false;
+		let debugMode = true;
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
 		console.error = this.overrideError(console.error, debugMode);

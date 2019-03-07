@@ -47,6 +47,17 @@ export class SimpleIOService {
 		});
 	}
 
+	public async getFileContents(filePath: string): Promise<string> {
+		await this.waitForInit();
+		const plugin = await this.get();
+		return new Promise<string>((resolve) => {
+			plugin.getTextFile(filePath, false, (result, contents) => {
+				console.log('read file contents completed', filePath, result);
+				resolve(contents);
+			})
+		})
+	}
+
 	public async get() {
 		await this.waitForInit();
 		return this.simpleIOPlugin.get();

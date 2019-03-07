@@ -5,8 +5,10 @@ import { Events } from './events.service';
 import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { captureEvent } from '@sentry/core';
 import { S3FileUploadService } from './s3-file-upload.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 
 declare var OverwolfPlugin: any;
+declare var overwolf: any;
 
 @Injectable()
 export class GameEvents {
@@ -22,6 +24,7 @@ export class GameEvents {
 
 	constructor(
 		private events: Events,
+		private io: SimpleIOService,
 		private s3: S3FileUploadService,
 		private memoryInspectionService: MemoryInspectionService) {
 		this.init();
@@ -232,16 +235,21 @@ export class GameEvents {
 
 	private async uploadLogsAndSendException(first, second) {
 		try {
-			const s3LogFileKey = await this.s3.postLogs(second);
-			console.log('uploaded logs to S3', s3LogFileKey);
-			captureEvent({
-				message: 'Exception while running plugin: ' + first,
-				extra: {
-					first: first,
-					logFileKey: s3LogFileKey,
-				}
+			// Get the HS Power.log file
+			overwolf.games.getRunningGameInfo(async (res: any) => {
+				const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
+				const logLines = await this.io.getFileContents(logsLocation);
+				const s3LogFileKey = await this.s3.postLogs(logLines);
+				console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+				captureEvent({
+					message: 'Exception while running plugin: ' + first,
+					extra: {
+						first: first,
+						logFileKey: s3LogFileKey,
+					}
+				});
+				console.log('uploaded event to sentry');
 			});
-			console.log('uploaded event to sentry');
 		}
 		catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);
