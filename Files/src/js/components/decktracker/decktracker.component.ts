@@ -120,6 +120,9 @@ export class DeckTrackerComponent implements AfterViewInit {
 	}
 
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
+		if (!this.gameState || !this.gameState.metadata) { 
+			return;
+		}
 		const prefs = preferences || await this.prefs.getPreferences();
 		switch (this.gameState.metadata.gameType as GameType) {
 			case GameType.ARENA: 
