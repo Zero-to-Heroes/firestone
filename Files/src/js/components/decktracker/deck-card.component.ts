@@ -10,7 +10,7 @@ import { Events } from '../../services/events.service';
 		'../../../css/component/decktracker/dim-overlay.scss',
 	],
 	template: `
-		<div class="deck-card" [ngClass]="{'legendary': rarity === 'legendary'}">
+		<div class="deck-card {{rarity}}">
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
 			<div class="mana-cost"><span>{{manaCost === undefined ? '?' : manaCost}}</span></div>

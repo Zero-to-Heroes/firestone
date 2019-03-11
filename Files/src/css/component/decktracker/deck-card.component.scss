@@ -92,4 +92,14 @@
             height: 12px;
         }
     }
+
+    &.rare .mana-cost {
+        background: #357EE3;
+    }
+    &.epic .mana-cost {
+        background: #6D3E92;
+    }
+    &.legendary .mana-cost {
+        background: #AE7014;
+    }
 }
