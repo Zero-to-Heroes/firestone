@@ -1,4 +1,4 @@
-import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef, EventEmitter } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
 
@@ -19,7 +19,10 @@ declare var overwolf: any;
                         <control-close [windowId]="thisWindowId"></control-close>
                     </div>
                 </section>
-                <settings-app-selection (onAppSelected)="onAppSelected($event)"></settings-app-selection>
+				<settings-app-selection 
+						[selectedApp]="selectedApp" 
+						(onAppSelected)="onAppSelected($event)">
+				</settings-app-selection>
 				<ng-container [ngSwitch]="selectedApp">
 					<settings-achievements *ngSwitchCase="'achievements'"></settings-achievements>
 					<settings-decktracker *ngSwitchCase="'decktracker'"></settings-decktracker>
@@ -55,13 +58,17 @@ export class SettingsComponent implements AfterViewInit {
 
 	thisWindowId: string;
 	selectedApp: string = 'achievements';
+	private settingsEventBus: EventEmitter<string>;
 
-	constructor(private debugService: DebugService) {
+	constructor(private debugService: DebugService, private cdr: ChangeDetectorRef) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.thisWindowId = result.window.id;
 			}
 		});
+		window['selectApp'] = this.onAppSelected;
+		this.settingsEventBus = overwolf.windows.getMainWindow().settingsEventBus;
+		this.settingsEventBus.subscribe((selectedApp) => this.selectApp(selectedApp));
 	}
 
 	ngAfterViewInit() {
@@ -76,10 +83,23 @@ export class SettingsComponent implements AfterViewInit {
 				});
 			}
 		});
+
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			// console.log('updated game', res);
+			if (this.exitGame(res)) {
+				this.closeApp();
+			}
+		});
 	}
 
 	onAppSelected(selectedApp: string) {
 		this.selectedApp = selectedApp;
+	}
+
+	selectApp(selectedApp: string) {
+		console.log('selectApp', selectedApp);
+		this.selectedApp = selectedApp;
+		this.cdr.detectChanges();
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -87,7 +107,16 @@ export class SettingsComponent implements AfterViewInit {
 		overwolf.windows.dragMove(this.thisWindowId);
 	};
 
-	closeWindow() {
-		overwolf.windows.close(this.thisWindowId);
-	};
+	private exitGame(gameInfoResult: any): boolean {
+		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	}
+
+	private closeApp() {
+		overwolf.windows.getCurrentWindow((result) => {
+			if (result.status === "success") {
+				console.log('closing');
+				overwolf.windows.close(result.window.id);
+			}
+		});
+	}
 }

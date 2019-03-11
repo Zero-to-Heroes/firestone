@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-app-selection',
@@ -24,7 +24,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmi
 })
 export class SettingsAppSelectionComponent {
 
-    selectedApp: string = 'achievements';
+    @Input() selectedApp: string = 'achievements';
     @Output() onAppSelected = new EventEmitter<string>();
 
     changeSelection(selection: string) {
