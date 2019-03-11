@@ -6,9 +6,12 @@ import { ControlHelpComponent } from '../../components/controls/control-help.com
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
+import { TooltipsComponent, Tooltip } from '../../components/tooltips.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
 	imports: [
+		BrowserModule,
 	],
 	declarations: [
 		ControlHelpComponent,
@@ -18,7 +21,11 @@ import { ControlSettingsComponent } from '../../components/controls/control-sett
 		
 		HotkeyComponent,
 		VersionComponent,
+
+		Tooltip,
+		TooltipsComponent,
 	],
+	entryComponents: [Tooltip],
 	exports: [
 		ControlHelpComponent,
 		ControlMinimizeComponent,
@@ -27,6 +34,9 @@ import { ControlSettingsComponent } from '../../components/controls/control-sett
 
 		HotkeyComponent,
 		VersionComponent,
+
+		Tooltip,
+		TooltipsComponent,
 	],
 })
 

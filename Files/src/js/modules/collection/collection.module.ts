@@ -143,13 +143,11 @@ console.log('version is', process.env.APP_VERSION);
 
 		FtueElement,
 		FtueComponent,
-		Tooltip,
-		TooltipsComponent,
 	],
 	bootstrap: [
 		MainWindowComponent,
 	],
-	entryComponents: [Tooltip, FtueElement],
+	entryComponents: [FtueElement],
 	providers: [
 		AllCardsService,
 		CardHistoryStorageService,
