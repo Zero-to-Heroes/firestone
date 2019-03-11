@@ -23,6 +23,7 @@ export class ControlSettingsComponent implements AfterViewInit {
 
     @Input() settingsApp: string;
     @Input() windowId: string;
+    @Input() shouldMoveSettingsWindow: boolean = true;
 	@Input() settingsSection: string;
 
 	private settingsWindowId: string;
@@ -51,10 +52,14 @@ export class ControlSettingsComponent implements AfterViewInit {
 				y: currentWindoResult.window.top + currentWindoResult.window.height / 2
 			};
 			// console.log('center is', center);
-			overwolf.windows.sendMessage(this.settingsWindowId, 'move', center, (result3) => {
-				overwolf.windows.restore(this.settingsWindowId, (result2) => { 
+			if (this.shouldMoveSettingsWindow) {
+				overwolf.windows.sendMessage(this.settingsWindowId, 'move', center, (result3) => {
+					overwolf.windows.restore(this.settingsWindowId);
 				});
-			});
+			}
+			else {
+				overwolf.windows.restore(this.settingsWindowId);
+			}
 		});
 	}
 }
