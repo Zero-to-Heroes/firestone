@@ -12,7 +12,8 @@ import { DeckState } from '../../models/decktracker/deck-state';
 		<div class="deck-list">
 			<ng-container [ngSwitch]="_displayMode">
 				<deck-list-by-zone *ngSwitchCase="'DISPLAY_MODE_ZONE'" 
-					[deckState]="_deckState">
+					[deckState]="_deckState"
+					[activeTooltip]="activeTooltip">
 				</deck-list-by-zone>
 			</ng-container>
 		</div>
@@ -21,6 +22,7 @@ import { DeckState } from '../../models/decktracker/deck-state';
 })
 export class DeckTrackerDeckListComponent {
 
+	@Input() activeTooltip: string;
 	_deckState: DeckState;
 	_displayMode: string = 'DISPLAY_MODE_ZONE';
 

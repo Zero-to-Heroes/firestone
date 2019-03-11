@@ -6,6 +6,8 @@ import { DeckEvents } from '../../services/decktracker/event-parser/deck-events'
 import { Preferences } from '../../models/preferences';
 import { PreferencesService } from '../../services/preferences.service';
 import { GameType } from '../../models/enums/game-type';
+import { Events } from '../../services/events.service';
+import { GameEvent } from '../../models/game-event';
 
 declare var overwolf: any;
 
@@ -23,7 +25,10 @@ declare var overwolf: any;
 					[hero]="gameState.playerDeck.hero"
 					[deckName]="gameState.playerDeck.name">				
 				</decktracker-deck-name>
-				<decktracker-deck-list [deckState]="gameState.playerDeck"></decktracker-deck-list>
+				<decktracker-deck-list 
+						[deckState]="gameState.playerDeck"
+						[activeTooltip]="activeTooltip">
+				</decktracker-deck-list>
 			</div>
 
 			<i class="i-54 gold-theme corner top-left">
@@ -46,6 +51,7 @@ declare var overwolf: any;
 					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
 				</svg>
 			</i>
+			<tooltips [module]="'decktracker'"></tooltips>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,10 +60,12 @@ export class DeckTrackerComponent implements AfterViewInit {
 
 	gameState: GameState;
 	windowId: string;
+	activeTooltip: string;
 
 	constructor(
 			private prefs: PreferencesService,
 			private cdr: ChangeDetectorRef,
+			private events: Events,
 			private debugService: DebugService,
 			private elRef: ElementRef) {
 		overwolf.windows.getCurrentWindow((result) => {
@@ -67,6 +75,14 @@ export class DeckTrackerComponent implements AfterViewInit {
 			if (this.exitGame(res)) {
 				this.closeApp();
 			}
+		});
+		this.events.on(Events.SHOW_TOOLTIP).subscribe((data) => {
+			this.activeTooltip = data.data[0];
+			this.cdr.detectChanges();
+		});
+		this.events.on(Events.HIDE_TOOLTIP).subscribe((data) => {
+			this.activeTooltip = undefined;
+			this.cdr.detectChanges();
 		});
 	}
 

@@ -1,11 +1,13 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
+import { Events } from '../../services/events.service';
 
 @Component({
 	selector: 'deck-card',
 	styleUrls: [
 		'../../../css/global/components-global.scss',
 		'../../../css/component/decktracker/deck-card.component.scss',
+		'../../../css/component/decktracker/dim-overlay.scss',
 	],
 	template: `
 		<div class="deck-card" [ngClass]="{'legendary': rarity === 'legendary'}">
@@ -27,19 +29,33 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 					</i>
 				</div>
 			</div>
+			<div class="dim-overlay" *ngIf="_activeTooltip && _activeTooltip !== cardId"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckCardComponent {
 
+	_activeTooltip: string;
+	cardId: string;
 	cardImage: string;
 	manaCost: number;
 	cardName: string;
 	rarity: string;
 	numberOfCopies: number;
 
+	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {
+
+	}
+
+	@Input('activeTooltip') set activeTooltip(activeTooltip: string) {
+		this._activeTooltip = activeTooltip;
+		this.cdr.detectChanges();
+		// console.log('setting active tooltip', this.cardId, this._activeTooltip);
+	}
+
 	@Input('card') set card(card: DeckCard) {
+		this.cardId = card.cardId;
 		this.cardImage = `url(http://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
 		this.manaCost = card.manaCost;
 		this.cardName = card.cardName;
@@ -48,5 +64,18 @@ export class DeckCardComponent {
 		if (this.numberOfCopies <= 0) {
 			console.error('invalid number of copies', card);
 		}
+	}
+
+	@HostListener('mouseenter') onMouseEnter() {
+		let rect = this.el.nativeElement.getBoundingClientRect();
+		let x = rect.left;
+		let y = rect.top;
+		// console.log('on mouse enter', rect);
+		this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true);
+	}
+
+	@HostListener('mouseleave')
+	onMouseLeave() {
+		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}
 }

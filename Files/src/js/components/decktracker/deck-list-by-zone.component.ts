@@ -14,7 +14,7 @@ declare var overwolf: any;
 	template: `
 		<ul class="deck-list">
 			<li *ngFor="let zone of zones; trackBy: trackZone">
-				<deck-zone [zone]="zone"></deck-zone>
+				<deck-zone [zone]="zone" [activeTooltip]="activeTooltip"></deck-zone>
 			</li>
 		</ul>
 	`,
@@ -22,6 +22,7 @@ declare var overwolf: any;
 })
 export class DeckListByZoneComponent {
 
+	@Input() activeTooltip: string;
 	zones: ReadonlyArray<DeckZone>;
 
 	@Input('deckState') set deckState(deckState: DeckState) {

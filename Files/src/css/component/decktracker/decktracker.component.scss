@@ -64,6 +64,24 @@
 			display: flex;
 			position: relative;
 			height: 100%;
-        }
+		}
+	}
+
+	tooltips {
+		z-index: 1;
+		pointer-events: none;
+
+		::ng-deep tooltip {
+			left: 0;
+			width: 100%;
+			// display: flex !important;
+			align-items: center;
+			justify-content: center;
+			
+			.tooltip-container img {
+				width: 210px;
+				filter: drop-shadow(0 0 15px rgba(159, 182, 215, 0.7));
+			}
+		}
 	}
 }
