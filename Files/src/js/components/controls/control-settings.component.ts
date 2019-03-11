@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
 
 declare var overwolf: any;
 
@@ -19,26 +19,40 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlSettingsComponent {
+export class ControlSettingsComponent implements AfterViewInit {
 
+    @Input() settingsApp: string;
     @Input() windowId: string;
+	@Input() settingsSection: string;
 
-	showSettings() {
-        console.log('showing settings');
+	private settingsWindowId: string;
+	private settingsEventBus: EventEmitter<string>;
+	
+	ngAfterViewInit() {
         overwolf.windows.obtainDeclaredWindow("SettingsWindow", (result) => {
 			if (result.status !== 'success') {
-				console.warn('Could not get SettingsWindow', result);
+				// console.warn('Could not get SettingsWindow', result);
+				this.ngAfterViewInit();
 				return;
 			}
-			overwolf.windows.getCurrentWindow((currentWindoResult) => {
-				// console.log('current window', currentWindoResult);
-				const center = {
-					x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
-					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
-				};
-				// console.log('center is', center);
-				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
-					overwolf.windows.restore(result.window.id, (result2) => { });
+			this.settingsWindowId = result.window.id;
+			this.settingsEventBus = overwolf.windows.getMainWindow().settingsEventBus;
+		});
+	}
+
+	showSettings() {
+		if (this.settingsApp) {
+			this.settingsEventBus.next(this.settingsApp);
+		}
+		overwolf.windows.getCurrentWindow((currentWindoResult) => {
+			// console.log('current window', currentWindoResult);
+			const center = {
+				x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
+				y: currentWindoResult.window.top + currentWindoResult.window.height / 2
+			};
+			// console.log('center is', center);
+			overwolf.windows.sendMessage(this.settingsWindowId, 'move', center, (result3) => {
+				overwolf.windows.restore(this.settingsWindowId, (result2) => { 
 				});
 			});
 		});
