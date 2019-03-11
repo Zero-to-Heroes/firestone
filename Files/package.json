@@ -1,10 +1,9 @@
 {
   "name": "Firestone",
-  "version": "2.0.17",
+  "version": "2.0.29",
   "scripts": {
-    "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.development --progress --profile --bail --colors",
-    "build": "rimraf dist && webpack --config webpack.config.js --env.production --progress --profile --bail --colors",
-    "serve": "webpack-dev-server --config webpack.config.js --env.development --content-base ./dist"
+    "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
+    "build": "rimraf dist && webpack --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
   },
   "license": "MIT",
   "dependencies": {
@@ -52,6 +51,7 @@
     "mini-css-extract-plugin": "0.4.0",
     "node-sass": "4.9.0",
     "raw-loader": "0.5.1",
+    "replace-in-file-webpack-plugin": "1.0.6",
     "rimraf": "2.6.2",
     "sass-loader": "7.0.1",
     "style-loader": "0.21.0",

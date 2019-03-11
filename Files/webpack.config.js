@@ -2,7 +2,9 @@ const webpack = require("@artonge/webpack");
 // const ngcWebpack = require("ngc-webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
+const DefinePlugin = require("webpack").DefinePlugin;
 
 var path = require("path");
 
@@ -95,6 +97,11 @@ module.exports = function(env, argv) {
     },
 
     plugins: [
+      // Define environment variables to export to Angular
+      new DefinePlugin({
+        'process.env.APP_VERSION': JSON.stringify(env.appversion),
+      }),
+
       new AngularCompilerPlugin({
         tsConfigPath: "./tsconfig.json",
         entryModules: [
@@ -126,6 +133,16 @@ module.exports = function(env, argv) {
         { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
         { from: path.join(process.cwd(), "plugins"), to: "plugins" },
       ]),
+
+      // Replace the version in the manifest
+      new ReplaceInFileWebpackPlugin([{
+        dir: 'dist',
+        files: ['manifest.json'],
+        rules: [{
+          search: '@app-version@',
+          replace: env.appversion
+        }]
+      }])
     ]
   };
 };
