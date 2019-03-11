@@ -14,6 +14,15 @@ import { DeckCardComponent } from '../../components/decktracker/deck-card.compon
 import { SharedModule } from '../shared/shared.module';
 import { PreferencesService } from '../../services/preferences.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { init } from '@sentry/browser';
+
+init({
+	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
+	enabled: process.env.NODE_ENV === 'production',
+	release: process.env.APP_VERSION
+});
+
+console.log('version is', process.env.APP_VERSION);
 
 @NgModule({
 	imports: [

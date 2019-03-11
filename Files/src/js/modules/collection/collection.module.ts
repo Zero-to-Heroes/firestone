@@ -76,6 +76,15 @@ import { FsTimeDisplay, FsUtcPipe } from '../../components/video-controls/single
 import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-double-click';
 import { AchievementsGlobalCategoriesComponent } from '../../components/achievements/achievements-global-categories.component';
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
+import { init } from '@sentry/browser';
+
+init({
+	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
+	enabled: process.env.NODE_ENV === 'production',
+	release: process.env.APP_VERSION
+});
+
+console.log('version is', process.env.APP_VERSION);
 
 @NgModule({
 	imports: [
