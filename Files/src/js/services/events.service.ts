@@ -41,6 +41,10 @@ export class Events {
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
 
+	// An intermediate layer for decktracker, so that we have better control on the display
+	public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';
+	public static readonly DECK_HIDE_TOOLTIP = 'deck-hide-tooltip';
+
 	public static readonly SET_MOUSE_OVER = 'set-mouse-over';
 	public static readonly SHOWING_FTUE = 'showing-ftue';
 	public static readonly DISMISS_FTUE = 'dismiss-ftue';

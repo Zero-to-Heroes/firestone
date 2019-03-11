@@ -62,6 +62,9 @@ export class DeckTrackerComponent implements AfterViewInit {
 	windowId: string;
 	activeTooltip: string;
 
+	private showTooltipTimer;
+	private hideTooltipTimer;
+
 	constructor(
 			private prefs: PreferencesService,
 			private cdr: ChangeDetectorRef,
@@ -76,13 +79,29 @@ export class DeckTrackerComponent implements AfterViewInit {
 				this.closeApp();
 			}
 		});
-		this.events.on(Events.SHOW_TOOLTIP).subscribe((data) => {
-			this.activeTooltip = data.data[0];
-			this.cdr.detectChanges();
+		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
+			clearTimeout(this.hideTooltipTimer);
+			// Already in tooltip mode
+			if (this.activeTooltip) {
+				this.activeTooltip = data.data[0];
+				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+				this.cdr.detectChanges();
+			}
+			else {
+				this.showTooltipTimer = setTimeout(() => {
+					this.activeTooltip = data.data[0];
+					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+					this.cdr.detectChanges();
+				}, 300)
+			}
 		});
-		this.events.on(Events.HIDE_TOOLTIP).subscribe((data) => {
-			this.activeTooltip = undefined;
-			this.cdr.detectChanges();
+		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe((data) => {
+			clearTimeout(this.showTooltipTimer);
+			this.hideTooltipTimer = setTimeout(() => {
+				this.activeTooltip = undefined;
+				this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
+				this.cdr.detectChanges();
+			}, 200);
 		});
 	}
 

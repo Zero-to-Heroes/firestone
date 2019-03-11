@@ -71,11 +71,11 @@ export class DeckCardComponent {
 		let x = rect.left;
 		let y = rect.top;
 		// console.log('on mouse enter', rect);
-		this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true);
+		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, x, y, true);
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
+		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, this.cardId);
 	}
 }
