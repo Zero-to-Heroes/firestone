@@ -29,8 +29,8 @@ export class DeckListByZoneComponent {
 		this.zones = [
 			this.buildZone(deckState.deck, 'deck', 'In deck', (a, b) => a.manaCost - b.manaCost),
 			// this.buildZone(deckState.graveyard, 'Graveyard'),
-			this.buildZone(deckState.hand, 'hand', 'In your hand', null),
-			this.buildZone(deckState.otherZone, 'other', 'Other', null),
+			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost),
+			this.buildZone(deckState.otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost),
 		]
 	}
 
