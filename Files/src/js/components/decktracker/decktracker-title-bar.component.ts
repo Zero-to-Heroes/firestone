@@ -16,8 +16,7 @@ declare var overwolf: any;
 				</svg>
 			</i>
 			<div class="controls">
-				<control-settings [windowId]="windowId"></control-settings>
-				<control-close [windowId]="windowId"></control-close>
+				<control-settings [settingsApp]="'decktracker'" [windowId]="windowId"></control-settings>
 			</div>
 		</div>
 	`,
