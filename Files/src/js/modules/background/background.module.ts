@@ -46,6 +46,7 @@ import { GenericIndexedDbService } from '../../services/generic-indexed-db.servi
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { GameStateService } from '../../services/decktracker/game-state.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
+import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -92,6 +93,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		OverwolfService,
 		OwNotificationsService,
 		PreferencesService,
+		SettingsCommunicationService,
 		SimpleIOService,
 		MemoryInspectionService,
 		S3FileUploadService,

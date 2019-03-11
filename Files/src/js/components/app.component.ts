@@ -16,6 +16,7 @@ import { DevService } from '../services/dev.service';
 import { AchievementsVideoCaptureService } from '../services/achievement/achievements-video-capture.service';
 import { DeckParserService } from '../services/decktracker/deck-parser.service';
 import { GameStateService } from '../services/decktracker/game-state.service';
+import { SettingsCommunicationService } from '../services/settings/settings-communication.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -56,6 +57,7 @@ export class AppComponent {
 		private achievementsDb: AchievementsDb,
 		private deckParserService: DeckParserService,
 		private gameStateService: GameStateService,
+		private settingsCommunicationService: SettingsCommunicationService,
 		private logStatusService: LogStatusService) {
 
 		this.init();
@@ -99,6 +101,16 @@ export class AppComponent {
 				}
 			}
 		)
+		
+		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+			// console.log('updated game', res);
+			if (this.exitGame(res)) {
+				this.closeApp();
+			}
+			else if (this.gameRunning(res.gameInfo)) {
+				this.showLoadingScreen();
+			}
+		});
 
 		overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
 			this.loadingWindowId = result.window.id;
@@ -106,15 +118,6 @@ export class AppComponent {
 			overwolf.windows.restore(this.loadingWindowId, (result2) => {
 				// console.log('loadingwindow restored', result2)
 				overwolf.windows.hide(this.loadingWindowId);
-				overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-					// console.log('updated game', res);
-					if (this.exitGame(res)) {
-						this.closeApp();
-					}
-					else if (this.gameRunning(res.gameInfo)) {
-						this.showLoadingScreen();
-					}
-				});
 				overwolf.games.getRunningGameInfo((res: any) => {
 					// console.log('running game info', res);
 					if (this.gameRunning(res)) {
@@ -122,27 +125,28 @@ export class AppComponent {
 					}
 				});
 			});
-
-			overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-				if (result.status !== 'success') {
-					console.warn('Could not get CollectionWindow', result);
-					return;
-				}
-				overwolf.windows.restore(result.window.id, (result2) => {
-					overwolf.windows.hide(result.window.id);
-
-					this.startApp();
-
-					overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-						this.startApp(() => this.showCollectionWindow());
-						// this.startApp(() => this.showWelcomePage());
-					})
-
-					ga('send', 'event', 'toast', 'start-app');
-				})
-			});
 		});
 
+		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
+			if (result.status !== 'success') {
+				console.warn('Could not get CollectionWindow', result);
+				return;
+			}
+			overwolf.windows.restore(result.window.id, (result2) => {
+				overwolf.windows.hide(result.window.id);
+				this.startApp();
+				overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
+					this.startApp(() => this.showCollectionWindow());
+				})
+				ga('send', 'event', 'toast', 'start-app');
+			})
+		});
+
+		overwolf.windows.obtainDeclaredWindow("SettingsWindow", (result) => {
+			overwolf.windows.restore(result.window.id, (result2) => {
+				overwolf.windows.hide(result.window.id);
+			});
+		});
 	}
 
 	private showLoadingScreen() {
