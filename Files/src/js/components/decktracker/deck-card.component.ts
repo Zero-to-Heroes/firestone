@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { Events } from '../../services/events.service';
+import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 
 @Component({
 	selector: 'deck-card',
@@ -10,7 +11,7 @@ import { Events } from '../../services/events.service';
 		'../../../css/component/decktracker/dim-overlay.scss',
 	],
 	template: `
-		<div class="deck-card {{rarity}}">
+		<div class="deck-card {{rarity}} {{highlight}}">
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
 			<div class="mana-cost"><span>{{manaCost === undefined ? '?' : manaCost}}</span></div>
@@ -29,7 +30,7 @@ import { Events } from '../../services/events.service';
 					</i>
 				</div>
 			</div>
-			<div class="dim-overlay" *ngIf="_activeTooltip && _activeTooltip !== cardId"></div>
+			<div class="dim-overlay" *ngIf="highlight === 'dim' || (_activeTooltip && _activeTooltip !== cardId)"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,6 +44,7 @@ export class DeckCardComponent {
 	cardName: string;
 	rarity: string;
 	numberOfCopies: number;
+	highlight: string;
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {
 
@@ -61,7 +63,9 @@ export class DeckCardComponent {
 		this.cardName = card.cardName;
 		this.numberOfCopies = card.totalQuantity;
 		this.rarity = card.rarity;
-		if (this.numberOfCopies <= 0) {
+		this.highlight = card instanceof VisualDeckCard ? (card as VisualDeckCard).highlight : undefined;
+		// 0 is acceptable when showing the deck as a single deck list
+		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', card);
 		}
 	}

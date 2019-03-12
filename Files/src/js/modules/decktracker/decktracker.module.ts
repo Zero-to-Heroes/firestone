@@ -16,6 +16,9 @@ import { PreferencesService } from '../../services/preferences.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { init } from '@sentry/browser';
 import { Events } from '../../services/events.service';
+import { GroupedDeckListComponent } from '../../components/decktracker/grouped-deck-list.component';
+import { SelectModule } from 'ng-select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -31,11 +34,15 @@ console.log('version is', process.env.APP_VERSION);
 		HttpModule,
         BrowserAnimationsModule,
 		SharedModule,
+        SelectModule,
+		FormsModule,
+		ReactiveFormsModule,
 	],
 	declarations: [
 		DeckTrackerComponent,
 		DeckTrackerDeckListComponent,
 		DeckListByZoneComponent,
+		GroupedDeckListComponent,
 		DeckCardComponent,
 		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,

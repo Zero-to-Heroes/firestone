@@ -21,6 +21,18 @@
         background: linear-gradient(89.48deg, #090A0D 36.89%, rgba(9, 10, 13, 0) 99.92%);
     }
 
+    &.strong {
+        background: linear-gradient(89.48deg, #090A0D 36.89%, #9FB6D7 66%, #9FB6D7 100%);
+        .background-image {
+            top: 2px;
+            bottom: 2px;
+            right: 2px;
+        }
+        .gradiant {
+            margin: 2px;
+        }
+    }
+
     .mana-cost {
         width: 30px;
         height: 100%;

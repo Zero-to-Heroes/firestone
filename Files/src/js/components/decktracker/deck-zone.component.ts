@@ -11,7 +11,7 @@ import { DeckCard } from '../../models/decktracker/deck-card';
 	],
 	template: `
 		<div class="deck-zone {{className}}">
-			<div class="zone-name-container">
+			<div class="zone-name-container" *ngIf="zoneName">
 				<span class="zone-name">{{zoneName}}</span>
 				<!-- TODO: collapse caret -->
 				<div class="dim-overlay" *ngIf="activeTooltip"></div>

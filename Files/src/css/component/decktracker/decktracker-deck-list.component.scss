@@ -1,6 +1,84 @@
 .deck-list {
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     width: 100%;
     padding-bottom: 30px;
+
+    ng-select {
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        line-height: normal;
+        font-size: 13px;
+        color: #9FB6D7;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.08);
+        width: 100%;
+        z-index: 2;
+    }
+
+    ::ng-deep ng-select {
+        & > div {
+            border: none;
+            outline: none;
+
+            div.single > div.toggle:hover {
+                background: transparent;
+            }
+        }
+
+        .toggle {
+            display: none;
+        }
+
+        .open {
+            border: 1px solid #5A5F87;
+        }
+
+        .open .caret {
+            transform: scale(1, -1);
+        }
+
+        .single {
+            height: 29px;
+        }
+
+        select-dropdown {
+
+            & > div {
+                background: #07081F;
+                border: 1px solid #5A5F87;
+                border-top: none;
+                outline: none;
+            }
+
+            .filter {
+                display: none;
+            }
+
+            & > div .options ul li {
+                color: #9FB6D7;
+                border-bottom: 1px solid #5A5F87;
+                padding: 0;
+                padding-left: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 30px;
+
+                &.selected {
+                    background-color: inherit;
+                    color: inherit;
+
+                    &:hover {
+                        color: inherit;
+                    }
+                }
+
+                &.highlighted, &:hover {
+                    background-color: #303352;
+                }
+            }
+        }
+    }
 }
