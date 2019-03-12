@@ -21,7 +21,7 @@ import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
 					<span>{{numberOfCopies}}</span>
 				</div>
 			</div>
-			<div class="legendary-symbol" *ngIf="numberOfCopies === 1 && rarity === 'legendary'">
+			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
 				<div class="inner-border">
 					<i>
 						<svg>
