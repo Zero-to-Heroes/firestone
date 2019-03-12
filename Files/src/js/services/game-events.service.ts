@@ -245,6 +245,7 @@ export class GameEvents {
 					message: 'Exception while running plugin: ' + first,
 					extra: {
 						first: first,
+						firstProcessedLine: second.indexOf('\n') !== -1 ? second.split('\n')[0] : second,
 						logFileKey: s3LogFileKey,
 					}
 				});
