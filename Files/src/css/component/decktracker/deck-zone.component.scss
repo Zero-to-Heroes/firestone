@@ -13,7 +13,21 @@
             font-weight: normal;
             line-height: normal;
             font-size: 15px;
-            color: #9FB6D7;            
+            color: #9FB6D7;   
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;         
+        }
+    }
+
+    .collapse-caret {
+        --icon-color: #9FB6D7;
+        width: 12px;
+        height: 6px;
+        margin-right: 8px;
+
+        &.close {
+            transform: scale(1, -1);
         }
     }
 
