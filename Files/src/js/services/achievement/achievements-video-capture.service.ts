@@ -78,7 +78,7 @@ export class AchievementsVideoCaptureService {
 
     private actuallyTurnOnRecording() {
         if (!this.listenerRegistered) {
-            console.log('[recording] registered listeners?', overwolf.settings.OnVideoCaptureSettingsChanged);
+            // console.log('[recording] registered listeners?', overwolf.settings.OnVideoCaptureSettingsChanged);
             overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange());
             this.listenerRegistered = true;
         }

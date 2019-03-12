@@ -175,7 +175,7 @@ export class LogListenerService {
 			return false;
 		}
 
-		console.log('[log-listener] [' + this.logFile + '] HS running');
+		// console.log('[log-listener] [' + this.logFile + '] HS running');
 		return true;
 	}
 }

@@ -292,7 +292,7 @@ export class AppComponent {
 			return false;
 		}
 
-		console.log("HS running");
+		// console.log("HS running");
 		return true;
 	}
 

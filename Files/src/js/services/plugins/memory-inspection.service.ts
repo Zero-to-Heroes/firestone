@@ -86,8 +86,8 @@ export class MemoryInspectionService {
 				window.setTimeout(() => this.setFeatures(), 2000);
 				return;
 		  	}
-		  	console.log("[memory service] Set required features:");
-		  	console.log("[memory service] ", info);
+		  	// console.log("[memory service] Set required features:");
+		  	// console.log("[memory service] ", info);
 		});
 	}
 
