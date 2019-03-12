@@ -46,7 +46,7 @@ export class GameEvents {
 			console.log("[game-events] Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
 			gameEventsPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
-				if (first.toLowerCase().indexOf("exception") !== -1) {
+				if (first.toLowerCase().indexOf("exception") !== -1 || first.toLowerCase().indexOf("error") !== -1) {
 					this.uploadLogsAndSendException(first, second);
 				}
 			});
