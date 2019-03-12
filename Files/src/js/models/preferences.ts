@@ -11,4 +11,5 @@ export class Preferences {
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
 	readonly decktrackerShowCasual: boolean = true;
+	readonly overlayDisplayMode: string;
 }

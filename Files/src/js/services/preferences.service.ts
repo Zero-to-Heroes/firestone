@@ -79,7 +79,13 @@ export class PreferencesService {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, decktrackerShowCasual: pref} as Preferences;
         this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
+    }
+    
+    public async setOverlayDisplayMode(pref: string) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, overlayDisplayMode: pref} as Preferences;
+        this.savePreferences(newPrefs);
+    }
     
     private savePreferences(userPrefs: Preferences, eventName: string = null) {
         this.indexedDb.saveUserPreferences(userPrefs);

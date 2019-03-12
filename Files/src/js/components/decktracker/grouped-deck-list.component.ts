@@ -24,10 +24,6 @@ export class GroupedDeckListComponent {
 	@Input('deckState') set deckState(deckState: DeckState) {
 		// The zone in this view is the decklist + cards in the deck that didn't 
 		// start in the decklist
-		// The way we want to display it:
-		// - If the card is in hand: special highlight (if there are some copies in deck as well, just use the number)
-		// - If the card is in the deck: normal highlight
-		// - If the card is neither in deck nor in hand: dim
 		const base = deckState.deckList.map((card) => ({
 			cardId: card.cardId,
 			cardName: card.cardName,
@@ -45,11 +41,11 @@ export class GroupedDeckListComponent {
 						quantity = deckCard.totalQuantity;
 						highlight = 'normal';
 					}
-					const handCard = deckState.hand.find((c) => c.cardId === card.cardId);
-					if (handCard) {
-						// quantity += handCard.totalQuantity; // We only show the number of cards left in deck
-						highlight = 'normal';
-					}
+					// const handCard = deckState.hand.find((c) => c.cardId === card.cardId);
+					// if (handCard) {
+					// 	// quantity += handCard.totalQuantity; // We only show the number of cards left in deck
+					// 	highlight = 'normal';
+					// }
 					let newCard = Object.assign(new VisualDeckCard(), card, {
 						totalQuantity: quantity,
 						highlight: highlight,

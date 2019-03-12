@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, AfterViewInit, ViewRef, ChangeDetectorRef } from '@angular/core';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { IOption } from 'ng-select';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'decktracker-deck-list',
@@ -49,16 +50,21 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	@Input() activeTooltip: string;
 	_deckState: DeckState;
-	displayMode: string = 'DISPLAY_MODE_GROUPED';
+	displayMode: string;
 	
 	displayModeSelectOptions: Array<IOption> = [
 		{label: 'Card location', value: 'DISPLAY_MODE_ZONE'},
-		{label: 'Grouped list', value: 'DISPLAY_MODE_GROUPED'},
+		{label: 'Focus on deck', value: 'DISPLAY_MODE_GROUPED'},
 	]
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) { }
+	constructor(
+			private el: ElementRef, 
+			private cdr: ChangeDetectorRef,
+			private prefs: PreferencesService) { 
+		this.loadDefaultValues();
+	}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		let singleEl: HTMLElement = this.el.nativeElement.querySelector('.single');
 		let caretEl = singleEl.appendChild(document.createElement('i'));
 		caretEl.innerHTML =
@@ -79,8 +85,8 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 	}
 
 	selectDisplayMode(option: IOption) {
-		// TODO: save pref
 		console.log('changing display mode', option);
+		this.prefs.setOverlayDisplayMode(option.value);
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click
@@ -101,4 +107,14 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 		}
 	}
 
+	private async loadDefaultValues() {
+		this.displayMode = (await this.prefs.getPreferences()).overlayDisplayMode || 'DISPLAY_MODE_ZONE';
+		console.log('loaded default display mode', this.displayMode);
+		setTimeout(() => {
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+				console.log('detech changes')
+			}
+		});
+	}
 }
