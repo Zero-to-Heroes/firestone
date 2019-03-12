@@ -7,26 +7,30 @@ import { IOption } from 'ng-select';
 	styleUrls: [
 		'../../../css/global/components-global.scss',
 		'../../../css/component/decktracker/decktracker-deck-list.component.scss',
+		'../../../css/component/decktracker/dim-overlay.scss',
 		`../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
 		<div class="deck-list">
-			<ng-select
-					class="display-mode-select"
-					[options]="displayModeSelectOptions"
-					(opened)="refresh()"
-					(closed)="refresh()"
-					(selected)="selectDisplayMode($event)"
-					[(ngModel)]="displayMode">
-				<ng-template #optionTemplate let-option="option">
-					<span>{{option?.label}}</span>
-					<i class="i-30" *ngIf="option.value == displayMode">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown"/>
-						</svg>
-					</i>
-				</ng-template>
-			</ng-select>
+			<div class="select-container">
+				<ng-select
+						class="display-mode-select"
+						[options]="displayModeSelectOptions"
+						(opened)="refresh()"
+						(closed)="refresh()"
+						(selected)="selectDisplayMode($event)"
+						[(ngModel)]="displayMode">
+					<ng-template #optionTemplate let-option="option">
+						<span>{{option?.label}}</span>
+						<i class="i-30" *ngIf="option.value == displayMode">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown"/>
+							</svg>
+						</i>
+					</ng-template>
+				</ng-select>
+				<div class="dim-overlay" *ngIf="activeTooltip"></div>
+			</div>
 			<ng-container [ngSwitch]="displayMode">
 				<deck-list-by-zone *ngSwitchCase="'DISPLAY_MODE_ZONE'" 
 					[deckState]="_deckState"
@@ -76,7 +80,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	selectDisplayMode(option: IOption) {
 		// TODO: save pref
-		console.log('changing displayu mode', option);
+		console.log('changing display mode', option);
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click
