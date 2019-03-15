@@ -385,7 +385,6 @@
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_821c", "cardId": "GILA_821c", "cardDbfId": 48402, "cardType": "spell", "name": "Crazed Mob", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_824", "cardId": "GILA_824", "cardDbfId": 48816, "cardType": "spell", "name": "Royal Gift", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_825", "cardId": "GILA_825", "cardDbfId": 48818, "cardType": "spell", "name": "Gentleman's Top Hat", "difficulty": "rare"},
-	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_825d", "cardId": "GILA_825d", "cardDbfId": 50764, "cardType": "spell", "name": "Gentlemanly Reequip Effect Dummy", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_826", "cardId": "GILA_826", "cardDbfId": 48994, "cardType": "minion", "name": "Nalaa the Redeemer", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_827", "cardId": "GILA_827", "cardDbfId": 49343, "cardType": "minion", "name": "Murloc Holmes", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_850b", "cardId": "GILA_850b", "cardDbfId": 48378, "cardType": "spell", "name": "Hallowed Water", "difficulty": "rare"},
@@ -397,6 +396,7 @@
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_852c", "cardId": "GILA_852c", "cardDbfId": 48385, "cardType": "spell", "name": "Veteran's Militia Horn", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_853b", "cardId": "GILA_853b", "cardDbfId": 48398, "cardType": "spell", "name": "Pristine Compass", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_854", "cardId": "GILA_854", "cardDbfId": 50535, "cardType": "minion", "name": "Beastly Beauty", "difficulty": "rare"},
+	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_854t", "cardId": "GILA_854t", "cardDbfId": 50536, "cardType": "minion", "name": "Beautiful Beast", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_901", "cardId": "GILA_901", "cardDbfId": 48613, "cardType": "spell", "name": "Chaos Theory", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_903", "cardId": "GILA_903", "cardDbfId": 48615, "cardType": "spell", "name": "Enhance-a-matic", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_904", "cardId": "GILA_904", "cardDbfId": 48617, "cardType": "spell", "name": "Stroke of Midnight", "difficulty": "rare"},
@@ -410,7 +410,7 @@
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_BOSS_37t", "cardId": "GILA_BOSS_37t", "cardDbfId": 48330, "cardType": "spell", "name": "Plague of Murlocs", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_BOSS_43t", "cardId": "GILA_BOSS_43t", "cardDbfId": 48810, "cardType": "spell", "name": "Grave Mistake", "difficulty": "rare"},
 	{ "type": "monster_hunt_treasure_play", "id": "monster_hunt_treasure_play_GILA_BOSS_57t", "cardId": "GILA_BOSS_57t", "cardDbfId": 48944, "cardType": "spell", "name": "Shallow Graves", "difficulty": "rare"},
-
+	
 	{ "type": "monster_hunt_passive_play", "id": "monster_hunt_passive_play_GILA_414", "cardId": "GILA_414", "cardDbfId": 49315, "cardType": "spell", "name": "Companionship", "difficulty": "rare"},
 	{ "type": "monster_hunt_passive_play", "id": "monster_hunt_passive_play_GILA_415", "cardId": "GILA_415", "cardDbfId": 49317, "cardType": "spell", "name": "Lunar Signet", "difficulty": "rare"},
 	{ "type": "monster_hunt_passive_play", "id": "monster_hunt_passive_play_GILA_506", "cardId": "GILA_506", "cardDbfId": 48495, "cardType": "spell", "name": "First Aid Kit", "difficulty": "rare"},
