@@ -22,7 +22,7 @@ export class IndexedDbService {
 			return achievement;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while loading completed achievement', e);
+			console.error('[achievements] [storage] error while loading completed achievement', e.message, e.name, e);
 		}
 	}
 
@@ -33,7 +33,7 @@ export class IndexedDbService {
 			return result;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while saving completed achievement', e);
+			console.error('[achievements] [storage] error while saving completed achievement', e.message, e.name, e);
 		}
 	}
 
@@ -44,7 +44,7 @@ export class IndexedDbService {
 			return achievements;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while getting all completed achievements', e);
+			console.error('[achievements] [storage] error while getting all completed achievements', e.message, e.name, e);
 		}
 	}
 	
@@ -55,7 +55,7 @@ export class IndexedDbService {
 			return history;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while loading all history', e);
+			console.error('[achievements] [storage] error while loading all history', e.message, e.name, e);
 		}
 	}
 	
@@ -66,7 +66,7 @@ export class IndexedDbService {
 			console.log('[achievements] [storage] saved history', saved);
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while saving history', history, e);
+			console.error('[achievements] [storage] error while saving history', e.message, e.name, history, e);
 		}
 	}
 
@@ -90,8 +90,8 @@ export class IndexedDbService {
 				console.log('[achievements] [storage] openDatabase successful', this.db.dbWrapper.dbName);
 		    	this.dbInit = true;
 			},
-			(error) => {
-				console.log('[achievements] [storage] error in openDatabase', error);
+			(e) => {
+				console.log('[achievements] [storage] error in openDatabase', e.message, e.name, e);
 			}
 		);
 	}

@@ -30,7 +30,7 @@ export class IndexedDbService {
 			return collection;
 		}
 		catch (e) {
-			console.error('[collection] [storage] could not update collection', e);
+			console.error('[collection] [storage] could not update collection', e.message, e.name, e);
 		}
 	}
 
@@ -41,7 +41,7 @@ export class IndexedDbService {
 			return collection[0] ? collection[0].cards : [];
 		}
 		catch (e) {
-			console.error('[collection] [storage] could not get collection', e);
+			console.error('[collection] [storage] could not get collection', e.message, e.name, e);
 		}
 	}
 
@@ -52,7 +52,7 @@ export class IndexedDbService {
 			return result;
 		}
 		catch (e) {
-			console.error('[collection] [storage] error while saving history', e);
+			console.error('[collection] [storage] error while saving history', e.message, e.name, e);
 		}
 	}
 
@@ -64,7 +64,7 @@ export class IndexedDbService {
 			return history;
 		}
 		catch (e) {
-			console.error('[collection] [storage] error while saving new pack', e);
+			console.error('[collection] [storage] error while saving new pack', e.message, e.name, e);
 		}
 	}
 	
@@ -75,7 +75,7 @@ export class IndexedDbService {
 			return pityTimer;
 		}
 		catch (e) {
-			console.error('[collection] [storage] could not get pity timer', e);
+			console.error('[collection] [storage] could not get pity timer', e.message, e.name, e);
 		}
 	}
 	
@@ -86,7 +86,7 @@ export class IndexedDbService {
 			return pityTimers;
 		}
 		catch (e) {
-			console.error('[collection] [storage] could not get pity timers', e);
+			console.error('[collection] [storage] could not get pity timers', e.message, e.name, e);
 		}
 	}
 	
@@ -97,7 +97,7 @@ export class IndexedDbService {
 			return pityTimer;
 		}
 		catch (e) {
-			console.error('[collection] [storage] could not update pity timer', pityTimer, e);
+			console.error('[collection] [storage] could not update pity timer', e.message, e.name, pityTimer, e);
 		}
     }
 
