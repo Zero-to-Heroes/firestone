@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
@@ -59,13 +59,17 @@ export class SettingsAchievementsSoundCaptureComponent {
 	toggleSystemSoundCapture(event) {
 		this.captureSystemSound = !this.captureSystemSound;
 		this.changeSoundCaptureSettings();
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	toggleMicrophoneSoundCapture(event) {
 		this.captureMicrophoneSound = !this.captureMicrophoneSound;
 		this.changeSoundCaptureSettings();
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async changeSoundCaptureSettings() {
@@ -79,6 +83,8 @@ export class SettingsAchievementsSoundCaptureComponent {
 		console.log('sound default values', result);
 		this.captureSystemSound = result.sound_enabled;
 		this.captureMicrophoneSound = result.microphone_enabled;
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

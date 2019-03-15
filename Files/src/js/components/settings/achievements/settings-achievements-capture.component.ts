@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga;
@@ -58,7 +58,9 @@ export class SettingsAchievementsCaptureComponent {
 	toggleVideoCapture(event) {
 		this.captureVideo = !this.captureVideo;
 		this.changeVideoSettings();
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 		ga('send', 'event', 'video-capture-toggle', this.captureVideo);
 	}
 	
@@ -80,7 +82,9 @@ export class SettingsAchievementsCaptureComponent {
 
 	private async updateDefaultValues() {
 		this.captureVideo = !(await this.prefs.getPreferences()).dontRecordAchievements;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async changeVideoSettings() {

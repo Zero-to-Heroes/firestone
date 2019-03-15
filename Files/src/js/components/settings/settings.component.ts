@@ -1,4 +1,4 @@
-import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef, EventEmitter } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef, EventEmitter, ViewRef } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
 
@@ -99,7 +99,9 @@ export class SettingsComponent implements AfterViewInit {
 	selectApp(selectedApp: string) {
 		console.log('selectApp', selectedApp);
 		this.selectedApp = selectedApp;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('mousedown', ['$event'])

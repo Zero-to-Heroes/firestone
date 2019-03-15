@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { Events } from '../../../services/events.service';
@@ -171,7 +171,9 @@ export class SettingsAchievementsVideoCaptureComponent {
 				this.settingsForm.controls['videoQuality'].setValue('custom', {emitEvent: false});
 			}
 			console.log('set default capture values', settings, this.resolution, this.fps, this.settingsForm.controls['videoQuality'].value);
-			this.cdr.detectChanges();
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
 	}
 

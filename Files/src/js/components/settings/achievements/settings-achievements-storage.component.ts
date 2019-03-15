@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 declare var overwolf;
@@ -51,7 +51,9 @@ export class SettingsAchievementsStorageComponent {
 		const sizeResult = await this.owService.getAppVideoCaptureFolderSize();
 		this.usedSizeInGB = sizeResult.totalVideosSizeMB / 1024;
 		console.log('sizeResult', sizeResult);
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 }

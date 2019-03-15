@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { Events } from '../../../services/events.service';
 
@@ -35,6 +35,8 @@ export class SettingsModalComponent {
 	private handleNewModal(data) {
 		this.currentModal = data.data[0];
 		console.log('showing modal', data, this.currentModal);
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
