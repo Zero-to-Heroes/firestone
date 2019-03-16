@@ -241,11 +241,14 @@ export class GameEvents {
 				const logLines = await this.io.getFileContents(logsLocation);
 				const s3LogFileKey = await this.s3.postLogs(logLines);
 				console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+				const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
+				const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
 				captureEvent({
 					message: 'Exception while running plugin: ' + first,
 					extra: {
 						first: first,
-						firstProcessedLine: second.indexOf('\n') !== -1 ? second.split('\n')[0] : second,
+						firstProcessedLine: fullLogsFromPlugin.indexOf('\n') !== -1 ? fullLogsFromPlugin.split('\n')[0] : fullLogsFromPlugin,
+						lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
 						logFileKey: s3LogFileKey,
 					}
 				});
