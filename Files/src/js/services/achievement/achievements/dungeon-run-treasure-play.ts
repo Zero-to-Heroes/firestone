@@ -16,7 +16,7 @@ export class DungeonRunTreasurePlay extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type == GameEvent.CARD_CHANGED_ON_BOARD) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}

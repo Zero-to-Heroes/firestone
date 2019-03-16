@@ -1,4 +1,3 @@
-import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
@@ -17,7 +16,7 @@ export class RumbleTeammatePlay extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type == GameEvent.CARD_CHANGED_ON_BOARD) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
