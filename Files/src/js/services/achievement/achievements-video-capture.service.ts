@@ -166,9 +166,9 @@ export class AchievementsVideoCaptureService {
     private performStopCapture() {
         clearTimeout(this.currentRecordEndTimer);
         this.currentRecordEndTimer = undefined;
-        // console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
+        console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
         if (!this.currentReplayId || !this.captureOngoing) {
-            setTimeout(() => this.performStopCapture(), 50);
+            setTimeout(() => this.performStopCapture(), 500);
             return;
         }
         console.log('[recording] stopping capture, was scheduled for', this.lastRecordingDate, Date.now());
