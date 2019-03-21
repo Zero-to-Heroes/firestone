@@ -53,7 +53,9 @@ export class GameEvents {
 			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
 				this.dispatchGameEvent(JSON.parse(gameEvent));
 			});
-			gameEventsPlugin.get().initRealtimeLogConversion();
+			gameEventsPlugin.get().initRealtimeLogConversion(() => {
+				console.log('[game-events] real-time log processing ready to go');
+			});
 		});
 
 		setInterval(() => {
@@ -219,16 +221,18 @@ export class GameEvents {
 
 	public receiveLogLine(data: string) {
 		if (data.indexOf('Begin Spectating') !== -1) {
+			console.log('begin spectating', data);
 			this.spectating = true;
 		}
 		if (data.indexOf('End Spectator Mode') !== -1) {
+			console.log('end spectating', data);
 			this.spectating = false;
 		}
 
-		if (this.spectating) {
-			// For now we're not interested in spectating events, but that will come out later
-			return;
-		}
+		// if (this.spectating) {
+		// 	// For now we're not interested in spectating events, but that will come out later
+		// 	return;
+		// }
 
 		this.logLines.push(data);
 	}
