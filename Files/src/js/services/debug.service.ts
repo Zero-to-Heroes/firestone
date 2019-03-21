@@ -53,7 +53,7 @@ export class DebugService {
 							cache.push(value);
 						}
 						return value;
-					}) || '') + ' | ';
+					}) || '').substring(0, 1000) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
 				oldConsoleLogFunc.apply(console, [argsString]);
