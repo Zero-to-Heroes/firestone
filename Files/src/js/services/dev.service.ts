@@ -5,6 +5,11 @@ import { AchievementsStorageService } from './achievement/achievements-storage.s
 import { CompletedAchievement } from '../models/completed-achievement';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { Card } from '../models/card';
+import { SimpleIOService } from './plugins/simple-io.service';
+import { GameEvents } from './game-events.service';
+import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+
+const HEARTHSTONE_GAME_ID = 9898;
 
 declare var overwolf: any;
 
@@ -14,6 +19,8 @@ export class DevService {
 	constructor(
 		private achievementMonitor: AchievementsMonitor, 
 		private packMonitor: PackMonitor,
+		private io: SimpleIOService,
+		private gameEventsPlugin: GameEventsPluginService,
 		private storage: AchievementsStorageService) {
 		this.addTestCommands();
 	}
@@ -21,6 +28,7 @@ export class DevService {
 	private addTestCommands() {
 		this.addCollectionCommands();
 		this.addAchievementCommands();
+		this.addCustomLogLoaderCommand();
 	}
 
 	private addAchievementCommands() {
@@ -72,5 +80,27 @@ export class DevService {
 			const card: Card = new Card('AT_001', 1, 1);
 			this.packMonitor.createNewCardToast(card, 'GOLDEN');
 		}
+	}
+
+	private addCustomLogLoaderCommand() {	
+		window['loadLog'] = (logName) => {
+			overwolf.games.getRunningGameInfo(async (res: any) => {
+				if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
+					const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
+					const logContents = await this.io.getFileContents(logsLocation);
+					this.loadArbitraryLogContent(logContents);
+				}
+			});
+		}
+	}
+
+	private async loadArbitraryLogContent(content: string) {
+		const plugin = await this.gameEventsPlugin.get();
+		plugin.startDevMode();
+		const logLines = content.split('\n');
+		plugin.realtimeLogProcessing(logLines, () => {
+			console.log('Jobs done');
+			plugin.stopDevMode();
+		});
 	}
 }
