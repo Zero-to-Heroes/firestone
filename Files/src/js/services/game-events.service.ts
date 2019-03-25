@@ -254,6 +254,8 @@ export class GameEvents {
 				const s3LogFileKey = await this.s3.postLogs(logLines);
 				console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
 				const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
+				const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
+				console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
 				const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
 				captureEvent({
 					message: 'Exception while running plugin: ' + first,
@@ -262,6 +264,7 @@ export class GameEvents {
 						firstProcessedLine: fullLogsFromPlugin.indexOf('\n') !== -1 ? fullLogsFromPlugin.split('\n')[0] : fullLogsFromPlugin,
 						lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
 						logFileKey: s3LogFileKey,
+						pluginLogsFileKey: pluginLogsFileKey,
 					}
 				});
 				console.log('uploaded event to sentry');
