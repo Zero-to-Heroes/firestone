@@ -47,6 +47,7 @@ import { DeckParserService } from '../../services/decktracker/deck-parser.servic
 import { GameStateService } from '../../services/decktracker/game-state.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
+import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -84,6 +85,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		FeatureFlags,
 		HsPublicEventsListener,
 		GameEvents,
+		GameEventsPluginService,
 		IndexedDbService,
 		GenericIndexedDbService,
 		LogListenerService,

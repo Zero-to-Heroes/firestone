@@ -1,13 +1,11 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { GameEvent } from '../models/game-event';
-import { Events } from './events.service';
-import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { captureEvent } from '@sentry/core';
 import { S3FileUploadService } from './s3-file-upload.service';
 import { SimpleIOService } from './plugins/simple-io.service';
+import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 
-declare var OverwolfPlugin: any;
 declare var overwolf: any;
 
 @Injectable()
@@ -17,45 +15,33 @@ export class GameEvents {
 	public newLogLineEvents = new EventEmitter<GameEvent>();
 	public onGameStart = new EventEmitter<GameEvent>();
 
-	private gameEventsPlugin: any;
-
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
 
 	constructor(
-		private events: Events,
+		private gameEventsPlugin: GameEventsPluginService,
 		private io: SimpleIOService,
-		private s3: S3FileUploadService,
-		private memoryInspectionService: MemoryInspectionService) {
+		private s3: S3FileUploadService) {
 		this.init();
-
-		// this.detectMousePicks();
 	}
 
 	private logLines: string[] = [];
 	private processingLines = false;
 
-	init(): void {
+	async init() {
 		console.log('init game events monitor');
-		let gameEventsPlugin = this.gameEventsPlugin = new OverwolfPlugin("overwolf-replay-converter", true);
-		gameEventsPlugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.error("[game-events] Plugin couldn't be loaded??");
-				return;
+		const plugin = await this.gameEventsPlugin.get();
+		plugin.onGlobalEvent.addListener((first: string, second: string) => {
+			console.log('[game-events] received global event', first, second);
+			if (first.toLowerCase().indexOf("exception") !== -1 || first.toLowerCase().indexOf("error") !== -1) {
+				this.uploadLogsAndSendException(first, second);
 			}
-			console.log("[game-events] Plugin " + gameEventsPlugin.get()._PluginName_ + " was loaded!");
-			gameEventsPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
-				console.log('[game-events] received global event', first, second);
-				if (first.toLowerCase().indexOf("exception") !== -1 || first.toLowerCase().indexOf("error") !== -1) {
-					this.uploadLogsAndSendException(first, second);
-				}
-			});
-			gameEventsPlugin.get().onGameEvent.addListener((gameEvent) => {
-				this.dispatchGameEvent(JSON.parse(gameEvent));
-			});
-			gameEventsPlugin.get().initRealtimeLogConversion(() => {
-				console.log('[game-events] real-time log processing ready to go');
-			});
+		});
+		plugin.onGameEvent.addListener((gameEvent) => {
+			this.dispatchGameEvent(JSON.parse(gameEvent));
+		});
+		plugin.initRealtimeLogConversion(() => {
+			console.log('[game-events] real-time log processing ready to go');
 		});
 
 		setInterval(() => {
@@ -69,7 +55,7 @@ export class GameEvents {
 			}
 			if (toProcess.length > 0) {
 				// console.log('processing start', toProcess);
-				this.gameEventsPlugin.get().realtimeLogProcessing(toProcess, () => {
+				plugin.realtimeLogProcessing(toProcess, () => {
 					this.processingLines = false;
 				});
 			}
