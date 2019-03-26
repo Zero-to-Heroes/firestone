@@ -1,17 +1,15 @@
-import { Component, NgZone, ViewChild, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
+import { Component,  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, Input, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms'; 
 
-
-import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
-
 import { SetCard } from '../../models/set';
-import { Card } from '../../models/card';
-import { debounceTime, map, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { UpdateCardSearchResultsEvent } from '../../services/mainwindow/store/events/collection/update-card-search-results-event';
+import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
+import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 
 declare var overwolf: any;
-declare var ga: any;
 
 @Component({
 	selector: 'card-search',
@@ -21,7 +19,7 @@ declare var ga: any;
 	],
 	template: `
 		<div class="card-search" (keyup)="onValidateSearch($event)">
-			<label class="search-label" [ngClass]="{'search-active': searchString}">
+			<label class="search-label" [ngClass]="{'search-active': _searchString}">
 				<i class="i-30">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#search"/>
@@ -34,9 +32,9 @@ declare var ga: any;
 					placeholder="Search card..." />
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
-				<card-search-autocomplete-item *ngFor="let result of searchResults; trackBy: trackById"
+				<card-search-autocomplete-item *ngFor="let result of _searchResults; trackBy: trackById"
 					[fullString]="result.name"
-					[searchString]="searchString"
+					[searchString]="_searchString"
 					(click)="showCard(result)">
 				</card-search-autocomplete-item>
 			</ul>
@@ -46,48 +44,57 @@ declare var ga: any;
 })
 export class CardSearchComponent implements AfterViewInit {
 
+	_searchResults: ReadonlyArray<SetCard>;
+	_searchString: string;
+
 	searchForm = new FormControl();
 
-	searchString: string;
-	searchResults: SetCard[] = [];
 	showSearchResults = false;
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private cards: AllCardsService, 
-		private events: Events, 
-		private collectionManager: CollectionManager, 
+		private events: Events,
 		private cdr: ChangeDetectorRef) {
 	}
 
 	ngAfterViewInit() {
-		this.cdr.detach();
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 		this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe(data => {
-				this.searchString = data;
+				console.log('value changed?', data);
+				this._searchString = data;
 				this.onSearchStringChange();
 			});
-		this.events.on(Events.SET_SELECTED).subscribe((data) => this.resetSearchString());
-		this.events.on(Events.FORMAT_SELECTED).subscribe((data) => this.resetSearchString());
-		this.events.on(Events.MODULE_SELECTED).subscribe((data) => this.resetSearchString());
-		this.events.on(Events.SHOW_CARD_MODAL).subscribe((data) => this.resetSearchString());
+	}
+
+	@Input('searchString') set searchString(searchString: string) {
+		this.searchForm.setValue(searchString);
+		this._searchString = searchString;
+		console.log('set searchstring', this._searchString);
+	}
+
+	@Input('searchResults') set searchResults(searchResults: ReadonlyArray<SetCard>) {
+		this._searchResults = searchResults;
+		this.showSearchResults = searchResults && searchResults.length > 0;
+		console.log('set searchResults', this._searchResults);
 	}
 
 	onSearchStringChange() {
 		this.showSearchResults = false;
-		console.log('updating serach string', this.searchString);
-		if (this.searchString.length < 2) {
+		console.log('searchstring changed', this._searchString);
+		if (!this._searchString || this._searchString.length < 2) {
 			return;
 		}
-		this.updateSearchResults();
+		this.stateUpdater.next(new UpdateCardSearchResultsEvent(this._searchString));
 	}
 
 	onValidateSearch(event: KeyboardEvent) {
-		if (event.keyCode === 13 && this.searchString) {
-			console.log('validating search', this.searchResults, this.searchString);
-
-			this.events.broadcast(Events.SHOW_CARDS, this.searchResults, this.searchString);
+		if (event.keyCode === 13 && this._searchString) {
+			console.log('validating search', this.searchResults, this._searchString);
+			this.stateUpdater.next(new SearchCardsEvent(this._searchString));
 			this.showSearchResults = false;
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
@@ -96,13 +103,13 @@ export class CardSearchComponent implements AfterViewInit {
 	}
 
 	showCard(result: SetCard) {
-		this.events.broadcast(Events.SHOW_CARD_MODAL, result.id);
+		this.stateUpdater.next(new ShowCardDetailsEvent(result.id));
 		this.events.broadcast(Events.HIDE_TOOLTIP, result.id);
 	}
 
 	onFocusLost() {
-		// console.log('focus lost');
 		setTimeout(() => {
+			console.log('focus lost');
 			this.showSearchResults = false;
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
@@ -115,47 +122,6 @@ export class CardSearchComponent implements AfterViewInit {
 	}
 
 	trackById(index, card: SetCard) {
-		// console.log('tracking by id', index, card);
 		return card.id;
-	}
-
-	private resetSearchString() {
-		console.log('resetting search string');
-		this.searchForm.setValue('');
-	}
-
-	private async updateSearchResults() {
-		this.searchResults = this.cards.searchCards(this.searchString);
-		console.log('raw search results', this.searchResults);
-		const collection = await this.collectionManager.getCollection();
-		console.log('retrieved collection', collection);
-		this.searchResults = this.searchResults.map((card) => {
-			let collectionCard: Card = this.findCollectionCard(collection, card);
-			return new SetCard(
-				card.id, 
-				card.name, 
-				card.cardClass,
-				card.rarity, 
-				card.cost,
-				collectionCard ? collectionCard.count : 0, 
-				collectionCard ? collectionCard.premiumCount : 0)
-		});
-		console.log('Updated search results', this.searchResults);
-		this.showSearchResults = this.searchResults.length > 0;
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private findCollectionCard(collection: Card[], card: SetCard): Card {
-		for (let i = 0; i < collection.length; i++) {
-			let collectionCard = collection[i];
-			if (collectionCard.id == card.id) {
-				// console.log('Matching card', collectionCard, card);
-				return collectionCard;
-			}
-		}
-		// console.log('Could not find matching cards', card, collection);
-		return null;
 	}
 }

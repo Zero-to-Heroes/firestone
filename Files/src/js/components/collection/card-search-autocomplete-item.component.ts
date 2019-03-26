@@ -1,6 +1,4 @@
-import { Component, Input, OnInit, HostListener, ChangeDetectionStrategy } from '@angular/core';
-
-import { Events } from '../../services/events.service';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'card-search-autocomplete-item',
@@ -24,20 +22,13 @@ export class CardSearchAutocompleteItemComponent implements OnInit {
 	match: string;
 	last: string;
 
-	constructor(private events: Events) {
-	}
-
 	ngOnInit() {
-		// console.log('init autocomplete item', this.fullString, this.searchString);
 		let searchIndex = this.fullString.toLowerCase().indexOf(this.searchString.toLowerCase());
 		let searchEnd = searchIndex + this.searchString.length;
-		// console.log(searchIndex, searchEnd, this.fullString.length);
-
 		this.first = this.fullString.substring(0, searchIndex);
 		this.match = this.fullString.substring(searchIndex, Math.min(this.fullString.length, searchEnd));
 		if (searchEnd < this.fullString.length) {
 			this.last = this.fullString.substring(searchEnd);
 		}
-		// console.log(this.first, this.match, this.last);
 	}
 }

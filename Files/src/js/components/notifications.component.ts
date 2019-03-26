@@ -1,7 +1,10 @@
-import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, EventEmitter } from '@angular/core';
 
 import { NotificationsService, Notification } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
+import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
+import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
+import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
 
 declare var overwolf: any;
 
@@ -40,6 +43,7 @@ export class NotificationsComponent implements AfterViewInit {
 	private windowId: string;
 	private mainWindowId: string;
 	private activeNotifications: ActiveNotification[] = [];
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private notificationService: NotificationsService,
@@ -74,6 +78,7 @@ export class NotificationsComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.cdr.detach();
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	created(event) {
@@ -177,16 +182,12 @@ export class NotificationsComponent implements AfterViewInit {
 							|| type === 'achievement-confirm';
 					if (isActiveAchievement) {
 						console.log('sending message', this.mainWindowId);
-						overwolf.windows.sendMessage(this.mainWindowId, 'click-achievement', cardId, (result) => {
-							console.log('send achievement click info to collection window', cardId, this.mainWindowId, result);
-						});
+						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
 						this.notificationService.remove(toast.id);
 					}
 					// Collection
 					else if (!isAchievement) {
-						overwolf.windows.sendMessage(this.mainWindowId, 'click-card', cardId, (result) => {
-							console.log('send click info to collection window', cardId, this.mainWindowId, result);
-						});
+						this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
 					}
 				}
 			});

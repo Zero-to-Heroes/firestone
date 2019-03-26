@@ -1,4 +1,6 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -21,12 +23,22 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlCloseComponent {
+export class ControlCloseComponent implements AfterViewInit {
 
 	@Input() windowId: string;
 	@Input() closeAll: boolean;
+	@Input() isMainWindow: boolean;
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+	}
 
 	closeWindow() {
+		if (this.isMainWindow) {
+			this.stateUpdater.next(new CloseMainWindowEvent());
+		}
 		// If game is not running, we close all other windows
 		overwolf.games.getRunningGameInfo((res: any) => {
 			console.log('running game info', res);

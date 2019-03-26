@@ -19,6 +19,10 @@ i {
   font-style: inherit;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 // buttons
 button {
   border: none;

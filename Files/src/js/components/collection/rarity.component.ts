@@ -1,10 +1,5 @@
-import { Component, NgZone, Input, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-
-import { AllCardsService } from '../../services/all-cards.service';
-
-import { Card } from '../../models/card';
-import { Set, SetCard } from '../../models/set';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Set } from '../../models/set';
 
 declare var overwolf: any;
 
@@ -21,15 +16,10 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class RarityComponent {
 
 	@Input() rarity: string;
 	@Input() cardSet: Set;
 
-	constructor(
-		private sanitizer: DomSanitizer,
-		private cards: AllCardsService) {
-		// console.log('constructor CollectionComponent');
-	}
+	constructor() { }
 }

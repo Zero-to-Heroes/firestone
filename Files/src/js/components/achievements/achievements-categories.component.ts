@@ -1,8 +1,9 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 
-import { Events } from '../../services/events.service';
+import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 declare var overwolf: any;
 
@@ -23,16 +24,18 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
-export class AchievementsCategoriesComponent {
+export class AchievementsCategoriesComponent implements AfterViewInit {
 
 	@Input() public achievementSets: AchievementSet[];
-
-	constructor(private _events: Events) {
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	selectSet(set: AchievementSet) {
-		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, set);
+		this.stateUpdater.next(new SelectAchievementSetEvent(set.id));
 	}
 	
 	trackById(achievementSet: AchievementSet, index: number) {

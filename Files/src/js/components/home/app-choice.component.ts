@@ -1,7 +1,8 @@
 import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { FeatureFlags } from '../../services/feature-flags.service';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
 
 declare var overwolf: any;
 
@@ -65,6 +66,7 @@ export class AppChoiceComponent implements AfterViewInit {
 	noCollection = true;
 
 	private collectionWindowId;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
 	}
@@ -81,7 +83,6 @@ export class AppChoiceComponent implements AfterViewInit {
 			}
 		});
 		this.refreshContents();
-
 		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get CollectionWindow', result);
@@ -89,6 +90,7 @@ export class AppChoiceComponent implements AfterViewInit {
 			}
 			this.collectionWindowId = result.window.id;
 		});
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	showCollection() {
@@ -111,21 +113,23 @@ export class AppChoiceComponent implements AfterViewInit {
 			return;
 		}
 		
-		overwolf.windows.sendMessage(this.collectionWindowId, 'module', module, () => {
-			console.log('module message sent', module);
-			overwolf.windows.getCurrentWindow((currentWindoResult) => {
-				const center = {
-					x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
-					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
-				};
-				// console.log('center is', center);
-				overwolf.windows.sendMessage(this.collectionWindowId, 'move', center, () => {
-					overwolf.windows.restore(this.collectionWindowId, () => {
-						this.close.emit(null);
-					});
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
+
+		// overwolf.windows.sendMessage(this.collectionWindowId, 'module', module, () => {
+		// 	console.log('module message sent', module);
+		overwolf.windows.getCurrentWindow((currentWindoResult) => {
+			const center = {
+				x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
+				y: currentWindoResult.window.top + currentWindoResult.window.height / 2
+			};
+			// console.log('center is', center);
+			overwolf.windows.sendMessage(this.collectionWindowId, 'move', center, () => {
+				overwolf.windows.restore(this.collectionWindowId, () => {
+					this.close.emit(null);
 				});
 			});
 		});
+		// });
 
 	}
 

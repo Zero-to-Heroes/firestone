@@ -1,7 +1,10 @@
-import { Component, Input, ChangeDetectionStrategy, HostListener } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, HostListener, EventEmitter, AfterViewInit } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { AchievementNameService } from '../../services/achievement/achievement-name.service';
-import { Events } from '../../services/events.service';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
+
+declare var overwolf;
 
 @Component({
 	selector: 'achievement-history-item',
@@ -14,15 +17,19 @@ import { Events } from '../../services/events.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementHistoryItemComponent {
+export class AchievementHistoryItemComponent implements AfterViewInit {
 	
 	achievementName: string;
 	creationDate: string;
 
 	private achievementId: string;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private namingService: AchievementNameService, private events: Events) {
-		
+	constructor(private namingService: AchievementNameService) {
+	}
+
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;		
 	}
 
 	@Input('historyItem') set historyItem(history: AchievementHistory) {
@@ -36,7 +43,8 @@ export class AchievementHistoryItemComponent {
 			{ day: "2-digit", month: "2-digit", year: "2-digit"} );
 	}
 
-	@HostListener('click') onClick() {
-		this.events.broadcast(Events.SHOW_ACHIEVEMENT, this.achievementId);
+	@HostListener('click') 
+	onClick() {
+		this.stateUpdater.next(new ChangeVisibleAchievementEvent(this.achievementId));
 	}
 }

@@ -55,18 +55,20 @@ export class AchievementSetComponent {
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		this._achievementSet = achievementSet;
-		this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
-			<svg>
-				<use xlink:href="/Files/assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
-			</svg>`
-		);
-		this.displayName = achievementSet.displayName;
-		const flatCompletions = achievementSet.achievements
-				.map((achievement) => achievement.completionSteps)
-				.reduce((a, b) => a.concat(b));
-		const total = flatCompletions.length;
-		const achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
-		this.complete = total === achieved;
-		this.empty = achieved === 0;
-	}
+		if (achievementSet) {
+			this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
+				<svg>
+					<use xlink:href="/Files/assets/svg/sprite.svg#${this._achievementSet.logoName}"/>
+				</svg>`
+			);
+			this.displayName = achievementSet.displayName;
+			const flatCompletions = achievementSet.achievements
+					.map((achievement) => achievement.completionSteps)
+					.reduce((a, b) => a.concat(b));
+			const total = flatCompletions.length;
+			const achieved = flatCompletions.filter((a) => a.numberOfCompletions > 0).length;
+			this.complete = total === achieved;
+			this.empty = achieved === 0;
+		}
+	} 
 }

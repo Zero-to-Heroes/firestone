@@ -1,58 +1,46 @@
-import { Component, ViewRef, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { timeInterval } from 'rxjs/operator/timeInterval';
 
-import { Events } from '../../services/events.service';
-import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
-import { CompletedAchievement } from '../../models/completed-achievement';
-import { AchievementSet } from '../../models/achievement-set';
-import { Achievement } from '../../models/achievement';
-import { VisualAchievement } from '../../models/visual-achievement';
-import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
-import { AchievementCategory } from '../../models/achievement-category';
-import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { AchievementsState } from '../../models/mainwindow/achievements-state';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
-declare var overwolf: any;
-declare var ga: any;
-declare var _: any;
+declare var overwolf;
 
 @Component({
 	selector: 'achievements',
 	styleUrls: [
 		`../../../css/component/achievements/achievements.component.scss`,
+		`../../../css/global/components-global.scss`,
 	],
 	template: `
 		<div class="achievements">
-			<section class="main" [ngClass]="{'divider': _selectedView == 'list'}" [@viewState]="_viewState">
+			<section class="main" [ngClass]="{'divider': state.currentView == 'list'}" [@viewState]="_viewState">
 				<achievements-menu 
-					[ngClass]="{'shrink': hideMenu}"
-					[displayType]="_menuDisplayType"
-					[selectedCategory]="_selectedGlobalCategory"
-					[selectedAchievementSet]="_selectedCategory">
+					[ngClass]="{'shrink': state.shortDisplay}"
+					[displayType]="state.menuDisplayType"
+					[selectedCategory]="state.selectedGlobalCategory"
+					[selectedAchievementSet]="state.selectedCategory">
 				</achievements-menu>
-				<ng-container [ngSwitch]="_selectedView">
-					<achievements-global-categories
-							*ngSwitchCase="'categories'"
-							[categories]="globalCategories"
-							[achievementSets]="achievementCategories">
-					</achievements-global-categories>
-					<achievements-categories
-							*ngSwitchCase="'category'"
-							[achievementSets]="achievementCategories">
-					</achievements-categories>
-					<achievements-list
-							*ngSwitchCase="'list'"
-							(shortDisplay)="onShortDisplay($event)"
-							[achievementsList]="_achievementsList"
-							[achievementIdToScrollIntoView]="achievementIdToScrollIntoView"
-							[achievementSet]="_selectedCategory">
-					</achievements-list>
-				</ng-container>
+				<achievements-global-categories
+						[hidden]="state.currentView !== 'categories'"
+						[globalCategories]="state.globalCategories">
+				</achievements-global-categories>
+				<achievements-categories
+						[hidden]="state.currentView !== 'category'"
+						[achievementSets]="state.achievementCategories">
+				</achievements-categories>
+				<achievements-list
+						[hidden]="state.currentView !== 'list'"
+						[shortDisplay]="state.shortDisplay"
+						[achievementsList]="state.achievementsList"
+						[selectedAchievementId]="state.selectedAchievementId"
+						[achievementSet]="state.selectedCategory">
+				</achievements-list>
 			</section>
 			<section class="secondary">
-				<achievement-history></achievement-history>
+				<achievement-history [achievementHistory]="state.achievementHistory"></achievement-history>
 			</section>
 		</div>
 	`,
@@ -72,169 +60,9 @@ declare var _: any;
 		])
 	],
 })
-// 7.1.1.17994
-export class AchievementsComponent implements AfterViewInit {
+export class AchievementsComponent {
 
-	_menuDisplayType = 'menu';
-	_selectedView = 'categories';
-	_selectedCategory: AchievementSet;
-	_selectedGlobalCategory: VisualAchievementCategory;
-	_achievementsList: ReadonlyArray<VisualAchievement>;
-	achievementCategories: AchievementSet[];
-	globalCategories: AchievementCategory[];
+	@Input() state: AchievementsState;
+	
 	_viewState = 'shown';
-	hideMenu: boolean;
-	achievementIdToScrollIntoView: string;
-
-	private windowId: string;
-	private refreshingContent = false;
-
-	constructor(
-		private _events: Events,
-		private repository: AchievementsRepository,
-		private cdr: ChangeDetectorRef) {
-
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
-			}
-			// console.log('state changed in achievements', message);
-			if (message.window_state == 'normal') {
-				this.refreshContents();
-			}
-		});
-
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.windowId = result.window.id;
-			}
-		});
-
-		// console.log('constructing');
-		this._events.on(Events.ACHIEVEMENT_CATEGORY_SELECTED).subscribe(
-			(data) => {
-				this.transitionState(() => {
-					this.reset();
-					// console.log(`selecting set, showing cards`, data);
-					this._menuDisplayType = 'breadcrumbs';
-					this._selectedView = 'category';
-					this._selectedGlobalCategory = data.data[0];
-					this.achievementCategories = this._selectedGlobalCategory.achievementSets;
-					this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
-				});
-			}
-		)
-		this._events.on(Events.ACHIEVEMENT_SET_SELECTED).subscribe(
-			(data) => {
-				this.transitionState(() => {
-					this.reset();
-					// console.log(`selecting set, showing cards`, data);
-					this._menuDisplayType = 'breadcrumbs';
-					this._selectedView = 'list';
-					this._selectedCategory = data.data[0];
-					this._achievementsList = this._selectedCategory.achievements;
-					this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
-				});
-			}
-		)
-
-		this._events.on(Events.MODULE_SELECTED).subscribe(
-			(data) => {
-				if (data.data[0] === 'achievements') {
-					this.transitionState(() => {
-						this._menuDisplayType = 'menu';
-						this._selectedView = 'categories';
-						this.refreshContents();
-						console.log('reset achievements to categories view');
-					});
-				}
-			}
-		);
-
-		this._events.on(Events.ACHIEVEMENT_UPDATED).subscribe(
-			(data) => {
-				this.reloadAchievement(data.data[0]);
-			}
-		)
-		this.refreshContents();
-	}
-
-	public async selectAchievement(achievementId: string) {
-		this.reset();
-		console.log('selecting achievement', achievementId);
-		const achievementSet: AchievementSet = await this.repository.findCategoryForAchievement(achievementId);
-		console.log('achievement found', achievementSet);
-		// this.refreshContents();
-		this._menuDisplayType = 'breadcrumbs';
-		this._selectedView = 'list';
-		this._selectedCategory = achievementSet;
-		this._achievementsList = this._selectedCategory.achievements;
-		this.achievementIdToScrollIntoView = achievementSet.findAchievementId(achievementId);
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-			this._events.broadcast(Events.MODULE_IN_VIEW, 'achievements');
-		}
-	}
-
-	public async reloadAchievement(achievementId: string) {
-		// console.log('reloading achievement?', achievementId);
-		const achievementSet: AchievementSet = await this.repository.findCategoryForAchievement(achievementId);
-		// If we're displaying the achievement set, we refresh it
-		if (!this._selectedCategory || achievementSet.id === this._selectedCategory.id) {
-			this._selectedCategory = achievementSet;
-			// console.log('reloaded set');
-			if (!this._selectedView || this._selectedView === 'list') {
-				// console.log('reloaded achievments list');
-				this._achievementsList = this._selectedCategory.achievements;
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-			}
-		}		
-	}
-
-	ngAfterViewInit() {
-		this.cdr.detach();
-	}
-
-	async refreshContents() {
-		if (this.refreshingContent) {
-			return;
-		}
-		console.log('refreshing contents in achievements');
-		this.refreshingContent = true;
-		this.globalCategories = this.repository.getCategories();
-		const achievementSets: AchievementSet[] = await this.repository.loadAggregatedAchievements();
-		console.log('[achievements.component.ts] loaded all achievement Sets', achievementSets, this.globalCategories);
-		this.achievementCategories = achievementSets;
-		this.refreshingContent = false;
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	onShortDisplay(shrink: boolean) {
-		this.hideMenu = shrink;
-		this.cdr.detectChanges();
-	}
-
-	private transitionState(changeStateCallback: Function) {
-		this._viewState = "hidden";
-		setTimeout(() => {
-			changeStateCallback();
-			this._viewState = "shown";
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-		}, ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS);
-	}
-
-	private reset() {
-		this._menuDisplayType = undefined;
-		this._selectedView = undefined;
-		this._selectedCategory = undefined;
-		this._achievementsList = undefined;
-		this.achievementCategories = undefined;
-		this.globalCategories = undefined;
-	}
 }

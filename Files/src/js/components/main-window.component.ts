@@ -1,11 +1,10 @@
 import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ViewChild } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
-import { Events } from '../services/events.service';
-import { CollectionComponent } from './collection.component';
+import { CollectionComponent } from './collection/collection.component';
 import { AchievementsComponent } from './achievements/achievements.component';
-import { SimpleIOService } from '../services/plugins/simple-io.service';
-import { FeatureFlags } from '../services/feature-flags.service';
+import { MainWindowState as MainWindowState } from '../models/mainwindow/main-window-state';
+import { BehaviorSubject } from 'rxjs';
 
 declare var overwolf: any;
 declare var adsReady: any;
@@ -20,9 +19,9 @@ declare var ga: any;
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="top {{selectedModule}}">
+		<div class="top {{state.currentApp}}">
 			<div class="root">
-				<div class="app-container {{selectedModule}}">
+				<div class="app-container {{state.currentApp}}">
 					<section class="menu-bar">
 						<div class="first">
 							<real-time-notifications></real-time-notifications>
@@ -32,7 +31,7 @@ declare var ga: any;
 										<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
 									</svg>
 								</i>
-								<menu-selection></menu-selection>
+								<menu-selection [selectedModule]="state.currentApp"></menu-selection>
 							</div>
 						</div>
 						<hotkey></hotkey>
@@ -44,14 +43,22 @@ declare var ga: any;
 								</svg>
 							</button>
 							<control-help></control-help>
-							<control-minimize [windowId]="windowId"></control-minimize>
-							<control-close [windowId]="windowId"></control-close>
+							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+							<control-close [windowId]="windowId" [isMainWindow]="true"></control-close>
 						</div>
 					</section>
 					<section class="content-container">
-						<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
-						<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
-						<decktracker [hidden]="selectedModule !== 'decktracker'" class="main-section"></decktracker>
+						<collection #collection class="main-section"
+								[state]="state.binder"
+								[hidden]="state.currentApp !== 'collection'">						
+						</collection>
+						<achievements #achievements class="main-section"
+								[state]="state.achievements"
+								[hidden]="state.currentApp !== 'achievements'">
+						</achievements>
+						<decktracker class="main-section" 
+								[hidden]="state.currentApp !== 'decktracker'">
+						</decktracker>
 					</section>
 				</div>
 
@@ -100,17 +107,16 @@ export class MainWindowComponent implements AfterViewInit {
 	@ViewChild('achievements')
 	private achievements: AchievementsComponent;
 
-	selectedModule = 'collection';
+	state: MainWindowState;
 	windowId: string;
 	
 	private adRef;
 	private adInit = false;
 
 	constructor(
-		private events: Events, 
-		private cdr: ChangeDetectorRef,
-		private io: SimpleIOService,
-		private debug: DebugService) {
+			private cdr: ChangeDetectorRef,
+			private debug: DebugService) {
+		this.cdr.detach();
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.windowId = result.window.id;
@@ -125,40 +131,6 @@ export class MainWindowComponent implements AfterViewInit {
 						overwolf.windows.changePosition(this.windowId, newX, newY);
 					}
 				});
-				// console.log('received move message', message.content);
-			}
-			if (message.id === 'module') {
-				this.selectedModule = message.content;
-				this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-				console.log('showing module from message', message);
-			}
-			if (message.id === 'click-card') {
-				this.selectedModule = 'collection';
-				// this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-				setTimeout(() => {
-					this.collection.selectCard(message.content);
-					overwolf.windows.restore(this.windowId);
-				})
-			}
-			if (message.id === 'click-achievement') {
-				this.selectedModule = 'achievements';
-				// this.events.broadcast(Events.MODULE_SELECTED, this.selectedModule);
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-				setTimeout(() => {
-					this.achievements.selectAchievement(message.content);
-				});
-				overwolf.windows.restore(this.windowId);
-			}
-			if (message.id === 'achievement-save-complete') {
-				this.achievements.reloadAchievement(message.content);
 			}
 		});
 
@@ -176,18 +148,22 @@ export class MainWindowComponent implements AfterViewInit {
 				this.refreshAds();
 			}
 		});
-		this.events.on(Events.MODULE_SELECTED).subscribe(
-			(data) => {
-				this.selectedModule = data.data[0];
-				console.log('selected module', this.selectedModule);
-			}
-		);
-		this.events.on(Events.SHOW_ACHIEVEMENT).subscribe((data) => {
-			this.achievements.selectAchievement(data.data[0]);
-		});
 	}
 
 	ngAfterViewInit() {
+		const storeBus: BehaviorSubject<MainWindowState> = overwolf.windows.getMainWindow().mainWindowStore;
+		storeBus.subscribe((newState: MainWindowState) => {
+			setTimeout(() => {
+				if (newState.isVisible && (!this.state || !this.state.isVisible)) {
+					overwolf.windows.restore(this.windowId);
+				}
+				console.log('got new state', newState, this.state);
+				this.state = newState;
+				if (!(<ViewRef>this.cdr).destroyed) {
+					this.cdr.detectChanges();
+				}
+			})
+		});
 		this.refreshAds();
 		ga('send', 'event', 'collection', 'show');
 	}
@@ -203,10 +179,6 @@ export class MainWindowComponent implements AfterViewInit {
 				console.warn('Could not get WelcomeWindow', result);
 				return;
 			}
-			// console.log('got welcome window', result);
-			// overwolf.windows.restore(result.window.id, (result) => {
-			// 	this.closeWindow();
-			// })
 			overwolf.windows.getCurrentWindow((currentWindoResult) => {
 				// console.log('current window', currentWindoResult);
 				const center = {

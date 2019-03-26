@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-declare var overwolf: any;
-
 @Injectable()
 export class DebugService {
 

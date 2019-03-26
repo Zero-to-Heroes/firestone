@@ -18,13 +18,8 @@ export class CardHistoryStorageService {
 		return this.indexedDb.countHistory();
 	}
 
-	public async newCard(history: CardHistory) {
+	public async newHistory(history: CardHistory) {
 		const result = await this.indexedDb.save(history);
 		console.log('new card history saved', result);
-	}
-
-	public async newDust(history: CardHistory) {
-		const result = await this.indexedDb.save(history)
-		console.log('new dust history saved', result);
 	}
 }

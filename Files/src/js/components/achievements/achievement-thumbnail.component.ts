@@ -57,5 +57,5 @@ export class AchievementThumbnailComponent {
         event.stopPropagation();
         const element = this.el.nativeElement.querySelector('.delete-icon');
         this.deletionRequest.next(element.getBoundingClientRect());
-    }
+    } 
 }

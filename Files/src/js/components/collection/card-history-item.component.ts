@@ -1,11 +1,12 @@
-import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
 
 import { Events } from '../../services/events.service';
 
 import { CardHistory } from '../../models/card-history';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 
 declare var overwolf: any;
-declare var ga: any;
 
 @Component({
 	selector: 'card-history-item',
@@ -33,7 +34,7 @@ declare var ga: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardHistoryItemComponent {
+export class CardHistoryItemComponent implements AfterViewInit {
 
 	@Input() active: boolean;
 	
@@ -45,10 +46,15 @@ export class CardHistoryItemComponent {
 	dustValue: number;
 
 	private cardId: string;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private el: ElementRef,
 		private events: Events) {
+	}
+
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	@Input('historyItem') set historyItem(history: CardHistory) {
@@ -67,23 +73,19 @@ export class CardHistoryItemComponent {
 	}
 
 	@HostListener('click') onClick() {
-		this.events.broadcast(Events.SHOW_CARD_MODAL, this.cardId);
+		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		// const start = Date.now();
 		let rect = this.el.nativeElement.getBoundingClientRect();
 		let x = rect.left - rect.width + 120;
 		let y = rect.top + rect.height / 2;
 		this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true);
-		// console.log('broadcast event to show tooltip', (Date.now() - start));
-		// Completes after 1-2ms
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		// console.log('hiding tooltip', this.cardId);
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}
 }

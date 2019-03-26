@@ -1,9 +1,13 @@
-import { Component, HostListener, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
 
 import { Set } from '../../models/set';
 
 import { Events } from '../../services/events.service';
 import { AllCardsService } from '../../services/all-cards.service';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
+import { SelectCollectionFormatEvent } from '../../services/mainwindow/store/events/collection/select-collection-format-event';
+import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
 
 declare var overwolf: any;
 
@@ -14,10 +18,9 @@ declare var overwolf: any;
 		`../../../css/component/collection/collection-menu.component.scss`,
 	],
 	template: `
-		<ng-container [ngSwitch]="displayType">
+		<ng-container [ngSwitch]="_displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection-collection menu-selection">
 				<li class="selected" (click)="goToCollectionView()">Sets</li>
-				<!--<li>Cards</li>-->
 			</ul>
 			<ng-container *ngSwitchCase="'breadcrumbs'">
 				<ul class="menu-selection-collection breadcrumbs" *ngIf="!searchString">
@@ -42,21 +45,31 @@ declare var overwolf: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class CollectionMenuComponent {
+export class CollectionMenuComponent implements AfterViewInit {
 
-	@Input() public displayType: string;
+	_displayType: string;
 	@Input() public selectedSet: Set;
 	@Input() public selectedFormat: string;
 	@Input() public searchString: string;
-
 	selectedCard: any;
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private _events: Events, private cards: AllCardsService) {
 
 	}
 
+	@Input() set displayType(displayType: string) {
+		console.log('setting display type', displayType);
+		this._displayType = displayType;
+	}
+
 	@Input('selectedCardId') set selectedCardId(cardId: string) {
 		this.selectedCard = this.cards.getCard(cardId);
+	}
+	
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	getSelectedFormat() {
@@ -65,16 +78,16 @@ export class CollectionMenuComponent {
 
 	goToSetView() {
 		this._events.broadcast(Events.HIDE_TOOLTIP);
-		this._events.broadcast(Events.SET_SELECTED, this.selectedSet);
+		this.stateUpdater.next(new SelectCollectionSetEvent(this.selectedSet.id));
 	}
 
 	goToFormatView() {
 		this._events.broadcast(Events.HIDE_TOOLTIP);
-		this._events.broadcast(Events.FORMAT_SELECTED, this.selectedSet.standard ? 'standard' : 'wild');
+		this.stateUpdater.next(new SelectCollectionFormatEvent(this.selectedSet.standard ? 'standard' : 'wild'));
 	}
 
 	goToCollectionView() {
 		this._events.broadcast(Events.HIDE_TOOLTIP);
-		this._events.broadcast(Events.MODULE_SELECTED, 'collection');
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent('collection'));
 	}
 }

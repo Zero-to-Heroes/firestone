@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { CompletedAchievement } from '../../models/completed-achievement';
-import { AchievementSet } from '../../models/achievement-set';
-import { Achievement } from '../../models/achievement';
 
 import { IndexedDbService } from './indexed-db.service';
 import { ReplayInfo } from '../../models/replay-info';
@@ -11,6 +9,7 @@ import { ReplayInfo } from '../../models/replay-info';
 export class AchievementsStorageService {
 
 	constructor(
+		// private store: MainWindowStoreService,
 		private indexedDb: IndexedDbService) {
 	}
 
@@ -19,7 +18,8 @@ export class AchievementsStorageService {
 	}
 
 	public async saveAchievement(achievement: CompletedAchievement): Promise<CompletedAchievement> {
-		return this.indexedDb.save(achievement);
+		const completedAchievement = await this.indexedDb.save(achievement);
+		return completedAchievement;
 	}
 
 	public async loadAchievements(): Promise<CompletedAchievement[]> {
@@ -35,5 +35,5 @@ export class AchievementsStorageService {
 			achievement.numberOfCompletions,
 			updatedReplays);
 		return this.saveAchievement(updatedAchievement);
-    }
+  	}
 }

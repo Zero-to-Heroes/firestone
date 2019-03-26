@@ -1,9 +1,12 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 
-import { Events } from '../../services/events.service';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
+import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
+import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
 
 declare var overwolf: any;
 
@@ -35,25 +38,27 @@ declare var overwolf: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class AchievementsMenuComponent {
+export class AchievementsMenuComponent implements AfterViewInit {
 
 	@Input() displayType: string;
 	@Input() selectedCategory: VisualAchievementCategory;
 	@Input() selectedAchievementSet: AchievementSet;
-
-	constructor(private _events: Events) {
-
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	goToAchievementsCategoriesView() {
-		this._events.broadcast(Events.MODULE_SELECTED, 'achievements');
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent('achievements'));
 	}
 
 	goToAchievementsCategoryView() {
-		this._events.broadcast(Events.ACHIEVEMENT_CATEGORY_SELECTED, this.selectedCategory);
+		this.stateUpdater.next(new SelectAchievementCategoryEvent(this.selectedCategory.id));
 	}
 
 	goToAchievementSetView() {
-		this._events.broadcast(Events.ACHIEVEMENT_SET_SELECTED, this.selectedAchievementSet);
+		this.stateUpdater.next(new SelectAchievementSetEvent(this.selectedAchievementSet.id));
 	}
 }

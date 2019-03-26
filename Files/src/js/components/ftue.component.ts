@@ -71,10 +71,10 @@ export class FtueComponent implements AfterViewInit {
 		this.events.on(Events.SET_MOUSE_OVER).subscribe((data) => this.handleSetMouseOver(data));
 		this.events.on(Events.DISMISS_FTUE).subscribe(() => this.destroy());
 		this.events.on(Events.FORMAT_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
-		this.events.on(Events.MODULE_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
-		this.events.on(Events.SHOW_CARDS).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		// this.events.on(Events.MODULE_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		// this.events.on(Events.SHOW_CARDS).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
 		this.events.on(Events.SET_SELECTED).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
-		this.events.on(Events.SHOW_CARD_MODAL).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
+		// this.events.on(Events.SHOW_CARD_MODAL).subscribe(() => this.events.broadcast(Events.DISMISS_FTUE));
 	}
 
 	ngAfterViewInit() {

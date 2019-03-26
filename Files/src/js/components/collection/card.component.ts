@@ -1,9 +1,13 @@
-import { Component,  Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component,  Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, EventEmitter, AfterViewInit } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { Events } from '../../services/events.service';
 
 import { SetCard } from '../../models/set';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+
+declare var overwolf;
 
 @Component({
 	selector: 'card-view',
@@ -62,8 +66,7 @@ import { SetCard } from '../../models/set';
 		])
 	]
 })
-// 7.1.1.17994
-export class CardComponent {
+export class CardComponent implements AfterViewInit {
 
 	@Input() public tooltips = true;
 	@Input() public showCounts = false;
@@ -72,6 +75,8 @@ export class CardComponent {
 	image: string;
 	overlayMaskImage: string;
 	_card: SetCard;
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private el: ElementRef,
@@ -85,10 +90,14 @@ export class CardComponent {
 		this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + card.id + '.png';
 		this.overlayMaskImage = `url('${this.image}')`;
 	}
+	
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+	}
 
 	@HostListener('click') onClick() {
 		if (this.tooltips) {
-			this.events.broadcast(Events.SHOW_CARD_MODAL, this._card.id);
+			this.stateUpdater.next(new ShowCardDetailsEvent(this._card.id));
 		}
 	}
 

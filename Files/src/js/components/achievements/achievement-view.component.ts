@@ -1,5 +1,9 @@
-import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+
+declare var overwolf;
 
 @Component({
 	selector: 'achievement-view',
@@ -45,16 +49,17 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AchievementViewComponent {
+export class AchievementViewComponent implements AfterViewInit {
 
-	@Output() requestGlobalHeaderCollapse = new EventEmitter<boolean>();
-
+	showRecordings: boolean;
 	_achievement: VisualAchievement;
+	
 	achievementText: string;
 	achieved: boolean = false;
 	completionDate: string;
 	numberOfRecordings: number;
-	showRecordings: boolean;
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set showReplays(showReplays: boolean) {
 		// We just want to trigger the opening of the replay windows, not hide it
@@ -84,18 +89,15 @@ export class AchievementViewComponent {
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {
 	}
+	
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+	}
 
 	toggleRecordings() {
 		if (this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
-			console.log('show recording?', this._achievement.id, this.showRecordings);
-			if (this.showRecordings) {
-				this.requestGlobalHeaderCollapse.next(true);
-				console.log('requested global header collapse');
-			}
-			else {
-				this.requestGlobalHeaderCollapse.next(false);
-			}
+			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(this.showRecordings));
 			this.cdr.detectChanges();
 		}
 	}

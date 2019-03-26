@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef, ViewRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef, ViewRef, Input } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 
@@ -37,48 +37,46 @@ declare var overwolf: any;
 })
 export class AchievementHistoryComponent implements AfterViewInit {
 	
-	achievementHistory: AchievementHistory[];
+ 	@Input() achievementHistory: ReadonlyArray<AchievementHistory>;
 	
-	private refreshing = false;
-
 	constructor(
-		private storage: AchievementHistoryStorageService,
+		// private storage: AchievementHistoryStorageService,
 		private el: ElementRef,
 		private cdr: ChangeDetectorRef) {
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
-			}
-			// console.log('state changed achievement-history', message);
-			if (message.window_state == 'normal') {
-				this.refreshContents();
-			}
-		});
+		// overwolf.windows.onStateChanged.addListener((message) => {
+		// 	if (message.window_name != "CollectionWindow") {
+		// 		return;
+		// 	}
+		// 	// console.log('state changed achievement-history', message);
+		// 	if (message.window_state == 'normal') {
+		// 		this.refreshContents();
+		// 	}
+		// });
 	}
 
 	ngAfterViewInit() {
-		this.cdr.detach();
-		this.refreshContents();
+		// this.cdr.detach();
+		// this.refreshContents();
 	}
 
-	refreshContents() {
-		if (this.refreshing) {
-			return;
-		}
-		this.refreshing = true;
-		console.log('request to load');
-		this.storage.loadAll().then((result: AchievementHistory[]) => {
-            console.log('loaded history', result);
-			this.achievementHistory = result
-				.filter((history) => history.numberOfCompletions == 1)
-				// We want to have the most recent at the top
-				.reverse();
-            this.refreshing = false;
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-        });
-	}
+	// refreshContents() {
+	// 	if (this.refreshing) {
+	// 		return;
+	// 	}
+	// 	this.refreshing = true;
+	// 	console.log('request to load');
+	// 	this.storage.loadAll().then((result: AchievementHistory[]) => {
+    //         console.log('loaded history', result);
+	// 		this.achievementHistory = result
+	// 			.filter((history) => history.numberOfCompletions == 1)
+	// 			// We want to have the most recent at the top
+	// 			.reverse();
+    //         this.refreshing = false;
+	// 		if (!(<ViewRef>this.cdr).destroyed) {
+	// 			this.cdr.detectChanges();
+	// 		}
+    //     });
+	// }
 
 	trackById(index, history: AchievementHistory) {
 		return history.id;

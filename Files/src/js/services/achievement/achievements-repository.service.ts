@@ -72,14 +72,14 @@ export class AchievementsRepository {
 		return achievementSets;
 	}
 
-	public async findCategoryForAchievement(achievementId: string): Promise<AchievementSet> {
-		const completedAchievements: CompletedAchievement[] = await this.storage.loadAchievements();
-		const achievementSet: AchievementSet = this.setProviders
-				.find((provider) => provider.supportsAchievement(this.allAchievements, achievementId))
-				.provide(this.allAchievements, completedAchievements);
-		console.log('achievement', achievementId, 'matching set', achievementSet);
-		return achievementSet;
-	}
+	// public async findCategoryForAchievement(achievementId: string): Promise<AchievementSet> {
+	// 	const completedAchievements: CompletedAchievement[] = await this.storage.loadAchievements();
+	// 	const achievementSet: AchievementSet = this.setProviders
+	// 			.find((provider) => provider.supportsAchievement(this.allAchievements, achievementId))
+	// 			.provide(this.allAchievements, completedAchievements);
+	// 	console.log('achievement', achievementId, 'matching set', achievementSet);
+	// 	return achievementSet;
+	// }
 
 	public getCategories(): AchievementCategory[] {
 		return this.categories;

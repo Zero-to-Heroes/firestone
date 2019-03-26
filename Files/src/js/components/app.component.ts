@@ -7,7 +7,6 @@ import { AchievementsMonitor } from '../services/achievement/achievements-monito
 import { DebugService } from '../services/debug.service';
 import { LogStatusService } from '../services/log-status.service';
 import { HsPublicEventsListener } from '../services/hs-public-events-listener.service';
-import { Events } from '../services/events.service';
 import { PackHistoryService } from '../services/collection/pack-history.service';
 import { PackStatsService } from '../services/collection/pack-stats.service';
 import { CollectionManager } from '../services/collection/collection-manager.service';
@@ -17,6 +16,7 @@ import { AchievementsVideoCaptureService } from '../services/achievement/achieve
 import { DeckParserService } from '../services/decktracker/deck-parser.service';
 import { GameStateService } from '../services/decktracker/game-state.service';
 import { SettingsCommunicationService } from '../services/settings/settings-communication.service';
+import { MainWindowStoreService } from '../services/mainwindow/store/main-window-store.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -32,7 +32,6 @@ declare var ga: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class AppComponent {
 
 	private static readonly STATES = ['INIT', 'READY'];
@@ -42,9 +41,9 @@ export class AppComponent {
 	private loadingWindowId: string;
 
 	constructor(
+		private store: MainWindowStoreService,
 		private packMonitor: PackMonitor,
 		private packHistory: PackHistoryService,
-		private events: Events,
 		private debugService: DebugService,
 		private dev: DevService, 
 		private publicEventsListener: HsPublicEventsListener,

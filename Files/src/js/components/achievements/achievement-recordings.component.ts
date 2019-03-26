@@ -1,14 +1,15 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, HostListener } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, HostListener, EventEmitter } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { ReplayInfo } from '../../models/replay-info';
-import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
 import { PreferencesService } from '../../services/preferences.service';
-import { Events } from '../../services/events.service';
-import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { VideoReplayDeletionRequestEvent } from '../../services/mainwindow/store/events/achievements/video-replay-deletion-request-event';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
 
 declare var overwolf;
+declare var ga;
 
 @Component({
 	selector: 'achievement-recordings',
@@ -124,6 +125,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     private readonly THUMBNAILS_PER_PAGE = 5;
 
     _achievement: VisualAchievement;
+
     thumbnails: ThumbnailInfo[] = [];
 
     currentThumbnail: ThumbnailInfo;
@@ -143,6 +145,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     showDeleteNotification: boolean;
 
     private player;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
@@ -156,13 +159,12 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         private io: SimpleIOService,
         private elRef: ElementRef, 
         private cdr: ChangeDetectorRef, 
-        private storage: AchievementsStorageService,
         private prefs: PreferencesService,
-        private events: Events,
         private sanitizer: DomSanitizer) { 
     }
     
     ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
         this.player = this.elRef.nativeElement.querySelector('video');
         if (!this.player) {
             setTimeout(() => this.ngAfterViewInit(), 50);
@@ -174,7 +176,6 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         if (this.currentThumbnail === thumbnail) {
             return;
         }
-        console.log('showing replay', thumbnail, event);
         this.updateThumbnail(thumbnail);
         this.player.load();
         this.player.play();
@@ -217,22 +218,19 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     }
 
     async deleteMedia(thumbnail: ThumbnailInfo) {
+        ga('send', 'event', 'delete-media');
         console.log('deleting media', thumbnail);
-        this.showDeleteNotification = false;
+        // All this is not really clean, we should probably have the state drive ALL of the UI interactions, 
+        // and just have the views reflect the state of the store
+        this.stateUpdater.next(new VideoReplayDeletionRequestEvent(thumbnail.stepId, thumbnail.videoPath));
+        thumbnail.inDeletion = true;
+        this.showDeleteNotification = true;
         this.cdr.detectChanges();
-        const result: boolean = thumbnail.isDeleted || await this.io.deleteFile(thumbnail.videoPath);
-        if (result) {
-            thumbnail.inDeletion = true;
-            this.showDeleteNotification = true;
+        setTimeout(() => {
+            thumbnail.inDeletion = false;
+            this.showDeleteNotification = false;
             this.cdr.detectChanges();
-            setTimeout(async () => {
-                thumbnail.inDeletion = false;
-                const updatedAchievement = await this.storage.removeReplay(thumbnail.stepId, thumbnail.videoPath);
-                // console.log('updated achievement after deletion', updatedAchievement);
-                this.events.broadcast(Events.ACHIEVEMENT_UPDATED, updatedAchievement.id);
-                this.cdr.detectChanges();
-            }, 1500);
-        }
+        }, 1500);
     }
 
     toggleDontAsk(event: Event) {

@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, AfterViewInit, EventEmitter } from '@angular/core';
 
-import { Events } from '../services/events.service';
-import { FeatureFlags } from '../services/feature-flags.service';
+import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
+import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
 
 declare var overwolf: any;
 
@@ -30,24 +30,20 @@ declare var overwolf: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class MenuSelectionComponent {
+export class MenuSelectionComponent implements AfterViewInit {
 
-	selectedModule: string = 'collection';
+	@Input() selectedModule: string;
+	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef) {
-		this.events.on(Events.MODULE_SELECTED).subscribe((event) => {
-			this.selectedModule = event.data[0];
-			this.events.broadcast(Events.HIDE_TOOLTIP);
-			this.cdr.detectChanges();
-		});
-		this.events.on(Events.MODULE_IN_VIEW).subscribe((event) => {
-			console.log('updating module in view', event);
-			this.selectedModule = event.data[0];
-			this.cdr.detectChanges();
-		});
+	constructor() {
+	}
+
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	selectModule(module: string) {
-		this.events.broadcast(Events.MODULE_SELECTED, module);
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
 	}
 }

@@ -19,7 +19,7 @@ import { MenuSelectionComponent }  from '../../components/menu-selection.compone
 import { RealTimeNotificationsComponent }  from '../../components/real-time-notifications.component';
 import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
 
-import { CollectionComponent }  from '../../components/collection.component';
+import { CollectionComponent }  from '../../components/collection/collection.component';
 import { CollectionEmptyStateComponent }  from '../../components/collection/collection-empty-state.component';
 import { CollectionMenuComponent }  from '../../components/collection/collection-menu.component';
 import { CardsComponent }  from '../../components/collection/cards.component';

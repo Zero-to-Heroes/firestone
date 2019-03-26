@@ -8,7 +8,6 @@ interface BroadcastEvent {
 	data: any[];
 }
 
-// https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 export class Events {
 	public static readonly NO_LOG_FILE = 'no-log-file';
 	public static readonly START_LOG_FILE_DETECTION = 'start-log-file-detection';
@@ -17,27 +16,14 @@ export class Events {
 	public static readonly NEW_PACK = 'new-pack';
 	public static readonly NEW_CARD = 'new-card';
 	public static readonly MORE_DUST = 'more-dust';
-	public static readonly MODULE_SELECTED = 'module-selected';
-	public static readonly UPDATE_CURRENT_MENU = 'update-current-menu';
-	public static readonly MODULE_IN_VIEW = 'module-in-view';
-	public static readonly FORMAT_SELECTED = 'format-selected';
-	public static readonly SHOW_CARDS = 'show-cards';
-	public static readonly SET_SELECTED = 'set-selected';
 
-	public static readonly ACHIEVEMENT_CATEGORY_SELECTED = 'achievement-category-selected';
-	public static readonly ACHIEVEMENT_SET_SELECTED = 'achievement-set-selected';
 	public static readonly NEW_ACHIEVEMENT = 'new-achievement';
 	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
-	public static readonly ACHIEVEMENT_RECORD_STARTED = 'achievement-record-started';
 	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
 	public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
-	public static readonly ACHIEVEMENT_RECORD_SAVED = 'achievement-record-saved';
-	public static readonly ACHIEVEMENT_UPDATED = 'achievement-updated';
-	public static readonly SHOW_ACHIEVEMENT = 'show-achievement';
 
 	public static readonly SCENE_CHANGED = "scene-changed";
 
-	public static readonly SHOW_CARD_MODAL = 'show-card-modal';
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
 
@@ -45,11 +31,13 @@ export class Events {
 	public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';
 	public static readonly DECK_HIDE_TOOLTIP = 'deck-hide-tooltip';
 
-	public static readonly SET_MOUSE_OVER = 'set-mouse-over';
-	public static readonly SHOWING_FTUE = 'showing-ftue';
-	public static readonly DISMISS_FTUE = 'dismiss-ftue';
-	
 	public static readonly SETTINGS_DISPLAY_MODAL = 'settings-display-modal';	
+
+	public static readonly FORMAT_SELECTED = 'format-selected'; // For FTUE, will be refactored later
+	public static readonly SET_SELECTED = 'set-selected'; // For FTUE, will be refactored later
+	public static readonly SHOWING_FTUE = 'showing-ftue'; // For FTUE, will be refactored later
+	public static readonly DISMISS_FTUE = 'dismiss-ftue'; // For FTUE, will be refactored later
+	public static readonly SET_MOUSE_OVER = 'set-mouse-over'; // For FTUE, will be refactored later
 
 	private _eventBus: Subject<BroadcastEvent>;
 

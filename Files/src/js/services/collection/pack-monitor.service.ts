@@ -34,7 +34,6 @@ export class PackMonitor {
 	constructor(
 		private events: Events,
 		private logRegisterService: LogRegisterService,
-		private storage: CardHistoryStorageService,
 		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService) {
 
@@ -101,9 +100,6 @@ export class PackMonitor {
 		else {
 			this.revealCardById(card.id);
 		}
-		let dbCard = parseCardsText.getCard(card.id);
-		let relevantCount = type == 'GOLDEN' ? card.premiumCount : card.count;
-		this.storage.newCard(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, type == 'GOLDEN', true, relevantCount));
 	}
 
 	private handleNewDustEvent(event) {	
@@ -113,7 +109,6 @@ export class PackMonitor {
 		}
 		let card: Card = event.data[0];
 		let dust: number = event.data[1];
-		let type: string = event.data[2];
 		if (this.openingPack) {
 			this.unrevealedCards.push(card.id);
 			this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
@@ -121,9 +116,6 @@ export class PackMonitor {
 		else {
 			this.createDustToast(dust, 1);
 		}
-
-		let dbCard = parseCardsText.getCard(card.id);
-		this.storage.newDust(new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, dust, type == 'GOLDEN', false, -1));
 	}
 
 	private updateDpi() {

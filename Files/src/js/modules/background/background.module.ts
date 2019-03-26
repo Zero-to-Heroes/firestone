@@ -20,7 +20,6 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
-import { AchievementsRefereee } from '../../services/achievement/achievements-referee.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 import { IndexedDbService as AchievementsDb }  from '../../services/achievement/indexed-db.service';
@@ -48,6 +47,8 @@ import { GameStateService } from '../../services/decktracker/game-state.service'
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
+import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
+import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -78,6 +79,9 @@ export class SentryErrorHandler implements ErrorHandler {
 	],
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
+
+		MainWindowStoreService,
+		CollaboratorsService,
 
 		Events,
 		DebugService,
@@ -111,7 +115,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementHistoryStorageService,
 		AchievementsMonitor,
 		AchievementNameService,
-		AchievementsRefereee,
 		AchievementsRepository,
 		AchievementStatsService,
 		AchievementsStorageService,

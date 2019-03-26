@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
 import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
+import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 
 declare var OverwolfPlugin: any;
 declare var overwolf: any;
@@ -20,7 +23,7 @@ export class LogParserService {
 	private logLines: any[][] = [];
 	private processingLines = false;
 
-	constructor(private cards: AllCardsService, private events: Events) {
+	constructor(private cards: AllCardsService, private events: Events, private store: MainWindowStoreService) {
 		setInterval(() => {
 			if (this.processingLines) {
 				return;
@@ -65,6 +68,7 @@ export class LogParserService {
 			console.log('notifying new pack opening', setId, packCards);
 			ga('send', 'event', 'toast', 'new-pack');
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
+			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		}
 
 		for (let data of toProcess) {
@@ -101,6 +105,7 @@ export class LogParserService {
 		else {
 			this.displayDustMessage(cardInCollection, type);
 		}
+		this.store.stateUpdater.next(new NewCardEvent(cardInCollection, type));
 	}
 
 	private toPackCards(toProcess: string[]): any[] {
@@ -167,7 +172,9 @@ export class LogParserService {
 
 	private displayNewCardMessage(card: Card, type: string) {
 		console.log('New card!', card.id, type);
-		setTimeout(() => this.events.broadcast(Events.NEW_CARD, card, type), 20);
+		setTimeout(() => {
+			this.events.broadcast(Events.NEW_CARD, card, type);
+		}, 20);
 		ga('send', 'event', 'toast', 'new-card', card.id);
 	}
 
@@ -175,7 +182,9 @@ export class LogParserService {
 		let dbCard = parseCardsText.getCard(card.id);
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
 		dust = type == 'GOLDEN' ? dust * 4 : dust;
-		setTimeout(() => this.events.broadcast(Events.MORE_DUST, card, dust, type), 20);
+		setTimeout(() => {
+			this.events.broadcast(Events.MORE_DUST, card, dust, type);
+		}, 20);
 		ga('send', 'event', 'toast', 'dust', dust);
 		console.log('Got ' + dust + ' dust', card.id, type);
 	}

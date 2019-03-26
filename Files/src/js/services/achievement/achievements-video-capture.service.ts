@@ -8,6 +8,8 @@ import { FeatureFlags } from '../feature-flags.service';
 import { AchievementConfService } from './achievement-conf.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
 
 declare var overwolf;
 
@@ -34,6 +36,7 @@ export class AchievementsVideoCaptureService {
         private events: Events, 
         private prefs: PreferencesService,
         private achievementConf: AchievementConfService, 
+        private store: MainWindowStoreService,
         private owService: OverwolfService) {
 		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
@@ -129,7 +132,6 @@ export class AchievementsVideoCaptureService {
             console.info('[recording] capture ongoing, doing nothing', this.achievementsBeingRecorded);
             return;
         }
-        this.events.broadcast(Events.ACHIEVEMENT_RECORD_STARTED, achievement.id);
         // Here we can have custom settings based on achievement
         this.captureOngoing = true;
         // const conf = this.config.getConfig(achievement.type);
@@ -186,11 +188,11 @@ export class AchievementsVideoCaptureService {
                     thumbnailPath: result.thumbnail_path,
                     completionStepId: achievementId,
                 }
-                this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementId, replayInfo);
+                console.log('[recording] capture finished', result, achievementId, replayInfo);
+                this.store.stateUpdater.next(new AchievementRecordedEvent(achievementId, replayInfo));
                 if (this.settingsChanged) {
                     this.handleVideoSettingsChange();
                 }
-                console.log('[recording] capture finished', result, achievementId, replayInfo);
             }
             this.achievementsBeingRecorded = [];
         });

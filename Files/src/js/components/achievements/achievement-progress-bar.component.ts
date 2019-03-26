@@ -23,11 +23,12 @@ export class AchievementProgressBarComponent {
 	total: number;
 
 	@Input('achievements') set achievements(achievements: ReadonlyArray<VisualAchievement>) {
-		const flatCompletions = achievements
-				.map((achievement) => achievement.completionSteps)
-				.reduce((a, b) => a.concat(b), []);
-		this.total = flatCompletions.length;
-		this.achieved = flatCompletions.map((step) => step.numberOfCompletions).filter((a) => a > 0).length;
-		// console.log('set achievement in progress bar', this.total, this.achieved, achievements);
+		if (achievements) {
+			const flatCompletions = achievements
+					.map((achievement) => achievement.completionSteps)
+					.reduce((a, b) => a.concat(b), []);
+			this.total = flatCompletions.length;
+			this.achieved = flatCompletions.map((step) => step.numberOfCompletions).filter((a) => a > 0).length;
+		}
 	}
 }

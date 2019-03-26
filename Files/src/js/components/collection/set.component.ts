@@ -1,8 +1,10 @@
-import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
+import { Component, HostListener, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef, EventEmitter, AfterViewInit } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 import { Set } from '../../models/set';
 import { Events } from '../../services/events.service';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
 
 declare var overwolf: any;
 
@@ -147,7 +149,7 @@ declare var overwolf: any;
 	],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SetComponent {
+export class SetComponent implements AfterViewInit {
 
 	private readonly MOUSE_OVER_DELAY = 300;
 
@@ -165,6 +167,7 @@ export class SetComponent {
 	
 	private movingToSet: boolean = false;
 	private timeoutHandler;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
 		private cdr: ChangeDetectorRef, 
@@ -195,6 +198,10 @@ export class SetComponent {
 					}
 				});
 			});
+	}
+	
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	@Input('cardSet') set cardSet(set: Set) {
@@ -227,9 +234,8 @@ export class SetComponent {
 			clearTimeout(this.timeoutHandler);
 			this.timeoutHandler = null;
 		}
-		this.events.broadcast(Events.SET_SELECTED, this._cardSet);
+		this.stateUpdater.next(new SelectCollectionSetEvent(this._cardSet.id));
 		this.movingToSet = true;
-		console.log('set moving to set event');
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {

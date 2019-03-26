@@ -1,13 +1,12 @@
-import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewRef } from '@angular/core';
-
-import { Events } from '../../services/events.service';
-import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
+import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
 
 import { CardHistory } from '../../models/card-history';
 import { SetCard } from '../../models/set';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
+import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../services/mainwindow/store/events/collection/toggle-show-only-new-cards-in-history-event';
 
 declare var overwolf: any;
-declare var ga: any;
 
 @Component({
 	selector: 'card-history',
@@ -63,87 +62,31 @@ export class CardHistoryComponent implements AfterViewInit {
 
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 	
-	cardHistory: CardHistory[];
-	shownHistory: CardHistory[];
-	totalHistoryLength: number;
 	_selectedCard: SetCard;
+	@Input() showOnlyNewCards: boolean;
+	@Input() cardHistory: ReadonlyArray<CardHistory>;
+	@Input() shownHistory: ReadonlyArray<CardHistory>;
+	@Input() totalHistoryLength: number;
 	
-	private showOnlyNewCards: boolean;
 	private limit = 100;
-	private refreshing = false;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set selectedCard(selectedCard: SetCard) {
 		this._selectedCard = selectedCard;
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
-	constructor(
-		private storage: CardHistoryStorageService,
-		private el: ElementRef,
-		private cdr: ChangeDetectorRef,
-		private events: Events) {
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
-			}
-			// console.log('state changed card-history', message);
-			if (message.window_state == 'normal') {
-				this.refreshContents();
-			}
-		});
-	}
+	constructor(private el: ElementRef) { }
 
 	ngAfterViewInit() {
-		this.cdr.detach();
-		this.refreshContents();
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	async refreshContents() {
-		if (this.refreshing) {
-			return;
-		}
-		this.refreshing = true;
-		console.log('request to load');
-		this.totalHistoryLength = await this.storage.countHistory();
-		const result = await this.storage.loadAll(this.limit);
-		// console.log('loaded history', result);
-		this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
-		this.shownHistory = this.cardHistory;
-		this.refreshing = false;
-		this.filterView();
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	async loadMore() {
-		console.log('request to load more');
-		const result = await this.storage.loadAll(0);
-		// console.log('loaded history', result);
-		this.cardHistory = result.splice(0, this.MAX_RESULTS_DISPLAYED);
-		this.shownHistory = this.cardHistory;
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
+	loadMore() {
+		this.stateUpdater.next(new LoadMoreCardHistoryEvent(this.MAX_RESULTS_DISPLAYED));
 	}
 
 	toggleShowOnlyNewCards() {
-		this.showOnlyNewCards = !this.showOnlyNewCards;
-		this.filterView();
-		if (!(<ViewRef>this.cdr).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	filterView() {
-		if (this.showOnlyNewCards) {
-			this.shownHistory = this.cardHistory.filter((card: CardHistory) => card.isNewCard);
-		}
-		else {
-			this.shownHistory = this.cardHistory;
-		}
+		this.stateUpdater.next(new ToggleShowOnlyNewCardsInHistoryEvent());
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click

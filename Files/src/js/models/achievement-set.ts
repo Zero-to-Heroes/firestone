@@ -27,4 +27,9 @@ export class AchievementSet {
 				.completionSteps[0].id;
 	}
 
+	public findAchievement(achievementId: string): VisualAchievement {
+		return this.achievements
+				.find((achievement) => achievement.completionSteps.map((step) => step.id).indexOf(achievementId) !== -1);
+	}
+
 }

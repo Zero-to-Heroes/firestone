@@ -6,7 +6,6 @@ import { CompletedAchievement } from '../models/completed-achievement';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { Card } from '../models/card';
 import { SimpleIOService } from './plugins/simple-io.service';
-import { GameEvents } from './game-events.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
@@ -47,9 +46,6 @@ export class DevService {
 		window['showAchievementNotification'] = () => {			
 			this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
-		}
-		window['addAchievementHistory'] = () => {
-			this.achievementMonitor.storeNewAchievementHistory(achievement, 1);
 		}
 		window['addReplayInfos'] = async () => {
 			const achievements = await this.storage.loadAchievements();

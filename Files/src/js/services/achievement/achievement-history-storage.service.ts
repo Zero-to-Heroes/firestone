@@ -9,8 +9,8 @@ export class AchievementHistoryStorageService {
 	constructor(private indexedDb: IndexedDbService) {
 	}
 
-	public save(history: AchievementHistory) {
-		return this.indexedDb.saveHistory(history);
+	public async save(history: AchievementHistory) {
+		await this.indexedDb.saveHistory(history);
 	}
 
 	public loadAll(): Promise<AchievementHistory[]> {

@@ -1,6 +1,4 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { AchievementSet } from '../../models/achievement-set';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { VisualAchievement } from '../../models/visual-achievement';
 
@@ -44,25 +42,16 @@ import { VisualAchievement } from '../../models/visual-achievement';
 export class AchievementsGlobalCategoryComponent {
 
 	_category: VisualAchievementCategory;
+
 	allAchievements: ReadonlyArray<VisualAchievement>;
 	displayName: string;
 	categoryIcon: string;
-	// svgTemplate: SafeHtml;
 	complete: boolean = false;
 	empty: boolean = false;
-
-	constructor(private domSanitizer: DomSanitizer) {
-
-	}
 
 	@Input('category') set category(category: VisualAchievementCategory) {
 		this._category = category;
 		this.categoryIcon = `/Files/assets/svg/achievements/categories/${category.icon}.svg`;
-		// this.svgTemplate = this.domSanitizer.bypassSecurityTrustHtml(`
-		// 	<svg>
-		// 		<use xlink:href="/Files/assets/svg/achievements/categories/${category.icon}.svg"/>
-		// 	</svg>`
-		// );
 		this.displayName = category.name;
 		this.allAchievements = category.achievementSets
 				.map((set) => set.achievements)

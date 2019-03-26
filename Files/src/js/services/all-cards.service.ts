@@ -48,6 +48,10 @@ export class AllCardsService {
 		return this.getSets(this.WILD_SETS, false);
 	}
 
+	public getAllSets(): Set[] {
+		return this.getStandardSets().concat(this.getWildSets());
+	}
+
 	public getRarities(setId: string): string[] {
 		if (setId === 'core') {
 			return ['free'];

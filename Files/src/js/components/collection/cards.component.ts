@@ -89,23 +89,6 @@ import { Set, SetCard } from '../../models/set';
 				[searchString]="_searchString" 
 				*ngIf="_activeCards.length == 0">
 			</collection-empty-state>
-			<ul class="pagination" *ngIf="_numberOfPages > 1">
-				<li class="arrow previous" (click)="previousPage()" [ngClass]="_currentPage == 0 ? 'disabled' : ''">
-					<i class="i-30">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
-						</svg>
-					</i>
-				</li>
-				<li *ngFor="let page of _pages" [ngClass]="_currentPage == page ? 'active' : ''" (click)="goToPage(page)">{{page + 1}}</li>
-				<li class="arrow next" (click)="nextPage()" [ngClass]="_currentPage >= _numberOfPages - 1 ? 'disabled' : ''">
-					<i class="i-30">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
-						</svg>
-					</i>
-				</li>
-			</ul>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -172,10 +155,6 @@ export class CardsComponent implements AfterViewInit {
 	_cardList: SetCard[];
 	_activeCards: SetCard[];
 	_set: Set;
-	_cardsIndexRangeStart = 0;
-	_numberOfPages: number;
-	_currentPage = 0;
-	_pages: number[] = [];
 	classActiveFilter = this.CLASS_FILTER_ALL;
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
 	cardsOwnedActiveFilter = this.FILTER_ALL;
@@ -203,12 +182,10 @@ export class CardsComponent implements AfterViewInit {
 	}
 
 	@Input('set') set cardSet(set: Set) {
-		this._currentPage = 0;
 		this._set = set;
 	}
 
 	@Input('cardList') set cardList(cardList: SetCard[]) {
-		this._currentPage = 0;
 		this._cardList = sortBy(cardList, "cost", "name");
 		this.classActiveFilter = this.CLASS_FILTER_ALL;
 		this.rarityActiveFilter = this.RARITY_FILTER_ALL;
@@ -217,25 +194,21 @@ export class CardsComponent implements AfterViewInit {
 	}
 
 	@Input('searchString') set searchString(searchString: string) {
-		this._currentPage = 0;
 		this._searchString = searchString;
 	}
 
 	selectRarityFilter(option: IOption) {
 		this.rarityActiveFilter = option.value;
-		this._currentPage = 0;
 		this.updateShownCards();
 	}
 
 	selectClassFilter(option: IOption) {
 		this.classActiveFilter = option.value;
-		this._currentPage = 0;
 		this.updateShownCards();
 	}
 
 	selectCardsOwnedFilter(option: IOption) {
 		this.cardsOwnedActiveFilter = option.value;
-		this._currentPage = 0;
 		this.updateShownCards();
 	}
 
@@ -243,21 +216,6 @@ export class CardsComponent implements AfterViewInit {
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	previousPage() {
-		this._currentPage = Math.max(0, this._currentPage - 1);
-		this.updateShownCards();
-	}
-
-	nextPage() {
-		this._currentPage = Math.min(this._numberOfPages - 1, this._currentPage + 1);
-		this.updateShownCards();
-	}
-
-	goToPage(page: number) {
-		this._currentPage = page;
-		this.updateShownCards();
 	}
 
 	trackByCardId(card: Card, index: number) {
@@ -290,26 +248,15 @@ export class CardsComponent implements AfterViewInit {
 
 	private updateShownCards() {
 		// console.log('updating card list', this._cardList, this.classActiveFilter);
-		this._cardsIndexRangeStart = this._currentPage * this.MAX_CARDS_DISPLAYED_PER_PAGE;
 		let filteredCards = this._cardList
 				.filter(this.filterRarity())
 				.filter(this.filterClass())
 				.filter(this.filterCardsOwned());
 		// console.log('after filter', filteredCards);
-		this._pages = [];
-		this._numberOfPages = Math.ceil(filteredCards.length / this.MAX_CARDS_DISPLAYED_PER_PAGE);
-		// console.log('number of pages', this._numberOfPages, filteredCards);
-		for (let i = 0; i < this._numberOfPages; i++) {
-			this._pages.push(i);
+		this._activeCards = filteredCards.slice(0, this.MAX_CARDS_DISPLAYED_PER_PAGE);
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
 		}
-		this._activeCards = filteredCards.slice(
-			this._cardsIndexRangeStart,
-			this._cardsIndexRangeStart + this.MAX_CARDS_DISPLAYED_PER_PAGE);
-		// console.log('showing cards', this._currentPage, this._cardsIndexRangeStart);
-		// console.log('active cards', this._activeCards);
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
 	}
 
 	private filterRarity() {

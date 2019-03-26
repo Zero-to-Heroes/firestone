@@ -1,6 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ViewEncapsulation } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
-import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
 	selector: 'achievement-image',
@@ -51,9 +50,7 @@ export class AchievementImageComponent {
 	_imageType: string;
 	showPlaceholder = true;
 	
-	constructor(private cdr: ChangeDetectorRef) {
-		
-	}
+	constructor(private cdr: ChangeDetectorRef) { }
 
 	@Input() set imageId(imageId: string) {
 		this.image = `http://static.zerotoheroes.com/hearthstone/cardart/256x/${imageId}.jpg`;

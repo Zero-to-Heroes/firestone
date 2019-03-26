@@ -4,6 +4,10 @@ import { AchievementSet } from '../../models/achievement-set';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { IOption } from 'ng-select';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+
+declare var overwolf;
 
 @Component({
 	selector: 'achievements-list',
@@ -13,8 +17,8 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="achievements-container {{headerClass}}">
-			<div class="set-title">{{_achievementSet.displayName}}</div>
+		<div class="achievements-container" [ngClass]="{'shrink-header': shortDisplay}">
+			<div class="set-title">{{_achievementSet ?_achievementSet.displayName : ''}}</div>
 			<div class="show-filter">
 				<ng-select
 					class="filter"
@@ -33,9 +37,10 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 						</i>
 					</ng-template>
 				</ng-select>
-				<achievement-progress-bar [achievements]="_achievementSet.achievements"></achievement-progress-bar>
+				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
+				</achievement-progress-bar>
 			</div>
-			<div class="collapse-menu {{headerClass}}" (click)="toggleMenu()">
+			<div class="collapse-menu" [ngClass]="{'shrink-header': shortDisplay}" (click)="toggleMenu()">
 				<i class="i-13X7" *ngIf="showCollapse">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
@@ -48,8 +53,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId ">
 					<achievement-view 
 							[attr.data-achievement-id]="achievement.id.toLowerCase()"
-							[showReplays]="_achievementIdToScrollIntoView === achievement.id"
-							(requestGlobalHeaderCollapse)="onRequestGlobalHeaderCollapse($event)"
+							[showReplays]="_selectedAchievementId === achievement.id"
 							[achievement]="achievement">
 					</achievement-view>
 				</li>
@@ -69,26 +73,24 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	readonly SCROLL_SHRINK_START_PX = 5 * 100;
 
-	@Output() shortDisplay = new EventEmitter<boolean>();
-
-	achievements: VisualAchievement[];
-	activeAchievements: VisualAchievement[];
+	@Input() shortDisplay: boolean;
 	_achievementSet: AchievementSet;
+	_selectedAchievementId: string;
+	achievements: ReadonlyArray<VisualAchievement>;
+
+	activeAchievements: VisualAchievement[];
 	filterOptions: Array<IOption>;
 	activeFilter: string;
 	emptyStateSvgTemplate: SafeHtml;
 	emptyStateIcon: string;
 	emptyStateTitle: string;
 	emptyStateText: string;
-	headerClass: string;
 	showCollapse: boolean;
-
-	_achievementIdToScrollIntoView: string;
 
 	private lastScrollPosition: number = 0;
 	private lastScrollPositionBeforeScrollDown: number = 0;
 	private lastScrollPositionBeforeScrollUp: number = 0;
-	private updatePending: boolean = false;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
 
@@ -110,40 +112,36 @@ export class AchievementsListComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		});
-		this.shortDisplay.subscribe((data) => {
-			this.headerClass = data ? 'shrink-header': undefined;
-			this.cdr.detectChanges();
-		})
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		this._achievementSet = achievementSet;
-		this.filterOptions = this._achievementSet.filterOptions
-			.map((option) => ({ label: option.label, value: option.value }));
-		this.activeFilter = this.filterOptions[0].value;
-		console.log('updated achievementSet', achievementSet.id);
-		this.updateShownAchievements();
+		if (achievementSet) {
+			this.filterOptions = this._achievementSet.filterOptions
+				.map((option) => ({ label: option.label, value: option.value }));
+			this.activeFilter = this.filterOptions[0].value;
+			this.updateShownAchievements();
+		}
 	}
 
 	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
 		this.achievements = achievementsList || [];
-		console.log('updated achievementsList');
 		this.updateShownAchievements();
 	}
 
-	@Input('achievementIdToScrollIntoView') set achievementIdToScrollIntoView(achievementIdToScrollIntoView: string) {
-		console.log('setting achievementIdToScrollIntoView', achievementIdToScrollIntoView, this._achievementIdToScrollIntoView);
-		this._achievementIdToScrollIntoView = achievementIdToScrollIntoView;
-		this.updateShownAchievements();
+	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
+		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
+			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
+			const achievementToShow: Element = this.el.nativeElement
+					.querySelector(`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`);
+			achievementToShow.scrollIntoView(true);
+		}
+		this._selectedAchievementId = selectedAchievementId;
 	}
 
 	toggleMenu() {
-		if (this.headerClass) {
-			this.shortDisplay.next(false);
-		} 
-		else {
-			this.shortDisplay.next(true);
-		}
+		this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(!this.shortDisplay));
 	}
 	
 	// Prevent the window from being dragged around if user scrolls with click
@@ -175,11 +173,6 @@ export class AchievementsListComponent implements AfterViewInit {
 		this.lastScrollPosition = elem.scrollTop;
 	}
 
-	onRequestGlobalHeaderCollapse(request: boolean) {
-		console.log('gloal header collapse request received', request);
-		this.shortDisplay.next(request);
-	}
-
 	selectFilter(option: IOption) {
 		this.activeFilter = option.value;
 		this.updateShownAchievements();
@@ -197,29 +190,22 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	private onScrollDown(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollUp = scrollPosition;
-		if (scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX && !this.headerClass) {
-			this.shortDisplay.next(true);
+		if (scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX && !this.shortDisplay) {
+			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
 		}
 	}
 
 	private onScrollUp(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollDown = scrollPosition;
-		if (this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX && this.headerClass) {
-			this.shortDisplay.next(false);
+		if (this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX && this.shortDisplay) {
+			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(false));
 		}
 	}
 
 	private updateShownAchievements() {
-		if (!this.achievements || this.updatePending) {
+		if (!this.achievements || !this._achievementSet) {
 			return;
 		}
-		this.updatePending = true;
-		// Delay update so that it only runs once, once all inputs have been set
-		// There probably is a better way of doing this though...
-		setTimeout(() => this.doRealUpdate(), 100);
-	}
-
-	private doRealUpdate() {
 		const filterOption = this._achievementSet.filterOptions
 				.filter((option) => option.value === this.activeFilter)
 				[0];
@@ -233,20 +219,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			</svg>
 		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
-		console.log('selected', this.activeAchievements, filterOption);
-		if (this._achievementIdToScrollIntoView) {
-			this.shortDisplay.next(true);
-			// Do the scrolling here
-			const targetId = this._achievementIdToScrollIntoView.toLowerCase();
-			const achievementToShow: Element = this.el.nativeElement.querySelector(`achievement-view[data-achievement-id=${targetId}]`);
-			console.log('scrolling into view', this._achievementIdToScrollIntoView, achievementToShow);
-			// const listElement: Element = this.el.nativeElement.querySelector('.achievements-list');
-			// console.log('list element', listElement);
-			achievementToShow.scrollIntoView(true);
-			this._achievementIdToScrollIntoView = undefined;
-		}
 		this.showCollapse = this.activeAchievements.length > 0;
-		this.updatePending = false;
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}

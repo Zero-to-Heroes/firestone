@@ -1,5 +1,5 @@
-import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
-import { VisualAchievement, CompletionStep } from '../../models/visual-achievement';
+import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { CompletionStep } from '../../models/visual-achievement';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -17,9 +17,7 @@ export class AchievementCompletionStepComponent {
     completedTimes: number;
     svgAndTooltip: SafeHtml;
     
-    constructor(private domSanitizer: DomSanitizer) {
-
-    }
+    constructor(private domSanitizer: DomSanitizer) { }
 
 	@Input() set step(step: CompletionStep) {
         this.completionStep = step;
