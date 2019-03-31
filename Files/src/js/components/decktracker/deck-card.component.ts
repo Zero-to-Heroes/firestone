@@ -70,7 +70,7 @@ export class DeckCardComponent {
 		}
 	}
 
-	@HostListener('mouseenter') onMouseEnter() {
+	@HostListener('click') onMouseEnter() {
 		let rect = this.el.nativeElement.getBoundingClientRect();
 		let x = rect.left;
 		let y = rect.top;
