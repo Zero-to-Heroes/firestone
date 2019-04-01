@@ -21,4 +21,38 @@
             height: 100%;
         }
     }
+
+	.state-container {
+		margin: auto;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+
+		i {
+            margin-bottom: 30px;
+            width: 256px;
+            height: 259px;
+		}
+
+		.title {
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 14px;
+            line-height: normal;
+            text-align: center;
+            color: #CB9FD7;
+			margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 13px;
+            line-height: normal;
+            text-align: center;            
+            color: #A276AF;
+        }
+	}
 }
