@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { HeroCard } from '../../models/decktracker/hero-card';
+import { HeroCard } from '../../../models/decktracker/hero-card';
 
 declare var overwolf: any;
 
 @Component({
 	selector: 'decktracker-deck-name',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/decktracker-deck-name.component.scss',
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-deck-name.component.scss',
 	],
 	template: `
 		<div class="deck-name">

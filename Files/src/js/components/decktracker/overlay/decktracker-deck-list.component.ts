@@ -1,15 +1,15 @@
 import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, AfterViewInit, ViewRef, ChangeDetectorRef } from '@angular/core';
-import { DeckState } from '../../models/decktracker/deck-state';
+import { DeckState } from '../../../models/decktracker/deck-state';
 import { IOption } from 'ng-select';
-import { PreferencesService } from '../../services/preferences.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'decktracker-deck-list',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/decktracker-deck-list.component.scss',
-		'../../../css/component/decktracker/dim-overlay.scss',
-		`../../../css/global/scrollbar-decktracker-overlay.scss`,
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-deck-list.component.scss',
+		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
+		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
 		<div class="deck-list">

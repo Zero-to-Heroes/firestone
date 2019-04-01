@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { DeckState } from '../../models/decktracker/deck-state';
-import { DeckZone } from '../../models/decktracker/view/deck-zone';
-import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
+import { DeckState } from '../../../models/decktracker/deck-state';
+import { DeckZone } from '../../../models/decktracker/view/deck-zone';
+import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	selector: 'grouped-deck-list',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/grouped-deck-list.component.scss',
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/grouped-deck-list.component.scss',
 	],
 	template: `
 		<ul class="deck-list">

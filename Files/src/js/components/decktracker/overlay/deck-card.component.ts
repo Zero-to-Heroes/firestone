@@ -1,14 +1,14 @@
 import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { DeckCard } from '../../models/decktracker/deck-card';
-import { Events } from '../../services/events.service';
-import { VisualDeckCard } from '../../models/decktracker/visual-deck-card';
+import { DeckCard } from '../../../models/decktracker/deck-card';
+import { Events } from '../../../services/events.service';
+import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	selector: 'deck-card',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/deck-card.component.scss',
-		'../../../css/component/decktracker/dim-overlay.scss',
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/deck-card.component.scss',
+		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],
 	template: `
 		<div class="deck-card {{rarity}} {{highlight}}">

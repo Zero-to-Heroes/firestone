@@ -6,8 +6,8 @@ declare var overwolf: any;
 @Component({
 	selector: 'decktracker-title-bar',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/decktracker-title-bar.component.scss',
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss',
 	],
 	template: `
 		<div class="title-bar">

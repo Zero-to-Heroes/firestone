@@ -1,21 +1,21 @@
 import { Component, AfterViewInit, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, HostListener } from '@angular/core';
 
-import { DebugService } from '../../services/debug.service';
-import { GameState } from '../../models/decktracker/game-state';
-import { DeckEvents } from '../../services/decktracker/event-parser/deck-events';
-import { Preferences } from '../../models/preferences';
-import { PreferencesService } from '../../services/preferences.service';
-import { GameType } from '../../models/enums/game-type';
-import { Events } from '../../services/events.service';
-import { GameEvent } from '../../models/game-event';
+import { DebugService } from '../../../services/debug.service';
+import { GameState } from '../../../models/decktracker/game-state';
+import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
+import { Preferences } from '../../../models/preferences';
+import { PreferencesService } from '../../../services/preferences.service';
+import { GameType } from '../../../models/enums/game-type';
+import { Events } from '../../../services/events.service';
+import { GameEvent } from '../../../models/game-event';
 
 declare var overwolf: any;
 
 @Component({
-	selector: 'decktracker',
+	selector: 'decktracker-overlay',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/decktracker.component.scss',
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 	],
 	template: `
 		<div class="root">
@@ -56,7 +56,7 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerComponent implements AfterViewInit {
+export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	gameState: GameState;
 	windowId: string;

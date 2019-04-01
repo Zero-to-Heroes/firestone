@@ -1,13 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
-import { DeckZone } from '../../models/decktracker/view/deck-zone';
-import { DeckCard } from '../../models/decktracker/deck-card';
+import { DeckZone } from '../../../models/decktracker/view/deck-zone';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
 	selector: 'deck-zone',
 	styleUrls: [
-		'../../../css/global/components-global.scss',
-		'../../../css/component/decktracker/deck-zone.component.scss',
-		'../../../css/component/decktracker/dim-overlay.scss',
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/deck-zone.component.scss',
+		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],
 	template: `
 		<div class="deck-zone {{className}}">
