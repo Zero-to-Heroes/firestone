@@ -20,14 +20,9 @@ declare var overwolf: any;
 				(click)="selectModule('achievements')">
 				<span>Achievements</span>
 			</li>
-			<li class="disabled">
+			<li [ngClass]="{'selected': selectedModule == 'decktracker'}" 
+				(click)="selectModule('decktracker')">
 				<span>Deck Tracker</span>
-				<div class="zth-tooltip bottom">
-					<p>Coming soon</p>
-					<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-						<polygon points="0,0 8,-9 16,0"/>
-					</svg>
-				</div>
 			</li>
 		</ul>
 	`,

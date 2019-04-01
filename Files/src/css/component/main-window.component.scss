@@ -119,17 +119,6 @@ body {
 				position: relative;
 			}
 
-    		// player-name {
-			   //  border-right: 1px solid $grey03;
-			   //  margin: 10px 11px 9px 0;
-			   //  padding-right: 15px;
-			   //  display: flex;
-			   //  // margin-top: 10px;
-			   //  // margin-bottom: 9px;
-			   //  // margin-right: 11px;
-			   //  // margin-left: 15px;
-    		// }
-
 		    real-time-notifications {
 		    	height: 29px;
 				display: flex;
@@ -149,7 +138,7 @@ body {
 		    }
 	    }
 		
-		&.achievements {
+		&.achievements, &.decktracker {
 			background-image: radial-gradient(340.00px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
 			background-size: 100%;
 			outline: 1px solid #4B3052;
@@ -255,7 +244,7 @@ tooltips {
 	}
 }
 
-.top.achievements {
+.top.achievements, .top.decktracker {
 	.no-ads-placeholder {
 		background-color: #190505;
 

@@ -40,8 +40,7 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div class="app deck-tracker last disabled inactive">
-				<div class="coming-soon">Coming soon</div>
+			<div (click)="showDecktracker()" class="app deck-tracker last">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
@@ -94,6 +93,10 @@ export class AppChoiceComponent implements AfterViewInit {
 
 	showCollection() {
 		this.showMainWindow('collection');
+	}
+
+	showDecktracker() {
+		this.showMainWindow('decktracker');
 	}
 
 	showAchievements() {

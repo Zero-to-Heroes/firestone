@@ -51,6 +51,7 @@ declare var ga: any;
 					<section class="content-container">
 						<collection #collection [hidden]="selectedModule !== 'collection'" class="main-section"></collection>
 						<achievements #achievements [hidden]="selectedModule !== 'achievements'" class="main-section"></achievements>
+						<decktracker [hidden]="selectedModule !== 'decktracker'" class="main-section"></decktracker>
 					</section>
 				</div>
 

@@ -77,6 +77,7 @@ import { FsOverlayPlay } from 'src/js/components/video-controls/play-overlay-dou
 import { AchievementsGlobalCategoriesComponent } from '../../components/achievements/achievements-global-categories.component';
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { init } from '@sentry/browser';
+import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -140,6 +141,8 @@ console.log('version is', process.env.APP_VERSION);
 		AchievementProgressBarComponent,
 		AchievementThumbnailComponent,
 		AchievementViewComponent,
+
+		DecktrackerComponent,
 
 		FtueElement,
 		FtueComponent,
