@@ -174,7 +174,7 @@ export class AchievementsVideoCaptureService {
         console.log('[recording] stopping capture, was scheduled for', this.lastRecordingDate, Date.now());
 
         overwolf.media.replays.stopCapture(this.currentReplayId, (result) => {
-            console.log('[recording] stopped capture', result);
+            console.log('[recording] stopped capture', result, this.achievementsBeingRecorded);
             this.captureOngoing = false;
             this.currentReplayId = undefined;
             for (let achievementId of this.achievementsBeingRecorded) {

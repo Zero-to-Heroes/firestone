@@ -23,7 +23,7 @@ declare var overwolf: any;
 					[ngClass]="{'big': !selectedAchievementSet}">
 				<li (click)="goToAchievementsCategoriesView()">Categories</li>
 				<li class="separator">></li>
-				<li (click)="goToAchievementsCategoryView()">{{selectedCategory.name}}</li>
+				<li (click)="goToAchievementsCategoryView()" *ngIf="selectedCategory">{{selectedCategory.name}}</li>
 				<li class="separator" *ngIf="selectedAchievementSet">></li>
 				<li class="unclickable" *ngIf="selectedAchievementSet" 
 						(click)="goToAchievementSetView()">
