@@ -13,7 +13,7 @@ export class AllCardsService {
 		['gilneas', 'The Witchwood'],
 		['boomsday', 'The Boomsday Project'],
 		['troll', 'Rastakhan\'s Rumble'],
-		['ros', 'Rise of Shadows'],
+		['dalaran', 'Rise of Shadows'],
 	]
 
 	private readonly WILD_SETS = [
