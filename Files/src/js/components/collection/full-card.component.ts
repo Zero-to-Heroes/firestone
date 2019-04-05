@@ -137,7 +137,7 @@ export class FullCardComponent {
 	onHistoryClick(event: MouseEvent) {
 		let rect = this.elRef.nativeElement.querySelector('.card-details').getBoundingClientRect();
 		let scrollbarWidth = 5;
-		console.log('mousedown on sets container', rect, event);
+		// console.log('mousedown on sets container', rect, event);
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
