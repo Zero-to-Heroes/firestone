@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import { decode } from 'deckstrings';
+import { GameEvents } from '../game-events.service';
+import { GameEvent } from '../../models/game-event';
 
 @Injectable()
 export class DeckParserService {
@@ -9,6 +11,15 @@ export class DeckParserService {
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 
 	public currentDeck: any = {};
+
+	constructor(private gameEvents: GameEvents) { 
+		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
+			if (event.type === GameEvent.GAME_END) {
+				this.reset();
+				console.log('resetting deck');
+			}
+		})
+	}
 
 	public parseActiveDeck(data: string) {
 		// console.log('[decks] received log line', data);

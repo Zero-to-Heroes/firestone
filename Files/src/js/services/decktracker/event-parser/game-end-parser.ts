@@ -14,7 +14,7 @@ export class GameEndParser implements EventParser {
     }    
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
-        return currentState;
+        return new GameState();
     }
 
 	event(): string {
