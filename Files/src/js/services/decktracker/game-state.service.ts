@@ -67,13 +67,14 @@ export class GameStateService {
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
 				this.state = parser.parse(this.state, gameEvent);
-				this.deckEventBus.next({ 
+				const emittedEvent = { 
 					state: this.state, 
 					event: {
 						name: parser.event() 
 					}
-				});
-				console.log('applied parser', parser);
+				};
+				this.deckEventBus.next(emittedEvent);
+				console.log('applied parser', this.state, emittedEvent);
 			}
 		}
 	}
