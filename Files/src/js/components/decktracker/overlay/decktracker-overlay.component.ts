@@ -10,6 +10,7 @@ import { Events } from '../../../services/events.service';
 import { GameEvent } from '../../../models/game-event';
 
 declare var overwolf: any;
+declare var ga: any;
 
 @Component({
 	selector: 'decktracker-overlay',
@@ -149,9 +150,10 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		console.log('retrieving preferences');
-		const pref = await this.shouldDisplayOverlay(preferences);
-		console.log('should display overlay?', pref, preferences, this.gameState);
-		if (pref) {
+		const shouldDisplay = await this.shouldDisplayOverlay(preferences);
+		console.log('should display overlay?', shouldDisplay, preferences, this.gameState);
+		if (shouldDisplay) {
+			ga('send', 'event', 'decktracker', 'show');
 			this.restoreWindow();
 		}
 		else {
