@@ -27,7 +27,9 @@ export class DeckTrackerDeckNameComponent {
 	@Input() deckName: string;
 
 	@Input("hero") set hero(hero: HeroCard) {
-		this.deckImage = `url(http://static.zerotoheroes.com/hearthstone/cardart/tiles/${hero.cardId}.jpg)`;
+		if (hero) {
+			this.deckImage = `url(http://static.zerotoheroes.com/hearthstone/cardart/tiles/${hero.cardId}.jpg)`;
+		}
 	}
 
 }

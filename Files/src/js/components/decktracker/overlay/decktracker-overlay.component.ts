@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, HostListener } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, HostListener, ViewRef } from '@angular/core';
 
 import { DebugService } from '../../../services/debug.service';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -7,7 +7,6 @@ import { Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../../services/preferences.service';
 import { GameType } from '../../../models/enums/game-type';
 import { Events } from '../../../services/events.service';
-import { GameEvent } from '../../../models/game-event';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -70,8 +69,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			private prefs: PreferencesService,
 			private cdr: ChangeDetectorRef,
 			private events: Events,
-			private debugService: DebugService,
-			private elRef: ElementRef) {
+			private debugService: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
 			this.windowId = result.window.id;
 		});
@@ -104,30 +102,30 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}, 200);
 		});
-	}
-
-	ngAfterViewInit() {
-		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		this.cdr.detach();
 		const deckEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().deckEventBus;
-		deckEventBus.subscribe((event) => {
-			console.log('received deck event', event);
+	 	deckEventBus.subscribe(async (event) => {
+			console.log('received deck event', event.event);
 			this.gameState = event.state;
-			this.processEvent(event.event);
-			this.cdr.detectChanges();
-		})
+			await this.processEvent(event.event);
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 		const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe((event) => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
 			}
-		})
-		console.warn("Should remove the restoreWindow from prod code");
-		this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
-		console.log('game state', this.gameState);
+		});
+	}
+
+	ngAfterViewInit() {
+		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
+		this.cdr.detach();
 		this.handleDisplayPreferences();
 		this.cdr.detectChanges();
+		console.log('handled after view init');
 	}
 
 	@HostListener('mousedown')
@@ -135,7 +133,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		overwolf.windows.dragMove(this.windowId);
 	};
 
-	private processEvent(event) {
+	private async processEvent(event) {
 		switch(event.name) {
 			case DeckEvents.MATCH_METADATA:
 				console.log('received MATCH_METADATA event');
@@ -151,7 +149,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		console.log('retrieving preferences');
 		const shouldDisplay = await this.shouldDisplayOverlay(preferences);
-		console.log('should display overlay?', shouldDisplay, preferences, this.gameState);
+		console.log('should display overlay?', shouldDisplay, preferences);
 		if (shouldDisplay) {
 			ga('send', 'event', 'decktracker', 'show');
 			this.restoreWindow();
@@ -162,10 +160,14 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	}
 
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
-		if (!this.gameState || !this.gameState.metadata) { 
-			return;
-		}
 		const prefs = preferences || await this.prefs.getPreferences();
+		if (!this.gameState 
+				|| !this.gameState.metadata 
+				|| !this.gameState.metadata.gameType
+				|| !this.gameState.playerDeck
+				|| !this.gameState.playerDeck.deckList) { 
+			return false;
+		}
 		switch (this.gameState.metadata.gameType as GameType) {
 			case GameType.ARENA: 
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowArena;
