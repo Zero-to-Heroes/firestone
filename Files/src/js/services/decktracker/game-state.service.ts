@@ -35,15 +35,10 @@ export class GameStateService {
 	constructor(
 			private gameEvents: GameEvents, 
 			private allCards: AllCardsService,
-			private flags: FeatureFlags,
 			private deckParser: DeckParserService) {
-		if (!flags.decktracker()) {
-			return;
-		}
 		this.registerGameEvents();
 		this.eventParsers = this.buildEventParsers();
 		window['deckEventBus'] = this.deckEventBus;
-		window['deckDebug'] = this;
 		this.loadDecktrackerWindow();
 	}
 
@@ -63,18 +58,17 @@ export class GameStateService {
 	}
 
 	private processEvent(gameEvent: GameEvent) {
-		// console.log('[game-state] Processing event', gameEvent);
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
 				this.state = parser.parse(this.state, gameEvent);
 				const emittedEvent = { 
-					state: this.state, 
 					event: {
 						name: parser.event() 
-					}
+					},
+					state: this.state, 
 				};
 				this.deckEventBus.next(emittedEvent);
-				console.log('applied parser', this.state, emittedEvent);
+				console.log('emitted deck event', gameEvent, emittedEvent, this.deckEventBus);
 			}
 		}
 	}
