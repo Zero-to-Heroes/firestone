@@ -243,6 +243,9 @@ export class GameEvents {
 				const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
 				console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
 				const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
+				const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
+				const firstoneLogsKey = await this.s3.postBinaryFile(firestoneLogs);
+				console.log('posted Firestone logs', firstoneLogsKey);
 				captureEvent({
 					message: 'Exception while running plugin: ' + first,
 					extra: {
@@ -251,6 +254,7 @@ export class GameEvents {
 						lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
 						logFileKey: s3LogFileKey,
 						pluginLogsFileKey: pluginLogsFileKey,
+						firestoneLogs: firstoneLogsKey,
 					}
 				});
 				console.log('uploaded event to sentry');

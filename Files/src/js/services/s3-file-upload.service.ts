@@ -32,6 +32,40 @@ export class S3FileUploadService {
                 }
             });
         })
+    }
+    
+    public async postBinaryFile(biytesAsString: string): Promise<string> {
+        const split = biytesAsString.split(',');
+        let bytes = [];
+        for (let i = 0; i < split.length; i++) {
+            bytes[i] = parseInt(split[i]);
+        }
+        const byteArray = new Uint8Array(bytes);
+        const blob = new Blob([byteArray], { type: 'application/zip' });
+        
+        const fileKey = uuid();
+        AWS.config.region = 'us-west-2';
+        AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+        const s3 = new AWS.S3();
+        const params = {
+            Bucket: BUCKET,
+            Key: fileKey,
+            ACL: 'public-read-write',
+            Body: blob,
+        };
+        console.log('uploading log to S3 with params', params);
+        return new Promise<string>((resolve) => {
+            s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
+                // There Was An Error With Your S3 Config
+                if (err) {
+                    console.warn('An error during upload', err);
+                }
+                else {
+                    console.log('Uploaded logs', data2);
+                    resolve(fileKey);
+                }
+            });
+        })
 	}
 
 }

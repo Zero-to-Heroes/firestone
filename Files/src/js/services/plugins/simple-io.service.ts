@@ -58,6 +58,17 @@ export class SimpleIOService {
 		})
 	}
 
+	public async zipAppLogFolder(appName: string): Promise<string> {
+		await this.waitForInit();
+		const plugin = await this.get();
+		return new Promise<string>((resolve) => {
+			plugin.zipAppLogFolder(appName, (result, contents) => {
+				console.log('zipped directory done, reading binary result', appName, result);
+				resolve(contents);
+			})
+		})
+	}
+
 	public async get() {
 		await this.waitForInit();
 		return this.simpleIOPlugin.get();
