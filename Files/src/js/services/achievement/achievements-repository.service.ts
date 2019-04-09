@@ -42,6 +42,7 @@ import { MonsterHuntPassivePlay } from './achievements/monster-hunt-passive-play
 import { AchievementCategory } from '../../models/achievement-category.js';
 import { ScenarioId } from '../../models/scenario-id.js';
 import { KrippFirstInstallmentSetProvider } from './achievement-sets/kripp/kripp-first-installment.js';
+import { KrippShirvallah } from './achievements/kripp/kripp-shirvallah.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -79,6 +80,7 @@ export class AchievementsRepository {
 
 	private registerModules() {
 		// Create challenges
+		// console.log('achievemnt types', this.achievementTypes());
 		this.achievementTypes().forEach((achievementType) => {
 			this.createChallenge(achievementType.type, achievementType.challengeCreationFn);
 		});
@@ -203,7 +205,7 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 
-			// { type: 'kripp_achievements_1_shrivallah', challengeCreationFn: (achievement) => new KrippShrivallah(achievement, this.events) },
+			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
 
 		];
 	}

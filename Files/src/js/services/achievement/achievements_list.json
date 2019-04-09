@@ -743,7 +743,7 @@
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_6", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 6, "name": "Akali's Horn (Warrior) - Cleared round 7", "difficulty": "free"},
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_7", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 7, "name": "Akali's Horn (Warrior) - Completed Rumble Run!", "difficulty": "epic"},
 	
-	{ "type": "kripp_achievements_1_shrivallah", "id": "kripp_achievements_1_shrivallah", "cardId": "TRL_300", "name": "Hello Kitty", "text": "Win a game after playing Shrivallah, the Tiger from your hand (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_shirvallah", "id": "kripp_achievements_1_shirvallah", "cardId": "TRL_300", "name": "Hello Kitty", "text": "Win a game after playing Shirvallah, the Tiger from your hand (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_treants", "id": "kripp_achievements_1_treants", "cardId": "GIL_663t", "name": "I am Gloop", "text": "Win a game after summoning 8 or more Treants (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_classic", "id": "kripp_achievements_1_classic", "cardId": "EX1_298", "name": "Classicerino", "text": "Win a game using only Classic cards (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_fatigue", "id": "kripp_achievements_1_fatigue", "cardId": "EX1_161", "name": "Millerino", "text": "Win a game after your opponent has taken a hit for at least 4 fatigue damage (Ranked)", "difficulty": "epic"},

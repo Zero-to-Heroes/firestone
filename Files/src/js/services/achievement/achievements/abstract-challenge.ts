@@ -53,7 +53,7 @@ export abstract class AbstractChallenge implements Challenge {
 		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 
-	private detectScenario(gameEvent: GameEvent) {
+	protected detectScenario(gameEvent: GameEvent) {
 		// console.log('detecting scenario', gameEvent)
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
