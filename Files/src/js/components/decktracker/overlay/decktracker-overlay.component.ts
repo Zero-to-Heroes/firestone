@@ -7,6 +7,7 @@ import { Preferences } from '../../../models/preferences';
 import { PreferencesService } from '../../../services/preferences.service';
 import { GameType } from '../../../models/enums/game-type';
 import { Events } from '../../../services/events.service';
+import { ScenarioId } from '../../../models/scenario-id';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -57,6 +58,10 @@ declare var ga: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayComponent implements AfterViewInit {
+
+	// This should not be necessary, but is an additional guard
+	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = 
+		[ScenarioId.DUNGEON_RUN, ScenarioId.MONSTER_HUNT, ScenarioId.RUMBLE_RUN];
 
 	gameState: GameState;
 	windowId: string;
@@ -181,8 +186,10 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowCasual;
 			case GameType.RANKED: 
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowRanked;
-			case GameType.VS_AI: 
-				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowPractice;
+			case GameType.VS_AI:
+				return this.gameState.playerDeck.deckList.length > 0 
+						&& prefs.decktrackerShowPractice
+						&& this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(this.gameState.metadata.scenarioId) !== -1;
 			case GameType.VS_FRIEND: 
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly;
 			case GameType.FSG_BRAWL: 
