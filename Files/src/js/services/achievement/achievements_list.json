@@ -741,6 +741,18 @@
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_4", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 4, "name": "Akali's Horn (Warrior) - Cleared round 5", "difficulty": "free"},
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_5", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 5, "name": "Akali's Horn (Warrior) - Cleared round 6", "difficulty": "free"},
 	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_6", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 6, "name": "Akali's Horn (Warrior) - Cleared round 7", "difficulty": "free"},
-	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_7", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 7, "name": "Akali's Horn (Warrior) - Completed Rumble Run!", "difficulty": "epic"}	
-
+	{ "type": "rumble_run_progression", "id": "rumble_run_progression_TRLA_209h_Warrior_TRLA_171_7", "cardId": "TRLA_209h_Warrior", "secondaryCardId": "TRLA_171", "cardDbfId": 54064, "step": 7, "name": "Akali's Horn (Warrior) - Completed Rumble Run!", "difficulty": "epic"},
+	
+	{ "type": "kripp_achievements_1_shrivallah", "id": "kripp_achievements_1_shrivallah", "cardId": "TRL_300", "name": "Hello Kitty", "text": "Win a game after playing Shrivallah, the Tiger from your hand (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_treants", "id": "kripp_achievements_1_treants", "cardId": "GIL_663t", "name": "I am Gloop", "text": "Win a game after summoning 8 or more Treants (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_classic", "id": "kripp_achievements_1_classic", "cardId": "EX1_298", "name": "Classicerino", "text": "Win a game using only Classic cards (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_fatigue", "id": "kripp_achievements_1_fatigue", "cardId": "EX1_161", "name": "Millerino", "text": "Win a game after your opponent has taken a hit for at least 4 fatigue damage (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_goblin_bombs", "id": "kripp_achievements_1_goblin_bombs", "cardId": "BOT_031", "name": "Baby Boomers", "text": "Win a game after dealing at least 16 damage from Goblin Bombs (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_pogo_hopper", "id": "kripp_achievements_1_pogo_hopper", "cardId": "BOT_283", "name": "Can't stop hopping", "text": "Win a game after playing a Pogo-Hopper with at least 16 attack (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_freeze_shaman", "id": "kripp_achievements_1_freeze_shaman", "cardId": "ICC_289", "name": "Let it go", "text": "Win a game after freezing at least 10 enemy minions as Shaman (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_treasure_room", "id": "kripp_achievements_1_treasure_room", "cardId": "LOOTA_BOSS_52t", "name": "Finally lucky", "text": "Loot a chest in the Treasure Vault (Dungeon Run)", "difficulty": "legendary"},
+	{ "type": "kripp_achievements_1_rod_of_roasting", "id": "kripp_achievements_1_rod_of_roasting", "cardId": "LOOTA_822", "name": "You Only Kripp Once", "text": "Kill a boss with the Rod of Roasting (Dungeon Run)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_arcane_missiles", "id": "kripp_achievements_1_arcane_missiles", "cardId": "EX1_277", "name": "Arcane Orb", "text": "Send an Arcane Missile that deals at least 10 damage (Rumble Run)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_one_hp_remaining", "id": "kripp_achievements_1_one_hp_remaining", "cardId": "EX1_295", "name": "Last Kripp Standing", "text": "Win a game with 1 HP remaining (Ranked/Arena)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_mass_hysteria", "id": "kripp_achievements_1_mass_hysteria", "cardId": "TRL_258", "name": "Krippsteria",  "text": "Perform a full 7-minion board clear with Mass Hysteria (Ranked/Arena)", "difficulty": "legendary"}
 ]

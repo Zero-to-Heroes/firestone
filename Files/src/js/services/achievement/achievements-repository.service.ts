@@ -41,6 +41,7 @@ import { MonsterHuntTreasurePlay } from './achievements/monster-hunttreasure-pla
 import { MonsterHuntPassivePlay } from './achievements/monster-hunt-passive-play.js';
 import { AchievementCategory } from '../../models/achievement-category.js';
 import { ScenarioId } from '../../models/scenario-id.js';
+import { KrippFirstInstallmentSetProvider } from './achievement-sets/kripp/kripp-first-installment.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -72,15 +73,6 @@ export class AchievementsRepository {
 		return achievementSets;
 	}
 
-	// public async findCategoryForAchievement(achievementId: string): Promise<AchievementSet> {
-	// 	const completedAchievements: CompletedAchievement[] = await this.storage.loadAchievements();
-	// 	const achievementSet: AchievementSet = this.setProviders
-	// 			.find((provider) => provider.supportsAchievement(this.allAchievements, achievementId))
-	// 			.provide(this.allAchievements, completedAchievements);
-	// 	console.log('achievement', achievementId, 'matching set', achievementSet);
-	// 	return achievementSet;
-	// }
-
 	public getCategories(): AchievementCategory[] {
 		return this.categories;
 	}
@@ -103,6 +95,9 @@ export class AchievementsRepository {
 		const rumbleRunShrinePlayProvider = new RumbleRunShrinePlaySetProvider(this.cards, this.conf);
 		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.cards, this.conf);
 		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.cards, this.conf);
+
+		const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
+
 		this.setProviders = [
 			dungeonRunProgressionProvider,
 			dungeonRunBossProvider,
@@ -116,7 +111,16 @@ export class AchievementsRepository {
 			rumbleRunShrinePlayProvider,
 			rumbleRunTeammateProvider,
 			rumbleRunPassiveProvider,
+			krippFirstInstallment,
 		];
+		const krippCategory = new AchievementCategory(
+			'kripp',
+			'Kripp',
+			'kripp',
+			[
+				krippFirstInstallment.id,
+			]
+		);
 		this.categories = [
 			new AchievementCategory(
 				'dungeon_run',
@@ -151,12 +155,14 @@ export class AchievementsRepository {
 					rumbleRunPassiveProvider.id,
 				]
 			),
+			// krippCategory,
 		]
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
 			.map((achievement) => new Achievement(
 				achievement.id, 
 				achievement.name, 
+				achievement.text,
 				achievement.type, 
 				achievement.bossId || achievement.cardId, 
 				achievement.cardType,
@@ -196,6 +202,9 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
+
+			// { type: 'kripp_achievements_1_shrivallah', challengeCreationFn: (achievement) => new KrippShrivallah(achievement, this.events) },
+
 		];
 	}
 }

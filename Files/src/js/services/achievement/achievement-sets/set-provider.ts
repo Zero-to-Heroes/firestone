@@ -39,6 +39,7 @@ export abstract class SetProvider {
 					return new Achievement(
                         ref.id, 
                         ref.name, 
+                        ref.text,
                         ref.type, 
                         ref.cardId, 
                         ref.cardType, 

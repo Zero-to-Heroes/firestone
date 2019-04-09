@@ -34,6 +34,7 @@ export class DevService {
 		const achievement = new Achievement(
 			'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
 			'Fake Wee Whelp',
+			'Temp text',
 			'dungeon_run_boss_encounter',
 			'LOOTA_BOSS_44h',
 			'minion',

@@ -4,6 +4,7 @@ export class Achievement {
 
 	readonly id: string;
 	readonly name: string;
+	readonly text: string;
 	readonly type: string;
 	readonly cardId: string;
 	readonly cardType: string;
@@ -16,6 +17,7 @@ export class Achievement {
 	constructor(
 			id: string, 
 			name: string, 
+			text: string,
 			type: string, 
 			cardId: string, 
 			cardType: string,
@@ -26,6 +28,7 @@ export class Achievement {
 			replayInfo: ReadonlyArray<ReplayInfo>) {
 		this.id = id;
 		this.name = name;
+		this.text = text;
 		this.type = type;
 		this.cardId = cardId;
 		this.cardType = cardType;
