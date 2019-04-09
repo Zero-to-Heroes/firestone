@@ -9,7 +9,7 @@ export class ShrinePlay extends AbstractChallenge {
 	private mulliganOver: boolean = false;
 
 	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, scenarioId, events, [GameEvent.GAME_START, GameEvent.GAME_END]);
+		super(achievement, [scenarioId], events, [GameEvent.GAME_START, GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
 	}
 

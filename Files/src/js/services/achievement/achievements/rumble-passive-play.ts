@@ -1,4 +1,3 @@
-import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
@@ -8,7 +7,7 @@ export class RumblePassivePlay extends AbstractChallenge {
 	private readonly cardId: string;
 
 	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, scenarioId, events, [GameEvent.GAME_START, GameEvent.GAME_END]);
+		super(achievement, [scenarioId], events, [GameEvent.GAME_START, GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
 	}
 

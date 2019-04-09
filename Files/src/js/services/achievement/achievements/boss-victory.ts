@@ -1,5 +1,3 @@
-import { Challenge } from './challenge';
-import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
@@ -11,7 +9,7 @@ export class BossVictory extends AbstractChallenge {
 	private currentTurnStartTime: number;
 
 	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, scenarioId, events, [GameEvent.GAME_START]);
+		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
 		this.cardId = achievement.cardId;
 	}
 

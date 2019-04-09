@@ -1,5 +1,3 @@
-import { Challenge } from './challenge';
-import { CompletedAchievement } from '../../../models/completed-achievement';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
@@ -15,7 +13,7 @@ export class RumbleProgression extends AbstractChallenge {
 	private shrinePlayed: boolean = false;
 
 	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, scenarioId, events, [GameEvent.GAME_START]);
+		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
 		this.heroId = achievement.cardId;
 		this.shrineId = achievement.secondaryCardId;
 		this.rumbleStep = achievement.step;

@@ -9,7 +9,7 @@ export class BossEncounter extends AbstractChallenge {
 	private sceneChanged: boolean = false;
 
 	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, scenarioId, events, [GameEvent.GAME_END]);
+		super(achievement, [scenarioId], events, [GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
 		
 		events.on(Events.SCENE_CHANGED).subscribe((data) => {

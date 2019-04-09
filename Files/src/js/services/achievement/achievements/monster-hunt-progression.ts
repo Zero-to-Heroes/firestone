@@ -11,7 +11,7 @@ export class MonsterHuntProgression extends AbstractChallenge {
 	private currentHuntStep: number;
 
 	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, scenarioId, events, [GameEvent.GAME_START]);
+		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
 		this.heroId = achievement.cardId;
 		this.huntStep = achievement.step;
 	}

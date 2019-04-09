@@ -6,7 +6,7 @@ import { Events } from '../../events.service';
 export abstract class AbstractChallenge implements Challenge {
 
 	protected readonly achievementId: string;
-	protected readonly scenarioId: number;
+	protected readonly modeOrScenarioIds: ReadonlyArray<number>;
 	protected readonly events: Events;
 	protected readonly resetEvents: ReadonlyArray<string>;
 	protected readonly stateProperties: ReadonlyArray<string>;
@@ -16,11 +16,11 @@ export abstract class AbstractChallenge implements Challenge {
 
 	constructor(
 			achievement, 
-			scenarioId: number, 
+			modeOrScenarioIds: ReadonlyArray<number>, 
 			events: Events,
 			resetEvents: ReadonlyArray<string>) {
 		this.achievementId = achievement.id;
-		this.scenarioId = scenarioId;
+		this.modeOrScenarioIds = modeOrScenarioIds;
 		this.events = events;
 		this.resetEvents = resetEvents || [];
 	}
@@ -58,7 +58,8 @@ export abstract class AbstractChallenge implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-		if (parseInt(gameEvent.data[0].ScenarioID) === this.scenarioId) {
+		if (this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].ScenarioID)) !== -1
+				|| this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].GameType)) !== -1) {
 			this.correctMode = true;
 			// console.log('correct scenario');
 			this.handleCompletion();
