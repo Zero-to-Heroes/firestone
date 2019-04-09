@@ -1,0 +1,36 @@
+.share-info {
+    display: flex;
+    flex-direction: column;
+}
+
+textarea {
+    background: rgba(255, 255, 255, 0.12);
+    height: 90px;
+    padding: 10px;
+    border: none;
+    resize: none;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: normal;    
+    color: #D9C3AB;
+}
+
+button {
+    width: 80px;
+    height: 30px;
+    background: #FFB948;
+    align-self: flex-end;
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: normal;
+    text-align: center;    
+    color: #2F0D0D;
+
+    &:hover {
+        background: #D9C3AB;
+    }
+}

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
 
 declare var overwolf: any;
 
@@ -104,14 +105,50 @@ export class OverwolfService {
                 resolve();
             });
         });
-    }
+	}
+	
     public async getReplayMediaState(): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
             overwolf.media.replays.getState((res: any) => {
                 resolve(res.isOn);
             });
         });
-    }
+	}
+	
+    public async getTwitterUserInfo(): Promise<TwitterUserInfo> {
+		return new Promise<TwitterUserInfo>((resolve) => {
+            overwolf.social.twitter.getUserInfo((res) => {
+				if (res.status !== 'success' || !res.userInfo)  {
+					resolve({
+						avatarUrl: undefined,
+						id: undefined,
+						name: undefined,
+						screenName: undefined,
+					} as TwitterUserInfo);
+					return;
+				}
+                resolve({
+					avatarUrl: res.userInfo.avatar,
+					id: res.userInfo.id,
+					name: res.userInfo.name,
+					screenName: res.userInfo.screenName,
+				} as TwitterUserInfo);
+            });
+        });
+	}
+	
+    public async twitterShare(filePathOnDisk: string, message: string): Promise<boolean> {
+		return new Promise<boolean>((resolve) => {
+            overwolf.social.twitter.share({
+				file: filePathOnDisk,
+				message: message,
+			}, 
+			(res, error) => {
+				console.log('uploaded file to twitter', res, error);
+                resolve(res);
+            });
+        });
+	}
 
 	private gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {

@@ -1,12 +1,10 @@
-import { Component, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
-
-declare var overwolf;
 
 @Component({
 	selector: 'achievements',
@@ -34,10 +32,16 @@ declare var overwolf;
 				<achievements-list
 						[hidden]="state.currentView !== 'list'"
 						[shortDisplay]="state.shortDisplay"
+						[socialShareUserInfo]="socialShareUserInfo"
 						[achievementsList]="state.achievementsList"
 						[selectedAchievementId]="state.selectedAchievementId"
 						[achievementSet]="state.selectedCategory">
 				</achievements-list>
+				<achievement-sharing-modal
+						[hidden]="state.currentView !== 'sharing-achievement'"
+						[socialShareUserInfo]="socialShareUserInfo"
+						[sharingAchievement]="state.sharingAchievement">
+				</achievement-sharing-modal>
 			</section>
 			<section class="secondary">
 				<achievement-history [achievementHistory]="state.achievementHistory"></achievement-history>
@@ -63,6 +67,7 @@ declare var overwolf;
 export class AchievementsComponent {
 
 	@Input() state: AchievementsState;
+	@Input() socialShareUserInfo: SocialShareUserInfo;
 	
 	_viewState = 'shown';
 }

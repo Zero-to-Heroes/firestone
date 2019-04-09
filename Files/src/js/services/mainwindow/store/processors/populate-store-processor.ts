@@ -17,6 +17,10 @@ import { Card } from "../../../../models/card";
 import { PityTimer } from "../../../../models/pity-timer";
 import { AllCardsService } from "../../../all-cards.service";
 import { PackHistoryService } from "../../../collection/pack-history.service";
+import { SocialShareUserInfo } from "../../../../models/mainwindow/social-share-user-info";
+import { OverwolfService } from "../../../overwolf.service";
+
+declare var overwolf;
 
 export class PopulateStoreProcessor implements Processor {
 
@@ -26,15 +30,26 @@ export class PopulateStoreProcessor implements Processor {
         private cardHistoryStorage: CardHistoryStorageService,
         private collectionManager: CollectionManager,
         private pityTimer: PackHistoryService,
+        private ow: OverwolfService,
         private cards: AllCardsService) { }
 
     public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
         const collection = await this.populateCollectionState(currentState.binder);
-		const achievements = await this.populateAchievementState(currentState.achievements);
+        const achievements = await this.populateAchievementState(currentState.achievements);
+        const socialShareUserInfo = await this.initializeSocialShareUserInfo(currentState.socialShareUserInfo);
         return Object.assign(new MainWindowState(), currentState, {
             achievements: achievements,
             binder: collection,
+            socialShareUserInfo: socialShareUserInfo,
+            isVisible: false,
         } as MainWindowState)
+    }
+
+    private async initializeSocialShareUserInfo(socialShareUserInfo: SocialShareUserInfo): Promise<SocialShareUserInfo> {
+        const twitter = await this.ow.getTwitterUserInfo();
+        return Object.assign(new SocialShareUserInfo(), socialShareUserInfo, {
+            twitter: twitter,
+        } as SocialShareUserInfo);
     }
 
     private async populateAchievementState(currentState: AchievementsState): Promise<AchievementsState> {

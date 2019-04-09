@@ -6,6 +6,7 @@ import { IOption } from 'ng-select';
 import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 
 declare var overwolf;
 
@@ -53,6 +54,7 @@ declare var overwolf;
 				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId ">
 					<achievement-view 
 							[attr.data-achievement-id]="achievement.id.toLowerCase()"
+							[socialShareUserInfo]="socialShareUserInfo"
 							[showReplays]="_selectedAchievementId === achievement.id"
 							[achievement]="achievement">
 					</achievement-view>
@@ -74,6 +76,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	readonly SCROLL_SHRINK_START_PX = 5 * 100;
 
 	@Input() shortDisplay: boolean;
+	@Input() socialShareUserInfo: SocialShareUserInfo;
 	_achievementSet: AchievementSet;
 	_selectedAchievementId: string;
 	achievements: ReadonlyArray<VisualAchievement>;

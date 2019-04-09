@@ -2,6 +2,7 @@ import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRe
 import { VisualAchievement } from '../../models/visual-achievement';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 
 declare var overwolf;
 
@@ -44,7 +45,10 @@ declare var overwolf;
 					</i>
 				</div>
 			</div>
-			<achievement-recordings *ngIf="showRecordings" [achievement]="_achievement"></achievement-recordings>
+			<achievement-recordings *ngIf="showRecordings" 
+					[socialShareUserInfo]="socialShareUserInfo"
+					[achievement]="_achievement">
+			</achievement-recordings>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush
@@ -53,6 +57,7 @@ export class AchievementViewComponent implements AfterViewInit {
 
 	showRecordings: boolean;
 	_achievement: VisualAchievement;
+	@Input() socialShareUserInfo: SocialShareUserInfo;
 	
 	achievementText: string;
 	achieved: boolean = false;

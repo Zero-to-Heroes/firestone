@@ -61,6 +61,15 @@ import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
+import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
+import { OverwolfService } from '../../overwolf.service';
+import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
+import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
+import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
+import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
+import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
 
 declare var overwolf;
 const HEARTHSTONE_GAME_ID = 9898;
@@ -86,6 +95,7 @@ export class MainWindowStoreService {
 			private io: SimpleIOService,
 			private collectionDb: IndexedDbService,
 			private achievementsDb: AchievementsDb,
+			private ow: OverwolfService,
 			private memoryReading: MemoryInspectionService,
 			private events: Events,
 			private pityTimer: PackHistoryService) {
@@ -99,7 +109,6 @@ export class MainWindowStoreService {
 			// So that we don't wait for the next tick in case the event can be processed right away
 			this.processQueue();
 		});
-
 		setInterval(() => this.processQueue(), 50);
 
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
@@ -107,8 +116,9 @@ export class MainWindowStoreService {
 				this.populateStore();
 			}
 		});
-
 		this.populateStore();
+
+		this.listenForSocialAccountLoginUpdates();
 	}
 
 	// We want events to be processed sequentially
@@ -127,7 +137,6 @@ export class MainWindowStoreService {
 			console.log('[store] emitted new state', this.state);
 		}
 		this.isProcessing = false;
-		console.log('[store] processing over');
 	}
 
 	private buildProcessors(): Map<String, Processor> {
@@ -140,6 +149,7 @@ export class MainWindowStoreService {
 				this.cardHistoryStorage,
 				this.collectionManager,
 				this.pityTimer,
+				this.ow,
 				this.cards),
 			ChangeVisibleApplicationEvent.name, new ChangeVisibleApplicationProcessor(),
 			CloseMainWindowEvent.name, new CloseMainWindowProcessor(),
@@ -167,6 +177,11 @@ export class MainWindowStoreService {
 				achievementStateHelper, this.events),
 			AchievementCompletedEvent.name, new AchievementCompletedProcessor(this.achievementsStorage, 
 				this.achievementHistoryStorage, this.achievementsRepository, this.events, achievementUpdateHelper),
+
+			StartSocialSharingEvent.name, new StartSocialSharingProcessor(),
+			TriggerSocialNetworkLoginToggleEvent.name, new TriggerSocialNetworkLoginToggleProcessor(),
+			UpdateTwitterSocialInfoEvent.name, new UpdateTwitterSocialInfoProcessor(this.ow),
+			ShareVideoOnSocialNetworkEvent.name, new ShareVideoOnSocialNetworkProcessor(this.ow),
 		);
 	}
 
@@ -174,7 +189,13 @@ export class MainWindowStoreService {
 		this.stateUpdater.next(new PopulateStoreEvent());
 	}
 
-	gameLaunched(gameInfoResult: any): boolean {
+	private listenForSocialAccountLoginUpdates() {
+		overwolf.social.twitter.onLoginStateChanged.addListener((change) => {
+			this.stateUpdater.next(new UpdateTwitterSocialInfoEvent());
+		})
+	}
+
+	private gameLaunched(gameInfoResult: any): boolean {
 		if (!gameInfoResult) {
 			return false;
 		}
@@ -191,7 +212,7 @@ export class MainWindowStoreService {
 		return true;
 	}
 
-	gameRunning(gameInfo: any): boolean {
+	private gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {
 			return false;
 		}

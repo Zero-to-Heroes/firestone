@@ -1,0 +1,72 @@
+.share-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .avatar-image {
+        position: relative;
+    }
+
+    button {
+        background: rgba(217, 195, 171, 0.5);
+        width: 60px;
+        height: 18px;
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: normal;    
+        color: #1B071F;
+        margin-top: 10px;
+    }
+
+    .zth-tooltip {
+        display: none;
+        opacity: 1;
+        background: #A89782;
+        position: absolute;
+        top: -42px;
+        width: 110px;
+        height: 30px;
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        left: calc(25px + 50%);
+        transform: translateX(-50%);
+        overflow: visible;
+    
+        .tooltip-arrow {
+            position: absolute;
+            bottom: 0px;
+            left: 23px;
+            width: 16px;
+            height: 9px;
+            fill: #A89782;
+            transform: rotate(-180deg);
+        }
+    
+        p {
+            white-space: nowrap;
+            cursor: default;
+            color: #1B071F;
+            margin: 0;
+            font-family: Open Sans;
+            font-style: normal;
+            font-weight: normal;
+            line-height: normal;
+            font-size: 13px;
+            text-align: center;
+        }
+    }
+
+    button:hover {
+        background: #D9C3AB;
+    }
+
+    .avatar-image:hover {
+        .zth-tooltip {
+            display: flex;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+.achievement-social-shares {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    height: 80%;
+}
+
+.social-share {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #A89782;
+
+    i {
+        width: 21px;
+        height: 16px;
+        --icon-color: #1B071F;
+    }
+}

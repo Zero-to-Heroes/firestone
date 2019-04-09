@@ -54,6 +54,7 @@ declare var ga: any;
 						</collection>
 						<achievements #achievements class="main-section"
 								[state]="state.achievements"
+								[socialShareUserInfo]="state.socialShareUserInfo"
 								[hidden]="state.currentApp !== 'achievements'">
 						</achievements>
 						<decktracker class="main-section" 
@@ -157,7 +158,7 @@ export class MainWindowComponent implements AfterViewInit {
 				if (newState.isVisible && (!this.state || !this.state.isVisible)) {
 					overwolf.windows.restore(this.windowId);
 				}
-				console.log('got new state', newState, this.state);
+				console.log('got new state', newState);
 				this.state = newState;
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();

@@ -78,6 +78,10 @@ import { AchievementsGlobalCategoriesComponent } from '../../components/achievem
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { init } from '@sentry/browser';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
+import { AchievementSocialSharesComponent } from '../../components/achievements/achievement-social-shares.component';
+import { AchievementSharingModal } from '../../components/achievements/achievement-sharing-modal.component';
+import { ShareLoginComponent } from '../../components/sharing/share-login.component';
+import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -141,8 +145,13 @@ console.log('version is', process.env.APP_VERSION);
 		AchievementProgressBarComponent,
 		AchievementThumbnailComponent,
 		AchievementViewComponent,
+		AchievementSocialSharesComponent,
+		AchievementSharingModal,
 
 		DecktrackerComponent,
+
+		ShareLoginComponent,
+		ShareInfoComponent,
 
 		FtueElement,
 		FtueComponent,

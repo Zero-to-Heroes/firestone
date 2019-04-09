@@ -7,6 +7,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { VideoReplayDeletionRequestEvent } from '../../services/mainwindow/store/events/achievements/video-replay-deletion-request-event';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 
 declare var overwolf;
 declare var ga;
@@ -40,6 +41,15 @@ declare var ga;
             
                     <vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen>
                 </vg-controls>
+
+                <achievement-social-shares 
+                        *ngIf="!currentThumbnail.isDeleted"
+                        [socialShareUserInfo]="socialShareUserInfo"
+                        [achievementName]="_achievement.name"
+                        [title]="title"
+                        [videoPathOnDisk]="currentVideoPathOnDisk"
+                        [videoPath]="currentReplayLocation">
+                </achievement-social-shares>
 
                 <video [vgMedia]="media" #media id="singleVideo" preload="auto">
                     <source [src]="currentReplay" type="video/mp4">
@@ -124,12 +134,14 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
     private readonly THUMBNAILS_PER_PAGE = 5;
 
+    @Input() socialShareUserInfo: SocialShareUserInfo;
     _achievement: VisualAchievement;
 
     thumbnails: ThumbnailInfo[] = [];
 
     currentThumbnail: ThumbnailInfo;
     currentReplayLocation: string;
+    currentVideoPathOnDisk: string;
     currentReplay: SafeUrl;
     title: SafeHtml;
     fullscreen: boolean = false;
@@ -294,6 +306,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     private updateThumbnail(thumbnail: ThumbnailInfo) {
         console.log('updating thumbnail', thumbnail);
         this.currentThumbnail = thumbnail;
+        this.currentVideoPathOnDisk = this.currentThumbnail 
+                ? this.currentThumbnail.videoPath 
+                : undefined;
         this.currentReplayLocation = this.currentThumbnail 
                 ? this.currentThumbnail.videoLocation 
                 : undefined;
