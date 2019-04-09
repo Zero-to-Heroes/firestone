@@ -153,6 +153,7 @@ export class MainWindowComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		const storeBus: BehaviorSubject<MainWindowState> = overwolf.windows.getMainWindow().mainWindowStore;
+		console.log('retrieved storeBus', storeBus, overwolf.windows.getMainWindow());
 		storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(() => {
 				if (newState.isVisible && (!this.state || !this.state.isVisible)) {

@@ -86,8 +86,12 @@ export class AchievementSharingModal implements AfterViewInit {
 		this.network = value.network;
 		this.title = value.title;
 		this.achievementName = value.achievementName;
+		this.initPlayer();
+	}
+
+	private initPlayer() {
 		if (!this.player) {
-			console.log('player not defined');
+			setTimeout(() => this.initPlayer(), 50);
 			return;
 		}
         this.player.load();

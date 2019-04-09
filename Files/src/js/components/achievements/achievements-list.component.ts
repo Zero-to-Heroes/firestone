@@ -96,7 +96,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
-
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	ngAfterViewInit() {
@@ -115,7 +115,6 @@ export class AchievementsListComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		});
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
