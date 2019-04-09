@@ -12,6 +12,16 @@
     align-items: center;
     justify-content: center;
     background: #A89782;
+    margin-bottom: 5px;
+
+    &:hover:not(.disabled) {
+        background: #D9C3AB;
+    }
+
+    &.disabled {
+        background: #A89782;
+        opacity: 0.5;
+    }
 
     i {
         width: 21px;
