@@ -144,7 +144,7 @@ export class GameEvents {
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer,
-					gameEvent.Value.CreatorId));
+					gameEvent.Value.CreatorCardId));
 				break;
 			case 'SECRET_PLAYED':
 				this.allEvents.next(new GameEvent(
@@ -174,6 +174,14 @@ export class GameEvents {
 			case 'CARD_REMOVED_FROM_DECK':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_REMOVED_FROM_DECK, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
+			case 'CARD_REMOVED_FROM_HAND':
+				this.allEvents.next(new GameEvent(
+					GameEvent.CARD_REMOVED_FROM_HAND, 
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,

@@ -82,7 +82,7 @@ export class AllCardsService {
 
 	public getCard(id: string): any {
 		return parseCardsText.jsonDatabase
-			.find((card) => card.id == id);
+			.find((card) => card.id === id);
 	}
 
 	public getCardFromDbfId(dbfId: number): any {

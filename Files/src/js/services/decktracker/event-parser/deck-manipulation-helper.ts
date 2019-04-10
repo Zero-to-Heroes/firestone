@@ -16,7 +16,8 @@ export class DeckManipulationHelper {
         // console.log('got it with find', zone.find((card) => card.cardId === cardTemplate.cardId));
         let inZone = zone.find((card) => card.cardId === cardTemplate.cardId);
         // console.log('is in zone?', inZone);
-        if (!inZone) {
+        // If we don't know what card it is, we don't want to group them together
+        if (!inZone || cardTemplate.cardId === null) {
             const result = [
                 ...zone, 
                 Object.assign(new DeckCard(), {
