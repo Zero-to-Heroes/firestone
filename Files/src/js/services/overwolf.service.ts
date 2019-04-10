@@ -139,11 +139,12 @@ export class OverwolfService {
 	
     public async twitterShare(filePathOnDisk: string, message: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
-            overwolf.social.twitter.share({
+			const shareParam = {
 				file: filePathOnDisk,
 				message: message,
-			}, 
-			(res, error) => {
+			};
+			console.log('sharing on Twitter', shareParam),
+            overwolf.social.twitter.share(shareParam,  (res, error) => {
 				console.log('uploaded file to twitter', res, error);
                 resolve(res);
             });
