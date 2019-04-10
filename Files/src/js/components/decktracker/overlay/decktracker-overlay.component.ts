@@ -172,6 +172,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
 		const prefs = preferences || await this.prefs.getPreferences();
+		console.log('merged prefs', prefs, this.gameState);
 		if (!this.gameState 
 				|| !this.gameState.metadata 
 				|| !this.gameState.metadata.gameType
@@ -189,7 +190,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			case GameType.VS_AI:
 				return this.gameState.playerDeck.deckList.length > 0 
 						&& prefs.decktrackerShowPractice
-						&& this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(this.gameState.metadata.scenarioId) !== -1;
+						&& this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(this.gameState.metadata.scenarioId) === -1;
 			case GameType.VS_FRIEND: 
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly;
 			case GameType.FSG_BRAWL: 
@@ -206,24 +207,24 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	private restoreWindow() {
 		overwolf.windows.restore(this.windowId, (result) => {
-			console.log('window restored', result);
+			// console.log('window restored', result);
 			let width = 270;
 			overwolf.games.getRunningGameInfo((gameInfo) => {
-				console.log('got running game info', gameInfo);
+				// console.log('got running game info', gameInfo);
 				if (!gameInfo) {
 					return;
 				}
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
 				let dpi = gameWidth / gameInfo.width;
-				console.log('computed stuff', gameWidth, gameHeight, dpi);
+				// console.log('computed stuff', gameWidth, gameHeight, dpi);
 				overwolf.windows.changeSize(this.windowId, width, gameHeight, (changeSize) => {
 					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 					let newLeft = ~~(gameWidth - width* dpi - 20); // Leave a bit of room to the right
 					let newTop = 0;
-					console.log('changing position', newLeft, newTop, width, gameHeight, changeSize);
+					// console.log('changing position', newLeft, newTop, width, gameHeight, changeSize);
 					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
-						console.log('changed window position', changePosition);
+						// console.log('changed window position', changePosition);
 					});
 				});
 			});

@@ -105,6 +105,14 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+			case 'DISCARD_CARD':
+				this.allEvents.next(new GameEvent(
+					GameEvent.DISCARD_CARD, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_CHANGED_ON_BOARD, 
