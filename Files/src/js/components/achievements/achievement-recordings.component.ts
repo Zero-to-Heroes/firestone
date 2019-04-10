@@ -43,7 +43,7 @@ declare var ga;
                 </vg-controls>
 
                 <achievement-social-shares 
-                        *ngIf="!currentThumbnail.isDeleted"
+                        *ngIf="false && !currentThumbnail.isDeleted"
                         [socialShareUserInfo]="socialShareUserInfo"
                         [achievementName]="_achievement.name"
                         [title]="title"
