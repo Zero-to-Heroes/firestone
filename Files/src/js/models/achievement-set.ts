@@ -9,11 +9,11 @@ export class AchievementSet {
 	readonly filterOptions: ReadonlyArray<FilterOption> = [];
 
 	constructor(
-			id: string, 
-			displayName: string, 
-			logoName: string,
-			achievements: ReadonlyArray<VisualAchievement>,
-			filterOptions: ReadonlyArray<FilterOption>) {
+			id: string = null, 
+			displayName: string = null, 
+			logoName: string = null,
+			achievements: ReadonlyArray<VisualAchievement> = null,
+			filterOptions: ReadonlyArray<FilterOption> = null) {
 		this.id = id;
 		this.displayName = displayName;
 		this.logoName = logoName;

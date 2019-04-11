@@ -51,7 +51,7 @@ export class AchievementRecordedProcessor implements Processor {
     private updateCategory(globalCategory: VisualAchievementCategory, newSet: AchievementSet): VisualAchievementCategory {
         const newAchievements = globalCategory.achievementSets
                 .map((set) => set.id === newSet.id ? newSet : set);
-        return Object.assign(globalCategory, {
+        return Object.assign({ } as VisualAchievementCategory, globalCategory, {
             achievementSets: newAchievements as ReadonlyArray<AchievementSet>,
         } as VisualAchievementCategory);
     }
@@ -60,14 +60,14 @@ export class AchievementRecordedProcessor implements Processor {
         const existingAchievement = 
             achievementSet.achievements.find((achv) => achv.completionSteps.some((step) => step.id === achievementId));
         const updatedReplayInfo = [replayInfo, ...existingAchievement.replayInfo] as ReadonlyArray<ReplayInfo>;
-        const updatedAchievement = Object.assign(existingAchievement, {
+        const updatedAchievement = Object.assign(new VisualAchievement(), existingAchievement, {
             replayInfo: updatedReplayInfo,
         } as VisualAchievement);
 
         const existingIndex = achievementSet.achievements.indexOf(existingAchievement);
         let updatedAchievements = achievementSet.achievements
                 .map((item, index) => index === existingIndex ? updatedAchievement : item);
-        return Object.assign(achievementSet, {
+        return Object.assign(new AchievementSet(), achievementSet, {
             achievements: updatedAchievements as ReadonlyArray<VisualAchievement>,
         } as AchievementSet);
     }

@@ -11,9 +11,9 @@ export class Set {
 	readonly ownedLimitCollectiblePremiumCards: number = 0;
 
 	constructor(
-			id: string, 
-			name: string, 
-			isStandard: boolean, 
+			id?: string, 
+			name?: string, 
+			isStandard?: boolean, 
 			allCards?: SetCard[],
 			pityTimer?: PityTimer,
 			ownedLimitCollectibleCards?: number, 

@@ -15,16 +15,14 @@ export class VisualAchievement {
 	readonly replayInfo: ReadonlyArray<ReplayInfo> = [];
 
 	constructor(
-			id: string, 
-			name: string, 
-			type: string, 
-			cardId: string, 
-			cardType: string,
-			text: string, 
-			completionSteps: CompletionStep[],
-			// achievementStepIds: string[], 
-			// numberOfCompletions: number[] = [],
-			replayInfo: ReadonlyArray<ReplayInfo>) {
+			id: string = null, 
+			name: string = null, 
+			type: string = null, 
+			cardId: string = null, 
+			cardType: string = null,
+			text: string = null, 
+			completionSteps: CompletionStep[] = null,
+			replayInfo: ReadonlyArray<ReplayInfo> = null) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -32,8 +30,6 @@ export class VisualAchievement {
 		this.cardType = cardType;
 		this.text = text;
 		this.completionSteps = completionSteps;
-		// this.achievementStepIds = achievementStepIds;
-		// this.numberOfCompletions = numberOfCompletions;
 		this.replayInfo = replayInfo;
 	}
 
