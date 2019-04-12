@@ -156,15 +156,18 @@ export class MainWindowComponent implements AfterViewInit {
 		console.log('retrieved storeBus', storeBus, overwolf.windows.getMainWindow());
 		storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(() => {
-				if (newState.isVisible && (!this.state || !this.state.isVisible)) {
-					overwolf.windows.restore(this.windowId);
-				}
-				console.log('got new state', newState);
-				this.state = newState;
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
-			})
+                overwolf.windows.getCurrentWindow((result) => {
+                    const currentlyVisible = result.window.isVisible;
+                    if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
+                        overwolf.windows.restore(this.windowId);
+                    }
+                    console.log('got new state', newState);
+                    this.state = newState;
+                    if (!(<ViewRef>this.cdr).destroyed) {
+                        this.cdr.detectChanges();
+                    }
+                });
+            });
 		});
 		this.refreshAds();
 		ga('send', 'event', 'collection', 'show');
