@@ -43,6 +43,9 @@ import { AchievementCategory } from '../../models/achievement-category.js';
 import { ScenarioId } from '../../models/scenario-id.js';
 import { KrippFirstInstallmentSetProvider } from './achievement-sets/kripp/kripp-first-installment.js';
 import { KrippShirvallah } from './achievements/kripp/kripp-shirvallah.js';
+import { KrippCrazyDecksSetProvider } from './achievement-sets/kripp/kripp-crazy-decks.js';
+import { KrippSoloModeSetProvider } from './achievement-sets/kripp/kripp-solo-mode.js';
+import { KrippAmazingPlaysSetProvider } from './achievement-sets/kripp/kripp-amazing-plays.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -98,7 +101,10 @@ export class AchievementsRepository {
 		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.cards, this.conf);
 		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.cards, this.conf);
 
-		const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
+		// const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
+		const krippCrazyDecksProvider = new KrippCrazyDecksSetProvider(this.cards, this.conf);
+		const krippSoloModeProvider = new KrippSoloModeSetProvider(this.cards, this.conf);
+		const krippAmazingPlaysProvider = new KrippAmazingPlaysSetProvider(this.cards, this.conf);
 
 		this.setProviders = [
 			dungeonRunProgressionProvider,
@@ -113,14 +119,19 @@ export class AchievementsRepository {
 			rumbleRunShrinePlayProvider,
 			rumbleRunTeammateProvider,
 			rumbleRunPassiveProvider,
-			krippFirstInstallment,
+            // krippFirstInstallment,
+            krippCrazyDecksProvider,
+            krippSoloModeProvider,
+            krippAmazingPlaysProvider,
 		];
 		const krippCategory = new AchievementCategory(
 			'kripp',
 			'Kripp',
 			'kripp',
 			[
-				krippFirstInstallment.id,
+				krippCrazyDecksProvider.id,
+				krippSoloModeProvider.id,
+				krippAmazingPlaysProvider.id,
 			]
 		);
 		this.categories = [
