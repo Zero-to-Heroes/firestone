@@ -9,7 +9,6 @@ declare var ga: any;
 declare var overwolf: any;
 declare var adsReady: any;
 declare var OwAd: any;
-declare var Crate: any;
 
 @Component({
 	selector: 'loading',
@@ -30,11 +29,6 @@ declare var Crate: any;
 						</i>
 						<div class="controls">
 							<control-settings [windowId]="thisWindowId"></control-settings>
-							<button class="i-30 pink-button" (click)="contactSupport()">
-								<svg class="svg-icon-fill">
-									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_support"></use>
-								</svg>
-							</button>
 							<button class="i-30 pink-button" (click)="minimizeWindow()">
 								<svg class="svg-icon-fill">
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
@@ -117,7 +111,6 @@ export class LoadingComponent implements AfterViewInit {
 	thisWindowId: string;
 	
 	private adRef;
-	private crate;
 	private adInit;
 
 	constructor(
@@ -158,7 +151,6 @@ export class LoadingComponent implements AfterViewInit {
 			}
 			else {
 				console.log('refreshing ad', message.window_state);
-				this.initCrate();
 				this.refreshAds();
 			}
 		});
@@ -166,20 +158,6 @@ export class LoadingComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.cdr.detach();
-		if (!Crate) {
-			setTimeout(() => {
-				this.ngAfterViewInit();
-			}, 20);
-			return;
-		}
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				if (!result.window.isVisible) {
-					return;
-				}
-				this.initCrate();
-			}
-		});
 		this.refreshAds();
 	}
 
@@ -202,29 +180,6 @@ export class LoadingComponent implements AfterViewInit {
 	minimizeWindow() {
 		overwolf.windows.minimize(this.thisWindowId);
 	};
-
-	contactSupport() {
-		this.initCrate();
-		this.crate.toggle();
-		this.crate.show();
-	}
-	 
-	private initCrate() {
-		if (this.crate) {
-			return;
-		}
-		this.crate = new Crate({
-			server:"187101197767933952",
-			channel:"446045705392357376",
-			shard: 'https://widgetbot.io'
-		});
-		this.crate.store.subscribe(() => {
-			if (this.crate.store.getState().visible && !this.crate.store.getState().open) {
-				this.crate.hide();
-			}
-		});
-		this.crate.hide();
-	}
 
 	private refreshAds() {
 		if (this.adInit) {
