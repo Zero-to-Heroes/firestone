@@ -70,7 +70,7 @@ export class GameStateService {
 					state: this.state, 
 				};
 				this.deckEventBus.next(emittedEvent);
-				console.log('emitted deck event', gameEvent, emittedEvent, this.deckEventBus);
+				console.log('emitted deck event', emittedEvent.event);
 			}
 		}
 	}
