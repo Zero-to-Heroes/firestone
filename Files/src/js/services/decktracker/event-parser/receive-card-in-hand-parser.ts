@@ -23,6 +23,9 @@ export class ReceiveCardInHandParser implements EventParser {
     }    
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
+		if (currentState.playerDeck.deckList.length === 0) {
+			return;
+		}
 		const cardId: string = gameEvent.data[0];
 		const cardData = this.allCards.getCard(cardId);
 		const card = Object.assign(new DeckCard(), {

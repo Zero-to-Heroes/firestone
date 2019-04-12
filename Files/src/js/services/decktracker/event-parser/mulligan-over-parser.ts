@@ -14,6 +14,9 @@ export class MulliganOverParser implements EventParser {
     }    
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
+		if (currentState.playerDeck.deckList.length === 0) {
+			return;
+		}
 		return Object.assign(new GameState(), currentState, { 
 			mulliganOver: true
 		} as GameState);

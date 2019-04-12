@@ -23,6 +23,9 @@ export class CardRemovedFromHandParser implements EventParser {
     }    
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
+		if (currentState.playerDeck.deckList.length === 0) {
+			return;
+		}
 		const cardId: string = gameEvent.data[0];
 		const card = currentState.playerDeck.hand.find((card) => card.cardId === cardId);
 		const previousHand = currentState.playerDeck.hand;

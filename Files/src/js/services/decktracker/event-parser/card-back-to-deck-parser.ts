@@ -23,6 +23,9 @@ export class CardBackToDeckParser implements EventParser {
     }    
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
+		if (currentState.playerDeck.deckList.length === 0) {
+			return;
+		}
 		const cardId: string = gameEvent.data[0];
 		const initialZone: string = gameEvent.data[2];
 		const card = this.findCard(initialZone, currentState.playerDeck, cardId);
