@@ -34,7 +34,7 @@
             }
         }
 
-        &.unselected:hover .label-custom,  {
+        &.unselected:hover .label-custom  {
             color: #FFB948;
         }
     }
@@ -46,5 +46,6 @@
 
     a.advanced {
         margin-top: -5px;
+        width: 100%;
     }
 }
