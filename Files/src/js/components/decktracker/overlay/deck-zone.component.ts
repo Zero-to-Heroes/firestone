@@ -12,7 +12,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	template: `
 		<div class="deck-zone {{className}}">
 			<div class="zone-name-container" *ngIf="zoneName" (click)="toggleZone()">
-				<span class="zone-name">{{zoneName}}</span>
+				<span class="zone-name">{{zoneName}} ({{cardsInZone}})</span>
 				<!-- TODO: collapse caret -->
 				<i class="collapse-caret {{open ? 'open' : 'close'}}">
 					<svg class="svg-icon-fill">
@@ -34,7 +34,8 @@ export class DeckZoneComponent {
 
 	@Input() activeTooltip: string;
 	className: string;
-	zoneName: string;
+    zoneName: string;
+    cardsInZone: number = 0;
 	cards: ReadonlyArray<DeckCard>;
 	open: boolean = true;
 
@@ -47,7 +48,8 @@ export class DeckZoneComponent {
 		this.zoneName = zone.name;
 		this.cards = zone.sortingFunction
 				? [...zone.cards].sort(zone.sortingFunction)
-				: zone.cards;
+                : zone.cards;
+        this.cardsInZone = this.cards.map((card) => card.totalQuantity).reduce((a, b) => a + b);
 	}
 
 	toggleZone() {
