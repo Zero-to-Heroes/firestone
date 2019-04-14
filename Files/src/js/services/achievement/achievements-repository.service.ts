@@ -46,6 +46,7 @@ import { KrippShirvallah } from './achievements/kripp/kripp-shirvallah.js';
 import { KrippCrazyDecksSetProvider } from './achievement-sets/kripp/kripp-crazy-decks.js';
 import { KrippSoloModeSetProvider } from './achievement-sets/kripp/kripp-solo-mode.js';
 import { KrippAmazingPlaysSetProvider } from './achievement-sets/kripp/kripp-amazing-plays.js';
+import { KrippPogo } from './achievements/kripp/kripp-pogo.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -217,7 +218,7 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 
 			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
-
+			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
 		];
 	}
 }

@@ -4,11 +4,12 @@ import { Events } from "../../../events.service";
 import { GameType } from "../../../../models/enums/game-type";
 
 
-export class KrippShirvallah extends AbstractChallenge {
+export class KrippPogo extends AbstractChallenge {
 
+    private static readonly CHALLENGE_MINIMUM_ATTACK = 11;
 	private readonly cardId: string;
 
-	private tigerPlayed: boolean = false;
+    private strongestPogoAttack: number = 0;
     private gameStartTime: number;
 
 	constructor(achievement, events: Events) {
@@ -17,15 +18,15 @@ export class KrippShirvallah extends AbstractChallenge {
 	}
 
 	protected resetState() {
-		this.tigerPlayed = false;
+		this.strongestPogoAttack = 0;
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
         if (gameEvent.type === GameEvent.GAME_START) {
             this.gameStartTime = Date.now();
         }
-		if (gameEvent.type === GameEvent.CARD_PLAYED) {
-			this.detectCardPlayedEvent(gameEvent, callback);
+		if (gameEvent.type === GameEvent.MINION_ON_BOARD_ATTACK_UPDATED) {
+			this.detectMinionAttackUpdated(gameEvent, callback);
 			return;
 		}
 		if (gameEvent.type === GameEvent.WINNER) {
@@ -47,15 +48,16 @@ export class KrippShirvallah extends AbstractChallenge {
 		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 10000);
 	}
 
-	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
+	private detectMinionAttackUpdated(gameEvent: GameEvent, callback: Function) {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
 		const cardId = gameEvent.data[0];
 		const controllerId = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+        const localPlayer = gameEvent.data[2];
+        const newAttack = gameEvent.data[5];
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
-			this.tigerPlayed = true;
+			this.strongestPogoAttack = Math.max(this.strongestPogoAttack, newAttack);
 		}
 	}
 
@@ -72,6 +74,6 @@ export class KrippShirvallah extends AbstractChallenge {
 	}
 
 	protected additionalCheckForCompletion(): boolean {
-		return this.tigerPlayed;
+		return this.strongestPogoAttack >= KrippPogo.CHALLENGE_MINIMUM_ATTACK;
 	}
 }

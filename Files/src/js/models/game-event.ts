@@ -27,6 +27,7 @@ export class GameEvent {
 	public static readonly CARD_REMOVED_FROM_HAND = 'CARD_REMOVED_FROM_HAND';
 	public static readonly CARD_ON_BOARD_AT_GAME_START = 'CARD_ON_BOARD_AT_GAME_START';
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
+	public static readonly MINION_ON_BOARD_ATTACK_UPDATED = 'MINION_ON_BOARD_ATTACK_UPDATED';
 	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';

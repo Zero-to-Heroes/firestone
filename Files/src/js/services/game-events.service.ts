@@ -211,6 +211,17 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+            case 'MINION_ON_BOARD_ATTACK_UPDATED':
+                this.allEvents.next(new GameEvent(
+                    GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, 
+                    gameEvent.Value.CardId,
+                    gameEvent.Value.ControllerId,
+                    gameEvent.Value.LocalPlayer,
+                    gameEvent.Value.OpponentPlayer,
+                    gameEvent.Value.InitialAttack,
+                    gameEvent.Value.NewAttack,
+                    gameEvent.Value.EntityId));
+                break;
 			case 'TURN_START':
 				this.allEvents.next(new GameEvent(GameEvent.TURN_START, gameEvent.Value));
 				break;
