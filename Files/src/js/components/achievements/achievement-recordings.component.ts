@@ -161,6 +161,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
+        console.log('setting achievement', achievement);
         setTimeout(() => {
             this.updateThumbnails(achievement.replayInfo);
             this.cdr.detectChanges();            
@@ -301,6 +302,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         console.log('updated thumbnails', this.thumbnails);
         this.updateThumbnail(this.thumbnails[this.indexOfFirstShown]);
         this.cdr.detectChanges();
+        setTimeout(() => this.cdr.detectChanges());
     }
     
     private updateThumbnail(thumbnail: ThumbnailInfo) {
@@ -315,6 +317,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.currentReplay = this.currentReplayLocation 
                 ? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation) 
                 : undefined;
+        console.log('updated current replay', this.currentReplay);
         this.updateTitle();
     }
 
@@ -366,14 +369,20 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     }
 
     private buildIcon(stepId: string): string {
-        return this._achievement.completionSteps
-                .find((step) => step.id === stepId)
-                .iconSvgSymbol;
+        const step = this._achievement.completionSteps.find((step) => step.id === stepId);
+        if (!step) {
+            console.error('Could not find steo for', stepId, this._achievement);
+            return '';
+        }
+        return step.iconSvgSymbol;
     }
 
     private buildText(): string {
-        return this._achievement.completionSteps
-                .find((step) => step.id === this.currentThumbnail.stepId)
-                .text(false);
+        const step = this._achievement.completionSteps.find((step) => step.id === this.currentThumbnail.stepId);
+        if (!step) {
+            console.error('Could not find step for', this.currentThumbnail.stepId, this._achievement, this.currentThumbnail);
+            return '';
+        }
+        return step.text(false);
     }
 }
