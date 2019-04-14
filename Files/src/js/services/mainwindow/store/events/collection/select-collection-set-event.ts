@@ -6,4 +6,12 @@ export class SelectCollectionSetEvent implements MainWindowStoreEvent {
     constructor(setId: string) {
         this.setId = setId;
     }
+    
+    public eventName(): string {
+        return 'SelectCollectionSetEvent';
+    }
+
+    public static eventName(): string {
+        return 'SelectCollectionSetEvent';
+    }
 }

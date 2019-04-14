@@ -15,4 +15,12 @@ export class StartSocialSharingEvent implements MainWindowStoreEvent {
         this.title = title;
         this.achievementName = achievementName;
     }
+
+    public eventName(): string {
+        return 'StartSocialSharingEvent';
+    }
+
+    public static eventName(): string {
+        return 'StartSocialSharingEvent';
+    }
 }

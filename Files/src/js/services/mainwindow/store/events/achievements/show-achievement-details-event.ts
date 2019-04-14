@@ -6,4 +6,12 @@ export class ShowAchievementDetailsEvent implements MainWindowStoreEvent {
     constructor(achievementId: string) {
         this.achievementId = achievementId;
     }
+    
+    public eventName(): string {
+        return 'ShowAchievementDetailsEvent';
+    }
+
+    public static eventName(): string {
+        return 'ShowAchievementDetailsEvent';
+    }
 }

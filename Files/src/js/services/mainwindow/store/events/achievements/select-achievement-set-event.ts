@@ -6,4 +6,12 @@ export class SelectAchievementSetEvent implements MainWindowStoreEvent {
     constructor(achievementSetId: string) {
         this.achievementSetId = achievementSetId;
     }
+    
+    public eventName(): string {
+        return 'SelectAchievementSetEvent';
+    }
+
+    public static eventName(): string {
+        return 'SelectAchievementSetEvent';
+    }
 }

@@ -6,4 +6,12 @@ export class SelectAchievementCategoryEvent implements MainWindowStoreEvent {
     constructor(globalCategoryId: string) {
         this.globalCategoryId = globalCategoryId;
     }
+    
+    public eventName(): string {
+        return 'SelectAchievementCategoryEvent';
+    }
+
+    public static eventName(): string {
+        return 'SelectAchievementCategoryEvent';
+    }
 }

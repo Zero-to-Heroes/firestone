@@ -6,4 +6,12 @@ export class TriggerSocialNetworkLoginToggleEvent implements MainWindowStoreEven
     constructor(network: string) {
         this.network = network;
     }
+
+    public eventName(): string {
+        return 'TriggerSocialNetworkLoginToggleEvent';
+    }
+
+    public static eventName(): string {
+        return 'TriggerSocialNetworkLoginToggleEvent';
+    }
 }

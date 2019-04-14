@@ -6,4 +6,12 @@ export class ChangeVisibleApplicationEvent implements MainWindowStoreEvent {
     constructor(module: string) {
         this.module = module;
     }
+
+    public eventName(): string {
+        return 'ChangeVisibleApplicationEvent';
+    }
+
+    public static eventName(): string {
+        return 'ChangeVisibleApplicationEvent';
+    }
 }

@@ -6,4 +6,12 @@ export class SearchCardsEvent implements MainWindowStoreEvent {
     constructor(searchString: string) {
         this.searchString = searchString;
     }
+    
+    public eventName(): string {
+        return 'SearchCardsEvent';
+    }
+
+    public static eventName(): string {
+        return 'SearchCardsEvent';
+    }
 }

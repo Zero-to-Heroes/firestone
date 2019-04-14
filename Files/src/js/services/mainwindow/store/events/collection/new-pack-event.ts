@@ -8,4 +8,12 @@ export class NewPackEvent implements MainWindowStoreEvent {
 		this.setId = setId;
 		this.packCards = packCards;
 	}
+    
+    public eventName(): string {
+        return 'NewPackEvent';
+    }
+
+    public static eventName(): string {
+        return 'NewPackEvent';
+    }
 }

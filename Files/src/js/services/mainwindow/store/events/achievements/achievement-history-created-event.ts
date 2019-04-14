@@ -7,4 +7,12 @@ export class AchievementHistoryCreatedEvent implements MainWindowStoreEvent {
     constructor(history: AchievementHistory) {
         this.history = history;
     }
+    
+    public eventName(): string {
+        return 'AchievementHistoryCreatedEvent';
+    }
+
+    public static eventName(): string {
+        return 'AchievementHistoryCreatedEvent';
+    }
 }

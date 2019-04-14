@@ -70,6 +70,8 @@ import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-soc
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
 import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-social-network-event';
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
+import { ShowMainWindowEvent } from './events/show-main-window-event';
+import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 
 declare var overwolf;
 const HEARTHSTONE_GAME_ID = 9898;
@@ -128,8 +130,8 @@ export class MainWindowStoreService {
 		}
 		this.isProcessing = true;
 		const event = this.eventQueue.shift();
-		console.log('[store] processing event', event);
-		const processor: Processor = this.processors.get(event.constructor.name);
+		console.log('[store] processing event hey', event.eventName(), event, this.state);
+		const processor: Processor = this.processors.get(event.eventName());
 		const newState = await processor.process(event, this.state);
 		if (newState) {
 			this.state = newState;
@@ -143,7 +145,7 @@ export class MainWindowStoreService {
 		const achievementStateHelper = new AchievementStateHelper();
 		const achievementUpdateHelper = new AchievementUpdateHelper(this.achievementsRepository, achievementStateHelper);
 		return Map.of(
-			PopulateStoreEvent.name, new PopulateStoreProcessor(
+			PopulateStoreEvent.eventName(), new PopulateStoreProcessor(
 				this.achievementHistoryStorage,
 				this.achievementsRepository,
 				this.cardHistoryStorage,
@@ -151,37 +153,38 @@ export class MainWindowStoreService {
 				this.pityTimer,
 				this.ow,
 				this.cards),
-			ChangeVisibleApplicationEvent.name, new ChangeVisibleApplicationProcessor(),
-			CloseMainWindowEvent.name, new CloseMainWindowProcessor(),
+			ChangeVisibleApplicationEvent.eventName(), new ChangeVisibleApplicationProcessor(),
+			CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(),
+			ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(),
 
-			SearchCardsEvent.name, new SearchCardProcessor(this.collectionManager, this.cards),
-			LoadMoreCardHistoryEvent.name, new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
-			SelectCollectionFormatEvent.name, new SelectCollectionFormatProcessor(),
-			SelectCollectionSetEvent.name, new SelectCollectionSetProcessor(),
-			ShowCardDetailsEvent.name, new ShowCardDetailsProcessor(),
-			ToggleShowOnlyNewCardsInHistoryEvent.name, new ToggleShowOnlyNewCardsInHistoryProcessor(),
-			UpdateCardSearchResultsEvent.name, new UpdateCardSearchResultsProcessor(this.collectionManager, this.cards),
-			NewPackEvent.name, new NewPackProcessor(this.collectionDb, this.cards),
-			NewCardEvent.name, new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, 
+			SearchCardsEvent.eventName(), new SearchCardProcessor(this.collectionManager, this.cards),
+			LoadMoreCardHistoryEvent.eventName(), new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
+			SelectCollectionFormatEvent.eventName(), new SelectCollectionFormatProcessor(),
+			SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor(),
+			ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(),
+			ToggleShowOnlyNewCardsInHistoryEvent.eventName(), new ToggleShowOnlyNewCardsInHistoryProcessor(),
+			UpdateCardSearchResultsEvent.eventName(), new UpdateCardSearchResultsProcessor(this.collectionManager, this.cards),
+			NewPackEvent.eventName(), new NewPackProcessor(this.collectionDb, this.cards),
+			NewCardEvent.eventName(), new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, 
 				this.pityTimer, this.cards),
 			
-			AchievementHistoryCreatedEvent.name, new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage),
-			ChangeAchievementsShortDisplayEvent.name, new ChangeAchievementsShortDisplayProcessor(),
-			ChangeVisibleAchievementEvent.name, new ChangeVisibleAchievementProcessor(),
-			SelectAchievementCategoryEvent.name, new SelectAchievementCategoryProcessor(),
-			SelectAchievementSetEvent.name, new SelectAchievementSetProcessor(),
-			ShowAchievementDetailsEvent.name, new ShowAchievementDetailsProcessor(),
-			VideoReplayDeletionRequestEvent.name, new VideoReplayDeletionRequestProcessor(this.io, achievementUpdateHelper,
+			AchievementHistoryCreatedEvent.eventName(), new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage),
+			ChangeAchievementsShortDisplayEvent.eventName(), new ChangeAchievementsShortDisplayProcessor(),
+			ChangeVisibleAchievementEvent.eventName(), new ChangeVisibleAchievementProcessor(),
+			SelectAchievementCategoryEvent.eventName(), new SelectAchievementCategoryProcessor(),
+			SelectAchievementSetEvent.eventName(), new SelectAchievementSetProcessor(),
+			ShowAchievementDetailsEvent.eventName(), new ShowAchievementDetailsProcessor(),
+			VideoReplayDeletionRequestEvent.eventName(), new VideoReplayDeletionRequestProcessor(this.io, achievementUpdateHelper,
 				this.achievementsStorage),
-			AchievementRecordedEvent.name, new AchievementRecordedProcessor(this.achievementsStorage, 
+			AchievementRecordedEvent.eventName(), new AchievementRecordedProcessor(this.achievementsStorage, 
 				achievementStateHelper, this.events),
-			AchievementCompletedEvent.name, new AchievementCompletedProcessor(this.achievementsStorage, 
+			AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementsStorage, 
 				this.achievementHistoryStorage, this.achievementsRepository, this.events, achievementUpdateHelper),
 
-			StartSocialSharingEvent.name, new StartSocialSharingProcessor(),
-			TriggerSocialNetworkLoginToggleEvent.name, new TriggerSocialNetworkLoginToggleProcessor(),
-			UpdateTwitterSocialInfoEvent.name, new UpdateTwitterSocialInfoProcessor(this.ow),
-			ShareVideoOnSocialNetworkEvent.name, new ShareVideoOnSocialNetworkProcessor(this.ow),
+			StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor(),
+			TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor(),
+			UpdateTwitterSocialInfoEvent.eventName(), new UpdateTwitterSocialInfoProcessor(this.ow),
+			ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow),
 		);
 	}
 

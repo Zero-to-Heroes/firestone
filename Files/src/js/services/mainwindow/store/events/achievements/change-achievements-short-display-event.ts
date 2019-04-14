@@ -6,4 +6,12 @@ export class ChangeAchievementsShortDisplayEvent implements MainWindowStoreEvent
     constructor(shortDisplay: boolean) {
         this.shortDisplay = shortDisplay;
     }
+    
+    public eventName(): string {
+        return 'ChangeAchievementsShortDisplayEvent';
+    }
+
+    public static eventName(): string {
+        return 'ChangeAchievementsShortDisplayEvent';
+    }
 }

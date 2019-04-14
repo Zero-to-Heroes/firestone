@@ -8,4 +8,12 @@ export class VideoReplayDeletionRequestEvent implements MainWindowStoreEvent {
         this.stepId = stepId;
         this.videoPath = videoPath;
     }
+    
+    public eventName(): string {
+        return 'VideoReplayDeletionRequestEvent';
+    }
+
+    public static eventName(): string {
+        return 'VideoReplayDeletionRequestEvent';
+    }
 }

@@ -9,4 +9,12 @@ export class NewCardEvent implements MainWindowStoreEvent {
 		this.card = card;
 		this.type = type;
 	}
+    
+    public eventName(): string {
+        return 'NewCardEvent';
+    }
+
+    public static eventName(): string {
+        return 'NewCardEvent';
+    }
 }

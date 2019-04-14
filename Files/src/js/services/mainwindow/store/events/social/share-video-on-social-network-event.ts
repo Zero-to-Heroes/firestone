@@ -10,4 +10,12 @@ export class ShareVideoOnSocialNetworkEvent implements MainWindowStoreEvent {
         this.videoPathOnDisk = videoPathOnDisk;
         this.message = message;
     }
+
+    public eventName(): string {
+        return 'ShareVideoOnSocialNetworkEvent';
+    }
+
+    public static eventName(): string {
+        return 'ShareVideoOnSocialNetworkEvent';
+    }
 }

@@ -6,4 +6,12 @@ export class SelectCollectionFormatEvent implements MainWindowStoreEvent {
     constructor(format: string) {
         this.format = format;
     }
+    
+    public eventName(): string {
+        return 'SelectCollectionFormatEvent';
+    }
+
+    public static eventName(): string {
+        return 'SelectCollectionFormatEvent';
+    }
 }

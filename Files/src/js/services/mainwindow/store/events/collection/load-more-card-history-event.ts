@@ -6,4 +6,12 @@ export class LoadMoreCardHistoryEvent implements MainWindowStoreEvent {
     constructor(maxResults: number) {
         this.maxResults = maxResults;
     }
+    
+    public eventName(): string {
+        return 'LoadMoreCardHistoryEvent';
+    }
+
+    public static eventName(): string {
+        return 'LoadMoreCardHistoryEvent';
+    }
 }

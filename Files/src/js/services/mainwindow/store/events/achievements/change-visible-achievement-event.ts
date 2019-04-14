@@ -6,4 +6,12 @@ export class ChangeVisibleAchievementEvent implements MainWindowStoreEvent {
     constructor(achievementId: string) {
         this.achievementId = achievementId;
     }
+    
+    public eventName(): string {
+        return 'ChangeVisibleAchievementEvent';
+    }
+
+    public static eventName(): string {
+        return 'ChangeVisibleAchievementEvent';
+    }
 }
