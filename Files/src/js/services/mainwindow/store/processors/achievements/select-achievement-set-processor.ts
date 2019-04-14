@@ -22,6 +22,7 @@ export class SelectAchievementSetProcessor implements Processor {
         } as AchievementsState);
         return Object.assign(new MainWindowState(), currentState, {
             achievements: newState,
+            isVisible: true,
         } as MainWindowState);
     }
 }

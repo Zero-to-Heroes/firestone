@@ -34,6 +34,7 @@ export class SearchCardProcessor implements Processor {
         } as BinderState)
         return Object.assign(new MainWindowState(), currentState, {
             binder: newBinder,
+            isVisible: true,
         } as MainWindowState)
     }
 

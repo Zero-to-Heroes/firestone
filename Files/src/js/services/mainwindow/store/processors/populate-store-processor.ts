@@ -34,9 +34,11 @@ export class PopulateStoreProcessor implements Processor {
         private cards: AllCardsService) { }
 
     public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
+        console.log('populating store');
         const collection = await this.populateCollectionState(currentState.binder);
         const achievements = await this.populateAchievementState(currentState.achievements);
         const socialShareUserInfo = await this.initializeSocialShareUserInfo(currentState.socialShareUserInfo);
+        console.log('almost done');
         return Object.assign(new MainWindowState(), currentState, {
             achievements: achievements,
             binder: collection,

@@ -17,6 +17,8 @@ import { DeckParserService } from '../services/decktracker/deck-parser.service';
 import { GameStateService } from '../services/decktracker/game-state.service';
 import { SettingsCommunicationService } from '../services/settings/settings-communication.service';
 import { MainWindowStoreService } from '../services/mainwindow/store/main-window-store.service';
+import { CloseMainWindowEvent } from '../services/mainwindow/store/events/close-main-window-event';
+import { ShowMainWindowEvent } from '../services/mainwindow/store/events/show-main-window-event';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -87,6 +89,7 @@ export class AppComponent {
 					overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 						console.log('is CollectionWindow running?', result);
 						if (result.window.isVisible) {
+                            this.store.stateUpdater.next(new CloseMainWindowEvent());
 							overwolf.windows.hide(result.window.id);
 						}
 						else {
@@ -200,7 +203,8 @@ export class AppComponent {
 			if (result.status !== 'success') {
 				console.warn('Could not get WelcomeWindow', result);
 				return;
-			}
+            }
+            console.log('closing welcome window');
 			overwolf.windows.hide(result.window.id);
 		});
 	}
@@ -235,14 +239,17 @@ export class AppComponent {
 		if (this.currentState != 'READY') {
 			console.log('app not ready yet, cannot show collection window', this.currentState);
 			return;
-		}
+        }
+        console.log('reading to show collection window');
 		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 			if (result.status !== 'success') {
 				console.warn('Could not get CollectionWindow', result);
 				return;
 			}
-			// console.log('got collection window', result);
-
+            // console.log('got collection window', result);
+            console.log('sending new event', this.store);
+            this.store.stateUpdater.next(new ShowMainWindowEvent());
+            console.log('sent new event', this.store);
 			overwolf.windows.restore(result.window.id, (result) => {
 				// console.log('CollectionWindow is on?', result);
 				this.closeLoadingScreen();
