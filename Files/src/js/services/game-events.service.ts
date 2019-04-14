@@ -250,10 +250,10 @@ export class GameEvents {
 			this.spectating = false;
 		}
 
-		// if (this.spectating) {
-		// 	// For now we're not interested in spectating events, but that will come out later
-		// 	return;
-		// }
+		if (this.spectating) {
+			// For now we're not interested in spectating events, but that will come out later
+			return;
+		}
 
 		this.logLines.push(data);
 	}
