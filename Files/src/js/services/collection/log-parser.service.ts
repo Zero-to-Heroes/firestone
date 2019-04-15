@@ -17,7 +17,7 @@ export class LogParserService {
 	plugin: any;
 
 	private cardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d).*');
-	private rewardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*');
+	private rewardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) (?:.*)CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*');
 	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
 	private logLines: any[][] = [];
