@@ -113,6 +113,14 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+            case 'RECRUIT_CARD':
+                this.allEvents.next(new GameEvent(
+                    GameEvent.RECRUIT_CARD, 
+                    gameEvent.Value.CardId,
+                    gameEvent.Value.ControllerId,
+                    gameEvent.Value.LocalPlayer,
+                    gameEvent.Value.OpponentPlayer));
+                break;
 			case 'CARD_CHANGED_ON_BOARD':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_CHANGED_ON_BOARD, 

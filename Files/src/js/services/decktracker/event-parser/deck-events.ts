@@ -6,6 +6,7 @@ export class DeckEvents {
     public static readonly CARD_REMOVED_FROM_HAND = 'CARD_REMOVED_FROM_HAND';
     public static readonly CARD_PLAYED_FROM_HAND = 'CARD_PLAYED_FROM_HAND';
     public static readonly DISCARD_CARD = 'DISCARD_CARD';
+    public static readonly RECRUIT_CARD = 'RECRUIT_CARD';
     public static readonly SECRET_PLAYED_FROM_HAND = 'SECRET_PLAYED_FROM_HAND';
     public static readonly CARD_DRAW = 'DECK_CARD_DRAW';
     public static readonly RECEIVE_CARD_IN_HAND = 'RECEIVE_CARD_IN_HAND';

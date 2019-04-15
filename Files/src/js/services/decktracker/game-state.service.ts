@@ -11,7 +11,6 @@ import { CardDrawParser } from './event-parser/card-draw-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
-import { FeatureFlags } from '../feature-flags.service';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
@@ -21,6 +20,7 @@ import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
+import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 
 declare var overwolf: any;
 
@@ -91,6 +91,7 @@ export class GameStateService {
 			new EndOfEchoInHandParser(this.deckParser, this.allCards),
 			new GameEndParser(this.deckParser, this.allCards),
 			new DiscardedCardParser(),
+			new CardRecruitedParser(),
 		];
 	}
 
