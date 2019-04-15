@@ -63,21 +63,38 @@ export class AllCardsService {
 	}
 
 	public searchCards(searchString: string): SetCard[] {
-		if (!searchString) return [];
+        if (!searchString) return [];
 
-		return parseCardsText.jsonDatabase
-			.filter((card) => card.collectible)
-			.filter((card) => card.set != 'Hero_skins')
-			.filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) == -1)
-			.filter((card) => card.name)
-			.filter((card) => card.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1)
-			.map((card) => {
-				let cardName = card.name;
-				if (card.type == 'Hero') {
-					cardName += ' (Hero)';
-				}
-				return new SetCard(card.id, cardName, card.playerClass, card.rarity.toLowerCase(), card.cost)
-			});
+        const filterFunctions = [];
+        
+        const fragments = searchString.indexOf(' ' ) !== -1
+                ? searchString.split(' ')
+                : [searchString];
+        for (let fragment of fragments) {
+            if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
+                const textToFind = searchString.split('text:')[1];
+                filterFunctions.push((card) => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1);
+            }
+        }
+        // Default filtering based on name
+        if (filterFunctions.length === 0) {
+            filterFunctions.push((card) => card.name && card.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1);
+        }
+
+        const basicFiltered = parseCardsText.jsonDatabase
+                .filter((card) => card.collectible)
+                .filter((card) => card.set != 'Hero_skins')
+                .filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) == -1);
+        return filterFunctions
+                .reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
+                .map((card) => {
+                    let cardName = card.name;
+                    if (card.type == 'Hero') {
+                        cardName += ' (Hero)';
+                    }
+                    const rarity = card.rarity ? card.rarity.toLowerCase() : '';
+                    return new SetCard(card.id, cardName, card.playerClass, rarity, card.cost)
+                });
 	}
 
 	public getCard(id: string): any {
