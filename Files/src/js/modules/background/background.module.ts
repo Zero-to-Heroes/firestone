@@ -49,6 +49,7 @@ import { SettingsCommunicationService } from '../../services/settings/settings-c
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
+import { DynamicZoneHelperService } from '../../services/decktracker/dynamic-zone-helper.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -122,7 +123,8 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementsDb,
 
 		DeckParserService,
-		GameStateService,
+        GameStateService,
+        DynamicZoneHelperService,
 	]
 })
 export class AppModule { }

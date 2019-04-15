@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 
 declare var overwolf: any;
 
@@ -26,17 +27,35 @@ export class DeckListByZoneComponent {
 	zones: ReadonlyArray<DeckZone>;
 
 	@Input('deckState') set deckState(deckState: DeckState) {
-		this.zones = [
-			this.buildZone(deckState.deck, 'deck', 'In deck', (a, b) => a.manaCost - b.manaCost),
-			// this.buildZone(deckState.graveyard, 'Graveyard'),
+		const zones = [
+			this.buildZone(deckState.deck, 'deck', 'In your deck', (a, b) => a.manaCost - b.manaCost),
 			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost),
-			this.buildZone(deckState.otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost),
-		]
+        ];
+        // If there are no dynamic zones, we use the standard "other" zone
+        if (deckState.dynamicZones.length == 0) {
+            zones.push(this.buildZone(deckState.otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost));
+        }
+        // Otherwise, we add all the dynamic zones
+        deckState.dynamicZones.forEach((zone) => {
+            zones.push(this.buildDynamicZone(zone, (a, b) => a.manaCost - b.manaCost));
+        })
+        this.zones = zones as ReadonlyArray<DeckZone>;
 	}
 
 	trackZone(index, zone: DeckZone) {
 		return zone.id;
-	}
+    }
+    
+    private buildDynamicZone(
+            zone: DynamicZone, 
+            sortingFunction: (a: DeckCard, b: DeckCard) => number): DeckZone {
+        return {
+			id: zone.id,
+			name: zone.name,
+			cards: zone.cards,
+			sortingFunction: sortingFunction,
+		} as DeckZone;
+    }
 
 	private buildZone(
 			cards: ReadonlyArray<DeckCard>, 

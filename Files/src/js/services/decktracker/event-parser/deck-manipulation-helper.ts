@@ -26,6 +26,7 @@ export class DeckManipulationHelper {
                     manaCost: cardTemplate.manaCost,
                     rarity: cardTemplate.rarity,
                     totalQuantity: 1,
+                    zone: cardTemplate.zone,
                 } as DeckCard)
             ];
             // console.log('returning', result);

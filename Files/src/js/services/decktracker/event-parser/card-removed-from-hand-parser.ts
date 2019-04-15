@@ -30,8 +30,11 @@ export class CardRemovedFromHandParser implements EventParser {
 		const card = currentState.playerDeck.hand.find((card) => card.cardId === cardId);
 		const previousHand = currentState.playerDeck.hand;
 		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousHand, cardId);
+        const cardWithZone = Object.assign(new DeckCard(), card, {
+            zone: 'SETASIDE',
+        } as DeckCard);
 		const previousOtherZone = currentState.playerDeck.otherZone;
-		const newOtherZone: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousOtherZone, card);
+		const newOtherZone: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousOtherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, 
 			{
 				hand: newHand,

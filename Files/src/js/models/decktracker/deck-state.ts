@@ -1,6 +1,7 @@
 import { Map } from 'immutable';
 import { DeckCard } from './deck-card';
 import { HeroCard } from './hero-card';
+import { DynamicZone } from './view/dynamic-zone';
 
 export class DeckState {
     readonly name: string;
@@ -15,4 +16,5 @@ export class DeckState {
     readonly hand: ReadonlyArray<DeckCard> = [];
     readonly deck: ReadonlyArray<DeckCard> = [];
     readonly otherZone: ReadonlyArray<DeckCard> = [];
+    readonly dynamicZones: ReadonlyArray<DynamicZone> = [];
 }

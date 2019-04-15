@@ -21,6 +21,7 @@ import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
+import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 
 declare var overwolf: any;
 
@@ -35,7 +36,8 @@ export class GameStateService {
 	private deckEventBus = new EventEmitter<any>();
 
 	constructor(
-			private gameEvents: GameEvents, 
+            private gameEvents: GameEvents, 
+            private dynamicZoneHelper: DynamicZoneHelperService,
 			private allCards: AllCardsService,
 			private deckParser: DeckParserService) {
 		this.registerGameEvents();
@@ -62,15 +64,19 @@ export class GameStateService {
 	private processEvent(gameEvent: GameEvent) {
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
-				this.state = parser.parse(this.state, gameEvent);
+                const newState = parser.parse(this.state, gameEvent);
+                const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
+                this.state = Object.assign(new GameState(), newState, {
+                    playerDeck: playerDeckWithDynamicZones
+                } as GameState);
 				const emittedEvent = { 
 					event: {
-						name: parser.event() 
+						name: parser.event()
 					},
 					state: this.state, 
 				};
 				this.deckEventBus.next(emittedEvent);
-				console.log('emitted deck event', emittedEvent.event);
+				console.log('emitted deck event', emittedEvent.event.name);
 			}
 		}
 	}

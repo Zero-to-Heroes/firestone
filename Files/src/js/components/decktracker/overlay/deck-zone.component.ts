@@ -49,7 +49,7 @@ export class DeckZoneComponent {
 		this.cards = zone.sortingFunction
 				? [...zone.cards].sort(zone.sortingFunction)
                 : zone.cards;
-        this.cardsInZone = this.cards.map((card) => card.totalQuantity).reduce((a, b) => a + b);
+        this.cardsInZone = this.cards.map((card) => card.totalQuantity).reduce((a, b) => a + b, 0);
 	}
 
 	toggleZone() {
