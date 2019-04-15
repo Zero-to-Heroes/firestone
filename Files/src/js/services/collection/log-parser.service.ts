@@ -16,7 +16,7 @@ declare var ga: any;
 export class LogParserService {
 	plugin: any;
 
-	private cardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d).*');
+	private cardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d+).*');
 	private rewardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) (?:.*)CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*');
 	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
@@ -39,7 +39,7 @@ export class LogParserService {
 				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length).map(logLine => logLine[1])];
 			}
 			if (toProcess.length > 0) {
-				console.log('lines to process', toProcess);
+				// console.log('lines to process', toProcess);
 				this.processLines(toProcess);
 				this.processingLines = false;
 			}
@@ -65,7 +65,7 @@ export class LogParserService {
 		if (this.isPack(cards)) {
 			const setId = cards[0].set;
 			const packCards = this.toPackCards(toProcess);
-			console.log('notifying new pack opening', setId, packCards);
+			// console.log('notifying new pack opening', setId, packCards);
 			ga('send', 'event', 'toast', 'new-pack');
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
@@ -83,6 +83,7 @@ export class LogParserService {
 				let cardId = match[1];
 				let type = match[2];
 				let newCount = parseInt(match[3]);
+                // console.log('handling new card', cardId, type, newCount, data);
 				// console.log('card in collection?', cardId, type, cardInCollection);
 				if (multipleCopies) {
 					for (let i = 0; i < newCount; i++) {
@@ -100,6 +101,7 @@ export class LogParserService {
 		let premiumCount: number = type === 'GOLDEN' ? count : -1;
 		let cardInCollection = new Card(cardId, normalCount, premiumCount);
 		if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
+            // console.log('displaying new cards message', cardInCollection, type);
 			this.displayNewCardMessage(cardInCollection, type);
 		}
 		else {

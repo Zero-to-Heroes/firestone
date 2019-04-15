@@ -250,7 +250,7 @@ export class PackMonitor {
 	}
 
 	private revealCardById(cardId: string) {
-		console.log('revealing card', cardId, this.cardEvents[cardId], this.unrevealedCards);
+		console.log('revealing card', cardId, this.unrevealedCards);
 		if (this.cardEvents[cardId]) {
 			this.cardEvents[cardId]();
 		}
