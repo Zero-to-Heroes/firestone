@@ -521,8 +521,8 @@ D 10:40:24.9277981 GameState.DebugPrintPower() -         tag=ZONE_POSITION value
 D 10:40:24.9317974 GameState.DebugPrintPower() -     TAG_CHANGE Entity=1 tag=NEXT_STEP value=BEGIN_MULLIGAN 
 D 10:40:24.9357859 GameState.DebugPrintPower() - BLOCK_END
 D 10:40:24.9577634 GameState.DebugPrintGame() - BuildNumber=30103
-D 10:40:24.9617668 GameState.DebugPrintGame() - GameType=GT_VS_AI
-D 10:40:24.9677764 GameState.DebugPrintGame() - FormatType=FT_WILD
+D 16:55:50.1200375 GameState.DebugPrintGame() - GameType=GT_RANKED
+D 16:55:50.1260406 GameState.DebugPrintGame() - FormatType=FT_STANDARD
 D 10:40:24.9707609 GameState.DebugPrintGame() - ScenarioID=259
 D 10:40:24.9747637 GameState.DebugPrintGame() - PlayerID=1, PlayerName=Daedin#2991
 D 10:40:24.9818107 GameState.DebugPrintGame() - PlayerID=2, PlayerName=The Innkeeper

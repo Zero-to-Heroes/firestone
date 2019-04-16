@@ -426,8 +426,8 @@ D 22:09:05.7027003 GameState.DebugPrintPower() -     TAG_CHANGE Entity=1 tag=10 
 D 22:09:05.7097075 GameState.DebugPrintPower() -     TAG_CHANGE Entity=1 tag=NEXT_STEP value=BEGIN_MULLIGAN 
 D 22:09:05.7217004 GameState.DebugPrintPower() - BLOCK_END
 D 22:09:05.7836999 GameState.DebugPrintGame() - BuildNumber=30103
-D 22:09:05.7906993 GameState.DebugPrintGame() - GameType=GT_RANKED
-D 22:09:05.7977021 GameState.DebugPrintGame() - FormatType=FT_STANDARD
+D 16:55:50.1200375 GameState.DebugPrintGame() - GameType=GT_RANKED
+D 16:55:50.1260406 GameState.DebugPrintGame() - FormatType=FT_STANDARD
 D 22:09:05.8056994 GameState.DebugPrintGame() - ScenarioID=2
 D 22:09:05.8117005 GameState.DebugPrintGame() - PlayerID=1, PlayerName=Daedin#2991
 D 22:09:05.8216993 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER
