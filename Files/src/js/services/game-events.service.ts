@@ -121,6 +121,14 @@ export class GameEvents {
                     gameEvent.Value.LocalPlayer,
                     gameEvent.Value.OpponentPlayer));
                 break;
+			case 'MINION_SUMMONED':
+				this.allEvents.next(new GameEvent(
+					GameEvent.MINION_SUMMONED, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				this.allEvents.next(new GameEvent(
 					GameEvent.CARD_CHANGED_ON_BOARD, 

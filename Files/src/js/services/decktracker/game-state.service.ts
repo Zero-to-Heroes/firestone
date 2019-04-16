@@ -22,6 +22,7 @@ import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
+import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 
 declare var overwolf: any;
 
@@ -98,6 +99,7 @@ export class GameStateService {
 			new GameEndParser(this.deckParser, this.allCards),
 			new DiscardedCardParser(),
 			new CardRecruitedParser(),
+			new MinionSummonedParser(this.allCards),
 		];
 	}
 
