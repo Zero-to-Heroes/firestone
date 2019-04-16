@@ -16,7 +16,6 @@ export class DeckParserService {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
-				console.log('resetting deck');
 			}
 		})
 	}
@@ -36,7 +35,7 @@ export class DeckParserService {
 			this.currentDeck.deckstring = match[1];
 			// console.log('[decks] deck updated', this.currentDeck);
 			const deck = decode(this.currentDeck.deckstring);
-			// console.log('[decks] deck decoded', deck);
+			console.log('[decks] deck decoded', deck);
 			this.currentDeck.deck = deck;
 			return;
 		}
@@ -46,5 +45,6 @@ export class DeckParserService {
 	// a game mode that doesn't interact with the Decks.log
 	public reset() {
 		this.currentDeck = {};
+		console.log('resetting deck');
 	}
 }
