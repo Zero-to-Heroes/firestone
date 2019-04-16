@@ -745,7 +745,7 @@
 	
 	{ "type": "kripp_achievements_1_shirvallah", "id": "kripp_achievements_1_shirvallah", "cardId": "TRL_300", "name": "Hello Kitty", "text": "Win a game after playing Shirvallah, the Tiger from your hand (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_treants", "id": "kripp_achievements_1_treants", "cardIds": ["EX1_158t", "EX1_tk9", "FP1_019t", "GIL_663t", "EX1_573t"], "name": "I am Gloop", "text": "Win a game after summoning 8 or more Treants (Ranked)", "difficulty": "epic"},
-	{ "type": "kripp_achievements_1_classic", "id": "kripp_achievements_1_classic", "cardId": "EX1_298", "name": "Classicerino", "text": "Win a game using only Classic cards (Ranked)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_classic", "id": "kripp_achievements_1_classic", "cardId": "EX1_298", "name": "Classicerino", "text": "Win a game using a deck with only Classic or Basic cards (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_fatigue", "id": "kripp_achievements_1_fatigue", "cardId": "EX1_161", "name": "Millerino", "text": "Win a game after your opponent has taken a hit for at least 4 fatigue damage (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_goblin_bombs", "id": "kripp_achievements_1_goblin_bombs", "cardId": "BOT_031", "name": "Baby Boomers", "text": "Win a game after dealing at least 16 damage from Goblin Bombs (Ranked)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_pogo_hopper", "id": "kripp_achievements_1_pogo_hopper", "cardId": "BOT_283", "name": "Can't stop hopping", "text": "Win a game after playing a Pogo-Hopper with at least 16 attack (Ranked)", "difficulty": "epic"},

@@ -48,6 +48,8 @@ import { KrippSoloModeSetProvider } from './achievement-sets/kripp/kripp-solo-mo
 import { KrippAmazingPlaysSetProvider } from './achievement-sets/kripp/kripp-amazing-plays.js';
 import { KrippPogo } from './achievements/kripp/kripp-pogo.js';
 import { KrippTreants } from './achievements/kripp/kripp-treants.js';
+import { DeckParserService } from '../decktracker/deck-parser.service.js';
+import { KrippClassic } from './achievements/kripp/kripp-classic.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -63,6 +65,7 @@ export class AchievementsRepository {
 			private storage: AchievementsStorageService, 
 			private cards: AllCardsService, 
 			private conf: AchievementConfService,
+			private deckParser: DeckParserService,
 			private events: Events) {
 		this.registerModules();
 		this.modulesLoaded.next(true);
@@ -221,6 +224,7 @@ export class AchievementsRepository {
 			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
 			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
 			// { type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
+			// { type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
 		];
 	}
 }
