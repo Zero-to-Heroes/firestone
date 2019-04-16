@@ -47,6 +47,7 @@ import { KrippCrazyDecksSetProvider } from './achievement-sets/kripp/kripp-crazy
 import { KrippSoloModeSetProvider } from './achievement-sets/kripp/kripp-solo-mode.js';
 import { KrippAmazingPlaysSetProvider } from './achievement-sets/kripp/kripp-amazing-plays.js';
 import { KrippPogo } from './achievements/kripp/kripp-pogo.js';
+import { KrippTreants } from './achievements/kripp/kripp-treants.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -178,7 +179,7 @@ export class AchievementsRepository {
 				achievement.name, 
 				achievement.text,
 				achievement.type, 
-				achievement.bossId || achievement.cardId, 
+				achievement.bossId || achievement.cardId || (achievement.cardIds && achievement.cardIds[0]), 
 				achievement.cardType,
 				achievement.secondaryCardId,
 				achievement.secodaryCardType,
@@ -219,6 +220,7 @@ export class AchievementsRepository {
 
 			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
 			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
+			// { type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
 		];
 	}
 }
