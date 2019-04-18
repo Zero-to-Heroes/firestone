@@ -50,6 +50,8 @@ import { KrippPogo } from './achievements/kripp/kripp-pogo.js';
 import { KrippTreants } from './achievements/kripp/kripp-treants.js';
 import { DeckParserService } from '../decktracker/deck-parser.service.js';
 import { KrippClassic } from './achievements/kripp/kripp-classic.js';
+import { KrippGoblinBombs } from './achievements/kripp/kripp-goblin-bombs.js';
+import { KrippFatigue } from './achievements/kripp/kripp-fatigue.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -225,6 +227,8 @@ export class AchievementsRepository {
 			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
 			// { type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
 			// { type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
+			// { type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
+			// { type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
 		];
 	}
 }

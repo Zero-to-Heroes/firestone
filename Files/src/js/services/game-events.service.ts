@@ -238,6 +238,25 @@ export class GameEvents {
                     gameEvent.Value.NewAttack,
                     gameEvent.Value.EntityId));
                 break;
+			case 'FATIGUE_DAMAGE':
+				this.allEvents.next(new GameEvent(
+					GameEvent.FATIGUE_DAMAGE, 
+					gameEvent.Value.PlayerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer,
+					gameEvent.Value.FatigueDamage));
+				break;
+			case 'DAMAGE':
+				this.allEvents.next(new GameEvent(
+					GameEvent.DAMAGE, 
+					gameEvent.Value.SourceCardId,
+					gameEvent.Value.SourceControllerId,
+					gameEvent.Value.TargetCardId,
+					gameEvent.Value.TargetControllerId,
+					gameEvent.Value.Damage,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'TURN_START':
 				this.allEvents.next(new GameEvent(GameEvent.TURN_START, gameEvent.Value));
 				break;
