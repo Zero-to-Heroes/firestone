@@ -50,8 +50,16 @@ export class GameEvents {
 			}
 			this.processingLines = true;
 			let toProcess: string[] = [];
+			let shouldDebug = false;
+			if (this.logLines.some((data) => data.indexOf('CREATE_GAME') !== -1)) {
+				console.log('[game-events] preparing log lines that include game creation to feed to the plugin', this.logLines);
+				shouldDebug = true;
+			}
 			while (this.logLines.length > 0) {
 				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length)];
+			}
+			if (shouldDebug) {
+				console.log('[game-events] build log logs to feed to the plugin', toProcess);
 			}
 			if (toProcess.length > 0) {
 				// console.log('processing start', toProcess);
@@ -291,6 +299,10 @@ export class GameEvents {
 		}
 
 		this.logLines.push(data);
+
+		if (data.indexOf('CREATE_GAME') !== -1) {
+			console.log('[game-events] received CREATE_GAME log', data, this.logLines);
+		}
 	}
 
 	private async uploadLogsAndSendException(first, second) {
@@ -317,6 +329,7 @@ export class GameEvents {
 						logFileKey: s3LogFileKey,
 						pluginLogsFileKey: pluginLogsFileKey,
 						firestoneLogs: firstoneLogsKey,
+						typeScriptLogLines: this.logLines,
 					}
 				});
 				console.log('uploaded event to sentry');
