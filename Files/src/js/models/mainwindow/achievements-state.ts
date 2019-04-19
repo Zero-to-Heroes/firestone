@@ -15,5 +15,5 @@ export class AchievementsState {
     readonly selectedAchievementId: string;
     readonly shortDisplay: boolean = false;
     readonly achievementHistory: ReadonlyArray<AchievementHistory> = [];
-    readonly sharingAchievement: SharingAchievement = new SharingAchievement();
+    readonly sharingAchievement: SharingAchievement;
 }

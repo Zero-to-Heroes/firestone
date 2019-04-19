@@ -15,6 +15,7 @@ textarea {
     font-size: 12px;
     line-height: normal;    
     color: #D9C3AB;
+    cursor: auto;
 }
 
 button {
@@ -28,7 +29,8 @@ button {
     font-size: 13px;
     line-height: normal;
     text-align: center;    
-    color: #2F0D0D;
+	color: #2F0D0D;
+	margin-top: 10px;
 
     &:hover {
         background: #D9C3AB;

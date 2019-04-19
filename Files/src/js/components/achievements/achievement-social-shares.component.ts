@@ -19,7 +19,7 @@ declare var ga;
                     </svg>
                 </i>
             </div>
-            <div class="social-share discord disabled">
+            <!--<div class="social-share discord disabled">
                 <i>
                     <svg>
                         <use xlink:href="/Files/assets/svg/sprite.svg#discord_share"/>
@@ -39,7 +39,7 @@ declare var ga;
                         <use xlink:href="/Files/assets/svg/sprite.svg#gfycat_share"/>
                     </svg>
                 </i>
-            </div>
+            </div>-->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush

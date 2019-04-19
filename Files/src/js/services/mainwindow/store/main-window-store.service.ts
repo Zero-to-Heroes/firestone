@@ -72,6 +72,8 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-video-on-social-network-processor';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
+import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
+import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
 
 declare var overwolf;
 const HEARTHSTONE_GAME_ID = 9898;
@@ -185,6 +187,7 @@ export class MainWindowStoreService {
 			TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor(),
 			UpdateTwitterSocialInfoEvent.eventName(), new UpdateTwitterSocialInfoProcessor(this.ow),
 			ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow),
+			CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor(),
 		);
 	}
 

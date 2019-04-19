@@ -16,7 +16,6 @@ export class StartSocialSharingProcessor implements Processor {
         };
         const achievementState = Object.assign(new AchievementsState(), currentState.achievements, {
             sharingAchievement: sharingAchievement,
-            currentView: 'sharing-achievement',
         } as AchievementsState);
         return Object.assign(new MainWindowState(), currentState, {
             isVisible: true,

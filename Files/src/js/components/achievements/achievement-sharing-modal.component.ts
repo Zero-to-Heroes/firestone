@@ -4,6 +4,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { SharingAchievement } from '../../models/mainwindow/achievement/sharing-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
+import { CloseSocialShareModalEvent } from '../../services/mainwindow/store/events/social/close-social-share-modal-event';
 
 declare var overwolf;
 
@@ -12,9 +13,16 @@ declare var overwolf;
 	styleUrls: [
 		`../../../css/component/achievements/achievement-sharing-modal.component.scss`,
 		`../../../css/global/scrollbar-achievements.scss`,
+		`../../../css/component/controls/controls.scss`,
+		`../../../css/component/controls/control-close.component.scss`,
 	],
 	template: `
 		<div class="achievement-sharing-modal {{network}}">
+			<button class="i-30 close-button" (click)="closeModal()">
+				<svg class="svg-icon-fill">
+					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+				</svg>
+			</button>
 			<div class="modal-title">
 				<div class="social-share twitter">
 					<i>
@@ -89,6 +97,18 @@ export class AchievementSharingModal implements AfterViewInit {
 		this.initPlayer();
 	}
 
+	ngAfterViewInit() {
+		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+        this.player = this.elRef.nativeElement.querySelector('video');
+        if (!this.player) {
+            setTimeout(() => this.ngAfterViewInit(), 50);
+        }
+	}
+
+	closeModal() {
+		this.stateUpdater.next(new CloseSocialShareModalEvent());
+	}
+
 	private initPlayer() {
 		if (!this.player) {
 			setTimeout(() => this.initPlayer(), 50);
@@ -97,13 +117,5 @@ export class AchievementSharingModal implements AfterViewInit {
         this.player.load();
         this.player.play();
         this.cdr.detectChanges();
-	}
-
-	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
-        this.player = this.elRef.nativeElement.querySelector('video');
-        if (!this.player) {
-            setTimeout(() => this.ngAfterViewInit(), 50);
-        }
 	}
 }

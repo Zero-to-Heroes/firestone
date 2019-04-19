@@ -48,9 +48,14 @@
             flex-grow: 1;
         }
 
-        achievements-sharing-modal {
-            display: flex;
-            flex-grow: 1;
+        achievement-sharing-modal {
+			display: flex;
+			position: absolute;
+			background: rgba(0, 0, 0, 0.8);
+			z-index: 999;
+			bottom: 0;
+			left: 0;
+			height: calc(100vh - 40px);
         }
     }
 

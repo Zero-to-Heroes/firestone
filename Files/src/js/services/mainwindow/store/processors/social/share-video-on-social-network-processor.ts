@@ -16,7 +16,6 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
         }
         const achievementState = Object.assign(new AchievementsState(), currentState.achievements, {
             sharingAchievement: undefined,
-            currentView: 'list',
         } as AchievementsState);
         return Object.assign(new MainWindowState(), currentState, {
             achievements: achievementState,

@@ -38,7 +38,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 						[achievementSet]="state.selectedCategory">
 				</achievements-list>
 				<achievement-sharing-modal
-						[hidden]="state.currentView !== 'sharing-achievement'"
+						[hidden]="!state.sharingAchievement"
 						[socialShareUserInfo]="socialShareUserInfo"
 						[sharingAchievement]="state.sharingAchievement">
 				</achievement-sharing-modal>
