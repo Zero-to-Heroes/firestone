@@ -19,6 +19,7 @@ import { AllCardsService } from "../../../all-cards.service";
 import { PackHistoryService } from "../../../collection/pack-history.service";
 import { SocialShareUserInfo } from "../../../../models/mainwindow/social-share-user-info";
 import { OverwolfService } from "../../../overwolf.service";
+import { AchievementNameService } from "../../../achievement/achievement-name.service";
 
 declare var overwolf;
 
@@ -30,7 +31,8 @@ export class PopulateStoreProcessor implements Processor {
         private cardHistoryStorage: CardHistoryStorageService,
         private collectionManager: CollectionManager,
         private pityTimer: PackHistoryService,
-        private ow: OverwolfService,
+		private ow: OverwolfService,
+		private namingService: AchievementNameService,
         private cards: AllCardsService) { }
 
     public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
@@ -65,6 +67,9 @@ export class PopulateStoreProcessor implements Processor {
         const history = await this.achievementHistoryStorage.loadAll();
         return history
             .filter((history) => history.numberOfCompletions == 1)
+			.map((history) => Object.assign(new AchievementHistory(), history, {
+				displayName: this.namingService.displayName(history.achievementId),
+			} as AchievementHistory))
             // We want to have the most recent at the top
             .reverse();
     }

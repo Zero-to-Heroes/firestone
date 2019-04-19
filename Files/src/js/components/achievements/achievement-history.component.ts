@@ -1,8 +1,5 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, HostListener, ElementRef, ViewRef, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, Input } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
-import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
-
-declare var overwolf: any;
 
 @Component({
 	selector: 'achievement-history',
@@ -17,9 +14,7 @@ declare var overwolf: any;
 			</div>
 			<ul class="history">
 				<li *ngFor="let historyItem of achievementHistory; trackBy: trackById">
-					<achievement-history-item 
-						[historyItem]="historyItem">
-					</achievement-history-item>
+					<achievement-history-item [historyItem]="historyItem"></achievement-history-item>
 				</li>
 				<section *ngIf="!achievementHistory || achievementHistory.length == 0" class="empty-state">
 					<i class="i-60x78 pale-theme">
@@ -35,48 +30,14 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementHistoryComponent implements AfterViewInit {
+export class AchievementHistoryComponent {
 	
  	@Input() achievementHistory: ReadonlyArray<AchievementHistory>;
 	
 	constructor(
-		// private storage: AchievementHistoryStorageService,
 		private el: ElementRef,
 		private cdr: ChangeDetectorRef) {
-		// overwolf.windows.onStateChanged.addListener((message) => {
-		// 	if (message.window_name != "CollectionWindow") {
-		// 		return;
-		// 	}
-		// 	// console.log('state changed achievement-history', message);
-		// 	if (message.window_state == 'normal') {
-		// 		this.refreshContents();
-		// 	}
-		// });
 	}
-
-	ngAfterViewInit() {
-		// this.cdr.detach();
-		// this.refreshContents();
-	}
-
-	// refreshContents() {
-	// 	if (this.refreshing) {
-	// 		return;
-	// 	}
-	// 	this.refreshing = true;
-	// 	console.log('request to load');
-	// 	this.storage.loadAll().then((result: AchievementHistory[]) => {
-    //         console.log('loaded history', result);
-	// 		this.achievementHistory = result
-	// 			.filter((history) => history.numberOfCompletions == 1)
-	// 			// We want to have the most recent at the top
-	// 			.reverse();
-    //         this.refreshing = false;
-	// 		if (!(<ViewRef>this.cdr).destroyed) {
-	// 			this.cdr.detectChanges();
-	// 		}
-    //     });
-	// }
 
 	trackById(index, history: AchievementHistory) {
 		return history.id;

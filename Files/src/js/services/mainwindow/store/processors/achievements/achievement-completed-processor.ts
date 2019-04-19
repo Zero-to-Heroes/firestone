@@ -10,6 +10,7 @@ import { Events } from "../../../../events.service";
 import { Achievement } from "../../../../../models/achievement";
 import { AchievementHistory } from "../../../../../models/achievement/achievement-history";
 import { AchievementHistoryStorageService } from "../../../../achievement/achievement-history-storage.service";
+import { AchievementNameService } from "../../../../achievement/achievement-name.service";
 
 export class AchievementCompletedProcessor implements Processor {
 
@@ -17,7 +18,8 @@ export class AchievementCompletedProcessor implements Processor {
         private achievementsStorage: AchievementsStorageService, 
         private historyStorage: AchievementHistoryStorageService,
         private repository: AchievementsRepository,
-        private events: Events,
+		private events: Events,
+		private namingService: AchievementNameService,
         private helper: AchievementUpdateHelper) { }
 
     public async process(event: AchievementCompletedEvent, currentState: MainWindowState): Promise<MainWindowState> {
@@ -31,14 +33,19 @@ export class AchievementCompletedProcessor implements Processor {
         const newAchievementState = await this.helper.rebuildAchievements(currentState);
         this.events.broadcast(Events.NEW_ACHIEVEMENT, completedAchievement);
 		const achievement: Achievement = this.repository.getAllAchievements().find((ach) => ach.id == completedAchievement.id);
-        const historyItem = new AchievementHistory(
-            achievement.id, 
-            achievement.name, 
-            completedAchievement.numberOfCompletions, 
-            achievement.difficulty);
+        const historyItem = {
+            achievementId: achievement.id, 
+            achievementName: achievement.name, 
+            numberOfCompletions: completedAchievement.numberOfCompletions, 
+            difficulty: achievement.difficulty,
+			creationTimestamp: Date.now(),
+		} as AchievementHistory; 
         await this.historyStorage.save(historyItem);
         const history = (await this.historyStorage.loadAll())
             .filter((history) => history.numberOfCompletions == 1)
+			.map((history) => Object.assign(new AchievementHistory(), history, {
+				displayName: this.namingService.displayName(history.achievementId),
+			} as AchievementHistory))
             .reverse();
         const newState = Object.assign(new AchievementsState(), newAchievementState, {
             achievementHistory: history as ReadonlyArray<AchievementHistory>,

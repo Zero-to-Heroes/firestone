@@ -74,6 +74,7 @@ import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
+import { AchievementNameService } from '../../achievement/achievement-name.service';
 
 declare var overwolf;
 const HEARTHSTONE_GAME_ID = 9898;
@@ -96,6 +97,7 @@ export class MainWindowStoreService {
 			private cardHistoryStorage: CardHistoryStorageService,
 			private achievementsStorage: AchievementsStorageService,
 			private achievementHistoryStorage: AchievementHistoryStorageService,
+			private achievementNameService: AchievementNameService,
 			private io: SimpleIOService,
 			private collectionDb: IndexedDbService,
 			private achievementsDb: AchievementsDb,
@@ -154,6 +156,7 @@ export class MainWindowStoreService {
 				this.collectionManager,
 				this.pityTimer,
 				this.ow,
+				this.achievementNameService,
 				this.cards),
 			ChangeVisibleApplicationEvent.eventName(), new ChangeVisibleApplicationProcessor(),
 			CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(),
@@ -170,7 +173,8 @@ export class MainWindowStoreService {
 			NewCardEvent.eventName(), new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, 
 				this.pityTimer, this.cards),
 			
-			AchievementHistoryCreatedEvent.eventName(), new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage),
+			AchievementHistoryCreatedEvent.eventName(), new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, 
+				this.achievementNameService),
 			ChangeAchievementsShortDisplayEvent.eventName(), new ChangeAchievementsShortDisplayProcessor(),
 			ChangeVisibleAchievementEvent.eventName(), new ChangeVisibleAchievementProcessor(),
 			SelectAchievementCategoryEvent.eventName(), new SelectAchievementCategoryProcessor(),
@@ -181,7 +185,7 @@ export class MainWindowStoreService {
 			AchievementRecordedEvent.eventName(), new AchievementRecordedProcessor(this.achievementsStorage, 
 				achievementStateHelper, this.events),
 			AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementsStorage, 
-				this.achievementHistoryStorage, this.achievementsRepository, this.events, achievementUpdateHelper),
+				this.achievementHistoryStorage, this.achievementsRepository, this.events, this.achievementNameService, achievementUpdateHelper),
 
 			StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor(),
 			TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor(),

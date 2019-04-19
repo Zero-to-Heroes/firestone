@@ -25,19 +25,17 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 	private achievementId: string;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private namingService: AchievementNameService) {
-	}
-
 	ngAfterViewInit() {
 		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;		
 	}
 
-	@Input('historyItem') set historyItem(history: AchievementHistory) {
+	@Input() set historyItem(history: AchievementHistory) {
+		console.log('setting history item', history);
 		if (!history) {
 			return;
 		}
 		this.achievementId = history.achievementId;
-		this.achievementName = this.namingService.displayName(history.achievementId);
+		this.achievementName = history.displayName;
 		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString(
 			"en-GB",
 			{ day: "2-digit", month: "2-digit", year: "2-digit"} );

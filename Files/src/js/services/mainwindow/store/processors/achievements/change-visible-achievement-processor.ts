@@ -22,7 +22,8 @@ export class ChangeVisibleAchievementProcessor implements Processor {
             selectedCategory: achievementSet,
             achievementCategories: globalCategory.achievementSets as ReadonlyArray<AchievementSet>,
             achievementsList: achievementSet.achievements as ReadonlyArray<VisualAchievement>,
-            selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
+			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
+			sharingAchievement: undefined,
             shortDisplay: true,
         } as AchievementsState);
         return Object.assign(new MainWindowState(), currentState, {

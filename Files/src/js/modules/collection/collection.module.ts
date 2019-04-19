@@ -82,6 +82,7 @@ import { AchievementSocialSharesComponent } from '../../components/achievements/
 import { AchievementSharingModal } from '../../components/achievements/achievement-sharing-modal.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
+import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
