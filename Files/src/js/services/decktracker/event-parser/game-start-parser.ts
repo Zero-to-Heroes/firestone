@@ -39,6 +39,9 @@ export class GameStartParser implements EventParser {
 	}
 
 	private buildHero(currentDeck: any): HeroCard {
+		if (!currentDeck || !currentDeck.deck) {
+			return null;
+		}
 		return currentDeck.deck.heroes
 				.map((hero) => this.allCards.getCardFromDbfId(hero))
 				.map((heroCard) => Object.assign(new HeroCard(), { 
@@ -49,6 +52,9 @@ export class GameStartParser implements EventParser {
 	}
 	
 	private buildDeckList(currentDeck: any): ReadonlyArray<DeckCard> {
+		if (!currentDeck || !currentDeck.deck) {
+			return [];
+		}
 		return currentDeck.deck.cards
 				// [dbfid, count] pair
 				.map((pair) => this.buildDeckCard(pair))

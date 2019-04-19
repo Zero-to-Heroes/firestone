@@ -39,6 +39,14 @@ export class DeckManipulationHelper {
                     : card);
         }
 	}
+	
+	public static findCardInZone(zone: ReadonlyArray<DeckCard>, cardId: string): DeckCard {
+		const found = zone.find((card) => card.cardId === cardId);
+		if (!found) {
+			console.error('Could not find card in zone', cardId, zone);
+		}
+		return found;
+	}
     
 	private static removeSingleCard(card: DeckCard): DeckCard {
 		if (card.totalQuantity == 1) {

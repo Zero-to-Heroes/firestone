@@ -27,7 +27,7 @@ export class CardRemovedFromDeckParser implements EventParser {
 			return;
 		}
 		const cardId: string = gameEvent.data[0];
-		const card = currentState.playerDeck.deck.find((card) => card.cardId === cardId);
+		const card = DeckManipulationHelper.findCardInZone(currentState.playerDeck.deck, cardId);
 		const previousDeck = currentState.playerDeck.deck;
 		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId);
         const cardWithZone = Object.assign(new DeckCard(), card, {

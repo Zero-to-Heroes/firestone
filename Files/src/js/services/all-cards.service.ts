@@ -98,8 +98,12 @@ export class AllCardsService {
 	}
 
 	public getCard(id: string): any {
-		return parseCardsText.jsonDatabase
+		const found = parseCardsText.jsonDatabase
 			.find((card) => card.id === id);
+		if (!found) {
+			console.error('Could not find card in json database', id);
+		}
+		return found;
 	}
 
 	public getCardFromDbfId(dbfId: number): any {

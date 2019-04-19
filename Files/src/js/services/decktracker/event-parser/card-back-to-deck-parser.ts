@@ -50,11 +50,12 @@ export class CardBackToDeckParser implements EventParser {
 	
 	private findCard(initialZone: string, deckState: DeckState, cardId: string): DeckCard {
 		if (initialZone === 'HAND') {
-			return deckState.hand.find((card) => card.cardId === cardId);
+			return DeckManipulationHelper.findCardInZone(deckState.hand, cardId);
 		}
 		if (['PLAY', 'GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return deckState.otherZone.find((card) => card.cardId === cardId);
+			return DeckManipulationHelper.findCardInZone(deckState.otherZone, cardId);
 		}
+		console.error('could not find card in card-back-to-deck', initialZone, cardId, deckState);
 		return null;
 	}
 	
