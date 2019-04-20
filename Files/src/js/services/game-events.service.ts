@@ -259,9 +259,7 @@ export class GameEvents {
 					GameEvent.DAMAGE, 
 					gameEvent.Value.SourceCardId,
 					gameEvent.Value.SourceControllerId,
-					gameEvent.Value.TargetCardId,
-					gameEvent.Value.TargetControllerId,
-					gameEvent.Value.Damage,
+					gameEvent.Value.Targets,
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;

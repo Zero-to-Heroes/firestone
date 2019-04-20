@@ -54,9 +54,14 @@ export class KrippGoblinBombs extends AbstractChallenge {
 		}
 		const sourceCardId = gameEvent.data[0];
 		const sourceControllerId = gameEvent.data[1];
-        const localPlayer = gameEvent.data[5];
-        const totalDamage = gameEvent.data[4];
+		const localPlayer = gameEvent.data[3];
+		const targets = gameEvent.data[2];
 		if (sourceCardId == this.cardId && sourceControllerId == localPlayer.PlayerId) {
+			console.log(Object.keys(targets));
+			const totalDamage = Object.keys(targets)
+					.map((key) => targets[key])
+					.map((target) => target.Damage)
+					.reduce((a, b) => a + b, 0);
 			this.totalBombsDamage = this.totalBombsDamage + totalDamage;
 		}
 	}
