@@ -21,7 +21,6 @@ export class KrippCrazyDecksSetProvider extends SetProvider {
             'kripp_achievements_1_fatigue',
             'kripp_achievements_1_goblin_bombs',
             'kripp_achievements_1_pogo_hopper',
-            'kripp_achievements_1_freeze_shaman',
         ]);
         this.logoName = 'kripp_achievements_1_crazy_decks';
         this.cardsService = cardsService;

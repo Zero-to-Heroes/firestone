@@ -52,6 +52,7 @@ import { DeckParserService } from '../decktracker/deck-parser.service.js';
 import { KrippClassic } from './achievements/kripp/kripp-classic.js';
 import { KrippGoblinBombs } from './achievements/kripp/kripp-goblin-bombs.js';
 import { KrippFatigue } from './achievements/kripp/kripp-fatigue.js';
+import { KrippArcaneMissiles } from './achievements/kripp/kripp-arcane-missiles.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -108,10 +109,10 @@ export class AchievementsRepository {
 		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.cards, this.conf);
 		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.cards, this.conf);
 
-		// const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
-		const krippCrazyDecksProvider = new KrippCrazyDecksSetProvider(this.cards, this.conf);
-		const krippSoloModeProvider = new KrippSoloModeSetProvider(this.cards, this.conf);
-		const krippAmazingPlaysProvider = new KrippAmazingPlaysSetProvider(this.cards, this.conf);
+		const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
+		// const krippCrazyDecksProvider = new KrippCrazyDecksSetProvider(this.cards, this.conf);
+		// const krippSoloModeProvider = new KrippSoloModeSetProvider(this.cards, this.conf);
+		// const krippAmazingPlaysProvider = new KrippAmazingPlaysSetProvider(this.cards, this.conf);
 
 		this.setProviders = [
 			dungeonRunProgressionProvider,
@@ -126,19 +127,20 @@ export class AchievementsRepository {
 			rumbleRunShrinePlayProvider,
 			rumbleRunTeammateProvider,
 			rumbleRunPassiveProvider,
-            // krippFirstInstallment,
-            krippCrazyDecksProvider,
-            krippSoloModeProvider,
-            krippAmazingPlaysProvider,
+            krippFirstInstallment,
+            // krippCrazyDecksProvider,
+            // krippSoloModeProvider,
+            // krippAmazingPlaysProvider,
 		];
 		const krippCategory = new AchievementCategory(
 			'kripp',
 			'Kripp',
 			'kripp',
 			[
-				krippCrazyDecksProvider.id,
-				krippSoloModeProvider.id,
-				krippAmazingPlaysProvider.id,
+				krippFirstInstallment.id,
+				// krippCrazyDecksProvider.id,
+				// krippSoloModeProvider.id,
+				// krippAmazingPlaysProvider.id,
 			]
 		);
 		this.categories = [
@@ -229,6 +231,7 @@ export class AchievementsRepository {
 			// { type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
 			// { type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
 			// { type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
+			// { type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
 		];
 	}
 }

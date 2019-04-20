@@ -15,17 +15,17 @@ export class KrippFirstInstallmentSetProvider extends SetProvider {
     private conf: AchievementConfService;
 
     constructor(cardsService: AllCardsService, conf: AchievementConfService) {
-        super('kripp_achievements_1', 'First installment', [
+        super('kripp_achievements_1', 'Kripp achievements', [
             'kripp_achievements_1_shirvallah',
             'kripp_achievements_1_treants',
             'kripp_achievements_1_classic',
             'kripp_achievements_1_fatigue',
             'kripp_achievements_1_goblin_bombs',
-            'kripp_achievements_1_pogo_hopper',
-            'kripp_achievements_1_freeze_shaman',
+			'kripp_achievements_1_pogo_hopper',
+			
+            'kripp_achievements_1_arcane_missiles',
             'kripp_achievements_1_treasure_room',
             'kripp_achievements_1_rod_of_roasting',
-            'kripp_achievements_1_arcane_missiles',
             'kripp_achievements_1_one_hp_remaining',
             'kripp_achievements_1_mass_hysteria',
         ]);
