@@ -234,6 +234,7 @@ export class AchievementsRepository {
 			// { type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
 			// { type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
 			// { type: 'kripp_achievements_1_rod_of_roasting', challengeCreationFn: (achievement) => new KrippRodOfRoasting(achievement, this.events) },
+			// { type: 'kripp_achievements_1_one_hp_remaining', challengeCreationFn: (achievement) => new KrippOneHpRemaining(achievement, this.events) },
 		];
 	}
 }

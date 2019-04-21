@@ -24,9 +24,9 @@ export class KrippFirstInstallmentSetProvider extends SetProvider {
 			'kripp_achievements_1_pogo_hopper',
             'kripp_achievements_1_arcane_missiles',
             'kripp_achievements_1_rod_of_roasting',
+            'kripp_achievements_1_one_hp_remaining',
 			
             'kripp_achievements_1_treasure_room',
-            'kripp_achievements_1_one_hp_remaining',
             'kripp_achievements_1_mass_hysteria',
         ]);
         this.logoName = 'kripp_achievements_1';

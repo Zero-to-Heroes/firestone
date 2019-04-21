@@ -271,7 +271,8 @@ export class GameEvents {
 					GameEvent.WINNER,
 					gameEvent.Value.Winner,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+					gameEvent.Value.GameState));
 				break;
 			case 'GAME_END':
 				this.allEvents.next(new GameEvent(GameEvent.GAME_END, gameEvent.Value.Game, gameEvent.Value.ReplayXml));

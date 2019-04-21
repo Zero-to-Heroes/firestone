@@ -752,6 +752,6 @@
 	{ "type": "kripp_achievements_1_treasure_room", "id": "kripp_achievements_1_treasure_room", "cardId": "LOOTA_BOSS_52t", "name": "Finally lucky", "text": "Loot a chest in the Treasure Vault (Dungeon Run)", "difficulty": "legendary"},
 	{ "type": "kripp_achievements_1_rod_of_roasting", "id": "kripp_achievements_1_rod_of_roasting", "cardId": "LOOTA_822", "name": "You Only Kripp Once", "text": "Kill a boss with the Rod of Roasting (Dungeon Run)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_arcane_missiles", "id": "kripp_achievements_1_arcane_missiles", "cardId": "EX1_277", "name": "Arcane Orb", "text": "Send an Arcane Missile that deals at least 10 damage (Rumble Run)", "difficulty": "epic"},
-	{ "type": "kripp_achievements_1_one_hp_remaining", "id": "kripp_achievements_1_one_hp_remaining", "cardId": "EX1_295", "name": "Last Kripp Standing", "text": "Win a game with 1 HP remaining (Ranked/Arena)", "difficulty": "epic"},
+	{ "type": "kripp_achievements_1_one_hp_remaining", "id": "kripp_achievements_1_one_hp_remaining", "cardId": "EX1_295", "name": "Last Kripp Standing", "text": "Win a game with 1 HP and no armor remaining (Ranked/Arena)", "difficulty": "epic"},
 	{ "type": "kripp_achievements_1_mass_hysteria", "id": "kripp_achievements_1_mass_hysteria", "cardId": "TRL_258", "name": "Krippsteria",  "text": "Perform a full 7-minion board clear with Mass Hysteria (Ranked/Arena)", "difficulty": "legendary"}
 ]
