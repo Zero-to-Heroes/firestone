@@ -53,6 +53,7 @@ import { KrippClassic } from './achievements/kripp/kripp-classic.js';
 import { KrippGoblinBombs } from './achievements/kripp/kripp-goblin-bombs.js';
 import { KrippFatigue } from './achievements/kripp/kripp-fatigue.js';
 import { KrippArcaneMissiles } from './achievements/kripp/kripp-arcane-missiles.js';
+import { KrippRodOfRoasting } from './achievements/kripp/kripp-roasting.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -232,6 +233,7 @@ export class AchievementsRepository {
 			// { type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
 			// { type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
 			// { type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
+			// { type: 'kripp_achievements_1_rod_of_roasting', challengeCreationFn: (achievement) => new KrippRodOfRoasting(achievement, this.events) },
 		];
 	}
 }
