@@ -22,18 +22,6 @@ export class DungeonRunTreasurePlay extends AbstractChallenge {
 		}
 	}
 
-	public getRecordPastDurationMillis(): number {
-		return 1000;
-	}
-
-	public notificationTimeout(): number {
-		return 5000;
-	}
-
-	public broadcastEndOfCapture() {
-		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 10000);
-	}
-
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;

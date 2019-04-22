@@ -33,12 +33,8 @@ export class BossVictory extends AbstractChallenge {
 		return Date.now() - this.currentTurnStartTime;
 	}
 
-	public broadcastEndOfCapture() {
-		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
-	}
-
-	public notificationTimeout(): number {
-		return 10000;
+	public getRecordingDuration(): number {
+		return 5000;
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {

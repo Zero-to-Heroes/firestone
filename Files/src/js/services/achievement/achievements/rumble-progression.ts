@@ -53,14 +53,6 @@ export class RumbleProgression extends AbstractChallenge {
 		return Date.now() - this.currentTurnStartTime;
 	}
 
-	public broadcastEndOfCapture() {
-		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 5000);
-	}
-
-	public notificationTimeout(): number {
-		return 10000;
-	}
-
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;

@@ -40,7 +40,7 @@ export class AchievementsVideoCaptureService {
         private owService: OverwolfService) {
 		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
-        this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => setTimeout(() => this.onAchievementRecordEnd(data), 500));
+        // this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => setTimeout(() => this.onAchievementRecordEnd(data), 500));
 
         // This is handled already by the regular query
         // this.turnOnRecording();
@@ -117,17 +117,19 @@ export class AchievementsVideoCaptureService {
     private onAchievementComplete(data) {
         const achievement: Achievement = data.data[0];
         const numberOfCompletions: number = data.data[1];
-        const challenge: Challenge = data.data[2];
+		const challenge: Challenge = data.data[2];
+		const recordDuration: number = challenge.getRecordingDuration();
         console.log('[recording] achievment complete', achievement, numberOfCompletions);
-        this.capture(achievement, challenge);
+        this.capture(achievement, challenge, recordDuration);
     }
 
-    private async capture(achievement: Achievement, challenge: Challenge) {
+    private async capture(achievement: Achievement, challenge: Challenge, recordDuration: number) {
         if (!(await this.achievementConf.shouldRecord(achievement))) {
             console.log('[recording] Not recording achievement', achievement);
             return;
         }
-        this.achievementsBeingRecorded.push(achievement.id);
+		this.achievementsBeingRecorded.push(achievement.id);
+		this.planCaptureStop(recordDuration);
         if (this.captureOngoing) {
             console.info('[recording] capture ongoing, doing nothing', this.achievementsBeingRecorded);
             return;
@@ -145,23 +147,23 @@ export class AchievementsVideoCaptureService {
         );
     }
 
-    private onAchievementRecordEnd(data) {
-        console.log('[recording] on achievementrecordend', data);
-        const achievementId = data.data[0];
-        if (this.achievementsBeingRecorded.indexOf(achievementId) === -1) {
-            console.log('[recording] Not recording achievement, so not planning capture stop', achievementId, this.achievementsBeingRecorded)
-            return;
-        }
-        const requestedTime: number = data.data[1];
+    private planCaptureStop(recordDuration: number) {
+        console.log('[recording] planning recording end', recordDuration);
+        // const achievementId = data.data[0];
+        // if (this.achievementsBeingRecorded.indexOf(achievementId) === -1) {
+        //     console.log('[recording] Not recording achievement, so not planning capture stop', achievementId, this.achievementsBeingRecorded)
+        //     return;
+        // }
+        // const requestedTime: number = data.data[1];
         this.lastRecordingDate = Math.max(
             this.lastRecordingDate,
-            Date.now() + requestedTime);
+            Date.now() + recordDuration);
         if (this.currentRecordEndTimer) {
             console.log('[recording] clearing timeout', this.currentRecordEndTimer);
             clearTimeout(this.currentRecordEndTimer);
         }
         const stopCaptureTime = this.lastRecordingDate - Date.now();
-        console.log('[recording] will stop recording in ', stopCaptureTime, data);
+        console.log('[recording] will stop recording in ', stopCaptureTime, recordDuration);
         this.currentRecordEndTimer = setTimeout(() => this.performStopCapture(), stopCaptureTime);
     }
 

@@ -40,10 +40,6 @@ export class BossEncounter extends AbstractChallenge {
 		return 15000;
 	}
 
-	public broadcastEndOfCapture() {
-		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 10000);
-	}
-
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
 		if (!gameEvent.data || gameEvent.data.length === 0) {
 			return;

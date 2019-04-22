@@ -12,7 +12,7 @@ export interface Challenge {
 
 	getRecordPastDurationMillis(): number;
 
-	broadcastEndOfCapture(): void;
+	getRecordingDuration(): number;
 
 	notificationTimeout(): number;
 }

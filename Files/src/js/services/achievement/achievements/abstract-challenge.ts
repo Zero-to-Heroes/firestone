@@ -25,9 +25,6 @@ export abstract class AbstractChallenge implements Challenge {
 		this.resetEvents = resetEvents || [];
 	}
 
-	public abstract getRecordPastDurationMillis(): number;
-	public abstract broadcastEndOfCapture(): void;
-	public abstract notificationTimeout(): number;
 	protected abstract detectEvent(gameEvent: GameEvent, callback: Function);
 	protected abstract resetState();
 
@@ -53,6 +50,18 @@ export abstract class AbstractChallenge implements Challenge {
 		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 
+	public getRecordingDuration(): number {
+		return 10000;
+	}
+
+	public notificationTimeout(): number {
+		return 5000;
+	}
+
+	public getRecordPastDurationMillis(): number {
+		return 1000;
+	}
+
 	protected detectScenario(gameEvent: GameEvent) {
 		// console.log('detecting scenario', gameEvent)
 		if (!gameEvent.data || gameEvent.data.length == 0) {
@@ -73,7 +82,7 @@ export abstract class AbstractChallenge implements Challenge {
 			const complete = this.additionalCheckForCompletion();
 			if (complete) {
 				this.callback();
-				this.broadcastEndOfCapture();
+				// this.broadcastEndOfCapture();
 			}
 		}
 	}

@@ -38,15 +38,6 @@ export class KrippShirvallah extends AbstractChallenge {
 		return Date.now() - this.gameStartTime;
 	}
 
-	public notificationTimeout(): number {
-		// Since we stop recording only when mulligan is done, it could take some time
-		return 2000;
-	}
-
-	public broadcastEndOfCapture() {
-		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 10000);
-	}
-
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;

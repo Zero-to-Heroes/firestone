@@ -38,10 +38,6 @@ export class ShrinePlay extends AbstractChallenge {
 		return 15000;
 	}
 
-	public broadcastEndOfCapture() {
-		this.events.broadcast(Events.ACHIEVEMENT_RECORD_END, this.achievementId, 15000);
-	}
-
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
