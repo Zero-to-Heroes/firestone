@@ -27,6 +27,7 @@ export class GameEvent {
 	public static readonly CARD_BACK_TO_DECK = 'CARD_BACK_TO_DECK';
 	public static readonly CARD_REMOVED_FROM_DECK = 'CARD_REMOVED_FROM_DECK';
 	public static readonly CARD_REMOVED_FROM_HAND = 'CARD_REMOVED_FROM_HAND';
+	public static readonly BURNED_CARD = 'BURNED_CARD';
 	public static readonly CARD_ON_BOARD_AT_GAME_START = 'CARD_ON_BOARD_AT_GAME_START';
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly MINION_ON_BOARD_ATTACK_UPDATED = 'MINION_ON_BOARD_ATTACK_UPDATED';
