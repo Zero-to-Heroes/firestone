@@ -154,16 +154,18 @@ export class AchievementsVideoCaptureService {
         //     console.log('[recording] Not recording achievement, so not planning capture stop', achievementId, this.achievementsBeingRecorded)
         //     return;
         // }
-        // const requestedTime: number = data.data[1];
+		// const requestedTime: number = data.data[1];
+		// Record duration is capped to 140s on Twitter, and we're taking some buffer
+		const cappedDuration = Math.max(120000, recordDuration)
         this.lastRecordingDate = Math.max(
             this.lastRecordingDate,
-            Date.now() + recordDuration);
+            Date.now() + cappedDuration);
         if (this.currentRecordEndTimer) {
             console.log('[recording] clearing timeout', this.currentRecordEndTimer);
             clearTimeout(this.currentRecordEndTimer);
         }
         const stopCaptureTime = this.lastRecordingDate - Date.now();
-        console.log('[recording] will stop recording in ', stopCaptureTime, recordDuration);
+        console.log('[recording] will stop recording in ', stopCaptureTime, cappedDuration);
         this.currentRecordEndTimer = setTimeout(() => this.performStopCapture(), stopCaptureTime);
     }
 
