@@ -211,6 +211,14 @@ export class GameEvents {
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer));
 				break;
+			case 'BURNED_CARD':
+				this.allEvents.next(new GameEvent(
+					GameEvent.BURNED_CARD, 
+					gameEvent.Value.CardId,
+					gameEvent.Value.ControllerId,
+					gameEvent.Value.LocalPlayer,
+					gameEvent.Value.OpponentPlayer));
+				break;
 			case 'MULLIGAN_INITIAL_OPTION':
 				this.allEvents.next(new GameEvent(
 					GameEvent.MULLIGAN_INITIAL_OPTION, 

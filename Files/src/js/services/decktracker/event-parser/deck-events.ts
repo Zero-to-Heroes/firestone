@@ -3,6 +3,7 @@ export class DeckEvents {
     public static readonly MATCH_METADATA = 'MATCH_METADATA';
     public static readonly CARD_BACK_TO_DECK = 'DECK_CARD_BACK_TO_DECK';
     public static readonly CARD_REMOVED_FROM_DECK = 'CARD_REMOVED_FROM_DECK';
+    public static readonly BURNED_CARD = 'BURNED_CARD';
     public static readonly CARD_REMOVED_FROM_HAND = 'CARD_REMOVED_FROM_HAND';
     public static readonly CARD_PLAYED_FROM_HAND = 'CARD_PLAYED_FROM_HAND';
     public static readonly DISCARD_CARD = 'DISCARD_CARD';

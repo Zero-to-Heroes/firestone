@@ -23,7 +23,7 @@ export class CreateCardInDeckParser implements EventParser {
     
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
 		if (currentState.playerDeck.deckList.length === 0) {
-			return;
+			return currentState;
 		}
 		const cardId: string = gameEvent.data[0];
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
