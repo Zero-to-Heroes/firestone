@@ -13,7 +13,7 @@ export class KrippTreants extends AbstractChallenge {
     private gameStartTime: number;
 
 	constructor(achievement, events: Events) {
-		super(achievement, [GameType.RANKED, GameType.CASUAL], events, [GameEvent.GAME_END]);
+		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
 		this.cardIds = achievement.cardIds;
 	}
 

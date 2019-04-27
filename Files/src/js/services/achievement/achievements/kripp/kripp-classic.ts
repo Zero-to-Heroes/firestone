@@ -14,7 +14,7 @@ export class KrippClassic extends AbstractChallenge {
 	private isDeckClassic: boolean = false;
 
 	constructor(achievement, events: Events, private deckParser: DeckParserService, private allCards: AllCardsService) {
-		super(achievement, [GameType.RANKED, GameType.CASUAL], events, [GameEvent.GAME_END]);
+		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
 	}
 

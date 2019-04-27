@@ -12,7 +12,7 @@ export class KrippRodOfRoasting extends AbstractChallenge {
 	private currentTurnStartTime: number;
 
 	constructor(achievement, events: Events) {
-		super(achievement, [GameType.RANKED, GameType.CASUAL], events, [GameEvent.GAME_END]);
+		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
 	}
 
