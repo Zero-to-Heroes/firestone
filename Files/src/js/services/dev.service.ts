@@ -7,6 +7,10 @@ import { PackMonitor } from './collection/pack-monitor.service';
 import { Card } from '../models/card';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+import { DeckParserService } from './decktracker/deck-parser.service';
+import { GameStateService } from './decktracker/game-state.service';
+import { GameState } from '../models/decktracker/game-state';
+import { GameEvents } from './game-events.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -19,7 +23,9 @@ export class DevService {
 		private achievementMonitor: AchievementsMonitor, 
 		private packMonitor: PackMonitor,
 		private io: SimpleIOService,
+		private gameEvents: GameEvents,
 		private gameEventsPlugin: GameEventsPluginService,
+		private deckService: DeckParserService,
 		private storage: AchievementsStorageService) {
 		this.addTestCommands();
 	}
@@ -80,7 +86,9 @@ export class DevService {
 	}
 
 	private addCustomLogLoaderCommand() {	
-		window['loadLog'] = (logName) => {
+		window['loadLog'] = (logName, deckString) => {
+			this.deckService.currentDeck.deckstring = deckString;
+			this.deckService.decodeDeckString();
 			overwolf.games.getRunningGameInfo(async (res: any) => {
 				if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 					const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
@@ -93,11 +101,14 @@ export class DevService {
 
 	private async loadArbitraryLogContent(content: string) {
 		const plugin = await this.gameEventsPlugin.get();
-		plugin.startDevMode();
-		const logLines = content.split('\n');
-		plugin.realtimeLogProcessing(logLines, () => {
-			console.log('Jobs done');
-			plugin.stopDevMode();
+		plugin.initRealtimeLogConversion(() => {
+			plugin.startDevMode();
+			const logLines = content.split('\n');
+			plugin.realtimeLogProcessing(logLines, () => {
+				console.log('Jobs done');
+				plugin.stopDevMode();
+				this.deckService.reset();
+			});
 		});
 	}
 }

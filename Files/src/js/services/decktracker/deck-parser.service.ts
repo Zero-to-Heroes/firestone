@@ -33,12 +33,16 @@ export class DeckParserService {
 		match = this.deckstringRegex.exec(data);
 		if (match) {
 			this.currentDeck.deckstring = match[1];
-			// console.log('[decks] deck updated', this.currentDeck);
-			const deck = decode(this.currentDeck.deckstring);
-			console.log('[decks] deck decoded', deck);
-			this.currentDeck.deck = deck;
-			return;
+			this.decodeDeckString();
 		}
+	}
+
+	public decodeDeckString() {
+		// console.log('[decks] deck updated', this.currentDeck);
+		const deck = decode(this.currentDeck.deckstring);
+		console.log('[decks] deck decoded', deck);
+		this.currentDeck.deck = deck;
+		return;
 	}
 
 	// By doing this we make sure we don't get a leftover deckstring caused by 
