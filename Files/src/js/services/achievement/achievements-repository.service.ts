@@ -54,6 +54,8 @@ import { KrippGoblinBombs } from './achievements/kripp/kripp-goblin-bombs.js';
 import { KrippFatigue } from './achievements/kripp/kripp-fatigue.js';
 import { KrippArcaneMissiles } from './achievements/kripp/kripp-arcane-missiles.js';
 import { KrippRodOfRoasting } from './achievements/kripp/kripp-roasting.js';
+import { KrippOneHpRemaining } from './achievements/kripp/kripp-one-hp-remaining.js';
+import { KrippMassHysteria } from './achievements/kripp/kripp-mass-hysteria.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -178,7 +180,7 @@ export class AchievementsRepository {
 					rumbleRunPassiveProvider.id,
 				]
 			),
-			// krippCategory,
+			krippCategory,
 		]
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
@@ -226,15 +228,16 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 
-			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
-			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
-			// { type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
-			// { type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
-			// { type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
-			// { type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
-			// { type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
-			// { type: 'kripp_achievements_1_rod_of_roasting', challengeCreationFn: (achievement) => new KrippRodOfRoasting(achievement, this.events) },
-			// { type: 'kripp_achievements_1_one_hp_remaining', challengeCreationFn: (achievement) => new KrippOneHpRemaining(achievement, this.events) },
+			{ type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
+			{ type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
+			{ type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
+			{ type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
+			{ type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
+			{ type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
+			{ type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
+			{ type: 'kripp_achievements_1_rod_of_roasting', challengeCreationFn: (achievement) => new KrippRodOfRoasting(achievement, this.events) },
+			{ type: 'kripp_achievements_1_one_hp_remaining', challengeCreationFn: (achievement) => new KrippOneHpRemaining(achievement, this.events) },
+			{ type: 'kripp_achievements_1_mass_hysteria', challengeCreationFn: (achievement) => new KrippMassHysteria(achievement, this.events) },
 		];
 	}
 }
