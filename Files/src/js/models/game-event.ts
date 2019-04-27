@@ -16,6 +16,7 @@ export class GameEvent {
 	public static readonly GAME_END = 'GAME_END';
 	public static readonly CARD_PLAYED = 'CARD_PLAYED';
 	public static readonly DISCARD_CARD = 'DISCARD_CARD';
+	public static readonly MINION_DIED = 'MINION_DIED';
 	public static readonly RECRUIT_CARD = 'RECRUIT_CARD';
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
