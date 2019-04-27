@@ -41,9 +41,11 @@ export class DeckManipulationHelper {
 	}
 	
 	public static findCardInZone(zone: ReadonlyArray<DeckCard>, cardId: string): DeckCard {
-		const found = zone.find((card) => card.cardId === cardId);
+		let found = zone.find((card) => card.cardId === cardId);
 		if (!found) {
 			console.error('Could not find card in zone', cardId, zone);
+			found = zone.find((card) => !card.cardId);
+			console.log('defaulting to getting a card without cardId', found);
 		}
 		return found;
 	}
