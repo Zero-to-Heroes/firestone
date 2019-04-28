@@ -15,7 +15,7 @@ Run `loadLog(logFileName, deckString)`. The `deckString` parameter is optional, 
 | Kripp - Classic | `loadLog('logFiles/kripp/classic.log', 'AAECAf0EApUDuAgOTXHDAbsC7gKLA6sEtATmBJYF7AXsB78IyQ0A')` |
 | Kripp - Fatigue | `loadLog('logFiles/kripp/fatigue.log', 'AAECAQcES9ICogTUCA2aBNQE/ASOBZEG7web8wKD+wKz/AL4hgOqiwPwngOSnwMA')` |
 | Kripp - Goblin Bombs | `loadLog('logFiles/kripp/goblinbombs.log', 'AAECAR8GrwTZB5cI4fUCoIAD8pYDDN31AuD1AuL1Au/1Arn4Apj7Aqj7Arz8Avb9AomAA8yBA7acAwA=')` |
-| Kripp - Arcane Missiles | Not yet |
+| Kripp - Arcane Missiles | `loadLog('logFiles/kripp/arcanemissiles.log', 'AAECAf0EDO0F4QflB+wHxewCzPQC7vYC7vcC9v0CjIADpIcDtJEDCdMBqwS0BLT8ApX/Au+AA82JA+eVA56bAwA=')` |
 | Kripp - Rod of Roasting | Not yet |
-| Kripp - One HP Remaining | Not yet |
+| Kripp - One HP Remaining | `loadLog('logFiles/kripp/onehpremaining.log', 'AAECAZ8FBO0F+ga9hgPSigMNnAKzA9wD9AX2B6f3AoT8Avz8Atn+As+GA+yGA7aYA8OdAwA=')` |
 | Kripp - Mass Hysteria | `loadLog('logFiles/kripp/mass_hysteria.log', 'AAECAa0GDvgC7QX7CNEK0wrWCtcK8vECvfMC+/4Cp4cD64oDmJsDmZsDCPsBlwKcAuUEyQbyDPsMl4cDAA==')` |
