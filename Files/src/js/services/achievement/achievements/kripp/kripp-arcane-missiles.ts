@@ -29,10 +29,6 @@ export class KrippArcaneMissiles extends AbstractChallenge {
 			this.detectDamage(gameEvent, callback);
 			return;
 		}
-		if (gameEvent.type === GameEvent.WINNER) {
-			this.detectGameResultEvent(gameEvent, callback);
-			return;
-		}
 	}
 
 	public getRecordPastDurationMillis(): number {
@@ -55,16 +51,6 @@ export class KrippArcaneMissiles extends AbstractChallenge {
 					.reduce((a, b) => a + b, 0);
 			this.maximumArcaneMissileDamage = Math.max(this.maximumArcaneMissileDamage, totalDamage);
 			console.log('maximum damage from arcane missiles', this.maximumArcaneMissileDamage);
-		}
-	}
-
-	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
-		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();
 		}
