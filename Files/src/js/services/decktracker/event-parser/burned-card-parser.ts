@@ -24,13 +24,14 @@ export class BurnedCardParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-		const cardId: string = gameEvent.data[0];
-		if (cardId == null) {
+        const cardId: string = gameEvent.data[0];
+        const entityId: number = gameEvent.data[4];
+		if (!cardId && !entityId) {
 			return currentState;
 		}
-		const card = DeckManipulationHelper.findCardInZone(currentState.playerDeck.deck, cardId);
+		const card = DeckManipulationHelper.findCardInZone(currentState.playerDeck.deck, cardId, entityId);
 		const previousDeck = currentState.playerDeck.deck;
-		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId);
+		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId, entityId);
         const cardWithZone = Object.assign(new DeckCard(), card, {
             zone: 'BURNED',
         } as DeckCard);

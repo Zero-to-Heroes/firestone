@@ -28,7 +28,8 @@ export class CardBackToDeckParser implements EventParser {
 		}
 		const cardId: string = gameEvent.data[0];
 		const initialZone: string = gameEvent.data[2];
-		const card = this.findCard(initialZone, currentState.playerDeck, cardId);
+        const entityId: number = gameEvent.data[5];
+		const card = this.findCard(initialZone, currentState.playerDeck, cardId, entityId);
 		const newHand: ReadonlyArray<DeckCard> = this.buildNewHand(initialZone, currentState.playerDeck.hand, card);
 		const newOther: ReadonlyArray<DeckCard> = this.buildNewOther(initialZone, currentState.playerDeck.otherZone, card);
 		const previousDeck = currentState.playerDeck.deck;
@@ -48,12 +49,12 @@ export class CardBackToDeckParser implements EventParser {
 		return DeckEvents.CARD_BACK_TO_DECK;
 	}
 	
-	private findCard(initialZone: string, deckState: DeckState, cardId: string): DeckCard {
+	private findCard(initialZone: string, deckState: DeckState, cardId: string, entityId: number): DeckCard {
 		if (initialZone === 'HAND') {
-			return DeckManipulationHelper.findCardInZone(deckState.hand, cardId);
+			return DeckManipulationHelper.findCardInZone(deckState.hand, cardId, entityId);
 		}
 		if (['PLAY', 'GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return DeckManipulationHelper.findCardInZone(deckState.otherZone, cardId);
+			return DeckManipulationHelper.findCardInZone(deckState.otherZone, cardId, entityId);
 		}
 		console.error('could not find card in card-back-to-deck', initialZone, cardId, deckState);
 		return null;
@@ -63,12 +64,12 @@ export class CardBackToDeckParser implements EventParser {
 		if (initialZone !== 'HAND') {
 			return previousHand;
 		}
-		return DeckManipulationHelper.removeSingleCardFromZone(previousHand, movedCard.cardId);
+		return DeckManipulationHelper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId);
 	}
 	
 	private buildNewOther(initialZone: string, previousOther: ReadonlyArray<DeckCard>, movedCard: DeckCard): ReadonlyArray<DeckCard> {
 		if (['PLAY', 'GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return DeckManipulationHelper.removeSingleCardFromZone(previousOther, movedCard.cardId);
+			return DeckManipulationHelper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId);
 		}
 		return previousOther;
 	}

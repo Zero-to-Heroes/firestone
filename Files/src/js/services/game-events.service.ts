@@ -111,7 +111,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+                    gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'DISCARD_CARD':
 				this.allEvents.next(new GameEvent(
@@ -119,7 +120,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'MINION_DIED':
 				this.allEvents.next(new GameEvent(
@@ -127,7 +129,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
             case 'RECRUIT_CARD':
                 this.allEvents.next(new GameEvent(
@@ -135,7 +138,8 @@ export class GameEvents {
                     gameEvent.Value.CardId,
                     gameEvent.Value.ControllerId,
                     gameEvent.Value.LocalPlayer,
-                    gameEvent.Value.OpponentPlayer));
+                    gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
                 break;
 			case 'MINION_SUMMONED':
 				this.allEvents.next(new GameEvent(
@@ -143,7 +147,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				this.allEvents.next(new GameEvent(
@@ -151,7 +156,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
 				this.allEvents.next(new GameEvent(
@@ -159,7 +165,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'END_OF_ECHO_IN_HAND':
 				this.allEvents.next(new GameEvent(
@@ -167,7 +174,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'CREATE_CARD_IN_DECK':
 				this.allEvents.next(new GameEvent(
@@ -176,7 +184,8 @@ export class GameEvents {
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer,
-					gameEvent.Value.CreatorCardId));
+					gameEvent.Value.CreatorCardId,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'SECRET_PLAYED':
 				this.allEvents.next(new GameEvent(
@@ -184,7 +193,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'CARD_DRAW_FROM_DECK':
 				this.allEvents.next(new GameEvent(
@@ -192,7 +202,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'CARD_BACK_TO_DECK':
 				this.allEvents.next(new GameEvent(
@@ -201,7 +212,8 @@ export class GameEvents {
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.InitialZone,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
 				this.allEvents.next(new GameEvent(
@@ -209,7 +221,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
 				this.allEvents.next(new GameEvent(
@@ -217,7 +230,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'BURNED_CARD':
 				this.allEvents.next(new GameEvent(
@@ -225,7 +239,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'MULLIGAN_INITIAL_OPTION':
 				this.allEvents.next(new GameEvent(
@@ -241,7 +256,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
 			case 'PASSIVE_BUFF':
 				this.allEvents.next(new GameEvent(
@@ -249,7 +265,8 @@ export class GameEvents {
 					gameEvent.Value.CardId,
 					gameEvent.Value.ControllerId,
 					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+					gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
 				break;
             case 'MINION_ON_BOARD_ATTACK_UPDATED':
                 this.allEvents.next(new GameEvent(
@@ -260,7 +277,8 @@ export class GameEvents {
                     gameEvent.Value.OpponentPlayer,
                     gameEvent.Value.InitialAttack,
                     gameEvent.Value.NewAttack,
-                    gameEvent.Value.EntityId));
+                    parseInt(gameEvent.Value.EntityId || 0),
+                    parseInt(gameEvent.Value.EntityId || 0)));
                 break;
 			case 'FATIGUE_DAMAGE':
 				this.allEvents.next(new GameEvent(

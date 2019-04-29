@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
 	selector: 'grouped-deck-list',
@@ -23,50 +24,66 @@ export class GroupedDeckListComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		// The zone in this view is the decklist + cards in the deck that didn't 
-		// start in the decklist
-		const base = deckState.deckList.map((card) => ({
-			cardId: card.cardId,
-			cardName: card.cardName,
-			manaCost: card.manaCost,
-			rarity: card.rarity,
-			totalQuantity: 0,
-			highlight: undefined,
-		} as VisualDeckCard));
-		const baseWithQuantities = base
-				.map((card) => {
-					let quantity = 0;
-					let highlight = 'dim';
-					const deckCard = deckState.deck.find((c) => c.cardId === card.cardId);
-					if (deckCard) {
-						quantity = deckCard.totalQuantity;
-						highlight = 'normal';
-					}
-					// const handCard = deckState.hand.find((c) => c.cardId === card.cardId);
-					// if (handCard) {
-					// 	// quantity += handCard.totalQuantity; // We only show the number of cards left in deck
-					// 	highlight = 'normal';
-					// }
-					let newCard = Object.assign(new VisualDeckCard(), card, {
-						totalQuantity: quantity,
-						highlight: highlight,
-					} as VisualDeckCard);
-					return newCard;
-				});
-		const cardsInDeckNotInDecklist = deckState.deck
-				.filter((card) => !deckState.deckList.find((c) => c.cardId === card.cardId))
-				.map((card) => ({
-					cardId: card.cardId,
-					cardName: card.cardName,
-					manaCost: card.manaCost,
-					rarity: card.rarity,
-					totalQuantity: card.totalQuantity,
-					highlight: 'normal',
-				} as VisualDeckCard));
+        // start in the decklist
+        const groupedFromDecklist: Map<string, DeckCard[]> = this.groupBy(deckState.deckList, (card: DeckCard) => card.cardId);
+        const groupedFromDeck: Map<string, DeckCard[]> = this.groupBy(deckState.deck, (card: DeckCard) => card.cardId);
+        const groupedFromNotInBaseDeck: Map<string, DeckCard[]> = this.groupBy(
+            deckState.deck.filter((card) => !deckState.deckList.find((c) => c.cardId === card.cardId)), 
+            (card: DeckCard) => card.cardId);
+
+        const base = [];
+        for (let cardId of Array.from(groupedFromDecklist.keys())) {
+            const cardsInDeck = (groupedFromDeck.get(cardId) || []).length; 
+            for (let i = 0; i < cardsInDeck; i++) {
+                base.push({
+                    cardId: groupedFromDecklist.get(cardId)[i].cardId,
+                    cardName: groupedFromDecklist.get(cardId)[i].cardName,
+                    manaCost: groupedFromDecklist.get(cardId)[i].manaCost,
+                    rarity: groupedFromDecklist.get(cardId)[i].rarity,
+                    highlight: 'normal',
+                } as VisualDeckCard);
+            }
+            if (cardsInDeck === 0) {
+                base.push({
+                    cardId: groupedFromDecklist.get(cardId)[0].cardId,
+                    cardName: groupedFromDecklist.get(cardId)[0].cardName,
+                    manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+                    rarity: groupedFromDecklist.get(cardId)[0].rarity,
+                    highlight: 'dim',
+                } as VisualDeckCard);
+            }
+        }
+        for (let cardId of Array.from(groupedFromNotInBaseDeck.keys())) {
+            const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
+            for (let i = 0; i < cardsInDeck; i++) {
+                base.push({
+                    cardId: groupedFromDeck.get(cardId)[i].cardId,
+                    cardName: groupedFromDeck.get(cardId)[i].cardName,
+                    manaCost: groupedFromDeck.get(cardId)[i].manaCost,
+                    rarity: groupedFromDeck.get(cardId)[i].rarity,
+                    highlight: 'normal',
+                } as VisualDeckCard);
+            }
+        }
 		this.zone = {
 			id: 'single-zone',
 			name: undefined,
-			cards: [...baseWithQuantities, ...cardsInDeckNotInDecklist],
+			cards: base,
 			sortingFunction: (a, b) => a.manaCost - b.manaCost,
 		} as DeckZone;
 	}
+
+    private groupBy(list, keyGetter): Map<string, DeckCard[]> {
+        const map = new Map();
+        list.forEach((item) => {
+            const key = keyGetter(item);
+            const collection = map.get(key);
+            if (!collection) {
+                map.set(key, [item]);
+            } else {
+                collection.push(item);
+            }
+        });
+        return map;
+    }
 }

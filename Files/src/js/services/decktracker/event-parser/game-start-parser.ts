@@ -57,18 +57,22 @@ export class GameStartParser implements EventParser {
 		}
 		return currentDeck.deck.cards
 				// [dbfid, count] pair
-				.map((pair) => this.buildDeckCard(pair))
+                .map((pair) => this.buildDeckCards(pair))
+                .reduce((a, b) => a.concat(b), [])
 				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost);
 	}
 
-	private buildDeckCard(pair): DeckCard {
-		const card = this.allCards.getCardFromDbfId(pair[0]);
-		return Object.assign(new DeckCard(), { 
-			cardId: card.id,
-			cardName: card.name,
-			manaCost: card.cost,
-			rarity: card.rarity ? card.rarity.toLowerCase() : null,
-			totalQuantity: pair[1]
-		} as DeckCard);
+	private buildDeckCards(pair): DeckCard[] {
+        const card = this.allCards.getCardFromDbfId(pair[0]);
+        let result: DeckCard[] = [];
+        for (let i = 0; i < pair[1]; i++) {
+            result.push(Object.assign(new DeckCard(), { 
+                cardId: card.id,
+                cardName: card.name,
+                manaCost: card.cost,
+                rarity: card.rarity ? card.rarity.toLowerCase() : null,
+            } as DeckCard))
+        }
+		return result;
 	}    
 }

@@ -45,6 +45,7 @@ export class GameStateService {
 		this.registerGameEvents();
 		this.eventParsers = this.buildEventParsers();
 		window['deckEventBus'] = this.deckEventBus;
+		window['deckDebug'] = this;
 		this.loadDecktrackerWindow();
 	}
 

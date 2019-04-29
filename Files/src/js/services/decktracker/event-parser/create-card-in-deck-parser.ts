@@ -26,10 +26,11 @@ export class CreateCardInDeckParser implements EventParser {
 			return currentState;
 		}
 		const cardId: string = gameEvent.data[0];
+        const entityId: number = gameEvent.data[5];
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = Object.assign(new DeckCard(), {
-			cardId: cardId,
-			totalQuantity: 1,
+            cardId: cardId,
+            entityId: entityId,
 			cardName: this.buildCardName(cardData, gameEvent.data[4]),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
@@ -39,8 +40,8 @@ export class CreateCardInDeckParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
 			deck: newDeck
 		});
-		if (!card.cardId) {
-			console.log('Adding unidentified card in deck', card, gameEvent);
+		if (!card.cardId && !card.entityId) {
+			console.warn('Adding unidentified card in deck', card, gameEvent);
 		}
 		return Object.assign(new GameState(), currentState, 
 			{ 

@@ -134,7 +134,12 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
 		this.cdr.detach();
-		this.handleDisplayPreferences();
+        this.handleDisplayPreferences();
+        if (process.env.NODE_ENV !== 'production') {
+            console.error("Should not allow debug game state from production");
+            this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
+            console.log('game state', this.gameState);
+        }
 		this.cdr.detectChanges();
 		console.log('handled after view init');
 	}

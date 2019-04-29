@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { Events } from '../../../services/events.service';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
@@ -56,7 +55,7 @@ export class DeckCardComponent {
 		// console.log('setting active tooltip', this.cardId, this._activeTooltip);
 	}
 
-	@Input('card') set card(card: DeckCard) {
+	@Input('card') set card(card: VisualDeckCard) {
 		this.cardId = card.cardId;
 		this.cardImage = `url(http://static.zerotoheroes.com/hearthstone/cardart/tiles/${card.cardId}.jpg)`;
 		this.manaCost = card.manaCost;

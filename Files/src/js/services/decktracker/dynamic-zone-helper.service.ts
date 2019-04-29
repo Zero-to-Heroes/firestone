@@ -29,7 +29,7 @@ export class DynamicZoneHelperService {
             const cardsNotInOtherZone = dynamicZones.map((zone) => zone.cards).reduce((a, b) => a.concat(b), []);
             let newOtherZoneCards = [...deckState.otherZone];
             for (let card of cardsNotInOtherZone) {
-                newOtherZoneCards = [...DeckManipulationHelper.removeSingleCardFromZone(newOtherZoneCards, card.cardId)];
+                newOtherZoneCards = [...DeckManipulationHelper.removeSingleCardFromZone(newOtherZoneCards, card.cardId, card.entityId)];
             }
             dynamicZones.push(Object.assign(new DynamicZone(), {
                 id: 'other-zone',

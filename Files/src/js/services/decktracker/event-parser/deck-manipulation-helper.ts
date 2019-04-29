@@ -2,66 +2,58 @@ import { DeckCard } from "../../../models/decktracker/deck-card";
 
 export class DeckManipulationHelper {
 
-    public static removeSingleCardFromZone(zone: ReadonlyArray<DeckCard>, cardId: string): ReadonlyArray<DeckCard> {
-        return zone
-                .map((card: DeckCard) => card.cardId === cardId 
-                        ? DeckManipulationHelper.removeSingleCard(card) 
-                        : card)
-                .filter((card) => card);
+    public static removeSingleCardFromZone(zone: ReadonlyArray<DeckCard>, cardId: string, entityId: number): ReadonlyArray<DeckCard> {
+        // We have the entityId, so we just remove it
+        if (zone.some((card) => card.entityId === entityId)) {
+            return zone
+                    .map((card: DeckCard) => card.entityId === entityId ? null : card)
+                    .filter((card) => card);
+        }
+        console.warn('removing a card from zone without using the entityId', cardId, entityId, zone)
+        let hasRemovedOnce = false;
+        const result = [];
+        for (let card of zone) {
+            if (card.cardId === cardId && !hasRemovedOnce) {
+                hasRemovedOnce = true;
+                continue;
+            }
+            result.push(card);
+        }
+        return result;
     }
 
 	public static addSingleCardToZone(zone: ReadonlyArray<DeckCard>, cardTemplate: DeckCard): ReadonlyArray<DeckCard> {
-        // console.log('adding single card to zone', zone, cardTemplate);
-        // console.log('got it with filter', zone.filter((card) => card.cardId === cardTemplate.cardId));
-        // console.log('got it with find', zone.find((card) => card.cardId === cardTemplate.cardId));
-        let inZone = zone.find((card) => card.cardId === cardTemplate.cardId);
-        // console.log('is in zone?', inZone);
-        // If we don't know what card it is, we don't want to group them together
-        if (!inZone || cardTemplate.cardId === null) {
-            const result = [
-                ...zone, 
-                Object.assign(new DeckCard(), {
+        const newCard = Object.assign(new DeckCard(), {
                     cardId: cardTemplate.cardId,
+                    entityId: cardTemplate.entityId,
                     cardName: cardTemplate.cardName,
                     manaCost: cardTemplate.manaCost,
                     rarity: cardTemplate.rarity,
-                    totalQuantity: 1,
                     zone: cardTemplate.zone,
-                } as DeckCard)
-            ];
-            // console.log('returning', result);
-            return result;
-        }
-        else {
-            // console.log('in zone', zone);
-            return zone.map((card) => card.cardId === cardTemplate.cardId 
-                    ? DeckManipulationHelper.addSingleCard(card) 
-                    : card);
-        }
+                } as DeckCard);
+        return [...zone, newCard];
 	}
 	
-	public static findCardInZone(zone: ReadonlyArray<DeckCard>, cardId: string): DeckCard {
-		let found = zone.find((card) => card.cardId === cardId);
+	public static findCardInZone(zone: ReadonlyArray<DeckCard>, cardId: string, entityId: number): DeckCard {
+        let found;
+        if (!entityId) {
+            console.error('trying to get a card without providing an entityId', cardId, zone);
+            found = zone.find((card) => card.cardId === cardId);
+        }
+        else {
+            found = zone.find((card) => card.entityId === entityId);
+            if (!found) {
+                found = zone.find((card) => card.cardId === cardId);
+                found = Object.assign(new DeckCard(), found, {
+                    entityId: entityId
+                });
+            }
+        }
 		if (!found) {
 			console.error('Could not find card in zone', cardId, zone);
 			found = zone.find((card) => !card.cardId);
 			console.log('defaulting to getting a card without cardId', found);
-		}
+        }
 		return found;
-	}
-    
-	private static removeSingleCard(card: DeckCard): DeckCard {
-		if (card.totalQuantity == 1) {
-			return null;
-		}
-		return Object.assign(new DeckCard(), card, {
-			totalQuantity: card.totalQuantity - 1,
-		});
-	}
-	
-	private static addSingleCard(card: DeckCard): DeckCard {
-		return Object.assign(new DeckCard(), card, {
-			totalQuantity: card.totalQuantity + 1,
-		});
 	}
 }

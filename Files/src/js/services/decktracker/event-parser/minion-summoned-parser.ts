@@ -25,14 +25,15 @@ export class MinionSummonedParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-		const cardId: string = gameEvent.data[0];
+        const cardId: string = gameEvent.data[0];
+        const entityId: number = gameEvent.data[4];
 		const dbCard = this.cards.getCard(cardId);
 		const card = Object.assign(new DeckCard(), {
-			cardId: cardId,
+            cardId: cardId,
+            entityId: entityId,
 			cardName: dbCard.name,
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity,
-			totalQuantity: 1,
 			zone: 'PLAY',
 		} as DeckCard);
 		const previousOtherZone = currentState.playerDeck.otherZone;

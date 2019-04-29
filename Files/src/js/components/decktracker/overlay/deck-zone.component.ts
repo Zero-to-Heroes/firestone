@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	selector: 'deck-zone',
@@ -36,20 +37,25 @@ export class DeckZoneComponent {
 	className: string;
     zoneName: string;
     cardsInZone: number = 0;
-	cards: ReadonlyArray<DeckCard>;
+	cards: ReadonlyArray<VisualDeckCard>; 
 	open: boolean = true;
 
-	constructor(private cdr: ChangeDetectorRef) {
-
-	}
+	constructor(private cdr: ChangeDetectorRef) { }
 
 	@Input('zone') set zone(zone: DeckZone) {
 		this.className = zone.id;
-		this.zoneName = zone.name;
-		this.cards = zone.sortingFunction
+        this.zoneName = zone.name;
+        // console.log('setting zone', zone);
+		const cardsToDisplay = zone.sortingFunction
 				? [...zone.cards].sort(zone.sortingFunction)
                 : zone.cards;
-        this.cardsInZone = this.cards.map((card) => card.totalQuantity).reduce((a, b) => a + b, 0);
+        this.cardsInZone = cardsToDisplay.length;
+        // console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
+        const grouped: Map<string, DeckCard[]> = this.groupBy(cardsToDisplay, (card: DeckCard) => card.cardId);
+        this.cards = Array.from(grouped.values(), cards => Object.assign(new VisualDeckCard(), cards[0], {
+            totalQuantity: cards.length
+        } as VisualDeckCard));
+        // console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
 	}
 
 	toggleZone() {
@@ -59,5 +65,19 @@ export class DeckZoneComponent {
 
 	trackCard(index, card: DeckCard) {
 		return card.cardId;
-	}
+    }
+
+    private groupBy(list, keyGetter): Map<string, DeckCard[]> {
+        const map = new Map();
+        list.forEach((item) => {
+            const key = keyGetter(item);
+            const collection = map.get(key);
+            if (!collection) {
+                map.set(key, [item]);
+            } else {
+                collection.push(item);
+            }
+        });
+        return map;
+    }
 }
