@@ -182,6 +182,16 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         if (!this.player) {
             setTimeout(() => this.ngAfterViewInit(), 50);
         }
+        // auto pause the video when window is closed / minimized
+		overwolf.windows.onStateChanged.addListener((message) => {
+			if (message.window_name != "CollectionWindow") {
+				return;
+			}
+			if (message.window_state != 'normal') {
+				this.player.pause();
+			}
+		});
+
     }
 
     showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
