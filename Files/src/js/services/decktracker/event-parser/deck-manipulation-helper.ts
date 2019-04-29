@@ -9,7 +9,7 @@ export class DeckManipulationHelper {
                     .map((card: DeckCard) => card.entityId === entityId ? null : card)
                     .filter((card) => card);
         }
-        console.warn('removing a card from zone without using the entityId', cardId, entityId, zone)
+        // console.warn('removing a card from zone without using the entityId', cardId, entityId, zone)
         let hasRemovedOnce = false;
         const result = [];
         for (let card of zone) {
