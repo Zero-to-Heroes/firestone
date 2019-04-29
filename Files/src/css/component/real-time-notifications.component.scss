@@ -15,9 +15,14 @@
 	}
 
 	span {
+        display: flex;
+        align-items: center;
+
 		a, a:active {
 			text-decoration: none;
-			color: #D9C3AB ;
+            color: #D9C3AB ;
+            width: auto;
+            margin-left: 5px;
 		}
 
 		a:hover {
