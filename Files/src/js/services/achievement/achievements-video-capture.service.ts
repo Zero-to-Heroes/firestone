@@ -153,7 +153,7 @@ export class AchievementsVideoCaptureService {
         // }
 		// const requestedTime: number = data.data[1];
 		// Record duration is capped to 140s on Twitter, and we're taking some buffer
-		const cappedDuration = Math.max(120000, recordDuration)
+		const cappedDuration = Math.min(120000, recordDuration)
         this.lastRecordingDate = Math.max(
             this.lastRecordingDate,
             Date.now() + cappedDuration);
