@@ -87,8 +87,10 @@ export class DevService {
 
 	private addCustomLogLoaderCommand() {	
 		window['loadLog'] = (logName, deckString) => {
-			this.deckService.currentDeck.deckstring = deckString;
-			this.deckService.decodeDeckString();
+            if (deckString) {
+                this.deckService.currentDeck.deckstring = deckString;
+                this.deckService.decodeDeckString();
+            }
 			overwolf.games.getRunningGameInfo(async (res: any) => {
 				if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 					const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
