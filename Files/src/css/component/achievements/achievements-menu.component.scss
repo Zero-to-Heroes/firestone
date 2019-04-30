@@ -28,7 +28,7 @@
 		margin-top: -4px;
 		margin-bottom: 10px;
 
-		li:not(.unclickable):not(.separator):hover {
+		li:not(.unclickable):not(.separator):not(.unreachable):hover {
 			color: #A276AF;
 		}
 

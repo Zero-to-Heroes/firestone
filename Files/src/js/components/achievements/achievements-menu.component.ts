@@ -26,7 +26,11 @@ declare var overwolf: any;
 					[ngClass]="{'big': !selectedAchievementSet}">
 				<li (click)="goToAchievementsCategoriesView()">Categories</li>
 				<li class="separator">></li>
-				<li (click)="goToAchievementsCategoryView()" *ngIf="selectedCategory">{{selectedCategory.name}}</li>
+                <li *ngIf="selectedCategory"
+                        (click)="goToAchievementsCategoryView()" 
+                        [ngClass]="{'unreachable': selectedCategory.achievementSets.length === 1}">
+                    {{selectedCategory.name}}
+                </li>
 				<li class="separator" *ngIf="selectedAchievementSet">></li>
 				<li class="unclickable" *ngIf="selectedAchievementSet" 
 						(click)="goToAchievementSetView()">
@@ -55,6 +59,9 @@ export class AchievementsMenuComponent implements AfterViewInit {
 	}
 
 	goToAchievementsCategoryView() {
+        if (this.selectedCategory.achievementSets.length === 1) {
+            return;
+        }
 		this.stateUpdater.next(new SelectAchievementCategoryEvent(this.selectedCategory.id));
 	}
 
