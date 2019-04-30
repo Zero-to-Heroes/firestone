@@ -14,6 +14,9 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, E
             <li [ngClass]="{'selected': selectedMenu === 'appearance'}" (click)="selectMenu('appearance')">
                 <span>Look and feel</span>
             </li>
+            <li [ngClass]="{'selected': selectedMenu === 'broadcast'}" (click)="selectMenu('broadcast')">
+                <span>Broadcast</span>
+            </li>
         </ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

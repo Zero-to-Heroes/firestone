@@ -1,8 +1,6 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 
-declare var overwolf: any;
-
 @Component({
 	selector: 'decktracker-deck-name',
 	styleUrls: [

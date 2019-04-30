@@ -126,7 +126,9 @@
 				"http://www.zerotoheroes.com",
 				"https://www.googletagmanager.com",
 				"https://*.zam.com",
-				"https://*.execute-api.us-west-2.amazonaws.com"
+                "https://*.execute-api.us-west-2.amazonaws.com",
+                "https://api.twitch.tv",
+                "https://localhost"
 			]
 		},
 		"extra-objects": {

@@ -1,7 +1,4 @@
 import { Component, ChangeDetectionStrategy, Input, AfterViewInit, ElementRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-
-declare var overwolf: any;
 
 @Component({
 	selector: 'decktracker-title-bar',

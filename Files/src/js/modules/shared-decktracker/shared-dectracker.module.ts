@@ -19,9 +19,6 @@ import { Events } from '../../services/events.service';
 import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
 import { SelectModule } from 'ng-select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
-import { OverwolfService } from '../../services/overwolf.service';
-import { HttpClientModule } from '@angular/common/http';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -29,39 +26,44 @@ init({
 	release: process.env.APP_VERSION
 });
 
-console.log('version is ' + process.env.APP_VERSION);
+console.log('version is', process.env.APP_VERSION);
 
 @NgModule({
 	imports: [
 		BrowserModule,
-        HttpModule,
+		HttpModule,
         BrowserAnimationsModule,
 		SharedModule,
         SelectModule,
 		FormsModule,
 		ReactiveFormsModule,
-        SharedDeckTrackerModule,
 	],
 	declarations: [
-		// DeckTrackerOverlayComponent,
-		// DeckTrackerDeckListComponent,
-		// DeckListByZoneComponent,
-		// GroupedDeckListComponent,
-		// DeckCardComponent,
-		// DeckZoneComponent,
-		// DeckTrackerDeckNameComponent,
-		// DeckTrackerTitleBarComponent,
-	],
-	bootstrap: [
 		DeckTrackerOverlayComponent,
+		DeckTrackerDeckListComponent,
+		DeckListByZoneComponent,
+		GroupedDeckListComponent,
+		DeckCardComponent,
+		DeckZoneComponent,
+		DeckTrackerDeckNameComponent,
+		DeckTrackerTitleBarComponent,
 	],
-	providers: [
-		DebugService,
-		Events,
-		GenericIndexedDbService,
-        PreferencesService,
-        OverwolfService,
+	exports: [
+		DeckTrackerOverlayComponent,
+		DeckTrackerDeckListComponent,
+		DeckListByZoneComponent,
+		GroupedDeckListComponent,
+		DeckCardComponent,
+		DeckZoneComponent,
+		DeckTrackerDeckNameComponent,
+		DeckTrackerTitleBarComponent,
 	],
+	// providers: [
+	// 	DebugService,
+	// 	Events,
+	// 	GenericIndexedDbService,
+	// 	PreferencesService,
+	// ],
 })
 
-export class DeckTrackerModule { }
+export class SharedDeckTrackerModule { }

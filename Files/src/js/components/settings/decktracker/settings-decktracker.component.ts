@@ -15,6 +15,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 			<ng-container [ngSwitch]="selectedMenu">
 				<settings-decktracker-launch *ngSwitchCase="'launch'"></settings-decktracker-launch>
 				<settings-decktracker-appearance *ngSwitchCase="'appearance'"></settings-decktracker-appearance>
+				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 			</ng-container>
 		</ul>
 	`,

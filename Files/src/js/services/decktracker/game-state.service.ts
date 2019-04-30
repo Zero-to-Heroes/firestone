@@ -25,6 +25,8 @@ import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
+import { PreferencesService } from '../preferences.service';
+import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 
 declare var overwolf: any;
 
@@ -36,15 +38,19 @@ export class GameStateService {
 	// We need to get through a queue to avoid race conditions when two events are close together, 
 	// so that we're sure teh state is update sequentially
 	private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
-	private deckEventBus = new EventEmitter<any>();
+    private deckEventBus = new EventEmitter<any>();
+    private eventEmitters = [];
 
 	constructor(
             private gameEvents: GameEvents, 
             private dynamicZoneHelper: DynamicZoneHelperService,
-			private allCards: AllCardsService,
+            private allCards: AllCardsService,
+            private prefs: PreferencesService,
+            private twitch: TwitchAuthService,
 			private deckParser: DeckParserService) {
 		this.registerGameEvents();
-		this.eventParsers = this.buildEventParsers();
+        this.eventParsers = this.buildEventParsers();
+        this.buildEventEmitters();
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckDebug'] = this;
 		this.loadDecktrackerWindow();
@@ -63,7 +69,18 @@ export class GameStateService {
 				this.processEvent(gameEvent);
 			}
 		}, 100);
-	}
+    }
+    
+    private async buildEventEmitters() {
+        const result = [(event) => this.deckEventBus.next(event)];
+        const prefs = await this.prefs.getPreferences();
+        if (prefs.twitchAccessToken) {
+            result.push((event) => this.twitch.emitDeckEvent(event));
+        }
+        this.eventEmitters = result;
+        console.log('emitting twitch event');
+        this.twitch.emitDeckEvent({ hop: "fakeEven" });
+    }
 
 	private processEvent(gameEvent: GameEvent) {
         if (!this.state) {
@@ -86,8 +103,8 @@ export class GameStateService {
 						name: parser.event()
 					},
 					state: this.state, 
-				};
-				this.deckEventBus.next(emittedEvent);
+                };
+                this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
 				console.log('emitted deck event', emittedEvent.event.name);
 			}
 		}

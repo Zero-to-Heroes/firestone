@@ -31,6 +31,9 @@ import { SettingsDecktrackerAppearanceComponent } from '../../components/setting
 import { SettingsCollectionComponent } from '../../components/settings/collection/settings-collection.component';
 import { SettingsCollectionMenuComponent } from '../../components/settings/collection/settings-collection-menu.component';
 import { SettingsCollectionNotificationComponent } from '../../components/settings/collection/settings-collection-notification';
+import { SettingsBroadcastComponent } from '../../components/settings/decktracker/settings-broadcast';
+import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
+import { HttpClientModule } from '@angular/common/http';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -43,7 +46,8 @@ console.log('version is ' + process.env.APP_VERSION);
 @NgModule({
 	imports: [
 		BrowserModule,
-		HttpModule,
+        HttpModule,
+        HttpClientModule,
         BrowserAnimationsModule,
 		FormsModule,
 		ReactiveFormsModule,
@@ -74,6 +78,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsDecktrackerMenuComponent,
         SettingsDecktrackerLaunchComponent,
         SettingsDecktrackerAppearanceComponent,
+        SettingsBroadcastComponent,
 	],
 	bootstrap: [
 		SettingsComponent,
@@ -83,7 +88,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		Events,
 		GenericIndexedDbService,
 		OverwolfService,
-		PreferencesService,
+        PreferencesService,
+        TwitchAuthService,
 	],
 })
 

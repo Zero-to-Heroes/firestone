@@ -17,4 +17,6 @@ export class Preferences {
 	readonly overlayDisplayMode: string;
     readonly launchAppOnGameStart: boolean = true;
     readonly binder: BinderPrefs = new BinderPrefs();
+
+    readonly twitchAccessToken: string;
 }

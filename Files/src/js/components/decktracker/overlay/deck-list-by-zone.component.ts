@@ -4,8 +4,6 @@ import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 
-declare var overwolf: any;
-
 @Component({
 	selector: 'deck-list-by-zone',
 	styleUrls: [

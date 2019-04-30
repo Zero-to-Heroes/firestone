@@ -1,0 +1,387 @@
+{
+    "playerDeck": {
+        "deckList": [
+            {
+                "cardId": "CS2_072",
+                "cardName": "Backstab",
+                "manaCost": 0,
+                "rarity": "free"
+            },
+            {
+                "cardId": "CS2_072",
+                "cardName": "Backstab",
+                "manaCost": 0,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_144",
+                "cardName": "Shadowstep",
+                "manaCost": 0,
+                "rarity": "common"
+            },
+            {
+                "cardId": "EX1_144",
+                "cardName": "Shadowstep",
+                "manaCost": 0,
+                "rarity": "common"
+            },
+            {
+                "cardId": "EX1_145",
+                "cardName": "Preparation",
+                "manaCost": 0,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "EX1_145",
+                "cardName": "Preparation",
+                "manaCost": 0,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "DAL_010",
+                "cardName": "Togwaggle's Scheme",
+                "manaCost": 1,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "DAL_010",
+                "cardName": "Togwaggle's Scheme",
+                "manaCost": 1,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "EX1_581",
+                "cardName": "Sap",
+                "manaCost": 2,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_581",
+                "cardName": "Sap",
+                "manaCost": 2,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_278",
+                "cardName": "Shiv",
+                "manaCost": 2,
+                "rarity": "free"
+            },
+            {
+                "cardId": "BOT_283",
+                "cardName": "Pogo-Hopper",
+                "manaCost": 2,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "BOT_283",
+                "cardName": "Pogo-Hopper",
+                "manaCost": 2,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "BOT_288",
+                "cardName": "Lab Recruiter",
+                "manaCost": 2,
+                "rarity": "common"
+            },
+            {
+                "cardId": "EX1_129",
+                "cardName": "Fan of Knives",
+                "manaCost": 3,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_129",
+                "cardName": "Fan of Knives",
+                "manaCost": 3,
+                "rarity": "free"
+            },
+            {
+                "cardId": "BOT_559",
+                "cardName": "Augmented Elekk",
+                "manaCost": 3,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "TRL_124",
+                "cardName": "Raiding Party",
+                "manaCost": 3,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "TRL_124",
+                "cardName": "Raiding Party",
+                "manaCost": 3,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "NEW1_022",
+                "cardName": "Dread Corsair",
+                "manaCost": 4,
+                "rarity": "common"
+            },
+            {
+                "cardId": "NEW1_022",
+                "cardName": "Dread Corsair",
+                "manaCost": 4,
+                "rarity": "common"
+            },
+            {
+                "cardId": "DAL_720",
+                "cardName": "Waggle Pick",
+                "manaCost": 4,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "DAL_720",
+                "cardName": "Waggle Pick",
+                "manaCost": 4,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "NEW1_024",
+                "cardName": "Captain Greenskin",
+                "manaCost": 5,
+                "rarity": "legendary"
+            },
+            {
+                "cardId": "BOT_242",
+                "cardName": "Myra's Unstable Element",
+                "manaCost": 5,
+                "rarity": "legendary"
+            },
+            {
+                "cardId": "BOT_548",
+                "cardName": "Zilliax",
+                "manaCost": 5,
+                "rarity": "legendary"
+            },
+            {
+                "cardId": "NEW1_004",
+                "cardName": "Vanish",
+                "manaCost": 6,
+                "rarity": "free"
+            },
+            {
+                "cardId": "NEW1_004",
+                "cardName": "Vanish",
+                "manaCost": 6,
+                "rarity": "free"
+            },
+            {
+                "cardId": "CS2_077",
+                "cardName": "Sprint",
+                "manaCost": 7,
+                "rarity": "free"
+            },
+            {
+                "cardId": "DAL_719",
+                "cardName": "Tak Nozwhisker",
+                "manaCost": 7,
+                "rarity": "legendary"
+            }
+        ],
+        "hand": [
+            {
+                "cardId": "EX1_144",
+                "entityId": 25,
+                "cardName": "Shadowstep",
+                "manaCost": 0,
+                "rarity": "common"
+            },
+            {
+                "cardId": "EX1_145",
+                "entityId": 19,
+                "cardName": "Preparation",
+                "manaCost": 0,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "NEW1_024",
+                "entityId": 24,
+                "cardName": "Captain Greenskin",
+                "manaCost": 5,
+                "rarity": "legendary"
+            }
+        ],
+        "deck": [
+            {
+                "cardId": "CS2_072",
+                "cardName": "Backstab",
+                "manaCost": 0,
+                "rarity": "free"
+            },
+            {
+                "cardId": "CS2_072",
+                "cardName": "Backstab",
+                "manaCost": 0,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_144",
+                "cardName": "Shadowstep",
+                "manaCost": 0,
+                "rarity": "common"
+            },
+            {
+                "cardId": "EX1_145",
+                "cardName": "Preparation",
+                "manaCost": 0,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "DAL_010",
+                "cardName": "Togwaggle's Scheme",
+                "manaCost": 1,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "DAL_010",
+                "cardName": "Togwaggle's Scheme",
+                "manaCost": 1,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "EX1_581",
+                "cardName": "Sap",
+                "manaCost": 2,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_581",
+                "cardName": "Sap",
+                "manaCost": 2,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_278",
+                "cardName": "Shiv",
+                "manaCost": 2,
+                "rarity": "free"
+            },
+            {
+                "cardId": "BOT_283",
+                "cardName": "Pogo-Hopper",
+                "manaCost": 2,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "BOT_283",
+                "cardName": "Pogo-Hopper",
+                "manaCost": 2,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "BOT_288",
+                "cardName": "Lab Recruiter",
+                "manaCost": 2,
+                "rarity": "common"
+            },
+            {
+                "cardId": "EX1_129",
+                "cardName": "Fan of Knives",
+                "manaCost": 3,
+                "rarity": "free"
+            },
+            {
+                "cardId": "EX1_129",
+                "cardName": "Fan of Knives",
+                "manaCost": 3,
+                "rarity": "free"
+            },
+            {
+                "cardId": "BOT_559",
+                "cardName": "Augmented Elekk",
+                "manaCost": 3,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "TRL_124",
+                "cardName": "Raiding Party",
+                "manaCost": 3,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "TRL_124",
+                "cardName": "Raiding Party",
+                "manaCost": 3,
+                "rarity": "rare"
+            },
+            {
+                "cardId": "NEW1_022",
+                "cardName": "Dread Corsair",
+                "manaCost": 4,
+                "rarity": "common"
+            },
+            {
+                "cardId": "NEW1_022",
+                "cardName": "Dread Corsair",
+                "manaCost": 4,
+                "rarity": "common"
+            },
+            {
+                "cardId": "DAL_720",
+                "cardName": "Waggle Pick",
+                "manaCost": 4,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "DAL_720",
+                "cardName": "Waggle Pick",
+                "manaCost": 4,
+                "rarity": "epic"
+            },
+            {
+                "cardId": "BOT_242",
+                "cardName": "Myra's Unstable Element",
+                "manaCost": 5,
+                "rarity": "legendary"
+            },
+            {
+                "cardId": "BOT_548",
+                "cardName": "Zilliax",
+                "manaCost": 5,
+                "rarity": "legendary"
+            },
+            {
+                "cardId": "NEW1_004",
+                "cardName": "Vanish",
+                "manaCost": 6,
+                "rarity": "free"
+            },
+            {
+                "cardId": "NEW1_004",
+                "cardName": "Vanish",
+                "manaCost": 6,
+                "rarity": "free"
+            },
+            {
+                "cardId": "CS2_077",
+                "cardName": "Sprint",
+                "manaCost": 7,
+                "rarity": "free"
+            },
+            {
+                "cardId": "DAL_719",
+                "cardName": "Tak Nozwhisker",
+                "manaCost": 7,
+                "rarity": "legendary"
+            }
+        ],
+        "otherZone": [],
+        "dynamicZones": [],
+        "name": "Can't stop hopping",
+        "hero": {
+            "cardId": "HERO_03a",
+            "name": "Maiev Shadowsong"
+        },
+        "graveyard": []
+    },
+    "mulliganOver": false,
+    "metadata": {
+        "gameType": 1,
+        "formatType": 1,
+        "scenarioId": 259
+    }
+}

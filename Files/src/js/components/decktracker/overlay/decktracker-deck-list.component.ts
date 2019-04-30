@@ -1,7 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, AfterViewInit, ViewRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, AfterViewInit, ViewRef, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { IOption } from 'ng-select';
-import { PreferencesService } from '../../../services/preferences.service';
 import { Events } from '../../../services/events.service';
 
 @Component({
@@ -51,18 +50,16 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	@Input() activeTooltip: string;
 	@Input() displayMode: string;
-	_deckState: DeckState;
+    _deckState: DeckState;
+    
+    @Output() onDisplayModeChanged: EventEmitter<string> = new EventEmitter<string>();
 	
 	displayModeSelectOptions: Array<IOption> = [
 		{label: 'Card location', value: 'DISPLAY_MODE_ZONE'},
 		{label: 'Focus on deck', value: 'DISPLAY_MODE_GROUPED'},
 	]
 
-	constructor(
-            private el: ElementRef, 
-            private cdr: ChangeDetectorRef, 
-            private events: Events,
-            private prefs: PreferencesService) { }
+	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) { }
 
 	async ngAfterViewInit() {
 		let singleEl: HTMLElement = this.el.nativeElement.querySelector('.single');
@@ -85,8 +82,8 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 	}
 
 	selectDisplayMode(option: IOption) {
-		console.log('changing display mode', option);
-        this.prefs.setOverlayDisplayMode(option.value);
+        console.log('changing display mode', option);
+        this.onDisplayModeChanged.next(option.value);
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click
@@ -94,7 +91,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 	onHistoryClick(event: MouseEvent) {
 		// console.log('handling history click', event);
 		let rect = this.el.nativeElement.querySelector('.deck-list').getBoundingClientRect();
-		// console.log('element rect', rect);
+		// console.log('element rect', r ect);
 		let scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();

@@ -18,6 +18,7 @@ import { IndexedDbService } from './collection/indexed-db.service';
 import { IndexedDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
+import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -36,6 +37,7 @@ export class AppBootstrapService {
     
     constructor(
             private store: MainWindowStoreService,
+            private twitchAuth: TwitchAuthService,
             private debugService: DebugService,
             private dev: DevService, 
             private collectionDb: IndexedDbService,
@@ -56,6 +58,7 @@ export class AppBootstrapService {
     }
 
 	public init() {
+        console.log('in init');
         if (!this.loadingWindowShown) {
             console.log('initializing loading window');
             this.loadingWindowShown = true;

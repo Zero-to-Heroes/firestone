@@ -21,14 +21,7 @@ module.exports = function(env, argv) {
     mode: env.production ? 'production' : 'development',
 
     entry: {
-      background: "./src/js/modules/background/main.ts",
-      collection: "./src/js/modules/collection/main.ts",
-      loading: "./src/js/modules/loading/main.ts",
-      notifications: "./src/js/modules/notifications/main.ts",
-      decktracker: "./src/js/modules/decktracker/main.ts",
-      settings: "./src/js/modules/settings/main.ts",
-      welcome: "./src/js/modules/welcome/main.ts",
-      twitchauthcallback: "./src/js/modules/twitch-auth-callback/main.ts",
+      decktracker: "./src/js/modules/decktracker-twitch/main.ts",
       polyfills: "./src/polyfills.ts"
     },
 
@@ -57,7 +50,7 @@ module.exports = function(env, argv) {
     },
 
     output: {
-      path: getRoot("dist/Files"),
+      path: getRoot("dist-twitch"),
       publicPath: "/",
       filename: "[name].js"
     },
@@ -106,14 +99,7 @@ module.exports = function(env, argv) {
       new AngularCompilerPlugin({
         tsConfigPath: "./tsconfig.json",
         entryModules: [
-          "./src/js/modules/background/background.module#AppModule",
-          "./src/js/modules/collection/collection.module#CollectionModule",
-          "./src/js/modules/loading/loading.module#LoadingModule",
-          "./src/js/modules/notifications/notifications.module#NotificationsModule",
-          "./src/js/modules/decktracker/decktracker.module#DeckTrackerModule",
-          "./src/js/modules/settings/settings.module#SettingsModule",
-          "./src/js/modules/welcome/welcome.module#WelcomeModule",
-          "./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule",
+          "./src/js/modules/decktracker-twitch/decktracker-twitch.module#DeckTrackerTwitchModule",
         ],
         sourceMap: true
       }),
@@ -123,29 +109,9 @@ module.exports = function(env, argv) {
       }),
 
       new CopyWebpackPlugin([
-        { from: path.join(process.cwd(), "src/html/background.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/collection.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/loading.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/notifications.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/decktracker.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/settings.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/welcome.html"), to: "html" },
-        { from: path.join(process.cwd(), "src/html/twitch-auth-callback.html"), to: "html" },
-        { from: path.join(process.cwd(), "/../*") },
+        { from: path.join(process.cwd(), "src/html/decktracker-twitch.html"), to: "." },
         { from: path.join(process.cwd(), "src/assets"), to: "assets" },
-        { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
-        { from: path.join(process.cwd(), "plugins"), to: "plugins" },
       ]),
-
-      // Replace the version in the manifest
-      new ReplaceInFileWebpackPlugin([{
-        dir: 'dist',
-        files: ['manifest.json'],
-        rules: [{
-          search: '@app-version@',
-          replace: env.appversion
-        }]
-      }])
     ]
   };
 };

@@ -34,7 +34,11 @@ export class AppComponent {
         const shouldLaunchFullApp = launchAppOnGameStart || !appLaunchedByGameLaunch;
         console.log('should launch app?', shouldLaunchFullApp);
         if (shouldLaunchFullApp) {
-            this.injector.get(AppBootstrapService).init();
+            try {
+                this.injector.get(AppBootstrapService).init();
+            } catch (e) {
+                console.error(e);
+            }
         } else {
             console.log('not starting app, waiting for manual launch');
             overwolf.extensions.onAppLaunchTriggered.addListener((result) => {

@@ -9,6 +9,7 @@ declare var overwolf: any;
 export class PreferencesService {
 
     public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';
+    public static readonly TWITCH_CONNECTION_STATUS = 'TWITCH_CONNECTION_STATUS';
 
     private preferencesEventBus = new EventEmitter<any>();
     
@@ -114,6 +115,12 @@ export class PreferencesService {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, overlayDisplayMode: pref} as Preferences;
         this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+    }
+    
+    public async setTwitchAccessToken(pref: string) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, twitchAccessToken: pref} as Preferences;
+        this.savePreferences(newPrefs), PreferencesService.TWITCH_CONNECTION_STATUS;
     }
     
     private savePreferences(userPrefs: Preferences, eventName: string = null) {

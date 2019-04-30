@@ -8,6 +8,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 import { GameType } from '../../../models/enums/game-type';
 import { Events } from '../../../services/events.service';
 import { ScenarioId } from '../../../models/scenario-id';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 declare var overwolf: any;
 declare var ga: any;
@@ -31,6 +32,7 @@ declare var ga: any;
                     <decktracker-deck-list 
                             [deckState]="gameState.playerDeck"
                             [displayMode]="displayMode"
+                            (onDisplayModeChanged)="onDisplayModeChanged($event)"
                             [activeTooltip]="activeTooltip">
                     </decktracker-deck-list>
                 </div>
@@ -80,7 +82,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	constructor(
 			private prefs: PreferencesService,
 			private cdr: ChangeDetectorRef,
-			private events: Events,
+            private events: Events,
+            private ow: OverwolfService,
 			private debugService: DebugService) {
 		overwolf.windows.getCurrentWindow((result) => {
 			this.windowId = result.window.id;
@@ -147,7 +150,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
         if (process.env.NODE_ENV !== 'production') {
             console.error("Should not allow debug game state from production");
             this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
-            console.log('game state', this.gameState);
+            console.log('game state', this.gameState, JSON.stringify(this.gameState));
         }
 		this.cdr.detectChanges();
 		console.log('handled after view init');
@@ -158,6 +161,10 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		overwolf.windows.dragMove(this.windowId);
 	}
 
+	onDisplayModeChanged(pref: string) {
+		this.prefs.setOverlayDisplayMode(pref);
+    }
+    
 	private async processEvent(event) {
 		switch(event.name) {
 			case DeckEvents.MATCH_METADATA:
