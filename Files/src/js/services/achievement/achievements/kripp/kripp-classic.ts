@@ -19,7 +19,7 @@ export class KrippClassic extends AbstractChallenge {
 	}
 
 	protected resetState() {
-		// Do nothing
+        this.gameStartTime = 0;
 		this.isDeckClassic = false;
 	}
 
@@ -30,6 +30,10 @@ export class KrippClassic extends AbstractChallenge {
 			this.isDeckClassic = this.hasDeckOnlyClassicCards(this.deckParser.currentDeck);
 			console.log('is deck classic?', this.isDeckClassic, this.deckParser.currentDeck);
         }
+		if (gameEvent.type === GameEvent.GAME_START) {
+			this.gameStartTime = Date.now();
+			return;
+		}
 		if (gameEvent.type === GameEvent.WINNER) {
 			this.detectGameResultEvent(gameEvent, callback);
 			return;

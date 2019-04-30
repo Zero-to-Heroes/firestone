@@ -10,7 +10,7 @@ export class KrippPogo extends AbstractChallenge {
 	private readonly cardId: string;
 
     private strongestPogoAttack: number = 0;
-    private gameStartTime: number;
+    private recordStartTime: number;
 
 	constructor(achievement, events: Events) {
 		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
@@ -18,12 +18,13 @@ export class KrippPogo extends AbstractChallenge {
 	}
 
 	protected resetState() {
+        this.recordStartTime = 0;
 		this.strongestPogoAttack = 0;
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-        if (gameEvent.type === GameEvent.GAME_START) {
-            this.gameStartTime = Date.now();
+        if (gameEvent.type === GameEvent.TURN_START && !this.additionalCheckForCompletion()) {
+            this.recordStartTime = Date.now();
         }
 		if (gameEvent.type === GameEvent.MINION_ON_BOARD_ATTACK_UPDATED) {
 			this.detectMinionAttackUpdated(gameEvent, callback);
@@ -36,7 +37,7 @@ export class KrippPogo extends AbstractChallenge {
 	}
 
 	public getRecordPastDurationMillis(): number {
-		return Date.now() - this.gameStartTime;
+		return Date.now() - this.recordStartTime;
 	}
 
 	private detectMinionAttackUpdated(gameEvent: GameEvent, callback: Function) {

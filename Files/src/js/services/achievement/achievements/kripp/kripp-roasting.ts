@@ -17,7 +17,7 @@ export class KrippRodOfRoasting extends AbstractChallenge {
 	}
 
 	protected resetState() {
-		this.currentTurnStartTime = undefined;
+		this.currentTurnStartTime = 0;
 		this.hasPlayedRodOfRoasting = false;
 	}
 

@@ -9,7 +9,7 @@ export class KrippShirvallah extends AbstractChallenge {
 	private readonly cardId: string;
 
 	private tigerPlayed: boolean = false;
-    private gameStartTime: number;
+    private turnStartTime: number;
 
 	constructor(achievement, events: Events) {
 		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
@@ -21,8 +21,8 @@ export class KrippShirvallah extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-        if (gameEvent.type === GameEvent.GAME_START) {
-            this.gameStartTime = Date.now();
+        if (gameEvent.type === GameEvent.TURN_START && !this.tigerPlayed) {
+            this.turnStartTime = Date.now();
         }
 		if (gameEvent.type === GameEvent.CARD_PLAYED) {
 			this.detectCardPlayedEvent(gameEvent, callback);
@@ -35,7 +35,7 @@ export class KrippShirvallah extends AbstractChallenge {
 	}
 
 	public getRecordPastDurationMillis(): number {
-		return Date.now() - this.gameStartTime;
+		return Date.now() - this.turnStartTime;
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {

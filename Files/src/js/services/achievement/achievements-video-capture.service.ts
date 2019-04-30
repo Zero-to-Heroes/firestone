@@ -18,7 +18,7 @@ export class AchievementsVideoCaptureService {
 
     readonly settings = {
         "settings": {
-            "video": { "buffer_length": 40000 },
+            "video": { "buffer_length": 120000 },
             "peripherals": { "capture_mouse_cursor": "both" }
         }
     }

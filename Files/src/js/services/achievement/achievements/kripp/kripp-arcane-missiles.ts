@@ -10,7 +10,7 @@ export class KrippArcaneMissiles extends AbstractChallenge {
 	private readonly cardId: string;
 
     private maximumArcaneMissileDamage: number = 0;
-    private gameStartTime: number;
+    private turnStartTime: number;
 
 	constructor(achievement, events: Events) {
 		super(achievement, [ScenarioId.RUMBLE_RUN], events, [GameEvent.GAME_END]);
@@ -18,12 +18,13 @@ export class KrippArcaneMissiles extends AbstractChallenge {
 	}
 
 	protected resetState() {
+        this.turnStartTime = 0;
 		this.maximumArcaneMissileDamage = 0;
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-        if (gameEvent.type === GameEvent.GAME_START) {
-            this.gameStartTime = Date.now();
+        if (gameEvent.type === GameEvent.TURN_START) {
+            this.turnStartTime = Date.now();
         }
 		if (gameEvent.type === GameEvent.DAMAGE) {
 			this.detectDamage(gameEvent, callback);
@@ -32,7 +33,7 @@ export class KrippArcaneMissiles extends AbstractChallenge {
 	}
 
 	public getRecordPastDurationMillis(): number {
-		return Date.now() - this.gameStartTime;
+		return Date.now() - this.turnStartTime;
 	}
 
 	private detectDamage(gameEvent: GameEvent, callback: Function) {
