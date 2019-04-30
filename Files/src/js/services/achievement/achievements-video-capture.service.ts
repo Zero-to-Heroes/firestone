@@ -10,6 +10,7 @@ import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
+import { TemporaryResolutionOverrideService } from './temporary-resolution-override-service';
 
 declare var overwolf;
 
@@ -33,17 +34,13 @@ export class AchievementsVideoCaptureService {
     private currentRecordEndTimer;
 
 	constructor(
-        private events: Events, 
-        private prefs: PreferencesService,
-        private achievementConf: AchievementConfService, 
-        private store: MainWindowStoreService,
-        private owService: OverwolfService) {
-		// this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => this.handleRecording(gameEvent));
+            private events: Events, 
+            private prefs: PreferencesService,
+            private achievementConf: AchievementConfService, 
+            private store: MainWindowStoreService,
+            private temporaryResolutionOverride: TemporaryResolutionOverrideService,
+            private owService: OverwolfService) {
         this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.onAchievementComplete(data));
-        // this.events.on(Events.ACHIEVEMENT_RECORD_END).subscribe((data) => setTimeout(() => this.onAchievementRecordEnd(data), 500));
-
-        // This is handled already by the regular query
-        // this.turnOnRecording();
         this.listenToRecordingPrefUpdates()
     }
 
