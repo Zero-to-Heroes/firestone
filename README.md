@@ -18,6 +18,8 @@ PS: images come from HearthHead
 * Pity timer for each set
 * In-game collection manager
 * See all the details of any cards (including the sounds it makes in game)
+* Collect achievements in Dungeon Run, Monster Hunt and Rumble Run
+* Integrated deck tracker
 
 # Screenshots
 
@@ -38,6 +40,8 @@ $ npm run build # For release
 ```
 
 ## Commit guidelines
+
+The guidelines below are deprecated, I'm trying out some new stuff as I found out using the Angular guidelines didn't really build a commit history I was happy with.
 
 Commits should be like `type(component): commit message`. Still figuring out exactly how to break up the types.
 
