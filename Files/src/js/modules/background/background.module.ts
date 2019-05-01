@@ -51,6 +51,7 @@ import { MainWindowStoreService } from '../../services/mainwindow/store/main-win
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { DynamicZoneHelperService } from '../../services/decktracker/dynamic-zone-helper.service';
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
+import { AppBootstrapService } from '../../services/app-bootstrap.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -82,6 +83,7 @@ export class SentryErrorHandler implements ErrorHandler {
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
 
+        AppBootstrapService,
 		MainWindowStoreService,
 		CollaboratorsService,
 
