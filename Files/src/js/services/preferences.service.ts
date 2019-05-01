@@ -21,6 +21,12 @@ export class PreferencesService {
         return this.indexedDb.getUserPreferences();
     }
     
+    public async setLaunchAppOnGameStart(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, launchAppOnGameStart: pref} as Preferences;
+        this.savePreferences(newPrefs);
+    }
+    
     public async setDontConfirmVideoDeletion(dontAsk: boolean) {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk} as Preferences;

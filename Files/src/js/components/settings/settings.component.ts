@@ -24,6 +24,7 @@ declare var overwolf: any;
 						(onAppSelected)="onAppSelected($event)">
 				</settings-app-selection>
 				<ng-container [ngSwitch]="selectedApp">
+                    <settings-general *ngSwitchCase="'general'"></settings-general>
 					<settings-achievements *ngSwitchCase="'achievements'"></settings-achievements>
 					<settings-decktracker *ngSwitchCase="'decktracker'"></settings-decktracker>
 				</ng-container>
@@ -57,7 +58,7 @@ declare var overwolf: any;
 export class SettingsComponent implements AfterViewInit {
 
 	thisWindowId: string;
-	selectedApp: string = 'achievements';
+	selectedApp: string = 'general';
 	private settingsEventBus: EventEmitter<string>;
 
 	constructor(private debugService: DebugService, private cdr: ChangeDetectorRef) {

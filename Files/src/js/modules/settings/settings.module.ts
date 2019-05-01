@@ -24,6 +24,9 @@ import { SettingsDecktrackerComponent } from '../../components/settings/decktrac
 import { SettingsDecktrackerMenuComponent } from '../../components/settings/decktracker/settings-decktracker-menu.component';
 import { SettingsDecktrackerLaunchComponent } from '../../components/settings/decktracker/settings-decktracker-launch';
 import { init } from '@sentry/browser';
+import { SettingsGeneralMenuComponent } from '../../components/settings/general/settings-general-menu.component';
+import { SettingsGeneralLaunchComponent } from '../../components/settings/general/settings-general-launch.component';
+import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -44,7 +47,11 @@ console.log('version is', process.env.APP_VERSION);
 	],
 	declarations: [
 		SettingsComponent,
-		SettingsAppSelectionComponent,
+        SettingsAppSelectionComponent,
+        
+        SettingsGeneralComponent,
+        SettingsGeneralMenuComponent,
+        SettingsGeneralLaunchComponent,
 
 		SettingsAchievementsComponent,
 		SettingsAchievementsMenuComponent,

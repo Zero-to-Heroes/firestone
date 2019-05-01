@@ -29,6 +29,7 @@ label {
     border: 1px solid $grey05;
     border-radius: 33.33333%/50%; // 2:3 width height ratio
     transition: .15s;
+    pointer-events: none;
 
     &:before {
       content: "";

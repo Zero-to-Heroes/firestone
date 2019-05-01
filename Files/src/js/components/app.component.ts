@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, Injector } from '@angular/core';
 
 import { AppBootstrapService } from '../services/app-bootstrap.service';
+import { PreferencesService } from '../services/preferences.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -17,12 +18,12 @@ declare var overwolf: any;
 })
 export class AppComponent {
 
-	constructor(private injector: Injector) {
+	constructor(private injector: Injector, private prefs: PreferencesService) {
         this.init();
     }
 
     private async init() {
-        const launchAppOnGameStart: boolean = false;
+        const launchAppOnGameStart: boolean = (await this.prefs.getPreferences()).launchAppOnGameStart;
         // See http://developers.overwolf.com/documentation/sdk/overwolf/extensions/#onapplaunchtriggered
         const appLaunchedByGameLaunch: boolean = this.isLaunchedByGameEvent();
         // If the app was launched and the game was not running, this means that 

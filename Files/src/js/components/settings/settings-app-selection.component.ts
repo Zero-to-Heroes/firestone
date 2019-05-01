@@ -9,6 +9,9 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmi
 	],
 	template: `
         <ul class="menu-selection">
+            <li [ngClass]="{'selected': selectedApp == 'general'}">
+                <span (click)="changeSelection('general')">General</span>
+            </li>
             <li class="disabled">
                 <span>The Binder</span>
             </li>
@@ -24,7 +27,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmi
 })
 export class SettingsAppSelectionComponent {
 
-    @Input() selectedApp: string = 'achievements';
+    @Input() selectedApp: string = 'general';
     @Output() onAppSelected = new EventEmitter<string>();
 
     changeSelection(selection: string) {
