@@ -49,10 +49,14 @@ label {
         color: #A89782;
     }
 
-    &:hover {
+    &:hover:not([disabled]) {
         i {
             --icon-color: #D9C3AB;
         }
+    }
+
+    &[disabled] {
+        opacity: 0.5;
     }
 }
 

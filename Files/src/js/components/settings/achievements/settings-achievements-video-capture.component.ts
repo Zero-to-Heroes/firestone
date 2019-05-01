@@ -48,7 +48,7 @@ declare var overwolf;
                 </label>
 
                 <input type="radio" formControlName="videoQuality" value="high" id="video-quality-high">
-                <label for="video-quality-high">
+                <label for="video-quality-high" disabled>
                     <i class="unselected" *ngIf="settingsForm.value.videoQuality !== 'high'">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#radio_unselected"/>
