@@ -1,12 +1,17 @@
 @import '../../../global/variables';
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
+:host {
+    display: flex;
+    flex-direction: column;
+}
+
 .root {
 	position: relative;
 	display: flex;
 	justify-content: center;
-	align-items: center;
-	height: 100%;
+	align-items: flex-start;
+	// height: 100%;
     filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
 
 	.corner {
@@ -36,17 +41,28 @@
     		transform: rotate(270deg);
     		top: auto;
 		}
-	}
+    }
+    
+    .decktracker-container {
+        position: relative;
+        background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url(/Files/assets/images/backgrounds/decktracker_bg.png);
+        background-size: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+    }
 
 	.decktracker {
     	position: relative;
         background-image: radial-gradient(462.50px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url('/Files/assets/images/backgrounds/decktracker_bg.png');
         background-size: 100%;
-	    width: calc(100% - 20px);
-	    height: calc(100% - 20px);
+	    width: 100%;
+	    // height: calc(100% - 20px);
 	    display: flex;
 	    flex-direction: column;
-        overflow: hidden;
+        // overflow: hidden;
+        max-height: 90vh;
         
         decktracker-title-bar {
             flex-grow: 0;
@@ -84,4 +100,27 @@
 			}
 		}
 	}
+}
+
+.root.clean {
+    & > i {
+        display: none;
+    }  
+
+    .decktracker {
+        background: transparent;
+    }
+
+    decktracker-deck-name, decktracker-title-bar {
+        display: none;
+    }
+
+    ::ng-deep decktracker-deck-list {
+        .select-container {
+            display: none;
+        }
+        .deck-zone .card-list li {
+            margin-bottom: 1px;
+        }
+    }
 }

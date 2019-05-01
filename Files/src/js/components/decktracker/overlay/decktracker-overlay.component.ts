@@ -19,18 +19,20 @@ declare var ga: any;
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 	],
 	template: `
-		<div class="root">
-			<div class="decktracker" *ngIf="gameState">
-				<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
-				<decktracker-deck-name 
-					[hero]="gameState.playerDeck.hero"
-					[deckName]="gameState.playerDeck.name">				
-				</decktracker-deck-name>
-				<decktracker-deck-list 
-						[deckState]="gameState.playerDeck"
-						[activeTooltip]="activeTooltip">
-				</decktracker-deck-list>
-			</div>
+        <div class="root">
+            <div class="decktracker-container">
+                <div class="decktracker" *ngIf="gameState">
+                    <decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
+                    <decktracker-deck-name 
+                        [hero]="gameState.playerDeck.hero"
+                        [deckName]="gameState.playerDeck.name">				
+                    </decktracker-deck-name>
+                    <decktracker-deck-list 
+                            [deckState]="gameState.playerDeck"
+                            [activeTooltip]="activeTooltip">
+                    </decktracker-deck-list>
+                </div>
+            </div>
 
 			<i class="i-54 gold-theme corner top-left">
 				<svg class="svg-icon-fill">
