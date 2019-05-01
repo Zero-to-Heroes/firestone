@@ -4,13 +4,19 @@
 
 Firestone is an app you run on Overwolf alongside Hearthstone (like HearthArena).
 
-It monitors the packs you open and tells you if the cards you receive are new cards or are just dust because you already have the maximum number of copies of the card. It also gives you an overview of how far along to completing each set you are, as well as details on cards (you can play the sounds they make in-game directly from the collection window);
+It monitors the packs you open and tells you if the cards you receive are new cards or are just dust because you already have the maximum number of copies of the card. It also gives you an overview of how far along to completing each set you are, as well as details on cards (you can play the sounds they make in-game directly from the collection window).
 
-The long-term goal is to provide other features needed by players who want to manage their collection (such as stats, missing cards, etc.), as well as an achievements system and deck tracker.
+It also adds in-game achievements to Hearthstone. It does a few things today:  
+* Track the main achievements for the three rogue-like solo modes (Dungeon Run, Monster Hunt and Rumble Run). The achievements tracked today are:
+    * Progress (how far you've gone with each class, or with which Shrine in case of RR)
+    * Passive abilities played
+    * Treasures played (DR and MH) / teammates recruited (RR)
+    * Bosses faced and defeated (DR and MR) and shrines played (RR)
+* When you complete an achievement, a short video replay is automatically saved on your hard drive (this can be disabled if you're worried about performances).
+
+And it includes a Deck Tracker (still in an early phase).
 
 Please don't hesitate to request new features or report issues using the issues link above.
-
-PS: images come from HearthHead
 
 # Features
 
@@ -19,7 +25,9 @@ PS: images come from HearthHead
 * In-game collection manager
 * See all the details of any cards (including the sounds it makes in game)
 * Collect achievements in Dungeon Run, Monster Hunt and Rumble Run
+* Record a short video clip whenever you unlock an achievement for the first time
 * Integrated deck tracker
+* App is accessible both from in-game and from desktop
 
 # Screenshots
 
