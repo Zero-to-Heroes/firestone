@@ -17,58 +17,12 @@
             display: flex;
 
             .info {
-                margin-left: 5px;
-                position: relative;
-                width: 15px;
-                height: 15px;
-
-                &:hover {
-                    .zth-tooltip {
-                        opacity: 1;
-                    }
-                }
-        
                 .zth-tooltip {
-                    background-color: #A89782;
-                    padding: 15px;
-                    opacity: 0;
                     position: fixed; // Because of the overflow:hidden
                     max-width: 200px;
-                    pointer-events: none;
-                    z-index: 100;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
-                
-                    .tooltip-arrow {
-                        position: absolute;
-                        width: 16px;
-                        height: 9px;
-                        fill: #A89782;
-                        overflow: visible;
-                    }
-                
-                    p {
-                        cursor: default;
-                        color: #2F0D0D;
-                        margin: 0;
-                        font-family: Open Sans;
-                        font-style: normal;
-                        font-weight: normal;
-                        line-height: normal;
-                        font-size: 13px;
-                    }
-                
                     &.right {
                         right: 24px;
                         top: 78px;
-                
-                        .tooltip-arrow {
-                            left: -3px;
-                            top: calc(50% - 5px);
-                            transform: rotate(-90deg);
-                        }
                     }
                 }
             }

@@ -48,4 +48,24 @@
         margin-top: -15px;
         width: 100%;
     }
+
+    label.video-quality-high {
+        .info {
+            .zth-tooltip {
+                position: absolute;
+                max-width: 200px;
+
+                p {
+                    width: 200px;
+                }
+
+                &.right {
+                    top: 50%;
+                    transform: translateY(-50%);
+                    left: 35px;
+                    right: auto;
+                }
+            }
+        }
+    }
 }

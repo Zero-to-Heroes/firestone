@@ -8,8 +8,8 @@ declare var ga;
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
 		`../../../../css/global/scrollbar-settings.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-capture.component.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/achievements/settings-achievements-capture.component.scss`
 	],
 	template: `
 		<div class="achievements-capture" [ngClass]="{'disabled': !captureVideo}">

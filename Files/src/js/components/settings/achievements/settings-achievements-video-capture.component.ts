@@ -10,8 +10,8 @@ declare var overwolf;
 	selector: 'settings-achievements-video-capture',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/achievements/settings-achievements-video-capture.component.scss`,
 		`../../../../css/component/settings/settings-common.component.scss`,
-		`../../../../css/component/settings/achievements/settings-achievements-video-capture.component.scss`
 	],
 	template: `
         <div class="video-capture">
@@ -47,8 +47,8 @@ declare var overwolf;
                     <p>Medium (720p 30fps)</p>
                 </label>
 
-                <input type="radio" formControlName="videoQuality" value="high" id="video-quality-high">
-                <label for="video-quality-high" disabled>
+                <input type="radio" formControlName="videoQuality" value="high" id="video-quality-high" disabled>
+                <label for="video-quality-high" class="video-quality-high" disabled>
                     <i class="unselected" *ngIf="settingsForm.value.videoQuality !== 'high'">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#radio_unselected"/>
@@ -60,6 +60,17 @@ declare var overwolf;
                         </svg>
                     </i>
                     <p>High (1080p 60fps)</p>
+					<i class="info">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#info"/>
+						</svg>
+						<div class="zth-tooltip right">
+							<p>1080p recording is temporarily disabled for Achiemvents, and will come back soon</p>
+							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0"/>
+							</svg>
+						</div>
+					</i>
                 </label>
 
                 <input type="radio" formControlName="videoQuality" value="custom" id="video-quality-custom">
