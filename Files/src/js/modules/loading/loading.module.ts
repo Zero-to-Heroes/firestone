@@ -10,6 +10,7 @@ import { LoadingComponent } from '../../components/loading/loading.component';
 import { DebugService } from '../../services/debug.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { init } from '@sentry/browser';
+import { AdService } from '../../services/ad.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -35,6 +36,7 @@ console.log('version is', process.env.APP_VERSION);
 	providers: [
 		DebugService,
 		FeatureFlags,
+        AdService,
 	],
 })
 

@@ -83,6 +83,7 @@ import { AchievementSharingModal } from '../../components/achievements/achieveme
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
+import { AdService } from '../../services/ad.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -162,6 +163,7 @@ console.log('version is', process.env.APP_VERSION);
 	],
 	entryComponents: [FtueElement],
 	providers: [
+        AdService,
 		AllCardsService,
 		CardHistoryStorageService,
 		CollectionManager,

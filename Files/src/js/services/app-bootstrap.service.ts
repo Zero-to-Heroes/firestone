@@ -146,7 +146,7 @@ export class AppBootstrapService {
 	}
 
 	private showLoadingScreen() {
-		// console.log('showing loading screen?', this.currentState, this.loadingWindowId);
+		console.log('showing loading screen?', this.currentState, this.loadingWindowId);
 		if (this.currentState == 'READY') {
 			return;
 		}

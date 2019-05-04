@@ -5,6 +5,7 @@ import { CollectionComponent } from './collection/collection.component';
 import { AchievementsComponent } from './achievements/achievements.component';
 import { MainWindowState as MainWindowState } from '../models/mainwindow/main-window-state';
 import { BehaviorSubject } from 'rxjs';
+import { AdService } from '../services/ad.service';
 
 declare var overwolf: any;
 declare var adsReady: any;
@@ -115,7 +116,8 @@ export class MainWindowComponent implements AfterViewInit {
 	private adInit = false;
 
 	constructor(
-			private cdr: ChangeDetectorRef,
+            private cdr: ChangeDetectorRef,
+            private adService: AdService,
 			private debug: DebugService) {
 		this.cdr.detach();
 		overwolf.windows.getCurrentWindow((result) => {
@@ -200,38 +202,51 @@ export class MainWindowComponent implements AfterViewInit {
 		});
 	};
 
-	private refreshAds() {
+	private async refreshAds() {
+        const shouldDisplayAds = await this.adService.shouldDisplayAds();
+        if (!shouldDisplayAds) {
+            console.log('ad-free app, not showing ads and returning');
+            return;
+        }
+        console.log('shouldDisplayAds', shouldDisplayAds);
 		if (this.adInit) {
-		 	console.log('already initializing ads, returning');
-		 	return;
+			console.log('already initializing ads, returning');
+			return;
 		}
 		if (!adsReady) {
-		 	console.log('ads container not ready, returning');
-		 	setTimeout(() => {
-			 	this.refreshAds()
-		 	}, 50);
-		 	return;
+			console.log('ads container not ready, returning');
+			setTimeout(() => {
+				this.refreshAds()
+			}, 50);
+			return;
 		}
 		if (!this.adRef) {
-		 	console.log('first time init ads, creating OwAd');
-		 	this.adInit = true;
-		 	overwolf.windows.getCurrentWindow((result) => {
+			console.log('first time init ads, creating OwAd');
+			this.adInit = true;
+			overwolf.windows.getCurrentWindow((result) => {
 				if (result.status === "success") {
 					console.log('is window visible?', result);
 					if (result.window.isVisible) {
 						console.log('init OwAd');
-						this.adRef = new OwAd(document.getElementById('ad-div'));
+						this.adRef = new OwAd(document.getElementById("ad-div"));
 						this.adRef.addEventListener('impression', (data) => {
-							ga('send', 'event', 'ad', 'main-window');
+							ga('send', 'event', 'ad', 'loading-window');
 						})
+						if (!(<ViewRef>this.cdr).destroyed) {
+							this.cdr.detectChanges();
+						}
 					}
-					this.adInit = false;
+                    this.adInit = false;
+                    this.refreshAds();
 				}
 			});
-		 	return;
-		}
+			return;
+        }
 		console.log('refreshing ads');
 		this.adRef.refreshAd();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
  
 	private removeAds() {

@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterVi
 
 import { DebugService } from '../../services/debug.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
+import { AdService } from '../../services/ad.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -117,6 +118,7 @@ export class LoadingComponent implements AfterViewInit {
 			private debugService: DebugService, 
 			private ngZone: NgZone, 
 			private elRef: ElementRef, 
+            private adService: AdService,
 			private cdr: ChangeDetectorRef) {
 		console.log('in loading constructor');
 		overwolf.windows.getCurrentWindow((result) => {
@@ -181,7 +183,13 @@ export class LoadingComponent implements AfterViewInit {
 		overwolf.windows.minimize(this.thisWindowId);
 	};
 
-	private refreshAds() {
+	private async refreshAds() {
+        const shouldDisplayAds = await this.adService.shouldDisplayAds();
+        if (!shouldDisplayAds) {
+            console.log('ad-free app, not showing ads and returning');
+            return;
+        }
+        console.log('shouldDisplayAds', shouldDisplayAds);
 		if (this.adInit) {
 			console.log('already initializing ads, returning');
 			return;
@@ -209,11 +217,12 @@ export class LoadingComponent implements AfterViewInit {
 							this.cdr.detectChanges();
 						}
 					}
-					this.adInit = false;
+                    this.adInit = false;
+                    this.refreshAds();
 				}
 			});
 			return;
-		}
+        }
 		console.log('refreshing ads');
 		this.adRef.refreshAd();
 		if (!(<ViewRef>this.cdr).destroyed) {
