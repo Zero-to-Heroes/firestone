@@ -33,13 +33,15 @@ export class GroupedDeckListComponent {
 
         const base = [];
         for (let cardId of Array.from(groupedFromDecklist.keys())) {
-            const cardsInDeck = (groupedFromDeck.get(cardId) || []).length; 
+            const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
             for (let i = 0; i < cardsInDeck; i++) {
+                // console.log('adding card', cardId, groupedFromDecklist.get(cardId), groupedFromDecklist, deckState);
+                // console.log(groupedFromDecklist.get(cardId)[0]);
                 base.push({
-                    cardId: groupedFromDecklist.get(cardId)[i].cardId,
-                    cardName: groupedFromDecklist.get(cardId)[i].cardName,
-                    manaCost: groupedFromDecklist.get(cardId)[i].manaCost,
-                    rarity: groupedFromDecklist.get(cardId)[i].rarity,
+                    cardId: groupedFromDecklist.get(cardId)[0].cardId,
+                    cardName: groupedFromDecklist.get(cardId)[0].cardName,
+                    manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
+                    rarity: groupedFromDecklist.get(cardId)[0].rarity,
                     highlight: 'normal',
                 } as VisualDeckCard);
             }
