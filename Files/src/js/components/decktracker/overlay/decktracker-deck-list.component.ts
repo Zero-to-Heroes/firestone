@@ -49,20 +49,15 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	@Input() activeTooltip: string;
+	@Input() displayMode: string;
 	_deckState: DeckState;
-	displayMode: string;
 	
 	displayModeSelectOptions: Array<IOption> = [
 		{label: 'Card location', value: 'DISPLAY_MODE_ZONE'},
 		{label: 'Focus on deck', value: 'DISPLAY_MODE_GROUPED'},
 	]
 
-	constructor(
-			private el: ElementRef, 
-			private cdr: ChangeDetectorRef,
-			private prefs: PreferencesService) { 
-		this.loadDefaultValues();
-	}
+	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private prefs: PreferencesService) { }
 
 	async ngAfterViewInit() {
 		let singleEl: HTMLElement = this.el.nativeElement.querySelector('.single');
@@ -105,16 +100,5 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private async loadDefaultValues() {
-		this.displayMode = (await this.prefs.getPreferences()).overlayDisplayMode || 'DISPLAY_MODE_ZONE';
-		console.log('loaded default display mode', this.displayMode);
-		setTimeout(() => {
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-				console.log('detech changes')
-			}
-		});
 	}
 }

@@ -17,9 +17,10 @@ declare var ga: any;
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
 	],
 	template: `
-        <div class="root">
+        <div class="root" [ngClass]="{'clean': useCleanMode}">
             <div class="decktracker-container">
                 <div class="decktracker" *ngIf="gameState">
                     <decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
@@ -29,6 +30,7 @@ declare var ga: any;
                     </decktracker-deck-name>
                     <decktracker-deck-list 
                             [deckState]="gameState.playerDeck"
+                            [displayMode]="displayMode"
                             [activeTooltip]="activeTooltip">
                     </decktracker-deck-list>
                 </div>
@@ -67,7 +69,10 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	gameState: GameState;
 	windowId: string;
-	activeTooltip: string;
+    activeTooltip: string;
+    overlayDisplayed: boolean;
+    displayMode: string;
+    useCleanMode: boolean;
 
 	// private showTooltipTimer;
 	// private hideTooltipTimer;
@@ -165,16 +170,23 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
-		console.log('retrieving preferences');
+        console.log('retrieving preferences');
+        preferences = preferences || await this.prefs.getPreferences();
+        this.useCleanMode = preferences.decktrackerCleanMode;
+        this.displayMode = preferences.decktrackerCleanMode
+                ? 'DISPLAY_MODE_GROUPED'
+                : (preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE');
+
 		const shouldDisplay = await this.shouldDisplayOverlay(preferences);
 		console.log('should display overlay?', shouldDisplay, preferences);
-		if (shouldDisplay) {
+		if (!this.overlayDisplayed && shouldDisplay) {
 			ga('send', 'event', 'decktracker', 'show');
 			this.restoreWindow();
 		}
-		else {
+		else if (this.overlayDisplayed && !shouldDisplay) {
 			this.hideWindow();
-		}
+        }
+        this.cdr.detectChanges();
 	}
 
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {

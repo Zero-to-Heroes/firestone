@@ -101,26 +101,3 @@
 		}
 	}
 }
-
-.root.clean {
-    & > i {
-        display: none;
-    }  
-
-    .decktracker {
-        background: transparent;
-    }
-
-    decktracker-deck-name, decktracker-title-bar {
-        display: none;
-    }
-
-    ::ng-deep decktracker-deck-list {
-        .select-container {
-            display: none;
-        }
-        .deck-zone .card-list li {
-            margin-bottom: 1px;
-        }
-    }
-}

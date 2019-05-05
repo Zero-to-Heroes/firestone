@@ -15,8 +15,8 @@
             font-style: normal;
             font-weight: normal;
             line-height: normal;
-            font-size: 14px;
-            color: #2F0D0D;
+            font-size: 14px;  
+            color: #D9C3AB;
         }
 
         label {
@@ -46,13 +46,14 @@
 
     label {
         .info {
+            margin-left: 5px;
             .zth-tooltip {
                 position: absolute;
                 max-width: 200px;
 
                 p {
                     width: 200px;    
-                    color: #A89782;
+                    color: #2F0D0D;
                 }
 
                 &.right {
