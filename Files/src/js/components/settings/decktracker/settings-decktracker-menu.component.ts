@@ -11,6 +11,9 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, E
             <li [ngClass]="{'selected': selectedMenu === 'launch'}" (click)="selectMenu('launch')">
                 <span>Launch options</span>
             </li>
+            <li [ngClass]="{'selected': selectedMenu === 'appearance'}" (click)="selectMenu('appearance')">
+                <span>Look and feel</span>
+            </li>
         </ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

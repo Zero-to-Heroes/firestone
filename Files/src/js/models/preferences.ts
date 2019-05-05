@@ -10,7 +10,8 @@ export class Preferences {
 	readonly decktrackerShowTavernBrawl: boolean = true;
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
-	readonly decktrackerShowCasual: boolean = true;
+    readonly decktrackerShowCasual: boolean = true;
+    readonly decktrackerCleanMode: boolean = false;
 	readonly overlayDisplayMode: string;
     readonly launchAppOnGameStart: boolean = true;
 }

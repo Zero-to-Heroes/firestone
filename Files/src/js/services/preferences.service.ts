@@ -87,6 +87,12 @@ export class PreferencesService {
         this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
     }
     
+	public async setDecktrackerCleanMode(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, decktrackerCleanMode: pref} as Preferences;
+        this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+    }
+    
     public async setOverlayDisplayMode(pref: string) {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, overlayDisplayMode: pref} as Preferences;

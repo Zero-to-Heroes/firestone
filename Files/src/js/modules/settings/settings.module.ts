@@ -27,6 +27,7 @@ import { init } from '@sentry/browser';
 import { SettingsGeneralMenuComponent } from '../../components/settings/general/settings-general-menu.component';
 import { SettingsGeneralLaunchComponent } from '../../components/settings/general/settings-general-launch.component';
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
+import { SettingsDecktrackerAppearanceComponent } from '../../components/settings/decktracker/settings-decktracker-appearance';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -64,7 +65,8 @@ console.log('version is', process.env.APP_VERSION);
 		
 		SettingsDecktrackerComponent,
 		SettingsDecktrackerMenuComponent,
-		SettingsDecktrackerLaunchComponent,
+        SettingsDecktrackerLaunchComponent,
+        SettingsDecktrackerAppearanceComponent,
 	],
 	bootstrap: [
 		SettingsComponent,
