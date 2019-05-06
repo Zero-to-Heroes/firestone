@@ -227,7 +227,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	private restoreWindow() {
 		overwolf.windows.restore(this.windowId, (result) => {
 			// console.log('window restored', result);
-			let width = 270;
+			let width = 252;
 			overwolf.games.getRunningGameInfo((gameInfo) => {
 				// console.log('got running game info', gameInfo);
 				if (!gameInfo) {
