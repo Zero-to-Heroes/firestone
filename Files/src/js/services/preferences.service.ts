@@ -87,9 +87,9 @@ export class PreferencesService {
         this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
     }
     
-	public async setDecktrackerCleanMode(pref: boolean) {
+	public async setDecktrackerSkin(pref: string) {
         const prefs = await this.getPreferences();
-        const newPrefs = { ...prefs, decktrackerCleanMode: pref} as Preferences;
+        const newPrefs = { ...prefs, decktrackerSkin: pref} as Preferences;
         this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
     }
     

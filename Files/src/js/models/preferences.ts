@@ -11,7 +11,7 @@ export class Preferences {
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
     readonly decktrackerShowCasual: boolean = true;
-    readonly decktrackerCleanMode: boolean = false;
+    readonly decktrackerSkin: string = 'original';
 	readonly overlayDisplayMode: string;
     readonly launchAppOnGameStart: boolean = true;
 }
