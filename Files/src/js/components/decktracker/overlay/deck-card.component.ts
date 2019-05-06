@@ -69,7 +69,7 @@ export class DeckCardComponent {
 		}
 	}
 
-	@HostListener('click') onMouseEnter() {
+	@HostListener('mouseenter') onMouseEnter() {
 		let rect = this.el.nativeElement.getBoundingClientRect();
 		let x = rect.left;
 		let y = rect.top;
@@ -79,6 +79,6 @@ export class DeckCardComponent {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, this.cardId);
+		this.events.broadcast(Events.DECK_HIDE_TOOLTIP);
 	}
 }

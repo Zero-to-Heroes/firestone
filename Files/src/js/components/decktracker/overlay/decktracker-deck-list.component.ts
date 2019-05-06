@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, Af
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { IOption } from 'ng-select';
 import { PreferencesService } from '../../../services/preferences.service';
+import { Events } from '../../../services/events.service';
 
 @Component({
 	selector: 'decktracker-deck-list',
@@ -12,7 +13,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
-		<div class="deck-list">
+		<div class="deck-list" (scroll)="onScroll($event)">
 			<div class="select-container">
 				<ng-select
 						class="display-mode-select"
@@ -57,7 +58,11 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 		{label: 'Focus on deck', value: 'DISPLAY_MODE_GROUPED'},
 	]
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private prefs: PreferencesService) { }
+	constructor(
+            private el: ElementRef, 
+            private cdr: ChangeDetectorRef, 
+            private events: Events,
+            private prefs: PreferencesService) { }
 
 	async ngAfterViewInit() {
 		let singleEl: HTMLElement = this.el.nativeElement.querySelector('.single');
@@ -72,7 +77,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 			if (!(<ViewRef>this.cdr).destroyed) {
 				this.cdr.detectChanges();
 			}
-		});
+        });
 	}
 
 	@Input('deckState') set deckState(deckState: DeckState) {
@@ -94,7 +99,13 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
-	}
+    }
+    
+    onScroll(event) {
+        console.log('scrolling');
+        // Force immediate clean of the tooltip
+		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);        
+    }
 
 	refresh() {
 		if (!(<ViewRef>this.cdr).destroyed) {

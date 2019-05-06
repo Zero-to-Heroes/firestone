@@ -74,8 +74,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
     displayMode: string;
     useCleanMode: boolean;
 
-	// private showTooltipTimer;
-	// private hideTooltipTimer;
+	private showTooltipTimer;
+	private hideTooltipTimer;
 
 	constructor(
 			private prefs: PreferencesService,
@@ -91,34 +91,36 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			}
 		});
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
-			this.activeTooltip = data.data[0];
-			this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-			this.cdr.detectChanges();
-			// clearTimeout(this.hideTooltipTimer);
+			// this.activeTooltip = data.data[0];
+			// this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+            // this.cdr.detectChanges();
+			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
-			// if (this.activeTooltip) {
-			// 	this.activeTooltip = data.data[0];
-			// 	this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-			// 	this.cdr.detectChanges();
-			// }
-			// else {
-			// 	this.showTooltipTimer = setTimeout(() => {
-			// 		this.activeTooltip = data.data[0];
-			// 		this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-			// 		this.cdr.detectChanges();
-			// 	}, 300)
-			// }
+			if (this.activeTooltip) {
+				this.activeTooltip = data.data[0];
+				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+				this.cdr.detectChanges();
+			}
+			else {
+				this.showTooltipTimer = setTimeout(() => {
+					this.activeTooltip = data.data[0];
+					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+					this.cdr.detectChanges();
+				}, 500)
+			}
 		});
 		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe((data) => {
-			this.activeTooltip = undefined;
-			this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
-			this.cdr.detectChanges();
-			// clearTimeout(this.showTooltipTimer);
-			// this.hideTooltipTimer = setTimeout(() => {
-			// 	this.activeTooltip = undefined;
-			// 	this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
-			// 	this.cdr.detectChanges();
-			// }, 200);
+			// this.activeTooltip = undefined;
+			// this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
+            // this.cdr.detectChanges();
+            // console.log('received hide tooltip event', data);
+            clearTimeout(this.showTooltipTimer);
+			this.hideTooltipTimer = setTimeout(() => {
+                // console.log('hidigin tooltip');
+				this.activeTooltip = undefined;
+				this.events.broadcast(Events.HIDE_TOOLTIP);
+				this.cdr.detectChanges();
+			}, data.data[0] ? data.data[0] : 200);
 		});
 		const deckEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().deckEventBus;
 	 	deckEventBus.subscribe(async (event) => {
@@ -154,7 +156,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	@HostListener('mousedown')
 	dragMove() {
 		overwolf.windows.dragMove(this.windowId);
-	};
+	}
 
 	private async processEvent(event) {
 		switch(event.name) {
