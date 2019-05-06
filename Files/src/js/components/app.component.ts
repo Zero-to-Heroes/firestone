@@ -24,11 +24,14 @@ export class AppComponent {
 
     private async init() {
         const launchAppOnGameStart: boolean = (await this.prefs.getPreferences()).launchAppOnGameStart;
+        console.log('should launch on game start?', launchAppOnGameStart);
         // See http://developers.overwolf.com/documentation/sdk/overwolf/extensions/#onapplaunchtriggered
         const appLaunchedByGameLaunch: boolean = this.isLaunchedByGameEvent();
+        console.log('is app launched by a game event?', appLaunchedByGameLaunch);
         // If the app was launched and the game was not running, this means that 
         // it was launched by a user action
         const shouldLaunchFullApp = launchAppOnGameStart || !appLaunchedByGameLaunch;
+        console.log('should launch app?', shouldLaunchFullApp);
         if (shouldLaunchFullApp) {
             this.injector.get(AppBootstrapService).init();
         } else {
@@ -42,12 +45,29 @@ export class AppComponent {
 
     private isLaunchedByGameEvent(): boolean {
         console.log('window location', window.location.href);
-        const urlSearchParams = window.location.href.split('?')[1];
+        if (!window.location.href) {
+            return false;
+        }
+        const splitParams = window.location.href.split('?');
+        if (!splitParams || splitParams.length < 2) {
+            return false;
+        }
+        const urlSearchParams = splitParams[1];
+        if (!urlSearchParams) {
+            return false;
+        }
         const searchParams = urlSearchParams.split('&');
+        if (!searchParams) {
+            return false;
+        }
         for (let param of searchParams) {
-            const key = param.split('=')[0];
+            const split = param.split('=');
+            if (!split || split.length < 2) {
+                return false;
+            }
+            const key = split[0];
             if (key === 'source') {
-                return param.split('=')[1] === 'gamelaunchevent';
+                return split[1] === 'gamelaunchevent';
             }
         }
         return false;
