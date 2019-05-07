@@ -22,12 +22,7 @@ declare var overwolf: any;
 					[shouldMoveSettingsWindow]="false"
 					[windowId]="windowId">
 				</control-settings>
-				<control-settings 
-					id="fakeClose"
-					[settingsApp]="'decktracker'" 
-					[shouldMoveSettingsWindow]="false"
-					[windowId]="windowId">
-				</control-settings>
+                <control-close [windowId]="windowId"></control-close>
 			</div>
 		</div>
 	`,

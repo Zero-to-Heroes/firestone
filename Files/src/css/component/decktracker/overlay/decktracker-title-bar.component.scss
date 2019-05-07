@@ -23,7 +23,7 @@
             }
         }
 
-        #fakeClose ::ng-deep button {
+        ::ng-deep control-close button {
             &:hover {
                 color: #101530;
                 background: #9FB6D7;
