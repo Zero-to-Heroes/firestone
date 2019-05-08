@@ -39,6 +39,6 @@ export class AchievementNameService {
             case 'monster_hunt_progression':             
                 return '';
         }
-        return 'unknown';
+        return '';
     }
 }
