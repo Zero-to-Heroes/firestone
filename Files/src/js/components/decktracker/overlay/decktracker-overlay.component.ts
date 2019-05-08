@@ -178,6 +178,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
         this.displayMode = this.useCleanMode
                 ? 'DISPLAY_MODE_GROUPED'
                 : (preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE');
+        console.log('switching views?', this.useCleanMode, this.displayMode);
 
 		const shouldDisplay = await this.shouldDisplayOverlay(preferences);
 		console.log('should display overlay?', shouldDisplay, preferences);

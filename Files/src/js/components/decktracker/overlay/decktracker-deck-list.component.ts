@@ -21,7 +21,7 @@ import { Events } from '../../../services/events.service';
 						(opened)="refresh()"
 						(closed)="refresh()"
 						(selected)="selectDisplayMode($event)"
-						[(ngModel)]="displayMode">
+						[ngModel]="displayMode">
 					<ng-template #optionTemplate let-option="option">
 						<span>{{option?.label}}</span>
 						<i class="i-30" *ngIf="option.value == displayMode">
@@ -86,7 +86,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	selectDisplayMode(option: IOption) {
 		console.log('changing display mode', option);
-		this.prefs.setOverlayDisplayMode(option.value);
+        this.prefs.setOverlayDisplayMode(option.value);
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click
