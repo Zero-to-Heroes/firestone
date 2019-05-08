@@ -59,7 +59,7 @@ init({
 	release: process.env.APP_VERSION
 });
 
-console.log('version is', process.env.APP_VERSION);
+console.log('version is ' + process.env.APP_VERSION);
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {

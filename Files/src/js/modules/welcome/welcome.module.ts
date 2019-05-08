@@ -27,7 +27,7 @@ init({
 	release: process.env.APP_VERSION
 });
 
-console.log('version is', process.env.APP_VERSION);
+console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
 	imports: [
