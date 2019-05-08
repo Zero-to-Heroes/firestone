@@ -28,17 +28,7 @@ declare var overwolf: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerTitleBarComponent implements AfterViewInit {
+export class DeckTrackerTitleBarComponent {
 
 	@Input() windowId: string;
-
-	constructor(private el: ElementRef) { }
-
-	ngAfterViewInit() {
-		let singleEl: HTMLElement = this.el.nativeElement.querySelector('#fakeClose button');
-		singleEl.innerHTML = `
-			<svg class="svg-icon-fill">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-			</svg>`;
-	}
 }
