@@ -1780,7 +1780,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 1,
 		"set": "Tgt",
 		"name": "Grasping Roots",
 		"id": "AT_037a",
@@ -1808,7 +1808,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 1,
 		"set": "Tgt",
 		"name": "One, Two, Trees!",
 		"id": "AT_037b",
@@ -9572,7 +9572,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 6,
 		"set": "Boomsday",
 		"artist": "Zoltan Boros",
 		"name": "Old Growth",
@@ -9604,7 +9604,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 6,
 		"set": "Boomsday",
 		"artist": "Zoltan Boros",
 		"name": "New Growth",
@@ -19142,6 +19142,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -19161,6 +19167,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -19180,6 +19192,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -19202,6 +19220,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -19314,6 +19338,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -23548,7 +23578,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 10,
 		"set": "Gangs",
 		"artist": "Jon Neimeister",
 		"name": "Forgotten Armor",
@@ -23565,7 +23595,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 10,
 		"set": "Gangs",
 		"artist": "Jon Neimeister",
 		"name": "Forgotten Mana",
@@ -24524,7 +24554,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 1,
 		"set": "Gangs",
 		"artist": "Matthew O'Connor",
 		"name": "Cut from Jade",
@@ -24553,7 +24583,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 1,
 		"set": "Gangs",
 		"artist": "Matthew O'Connor",
 		"name": "Jade Stash",
@@ -34395,7 +34425,7 @@ var parseCardsText = {
 			"ruRU": "Нанести 1 ед. урона.",
 			"esMX": "Inflige 1 de daño.",
 			"koKR": "피해 1",
-			"thTH": "สร้างความเสียหาย_1_แต้ม"
+			"thTH": "สร้างความเสียหาย 1_แต้ม"
 		},
 		"id": "CS2_034",
 		"text": "<b>Hero Power</b>\nDeal $1 damage.",
@@ -34423,7 +34453,7 @@ var parseCardsText = {
 			"ruRU": "Нанести 1 ед. урона.",
 			"esMX": "Inflige 1 de daño.",
 			"koKR": "피해 1",
-			"thTH": "สร้างความเสียหาย_1_แต้ม"
+			"thTH": "สร้างความเสียหาย 1_แต้ม"
 		},
 		"id": "CS2_034_H1",
 		"audio": {
@@ -34496,7 +34526,7 @@ var parseCardsText = {
 			"ruRU": "Нанести 1 ед. урона.",
 			"esMX": "Inflige 1 de daño.",
 			"koKR": "피해 1",
-			"thTH": "สร้างความเสียหาย_1_แต้ม"
+			"thTH": "สร้างความเสียหาย 1_แต้ม"
 		},
 		"id": "CS2_034_H2",
 		"audio": {
@@ -35166,6 +35196,11 @@ var parseCardsText = {
 		"set": "Hero_skins",
 		"name": "Totemic Slam",
 		"id": "CS2_049_H2_AT_132",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
 		"text": "<b>Hero Power</b>\nSummon a Totem of your choice.",
 		"dbfId": 53239,
 		"type": "Hero_power",
@@ -40386,9 +40421,6 @@ var parseCardsText = {
 				"VO_DAL_060_Male_Mech_Play_02.ogg",
 				"CleanMechSmall_Play_Underlay.ogg"
 			],
-			"spell_Redemption_target_1": [
-				"spell_Redemption_target_1.ogg"
-			],
 			"death": [
 				"VO_DAL_060_Male_Mech_Death_01.ogg",
 				"CleanMechSmall_Death_Underlay.ogg"
@@ -40713,7 +40745,7 @@ var parseCardsText = {
 		"flavor": "Some heroes have soft hearts and hard shells.",
 		"playerClass": "Neutral",
 		"attack": 3,
-		"name": "Travelling Healer",
+		"name": "Traveling Healer",
 		"id": "DAL_078",
 		"audio": {
 			"play": [
@@ -41501,7 +41533,7 @@ var parseCardsText = {
 				"ShadowMagic_Attack_Underlay.ogg"
 			]
 		},
-		"text": "[x]<b>Taunt</b>\nWhen you draw this, restore\n4 Health to your hero.",
+		"text": "[x]<b>Taunt</b>\nWhen you draw this, restore\n#4 Health to your hero.",
 		"cardClass": "WARLOCK",
 		"rarity": "Common"
 	},
@@ -43324,11 +43356,6 @@ var parseCardsText = {
 		"set": "Dalaran",
 		"name": "Power of EVIL",
 		"id": "DAL_563e",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"text": "+2/+2.",
 		"dbfId": 56204,
 		"type": "Enchantment",
@@ -43358,9 +43385,6 @@ var parseCardsText = {
 			"play": [
 				"VO_DAL_565_Male_Doomguard_Play_01.ogg",
 				"PortalOverfiend_Underlay_Play.ogg"
-			],
-			"spell_Redemption_target_1": [
-				"spell_Redemption_target_1.ogg"
 			],
 			"death": [
 				"VO_DAL_565_Male_Doomguard_Death_01.ogg"
@@ -43657,13 +43681,16 @@ var parseCardsText = {
 		"id": "DAL_576",
 		"audio": {
 			"play": [
-				"VO_DAL_576_Female_Draenei_Play_01.ogg"
+				"VO_DAL_576_Female_Draenei_Play_01.ogg",
+				"TriSpell_Underlay_Play.ogg"
 			],
 			"death": [
-				"VO_DAL_576_Female_Draenei_Death_01.ogg"
+				"VO_DAL_576_Female_Draenei_Death_01.ogg",
+				"TriSpell_Underlay_Death.ogg"
 			],
 			"attack": [
-				"VO_DAL_576_Female_Draenei_Attack_02.ogg"
+				"VO_DAL_576_Female_Draenei_Attack_02.ogg",
+				"TriSpell_Underlay_Attack.ogg"
 			]
 		},
 		"text": "<b>Spell Damage +3</b>\nYour spells cost (1) more.",
@@ -43851,9 +43878,6 @@ var parseCardsText = {
 			"play": [
 				"VO_DAL_582_Male_Dreadlord_Play_01.ogg",
 				"PortalOverfiend_Underlay_Play.ogg"
-			],
-			"spell_Redemption_target_1": [
-				"spell_Redemption_target_1.ogg"
 			],
 			"death": [
 				"VO_DAL_582_Male_Dreadlord_Death_01.ogg"
@@ -44988,7 +45012,8 @@ var parseCardsText = {
 		"id": "DAL_735",
 		"audio": {
 			"play": [
-				"VO_DAL_735_Female_Orc_Play_02.ogg"
+				"VO_DAL_735_Female_Orc_Play_02.ogg",
+				"Books_Play_Underlay.ogg"
 			],
 			"Shared_Arcane_Fizzle_1": [
 				"Shared_Arcane_Fizzle_1.ogg"
@@ -44997,7 +45022,8 @@ var parseCardsText = {
 				"Shared_Arcane_PreCast_1.ogg"
 			],
 			"death": [
-				"VO_DAL_735_Female_Orc_Death_01.ogg"
+				"VO_DAL_735_Female_Orc_Death_01.ogg",
+				"Books_Death_Underlay.ogg"
 			],
 			"silence_target_1": [
 				"silence_target_1.ogg"
@@ -45006,7 +45032,8 @@ var parseCardsText = {
 				"Arcane_Impact_03_Bookwyrm_Sound.ogg"
 			],
 			"attack": [
-				"VO_DAL_735_Female_Orc_Attack_01.ogg"
+				"VO_DAL_735_Female_Orc_Attack_01.ogg",
+				"Books_Attack_Underlay.ogg"
 			]
 		},
 		"text": "<b>Battlecry:</b> <b>Silence</b>\nadjacent minions.",
@@ -45935,6 +45962,12554 @@ var parseCardsText = {
 		"text": "<b>Rush</b>. <b>Battlecry:</b> If you've restored 5 Health this game, summon a copy of this.@ <i>({0} left!)</i>@ <i>(Ready!)</i>",
 		"cardClass": "DRUID",
 		"rarity": "Epic"
+	},
+	{
+		"howToEarnGolden": {
+			"ptBR": "Desbloqueou todos os capítulos de Assalto a Dalaran.",
+			"zhCN": "拥有达拉然大劫案的所有章节后解锁。",
+			"itIT": "Sbloccata possedendo tutti i capitoli di Colpo grosso a Dalaran.",
+			"enUS": "Unlocked by owning all The Dalaran Heist chapters.",
+			"frFR": "Débloquée en possédant tous les chapitres du Casse du siècle.",
+			"zhTW": "擁有達拉然大劫案全部的章節即可解鎖",
+			"deDE": "Wird freigeschaltet, wenn Ihr alle Kapitel des großen Coups besitzt.",
+			"jaJP": "「ダララン大強奪」の全ての章を所有することで入手。",
+			"plPL": "Odblokowana za posiadanie wszystkich rozdziałów Dalarańskiej roboty.",
+			"esES": "Se desbloquea al poseer todos los capítulos de Golpe en Dalaran.",
+			"ruRU": "Награда за приобретение всех глав «Похищения Даларана».",
+			"esMX": "Se desbloquea al adquirir todos los capítulos del Atraco a Dalaran.",
+			"koKR": "달라란 침공 모든 지구 보유 시 잠금 해제",
+			"thTH": "ปลดล็อคโดยการเป็นเจ้าของ The Dalaran Heist ครบทุกบท"
+		},
+		"collectible": true,
+		"cost": 2,
+		"set": "Dalaran",
+		"artist": "James Ryman",
+		"health": 2,
+		"dbfId": 56047,
+		"type": "Minion",
+		"flavor": "E.V.I.L. is the new black.",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 3,
+		"name": "Zayle, Shadow Cloak",
+		"id": "DAL_800",
+		"audio": {
+			"play": [
+				"DAL_800_ZayleShadowCloak_Play.ogg",
+				"Zayle_Play_Stinger.ogg"
+			],
+			"death": [
+				"DAL_800_ZayleShadowCloak_Death.ogg"
+			],
+			"attack": [
+				"DAL_800_ZayleShadowCloak_Attack.ogg"
+			]
+		},
+		"text": "You start the game with one of Zayle's EVIL Decks!",
+		"cardClass": "NEUTRAL",
+		"rarity": "Legendary"
+	},
+	{
+		"playerClass": "Whizbang",
+		"set": "Dalaran",
+		"name": "Zayle, Shadow Cloak",
+		"health": 30,
+		"id": "DAL_800h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 56963,
+		"type": "Hero",
+		"cardClass": "WHIZBANG",
+		"rarity": "Free"
+	},
+	{
+		"cost": 2,
+		"set": "Dalaran",
+		"health": 4,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 53746,
+		"type": "Minion",
+		"playerClass": "Mage",
+		"attack": 2,
+		"name": "Cheerful Spirit",
+		"id": "DALA_501",
+		"audio": {
+			"play": [
+				"VO_DALA_501_Male_Human_Play_01.ogg",
+				"Ghost_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_501_Male_Human_Death_01.ogg",
+				"Ghost_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_501_Male_Human_Attack_01.ogg",
+				"Ghost_Underlay_Attack.ogg"
+			]
+		},
+		"text": "Whenever you draw a spell, add a copy of it to your deck.",
+		"cardClass": "MAGE"
+	},
+	{
+		"cost": 2,
+		"set": "Dalaran",
+		"health": 1,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 53574,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 1,
+		"name": "Infuriated Banker",
+		"id": "DALA_502",
+		"audio": {
+			"play": [
+				"VO_DALA_502_Male_Tauren_Play_01.ogg",
+				"GoldMedium_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_502_Male_Tauren_Death_01.ogg",
+				"GoldMedium_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_502_Male_Tauren_Attack_01.ogg",
+				"GoldMedium_Underlay_Attack.ogg"
+			]
+		},
+		"text": "Whenever a Coin is played, gain +1/+1.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Rich",
+		"id": "DALA_502e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Increased stats.",
+		"dbfId": 53575,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"attack": 1,
+		"name": "Kirin Tor Guard",
+		"health": 4,
+		"id": "DALA_503",
+		"audio": {
+			"play": [
+				"VO_DALA_503_Female_Human_Play_01.ogg",
+				"1H_Staff_Underlay_Play.ogg",
+				"2H_EpicStaff_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_503_Female_Human_Death_01.ogg",
+				"1H_Staff_Underlay_Death.ogg",
+				"2H_EpicStaff_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_503_Female_Human_Attack_01.ogg",
+				"1H_Staff_Underlay_Attack.ogg",
+				"2H_EpicStaff_Underlay_Attack.ogg"
+			]
+		},
+		"text": "Has +1 Attack for each other friendly Kirin Tor Guard.",
+		"dbfId": 54399,
+		"type": "Minion",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 2,
+		"set": "Dalaran",
+		"race": "ELEMENTAL",
+		"health": 3,
+		"dbfId": 54409,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 2,
+		"name": "Kirin Tor Elemental",
+		"id": "DALA_504",
+		"audio": {
+			"play": [
+				"VO_DALA_504_Female_Elemental_Play_01.ogg",
+				"ArcaneMagic_Play_Underlay.ogg"
+			],
+			"death": [
+				"VO_DALA_504_Female_Elemental_Death_01.ogg",
+				"ArcaneMagic_Death_Underlay.ogg"
+			],
+			"attack": [
+				"VO_DALA_504_Female_Elemental_Attack_01.ogg",
+				"ArcaneMagic_Attack_Underlay.ogg"
+			]
+		},
+		"text": "Your spells cast an additional time.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "Continuum Collider",
+		"id": "DALA_700",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"extra_turn_button_flips_over": [
+				"extra_turn_button_flips_over.ogg"
+			],
+			"Temporus_Hourglass_Sound": [
+				"Temporus_Hourglass_Sound.ogg"
+			]
+		},
+		"text": "Take an extra turn. Your opponent takes an extra turn after.",
+		"dbfId": 53949,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "The Box",
+		"id": "DALA_701",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Each turn this is in your hand, transform it into a random treasure.",
+		"dbfId": 53950,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Sifting",
+		"id": "DALA_701e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Transforming into random treasures.",
+		"dbfId": 53951,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 5,
+		"set": "Dalaran",
+		"name": "Gnomish Army Knife",
+		"referencedTags": [
+			"CHARGE",
+			"DIVINE_SHIELD",
+			"LIFESTEAL",
+			"POISONOUS",
+			"STEALTH",
+			"TAUNT",
+			"WINDFURY"
+		],
+		"id": "DALA_702",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]Give a minion <b>Charge</b>,\n<b>Windfury</b>, <b>Divine Shield</b>,\n<b>Lifesteal</b>, <b>Poisonous</b>,\n<b>Taunt</b>, and <b>Stealth</b>.",
+		"dbfId": 53952,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Tooled Up!",
+		"id": "DALA_702e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Granted <b>Charge</b>,\n<b>Windfury</b>, <b>Divine Shield</b>,\n<b>Lifesteal</b>, <b>Poisonous</b>,\n<b>Taunt</b>, and <b>Stealth</b>.",
+		"dbfId": 53953,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 4,
+		"set": "Dalaran",
+		"health": 5,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"dbfId": 53957,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 4,
+		"name": "The Muscle",
+		"id": "DALA_703",
+		"audio": {
+			"play": [
+				"VO_DALA_703_Male_Orc_Play_02.ogg",
+				"Rocket_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_703_Male_Orc_Death_01.ogg"
+			],
+			"GadgetzanAuctioneer_card_spawn_coins": [
+				"GadgetzanAuctioneer_card_spawn_coins.ogg"
+			],
+			"attack": [
+				"VO_DALA_703_Male_Orc_Attack_01.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Add three random cards to your hand. They cost (0).",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 5,
+		"set": "Dalaran",
+		"name": "Super Simian Sphere",
+		"referencedTags": [
+			"IMMUNE"
+		],
+		"id": "DALA_704",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Shared_CustomSpawn_MinionFlyIn_01": [
+				"Shared_CustomSpawn_MinionFlyIn_01.ogg"
+			]
+		},
+		"text": "[x]Summon King Mukla.\nGive it <b>Immune</b> and\n'Can't be targeted by\nspell or Hero Powers.'",
+		"dbfId": 53958,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"health": 3,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 53961,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 3,
+		"name": "Grimmer Patron",
+		"id": "DALA_705",
+		"audio": {
+			"play": [
+				"VO_DALA_705_Male_Dwarf_Play_01.ogg",
+				"FriendlyBartender_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_705_Male_Dwarf_Death_01.ogg",
+				"FriendlyBartender_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_705_Male_Dwarf_Attack_02.ogg",
+				"FriendlyBartender_Underlay_Attack.ogg"
+			]
+		},
+		"text": "At the end of your turn, summon a copy of this minion.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 10,
+		"set": "Dalaran",
+		"name": "EVIL Propaganda",
+		"id": "DALA_706",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "Take control of all enemy minions.",
+		"dbfId": 53962,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"health": 1,
+		"mechanics": [
+			"START_OF_GAME",
+			"TAUNT"
+		],
+		"dbfId": 53992,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 1,
+		"name": "Loyal Henchman",
+		"id": "DALA_707",
+		"audio": {
+			"play": [
+				"VO_DALA_707_Male_Gnoll_Play_01.ogg",
+				"SciFiPistol_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_707_Male_Gnoll_Death_01.ogg",
+				"SciFiPistol_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_707_Male_Gnoll_Attack_01.ogg",
+				"SciFiPistol_Underlay_Attack.ogg"
+			]
+		},
+		"text": "[x]<b>Start of Game:</b> Draw this.\n<b>Taunt</b>. Each turn this is in\nyour hand, gain +1/+1.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Scheming",
+		"id": "DALA_707e",
+		"text": "Increased stats.",
+		"dbfId": 53993,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Untold Splendor",
+		"id": "DALA_708",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Shuffle 5 random treasures into your deck.",
+		"dbfId": 53994,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 4,
+		"set": "Dalaran",
+		"health": 7,
+		"mechanics": [
+			"BATTLECRY",
+			"TAUNT"
+		],
+		"dbfId": 53997,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 7,
+		"name": "Golden Candle",
+		"id": "DALA_709",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Goldenize_Idle_Sound": [
+				"Goldenize_Idle_Sound.ogg"
+			],
+			"attack": [],
+			"GoldenCandle_AE": [
+				"GoldenCandle_AE.ogg"
+			]
+		},
+		"text": "<b>Taunt</b>. <b>Battlecry:</b> Replace ALL other cards with random Legendary minions.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 9,
+		"set": "Dalaran",
+		"name": "Dreamgrove Ring",
+		"referencedTags": [
+			"DISCOVER"
+		],
+		"id": "DALA_711",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"FX_MinionSummon_Drop": [
+				"FX_MinionSummon_Drop.ogg"
+			],
+			"Warlock_Shadow_Buff_Impact_Sound": [
+				"Warlock_Shadow_Buff_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Discover</b> a <b>Legendary</b> minion. Summon five copies of it.",
+		"dbfId": 54001,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "Orb of the Untold",
+		"mechanics": [
+			"ImmuneToSpellpower"
+		],
+		"id": "DALA_712",
+		"audio": {
+			"play": [],
+			"Lightning_Targeted_Whoosh_01": [
+				"Lightning_Targeted_Whoosh_01.ogg"
+			],
+			"Lightning_Targeted_Whoosh_02": [
+				"Lightning_Targeted_Whoosh_02.ogg"
+			],
+			"Lightning_Targeted_Whoosh_03": [
+				"Lightning_Targeted_Whoosh_03.ogg"
+			],
+			"death": [],
+			"OrbOfTheUntold_Idle_Loop": [
+				"OrbOfTheUntold_Idle_Loop.ogg"
+			],
+			"attack": [],
+			"OrbOfTheUntold_Idle_Start": [
+				"OrbOfTheUntold_Idle_Start.ogg"
+			],
+			"OrbOfTheUntold_Idle_End": [
+				"OrbOfTheUntold_Idle_End.ogg"
+			]
+		},
+		"text": "Deal $20 damage split between all enemies.",
+		"dbfId": 54004,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"health": 4,
+		"mechanics": [
+			"BATTLECRY",
+			"DEATHRATTLE"
+		],
+		"dbfId": 54025,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 4,
+		"name": "Elder Taggawag",
+		"id": "DALA_713",
+		"audio": {
+			"play": [
+				"VO_DALA_713_Male_Kobold_Play_01.ogg",
+				"NaturalWoodStaff_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_713_Male_Kobold_Death_01.ogg",
+				"NaturalWoodStaff_Underlay_Death.ogg"
+			],
+			"AE_Fire_Start_02": [
+				"AE_Fire_Start_02.ogg"
+			],
+			"AE_Fire_End_02": [
+				"AE_Fire_End_02.ogg"
+			],
+			"attack": [
+				"VO_DALA_713_Male_Kobold_Attack_02.ogg",
+				"NaturalWoodStaff_Underlay_Attack.ogg"
+			],
+			"Shared_FireAE_Impact_1": [
+				"Shared_FireAE_Impact_1.ogg"
+			]
+		},
+		"text": "[x]<b>Battlecry:</b> Deal 4 damage\nto all enemy minions.\n<b>Deathrattle:</b> Shuffle\nthis into your deck",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "THE... Candles?",
+		"id": "DALA_714",
+		"audio": {
+			"play": [],
+			"Fireblast_Impact_Blue": [
+				"Fireblast_Impact_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Loop": [
+				"Fireblast_Idle_Blue_Loop.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Fireblast_Missile_Blue": [
+				"Fireblast_Missile_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Fizzle": [
+				"Fireblast_Idle_Blue_Fizzle.ogg"
+			],
+			"Fireblast_Idle_Blue_Start": [
+				"Fireblast_Idle_Blue_Start.ogg"
+			]
+		},
+		"text": "<b>Twinspell.</b> <b>Twinspell.</b> <b>Twinspell.</b>\nDeal $3 damage to all enemy minions.",
+		"dbfId": 55858,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "THE... Candles?",
+		"id": "DALA_714a",
+		"audio": {
+			"play": [],
+			"Fireblast_Impact_Blue": [
+				"Fireblast_Impact_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Loop": [
+				"Fireblast_Idle_Blue_Loop.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Fireblast_Missile_Blue": [
+				"Fireblast_Missile_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Fizzle": [
+				"Fireblast_Idle_Blue_Fizzle.ogg"
+			],
+			"Fireblast_Idle_Blue_Start": [
+				"Fireblast_Idle_Blue_Start.ogg"
+			]
+		},
+		"text": "<b>Twinspell.</b> <b>Twinspell.</b>\nDeal $3 damage to all enemy minions.",
+		"dbfId": 55859,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "THE... Candles?",
+		"id": "DALA_714b",
+		"audio": {
+			"play": [],
+			"Fireblast_Impact_Blue": [
+				"Fireblast_Impact_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Loop": [
+				"Fireblast_Idle_Blue_Loop.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Fireblast_Missile_Blue": [
+				"Fireblast_Missile_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Fizzle": [
+				"Fireblast_Idle_Blue_Fizzle.ogg"
+			],
+			"Fireblast_Idle_Blue_Start": [
+				"Fireblast_Idle_Blue_Start.ogg"
+			]
+		},
+		"text": "<b>Twinspell.</b>\nDeal $3 damage to all enemy minions.",
+		"dbfId": 55860,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "THE... Candles?",
+		"id": "DALA_714c",
+		"audio": {
+			"play": [],
+			"Fireblast_Impact_Blue": [
+				"Fireblast_Impact_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Loop": [
+				"Fireblast_Idle_Blue_Loop.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Fireblast_Missile_Blue": [
+				"Fireblast_Missile_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Fizzle": [
+				"Fireblast_Idle_Blue_Fizzle.ogg"
+			],
+			"Fireblast_Idle_Blue_Start": [
+				"Fireblast_Idle_Blue_Start.ogg"
+			]
+		},
+		"text": "Deal $3 damage to all enemy minions.",
+		"dbfId": 55861,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Overpowered",
+		"id": "DALA_715",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "After you play a card this turn, replay it\n<i>(targets chosen randomly)</i>.",
+		"dbfId": 55852,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Overpowered",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
+		"id": "DALA_715e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 55854,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 5,
+		"set": "Dalaran",
+		"name": "Fly-By",
+		"id": "DALA_716",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]Shuffle a Kadoom Bot\ninto your opponent's deck.\nWhen drawn, it explodes\nfor 50 damage.",
+		"dbfId": 54021,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Kadoom Bot",
+		"mechanics": [
+			"TOPDECK",
+			"ImmuneToSpellpower"
+		],
+		"id": "DALA_716t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Barrel_exp_base": [
+				"Barrel_exp_base.ogg"
+			],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			],
+			"Bomb_Missile_Ball_Sound_01": [
+				"Bomb_Missile_Ball_Sound_01.ogg"
+			]
+		},
+		"text": "<b>Casts When Drawn</b>\nYou take 50 damage.",
+		"dbfId": 54023,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Case Study",
+		"referencedTags": [
+			"DISCOVER",
+			"QUEST"
+		],
+		"id": "DALA_717",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Discover</b> a <b>Quest</b> <b>Reward</b>.",
+		"dbfId": 54005,
+		"type": "Spell",
+		"entourage": [
+			"UNG_940t8",
+			"UNG_116t",
+			"UNG_067t1",
+			"UNG_954t1",
+			"UNG_942t",
+			"UNG_829t1",
+			"UNG_920t1",
+			"UNG_934t1",
+			"UNG_028t"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"health": 1,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"dbfId": 55481,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 1,
+		"name": "Elistra the Immortal",
+		"id": "DALA_718",
+		"audio": {
+			"play": [
+				"VO_DALA_718_Female_BloodElf_Play_02.ogg",
+				"1H_SwordThick_Underlay_Play.ogg",
+				"ShieldMetalThick_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_718_Female_BloodElf_Death_01.ogg",
+				"1H_SwordThick_Underlay_Death.ogg",
+				"ShieldMetalThick_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_718_Female_BloodElf_Attack_02.ogg",
+				"1H_SwordThick_Underlay_Attack.ogg",
+				"ShieldMetalThick_Underlay_Attack.ogg"
+			],
+			"LynessaSunsorrow_Mist_LP": [
+				"LynessaSunsorrow_Mist_LP.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Recast all spells you've cast on this minion this run.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 5,
+		"set": "Dalaran",
+		"durability": 1,
+		"mechanics": [
+			"DEATHRATTLE"
+		],
+		"dbfId": 55615,
+		"type": "Weapon",
+		"playerClass": "Neutral",
+		"attack": 6,
+		"name": "Soulreaper's Scythe",
+		"id": "DALA_719",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Deathrattle:</b> Summon all minions killed by this weapon this run.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Swampqueen's Call",
+		"id": "DALA_720",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SwampMuck_CustomSpawn_Sound": [
+				"SwampMuck_CustomSpawn_Sound.ogg"
+			]
+		},
+		"text": "Transform your minions into random <b>Legendary</b> minions. Repeatable this turn.",
+		"dbfId": 54400,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "Duplatransmogrifier",
+		"id": "DALA_721",
+		"audio": {
+			"play": [],
+			"PermanentAdd_Impact": [
+				"PermanentAdd_Impact.ogg"
+			],
+			"death": [],
+			"Weapon_Woecleaver_Trigger_Sound": [
+				"Weapon_Woecleaver_Trigger_Sound.ogg"
+			],
+			"attack": [],
+			"PermanentAdd_Idle": [
+				"PermanentAdd_Idle.ogg"
+			],
+			"MadameLazul_HeroPower_Idle_Loop": [
+				"MadameLazul_HeroPower_Idle_Loop.ogg"
+			]
+		},
+		"text": "Choose a friendly minion. Replace all minions in your Adventure deck with copies of it.",
+		"dbfId": 55351,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 7,
+		"set": "Dalaran",
+		"name": "Annoy-o Horn",
+		"id": "DALA_722",
+		"audio": {
+			"play": [],
+			"AnnoyOHorn_CustomSpawn_Sound": [
+				"AnnoyOHorn_CustomSpawn_Sound.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "Fill your board with annoying minions.",
+		"dbfId": 54401,
+		"type": "Spell",
+		"entourage": [
+			"BOT_911",
+			"GVG_085",
+			"OG_145"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"durability": 5,
+		"mechanics": [
+			"POISONOUS"
+		],
+		"referencedTags": [
+			"IMMUNE"
+		],
+		"dbfId": 54402,
+		"type": "Weapon",
+		"playerClass": "Neutral",
+		"attack": 1,
+		"name": "Hyperblaster",
+		"id": "DALA_723",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Poisonous</b>.\nYour hero is <b>Immune</b> while attacking.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hyperblaster Enchantment",
+		"id": "DALA_723e",
+		"text": "<b>Immune</b>.",
+		"dbfId": 56345,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Big Boomba",
+		"id": "DALA_724",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Barrel_exp_base": [
+				"Barrel_exp_base.ogg"
+			],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			]
+		},
+		"text": "Destroy ALL minions. Do it again at the start of your next turn.",
+		"dbfId": 55349,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Big Boomba Dummy Effects",
+		"id": "DALA_724d",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Barrel_exp_base": [
+				"Barrel_exp_base.ogg"
+			],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			]
+		},
+		"text": "Holds an effect for Big Boomba Player Enchantment (DALA 724e)",
+		"dbfId": 56352,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Big Boomba Player Enchantment",
+		"id": "DALA_724e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "At the start of your turn, destroy all minions.",
+		"dbfId": 55350,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Banana Split",
+		"id": "DALA_725",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Nature_Green_Buff_Impact": [
+				"Nature_Green_Buff_Impact.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			]
+		},
+		"text": "Give a friendly minion +2/+2. Summon two copies of it.",
+		"dbfId": 54403,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Glowing Green",
+		"id": "DALA_725e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2/+2.",
+		"dbfId": 54404,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": "Cause $",
+			"zhCN": "造成$",
+			"itIT": "[x]Infligge $",
+			"enUS": "[x]Deal $",
+			"frFR": "Inflige $",
+			"zhTW": "造成$",
+			"deDE": "Verursacht $",
+			"jaJP": "[x]$",
+			"plPL": "Zadaj $",
+			"esES": "Inflige $",
+			"ruRU": "Наносит $",
+			"esMX": "Inflige $",
+			"koKR": "피해를 $",
+			"thTH": "สร้างความเสียหาย $"
+		},
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Master Scheme",
+		"id": "DALA_726",
+		"audio": {
+			"play": [],
+			"DrBoom_ZapCannon_Idle_Loop_Sound": [
+				"DrBoom_ZapCannon_Idle_Loop_Sound.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"DrBoom_ZapCannon_Impact_Sound": [
+				"DrBoom_ZapCannon_Impact_Sound.ogg"
+			],
+			"DrBoom_ZapCannon_Idle_Start_Sound": [
+				"DrBoom_ZapCannon_Idle_Start_Sound.ogg"
+			],
+			"DrBoom_ZapCannon_Missile_Launch_Sound": [
+				"DrBoom_ZapCannon_Missile_Launch_Sound.ogg"
+			],
+			"DrBoom_ZapCannon_Idle_Fizzle_Sound": [
+				"DrBoom_ZapCannon_Idle_Fizzle_Sound.ogg"
+			]
+		},
+		"text": "[x]Deal $@ damage. Draw\n@ |4(card, cards). Gain @ Armor.\nSummon @ <b>Boom |4(Bot, Bots)</b>.\n<i>(Upgrades each turn!)</i>",
+		"dbfId": 55348,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 5,
+		"set": "Dalaran",
+		"name": "Sow the Seeds",
+		"id": "DALA_727",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Barnabus_CustomSummon_Deck_Sound": [
+				"Barnabus_CustomSummon_Deck_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "Give all minions in your deck +3/+3.",
+		"dbfId": 54405,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Seeds Sown",
+		"id": "DALA_727e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+3/+3.",
+		"dbfId": 54406,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Recycling",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_728",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive</b>\nAfter a friendly minion dies, gain 2 armor.",
+		"dbfId": 55871,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Recycling Dummy Effects",
+		"id": "DALA_728d",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Holds an effect for Recycling Player Enchantment (DALA 728e)",
+		"dbfId": 56150,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Recycling Player Enchantment",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_728e",
+		"dbfId": 55872,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"health": 5,
+		"mechanics": [
+			"STEALTH",
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 54407,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 2,
+		"name": "Dagwik Stickytoe",
+		"id": "DALA_729",
+		"audio": {
+			"play": [
+				"VO_DALA_729_Male_Kobold_Play_01.ogg",
+				"LOOTA_BOSS_52h_TreasureVault_Emote.ogg"
+			],
+			"death": [
+				"VO_DALA_729_Male_Kobold_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_729_Male_Kobold_Attack_01.ogg"
+			]
+		},
+		"text": "[x]<b>Stealth</b>\nAfter this minion attacks\na hero, steal a card\nfrom their hand.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"race": "MURLOC",
+		"health": 6,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"referencedTags": [
+			"OVERLOAD"
+		],
+		"dbfId": 55482,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 3,
+		"name": "Murgatha",
+		"id": "DALA_730",
+		"audio": {
+			"play": [
+				"VO_DALA_730_Female_Murloc_Play_01.ogg",
+				"UnderbellyAngler_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_730_Female_Murloc_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_730_Female_Murloc_Attack_02.ogg",
+				"UnderbellyAngler_Underlay_Attack.ogg",
+				"1H_Staff_Underlay_Attack.ogg"
+			]
+		},
+		"text": "Whenever you play\na card, <b>Overload</b> one\nof your opponent's\nMana Crystals.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"referencedTags": [
+			"RUSH"
+		],
+		"dbfId": 54457,
+		"type": "Spell",
+		"playerClass": "Neutral",
+		"name": "Rocket Backpacks",
+		"id": "DALA_731",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nYour minions have <b>Rush</b>.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Rocket Backpacks Player Enchantment",
+		"mechanics": [
+			"AURA"
+		],
+		"id": "DALA_731e",
+		"dbfId": 54458,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Rocket Backpack",
+		"id": "DALA_731e2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Has <b>Rush</b>.",
+		"dbfId": 54459,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Emerald Goggles",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_733",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nThe left-most card in your hand costs (2) less.",
+		"dbfId": 54460,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Emerald Goggles Player Enchantment",
+		"mechanics": [
+			"AURA"
+		],
+		"id": "DALA_733e",
+		"dbfId": 54461,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Emerald Goggles",
+		"id": "DALA_733e2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Cost reduced by (2).",
+		"dbfId": 54462,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Robes of Gaudiness",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_735",
+		"audio": {
+			"play": [],
+			"Card_Play_HeroPower_SpellPower_Sound": [
+				"Card_Play_HeroPower_SpellPower_Sound.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive</b>\nYour cards cost half, but you can only play two cards each turn.",
+		"dbfId": 54464,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Robes of Gaudiness Player Enchantment",
+		"mechanics": [
+			"AURA"
+		],
+		"id": "DALA_735e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Your cards cost half, but you can only play two cards each turn.",
+		"dbfId": 54465,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Robes of Gaudiness",
+		"id": "DALA_735e2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Costs half.",
+		"dbfId": 54466,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Too Gaudy",
+		"id": "DALA_735e3",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Can't play cards this turn.",
+		"dbfId": 55558,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Stargazing",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_736",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive</b>\nYou can use your Hero Power twice each turn.\nIt costs (1) less.",
+		"dbfId": 55869,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Stargazing Player Enchant",
+		"mechanics": [
+			"AURA"
+		],
+		"id": "DALA_736e",
+		"dbfId": 55870,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Resourcefulness",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_737",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive</b>\nAt the start of the game, equip a random weapon. Give it +1/+1.",
+		"dbfId": 54467,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "E.V.I.L. Upgrade",
+		"id": "DALA_737e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+1 Attack and +1 Durability.",
+		"dbfId": 56500,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"dbfId": 54468,
+		"type": "Spell",
+		"playerClass": "Neutral",
+		"name": "A Prince's Ring",
+		"id": "DALA_738",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"DK_Impact_PrincesRing_Sound": [
+				"DK_Impact_PrincesRing_Sound.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nReplace your starting Hero Power with a random Death Knight one.",
+		"entourage": [
+			"ICC_831p",
+			"ICC_828p",
+			"ICC_833h",
+			"ICC_832p",
+			"ICC_834h",
+			"ICC_830p",
+			"ICC_481p",
+			"ICC_829p",
+			"ICC_827p"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "A Prince's Ring Enchantment",
+		"id": "DALA_738e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 57108,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Book of Wonders",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_739",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"DeckOfWonders_Impact_Sound": [
+				"DeckOfWonders_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nAt the start of the game, shuffle 10 'Scrolls of Wonder' into your deck.",
+		"dbfId": 54469,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Wondrous Wisdomball",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_740",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive</b>\nOccasionally gives helpful advice.",
+		"dbfId": 55500,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Player Enchantment",
+		"id": "DALA_740e",
+		"dbfId": 55501,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Ice Block",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
+		"id": "DALA_740e2",
+		"dbfId": 55502,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Extra Spellcast",
+		"id": "DALA_740e3",
+		"dbfId": 55553,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Copy Cards Tokenspell",
+		"id": "DALA_740ts",
+		"text": "Chance to give you 2 - 5 extra copies of a card.",
+		"dbfId": 56408,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Empty Hand Tokenspell",
+		"id": "DALA_740ts2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "Chance to give you 5 random cards.",
+		"dbfId": 56409,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Free Minions Tokenspell",
+		"id": "DALA_740ts3",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "Chance to give you 3 random minions.",
+		"dbfId": 56422,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Random Legendary Tokenspell",
+		"id": "DALA_740ts4",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Goldenize_Idle_Sound": [
+				"Goldenize_Idle_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "Transform a minion into a random <b>Legendary</b> minion.",
+		"dbfId": 56433,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Wondrous Wisdomball Summon Taunts Tokenspell",
+		"id": "DALA_740ts5",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Summon 3 random <b>Taunt</b> minions.",
+		"dbfId": 56716,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Togwaggle's Dice",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_741",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"EVILLeague_Togwoosh_Impact_Sound": [
+				"EVILLeague_Togwoosh_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nAt the end of your turn, randomize the cost of all cards in your hand.",
+		"dbfId": 54470,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Togwaggle's Dice Player Enchantment",
+		"id": "DALA_741e",
+		"text": "At the end of your turn, randomize the cost of all cards in your hand.",
+		"dbfId": 54471,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Roll the Dice",
+		"id": "DALA_741e2",
+		"text": "Cost manipulated by Togwaggle's Dice.",
+		"dbfId": 56350,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Dr. Boom's Remote",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_743",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"WeeBot_CustomSpawn_Sound": [
+				"WeeBot_CustomSpawn_Sound.ogg"
+			],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nAt the start of the game, summon three 1/1 Boom Bots.",
+		"dbfId": 54474,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Sleepy",
+		"mechanics": [
+			"CANT_BE_SILENCED",
+			"ENCHANTMENT_INVISIBLE"
+		],
+		"id": "DALA_743e",
+		"dbfId": 56187,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Hagatha's Embrace",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_744",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nAt the start of your turn, give a random minion in your hand +1/+1.",
+		"dbfId": 54485,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Hagatha's Embrace Dummy Effects",
+		"id": "DALA_744d",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"ArmsDealing_Impact_Sound": [
+				"ArmsDealing_Impact_Sound.ogg"
+			]
+		},
+		"text": "Holds an effect for Hagatha's Embrace Player Enchantment (DALA 744e)",
+		"dbfId": 56261,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hagatha's Embrace Player Enchantment",
+		"id": "DALA_744e",
+		"text": "At the start of your turn, give a random minion in your hand +1/+1.",
+		"dbfId": 54486,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hagatha's Embrace",
+		"id": "DALA_744e2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+1/+1.",
+		"dbfId": 54487,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "The Hand of Rafaam",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_745",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nAt the start of the game, give your opponent two 'Cursed!' cards.",
+		"dbfId": 54476,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Elixir of Vigor",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_746",
+		"audio": {
+			"play": [],
+			"Potion_Kabal_Underlay_Death": [
+				"Potion_Kabal_Underlay_Death.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_Physical_Cast": [
+				"Shared_Physical_Cast.ogg"
+			],
+			"Potion_Missile_Red_withShatter_Sound": [
+				"Potion_Missile_Red_withShatter_Sound.ogg"
+			],
+			"Potion_Kabal_Underlay_Attack": [
+				"Potion_Kabal_Underlay_Attack.ogg"
+			],
+			"ShaysBell": [
+				"ShaysBell.ogg"
+			],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nAfter you play a minion, shuffle two copies of it into your deck. They cost (1).",
+		"dbfId": 54479,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Elixir of Vigor Dummy",
+		"id": "DALA_746d",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToDeck_CardOverDeck_Arcane": [
+				"SpawnToDeck_CardOverDeck_Arcane.ogg"
+			]
+		},
+		"text": "Holds and effect for Elixir of Vigor Player Enchantment (DALA 746e)",
+		"dbfId": 56353,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Elixir of Vigor Player Enchantment",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_746e",
+		"text": "After you play a minion, shuffle two copies of it into your deck. They cost (1).",
+		"dbfId": 54480,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"referencedTags": [
+			"IMMUNE"
+		],
+		"dbfId": 54481,
+		"type": "Spell",
+		"playerClass": "Neutral",
+		"name": "Elixir of Vim",
+		"id": "DALA_747",
+		"audio": {
+			"play": [],
+			"Potion_Kabal_Underlay_Death": [
+				"Potion_Kabal_Underlay_Death.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_Glass_Impact_Sound": [
+				"Shared_Glass_Impact_Sound.ogg"
+			],
+			"EVILLeague_Togwoosh_Impact_Sound": [
+				"EVILLeague_Togwoosh_Impact_Sound.ogg"
+			],
+			"Shared_Physical_Cast": [
+				"Shared_Physical_Cast.ogg"
+			],
+			"Potion_Kabal_Underlay_Attack": [
+				"Potion_Kabal_Underlay_Attack.ogg"
+			],
+			"ShaysBell": [
+				"ShaysBell.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nYou draw an additional two cards each turn. You are <b>Immune</b> to <b>Fatigue</b>.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Elixir of Vim Player Enchantment",
+		"id": "DALA_747e",
+		"text": "Draw 2 additional cards each turn.",
+		"dbfId": 54482,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Elixir of Vile",
+		"mechanics": [
+			"DUNGEON_PASSIVE_BUFF"
+		],
+		"id": "DALA_748",
+		"audio": {
+			"play": [],
+			"Potion_Kabal_Underlay_Death": [
+				"Potion_Kabal_Underlay_Death.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_Glass_Impact_Sound": [
+				"Shared_Glass_Impact_Sound.ogg"
+			],
+			"Shared_Physical_Cast": [
+				"Shared_Physical_Cast.ogg"
+			],
+			"Potion_Kabal_Underlay_Attack": [
+				"Potion_Kabal_Underlay_Attack.ogg"
+			],
+			"ShaysBell": [
+				"ShaysBell.ogg"
+			],
+			"SpawnToHand_EVILLeague_Lackey": [
+				"SpawnToHand_EVILLeague_Lackey.ogg"
+			]
+		},
+		"text": "<b>Passive</b>\nYour spells cost Health instead of Mana.",
+		"dbfId": 54483,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Elixir of Vile Player Enchantment",
+		"id": "DALA_748e",
+		"text": "Your spells cost Health instead of Mana.",
+		"dbfId": 54484,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Mage Deck",
+		"id": "DALA_800",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53306,
+		"type": "Spell",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Druid Deck",
+		"id": "DALA_801",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53311,
+		"type": "Spell",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Hunter Deck",
+		"id": "DALA_802",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53319,
+		"type": "Spell",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Paladin Deck",
+		"id": "DALA_803",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53322,
+		"type": "Spell",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Priest Deck",
+		"id": "DALA_804",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53323,
+		"type": "Spell",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Rogue Deck",
+		"id": "DALA_805",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53324,
+		"type": "Spell",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Shaman Deck",
+		"id": "DALA_806",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53325,
+		"type": "Spell",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Warlock Deck",
+		"id": "DALA_807",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53326,
+		"type": "Spell",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Random Warrior Deck",
+		"id": "DALA_808",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the run with a deck of random cards.",
+		"dbfId": 53327,
+		"type": "Spell",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Twist - The Coffers",
+		"id": "DALA_829",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Your opponent starts the game with a 'Cache of Cash.'",
+		"dbfId": 55455,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"health": 3,
+		"mechanics": [
+			"DEATHRATTLE"
+		],
+		"dbfId": 55689,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Cache of Cash",
+		"id": "DALA_829t",
+		"audio": {
+			"play": [
+				"DALA_829t_CacheofCash_Play.ogg"
+			],
+			"death": [
+				"DALA_829t_CacheofCash_Death.ogg"
+			],
+			"attack": [
+				"DALA_829t_CacheofCash_Attack.ogg"
+			]
+		},
+		"text": "<b>Deathrattle:</b> Give each player two Coins.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Twist - The Finale",
+		"id": "DALA_830",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "This run has four additional powerful bosses.",
+		"dbfId": 56961,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Twist - The Stench",
+		"id": "DALA_831",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All minions' Attack and Health are swapped.",
+		"dbfId": 53404,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Undesirable Stench Player Enchantment",
+		"id": "DALA_831e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All minions' Attack and Health are swapped.",
+		"dbfId": 54563,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Stinky",
+		"id": "DALA_831e2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Attack and Health are swapped.",
+		"dbfId": 55902,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Twist - The Prisons",
+		"id": "DALA_832",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Both players start the game with a 'Violet Prison.'",
+		"dbfId": 53405,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"health": 0,
+		"mechanics": [
+			"TRIGGER_VISUAL",
+			"UNTOUCHABLE"
+		],
+		"dbfId": 55690,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Violet Prison",
+		"id": "DALA_832t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Twist - The Carts",
+		"id": "DALA_833",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Both players can only have four minions.",
+		"dbfId": 53406,
+		"type": "Spell",
+		"entourage": [
+			"DALA_833t2",
+			"DALA_833t",
+			"DALA_833t3",
+			"DALA_833t4"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"hideStats": true,
+		"health": 1,
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
+		"dbfId": 54565,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Fruit Cart",
+		"id": "DALA_833t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"hideStats": true,
+		"health": 1,
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
+		"dbfId": 55921,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Fish Cart",
+		"id": "DALA_833t2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"hideStats": true,
+		"health": 1,
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
+		"dbfId": 55922,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Meat Cart",
+		"id": "DALA_833t3",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"hideStats": true,
+		"attack": 0,
+		"name": "Dessert Cart",
+		"health": 1,
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
+		"id": "DALA_833t4",
+		"dbfId": 56803,
+		"type": "Minion",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Arcane",
+		"id": "DALA_850",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All spells cost (2) less.",
+		"dbfId": 55878,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Arcane Player Enchantment",
+		"id": "DALA_850e",
+		"text": "All spells cost (2) less.",
+		"dbfId": 55879,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Summons",
+		"id": "DALA_851",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After a spell is played, a minion of the same cost is summoned.",
+		"dbfId": 55881,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Summons Player Enchantment",
+		"id": "DALA_851e",
+		"text": "After a spell is played, a minion of the same cost is summoned.",
+		"dbfId": 55882,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Crying",
+		"referencedTags": [
+			"BATTLECRY"
+		],
+		"id": "DALA_852",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All <b>Battlecries</b> trigger twice.",
+		"dbfId": 55884,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Crying Player Enchantment",
+		"id": "DALA_852e",
+		"text": "All <b>Battlecries</b> trigger twice.",
+		"dbfId": 55886,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Rattling",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
+		"id": "DALA_853",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All <b>Deathrattles</b> trigger twice.",
+		"dbfId": 55888,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Rattling Player Enchantment",
+		"id": "DALA_853e",
+		"text": "All <b>Deathrattles</b> trigger twice.",
+		"dbfId": 55887,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Nesting",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
+		"id": "DALA_854",
+		"text": "After a minion is played, it gains \"<b>Deathrattle:</b> Summon a 1/1 copy of this minion.\"",
+		"dbfId": 55912,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Nesting Player Enchantment",
+		"id": "DALA_854e",
+		"text": "After a minion is played, it gains \"<b>Deathrattle:</b> Summon a 1/1 copy of this minion.\"",
+		"dbfId": 55913,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Nested",
+		"id": "DALA_854e2",
+		"text": "Granted \"<b>Deathrattle:</b> Summon a 1/1 copy of this minion.\"",
+		"dbfId": 55914,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Popped Out",
+		"id": "DALA_854e3",
+		"text": "1/1.",
+		"dbfId": 55915,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Refreshing",
+		"id": "DALA_855",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "At the end of each player's turn, that player draws until they have 5 cards.",
+		"dbfId": 55889,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Refreshing Player Enchantment",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_855e",
+		"text": "At the end of each player's turn, that player draws until they have 5 cards.",
+		"dbfId": 55890,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Wild Magic",
+		"id": "DALA_856",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All spells cast an additional time. <i>(targets chosen randomly)</i>",
+		"dbfId": 55891,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Wild Magic Player Enchantment",
+		"id": "DALA_856e",
+		"text": "All spells cast an additional time. <i>(targets chosen randomly)</i>",
+		"dbfId": 55892,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Glittering",
+		"id": "DALA_857",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After a player plays a card that costs (8) or more, that player adds a Treasure to their hand.",
+		"dbfId": 55916,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Glittering Player Enchantment",
+		"id": "DALA_857e",
+		"text": "After a player plays a card that costs (8) or more, that player adds a Treasure to their hand.",
+		"dbfId": 55917,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Fishy",
+		"id": "DALA_858",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Murlocs occasionally join the battle.",
+		"dbfId": 55893,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Fishy Player Enchantment",
+		"id": "DALA_858e",
+		"text": "Murlocs occasionally join the battle.",
+		"dbfId": 55894,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Gorged",
+		"id": "DALA_859",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Both players start the game with two extra cards and Mana Crystals.",
+		"dbfId": 55895,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Dragon Soul",
+		"id": "DALA_860",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After a player casts 3 spells in a turn, that player summons a 5/5 Dragon.",
+		"dbfId": 55896,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Dragon Soul Player Enchantment",
+		"id": "DALA_860e",
+		"text": "After a player casts 3 spells in a turn, that player summons a 5/5 Dragon.",
+		"dbfId": 55928,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Ogreish",
+		"id": "DALA_861",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "All minions have a 50% chance to attack the wrong enemy.",
+		"dbfId": 55897,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Ogreish Player Enchantment",
+		"id": "DALA_861e",
+		"text": "All minions have a 50% chance to attack the wrong enemy.",
+		"dbfId": 55898,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Ogreish",
+		"mechanics": [
+			"FORGETFUL",
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_861e2",
+		"text": "50% chance to attack the wrong enemy",
+		"dbfId": 57219,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Reductive",
+		"id": "DALA_862",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "At the end of each player's turn, reduce the cost of cards in their hand by (1).",
+		"dbfId": 56473,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Reductive Player Enchantment",
+		"id": "DALA_862e",
+		"text": "At the end of each player's turn, reduce the cost of cards in their hand by (1).",
+		"dbfId": 56533,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Hallucinating",
+		"id": "DALA_863",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Both players start the game with 10 'Hallucinations' in their deck.",
+		"dbfId": 56475,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Growing",
+		"id": "DALA_864",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Minions gain +1/+1 at the end of their owner's turn.",
+		"dbfId": 55899,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Growing Player Enchantment",
+		"id": "DALA_864e",
+		"text": "Minions gain +1/+1 at the end of their owner's turn.",
+		"dbfId": 55900,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Growth Anomaly",
+		"id": "DALA_864e2",
+		"text": "Increased stats.",
+		"dbfId": 55901,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Explosive",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
+		"id": "DALA_865",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After a minion is summoned, it gains \"<b>Deathrattle</b>: Deal 1 damage to all minions.\"",
+		"dbfId": 56477,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Explosive Player Enchantment",
+		"id": "DALA_865e",
+		"text": "After a minion is summoned, it gains \"<b>Deathrattle</b>: Deal 1 damage to all minions.\"",
+		"dbfId": 56797,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Explosive",
+		"id": "DALA_865e2",
+		"text": "Granted '<b>Deathrattle</b>: Deal 1 damage to all minions.'",
+		"dbfId": 56798,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Rejuvenating",
+		"id": "DALA_866",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]At the start of each\nplayer's turn, that\nplayer restores 2 Health\nto their hero.",
+		"dbfId": 56476,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Rejuvenating Player Enchantment",
+		"id": "DALA_866e",
+		"text": "[x]At the start of each\nplayer's turn, that\nplayer restores 2 Health\nto their hero.",
+		"dbfId": 56805,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Anomaly - Infused",
+		"referencedTags": [
+			"DIVINE_SHIELD",
+			"RUSH",
+			"TAUNT",
+			"WINDFURY"
+		],
+		"id": "DALA_867",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After a minion is summoned, it gains <b>Taunt</b>, <b>Divine Shield</b>, <b>Rush</b>, or <b>Windfury</b> at random.",
+		"dbfId": 55923,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Anomaly - Infused Player Enchantment",
+		"id": "DALA_867e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After a minion is summoned, it gains <b>Taunt</b>, <b>Divine Shield</b>, <b>Rush</b>, or <b>Windfury</b> at random.",
+		"dbfId": 55924,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Recruit",
+		"id": "DALA_901",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"PermanentAdd_Idle": [
+				"PermanentAdd_Idle.ogg"
+			],
+			"MadameLazul_HeroPower_Idle_Loop": [
+				"MadameLazul_HeroPower_Idle_Loop.ogg"
+			]
+		},
+		"text": "Choose an enemy minion. Add it to your Adventure Deck.",
+		"dbfId": 54607,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Dismiss",
+		"id": "DALA_902",
+		"audio": {
+			"play": [],
+			"death": [],
+			"PermanentRemove_Impact": [
+				"PermanentRemove_Impact.ogg"
+			],
+			"attack": [],
+			"PermanentRemove_Idle_Loop": [
+				"PermanentRemove_Idle_Loop.ogg"
+			],
+			"PermanentRemove_Deck_Loop": [
+				"PermanentRemove_Deck_Loop.ogg"
+			]
+		},
+		"text": "Choose a friendly minion. Remove it from your Adventure Deck.",
+		"dbfId": 54608,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Take a Chance",
+		"id": "DALA_903",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Reduce the cost of a random card in your Adventure Deck to (0).",
+		"dbfId": 54609,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Lucky!",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
+		"id": "DALA_903e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Costs (0).",
+		"dbfId": 55138,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Good Food",
+		"id": "DALA_904",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_Physical_Cast": [
+				"Shared_Physical_Cast.ogg"
+			]
+		},
+		"text": "Increase your starting Health by 5.",
+		"dbfId": 54611,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Right Hand Man",
+		"id": "DALA_905",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Loop_01": [
+				"Holy_Targeted_Loop_01.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Holy_Targeted_Start_01": [
+				"Holy_Targeted_Start_01.ogg"
+			]
+		},
+		"text": "Choose a friendly minion. It always starts in your hand.",
+		"dbfId": 54612,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Right Hand Man",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
+		"id": "DALA_905e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Always starts in your hand.",
+		"dbfId": 56283,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Round of Drinks",
+		"id": "DALA_906",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"KingMukla_BarrelToss_Impact_1": [
+				"KingMukla_BarrelToss_Impact_1.ogg"
+			]
+		},
+		"text": "[x]Add all enemy minions\nto your Adventure Deck.\nThey gain +1/+1\nfor this run.",
+		"dbfId": 54613,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Merriment",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
+		"id": "DALA_906e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+1/+1.",
+		"dbfId": 56287,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Recruit a Veteran",
+		"referencedTags": [
+			"DISCOVER"
+		],
+		"id": "DALA_907",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Weapon_Woecleaver_Trigger_Sound": [
+				"Weapon_Woecleaver_Trigger_Sound.ogg"
+			],
+			"attack": [],
+			"SpawnToDeck_CardOverDeck_Arcane": [
+				"SpawnToDeck_CardOverDeck_Arcane.ogg"
+			]
+		},
+		"text": "<b>Discover</b> a <b>Legendary</b> minion. Add it to your Adventure Deck.",
+		"dbfId": 54614,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Tell a Story",
+		"id": "DALA_908",
+		"audio": {
+			"play": [],
+			"wow_levelup": [
+				"wow_levelup.ogg"
+			],
+			"death": [],
+			"Goldenize_Idle_Sound": [
+				"Goldenize_Idle_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "Give a friendly minion +2/+2 for this run.",
+		"dbfId": 54615,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Stories Told",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
+		"id": "DALA_908e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2/+2.",
+		"dbfId": 55137,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "You're All Fired!",
+		"id": "DALA_909",
+		"audio": {
+			"play": [],
+			"death": [],
+			"PermanentRemove_Impact": [
+				"PermanentRemove_Impact.ogg"
+			],
+			"attack": [],
+			"PermanentRemove_Idle_Loop": [
+				"PermanentRemove_Idle_Loop.ogg"
+			],
+			"PermanentRemove_Deck_Loop": [
+				"PermanentRemove_Deck_Loop.ogg"
+			]
+		},
+		"text": "Remove all friendly minions in play from your Adventure Deck.",
+		"dbfId": 54616,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "The Gang's All Here!",
+		"id": "DALA_910",
+		"audio": {
+			"play": [],
+			"PermanentAdd_Impact": [
+				"PermanentAdd_Impact.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"PermanentAdd_Idle": [
+				"PermanentAdd_Idle.ogg"
+			],
+			"MadameLazul_HeroPower_Idle_Loop": [
+				"MadameLazul_HeroPower_Idle_Loop.ogg"
+			]
+		},
+		"text": "Choose a friendly minion. Add three new copies of it to your Adventure Deck.",
+		"dbfId": 54617,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Kindle",
+		"id": "DALA_911",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Look at four spells from your Adventure Deck. Choose one to remove.",
+		"dbfId": 54618,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Brood",
+		"id": "DALA_912",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Fill the tavern with new minions.",
+		"dbfId": 54619,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Tall Tales",
+		"id": "DALA_913",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]Choose a friendly minion.\nIt gains +4/+4 but costs\n(2) more for this run.",
+		"dbfId": 54620,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Gossip",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
+		"id": "DALA_913e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+4/+4 and costs (2) more.",
+		"dbfId": 55139,
+		"type": "Enchantment"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "The Upper Hand",
+		"id": "DALA_914",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Weapon_Woecleaver_Trigger_Sound": [
+				"Weapon_Woecleaver_Trigger_Sound.ogg"
+			],
+			"attack": [],
+			"SpawnToDeck_CardOverDeck_Arcane": [
+				"SpawnToDeck_CardOverDeck_Arcane.ogg"
+			]
+		},
+		"text": "Look at four spells from your deck. Reduce the cost of one by (3) for this run.",
+		"dbfId": 54621,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "The Upper Hand",
+		"mechanics": [
+			"CANT_BE_SILENCED"
+		],
+		"id": "DALA_914e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Costs (3) less.",
+		"dbfId": 55603,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Ol' Barkeye",
+		"health": 15,
+		"id": "DALA_Barkeye",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Barkeye_Male_Gnoll_Death_02.ogg"
+			],
+			"attack": [
+				"VO_DALA_Barkeye_Male_Gnoll_Attack_01.ogg"
+			]
+		},
+		"dbfId": 54550,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Chomper",
+		"health": 10,
+		"id": "DALA_BOSS_01h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Chomper survives the sewers by snacking on smaller minions.</i>",
+		"dbfId": 53750,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Chomp",
+		"mechanics": [
+			"LIFESTEAL"
+		],
+		"id": "DALA_BOSS_01p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\n<b>Lifesteal</b>\nDeal 1 damage to a minion.",
+		"dbfId": 53751,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Chomp",
+		"mechanics": [
+			"LIFESTEAL"
+		],
+		"id": "DALA_BOSS_01px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\n<b>Lifesteal</b>\nDeal 2 damage to a minion.",
+		"dbfId": 55987,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Awilo, Cooking Trainer",
+		"health": 30,
+		"id": "DALA_BOSS_02h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This chef is cooking\nup some REALLY healthy food.</i>",
+		"dbfId": 53779,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "The Feast",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_02p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter you cast a spell,\nrestore #3 Health\nto your hero.",
+		"dbfId": 53781,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "The Feast",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_02px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter you cast a spell,\nrestore #5 Health\nto your hero.",
+		"dbfId": 55988,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Reductomara'd",
+		"id": "DALA_BOSS_03e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Costs (1) less.",
+		"dbfId": 56255,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "The Great Akazamzarak",
+		"health": 10,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_03h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>It's not real magic. He's got cards tucked into his sleeve.</i>",
+		"dbfId": 53667,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Prestidigitation",
+		"id": "DALA_BOSS_03p",
+		"audio": {
+			"play": [],
+			"Card_Play_HeroPower_SpellPower_Sound": [
+				"Card_Play_HeroPower_SpellPower_Sound.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nAdd a random magical feat to your hand.",
+		"dbfId": 53668,
+		"type": "Hero_power",
+		"entourage": [
+			"DALA_BOSS_03t",
+			"DALA_BOSS_03t2",
+			"DALA_BOSS_03t3",
+			"DALA_BOSS_03t4"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Prestidigitation",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_03px",
+		"audio": {
+			"play": [],
+			"Card_Play_HeroPower_SpellPower_Sound": [
+				"Card_Play_HeroPower_SpellPower_Sound.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nAdd a random magical feat to your hand.",
+		"dbfId": 55989,
+		"type": "Hero_power",
+		"entourage": [
+			"DALA_BOSS_03t",
+			"DALA_BOSS_03t2",
+			"DALA_BOSS_03t3",
+			"DALA_BOSS_03t4"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Reductomara",
+		"id": "DALA_BOSS_03t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Reductomara_AE_Hand_Sound": [
+				"Reductomara_AE_Hand_Sound.ogg"
+			],
+			"Reductomara_AE_Deck_Sound": [
+				"Reductomara_AE_Deck_Sound.ogg"
+			]
+		},
+		"text": "Reduce the cost of all spells in both player's hand and deck by (1).",
+		"dbfId": 54071,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Bunnifitronus",
+		"id": "DALA_BOSS_03t2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Transform a random minion into a random critter.",
+		"dbfId": 54072,
+		"type": "Spell",
+		"entourage": [
+			"EX1_tk28",
+			"CS2_tk1",
+			"hexfrog"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Presto Legendaro",
+		"id": "DALA_BOSS_03t3",
+		"audio": {
+			"play": [],
+			"Card_Play_HeroPower_SpellPower_Sound": [
+				"Card_Play_HeroPower_SpellPower_Sound.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "Give each player a random Golden <b>Legendary</b> minion.",
+		"dbfId": 54073,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Presto Legendaro Marker",
+		"id": "DALA_BOSS_03t3e",
+		"dbfId": 56354,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Yoggers Poggers",
+		"id": "DALA_BOSS_03t4",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"DeckOfWonders_Impact_Sound": [
+				"DeckOfWonders_Impact_Sound.ogg"
+			]
+		},
+		"text": "Shuffle three Scrolls of Wonder into each player's deck.",
+		"dbfId": 54074,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Kaye Toogie",
+		"health": 30,
+		"id": "DALA_BOSS_04h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Step 1: Open portal.\nStep 2: Minions fight.\nStep 3: ...Victory?</i>",
+		"dbfId": 53558,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Open Wormhole",
+		"id": "DALA_BOSS_04p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"DalaranPortal_Deck_AE": [
+				"DalaranPortal_Deck_AE.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nBoth players summon a minion from their deck. They fight.",
+		"dbfId": 53559,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "The Amazing \"Bonepaw\"",
+		"health": 30,
+		"id": "DALA_BOSS_05h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>What's amazing is how far he's gotten copying other people's spells.</i>",
+		"dbfId": 53572,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Mana Echoes",
+		"id": "DALA_BOSS_05p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nCast a random spell that\nwas cast this game\n<i>(targets chosen randomly)</i>",
+		"dbfId": 53573,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 8,
+		"set": "Dalaran",
+		"health": 30,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"dbfId": 54434,
+		"type": "Hero",
+		"playerClass": "Warrior",
+		"elite": true,
+		"armor": 10,
+		"name": "\"Scourgelord\" Dazzik",
+		"id": "DALA_BOSS_06dk",
+		"audio": {
+			"play": [
+				"VO_DALA_BOSS_06dk_Male_Goblin_Intro_01.ogg"
+			],
+			"death": [
+				"VO_DALA_BOSS_06dk_Male_Goblin_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_BOSS_06dk_Male_Goblin_Attack_03.ogg"
+			]
+		},
+		"text": "<b>Battlecry</b>: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
+		"cardClass": "WARRIOR",
+		"rarity": "Legendary"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Dazzik \"Hellscream\"",
+		"health": 30,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_06h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [
+				"VO_DALA_BOSS_06h_Male_Goblin_Attack_01.ogg"
+			]
+		},
+		"text": "<i>Something about\nthe Warchief seems\na little... off.</i>",
+		"dbfId": 53636,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "\"Armor Up\"",
+		"id": "DALA_BOSS_06p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGain 2 Armor.",
+		"dbfId": 53640,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "\"Tank Up!\"",
+		"id": "DALA_BOSS_06px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGain 4 Armor.",
+		"dbfId": 55990,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Flying!",
+		"id": "DALA_BOSS_07e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Belnaara is <b>Immune</b> for now.",
+		"dbfId": 55319,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Flight Master Belnaara",
+		"health": 30,
+		"id": "DALA_BOSS_07h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>When it comes to Fight or Flight, Belnaara chooses both.</i>",
+		"dbfId": 53607,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": " de dano)</i>",
+			"zhCN": "点伤害）</i>。",
+			"itIT": " |4(restante,restanti))</i>",
+			"enUS": " damage remaining)</i>",
+			"frFR": " |4(point,points) de dégâts.)</i>",
+			"zhTW": "點傷害)</i>",
+			"deDE": " Schaden)</i>",
+			"jaJP": "ダメージ）</i>",
+			"plPL": " pkt. obrażeń)</i>",
+			"esES": " p.)</i>.",
+			"ruRU": " ед.)</i>.",
+			"esMX": " de daño)</i>",
+			"koKR": " 남음)</i>",
+			"thTH": " แต้ม)</i>"
+		},
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Take Flight!",
+		"id": "DALA_BOSS_07p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter taking 15 damage,\nBelnaara will take flight.\n<i>(",
+		"dbfId": 54078,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": ")</i>",
+			"zhCN": "回合）</i>。",
+			"itIT": " |4(restante,restanti))</i>",
+			"enUS": " turns remaining)</i>",
+			"frFR": " |4(tour,tours).)</i>",
+			"zhTW": "回合)</i>",
+			"deDE": " |4(Zug,Züge))</i>",
+			"jaJP": "ターン）</i>",
+			"plPL": ")</i>",
+			"esES": ")</i>.",
+			"ruRU": " |4(ход,хода,ходов)</i>.",
+			"esMX": ")</i>",
+			"koKR": "턴 남음)</i>",
+			"thTH": " เทิร์น)</i>"
+		},
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Flying!",
+		"id": "DALA_BOSS_07p2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nBelnaara will land in 2 turns.\n<i>(",
+		"dbfId": 56700,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "Applebough",
+		"health": 30,
+		"id": "DALA_BOSS_08h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This old tree is full of\nknowledge to drop.</i>",
+		"dbfId": 53309,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Apple Toss",
+		"id": "DALA_BOSS_08p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"AppleToss_Missile_Sound": [
+				"AppleToss_Missile_Sound.ogg"
+			],
+			"Shared_Physical_Cast": [
+				"Shared_Physical_Cast.ogg"
+			],
+			"AppleToss_Impact_Sound": [
+				"AppleToss_Impact_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nDeal $1 damage to the\nlowest Health enemy.\nIf it dies, repeat this.",
+		"dbfId": 53308,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Apple Toss",
+		"id": "DALA_BOSS_08px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"AppleToss_Missile_Sound": [
+				"AppleToss_Missile_Sound.ogg"
+			],
+			"Shared_Physical_Cast": [
+				"Shared_Physical_Cast.ogg"
+			],
+			"AppleToss_Impact_Sound": [
+				"AppleToss_Impact_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nDeal $2 damage to the\nlowest Health enemy.\nIf it dies, repeat this.",
+		"dbfId": 55991,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Dalaran",
+		"name": "Archivist Oshi",
+		"health": 30,
+		"id": "DALA_BOSS_09h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Those who forget history are doomed to resummon it.</i>",
+		"dbfId": 53562,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Repeat History",
+		"id": "DALA_BOSS_09p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Toki_TimePortal_Impact_Sound": [
+				"Toki_TimePortal_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a random friendly minion that died this turn.",
+		"dbfId": 53563,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Repeat History",
+		"id": "DALA_BOSS_09px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Toki_TimePortal_Impact_Sound": [
+				"Toki_TimePortal_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a random friendly minion that died this game.",
+		"dbfId": 55992,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Mo Eniwhiskers",
+		"health": 30,
+		"id": "DALA_BOSS_10h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Mo's money creates Mo's problems.</i>",
+		"dbfId": 53483,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Street Smarts",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_10p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nWhenever you play a Coin, draw a card.",
+		"dbfId": 53484,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Street Smarts",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_10px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nWhenever a player plays\na Coin, draw a card.",
+		"dbfId": 56359,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Backstabby",
+		"id": "DALA_BOSS_11e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+1 Attack.",
+		"dbfId": 53720,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Backstabby",
+		"id": "DALA_BOSS_11ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2 Attack.",
+		"dbfId": 55994,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Noz Timbertail",
+		"health": 30,
+		"id": "DALA_BOSS_11h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This kobold pirate has elevated sneak attacks to an art form.</i>",
+		"dbfId": 53714,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Backstabber",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_11p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nWhenever a <b><b>Stealth</b>ed</b>\nminion is summoned,\ngive it +1 Attack.",
+		"dbfId": 53716,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Backstabber",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_11px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nWhenever a <b>Stealthed</b>\nminion is summoned,\ngive it +2 Attack.",
+		"dbfId": 55993,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Cravitz Lorent",
+		"health": 30,
+		"id": "DALA_BOSS_12h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Your battle with this romance novelist won't have a happy ending.</i>",
+		"dbfId": 53783,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Forbidden Love",
+		"id": "DALA_BOSS_12p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"ForbiddenLove_OverrideDeath": [
+				"ForbiddenLove_OverrideDeath.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nDestroy a random minion for each player.",
+		"dbfId": 53784,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Forbidden Love",
+		"id": "DALA_BOSS_12px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nDestroy a random minion for each player.",
+		"dbfId": 56321,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Albin Eastoft",
+		"health": 30,
+		"id": "DALA_BOSS_13h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Friend? Foe? He's on a beastial rampage, he's not particular.</i>",
+		"dbfId": 53734,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Slice and Dice",
+		"id": "DALA_BOSS_13p",
+		"audio": {
+			"play": [],
+			"Shared_SneakyMissileStandard2_Cast_1": [
+				"Shared_SneakyMissileStandard2_Cast_1.ogg"
+			],
+			"Sneaky_Target_Loop_01": [
+				"Sneaky_Target_Loop_01.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_SneakyAttackImpactStandard_1": [
+				"Shared_SneakyAttackImpactStandard_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $1-$3 damage to three random minions.",
+		"dbfId": 53735,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Tierra Blythe",
+		"health": 30,
+		"id": "DALA_BOSS_14h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Be sure to tip\nyour wait staff!\n(Or else.)</i>",
+		"dbfId": 53637,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Order Up!",
+		"id": "DALA_BOSS_14p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon a 2/2 Kind Waitress.",
+		"dbfId": 53638,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Order Up!",
+		"id": "DALA_BOSS_14px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon two 2/2 Kind Waitresses.",
+		"dbfId": 55995,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 2,
+		"set": "Dalaran",
+		"health": 2,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 53639,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 2,
+		"name": "\"Kind\" Waitress",
+		"id": "DALA_BOSS_14t",
+		"audio": {
+			"play": [
+				"VO_DALA_BOSS_14t_Female_Dwarf_Play_01.ogg",
+				"FriendlyBartender_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_BOSS_14t_Female_Dwarf_Death_01.ogg",
+				"FriendlyBartender_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_BOSS_14t_Female_Dwarf_Attack_01.ogg",
+				"FriendlyBartender_Underlay_Attack.ogg"
+			]
+		},
+		"text": "[x]Enemies attacking this\nhave a 50% chance to\nattack someone else.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Dalaran",
+		"name": "Moon Priestess Nici",
+		"health": 30,
+		"id": "DALA_BOSS_15h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Time heals all wounds. But if you're in a hurry, call Nici!</i>",
+		"dbfId": 53567,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Blessing of Elune",
+		"id": "DALA_BOSS_15p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nAll healing is doubled.",
+		"dbfId": 54099,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Equivalent Exchange Marker",
+		"id": "DALA_BOSS_16e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 55980,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Alchemist Wendy",
+		"health": 30,
+		"id": "DALA_BOSS_16h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This alchemist mixes up decks, attempting to create golden cards.</i>",
+		"dbfId": 53568,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Equivalent Exchange",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_16p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSwap a random card in each player's hand.",
+		"dbfId": 53569,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Equivalent Exchange",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_16px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSwap a random card in each player's hand.",
+		"dbfId": 55996,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "Tala Stonerage",
+		"health": 30,
+		"id": "DALA_BOSS_17h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Druids walk many paths.\nTala walks them all.</i>",
+		"dbfId": 53571,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Twin Paths",
+		"mechanics": [
+			"AURA"
+		],
+		"id": "DALA_BOSS_17p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nYour <b>Choose One</b> cards\nand powers have both\neffects combined.",
+		"dbfId": 54101,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Disidra Stormglory",
+		"health": 30,
+		"id": "DALA_BOSS_18h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Terribly tenacious.\nTruly thaumaturgic.\nTotally totemic.</i>",
+		"dbfId": 53528,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Totemic Summons",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_18p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon ANY random Totem.",
+		"dbfId": 53665,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Totemic Summons",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_18px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon ANY random Totem.",
+		"dbfId": 55997,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Linzi Redgrin",
+		"health": 10,
+		"id": "DALA_BOSS_19h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This teeny-tiny\nrogue dishes out\nsome big big hurt.</i>",
+		"dbfId": 53776,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Lil' Eviscerate",
+		"mechanics": [
+			"COMBO"
+		],
+		"id": "DALA_BOSS_19p",
+		"audio": {
+			"play": [],
+			"Sneaky_Target_Loop_01": [
+				"Sneaky_Target_Loop_01.ogg"
+			],
+			"death": [],
+			"Rogue_Eviscerate_Impact_1": [
+				"Rogue_Eviscerate_Impact_1.ogg"
+			],
+			"attack": [],
+			"Rogue_Eviscerate_Cast_1": [
+				"Rogue_Eviscerate_Cast_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal 1 damage\n<b>Combo:</b> 2 instead.",
+		"dbfId": 53777,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Lil' Eviscerate",
+		"mechanics": [
+			"COMBO"
+		],
+		"id": "DALA_BOSS_19px",
+		"audio": {
+			"play": [],
+			"Sneaky_Target_Loop_01": [
+				"Sneaky_Target_Loop_01.ogg"
+			],
+			"death": [],
+			"Rogue_Eviscerate_Impact_1": [
+				"Rogue_Eviscerate_Impact_1.ogg"
+			],
+			"attack": [],
+			"Rogue_Eviscerate_Cast_1": [
+				"Rogue_Eviscerate_Cast_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal 1 damage\n<b>Combo:</b> 2 instead.",
+		"dbfId": 55998,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Vas'no",
+		"health": 30,
+		"id": "DALA_BOSS_20h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This troll water shaman is into undertows and overloads.</i>",
+		"dbfId": 53521,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Stormswell",
+		"id": "DALA_BOSS_20p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nYour spells with <b>Overload</b> cast twice.",
+		"dbfId": 54105,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Stormswell",
+		"id": "DALA_BOSS_20px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nYour spells with <b>Overload</b> cast thrice.",
+		"dbfId": 55999,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Whirt the All-Knowing",
+		"health": 30,
+		"id": "DALA_BOSS_21h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>What's the secret to knowing all secrets? It's a secret.</i>",
+		"dbfId": 53560,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Prediction",
+		"id": "DALA_BOSS_21p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nPut a random class <b>Secret</b> into the battlefield.",
+		"dbfId": 53561,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Shushed",
+		"id": "DALA_BOSS_22ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b><b>Silence</b>d</b>.",
+		"dbfId": 56001,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Dalaran",
+		"name": "Bookmaster Bae Chao",
+		"health": 30,
+		"id": "DALA_BOSS_22h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Quiet, please.</i>",
+		"dbfId": 53538,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Shhh!",
+		"id": "DALA_BOSS_22p",
+		"audio": {
+			"play": [],
+			"Mass_Dispell_cast": [
+				"Mass_Dispell_cast.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\n<b>Silence</b> ALL minions.",
+		"dbfId": 53539,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Shhh!",
+		"id": "DALA_BOSS_22px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nAfter a minion is summoned, <b>Silence</b> it.",
+		"dbfId": 56000,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "Sharky McFin",
+		"health": 30,
+		"id": "DALA_BOSS_23h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This McShark feeds\non the McWeak.</i>",
+		"dbfId": 53673,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Sharkbite",
+		"id": "DALA_BOSS_23p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nDestroy a random damaged minion.",
+		"dbfId": 53674,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Sharkbite",
+		"id": "DALA_BOSS_23px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nDestroy a random damaged enemy minion.",
+		"dbfId": 56002,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Ar'ha's Call Player Enchantment",
+		"id": "DALA_BOSS_24e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Triggers additional <b>Battlecries.</b>",
+		"dbfId": 53758,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Ranger Ar'ha",
+		"health": 30,
+		"id": "DALA_BOSS_24h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Battlecry havoc,\nand let slip the\nAlleycats of war!</i>",
+		"dbfId": 53583,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Ar'ha's Call",
+		"referencedTags": [
+			"BATTLECRY"
+		],
+		"id": "DALA_BOSS_24p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Rage_Untargeted_CommandingShout_Gong_FX": [
+				"Rage_Untargeted_CommandingShout_Gong_FX.ogg"
+			],
+			"Generic_Untargeted_Cast_01": [
+				"Generic_Untargeted_Cast_01.ogg"
+			],
+			"Rage_CommandingShout_Cast_Horn_Sound": [
+				"Rage_CommandingShout_Cast_Horn_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nYour next <b>Battlecry</b> triggers an additional time.",
+		"dbfId": 53757,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Ar'ha's Call",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"referencedTags": [
+			"BATTLECRY"
+		],
+		"id": "DALA_BOSS_24px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Rage_Untargeted_CommandingShout_Gong_FX": [
+				"Rage_Untargeted_CommandingShout_Gong_FX.ogg"
+			],
+			"Generic_Untargeted_Cast_01": [
+				"Generic_Untargeted_Cast_01.ogg"
+			],
+			"Rage_CommandingShout_Cast_Horn_Sound": [
+				"Rage_CommandingShout_Cast_Horn_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nYour next <b>Battlecry</b> triggers an additional time.",
+		"dbfId": 56003,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Toyification",
+		"id": "DALA_BOSS_25e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Stats changed to 1/1.",
+		"dbfId": 53701,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Jepetto Joybuzz",
+		"health": 30,
+		"id": "DALA_BOSS_25h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Some assembly required.</i>",
+		"dbfId": 53541,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Assembly",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_25p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter a player draws a\nminion, they summon\na 1/1 copy of it.",
+		"dbfId": 53542,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Assembly",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_25px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter you draw a minion,\nsummon a 1/1 copy of it.",
+		"dbfId": 56004,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "Hoard of Toys",
+		"id": "DALA_BOSS_25t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"DollmasterDorian_CustomSpawn_Sound": [
+				"DollmasterDorian_CustomSpawn_Sound.ogg"
+			]
+		},
+		"text": "Summon 1/1 copies of five random minions.",
+		"dbfId": 53873,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Dalaran Fountain Golem",
+		"health": 30,
+		"id": "DALA_BOSS_26h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Ice cold this fountain flows frostin' up foes with lyrical ice floes.</i>",
+		"dbfId": 53566,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Cold Water",
+		"id": "DALA_BOSS_26p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\n<b>Freeze</b> the first minion that attacks you each turn.",
+		"dbfId": 54106,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Cold Water",
+		"id": "DALA_BOSS_26px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nAfter a minion attacks you, <b>Freeze</b> it.",
+		"dbfId": 56005,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Rasil Fireborne",
+		"health": 30,
+		"id": "DALA_BOSS_27h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Some say art is subjective. Rasil\nprefers destructive.</i>",
+		"dbfId": 53599,
+		"type": "Hero",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Masterpiece!",
+		"id": "DALA_BOSS_27p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Masterpiece_CustomSpawn_Intro": [
+				"Masterpiece_CustomSpawn_Intro.ogg"
+			],
+			"Masterpiece_CustomSpawn_Impact": [
+				"Masterpiece_CustomSpawn_Impact.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nSpend all your Mana.\nSummon a random minion\nthat costs that much.",
+		"dbfId": 53600,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Savvy",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
+		"id": "DALA_BOSS_28e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Costs (0) this turn.",
+		"dbfId": 56186,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Xur'ios",
+		"health": 30,
+		"id": "DALA_BOSS_28h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Master of spellcasting.\n[x]Lousy at spell-aiming.</i>",
+		"dbfId": 53880,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Scroll Savvy",
+		"id": "DALA_BOSS_28p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nSpells cost (0) the turn they are drawn.",
+		"dbfId": 53881,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Mama Diggs",
+		"health": 40,
+		"id": "DALA_BOSS_29h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>She's always digging into her deck for elementals.</i>",
+		"dbfId": 53584,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Excavate",
+		"id": "DALA_BOSS_29p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Shared_Physical_PreCast": [
+				"Shared_Physical_PreCast.ogg"
+			],
+			"attack": [],
+			"Shared_Physical_Fizzle": [
+				"Shared_Physical_Fizzle.ogg"
+			],
+			"Physical_Targeted_Impact_01": [
+				"Physical_Targeted_Impact_01.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal 2 damage to a friendly Elemental. Find out what's inside.",
+		"dbfId": 53585,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "The Rat King",
+		"health": 10,
+		"id": "DALA_BOSS_30h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>There must always\nbe a rat king.</i>",
+		"dbfId": 53601,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "A Tale of Kings",
+		"id": "DALA_BOSS_30p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SwampMuck_CustomSpawn_Sound": [
+				"SwampMuck_CustomSpawn_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon an Underbelly Rat.",
+		"dbfId": 53602,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"race": "BEAST",
+		"health": 1,
+		"dbfId": 53603,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 10,
+		"name": "Underbelly Rat",
+		"id": "DALA_BOSS_30t",
+		"audio": {
+			"play": [
+				"LOOTA_BOSS_18t_Rat_Play.ogg"
+			],
+			"death": [
+				"LOOTA_BOSS_18t_Rat_Death.ogg"
+			],
+			"attack": [
+				"LOOTA_BOSS_18t_Rat_Attack.ogg"
+			]
+		},
+		"text": "When your hero dies, the eldest Underbelly Rat replaces your hero.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Blinged Out!",
+		"id": "DALA_BOSS_31e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Has +4/+4. This minion is STUNNING!",
+		"dbfId": 53608,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Blinged Out!",
+		"id": "DALA_BOSS_31ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Has +8/+8. This minion is GORGEOUS!",
+		"dbfId": 56008,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Timothy Jones",
+		"health": 30,
+		"id": "DALA_BOSS_31h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Timothy has never dusted a golden.\nNot even once!</i>",
+		"dbfId": 53587,
+		"type": "Hero",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Bling it On!",
+		"id": "DALA_BOSS_31p",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nMake a minion Golden. If it's already Golden, give it +4/+4.",
+		"dbfId": 53588,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Bling it On!",
+		"id": "DALA_BOSS_31px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Goldenize_Idle_Sound": [
+				"Goldenize_Idle_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nMake a minion Golden. If it's already Golden, give it +8/+8.",
+		"dbfId": 56007,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Nondescript Fade",
+		"id": "DALA_BOSS_32e1",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Has <b>Stealth</b>",
+		"dbfId": 53630,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Intrusive Pompadour",
+		"id": "DALA_BOSS_32e2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Has <b>Taunt</b>.",
+		"dbfId": 53642,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Incredible Quiff",
+		"id": "DALA_BOSS_32e3",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2 Health",
+		"dbfId": 53643,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Aggressive Mohawk",
+		"id": "DALA_BOSS_32e4",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2 Attack",
+		"dbfId": 53645,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Kizi Copperclip",
+		"health": 10,
+		"id": "DALA_BOSS_32h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>A skilled stylist, but get on her bad side and she's a bit snippy.</i>",
+		"dbfId": 53624,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Makeover",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_32p",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive a friendly minion a random haircut.",
+		"dbfId": 53626,
+		"type": "Hero_power",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Gold Elemental",
+		"health": 40,
+		"id": "DALA_BOSS_33h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Something has gone awry at the bottom of the wishing well.</i>",
+		"dbfId": 53564,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Made of Coins",
+		"id": "DALA_BOSS_33p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nWhenever you take damage, add a Coin\nto your hand.",
+		"dbfId": 53565,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "Carousel Gryphon",
+		"health": 30,
+		"id": "DALA_BOSS_34h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Round and round your minions go...</i>",
+		"dbfId": 53802,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Merry Go Round",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_34p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAt the end of your turn,\nmerrily rotate all minions\naround the board.",
+		"dbfId": 53803,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Dalaran",
+		"name": "Soothsayer Zoie",
+		"health": 30,
+		"id": "DALA_BOSS_35h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This healer will fight\nfor her city. Break\nout the sooths!</i>",
+		"dbfId": 53622,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Healing Hands",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_35p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAt the start of your turn,\nrestore #2 Health to\nall friendly minions.",
+		"dbfId": 53623,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Healing Hands",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_35px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAt the start of your turn,\nrestore all friendly\nminions to full Health.",
+		"dbfId": 56010,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Draemus",
+		"health": 30,
+		"id": "DALA_BOSS_36h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Importer of rare and exotic pets. Many of them dangerous.</i>",
+		"dbfId": 53629,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Import \"Pet\"",
+		"id": "DALA_BOSS_36p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nCraft a custom Exotic Pet.",
+		"dbfId": 55320,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Import \"Pet\"",
+		"id": "DALA_BOSS_36px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nCraft a custom Exotic Pet.",
+		"dbfId": 56013,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"race": "BEAST",
+		"attack": 1,
+		"name": "Exotic Pet",
+		"health": 1,
+		"id": "DALA_BOSS_36t",
+		"dbfId": 55321,
+		"type": "Minion",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Ol' Toomba",
+		"health": 30,
+		"id": "DALA_BOSS_37h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>His hunt for treasure consumed his life...\nand maybe yours too.</i>",
+		"dbfId": 53810,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Tales of Fortune",
+		"id": "DALA_BOSS_37p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nShuffle a random old Treasure into your deck.",
+		"dbfId": 53811,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Tales of Fortune",
+		"id": "DALA_BOSS_37px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nShuffle three random old Treasure into your deck.",
+		"dbfId": 56014,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Tipsi Wobblerune",
+		"health": 30,
+		"id": "DALA_BOSS_38h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>She's a portable\nportal party!</i>",
+		"dbfId": 53815,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Portal Party",
+		"id": "DALA_BOSS_38p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_DalaranPortal_FX": [
+				"SpawnToHand_DalaranPortal_FX.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nAdd a random Portal to your hand.",
+		"dbfId": 53816,
+		"type": "Hero_power",
+		"entourage": [
+			"GVG_003",
+			"KAR_077",
+			"KAR_075",
+			"KAR_073",
+			"KAR_091",
+			"KAR_076",
+			"DALA_BOSS_38t"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Portal Party",
+		"id": "DALA_BOSS_38px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToHand_DalaranPortal_FX": [
+				"SpawnToHand_DalaranPortal_FX.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nAdd a random Portal to your hand.",
+		"dbfId": 56015,
+		"type": "Hero_power",
+		"entourage": [
+			"GVG_003",
+			"KAR_077",
+			"KAR_075",
+			"KAR_073",
+			"KAR_091",
+			"KAR_076",
+			"DALA_BOSS_38t"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "PARTY PORTAL!",
+		"id": "DALA_BOSS_38t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Summon a random Partygoer.",
+		"dbfId": 55862,
+		"type": "Spell",
+		"entourage": [
+			"KARA_13_20",
+			"GIL_805",
+			"KARA_13_22",
+			"DAL_721",
+			"BRM_019",
+			"CFM_659"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Light-imbued",
+		"id": "DALA_BOSS_39e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Has +1/+1.",
+		"dbfId": 53819,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Aki the Brilliant",
+		"health": 30,
+		"id": "DALA_BOSS_39h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Handbuffing isn't particularly brilliant but the name stuck.</i>",
+		"dbfId": 53817,
+		"type": "Hero",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "For The Light!",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_39p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"ArmsDealing_Impact_Sound": [
+				"ArmsDealing_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nGive all minions in your hand +1/+1.",
+		"dbfId": 53818,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Oxana Demonslay",
+		"health": 30,
+		"id": "DALA_BOSS_40h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Slaying demons is her profession, but beating you is her passion.</i>",
+		"dbfId": 53820,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Immolation Aura",
+		"id": "DALA_BOSS_40p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter a minion attacks you,\ndeal 2 damage to it.",
+		"dbfId": 53821,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Immolation Aura",
+		"id": "DALA_BOSS_40px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter a minion attacks you,\ndeal 3 damage to it.",
+		"dbfId": 56018,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Ungan Oddkind",
+		"health": 30,
+		"id": "DALA_BOSS_41h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>He conjures up animals. And insults. And insulting animals.</i>",
+		"dbfId": 53870,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "Summon Companion",
+		"id": "DALA_BOSS_41p",
+		"audio": {
+			"play": [],
+			"Paw_Untargeted_01_CotW_Sound": [
+				"Paw_Untargeted_01_CotW_Sound.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Hunter_Animal_Companion": [
+				"Hunter_Animal_Companion.ogg"
+			],
+			"Shared_PawUntargeted02_PreCast": [
+				"Shared_PawUntargeted02_PreCast.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a random\nAnimal Companion.",
+		"dbfId": 53871,
+		"type": "Hero_power",
+		"entourage": [
+			"NEW1_034",
+			"NEW1_032",
+			"NEW1_033"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 5,
+		"set": "Dalaran",
+		"name": "Summon Companions",
+		"id": "DALA_BOSS_41px",
+		"audio": {
+			"play": [],
+			"Paw_Untargeted_01_CotW_Sound": [
+				"Paw_Untargeted_01_CotW_Sound.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Hunter_Animal_Companion": [
+				"Hunter_Animal_Companion.ogg"
+			],
+			"Shared_PawUntargeted02_PreCast": [
+				"Shared_PawUntargeted02_PreCast.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon two random\nAnimal Companions.",
+		"dbfId": 56020,
+		"type": "Hero_power",
+		"entourage": [
+			"NEW1_034",
+			"NEW1_032",
+			"NEW1_033"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "P.O.G.O.",
+		"health": 30,
+		"id": "DALA_BOSS_42h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This bionic bouncing machine has gone completely rogue!</i>",
+		"dbfId": 53903,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Pogoshuffle",
+		"id": "DALA_BOSS_42p",
+		"audio": {
+			"play": [],
+			"Shared_Gearsplosion_Sound_01": [
+				"Shared_Gearsplosion_Sound_01.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nChoose a minion. Shuffle 3 copies of it into your deck.",
+		"dbfId": 53904,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Pogoshuffle",
+		"id": "DALA_BOSS_42px",
+		"audio": {
+			"play": [],
+			"Shared_Gearsplosion_Sound_01": [
+				"Shared_Gearsplosion_Sound_01.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nChoose a minion. Shuffle 3 copies of it into your deck. Draw a card.",
+		"dbfId": 56021,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Magistrix Norroa",
+		"health": 30,
+		"id": "DALA_BOSS_43h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>There's no time\nto read her card text.\nGo, go, GO!</i>",
+		"dbfId": 54155,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Kaironomaly",
+		"id": "DALA_BOSS_43p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nYour opponent has 25 seconds to take their turn.",
+		"dbfId": 54156,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Forseen",
+		"id": "DALA_BOSS_44e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2/+2.",
+		"dbfId": 54305,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Forseen",
+		"id": "DALA_BOSS_44ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+4/+4.",
+		"dbfId": 56024,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Erekem",
+		"health": 30,
+		"id": "DALA_BOSS_44h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This Arakkoa can see the future... and he's stacking the deck.</i>",
+		"dbfId": 54303,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Dark Tidings",
+		"id": "DALA_BOSS_44p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nReveal a minion from your\ndeck. Give it +2/+2 and\nput it on top.",
+		"dbfId": 54304,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Dark Tidings",
+		"id": "DALA_BOSS_44px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nReveal a minion from your\ndeck. Give it +4/+4 and\nput it on top.",
+		"dbfId": 56023,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Moragg",
+		"health": 30,
+		"id": "DALA_BOSS_45h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>\"Prisoner #54293. Indefinite suspension.\nAvoid eye contact.\"</i>",
+		"dbfId": 54293,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": " de dano ao herói inimigo. <i>(aumenta a cada uso)</i>",
+			"zhCN": "点伤害<i>（每次使用伤害都会增加）</i>。",
+			"itIT": " |4(danno,danni)\nall'eroe nemico.\n  <i>(Si potenzia a ogni uso)</i>",
+			"enUS": " damage to\nthe enemy hero.\n<i>(increases each use)</i>",
+			"frFR": " |4(point,points) de dégâts au héros adverse. <i>(Augmente à chaque utilisation.)</i>",
+			"zhTW": "點傷害\n<i>(每次使用提高)</i>",
+			"deDE": " Schaden zu. <i>(Wird mit jedem\nEinsatz stärker)</i>",
+			"jaJP": "ダメージを与える。\n<i>（使用する度に増加）</i>",
+			"plPL": " pkt. obrażeń wrogiemu bohaterowi (<i>(więcej z każdym użyciem)</i>.",
+			"esES": " p. de daño\nal héroe enemigo.\n<i>(Aumenta con cada uso).</i>",
+			"ruRU": " ед. урона герою противника <i>(увеличивается\n[x]с каждым использованием)</i>.",
+			"esMX": " de daño al héroe enemigo <i>(aumenta con cada uso)</i>.",
+			"koKR": " 줍니다. <i>(사용할 때마다 피해 증가)</i>",
+			"thTH": " แต้ม[b]  ให้ฮีโร่ศัตรู <i>(เพิ่มขึ้นทุกครั้งที่ใช้)</i>"
+		},
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Ray of Suffering",
+		"id": "DALA_BOSS_45p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Laser_Impact_Confuse_Sound": [
+				"Laser_Impact_Confuse_Sound.ogg"
+			],
+			"attack": [],
+			"spell_SacredTrial_precast": [
+				"spell_SacredTrial_precast.ogg"
+			],
+			"Laser_Missile_Confuse_Sound": [
+				"Laser_Missile_Confuse_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nDeal",
+		"dbfId": 54294,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": " de dano ao herói inimigo. <i>(aumenta a cada uso)</i>",
+			"zhCN": "点伤害<i>（每次使用伤害都会增加）</i>。",
+			"itIT": " |4(danno,danni)\nall'eroe nemico.\n  <i>(Si potenzia a ogni uso)</i>",
+			"enUS": " damage to\nthe enemy hero.\n<i>(increases each use)</i>",
+			"frFR": " |4(point,points) de dégâts au héros adverse. <i>(Augmente à chaque utilisation.)</i>",
+			"zhTW": "點傷害\n<i>(每次使用提高)</i>",
+			"deDE": " Schaden zu. <i>(Wird mit jedem\nEinsatz stärker)</i>",
+			"jaJP": "ダメージを与える。\n<i>（使用する度に増加）</i>",
+			"plPL": " pkt. obrażeń wrogiemu bohaterowi (<i>(więcej z każdym użyciem)</i>.",
+			"esES": " p. de daño\nal héroe enemigo.\n<i>(Aumenta con cada uso).</i>",
+			"ruRU": " ед. урона герою противника <i>(увеличивается\n[x]с каждым использованием)</i>.",
+			"esMX": " de daño al héroe enemigo <i>(aumenta con cada uso)</i>.",
+			"koKR": " 줍니다. <i>(사용할 때마다 피해 증가)</i>",
+			"thTH": " แต้ม[b]  ให้ฮีโร่ศัตรู <i>(เพิ่มขึ้นทุกครั้งที่ใช้)</i>"
+		},
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Ray of Suffering",
+		"id": "DALA_BOSS_45px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Laser_Impact_Confuse_Sound": [
+				"Laser_Impact_Confuse_Sound.ogg"
+			],
+			"attack": [],
+			"spell_SacredTrial_precast": [
+				"spell_SacredTrial_precast.ogg"
+			],
+			"Laser_Missile_Confuse_Sound": [
+				"Laser_Missile_Confuse_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nDeal",
+		"dbfId": 56025,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Ichoron",
+		"health": 30,
+		"id": "DALA_BOSS_46h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This elemental is\ndouble the trouble and\ntriple the bubble.</i>",
+		"dbfId": 53604,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Protective Bubble",
+		"id": "DALA_BOSS_46p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Splash_Impact_Sound": [
+				"Splash_Impact_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nGive a friendly minion\n<b>Divine Shield</b>.",
+		"dbfId": 53605,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Protective Bubble",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_46px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Splash_Impact_Sound": [
+				"Splash_Impact_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive all your minions <b>Divine Shield</b>.",
+		"dbfId": 56026,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Lavanthor",
+		"health": 30,
+		"id": "DALA_BOSS_47h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>\"What's in your mouth Lavanthor? Spit it out! Bad core hound!\"</i>",
+		"dbfId": 53597,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Lava Belch",
+		"id": "DALA_BOSS_47p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
+			"Shared_NatureImpact02_1": [
+				"Shared_NatureImpact02_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a 0/3 Molten Rock.",
+		"dbfId": 53598,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Lava Belch",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_47px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
+			"Shared_NatureImpact02_1": [
+				"Shared_NatureImpact02_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a 0/3 Molten Rock.",
+		"dbfId": 56027,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"health": 3,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 54295,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Molten Rock",
+		"id": "DALA_BOSS_47t",
+		"audio": {
+			"play": [
+				"DALA_BOSS_47t_MoltenRock_Play.ogg"
+			],
+			"death": [
+				"DALA_BOSS_47t_MoltenRock_Death.ogg"
+			],
+			"attack": [
+				"DALA_BOSS_47t_MoltenRock_Attack.ogg"
+			]
+		},
+		"text": "At the end of your turn, deal 1 damage to all characters.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Voided",
+		"id": "DALA_BOSS_48e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "In the Void.",
+		"dbfId": 54297,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Zuramat the Obliterator",
+		"health": 30,
+		"id": "DALA_BOSS_48h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Imprisoned because the Kirin-Tor mostly frowns on obliterations.</i>",
+		"dbfId": 53594,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "To The Void",
+		"id": "DALA_BOSS_48p",
+		"audio": {
+			"play": [],
+			"Warlock_SiphonSoul_TargetImpact_1": [
+				"Warlock_SiphonSoul_TargetImpact_1.ogg"
+			],
+			"Warlock_Darkbomb_Missile_Sound_01": [
+				"Warlock_Darkbomb_Missile_Sound_01.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nBanish a minion to the Void.",
+		"dbfId": 53595,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Void Shift",
+		"id": "DALA_BOSS_48t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Fel_AE_FullBoardPurple_Sound": [
+				"Fel_AE_FullBoardPurple_Sound.ogg"
+			],
+			"attack": [],
+			"AE_FEL_Impact_01": [
+				"AE_FEL_Impact_01.ogg"
+			]
+		},
+		"text": "Destroy all minions. Summon all minions from the Void.",
+		"dbfId": 54298,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Cyanigosa",
+		"health": 30,
+		"id": "DALA_BOSS_49h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This master of chaotic magic was the chosen agent of Malygos.</i>",
+		"dbfId": 53592,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Uncontrollable Energy",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_49p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter you cast a spell,\ndeal $1 damage to all\nenemies.",
+		"dbfId": 53593,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Uncontrollable Energy",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_49px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Passive Hero Power</b>\nAfter you cast a spell,\ndeal $2 damage to all\nenemies.",
+		"dbfId": 56028,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Nozari",
+		"health": 30,
+		"id": "DALA_BOSS_50h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>When time travel fails, bronze dragons often resort to random sand.</i>",
+		"dbfId": 54299,
+		"type": "Hero",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Sand Breath",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_50p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Alexstraza_MagicalFireBreath_Cast_1": [
+				"Alexstraza_MagicalFireBreath_Cast_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $2 damage to a random enemy.",
+		"dbfId": 54300,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Sand Breath",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_50px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Alexstraza_MagicalFireBreath_Cast_1": [
+				"Alexstraza_MagicalFireBreath_Cast_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $4 damage to a random enemy.",
+		"dbfId": 56029,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Mallificent Manastorm",
+		"health": 30,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_51h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Dread spouse of Millhouse, whom she'd like to have a word with.</i>",
+		"dbfId": 54306,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Tinker",
+		"id": "DALA_BOSS_51p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"WeeBot_CustomSpawn_Sound": [
+				"WeeBot_CustomSpawn_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a 0/4 Squirrel Bomb.",
+		"dbfId": 54307,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 2,
+		"set": "Dalaran",
+		"race": "MECHANICAL",
+		"health": 4,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 54308,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 0,
+		"name": "Elementium Squirrel Bomb",
+		"id": "DALA_BOSS_51t",
+		"audio": {
+			"play": [
+				"CoppertailImposter_BOT_562_Play.ogg"
+			],
+			"death": [
+				"CoppertailImposter_BOT_562_Death.ogg"
+			],
+			"attack": [
+				"CoppertailImposter_BOT_562_Attack.ogg"
+			]
+		},
+		"text": "At the start of your turn, destroy this and deal 2 damage to all enemies.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"race": "MECHANICAL",
+		"health": 1,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 54309,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 5,
+		"name": "Thorium Chicken",
+		"id": "DALA_BOSS_51t2",
+		"audio": {
+			"play": [
+				"SFX_Mekka1_EnterPlay.ogg"
+			],
+			"death": [
+				"SFX_Mekka1_Death.ogg"
+			],
+			"attack": [
+				"SFX_Mekka1_Attack.ogg"
+			]
+		},
+		"text": "After your opponent plays a card, deal 3 damage to their hero.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hold Fast!",
+		"id": "DALA_BOSS_52e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+2 Health and <b>Taunt</b>.",
+		"dbfId": 54435,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hold Fast!",
+		"id": "DALA_BOSS_52ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+4 Health and <b>Taunt</b>.",
+		"dbfId": 56031,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Lieutenant Sinclari",
+		"health": 30,
+		"id": "DALA_BOSS_52h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>She told them the Hold needed more security. She told them!</i>",
+		"dbfId": 54334,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Hold the Gates!",
+		"referencedTags": [
+			"TAUNT"
+		],
+		"id": "DALA_BOSS_52p",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive a minion +2 Health and <b>Taunt</b>.",
+		"dbfId": 54335,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Hold the Gates!",
+		"referencedTags": [
+			"TAUNT"
+		],
+		"id": "DALA_BOSS_52px",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive a minion +4 Health and <b>Taunt</b>.",
+		"dbfId": 56030,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Boogie Beyond",
+		"id": "DALA_BOSS_53e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Granted \"<b>Deathrattle:</b> Resummon this minion.\"",
+		"dbfId": 53621,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Dancin' Deryl",
+		"health": 30,
+		"id": "DALA_BOSS_53h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Can't stop, won't stop, the boogie woogie!</i>",
+		"dbfId": 53556,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Boogie Woogie",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
+		"id": "DALA_BOSS_53p",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"Nature_Spirit_Impact_Sound": [
+				"Nature_Spirit_Impact_Sound.ogg"
+			],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nGive a friendly minion\n \"<b>Deathrattle:</b> Resummon\n this minion.\"",
+		"dbfId": 53557,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Boogie Woogie",
+		"referencedTags": [
+			"DEATHRATTLE"
+		],
+		"id": "DALA_BOSS_53px",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"Nature_Spirit_Impact_Sound": [
+				"Nature_Spirit_Impact_Sound.ogg"
+			],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nGive a friendly minion\n \"<b>Deathrattle:</b> Resummon\n this minion.\"",
+		"dbfId": 56032,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Locksmith Zibb",
+		"health": 30,
+		"id": "DALA_BOSS_54h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Mages in Dalaran rely on Zibb's skills to lock up their spells.</i>",
+		"dbfId": 54336,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"referencedTags": [
+			"OVERLOAD"
+		],
+		"dbfId": 54337,
+		"type": "Hero_power",
+		"playerClass": "Neutral",
+		"name": "Spell Lock",
+		"id": "DALA_BOSS_54p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nSpells <b>Overload</b> for their cost.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Captain Hannigan",
+		"health": 30,
+		"id": "DALA_BOSS_55h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Guards!\nGUARDS!!</i>",
+		"dbfId": 54338,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Raise the Alarm",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_55p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"spell_Holy_target_spare": [
+				"spell_Holy_target_spare.ogg"
+			],
+			"attack": [],
+			"SoundTheBells_Sound": [
+				"SoundTheBells_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a 1/4\nKirin Tor Guard.",
+		"dbfId": 54339,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Raise the Alarm",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_55px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"spell_Holy_target_spare": [
+				"spell_Holy_target_spare.ogg"
+			],
+			"attack": [],
+			"SoundTheBells_Sound": [
+				"SoundTheBells_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a 1/4\nKirin Tor Guard.",
+		"dbfId": 56033,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"set": "Dalaran",
+		"name": "Bribed",
+		"id": "DALA_BOSS_56e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Deathrattle:</b> Return this to your opponent's hand.",
+		"dbfId": 55135,
+		"type": "Enchantment"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Queen Wagtoggle",
+		"health": 30,
+		"id": "DALA_BOSS_56h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>The kobold Queen is ALSO robbing the bank. And your minions.</i>",
+		"dbfId": 54340,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Bribery",
+		"id": "DALA_BOSS_56p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"DeckAE_GoldCoins_Sound": [
+				"DeckAE_GoldCoins_Sound.ogg"
+			],
+			"attack": [],
+			"CoinPouch_SpawnToDeck_Sound": [
+				"CoinPouch_SpawnToDeck_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a minion from your opponent's deck. When it dies, give it back.",
+		"dbfId": 54341,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"attack": 4,
+		"name": "Rival Accomplice",
+		"health": 4,
+		"id": "DALA_BOSS_56t",
+		"audio": {
+			"play": [
+				"VO_DALA_BOSS_56t_Male_Goblin_Play_02.ogg",
+				"SciFiPistol_Underlay_Play.ogg"
+			],
+			"death": [
+				"VO_DALA_BOSS_56t_Male_Goblin_Death_01.ogg",
+				"SciFiPistol_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_DALA_BOSS_56t_Male_Goblin_Attack_01.ogg",
+				"SciFiPistol_Underlay_Attack.ogg"
+			]
+		},
+		"dbfId": 54436,
+		"type": "Minion",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Tracking Coin Played Enchantment",
+		"id": "DALA_BOSS_57e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 56191,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Trade Prince Gallywix",
+		"health": 30,
+		"id": "DALA_BOSS_57h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>The goblin Prince has rigged the market. Against you.</i>",
+		"dbfId": 54342,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Greed is Good",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_57p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nBuy a copy of the first card your opponent plays each turn for a Coin.",
+		"dbfId": 54343,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Blast Powder",
+		"id": "DALA_BOSS_58e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "If this minion takes damage, it will be destroyed.",
+		"dbfId": 54367,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"set": "Dalaran",
+		"name": "Wire Watcher Player Enchantment",
+		"id": "DALA_BOSS_58e2",
+		"dbfId": 54500,
+		"type": "Enchantment"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Boommaster Flark",
+		"health": 30,
+		"id": "DALA_BOSS_58h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Former Boom protégé, Flark has a blast messing with minions.</i>",
+		"dbfId": 54344,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Blast Powder",
+		"id": "DALA_BOSS_58p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nCoat a minion in Blast\nPowder. When it takes\ndamage, destroy it.",
+		"dbfId": 54345,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"hideStats": true,
+		"health": 3,
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
+		"dbfId": 54451,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 3,
+		"name": "The Wire",
+		"id": "DALA_BOSS_58t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "While wires are touching, take 5 damage at the start of your turn.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"hideStats": true,
+		"health": 3,
+		"mechanics": [
+			"UNTOUCHABLE"
+		],
+		"dbfId": 54452,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 3,
+		"name": "The Other Wire",
+		"id": "DALA_BOSS_58t2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "While wires are touching, take 5 damage at the start of your turn.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Payday",
+		"id": "DALA_BOSS_59e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Increased stats.",
+		"dbfId": 55176,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Madam Goya",
+		"health": 30,
+		"id": "DALA_BOSS_59h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>\"Extortion\" is such an ugly word. Goya prefers \"Licensing Fees.\"</i>",
+		"dbfId": 54346,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Blackmail",
+		"id": "DALA_BOSS_59p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Spellstone_Upgrade_Impact_Rogue_Sound": [
+				"Spellstone_Upgrade_Impact_Rogue_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nReplace a random card in\nyour opponent's hand\nwith an 'Extortion.'",
+		"dbfId": 54347,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Blackmail",
+		"id": "DALA_BOSS_59px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Spellstone_Upgrade_Impact_Rogue_Sound": [
+				"Spellstone_Upgrade_Impact_Rogue_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nReplace a random card in\nyour opponent's hand\nwith an 'Extortion.'",
+		"dbfId": 56034,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Dalaran",
+		"health": 3,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 54453,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 2,
+		"name": "Lotus Bruiser",
+		"id": "DALA_BOSS_59t",
+		"audio": {
+			"play": [
+				"VO_DALA_BOSS_59t_Male_Hozen_Play_01.ogg",
+				"BlackQueen_Play_Underlay.ogg"
+			],
+			"death": [
+				"VO_DALA_BOSS_59t_Male_Hozen_Death_02.ogg",
+				"BlackQueen_Death_Underlay.ogg"
+			],
+			"attack": [
+				"VO_DALA_BOSS_59t_Male_Hozen_Attack_01.ogg",
+				"BlackQueen_Attack_Underlay_1.ogg",
+				"BlackQueen_Attack_Underlay_2.ogg"
+			]
+		},
+		"text": "Whenever an 'Extortion' is played, gain +2/+2.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 4,
+		"set": "Dalaran",
+		"health": 2,
+		"mechanics": [
+			"BATTLECRY",
+			"COMBO"
+		],
+		"dbfId": 54454,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"attack": 4,
+		"name": "Fruit Slasher",
+		"id": "DALA_BOSS_59t2",
+		"audio": {
+			"play": [
+				"VO_DALA_BOSS_59t2_Female_Pandaren_Play_01.ogg",
+				"Finja_Underlay_Play.ogg"
+			],
+			"Sneaky_Target_Loop_01": [
+				"Sneaky_Target_Loop_01.ogg"
+			],
+			"death": [
+				"VO_DALA_BOSS_59t2_Female_Pandaren_Death_01.ogg",
+				"Finja_Underlay_Death.ogg"
+			],
+			"Rogue_Eviscerate_Impact_1": [
+				"Rogue_Eviscerate_Impact_1.ogg"
+			],
+			"attack": [
+				"VO_DALA_BOSS_59t2_Female_Pandaren_Attack_01.ogg",
+				"Finja_Underlay_Attack.ogg"
+			],
+			"Rogue_Eviscerate_Cast_1": [
+				"Rogue_Eviscerate_Cast_1.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Deal 4 damage to an enemy. <b>Combo:</b> And 1 damage to all other enemies.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Extortion",
+		"id": "DALA_BOSS_59t3",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Return your '{0}' to your hand.",
+		"dbfId": 54455,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Archmage Khadgar",
+		"health": 30,
+		"id": "DALA_BOSS_60h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Ingenuous. Inscrutable. Indefatigable. In... your... way.</i>",
+		"dbfId": 54348,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Summon Elemental",
+		"id": "DALA_BOSS_60p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Khadgar_Trigger_CustomSpawn_Sound": [
+				"Khadgar_Trigger_CustomSpawn_Sound.ogg"
+			],
+			"attack": [],
+			"Khadgar_Trigger_Idle_Sound": [
+				"Khadgar_Trigger_Idle_Sound.ogg"
+			],
+			"Shared_Lightning_PreCast_1": [
+				"Shared_Lightning_PreCast_1.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nSummon a 2/3 Elemental.\nIt copies your spells.",
+		"dbfId": 54349,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Summon Elemental",
+		"id": "DALA_BOSS_60px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Khadgar_Trigger_CustomSpawn_Sound": [
+				"Khadgar_Trigger_CustomSpawn_Sound.ogg"
+			],
+			"attack": [],
+			"Khadgar_Trigger_Idle_Sound": [
+				"Khadgar_Trigger_Idle_Sound.ogg"
+			],
+			"Shared_Lightning_PreCast_1": [
+				"Shared_Lightning_PreCast_1.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nSummon a 2/3 Elemental.\nIt copies your spells.",
+		"dbfId": 56035,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Sael'orn",
+		"health": 30,
+		"id": "DALA_BOSS_61h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Traps prey like a spider... toys with\nthem like a demon.</i>",
+		"dbfId": 54350,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Web Grab",
+		"id": "DALA_BOSS_61p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nYour opponent summons a minion from their hand.",
+		"dbfId": 54351,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"attack": 3,
+		"name": "Phase Spider",
+		"health": 3,
+		"id": "DALA_BOSS_61t",
+		"audio": {
+			"play": [
+				"DALA_BOSS_61t_PhaseSpider_Play.ogg"
+			],
+			"death": [
+				"DALA_BOSS_61t_PhaseSpider_Death.ogg"
+			],
+			"attack": [
+				"DALA_BOSS_61t_PhaseSpider_Attack.ogg"
+			]
+		},
+		"text": "<b>Immune</b>. <b>Can't Attack</b> while a minion is opposite of this.",
+		"dbfId": 54456,
+		"type": "Minion",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Darkened",
+		"id": "DALA_BOSS_62e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "-2 Attack until next turn",
+		"dbfId": 54382,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Darkened",
+		"id": "DALA_BOSS_62ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "-2 Attack",
+		"dbfId": 57054,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Dalaran",
+		"name": "Haro Setting-Sun",
+		"health": 30,
+		"id": "DALA_BOSS_62h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>With one hoof in the shadows, weakness is his strength.</i>",
+		"dbfId": 54352,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Darken",
+		"id": "DALA_BOSS_62p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Potion_PintSize_AE_Sound": [
+				"Potion_PintSize_AE_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nGive all minions -2 Attack until your next turn.",
+		"dbfId": 54353,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Darken",
+		"id": "DALA_BOSS_62px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nYour opponent's minions have -2 Attack.",
+		"dbfId": 56036,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Dagg Cruelmight",
+		"health": 30,
+		"id": "DALA_BOSS_63h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>You never kick a man when he's down.\nUnless you're Dagg.</i>",
+		"dbfId": 54354,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Bully",
+		"id": "DALA_BOSS_63p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Shared_Physical_PreCast": [
+				"Shared_Physical_PreCast.ogg"
+			],
+			"attack": [],
+			"Shared_Physical_Fizzle": [
+				"Shared_Physical_Fizzle.ogg"
+			],
+			"Physical_Targeted_Impact_01": [
+				"Physical_Targeted_Impact_01.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $2 damage to a damaged minion.",
+		"dbfId": 54355,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Bully",
+		"id": "DALA_BOSS_63px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Shared_Physical_PreCast": [
+				"Shared_Physical_PreCast.ogg"
+			],
+			"attack": [],
+			"Shared_Physical_Fizzle": [
+				"Shared_Physical_Fizzle.ogg"
+			],
+			"Physical_Targeted_Impact_01": [
+				"Physical_Targeted_Impact_01.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $4 damage to a damaged minion.",
+		"dbfId": 56037,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Capital Gains",
+		"id": "DALA_BOSS_64e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+4/+4.",
+		"dbfId": 54366,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Banker Biggs",
+		"health": 30,
+		"id": "DALA_BOSS_64h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>His minions are compound-interesting.</i>",
+		"dbfId": 54356,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 4,
+		"set": "Dalaran",
+		"name": "Invest!",
+		"id": "DALA_BOSS_64p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"DeckAE_GoldCoins_Sound": [
+				"DeckAE_GoldCoins_Sound.ogg"
+			],
+			"attack": [],
+			"CoinPouch_SpawnToDeck_Sound": [
+				"CoinPouch_SpawnToDeck_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nReturn a friendly minion to your hand. Give it +4/+4.",
+		"dbfId": 54357,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Invest!",
+		"id": "DALA_BOSS_64px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"DeckAE_GoldCoins_Sound": [
+				"DeckAE_GoldCoins_Sound.ogg"
+			],
+			"attack": [],
+			"CoinPouch_SpawnToDeck_Sound": [
+				"CoinPouch_SpawnToDeck_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nReturn a friendly minion to your hand, then give it +4/+4 and copy it.",
+		"dbfId": 56256,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Valdera Highborne",
+		"health": 30,
+		"id": "DALA_BOSS_65h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>His smile is disarming, but his fancy armor is the real threat.</i>",
+		"dbfId": 54358,
+		"type": "Hero",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Impervious",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_65p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nYour hero can only take up to 3 damage at a time.",
+		"dbfId": 54359,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Marei Loom",
+		"health": 10,
+		"id": "DALA_BOSS_66h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>She'll exploit your finances, but she won't finance your exploits.</i>",
+		"dbfId": 54360,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Next...",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "DALA_BOSS_66p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nSwap the left-most card in\neach player's hand with\none in their deck.",
+		"dbfId": 54361,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Archmage Vargoth",
+		"health": 30,
+		"id": "DALA_BOSS_67h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Trapped for years in Outland, Vargoth found new sources of magic.</i>",
+		"dbfId": 54437,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Arcane Runes",
+		"id": "DALA_BOSS_67p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nAdd a random Arcane spell to your hand.",
+		"dbfId": 54438,
+		"type": "Hero_power",
+		"entourage": [
+			"AT_004",
+			"CFM_623",
+			"EX1_277",
+			"CS2_023",
+			"CS2_025"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Lilayell Suntear",
+		"health": 30,
+		"id": "DALA_BOSS_68h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>She makes the instability of the universe work for her.</i>",
+		"dbfId": 54439,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Mini Portal",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_68p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nAfter you cast a spell, summon a random 1-cost minion.",
+		"dbfId": 54440,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Mega Portal",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_68px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nAfter you cast a spell, summon a random minion of the same cost.",
+		"dbfId": 56038,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Archmage Kalec",
+		"health": 30,
+		"id": "DALA_BOSS_69h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>It's just a matter of time before he's the next Malygos.</i>",
+		"dbfId": 54362,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": ")</i>",
+			"zhCN": "点）</i>。",
+			"itIT": " attualmente)</i>",
+			"enUS": " currently)</i>",
+			"frFR": " actuellement)</i>.",
+			"zhTW": ")</i>",
+			"deDE": ")</i>",
+			"jaJP": "）</i>",
+			"plPL": ")</i>.",
+			"esES": " p.).</i>",
+			"ruRU": ")</i>.",
+			"esMX": ")</i>.",
+			"koKR": ")</i>",
+			"thTH": ")</i>"
+		},
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Dragonwrath",
+		"referencedTags": [
+			"SPELLPOWER"
+		],
+		"id": "DALA_BOSS_69p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive your Hero\n<b>Spell Damage +1</b>.\n<i>(+",
+		"dbfId": 54363,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"collectionText": {
+			"ptBR": ")</i>",
+			"zhCN": "点）</i>。",
+			"itIT": " attualmente)</i>",
+			"enUS": " currently)</i>",
+			"frFR": " actuellement)</i>.",
+			"zhTW": ")</i>",
+			"deDE": ")</i>",
+			"jaJP": "）</i>",
+			"plPL": ")</i>.",
+			"esES": " p.).</i>",
+			"ruRU": ")</i>.",
+			"esMX": ")</i>.",
+			"koKR": ")</i>",
+			"thTH": ")</i>"
+		},
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Dragonwrath",
+		"referencedTags": [
+			"SPELLPOWER"
+		],
+		"id": "DALA_BOSS_69px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Arcane_Impact_WithCards_Sound": [
+				"Arcane_Impact_WithCards_Sound.ogg"
+			],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive your Hero\n<b>Spell Damage +1</b>.\n<i>(+",
+		"dbfId": 56039,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"set": "Dalaran",
+		"name": "Bombardment Recharge Player Enchantment",
+		"id": "DALA_BOSS_70e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Disables Hero Power while reloading.",
+		"dbfId": 54499,
+		"type": "Enchantment"
+	},
+	{
+		"playerClass": "Hunter",
+		"set": "Dalaran",
+		"name": "Sky Captain Smiggs",
+		"health": 30,
+		"id": "DALA_BOSS_70h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>The only thing bigger than his moustache is his broadside.</i>",
+		"dbfId": 54364,
+		"type": "Hero",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Bombardment",
+		"id": "DALA_BOSS_70p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Cannon_Missile": [
+				"Cannon_Missile.ogg"
+			],
+			"attack": [],
+			"Barrel_exp_base": [
+				"Barrel_exp_base.ogg"
+			],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $2 damage to all minions. Takes 2 turns to reload.",
+		"dbfId": 54365,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Bombardment",
+		"id": "DALA_BOSS_70px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Cannon_Missile": [
+				"Cannon_Missile.ogg"
+			],
+			"attack": [],
+			"Barrel_exp_base": [
+				"Barrel_exp_base.ogg"
+			],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal $3 damage to all enemy minions. Takes 2 turns to reload.",
+		"dbfId": 56040,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "Anarii Duskgrove",
+		"health": 30,
+		"id": "DALA_BOSS_71h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This druid speaks for the trees, and they have nothing nice to say.</i>",
+		"dbfId": 54441,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Summon Protectors",
+		"referencedTags": [
+			"TAUNT"
+		],
+		"id": "DALA_BOSS_71p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Treant_CustomSpawn_1": [
+				"Treant_CustomSpawn_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon a 2/2 Treant with <b>Taunt</b>.",
+		"dbfId": 54442,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Summon Protectors",
+		"referencedTags": [
+			"TAUNT"
+		],
+		"id": "DALA_BOSS_71px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Treant_CustomSpawn_1": [
+				"Treant_CustomSpawn_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSummon two 2/2 Treants with <b>Taunt</b>.",
+		"dbfId": 56041,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Kazamon Steelskin",
+		"health": 30,
+		"id": "DALA_BOSS_72h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>To say he's reckless is an understatement. Zero recks are given.</i>",
+		"dbfId": 54443,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"hideStats": true,
+		"name": "Steelskin",
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"id": "DALA_BOSS_72p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Passive Hero Power</b>\nYou can't damage yourself.",
+		"dbfId": 54444,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Earthmother's Rancor",
+		"id": "DALA_BOSS_73e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Windfury</b>",
+		"dbfId": 57053,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Earthmother's Rancor",
+		"id": "DALA_BOSS_73ex",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Mega-Windfury</b>",
+		"dbfId": 56043,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Hesutu Stonewind",
+		"health": 30,
+		"id": "DALA_BOSS_73h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>This shaman has a way of whipping his minions into a frenzy.</i>",
+		"dbfId": 54445,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Earthmother's Rage",
+		"referencedTags": [
+			"WINDFURY"
+		],
+		"id": "DALA_BOSS_73p",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			],
+			"Shaman_Windfury_Impact": [
+				"Shaman_Windfury_Impact.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nGive a friendly minion <b>Windfury</b>.",
+		"dbfId": 54446,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Earthmother's Rage",
+		"id": "DALA_BOSS_73px",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			],
+			"Shaman_Windfury_Impact": [
+				"Shaman_Windfury_Impact.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nGive a friendly minion <b>Mega-Windfury</b>.",
+		"dbfId": 56042,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Kara Stamper",
+		"health": 30,
+		"id": "DALA_BOSS_74h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>She would sell a soul for more minions. Not hers, of course.</i>",
+		"dbfId": 54447,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 3,
+		"set": "Dalaran",
+		"name": "Soul Weave",
+		"id": "DALA_BOSS_74p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"FX_MinionSummon_Drop": [
+				"FX_MinionSummon_Drop.ogg"
+			],
+			"Warlock_Shadow_Buff_Impact_Sound": [
+				"Warlock_Shadow_Buff_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDiscard a card. Summon a random minion of the same cost.",
+		"dbfId": 54448,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Soul Weave",
+		"id": "DALA_BOSS_74px",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nDiscard a card. Summon a random minion of the same cost.",
+		"dbfId": 56357,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Bear Liver Quest",
+		"mechanics": [
+			"CANT_BE_SILENCED",
+			"ENCHANTMENT_INVISIBLE"
+		],
+		"id": "DALA_BOSS_75e1",
+		"dbfId": 56383,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Murloc Quest",
+		"mechanics": [
+			"CANT_BE_SILENCED",
+			"ENCHANTMENT_INVISIBLE"
+		],
+		"id": "DALA_BOSS_75e2",
+		"dbfId": 56426,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Turtle Escort Quest",
+		"mechanics": [
+			"CANT_BE_SILENCED",
+			"ENCHANTMENT_INVISIBLE"
+		],
+		"id": "DALA_BOSS_75e3",
+		"dbfId": 56427,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Herbalist Quest",
+		"mechanics": [
+			"CANT_BE_SILENCED",
+			"ENCHANTMENT_INVISIBLE"
+		],
+		"id": "DALA_BOSS_75e4",
+		"dbfId": 56428,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hogger Quest",
+		"mechanics": [
+			"CANT_BE_SILENCED",
+			"ENCHANTMENT_INVISIBLE"
+		],
+		"id": "DALA_BOSS_75e5",
+		"dbfId": 56429,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Commander Bolan",
+		"health": 0,
+		"id": "DALA_BOSS_75h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Be careful, he's got an enormous exclamation point over his head.</i>",
+		"dbfId": 54449,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "A Quest!",
+		"id": "DALA_BOSS_75p",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive your opponent a Quest!",
+		"dbfId": 54450,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Bartendotron",
+		"health": 40,
+		"id": "DALA_BOSS_98h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Sometimes you want to go where everybody knows your deck.</i>",
+		"dbfId": 56479,
+		"type": "Hero",
+		"entourage": [
+			"BRM_028",
+			"EX1_298",
+			"ICC_314",
+			"EX1_572",
+			"GVG_114",
+			"FP1_013",
+			"EX1_016"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "Bartender Bob",
+		"health": 40,
+		"id": "DALA_BOSS_99h",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Sometimes you want to go where everybody knows your deck.</i>",
+		"dbfId": 52913,
+		"type": "Hero",
+		"entourage": [
+			"BRM_028",
+			"EX1_298",
+			"ICC_314",
+			"EX1_572",
+			"GVG_114",
+			"FP1_013",
+			"EX1_016"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Warrior",
+		"set": "Dalaran",
+		"name": "Mr. Chu",
+		"health": 15,
+		"id": "DALA_Chu",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Chu_Male_Pandaren_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_Chu_Male_Pandaren_Attack_01.ogg"
+			]
+		},
+		"dbfId": 54546,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Swarm",
+		"id": "DALA_Druid_01",
+		"dbfId": 55671,
+		"type": "Spell",
+		"entourage": [
+			"DAL_354",
+			"CS2_188",
+			"FP1_003",
+			"FP1_002",
+			"GVG_104",
+			"ICC_808",
+			"EX1_597",
+			"KAR_044",
+			"OG_313",
+			"AT_037",
+			"CFM_614",
+			"DAL_733",
+			"EX1_160",
+			"DAL_351",
+			"CS2_011",
+			"OG_195",
+			"DAL_256"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Recovery",
+		"id": "DALA_Druid_02",
+		"dbfId": 55672,
+		"type": "Spell",
+		"entourage": [
+			"DAL_544",
+			"CFM_120",
+			"CS2_117",
+			"LOOT_388",
+			"DAL_355",
+			"GIL_622",
+			"GVG_069",
+			"GIL_667",
+			"DAL_799",
+			"NEW1_008",
+			"DAL_357",
+			"DAL_350",
+			"DAL_733",
+			"CS2_007",
+			"KAR_075",
+			"GVG_033"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Choices, Choices",
+		"id": "DALA_Druid_03",
+		"dbfId": 55673,
+		"type": "Spell",
+		"entourage": [
+			"AT_042",
+			"ICC_051",
+			"DAL_732",
+			"GIL_188",
+			"TRL_343",
+			"OG_044",
+			"EX1_165",
+			"EX1_178",
+			"CFM_308",
+			"DAL_350",
+			"CFM_602",
+			"AT_037",
+			"LOE_115",
+			"EX1_154",
+			"GVG_041",
+			"OG_195",
+			"ICC_832"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "All Bark",
+		"id": "DALA_Druid_04",
+		"dbfId": 55674,
+		"type": "Spell",
+		"entourage": [
+			"BOT_419",
+			"TRL_341",
+			"BOT_422",
+			"NEW1_008",
+			"EX1_178",
+			"EX1_573",
+			"BOT_523",
+			"GIL_663",
+			"BOT_420",
+			"AT_044",
+			"FP1_019",
+			"EX1_158",
+			"EX1_571",
+			"UNG_111",
+			"DAL_256",
+			"LOOT_392"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Nature's Wrath",
+		"id": "DALA_Druid_05",
+		"dbfId": 55675,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"EX1_284",
+			"AT_127",
+			"EX1_095",
+			"DAL_774",
+			"EX1_563",
+			"KAR_711",
+			"OG_134",
+			"EX1_161",
+			"AT_037",
+			"DAL_733",
+			"DAL_352",
+			"EX1_154",
+			"CS2_012",
+			"NEW1_007",
+			"EX1_173",
+			"DAL_256",
+			"ICC_085"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Feral Bite",
+		"id": "DALA_Druid_06",
+		"dbfId": 55676,
+		"type": "Spell",
+		"entourage": [
+			"TRL_223",
+			"TRL_240",
+			"AT_039",
+			"LOOT_048",
+			"EX1_116",
+			"TRL_241",
+			"TRL_243",
+			"LOOT_051",
+			"UNG_108",
+			"CS2_005",
+			"GIL_637",
+			"EX1_570",
+			"CS2_012",
+			"OG_047",
+			"LOOT_054"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Nurture and Grow",
+		"id": "DALA_Druid_07",
+		"dbfId": 55677,
+		"type": "Spell",
+		"entourage": [
+			"EX1_096",
+			"AT_038",
+			"EX1_050",
+			"LOOT_351",
+			"GVG_032",
+			"OG_202",
+			"GIL_833",
+			"EX1_284",
+			"NEW1_008",
+			"BRM_031",
+			"BOT_444",
+			"BOT_054",
+			"CFM_713",
+			"EX1_164",
+			"ICC_085"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Roar!",
+		"id": "DALA_Druid_08",
+		"dbfId": 55678,
+		"type": "Spell",
+		"entourage": [
+			"GIL_623",
+			"UNG_087",
+			"KAR_702",
+			"GVG_035",
+			"LOOT_153",
+			"GVG_080",
+			"UNG_086",
+			"TRL_232",
+			"TRL_550",
+			"BOT_423",
+			"UNG_099",
+			"TRL_542",
+			"UNG_852",
+			"GIL_571",
+			"TRL_244",
+			"TRL_255"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Protectors",
+		"id": "DALA_Druid_09",
+		"dbfId": 55679,
+		"type": "Spell",
+		"entourage": [
+			"UNG_072",
+			"EX1_093",
+			"ICC_466",
+			"ICC_807",
+			"FP1_012",
+			"GIL_623",
+			"LOOT_383",
+			"CFM_343",
+			"DAL_357",
+			"DAL_560",
+			"ICC_314",
+			"UNG_848",
+			"ICC_835",
+			"CS2_009",
+			"ICC_054"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Beasts and Buffs",
+		"id": "DALA_Druid_10",
+		"dbfId": 55680,
+		"type": "Spell",
+		"entourage": [
+			"KAR_300",
+			"LOOT_258",
+			"TRL_505",
+			"GIL_558",
+			"FP1_002",
+			"LOE_029",
+			"GIL_143",
+			"OG_313",
+			"LOE_050",
+			"UNG_075",
+			"AT_040",
+			"CFM_816",
+			"OG_048",
+			"CS2_009",
+			"EX1_155",
+			"UNG_103",
+			"TRL_254",
+			"GVG_041"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Big Friends",
+		"id": "DALA_Druid_11",
+		"dbfId": 55681,
+		"type": "Spell",
+		"entourage": [
+			"UNG_109",
+			"NEW1_008",
+			"EX1_178",
+			"UNG_086",
+			"TRL_232",
+			"TRL_528",
+			"BOT_552",
+			"CS2_232",
+			"BOT_507",
+			"ICC_705",
+			"BRM_031",
+			"NEW1_038",
+			"OG_173",
+			"DAL_553",
+			"AT_045",
+			"UNG_078",
+			"LOOT_233"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Druid_12",
+		"dbfId": 55682,
+		"type": "Spell",
+		"entourage": [
+			"TRL_343",
+			"BOT_434",
+			"FP1_030",
+			"LOOT_329",
+			"CFM_902",
+			"EX1_110",
+			"BRM_028",
+			"EX1_016",
+			"FP1_013",
+			"GVG_110",
+			"GVG_035",
+			"GVG_118",
+			"EX1_298",
+			"GVG_114",
+			"ICC_314",
+			"EX1_572",
+			"AT_045",
+			"EX1_573",
+			"CFM_308",
+			"UNG_852"
+		],
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Lifebloom",
+		"id": "DALA_Druid_HP1",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Nature_Green_Buff_Impact": [
+				"Nature_Green_Buff_Impact.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nRestore a minion to full Health.",
+		"dbfId": 53275,
+		"type": "Hero_power",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Touch of Bark",
+		"id": "DALA_Druid_HP2",
+		"audio": {
+			"play": [],
+			"Shared_Nature_Fizzle_1": [
+				"Shared_Nature_Fizzle_1.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Nature_Target_Start_01": [
+				"Nature_Target_Start_01.ogg"
+			],
+			"Nature_Green_Buff_Impact": [
+				"Nature_Green_Buff_Impact.ogg"
+			],
+			"Shared_Nature_PreCast_1": [
+				"Shared_Nature_PreCast_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nGive a minion +1/+1.",
+		"dbfId": 53277,
+		"type": "Hero_power",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Barky",
+		"id": "DALA_Druid_HP2e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "+1/+1.",
+		"dbfId": 53278,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Druid Hero Power Watcher",
+		"id": "DALA_Druid_HPe",
+		"dbfId": 55940,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Dalaran",
+		"name": "Captain Eudora",
+		"health": 15,
+		"id": "DALA_Eudora",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Eudora_Female_Vulpine_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_Eudora_Female_Vulpine_Attack_01.ogg"
+			]
+		},
+		"dbfId": 54548,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Paladin",
+		"set": "Dalaran",
+		"name": "George the Fallen",
+		"health": 15,
+		"id": "DALA_George",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_George_Male_Human_Death_02.ogg"
+			],
+			"attack": [
+				"VO_DALA_George_Male_Human_Attack_03.ogg"
+			]
+		},
+		"dbfId": 54549,
+		"type": "Hero",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Spells",
+		"id": "DALA_Hunter_01",
+		"dbfId": 55737,
+		"type": "Spell",
+		"entourage": [
+			"DAL_587",
+			"DAL_372",
+			"DAL_379",
+			"KAR_711",
+			"DAL_373",
+			"DS1_184",
+			"UNG_910",
+			"AT_061",
+			"BRM_013",
+			"DAL_371",
+			"NEW1_031",
+			"EX1_617",
+			"DS1_183",
+			"LOOT_077",
+			"TRL_347",
+			"DAL_378",
+			"OG_211",
+			"LOOT_085",
+			"TRL_065"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Secretive",
+		"id": "DALA_Hunter_02",
+		"dbfId": 55738,
+		"type": "Spell",
+		"entourage": [
+			"EX1_080",
+			"FP1_004",
+			"DAL_086",
+			"GVG_089",
+			"TRL_530",
+			"KAR_006",
+			"ICC_204",
+			"BOT_573",
+			"BOT_402",
+			"AT_060",
+			"KAR_004",
+			"EX1_610",
+			"EX1_611",
+			"EX1_533",
+			"GIL_577",
+			"LOOT_079",
+			"EX1_609",
+			"LOOT_080",
+			"EX1_536"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Deathrattle",
+		"id": "DALA_Hunter_03",
+		"dbfId": 55739,
+		"type": "Spell",
+		"entourage": [
+			"EX1_029",
+			"OG_292",
+			"CFM_316",
+			"UNG_900",
+			"ICC_021",
+			"OG_216",
+			"ICC_243",
+			"BOT_039",
+			"OG_309",
+			"LOOT_161",
+			"EX1_534",
+			"LOOT_520",
+			"LOOT_511",
+			"TRL_537",
+			"OG_133",
+			"ICC_052",
+			"GVG_026",
+			"LOE_105",
+			"OG_045",
+			"DAL_377"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Technological",
+		"id": "DALA_Hunter_04",
+		"dbfId": 55740,
+		"type": "Spell",
+		"entourage": [
+			"BOT_079",
+			"BOT_907",
+			"GVG_006",
+			"GVG_076",
+			"BOT_038",
+			"BOT_035",
+			"GVG_048",
+			"BOT_251",
+			"GVG_096",
+			"DAL_604",
+			"BOT_563",
+			"BOT_066",
+			"DAL_376",
+			"BOT_034",
+			"GVG_114",
+			"BOT_033",
+			"BOT_438"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Big Beasts",
+		"id": "DALA_Hunter_05",
+		"dbfId": 55741,
+		"type": "Spell",
+		"entourage": [
+			"CFM_333",
+			"EX1_534",
+			"OG_152",
+			"TRL_550",
+			"ICC_825",
+			"GVG_049",
+			"UNG_919",
+			"LOOT_153",
+			"OG_308",
+			"LOOT_511",
+			"AT_103",
+			"EX1_543",
+			"TRL_542",
+			"GIL_128",
+			"GIL_828",
+			"DAL_589",
+			"BOT_429",
+			"ICC_828"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Tiny Trouble",
+		"id": "DALA_Hunter_06",
+		"dbfId": 55742,
+		"type": "Spell",
+		"entourage": [
+			"CFM_315",
+			"OG_179",
+			"UNG_912",
+			"UNG_914",
+			"DAL_587",
+			"TRL_348",
+			"DS1_175",
+			"FP1_011",
+			"LOOT_258",
+			"ICC_092",
+			"UNG_809",
+			"TRL_505",
+			"DAL_372",
+			"GIL_607",
+			"UNG_913",
+			"OG_061",
+			"UNG_916",
+			"EX1_554"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Empowering",
+		"id": "DALA_Hunter_07",
+		"dbfId": 55743,
+		"type": "Spell",
+		"entourage": [
+			"EX1_531",
+			"UNG_915",
+			"CFM_338",
+			"AT_057",
+			"UNG_075",
+			"LOOT_125",
+			"ICC_854",
+			"GIL_624",
+			"LOE_047",
+			"DS1_070",
+			"CFM_335",
+			"AT_010",
+			"AT_090",
+			"LOE_105",
+			"EX1_539",
+			"TRL_339",
+			"GIL_828",
+			"TRL_111"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Aggression",
+		"id": "DALA_Hunter_08",
+		"dbfId": 55744,
+		"type": "Spell",
+		"entourage": [
+			"TRL_348",
+			"GIL_607t",
+			"GIL_143",
+			"GIL_650",
+			"GIL_562",
+			"TRL_900",
+			"DS1_178",
+			"EX1_116",
+			"BOT_102",
+			"TRL_550",
+			"DAL_592",
+			"UNG_099",
+			"TRL_542",
+			"EX1_543",
+			"TRL_119",
+			"BOT_437",
+			"EX1_538",
+			"DAL_378",
+			"GVG_043"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Overwhelm",
+		"id": "DALA_Hunter_09",
+		"dbfId": 55745,
+		"type": "Spell",
+		"entourage": [
+			"CFM_315",
+			"TRL_348",
+			"FP1_002",
+			"EX1_531",
+			"KAR_044",
+			"CFM_316",
+			"TRL_901",
+			"OG_216",
+			"TRL_020",
+			"TRL_900",
+			"CS2_237",
+			"DAL_566",
+			"DAL_751",
+			"LOOT_153",
+			"EX1_554",
+			"EX1_538",
+			"AT_062",
+			"CFM_337"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Professional",
+		"id": "DALA_Hunter_10",
+		"dbfId": 55746,
+		"type": "Spell",
+		"entourage": [
+			"NEW1_021",
+			"TRL_349",
+			"BOT_251",
+			"GVG_119",
+			"EX1_005",
+			"EX1_002",
+			"AT_063",
+			"EX1_544",
+			"EX1_617",
+			"EX1_537",
+			"TRL_347",
+			"LOOT_522",
+			"LOOT_222",
+			"GVG_043",
+			"EX1_536",
+			"CFM_337",
+			"DS1_188"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Battlecry",
+		"id": "DALA_Hunter_11",
+		"dbfId": 55747,
+		"type": "Spell",
+		"entourage": [
+			"CFM_315",
+			"UNG_912",
+			"TRL_348",
+			"UNG_915",
+			"AT_058",
+			"CFM_338",
+			"ICC_415",
+			"DAL_546",
+			"LOE_077",
+			"UNG_072",
+			"CFM_335",
+			"GIL_905",
+			"AT_010",
+			"FP1_030",
+			"LOOT_167",
+			"CFM_685",
+			"UNG_848",
+			"LOOT_511",
+			"ICC_705",
+			"GIL_128"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Hunter_12",
+		"dbfId": 55748,
+		"type": "Spell",
+		"entourage": [
+			"AT_063t",
+			"GIL_650",
+			"CFM_333",
+			"BRM_028",
+			"EX1_577",
+			"GVG_049",
+			"UNG_919",
+			"DAL_379",
+			"GIL_198",
+			"GVG_118",
+			"FP1_013",
+			"EX1_298",
+			"GVG_114",
+			"ICC_314",
+			"EX1_563",
+			"TRL_542",
+			"EX1_572",
+			"EX1_543",
+			"GIL_128",
+			"OG_133"
+		],
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Opportunist",
+		"id": "DALA_Hunter_HP1",
+		"audio": {
+			"play": [],
+			"Shared_Rage_InnerRage_Impact_1": [
+				"Shared_Rage_InnerRage_Impact_1.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive a minion +2 Attack this turn.",
+		"dbfId": 53279,
+		"type": "Hero_power",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Opportunist",
+		"mechanics": [
+			"TAG_ONE_TURN_EFFECT"
+		],
+		"id": "DALA_Hunter_HP1e",
+		"text": "+2 Attack this turn.",
+		"dbfId": 53280,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Hunter",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Pet Training",
+		"id": "DALA_Hunter_HP2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nAdd a 1/1 Shifting Chameleon to your hand.",
+		"dbfId": 53281,
+		"type": "Hero_power",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Shifting",
+		"id": "DALA_Hunter_HP2e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Transforming into a random 1-cost minion.",
+		"dbfId": 56188,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Dalaran",
+		"race": "BEAST",
+		"health": 1,
+		"dbfId": 53282,
+		"type": "Minion",
+		"playerClass": "Hunter",
+		"attack": 1,
+		"name": "Shifting Chameleon",
+		"id": "DALA_Hunter_HP2t",
+		"audio": {
+			"play": [
+				"GIL_142_Chameleos_Play.ogg"
+			],
+			"death": [
+				"GIL_142_Chameleos_Death.ogg"
+			],
+			"attack": [
+				"GIL_142_Chameleos_Attack.ogg"
+			]
+		},
+		"text": "[x]Each turn this is in your\nhand, transform into a\nrandom 1-cost minion.",
+		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Hunter Hero Power Watcher",
+		"id": "DALA_Hunter_HPe",
+		"dbfId": 55941,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Dalaran",
+		"name": "Kriziki",
+		"health": 15,
+		"id": "DALA_Kriziki",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Kriziki_Female_Arakkoa_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_Kriziki_Female_Arakkoa_Attack_02.ogg"
+			]
+		},
+		"dbfId": 54554,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Multi-Cast",
+		"id": "DALA_Mage_01",
+		"dbfId": 55751,
+		"type": "Spell",
+		"entourage": [
+			"KAR_009",
+			"DAL_603",
+			"EX1_012",
+			"DAL_182",
+			"BOT_103",
+			"GIL_640",
+			"EX1_050",
+			"LOE_003",
+			"EX1_559",
+			"TRL_318",
+			"DAL_609",
+			"DAL_608",
+			"DAL_577",
+			"EX1_180",
+			"UNG_941",
+			"BOT_600",
+			"CS2_023",
+			"DAL_177",
+			"LOOT_108"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Coldsnap",
+		"id": "DALA_Mage_02",
+		"dbfId": 55752,
+		"type": "Spell",
+		"entourage": [
+			"UNG_205",
+			"GVG_002",
+			"ICC_252",
+			"OG_085",
+			"CS2_033",
+			"EX1_283",
+			"DAL_577",
+			"ICC_836",
+			"CS2_024",
+			"GIL_801",
+			"CS2_026",
+			"ICC_082",
+			"EX1_289",
+			"EX1_295",
+			"EX1_275",
+			"CS2_028",
+			"ICC_833"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Summoning",
+		"id": "DALA_Mage_03",
+		"dbfId": 55753,
+		"type": "Spell",
+		"entourage": [
+			"DAL_575",
+			"DAL_163",
+			"GIL_664",
+			"OG_207",
+			"BOT_256",
+			"KAR_076",
+			"GVG_114",
+			"GVG_116",
+			"DAL_553",
+			"CS2_027",
+			"AT_002",
+			"TRL_400",
+			"EX1_294",
+			"UNG_948",
+			"BOT_254",
+			"DAL_177",
+			"DAL_578"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Powered Up",
+		"id": "DALA_Mage_04",
+		"dbfId": 55754,
+		"type": "Spell",
+		"entourage": [
+			"EX1_608",
+			"EX1_012",
+			"BOT_531",
+			"ICC_093",
+			"GVG_123",
+			"DAL_089",
+			"BOT_604",
+			"AT_006",
+			"DAL_576",
+			"EX1_584",
+			"EX1_284",
+			"DAL_434",
+			"DAL_548",
+			"DAL_096",
+			"EX1_563",
+			"AT_004",
+			"BOT_254",
+			"LOOT_108"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Go Big",
+		"id": "DALA_Mage_05",
+		"dbfId": 55755,
+		"type": "Spell",
+		"entourage": [
+			"DAL_539",
+			"BOT_539",
+			"BOT_601",
+			"BOT_256",
+			"LOOT_539",
+			"LOOT_414",
+			"LOOT_535",
+			"DAL_609",
+			"CS2_022",
+			"OG_090",
+			"LOOT_172",
+			"CS2_028",
+			"UNG_955",
+			"KAR_076",
+			"CS2_032",
+			"CFM_623",
+			"BOT_257",
+			"DAL_578",
+			"EX1_279"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "BURN!",
+		"id": "DALA_Mage_06",
+		"dbfId": 55756,
+		"type": "Spell",
+		"entourage": [
+			"UNG_809",
+			"UNG_027",
+			"BRM_002",
+			"GVG_123",
+			"EX1_559",
+			"OG_086",
+			"UNG_018",
+			"GVG_001",
+			"LOE_002",
+			"CFM_065",
+			"LOOT_101",
+			"EX1_594",
+			"GIL_147",
+			"CS2_029",
+			"UNG_948",
+			"TRL_317",
+			"UNG_955",
+			"CS2_032",
+			"EX1_279"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Elements",
+		"id": "DALA_Mage_07",
+		"dbfId": 55757,
+		"type": "Spell",
+		"entourage": [
+			"UNG_809",
+			"LOOT_231",
+			"UNG_027",
+			"BOT_604",
+			"UNG_021",
+			"CS2_033",
+			"UNG_816",
+			"GIL_645",
+			"TRL_311",
+			"DAL_548",
+			"EX1_249",
+			"UNG_847",
+			"OG_120",
+			"EX1_298",
+			"UNG_907",
+			"TRL_310",
+			"UNG_018",
+			"LOOT_103",
+			"TRL_313"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Technology",
+		"id": "DALA_Mage_08",
+		"dbfId": 55758,
+		"type": "Spell",
+		"entourage": [
+			"GVG_082",
+			"GVG_002",
+			"GVG_085",
+			"GVG_006",
+			"BOT_907",
+			"GVG_123",
+			"GVG_004",
+			"BOT_312",
+			"GVG_096",
+			"GVG_111",
+			"BOT_563",
+			"BOT_548",
+			"GVG_117",
+			"BOT_066",
+			"GVG_105",
+			"BOT_270",
+			"GVG_007",
+			"GVG_114",
+			"GVG_001"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Fate's Hand",
+		"id": "DALA_Mage_09",
+		"dbfId": 55759,
+		"type": "Spell",
+		"entourage": [
+			"KAR_009",
+			"UNG_846",
+			"DAL_603",
+			"AT_007",
+			"LOOT_537",
+			"TRL_096",
+			"GIL_549",
+			"DAL_553",
+			"OG_134",
+			"LOOT_104",
+			"EX1_277",
+			"BOT_101",
+			"GVG_003",
+			"UNG_941",
+			"BOT_254",
+			"OG_090",
+			"LOOT_106",
+			"KAR_076",
+			"CFM_623"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Trade Secrets",
+		"id": "DALA_Mage_10",
+		"dbfId": 55760,
+		"type": "Spell",
+		"entourage": [
+			"CFM_066",
+			"EX1_080",
+			"UNG_020",
+			"FP1_004",
+			"KAR_092",
+			"EX1_612",
+			"GVG_089",
+			"TRL_530",
+			"GIL_116",
+			"EX1_274",
+			"BOT_573",
+			"CFM_760",
+			"EX1_287",
+			"FP1_018",
+			"EX1_295",
+			"EX1_289",
+			"UNG_024",
+			"EX1_294",
+			"tt_010"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Inspired",
+		"id": "DALA_Mage_11",
+		"dbfId": 55761,
+		"type": "Spell",
+		"entourage": [
+			"AT_082",
+			"TRL_390",
+			"AT_003",
+			"TRL_319",
+			"AT_080",
+			"TRL_407",
+			"TRL_315",
+			"CFM_807",
+			"GIL_561",
+			"AT_115",
+			"AT_085",
+			"AT_006",
+			"AT_119",
+			"AT_090",
+			"AT_127",
+			"AT_099",
+			"TRL_316",
+			"AT_120"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Mage_12",
+		"dbfId": 55762,
+		"type": "Spell",
+		"entourage": [
+			"GIL_691",
+			"BOT_103",
+			"DAL_558",
+			"AT_127",
+			"BRM_028",
+			"GIL_549",
+			"EX1_249",
+			"GVG_110",
+			"EX1_559",
+			"TRL_318",
+			"AT_009",
+			"ICC_838",
+			"KAR_097",
+			"EX1_298",
+			"GVG_114",
+			"ICC_314",
+			"EX1_563",
+			"EX1_572",
+			"OG_134",
+			"EX1_016"
+		],
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Burning Wit",
+		"id": "DALA_Mage_HP1",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"ArmsDealing_Impact_Sound": [
+				"ArmsDealing_Impact_Sound.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nReduce the cost of a\nrandom card in your\nhand by (2).",
+		"dbfId": 53283,
+		"type": "Hero_power",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Witty",
+		"id": "DALA_Mage_HP1e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Costs (2) less.",
+		"dbfId": 53284,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Frostburn",
+		"id": "DALA_Mage_HP2",
+		"audio": {
+			"play": [],
+			"Fireblast_Impact_Blue": [
+				"Fireblast_Impact_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Loop": [
+				"Fireblast_Idle_Blue_Loop.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Fireblast_Missile_Blue": [
+				"Fireblast_Missile_Blue.ogg"
+			],
+			"Fireblast_Idle_Blue_Fizzle": [
+				"Fireblast_Idle_Blue_Fizzle.ogg"
+			],
+			"Fireblast_Idle_Blue_Start": [
+				"Fireblast_Idle_Blue_Start.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\n<b>Freeze</b> a character.\nIf it's already <b>Frozen</b>, deal 2 damage.",
+		"dbfId": 53285,
+		"type": "Hero_power",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Mage Hero Power Watcher",
+		"id": "DALA_Mage_HPe",
+		"dbfId": 55942,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Secret Whispers",
+		"id": "DALA_Paladin_01",
+		"dbfId": 55695,
+		"type": "Spell",
+		"entourage": [
+			"EX1_080",
+			"FP1_004",
+			"UNG_011",
+			"DAL_086",
+			"DAL_573",
+			"GIL_634",
+			"AT_079",
+			"DAL_570",
+			"DAL_141",
+			"FP1_020",
+			"CFM_800",
+			"EX1_132",
+			"GIL_903",
+			"EX1_130",
+			"EX1_136",
+			"LOE_027",
+			"DAL_571"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Small Army",
+		"id": "DALA_Paladin_02",
+		"dbfId": 55696,
+		"type": "Spell",
+		"entourage": [
+			"EX1_008",
+			"ICC_038",
+			"LOOT_363",
+			"FP1_003",
+			"UNG_808",
+			"GVG_104",
+			"LOOT_125",
+			"OG_310",
+			"UNG_015",
+			"AT_073",
+			"BOT_909",
+			"DAL_727",
+			"EX1_349",
+			"LOOT_093",
+			"TRL_543",
+			"EX1_366"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Dragons",
+		"id": "DALA_Paladin_03",
+		"dbfId": 55697,
+		"type": "Spell",
+		"entourage": [
+			"GIL_635",
+			"DAL_146",
+			"KAR_010",
+			"DAL_147",
+			"BRM_026",
+			"BRM_018",
+			"ICC_029",
+			"TRL_526",
+			"ICC_027",
+			"OG_271",
+			"TRL_569",
+			"UNG_848",
+			"EX1_562",
+			"EX1_572",
+			"EX1_563",
+			"DAL_581",
+			"BOT_436",
+			"DAL_731"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Holy Infusions",
+		"id": "DALA_Paladin_04",
+		"dbfId": 55698,
+		"type": "Spell",
+		"entourage": [
+			"TRL_306",
+			"TRL_309",
+			"UNG_953",
+			"BRM_020",
+			"LOOT_216",
+			"CS2_087",
+			"EX1_363",
+			"GIL_145",
+			"ICC_244",
+			"DAL_568",
+			"AT_074",
+			"CS2_092",
+			"KAR_077",
+			"EX1_355",
+			"UNG_952",
+			"LOOT_500"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Healing Hands",
+		"id": "DALA_Paladin_05",
+		"dbfId": 55699,
+		"type": "Spell",
+		"entourage": [
+			"DAL_544",
+			"BOT_236",
+			"TRL_308",
+			"LOOT_398",
+			"GIL_817",
+			"TRL_545",
+			"KAR_057",
+			"ICC_245",
+			"CS2_088",
+			"OG_229",
+			"TRL_300",
+			"DAL_581",
+			"OG_198",
+			"LOOT_091",
+			"TRL_307",
+			"EX1_354",
+			"CS2_097"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Handbuff",
+		"id": "DALA_Paladin_06",
+		"dbfId": 55700,
+		"type": "Spell",
+		"entourage": [
+			"CFM_759",
+			"CFM_753",
+			"CFM_853",
+			"GIL_685",
+			"TRL_517",
+			"CFM_639",
+			"CFM_668",
+			"BOT_910",
+			"BRM_028",
+			"CFM_685",
+			"CFM_305",
+			"OG_311",
+			"DAL_727",
+			"TRL_304",
+			"LOOT_500",
+			"LOE_077"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Murglgglgl",
+		"id": "DALA_Paladin_07",
+		"dbfId": 55701,
+		"type": "Spell",
+		"entourage": [
+			"CFM_650",
+			"EX1_509",
+			"DAL_077",
+			"UNG_011",
+			"UNG_953",
+			"OG_156",
+			"CS2_173",
+			"UNG_073",
+			"EX1_050",
+			"GIL_681",
+			"EX1_507",
+			"UNG_937",
+			"TRL_520",
+			"EX1_062",
+			"AT_076",
+			"CFM_344",
+			"LOE_026"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Robotic",
+		"id": "DALA_Paladin_08",
+		"dbfId": 55702,
+		"type": "Spell",
+		"entourage": [
+			"BOT_906",
+			"GVG_058",
+			"GVG_006",
+			"GVG_085",
+			"BOT_911",
+			"GVG_096",
+			"GVG_062",
+			"BOT_563",
+			"GVG_111",
+			"BOT_548",
+			"GVG_105",
+			"BOT_270",
+			"GVG_113",
+			"GVG_114",
+			"GVG_116",
+			"GVG_121",
+			"BOT_234",
+			"BOT_912"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "The Silver Hand",
+		"id": "DALA_Paladin_09",
+		"dbfId": 55706,
+		"type": "Spell",
+		"entourage": [
+			"LOOT_363",
+			"AT_075",
+			"AT_100",
+			"UNG_962",
+			"GVG_060",
+			"UNG_015",
+			"LOOT_313",
+			"EX1_383",
+			"AT_073",
+			"UNG_960",
+			"GVG_061",
+			"OG_273",
+			"LOOT_333",
+			"LOOT_286",
+			"UNG_950",
+			"GIL_596"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Protectors",
+		"id": "DALA_Paladin_10",
+		"dbfId": 55707,
+		"type": "Spell",
+		"entourage": [
+			"ICC_038",
+			"EX1_362",
+			"GVG_058",
+			"CFM_815",
+			"LOOT_124",
+			"FP1_012",
+			"ICC_858",
+			"BOT_548",
+			"EX1_067",
+			"EX1_032",
+			"EX1_383",
+			"BOT_908",
+			"LOOT_088",
+			"TRL_302",
+			"TRL_305",
+			"GVG_059",
+			"ICC_071"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Judgment",
+		"id": "DALA_Paladin_11",
+		"dbfId": 55708,
+		"type": "Spell",
+		"entourage": [
+			"ICC_913",
+			"EX1_012",
+			"NEW1_020",
+			"AT_127",
+			"KAR_057",
+			"DAL_548",
+			"EX1_563",
+			"TRL_300",
+			"EX1_619",
+			"CS2_093",
+			"CS2_094",
+			"DAL_731",
+			"EX1_365",
+			"EX1_384",
+			"UNG_952",
+			"ICC_829"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Paladin_12",
+		"dbfId": 55709,
+		"type": "Spell",
+		"entourage": [
+			"BOT_236",
+			"CFM_815",
+			"GIL_694",
+			"UNG_015",
+			"EX1_016",
+			"AT_081",
+			"NEW1_038",
+			"KAR_097",
+			"ICC_314",
+			"OG_229",
+			"EX1_383",
+			"BRM_030",
+			"GVG_116",
+			"NEW1_030",
+			"TRL_541",
+			"OG_042",
+			"DAL_581",
+			"TRL_300"
+		],
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Backup",
+		"id": "DALA_Paladin_HP1",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Loop_01": [
+				"Holy_Targeted_Loop_01.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nAdd three 1/1 Silver Hand Recruits to your hand.",
+		"dbfId": 53286,
+		"type": "Hero_power",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Paladin",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Boon of Light",
+		"id": "DALA_Paladin_HP2",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nGive a friendly minion <b>Divine Shield</b>.",
+		"dbfId": 53287,
+		"type": "Hero_power",
+		"cardClass": "PALADIN"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Paladin Hero Power Watcher",
+		"id": "DALA_Paladin_HPe",
+		"dbfId": 55943,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Curatives",
+		"id": "DALA_Priest_01",
+		"dbfId": 55646,
+		"type": "Spell",
+		"entourage": [
+			"CFM_120",
+			"CS2_235",
+			"TRL_570",
+			"CFM_606",
+			"GVG_072",
+			"CS2_117",
+			"BOT_216",
+			"AT_011",
+			"OG_234",
+			"GIL_156",
+			"EX1_621",
+			"TRL_128",
+			"UNG_030",
+			"GVG_012",
+			"AT_013",
+			"GIL_661",
+			"CFM_604",
+			"CS1_112",
+			"EX1_624"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Afterlife",
+		"id": "DALA_Priest_02",
+		"dbfId": 55647,
+		"type": "Spell",
+		"entourage": [
+			"DAL_030",
+			"BOT_509",
+			"LOE_006",
+			"DAL_413",
+			"LOOT_534",
+			"LOOT_534",
+			"UNG_037",
+			"DAL_040",
+			"UNG_900",
+			"DAL_039",
+			"BOT_566",
+			"GIL_805",
+			"EX1_016",
+			"DAL_775",
+			"TRL_537",
+			"GVG_114",
+			"ICC_214",
+			"OG_133",
+			"LOOT_187"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "From the Graves",
+		"id": "DALA_Priest_03",
+		"dbfId": 55648,
+		"type": "Spell",
+		"entourage": [
+			"KAR_204",
+			"UNG_963",
+			"DAL_721",
+			"ICC_314",
+			"EX1_350",
+			"AT_018",
+			"EX1_298",
+			"FP1_013",
+			"EX1_563",
+			"ICC_214",
+			"OG_042",
+			"BRM_017",
+			"UNG_029",
+			"DAL_065",
+			"ICC_213",
+			"ICC_235",
+			"LOOT_507",
+			"DAL_724",
+			"BOT_567"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Shadows",
+		"id": "DALA_Priest_04",
+		"dbfId": 55649,
+		"type": "Spell",
+		"entourage": [
+			"GVG_009",
+			"DAL_030",
+			"TRL_501",
+			"ICC_210",
+			"ICC_212",
+			"AT_014",
+			"EX1_591",
+			"EX1_334",
+			"OG_101",
+			"DAL_723",
+			"DAL_011",
+			"CFM_603",
+			"DS1_233",
+			"CS2_234",
+			"UNG_029",
+			"EX1_622",
+			"TRL_500",
+			"ICC_235",
+			"ICC_830"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "What's Mind is Mine",
+		"id": "DALA_Priest_05",
+		"dbfId": 55650,
+		"type": "Spell",
+		"entourage": [
+			"GIL_142",
+			"UNG_032",
+			"DAL_729",
+			"OG_335",
+			"EX1_091",
+			"EX1_016",
+			"ICC_215",
+			"TRL_259",
+			"CS2_003",
+			"LOOT_353",
+			"TRL_097",
+			"BOT_435",
+			"EX1_339",
+			"EX1_345",
+			"EX1_334",
+			"GIL_134",
+			"ICC_207",
+			"CS1_113"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Old God",
+		"id": "DALA_Priest_06",
+		"dbfId": 55651,
+		"type": "Spell",
+		"entourage": [
+			"OG_281",
+			"OG_284",
+			"OG_162",
+			"OG_286",
+			"OG_283",
+			"OG_334",
+			"OG_096",
+			"OG_321",
+			"OG_339",
+			"OG_131",
+			"OG_255",
+			"OG_280"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Pint-Sized",
+		"id": "DALA_Priest_07",
+		"dbfId": 55652,
+		"type": "Spell",
+		"entourage": [
+			"DAL_544",
+			"FP1_001",
+			"UNG_809",
+			"DAL_030",
+			"TRL_502",
+			"UNG_022",
+			"TRL_131",
+			"DAL_773",
+			"LOOT_394",
+			"GIL_212",
+			"NEW1_026",
+			"KAR_114",
+			"GIL_620",
+			"OG_316",
+			"TRL_260",
+			"GVG_110",
+			"LOOT_278",
+			"GIL_813",
+			"BOT_567"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Dragonfire",
+		"id": "DALA_Priest_08",
+		"dbfId": 55653,
+		"type": "Spell",
+		"entourage": [
+			"BRM_004",
+			"AT_116",
+			"LOOT_528",
+			"LOOT_410",
+			"CFM_605",
+			"TRL_526",
+			"GIL_190",
+			"TRL_569",
+			"LOOT_538",
+			"BRM_031",
+			"UNG_848",
+			"LOOT_540",
+			"EX1_563",
+			"BRM_030",
+			"EX1_572",
+			"LOOT_137",
+			"CFM_662",
+			"GVG_008",
+			"LOOT_209"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Twisted",
+		"id": "DALA_Priest_09",
+		"dbfId": 55654,
+		"type": "Spell",
+		"entourage": [
+			"UNG_034",
+			"GVG_011",
+			"DAL_735",
+			"EX1_045",
+			"UNG_844",
+			"LOE_107",
+			"EX1_048",
+			"CFM_657",
+			"GVG_014",
+			"DAL_434",
+			"EX1_332",
+			"CFM_661",
+			"AT_016",
+			"KAR_013",
+			"EX1_626",
+			"TRL_258",
+			"LOE_111",
+			"LOE_104",
+			"LOOT_008"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Strength Within",
+		"id": "DALA_Priest_10",
+		"dbfId": 55655,
+		"type": "Spell",
+		"entourage": [
+			"BOT_558",
+			"ICC_094",
+			"ICC_210",
+			"OG_256",
+			"FP1_023",
+			"CFM_626",
+			"AT_129",
+			"BRM_020",
+			"UNG_037",
+			"BOT_258",
+			"GIL_840",
+			"ICC_705",
+			"CS1_129",
+			"CS2_236",
+			"BOT_219",
+			"LOOT_278",
+			"GVG_010",
+			"TRL_500",
+			"OG_094"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Miracles",
+		"id": "DALA_Priest_11",
+		"dbfId": 55656,
+		"type": "Spell",
+		"entourage": [
+			"BOT_558",
+			"EX1_055",
+			"UNG_034",
+			"NEW1_020",
+			"EX1_044",
+			"TRL_131",
+			"KAR_035",
+			"NEW1_026",
+			"UNG_963",
+			"BOT_258",
+			"EX1_095",
+			"TRL_408",
+			"CS2_004",
+			"UNG_029",
+			"ICC_802",
+			"BOT_219",
+			"LOOT_278",
+			"BOT_529",
+			"LOOT_209"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Priest_12",
+		"dbfId": 55657,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"LOOT_516",
+			"LOE_077",
+			"ICC_854",
+			"EX1_558",
+			"FP1_030",
+			"UNG_963",
+			"EX1_110",
+			"BRM_028",
+			"EX1_614",
+			"TRL_564",
+			"EX1_002",
+			"GVG_118",
+			"AT_018",
+			"EX1_350",
+			"NEW1_038",
+			"KAR_097",
+			"LOOT_357",
+			"EX1_298",
+			"LOE_092",
+			"TRL_541"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Distort",
+		"id": "DALA_Priest_HP1",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"TopsyTurvy_HealthSwap_Impact_Sound": [
+				"TopsyTurvy_HealthSwap_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nSwap a minion's Attack and Health.",
+		"dbfId": 53288,
+		"type": "Hero_power",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Distorted",
+		"id": "DALA_Priest_HP1e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Attack and Health have been swapped by Distort.",
+		"dbfId": 53444,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Soothe",
+		"id": "DALA_Priest_HP2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"spell_Humility_target_1": [
+				"spell_Humility_target_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nGive a minion -2 Attack until your next turn.",
+		"dbfId": 53289,
+		"type": "Hero_power",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Soothed",
+		"id": "DALA_Priest_HP2e",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "-2 Attack until your next turn.",
+		"dbfId": 53290,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Priest Hero Power Watcher",
+		"id": "DALA_Priest_HPe",
+		"dbfId": 55947,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Dalaran",
+		"name": "Rakanishu",
+		"health": 15,
+		"id": "DALA_Rakanishu",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Rakanishu_Male_Elemental_Death_02.ogg"
+			],
+			"attack": [
+				"VO_DALA_Rakanishu_Male_Elemental_Attack_04.ogg"
+			]
+		},
+		"dbfId": 54553,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Combo",
+		"id": "DALA_Rogue_01",
+		"dbfId": 55658,
+		"type": "Spell",
+		"entourage": [
+			"OG_070",
+			"EX1_131",
+			"EX1_613",
+			"DAL_415",
+			"EX1_134",
+			"LOOT_211",
+			"TRL_092",
+			"UNG_064",
+			"GIL_557",
+			"CS2_073",
+			"EX1_124",
+			"CFM_690"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Thief",
+		"id": "DALA_Rogue_02",
+		"dbfId": 55659,
+		"type": "Spell",
+		"entourage": [
+			"KAR_069",
+			"OG_330",
+			"DAL_714",
+			"GIL_827",
+			"GIL_677",
+			"CFM_781",
+			"DAL_416",
+			"ICC_811",
+			"KAR_070",
+			"GVG_028",
+			"GIL_598",
+			"GIL_598",
+			"BRM_030",
+			"UNG_856",
+			"DAL_716",
+			"GIL_672"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Trickery",
+		"id": "DALA_Rogue_03",
+		"dbfId": 55660,
+		"type": "Spell",
+		"entourage": [
+			"BOT_288",
+			"DAL_400",
+			"DAL_415",
+			"LOOT_165",
+			"BOT_559",
+			"LOOT_026",
+			"LOOT_412",
+			"DAL_417",
+			"DAL_719",
+			"TRL_541",
+			"DAL_010",
+			"EX1_581",
+			"AT_035",
+			"BOT_087",
+			"DAL_366",
+			"OG_073",
+			"DAL_720",
+			"ICC_827"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Kingslayer",
+		"id": "DALA_Rogue_04",
+		"dbfId": 55661,
+		"type": "Spell",
+		"entourage": [
+			"LOOT_033",
+			"GVG_023",
+			"NEW1_018",
+			"BOT_083",
+			"GIL_534",
+			"NEW1_024",
+			"CS2_074",
+			"ICC_233",
+			"ICC_221",
+			"UNG_823",
+			"CS2_233",
+			"GVG_022",
+			"LOOT_542"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Deathrattle",
+		"id": "DALA_Rogue_05",
+		"dbfId": 55662,
+		"type": "Spell",
+		"entourage": [
+			"CFM_691",
+			"LOE_019",
+			"LOE_012",
+			"FP1_031",
+			"DAL_749",
+			"BOT_243",
+			"DAL_775",
+			"TRL_537",
+			"AT_036",
+			"OG_133",
+			"OG_072",
+			"BOT_084",
+			"BOT_508",
+			"LOOT_503",
+			"BOT_286"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Cogs and Gears",
+		"id": "DALA_Rogue_06",
+		"dbfId": 55663,
+		"type": "Spell",
+		"entourage": [
+			"BOT_283",
+			"BOT_907",
+			"GVG_006",
+			"GVG_027",
+			"EX1_556",
+			"BOT_565",
+			"GVG_096",
+			"GVG_078",
+			"BOT_548",
+			"BOT_066",
+			"GVG_096",
+			"GVG_114",
+			"GVG_116",
+			"BOT_424"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Scallywags",
+		"id": "DALA_Rogue_07",
+		"dbfId": 55664,
+		"type": "Spell",
+		"entourage": [
+			"KAR_069",
+			"CS2_146",
+			"GVG_075",
+			"TRL_071",
+			"NEW1_027",
+			"AT_032",
+			"TRL_015",
+			"OG_267",
+			"NEW1_024",
+			"AT_070",
+			"TRL_126",
+			"TRL_124",
+			"TRL_157",
+			"GIL_687",
+			"TRL_127",
+			"TRL_074"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Cutthroat",
+		"id": "DALA_Rogue_08",
+		"dbfId": 55665,
+		"type": "Spell",
+		"entourage": [
+			"CS2_188",
+			"EX1_008",
+			"EX1_162",
+			"UNG_075",
+			"AT_087",
+			"EX1_046",
+			"ICC_029",
+			"DAL_749",
+			"EX1_116",
+			"DAL_592",
+			"CS2_073",
+			"EX1_124",
+			"GVG_022"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Draw!",
+		"id": "DALA_Rogue_09",
+		"dbfId": 55666,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"EX1_096",
+			"EX1_007",
+			"EX1_050",
+			"LOOT_211",
+			"DAL_582",
+			"DAL_565",
+			"BRM_031",
+			"EX1_145",
+			"EX1_278",
+			"UNG_060",
+			"EX1_129",
+			"BOT_242",
+			"OG_073",
+			"CS2_077"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Battlecry",
+		"id": "DALA_Rogue_10",
+		"dbfId": 55667,
+		"type": "Spell",
+		"entourage": [
+			"BOT_283",
+			"LOE_077",
+			"GIL_827",
+			"LOOT_165",
+			"GVG_107",
+			"LOOT_026",
+			"DAL_416",
+			"TRL_092",
+			"OG_080",
+			"TRL_409",
+			"ICC_257",
+			"OG_291",
+			"TRL_077",
+			"UNG_848",
+			"ICC_705",
+			"EX1_144",
+			"DAL_728",
+			"DAL_010",
+			"NEW1_004"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Spellslinger",
+		"id": "DALA_Rogue_11",
+		"dbfId": 55668,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"UNG_058",
+			"NEW1_026",
+			"DAL_095",
+			"EX1_284",
+			"EX1_095",
+			"EX1_563",
+			"OG_134",
+			"CS2_072",
+			"EX1_145",
+			"GIL_506",
+			"EX1_124",
+			"CFM_690",
+			"EX1_278",
+			"EX1_129",
+			"OG_176",
+			"EX1_044"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Rogue_12",
+		"dbfId": 55669,
+		"type": "Spell",
+		"entourage": [
+			"EX1_613",
+			"GIL_677",
+			"BOT_243",
+			"FP1_030",
+			"EX1_116",
+			"BRM_028",
+			"EX1_110",
+			"EX1_016",
+			"ICC_314",
+			"AT_036",
+			"EX1_563",
+			"EX1_572",
+			"FP1_010",
+			"GVG_110",
+			"LOOT_357",
+			"EX1_298",
+			"GVG_114"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Yoink!",
+		"id": "DALA_Rogue_HP1",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nAdd a random\ncard to your hand\n<i>(from another class).</i>",
+		"dbfId": 53291,
+		"type": "Hero_power",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Cut-less",
+		"id": "DALA_Rogue_HP2",
+		"audio": {
+			"play": [],
+			"Shared_SneakyMissileStandard2_Cast_1": [
+				"Shared_SneakyMissileStandard2_Cast_1.ogg"
+			],
+			"Sneaky_Target_Loop_01": [
+				"Sneaky_Target_Loop_01.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_SneakyAttackImpactStandard_1": [
+				"Shared_SneakyAttackImpactStandard_1.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDeal 2 damage to an undamaged minion.",
+		"dbfId": 53293,
+		"type": "Hero_power",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Rogue Hero Power Watcher",
+		"id": "DALA_Rogue_HPe",
+		"dbfId": 55950,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Flood",
+		"id": "DALA_Shaman_01",
+		"dbfId": 55723,
+		"type": "Spell",
+		"entourage": [
+			"EX1_565",
+			"UNG_201",
+			"AT_046",
+			"LOOT_167",
+			"DAL_566",
+			"ICC_900",
+			"BOT_102",
+			"LOE_089",
+			"UNG_010",
+			"CS2_222",
+			"EX1_562",
+			"TRL_012",
+			"BOT_451",
+			"KAR_073",
+			"EX1_248",
+			"UNG_956",
+			"CFM_310",
+			"CS2_046",
+			"TRL_351"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Spirits",
+		"id": "DALA_Shaman_02",
+		"dbfId": 55725,
+		"type": "Spell",
+		"entourage": [
+			"EX1_096",
+			"FP1_007",
+			"ICC_702",
+			"ICC_854",
+			"FP1_031",
+			"UNG_900",
+			"CFM_324",
+			"LOOT_161",
+			"EX1_097",
+			"ICC_257",
+			"EX1_110",
+			"EX1_016",
+			"TRL_537",
+			"OG_133",
+			"CS2_038",
+			"FP1_025",
+			"UNG_956",
+			"GVG_096"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Fishy",
+		"id": "DALA_Shaman_03",
+		"dbfId": 55726,
+		"type": "Spell",
+		"entourage": [
+			"DAL_077",
+			"GIL_678",
+			"DAL_049",
+			"UNG_073",
+			"EX1_507",
+			"EX1_103",
+			"UNG_937",
+			"UNG_089",
+			"TRL_520",
+			"EX1_062",
+			"GVG_040",
+			"DAL_726",
+			"CFM_344",
+			"OG_161",
+			"GVG_042",
+			"ICC_089",
+			"DAL_710",
+			"CFM_310",
+			"LOE_113"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Overload",
+		"id": "DALA_Shaman_04",
+		"dbfId": 55727,
+		"type": "Spell",
+		"entourage": [
+			"DAL_433",
+			"LOE_018",
+			"OG_026",
+			"ICC_081",
+			"EX1_258",
+			"OG_024",
+			"BOT_407",
+			"ICC_090",
+			"CFM_313",
+			"AT_053",
+			"LOOT_060",
+			"BRM_011",
+			"AT_051",
+			"EX1_248",
+			"UNG_025",
+			"LOOT_064",
+			"EX1_247",
+			"TRL_352"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Big Shaman",
+		"id": "DALA_Shaman_05",
+		"dbfId": 55728,
+		"type": "Spell",
+		"entourage": [
+			"ICC_912",
+			"DAL_052",
+			"BOT_548",
+			"CFM_324",
+			"NEW1_010",
+			"DAL_047",
+			"GIL_616",
+			"ICC_314",
+			"EX1_563",
+			"EX1_572",
+			"DAL_553",
+			"OG_042",
+			"CS2_039",
+			"BOT_099",
+			"EX1_298"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Elemental Wrath",
+		"id": "DALA_Shaman_06",
+		"dbfId": 55729,
+		"type": "Spell",
+		"entourage": [
+			"UNG_809",
+			"UNG_202",
+			"BOT_533",
+			"GIL_581",
+			"UNG_070",
+			"UNG_816",
+			"EX1_250",
+			"CS2_042",
+			"UNG_208",
+			"EX1_249",
+			"UNG_847",
+			"EX1_298",
+			"UNG_211",
+			"DAL_047",
+			"UNG_907",
+			"BOT_093"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Battlecry",
+		"id": "DALA_Shaman_07",
+		"dbfId": 55730,
+		"type": "Spell",
+		"entourage": [
+			"ICC_058",
+			"LOOT_517",
+			"LOE_077",
+			"LOOT_516",
+			"LOE_016",
+			"DAL_546",
+			"ICC_466",
+			"CFM_668",
+			"FP1_030",
+			"LOOT_167",
+			"ICC_257",
+			"LOOT_358",
+			"AT_054",
+			"UNG_848",
+			"GIL_820",
+			"DAL_431",
+			"GIL_836"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Sssspells",
+		"id": "DALA_Shaman_08",
+		"dbfId": 55731,
+		"type": "Spell",
+		"entourage": [
+			"GIL_531",
+			"TRL_060",
+			"BOT_411",
+			"KAR_021",
+			"EX1_284",
+			"GIL_807",
+			"EX1_563",
+			"OG_134",
+			"EX1_245",
+			"EX1_238",
+			"GVG_038",
+			"KAR_073",
+			"EX1_241",
+			"TRL_058",
+			"EX1_259",
+			"DAL_009",
+			"LOOT_506",
+			"GIL_504"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Carvings",
+		"id": "DALA_Shaman_09",
+		"dbfId": 55732,
+		"type": "Spell",
+		"entourage": [
+			"EX1_565",
+			"LOOT_062",
+			"UNG_201",
+			"AT_052",
+			"GIL_681",
+			"EX1_575",
+			"AT_046",
+			"AT_047",
+			"GIL_583",
+			"KAR_021",
+			"AT_049",
+			"LOOT_518",
+			"OG_028",
+			"OG_023",
+			"TRL_012",
+			"LOOT_344"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Regeneration",
+		"id": "DALA_Shaman_10",
+		"dbfId": 55733,
+		"type": "Spell",
+		"entourage": [
+			"DAL_544",
+			"CFM_120",
+			"UNG_938",
+			"CS2_117",
+			"LOOT_291",
+			"GIL_622",
+			"CFM_061",
+			"OG_209",
+			"GIL_667",
+			"GVG_069",
+			"GIL_118",
+			"DAL_432",
+			"LOOT_373",
+			"AT_048",
+			"UNG_817"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Shifting Scales",
+		"id": "DALA_Shaman_11",
+		"dbfId": 55734,
+		"type": "Spell",
+		"entourage": [
+			"OG_123",
+			"EX1_083",
+			"TRL_085",
+			"CFM_697",
+			"EX1_564",
+			"CFM_668",
+			"DAL_052",
+			"LOE_053",
+			"GIL_198",
+			"DAL_431",
+			"OG_027",
+			"LOOT_504",
+			"TRL_082",
+			"CFM_696",
+			"UNG_956",
+			"EX1_246",
+			"ICC_481"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Shaman_12",
+		"dbfId": 55735,
+		"type": "Spell",
+		"entourage": [
+			"BOT_411",
+			"TRL_085",
+			"DAL_546",
+			"OG_209",
+			"CFM_324",
+			"BOT_548",
+			"TRL_345",
+			"LOOT_358",
+			"AT_054",
+			"BRM_028",
+			"EX1_016",
+			"KAR_097",
+			"FP1_013",
+			"LOOT_357",
+			"EX1_298",
+			"ICC_314",
+			"DAL_431",
+			"EX1_572"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Evolution",
+		"id": "DALA_Shaman_HP1",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"DKThrall_HeroPower_Impact_Sound": [
+				"DKThrall_HeroPower_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nTransform a friendly minion into one that costs (1) more.",
+		"dbfId": 53294,
+		"type": "Hero_power",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 1,
+		"set": "Dalaran",
+		"name": "Refresh",
+		"mechanics": [
+			"OVERLOAD"
+		],
+		"id": "DALA_Shaman_HP2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Water_Idle_Loop": [
+				"Water_Idle_Loop.ogg"
+			],
+			"Water_Heal_Impact_Sound": [
+				"Water_Heal_Impact_Sound.ogg"
+			]
+		},
+		"text": "<b>Hero Power</b>\nDraw a card.\n<b>Overload:</b> (1).",
+		"dbfId": 53295,
+		"type": "Hero_power",
+		"cardClass": "SHAMAN",
+		"overload": 1
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Shaman Hero Power Watcher",
+		"id": "DALA_Shaman_HPe",
+		"dbfId": 55952,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Dalaran",
+		"name": "Squeamlish",
+		"health": 15,
+		"id": "DALA_Squeamlish",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Squeamlish_Female_Kobold_Death_02.ogg"
+			],
+			"attack": [
+				"VO_DALA_Squeamlish_Female_Kobold_Attack_01.ogg"
+			]
+		},
+		"dbfId": 54551,
+		"type": "Hero",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Dalaran",
+		"name": "Tekahn",
+		"health": 15,
+		"id": "DALA_Tekahn",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Tekahn_Male_TolVir_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_Tekahn_Male_TolVir_Attack_03.ogg"
+			]
+		},
+		"dbfId": 54552,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Dalaran",
+		"name": "Vessina",
+		"health": 15,
+		"id": "DALA_Vessina",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_DALA_Vessina_Female_Sethrak_Death_01 .ogg"
+			],
+			"attack": [
+				"VO_DALA_Vessina_Female_Sethrak_Attack_02.ogg"
+			]
+		},
+		"dbfId": 54547,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Big Demons",
+		"id": "DALA_Warlock_01",
+		"dbfId": 55763,
+		"type": "Spell",
+		"entourage": [
+			"FP1_022",
+			"ICC_075",
+			"EX1_310",
+			"DAL_185",
+			"CS2_064",
+			"CFM_663",
+			"LOOT_306",
+			"AT_023",
+			"EX1_614",
+			"CFM_751",
+			"DAL_607",
+			"EX1_323",
+			"LOOT_368",
+			"GVG_021",
+			"DAL_561",
+			"GVG_019",
+			"EX1_320",
+			"BOT_521",
+			"LOOT_420",
+			"ICC_831"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Swarming",
+		"id": "DALA_Warlock_02",
+		"dbfId": 55765,
+		"type": "Spell",
+		"entourage": [
+			"LOOT_014",
+			"OG_241",
+			"LOE_116",
+			"ICC_903",
+			"LOE_023",
+			"DAL_606",
+			"TRL_251",
+			"UNG_835",
+			"OG_113",
+			"BRM_006",
+			"AT_019",
+			"UNG_047",
+			"TRL_257",
+			"OG_114",
+			"EX1_316",
+			"GIL_191",
+			"KAR_025",
+			"TRL_555"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Draw",
+		"id": "DALA_Warlock_03",
+		"dbfId": 55766,
+		"type": "Spell",
+		"entourage": [
+			"LOOT_014",
+			"OG_109",
+			"GIL_815",
+			"BOT_559",
+			"EX1_050",
+			"LOE_079",
+			"DAL_582",
+			"LOOT_526",
+			"UNG_851",
+			"EX1_284",
+			"DAL_565",
+			"DAL_185",
+			"DAL_607",
+			"TRL_541",
+			"EX1_302",
+			"BOT_568",
+			"DAL_602",
+			"OG_239"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Sacrifice",
+		"id": "DALA_Warlock_04",
+		"dbfId": 55768,
+		"type": "Spell",
+		"entourage": [
+			"ICC_903",
+			"DAL_606",
+			"EX1_301",
+			"GIL_515",
+			"EX1_304",
+			"UNG_047",
+			"LOOT_161",
+			"NEW1_003",
+			"EX1_316",
+			"CS2_063",
+			"TRL_249",
+			"ICC_469",
+			"UNG_831",
+			"BOT_913",
+			"LOE_007",
+			"EX1_303",
+			"CFM_608",
+			"DAL_173"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Pain",
+		"id": "DALA_Warlock_05",
+		"dbfId": 55769,
+		"type": "Spell",
+		"entourage": [
+			"BOT_447",
+			"EX1_319",
+			"LOOT_014",
+			"GIL_508",
+			"LOOT_013",
+			"UNG_835",
+			"BOT_226",
+			"EX1_313",
+			"GIL_693",
+			"GIL_565",
+			"GVG_100",
+			"CS2_064",
+			"CFM_751",
+			"EX1_620",
+			"GIL_543",
+			"BOT_222",
+			"CS2_062",
+			"LOOT_043",
+			"CFM_094"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Discard",
+		"id": "DALA_Warlock_06",
+		"dbfId": 55770,
+		"type": "Spell",
+		"entourage": [
+			"KAR_089",
+			"UNG_836",
+			"OG_109",
+			"AT_021",
+			"TRL_551",
+			"KAR_205",
+			"TRL_252",
+			"UNG_833",
+			"ICC_841",
+			"EX1_310",
+			"UNG_830",
+			"TRL_247",
+			"NEW1_030",
+			"TRL_245",
+			"EX1_308",
+			"BOT_568",
+			"LOOT_417",
+			"AT_022"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "In Control",
+		"id": "DALA_Warlock_07",
+		"dbfId": 55771,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"NEW1_021",
+			"EX1_058",
+			"EX1_043",
+			"OG_174",
+			"ICC_075",
+			"LOOT_415",
+			"GIL_618",
+			"BRM_028",
+			"GIL_124",
+			"CFM_751",
+			"GIL_825",
+			"ICC_314",
+			"LOOT_368",
+			"EX1_105",
+			"EX1_620",
+			"ICC_041",
+			"EX1_303",
+			"LOOT_043",
+			"EX1_309"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Destruction",
+		"id": "DALA_Warlock_08",
+		"dbfId": 55772,
+		"type": "Spell",
+		"entourage": [
+			"NEW1_021",
+			"GIL_614",
+			"LOOT_161",
+			"EX1_002",
+			"AT_023",
+			"GVG_015",
+			"CS2_057",
+			"LOOT_417",
+			"CS2_062",
+			"EX1_303",
+			"AT_025",
+			"CFM_094",
+			"EX1_309",
+			"DAL_173",
+			"TRL_246",
+			"EX1_312",
+			"OG_239"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Lil' Demons",
+		"id": "DALA_Warlock_09",
+		"dbfId": 55773,
+		"type": "Spell",
+		"entourage": [
+			"CS2_059",
+			"EX1_319",
+			"KAR_089",
+			"CS2_065",
+			"GVG_018",
+			"BOT_443",
+			"LOOT_013",
+			"BOT_224",
+			"BRM_006",
+			"CFM_610",
+			"DAL_751",
+			"DAL_561",
+			"TRL_249",
+			"BOT_263",
+			"EX1_596",
+			"BRM_005",
+			"DAL_007",
+			"DAL_605",
+			"GVG_045"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Empowering",
+		"id": "DALA_Warlock_10",
+		"dbfId": 55774,
+		"type": "Spell",
+		"entourage": [
+			"ICC_092",
+			"EX1_004",
+			"TRL_251",
+			"ICC_094",
+			"OG_256",
+			"BOT_224",
+			"TRL_517",
+			"DAL_563",
+			"BOT_536",
+			"EX1_093",
+			"CFM_668",
+			"ICC_029",
+			"AT_090",
+			"LOOT_167",
+			"TRL_253",
+			"BOT_263",
+			"TRL_249",
+			"CFM_611"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Curatives",
+		"id": "DALA_Warlock_11",
+		"dbfId": 55775,
+		"type": "Spell",
+		"entourage": [
+			"CFM_120",
+			"GIL_558",
+			"GVG_018",
+			"GIL_143",
+			"CS2_117",
+			"GIL_622",
+			"TRL_252",
+			"GIL_565",
+			"BOT_548",
+			"ICC_905",
+			"GIL_667",
+			"DAL_185",
+			"LOOT_017",
+			"OG_118",
+			"ICC_055",
+			"CS2_061",
+			"LOOT_043",
+			"EX1_309"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legend",
+		"id": "DALA_Warlock_12",
+		"dbfId": 55776,
+		"type": "Spell",
+		"entourage": [
+			"FP1_030",
+			"GIL_618",
+			"BRM_028",
+			"LOOT_415",
+			"EX1_016",
+			"GIL_825",
+			"DAL_422",
+			"GVG_110",
+			"BRM_031",
+			"FP1_013",
+			"DAL_607",
+			"KAR_097",
+			"EX1_298",
+			"ICC_314",
+			"BOT_433",
+			"LOE_092",
+			"GVG_021",
+			"EX1_572",
+			"OG_134",
+			"OG_042"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Pain Split",
+		"id": "DALA_Warlock_HP1",
+		"audio": {
+			"play": [],
+			"Warlock_SiphonSoul_TargetImpact_1": [
+				"Warlock_SiphonSoul_TargetImpact_1.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nTake 2 damage.\nDeal 2 damage.",
+		"dbfId": 53296,
+		"type": "Hero_power",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "The Pact",
+		"id": "DALA_Warlock_HP2",
+		"audio": {
+			"play": [],
+			"Warlock_SiphonSoul_TargetImpact_1": [
+				"Warlock_SiphonSoul_TargetImpact_1.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nTake 2 damage.\nSummon a 2/2 Imp.",
+		"dbfId": 53297,
+		"type": "Hero_power",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 2,
+		"set": "Dalaran",
+		"race": "DEMON",
+		"attack": 2,
+		"name": "Devious Imp",
+		"health": 2,
+		"id": "DALA_Warlock_HP2t",
+		"audio": {
+			"play": [
+				"VO_DALA_Warlock_HP2t_Male_Demon_Play_01.ogg"
+			],
+			"death": [
+				"VO_DALA_Warlock_HP2t_Male_Demon_Death_01.ogg"
+			],
+			"attack": [
+				"VO_DALA_Warlock_HP2t_Male_Demon_Attack_01.ogg"
+			]
+		},
+		"dbfId": 53298,
+		"type": "Minion",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Warlock Hero Power Watcher",
+		"id": "DALA_Warlock_HPe",
+		"dbfId": 55953,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Mercenaries",
+		"id": "DALA_Warrior_01",
+		"dbfId": 55711,
+		"type": "Spell",
+		"entourage": [
+			"OG_312",
+			"CFM_637",
+			"CS2_146",
+			"NEW1_018",
+			"TRL_507",
+			"GVG_075",
+			"OG_315",
+			"GIL_681",
+			"NEW1_027",
+			"NEW1_022",
+			"CFM_651",
+			"TRL_015",
+			"NEW1_024",
+			"GVG_070",
+			"AT_070",
+			"CS2_106",
+			"FP1_021",
+			"CS2_112",
+			"KAR_028",
+			"CFM_631"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Damaged",
+		"id": "DALA_Warrior_02",
+		"dbfId": 55712,
+		"type": "Spell",
+		"entourage": [
+			"EX1_402",
+			"EX1_603",
+			"EX1_604",
+			"OG_149",
+			"ICC_408",
+			"OG_218",
+			"BRM_016",
+			"BOT_218",
+			"GIL_152",
+			"ICC_405",
+			"EX1_607",
+			"DAL_769",
+			"OG_314",
+			"EX1_400",
+			"EX1_392",
+			"CS2_108",
+			"UNG_927",
+			"TRL_360",
+			"FP1_021",
+			"ICC_834"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Big Minions",
+		"id": "DALA_Warrior_03",
+		"dbfId": 55713,
+		"type": "Spell",
+		"entourage": [
+			"LOE_009",
+			"UNG_838",
+			"EX1_298",
+			"GIL_616",
+			"ICC_314",
+			"LOOT_153",
+			"EX1_414",
+			"ICC_405",
+			"OG_173",
+			"BOT_534",
+			"AT_072",
+			"DAL_070",
+			"OG_042",
+			"EX1_620",
+			"LOOT_370",
+			"BOT_069",
+			"DAL_059",
+			"LOOT_380"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Bombs Away!",
+		"id": "DALA_Warrior_04",
+		"dbfId": 55714,
+		"type": "Spell",
+		"entourage": [
+			"EX1_082",
+			"BOT_431",
+			"GIL_815",
+			"LOE_077",
+			"BOT_532",
+			"DAL_060",
+			"BOT_559",
+			"EX1_050",
+			"GVG_099",
+			"CFM_667",
+			"GVG_090",
+			"BOT_511",
+			"GVG_056",
+			"DAL_064",
+			"GVG_110",
+			"ICC_091",
+			"DAL_063"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Rush",
+		"id": "DALA_Warrior_05",
+		"dbfId": 55715,
+		"type": "Spell",
+		"entourage": [
+			"TRL_327",
+			"GIL_580",
+			"GIL_155",
+			"GIL_113",
+			"GIL_803",
+			"NEW1_011",
+			"EX1_116",
+			"GIL_547",
+			"EX1_067",
+			"TRL_550",
+			"TRL_329",
+			"EX1_414",
+			"GIL_202",
+			"DAL_070",
+			"NEW1_036",
+			"DAL_062",
+			"CS2_105",
+			"BOT_069",
+			"GIL_653"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Iron and Steel",
+		"id": "DALA_Warrior_06",
+		"dbfId": 55716,
+		"type": "Spell",
+		"entourage": [
+			"GVG_051",
+			"DAL_759",
+			"GVG_085",
+			"BOT_907",
+			"GVG_006",
+			"DAL_060",
+			"DAL_770",
+			"BOT_312",
+			"BOT_563",
+			"BOT_548",
+			"BOT_104",
+			"BOT_107",
+			"GVG_056",
+			"BOT_218",
+			"BOT_237",
+			"GVG_114",
+			"DAL_070",
+			"BOT_299",
+			"GVG_050",
+			"BOT_406",
+			"BOT_238"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Dragon",
+		"id": "DALA_Warrior_07",
+		"dbfId": 55717,
+		"type": "Spell",
+		"entourage": [
+			"AT_071",
+			"TRL_326",
+			"TRL_328",
+			"TRL_323",
+			"BRM_034",
+			"ICC_027",
+			"AT_123",
+			"TRL_569",
+			"GIL_526",
+			"BRM_031",
+			"UNG_848",
+			"LOOT_540",
+			"EX1_563",
+			"EX1_562",
+			"EX1_572",
+			"LOOT_137",
+			"NEW1_030",
+			"OG_317",
+			"TRL_362",
+			"EX1_284",
+			"ICC_029"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Armored Up",
+		"id": "DALA_Warrior_08",
+		"dbfId": 55718,
+		"type": "Spell",
+		"entourage": [
+			"BOT_059",
+			"BOT_447",
+			"LOOT_413",
+			"EX1_402",
+			"LOOT_367",
+			"DAL_759",
+			"ICC_062",
+			"CFM_756",
+			"LOOT_365",
+			"GVG_053",
+			"LOOT_519",
+			"EX1_410",
+			"ICC_837",
+			"BOT_042",
+			"AT_064",
+			"DAL_008",
+			"LOOT_364",
+			"EX1_606",
+			"KAR_091",
+			"LOOT_285"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Arsenal",
+		"id": "DALA_Warrior_09",
+		"dbfId": 55719,
+		"type": "Spell",
+		"entourage": [
+			"CS2_146",
+			"NEW1_018",
+			"CFM_643",
+			"BOT_083",
+			"CFM_755",
+			"AT_066",
+			"EX1_398",
+			"NEW1_024",
+			"OG_220",
+			"EX1_409",
+			"GIL_537",
+			"LOOT_203",
+			"UNG_929",
+			"CFM_631",
+			"ICC_064",
+			"CS2_112",
+			"BOT_406",
+			"TRL_325",
+			"EX1_411"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "All Might",
+		"id": "DALA_Warrior_10",
+		"dbfId": 55720,
+		"type": "Spell",
+		"entourage": [
+			"NEW1_021",
+			"NEW1_041",
+			"AT_130",
+			"EX1_002",
+			"GIL_124",
+			"UNG_933",
+			"BOT_424",
+			"NEW1_030",
+			"TRL_321",
+			"CFM_716",
+			"EX1_391",
+			"CS2_104",
+			"CS2_114",
+			"CS2_108",
+			"EX1_407",
+			"GVG_052",
+			"GVG_054"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Taunt",
+		"id": "DALA_Warrior_11",
+		"dbfId": 55721,
+		"type": "Spell",
+		"entourage": [
+			"CFM_790",
+			"UNG_808",
+			"AT_069",
+			"UNG_928",
+			"UNG_072",
+			"GIL_207",
+			"LOE_022",
+			"CFM_756",
+			"UNG_957",
+			"FP1_012",
+			"GIL_667",
+			"DAL_088",
+			"UNG_925",
+			"UNG_838",
+			"UNG_848",
+			"OG_340",
+			"CFM_940",
+			"AT_068",
+			"AT_065",
+			"BOT_548"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Dalaran",
+		"name": "Legends",
+		"id": "DALA_Warrior_12",
+		"dbfId": 55722,
+		"type": "Spell",
+		"entourage": [
+			"GIL_547",
+			"FP1_030",
+			"BRM_028",
+			"EX1_016",
+			"GVG_056",
+			"OG_220",
+			"EX1_249",
+			"GVG_110",
+			"GVG_118",
+			"EX1_414",
+			"ICC_405",
+			"GVG_113",
+			"FP1_013",
+			"EX1_298",
+			"ICC_314",
+			"EX1_572",
+			"AT_072",
+			"TRL_541",
+			"UNG_933",
+			"BRM_030"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Invigorating Brew",
+		"id": "DALA_Warrior_HP1",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"KingMukla_BarrelToss_Cast_1": [
+				"KingMukla_BarrelToss_Cast_1.ogg"
+			],
+			"KingMukla_BarrelToss_Impact_1": [
+				"KingMukla_BarrelToss_Impact_1.ogg"
+			]
+		},
+		"text": "[x]<b>Hero Power</b>\nDeal 1 damage to\na minion and give\nit +2 Attack.",
+		"dbfId": 53299,
+		"type": "Hero_power",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Invigorated",
+		"id": "DALA_Warrior_HP1e",
+		"text": "+2 Attack.",
+		"dbfId": 53300,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Undermine",
+		"id": "DALA_Warrior_HP2",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nShuffle two Explosives\ninto your opponent's\ndeck.",
+		"dbfId": 53301,
+		"type": "Hero_power",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Dalaran",
+		"name": "Improvised Explosive",
+		"mechanics": [
+			"TOPDECK",
+			"ImmuneToSpellpower"
+		],
+		"id": "DALA_Warrior_HP2t",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Barrel_exp_base": [
+				"Barrel_exp_base.ogg"
+			],
+			"FX_FireballEvent04_SpellImpact_01": [
+				"FX_FireballEvent04_SpellImpact_01.ogg"
+			],
+			"Bomb_Missile_Ball_Sound_01": [
+				"Bomb_Missile_Ball_Sound_01.ogg"
+			]
+		},
+		"text": "<b>Casts When Drawn</b>\nTake 3 damage.",
+		"dbfId": 53307,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Warrior Hero Power Watcher",
+		"id": "DALA_Warrior_HPe",
+		"dbfId": 55955,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Core",
+		"name": "Fast Spawn to Deck Dummy FX",
+		"id": "DFX_001",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"SpawnToDeck_CardOverDeck_Arcane": [
+				"SpawnToDeck_CardOverDeck_Arcane.ogg"
+			]
+		},
+		"text": "Holds the FX for inserting a card into a deck quickly.",
+		"dbfId": 56407,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Core",
+		"name": "Time Warp Dummy FX",
+		"id": "DFX_002",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"extra_turn_button_flips_over": [
+				"extra_turn_button_flips_over.ogg"
+			],
+			"TimeWarp_Fullboard_Sound": [
+				"TimeWarp_Fullboard_Sound.ogg"
+			],
+			"extra_turn_button_explodes": [
+				"extra_turn_button_explodes.ogg"
+			]
+		},
+		"text": "Holds the FX for playing Timewarp FX.",
+		"dbfId": 56410,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Core",
+		"name": "Frost Nova Dummy FX",
+		"id": "DFX_003",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Mage_FrostNova_Cast_1": [
+				"Mage_FrostNova_Cast_1.ogg"
+			],
+			"Mage_FrostNovaCast_New": [
+				"Mage_FrostNovaCast_New.ogg"
+			],
+			"AE_Frost_Cast_01": [
+				"AE_Frost_Cast_01.ogg"
+			]
+		},
+		"text": "Holds the FX for playing Frost Nova FX.",
+		"dbfId": 56430,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Core",
+		"name": "Holy Healing Dummy FX",
+		"id": "DFX_004",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "Holds the FX for playing Holy Healing FX.",
+		"dbfId": 56431,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Core",
+		"name": "Flamestrike Dummy FX",
+		"id": "DFX_005",
+		"audio": {
+			"play": [],
+			"death": [],
+			"AE_Fire_Start_02": [
+				"AE_Fire_Start_02.ogg"
+			],
+			"AE_Fire_End_02": [
+				"AE_Fire_End_02.ogg"
+			],
+			"attack": [],
+			"Shared_FireAE_Impact_1": [
+				"Shared_FireAE_Impact_1.ogg"
+			]
+		},
+		"text": "Holds the FX for playing Flamestrike FX.",
+		"dbfId": 56432,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
 	},
 	{
 		"cost": 3,
@@ -49925,7 +62500,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 2,
 		"set": "Expert1",
 		"name": "Solar Wrath",
 		"id": "EX1_154a",
@@ -49953,7 +62528,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 2,
 		"set": "Expert1",
 		"name": "Nature's Wrath",
 		"id": "EX1_154b",
@@ -50019,7 +62594,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 3,
 		"set": "Expert1",
 		"name": "Tiger's Fury",
 		"id": "EX1_155a",
@@ -50062,7 +62637,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 3,
 		"set": "Expert1",
 		"name": "Thick Hide",
 		"id": "EX1_155b",
@@ -50201,7 +62776,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 2,
 		"set": "Expert1",
 		"name": "Summon a Panther",
 		"id": "EX1_160a",
@@ -50220,7 +62795,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 2,
 		"set": "Expert1",
 		"name": "Leader of the Pack",
 		"id": "EX1_160b",
@@ -50279,6 +62854,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 1,
+		"set": "Hof",
 		"artist": "Leo Che",
 		"dbfId": 233,
 		"type": "Spell",
@@ -50386,7 +62962,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 6,
 		"set": "Expert1",
 		"name": "Rampant Growth",
 		"id": "EX1_164a",
@@ -50408,7 +62984,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 6,
 		"set": "Expert1",
 		"name": "Enrich",
 		"id": "EX1_164b",
@@ -50612,7 +63188,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 4,
 		"set": "Expert1",
 		"name": "Moonfire",
 		"id": "EX1_166a",
@@ -50628,7 +63204,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 4,
 		"set": "Expert1",
 		"name": "Dispel",
 		"mechanics": [
@@ -50838,7 +63414,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Expert1",
 		"name": "Rooted",
 		"id": "EX1_178a",
@@ -50869,7 +63445,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Expert1",
 		"name": "Uproot",
 		"id": "EX1_178b",
@@ -52404,6 +64980,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
+		"set": "Hof",
 		"race": "DEMON",
 		"artist": "Lucas Graciano",
 		"health": 7,
@@ -53013,6 +65590,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
+		"set": "Hof",
 		"artist": "Lucas Graciano",
 		"dbfId": 679,
 		"type": "Spell",
@@ -55735,7 +68313,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 9,
 		"set": "Expert1",
 		"name": "Demigod's Favor",
 		"id": "EX1_573a",
@@ -55766,7 +68344,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 9,
 		"set": "Expert1",
 		"name": "Shan'do's Lesson",
 		"id": "EX1_573b",
@@ -58581,7 +71159,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 5,
 		"set": "Tb",
 		"name": "Cat Form",
 		"id": "FB_Champs_EX1_165a",
@@ -58597,7 +71175,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 5,
 		"set": "Tb",
 		"name": "Bear Form",
 		"id": "FB_Champs_EX1_165b",
@@ -59390,7 +71968,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Tb",
 		"name": "Ancient Teachings",
 		"id": "FB_Champs_NEW1_008a",
@@ -59406,7 +71984,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Tb",
 		"name": "Ancient Secrets",
 		"id": "FB_Champs_NEW1_008b",
@@ -65173,6 +77751,12 @@ var parseCardsText = {
 			"attack": [
 				"VO_GIL_124_Male_Giant_Attack_02.ogg"
 			],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Shared_Physical_Fizzle": [
 				"Shared_Physical_Fizzle.ogg"
 			]
@@ -65291,6 +77875,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
+		"set": "Hof",
 		"race": "BEAST",
 		"artist": "Jerry Mascho",
 		"health": 6,
@@ -66923,6 +79508,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 2,
+		"set": "Hof",
 		"race": "BEAST",
 		"artist": "Luca Zontini",
 		"health": 3,
@@ -69625,6 +82211,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 6,
+		"set": "Hof",
 		"artist": "Alex Horley Orlandelli",
 		"health": 5,
 		"mechanics": [
@@ -70249,6 +82836,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 9,
+		"set": "Hof",
 		"race": "BEAST",
 		"artist": "James Ryman",
 		"health": 8,
@@ -70446,6 +83034,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 5,
+		"set": "Hof",
 		"race": "BEAST",
 		"artist": "Bill Ruan",
 		"health": 4,
@@ -70495,6 +83084,7 @@ var parseCardsText = {
 	{
 		"collectible": true,
 		"cost": 3,
+		"set": "Hof",
 		"race": "BEAST",
 		"artist": "Jakub Kasper",
 		"spellDamage": 1,
@@ -76572,6 +89162,12 @@ var parseCardsText = {
 				"Shared_Physical_PreCast.ogg"
 			],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Shared_Physical_Fizzle": [
 				"Shared_Physical_Fizzle.ogg"
 			]
@@ -78628,7 +91224,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 2,
 		"set": "Gvg",
 		"name": "Attack Mode",
 		"id": "GVG_030a",
@@ -78659,7 +91255,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 2,
 		"set": "Gvg",
 		"name": "Tank Mode",
 		"id": "GVG_030b",
@@ -78750,7 +91346,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 3,
 		"set": "Gvg",
 		"name": "Gift of Mana",
 		"id": "GVG_032a",
@@ -78766,7 +91362,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 3,
 		"set": "Gvg",
 		"name": "Gift of Cards",
 		"id": "GVG_032b",
@@ -79112,7 +91708,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 6,
 		"set": "Gvg",
 		"name": "Call the Guardians",
 		"id": "GVG_041a",
@@ -79134,7 +91730,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 6,
 		"set": "Gvg",
 		"name": "Nature's Defense",
 		"id": "GVG_041b",
@@ -79610,6 +92206,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -88625,7 +101227,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Icecrown",
 		"name": "Scarab Plague",
 		"id": "ICC_832a",
@@ -88641,7 +101243,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Icecrown",
 		"name": "Spider Plague",
 		"id": "ICC_832b",
@@ -88700,7 +101302,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Icecrown",
 		"name": "Scarab Shell",
 		"id": "ICC_832pa",
@@ -88716,7 +101318,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Icecrown",
 		"name": "Spider Fangs",
 		"id": "ICC_832pb",
@@ -98310,6 +110912,12 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Crush_CustomDeath_Sound_01": [
 				"Crush_CustomDeath_Sound_01.ogg"
 			]
@@ -101925,7 +114533,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 1,
 		"set": "Loe",
 		"artist": "A. J. Nazzaro",
 		"name": "Break Free",
@@ -101942,7 +114550,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 1,
 		"set": "Loe",
 		"artist": "A. J. Nazzaro",
 		"name": "Awakened",
@@ -115581,21 +128189,12 @@ var parseCardsText = {
 		"audio": {
 			"play": [],
 			"death": [],
-			"Laser_Idle_Eye_Confuse_Sound": [
-				"Laser_Idle_Eye_Confuse_Sound.ogg"
-			],
 			"Laser_Impact_Confuse_Sound": [
 				"Laser_Impact_Confuse_Sound.ogg"
 			],
 			"attack": [],
-			"Laser_Idle_Eye_Fear_Sound": [
-				"Laser_Idle_Eye_Fear_Sound.ogg"
-			],
-			"Laser_Idle_Eye_Devitalize_Sound": [
-				"Laser_Idle_Eye_Devitalize_Sound.ogg"
-			],
-			"Laser_Idle_Eye_Frost_Sound": [
-				"Laser_Idle_Eye_Frost_Sound.ogg"
+			"spell_SacredTrial_precast": [
+				"spell_SacredTrial_precast.ogg"
 			],
 			"Laser_Missile_Confuse_Sound": [
 				"Laser_Missile_Confuse_Sound.ogg"
@@ -122678,7 +135277,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 5,
 		"set": "Expert1",
 		"name": "Stellar Drift",
 		"id": "NEW1_007a",
@@ -122700,7 +135299,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 5,
 		"set": "Expert1",
 		"name": "Starlord",
 		"id": "NEW1_007b",
@@ -122753,7 +135352,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Expert1",
 		"name": "Ancient Teachings",
 		"id": "NEW1_008a",
@@ -122769,7 +135368,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Expert1",
 		"name": "Ancient Secrets",
 		"id": "NEW1_008b",
@@ -124061,6 +136660,12 @@ var parseCardsText = {
 			"attack": [
 				"KotoBeastYes1.ogg"
 			],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Shared_Physical_Fizzle": [
 				"Shared_Physical_Fizzle.ogg"
 			]
@@ -124653,7 +137258,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 3,
 		"set": "Og",
 		"artist": "Alex Alexandrov",
 		"name": "Evolve Spines",
@@ -124670,7 +137275,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 3,
 		"set": "Og",
 		"artist": "Alex Alexandrov",
 		"name": "Evolve Scales",
@@ -126942,7 +139547,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Og",
 		"artist": "Skan Srisuwan",
 		"name": "Many Wisps",
@@ -126962,7 +139567,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 7,
 		"set": "Og",
 		"artist": "Skan Srisuwan",
 		"name": "Big Wisps",
@@ -127121,7 +139726,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 4,
 		"set": "Og",
 		"artist": "L. Lullabi & S. Srisuwan",
 		"name": "Y'Shaarj's Strength",
@@ -127154,7 +139759,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 4,
 		"set": "Og",
 		"artist": "L. Lullabi & S. Srisuwan",
 		"name": "Yogg-Saron's Magic",
@@ -130985,6 +143590,220 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Tb",
+		"name": "Bag of Burgled Spells",
+		"health": 30,
+		"id": "TB_207_BagOfSpells",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Your spells summon a random minion of the same cost!",
+		"dbfId": 56201,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Cloneball!",
+		"health": 30,
+		"id": "TB_207_Cloneball",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Your deck is made of random Legendary minions, cloned four times!",
+		"dbfId": 56199,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "When Clones Attack!",
+		"health": 30,
+		"id": "TB_207_ClonesAttack",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Every minion you play will generate a 1/1 clone!",
+		"dbfId": 56196,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "The Masked Ball",
+		"health": 30,
+		"id": "TB_207_MaskedBall",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "After you summon a minion, give it \"<b>Deathrattle:</b> Summon a minion that costs (2) less.\"",
+		"dbfId": 56197,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Randomonium",
+		"health": 30,
+		"id": "TB_207_Randomonium",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Each turn your cards' cost are randomized!",
+		"dbfId": 56200,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Battle of Tol Barad",
+		"health": 30,
+		"id": "TB_207_TolBarad",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Play a minion and get a random spell of the same cost, but for free!",
+		"dbfId": 56193,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Catacomb Treasures!",
+		"health": 30,
+		"id": "TB_207_TreasureCatacombs",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Complete your quest to get an awesome treasure!",
+		"dbfId": 56195,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "The Void Singularity",
+		"health": 30,
+		"id": "TB_207_VoidSingularity",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Your minions become crushed into a single powerful entity of light!",
+		"dbfId": 56198,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Yellow-Brick Brawl",
+		"health": 30,
+		"id": "TB_207_YellowBrick",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Start the game with Dorothee!",
+		"dbfId": 56194,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"elite": true,
+		"cost": 1,
+		"set": "Tb",
+		"name": "Journey to the Catacombs",
+		"mechanics": [
+			"QUEST",
+			"ImmuneToSpellpower"
+		],
+		"id": "TB_207CatacombQ",
+		"text": "[x]<b>Quest:</b> Play 4 minions.\n<b>Reward:</b> Master Chest!",
+		"dbfId": 56162,
+		"type": "Spell",
+		"cardClass": "NEUTRAL",
+		"rarity": "Legendary"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "TB207 Masked Ball e",
+		"id": "TB_207MaskedBallE",
+		"dbfId": 56182,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 3,
+		"set": "Tb",
+		"health": 4,
+		"mechanics": [
+			"DEATHRATTLE",
+			"MULTIPLY_BUFF_VALUE"
+		],
+		"dbfId": 56192,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 0,
+		"name": "Master Chest",
+		"id": "TB_207masterChest",
+		"audio": {
+			"play": [
+				"LOOT_357l_MasterChest_Play.ogg"
+			],
+			"death": [
+				"LOOT_357l_MasterChest_Death.ogg"
+			],
+			"attack": [
+				"LOOT_357l_MasterChest_Attack.ogg"
+			]
+		},
+		"text": "<b>Deathrattle:</b> Give your opponent a fantastic treasure!",
+		"entourage": [
+			"LOOT_998h",
+			"LOOT_998j",
+			"LOOT_998l",
+			"LOOT_998k"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "TB207 Minions Make Spells e",
+		"id": "TB_207TolBaradE",
+		"dbfId": 56159,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
 		"name": "Give Taunt and Charge",
 		"id": "TB_AllMinionsTauntCharge",
 		"audio": {
@@ -130994,6 +143813,16 @@ var parseCardsText = {
 		},
 		"text": "This minion is granted <b>Taunt</b> and <b>Charge</b>.",
 		"dbfId": 38949,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Amalgam Enchant",
+		"id": "TB_Amalgam_Ench",
+		"text": "Minions have all races.",
+		"dbfId": 56940,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
 	},
@@ -131604,6 +144433,22 @@ var parseCardsText = {
 		"text": "<b>Hero Power</b>\nDeal 1 damage to all minions.",
 		"dbfId": 47532,
 		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Get Champs DeckID",
+		"id": "TB_Champs_GetChampsDeckID",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Reset Your Deck",
+		"dbfId": 56214,
+		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -134753,11 +147598,6 @@ var parseCardsText = {
 		"set": "Tb",
 		"name": "Henchmania Discover",
 		"id": "TB_Henchmania_Discover",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"dbfId": 55310,
 		"type": "Enchantment",
 		"entourage": [
@@ -134789,11 +147629,6 @@ var parseCardsText = {
 		"set": "Tb",
 		"name": "Work for Hagatha Enchantment",
 		"id": "TB_Henchmania_DiscoverAe",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"text": "At the end of your turn transform a random friendly minion into\none that costs (1) more.",
 		"dbfId": 55339,
 		"type": "Enchantment",
@@ -134820,11 +147655,6 @@ var parseCardsText = {
 		"set": "Tb",
 		"name": "Work for Dr. Boom enchant",
 		"id": "TB_Henchmania_DiscoverBe",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"dbfId": 55340,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
@@ -134850,11 +147680,6 @@ var parseCardsText = {
 		"set": "Tb",
 		"name": "Work for Togwaggle enchant",
 		"id": "TB_Henchmania_DiscoverCe",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"dbfId": 55635,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
@@ -134880,11 +147705,6 @@ var parseCardsText = {
 		"set": "Tb",
 		"name": "Work for Madame Lazul enchant",
 		"id": "TB_Henchmania_DiscoverDe",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"dbfId": 55637,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
@@ -138194,6 +151014,17 @@ var parseCardsText = {
 		"id": "TB_RandomDeckRecipeResetDecks",
 		"text": "Reset Both Player Decks",
 		"dbfId": 55254,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Reset Your Deck",
+		"id": "TB_RandomDeckRecipeResetYours",
+		"text": "Reset Your Deck",
+		"dbfId": 56203,
 		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
@@ -142938,7 +155769,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 4,
 		"set": "Troll",
 		"artist": "Ivan Fomin",
 		"name": "Gonk's Resilience",
@@ -142973,7 +155804,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
-		"cost": 0,
+		"cost": 4,
 		"set": "Troll",
 		"artist": "Luke Mancini",
 		"name": "Raptor Pack",
@@ -143038,11 +155869,6 @@ var parseCardsText = {
 		"set": "Troll",
 		"name": "Stampede!",
 		"id": "TRL_255e",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"text": "Has <b>Rush</b>.",
 		"dbfId": 54782,
 		"type": "Enchantment",
@@ -146697,7 +159523,7 @@ var parseCardsText = {
 			"deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.",
 			"jaJP": "[x]<b>雄叫び:</b>\nこの対戦で自分が体力を\n10以上回復していた場合\n+4/+4と<b>挑発</b>を獲得する。\n",
 			"plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.",
-			"esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtienes\n+4/+4 y <b>Provocar</b>.",
+			"esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtiene +4/+4\ny <b>Provocar</b>.",
 			"ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.",
 			"esMX": "<b>Grito de batalla:</b> si has restaurado 10 de salud en esta partida, obtiene +4/+4 y <b>Provocación</b>.",
 			"koKR": "<b>전투의 함성:</b> 이번 게임에서 생명력을 10 이상 회복했으면, +4/+4와 <b>도발</b>을 얻습니다.",
@@ -147802,11 +160628,6 @@ var parseCardsText = {
 		"set": "Troll",
 		"name": "Gonk's Bond",
 		"id": "TRLA_116e",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"text": "Increased Attack.",
 		"dbfId": 54788,
 		"type": "Enchantment",
@@ -149434,11 +162255,6 @@ var parseCardsText = {
 		"set": "Troll",
 		"name": "Panther's Lead",
 		"id": "TRLA_164e",
-		"audio": {
-			"play": [],
-			"death": [],
-			"attack": []
-		},
 		"text": "Has <b>Rush</b>.",
 		"dbfId": 54029,
 		"type": "Enchantment",
@@ -149945,6 +162761,12 @@ var parseCardsText = {
 			],
 			"attack": [
 				"VO_TRLA_177_Male_Troll_Attack_01.ogg"
+			],
+			"Shared_Physical_Impact_02": [
+				"Shared_Physical_Impact_02.ogg"
+			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
 			],
 			"Shared_Physical_Fizzle": [
 				"Shared_Physical_Fizzle.ogg"
@@ -157226,6 +170048,9 @@ var parseCardsText = {
 			"attack": [
 				"VO_UNG_070_Male_Elemental_Attack_01.ogg"
 			],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Shared_NatureImpact02_1": [
 				"Shared_NatureImpact02_1.ogg"
 			]
@@ -157308,6 +170133,9 @@ var parseCardsText = {
 			"play": [],
 			"death": [],
 			"attack": [],
+			"Shared_Physical_Impact_01": [
+				"Shared_Physical_Impact_01.ogg"
+			],
 			"Shared_NatureImpact02_1": [
 				"Shared_NatureImpact02_1.ogg"
 			]
