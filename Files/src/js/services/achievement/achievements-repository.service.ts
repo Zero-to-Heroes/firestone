@@ -56,6 +56,10 @@ import { KrippArcaneMissiles } from './achievements/kripp/kripp-arcane-missiles.
 import { KrippRodOfRoasting } from './achievements/kripp/kripp-roasting.js';
 import { KrippOneHpRemaining } from './achievements/kripp/kripp-one-hp-remaining.js';
 import { KrippMassHysteria } from './achievements/kripp/kripp-mass-hysteria.js';
+import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure.js';
+import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive.js';
+import { DalaranHeistTreasurePlay } from './achievements/dalaran/dalran-heist-treasure-play.js';
+import { DalaranHeistPassivePlay } from './achievements/dalaran/dalaran-heist-passive-play.js';
 
 @Injectable()
 export class AchievementsRepository {
@@ -111,6 +115,8 @@ export class AchievementsRepository {
 		const rumbleRunShrinePlayProvider = new RumbleRunShrinePlaySetProvider(this.cards, this.conf);
 		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.cards, this.conf);
 		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.cards, this.conf);
+		const dalaranHeistTreasureProvider = new DalaranHeistTreasureSetProvider(this.cards, this.conf);
+		const dalaranHeistPassiveProvider = new DalaranHeistPassivesSetProvider(this.cards, this.conf);
 
 		const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
 		// const krippCrazyDecksProvider = new KrippCrazyDecksSetProvider(this.cards, this.conf);
@@ -129,7 +135,9 @@ export class AchievementsRepository {
 			rumbleRunProgressionProvider,
 			rumbleRunShrinePlayProvider,
 			rumbleRunTeammateProvider,
-			rumbleRunPassiveProvider,
+            rumbleRunPassiveProvider,
+            dalaranHeistPassiveProvider,
+            dalaranHeistTreasureProvider,
             krippFirstInstallment,
             // krippCrazyDecksProvider,
             // krippSoloModeProvider,
@@ -180,6 +188,15 @@ export class AchievementsRepository {
 					rumbleRunPassiveProvider.id,
 				]
 			),
+			new AchievementCategory(
+				'dalaran_heist',
+				'Dalaran Heist',
+				'dalaran_heist',
+				[
+					dalaranHeistPassiveProvider.id,
+					dalaranHeistTreasureProvider.id,
+				]
+			),
 			krippCategory,
 		]
 		// Create all the achievements
@@ -195,7 +212,7 @@ export class AchievementsRepository {
 				achievement.secodaryCardType,
 				achievement.difficulty,
 				0,
-				[]));
+                []));
 		// Create the achievement sets
 		this.loadAggregatedAchievements().then((result) => console.log('loaded aggregated achievements'));
 		console.log('[achievements] modules registered');
@@ -227,6 +244,8 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
+            { type: 'dalaran_heist_treasure_play', challengeCreationFn: (achievement) => new DalaranHeistTreasurePlay(achievement, ScenarioId.DALARAN_HEIST, this.events) },
+			{ type: 'dalaran_heist_passive_play', challengeCreationFn: (achievement) => new DalaranHeistPassivePlay(achievement, ScenarioId.DALARAN_HEIST, this.events) },
 
 			{ type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
 			{ type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },

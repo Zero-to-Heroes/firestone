@@ -25,9 +25,11 @@ export class AchievementNameService {
             case 'dungeon_run_boss_victory': return 'Boss defeated: ';
             case 'dungeon_run_treasure_play': 
             case 'monster_hunt_treasure_play': 
+            case 'dalaran_heist_treasure_play': 
                 return 'Treasure played: ';
             case 'dungeon_run_passive_play': 
             case 'monster_hunt_passive_play': 
+            case 'dalaran_heist_passive_play': 
                 return 'Passive triggered: ';
             case 'monster_hunt_boss_encounter': return 'Monster met: ';
             case 'monster_hunt_boss_victory': return 'Monster defeated: ';

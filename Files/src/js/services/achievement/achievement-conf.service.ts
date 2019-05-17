@@ -23,6 +23,8 @@ export class AchievementConfService {
             'rumble_run_shrine_play',
             'rumble_run_teammate_play',
             'rumble_run_passive_play',
+            'dalaran_heist_treasure_play', 
+            'dalaran_heist_passive_play', 
         ];
         // Only record free achievements once
         if (recordOnlyOnce.indexOf(achievement.type) !== -1 || achievement.difficulty === 'free') {
