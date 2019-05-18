@@ -69,7 +69,10 @@ export class LogParserService {
 			ga('send', 'event', 'toast', 'new-pack');
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
-		}
+        }
+        else {
+            console.log('received cards outside of pack', cards);
+        }
 
 		for (let data of toProcess) {
 			// console.log('considering log line', data);
