@@ -10,6 +10,7 @@ import { OwNotificationsService } from '../../services/notifications.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { CardHistoryStorageService } from './card-history-storage.service';
 import { captureEvent } from '@sentry/core';
+import { PreferencesService } from '../preferences.service';
 
 declare var overwolf: any;
 declare var parseCardsText: any;
@@ -32,7 +33,8 @@ export class PackMonitor {
 	// private timer: any;
 
 	constructor(
-		private events: Events,
+        private events: Events,
+        private prefs: PreferencesService,
 		private logRegisterService: LogRegisterService,
 		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService) {
@@ -321,27 +323,30 @@ export class PackMonitor {
 		});
 	}
 
-	private createDustToast(dust: number, numberOfCards: number) {
-		this.notificationService.html({
-			content: `
-				<div class="message-container message-dust">
-					<div class="dust">
-						<i class="i-30 pale-theme">
-							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#dust"/>
-							</svg>
-						</i>
-					</div>
-					<div class="text">
-						<span>${numberOfCards} duplicate cards</span>
-						<span class="dust-amount">${dust} Dust potential</span>
-					</div>
-					<button class="i-30 close-button">
-						<svg class="svg-icon-fill">
-							<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-						</svg>
-					</button>
-				</div>`
-		});
+	private async createDustToast(dust: number, numberOfCards: number) {
+        const prefs = await this.prefs.getPreferences();
+        if (prefs.binder.showDust) {
+            this.notificationService.html({
+                content: `
+                    <div class="message-container message-dust">
+                        <div class="dust">
+                            <i class="i-30 pale-theme">
+                                <svg class="svg-icon-fill">
+                                    <use xlink:href="/Files/assets/svg/sprite.svg#dust"/>
+                                </svg>
+                            </i>
+                        </div>
+                        <div class="text">
+                            <span>${numberOfCards} duplicate cards</span>
+                            <span class="dust-amount">${dust} Dust potential</span>
+                        </div>
+                        <button class="i-30 close-button">
+                            <svg class="svg-icon-fill">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+                            </svg>
+                        </button>
+                    </div>`
+            });
+        }
 	}
 }

@@ -25,6 +25,7 @@ declare var overwolf: any;
 				</settings-app-selection>
 				<ng-container [ngSwitch]="selectedApp">
                     <settings-general *ngSwitchCase="'general'"></settings-general>
+                    <settings-collection *ngSwitchCase="'collection'"></settings-collection>
 					<settings-achievements *ngSwitchCase="'achievements'"></settings-achievements>
 					<settings-decktracker *ngSwitchCase="'decktracker'"></settings-decktracker>
 				</ng-container>

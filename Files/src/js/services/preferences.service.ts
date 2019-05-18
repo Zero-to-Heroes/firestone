@@ -1,6 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { Preferences } from '../models/preferences';
+import { BinderPrefs } from '../models/preferences/binder-prefs';
 
 declare var overwolf: any;
 
@@ -24,6 +25,14 @@ export class PreferencesService {
     public async setLaunchAppOnGameStart(pref: boolean) {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, launchAppOnGameStart: pref} as Preferences;
+        this.savePreferences(newPrefs);
+    }
+    
+    public async setBinderShowDust(pref: boolean) {
+        const prefs = await this.getPreferences();
+        const binder = prefs.binder;
+        const newBinder = { ...binder, showDust: pref } as BinderPrefs;
+        const newPrefs = { ...prefs, binder: newBinder } as Preferences;
         this.savePreferences(newPrefs);
     }
     

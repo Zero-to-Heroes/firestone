@@ -1,3 +1,5 @@
+import { BinderPrefs } from "./preferences/binder-prefs";
+
 export class Preferences {
 
 	readonly id: number = 1;
@@ -14,4 +16,5 @@ export class Preferences {
     readonly decktrackerSkin: string = 'original';
 	readonly overlayDisplayMode: string;
     readonly launchAppOnGameStart: boolean = true;
+    readonly binder: BinderPrefs = new BinderPrefs();
 }

@@ -12,8 +12,8 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmi
             <li [ngClass]="{'selected': selectedApp == 'general'}">
                 <span (click)="changeSelection('general')">General</span>
             </li>
-            <li class="disabled">
-                <span>The Binder</span>
+            <li [ngClass]="{'selected': selectedApp == 'collection'}">
+                <span (click)="changeSelection('collection')">The Binder</span>
             </li>
             <li [ngClass]="{'selected': selectedApp == 'achievements'}">
                 <span (click)="changeSelection('achievements')">Achievements</span>
