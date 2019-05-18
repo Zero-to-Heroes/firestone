@@ -97,6 +97,9 @@ export class PackMonitor {
 			this.createNewCardToast(card, type);
 		};
 		if (this.openingPack) {
+            if (!card.id) { 
+                console.error('Trying to add an empty card id to unrevealed cards', card, type) 
+            };
 			this.unrevealedCards.push(card.id);
 		}
 		else {
@@ -112,6 +115,9 @@ export class PackMonitor {
 		let card: Card = event.data[0];
 		let dust: number = event.data[1];
 		if (this.openingPack) {
+            if (!card.id) { 
+                console.error('Trying to add an empty card id to unrevealed cards', card, dust) 
+            };
 			this.unrevealedCards.push(card.id);
 			this.cardEvents[card.id] = () => { this.totalDustInPack += dust; this.totalDuplicateCards++; };
 		}
@@ -231,7 +237,7 @@ export class PackMonitor {
 		this.busy = true;
 
 		// card has been revealed already
-		if (this.unrevealedCards[i] === '') {
+		if (this.unrevealedCards[i] === '' || !this.unrevealedCards[i]) {
 			this.busy = false;
 			return;
 		}
@@ -276,7 +282,7 @@ export class PackMonitor {
 		console.log('reset done');
 	}
 
-	public createNewCardToast(card: Card, type: string) {
+	public async createNewCardToast(card: Card, type: string) {
 		let dbCard = parseCardsText.getCard(card.id);
 		let cardName: string = dbCard.name;
 		let goldenClass = undefined;
@@ -291,7 +297,11 @@ export class PackMonitor {
 		else if (card.count >= 2) {
 			newLabel = 'Second copy';
 		}
-		console.log('displaying new card toast notification for ' + cardName);
+        console.log('displaying new card toast notification for ' + cardName);
+        const prefs = await this.prefs.getPreferences();
+        if (!prefs.binder.showCommon && dbCard.rarity === 'Common') {
+            return;
+        }
 		this.notificationService.html({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>

@@ -31,6 +31,21 @@ declare var ga;
 						</div>
 					</fieldset>
 				</form>
+				<form class="settings-section form-toggle">
+					<fieldset name="">
+						<div class="form-section">
+							<input hidden type="checkbox" 
+									[checked]="showCommon" 
+									name="" 
+									id="a-01" 
+									(change)="toggleShowCommon()">
+							<label for="a-01" [ngClass]="{'enabled': showCommon}">
+								<p class="settings-p">Non-golden commons</p>
+								<b></b>
+							</label>
+						</div>
+					</fieldset>
+				</form>
 			</section>
         </div>
 	`,
@@ -39,6 +54,7 @@ declare var ga;
 export class SettingsCollectionNotificationComponent {
 
 	showDust: boolean;
+	showCommon: boolean;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
 		this.cdr.detach();
@@ -48,6 +64,14 @@ export class SettingsCollectionNotificationComponent {
 	toggleShowDust() {
 		this.showDust = !this.showDust;
 		this.prefs.setBinderShowDust(this.showDust);
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	toggleShowCommon() {
+		this.showCommon = !this.showCommon;
+		this.prefs.setBinderShowCommon(this.showCommon);
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
