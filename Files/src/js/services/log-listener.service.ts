@@ -155,9 +155,8 @@ export class LogListenerService {
 			console.log('[log-listener] [' + this.logFile + '] Not HS, returning');
 			return false;
 		}
-
-		// console.log('[log-listener] [' + this.logFile + '] HS Launched');
-		return true;
+        // Only detect new game launched events when it goes from not running to running
+        return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
 	}
 
 	gameRunning(gameInfo: any): boolean {

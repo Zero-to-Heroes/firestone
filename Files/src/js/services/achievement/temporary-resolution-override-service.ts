@@ -83,6 +83,7 @@ export class TemporaryResolutionOverrideService {
 		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
 			return false;
 		}
-		return true;
+        // Only detect new game launched events when it goes from not running to running
+        return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
 	}
 }

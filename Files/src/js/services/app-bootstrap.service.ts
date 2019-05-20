@@ -252,32 +252,6 @@ export class AppBootstrapService {
 		});
 	}
 
-	private gameLaunched(gameInfoResult: any): boolean {
-		if (!gameInfoResult) {
-			console.log('No gameInfoResult, returning');
-			return false;
-		}
-
-		if (!gameInfoResult.gameInfo) {
-			console.log('No gameInfoResult.gameInfo, returning');
-			return false;
-		}
-
-		if (!gameInfoResult.gameInfo.isRunning) {
-			console.log('Game not running, returning');
-			return false;
-		}
-
-		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			console.log('Not HS, returning');
-			return false;
-		}
-
-		console.log("HS Launched");
-		return true;
-	}
-
 	private gameRunning(gameInfo: any): boolean {
 
 		if (!gameInfo) {

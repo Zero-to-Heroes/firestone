@@ -119,6 +119,7 @@ export class MainWindowStoreService {
 
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
 			if (this.gameLaunched(res)) {
+                console.log('game launched, populating store', res);
 				this.populateStore();
 			}
 		});
@@ -196,6 +197,7 @@ export class MainWindowStoreService {
 	}
 
 	private populateStore() {
+        console.log('sending populate store event');
 		this.stateUpdater.next(new PopulateStoreEvent());
 	}
 
@@ -218,21 +220,8 @@ export class MainWindowStoreService {
 		// NOTE: we divide by 10 to get the game class id without it's sequence number
 		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
 			return false;
-		}
-		return true;
-	}
-
-	private gameRunning(gameInfo: any): boolean {
-		if (!gameInfo) {
-			return false;
-		}
-		if (!gameInfo.isRunning) {
-			return false;
-		}
-		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			return false;
-		}
-		return true;
+        }
+        // Only detect new game launched events when it goes from not running to running
+        return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
 	}
 }
