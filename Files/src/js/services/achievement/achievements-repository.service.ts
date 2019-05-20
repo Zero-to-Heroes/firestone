@@ -118,7 +118,7 @@ export class AchievementsRepository {
 		const dalaranHeistTreasureProvider = new DalaranHeistTreasureSetProvider(this.cards, this.conf);
 		const dalaranHeistPassiveProvider = new DalaranHeistPassivesSetProvider(this.cards, this.conf);
 
-		// const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
+		const krippFirstInstallment = new KrippFirstInstallmentSetProvider(this.cards, this.conf);
 		// const krippCrazyDecksProvider = new KrippCrazyDecksSetProvider(this.cards, this.conf);
 		// const krippSoloModeProvider = new KrippSoloModeSetProvider(this.cards, this.conf);
 		// const krippAmazingPlaysProvider = new KrippAmazingPlaysSetProvider(this.cards, this.conf);
@@ -138,22 +138,22 @@ export class AchievementsRepository {
             rumbleRunPassiveProvider,
             dalaranHeistPassiveProvider,
             dalaranHeistTreasureProvider,
-            // krippFirstInstallment,
+            krippFirstInstallment,
             // krippCrazyDecksProvider,
             // krippSoloModeProvider,
             // krippAmazingPlaysProvider,
 		];
-		// const krippCategory = new AchievementCategory(
-		// 	'kripp',
-		// 	'Kripp',
-		// 	'kripp',
-		// 	[
-		// 		krippFirstInstallment.id,
-		// 		// krippCrazyDecksProvider.id,
-		// 		// krippSoloModeProvider.id,
-		// 		// krippAmazingPlaysProvider.id,
-		// 	]
-		// );
+		const krippCategory = new AchievementCategory(
+			'kripp',
+			'Kripp',
+			'kripp',
+			[
+				krippFirstInstallment.id,
+				// krippCrazyDecksProvider.id,
+				// krippSoloModeProvider.id,
+				// krippAmazingPlaysProvider.id,
+			]
+		);
 		this.categories = [
 			new AchievementCategory(
 				'dungeon_run',
@@ -197,7 +197,7 @@ export class AchievementsRepository {
 					dalaranHeistTreasureProvider.id,
 				]
 			),
-			// krippCategory,
+			krippCategory,
 		]
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
@@ -244,19 +244,19 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
-            { type: 'dalaran_heist_treasure_play', challengeCreationFn: (achievement) => new DalaranHeistTreasurePlay(achievement, ScenarioId.DALARAN_HEIST, this.events) },
-			{ type: 'dalaran_heist_passive_play', challengeCreationFn: (achievement) => new DalaranHeistPassivePlay(achievement, ScenarioId.DALARAN_HEIST, this.events) },
+            { type: 'dalaran_heist_treasure_play', challengeCreationFn: (achievement) => new DalaranHeistTreasurePlay(achievement, [ScenarioId.DALARAN_HEIST_CHAPTER_1, ScenarioId.DALARAN_HEIST_CHAPTER_2], this.events) },
+			{ type: 'dalaran_heist_passive_play', challengeCreationFn: (achievement) => new DalaranHeistPassivePlay(achievement, [ScenarioId.DALARAN_HEIST_CHAPTER_1, ScenarioId.DALARAN_HEIST_CHAPTER_2], this.events) },
 
-			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
-			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
-			// { type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
-			// { type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
-			// { type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
-			// { type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
-			// { type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
-			// { type: 'kripp_achievements_1_rod_of_roasting', challengeCreationFn: (achievement) => new KrippRodOfRoasting(achievement, this.events) },
-			// { type: 'kripp_achievements_1_one_hp_remaining', challengeCreationFn: (achievement) => new KrippOneHpRemaining(achievement, this.events) },
-			// { type: 'kripp_achievements_1_mass_hysteria', challengeCreationFn: (achievement) => new KrippMassHysteria(achievement, this.events) },
+			{ type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
+			{ type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
+			{ type: 'kripp_achievements_1_treants', challengeCreationFn: (achievement) => new KrippTreants(achievement, this.events) },
+			{ type: 'kripp_achievements_1_classic', challengeCreationFn: (achievement) => new KrippClassic(achievement, this.events, this.deckParser, this.cards) },
+			{ type: 'kripp_achievements_1_fatigue', challengeCreationFn: (achievement) => new KrippFatigue(achievement, this.events) },
+			{ type: 'kripp_achievements_1_goblin_bombs', challengeCreationFn: (achievement) => new KrippGoblinBombs(achievement, this.events) },
+			{ type: 'kripp_achievements_1_arcane_missiles', challengeCreationFn: (achievement) => new KrippArcaneMissiles(achievement, this.events) },
+			{ type: 'kripp_achievements_1_rod_of_roasting', challengeCreationFn: (achievement) => new KrippRodOfRoasting(achievement, this.events) },
+			{ type: 'kripp_achievements_1_one_hp_remaining', challengeCreationFn: (achievement) => new KrippOneHpRemaining(achievement, this.events) },
+			{ type: 'kripp_achievements_1_mass_hysteria', challengeCreationFn: (achievement) => new KrippMassHysteria(achievement, this.events) },
 		];
 	}
 }

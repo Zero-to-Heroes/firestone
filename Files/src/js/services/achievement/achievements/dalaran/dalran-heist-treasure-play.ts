@@ -6,8 +6,8 @@ export class DalaranHeistTreasurePlay extends AbstractChallenge {
 
 	private readonly cardId: string;
 
-	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, [scenarioId], events, [GameEvent.GAME_START, GameEvent.GAME_END]);
+	constructor(achievement, scenarioIds: number[], events: Events) {
+		super(achievement, scenarioIds, events, [GameEvent.GAME_START, GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
 	}
 
