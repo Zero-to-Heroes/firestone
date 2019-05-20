@@ -1,6 +1,6 @@
 import { Injectable, Output } from '@angular/core';
 
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 import { SimpleIOService } from './plugins/simple-io.service';
 import { Events } from './events.service';

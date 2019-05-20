@@ -1,7 +1,8 @@
-import {Subject} from 'rxjs/Subject';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+
+import {map, filter} from 'rxjs/operators';
+import {Subject, Observable} from 'rxjs';
+
+
 
 interface BroadcastEvent {
 	key: any;
@@ -50,8 +51,8 @@ export class Events {
 	}
 
 	on(key: any): Observable<BroadcastEvent> {
-		return this._eventBus.asObservable()
-			.filter(event => event.key === key)
-			.map(event => event);
+		return this._eventBus.asObservable().pipe(
+			filter(event => event.key === key),
+			map(event => event),);
 	}
 }
