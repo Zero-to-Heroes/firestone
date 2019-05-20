@@ -30,7 +30,6 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 	}
 
 	@Input() set historyItem(history: AchievementHistory) {
-		console.log('setting history item', history);
 		if (!history) {
 			return;
 		}

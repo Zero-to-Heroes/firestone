@@ -78,8 +78,8 @@ export class GameStateService {
             result.push((event) => this.twitch.emitDeckEvent(event));
         }
         this.eventEmitters = result;
-        console.log('emitting twitch event');
-        this.twitch.emitDeckEvent({ hop: "fakeEven" });
+        // console.log('emitting twitch event');
+        // this.twitch.emitDeckEvent({ hop: "fakeEven" });
     }
 
 	private processEvent(gameEvent: GameEvent) {

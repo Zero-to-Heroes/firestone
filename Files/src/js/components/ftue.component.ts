@@ -1,8 +1,7 @@
 import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-import { ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
+import { ViewContainerRef, ViewChild, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
-import { TrustedHtmlString } from '@angular/core/src/sanitization/sanitization';
 import { Preferences } from '../models/preferences';
 import { PreferencesService } from '../services/preferences.service';
 
@@ -26,7 +25,7 @@ import { PreferencesService } from '../services/preferences.service';
 export class FtueElement {
 
 	@Input() title: string;
-	@Input() text: TrustedHtmlString;
+	@Input() text: string;
 	@Input() buttonText: string;
 	@Input() placement: string;
 
@@ -113,7 +112,7 @@ export class FtueComponent implements AfterViewInit {
             this.ftueElement.instance.removing = false;
             this.ftueElement.instance.title = `We've added Pity Timers!`;
             this.ftueElement.instance.text = `You can see when is your next legendary and epic scheduled for every set.
-            <br/>Have fun!`;
+             Have fun!`;
             this.ftueElement.instance.buttonText = `Got it`;
             this.events.broadcast(Events.SHOWING_FTUE, data.data[1]);
             if (!(<ViewRef>this.cdr).destroyed) {

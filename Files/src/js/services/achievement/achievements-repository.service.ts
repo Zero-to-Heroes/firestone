@@ -3,7 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { cloneDeep } from 'lodash'
 
-import { default as allAchievements } from './achievements_list.json';
+import allAchievements from './achievements_list.json';
 
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { Achievement } from '../../models/achievement';

@@ -150,8 +150,9 @@ export class NotificationsComponent implements AfterViewInit {
 				if (!(<ViewRef>this.cdr).destroyed) {
 					this.cdr.detectChanges();
 				}
+				let currentElement: any = event.srcElement;
 				// Clicked on close, don't show the card
-				if (event.srcElement.className.indexOf("close") !== -1) {
+				if (currentElement.className.indexOf("close") !== -1) {
 					// Force close if it's not configured to auto close
 					if (override.clickToClose === false) {
 						this.notificationService.remove(toast.id);
@@ -160,13 +161,12 @@ export class NotificationsComponent implements AfterViewInit {
 					return;
 				}
 				// Clicked on settings, don't show the card and don't close
-				if (event.srcElement.className.indexOf("open-settings") !== -1) {
+				if (currentElement.className.indexOf("open-settings") !== -1) {
 					event.preventDefault();
 					event.stopPropagation();
 					this.showSettings();
 					return;
 				}
-				let currentElement = event.srcElement;
 				while (!currentElement.classList.contains("unclickable") && currentElement.parentElement) {
 					currentElement = currentElement.parentElement;
 				}

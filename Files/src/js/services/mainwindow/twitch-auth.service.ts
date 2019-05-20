@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { PreferencesService } from '../preferences.service';
 
-const EBS_URL = 'https://twitch.firestoneapp.com/deck/event';
+// const EBS_URL = 'https://twitch.firestoneapp.com/deck/event';
+const EBS_URL = 'http://localhost:8081/deck/event';
 
 const CLIENT_ID = 'cdbnfn27sed3s2n6kyj331lky9gx73';
 const REDIRECT_URI = 'overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob/Files/html/twitch-auth-callback.html';

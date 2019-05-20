@@ -239,7 +239,7 @@ export class IndexedDbService {
 			request.onsuccess = function (evt: Event) {
 				let cursor = (<IDBOpenDBRequest>evt.target).result;
 				if (cursor && result.length < limit) {
-					result.push(cursor.value);
+					result.push((cursor as any).value);
 					cursor["continue"]();
 				} else {
 					resolve(result);

@@ -68,6 +68,7 @@ export class MemoryInspectionService {
                             return;
                         }
                     });
+                    return;
                 }
                 // console.log('[memory service] [collection-manager] collection info', info);
                 const collection: Card[] = (<any>Object).values(info.res.collection)

@@ -30,6 +30,7 @@ export class DalaranHeistTreasurePlay extends AbstractChallenge {
 		const controllerId = gameEvent.data[1];
 		const localPlayer = gameEvent.data[2];
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
+            console.log('everything ok', this);
 			this.callback = callback;
 			this.handleCompletion();
 		}

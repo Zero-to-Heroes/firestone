@@ -12,6 +12,7 @@
 		"suppressImplicitAnyIndexErrors": true,
         "esModuleInterop": true,
         "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
 		"lib": [
 			"dom",
 			"es2015"
@@ -22,7 +23,12 @@
 		],
 		"types": [
 			"node",
-		]
+        ],
+        "paths": {
+            "core-js/es7/reflect": [
+              "node_modules/core-js/proposals/reflect-metadata"
+            ]
+          }
 	},
 	"exclude": [
     	"node_modules/*",
