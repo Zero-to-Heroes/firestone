@@ -11,6 +11,8 @@ declare var parseCardsText: any;
 @Injectable()
 export class MemoryInspectionService {
 
+    private triesLeft = 50;
+
 	readonly g_interestedInFeatures = [
 		'scene_state',
 		'collection',
@@ -34,24 +36,46 @@ export class MemoryInspectionService {
 	}
 
 	public getCollection(delay: number = 0): Promise<Card[]> {
+        this.triesLeft = 20;
 		return new Promise<Card[]>((resolve) => {
-			// I observed some cases where the new card information was not present in the memory reading
-			// right after I had gotten it from a pack, so let's add a little delay
-			setTimeout(() => {
-				overwolf.games.events.getInfo((info: any) => {
-					if (!info.res || !info.res.collection) {
-						// setTimeout(() => { this.getCollection(callback) }, 100);
-						resolve([]);
-						return;
-					}
-					// console.log('game info', info);
-					const collection: Card[] = (<any>Object).values(info.res.collection)
-							.map(strCard => JSON.parse(strCard));
-					// console.log('callback', collection);
-					resolve(collection);
-				})
-			}, delay);
+            this.getCollectionInternal((collection: Card[]) => {
+                resolve(collection);
+            }, delay);
 		});
+    }
+    
+    private getCollectionInternal(callback, delay: number = 0) {
+        this.triesLeft--;
+        // I observed some cases where the new card information was not present in the memory reading
+        // right after I had gotten it from a pack, so let's add a little delay
+        setTimeout(() => {
+            overwolf.games.events.getInfo((info: any) => {
+                if (!info.res || !info.res.collection) {
+                    // If game is running, we should have something in the collection
+                    // This might cause an issue if we're dealing with someone who has zero 
+                    // cards in their collection, but it's unlikely that totally beginners would 
+                    // use an app
+                    // console.log('[memory service] [collection-manager] no collection info', info);
+                    overwolf.games.getRunningGameInfo((res: any) => {
+                        if (this.gameRunning(res) && this.triesLeft > 0) {
+                            console.log('[memory service] [collection-manager] game is running, GEP should return a collection. Waiting...')
+                            setTimeout(() => this.getCollectionInternal(callback, delay), 2000);
+                            return;
+                        }
+                        else {
+                            // setTimeout(() => { this.getCollection(callback) }, 100);
+                            callback([]);
+                            return;
+                        }
+                    });
+                }
+                // console.log('[memory service] [collection-manager] collection info', info);
+                const collection: Card[] = (<any>Object).values(info.res.collection)
+                        .map(strCard => JSON.parse(strCard));
+                // console.log('callback', collection);
+                callback(collection);
+            })
+        }, delay);
 	}
 
 	private handleInfoUpdate(info) {
@@ -86,8 +110,8 @@ export class MemoryInspectionService {
 				window.setTimeout(() => this.setFeatures(), 2000);
 				return;
 		  	}
-		  	// console.log("[memory service] Set required features:");
-		  	// console.log("[memory service] ", info);
+		  	console.log("[memory service] Set required features:");
+		  	console.log("[memory service] ", info);
 		});
 	}
 
@@ -104,11 +128,8 @@ export class MemoryInspectionService {
 		if (!gameInfoResult.gameInfo.isRunning) {
 		  	return false;
 		}
-		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfoResult.gameInfo.id/10) != 9898) {
-		  	return false;
-		}
-		return true;
+        // Only detect new game launched events when it goes from not running to running
+        return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
 	}
 	  
 	private gameRunning(gameInfo) { 
