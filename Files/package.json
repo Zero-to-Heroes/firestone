@@ -34,7 +34,6 @@
     "ng-select": "1.0.0",
     "queue-typescript": "1.0.1",
     "rxjs": "6.0.0",
-    "rxjs-compat": "6.2.1",
     "ts-keycode-enum": "1.0.6",
     "uuid": "3.3.2",
     "videogular2": "6.3.0",
