@@ -1,7 +1,6 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpModule }    from '@angular/http';
 
 import { SharedModule } from '../shared/shared.module';
 import { init } from '@sentry/browser';
@@ -23,7 +22,6 @@ console.log('version is', process.env.APP_VERSION);
 @NgModule({
 	imports: [
 		BrowserModule,
-		HttpModule,
         HttpClientModule,
         BrowserAnimationsModule,
 		SharedModule,

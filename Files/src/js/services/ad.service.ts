@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 
 const SUBSCRIPTION_STATUS_ENDPOINT_GET = 'https://rpeze8ckdl.execute-api.us-west-2.amazonaws.com/Prod/subscriptions';
 
@@ -8,7 +8,7 @@ declare var overwolf;
 @Injectable()
 export class AdService {
 
-    constructor(private http: Http) { }
+    constructor(private http: HttpClient) { }
 
     public async shouldDisplayAds(): Promise<boolean> {
         return new Promise<boolean>((resolve) => {

@@ -1,7 +1,6 @@
 import { NgModule, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpModule }    from '@angular/http';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -11,6 +10,7 @@ import { DebugService } from '../../services/debug.service';
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { init } from '@sentry/browser';
 import { AdService } from '../../services/ad.service';
+import { HttpClientModule } from '@angular/common/http';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -23,7 +23,7 @@ console.log('version is ' + process.env.APP_VERSION);
 @NgModule({
 	imports: [
 		BrowserModule,
-		HttpModule,
+		HttpClientModule,
         BrowserAnimationsModule,
 		SharedModule,
 	],

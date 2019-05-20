@@ -1,7 +1,6 @@
 import { NgModule, Injectable, ErrorHandler }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpModule }    from '@angular/http';
 
 import { init, captureException } from "@sentry/browser";
 
@@ -76,7 +75,6 @@ export class SentryErrorHandler implements ErrorHandler {
 	bootstrap: [AppComponent],
 	imports: [
 		BrowserModule,
-        HttpModule,
         HttpClientModule,
 		BrowserAnimationsModule
 	],

@@ -1,12 +1,11 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { CompletedAchievement } from '../../models/completed-achievement';
 
 import { Events } from '../events.service';
 import { AchievementsRepository } from './achievements-repository.service';
-import { AchievementSet } from '../../models/achievement-set';
 import { Achievement } from '../../models/achievement';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 declare var overwolf: any;
 
@@ -21,7 +20,7 @@ export class AchievementStatsService {
 
 	constructor(
         private events: Events,
-        private http: Http,
+        private http: HttpClient,
 		private repository: AchievementsRepository) {
         this.events.on(Events.NEW_ACHIEVEMENT).subscribe((event) => this.publishAchievementStats(event));
         this.retrieveUserInfo();

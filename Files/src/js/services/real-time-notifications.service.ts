@@ -1,5 +1,5 @@
-import { Component, Injectable } from '@angular/core';
-import { Http } from "@angular/http";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class RealTimeNotificationService {
@@ -8,7 +8,7 @@ export class RealTimeNotificationService {
 
 	public notifications: string[];
 
-	constructor(private http: Http) {
+	constructor(private http: HttpClient) {
 		console.log('init real time notifications');
 		this.getStatus();
 	}

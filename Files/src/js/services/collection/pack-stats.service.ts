@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { captureEvent } from '@sentry/core';
 import { Events } from '../events.service';
 import { AllCardsService } from '../all-cards.service';
-import { Http } from '@angular/http';
 import { Card } from '../../models/card';
+import { HttpClient } from '@angular/common/http';
 
 declare var overwolf: any;
 
@@ -18,7 +18,7 @@ export class PackStatsService {
     private userMachineId: string;
     private username: string;
 
-	constructor(private events: Events, private allCards: AllCardsService, private http: Http) {
+	constructor(private events: Events, private allCards: AllCardsService, private http: HttpClient) {
         this.events.on(Events.NEW_PACK).subscribe(event => this.publishPackStat(event));
         this.events.on(Events.NEW_CARD).subscribe(event => this.publishCardStat(event.data[0], event.data[1], true));
         this.events.on(Events.MORE_DUST).subscribe(event => this.publishCardStat(event.data[0], event.data[2], false));
