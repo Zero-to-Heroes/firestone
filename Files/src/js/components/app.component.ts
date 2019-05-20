@@ -2,6 +2,7 @@ import { Component, ChangeDetectionStrategy, Injector } from '@angular/core';
 
 import { AppBootstrapService } from '../services/app-bootstrap.service';
 import { PreferencesService } from '../services/preferences.service';
+import { DebugService } from '../services/debug.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -18,7 +19,7 @@ declare var overwolf: any;
 })
 export class AppComponent {
 
-	constructor(private injector: Injector, private prefs: PreferencesService) {
+	constructor(private injector: Injector, private debug: DebugService, private prefs: PreferencesService) {
         this.init();
     }
 
@@ -72,20 +73,4 @@ export class AppComponent {
         }
         return false;
     }
-    
-    // private async isGameRunning(): Promise<boolean> {
-    //     return new Promise<boolean>((resolve) => {
-    //         overwolf.games.getRunningGameInfo((res: any) => {
-    //             // console.log('running game info', res);
-    //             if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-    //                 console.log('game running, not starting app');
-    //                 resolve(true);
-    //             }
-    //             else {
-    //                 console.log('game not running, app started manually');
-    //                 resolve(false);
-    //             }
-    //         });
-	// 	});
-    // }
 }

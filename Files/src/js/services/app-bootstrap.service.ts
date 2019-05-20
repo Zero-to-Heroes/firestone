@@ -114,11 +114,12 @@ export class AppBootstrapService {
 		)
 		
 		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-			// console.log('updated game', res);
+			console.log('updated game status', res);
 			if (this.exitGame(res)) {
 				this.closeApp();
 			}
 			else if (this.gameRunning(res.gameInfo)) {
+                console.log('game is running, showing loading screen', res);
 				this.showLoadingScreen();
 			}
 		});
