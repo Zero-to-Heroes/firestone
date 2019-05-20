@@ -207,15 +207,16 @@ export class LoadingComponent implements AfterViewInit {
 			overwolf.windows.getCurrentWindow((result) => {
 				if (result.status === "success") {
 					console.log('is window visible?', result);
-					if (result.window.isVisible) {
-						console.log('init OwAd');
-						this.adRef = new OwAd(document.getElementById("ad-div"));
-						this.adRef.addEventListener('impression', (data) => {
-							ga('send', 'event', 'ad', 'loading-window');
-						})
-						if (!(<ViewRef>this.cdr).destroyed) {
-							this.cdr.detectChanges();
-						}
+                    console.log('init OwAd');
+                    this.adRef = new OwAd(document.getElementById("ad-div"));
+                    this.adRef.addEventListener('impression', (data) => {
+                        ga('send', 'event', 'ad', 'loading-window');
+                    })
+                    if (!(<ViewRef>this.cdr).destroyed) {
+                        this.cdr.detectChanges();
+                    }
+                    if (!result.window.isVisible) {
+                        this.removeAds();
 					}
                     this.adInit = false;
                     this.refreshAds();
@@ -223,8 +224,6 @@ export class LoadingComponent implements AfterViewInit {
 			});
 			return;
         }
-		console.log('refreshing ads');
-		this.adRef.refreshAd();
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
