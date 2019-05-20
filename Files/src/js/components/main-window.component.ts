@@ -20,7 +20,7 @@ declare var ga: any;
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="top {{state.currentApp}}">
+		<div class="top {{state.currentApp}}" *ngIf="state">
 			<div class="root">
 				<div class="app-container {{state.currentApp}}">
 					<section class="menu-bar">
@@ -200,15 +200,14 @@ export class MainWindowComponent implements AfterViewInit {
 				});
 			});
 		});
-	};
-
+    };
+    
 	private async refreshAds() {
         const shouldDisplayAds = await this.adService.shouldDisplayAds();
         if (!shouldDisplayAds) {
             console.log('ad-free app, not showing ads and returning');
             return;
         }
-        console.log('shouldDisplayAds', shouldDisplayAds);
 		if (this.adInit) {
 			console.log('already initializing ads, returning');
 			return;
@@ -221,28 +220,28 @@ export class MainWindowComponent implements AfterViewInit {
 			return;
 		}
 		if (!this.adRef) {
-			console.log('first time init ads, creating OwAd');
 			this.adInit = true;
 			overwolf.windows.getCurrentWindow((result) => {
 				if (result.status === "success") {
-					console.log('is window visible?', result);
-                    console.log('init OwAd');
-                    this.adRef = new OwAd(document.getElementById("ad-div"));
-                    this.adRef.addEventListener('impression', (data) => {
-                        ga('send', 'event', 'ad', 'loading-window');
-                    })
-                    if (!(<ViewRef>this.cdr).destroyed) {
-                        this.cdr.detectChanges();
+                    if (result.window.isVisible) {
+                        console.log('first time init ads, creating OwAd');
+                        console.log('init OwAd');
+                        this.adRef = new OwAd(document.getElementById("ad-div"));
+                        this.adRef.addEventListener('impression', (data) => {
+                            ga('send', 'event', 'ad', 'loading-window');
+                        })
+                        if (!(<ViewRef>this.cdr).destroyed) {
+                            this.cdr.detectChanges();
+                        }
                     }
-                    if (!result.window.isVisible) {
-                        this.removeAds();
-					}
                     this.adInit = false;
                     this.refreshAds();
 				}
 			});
 			return;
         }
+		console.log('refreshing ads');
+		this.adRef.refreshAd();
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}

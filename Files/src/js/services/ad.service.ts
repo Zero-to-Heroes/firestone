@@ -13,6 +13,10 @@ export class AdService {
     public async shouldDisplayAds(): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
             overwolf.profile.getCurrentUser((user) => {
+                if (!user || !user.user) {
+                    resolve(true);
+                    return; 
+                }
                 let username = user.username;
                 if (!username) {
                     console.log('user not logged in', user);
