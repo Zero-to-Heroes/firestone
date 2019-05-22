@@ -72,8 +72,8 @@ export class AchievementsRepository {
 	private categories: AchievementCategory[] = [];
 
 	constructor(
-			private storage: AchievementsStorageService, 
-			private cards: AllCardsService, 
+			private storage: AchievementsStorageService,
+			private cards: AllCardsService,
 			private conf: AchievementConfService,
 			private deckParser: DeckParserService,
 			private events: Events) {
@@ -202,11 +202,11 @@ export class AchievementsRepository {
 		// Create all the achievements
 		this.allAchievements = (<any>allAchievements)
 			.map((achievement) => new Achievement(
-				achievement.id, 
-				achievement.name, 
+				achievement.id,
+				achievement.name,
 				achievement.text,
-				achievement.type, 
-				achievement.bossId || achievement.cardId || (achievement.cardIds && achievement.cardIds[0]), 
+				achievement.type,
+				achievement.bossId || achievement.cardId || (achievement.cardIds && achievement.cardIds[0]),
 				achievement.cardType,
 				achievement.secondaryCardId,
 				achievement.secodaryCardType,
@@ -244,8 +244,10 @@ export class AchievementsRepository {
 			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
 			{ type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
-            { type: 'dalaran_heist_treasure_play', challengeCreationFn: (achievement) => new DalaranHeistTreasurePlay(achievement, [ScenarioId.DALARAN_HEIST_CHAPTER_1, ScenarioId.DALARAN_HEIST_CHAPTER_2], this.events) },
-			{ type: 'dalaran_heist_passive_play', challengeCreationFn: (achievement) => new DalaranHeistPassivePlay(achievement, [ScenarioId.DALARAN_HEIST_CHAPTER_1, ScenarioId.DALARAN_HEIST_CHAPTER_2], this.events) },
+            // Each chapter has its own scenarioId, so restricting the scenario would mean we need
+            // the publish an update every week, which won't work
+            { type: 'dalaran_heist_treasure_play', challengeCreationFn: (achievement) => new DalaranHeistTreasurePlay(achievement, [], this.events) },
+			{ type: 'dalaran_heist_passive_play', challengeCreationFn: (achievement) => new DalaranHeistPassivePlay(achievement, [], this.events) },
 
 			{ type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
 			{ type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },
