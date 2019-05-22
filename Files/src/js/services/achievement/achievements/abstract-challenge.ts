@@ -67,7 +67,8 @@ export abstract class AbstractChallenge implements Challenge {
 		if (!gameEvent.data || gameEvent.data.length == 0) {
 			return;
 		}
-		if (this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].ScenarioID)) !== -1
+        if (this.modeOrScenarioIds.length === 0
+                || this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].ScenarioID)) !== -1
 				|| this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].GameType)) !== -1) {
 			this.correctMode = true;
 			// console.log('correct scenario');
