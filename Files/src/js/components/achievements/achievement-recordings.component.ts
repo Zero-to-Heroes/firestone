@@ -42,6 +42,7 @@ declare var ga;
                     <vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen>
                 </vg-controls>
 
+                <!--
                 <achievement-social-shares 
                         *ngIf="!currentThumbnail.isDeleted"
                         [socialShareUserInfo]="socialShareUserInfo"
@@ -50,6 +51,7 @@ declare var ga;
                         [videoPathOnDisk]="currentVideoPathOnDisk"
                         [videoPath]="currentReplayLocation">
                 </achievement-social-shares>
+                -->
 
                 <video [vgMedia]="media" #media id="singleVideo" preload="auto">
                     <source [src]="currentReplay" type="video/mp4">
