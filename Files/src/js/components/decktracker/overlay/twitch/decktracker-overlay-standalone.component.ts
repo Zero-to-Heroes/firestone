@@ -93,18 +93,15 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	ngAfterViewInit() {
         this.cdr.detach();
         this.twitch = (window as any).Twitch.ext;
-        // this.twitch.rig.log('cached Twitch var', this.twitch);
-        // console.log('cached Twitch var', this.twitch);
-        this.twitch.onContext((context, contextfields) => this.twitch.rig.log('oncontext', context, contextfields));
-        this.twitch.onAuthorized((auth) => this.twitch.rig.log('on authorized', auth));
+        this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
+        this.twitch.onAuthorized((auth) => console.log('on authorized', auth));
         this.twitch.listen('broadcast', (target, contentType, event) => {
             const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
             console.log('received event', deckEvent);
             this.processEvent(deckEvent);
         });
-
         this.displayMode = 'DISPLAY_MODE_GROUPED';
-        // this.addDebugGameState();
+        console.log('init done');
 		this.cdr.detectChanges();
     }
     
