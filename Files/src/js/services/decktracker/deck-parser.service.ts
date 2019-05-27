@@ -7,10 +7,16 @@ import { GameEvent } from '../../models/game-event';
 @Injectable()
 export class DeckParserService {
 
+    private readonly deckContentsRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Deck Contents Received(.*)');
+    private readonly deckEditOverRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* Finished Editing Deck(.*)');
+    
 	private readonly deckNameRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ### (.*)');
 	private readonly deckstringRegex = new RegExp('I \\d*:\\d*:\\d*.\\d* ([a-zA-Z0-9\\/\\+=]+)$');
 
-	public currentDeck: any = {};
+    public currentDeck: any = {};
+    
+    private lastDeckTimestamp;
+    private currentBlock: string;
 
 	constructor(private gameEvents: GameEvents) { 
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
@@ -21,19 +27,42 @@ export class DeckParserService {
 	}
 
 	public parseActiveDeck(data: string) {
-		// console.log('[decks] received log line', data);
-		let match = this.deckNameRegex.exec(data);
+        let match = this.deckContentsRegex.exec(data);
 		if (match) {
+            this.lastDeckTimestamp = Date.now();
+            this.currentBlock = "DECK_CONTENTS";
+            console.log('[decks] finished listing deck content');
+            return;
+        }
+        match = this.deckEditOverRegex.exec(data);
+		if (match) {
+            this.lastDeckTimestamp = Date.now();
+            this.currentBlock = "DECK_EDIT_OVER";
+            console.log('[decks] finished editing deck');
+            return;
+        }
+
+        if (this.lastDeckTimestamp && (Date.now() - this.lastDeckTimestamp) < 1000 && this.currentBlock !== 'DECK_SLECTED') {
+            console.log('[decks] Doesnt look like a deck selection, exiting block', this.currentBlock);
+            this.reset();
+            return;
+        }
+
+		// console.log('[decks] received log line', data);
+		match = this.deckNameRegex.exec(data);
+		if (match) {
+            console.log('[decks] matching log line for deck name', data);
 			this.currentDeck = {
 				name: match[1]
 			};
-			// console.log('[decks] deck init', this.currentDeck);
+			console.log('[decks] deck init', this.currentDeck);
 			return;
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
-			this.currentDeck.deckstring = match[1];
-			this.decodeDeckString();
+            this.currentDeck.deckstring = match[1];
+            this.decodeDeckString();
+            return;
 		}
 	}
 
@@ -49,6 +78,6 @@ export class DeckParserService {
 	// a game mode that doesn't interact with the Decks.log
 	public reset() {
 		this.currentDeck = {};
-		console.log('resetting deck');
+		// console.log('[decks] resetting deck');
 	}
 }
