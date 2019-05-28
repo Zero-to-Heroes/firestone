@@ -8,8 +8,8 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
-        <div class="container">
-		    <decktracker-overlay-standalone cdkDrag></decktracker-overlay-standalone>
+        <div class="container drag-boundary">
+		    <decktracker-overlay-standalone></decktracker-overlay-standalone>
         </div>
     `,
 	changeDetection: ChangeDetectionStrategy.OnPush,

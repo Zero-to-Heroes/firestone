@@ -6,6 +6,8 @@ import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../../services/events.service';
 import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-events';
 
+import fakeState from './gameState.json';
+
 @Component({
 	selector: 'decktracker-overlay-standalone',
 	styleUrls: [
@@ -15,7 +17,7 @@ import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-e
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
 	],
 	template: `
-        <div class="root clean" cdkDrag *ngIf="gameState">
+        <div *ngIf="gameState" class="root clean" cdkDrag cdkDragBoundary=".drag-boundary">
             <div class="decktracker-container">
                 <div class="decktracker" *ngIf="gameState">
                     <decktracker-deck-list 
@@ -102,6 +104,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         });
         this.displayMode = 'DISPLAY_MODE_GROUPED';
         console.log('init done');
+        this.addDebugGameState();
 		this.cdr.detectChanges();
     }
     
@@ -120,5 +123,10 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
                 }
                 break;
 		}
-	}
+    }
+
+    private addDebugGameState() {
+        this.gameState = (<any>fakeState);
+        console.log('loaded fake state', this.gameState);
+    }
 }
