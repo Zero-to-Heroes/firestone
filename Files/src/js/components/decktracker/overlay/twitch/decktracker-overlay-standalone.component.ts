@@ -17,7 +17,11 @@ import fakeState from './gameState.json';
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
 	],
 	template: `
-        <div *ngIf="gameState" class="root clean" cdkDrag cdkDragBoundary=".drag-boundary">
+        <div *ngIf="gameState" class="root clean" [ngClass]="{'dragging': dragging}"
+                cdkDrag 
+                (cdkDragStarted)="startDragging()"
+                (cdkDragReleased)="stopDragging()"
+                cdkDragBoundary=".drag-boundary">
             <div class="decktracker-container">
                 <div class="decktracker" *ngIf="gameState">
                     <decktracker-deck-list 
@@ -58,7 +62,8 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
     gameState: GameState;
     displayMode: string;
-	activeTooltip: string;
+    activeTooltip: string;
+    dragging: boolean;
 
 	private showTooltipTimer;
     private hideTooltipTimer;
@@ -106,6 +111,18 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         console.log('init done');
         this.addDebugGameState();
 		this.cdr.detectChanges();
+    }
+
+    startDragging() {
+        this.dragging = true;
+        console.log('starting dragging');
+        this.cdr.detectChanges();
+    }
+
+    stopDragging() {
+        this.dragging = false;
+        console.log('stopped dragging');
+        this.cdr.detectChanges();
     }
     
     private async processEvent(event) {
