@@ -17,43 +17,44 @@ import fakeState from './gameState.json';
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
 	],
 	template: `
-        <div *ngIf="gameState" class="root clean" [ngClass]="{'dragging': dragging}"
-                cdkDrag 
-                (cdkDragStarted)="startDragging()"
-                (cdkDragReleased)="stopDragging()"
-                cdkDragBoundary=".drag-boundary">
-            <div class="decktracker-container">
-                <div class="decktracker" *ngIf="gameState">
-                    <decktracker-deck-list 
-                            [deckState]="gameState.playerDeck"
-                            [displayMode]="displayMode"
-                            (onDisplayModeChanged)="onDisplayModeChanged($event)"
-                            [activeTooltip]="activeTooltip">
-                    </decktracker-deck-list>
+        <div *ngIf="gameState" class="root clean" [ngClass]="{'dragging': dragging}">
+            <div class="draggable" 
+                    cdkDrag 
+                    (cdkDragStarted)="startDragging()"
+                    (cdkDragReleased)="stopDragging()">
+                <div class="decktracker-container">
+                    <div class="decktracker" *ngIf="gameState">
+                        <decktracker-deck-list 
+                                [deckState]="gameState.playerDeck"
+                                [displayMode]="displayMode"
+                                (onDisplayModeChanged)="onDisplayModeChanged($event)"
+                                [activeTooltip]="activeTooltip">
+                        </decktracker-deck-list>
+                    </div>
                 </div>
-            </div>
 
-            <i class="i-54 gold-theme corner top-left">
-                <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                </svg>
-            </i>
-            <i class="i-54 gold-theme corner top-right">
-                <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                </svg>
-            </i>
-            <i class="i-54 gold-theme corner bottom-right">
-                <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                </svg>
-            </i>
-            <i class="i-54 gold-theme corner bottom-left">
-                <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                </svg>
-            </i>
-            <tooltips [module]="'decktracker'"></tooltips>
+                <i class="i-54 gold-theme corner top-left">
+                    <svg class="svg-icon-fill">
+                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+                    </svg>
+                </i>
+                <i class="i-54 gold-theme corner top-right">
+                    <svg class="svg-icon-fill">
+                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+                    </svg>
+                </i>
+                <i class="i-54 gold-theme corner bottom-right">
+                    <svg class="svg-icon-fill">
+                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+                    </svg>
+                </i>
+                <i class="i-54 gold-theme corner bottom-left">
+                    <svg class="svg-icon-fill">
+                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+                    </svg>
+                </i>
+                <tooltips [module]="'decktracker'"></tooltips>
+            </div>
         </div>
     `,
 	changeDetection: ChangeDetectionStrategy.OnPush,
