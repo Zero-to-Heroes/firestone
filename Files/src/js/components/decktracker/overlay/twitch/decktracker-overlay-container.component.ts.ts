@@ -5,6 +5,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
+		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
         <div class="container">
