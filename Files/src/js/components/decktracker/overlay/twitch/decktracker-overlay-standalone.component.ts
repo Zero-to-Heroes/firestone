@@ -1,6 +1,7 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inflate } from 'pako';
+import { ResizedEvent } from 'angular-resize-event';
 
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../../services/events.service';
@@ -17,11 +18,13 @@ import fakeState from './gameState.json';
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
 	],
 	template: `
-        <div *ngIf="gameState" class="root clean" [ngClass]="{'dragging': dragging}">
-            <div class="draggable" 
-                    cdkDrag 
-                    (cdkDragStarted)="startDragging()"
-                    (cdkDragReleased)="stopDragging()">
+        <div *ngIf="gameState" class="root clean" 
+                [ngClass]="{'dragging': dragging}"
+                cdkDrag 
+                (cdkDragStarted)="startDragging()"
+                (cdkDragReleased)="stopDragging()"
+                (resized)="onResized($event)">
+            <div class="scalable">
                 <div class="decktracker-container">
                     <div class="decktracker" *ngIf="gameState">
                         <decktracker-deck-list 
@@ -71,7 +74,11 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
     
     private twitch;
 
-	constructor(private cdr: ChangeDetectorRef, private events: Events, private http: HttpClient) {
+	constructor(
+            private cdr: ChangeDetectorRef, 
+            private events: Events, 
+            private el: ElementRef, 
+            private renderer: Renderer2) {
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
 			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
@@ -112,6 +119,16 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         console.log('init done');
         this.addDebugGameState();
 		this.cdr.detectChanges();
+    }
+
+    onResized(event: ResizedEvent) {
+        console.log('resize event', event);
+        // Standard scale when height is 1000 px
+        const scale = event.newHeight / 1000;
+        const element = this.el.nativeElement.querySelector('.scalable');
+        this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+        this.cdr.detectChanges();
+        console.log('resizing done');
     }
 
     startDragging() {
