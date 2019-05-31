@@ -65,6 +65,10 @@ export class GameStateService {
 	}
 
 	private processEvent(gameEvent: GameEvent) {
+        if (!this.state) {
+            console.error('null state before processing event', gameEvent, this.state);
+            return;
+        }
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
                 const newState = parser.parse(this.state, gameEvent);
@@ -72,6 +76,10 @@ export class GameStateService {
                 this.state = Object.assign(new GameState(), newState, {
                     playerDeck: playerDeckWithDynamicZones
                 } as GameState);
+                if (!this.state || !newState) {
+                    console.error('null state after processing event', gameEvent, this.state);
+                    return;
+                }
 				const emittedEvent = { 
 					event: {
 						name: parser.event()
