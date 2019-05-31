@@ -141,6 +141,15 @@ export class GameEvents {
                     gameEvent.Value.OpponentPlayer,
                     parseInt(gameEvent.Value.EntityId || 0)));
                 break;
+            case 'SECRET_PLAYED_FROM_DECK':
+                this.allEvents.next(new GameEvent(
+                    GameEvent.SECRET_PLAYED_FROM_DECK, 
+                    gameEvent.Value.CardId,
+                    gameEvent.Value.ControllerId,
+                    gameEvent.Value.LocalPlayer,
+                    gameEvent.Value.OpponentPlayer,
+                    parseInt(gameEvent.Value.EntityId || 0)));
+                break;
 			case 'MINION_SUMMONED':
 				this.allEvents.next(new GameEvent(
 					GameEvent.MINION_SUMMONED, 

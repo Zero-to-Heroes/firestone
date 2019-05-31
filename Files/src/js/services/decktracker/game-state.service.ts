@@ -24,6 +24,7 @@ import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
+import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 
 declare var overwolf: any;
 
@@ -111,6 +112,7 @@ export class GameStateService {
 			new CardRecruitedParser(),
 			new MinionSummonedParser(this.allCards),
 			new BurnedCardParser(),
+			new SecretPlayedFromDeckParser(),
 		];
 	}
 
