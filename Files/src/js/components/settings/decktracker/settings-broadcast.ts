@@ -16,11 +16,10 @@ declare var overwolf;
 	template: `
         <div class="decktracker-broadcast">
             <div class="twitch logged-out" *ngIf="!twitchedLoggedIn">
-                <a href="{{twitchLoginUrl}}" class="text">Connect Firestone to your Twitch account</a>                
+                <button (click)="connect()" class="text">Connect Firestone to your Twitch account</button>
             </div>
             <div class="twitch logged-in" *ngIf="twitchedLoggedIn">
-                <!-- TODO: disconnect from Twitch -->
-                Logged in Twitch              
+                <button (click)="disconnect()" class="text">Disconnect your Twitch account</button>
             </div>
         </div>
 	`,
@@ -36,18 +35,30 @@ export class SettingsBroadcastComponent implements AfterViewInit {
             private cdr: ChangeDetectorRef, 
             private twitch: TwitchAuthService,
             private el: ElementRef) {
-		this.cdr.detach();
 		this.loadDefaultValues();
     }
 
     ngAfterViewInit() {
-		const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
-		preferencesEventBus.subscribe((event) => {
+        console.log('main window', overwolf.windows.getMainWindow());
+        const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+        console.log('registered prefs event bus', preferencesEventBus);
+		preferencesEventBus.subscribe(async (event) => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-				this.loadDefaultValues();
+				await this.loadDefaultValues();
+                console.log('broadcast prefs updated');
 			}
         });
+		this.cdr.detach();
+    }
+
+    connect() {
+        overwolf.utils.openUrlInOverwolfBrowser(this.twitchLoginUrl);
+    }
+
+    disconnect() {
+        console.log('disconnecting twitch');
+        this.prefs.disconnectTwitch();
     }
 
 	private async loadDefaultValues() {

@@ -21,8 +21,12 @@ export class TwitchAuthCallbackComponent implements AfterViewInit {
 	constructor(private debugService: DebugService) { }
 
 	ngAfterViewInit() {
-        console.log('handling twitch auth callback', overwolf.windows.getMainWindow());
-		this.stateUpdater = overwolf.windows.getMainWindow().twitchAuthUpdater;
+        console.log('handling twitch auth callback');
+        this.stateUpdater = overwolf.windows.getMainWindow().twitchAuthUpdater;
+        if (!this.stateUpdater) {
+            setTimeout(() => this.ngAfterViewInit(), 100);
+            return;
+        }
         const hash = window.location.hash;
         const hashAsObject: any = hash.substring(1)
                 .split('&')

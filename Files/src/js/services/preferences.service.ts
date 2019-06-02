@@ -120,12 +120,20 @@ export class PreferencesService {
     public async setTwitchAccessToken(pref: string) {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, twitchAccessToken: pref} as Preferences;
-        this.savePreferences(newPrefs), PreferencesService.TWITCH_CONNECTION_STATUS;
+        this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
     }
     
-    private savePreferences(userPrefs: Preferences, eventName: string = null) {
-        this.indexedDb.saveUserPreferences(userPrefs);
+    public async disconnectTwitch() {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, twitchAccessToken: undefined} as Preferences;
+        this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+    }
+    
+    private async savePreferences(userPrefs: Preferences, eventName: string = null) {
+        await this.indexedDb.saveUserPreferences(userPrefs);
+        console.log('user pref saved', eventName);
         if (eventName) {
+            console.log('broadcasting new prefs', userPrefs);
             const eventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
             eventBus.next({
                 name: eventName,
