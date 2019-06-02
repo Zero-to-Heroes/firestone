@@ -123,12 +123,48 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
     onResized(event: ResizedEvent) {
         console.log('resize event', event);
+        // Resize the tracker
         // Standard scale when height is 1000 px
         const scale = event.newHeight / 1000;
         const element = this.el.nativeElement.querySelector('.scalable');
         this.renderer.setStyle(element, 'transform', `scale(${scale})`);
         this.cdr.detectChanges();
-        console.log('resizing done');
+        this.keepOverlayInBounds();
+    }
+
+    private keepOverlayInBounds() {
+        setTimeout(() => {
+            // Move the tracker so that it doesn't go over the edges
+            const rect = this.el.nativeElement.querySelector('.scalable').getBoundingClientRect();
+            const parentRect = this.el.nativeElement.parentNode.getBoundingClientRect();
+            // Get current transform values
+            const transform = window.getComputedStyle(this.el.nativeElement.querySelector('.root')).transform;
+            const matrix = new DOMMatrix(transform);
+            const matrixCurrentLeftMove = matrix.m41;
+            const matrixCurrentTopMove = matrix.m42;
+            let newTranslateLeft = matrixCurrentLeftMove;
+            let newTranslateTop = matrixCurrentTopMove
+            if (rect.left < 0) {
+                // We move it so that the left is 0
+                const amountToMove = Math.abs(rect.left);
+                newTranslateLeft = matrixCurrentLeftMove + amountToMove;
+            } else if (rect.right > parentRect.right) {
+                const amountToMove = rect.right - parentRect.right;
+                newTranslateLeft = matrixCurrentLeftMove - amountToMove;
+            }
+            if (rect.top < 0) {
+                const amountToMove = Math.abs(rect.top);
+                newTranslateTop = matrixCurrentTopMove + amountToMove;
+            } else if (rect.bottom > parentRect.bottom) {
+                const amountToMove = rect.bottom - parentRect.bottom;
+                newTranslateTop = matrixCurrentTopMove - amountToMove;
+            }
+            const newTransform = `translate3d(${newTranslateLeft}px, ${newTranslateTop}px, 0px)`;
+            this.renderer.setStyle(this.el.nativeElement.querySelector('.root'), 'transform', newTransform);
+            // this.cdr.detectChanges();
+            // console.log('resizing done', rect, parentRect, matrix);
+            // console.log('updating transform', newTransform, matrixCurrentLeftMove, matrixCurrentTopMove, newTranslateLeft);
+        })
     }
 
     startDragging() {
@@ -141,6 +177,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         this.dragging = false;
         console.log('stopped dragging');
         this.cdr.detectChanges();
+        this.keepOverlayInBounds();
     }
     
     private async processEvent(event) {
