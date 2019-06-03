@@ -71,10 +71,8 @@ export class DeckCardComponent {
 
 	@HostListener('mouseenter') onMouseEnter() {
 		let rect = this.el.nativeElement.getBoundingClientRect();
-		let x = rect.left;
-		let y = rect.top;
 		// console.log('on mouse enter', rect);
-		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, x, y, true);
+		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
 	}
 
 	@HostListener('mouseleave')

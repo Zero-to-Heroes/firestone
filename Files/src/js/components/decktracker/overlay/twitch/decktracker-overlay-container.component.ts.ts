@@ -10,6 +10,9 @@ import { Component, ChangeDetectionStrategy, ElementRef, Renderer2, ChangeDetect
 	template: `
         <div class="container drag-boundary">
 		    <decktracker-overlay-standalone></decktracker-overlay-standalone>
+            <tooltips [module]="'decktracker'" 
+                    [position]="'outside'">
+            </tooltips>
         </div>
     `,
 	changeDetection: ChangeDetectionStrategy.OnPush,

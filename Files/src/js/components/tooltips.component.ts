@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ElementRef } from '@angular/core';
 import { ViewContainerRef, ViewChild, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
 
 import { Events } from '../services/events.service';
@@ -52,13 +52,15 @@ export class Tooltip {
 export class TooltipsComponent implements AfterViewInit {
 
 	@Input() module: string;
+	@Input() position: string = 'inside';
 
     @ViewChild('tooltips', { read: ViewContainerRef }) tooltips: ViewContainerRef;
     private tooltip;
 
 	constructor(
 		private events: Events,
-		private cdr: ChangeDetectorRef,
+        private cdr: ChangeDetectorRef,
+        private el: ElementRef,
 		private resolver: ComponentFactoryResolver) {
 
 		this.events.on(Events.SHOW_TOOLTIP).subscribe(
@@ -67,33 +69,54 @@ export class TooltipsComponent implements AfterViewInit {
 				this.destroy();
 
 				let cardId: string = data.data[0];
-				let x: number = data.data[1];
-				let y: number = data.data[2];
-				let owned: boolean = data.data[3];
-				let top: number = Math.min(window.innerHeight - 400, y - 388 / 2);
+				let left: number = data.data[1];
+				let elementTop: number = data.data[2];
+                let owned: boolean = data.data[3];
+                const elementRect = data.data[4];
+				let top: number = Math.min(window.innerHeight - 400, elementTop - 388 / 2);
 				// console.log('displaying tooltip', x, y, owned, top);
 				
-				// TODO: clean this messy hack (which will probably never happen :p)
-				if (this.module === 'decktracker') {
+                if (this.position === 'outside') {
+                    top = elementRect.top - 275 / 2;
+                    const containerHeight = parseInt(window.getComputedStyle(this.el.nativeElement).height.split('px')[0]);
+                    console.log('considering outside positioning', data, containerHeight, top);
+                    if (top < 0) {
+                        top = 0;
+                    }
+                    else if (top + 290 > containerHeight) {
+                        top = containerHeight - 290;
+                    }
+                    // else if (top > window.innerHeight - 400) {
+                    //     top = window.innerHeight - 400;
+                    // }
+                    if (elementRect.left < 350) {
+                        left = elementRect.right;
+                    } 
+                    else {
+                        left = elementRect.left - 240;
+                    }
+                }
+                // TODO: clean this messy hack (which will probably never happen :p)
+				else if (this.module === 'decktracker') {
 					// console.log('displaying decktracker tooltip')
-					if (y < 350) {
-						y = y;
+					if (top < 350) {
+						top = top;
 					}
 					else {
-						y = y - 300;
+						top = top - 300;
 					}
-					top = y;
-					x = 0;
+					top = top;
+					left = 0;
 				}
-				else if (x > 500) {
+				else if (left > 500) {
 					// Tooltip width and offset
-					x = x - 256 - 70;
+					left = left - 256 - 70;
 				}
 
 			    this.tooltip.instance.display = 'flex';
 		    	this.tooltip.instance.removing = false;
 			    this.tooltip.instance.cardId = cardId;
-			    this.tooltip.instance.left = x + 'px';
+			    this.tooltip.instance.left = left + 'px';
 			    this.tooltip.instance.top = top + 'px';
 			    this.tooltip.instance.position = 'absolute';
 			    this.tooltip.instance.missing = !owned;

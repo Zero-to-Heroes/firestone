@@ -56,7 +56,6 @@ import fakeState from './gameState.json';
                         <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
                     </svg>
                 </i>
-                <tooltips [module]="'decktracker'"></tooltips>
             </div>
         </div>
     `,
