@@ -79,7 +79,7 @@ export class TooltipsComponent implements AfterViewInit {
                 if (this.position === 'outside') {
                     top = elementRect.top - 275 / 2;
                     const containerHeight = parseInt(window.getComputedStyle(this.el.nativeElement).height.split('px')[0]);
-                    console.log('considering outside positioning', data, containerHeight, top);
+                    // console.log('considering outside positioning', data, containerHeight, top);
                     if (top < 0) {
                         top = 0;
                     }
