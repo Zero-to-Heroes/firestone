@@ -9,6 +9,9 @@ import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-e
 
 import fakeState from './gameState.json';
 
+const EBS_URL = 'https://twitch.firestoneapp.com/deck';
+// const EBS_URL = 'http://localhost:8081/deck';
+
 @Component({
 	selector: 'decktracker-overlay-standalone',
 	styleUrls: [
@@ -72,11 +75,13 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
     private hideTooltipTimer;
     
     private twitch;
+    private token: string;
 
 	constructor(
             private cdr: ChangeDetectorRef, 
             private events: Events, 
             private el: ElementRef, 
+            private http: HttpClient,
             private renderer: Renderer2) {
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
 			clearTimeout(this.hideTooltipTimer);
@@ -108,7 +113,12 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         this.cdr.detach();
         this.twitch = (window as any).Twitch.ext;
         this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
-        this.twitch.onAuthorized((auth) => console.log('on authorized', auth));
+        this.twitch.onAuthorized((auth) => {
+            console.log('on authorized', auth);
+            this.token = auth.token;
+            console.log('set token', this.token);
+            this.fetchInitialState();
+        });
         this.twitch.listen('broadcast', (target, contentType, event) => {
             const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
             console.log('received event', deckEvent);
@@ -116,7 +126,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         });
         this.displayMode = 'DISPLAY_MODE_GROUPED';
         console.log('init done');
-        this.addDebugGameState();
+        // this.addDebugGameState();
 		this.cdr.detectChanges();
     }
 
@@ -137,6 +147,18 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
         this.cdr.detectChanges();
         this.keepOverlayInBounds();
+    }
+
+    private fetchInitialState() {
+        console.log('retrieving initial state');
+        const options = {
+            headers: { 'Authorization': 'Bearer ' + this.token }
+        };
+        this.http.get(EBS_URL, options).subscribe((result: any) => {
+            console.log('successfully retrieved initial state', result);
+            this.gameState = result.state;
+            this.cdr.detectChanges();
+        });
     }
 
     private keepOverlayInBounds() {
@@ -185,12 +207,6 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         console.log('stopped dragging');
         this.cdr.detectChanges();
         this.keepOverlayInBounds();
-    }
-
-    private resizeIfNeeded() {
-        setTimeout(() => {
-
-        });
     }
     
     private async processEvent(event) {
