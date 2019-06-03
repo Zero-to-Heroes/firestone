@@ -51,6 +51,14 @@ export class GameStateService {
 		this.registerGameEvents();
         this.eventParsers = this.buildEventParsers();
         this.buildEventEmitters();
+        const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+		preferencesEventBus.subscribe(async (event) => {
+            console.log('received pref', event);
+			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
+                console.log('rebuilding event emitters');
+                this.buildEventEmitters();
+			}
+        });
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckDebug'] = this;
 		this.loadDecktrackerWindow();
@@ -74,6 +82,7 @@ export class GameStateService {
     private async buildEventEmitters() {
         const result = [(event) => this.deckEventBus.next(event)];
         const prefs = await this.prefs.getPreferences();
+        console.log('is logged in to Twitch?', prefs);
         if (prefs.twitchAccessToken) {
             result.push((event) => this.twitch.emitDeckEvent(event));
         }
