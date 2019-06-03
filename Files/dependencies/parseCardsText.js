@@ -6754,7 +6754,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 5,
+		"cost": 4,
 		"set": "Boomsday",
 		"artist": "Dany Orizio",
 		"health": 6,
@@ -7217,7 +7217,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 3,
+		"cost": 2,
 		"set": "Boomsday",
 		"artist": "Alex Horley Orlandelli",
 		"referencedTags": [
@@ -7637,7 +7637,7 @@ var parseCardsText = {
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Adam Byrne",
-		"health": 5,
+		"health": 6,
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -7704,7 +7704,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 3,
+		"cost": 2,
 		"set": "Boomsday",
 		"artist": "Nicola Saviori",
 		"dbfId": 48101,
@@ -7742,7 +7742,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Priest",
-		"cost": 3,
+		"cost": 2,
 		"set": "Boomsday",
 		"artist": "Nicola Saviori",
 		"name": "More Arms!",
@@ -7777,7 +7777,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 2,
+		"cost": 1,
 		"set": "Boomsday",
 		"artist": "Zoltan Boros",
 		"dbfId": 48113,
@@ -7995,7 +7995,7 @@ var parseCardsText = {
 		"type": "Minion",
 		"flavor": "Why Beryllium? Because it's hard to spell.",
 		"playerClass": "Warrior",
-		"attack": 3,
+		"attack": 4,
 		"name": "Beryllium Nullifier",
 		"id": "BOT_237",
 		"audio": {
@@ -8337,7 +8337,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 7,
+		"cost": 6,
 		"set": "Boomsday",
 		"artist": "J. Paick & K. Turovec",
 		"dbfId": 48161,
@@ -8463,7 +8463,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 4,
+		"cost": 3,
 		"set": "Boomsday",
 		"artist": "Jakub Kasper",
 		"dbfId": 48803,
@@ -8520,7 +8520,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 7,
+		"cost": 5,
 		"set": "Boomsday",
 		"artist": "Jakub Kasper",
 		"dbfId": 48198,
@@ -8794,7 +8794,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 2,
+		"cost": 1,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Matt Dixon",
@@ -9301,7 +9301,7 @@ var parseCardsText = {
 		"set": "Boomsday",
 		"race": "ELEMENTAL",
 		"artist": "Mike Sass",
-		"health": 5,
+		"health": 6,
 		"mechanics": [
 			"TRIGGER_VISUAL"
 		],
@@ -9703,7 +9703,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 8,
+		"cost": 7,
 		"set": "Boomsday",
 		"artist": "Jim Nelson",
 		"dbfId": 48670,
@@ -9764,7 +9764,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 8,
+		"cost": 6,
 		"set": "Boomsday",
 		"artist": "Slawomir Maniak",
 		"health": 5,
@@ -9857,7 +9857,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 2,
+		"cost": 1,
 		"set": "Boomsday",
 		"artist": "Anton Zemskov",
 		"referencedTags": [
@@ -10314,7 +10314,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 8,
+		"cost": 7,
 		"set": "Boomsday",
 		"artist": "Arthur Bozonnet",
 		"health": 4,
@@ -10552,7 +10552,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 10,
+		"cost": 9,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
 		"artist": "Mike Sass",
@@ -11644,7 +11644,7 @@ var parseCardsText = {
 				"VO_BOT_566_Female_Undead_Attack_01.ogg"
 			]
 		},
-		"text": "[x]<b>Deathrattle</b> minions you\nplay cost (3) less, but die\nat the end of the turn.",
+		"text": "[x]<b>Deathrattle</b> minions you\nplay cost (3) less, but die at\nend of turn. <i>(Cost can't be\nreduced below 1.)</i>",
 		"cardClass": "PRIEST",
 		"rarity": "Epic"
 	},
@@ -12053,6 +12053,58 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
+		"cost": 3,
+		"set": "Boomsday",
+		"race": "MECHANICAL",
+		"artist": "Nicola Saviori",
+		"health": 3,
+		"mechanics": [
+			"DEATHRATTLE",
+			"ECHO",
+			"MODULAR"
+		],
+		"dbfId": 56223,
+		"type": "Minion",
+		"flavor": "\"It's gonna be snip this, snap that. Bada-snip, bada-snap!\"",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 2,
+		"name": "SN1P-SN4P",
+		"id": "BOT_700",
+		"audio": {
+			"play": [
+				"BOT_700_SN1P-SN4P_Play.ogg",
+				"SN1P-SN4P_Play_Stinger.ogg"
+			],
+			"death": [
+				"BOT_700_SN1P-SN4P_Death.ogg"
+			],
+			"attack": [
+				"BOT_700_SN1P-SN4P_Attack.ogg"
+			],
+			"magnetic_play": [
+				"magnetic_play.ogg"
+			]
+		},
+		"text": "<b>Magnetic</b>, <b>Echo</b>\n<b>Deathrattle:</b> Summon two 1/1 Microbots.",
+		"cardClass": "NEUTRAL",
+		"rarity": "Legendary"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Boomsday",
+		"name": "SN1P-SN4P",
+		"mechanics": [
+			"MODULAR"
+		],
+		"id": "BOT_700e",
+		"text": "<b>Deathrattle:</b> Summon two 1/1 Microbots.",
+		"dbfId": 56225,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"collectible": true,
 		"cost": 1,
 		"set": "Boomsday",
 		"race": "MECHANICAL",
@@ -12185,7 +12237,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 2,
+		"cost": 1,
 		"set": "Boomsday",
 		"artist": "Tyler West Studio",
 		"dbfId": 48985,
@@ -12205,7 +12257,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 6,
+		"cost": 5,
 		"set": "Boomsday",
 		"artist": "Anton Zemskov",
 		"health": 4,
@@ -35207,6 +35259,51 @@ var parseCardsText = {
 		"cardClass": "SHAMAN"
 	},
 	{
+		"playerClass": "Shaman",
+		"cost": 2,
+		"set": "Hero_skins",
+		"name": "Totemic Call",
+		"id": "CS2_049_H3",
+		"audio": {
+			"play": [],
+			"ThunderKing_HeroPower_Impact": [
+				"ThunderKing_HeroPower_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon a random Totem.",
+		"dbfId": 55964,
+		"type": "Hero_power",
+		"entourage": [
+			"CS2_050",
+			"CS2_051",
+			"CS2_052",
+			"NEW1_009"
+		],
+		"cardClass": "SHAMAN",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 2,
+		"set": "Hero_skins",
+		"name": "Totemic Slam",
+		"id": "CS2_049_H3_AT_132",
+		"audio": {
+			"play": [],
+			"ThunderKing_HeroPower_Impact": [
+				"ThunderKing_HeroPower_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon a Totem of your choice.",
+		"dbfId": 55965,
+		"type": "Hero_power",
+		"cardClass": "SHAMAN"
+	},
+	{
 		"cost": 1,
 		"set": "Core",
 		"race": "TOTEM",
@@ -42503,7 +42600,7 @@ var parseCardsText = {
 		"cost": 3,
 		"set": "Dalaran",
 		"artist": "Mike Sass",
-		"health": 5,
+		"health": 4,
 		"mechanics": [
 			"COMBO"
 		],
@@ -42703,7 +42800,7 @@ var parseCardsText = {
 			"jaJP": "{0}を使用する。",
 			"plPL": "Rzuć zaklęcie {0}.",
 			"esES": "Lanza {0}.",
-			"ruRU": "Разыграть «{0}».",
+			"ruRU": "Применить «{0}».",
 			"esMX": "Lanza {0}.",
 			"koKR": "{0} 시전",
 			"thTH": "ร่าย '{0}'"
@@ -44343,6 +44440,16 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
+		"playerClass": "Neutral",
+		"set": "Dalaran",
+		"name": "Aspect's Magic",
+		"id": "DAL_609e",
+		"text": "Costs (0).",
+		"dbfId": 57805,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
 		"cost": 1,
 		"set": "Dalaran",
 		"artist": "Slawomir Maniak",
@@ -45042,7 +45149,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 8,
+		"cost": 9,
 		"set": "Dalaran",
 		"artist": "James Ryman",
 		"health": 7,
@@ -47200,7 +47307,7 @@ var parseCardsText = {
 				"VO_DALA_729_Male_Kobold_Attack_01.ogg"
 			]
 		},
-		"text": "[x]<b>Stealth</b>\nAfter this minion attacks\na hero, steal a card\nfrom their hand.",
+		"text": "[x]<b>Stealth</b>\nAfter this minion attacks\na hero, steal a card from\nyour opponent's hand.",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -52551,7 +52658,7 @@ var parseCardsText = {
 	{
 		"playerClass": "Warrior",
 		"set": "Dalaran",
-		"name": "Mallificent Manastorm",
+		"name": "Millificent Manastorm",
 		"health": 30,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -54036,7 +54143,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"cost": 2,
+		"cost": 3,
 		"set": "Dalaran",
 		"name": "Summon Protectors",
 		"referencedTags": [
@@ -54317,10 +54424,10 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"playerClass": "Neutral",
+		"playerClass": "Paladin",
 		"set": "Dalaran",
 		"name": "Commander Bolan",
-		"health": 0,
+		"health": 30,
 		"id": "DALA_BOSS_75h",
 		"audio": {
 			"play": [],
@@ -54330,7 +54437,7 @@ var parseCardsText = {
 		"text": "<i>Be careful, he's got an enormous exclamation point over his head.</i>",
 		"dbfId": 54449,
 		"type": "Hero",
-		"cardClass": "NEUTRAL"
+		"cardClass": "PALADIN"
 	},
 	{
 		"playerClass": "Neutral",
@@ -62431,7 +62538,7 @@ var parseCardsText = {
 				"Shared_SneakyUntargettedImpactStandard_1.ogg"
 			]
 		},
-		"text": "The next spell you cast this turn costs (3) less.",
+		"text": "The next spell you cast this turn costs (2) less.",
 		"cardClass": "ROGUE",
 		"rarity": "Epic"
 	},
@@ -62440,7 +62547,7 @@ var parseCardsText = {
 		"set": "Expert1",
 		"name": "Preparation",
 		"id": "EX1_145e",
-		"text": "The next spell you cast this turn costs (3) less.",
+		"text": "The next spell you cast this turn costs (2) less.",
 		"dbfId": 56309,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
@@ -62458,7 +62565,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "The next spell you cast this turn costs (3) less.",
+		"text": "The next spell you cast this turn costs (2) less.",
 		"dbfId": 1760,
 		"type": "Enchantment",
 		"cardClass": "ROGUE"
@@ -72132,6 +72239,16 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Tb",
+		"name": "Set Mission Event at game start",
+		"id": "FB_Champs_SetEventMulligan",
+		"text": "Increased stats.",
+		"dbfId": 57138,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
 		"name": "Champs Setup",
 		"id": "FB_Champs_SetUp_Ench",
 		"audio": {
@@ -78773,6 +78890,9 @@ var parseCardsText = {
 		"playerClass": "Neutral",
 		"set": "Gilneas",
 		"name": "Rebuked",
+		"mechanics": [
+			"AURA"
+		],
 		"id": "GIL_203e",
 		"audio": {
 			"play": [],
@@ -78781,6 +78901,16 @@ var parseCardsText = {
 		},
 		"text": "Your spells cost (5) more this turn.",
 		"dbfId": 49205,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Gilneas",
+		"name": "Rebuking",
+		"id": "GIL_203e2",
+		"text": "Costs (5) more.",
+		"dbfId": 57807,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
 	},
@@ -95275,6 +95405,27 @@ var parseCardsText = {
 			]
 		},
 		"dbfId": 53237,
+		"type": "Hero",
+		"cardClass": "SHAMAN",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Shaman",
+		"collectible": true,
+		"set": "Hero_skins",
+		"name": "The Thunder King",
+		"health": 30,
+		"id": "HERO_02c",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO__Male_Mogu_Death_01.ogg"
+			],
+			"attack": [
+				"VO__Male_Mogu_Attack_01.ogg"
+			]
+		},
+		"dbfId": 55963,
 		"type": "Hero",
 		"cardClass": "SHAMAN",
 		"rarity": "Free"
@@ -124605,7 +124756,7 @@ var parseCardsText = {
 			"jaJP": "[x]味方のミニオン\n2種を復活させる。\n<i>（呪文を4回使用すると \n  アップグレード）</i>",
 			"plPL": "Wskrześ dwóch różnych przyjaznych stronników. <i>(Rzuć 4 zaklęcia, aby ulepszyć.)</i>",
 			"esES": "Resucita a 2 esbirros amistosos diferentes. <i>(Lanza 4 hechizos para mejorarlo).</i>",
-			"ruRU": "Воскрешает 2 ваших различных существ. <i>(Разыграйте 4 заклинания для улучшения.)</i>",
+			"ruRU": "Воскрешает 2 ваших различных существ. <i>(Примените 4 заклинания для улучшения.)</i>",
 			"esMX": "Revive 2 esbirros aliados diferentes. <i>(Lanza 4 hechizos para mejorar esta carta.)</i>",
 			"koKR": "서로 다른 아군 하수인 둘을 부활시킵니다. <i>(주문을 4회 시전하면 강화됩니다.)</i>",
 			"thTH": "ชุบชีวิตมินเนี่ยน[b]ฝ่ายคุณที่ต่างกัน 2 ตัว <i>(ร่ายเวทมนตร์ 4 ใบ[b]เพื่ออัพเกรด)</i>"
@@ -144453,6 +144604,41 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Innkeeper Tools - Reset Session",
+		"id": "TB_Champs_KeepWinnerDeck_Choice",
+		"text": "Reset the brawl or play as normal",
+		"dbfId": 56324,
+		"type": "Enchantment",
+		"entourage": [
+			"FB_ELO001a",
+			"FB_ELO001b"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Reset Champs Decks",
+		"id": "TB_Champs_KeepWinnerDeck_IK",
+		"text": "As the Innkeeper, you can reset your Fireside Brawl's decks.",
+		"dbfId": 56355,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Reset Decks",
+		"id": "TB_Champs_KeepWinnerDeck_Reset",
+		"text": "Everyone gets a new deck, next game.",
+		"dbfId": 56322,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
 		"cost": 2,
 		"set": "Tb",
 		"name": "Castle",
@@ -146044,6 +146230,142 @@ var parseCardsText = {
 		"text": "+2/+2.",
 		"dbfId": 17264,
 		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Atramedes",
+		"health": 30,
+		"id": "TB_EVILBRM_Atramedes",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_BRMA16_1_DEATH_06.ogg"
+			],
+			"attack": []
+		},
+		"dbfId": 56559,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Garr",
+		"health": 30,
+		"id": "TB_EVILBRM_Garr",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_BRMA04_1_DEATH_06.ogg"
+			],
+			"attack": []
+		},
+		"dbfId": 56552,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Baron Geddon",
+		"health": 30,
+		"id": "TB_EVILBRM_Geddon",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 56560,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Nefarian",
+		"health": 30,
+		"id": "TB_EVILBRM_Nefarian",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 56542,
+		"type": "Hero",
+		"entourage": [
+			"BRMA13_8",
+			"BRMA13_7",
+			"BRMA13_5",
+			"BRMA13_6"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Omnotron Defense System",
+		"health": 30,
+		"id": "TB_EVILBRM_Omnotron01",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 56286,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Highlord Omokk",
+		"health": 30,
+		"id": "TB_EVILBRM_Omokk",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_BRMA07_1_DEATH_06.ogg"
+			],
+			"attack": []
+		},
+		"dbfId": 56553,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Onyxia",
+		"health": 30,
+		"id": "TB_EVILBRM_Onyxia01",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 56290,
+		"type": "Hero",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Ragnaros the Firelord",
+		"health": 60,
+		"id": "TB_EVILBRM_Ragnaros01",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_BRM_027h_Death_63.ogg"
+			],
+			"attack": [
+				"VO_BRM_027h_Attack_15.ogg"
+			]
+		},
+		"dbfId": 56295,
+		"type": "Hero",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -148051,6 +148373,21 @@ var parseCardsText = {
 		},
 		"dbfId": 41125,
 		"type": "Minion",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "Mirror Match",
+		"id": "TB_KeepWinnerDeck_Mirror",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Flags if a player is playing against the same deck",
+		"dbfId": 57045,
+		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -154947,7 +155284,7 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"cost": 3,
+		"cost": 4,
 		"set": "Troll",
 		"artist": "Jim Nelson",
 		"mechanics": [
