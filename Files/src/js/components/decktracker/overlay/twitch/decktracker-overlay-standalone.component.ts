@@ -126,8 +126,16 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         // Resize the tracker
         // Standard scale when height is 1000 px
         const scale = event.newHeight / 1000;
+        // console.log('proposed scale', scale);
+        // Now shrink the scale is the tracker is taller than a portion of the container's height
+        const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
+        // console.log('container height', containerHeight);
+        const maxTrackerHeight = 0.9 * containerHeight;
+        // console.log('maxTrackerHeight', maxTrackerHeight);
+        const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
+        // console.log('final scale', finalScale);
         const element = this.el.nativeElement.querySelector('.scalable');
-        this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+        this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
         this.cdr.detectChanges();
         this.keepOverlayInBounds();
     }
@@ -178,6 +186,12 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         console.log('stopped dragging');
         this.cdr.detectChanges();
         this.keepOverlayInBounds();
+    }
+
+    private resizeIfNeeded() {
+        setTimeout(() => {
+
+        });
     }
     
     private async processEvent(event) {

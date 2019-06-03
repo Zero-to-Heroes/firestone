@@ -3,10 +3,26 @@
 }
 
 .root {
+
+    .scalable {
+        transform: scale(1);
+    }
+
+    .decktracker {
+        max-height: none;
+    }
+
     &.dragging {
 
         tooltips {
             display: none;
         }
+    }
+
+    ::ng-deep decktracker-deck-list {
+        .deck-list {
+            overflow-y: hidden;
+        }
+
     }
 }
