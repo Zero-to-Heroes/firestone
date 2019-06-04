@@ -30,7 +30,10 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck';
             <div class="scalable">
                 <div class="decktracker-container">
                     <div class="decktracker" *ngIf="gameState">
-                        <decktracker-twitch-title-bar></decktracker-twitch-title-bar>
+                        <decktracker-twitch-control-bar></decktracker-twitch-control-bar>
+                        <decktracker-twitch-title-bar
+                                [deckState]="gameState.playerDeck">
+                        </decktracker-twitch-title-bar>
                         <decktracker-deck-list 
                                 [deckState]="gameState.playerDeck"
                                 [displayMode]="displayMode"

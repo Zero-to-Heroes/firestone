@@ -21,10 +21,15 @@
 
         decktracker-twitch-title-bar {
             display: flex;
+            background: #07081F;
+        }
+
+        decktracker-twitch-control-bar {
+            display: flex;
             justify-content: flex-end;
             opacity: 0;
             
-            .title-bar {
+            .control-bar {
                 background: #07081F;
             }
             .logo {
@@ -40,7 +45,7 @@
     }
 
     &:hover {
-        .decktracker decktracker-twitch-title-bar {
+        .decktracker decktracker-twitch-control-bar {
             opacity: 1;
         }
     }

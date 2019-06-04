@@ -12,6 +12,7 @@ import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker
 import { DeckTrackerOverlayStandaloneComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-standalone.component';
 import { HttpClientModule } from '@angular/common/http';
 import { DeckTrackerOverlayContainerComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
+import { DeckTrackerTwitchControlBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-control-bar.component';
 import { DeckTrackerTwitchTitleBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
 
 init({
@@ -37,6 +38,7 @@ console.log('version is', process.env.APP_VERSION);
 	declarations: [
         DeckTrackerOverlayStandaloneComponent,
         DeckTrackerOverlayContainerComponent,
+        DeckTrackerTwitchControlBarComponent,
         DeckTrackerTwitchTitleBarComponent,
 	],
 	bootstrap: [

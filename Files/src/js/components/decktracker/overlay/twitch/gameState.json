@@ -1,5 +1,6 @@
 {
     "playerDeck": {
+        "deckstring": "deckstring",
         "deckList": [
             {
                 "cardId": "CS2_072",

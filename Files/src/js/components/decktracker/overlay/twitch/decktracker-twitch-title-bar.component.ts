@@ -1,12 +1,11 @@
-import { Component, ChangeDetectionStrategy, Input, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { DeckState } from '../../../../models/decktracker/deck-state';
 
 @Component({
 	selector: 'decktracker-twitch-title-bar',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss',
-		`../../../../../css/component/controls/controls.scss`,
-		`../../../../../css/component/controls/control-close.component.scss`,
 	],
 	template: `
 		<div class="title-bar">
@@ -14,24 +13,22 @@ import { Component, ChangeDetectionStrategy, Input, AfterViewInit, ElementRef } 
 				<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#decktracker_logo"/>
 				</svg>
-			</i>
-			<div class="controls">
-                <button class="i-30 close-button" (click)="closeWindow()">
-                    <svg class="svg-icon-fill">
-                        <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-                    </svg>
-                </button>
-			</div>
+            </i>
+			<i class="copy-deckstring" (click)="copyDeckstring()" *ngIf="deckState.deckstring">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
+				</svg>
+            </i>            
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerTwitchTitleBarComponent {
 
-    @Input() windowId: string;
+    @Input() deckState: DeckState;
     
-    closeWindow() {
-        console.log('minimizing window');
-        (window as any).Twitch.ext.actions.minimize();
+    copyDeckstring() {
+        (navigator as any).clipboard.writeText(this.deckState.deckstring);
+        console.log('copied deckstring to clipboard', this.deckState.deckstring);
     }
 }
