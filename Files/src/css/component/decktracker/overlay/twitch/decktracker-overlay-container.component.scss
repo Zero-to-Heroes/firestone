@@ -1,5 +1,7 @@
 .container {
     position: relative;
+    display: flex;
+    justify-content: flex-end;
 
     ::ng-deep tooltips {
         position: absolute;
