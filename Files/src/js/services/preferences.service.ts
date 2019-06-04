@@ -123,6 +123,12 @@ export class PreferencesService {
         this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
     }
     
+    public async setTwitchUserName(pref: string) {
+        const prefs = await this.getPreferences();
+        const newPrefs = { ...prefs, twitchUserName: pref} as Preferences;
+        this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+    }
+    
     public async disconnectTwitch() {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, twitchAccessToken: undefined} as Preferences;

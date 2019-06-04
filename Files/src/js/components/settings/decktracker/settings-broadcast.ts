@@ -15,11 +15,38 @@ declare var overwolf;
 	],
 	template: `
         <div class="decktracker-broadcast">
-            <div class="twitch logged-out" *ngIf="!twitchedLoggedIn">
-                <button (click)="connect()" class="text">Connect Firestone to your Twitch account</button>
+            <h2>Broadcast on Twitch</h2>
+            <p class="text">
+                Firestone twitch extension allows you to stream while showing 
+                your deck tracker in Twitch player. To do so you will need to:
+            </p>
+            <ol class="todo"> 
+                <li>1. Install Firestone Twitch extension: <a href="" target="_blank">here</a>
+                <li>2. Connect your Twitch account to Firestone
+            </ol>
+
+            <div class="twitch logged-out" *ngIf="twitchLoginUrl && !twitchedLoggedIn">
+                <button (click)="connect()" class="text">
+                    <i class="twitch-icon">
+                        <svg>
+                            <use xlink:href="/Files/assets/svg/sprite.svg#twitch"/>
+                        </svg>
+                    </i>
+                    <span>Login with Twitch</span>
+                </button>
             </div>
-            <div class="twitch logged-in" *ngIf="twitchedLoggedIn">
-                <button (click)="disconnect()" class="text">Disconnect your Twitch account</button>
+            <div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
+                <div class="user-name">
+                    Logged in as: <a href="https://www.twitch.tv/{{twitchUserName}}" target="_blank">{{twitchUserName}}</a>
+                </div>
+                <button (click)="disconnect()" class="text">
+                    <i class="twitch-icon">
+                        <svg>
+                            <use xlink:href="/Files/assets/svg/sprite.svg#twitch"/>
+                        </svg>
+                    </i>
+                    <span>Disconnect</span>
+                </button>
             </div>
         </div>
 	`,
@@ -29,6 +56,7 @@ export class SettingsBroadcastComponent implements AfterViewInit {
     
     twitchedLoggedIn: boolean;
     twitchLoginUrl: string;
+    twitchUserName: string;
 
 	constructor(
             private prefs: PreferencesService, 
@@ -62,8 +90,9 @@ export class SettingsBroadcastComponent implements AfterViewInit {
     }
 
 	private async loadDefaultValues() {
-        this.twitchLoginUrl = this.twitch.buildLoginUrl();
         this.twitchedLoggedIn = await this.twitch.isLoggedIn();
+        this.twitchUserName = (await this.prefs.getPreferences()).twitchUserName;
+        this.twitchLoginUrl = this.twitch.buildLoginUrl();
         this.cdr.detectChanges();
 	}
 }

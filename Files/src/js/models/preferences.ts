@@ -19,4 +19,5 @@ export class Preferences {
     readonly binder: BinderPrefs = new BinderPrefs();
 
     readonly twitchAccessToken: string;
+    readonly twitchUserName: string;
 }

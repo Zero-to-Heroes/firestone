@@ -66,6 +66,11 @@
 	<path fill-rule="evenodd" clip-rule="evenodd" d="M4 0H11V2H15V3H13V15H2V3H0V2H4V0ZM10 1V2H5V1H10ZM12 3H3V14H12V3Z" fill="var(--icon-color, currentcolor)"/>
 </symbol>
 
+<!-- icons 18x18 -->
+<symbol id="twitch" viewBox="0 0 18 18">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M1.27962 0L0 3.10909V15.7091H4.52133V18H7.08057L9.46919 15.7091H13.1374L18 11.0455V0H1.27962ZM16.2085 10.2273L13.3934 12.9273H8.87204L6.48341 15.2182V12.9273H2.81517V1.63636H16.2085V10.2273ZM13.4787 4.74545V9.40909H11.7725V4.74545H13.4787ZM8.95735 4.74545V9.40909H7.25119V4.74545H8.95735Z" fill="var(--icon-color, currentcolor)"/>
+</symbol>
+
 
 <symbol id="unchecked_box" viewBox="0 0 20 20">
 	<rect x="0.5" y="0.5" width="19" height="19" stroke="var(--icon-color, currentcolor)"/>

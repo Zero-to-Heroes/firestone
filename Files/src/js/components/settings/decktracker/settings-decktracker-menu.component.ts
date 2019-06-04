@@ -15,7 +15,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, E
                 <span>Look and feel</span>
             </li>
             <li [ngClass]="{'selected': selectedMenu === 'broadcast'}" (click)="selectMenu('broadcast')">
-                <span>Broadcast</span>
+                <span>Twitch</span>
             </li>
         </ul>
 	`,

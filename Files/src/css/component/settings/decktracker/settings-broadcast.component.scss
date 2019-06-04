@@ -13,6 +13,7 @@
 
     h2 {
         margin-top: 15px;
+        margin-bottom: 15px;
         font-family: Open Sans;
         font-style: normal;
         font-weight: 600;
@@ -21,7 +22,78 @@
         color: #D9C3AB;
     }
 
-    button {
+    p, li, span, a {
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 13px;
+        line-height: 18px;
+        color: #D9C3AB;
+        margin-top: 0;
+    }
+
+    ol {
+        margin-top: 15px;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        margin-top: -5px;
+    }
+
+    .twitch {
+        margin-top: 30px;
+    }
+
+    a {
+        display: flex;
+        margin-left: 5px;
+        text-decoration: underline;
         width: auto;
+    }
+
+    .user-name {
+        display: flex;
+        align-items: center;
+        position: relative;
+        top: -10px;
+
+        a:hover {
+            color: #FFB948;
+            background: transparent;
+        }
+    }
+
+    button {
+        border: 1px solid #D9C3AB;
+        padding-left: 25px;
+        padding-right: 25px;
+        width: auto;
+        height: 35px;
+
+        i {
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            --icon-color: #FFB948;
+        }
+
+        div {
+            display: flex;
+        }
+
+        &:hover {
+            background: #FFB948;
+            border: none;
+
+            span {
+                color: #2F0D0D;
+            }
+
+            i {
+                --icon-color: #2F0D0D;
+            }
+        }
     }
 }
