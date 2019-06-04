@@ -30,6 +30,7 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck';
             <div class="scalable">
                 <div class="decktracker-container">
                     <div class="decktracker" *ngIf="gameState">
+                        <decktracker-twitch-title-bar></decktracker-twitch-title-bar>
                         <decktracker-deck-list 
                                 [deckState]="gameState.playerDeck"
                                 [displayMode]="displayMode"
@@ -38,27 +39,6 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck';
                         </decktracker-deck-list>
                     </div>
                 </div>
-
-                <i class="i-54 gold-theme corner top-left">
-                    <svg class="svg-icon-fill">
-                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                    </svg>
-                </i>
-                <i class="i-54 gold-theme corner top-right">
-                    <svg class="svg-icon-fill">
-                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                    </svg>
-                </i>
-                <i class="i-54 gold-theme corner bottom-right">
-                    <svg class="svg-icon-fill">
-                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                    </svg>
-                </i>
-                <i class="i-54 gold-theme corner bottom-left">
-                    <svg class="svg-icon-fill">
-                        <use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
-                    </svg>
-                </i>
             </div>
         </div>
     `,

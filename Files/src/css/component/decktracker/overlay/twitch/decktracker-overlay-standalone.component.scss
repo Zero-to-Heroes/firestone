@@ -12,17 +12,36 @@
         max-height: none;
     }
 
-    &.dragging {
+    ::ng-deep {
+        decktracker-deck-list {
+            .deck-list {
+                overflow-y: hidden;
+            }
+        }
 
+        decktracker-twitch-title-bar {
+            display: flex;
+            justify-content: flex-end;
+            opacity: 0;
+            
+            .title-bar {
+                background: #07081F;
+            }
+            .logo {
+                display: none;
+            }
+        }
+    }
+
+    &.dragging {
         tooltips {
             display: none;
         }
     }
 
-    ::ng-deep decktracker-deck-list {
-        .deck-list {
-            overflow-y: hidden;
+    &:hover {
+        .decktracker decktracker-twitch-title-bar {
+            opacity: 1;
         }
-
     }
 }
