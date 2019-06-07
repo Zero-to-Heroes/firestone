@@ -1,7 +1,14 @@
+:host() {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
 .container {
     position: relative;
     display: flex;
     justify-content: flex-end;
+    height: 100%;
 
     ::ng-deep tooltips {
         position: absolute;

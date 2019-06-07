@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 
 @Component({
@@ -6,6 +6,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss',
+		'../../../../../css/component/decktracker/overlay/twitch/decktracker-twitch-title-bar.component.scss',
 	],
 	template: `
 		<div class="title-bar">
@@ -14,11 +15,20 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 					<use xlink:href="/Files/assets/svg/sprite.svg#decktracker_logo"/>
 				</svg>
             </i>
-			<i class="copy-deckstring" (click)="copyDeckstring()" *ngIf="deckState.deckstring">
+            <i *ngIf="deckState.deckstring" class="copy-deckstring" 
+                    (click)="copyDeckstring()" 
+                    (mouseenter)="onMouseEnter()"
+                    (mouseleave)="onMouseLeave()">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
+					<use xlink:href="/Files/assets/svg/sprite.svg#copy_deckstring"/>
 				</svg>
-            </i>            
+            </i>
+            <div class="copy-text">{{copyText}}</div>
+            <button class="i-30 close-button" (click)="closeWindow()">
+                <svg class="svg-icon-fill">
+                    <use xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
+                </svg>
+            </button>   
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,9 +36,43 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 export class DeckTrackerTwitchTitleBarComponent {
 
     @Input() deckState: DeckState;
+    copyText: string;
+
+    private copied = false;
+
+    constructor(private cdr: ChangeDetectorRef) { }
     
     copyDeckstring() {
         (navigator as any).clipboard.writeText(this.deckState.deckstring);
+        this.copyText = 'Copied';
+        this.copied = true;
         console.log('copied deckstring to clipboard', this.deckState.deckstring);
+        this.cdr.detectChanges();
+        setTimeout(() => {
+            this.copied = false;
+            this.copyText = null;
+            this.cdr.detectChanges();
+        }, 3000);
+    }
+
+    onMouseEnter() {
+        if (this.copied) {
+            return;
+        }
+        this.copyText = 'Copy';
+        this.cdr.detectChanges();
+    }
+
+    onMouseLeave() {
+        if (this.copied) {
+            return;
+        }
+        this.copyText = null;
+        this.cdr.detectChanges();
+    }
+
+    closeWindow() {
+        console.log('minimizing window');
+        (window as any).Twitch.ext.actions.minimize();
     }
 }

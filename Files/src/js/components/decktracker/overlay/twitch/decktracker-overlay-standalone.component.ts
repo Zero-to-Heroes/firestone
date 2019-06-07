@@ -30,7 +30,6 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck';
             <div class="scalable">
                 <div class="decktracker-container">
                     <div class="decktracker" *ngIf="gameState">
-                        <decktracker-twitch-control-bar></decktracker-twitch-control-bar>
                         <decktracker-twitch-title-bar
                                 [deckState]="gameState.playerDeck">
                         </decktracker-twitch-title-bar>
@@ -100,7 +99,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
             console.log('on authorized', auth);
             this.token = auth.token;
             console.log('set token', this.token);
-            this.fetchInitialState();
+            // this.fetchInitialState();
         });
         this.twitch.listen('broadcast', (target, contentType, event) => {
             const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
@@ -109,7 +108,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         });
         this.displayMode = 'DISPLAY_MODE_GROUPED';
         console.log('init done');
-        // this.addDebugGameState();
+        this.addDebugGameState();
 		this.cdr.detectChanges();
     }
 

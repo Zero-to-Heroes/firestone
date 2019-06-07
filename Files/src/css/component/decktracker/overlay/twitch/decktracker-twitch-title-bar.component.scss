@@ -1,0 +1,36 @@
+.title-bar {
+    background: #07081F;
+    width: 100%;
+
+    .logo {
+        --icon-color: #9FB6D7;
+    }
+
+    .copy-deckstring {
+        width: 13px;
+        height: 16px;
+        --icon-color: #101530;
+        --icon-color-secondary: #9FB6D7;
+        margin-left: 10px;
+    }
+
+    .copy-text {
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 11px;
+        color: #9FB6D7;
+        flex-grow: 1;
+        margin-left: 5px;
+    }
+
+    .close-button {
+        background: #1F2142;
+        color: #9FB6D7;
+
+        &:hover {
+            background: #9FB6D7;
+            color: #101530;
+        }
+    }
+}
