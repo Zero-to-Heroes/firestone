@@ -108,7 +108,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         });
         this.displayMode = 'DISPLAY_MODE_GROUPED';
         console.log('init done');
-        this.addDebugGameState();
+        // this.addDebugGameState();
 		this.cdr.detectChanges();
     }
 
