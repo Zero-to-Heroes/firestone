@@ -176,7 +176,7 @@ export class AppBootstrapService {
 		overwolf.games.getRunningGameInfo((res: any) => {
 			// console.log('running game info', res);
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				if (showWhenStarted && this.currentState == 'READY') {
+				if (showWhenStarted) {
 					showWhenStarted();
 				}
 			}
@@ -233,11 +233,6 @@ export class AppBootstrapService {
 	}
 
 	private showCollectionWindow() {
-		// console.log('showing collection page');
-		if (this.currentState != 'READY') {
-			console.log('app not ready yet, cannot show collection window', this.currentState);
-			return;
-        }
         console.log('reading to show collection window');
 		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
 			if (result.status !== 'success') {
