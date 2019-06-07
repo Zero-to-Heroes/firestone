@@ -99,7 +99,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
             console.log('on authorized', auth);
             this.token = auth.token;
             console.log('set token', this.token);
-            // this.fetchInitialState();
+            this.fetchInitialState();
         });
         this.twitch.listen('broadcast', (target, contentType, event) => {
             const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
