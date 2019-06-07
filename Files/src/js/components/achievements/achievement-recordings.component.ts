@@ -294,6 +294,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     private async updateThumbnails(replayInfo: ReadonlyArray<ReplayInfo>) {
         const deletedPaths: string[] = await this.buildDeletedPaths(replayInfo);
         this.thumbnails = replayInfo
+                .filter((info) => info)
                 .map((info) => {
                     return {
                         timestamp: info.creationTimestamp,

@@ -80,7 +80,8 @@ export class AchievementViewComponent implements AfterViewInit {
 		this.achievementText = this._achievement.text;
 		this.numberOfRecordings = this._achievement.replayInfo.length;
 		if (this._achievement.replayInfo.length > 0) {
-			const allTs = this._achievement.replayInfo
+            const allTs = this._achievement.replayInfo
+                    .filter((info) => info)
 					.map((info) => info.creationTimestamp)
 					.filter((ts) => ts);
 			if (allTs.length > 0) {
