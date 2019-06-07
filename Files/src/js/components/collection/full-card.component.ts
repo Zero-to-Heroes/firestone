@@ -103,7 +103,7 @@ export class FullCardComponent {
 				}
 				for (let i = 0; i < audioClip.files.length; i++) {
 					let audio = new Audio();
-					audio.src = `http://static.zerotoheroes.com/hearthstone/audio/${audioClip.files[i]}`;
+					audio.src = `https://static.zerotoheroes.com/hearthstone/audio/${audioClip.files[i]}`;
 					audio.load();
 					audioClip.audios.push(audio);
 				}

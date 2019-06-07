@@ -31,11 +31,11 @@ export class Tooltip {
 
 	image() {
 		// return `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png`;
-		return `http://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
+		return `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
 	}
 	overlayMaskImage() {
 		// return `url('http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png')`;
-		return `url('http://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png')`;
+		return `url('https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png')`;
 	}
 }
 

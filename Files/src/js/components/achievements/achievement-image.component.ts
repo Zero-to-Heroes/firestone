@@ -53,7 +53,7 @@ export class AchievementImageComponent {
 	constructor(private cdr: ChangeDetectorRef) { }
 
 	@Input() set imageId(imageId: string) {
-		this.image = `http://static.zerotoheroes.com/hearthstone/cardart/256x/${imageId}.jpg`;
+		this.image = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${imageId}.jpg`;
 	}
 
 	@Input() set imageType(imageType: string) {

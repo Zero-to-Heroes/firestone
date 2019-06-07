@@ -88,7 +88,7 @@ export class CardComponent implements AfterViewInit {
 	@Input('card') set card(card: SetCard) {
 		this._card = card;
 		// this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + card.id + '.png';
-		this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' + card.id + '.png';
+		this.image = 'https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' + card.id + '.png';
 		this.overlayMaskImage = `url('${this.image}')`;
 	}
 	

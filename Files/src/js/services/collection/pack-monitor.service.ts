@@ -306,7 +306,7 @@ export class PackMonitor {
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
 					<img class="rarity" src="/Files/assets/images/rarity/rarity-${dbCard.rarity.toLowerCase()}.png">
-					<img class="art" src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
+					<img class="art" src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
 					<div class="message">
 						<div *ngIf="goldenClass" class="premium-deco">
 							<i class="gold-theme left">

@@ -85,7 +85,7 @@ export class AchievementsMonitor {
 				<div class="achievement-message-container ${achievement.id} ${unclickable}">
 					<div class="achievement-image-container">
 						<img 
-							src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
+							src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
 							class="real-achievement ${achievement.cardType}"/>
 						<i class="i-84x90 frame">
 							<svg>
@@ -129,7 +129,7 @@ export class AchievementsMonitor {
 			<div class="achievement-message-container ${achievement.id}">
 				<div class="achievement-image-container">
 					<img 
-						src="http://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
+						src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
 						class="real-achievement ${achievement.cardType}"/>
 					<i class="i-84x90 frame">
 						<svg>
