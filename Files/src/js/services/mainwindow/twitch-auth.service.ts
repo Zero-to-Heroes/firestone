@@ -30,18 +30,17 @@ export class TwitchAuthService {
     }
 
     public async emitDeckEvent(event: any) {
-        console.log('ready to emit twitch event');
+        // console.log('ready to emit twitch event');
         const prefs = await this.prefs.getPreferences();
         if (!prefs.twitchAccessToken) {
-            console.log('no twitch access token, returning');
+            // console.log('no twitch access token, returning');
             return;
         }
         const httpHeaders: HttpHeaders = new HttpHeaders()
                 .set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
-        console.log('sending event');
         this.http.post(EBS_URL, event, { headers: httpHeaders} ).subscribe((data) => {
             // Do nothing
-            console.log('twitch event result', data);
+            // console.log('twitch event result', data);
         }, (error) => {
             console.error('Could not send deck event to EBS', error);
         });
