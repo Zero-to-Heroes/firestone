@@ -9,6 +9,10 @@
         transform: scale(1);
     }
 
+    &.clean .decktracker-container {
+        background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%);
+    }
+
     .decktracker {
         max-height: none;
     }
@@ -17,6 +21,7 @@
         decktracker-deck-list {
             .deck-list {
                 overflow-y: hidden;
+                padding-bottom: 0;
             }
         }
 
