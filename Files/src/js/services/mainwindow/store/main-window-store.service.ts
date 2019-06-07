@@ -135,14 +135,16 @@ export class MainWindowStoreService {
 		}
 		this.isProcessing = true;
 		const event = this.eventQueue.shift();
-		console.log('[store] processing event hey', event.eventName(), event, this.state);
+		console.log('[store] processing event', event.eventName(), event);
 		const processor: Processor = this.processors.get(event.eventName());
 		const newState = await processor.process(event, this.state);
 		if (newState) {
 			this.state = newState;
 			this.stateEmitter.next(this.state);
-			console.log('[store] emitted new state', this.state);
-		}
+        }
+        else {
+            console.log('[store] no new state to emit');
+        }
 		this.isProcessing = false;
 	}
 

@@ -163,7 +163,7 @@ export class MainWindowComponent implements AfterViewInit {
                     if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
                         overwolf.windows.restore(this.windowId);
                     }
-                    console.log('got new state', newState);
+                    console.log('updated state after event');
                     this.state = newState;
                     if (!(<ViewRef>this.cdr).destroyed) {
                         this.cdr.detectChanges();
