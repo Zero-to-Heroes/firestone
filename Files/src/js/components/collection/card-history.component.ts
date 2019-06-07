@@ -68,7 +68,6 @@ export class CardHistoryComponent implements AfterViewInit {
 	@Input() shownHistory: ReadonlyArray<CardHistory>;
 	@Input() totalHistoryLength: number;
 	
-	private limit = 100;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set selectedCard(selectedCard: SetCard) {

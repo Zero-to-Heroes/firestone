@@ -34,10 +34,13 @@ export class NewCardProcessor implements Processor {
 		const history = this.isDust(event.card, event.type)
 				? new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, this.getDust(dbCard, event.type), event.type == 'GOLDEN', false, -1)
 				: new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, event.type == 'GOLDEN', true, relevantCount);
-		await this.cardHistoryStorage.newHistory(history);
+        await this.cardHistoryStorage.newHistory(history);
+        const cardHistory = [history, ...currentState.binder.cardHistory] as ReadonlyArray<CardHistory>;
+        // console.log('new cardHistory', cardHistory);
         const newBinder = Object.assign(new BinderState(), currentState.binder, {
             allSets: await this.buildSetsFromCollection(collection),
-            cardHistory: [history, ...currentState.binder.cardHistory] as ReadonlyArray<CardHistory>,
+            cardHistory: cardHistory,
+            shownCardHistory: cardHistory,
         } as BinderState);
         return Object.assign(new MainWindowState(), currentState, {
             binder: newBinder,
