@@ -8,13 +8,13 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, Output, E
 	],
 	template: `
         <ul class="decktracker-menu">
-            <li [ngClass]="{'selected': selectedMenu === 'launch'}" (click)="selectMenu('launch')">
+            <li [ngClass]="{'selected': selectedMenu === 'launch'}" (mousedown)="selectMenu('launch')">
                 <span>Launch options</span>
             </li>
-            <li [ngClass]="{'selected': selectedMenu === 'appearance'}" (click)="selectMenu('appearance')">
+            <li [ngClass]="{'selected': selectedMenu === 'appearance'}" (mousedown)="selectMenu('appearance')">
                 <span>Look and feel</span>
             </li>
-            <li [ngClass]="{'selected': selectedMenu === 'broadcast'}" (click)="selectMenu('broadcast')">
+            <li [ngClass]="{'selected': selectedMenu === 'broadcast'}" (mousedown)="selectMenu('broadcast')">
                 <span>Twitch</span>
             </li>
         </ul>

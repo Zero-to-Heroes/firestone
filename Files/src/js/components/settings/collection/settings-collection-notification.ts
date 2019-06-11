@@ -14,7 +14,7 @@ declare var ga;
 	],
 	template: `
 		<div class="collection-notification">
-			<h2 class="modes">You can hide some notifications when receiving cards</h2>
+			<h2 class="modes">You can selectively show some card notiications</h2>
 			<section class="toggle-label">
 				<form class="settings-section form-toggle">
 					<fieldset name="">

@@ -9,17 +9,17 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy, Output, EventEmi
 	],
 	template: `
         <ul class="menu-selection">
-            <li [ngClass]="{'selected': selectedApp == 'general'}">
-                <span (click)="changeSelection('general')">General</span>
+            <li [ngClass]="{'selected': selectedApp == 'general'}" (mousedown)="changeSelection('general')">
+                <span>General</span>
             </li>
-            <li [ngClass]="{'selected': selectedApp == 'collection'}">
-                <span (click)="changeSelection('collection')">The Binder</span>
+            <li [ngClass]="{'selected': selectedApp == 'collection'}" (mousedown)="changeSelection('collection')">
+                <span>The Binder</span>
             </li>
-            <li [ngClass]="{'selected': selectedApp == 'achievements'}">
-                <span (click)="changeSelection('achievements')">Achievements</span>
+            <li [ngClass]="{'selected': selectedApp == 'achievements'}" (mousedown)="changeSelection('achievements')">
+                <span>Achievements</span>
             </li>
-            <li [ngClass]="{'selected': selectedApp == 'decktracker'}">
-                <span (click)="changeSelection('decktracker')">Deck Tracker</span>
+            <li [ngClass]="{'selected': selectedApp == 'decktracker'}" (mousedown)="changeSelection('decktracker')">
+                <span>Deck Tracker</span>
             </li>
         </ul>
 	`,

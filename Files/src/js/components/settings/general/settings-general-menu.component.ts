@@ -8,7 +8,7 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 	],
 	template: `
         <ul class="general-menu">
-            <li [ngClass]="{'selected': selectedMenu === 'launch'}" (click)="selectMenu('launch')">
+            <li [ngClass]="{'selected': selectedMenu === 'launch'}" (mousedown)="selectMenu('launch')">
                 <span>Launch</span>
             </li>
         </ul>
