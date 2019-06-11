@@ -22,6 +22,10 @@
         color: #9FB6D7;
         flex-grow: 1;
         margin-left: 5px;
+
+        &.copied {
+            color: #1ECC02;
+        }
     }
 
     .close-button {

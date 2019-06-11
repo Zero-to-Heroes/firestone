@@ -23,7 +23,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 					<use xlink:href="assets/svg/sprite.svg#copy_deckstring"/>
 				</svg>
             </i>
-            <div class="copy-text">{{copyText}}</div>
+            <div class="copy-text" [ngClass]="{ 'copied': copied }">{{copyText}}</div>
             <button class="i-30 close-button" (mousedown)="closeWindow()">
                 <svg class="svg-icon-fill">
                     <use xlink:href="assets/svg/sprite.svg#window-control_minimize"></use>
@@ -37,8 +37,7 @@ export class DeckTrackerTwitchTitleBarComponent {
 
     @Input() deckState: DeckState;
     copyText: string;
-
-    private copied = false;
+    copied = false;
 
     constructor(private cdr: ChangeDetectorRef) { }
     
