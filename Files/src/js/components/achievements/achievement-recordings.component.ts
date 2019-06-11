@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, HostListener, EventEmitter } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, HostListener, EventEmitter, ViewRef } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { ReplayInfo } from '../../models/replay-info';
@@ -166,7 +166,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         console.log('setting achievement', achievement);
         setTimeout(() => {
             this.updateThumbnails(achievement.replayInfo);
-            this.cdr.detectChanges();            
+            if (!(<ViewRef>this.cdr).destroyed) {
+                this.cdr.detectChanges();
+            }
         })
     }
 
@@ -204,7 +206,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.updateThumbnail(thumbnail);
         this.player.load();
         this.player.play();
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     openVideoFolder() {
@@ -214,7 +218,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     goToPreviousPage() {
         this.indexOfFirstShown = Math.max(0, this.indexOfFirstShown - this.THUMBNAILS_PER_PAGE);
         this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     goToNextPage() {
@@ -223,7 +229,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
             this.thumbnails.length - this.THUMBNAILS_PER_PAGE);
         this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
         console.log('thumnailOffset', this.thumbnailsOffsetX);
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     async onDeletionRequest(thumbnail: ThumbnailInfo, event) {
@@ -239,7 +247,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
             this.confirmationTop = event.top - container.top + 55;
             this.confirmationLeft = event.left - container.left + 130;
         }
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     async deleteMedia(thumbnail: ThumbnailInfo) {
@@ -250,11 +260,15 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.stateUpdater.next(new VideoReplayDeletionRequestEvent(thumbnail.stepId, thumbnail.videoPath));
         thumbnail.inDeletion = true;
         this.showDeleteNotification = true;
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
         setTimeout(() => {
             thumbnail.inDeletion = false;
             this.showDeleteNotification = false;
-            this.cdr.detectChanges();
+            if (!(<ViewRef>this.cdr).destroyed) {
+                this.cdr.detectChanges();
+            }
         }, 1500);
     }
 
@@ -262,7 +276,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         event.stopPropagation();
         this.dontAsk = !this.dontAsk;
         this.prefs.setDontConfirmVideoDeletion(this.dontAsk);
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     hideConfirmationPopup(event: MouseEvent) {
@@ -270,7 +286,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         event.stopPropagation();
         this.showConfirmationPopup = false;
         this.pendingDeletion = undefined;
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
     
 	// Prevent the window from being dragged around if user drags controls
@@ -288,7 +306,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 	@HostListener('document:webkitfullscreenchange', ['$event'])
 	onFullScreenChange(event) {
         this.fullscreen = !this.fullscreen;
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     private async updateThumbnails(replayInfo: ReadonlyArray<ReplayInfo>) {
@@ -314,7 +334,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
         this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
         console.log('updated thumbnails', this.thumbnails);
         this.updateThumbnail(this.thumbnails[this.indexOfFirstShown]);
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
         setTimeout(() => this.cdr.detectChanges());
     }
     

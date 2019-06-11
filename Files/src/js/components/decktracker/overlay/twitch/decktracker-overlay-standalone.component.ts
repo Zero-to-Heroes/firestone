@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, ElementRef, ViewRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { inflate } from 'pako';
 import { ResizedEvent } from 'angular-resize-event';
@@ -71,13 +71,17 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 			if (this.activeTooltip) {
 				this.activeTooltip = data.data[0];
 				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-				this.cdr.detectChanges();
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
 			}
 			else {
 				this.showTooltipTimer = setTimeout(() => {
 					this.activeTooltip = data.data[0];
 					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-					this.cdr.detectChanges();
+                    if (!(<ViewRef>this.cdr).destroyed) {
+                        this.cdr.detectChanges();
+                    }
 				}, 300)
 			}
 		});
@@ -86,7 +90,9 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 			this.hideTooltipTimer = setTimeout(() => {
 				this.activeTooltip = undefined;
 				this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
-				this.cdr.detectChanges();
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
 			}, 200);
         });
 	}
@@ -109,7 +115,9 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         this.displayMode = 'DISPLAY_MODE_GROUPED';
         console.log('init done');
         // this.addDebugGameState(); 
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     onResized(event: ResizedEvent) {
@@ -127,7 +135,9 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         // console.log('final scale', finalScale);
         const element = this.el.nativeElement.querySelector('.scalable');
         this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
         this.keepOverlayInBounds();
     }
 
@@ -139,7 +149,9 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         this.http.get(EBS_URL, options).subscribe((result: any) => {
             console.log('successfully retrieved initial state', result);
             this.gameState = result.state;
-            this.cdr.detectChanges();
+            if (!(<ViewRef>this.cdr).destroyed) {
+                this.cdr.detectChanges();
+            }
         });
     }
 
@@ -181,13 +193,17 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
     startDragging() {
         this.dragging = true;
         console.log('starting dragging');
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     stopDragging() {
         this.dragging = false;
         console.log('stopped dragging');
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
         this.keepOverlayInBounds();
     }
     
@@ -196,13 +212,17 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 			case DeckEvents.GAME_END:
 				console.log('received GAME_END event');
                 this.gameState = undefined;
-                this.cdr.detectChanges();
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
                 break;
             default:
                 console.log('received deck event');
                 if (event.state.playerDeck.deckList.length > 0) {
                     this.gameState = event.state;
-                    this.cdr.detectChanges();
+                    if (!(<ViewRef>this.cdr).destroyed) {
+                        this.cdr.detectChanges();
+                    }
                 }
                 break;
 		}

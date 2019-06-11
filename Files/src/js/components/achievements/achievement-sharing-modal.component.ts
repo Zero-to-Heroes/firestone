@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter, ElementRef, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
@@ -126,6 +126,8 @@ export class AchievementSharingModal implements AfterViewInit {
 		}
         this.player.load();
         this.player.play();
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

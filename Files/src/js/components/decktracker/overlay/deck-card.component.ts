@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { Events } from '../../../services/events.service';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
@@ -51,7 +51,9 @@ export class DeckCardComponent {
 
 	@Input('activeTooltip') set activeTooltip(activeTooltip: string) {
 		this._activeTooltip = activeTooltip;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 		// console.log('setting active tooltip', this.cardId, this._activeTooltip);
 	}
 

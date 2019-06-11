@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, EventEmitter, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
 
@@ -93,6 +93,8 @@ export class SettingsBroadcastComponent implements AfterViewInit {
         this.twitchedLoggedIn = await this.twitch.isLoggedIn();
         this.twitchUserName = (await this.prefs.getPreferences()).twitchUserName;
         this.twitchLoginUrl = this.twitch.buildLoginUrl();
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

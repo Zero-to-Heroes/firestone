@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, Output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, ElementRef, ChangeDetectorRef, Output, EventEmitter, AfterViewInit, ViewRef } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
@@ -104,7 +104,9 @@ export class AchievementViewComponent implements AfterViewInit {
 		if (this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
 			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(this.showRecordings));
-			this.cdr.detectChanges();
+            if (!(<ViewRef>this.cdr).destroyed) {
+                this.cdr.detectChanges();
+            }
 		}
 	}
 }

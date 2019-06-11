@@ -102,13 +102,17 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			if (this.activeTooltip) {
 				this.activeTooltip = data.data[0];
 				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-				this.cdr.detectChanges();
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
 			}
 			else {
 				this.showTooltipTimer = setTimeout(() => {
 					this.activeTooltip = data.data[0];
 					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-					this.cdr.detectChanges();
+                    if (!(<ViewRef>this.cdr).destroyed) {
+                        this.cdr.detectChanges();
+                    }
 				}, 500)
 			}
 		});
@@ -122,7 +126,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
                 // console.log('hidigin tooltip');
 				this.activeTooltip = undefined;
 				this.events.broadcast(Events.HIDE_TOOLTIP);
-				this.cdr.detectChanges();
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
 			}, data.data[0] ? data.data[0] : 200);
 		});
 		const deckEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().deckEventBus;
@@ -152,7 +158,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
             this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
             console.log('game state', this.gameState, JSON.stringify(this.gameState));
         }
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 		console.log('handled after view init');
 	}
 
@@ -196,7 +204,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		else if (this.overlayDisplayed && !shouldDisplay) {
 			this.hideWindow();
         }
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {

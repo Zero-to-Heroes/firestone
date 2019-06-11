@@ -118,7 +118,9 @@ export class NotificationsComponent implements AfterViewInit {
 		const toast = activeNotif.toast;
 		console.log('active notif found', activeNotif, toast);
 		toast.theClass = 'active';
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 		console.log('got notif', notification);
 		notification.classList.add('active');
 		console.log('updated notif', notification);

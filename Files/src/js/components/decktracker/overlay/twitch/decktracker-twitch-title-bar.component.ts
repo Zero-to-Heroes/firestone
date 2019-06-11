@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 
 @Component({
@@ -51,7 +51,9 @@ export class DeckTrackerTwitchTitleBarComponent {
         setTimeout(() => {
             this.copied = false;
             this.copyText = null;
-            this.cdr.detectChanges();
+            if (!(<ViewRef>this.cdr).destroyed) {
+                this.cdr.detectChanges();
+            }
         }, 3000);
     }
 
@@ -60,7 +62,9 @@ export class DeckTrackerTwitchTitleBarComponent {
             return;
         }
         this.copyText = 'Copy';
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     onMouseLeave() {
@@ -68,7 +72,9 @@ export class DeckTrackerTwitchTitleBarComponent {
             return;
         }
         this.copyText = null;
-        this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
     }
 
     closeWindow() {

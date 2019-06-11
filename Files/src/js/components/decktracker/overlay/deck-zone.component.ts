@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
@@ -60,7 +60,9 @@ export class DeckZoneComponent {
 
 	toggleZone() {
 		this.open = !this.open;
-		this.cdr.detectChanges();
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	trackCard(index, card: DeckCard) {
