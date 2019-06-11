@@ -18,7 +18,7 @@ declare var overwolf;
 	],
 	template: `
 		<div class="achievement-sharing-modal {{network}}">
-			<button class="i-30 close-button" (click)="closeModal()">
+			<button class="i-30 close-button" (mousedown)="closeModal()">
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 				</svg>

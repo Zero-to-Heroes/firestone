@@ -14,7 +14,7 @@ declare var ga;
 	template: `
 		<div class="achievements-capture" [ngClass]="{'disabled': !captureVideo}">
 			<input type="checkbox" name="video-capture" id="video-capture-checkbox">
-			<label class="record-video" for="video-capture-checkbox" (click)="toggleVideoCapture($event)">
+			<label class="record-video" for="video-capture-checkbox" (mousedown)="toggleVideoCapture($event)">
 				<i class="unselected" *ngIf="!captureVideo">
 					<svg>
 						<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>

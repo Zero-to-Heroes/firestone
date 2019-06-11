@@ -13,15 +13,16 @@ declare var overwolf: any;
 	],
 	template: `
 		<ul class="menu-selection">
-			<li [ngClass]="{'selected': selectedModule == 'collection'}" (click)="selectModule('collection')">
+            <li [ngClass]="{'selected': selectedModule == 'collection'}" 
+                    (mousedown)="selectModule('collection')">
 				<span>The Binder</span>
 			</li>
 			<li [ngClass]="{'selected': selectedModule == 'achievements'}" 
-				(click)="selectModule('achievements')">
+				    (mousedown)="selectModule('achievements')">
 				<span>Achievements</span>
 			</li>
 			<li [ngClass]="{'selected': selectedModule == 'decktracker'}" 
-				(click)="selectModule('decktracker')">
+				    (mousedown)="selectModule('decktracker')">
 				<span>Deck Tracker</span>
 			</li>
 		</ul>

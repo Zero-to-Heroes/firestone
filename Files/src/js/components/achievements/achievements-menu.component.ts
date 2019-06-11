@@ -24,16 +24,16 @@ declare var overwolf: any;
 			<ul *ngSwitchCase="'breadcrumbs'" 
 					class="menu-selection-achievements breadcrumbs"
 					[ngClass]="{'big': !selectedAchievementSet}">
-				<li (click)="goToAchievementsCategoriesView()">Categories</li>
+				<li (mousedown)="goToAchievementsCategoriesView()">Categories</li>
 				<li class="separator">></li>
                 <li *ngIf="selectedCategory"
-                        (click)="goToAchievementsCategoryView()" 
+                        (mousedown)="goToAchievementsCategoryView()" 
                         [ngClass]="{'unreachable': selectedCategory.achievementSets.length === 1}">
                     {{selectedCategory.name}}
                 </li>
 				<li class="separator" *ngIf="selectedAchievementSet">></li>
 				<li class="unclickable" *ngIf="selectedAchievementSet" 
-						(click)="goToAchievementSetView()">
+						(mousedown)="goToAchievementSetView()">
 					{{selectedAchievementSet.displayName}}
 				</li>
 			</ul>

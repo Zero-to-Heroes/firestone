@@ -40,7 +40,7 @@ import { SetCard } from '../../models/set';
 					<div class="card-info audio" *ngIf="audioClips && audioClips.length > 0">
 						<span class="sub-title">Sound:</span>
 						<ul class="value">
-							<li class="sound" *ngFor="let sound of audioClips" (click)="playSound(sound)">
+							<li class="sound" *ngFor="let sound of audioClips" (mousedown)="playSound(sound)">
 								<span class="label">{{sound.name}}</span>
 								<button class="i-30 brown-theme sound-button">
 									<svg class="svg-icon-fill">

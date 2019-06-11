@@ -13,7 +13,7 @@ declare var overwolf: any;
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-        <button class="i-30 pink-button" (click)="minimizeWindow()">
+        <button class="i-30 pink-button" (mousedown)="minimizeWindow()">
             <svg class="svg-icon-fill">
                 <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
             </svg>

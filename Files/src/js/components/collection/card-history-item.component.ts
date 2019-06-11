@@ -72,7 +72,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 			{ day: "2-digit", month: "2-digit", year: "2-digit"} );
 	}
 
-	@HostListener('click') onClick() {
+	@HostListener('mousedown') onClick() {
 		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}

@@ -9,7 +9,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	],
 	template: `
 		<div class="modal-video-settings-changed">
-			<button class="i-30 close-button" (click)="close()">
+			<button class="i-30 close-button" (mousedown)="close()">
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 				</svg>
@@ -18,7 +18,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			<p>The changes you made have been applied to Overwolf general capture settings. This will affect all your Overwolf game capture apps.</p>
 			<div class="buttons">
 				<a href="overwolf://settings/capture">View settings</a>
-				<button (click)="confirm()">Got it</button>
+				<button (mousedown)="confirm()">Got it</button>
 			</div>
 		</div>
 	`,

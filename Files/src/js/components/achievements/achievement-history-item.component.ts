@@ -40,7 +40,7 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 			{ day: "2-digit", month: "2-digit", year: "2-digit"} );
 	}
 
-	@HostListener('click') 
+	@HostListener('mousedown') 
 	onClick() {
 		this.stateUpdater.next(new ChangeVisibleAchievementEvent(this.achievementId));
 	}

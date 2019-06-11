@@ -13,7 +13,7 @@ import { PreferencesService } from '../services/preferences.service';
         <div class="ftue-element {{placement}}" *ngIf="text">
             <span class="ftue-title" [innerHTML]="title"></span>
             <p [innerHTML]="text"></p>
-            <button class="confirm" (click)="dismissFtue()">{{buttonText}}</button>        
+            <button class="confirm" (mousedown)="dismissFtue()">{{buttonText}}</button>        
             <svg class="ftue-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
                 <polygon points="0,0 8,-9 16,0"/>
             </svg>

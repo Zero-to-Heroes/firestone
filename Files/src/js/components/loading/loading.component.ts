@@ -30,12 +30,12 @@ declare var OwAd: any;
 						</i>
 						<div class="controls">
 							<control-settings [windowId]="thisWindowId"></control-settings>
-							<button class="i-30 pink-button" (click)="minimizeWindow()">
+							<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
 								<svg class="svg-icon-fill">
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
 								</svg>
 							</button>
-							<button class="i-30 close-button" (click)="closeWindow(true)">
+							<button class="i-30 close-button" (mousedown)="closeWindow(true)">
 								<svg class="svg-icon-fill">
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 								</svg>

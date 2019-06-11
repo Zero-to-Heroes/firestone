@@ -96,7 +96,7 @@ export class CardComponent implements AfterViewInit {
 		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	@HostListener('click') onClick() {
+	@HostListener('mousedown') onClick() {
 		if (this.tooltips) {
 			this.stateUpdater.next(new ShowCardDetailsEvent(this._card.id));
 		}

@@ -13,7 +13,7 @@ import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
                 <div class="icon" [innerHTML]="_thumbnail.iconSvg"></div>
                 <div class="media-missing-text" *ngIf="_thumbnail.isDeleted">Media missing</div>
                 <i class="delete-icon" [ngClass]="{'displayed': highlighted }"
-                        (click)="requestDeletion($event)" 
+                        (mousedown)="requestDeletion($event)" 
                         *ngIf="_thumbnail !== _currentThumbnail">
                     <svg>
                         <use xlink:href="/Files/assets/svg/sprite.svg#delete"/>

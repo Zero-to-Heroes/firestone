@@ -118,7 +118,7 @@ export class FsOverlayPlay implements OnInit, OnDestroy {
 
     private inDoubleClick = false;
 
-    @HostListener('click')
+    @HostListener('mousedown')
     onClick() {
         if (this.lastClickTime && Date.now() - this.lastClickTime <= this.DOUBLE_CLICK_TIME) {
             this.fsAPI.toggleFullscreen();

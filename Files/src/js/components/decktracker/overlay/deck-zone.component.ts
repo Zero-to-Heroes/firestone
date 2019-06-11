@@ -12,7 +12,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	],
 	template: `
 		<div class="deck-zone {{className}}">
-			<div class="zone-name-container" *ngIf="zoneName" (click)="toggleZone()">
+			<div class="zone-name-container" *ngIf="zoneName" (mousedown)="toggleZone()">
 				<span class="zone-name">{{zoneName}} ({{cardsInZone}})</span>
 				<!-- TODO: collapse caret -->
 				<i class="collapse-caret {{open ? 'open' : 'close'}}">

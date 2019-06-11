@@ -16,7 +16,7 @@ declare var overwolf;
 		<div class="achievements-global-categories">
 			<ul>
 				<li *ngFor="let category of globalCategories">
-					<achievements-global-category [category]="category" (click)="selectCategory(category)">
+					<achievements-global-category [category]="category" (mousedown)="selectCategory(category)">
 					</achievements-global-category>
 				</li>
 			</ul>

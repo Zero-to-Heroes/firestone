@@ -35,7 +35,7 @@ declare var overwolf: any;
 				<card-search-autocomplete-item *ngFor="let result of _searchResults; trackBy: trackById"
 					[fullString]="result.name"
 					[searchString]="_searchString"
-					(click)="showCard(result)">
+					(mousedown)="showCard(result)">
 				</card-search-autocomplete-item>
 			</ul>
 		</div>

@@ -12,7 +12,7 @@ declare var ga;
 	styleUrls: [`../../../css/component/achievements/achievement-social-shares.component.scss`],
 	template: `
         <div class="achievement-social-shares">
-            <div class="social-share twitter" (click)="startSharingTwitter()">
+            <div class="social-share twitter" (mousedown)="startSharingTwitter()">
                 <i>
                     <svg>
                         <use xlink:href="/Files/assets/svg/sprite.svg#twitter_share"/>

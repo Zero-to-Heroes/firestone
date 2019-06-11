@@ -13,7 +13,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
             <div class="title">Sound capture</div>
             <div class="sound-capture-form">
                 <input type="checkbox" name="system-capture" id="system-capture-checkbox">
-                <label for="system-capture-checkbox" (click)="toggleSystemSoundCapture($event)">
+                <label for="system-capture-checkbox" (mousedown)="toggleSystemSoundCapture($event)">
                     <i class="unselected" *ngIf="!captureSystemSound">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>
@@ -28,7 +28,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</label>
 				
                 <input type="checkbox" name="microphone-capture" id="microphone-capture-checkbox">
-                <label for="microphone-capture-checkbox" (click)="toggleMicrophoneSoundCapture($event)">
+                <label for="microphone-capture-checkbox" (mousedown)="toggleMicrophoneSoundCapture($event)">
                     <i class="unselected" *ngIf="!captureMicrophoneSound">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>

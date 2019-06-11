@@ -8,13 +8,13 @@ import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef } 
 	],
 	template: `
 		<div class="social-media">
-			<button class="i-30 pale-theme social-button" (click)="openReddit()">
+			<button class="i-30 pale-theme social-button" (mousedown)="openReddit()">
 				<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#reddit"/>
 				</svg>
 			</button>
 
-			<button class="i-30 pale-theme social-button" (click)="openGitHub()">
+			<button class="i-30 pale-theme social-button" (mousedown)="openGitHub()">
 				<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#github"/>
 				</svg>

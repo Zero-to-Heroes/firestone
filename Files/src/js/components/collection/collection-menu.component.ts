@@ -20,20 +20,20 @@ declare var overwolf: any;
 	template: `
 		<ng-container [ngSwitch]="_displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection-collection menu-selection">
-				<li class="selected" (click)="goToCollectionView()">Sets</li>
+				<li class="selected" (mousedown)="goToCollectionView()">Sets</li>
 			</ul>
 			<ng-container *ngSwitchCase="'breadcrumbs'">
 				<ul class="menu-selection-collection breadcrumbs" *ngIf="!searchString">
-					<li (click)="goToCollectionView()" class="highlight-on-hover">Sets</li>
+					<li (mousedown)="goToCollectionView()" class="highlight-on-hover">Sets</li>
 					<li class="separator">></li>
-					<li (click)="goToFormatView()" class="highlight-on-hover">{{getSelectedFormat()}}</li>
+					<li (mousedown)="goToFormatView()" class="highlight-on-hover">{{getSelectedFormat()}}</li>
 					<li class="separator">></li>
-					<li (click)="goToSetView()" class="highlight-on-hover" *ngIf="selectedSet">{{selectedSet.name}}</li>
+					<li (mousedown)="goToSetView()" class="highlight-on-hover" *ngIf="selectedSet">{{selectedSet.name}}</li>
 					<li *ngIf="selectedCard" class="separator">></li>
 					<li *ngIf="selectedCard" class="unclickable">{{selectedCard.name}}</li>
 				</ul>
 				<ul class="menu-selection-collection breadcrumbs" *ngIf="searchString">
-					<li class="highlight-on-hover" (click)="goToCollectionView()">Home</li>
+					<li class="highlight-on-hover" (mousedown)="goToCollectionView()">Home</li>
 					<li class="separator">></li>
 					<li class="unclickable">Search</li>
 					<li class="separator">></li>

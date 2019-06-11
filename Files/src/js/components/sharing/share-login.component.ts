@@ -22,7 +22,7 @@ declare var overwolf;
 				</div>
 				<img [src]="loginImage">
 			</div>
-			<button (click)="logInOut()">{{loggedIn ? 'Log out' : 'Log in'}}</button>
+			<button (mousedown)="logInOut()">{{loggedIn ? 'Log out' : 'Log in'}}</button>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

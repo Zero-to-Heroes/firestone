@@ -11,7 +11,7 @@ declare var overwolf;
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
 		<div class="achievement-container" [ngClass]="{'missing': !achieved}">
-			<div class="stripe" (click)="toggleRecordings()">
+			<div class="stripe" (mousedown)="toggleRecordings()">
 				<achievement-image 
 						[imageId]="_achievement.cardId" 
 						[imageType]="_achievement.cardType">

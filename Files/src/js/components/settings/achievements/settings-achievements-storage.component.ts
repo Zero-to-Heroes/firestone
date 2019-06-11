@@ -16,7 +16,7 @@ declare var overwolf;
 			<div class="input-label">Media folder</div>
 			<input class="media-folder-input" [ngModel]="mediaFolder" readonly>
 			<div class="buttons">
-				<button (click)="openVideoFolder()">Open</button>
+				<button (mousedown)="openVideoFolder()">Open</button>
 				<a href="overwolf://settings/capture">Change</a>
 			</div>
 			<div class="title used-storage">Used storage: {{usedSizeInGB | number:'1.0-1' }}GB</div>

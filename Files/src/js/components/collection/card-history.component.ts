@@ -42,7 +42,7 @@ declare var overwolf: any;
 				</li>
 				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
 					<span class="more-data-text">You've viewed {{cardHistory.length}} of {{totalHistoryLength}} cards</span>
-					<button class="load-more-button" (click)="loadMore()">Load More</button>
+					<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
 				</li>
 				<section *ngIf="!cardHistory || cardHistory.length == 0" class="empty-state">
 					<i class="i-60x78 pale-theme">

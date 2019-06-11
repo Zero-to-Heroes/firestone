@@ -33,7 +33,7 @@ declare var ga;
                     <vg-mute></vg-mute>
                     <vg-volume></vg-volume>
                     
-                    <i class="video-folder" (click)="openVideoFolder()">
+                    <i class="video-folder" (mousedown)="openVideoFolder()">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#video_folder"/>
                         </svg>
@@ -69,7 +69,7 @@ declare var ga;
             <div class="thumbnails">
                 <i class="page-arrow previous-page"  
                         [ngClass]="{'disabled': indexOfFirstShown === 0}"
-                        (click)="goToPreviousPage()"
+                        (mousedown)="goToPreviousPage()"
                         *ngIf="thumbnails.length > THUMBNAILS_PER_PAGE">
                     <svg>
                         <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
@@ -80,7 +80,7 @@ declare var ga;
                     <achievement-thumbnail 
                             *ngFor="let thumbnail of thumbnails"
                             [ngClass]="{'inDeletion': thumbnail.inDeletion}"
-                            (click)="showReplay(thumbnail, $event)"
+                            (mousedown)="showReplay(thumbnail, $event)"
                             (deletionRequest)="onDeletionRequest(thumbnail, $event)"
                             [highlighted]="pendingDeletion === thumbnail"
                             [thumbnail]="thumbnail" 
@@ -89,7 +89,7 @@ declare var ga;
                 </ul>
                 <i class="page-arrow next-page" 
                         [ngClass]="{'disabled': indexOfFirstShown === thumbnails.length - THUMBNAILS_PER_PAGE}" 
-                        (click)="goToNextPage()"
+                        (mousedown)="goToNextPage()"
                         *ngIf="thumbnails.length > THUMBNAILS_PER_PAGE">
                     <svg>
                         <use xlink:href="/Files/assets/svg/sprite.svg#carousel_arrow"/>
@@ -102,10 +102,10 @@ declare var ga;
                     [style.left.px]="confirmationLeft">
                 <p>Are you sure?</p>
                 <div class="buttons">
-                    <button (click)="hideConfirmationPopup($event)" class="cancel"><span>Cancel</span></button>
-                    <button (click)="deleteMedia(pendingDeletion)" class="confirm"><span>Delete</span></button>
+                    <button (mousedown)="hideConfirmationPopup($event)" class="cancel"><span>Cancel</span></button>
+                    <button (mousedown)="deleteMedia(pendingDeletion)" class="confirm"><span>Delete</span></button>
                 </div>
-                <div class="dont-ask" (click)="toggleDontAsk($event)">
+                <div class="dont-ask" (mousedown)="toggleDontAsk($event)">
                     <input hidden type="checkbox" name="" id="a-01">
                     <label for="a-01">
                         <i class="unchecked" *ngIf="!dontAsk">

@@ -10,8 +10,8 @@ import { Set } from '../../models/set';
 	template: `
 		<div class="sets">
 			<ul class="menu-selection">
-				<li [ngClass]="{'active': showStandard}" (click)="toggleStandard()">Standard</li>
-				<li [ngClass]="{'active': showWild}" (click)="toggleWild()">Wild</li>
+				<li [ngClass]="{'active': showStandard}" (mousedown)="toggleStandard()">Standard</li>
+				<li [ngClass]="{'active': showWild}" (mousedown)="toggleWild()">Wild</li>
 			</ul>
 			<sets-container [sets]="standardSets" [category]="'Standard'" *ngIf="showStandard"></sets-container>
 			<sets-container [sets]="wildSets" [category]="'Wild'" *ngIf="showWild"></sets-container>

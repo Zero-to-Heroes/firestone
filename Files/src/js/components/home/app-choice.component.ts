@@ -14,7 +14,7 @@ declare var overwolf: any;
 	],
 	template: `
 		<div class="app-choice" *ngIf="dataLoaded">
-			<div (click)="showCollection()" 
+			<div (mousedown)="showCollection()" 
 					[ngClass]="{'app binder': true, 'inactive': noCollection}">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
@@ -27,7 +27,7 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div (click)="showAchievements()" 
+			<div (mousedown)="showAchievements()" 
 					class="app achievements" 
 					[ngClass]="{'inactive': noCollection}">
 				<div class="info">
@@ -41,7 +41,7 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div (click)="showDecktracker()" class="app deck-tracker last">
+			<div (mousedown)="showDecktracker()" class="app deck-tracker last">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">

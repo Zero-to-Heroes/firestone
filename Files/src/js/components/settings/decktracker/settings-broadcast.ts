@@ -26,7 +26,7 @@ declare var overwolf;
             </ol>
 
             <div class="twitch logged-out" *ngIf="twitchLoginUrl && !twitchedLoggedIn">
-                <button (click)="connect()" class="text">
+                <button (mousedown)="connect()" class="text">
                     <i class="twitch-icon">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#twitch"/>
@@ -39,7 +39,7 @@ declare var overwolf;
                 <div class="user-name">
                     Logged in as: <a href="https://www.twitch.tv/{{twitchUserName}}" target="_blank">{{twitchUserName}}</a>
                 </div>
-                <button (click)="disconnect()" class="text">
+                <button (mousedown)="disconnect()" class="text">
                     <i class="twitch-icon">
                         <svg>
                             <use xlink:href="/Files/assets/svg/sprite.svg#twitch"/>

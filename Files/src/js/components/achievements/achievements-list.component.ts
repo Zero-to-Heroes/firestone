@@ -41,7 +41,7 @@ declare var overwolf;
 				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
 				</achievement-progress-bar>
 			</div>
-			<div class="collapse-menu" [ngClass]="{'shrink-header': shortDisplay}" (click)="toggleMenu()">
+			<div class="collapse-menu" [ngClass]="{'shrink-header': shortDisplay}" (mousedown)="toggleMenu()">
 				<i class="i-13X7" *ngIf="showCollapse">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
