@@ -40,22 +40,22 @@ declare var ga: any;
 
 			<i class="i-54 gold-theme corner top-left">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner top-right">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner bottom-right">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner bottom-left">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
 				</svg>
 			</i>
 			<tooltips [module]="'decktracker'"></tooltips>

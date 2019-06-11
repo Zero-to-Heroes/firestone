@@ -12,7 +12,7 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
 		<div class="title-bar">
 			<i class="logo">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#decktracker_logo"/>
+					<use xlink:href="assets/svg/sprite.svg#decktracker_logo"/>
 				</svg>
             </i>
             <i *ngIf="deckState.deckstring" class="copy-deckstring" 
@@ -20,13 +20,13 @@ import { DeckState } from '../../../../models/decktracker/deck-state';
                     (mouseenter)="onMouseEnter()"
                     (mouseleave)="onMouseLeave()">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#copy_deckstring"/>
+					<use xlink:href="assets/svg/sprite.svg#copy_deckstring"/>
 				</svg>
             </i>
             <div class="copy-text">{{copyText}}</div>
             <button class="i-30 close-button" (click)="closeWindow()">
                 <svg class="svg-icon-fill">
-                    <use xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
+                    <use xlink:href="assets/svg/sprite.svg#window-control_minimize"></use>
                 </svg>
             </button>   
 		</div>

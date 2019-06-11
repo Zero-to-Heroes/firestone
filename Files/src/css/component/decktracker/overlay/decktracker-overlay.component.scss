@@ -45,7 +45,7 @@
     
     .decktracker-container {
         position: relative;
-        background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url(/Files/assets/images/backgrounds/decktracker_bg.png);
+        background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url(assets/images/backgrounds/decktracker_bg.png);
         background-size: 100%;
         width: 100%;
         display: flex;
@@ -55,7 +55,7 @@
 
 	.decktracker {
     	position: relative;
-        background-image: radial-gradient(462.50px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url('/Files/assets/images/backgrounds/decktracker_bg.png');
+        background-image: radial-gradient(462.50px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url('assets/images/backgrounds/decktracker_bg.png');
         background-size: 100%;
 	    width: 100%;
 	    // height: calc(100% - 20px);

@@ -24,7 +24,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				<div class="inner-border">
 					<i>
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#legendary_star"/>
+							<use xlink:href="assets/svg/sprite.svg#legendary_star"/>
 						</svg>
 					</i>
 				</div>

@@ -10,7 +10,7 @@ import { Component, ChangeDetectionStrategy, Input, AfterViewInit, ElementRef } 
 		<div class="title-bar">
 			<i class="logo">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#decktracker_logo"/>
+					<use xlink:href="assets/svg/sprite.svg#decktracker_logo"/>
 				</svg>
 			</i>
 			<div class="controls">

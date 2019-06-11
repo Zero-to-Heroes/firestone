@@ -17,7 +17,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				<!-- TODO: collapse caret -->
 				<i class="collapse-caret {{open ? 'open' : 'close'}}">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
+						<use xlink:href="assets/svg/sprite.svg#collapse_caret"/>
 					</svg>
 				</i>
 				<div class="dim-overlay" *ngIf="activeTooltip"></div>
