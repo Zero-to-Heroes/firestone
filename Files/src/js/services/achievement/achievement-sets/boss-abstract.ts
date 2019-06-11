@@ -9,12 +9,13 @@ import { AchievementConfService } from "../achievement-conf.service";
 
 export abstract class AbstractBossSetProvider extends SetProvider {
 
-    private cardsService: AllCardsService;
-    private logoName: string;
-    private conf: AchievementConfService;
+    protected cardsService: AllCardsService;
+    protected logoName: string;
+    protected conf: AchievementConfService;
 
     constructor(
-            id: string, categoryId, 
+            id: string, 
+            categoryId: string, 
             displayName: string, 
             types: string[], 
             cardsService: AllCardsService, 

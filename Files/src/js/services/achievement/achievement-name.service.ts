@@ -21,8 +21,16 @@ export class AchievementNameService {
 
     private nameForType(type: string) {
         switch(type) {
-            case 'dungeon_run_boss_encounter': return 'Boss met: ';
-            case 'dungeon_run_boss_victory': return 'Boss defeated: ';
+            case 'dungeon_run_boss_encounter': 
+            case 'dalaran_heist_boss_encounter': 
+                return 'Boss met: ';
+            case 'dungeon_run_boss_victory': 
+            case 'dalaran_heist_boss_victory': 
+                return 'Boss defeated: ';
+            case 'dalaran_heist_boss_encounter_heroic': 
+                return 'Heroic boss met: '
+            case 'dalaran_heist_boss_victory_heroic': 
+                return 'Heroic boss defeated: '
             case 'dungeon_run_treasure_play': 
             case 'monster_hunt_treasure_play': 
             case 'dalaran_heist_treasure_play': 

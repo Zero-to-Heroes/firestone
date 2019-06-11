@@ -8,8 +8,8 @@ export class BossVictory extends AbstractChallenge {
 
 	private currentTurnStartTime: number;
 
-	constructor(achievement, scenarioId: number, events: Events) {
-		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
+	constructor(achievement, scenarioIds: number[], events: Events) {
+		super(achievement, scenarioIds, events, [GameEvent.GAME_START]);
 		this.cardId = achievement.cardId;
 	}
 
