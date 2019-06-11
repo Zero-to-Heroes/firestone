@@ -98,14 +98,15 @@ export class TooltipsComponent implements AfterViewInit {
                 }
                 // TODO: clean this messy hack (which will probably never happen :p)
 				else if (this.module === 'decktracker') {
-					// console.log('displaying decktracker tooltip')
-					if (top < 350) {
-						top = top;
-					}
-					else {
-						top = top - 300;
-					}
-					top = top;
+					// console.log('displaying decktracker tooltip', top, elementRect);
+                    // If element is too high, display the tooltip below the mouse
+                    if (elementRect.top < 350) {
+                        top = elementTop + 15;
+                    }
+                    // Otherwise display the elemtn sligntly above the mouse
+                    else {
+                        top = elementTop - 300;
+                    }
 					left = 0;
 				}
 				else if (left > 500) {

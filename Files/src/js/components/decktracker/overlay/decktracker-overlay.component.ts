@@ -94,9 +94,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			}
 		});
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
-			// this.activeTooltip = data.data[0];
-			// this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-            // this.cdr.detectChanges();
 			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
 			if (this.activeTooltip) {
@@ -117,10 +114,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			}
 		});
 		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe((data) => {
-			// this.activeTooltip = undefined;
-			// this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
-            // this.cdr.detectChanges();
-            // console.log('received hide tooltip event', data);
             clearTimeout(this.showTooltipTimer);
 			this.hideTooltipTimer = setTimeout(() => {
                 // console.log('hidigin tooltip');
