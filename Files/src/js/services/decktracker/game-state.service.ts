@@ -76,7 +76,9 @@ export class GameStateService {
 			while (gameEvent = this.eventQueue.dequeue()) {
 				this.processEvent(gameEvent);
 			}
-		}, 100);
+        }, 100);
+        // Reset the deck if it exists
+        this.eventQueue.enqueue(new GameEvent(GameEvent.GAME_END));
     }
     
     private async buildEventEmitters() {
