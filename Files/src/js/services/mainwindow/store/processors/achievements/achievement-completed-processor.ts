@@ -32,7 +32,9 @@ export class AchievementCompletedProcessor implements Processor {
         const savedAchievement = await this.achievementsStorage.saveAchievement(completedAchievement);
         const newAchievementState = await this.helper.rebuildAchievements(currentState);
         this.events.broadcast(Events.NEW_ACHIEVEMENT, completedAchievement);
-		const achievement: Achievement = this.repository.getAllAchievements().find((ach) => ach.id == completedAchievement.id);
+        const achievement: Achievement = this.repository.getAllAchievements().find((ach) => ach.id == completedAchievement.id);
+        // Send the notification early
+        this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, completedAchievement.numberOfCompletions, event.challenge);
         const historyItem = {
             achievementId: achievement.id, 
             achievementName: achievement.name, 
@@ -51,8 +53,7 @@ export class AchievementCompletedProcessor implements Processor {
             achievementHistory: history as ReadonlyArray<AchievementHistory>,
         } as AchievementsState);
 		// We store an history item every time, but we display only the first time an achievement is unlocked
-		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, completedAchievement.numberOfCompletions, event.challenge);
-        return Object.assign(new MainWindowState(), currentState, {
+		return Object.assign(new MainWindowState(), currentState, {
             achievements: newState,
         });
     }
