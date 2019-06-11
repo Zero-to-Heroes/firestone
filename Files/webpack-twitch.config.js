@@ -110,7 +110,7 @@ module.exports = function(env, argv) {
 
       new CopyWebpackPlugin([
         { from: path.join(process.cwd(), "src/html/decktracker-twitch.html"), to: "." },
-        { from: path.join(process.cwd(), "src/assets"), to: "Files/assets" },
+        { from: path.join(process.cwd(), "src/assets"), to: "assets" },
       ]),
     ]
   };

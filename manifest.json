@@ -29,7 +29,7 @@
 		"start_window":"MainWindow",
 		"windows": {
 			"MainWindow": {
-				"file": "Files/html/background.html",
+				"file": "Files/background.html",
 				"transparent": true,
 				"clickthrough": true,
 				"resizable": false,
@@ -42,7 +42,7 @@
                 "block_top_window_navigation": true
 			},
 			"LoadingWindow": {
-				"file": "Files/html/loading.html",
+				"file": "Files/loading.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
@@ -54,7 +54,7 @@
 		        "mute": true
 			},
 			"DeckTrackerWindow": {
-				"file": "Files/html/decktracker.html",
+				"file": "Files/decktracker.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": false,
@@ -62,7 +62,7 @@
 				"start_position": {"top": 0, "left": 0}
 			},
 			"NotificationsWindow": {
-				"file": "Files/html/notifications.html",
+				"file": "Files/notifications.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
@@ -73,7 +73,7 @@
                 "block_top_window_navigation": true
 			},
 			"SettingsWindow": {
-				"file": "Files/html/settings.html",
+				"file": "Files/settings.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
@@ -82,7 +82,7 @@
 		        "max_size": {"width": 680, "height": 620}
 			},
 			"WelcomeWindow": {
-				"file": "Files/html/welcome.html",
+				"file": "Files/welcome.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
@@ -91,7 +91,7 @@
 		        "max_size": {"width": 1064, "height": 680}
 			},
 			"CollectionWindow": {
-				"file": "Files/html/collection.html",
+				"file": "Files/collection.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
