@@ -127,6 +127,7 @@ export class NotificationsComponent implements AfterViewInit {
 	}
 
 	private showNotification(messageObject) {
+        console.log('showing notification', messageObject);
 		const htmlMessage: string = messageObject.content;
 		const cardId: string = messageObject.cardId;
 		const type: string = messageObject.type;

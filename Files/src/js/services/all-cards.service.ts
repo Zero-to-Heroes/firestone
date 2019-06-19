@@ -67,24 +67,34 @@ export class AllCardsService {
 
         const filterFunctions = [];
         
-        const fragments = searchString.indexOf(' ' ) !== -1
+        const fragments = searchString.indexOf(' ') !== -1
                 ? searchString.split(' ')
                 : [searchString];
+        let nameSearch = searchString;
+        let collectibleOnly: boolean = true;
         for (let fragment of fragments) {
             if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
                 const textToFind = searchString.split('text:')[1];
                 filterFunctions.push((card) => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1);
             }
+            // Include non-collectible
+            if (fragment.indexOf('type:') !== -1 && fragment.split('type:')[1] === 'nc') {
+                collectibleOnly = false;
+                nameSearch = nameSearch.replace(/type:nc\s?/, '');
+            }
         }
+        nameSearch = nameSearch.trim().toLowerCase();
         // Default filtering based on name
         if (filterFunctions.length === 0) {
-            filterFunctions.push((card) => card.name && card.name.toLowerCase().indexOf(searchString.toLowerCase()) != -1);
+            filterFunctions.push((card) => card.name && card.name.toLowerCase().indexOf(nameSearch) != -1);
         }
 
-        const basicFiltered = parseCardsText.jsonDatabase
-                .filter((card) => card.collectible)
-                .filter((card) => card.set != 'Hero_skins')
-                .filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) == -1);
+        const basicFiltered = collectibleOnly 
+                ? parseCardsText.jsonDatabase
+                        .filter((card) => card.collectible)
+                        .filter((card) => card.set != 'Hero_skins')
+                        .filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) == -1)
+                : parseCardsText.jsonDatabase;
         return filterFunctions
                 .reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
                 .map((card) => {
