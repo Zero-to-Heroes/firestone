@@ -3,8 +3,11 @@ import { MainWindowState } from "../../../../../models/mainwindow/main-window-st
 import { BinderState } from "../../../../../models/mainwindow/binder-state";
 import { Set, SetCard } from "../../../../../models/set";
 import { ShowCardDetailsEvent } from "../../events/collection/show-card-details-event";
+import { AllCardsService } from "../../../../all-cards.service";
 
 export class ShowCardDetailsProcessor implements Processor {
+
+    constructor(private cards: AllCardsService) { }
 
     public async process(event: ShowCardDetailsEvent, currentState: MainWindowState): Promise<MainWindowState> {
         const selectedSet: Set = this.pickSet(currentState.binder.allSets, event.cardId);
@@ -25,11 +28,29 @@ export class ShowCardDetailsProcessor implements Processor {
     }
 
     private pickCard(selectedSet: Set, cardId: string): SetCard {
-        return selectedSet.allCards.find((card) => card.id == cardId);
+        let card = selectedSet.allCards.find((card) => card.id == cardId);
+        if (!card) {
+            const rawCard = this.cards.getCard(cardId);
+            card = new SetCard(
+                cardId,
+                rawCard.name, 
+                rawCard.class,
+                rawCard.rarity,
+                rawCard.cost,
+                0,
+                0);
+        }
+        return card;
     }
 
     private pickSet(allSets: ReadonlyArray<Set>, cardId: string): Set {
-        return allSets
-                .find((set) => set.allCards.some((card) => card.id === cardId));
+        let set = allSets.find((set) => set.allCards.some((card) => card.id === cardId));
+        // Happens when cardId is not collectible
+        if (!set) {
+            const card = this.cards.getCard(cardId);
+            const setId = card.set.toLowerCase();
+            set = allSets.find(set => set.id === setId);
+        }
+        return set;
     }
 }

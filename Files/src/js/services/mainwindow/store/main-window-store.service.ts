@@ -169,7 +169,7 @@ export class MainWindowStoreService {
 			LoadMoreCardHistoryEvent.eventName(), new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
 			SelectCollectionFormatEvent.eventName(), new SelectCollectionFormatProcessor(),
 			SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor(),
-			ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(),
+			ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards),
 			ToggleShowOnlyNewCardsInHistoryEvent.eventName(), new ToggleShowOnlyNewCardsInHistoryProcessor(),
 			UpdateCardSearchResultsEvent.eventName(), new UpdateCardSearchResultsProcessor(this.collectionManager, this.cards),
 			NewPackEvent.eventName(), new NewPackProcessor(this.collectionDb, this.cards),

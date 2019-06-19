@@ -78,9 +78,9 @@ export class AllCardsService {
                 filterFunctions.push((card) => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1);
             }
             // Include non-collectible
-            if (fragment.indexOf('type:') !== -1 && fragment.split('type:')[1] === 'nc') {
+            if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'all') {
                 collectibleOnly = false;
-                nameSearch = nameSearch.replace(/type:nc\s?/, '');
+                nameSearch = nameSearch.replace(/cards:all\s?/, '');
             }
         }
         nameSearch = nameSearch.trim().toLowerCase();
