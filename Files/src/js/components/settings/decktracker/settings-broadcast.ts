@@ -93,6 +93,7 @@ export class SettingsBroadcastComponent implements AfterViewInit {
         this.twitchedLoggedIn = await this.twitch.isLoggedIn();
         this.twitchUserName = (await this.prefs.getPreferences()).twitchUserName;
         this.twitchLoginUrl = this.twitch.buildLoginUrl();
+        console.log('twitch login url', this.twitchLoginUrl);
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -7,7 +7,7 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck/event';
 // const EBS_URL = 'http://localhost:8081/deck/event';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
-const REDIRECT_URI = 'overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob/Files/html/twitch-auth-callback.html';
+const REDIRECT_URI = 'overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob/Files/twitch-auth-callback.html';
 const SCOPES = 'channel_read';
 const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
