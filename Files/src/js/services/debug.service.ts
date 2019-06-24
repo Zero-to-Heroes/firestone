@@ -54,8 +54,8 @@ export class DebugService {
 					}) || '').substring(0, 1000) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
-				oldConsoleLogFunc.apply(console, [argsString]);
 				oldConsoleLogFunc.apply(console, arguments);
+				oldConsoleLogFunc.apply(console, [argsString]);
 			};
 		}
 		return oldConsoleLogFunc;
