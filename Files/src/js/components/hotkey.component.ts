@@ -49,8 +49,8 @@ export class HotkeyComponent implements AfterViewInit {
     }
 
 	private splitHotkey(): string {
+		console.log('splitting hot key', this.hotkey);
 		let split = this.hotkey.split('+');
-		// console.log('split hot key', split);
 		return '<span class="text">Hotkey:</span>' + split
 			.map((splitItem) => `<span class="key">${splitItem}</span>`)
 			.join('<span class="plus">+</span>');

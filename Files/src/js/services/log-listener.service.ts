@@ -56,7 +56,7 @@ export class LogListenerService {
 
 		overwolf.games.getRunningGameInfo((res: any) => {
 			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				console.log('[log-listener] [' + this.logFile + '] Game is running!');
+				console.log('[log-listener] [' + this.logFile + '] Game is running!', res, res.executionPath);
 				this.logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
 			}
