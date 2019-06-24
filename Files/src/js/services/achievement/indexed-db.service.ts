@@ -33,7 +33,8 @@ export class IndexedDbService {
 			return result;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while saving completed achievement', e.message, e.name, e);
+            console.error('[achievements] [storage] error while saving completed achievement', e.message, e.name, e);
+            return achievement;
 		}
 	}
 
@@ -44,7 +45,8 @@ export class IndexedDbService {
 			return achievements;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while getting all completed achievements', e.message, e.name, e);
+            console.error('[achievements] [storage] error while getting all completed achievements', e.message, e.name, e);
+            return [];
 		}
 	}
 	
@@ -55,7 +57,8 @@ export class IndexedDbService {
 			return history;
 		}
 		catch (e) {
-			console.error('[achievements] [storage] error while loading all history', e.message, e.name, e);
+            console.error('[achievements] [storage] error while loading all history', e.message, e.name, e);
+            return [];
 		}
 	}
 	
