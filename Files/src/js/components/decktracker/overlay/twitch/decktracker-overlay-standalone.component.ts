@@ -123,7 +123,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
     onResized(event: ResizedEvent) {
         console.log('resize event', event);
         // Resize the tracker
-        const scale = event.newHeight / 900;
+        const scale = event.newHeight / 800;
         // console.log('proposed scale', scale);
         // Now shrink the scale is the tracker is taller than a portion of the container's height
         const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
