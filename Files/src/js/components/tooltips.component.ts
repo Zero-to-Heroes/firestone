@@ -90,10 +90,10 @@ export class TooltipsComponent implements AfterViewInit {
                     //     top = window.innerHeight - 400;
                     // }
                     if (elementRect.left < 350) {
-                        left = elementRect.right;
+                        left = elementRect.right + 12;
                     } 
                     else {
-                        left = elementRect.left - 240;
+                        left = elementRect.left - 217;
                     }
                 }
                 // TODO: clean this messy hack (which will probably never happen :p)
