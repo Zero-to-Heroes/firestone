@@ -9,11 +9,12 @@ export class DeckManipulationHelper {
                     .map((card: DeckCard) => card.entityId === entityId ? null : card)
                     .filter((card) => card);
         }
-        // console.warn('removing a card from zone without using the entityId', cardId, entityId, zone)
+        console.warn('removing a card from zone without using the entityId', cardId, entityId, zone)
         let hasRemovedOnce = false;
         const result = [];
         for (let card of zone) {
-            if (card.cardId === cardId && !hasRemovedOnce) {
+            // We don't want to remove a card if it has a different entityId
+            if (card.cardId === cardId && !card.entityId && !hasRemovedOnce) {
                 hasRemovedOnce = true;
                 continue;
             }
@@ -43,7 +44,7 @@ export class DeckManipulationHelper {
         else {
             found = zone.find((card) => card.entityId === entityId);
             if (!found) {
-                found = zone.find((card) => card.cardId === cardId);
+                found = zone.find((card) => card.cardId === cardId && !card.entityId);
                 found = Object.assign(new DeckCard(), found, {
                     entityId: entityId
                 });
