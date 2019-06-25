@@ -127,7 +127,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         // console.log('proposed scale', scale);
         // Now shrink the scale is the tracker is taller than a portion of the container's height
         const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
-        const maxTrackerHeight = 0.9 * containerHeight;
+        const maxTrackerHeight = containerHeight;
         const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
         const element = this.el.nativeElement.querySelector('.scalable');
         this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
