@@ -33,6 +33,10 @@
         justify-content: flex-start;
         padding-left: 20px;
         z-index: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
 
         span {
             font-family: Sumana;

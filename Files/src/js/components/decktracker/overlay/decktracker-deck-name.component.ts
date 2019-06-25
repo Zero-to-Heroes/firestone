@@ -12,7 +12,7 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 			<div class="background-image" [style.background-image]="deckImage"></div>
 			<div class="gradiant"></div>
 			<div class="inner-border">
-				<span>{{deckName}}</span>
+				<span class="name">{{deckName}}</span>
 			</div>
 		</div>
 	`,
