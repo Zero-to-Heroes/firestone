@@ -9,7 +9,7 @@ declare var overwolf: any;
 	],
 	template: `
         <div class="root">
-            Successfully logged in to Twitch, this window will auto close
+            Successfully logged in to Twitch, you can now close this window
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
