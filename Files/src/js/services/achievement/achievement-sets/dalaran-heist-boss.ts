@@ -4,6 +4,7 @@ import { AchievementConfService } from "../achievement-conf.service";
 import { Achievement } from "../../../models/achievement";
 import { IndexedVisualAchievement } from "./set-provider";
 import { CompletionStep, VisualAchievement } from "../../../models/visual-achievement";
+import { FilterOption } from "../../../models/filter-option";
 
 export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
 
@@ -90,5 +91,52 @@ export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
                 replayInfo),
             index: index 
         };
+    }
+
+    protected filterOptions(): ReadonlyArray<FilterOption> {
+        return [
+            {
+                value: 'ALL_ACHIEVEMENTS', 
+                label: 'All achievements', 
+                filterFunction: (a) => true, 
+                emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
+                emptyStateTitle: 'Holy Moly, you are epic!', 
+                emptyStateText: '100% of achievements in this category complete.' 
+            },
+            { 
+                value: 'ONLY_MISSING', 
+                label: 'Locked achievements', 
+                filterFunction: (a: VisualAchievement) => {
+                    return a.completionSteps.map((step) => step.numberOfCompletions).reduce((a, b) => a + b, 0) === 0;
+                }, 
+                emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration', 
+                emptyStateTitle: 'Tons of achievements await you!', 
+                emptyStateText: 'Find them listed here once completed.'
+            },
+            { 
+                value: 'ENCOUNTERED_ONLY', 
+                label: 'Met but undefeated', 
+                filterFunction: (a: VisualAchievement) => {
+                    return (a.completionSteps[0].numberOfCompletions > 0 && a.completionSteps[1].numberOfCompletions === 0)
+                            || (a.completionSteps[2].numberOfCompletions > 0 && a.completionSteps[3].numberOfCompletions === 0);
+                }, 
+                emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
+                emptyStateTitle: 'Tons of achievements await you!', 
+                emptyStateText: 'Find them listed here once completed.'
+            },
+            { 
+                value: 'ONLY_COMPLETED', 
+                label: 'Completed achievements', 
+                filterFunction: (a: VisualAchievement) => {
+                    return a.completionSteps[0].numberOfCompletions > 0 
+                            && a.completionSteps[1].numberOfCompletions > 0
+                            && a.completionSteps[2].numberOfCompletions > 0 
+                            && a.completionSteps[3].numberOfCompletions > 0;
+                }, 
+                emptyStateIcon: 'empty_state_Only_cards_I_have_illustration', 
+                emptyStateTitle: 'Tons of achievements await you!', 
+                emptyStateText: 'Find them listed here once completed.'
+            },
+        ];
     }
 }
