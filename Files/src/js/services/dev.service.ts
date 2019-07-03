@@ -98,8 +98,43 @@ export class DevService {
 					this.loadArbitraryLogContent(logContents);
 				}
 			});
-		}
-	}
+        }
+        window['startDeckCycle'] = async (logName, deckString) => {
+            console.log('starting new deck cycle', logName, deckString);
+            this.deckService.currentDeck.deckstring = deckString;
+            this.deckService.decodeDeckString();
+            const logsLocation = `D:\\Games\\Hearthstone\\Logs\\${logName}`;
+            const logContents = await this.io.getFileContents(logsLocation);
+            const logLines = logContents.split('\n');
+            await this.processLogLines(logLines);
+            this.deckService.reset();
+            window['startDeckCycle'](logName, deckString);
+        }
+    }
+
+    private async processLogLines(logLines) {
+        const plugin = await this.gameEventsPlugin.get();
+		return new Promise<void>((resolve) => {
+            plugin.initRealtimeLogConversion(async () => {
+                plugin.startDevMode();
+                for (let data of logLines) {
+                    await this.sendLogLine(data);
+                }
+                plugin.stopDevMode();
+                resolve();
+            });
+        });
+
+    }
+    
+    private async sendLogLine(data: string) {
+		return new Promise<void>((resolve) => {
+            setTimeout(() => {
+                this.gameEvents.receiveLogLine(data);
+                resolve();
+            }, 1);
+		});
+    }
 
 	private async loadArbitraryLogContent(content: string) {
 		const plugin = await this.gameEventsPlugin.get();
