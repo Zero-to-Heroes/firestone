@@ -21,8 +21,8 @@ declare var overwolf;
                 your deck tracker in Twitch player. To do so you will need to:
             </p>
             <ol class="todo"> 
-                <li>1. Install Firestone Twitch extension: <a href="" target="_blank">here</a>
-                <li>2. Connect your Twitch account to Firestone
+                <li>1. Install the Firestone Twitch extension: <a href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u" target="_blank">here</a>
+                <li>2. Connect your Twitch account to Firestone by clicking the button below
             </ol>
 
             <div class="twitch logged-out" *ngIf="twitchLoginUrl && !twitchedLoggedIn">
