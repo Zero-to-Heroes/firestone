@@ -44,7 +44,6 @@ declare var ga: any;
 								</svg>
 							</button>
                             <control-discord></control-discord>
-							<control-help></control-help>
 							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 							<control-close [windowId]="windowId" [isMainWindow]="true"></control-close>
 						</div>
