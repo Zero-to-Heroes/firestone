@@ -100,7 +100,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	ngAfterViewInit() {
         this.cdr.detach();
         this.twitch = (window as any).Twitch.ext;
-        this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
+        // this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
         this.twitch.onAuthorized((auth) => {
             console.log('on authorized', auth);
             this.token = auth.token;
@@ -144,7 +144,11 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
         };
         this.http.get(EBS_URL, options).subscribe((result: any) => {
             console.log('successfully retrieved initial state', result);
-            this.gameState = result.state;
+            if (result.event === DeckEvents.GAME_END) {
+                this.gameState = undefined;
+            } else {
+                this.gameState = result.state;
+            }
             if (!(<ViewRef>this.cdr).destroyed) {
                 this.cdr.detectChanges();
             }
