@@ -8,6 +8,7 @@ import { ControlCloseComponent } from '../../components/controls/control-close.c
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { TooltipsComponent, Tooltip } from '../../components/tooltips.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { ControlDiscordComponent } from '../../components/controls/control-discord.component';
 
 @NgModule({
 	imports: [
@@ -17,7 +18,8 @@ import { BrowserModule } from '@angular/platform-browser';
 		ControlHelpComponent,
 		ControlMinimizeComponent,
 		ControlCloseComponent,
-		ControlSettingsComponent,
+        ControlSettingsComponent,
+        ControlDiscordComponent,
 		
 		HotkeyComponent,
 		VersionComponent,
@@ -31,6 +33,7 @@ import { BrowserModule } from '@angular/platform-browser';
 		ControlMinimizeComponent,
 		ControlCloseComponent,
 		ControlSettingsComponent,
+        ControlDiscordComponent,
 
 		HotkeyComponent,
 		VersionComponent,

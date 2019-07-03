@@ -43,6 +43,7 @@ declare var ga: any;
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_home"></use>
 								</svg>
 							</button>
+                            <control-discord></control-discord>
 							<control-help></control-help>
 							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 							<control-close [windowId]="windowId" [isMainWindow]="true"></control-close>

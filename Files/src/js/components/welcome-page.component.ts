@@ -24,6 +24,7 @@ declare var overwolf: any;
 					</i>
 					<div class="controls">
 						<control-settings [windowId]="thisWindowId"></control-settings>
+						<control-discord></control-discord>
 						<control-help></control-help>
 						<control-minimize [windowId]="thisWindowId"></control-minimize>
 						<control-close [windowId]="thisWindowId" [closeAll]="true"></control-close>

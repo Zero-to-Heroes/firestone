@@ -30,6 +30,7 @@ declare var OwAd: any;
 						</i>
 						<div class="controls">
 							<control-settings [windowId]="thisWindowId"></control-settings>
+                            <control-discord></control-discord>
 							<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
 								<svg class="svg-icon-fill">
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
