@@ -126,13 +126,13 @@ export class AchievementsVideoCaptureService {
             return;
         }
 		this.achievementsBeingRecorded.push(achievement.id);
-		this.planCaptureStop(recordDuration);
         if (this.captureOngoing) {
             console.info('[recording] capture ongoing, doing nothing', this.achievementsBeingRecorded);
             return;
         }
         // Here we can have custom settings based on achievement
         this.captureOngoing = true;
+        this.planCaptureStop(recordDuration);
         // const conf = this.config.getConfig(achievement.type);
         console.log('[recording] start recording achievement', achievement, challenge.getRecordPastDurationMillis());
         const captureDuration = parseInt(challenge.getRecordPastDurationMillis() + '', 10);
