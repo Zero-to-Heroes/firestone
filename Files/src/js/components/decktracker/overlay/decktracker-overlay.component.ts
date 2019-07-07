@@ -249,12 +249,12 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
 				let dpi = gameWidth / gameInfo.width;
-				// console.log('computed stuff', gameWidth, gameHeight, dpi);
+				console.log('changing window size', this.windowId, width, gameHeight);
 				overwolf.windows.changeSize(this.windowId, width, gameHeight, (changeSize) => {
 					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 					let newLeft = ~~(gameWidth - width* dpi - 20); // Leave a bit of room to the right
 					let newTop = 0;
-					// console.log('changing position', newLeft, newTop, width, gameHeight, changeSize);
+					console.log('changing position', this.windowId, newLeft, newTop);
 					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
 						// console.log('changed window position', changePosition);
 					});

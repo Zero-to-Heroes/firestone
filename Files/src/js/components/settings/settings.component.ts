@@ -1,6 +1,7 @@
 import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef, EventEmitter, ViewRef } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
+import { OverwolfService } from '../../services/overwolf.service';
 
 declare var overwolf: any;
 
@@ -62,7 +63,10 @@ export class SettingsComponent implements AfterViewInit {
 	selectedApp: string = 'general';
 	private settingsEventBus: EventEmitter<string>;
 
-	constructor(private debugService: DebugService, private cdr: ChangeDetectorRef) {
+	constructor(
+            private debugService: DebugService, 
+            private ow: OverwolfService,
+            private cdr: ChangeDetectorRef) {
 		overwolf.windows.getCurrentWindow((result) => {
 			if (result.status === "success"){
 				this.thisWindowId = result.window.id;
@@ -79,8 +83,8 @@ export class SettingsComponent implements AfterViewInit {
 				overwolf.windows.getCurrentWindow((result) => {
 					if (result.status === "success") {
 						const newX = message.content.x - result.window.width / 2;
-						const newY = message.content.y - result.window.height / 2;
-						overwolf.windows.changePosition(this.thisWindowId, newX, newY);
+                        const newY = message.content.y - result.window.height / 2;
+                        this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 					}
 				});
 			}

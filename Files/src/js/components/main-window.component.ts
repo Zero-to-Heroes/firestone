@@ -6,6 +6,7 @@ import { AchievementsComponent } from './achievements/achievements.component';
 import { MainWindowState as MainWindowState } from '../models/mainwindow/main-window-state';
 import { BehaviorSubject } from 'rxjs';
 import { AdService } from '../services/ad.service';
+import { OverwolfService } from '../services/overwolf.service';
 
 declare var overwolf: any;
 declare var adsReady: any;
@@ -118,6 +119,7 @@ export class MainWindowComponent implements AfterViewInit {
 	constructor(
             private cdr: ChangeDetectorRef,
             private adService: AdService,
+            private ow: OverwolfService,
 			private debug: DebugService) {
 		this.cdr.detach();
 		overwolf.windows.getCurrentWindow((result) => {
@@ -130,8 +132,8 @@ export class MainWindowComponent implements AfterViewInit {
 				overwolf.windows.getCurrentWindow((result) => {
 					if (result.status === "success"){
 						const newX = message.content.x - result.window.width / 2;
-						const newY = message.content.y - result.window.height / 2;
-						overwolf.windows.changePosition(this.windowId, newX, newY);
+                        const newY = message.content.y - result.window.height / 2;
+                        this.ow.changeWindowPosition(this.windowId, newX, newY);
 					}
 				});
 			}

@@ -84,6 +84,7 @@ export class AchievementsVideoCaptureService {
         }
 
         // Keep recording on, as otherwise it makes it more difficult to calibrate the achievement timings
+        console.log('[recording] turning on replays', this.settings);
         overwolf.media.replays.turnOn(
             this.settings,
             (result) => console.log('[recording] turned on replay capture', result));
@@ -102,6 +103,7 @@ export class AchievementsVideoCaptureService {
             overwolf.media.replays.turnOff((result) => {
                 console.log('[recording] recording turned off, turning it on again to activate new settings', result);
                 setTimeout(() => {
+                        console.log('[recording] turning on replays', this.settings);
                         overwolf.media.replays.turnOn(this.settings, (result) => {
                             this.settingsChanged = false;
                             console.log('[recording] turned on replay capture after settings changed', result);
@@ -176,8 +178,7 @@ export class AchievementsVideoCaptureService {
             setTimeout(() => this.performStopCapture(), 500);
             return;
         }
-        console.log('[recording] stopping capture, was scheduled for', this.lastRecordingDate, Date.now());
-
+        console.log('[recording] stopping capture, was scheduled for', this.currentReplayId, this.lastRecordingDate, Date.now());
         overwolf.media.replays.stopCapture(this.currentReplayId, (result) => {
             console.log('[recording] stopped capture', result, this.achievementsBeingRecorded);
             this.captureOngoing = false;

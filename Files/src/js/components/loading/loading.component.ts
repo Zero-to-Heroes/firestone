@@ -250,9 +250,9 @@ export class LoadingComponent implements AfterViewInit {
 			let dpi = gameWidth / gameInfo.width;
 			let newLeft = ~~(gameWidth * 0.4) - 440;
 			let newTop = ~~(gameHeight * 0.1);
-			console.log('logical info', gameWidth, gameHeight, newLeft, newTop, dpi);
+			console.log('changing loading window position', this.thisWindowId, newLeft, newTop);
 			overwolf.windows.changePosition(this.thisWindowId, newLeft, newTop, (changePosition) => {
-				console.log('changed window position');
+				// console.log('changed window position');
 			});
 		});
 	}

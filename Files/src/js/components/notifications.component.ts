@@ -5,6 +5,7 @@ import { DebugService } from '../services/debug.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
+import { OverwolfService } from '../services/overwolf.service';
 
 declare var overwolf: any;
 
@@ -48,7 +49,8 @@ export class NotificationsComponent implements AfterViewInit {
 	constructor(
 		private notificationService: NotificationsService,
 		private cdr: ChangeDetectorRef,
-		private debugService: DebugService,
+        private debugService: DebugService, 
+        private ow: OverwolfService,
 		private elRef: ElementRef) {
 
 		overwolf.windows.onMessageReceived.addListener((message) => {
@@ -211,24 +213,18 @@ export class NotificationsComponent implements AfterViewInit {
 			let width = 500;
 			// console.log('resizing, current window');
 			// console.log('rect2', wrapper.getBoundingClientRect());
-			overwolf.games.getRunningGameInfo((gameInfo) => {
+			overwolf.games.getRunningGameInfo(async (gameInfo) => {
 				if (!gameInfo) {
 					return;
 				}
 				let gameWidth = gameInfo.logicalWidth;
 				let gameHeight = gameInfo.logicalHeight;
-				let dpi = gameWidth / gameInfo.width;
-				// console.log('logical info', gameWidth, gameHeight, dpi);
-				overwolf.windows.changeSize(this.windowId, width, height, (changeSize) => {
-					// console.log('changed window size');
-					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-					let newLeft = ~~(gameWidth - width * dpi);
-					let newTop = ~~(gameHeight - height * dpi - 10);
-					// console.log('changing position', newLeft, newTop, width, height);
-					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
-						// console.log('changed window position');
-					});
-				});
+                let dpi = gameWidth / gameInfo.width;
+                await this.ow.changeWindowSize(this.windowId, width, height);
+                // https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+                let newLeft = ~~(gameWidth - width * dpi);
+                let newTop = ~~(gameHeight - height * dpi - 10);
+                await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 			});
 		});
 	}

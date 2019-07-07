@@ -21,6 +21,7 @@ export class OverwolfService {
 	
 	public async setVideoCaptureSettings(resolution: string, fps: number): Promise<any> {
 		return new Promise<boolean>((resolve) => {
+            console.log('[overwolf-service] setting video capture settings', resolution, fps);
             overwolf.settings.setVideoCaptureSettings(resolution, fps, (res: any) => {
                 resolve(res);
             });
@@ -37,6 +38,7 @@ export class OverwolfService {
 
 	public async setAudioCaptureSettings(captureSystemSound: boolean, captureMicrophoneSound: boolean): Promise<any> {
 		return new Promise<boolean>((resolve) => {
+            console.log('[overwolf-service] setting audio capture settings', captureSystemSound, captureMicrophoneSound);
             overwolf.settings.setAudioCaptureSettings(captureSystemSound, captureMicrophoneSound, (res: any) => {
                 resolve(res);
             });
@@ -54,7 +56,8 @@ export class OverwolfService {
 	public async sendMessage(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<void>((resolve) => {
-			overwolf.windows.sendMessage(window.id,messageType, messageBody, (result) => {
+            console.log('[overwolf-service] sending message', window.id, messageType, messageBody);
+			overwolf.windows.sendMessage(window.id, messageType, messageBody, (result) => {
 				resolve();
 			});
         });
@@ -92,9 +95,24 @@ export class OverwolfService {
 
 	public async openWindowsExplorer(path: string): Promise<any> {
 		return new Promise<boolean>((resolve) => {
+            console.log('[overwolf-service] opening windows explorer', path);
             overwolf.utils.openWindowsExplorer(path, (res: any) => {
                 resolve(res);
             });
+        });
+	}
+
+	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            console.log('[overwolf-service] changing window position', windowId, newX, newY);
+            overwolf.windows.changePosition(windowId, newX, newY);
+        });
+	}
+
+	public async changeWindowSize(windowId: string, width: number, height: number): Promise<any> {
+		return new Promise<boolean>((resolve) => {
+            console.log('[overwolf-service] changing window size', windowId, width, height);
+            overwolf.windows.changeSize(windowId, width, height);
         });
 	}
 

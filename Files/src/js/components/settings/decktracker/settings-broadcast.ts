@@ -67,7 +67,6 @@ export class SettingsBroadcastComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        console.log('main window', overwolf.windows.getMainWindow());
         const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
         console.log('registered prefs event bus', preferencesEventBus);
 		preferencesEventBus.subscribe(async (event) => {
