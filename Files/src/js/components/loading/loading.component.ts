@@ -206,12 +206,12 @@ export class LoadingComponent implements AfterViewInit {
 			overwolf.windows.getCurrentWindow((result) => {
 				if (result.status === "success") {
                     if (result.window.isVisible) {
-                        console.log('first time init ads, creating OwAd');
-                        console.log('init OwAd');
+                        console.log('first time init ads, creating OwAd', adsReady);
                         this.adRef = new OwAd(document.getElementById("ad-div"));
                         this.adRef.addEventListener('impression', (data) => {
                             ga('send', 'event', 'ad', 'loading-window');
                         })
+                        console.log('init OwAd');
                         if (!(<ViewRef>this.cdr).destroyed) {
                             this.cdr.detectChanges();
                         }
