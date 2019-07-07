@@ -163,7 +163,10 @@ export class SettingsAchievementsVideoCaptureComponent {
 	}
 
 	private async updateDefaultValues() {
-		const settings = await this.owService.getVideoCaptureSettings();
+        const settings = await this.owService.getVideoCaptureSettings();
+        if (!settings) {
+            console.warn('Could not access video capture settings');
+        }
 		const oldResolution = this.resolution;
 		const oldFps = this.fps;
 		this.resolution = this.convertToResolution(settings.resolution);
