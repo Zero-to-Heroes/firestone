@@ -17,6 +17,77 @@ function getRoot(args) {
 }
 
 module.exports = function(env, argv) {
+
+    const plugins = [
+        // Define environment variables to export to Angular
+        new DefinePlugin({
+            'process.env.APP_VERSION': JSON.stringify(env.appversion),
+        }),
+        
+        new AngularCompilerPlugin({
+            tsConfigPath: "./tsconfig.json",
+            entryModules: [
+                "./src/js/modules/background/background.module#AppModule",
+                "./src/js/modules/collection/collection.module#CollectionModule",
+                "./src/js/modules/loading/loading.module#LoadingModule",
+                "./src/js/modules/notifications/notifications.module#NotificationsModule",
+                "./src/js/modules/decktracker/decktracker.module#DeckTrackerModule",
+                "./src/js/modules/settings/settings.module#SettingsModule",
+                "./src/js/modules/welcome/welcome.module#WelcomeModule",
+                "./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule",
+            ],
+            sourceMap: true
+        }),
+        
+        new MiniCssExtractPlugin({
+            filename: "app.css"
+        }),
+        
+        new CopyWebpackPlugin([
+            { from: path.join(process.cwd(), "src/html/background.html")},
+            { from: path.join(process.cwd(), "src/html/collection.html")},
+            { from: path.join(process.cwd(), "src/html/loading.html")},
+            { from: path.join(process.cwd(), "src/html/notifications.html")},
+            { from: path.join(process.cwd(), "src/html/decktracker.html")},
+            { from: path.join(process.cwd(), "src/html/settings.html")},
+            { from: path.join(process.cwd(), "src/html/welcome.html")},
+            { from: path.join(process.cwd(), "src/html/twitch-auth-callback.html")},
+            { from: path.join(process.cwd(), "/../*") },
+            { from: path.join(process.cwd(), "src/assets"), to: "assets" },
+            { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
+            { from: path.join(process.cwd(), "plugins"), to: "plugins" },
+        ]),
+        
+        // Replace the version in the manifest
+        new ReplaceInFileWebpackPlugin([{
+            dir: 'dist',
+            files: ['manifest.json'],
+            rules: [{
+                search: '@app-version@',
+                replace: env.appversion
+            }]
+        }]),
+        // Automatically update the version in sentry.properties
+        new ReplaceInFileWebpackPlugin([{
+            dir: '.',
+            files: ['sentry.properties'],
+            rules: [{
+                search: '@app-version@',
+                replace: env.appversion
+            }]
+        }]),
+    ];
+
+    if (env.production) {
+        plugins.push(
+            new SentryWebpackPlugin({
+                include: '.',
+                ignoreFile: '.sentrycliignore',
+                ignore: ['node_modules', 'webpack.config.js', 'webpack-twitch.config.js'],
+                configFile: 'sentry.properties'
+            })
+        );
+    }
     
     return {
         mode: env.production ? 'production' : 'development',
@@ -98,71 +169,6 @@ module.exports = function(env, argv) {
             ]
         },
         
-        plugins: [
-            // Define environment variables to export to Angular
-            new DefinePlugin({
-                'process.env.APP_VERSION': JSON.stringify(env.appversion),
-            }),
-            
-            new AngularCompilerPlugin({
-                tsConfigPath: "./tsconfig.json",
-                entryModules: [
-                    "./src/js/modules/background/background.module#AppModule",
-                    "./src/js/modules/collection/collection.module#CollectionModule",
-                    "./src/js/modules/loading/loading.module#LoadingModule",
-                    "./src/js/modules/notifications/notifications.module#NotificationsModule",
-                    "./src/js/modules/decktracker/decktracker.module#DeckTrackerModule",
-                    "./src/js/modules/settings/settings.module#SettingsModule",
-                    "./src/js/modules/welcome/welcome.module#WelcomeModule",
-                    "./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule",
-                ],
-                sourceMap: true
-            }),
-            
-            new MiniCssExtractPlugin({
-                filename: "app.css"
-            }),
-            
-            new CopyWebpackPlugin([
-                { from: path.join(process.cwd(), "src/html/background.html")},
-                { from: path.join(process.cwd(), "src/html/collection.html")},
-                { from: path.join(process.cwd(), "src/html/loading.html")},
-                { from: path.join(process.cwd(), "src/html/notifications.html")},
-                { from: path.join(process.cwd(), "src/html/decktracker.html")},
-                { from: path.join(process.cwd(), "src/html/settings.html")},
-                { from: path.join(process.cwd(), "src/html/welcome.html")},
-                { from: path.join(process.cwd(), "src/html/twitch-auth-callback.html")},
-                { from: path.join(process.cwd(), "/../*") },
-                { from: path.join(process.cwd(), "src/assets"), to: "assets" },
-                { from: path.join(process.cwd(), "dependencies"), to: "dependencies" },
-                { from: path.join(process.cwd(), "plugins"), to: "plugins" },
-            ]),
-            
-            // Replace the version in the manifest
-            new ReplaceInFileWebpackPlugin([{
-                dir: 'dist',
-                files: ['manifest.json'],
-                rules: [{
-                    search: '@app-version@',
-                    replace: env.appversion
-                }]
-            }]),
-            // Automatically update the version in sentry.properties
-            new ReplaceInFileWebpackPlugin([{
-                dir: '.',
-                files: ['sentry.properties'],
-                rules: [{
-                    search: '@app-version@',
-                    replace: env.appversion
-                }]
-            }]),
-            
-            new SentryWebpackPlugin({
-                include: '.',
-                ignoreFile: '.sentrycliignore',
-                ignore: ['node_modules', 'webpack.config.js', 'webpack-twitch.config.js'],
-                configFile: 'sentry.properties'
-            }),
-        ]
+        plugins: plugins,
     };
 };
