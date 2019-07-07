@@ -101,13 +101,17 @@ export class GameStateService {
 		for (let parser of this.eventParsers) {
 			if (parser.applies(gameEvent)) {
                 const newState = parser.parse(this.state, gameEvent);
+                if (!newState) {
+                    console.error('null state after processing event', gameEvent.type, parser, gameEvent);
+                    continue;
+                }
                 const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
                 this.state = Object.assign(new GameState(), newState, {
                     playerDeck: playerDeckWithDynamicZones
                 } as GameState);
-                if (!this.state || !newState) {
+                if (!this.state) {
                     console.error('null state after processing event', gameEvent, this.state);
-                    return;
+                    continue;
                 }
 				const emittedEvent = { 
 					event: {
