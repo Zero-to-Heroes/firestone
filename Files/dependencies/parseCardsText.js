@@ -1298,6 +1298,9 @@ var parseCardsText = {
 		"set": "Tgt",
 		"artist": "Tooth",
 		"health": 4,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
 		"dbfId": 2621,
 		"type": "Minion",
 		"flavor": "He can summon anything, even a FEARSOME DOOMGUARD*.\n*He's pretty sure this is going to work out.",
@@ -5785,6 +5788,25 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Druid",
+		"cost": 2,
+		"set": "Hero_skins",
+		"name": "Dire Shapeshift",
+		"id": "AT_132_DRUIDb",
+		"audio": {
+			"play": [],
+			"YoungElise_HeroPower": [
+				"YoungElise_HeroPower.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\n+2 Attack this turn.\n+2 Armor.",
+		"dbfId": 57870,
+		"type": "Hero_power",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Druid",
 		"set": "Tgt",
 		"name": "Dire Claws",
 		"mechanics": [
@@ -5803,24 +5825,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"collectionText": {
-			"ptBR": "<b>Poder Heroico</b>\nCause $3 de dano.",
-			"zhCN": "<b>英雄技能</b>\n造成$3点伤害。",
-			"itIT": "<b>Potere Eroe</b>\nInfligge $3 danni.",
-			"enUS": "<b>Hero Power</b>\nDeal $3 damage.",
-			"frFR": "<b>Pouvoir héroïque</b>\nInflige $3 points de dégâts.",
-			"zhTW": "<b>英雄能力</b>\n造成$3點傷害",
-			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $3 Schaden.",
-			"jaJP": "<b>ヒーローパワー</b>\n$3ダメージを\n与える。",
-			"plPL": "<b>Moc specjalna</b>\nZadaj $3 pkt. obrażeń.",
-			"esES": "<b>Poder de héroe</b> Inflige $3 p. de daño.",
-			"ruRU": "<b>Сила героя</b>\nНаносит $3 ед. урона.",
-			"esMX": "<b>Poder de héroe</b>\nInflige $3 de daño.",
-			"koKR": "<b>영웅 능력</b>\n피해를 $3 줍니다.",
-			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $3 แต้ม"
-		},
 		"cost": 2,
 		"set": "Tgt",
+		"collectionText": "<b>Hero Power</b>\nDeal $3 damage.",
 		"name": "Ballista Shot",
 		"id": "AT_132_HUNTER",
 		"audio": {
@@ -23712,24 +23719,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>. Conceda <b>Provocar</b> a ele.",
-			"zhCN": "<b>战吼：</b>召唤一个<b>青玉魔像</b>，使其获得\n<b>嘲讽</b>。",
-			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b> e gli fornisce <b>Provocazione</b>.",
-			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>. Give it <b>Taunt</b>.",
-			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>. Lui confère <b>Provocation</b>.",
-			"zhTW": "<b>戰吼：</b>召喚一個<b>翠玉魔像</b>並賦予<b>嘲諷</b>",
-			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei. Verleiht ihm <b>Spott</b>.",
-			"jaJP": "<b>雄叫び:</b>  \n<b>翡翠のゴーレム</b>を\n1体召喚し\n<b>挑発</b>を付与する。",
-			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>. Daj mu <b>Prowokację</b>.",
-			"esES": "<b>Grito de batalla:</b> Invoca un <b>gólem de jade</b> y le otorga <b>Provocar</b>.",
-			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b> с <b>«Провокацией»</b>.",
-			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b> y le otorgas <b>Provocación</b>.",
-			"koKR": "<b>전투의 함성:</b> <b>비취 골렘</b>을 소환하고 <b>도발</b>을 부여합니다.",
-			"thTH": "<b>คำรามสู้ศึก:</b> เรียก<b>เจดโกเล็ม</b> และมอบ[b]<b>ยั่วยุ</b> ให้มัน"
-		},
 		"cost": 7,
 		"set": "Gangs",
+		"collectionText": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>. Give it <b>Taunt</b>.",
 		"artist": "A. J. Nazzaro",
 		"health": 5,
 		"mechanics": [
@@ -24475,24 +24467,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "[x]<b>Provocar</b>\n<b>Grito de Guerra:</b> Evoque um \n<b>Golem de Jade</b>.",
-			"zhCN": "<b>嘲讽，战吼：</b>召唤一个<b>青玉魔像</b>。",
-			"itIT": "<b>Provocazione</b>. <b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>.",
-			"enUS": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon a\n<b>Jade Golem</b>.",
-			"frFR": "<b>Provocation</b>\n<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.",
-			"zhTW": "<b>嘲諷</b>\n<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>",
-			"deDE": "<b>Spott</b>. <b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "<b>挑発</b>、<b>雄叫び:</b>\n <b>翡翠のゴーレム</b>を\n1体召喚する。     ",
-			"plPL": "<b>Prowokacja</b>\n<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "[x]<b>Provocar</b>. <b>Grito de batalla:</b>\nInvoca un <b>gólem de jade</b>.",
-			"ruRU": "<b>Провокация</b>\n<b>Боевой клич:</b> призывает <b>нефритового голема</b>.",
-			"esMX": "<b>Provocación</b>\n<b>Grito de batalla:</b> Invoca un <b>Gólem de jade</b>.",
-			"koKR": "<b>도발</b>, <b>전투의 함성:</b>\n<b>비취 골렘</b>을 소환합니다.",
-			"thTH": "[x]<b>ยั่วยุ</b>\n<b>คำรามสู้ศึก:</b> \nเรียก <b>เจดโกเล็ม</b>"
-		},
 		"cost": 6,
 		"set": "Gangs",
+		"collectionText": "[x]<b>Taunt</b>\n<b>Battlecry:</b> Summon a\n<b>Jade Golem</b>.",
 		"artist": "Zoltan Boros",
 		"health": 6,
 		"mechanics": [
@@ -24564,24 +24541,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Escolha Um -</b> Evoque um <b>Golem de Jade</b>; ou Coloque 3 cópias deste card no seu deck.",
-			"zhCN": "<b>抉择：</b>召唤一个<b>青玉魔像</b>；或者将该牌的三张复制洗入你的\n牌库。",
-			"itIT": "<b>Scegli:</b> evoca un <b>Golem di Giada</b> <b>o</b> mette tre copie di questa carta nel tuo mazzo.",
-			"enUS": "<b>Choose One -</b> Summon a <b>Jade Golem</b>; or Shuffle 3 copies of this card into your deck.",
-			"frFR": "<b>Choix des armes :</b> invoque un <b>golem de jade</b> ou place 3 copies de cette carte dans votre deck.",
-			"zhTW": "<b>二選一：</b>召喚\n一個<b>翠玉魔像</b>，或將三張<b>翠玉塑像</b>洗入你的牌堆",
-			"deDE": "<b>Wählt aus:</b> Ruft einen <b>Jadegolem</b> herbei; oder mischt 3 Kopien dieser Karte in Euer Deck.",
-			"jaJP": "[x]<b>選択:</b>\n<b>翡翠のゴーレム</b>\nを1体召喚する。\nまたは、このカードのコピー\n3枚を自分のデッキに混ぜる。",
-			"plPL": "<b>Wybierz jedno:</b> Przyzwij <b>Nefrytowego golema</b>; lub wtasuj 3 kopie tej karty do twojej talii.",
-			"esES": "<b>Elige una:</b> Invoca un <b>gólem de jade</b>,\no bien mete 3 copias de esta carta en tu mazo.",
-			"ruRU": "<b>Выберите эффект:</b> призывает <b>нефритового голема</b>; или замешивает 3 копии этой карты в колоду.",
-			"esMX": "<b>Elige una opción:</b> invoca un <b>Gólem de jade</b> o coloca 3 copias de esta carta en tu mazo.",
-			"koKR": "<b>선택 -</b> <b>비취 골렘</b>을 소환합니다. 또는\n이 카드를 3장 복사하여 내 덱에 섞어 넣습니다.",
-			"thTH": "<b>เลือกหนึ่งอย่าง -</b> เรียก <b>เจดโกเล็ม</b> หรือสับการ์ดนี้ 3 ใบ เข้าไปในเด็คของคุณ"
-		},
 		"cost": 1,
 		"set": "Gangs",
+		"collectionText": "<b>Choose One -</b> Summon a <b>Jade Golem</b>; or Shuffle 3 copies of this card into your deck.",
 		"artist": "Matthew O'Connor",
 		"mechanics": [
 			"CHOOSE_ONE"
@@ -25658,24 +25620,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": "Transforma um lacaio inimigo aleatório.",
-			"zhCN": "随机使一个敌方随从变形。",
-			"itIT": "Trasforma un servitore nemico casuale in una pecora.",
-			"enUS": "Polymorph a random enemy minion.",
-			"frFR": "Métamorphose un serviteur adverse aléatoire.",
-			"zhTW": "將一個隨機敵方手下變成羊",
-			"deDE": "Verwandelt einen zufälligen feindlichen Diener.",
-			"jaJP": "ランダムな[b]敵の[b]ミニオン1体を[b]変身させる。",
-			"plPL": "Przemień losowego wrogiego stronnika w Owcę.",
-			"esES": "Transforma\na un esbirro enemigo aleatorio.",
-			"ruRU": "Превращает случайное существо противника.",
-			"esMX": "Lanza Polimorfia sobre un esbirro enemigo aleatorio.",
-			"koKR": "무작위 적 하수인을 변이시킵니다.",
-			"thTH": "สุ่มเปลี่ยนร่าง[b]มินเนี่ยนศัตรูหนึ่งตัว"
-		},
 		"cost": 5,
 		"set": "Gangs",
+		"collectionText": "Polymorph a random enemy minion.",
 		"artist": "Konstantin Turovec",
 		"name": "Mystic Wool",
 		"id": "CFM_621t21",
@@ -27891,24 +27838,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Cause $2 de dano.\n<b>Combo:</b> Evoque um <b>Golem de Jade</b>.",
-			"zhCN": "造成$2点伤害。\n<b>连击：</b>召唤一个<b>青玉魔像</b>。",
-			"itIT": "Infligge $2 danni. <b>Combo:</b> evoca un <b>Golem di Giada</b>.",
-			"enUS": "Deal $2 damage.\n<b>Combo:</b> Summon a <b>Jade Golem</b>.",
-			"frFR": "Inflige $2 |4(point,points) de dégâts. <b>Combo :</b> invoque un <b>golem de jade</b>.",
-			"zhTW": "造成$2點傷害。<b>連擊：</b>召喚一個\n<b>翠玉魔像</b>",
-			"deDE": "Verursacht $2 Schaden. <b>Combo:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "[x]  $2ダメージを与える。\n<b>コンボ:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"plPL": "Zadaj $2 pkt. obrażeń.\n<b>Kombinacja:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "Inflige $2 p. de daño.\n<b>Combo:</b> Invoca un <b>gólem de jade</b>.",
-			"ruRU": "Наносит $2 ед. урона. <b>Серия приемов:</b> призывает\n<b>нефритового голема</b>.",
-			"esMX": "Inflige $2 de daño.\n<b>Combo:</b> invoca un <b>Gólem de jade</b>.",
-			"koKR": "[x]피해를 $2 줍니다.\n<b>연계:</b> <b>비취 골렘</b>을\n소환합니다.",
-			"thTH": "สร้างความเสียหาย $2 แต้ม\n<b>คอมโบ:</b> เรียก <b>เจดโกเล็ม</b>"
-		},
 		"cost": 2,
 		"set": "Gangs",
+		"collectionText": "Deal $2 damage.\n<b>Combo:</b> Summon a <b>Jade Golem</b>.",
 		"artist": "Izzy Hoover",
 		"mechanics": [
 			"COMBO"
@@ -27934,24 +27866,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Furtividade</b>.\n<b>Último Suspiro:</b> Evoque um <b>Golem de Jade</b>.",
-			"zhCN": "<b>潜行，亡语：</b>召唤一个<b>青玉魔像</b>。",
-			"itIT": "<b>Furtività</b>. <b>Rantolo di Morte:</b> evoca un <b>Golem di Giada</b>.",
-			"enUS": "<b>Stealth</b>\n<b>Deathrattle:</b> Summon a <b>Jade Golem</b>.",
-			"frFR": "<b>Camouflage</b>. <b>Râle d’agonie :</b> invoque un <b>golem de jade</b>.",
-			"zhTW": "<b>潛行</b>\n<b>死亡之聲：</b>召喚一個<b>翠玉魔像</b>",
-			"deDE": "<b>Verstohlenheit</b>. <b>Todesröcheln:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "[x]<b>隠れ身</b>、 <b>断末魔:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"plPL": "<b>Ukrycie</b>\n<b>Agonia:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "<b>Sigilo</b>.\n<b>Último aliento:</b> Invoca un <b>gólem de jade</b>.",
-			"ruRU": "<b>Маскировка</b>. <b>Предсмертный хрип:</b> призывает   <b>нефритового голема</b>.",
-			"esMX": "<b>Sigilo</b>\n<b>Estertor:</b> invoca un <b>Gólem de jade</b>.",
-			"koKR": "<b>은신</b>, <b>죽음의 메아리:</b>\n<b>비취 골렘</b>을 소환합니다.",
-			"thTH": "<b>ซ่อนตัว</b>\n<b>เสียงสุดท้าย:</b> เรียก <b>เจดโกเล็ม</b>"
-		},
 		"cost": 2,
 		"set": "Gangs",
+		"collectionText": "<b>Stealth</b>\n<b>Deathrattle:</b> Summon a <b>Jade Golem</b>.",
 		"artist": "Slawomir Maniak",
 		"health": 1,
 		"mechanics": [
@@ -28222,24 +28139,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Cause $4 de dano. Evoque um <b>Golem de Jade</b>.",
-			"zhCN": "造成$4点伤害，召唤一个<b>青玉魔像</b>。",
-			"itIT": "Infligge $4 danni. Evoca un <b>Golem di Giada</b>.",
-			"enUS": "Deal $4 damage. Summon a <b>Jade Golem</b>.",
-			"frFR": "Inflige $4 |4(point,points) de dégâts. Invoque un <b>golem de jade</b>.",
-			"zhTW": "造成$4點傷害。召喚一個\n<b>翠玉魔像</b>",
-			"deDE": "Verursacht $4 Schaden. Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "[x]$4ダメージを与える。\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"plPL": "Zadaj $4 pkt. obrażeń. Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "Inflige $4 p. de daño. Invoca un <b>gólem de jade</b>.",
-			"ruRU": "Наносит $4 ед. урона. Призывает <b>нефритового голема</b>.",
-			"esMX": "Inflige $4 de daño. Invoca un <b>Gólem de jade</b>.",
-			"koKR": "[x]피해를 $4 줍니다.\n<b>비취 골렘</b>을 소환합니다.",
-			"thTH": "สร้างความเสียหาย $4 แต้ม\nเรียก <b>เจดโกเล็ม</b>"
-		},
 		"cost": 4,
 		"set": "Gangs",
+		"collectionText": "Deal $4 damage. Summon a <b>Jade Golem</b>.",
 		"artist": "Phil Saunders",
 		"referencedTags": [
 			"JADE_GOLEM"
@@ -29092,24 +28994,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Evoque um <b>Golem de Jade</b>. Receba um Cristal de Mana vazio.",
-			"zhCN": "召唤一个<b>青玉魔像</b>，获得一个空的法力水晶。",
-			"itIT": "Evoca un <b>Golem di Giada</b>. Fornisce 1 Cristallo di Mana vuoto",
-			"enUS": "Summon a <b>Jade Golem</b>. Gain an empty Mana Crystal.",
-			"frFR": "Invoque un <b>golem de jade</b>. Gagne un cristal de mana vide.",
-			"zhTW": "召喚一個\n<b>翠玉魔像</b>。獲得\n1顆空的法力水晶",
-			"deDE": "Ruft einen <b>Jadegolem</b> herbei. Erhaltet einen leeren Manakristall.",
-			"jaJP": "[x]<b>翡翠のゴーレム</b>\nを1体召喚する。\n空のマナクリスタル\nを1つ獲得する。",
-			"plPL": "Przyzwij <b>Nefrytowego golema</b>. Otrzymujesz pusty kryształ many.",
-			"esES": "Invoca un\n<b>gólem de jade</b>. Obtienes un cristal de maná vacío.",
-			"ruRU": "Призывает <b>нефритового голема</b>. Вы получаете\n[x]пустой кристалл маны.",
-			"esMX": "Invoca un <b>Gólem de jade</b>. Obtienes un Cristal de maná vacío.",
-			"koKR": "<b>비취 골렘</b>을 소환합니다. 빈 마나 수정을 얻습니다.",
-			"thTH": "เรียก <b>เจดโกเล็ม</b> ได้รับคริสตัลมานาเปล่า[b]หนึ่งอัน"
-		},
 		"cost": 3,
 		"set": "Gangs",
+		"collectionText": "Summon a <b>Jade Golem</b>. Gain an empty Mana Crystal.",
 		"artist": "Zoltan Boros",
 		"referencedTags": [
 			"JADE_GOLEM"
@@ -29137,24 +29024,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>.",
-			"zhCN": "<b>战吼：</b>召唤一个\n<b>青玉魔像</b>。",
-			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>.",
-			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.",
-			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.",
-			"zhTW": "<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>",
-			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "[x]<b>雄叫び:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "[x]<b>Grito de batalla:</b>\nInvoca un\n<b>gólem de jade</b>.",
-			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b>.",
-			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b>.",
-			"koKR": "<b>전투의 함성:</b>\n<b>비취 골렘</b>을 소환합니다.",
-			"thTH": "<b>คำรามสู้ศึก:</b> \nเรียก <b>เจดโกเล็ม</b>"
-		},
 		"cost": 4,
 		"set": "Gangs",
+		"collectionText": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.",
 		"race": "ELEMENTAL",
 		"artist": "Peter Stapleton",
 		"classes": [
@@ -29216,24 +29088,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Grito de Guerra:</b> Evoque um <b>Golem de Jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
-			"zhCN": "<b>战吼：</b>召唤一个<b>青玉魔像</b>。\n<b>过载：</b>（1）",
-			"itIT": "<b>Grido di Battaglia:</b> evoca un <b>Golem di Giada</b>. <b>Sovraccarico:</b> (1)",
-			"enUS": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.\n<b><b>Overload</b>:</b> (1)",
-			"frFR": "<b>Cri de guerre :</b> invoque un <b>golem de jade</b>.\n<b><b>Surcharge :</b></b> (1)",
-			"zhTW": "[x]<b>戰吼：</b>召喚一個\n<b>翠玉魔像</b>\n<b><b>超載</b>：</b>(1)",
-			"deDE": "<b>Kampfschrei:</b> Ruft einen <b>Jadegolem</b> herbei. <b>Überladung:</b> (1)",
-			"jaJP": "[x]<b>雄叫び:</b> \n<b>翡翠のゴーレム</b>を\n1体召喚する。\n     <b>オーバーロード</b>:（1）",
-			"plPL": "<b>Okrzyk bojowy:</b> Przyzwij <b>Nefrytowego golema</b>.\n<b>Przeciążenie:</b> (1)",
-			"esES": "[x]<b>Grito de batalla:</b> Invoca un\n<b>gólem de jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
-			"ruRU": "<b>Боевой клич:</b> призывает <b>нефритового голема</b>.\n<b>Перегрузка:</b> (1)",
-			"esMX": "<b>Grito de batalla:</b> invoca un <b>Gólem de jade</b>.\n<b><b>Sobrecarga</b>:</b> (1)",
-			"koKR": "[x]<b>전투의 함성:</b>\n<b>비취 골렘</b>을 소환합니다.\n<b>과부하:</b> (1)",
-			"thTH": "<b>คำรามสู้ศึก:</b>\nเรียก <b>เจดโกเล็ม</b> \n<b><b>โอเวอร์โหลด</b>:</b> (1)"
-		},
 		"cost": 2,
 		"set": "Gangs",
+		"collectionText": "<b>Battlecry:</b> Summon a <b>Jade Golem</b>.\n<b><b>Overload</b>:</b> (1)",
 		"artist": "A. J. Nazzaro",
 		"durability": 2,
 		"mechanics": [
@@ -30338,24 +30195,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": " <b>Grito de Guerra e Último Suspiro:</b> Evoque um <b>Golem de Jade</b>.",
-			"zhCN": "<b>战吼，亡语：</b>召唤一个<b>青玉魔像</b>。",
-			"itIT": "<b>Grido di Battaglia</b> e <b>Rantolo di Morte:</b> evoca un <b>Golem di Giada</b>.",
-			"enUS": " <b>Battlecry and Deathrattle:</b> Summon a <b>Jade Golem</b>.",
-			"frFR": "<b>Cri de guerre et Râle d’agonie :</b> invoque un <b>golem de jade</b>.",
-			"zhTW": "<b>戰吼及死亡之聲：</b>召喚一個<b>翠玉魔像</b>",
-			"deDE": "<b>Kampfschrei und Todesröcheln:</b> Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "[x]<b>雄叫び＆断末魔:</b>\n<b>翡翠のゴーレム</b>を\n1体召喚する。",
-			"plPL": "<b>Okrzyk bojowy i Agonia:</b> Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "<b>Grito de batalla y\nÚltimo aliento:</b>\nInvoca un\n<b>gólem de jade</b>.",
-			"ruRU": "<b>Боевой клич и предсмертный хрип:</b> призывает   <b>нефритового голема</b>.",
-			"esMX": "<b>Grito de batalla y Estertor:</b> invoca un <b>Gólem de jade</b>.",
-			"koKR": "[x]<b>전투의 함성과\n죽음의 메아리:</b>\n<b>비취 골렘</b>을 소환합니다.",
-			"thTH": "<b>คำรามสู้ศึกและเสียงสุดท้าย:</b> เรียก <b>เจดโกเล็ม</b>"
-		},
 		"cost": 6,
 		"set": "Gangs",
+		"collectionText": " <b>Battlecry and Deathrattle:</b> Summon a <b>Jade Golem</b>.",
 		"artist": "Glenn Rane",
 		"classes": [
 			"DRUID",
@@ -33836,6 +33678,26 @@ var parseCardsText = {
 		"id": "CS2_017_HS1",
 		"text": "<b>Hero Power</b>\n+1 Attack this turn.\n+1 Armor.",
 		"dbfId": 50485,
+		"type": "Hero_power",
+		"cardClass": "DRUID",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Druid",
+		"cost": 2,
+		"set": "Hero_skins",
+		"name": "Shapeshift",
+		"id": "CS2_017_HS2",
+		"audio": {
+			"play": [],
+			"YoungElise_HeroPower": [
+				"YoungElise_HeroPower.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\n+1 Attack this turn.\n+1 Armor.",
+		"dbfId": 56363,
 		"type": "Hero_power",
 		"cardClass": "DRUID",
 		"rarity": "Free"
@@ -39985,24 +39847,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": " |4(Diabrete, Diabretes) 1/1. <i>(Aprimora a cada turno!)</i>",
-			"zhCN": "个1/1的小鬼。<i>（每回合都会升级！）</i>",
-			"itIT": " Imp 1/1.\n<i>(Si potenzia ogni turno!)</i>",
-			"enUS": " 1/1 |4(Imp, Imps). <i>(Upgrades each turn!)</i>",
-			"frFR": " |4(diablotin,diablotins) 1/1. <i>(S’améliore à chaque tour !)</i>",
-			"zhTW": "個1/1小鬼\n<i>(每回合升級)</i>",
-			"deDE": " Wichtel (1/1). <i>(Wird in jedem Zug aufgewertet!)</i>",
-			"jaJP": "体召喚する。\n<i>（毎ターン   \nアップグレード！）</i>",
-			"plPL": " |4(Chochlika,Chochliki,Chochlików) 1/1. <i>(Ulepsza się w każdej turze!)</i>",
-			"esES": " |4(diablillo,diablillos) 1/1.\n<i>(Mejora cada turno).</i>",
-			"ruRU": " |4(беса,бесов,бесов) 1/1\n<i>(улучшается каждый ход)</i>.",
-			"esMX": " |4(Diablillo, Diablillos) 1/1. <i>(¡Mejora con cada turno!)</i>",
-			"koKR": "마리 소환합니다.\n<i>(내 턴마다 강화됩니다!)</i>",
-			"thTH": " ตัว <i>(อัพเกรดทุกเทิร์น!)</i>"
-		},
 		"cost": 3,
 		"set": "Dalaran",
+		"collectionText": " 1/1 |4(Imp, Imps). <i>(Upgrades each turn!)</i>",
 		"artist": "Jim Nelson",
 		"dbfId": 51371,
 		"type": "Spell",
@@ -40021,24 +39868,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": " de Armadura. <i>(Aprimora a cada turno!)</i>",
-			"zhCN": "点护甲值。<i>（每回合都会升级！）</i>",
-			"itIT": " Armatura.\n<i>(Si potenzia ogni turno!)</i>",
-			"enUS": " Armor.\n<i>(Upgrades each turn!)</i>",
-			"frFR": " |4(point,points) d’armure. <i>(S’améliore à chaque tour !</i>",
-			"zhTW": "點護甲值\n<i>(每回合升級)</i>",
-			"deDE": " Rüstung.\n<i>(Wird in jedem Zug aufgewertet!)</i>",
-			"jaJP": "獲得する。\n<i>（毎ターン   \nアップグレード！）</i>",
-			"plPL": " pkt. pancerza. <i>(Ulepsza się w każdej turze!)</i>",
-			"esES": " p. de armadura.\n<i>(Mejora cada turno).</i>",
-			"ruRU": " к броне \n[x]<i>(улучшается каждый ход)</i>.",
-			"esMX": " de Armadura. <i>(¡Mejora con cada turno!)</i>",
-			"koKR": " 얻습니다. <i>(내 턴마다 강화됩니다!)</i>",
-			"thTH": " แต้ม <i>(อัพเกรดทุกเทิร์น!)</i>"
-		},
 		"cost": 4,
 		"set": "Dalaran",
+		"collectionText": " Armor.\n<i>(Upgrades each turn!)</i>",
 		"artist": "Konstantin Turovec",
 		"dbfId": 51372,
 		"type": "Spell",
@@ -40057,24 +39889,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": " de dano a todos os lacaios. <i>(Aprimora a cada turno!)</i>",
-			"zhCN": "点伤害。<i>（每回合都会升级！）</i>",
-			"itIT": " |4(danno,danni)\na TUTTI i servitori.\n<i>(Si potenzia ogni turno!)</i>",
-			"enUS": " damage\nto all minions.\n<i>(Upgrades each turn!)</i>",
-			"frFR": " |4(point,points) de dégâts à tous les serviteurs. <i>(S’améliore à chaque tour !)</i>",
-			"zhTW": "點傷害\n<i>(每回合升級)</i>",
-			"deDE": " Schaden zu. <i>(Wird in jedem Zug aufgewertet!)</i>",
-			"jaJP": "ダメージを与える。\n<i>（毎ターン   \nアップグレード！）</i>",
-			"plPL": " pkt. obrażeń wszystkim stronnikom.\n<i>(Ulepsza się w każdej turze!)</i>",
-			"esES": " p. de daño\na todos los esbirros. <i>(Mejora cada turno).</i>",
-			"ruRU": " ед. урона всем существам [x]<i>(улучшается каждый ход)</i>.",
-			"esMX": " de daño a todos los esbirros. <i>(¡Mejora con cada turno!)</i>",
-			"koKR": " 줍니다.\n<i>(내 턴마다 강화됩니다!)</i>",
-			"thTH": " แต้มให้มินเนี่ยนทั้งหมด <i>(อัพเกรดทุกเทิร์น!)</i>"
-		},
 		"cost": 5,
 		"set": "Dalaran",
+		"collectionText": " damage\nto all minions.\n<i>(Upgrades each turn!)</i>",
 		"artist": "Arthur Gimaldinov",
 		"dbfId": 51373,
 		"type": "Spell",
@@ -40096,24 +39913,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": " |4(cópia, cópias) dele no seu deck. <i>(Aprimora a cada turno!)</i>",
-			"zhCN": "张复制洗入你的牌库。<i>（每回合都会升级！）</i>",
-			"itIT": " |4(copia,copie)\nnel tuo mazzo.\n<i>(Si potenzia ogni turno!)</i>",
-			"enUS": " |4(copy, copies) of it into your deck.\n<i>(Upgrades each turn!)</i>",
-			"frFR": " |4(copie,copies) dans votre deck. <i>(S’améliore à chaque tour !)</i>",
-			"zhTW": "張它的分身洗入你的牌堆<i>(每回合升級)</i>",
-			"deDE": " |4(Kopie, Kopien) davon in\nEuer Deck. <i>(Wird in jedem\nZug aufgewertet!)</i>",
-			"jaJP": "体を\n自分のデッキに混ぜる。\n<i>（毎ターン   \nアップグレード！）</i>",
-			"plPL": " |4(kopię,kopie,kopii) do twojej talii. <i>(Ulepsza się w każdej turze!)</i>",
-			"esES": " |4(copia,copias)\ndel mismo en tu mazo.\n<i>(Mejora cada turno).</i>",
-			"ruRU": " |4(его копию,его копии,его копий) <i>(улучшается каждый ход)</i>.",
-			"esMX": " |4(copia, copias) de él en tu mazo.\n<i>(¡Mejora con cada turno!)</i>",
-			"koKR": "장 복사하여\n내 덱에 섞어 넣습니다.\n<i>(내 턴마다 강화됩니다!)</i>",
-			"thTH": " ใบเข้า[b]เด็คคุณ <i>(อัพเกรดทุกเทิร์น!)</i>"
-		},
 		"cost": 1,
 		"set": "Dalaran",
+		"collectionText": " |4(copy, copies) of it into your deck.\n<i>(Upgrades each turn!)</i>",
 		"artist": "Konstantin Turovec",
 		"dbfId": 51375,
 		"type": "Spell",
@@ -40132,24 +39934,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": " até seu próximo turno. <i>(Aprimora a cada turno!)</i>",
-			"zhCN": "点。<i>（每回合都会升级！）</i>",
-			"itIT": " fino\nal tuo turno successivo.\n<i>(Si potenzia ogni turno!)</i>",
-			"enUS": " until your next turn. <i>(Upgrades each turn!)</i>",
-			"frFR": " |4(point,points) jusqu’à votre prochain tour. <i>(S’améliore à chaque tour !)</i>",
-			"zhTW": "點，直到你的下一回合\n<i>(每回合升級)</i>",
-			"deDE": ". <i>(Wird in jedem Zug aufgewertet!)</i>",
-			"jaJP": "減らす。\n<i>（毎ターン   \nアップグレード！）</i>",
-			"plPL": " do twojej następnej tury. <i>(Ulepsza się w każdej turze!)</i>",
-			"esES": " p. el ataque\nde un esbirro enemigo\nhasta tu siguiente turno.\n<i>(Mejora cada turno).</i>",
-			"ruRU": " к атаке до вашего следующего хода <i>(улучшается каждый ход)</i>.",
-			"esMX": " hasta tu próximo turno. <i>(¡Mejora con cada turno!)</i>",
-			"koKR": " 감소시킵니다.\n<i>(내 턴마다 강화됩니다!)</i>",
-			"thTH": " แต้ม\nจนถึงเทิร์นถัดไปของคุณ <i>(อัพเกรดทุกเทิร์น!)</i>"
-		},
 		"cost": 0,
 		"set": "Dalaran",
+		"collectionText": " until your next turn. <i>(Upgrades each turn!)</i>",
 		"artist": "J. Axer",
 		"dbfId": 51376,
 		"type": "Spell",
@@ -41989,24 +41776,9 @@ var parseCardsText = {
 		"rarity": "Legendary"
 	},
 	{
-		"collectionText": {
-			"ptBR": ")</i>",
-			"zhCN": "点！）</i>",
-			"itIT": "!)</i>",
-			"enUS": " left!)</i>",
-			"frFR": " !)</i>",
-			"zhTW": "點)</i>",
-			"deDE": "!)</i>",
-			"jaJP": "！）</i>",
-			"plPL": ")</i>",
-			"esES": ")</i>.",
-			"ruRU": ")</i>.",
-			"esMX": " más!)</i>",
-			"koKR": " 남음!)</i>",
-			"thTH": "!)</i>"
-		},
 		"cost": 11,
 		"set": "Dalaran",
+		"collectionText": " left!)</i>",
 		"hideStats": true,
 		"health": 1,
 		"mechanics": [
@@ -46020,24 +45792,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Rapidez</b>. <b>Grito de Guerra:</b>\nSe você tiver restaurado \n5 de Vida nesta partida, evoque uma cópia deste lacaio.",
-			"zhCN": "<b>突袭，战吼：</b>在本局对战中，如果你累计恢复了5点生命值，则召唤一个该随从的复制。",
-			"itIT": "[x]<b>Assalto</b>. <b>Grido di Battaglia:</b>\nse hai rigenerato 5 Salute in\nquesta partita, evoca una copia\ndi se stesso.",
-			"enUS": "<b>Rush</b>. <b>Battlecry:</b> If you've restored 5 Health this game, summon a copy of this.",
-			"frFR": "<b>Ruée</b>\n<b>Cri de guerre :</b> si vous avez rendu 5 PV pendant cette partie, invoque une copie de ce serviteur. ",
-			"zhTW": "<b>衝刺</b>。<b>戰吼：</b>若你在本賽局已恢復5點生命值，召喚一個此手下的分身",
-			"deDE": "<b>Eifer</b>. <b>Kampfschrei:</b> Ruft eine Kopie dieses Dieners herbei, wenn Ihr in diesem Spiel 5 Leben wiederher[d]gestellt habt.",
-			"jaJP": "[x]<b>急襲</b>、<b>雄叫び:</b>\nこの対戦で自分が体力を\n5以上回復していた場合\nこのミニオンのコピーを1体\n     召喚する。",
-			"plPL": "<b>Zryw</b>\n<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 5 pkt. zdrowia w tej grze, przyzwij kopię tego stronnika.",
-			"esES": "<b>Embestir</b>\n<b>Grito de batalla:</b> Si has restaurado 5 p. de salud en esta partida, invoca una copia de este esbirro.",
-			"ruRU": "<b>Натиск</b>. <b>Боевой клич:</b> если вы восстановили 5 ед. здоровья в этом матче, призывает копию [x]этого существа.",
-			"esMX": "<b>Acometida</b>\n<b>Grito de batalla:</b> si has restaurado 5 de Salud en esta partida, invoca una copia de esta carta.\n",
-			"koKR": "<b>속공</b>, <b>전투의 함성:</b> 이번 게임에서 생명력을 5 이상 회복했으면, 이 하수인을 복사하여 소환합니다.",
-			"thTH": "<b>จู่โจม</b> <b>คำรามสู้ศึก:</b> ถ้าเกมนี้[b]คุณฟื้นฟูพลังชีวิตไปแล้ว 5 แต้ม เรียกร่างก๊อปปี้ของมัน "
-		},
 		"cost": 5,
 		"set": "Dalaran",
+		"collectionText": "<b>Rush</b>. <b>Battlecry:</b> If you've restored 5 Health this game, summon a copy of this.",
 		"race": "BEAST",
 		"artist": "Patrik Bjorkstrom",
 		"health": 4,
@@ -46410,7 +46167,7 @@ var parseCardsText = {
 				"Shared_CustomSpawn_MinionFlyIn_01.ogg"
 			]
 		},
-		"text": "[x]Summon King Mukla.\nGive it <b>Immune</b> and\n'Can't be targeted by\nspell or Hero Powers.'",
+		"text": "[x]Summon King Mukla.\nGive it <b>Immune</b> and\n'Can't be targeted by\nspells or Hero Powers.'",
 		"dbfId": 53958,
 		"type": "Spell",
 		"cardClass": "NEUTRAL"
@@ -47154,24 +46911,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": "Cause $",
-			"zhCN": "造成$",
-			"itIT": "[x]Infligge $",
-			"enUS": "[x]Deal $",
-			"frFR": "Inflige $",
-			"zhTW": "造成$",
-			"deDE": "Verursacht $",
-			"jaJP": "[x]$",
-			"plPL": "Zadaj $",
-			"esES": "Inflige $",
-			"ruRU": "Наносит $",
-			"esMX": "Inflige $",
-			"koKR": "피해를 $",
-			"thTH": "สร้างความเสียหาย $"
-		},
 		"cost": 3,
 		"set": "Dalaran",
+		"collectionText": "[x]Deal $",
 		"name": "Master Scheme",
 		"id": "DALA_726",
 		"audio": {
@@ -49549,7 +49291,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"cost": 2,
+		"cost": 3,
 		"set": "Dalaran",
 		"name": "Chomp",
 		"mechanics": [
@@ -49984,24 +49726,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": " de dano)</i>",
-			"zhCN": "点伤害）</i>。",
-			"itIT": " |4(restante,restanti))</i>",
-			"enUS": " damage remaining)</i>",
-			"frFR": " |4(point,points) de dégâts.)</i>",
-			"zhTW": "點傷害)</i>",
-			"deDE": " Schaden)</i>",
-			"jaJP": "ダメージ）</i>",
-			"plPL": " pkt. obrażeń)</i>",
-			"esES": " p.)</i>.",
-			"ruRU": " ед.)</i>.",
-			"esMX": " de daño)</i>",
-			"koKR": " 남음)</i>",
-			"thTH": " แต้ม)</i>"
-		},
 		"cost": 0,
 		"set": "Dalaran",
+		"collectionText": " damage remaining)</i>",
 		"hideStats": true,
 		"name": "Take Flight!",
 		"id": "DALA_BOSS_07p",
@@ -50017,24 +49744,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": ")</i>",
-			"zhCN": "回合）</i>。",
-			"itIT": " |4(restante,restanti))</i>",
-			"enUS": " turns remaining)</i>",
-			"frFR": " |4(tour,tours).)</i>",
-			"zhTW": "回合)</i>",
-			"deDE": " |4(Zug,Züge))</i>",
-			"jaJP": "ターン）</i>",
-			"plPL": ")</i>",
-			"esES": ")</i>.",
-			"ruRU": " |4(ход,хода,ходов)</i>.",
-			"esMX": ")</i>",
-			"koKR": "턴 남음)</i>",
-			"thTH": " เทิร์น)</i>"
-		},
 		"cost": 0,
 		"set": "Dalaran",
+		"collectionText": " turns remaining)</i>",
 		"hideStats": true,
 		"name": "Flying!",
 		"id": "DALA_BOSS_07p2",
@@ -50091,7 +49803,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"cost": 2,
+		"cost": 3,
 		"set": "Dalaran",
 		"name": "Apple Toss",
 		"id": "DALA_BOSS_08px",
@@ -50811,7 +50523,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"cost": 2,
+		"cost": 1,
 		"set": "Dalaran",
 		"name": "Prediction",
 		"id": "DALA_BOSS_21p",
@@ -51762,7 +51474,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"cost": 2,
+		"cost": 1,
 		"set": "Dalaran",
 		"name": "Tales of Fortune",
 		"id": "DALA_BOSS_37px",
@@ -52234,24 +51946,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": " de dano ao herói inimigo. <i>(aumenta a cada uso)</i>",
-			"zhCN": "点伤害<i>（每次使用伤害都会增加）</i>。",
-			"itIT": " |4(danno,danni)\nall'eroe nemico.\n  <i>(Si potenzia a ogni uso)</i>",
-			"enUS": " damage to\nthe enemy hero.\n<i>(increases each use)</i>",
-			"frFR": " |4(point,points) de dégâts au héros adverse. <i>(Augmente à chaque utilisation.)</i>",
-			"zhTW": "點傷害\n<i>(每次使用提高)</i>",
-			"deDE": " Schaden zu. <i>(Wird mit jedem\nEinsatz stärker)</i>",
-			"jaJP": "ダメージを与える。\n<i>（使用する度に増加）</i>",
-			"plPL": " pkt. obrażeń wrogiemu bohaterowi (<i>(więcej z każdym użyciem)</i>.",
-			"esES": " p. de daño\nal héroe enemigo.\n<i>(Aumenta con cada uso).</i>",
-			"ruRU": " ед. урона герою противника <i>(увеличивается\n[x]с каждым использованием)</i>.",
-			"esMX": " de daño al héroe enemigo <i>(aumenta con cada uso)</i>.",
-			"koKR": " 줍니다. <i>(사용할 때마다 피해 증가)</i>",
-			"thTH": " แต้ม[b]  ให้ฮีโร่ศัตรู <i>(เพิ่มขึ้นทุกครั้งที่ใช้)</i>"
-		},
 		"cost": 3,
 		"set": "Dalaran",
+		"collectionText": " damage to\nthe enemy hero.\n<i>(increases each use)</i>",
 		"name": "Ray of Suffering",
 		"id": "DALA_BOSS_45p",
 		"audio": {
@@ -52275,24 +51972,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": " de dano ao herói inimigo. <i>(aumenta a cada uso)</i>",
-			"zhCN": "点伤害<i>（每次使用伤害都会增加）</i>。",
-			"itIT": " |4(danno,danni)\nall'eroe nemico.\n  <i>(Si potenzia a ogni uso)</i>",
-			"enUS": " damage to\nthe enemy hero.\n<i>(increases each use)</i>",
-			"frFR": " |4(point,points) de dégâts au héros adverse. <i>(Augmente à chaque utilisation.)</i>",
-			"zhTW": "點傷害\n<i>(每次使用提高)</i>",
-			"deDE": " Schaden zu. <i>(Wird mit jedem\nEinsatz stärker)</i>",
-			"jaJP": "ダメージを与える。\n<i>（使用する度に増加）</i>",
-			"plPL": " pkt. obrażeń wrogiemu bohaterowi (<i>(więcej z każdym użyciem)</i>.",
-			"esES": " p. de daño\nal héroe enemigo.\n<i>(Aumenta con cada uso).</i>",
-			"ruRU": " ед. урона герою противника <i>(увеличивается\n[x]с каждым использованием)</i>.",
-			"esMX": " de daño al héroe enemigo <i>(aumenta con cada uso)</i>.",
-			"koKR": " 줍니다. <i>(사용할 때마다 피해 증가)</i>",
-			"thTH": " แต้ม[b]  ให้ฮีโร่ศัตรู <i>(เพิ่มขึ้นทุกครั้งที่ใช้)</i>"
-		},
 		"cost": 2,
 		"set": "Dalaran",
+		"collectionText": " damage to\nthe enemy hero.\n<i>(increases each use)</i>",
 		"name": "Ray of Suffering",
 		"id": "DALA_BOSS_45px",
 		"audio": {
@@ -53014,7 +52696,7 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"cost": 0,
+		"cost": 1,
 		"set": "Dalaran",
 		"name": "Raise the Alarm",
 		"mechanics": [
@@ -53565,7 +53247,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "-2 Attack",
+		"text": "-1 Attack",
 		"dbfId": 57054,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
@@ -53617,7 +53299,7 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "<b>Passive Hero Power</b>\nYour opponent's minions have -2 Attack.",
+		"text": "<b>Passive Hero Power</b>\nYour opponent's minions have -1 Attack.",
 		"dbfId": 56036,
 		"type": "Hero_power",
 		"cardClass": "NEUTRAL"
@@ -53950,24 +53632,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": ")</i>",
-			"zhCN": "点）</i>。",
-			"itIT": " attualmente)</i>",
-			"enUS": " currently)</i>",
-			"frFR": " actuellement)</i>.",
-			"zhTW": ")</i>",
-			"deDE": ")</i>",
-			"jaJP": "）</i>",
-			"plPL": ")</i>.",
-			"esES": " p.).</i>",
-			"ruRU": ")</i>.",
-			"esMX": ")</i>.",
-			"koKR": ")</i>",
-			"thTH": ")</i>"
-		},
 		"cost": 2,
 		"set": "Dalaran",
+		"collectionText": " currently)</i>",
 		"name": "Dragonwrath",
 		"referencedTags": [
 			"SPELLPOWER"
@@ -53988,24 +53655,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": ")</i>",
-			"zhCN": "点）</i>。",
-			"itIT": " attualmente)</i>",
-			"enUS": " currently)</i>",
-			"frFR": " actuellement)</i>.",
-			"zhTW": ")</i>",
-			"deDE": ")</i>",
-			"jaJP": "）</i>",
-			"plPL": ")</i>.",
-			"esES": " p.).</i>",
-			"ruRU": ")</i>.",
-			"esMX": ")</i>.",
-			"koKR": ")</i>",
-			"thTH": ")</i>"
-		},
 		"cost": 1,
 		"set": "Dalaran",
+		"collectionText": " currently)</i>",
 		"name": "Dragonwrath",
 		"referencedTags": [
 			"SPELLPOWER"
@@ -59293,7 +58945,7 @@ var parseCardsText = {
 		},
 		"collectible": true,
 		"cost": 2,
-		"set": "Core",
+		"set": "Hof",
 		"artist": "Dave Allsop",
 		"howToEarn": {
 			"ptBR": "Disponível no nível 1.",
@@ -59339,7 +58991,7 @@ var parseCardsText = {
 		},
 		"text": "Deal $5 damage to the enemy hero.",
 		"cardClass": "PRIEST",
-		"rarity": "Free"
+		"rarity": "Common"
 	},
 	{
 		"playerClass": "Neutral",
@@ -59367,24 +59019,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"collectionText": {
-			"ptBR": "<b>Poder Heroico</b>\nCause $2 de dano.",
-			"zhCN": "<b>英雄技能</b>\n造成$2点伤害。",
-			"itIT": "<b>Potere Eroe</b>\nInfligge $2 danni.",
-			"enUS": "<b>Hero Power</b>\nDeal $2 damage.",
-			"frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts.",
-			"zhTW": "<b>英雄能力</b>\n造成$2點傷害",
-			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden.",
-			"jaJP": "<b>ヒーローパワー</b>\n$2ダメージを\n与える。",
-			"plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń.",
-			"esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño.",
-			"ruRU": "<b>Сила героя</b>\nНаносит $2 ед. урона.",
-			"esMX": "<b>Poder de héroe</b>\nInflige $2 de daño.",
-			"koKR": "<b>영웅 능력</b>\n피해를 $2 줍니다.",
-			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $2 แต้ม"
-		},
 		"cost": 2,
 		"set": "Core",
+		"collectionText": "<b>Hero Power</b>\nDeal $2 damage.",
 		"name": "Steady Shot",
 		"id": "DS1h_292",
 		"audio": {
@@ -59412,24 +59049,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"collectionText": {
-			"ptBR": "<b>Poder Heroico</b>\nCause $2 de dano.",
-			"zhCN": "<b>英雄技能</b>\n造成$2点伤害。",
-			"itIT": "<b>Potere Eroe</b>\nInfligge $2 danni.",
-			"enUS": "<b>Hero Power</b>\nDeal $2 damage.",
-			"frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts.",
-			"zhTW": "<b>英雄能力</b>\n造成$2點傷害",
-			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden.",
-			"jaJP": "<b>ヒーローパワー</b>\n$2ダメージを\n与える。",
-			"plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń.",
-			"esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño.",
-			"ruRU": "<b>Сила героя</b>\nНаносит $2 ед. урона.",
-			"esMX": "<b>Poder de héroe</b>\nInflige $2 de daño.",
-			"koKR": "<b>영웅 능력</b>\n피해를 $2 줍니다.",
-			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $2 แต้ม"
-		},
 		"cost": 2,
 		"set": "Hero_skins",
+		"collectionText": "<b>Hero Power</b>\nDeal $2 damage.",
 		"name": "Steady Shot",
 		"id": "DS1h_292_H1",
 		"audio": {
@@ -59448,24 +59070,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"collectionText": {
-			"ptBR": "<b>Poder Heroico</b>\nCause $3 de dano.",
-			"zhCN": "<b>英雄技能</b>\n造成$3点伤害。",
-			"itIT": "<b>Potere Eroe</b>\nInfligge $3 danni.",
-			"enUS": "<b>Hero Power</b>\nDeal $3 damage.",
-			"frFR": "<b>Pouvoir héroïque</b>\nInflige $3 points de dégâts.",
-			"zhTW": "<b>英雄能力</b>\n造成$3點傷害",
-			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $3 Schaden.",
-			"jaJP": "<b>ヒーローパワー</b>\n$3ダメージを\n与える。",
-			"plPL": "<b>Moc specjalna</b>\nZadaj $3 pkt. obrażeń.",
-			"esES": "[x]<b>Poder de héroe</b>\nInflige $3 p. de daño.",
-			"ruRU": "<b>Сила героя</b>\nНаносит $3 ед. урона.",
-			"esMX": "<b>Poder de héroe</b>\nInflige $3 de daño.",
-			"koKR": "<b>영웅 능력</b>\n피해를 $3 줍니다.",
-			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $3 แต้ม"
-		},
 		"cost": 2,
 		"set": "Hero_skins",
+		"collectionText": "<b>Hero Power</b>\nDeal $3 damage.",
 		"name": "Ballista Shot",
 		"id": "DS1h_292_H1_AT_132",
 		"audio": {
@@ -59480,6 +59087,217 @@ var parseCardsText = {
 		"dbfId": 30366,
 		"type": "Hero_power",
 		"cardClass": "HUNTER"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Thief",
+		"id": "EVILBRM_DALA_Rogue_02",
+		"dbfId": 57915,
+		"type": "Spell",
+		"entourage": [
+			"KAR_069",
+			"OG_330",
+			"DAL_714",
+			"GIL_827",
+			"GIL_677",
+			"CFM_781",
+			"DAL_416",
+			"ICC_811",
+			"KAR_070",
+			"GVG_028",
+			"GIL_598",
+			"GIL_598",
+			"BRM_030",
+			"UNG_856",
+			"DAL_716",
+			"GIL_672"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Swarming",
+		"id": "EVILBRM_DALA_Warlock_02",
+		"dbfId": 57913,
+		"type": "Spell",
+		"entourage": [
+			"LOOT_014",
+			"OG_241",
+			"LOE_116",
+			"ICC_903",
+			"LOE_023",
+			"DAL_606",
+			"TRL_251",
+			"UNG_835",
+			"OG_113",
+			"BRM_006",
+			"AT_019",
+			"UNG_047",
+			"TRL_257",
+			"OG_114",
+			"EX1_316",
+			"GIL_191",
+			"KAR_025",
+			"TRL_555"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Draw",
+		"id": "EVILBRM_DALA_Warlock_03",
+		"dbfId": 57914,
+		"type": "Spell",
+		"entourage": [
+			"LOOT_014",
+			"OG_109",
+			"GIL_815",
+			"BOT_559",
+			"EX1_050",
+			"LOE_079",
+			"DAL_582",
+			"LOOT_526",
+			"UNG_851",
+			"EX1_284",
+			"DAL_565",
+			"DAL_185",
+			"DAL_607",
+			"TRL_541",
+			"EX1_302",
+			"BOT_568",
+			"DAL_602",
+			"OG_239"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Tb",
+		"name": "In Control",
+		"id": "EVILBRM_DALA_Warlock_07",
+		"dbfId": 57909,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"NEW1_021",
+			"EX1_058",
+			"EX1_043",
+			"OG_174",
+			"ICC_075",
+			"LOOT_415",
+			"GIL_618",
+			"BRM_028",
+			"GIL_124",
+			"CFM_751",
+			"GIL_825",
+			"ICC_314",
+			"LOOT_368",
+			"EX1_105",
+			"EX1_620",
+			"ICC_041",
+			"EX1_303",
+			"LOOT_043",
+			"EX1_309"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Lil' Demons",
+		"id": "EVILBRM_DALA_Warlock_09",
+		"dbfId": 57911,
+		"type": "Spell",
+		"entourage": [
+			"CS2_059",
+			"EX1_319",
+			"KAR_089",
+			"CS2_065",
+			"GVG_018",
+			"BOT_443",
+			"LOOT_013",
+			"BOT_224",
+			"BRM_006",
+			"CFM_610",
+			"DAL_751",
+			"DAL_561",
+			"TRL_249",
+			"BOT_263",
+			"EX1_596",
+			"BRM_005",
+			"DAL_007",
+			"DAL_605",
+			"GVG_045"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Empowering",
+		"id": "EVILBRM_DALA_Warlock_10",
+		"dbfId": 57910,
+		"type": "Spell",
+		"entourage": [
+			"ICC_092",
+			"EX1_004",
+			"TRL_251",
+			"ICC_094",
+			"OG_256",
+			"BOT_224",
+			"TRL_517",
+			"DAL_563",
+			"BOT_536",
+			"EX1_093",
+			"CFM_668",
+			"ICC_029",
+			"AT_090",
+			"LOOT_167",
+			"TRL_253",
+			"BOT_263",
+			"TRL_249",
+			"CFM_611"
+		],
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Warlock",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Curatives",
+		"id": "EVILBRM_DALA_Warlock_11",
+		"dbfId": 57912,
+		"type": "Spell",
+		"entourage": [
+			"CFM_120",
+			"GIL_558",
+			"GVG_018",
+			"GIL_143",
+			"CS2_117",
+			"GIL_622",
+			"TRL_252",
+			"GIL_565",
+			"BOT_548",
+			"ICC_905",
+			"GIL_667",
+			"DAL_185",
+			"LOOT_017",
+			"OG_118",
+			"ICC_055",
+			"CS2_061",
+			"LOOT_043",
+			"EX1_309"
+		],
+		"cardClass": "WARLOCK"
 	},
 	{
 		"collectible": true,
@@ -60477,13 +60295,19 @@ var parseCardsText = {
 		"id": "EX1_033",
 		"audio": {
 			"play": [
-				"SFX_EX1_033_EnterPlay.ogg"
+				"SFX_EX1_033_EnterPlay.ogg",
+				"FrostMagic_Play_Underlay.ogg",
+				"WingFlapMedium_Underlay_Play.ogg"
 			],
 			"death": [
-				"SFX_EX1_033_Death.ogg"
+				"SFX_EX1_033_Death.ogg",
+				"FrostMagic_Death_Underlay.ogg",
+				"WingFlapMedium_Underlay_Death.ogg"
 			],
 			"attack": [
-				"SFX_EX1_033_Attack.ogg"
+				"SFX_EX1_033_Attack.ogg",
+				"FrostMagic_Attack_Underlay.ogg",
+				"WingFlapMedium_Underlay_Attack.ogg"
 			]
 		},
 		"text": "<b>Windfury</b>",
@@ -61056,7 +60880,7 @@ var parseCardsText = {
 			"jaJP": "基本とクラシックカードの、ゴールデンのマーロックカードを全て所持すると入手。",
 			"plPL": "Odblokowane kiedy zdobędziesz wszystkie złote Murloki z zestawu eksperckiego.",
 			"esES": "Se desbloquea cuando consigues todos los múrlocs dorados de los conjuntos básico y experto.",
-			"ruRU": "Доступна при наличии всех золотых карт мурлоков из базового набора и набора эксперта.",
+			"ruRU": "Доступна при наличии всех золотых мурлоков из базового набора и набора эксперта.",
 			"esMX": "Se desbloquea cuando tienes a todos los múrlocs dorados de los kits experto y básico.",
 			"koKR": "기본 세트와 고급 세트의 모든 멀록을 수집하면 잠금 해제",
 			"thTH": "ปลดล็อคเมื่อคุณมีการ์ดเมอร์ล็อคสีทองในชุดเอ็กซ์เปิร์ตและชุดพื้นฐานครบทั้งหมด"
@@ -61250,7 +61074,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 1,
 		"set": "Expert1",
-		"artist": "Gonzalo Ordonez",
+		"artist": "Evgeniy Zagumyenny",
 		"health": 2,
 		"mechanics": [
 			"TRIGGER_VISUAL"
@@ -61260,7 +61084,7 @@ var parseCardsText = {
 		],
 		"dbfId": 158,
 		"type": "Minion",
-		"flavor": "She promises not to tell anyone about that thing you did last night with that one person.",
+		"flavor": "Where is Mankrik’s wife? She’ll never tell.",
 		"playerClass": "Neutral",
 		"attack": 1,
 		"faction": "ALLIANCE",
@@ -61268,13 +61092,19 @@ var parseCardsText = {
 		"id": "EX1_080",
 		"audio": {
 			"play": [
-				"VO_EX1_080_Play_01.ogg"
+				"VO_EX1_080_Female_Human_Play_01.ogg",
+				"2H_EpicStaff_Underlay_Play.ogg",
+				"GoblinBlastMage_Play_Underlay.ogg"
 			],
 			"death": [
-				"VO_EX1_080_Death_03.ogg"
+				"VO_EX1_080_Female_Human_Death_01.ogg",
+				"2H_EpicStaff_Underlay_Death.ogg",
+				"GoblinBlastMage_Death_Underlay.ogg"
 			],
 			"attack": [
-				"VO_EX1_080_Attack_02.ogg"
+				"VO_EX1_080_Female_Human_Attack_01.ogg",
+				"2H_EpicStaff_Underlay_Attack.ogg",
+				"GoblinBlastMage_Attack_Underlay.ogg"
 			]
 		},
 		"text": "Whenever a <b>Secret</b> is played, gain +1/+1.",
@@ -62049,7 +61879,7 @@ var parseCardsText = {
 		],
 		"dbfId": 904,
 		"type": "Spell",
-		"flavor": "There is a high cost to Eviscerating your opponent:  It takes a long time to get blood stains out of leather armor.",
+		"flavor": "There is a high cost to Eviscerating your opponent. You might tweak your elbow! That really hurts!",
 		"playerClass": "Rogue",
 		"name": "Eviscerate",
 		"id": "EX1_124",
@@ -62474,7 +62304,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Expert1",
-		"artist": "James Zhang",
+		"artist": "Ludo Lullabi",
 		"mechanics": [
 			"COMBO"
 		],
@@ -63681,9 +63511,395 @@ var parseCardsText = {
 			"death": [],
 			"attack": []
 		},
-		"text": "Add a random card to your hand <i>(from your opponent's class)</i>.",
+		"text": "Add a random card from another class to your hand.",
 		"cardClass": "ROGUE",
 		"rarity": "Common"
+	},
+	{
+		"collectible": true,
+		"cost": 8,
+		"set": "Expert1",
+		"artist": "Zoltan Boros",
+		"referencedTags": [
+			"TAUNT"
+		],
+		"dbfId": 54833,
+		"type": "Spell",
+		"flavor": "The gift that keeps on living.",
+		"playerClass": "Druid",
+		"name": "Gift of the Wild",
+		"id": "EX1_183",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"Shared_PawUntargeted02_PreCast": [
+				"Shared_PawUntargeted02_PreCast.ogg"
+			]
+		},
+		"text": "Give your minions +2/+2 and <b>Taunt</b>.",
+		"cardClass": "DRUID",
+		"rarity": "Common"
+	},
+	{
+		"playerClass": "Druid",
+		"set": "Expert1",
+		"name": "Gift of the Wild",
+		"id": "EX1_183e",
+		"text": "+2/+2 and <b>Taunt</b>.",
+		"dbfId": 54841,
+		"type": "Enchantment",
+		"cardClass": "DRUID"
+	},
+	{
+		"collectible": true,
+		"cost": 5,
+		"set": "Expert1",
+		"artist": "Luke Mancini",
+		"referencedTags": [
+			"DIVINE_SHIELD"
+		],
+		"dbfId": 54834,
+		"type": "Spell",
+		"flavor": "Shield yourself in righteousness! It feels like a warm fuzzy blanket.",
+		"playerClass": "Paladin",
+		"name": "Righteousness",
+		"id": "EX1_184",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "Give your minions <b>Divine Shield</b>.",
+		"cardClass": "PALADIN",
+		"rarity": "Rare"
+	},
+	{
+		"collectible": true,
+		"cost": 7,
+		"set": "Expert1",
+		"race": "DEMON",
+		"artist": "James Ryman",
+		"health": 8,
+		"mechanics": [
+			"AURA",
+			"TAUNT"
+		],
+		"dbfId": 54835,
+		"type": "Minion",
+		"flavor": "Has a side hustle as a siegebroker.",
+		"playerClass": "Warlock",
+		"attack": 5,
+		"name": "Siegebreaker",
+		"id": "EX1_185",
+		"audio": {
+			"play": [
+				"VO_EX1_185_Male_Pitlord_Play_01.ogg"
+			],
+			"death": [
+				"VO_EX1_185_Male_Pitlord_Death_01.ogg"
+			],
+			"attack": [
+				"VO_EX1_185_Male_Pitlord_Attack_01.ogg"
+			]
+		},
+		"text": "<b>Taunt</b>\nYour other Demons have +1 Attack.",
+		"cardClass": "WARLOCK",
+		"rarity": "Rare"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Expert1",
+		"name": "Siegebreaking",
+		"id": "EX1_185e",
+		"text": "Siegebreaker is granting this minion +1 Attack.",
+		"dbfId": 54842,
+		"type": "Enchantment",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"collectible": true,
+		"cost": 4,
+		"set": "Expert1",
+		"artist": "Gonzalo Ordonez",
+		"health": 4,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"referencedTags": [
+			"SECRET"
+		],
+		"dbfId": 54836,
+		"type": "Minion",
+		"flavor": "What will she destroy? It’s a secret!",
+		"playerClass": "Neutral",
+		"attack": 5,
+		"name": "SI:7 Infiltrator",
+		"id": "EX1_186",
+		"audio": {
+			"play": [
+				"VO_EX1_186_Female_Human_Play_04.ogg"
+			],
+			"death": [
+				"VO_EX1_186_Female_Human_Death_01.ogg"
+			],
+			"attack": [
+				"VO_EX1_186_Female_Human_Attack_01.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Destroy a random enemy <b>Secret</b>.",
+		"cardClass": "NEUTRAL",
+		"rarity": "Rare"
+	},
+	{
+		"collectible": true,
+		"cost": 8,
+		"set": "Expert1",
+		"race": "ELEMENTAL",
+		"artist": "Ivan Fomin",
+		"health": 5,
+		"mechanics": [
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 54837,
+		"type": "Minion",
+		"flavor": "Likes her magic with a pinch of salt.",
+		"playerClass": "Neutral",
+		"attack": 5,
+		"name": "Arcane Devourer",
+		"id": "EX1_187",
+		"audio": {
+			"play": [
+				"VO_EX1_187_Female_Elemental_Play_01.ogg"
+			],
+			"death": [
+				"VO_EX1_187_Female_Elemental_Death_01.ogg"
+			],
+			"attack": [
+				"VO_EX1_187_Female_Elemental_Attack_01.ogg"
+			]
+		},
+		"text": "Whenever you cast a spell, gain +2/+2.",
+		"cardClass": "NEUTRAL",
+		"rarity": "Rare"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Expert1",
+		"name": "Arcane Gorged",
+		"id": "EX1_187e",
+		"text": "Increased stats.",
+		"dbfId": 54843,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"collectible": true,
+		"cost": 7,
+		"set": "Expert1",
+		"artist": "Peter Stapleton",
+		"health": 4,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"dbfId": 54838,
+		"type": "Minion",
+		"flavor": "It’s never Huffer.",
+		"playerClass": "Neutral",
+		"attack": 4,
+		"name": "Barrens Stablehand",
+		"id": "EX1_188",
+		"audio": {
+			"play": [
+				"VO_EX1_188_Male_Orc_Play_02.ogg"
+			],
+			"death": [
+				"VO_EX1_188_Male_Orc_Death_01.ogg"
+			],
+			"attack": [
+				"VO_EX1_188_Male_Orc_Attack_02.ogg"
+			],
+			"Shared_PawUntargeted02_PreCast": [
+				"Shared_PawUntargeted02_PreCast.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Summon a random Beast.",
+		"cardClass": "NEUTRAL",
+		"rarity": "Epic"
+	},
+	{
+		"collectible": true,
+		"cost": 3,
+		"set": "Expert1",
+		"race": "DRAGON",
+		"artist": "Jerry Mascho",
+		"health": 2,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"dbfId": 54839,
+		"type": "Minion",
+		"flavor": "Little faerie dragons are made of sugar and spice and maniacal vice.",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 3,
+		"name": "Brightwing",
+		"id": "EX1_189",
+		"audio": {
+			"play": [
+				"VO_EX1_189_Female_Faerie_Play_02.ogg",
+				"Brightwing_Play_Stinger.ogg"
+			],
+			"death": [
+				"VO_EX1_189_Female_Faerie_Death_01.ogg",
+				"WingFlapTiny_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_EX1_189_Female_Faerie_Attack_01.ogg",
+				"WingFlapTiny_Underlay_Attack.ogg"
+			],
+			"Brightwing_SpawnToHand": [
+				"Brightwing_SpawnToHand.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Add a random <b>Legendary</b> minion to your hand.",
+		"cardClass": "NEUTRAL",
+		"rarity": "Legendary"
+	},
+	{
+		"collectible": true,
+		"cost": 7,
+		"set": "Expert1",
+		"artist": "James Ryman",
+		"health": 8,
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"dbfId": 54840,
+		"type": "Minion",
+		"flavor": "No one told her that champions want to sleep in.",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 6,
+		"name": "High Inquisitor Whitemane",
+		"id": "EX1_190",
+		"audio": {
+			"play": [
+				"VO_EX1_190_Female_Human_Play_01.ogg",
+				"HighInquisitorWhitemane_Play_Stinger.ogg"
+			],
+			"death": [
+				"VO_EX1_190_Female_Human_Death_01.ogg",
+				"HolyMagic_Death_Underlay.ogg",
+				"2H_EpicStaff_Underlay_Death.ogg"
+			],
+			"attack": [
+				"VO_EX1_190_Female_Human_Attack_01.ogg",
+				"HolyMagic_Attack_Underlay.ogg",
+				"2H_EpicStaff_Underlay_Attack.ogg"
+			],
+			"HighInquisitorWhitemane_CustomSpawn": [
+				"HighInquisitorWhitemane_CustomSpawn.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Summon all friendly minions that died this turn.",
+		"cardClass": "NEUTRAL",
+		"rarity": "Legendary"
+	},
+	{
+		"collectible": true,
+		"cost": 4,
+		"set": "Core",
+		"artist": "J. Axer",
+		"health": 3,
+		"targetingArrowText": {
+			"ptBR": "Conceda Venenoso.",
+			"zhCN": "获得<b>剧毒</b>。",
+			"itIT": "Fornisce Veleno.",
+			"enUS": "Give Poisonous.",
+			"frFR": "Confère Toxicité.",
+			"zhTW": "賦予致命劇毒",
+			"deDE": "Macht giftig.",
+			"jaJP": "猛毒を付与する。",
+			"plPL": "Daj <b>Truciznę</b>.",
+			"esES": "Otorga Veneno.",
+			"ruRU": "Добавить «Яд».",
+			"esMX": "Otorga Venenoso.",
+			"koKR": "독성",
+			"thTH": "มอบพิษ"
+		},
+		"mechanics": [
+			"BATTLECRY"
+		],
+		"referencedTags": [
+			"POISONOUS"
+		],
+		"dbfId": 54863,
+		"type": "Minion",
+		"flavor": "One sip and you've got the grippe.",
+		"playerClass": "Rogue",
+		"attack": 3,
+		"name": "Plaguebringer",
+		"id": "EX1_191",
+		"audio": {
+			"play": [
+				"VO_EX1_191_Male_Undead_Play_01.ogg",
+				"Potion_Underlay_Play_01.ogg"
+			],
+			"Poison_Spit_Impact_Sound": [
+				"Poison_Spit_Impact_Sound.ogg"
+			],
+			"death": [
+				"VO_EX1_191_Male_Undead_Death_01.ogg",
+				"Potion_Underlay_Play_01.ogg"
+			],
+			"attack": [
+				"VO_EX1_191_Male_Undead_Attack_01.ogg",
+				"Potion_Underlay_Attack.ogg"
+			]
+		},
+		"text": "<b>Battlecry:</b> Give a friendly minion <b>Poisonous</b>.",
+		"cardClass": "ROGUE",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Core",
+		"name": "Plaguetouched",
+		"referencedTags": [
+			"POISONOUS"
+		],
+		"id": "EX1_191e",
+		"text": "<b>Poisonous</b>",
+		"dbfId": 54864,
+		"type": "Enchantment",
+		"cardClass": "ROGUE"
+	},
+	{
+		"collectible": true,
+		"cost": 1,
+		"set": "Core",
+		"artist": "James Ryman",
+		"dbfId": 54865,
+		"type": "Spell",
+		"flavor": "Because you're worth it!",
+		"playerClass": "Priest",
+		"name": "Radiance",
+		"id": "EX1_192",
+		"audio": {
+			"play": [],
+			"Holy_Targeted_Healing_Potion_FX_Impact": [
+				"Holy_Targeted_Healing_Potion_FX_Impact.ogg"
+			],
+			"death": [],
+			"attack": []
+		},
+		"text": "Restore #5 Health to your hero.",
+		"cardClass": "PRIEST",
+		"rarity": "Free"
 	},
 	{
 		"collectible": true,
@@ -64942,7 +65158,7 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Core",
 		"race": "DEMON",
-		"artist": "Matt Dixon",
+		"artist": "Alex Horley",
 		"health": 3,
 		"howToEarn": {
 			"ptBR": "Disponível no nível 1.",
@@ -64965,20 +65181,20 @@ var parseCardsText = {
 		],
 		"dbfId": 592,
 		"type": "Minion",
-		"flavor": "Warlocks have it pretty good.",
+		"flavor": "This puppy chews up cards instead of shoes.",
 		"playerClass": "Warlock",
 		"attack": 4,
-		"name": "Succubus",
+		"name": "Felstalker",
 		"id": "EX1_306",
 		"audio": {
 			"play": [
-				"VO_EX1_306_Play_01.ogg"
+				"Felstalker_EX1_306_Play.ogg"
 			],
 			"death": [
-				"VO_EX1_306_Death_03.ogg"
+				"Felstalker_EX1_306_Death.ogg"
 			],
 			"attack": [
-				"VO_EX1_306_Attack_02.ogg"
+				"Felstalker_EX1_306_Attack.ogg"
 			]
 		},
 		"text": "<b>Battlecry:</b> Discard a random card.",
@@ -65670,14 +65886,12 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"playerClass": "Priest",
 		"cost": 0,
 		"set": "Expert1",
-		"health": 1,
-		"dbfId": 1720,
-		"type": "Minion",
-		"playerClass": "Priest",
 		"attack": 0,
 		"name": "Shadow of Nothing",
+		"health": 1,
 		"id": "EX1_345t",
 		"audio": {
 			"play": [
@@ -65691,8 +65905,9 @@ var parseCardsText = {
 			]
 		},
 		"text": "Mindgames whiffed! Your opponent had no minions!",
-		"cardClass": "PRIEST",
-		"rarity": "Epic"
+		"dbfId": 1720,
+		"type": "Minion",
+		"cardClass": "PRIEST"
 	},
 	{
 		"collectible": true,
@@ -68275,7 +68490,7 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 4,
 		"set": "Expert1",
-		"artist": "Tom Baxa",
+		"artist": "MAR Studio",
 		"dbfId": 577,
 		"type": "Spell",
 		"flavor": "Chew your food!",
@@ -69747,10 +69962,10 @@ var parseCardsText = {
 		"collectible": true,
 		"cost": 3,
 		"set": "Expert1",
-		"artist": "Steve Prescott",
+		"artist": "Steven Prescott",
 		"dbfId": 1093,
 		"type": "Spell",
-		"flavor": "Accuracy is not a highly valued trait among the mok'nathal.  Deadliness is near the top, though.",
+		"flavor": "Our ballista operator is effective, but not picky.",
 		"playerClass": "Hunter",
 		"name": "Deadly Shot",
 		"id": "EX1_617",
@@ -72241,7 +72456,6 @@ var parseCardsText = {
 		"set": "Tb",
 		"name": "Set Mission Event at game start",
 		"id": "FB_Champs_SetEventMulligan",
-		"text": "Increased stats.",
 		"dbfId": 57138,
 		"type": "Enchantment",
 		"cardClass": "NEUTRAL"
@@ -73374,24 +73588,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Deathknight",
-		"collectionText": {
-			"ptBR": " de dano ao herói inimigo. +1 de dano a cada vez.",
-			"zhCN": "点伤害。每次使用\n+1点伤害。",
-			"itIT": " |4(danno,danni) all'eroe nemico. +1 danno a ogni utilizzo.",
-			"enUS": " damage to the enemy hero. +1 Damage each time.",
-			"frFR": " |4(point,points) de dégâts au héros adverse. +1 point de dégâts à chaque fois.",
-			"zhTW": "點傷害。每次提高1點傷害",
-			"deDE": " Schaden zu. Verursacht jedes Mal 1 Schaden mehr.",
-			"jaJP": "ダメージを与える。\n使用する度ダメージが\n+1される。",
-			"plPL": " pkt. obrażeń wrogiemu bohaterowi. +1 pkt. obrażeń za każdym razem.",
-			"esES": " p. de daño\nal héroe enemigo.\n+1 p. de daño cada vez.",
-			"ruRU": " ед. урона герою противника.\n+1 к урону с каждым использованием.",
-			"esMX": " de daño al héroe enemigo.\n+1 de daño cada vez.",
-			"koKR": " 줍니다. 사용할 때마다 피해가 +1 증가합니다.",
-			"thTH": " แต้มให้ฮีโร่ศัตรู ความเสียหาย +1 ทุกครั้งที่ใช้"
-		},
 		"cost": 0,
 		"set": "Tb",
+		"collectionText": " damage to the enemy hero. +1 Damage each time.",
 		"name": "Remorseless Winter",
 		"mechanics": [
 			"AI_MUST_PLAY"
@@ -74238,6 +74437,177 @@ var parseCardsText = {
 			"FB_LKStats002b",
 			"FB_LKStats002c"
 		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Tb",
+		"name": "Amulet of Domination",
+		"id": "FB_RagRaid_Amulet",
+		"text": "Take control of an enemy minion. Add it to your Dungeon Deck.",
+		"dbfId": 57628,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 3,
+		"set": "Tb",
+		"name": "Unquenching Rage",
+		"id": "FB_RagRaid_DeckRefresh",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"IceDK_Impact_Sound": [
+				"IceDK_Impact_Sound.ogg"
+			]
+		},
+		"text": "Replace your deck with a fresh one.",
+		"dbfId": 57314,
+		"type": "Spell",
+		"cardClass": "MAGE",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 6,
+		"set": "Tb",
+		"name": "BURRRRNNNN!!!",
+		"id": "FB_RagRaid_DestroyEverything",
+		"audio": {
+			"play": [],
+			"death": [],
+			"AE_Fire_Start_02": [
+				"AE_Fire_Start_02.ogg"
+			],
+			"AE_Fire_End_02": [
+				"AE_Fire_End_02.ogg"
+			],
+			"attack": [],
+			"GlassShatter_Underlay_Death": [
+				"GlassShatter_Underlay_Death.ogg"
+			]
+		},
+		"text": "Destroy All Minions",
+		"dbfId": 57484,
+		"type": "Spell",
+		"cardClass": "MAGE",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 4,
+		"set": "Tb",
+		"name": "DIE, INSECTS!",
+		"id": "FB_RagRaid_DoubleBlast",
+		"audio": {
+			"play": [],
+			"Shared_Fire_Fizzle_1": [
+				"Shared_Fire_Fizzle_1.ogg"
+			],
+			"death": [],
+			"attack": [],
+			"Shared_Fire_Precast_1": [
+				"Shared_Fire_Precast_1.ogg"
+			],
+			"Shared_Fire_Cast_1": [
+				"Shared_Fire_Cast_1.ogg"
+			]
+		},
+		"text": "Deal $8 damage to a random enemy. TWICE.",
+		"dbfId": 57483,
+		"type": "Spell",
+		"cardClass": "MAGE",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Mage",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Spreading Flames",
+		"id": "FB_RagRaid_Draw",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Draw 4 cards.",
+		"dbfId": 57316,
+		"type": "Spell",
+		"cardClass": "MAGE",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Tb",
+		"name": "Big Bad Ragnaros",
+		"health": 15000,
+		"id": "FB_RagRaid_Hero",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_BRM_027h_Death_63.ogg"
+			],
+			"attack": [
+				"VO_BRM_027h_Attack_15.ogg"
+			]
+		},
+		"dbfId": 57224,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "TOO SOON!",
+		"id": "FB_RagRaid_InnkeeperReset",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Summon Big Bad Ragnaros again, he will start at 15000 health.",
+		"dbfId": 57485,
+		"type": "Spell",
+		"cardClass": "NEUTRAL",
+		"rarity": "Free"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
+		"name": "RagRaid Innkeeper Tools for Reset - NOT PLAYER FACING",
+		"id": "FB_RagRaid_InnkeeperTools",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Reset Rag if he's dead",
+		"dbfId": 57487,
+		"type": "Enchantment",
+		"entourage": [
+			"FB_RagRaid_InnkeeperReset",
+			"FB_RagRaid_ResetCancel"
+		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Cancel",
+		"id": "FB_RagRaid_ResetCancel",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Don't reset Big Bad Ragnaros' health. Will end the game.",
+		"dbfId": 57486,
+		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -81690,7 +82060,7 @@ var parseCardsText = {
 			"jaJP": "10/10のコピー1体を自分の手札に追加する。",
 			"plPL": "Dodaj kopię 10/10 do twojej ręki.",
 			"esES": "Añade una copia 10/10\na tu mano.",
-			"ruRU": "Добавить в руку копию 10/10.",
+			"ruRU": "Положить в руку копию 10/10.",
 			"esMX": "Agrega una copia 10/10 a tu mano.",
 			"koKR": "10/10 하수인으로 복사하여 내 손으로 가져옴",
 			"thTH": "เพิ่มก๊อปปี้ 10/10 หนึ่งใบในมือคุณ"
@@ -84933,24 +85303,9 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"collectionText": {
-			"ptBR": " de dano aos inimigos em frente \na este lacaio.",
-			"zhCN": "点伤害。",
-			"itIT": " |4(danno,danni) ai\nnemici di fronte.",
-			"enUS": " damage to the enemies opposite of this minion.",
-			"frFR": " |4(point,points) de dégâts aux adversaires en face de ce serviteur.",
-			"zhTW": "點傷害",
-			"deDE": " Schaden zu.",
-			"jaJP": "ダメージを与える。",
-			"plPL": " pkt. obrażeń wrogom naprzeciw tego stronnika.",
-			"esES": " p. de daño a los enemigos en frente de este esbirro.",
-			"ruRU": " ед. урона противникам перед собой.",
-			"esMX": " de daño a los enemigos frente a este esbirro.",
-			"koKR": " 줍니다.",
-			"thTH": " แต้มให้ศัตรูที่อยู่[b]ตรงข้ามมินเนี่ยนตัวนี้"
-		},
 		"cost": 0,
 		"set": "Gilneas",
+		"collectionText": " damage to the enemies opposite of this minion.",
 		"artist": "Arthur Bozonnet",
 		"hideStats": true,
 		"health": 3,
@@ -90841,27 +91196,33 @@ var parseCardsText = {
 		"cost": 2,
 		"set": "Gvg",
 		"race": "DEMON",
-		"artist": "Carl Critchlow",
+		"artist": "Mike Sass",
 		"health": 4,
 		"mechanics": [
 			"LIFESTEAL"
 		],
 		"dbfId": 2172,
 		"type": "Minion",
-		"flavor": "Her sister is the Mistress of Pane who sells windows and shower doors.",
+		"flavor": "Her sister is the Queen of Pane who sells windows and shower doors.",
 		"playerClass": "Warlock",
 		"attack": 1,
-		"name": "Mistress of Pain",
+		"name": "Queen of Pain",
 		"id": "GVG_018",
 		"audio": {
 			"play": [
-				"VO_GVG_018_Play_01.ogg"
+				"VO_GVG_018_Female_Dreadlord_Play_01.ogg",
+				"2H_EpicStaff_Underlay_Play.ogg",
+				"ShadowMagic_Play_Underlay.ogg"
 			],
 			"death": [
-				"VO_GVG_018_Death_03.ogg"
+				"VO_GVG_018_Female_Dreadlord_Death_01.ogg",
+				"2H_Axe_Underlay_Death.ogg",
+				"ShadowMagic_Death_Underlay.ogg"
 			],
 			"attack": [
-				"VO_GVG_018_Attack_02_Alt.ogg"
+				"VO_GVG_018_Female_Dreadlord_Attack_01.ogg",
+				"2H_Axe_Underlay_Attack.ogg",
+				"ShadowMagic_Attack_Underlay.ogg"
 			]
 		},
 		"text": "<b>Lifesteal</b>",
@@ -95641,6 +96002,27 @@ var parseCardsText = {
 		"rarity": "Epic"
 	},
 	{
+		"playerClass": "Druid",
+		"collectible": true,
+		"set": "Hero_skins",
+		"name": "Elise Starseeker",
+		"health": 30,
+		"id": "HERO_06b",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO__Female_Night Elf_Death_01.ogg"
+			],
+			"attack": [
+				"VO__Female_Night Elf_Attack_01.ogg"
+			]
+		},
+		"dbfId": 56358,
+		"type": "Hero",
+		"cardClass": "DRUID",
+		"rarity": "Epic"
+	},
+	{
 		"playerClass": "Warlock",
 		"collectible": true,
 		"set": "Core",
@@ -96658,24 +97040,9 @@ var parseCardsText = {
 		"cardClass": "DRUID"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Último Suspiro Secreto:</b> Cause 3 de dano a todos os lacaios; ou Conceda +2/+2 a eles.",
-			"zhCN": "<b>秘密亡语：</b>对所有随从造成3点伤害；\n或者使所有随从获得+2/+2。",
-			"itIT": "<b>Rantolo di Morte Nascosto:</b> infligge 3 danni a TUTTI i servitori <b>o</b> +2/+2 a TUTTI i servitori.",
-			"enUS": "<b>Secret Deathrattle:</b> Deal 3 damage to all minions; or Give them +2/+2.",
-			"frFR": "<b>Râle d’agonie secret :</b> inflige 3 points de dégâts à tous les serviteurs ou leur donne +2/+2.",
-			"zhTW": "<b>隱密死聲：</b>對全部手下造成3點傷害，或賦予全部手下+2/+2",
-			"deDE": "[x]<b>Geheimes Todesröcheln:</b>\nFügt allen Dienern\n3 Schaden zu; oder\nverleiht ihnen +2/+2.",
-			"jaJP": "[x]<b>秘密の断末魔:</b>\n全てのミニオンに\n3ダメージを与える。\nまたは、全てのミニオンに\n+2/+2を付与する。",
-			"plPL": "<b>Skryta Agonia:</b> Zadaj 3 pkt. obrażeń wszystkim stronnikom; lub daj im +2/+2.",
-			"esES": "<b>Último aliento oculto:\n</b> Inflige 3 p. de daño\na todos los esbirros, o bien les otorga +2/+2.",
-			"ruRU": "<b>Тайный «Предсмертный хрип»:</b> наносит 3 ед. урона всем существам; или все существа получают +2/+2.",
-			"esMX": "<b>Estertor secreto:</b> inflige 3 de daño a todos los esbirros, o les otorga +2/+2.",
-			"koKR": "<b>죽음의 메아리 (비밀):</b>\n<b>모든</b> 하수인에게\n피해를 3 줍니다. 또는 +2/+2를 부여합니다.",
-			"thTH": "<b>เสียงสุดท้ายลับ:</b>\nสร้างความเสียหาย[b] 3 แต้มให้มินเนี่ยนทั้งหมด[b]หรือมอบ +2/+2 ให้"
-		},
 		"cost": 5,
 		"set": "Icecrown",
+		"collectionText": "<b>Secret Deathrattle:</b> Deal 3 damage to all minions; or Give them +2/+2.",
 		"health": 3,
 		"mechanics": [
 			"DEATHRATTLE"
@@ -100727,24 +101094,9 @@ var parseCardsText = {
 		"cardClass": "HUNTER"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Provocar</b>, <b>Venenoso</b>",
-			"zhCN": "<b>嘲讽，剧毒</b>",
-			"itIT": "<b>Provocazione</b>. <b>Veleno</b>",
-			"enUS": "<b>Taunt</b>, <b>Poisonous</b>",
-			"frFR": "<b>Provocation</b>, <b>Toxicité</b>",
-			"zhTW": "<b>嘲諷</b>，<b>致命劇毒</b>",
-			"deDE": "<b>Spott</b>, <b>Giftig</b>",
-			"jaJP": "<b>挑発</b>、<b>猛毒</b>",
-			"plPL": "<b>Prowokacja</b>, <b>Trucizna</b>",
-			"esES": "<b>Provocar</b>. <b>Veneno</b>.",
-			"ruRU": "<b>Яд</b>. <b>Провокация</b>.",
-			"esMX": "<b>Provocación</b>, <b>Venenoso</b>",
-			"koKR": "<b>도발</b>, <b>독성</b>",
-			"thTH": "<b>ยั่วยุ</b> <b>พิษ</b>"
-		},
 		"cost": 2,
 		"set": "Ungoro",
+		"collectionText": "<b>Taunt</b>, <b>Poisonous</b>",
 		"race": "BEAST",
 		"health": 2,
 		"mechanics": [
@@ -100773,24 +101125,9 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Furtividade</b>, <b>Venenoso</b>",
-			"zhCN": "<b>潜行，剧毒</b>",
-			"itIT": "<b>Furtività</b>. <b>Veleno</b>",
-			"enUS": "<b>Stealth</b>, <b>Poisonous</b>",
-			"frFR": "<b>Camouflage</b>, <b>Toxicité</b>",
-			"zhTW": "<b>潛行</b>，<b>致命劇毒</b>",
-			"deDE": "<b>Verstohlenheit</b>, <b>Giftig</b>",
-			"jaJP": "<b>隠れ身</b>、<b>猛毒</b>",
-			"plPL": "<b>Ukrycie</b>, <b>Trucizna</b>",
-			"esES": "<b>Sigilo</b>. <b>Veneno</b>.",
-			"ruRU": "<b>Яд</b>. <b>Маскировка</b>.",
-			"esMX": "<b>Sigilo</b>, <b>Venenoso</b>",
-			"koKR": "<b>은신</b>, <b>독성</b>",
-			"thTH": "<b>ซ่อนตัว</b> <b>พิษ</b>"
-		},
 		"cost": 3,
 		"set": "Ungoro",
+		"collectionText": "<b>Stealth</b>, <b>Poisonous</b>",
 		"race": "BEAST",
 		"health": 2,
 		"mechanics": [
@@ -100819,24 +101156,9 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Escudo Divino</b>, <b>Venenoso</b>",
-			"zhCN": "<b>圣盾，剧毒</b>",
-			"itIT": "<b>Scudo Divino</b>. <b>Veleno</b>",
-			"enUS": "<b>Divine Shield</b>, <b>Poisonous</b>",
-			"frFR": "<b>Bouclier divin</b>, <b>Toxicité</b>",
-			"zhTW": "<b>聖盾術</b>，<b>致命劇毒</b>",
-			"deDE": "<b>Gottesschild</b>, <b>Giftig</b>",
-			"jaJP": "<b>聖なる盾</b>、<b>猛毒</b>",
-			"plPL": "<b>Boska tarcza</b>, <b>Trucizna</b>",
-			"esES": "<b>Escudo divino</b>. <b>Veneno</b>.",
-			"ruRU": "<b>Яд</b>, <b>Божественный щит</b>.",
-			"esMX": "<b>Escudo divino</b>, <b>Venenoso</b>",
-			"koKR": "<b>천상의 보호막</b>, <b>독성</b>",
-			"thTH": "<b>โล่ศักดิ์สิทธิ์</b> <b>พิษ</b>"
-		},
 		"cost": 3,
 		"set": "Lootapalooza",
+		"collectionText": "<b>Divine Shield</b>, <b>Poisonous</b>",
 		"race": "BEAST",
 		"health": 1,
 		"mechanics": [
@@ -100865,24 +101187,9 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Eco</b>, <b>Rapidez</b>",
-			"zhCN": "<b>回响，突袭</b>",
-			"itIT": "<b>Eco</b>. <b>Assalto</b>",
-			"enUS": "<b>Echo</b>, <b>Rush</b>",
-			"frFR": "<b>Écho</b>, <b>Ruée</b>",
-			"zhTW": "<b>回音</b>，<b>衝刺</b>",
-			"deDE": "<b>Echo</b>, <b>Eifer</b>",
-			"jaJP": "<b>木霊</b>、<b>急襲</b>",
-			"plPL": "<b>Echo</b>, <b>Zryw</b>",
-			"esES": "<b>Eco</b>. <b>Embestir</b>.",
-			"ruRU": "<b>Эхо</b>, <b>Натиск</b>.",
-			"esMX": "<b>Eco</b>, <b>Acometida</b>",
-			"koKR": "<b>잔상</b>, <b>속공</b>",
-			"thTH": "<b>เสียงสะท้อน</b> <b>จู่โจม</b>"
-		},
 		"cost": 2,
 		"set": "Gilneas",
+		"collectionText": "<b>Echo</b>, <b>Rush</b>",
 		"race": "BEAST",
 		"health": 1,
 		"mechanics": [
@@ -100911,24 +101218,9 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Venenoso</b>, <b>Rapidez</b>",
-			"zhCN": "<b>剧毒，突袭</b>",
-			"itIT": "<b>Veleno</b>. <b>Assalto</b>",
-			"enUS": "<b>Poisonous</b>, <b>Rush</b>",
-			"frFR": "<b>Toxicité</b>, <b>Ruée</b>",
-			"zhTW": "<b>致命劇毒</b>，<b>衝刺</b>",
-			"deDE": "<b>Giftig</b>, <b>Eifer</b>",
-			"jaJP": "<b>猛毒</b>、<b>急襲</b>",
-			"plPL": "<b>Trucizna</b>, <b>Zryw</b>",
-			"esES": "<b>Veneno</b>. <b>Embestir</b>.",
-			"ruRU": "<b>Яд</b>, <b>Натиск</b>.",
-			"esMX": "<b>Venenoso</b>, <b>Acometida</b>",
-			"koKR": "<b>독성</b>, <b>속공</b>",
-			"thTH": "<b>พิษ</b> <b>จู่โจม</b>"
-		},
 		"cost": 5,
 		"set": "Gilneas",
+		"collectionText": "<b>Poisonous</b>, <b>Rush</b>",
 		"race": "BEAST",
 		"health": 3,
 		"mechanics": [
@@ -100957,24 +101249,9 @@ var parseCardsText = {
 		"rarity": "Common"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Roubar Vida</b>, <b>Rapidez</b>",
-			"zhCN": "<b>吸血，突袭</b>",
-			"itIT": "<b>Furto Vitale</b>. <b>Assalto</b>",
-			"enUS": "<b>Lifesteal</b>, <b>Rush</b>",
-			"frFR": "<b>Vol de vie</b>, <b>Ruée</b>",
-			"zhTW": "<b>生命竊取</b>，<b>衝刺</b>",
-			"deDE": "<b>Lebensentzug</b>, <b>Eifer</b>",
-			"jaJP": "<b>生命奪取</b>、<b>急襲</b>",
-			"plPL": "<b>Kradzież życia</b>, <b>Zryw</b>",
-			"esES": "<b>Robo de vida</b>. <b>Embestir</b>.",
-			"ruRU": "<b>Похищение жизни</b>, <b>Натиск</b>",
-			"esMX": "<b>Robavida</b>, <b>Acometida</b>",
-			"koKR": "<b>생명력 흡수</b>, <b>속공</b>",
-			"thTH": "<b>สูบชีวิต</b> <b>จู่โจม</b>"
-		},
 		"cost": 2,
 		"set": "Gilneas",
+		"collectionText": "<b>Lifesteal</b>, <b>Rush</b>",
 		"race": "BEAST",
 		"health": 3,
 		"mechanics": [
@@ -104156,24 +104433,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Deathknight",
-		"collectionText": {
-			"ptBR": " de dano ao herói inimigo. +1 de dano a cada vez.",
-			"zhCN": "点伤害。每次使用\n+1点伤害。",
-			"itIT": " |4(danno,danni) all'eroe nemico. +1 danno a ogni utilizzo.",
-			"enUS": " damage to the enemy hero. +1 Damage each time.",
-			"frFR": " |4(point,points) de dégâts au héros adverse. +1 point de dégâts à chaque fois.",
-			"zhTW": "點傷害。每次\n提高1點",
-			"deDE": " Schaden zu. Verursacht jedes Mal 1 Schaden mehr.",
-			"jaJP": "ダメージを与える。\n使用する度ダメージが\n+1される。",
-			"plPL": " pkt. obrażeń wrogiemu bohaterowi. +1 pkt. obrażeń za każdym razem.",
-			"esES": " p. de daño\nal héroe enemigo.\n+1 p. de daño cada vez.",
-			"ruRU": " ед. урона герою противника.\n+1 к урону с каждым использованием.",
-			"esMX": " de daño al héroe enemigo.\n+1 de daño cada vez.",
-			"koKR": " 줍니다. 사용할 때마다 피해가 +1 증가합니다.",
-			"thTH": " แต้ม[b]ให้ฮีโร่ศัตรู ความเสียหาย +1 ทุกครั้งที่ใช้"
-		},
 		"cost": 0,
 		"set": "Icecrown",
+		"collectionText": " damage to the enemy hero. +1 Damage each time.",
 		"name": "Remorseless Winter",
 		"mechanics": [
 			"AI_MUST_PLAY"
@@ -119482,24 +119744,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Cause $2 de dano a um lacaio. <i>(Receba 3 de Armadura para aprimorar.)</i>",
-			"zhCN": "对一个随从造成$2点伤害。<i>（获得3点护甲值后升级。）</i>",
-			"itIT": "Infligge $2 danni a un servitore. <i>(Si potenzia ottenendo 3 Armatura)</i>",
-			"enUS": "Deal $2 damage to a minion. <i>(Gain 3 Armor to upgrade.)</i>",
-			"frFR": "Inflige $2 |4(point,points) de dégâts à un serviteur. <i>(Obtenez 3 points d’armure pour l’améliorer.)</i>",
-			"zhTW": "對一個手下造成$2點傷害<i>(獲得3點護甲值後升級)</i>",
-			"deDE": "Fügt einem Diener $2 Schaden zu. <i>(Zum Aufwerten 3 Rüstung erhalten.)</i>",
-			"jaJP": "[x]ミニオン1体に\n$2ダメージを与える。\n<i>（装甲を3獲得すると\n   アップグレード）</i>",
-			"plPL": "Zadaj $2 pkt. obrażeń stronnikowi. <i>(Otrzymaj 3 pkt. pancerza, aby ulepszyć.)</i>",
-			"esES": "Inflige $2 p. de daño a un esbirro. <i>(Obtén 3 p. de armadura para mejorarlo).</i>",
-			"ruRU": "Наносит $2 ед. урона выбранному существу. <i>(Получите 3 ед. брони для улучшения.)</i>",
-			"esMX": "Inflige $2 de daño a un esbirro. <i>(Obtén 3 de Armadura para mejorar esta carta).</i>",
-			"koKR": "하수인에게 피해를 $2 줍니다. <i>(방어도를 +3 얻으면 강화됩니다.)</i>",
-			"thTH": "สร้างความเสียหาย $2 แต้มให้มินเนี่ยนหนึ่งตัว <i>(รับเกราะ 3 แต้มเพื่ออัพเกรด)</i>"
-		},
 		"cost": 1,
 		"set": "Lootapalooza",
+		"collectionText": "Deal $2 damage to a minion. <i>(Gain 3 Armor to upgrade.)</i>",
 		"artist": "Jim Nelson",
 		"dbfId": 43288,
 		"type": "Spell",
@@ -119789,24 +120036,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Evoque 1 cópia de um lacaio aliado. <i>(Cause <b>Sobrecarga</b> em 3 Cristais de Mana para aprimorar.)</i>",
-			"zhCN": "选择一个友方随从，召唤一个它的复制。<i>（<b>过载</b>三个法力水晶后升级。）</i>",
-			"itIT": "Evoca una copia di un tuo servitore. <i>(Si potenzia <b>Sovraccaricando</b> 3 Cristalli di Mana)</i>",
-			"enUS": "Summon 1 copy of a friendly minion. <i>(<b>Overload</b> 3 Mana Crystals to upgrade.)</i>",
-			"frFR": "Invoque 1 copie d’un serviteur allié. <i>(<b>Surchargez</b> 3 cristaux de mana pour l’améliorer.)</i>",
-			"zhTW": "召喚1個友方手下的分身<i>(<b>超載</b>3顆法力水晶後升級)</i>",
-			"deDE": "Ruft 1 Kopie eines befreundeten Dieners herbei. <i>(Zum Aufwerten 3 Manakristalle <b>überladen</b>.)</i>",
-			"jaJP": "[x]味方のミニオン1体の\nコピーを1体召喚する。\n<i>（マナクリスタルを3つ\n<b>オーバーロード</b>させると\nアップグレード）</i>",
-			"plPL": "Przyzwij 1 kopię przyjaznego stronnika. <i>(<b>Przeciąż</b> 3 kryształy many, aby ulepszyć.)</i>",
-			"esES": "Invoca 1 copia de un esbirro amistoso. <i>(<b>Sobrecarga</b> 3 cristales de maná para mejorarlo).</i>",
-			"ruRU": "Призывает 1 копию вашего выбранного существа. <i>(<b>Перегрузите</b> 3 кристалла маны для улучшения.)</i>",
-			"esMX": "Invoca 1 copia de un esbirro aliado. <i>(<b>Sobrecarga</b> 3 Cristales de maná para mejorar esta carta).</i>",
-			"koKR": "아군 하수인을 복사하여 소환합니다. <i>(내 마나 수정 3개를 <b>과부하</b>하면 강화됩니다.)</i>",
-			"thTH": "เรียกก๊อปปี้ของ[b]มินเนี่ยนฝ่ายคุณ 1 ตัว <i>(<b>โอเวอร์โหลด</b> คริสตัลมานา 3 อันเพื่ออัพเกรด)</i>"
-		},
 		"cost": 7,
 		"set": "Lootapalooza",
+		"collectionText": "Summon 1 copy of a friendly minion. <i>(<b>Overload</b> 3 Mana Crystals to upgrade.)</i>",
 		"artist": "Jason Kang",
 		"referencedTags": [
 			"OVERLOAD"
@@ -120164,24 +120396,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Evoque um Espírito 2/2 com <b>Provocar</b>. <i>(Restaure 3 de Vida para aprimorar.)</i>",
-			"zhCN": "召唤一个2/2并具有<b>嘲讽</b>的灵魂。<i>（恢复3点生命值后升级。）</i>",
-			"itIT": "Evoca uno Spirito 2/2 con <b>Provocazione</b>. <i>(Si potenzia rigenerando 3 Salute)</i>",
-			"enUS": "Summon a 2/2 Spirit with <b>Taunt</b>. <i>(Restore 3 Health to upgrade.)</i>",
-			"frFR": "Invoque un esprit 2/2 avec <b>Provocation</b>. <i>(Rendez 3 PV pour l’améliorer.)</i>",
-			"zhTW": "召喚一個有<b>嘲諷</b>的2/2聖靈<i>(恢復3點生命值後升級)</i>",
-			"deDE": "Ruft einen Geist (2/2) mit <b>Spott</b> herbei. <i>(Zum Aufwerten 3 Leben wiederherstellen.)</i>",
-			"jaJP": "<b>挑発</b>を持つ\n2/2の精霊を\n1体召喚する。\n<i>（体力を3回復するとアップグレード）</i>",
-			"plPL": "Przyzwij Ducha 2/2 z <b>Prowokacją</b>. <i>(Przywróć 3 pkt. zdrowia, aby ulepszyć.)</i>",
-			"esES": "Invoca un espíritu 2/2 con <b>Provocar</b>. <i>(Restaura 3 p. de salud para mejorarla).</i>",
-			"ruRU": "Призывает духа 2/2 с <b>«Провокацией»</b>. <i>(Восстановите 3 ед. здоровья для улучшения.)</i>",
-			"esMX": "Invoca un Espíritu 2/2 con <b>Provocación</b>. <i>(Restaura 3 de Salud para mejorar esta carta).</i>",
-			"koKR": "<b>도발</b> 능력이 있는 2/2 영혼을 소환합니다. <i>(생명력을 3 회복하면 강화됩니다.)</i>",
-			"thTH": "เรียกวิญญาณ 2/2 ที่มี <b>ยั่วยุ</b> <i>(ฟื้นฟูพลังชีวิต 3 แต้มเพื่ออัพเกรด)</i>"
-		},
 		"cost": 2,
 		"set": "Lootapalooza",
+		"collectionText": "Summon a 2/2 Spirit with <b>Taunt</b>. <i>(Restore 3 Health to upgrade.)</i>",
 		"artist": "Konstantin Turovec",
 		"referencedTags": [
 			"TAUNT"
@@ -120388,24 +120605,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Adicione 1 feitiço de Mago aleatório à sua mão. <i>(Jogue 2 Elementais para aprimorar.)</i>",
-			"zhCN": "随机将一张法师法术牌置入你的手牌。<i>（使用两张元素牌后升级。）</i>",
-			"itIT": "Mette nella tua mano una Magia casuale del Mago. <i>(Si potenzia giocando due Elementali)</i>",
-			"enUS": "Add 1 random Mage spell to your hand. <i>(Play 2 Elementals to upgrade.)</i>",
-			"frFR": "Place 1 sort de mage aléatoire dans votre main. <i>(Jouez 2 Élémentaires pour l’améliorer.)</i>",
-			"zhTW": "放1張隨機法師法術到你的手中<i>(打出2個元素後升級)</i>",
-			"deDE": "Erhaltet 1 zufälligen Magierzauber auf die Hand. <i>(Zum Aufwerten 2 Elementare ausspielen.)</i>",
-			"jaJP": "[x]ランダムなメイジの\n呪文カード1枚を\n自分の手札に追加する。\n<i>（エレメンタルを2体\n手札から使用すると\nアップグレード）</i>",
-			"plPL": "Dodaj 1 losowe zaklęcie maga do twojej ręki. <i>(Zagraj 2 Żywiołaki, aby ulepszyć.)</i>",
-			"esES": "Añade 1 hechizo de mago aleatorio a tu mano. <i>(Juega 2 elementales para mejorarlo.)</i>",
-			"ruRU": "Вы кладете в руку 1 случайное заклинание мага. <i>(Разыграйте 2 элементалей для улучшения.)</i>",
-			"esMX": "Agrega 1 hechizo de mago aleatorio a tu mano. <i>(Juega 2 Elementales para mejorar esta carta).</i>",
-			"koKR": "무작위 마법사 주문을 내 손으로 가져옵니다. <i>(정령을 2장 내면 강화됩니다.)</i>",
-			"thTH": "สุ่มเพิ่มการ์ดเวทมนตร์[b]ของเมจ 1 ใบในมือคุณ <i>(เล่นวิญญาณธาตุ 2 ใบเพื่ออัพเกรด)</i>"
-		},
 		"cost": 2,
 		"set": "Lootapalooza",
+		"collectionText": "Add 1 random Mage spell to your hand. <i>(Play 2 Elementals to upgrade.)</i>",
 		"artist": "Zoltan Boros",
 		"dbfId": 43414,
 		"type": "Spell",
@@ -124532,24 +124734,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Destrua 1 lacaio inimigo aleatório. <i>(Jogue 3 cards com <b>Último Suspiro</b> para aprimorar.)</i>",
-			"zhCN": "随机消灭一个敌方随从。<i>（使用三张<b>亡语</b>牌后升级。）</i>",
-			"itIT": "Distrugge un servitore nemico casuale. <i>(Si potenzia giocando 3 carte con <b>Rantolo di Morte</b>)</i>",
-			"enUS": "Destroy 1 random enemy minion.\n<i>(Play 3 <b>Deathrattle</b> cards to upgrade.)</i>",
-			"frFR": "Détruit 1 serviteur adverse aléatoire. <i>(Jouez 3 cartes avec <b>Râle d’agonie</b> pour l’améliorer.)</i>",
-			"zhTW": "摧毀1個隨機敵方手下<i>(打出3張<b>死亡之聲</b>牌後升級)</i>",
-			"deDE": "Vernichtet 1 zufälligen feindlichen Diener. <i>(Zum Aufwerten 3 <b>Todesröcheln</b>-Karten ausspielen.)</i>",
-			"jaJP": "[x]ランダムな敵の\nミニオン1体を破壊する。\n<i>（<b>断末魔</b>カードを\n3枚手札から使用\nするとアップグレード）</i>",
-			"plPL": "Zniszcz jednego losowego wrogiego stronnika. <i>(Zagraj 3 karty z <b>Agonią</b>, aby ulepszyć.)</i>",
-			"esES": "Destruye 1 esbirro enemigo aleatorio. <i>(Juega 3 cartas con <b>Último aliento</b> para mejorarlo).</i>",
-			"ruRU": "Уничтожает 1 случайное существо противника. <i>(Разыграйте 3 карты с <b>«Предсмертным хрипом»</b> для улучшения.)</i>",
-			"esMX": "Destruye 1 esbirro enemigo aleatorio. <i>(Juega 3 cartas con <b>Estertor</b> para mejorar esta carta).</i>",
-			"koKR": "무작위 적 하수인을 처치합니다.\n<i>(<b>죽음의 메아리</b> 카드를 3회 내면 강화됩니다.)</i>",
-			"thTH": "สุ่มทำลายมินเนี่ยนศัตรู 1 ตัว <i>(เล่นการ์ด <b>เสียงสุดท้าย</b> 3 ใบเพื่ออัพเกรด)</i>"
-		},
 		"cost": 5,
 		"set": "Lootapalooza",
+		"collectionText": "Destroy 1 random enemy minion.\n<i>(Play 3 <b>Deathrattle</b> cards to upgrade.)</i>",
 		"artist": "Arthur Bozonnet",
 		"referencedTags": [
 			"DEATHRATTLE"
@@ -124745,24 +124932,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "Ressuscite 2 lacaios aliados diferentes. <i>(Lance 4 feitiços para aprimorar.)</i>",
-			"zhCN": "复活两个不同的友方随从。<i>（施放四个法术后升级。）</i>",
-			"itIT": "Evoca due tuoi servitori diversi morti in questa partita. <i>(Si potenzia lanciando 4 Magie)</i>",
-			"enUS": "Resurrect 2 different friendly minions. <i>(Cast 4 spells to upgrade.)</i>",
-			"frFR": "Ressuscite 2 serviteurs alliés différents. <i>(Lancez 4 sorts pour l’améliorer.)</i>",
-			"zhTW": "復活2個不同的友方手下<i>(施放\n4個法術後升級)</i>",
-			"deDE": "Belebt 2 verschiedene befreundete Diener wieder. <i>(Zum Aufwerten 4 Zauber wirken.)</i>",
-			"jaJP": "[x]味方のミニオン\n2種を復活させる。\n<i>（呪文を4回使用すると \n  アップグレード）</i>",
-			"plPL": "Wskrześ dwóch różnych przyjaznych stronników. <i>(Rzuć 4 zaklęcia, aby ulepszyć.)</i>",
-			"esES": "Resucita a 2 esbirros amistosos diferentes. <i>(Lanza 4 hechizos para mejorarlo).</i>",
-			"ruRU": "Воскрешает 2 ваших различных существ. <i>(Примените 4 заклинания для улучшения.)</i>",
-			"esMX": "Revive 2 esbirros aliados diferentes. <i>(Lanza 4 hechizos para mejorar esta carta.)</i>",
-			"koKR": "서로 다른 아군 하수인 둘을 부활시킵니다. <i>(주문을 4회 시전하면 강화됩니다.)</i>",
-			"thTH": "ชุบชีวิตมินเนี่ยน[b]ฝ่ายคุณที่ต่างกัน 2 ตัว <i>(ร่ายเวทมนตร์ 4 ใบ[b]เพื่ออัพเกรด)</i>"
-		},
 		"cost": 7,
 		"set": "Lootapalooza",
+		"collectionText": "Resurrect 2 different friendly minions. <i>(Cast 4 spells to upgrade.)</i>",
 		"artist": "Tyler West Studio",
 		"dbfId": 46307,
 		"type": "Spell",
@@ -124881,7 +125053,7 @@ var parseCardsText = {
 			"jaJP": "ゴールデンのコピー1体を自分の手札に追加する。",
 			"plPL": "Dodaj złotą kopię do twojej ręki.",
 			"esES": "Añade una copia dorada a tu mano.",
-			"ruRU": "Добавить в руку золотую копию существа.",
+			"ruRU": "Положить в руку золотую копию существа.",
 			"esMX": "Agrega una copia dorada a tu mano.",
 			"koKR": "황금 카드로 복사하여 내 손으로 가져옴",
 			"thTH": "เพิ่มก๊อปปี้สีทอง[b]หนึ่งใบในมือคุณ"
@@ -126379,24 +126551,9 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"collectionText": {
-			"ptBR": "<b>Adapte</b> um lacaio aliado {0} |4(vez, vezes).",
-			"zhCN": "使一个友方随从<b>进化</b>{0}次。",
-			"itIT": "<b>Adatta</b> un tuo servitore {0} |4(volta,volte).",
-			"enUS": "<b>Adapt</b> a friendly minion {0} |4(time, times).",
-			"frFR": "Confère <b>Adaptation</b> {0} fois à un serviteur allié.",
-			"zhTW": "<b>演化</b>一個友方手下{0}次",
-			"deDE": "<b>Mutiert</b> einen befreundeten Diener {0}-mal.",
-			"jaJP": "味方の\nミニオン1体を\n{0}回<b>適応</b>させる。",
-			"plPL": "<b>Adaptuj</b> przyjaznego stronnika {0} |4(raz,razy,razy).",
-			"esES": "<b>Adapta</b> a un esbirro amistoso {0} |4(vez,veces).",
-			"ruRU": "Ваше существо <b>адаптируется</b> {0} р.",
-			"esMX": "<b>Adapta</b> a un esbirro aliado {0} |4(vez, veces).",
-			"koKR": "아군 하수인을 {0}번 <b>적응</b>시킵니다.",
-			"thTH": "<b>ปรับตัว</b> {0} ครั้ง[b]ให้มินเนี่ยนฝ่ายคุณ[b]หนึ่งตัว"
-		},
 		"cost": 4,
 		"set": "Lootapalooza",
+		"collectionText": "<b>Adapt</b> a friendly minion {0} |4(time, times).",
 		"artist": "Clint Langley",
 		"referencedTags": [
 			"ADAPT"
@@ -135312,7 +135469,7 @@ var parseCardsText = {
 		},
 		"collectible": true,
 		"cost": 6,
-		"set": "Core",
+		"set": "Hof",
 		"artist": "Sean O’Daniels",
 		"howToEarn": {
 			"ptBR": "Disponível no nível 8.",
@@ -135345,7 +135502,7 @@ var parseCardsText = {
 		},
 		"text": "Return all minions to their owner's hand.",
 		"cardClass": "ROGUE",
-		"rarity": "Free"
+		"rarity": "Common"
 	},
 	{
 		"collectible": true,
@@ -141400,7 +141557,7 @@ var parseCardsText = {
 			"jaJP": "1/1のコピー1体を自分の手札に追加する。",
 			"plPL": "Dodaj kopię 1/1 do twojej ręki.",
 			"esES": "Añade una copia 1/1 a tu mano.",
-			"ruRU": "Добавить в руку копию 1/1.",
+			"ruRU": "Положить в руку копию 1/1.",
 			"esMX": "Agrega una copia 1/1 a tu mano.",
 			"koKR": "1/1 하수인으로 복사하여 내 손으로 가져옴",
 			"thTH": "เพิ่มก๊อปปี้ 1/1 หนึ่งใบในมือคุณ"
@@ -144230,24 +144387,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
-		"collectionText": {
-			"ptBR": "Evoque um <b>Golem de Jade</b>.",
-			"zhCN": "召唤一个<b>青玉魔像</b>。",
-			"itIT": "Evoca un <b>Golem di Giada</b>.",
-			"enUS": "Summon a <b>Jade Golem</b>.",
-			"frFR": "Invoque un <b>golem de jade</b>.",
-			"zhTW": "召喚一個<b>翠玉魔像</b>",
-			"deDE": "Ruft einen <b>Jadegolem</b> herbei.",
-			"jaJP": "<b>翡翠のゴーレム</b>を1体召喚する。",
-			"plPL": "Przyzwij <b>Nefrytowego golema</b>.",
-			"esES": "Invoca un <b>gólem de jade</b>.",
-			"ruRU": "Призывает <b>нефритового голема</b>.",
-			"esMX": "Invoca un <b>Gólem de jade</b>.",
-			"koKR": "<b>비취 골렘</b>을 소환합니다.",
-			"thTH": "เรียก <b>เจดโกเล็ม</b> หนึ่งตัว"
-		},
 		"cost": 4,
 		"set": "Tb",
+		"collectionText": "Summon a <b>Jade Golem</b>.",
 		"name": "Construct Golem",
 		"id": "TB_BossRumble_002hp",
 		"audio": {
@@ -144695,6 +144837,17 @@ var parseCardsText = {
 		"text": "Increased stats and <b>Lifesteal.</b>",
 		"dbfId": 53411,
 		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Build a Deck Please!",
+		"id": "TB_ckBuildDeck_Dalaran",
+		"text": "Build a Deck!",
+		"dbfId": 56693,
+		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -146233,10 +146386,10 @@ var parseCardsText = {
 		"cardClass": "NEUTRAL"
 	},
 	{
-		"playerClass": "Neutral",
+		"playerClass": "Warrior",
 		"set": "Tb",
 		"name": "Atramedes",
-		"health": 30,
+		"health": 10,
 		"id": "TB_EVILBRM_Atramedes",
 		"audio": {
 			"play": [],
@@ -146245,15 +146398,84 @@ var parseCardsText = {
 			],
 			"attack": []
 		},
+		"text": "<i>He eats E.V.I.L. for breakfast, but only if there’s nothing G.O.O.D. around.</i>",
 		"dbfId": 56559,
 		"type": "Hero",
-		"cardClass": "NEUTRAL"
+		"cardClass": "WARRIOR"
 	},
 	{
-		"playerClass": "Neutral",
+		"playerClass": "Warrior",
+		"set": "Tb",
+		"name": "Dr. Boom",
+		"health": 30,
+		"id": "TB_EVILBRM_BoomH",
+		"audio": {
+			"play": [
+				"VO_BOT_238_Male_Goblin_CIP_03.ogg"
+			],
+			"death": [
+				"VO_BOT_238_Male_Goblin_Death_01.ogg"
+			],
+			"attack": [
+				"VO_BOT_238_Male_Goblin_Attack_01.ogg"
+			]
+		},
+		"dbfId": 57252,
+		"type": "Hero",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 1,
+		"set": "Tb",
+		"name": "Overmine",
+		"id": "TB_EVILBRM_BoomHeroPower",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "[x]<b>Hero Power</b>\nShuffle two Bombs\ninto your opponent's\ndeck.",
+		"dbfId": 57795,
+		"type": "Hero_power",
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Twisted",
+		"id": "TB_EVILBRM_DALA_Priest_09",
+		"dbfId": 57659,
+		"type": "Spell",
+		"entourage": [
+			"UNG_034",
+			"GVG_011",
+			"DAL_735",
+			"EX1_045",
+			"UNG_844",
+			"LOE_107",
+			"EX1_048",
+			"CFM_657",
+			"GVG_014",
+			"DAL_434",
+			"EX1_332",
+			"CFM_661",
+			"AT_016",
+			"KAR_013",
+			"EX1_626",
+			"TRL_258",
+			"LOE_111",
+			"LOE_104",
+			"LOOT_008"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Shaman",
 		"set": "Tb",
 		"name": "Garr",
-		"health": 30,
+		"health": 10,
 		"id": "TB_EVILBRM_Garr",
 		"audio": {
 			"play": [],
@@ -146262,36 +146484,140 @@ var parseCardsText = {
 			],
 			"attack": []
 		},
+		"text": "<i>It’s gonna be a rocky road with no chance of marshmallows.</i>",
 		"dbfId": 56552,
 		"type": "Hero",
-		"cardClass": "NEUTRAL"
+		"cardClass": "SHAMAN"
 	},
 	{
-		"playerClass": "Neutral",
+		"playerClass": "Druid",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Summon Firesworn",
+		"id": "TB_EVILBRM_GarrSummon",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Summon two 1/1 Saplings.",
+		"dbfId": 57587,
+		"type": "Spell",
+		"cardClass": "DRUID"
+	},
+	{
+		"playerClass": "Mage",
 		"set": "Tb",
 		"name": "Baron Geddon",
-		"health": 30,
+		"health": 10,
 		"id": "TB_EVILBRM_Geddon",
 		"audio": {
 			"play": [],
 			"death": [],
 			"attack": []
 		},
+		"text": "<i>Whatever you do, never arm a Geddon.</i>",
 		"dbfId": 56560,
 		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Shaman",
+		"set": "Tb",
+		"name": "Hagatha",
+		"health": 30,
+		"id": "TB_EVILBRM_HagathaH",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_GIL_504_Female_Orc_Death_01.ogg"
+			],
+			"attack": [
+				"VO_GIL_504_Female_Orc_Attack_01.ogg"
+			]
+		},
+		"dbfId": 57261,
+		"type": "Hero",
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Priest",
+		"set": "Tb",
+		"name": "Madame Lazul",
+		"health": 30,
+		"id": "TB_EVILBRM_LazulH",
+		"audio": {
+			"play": [],
+			"death": [
+				"VO_HERO_09b_Female_Troll_Death_01.ogg"
+			],
+			"attack": [
+				"VO_HERO_09b_Female_Troll_Attack_03.ogg"
+			]
+		},
+		"dbfId": 57254,
+		"type": "Hero",
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Tb",
+		"name": "Amulet of Domination",
+		"id": "TB_EVILBRM_LOOTA_805",
+		"audio": {
+			"play": [],
+			"death": [],
+			"Shared_Shadow_Start_1": [
+				"Shared_Shadow_Start_1.ogg"
+			],
+			"Shared_Shadow_Cast_1": [
+				"Shared_Shadow_Cast_1.ogg"
+			],
+			"Priest_MindControl_Impact_1": [
+				"Priest_MindControl_Impact_1.ogg"
+			],
+			"attack": [],
+			"Shared_Shadow_PreCast_1": [
+				"Shared_Shadow_PreCast_1.ogg"
+			],
+			"Shared_Shadow_Fizzle_1": [
+				"Shared_Shadow_Fizzle_1.ogg"
+			]
+		},
+		"text": "Take control of an enemy minion. Add it to your Dungeon Deck.",
+		"dbfId": 57532,
+		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
 	{
 		"playerClass": "Neutral",
+		"cost": 1,
+		"set": "Tb",
+		"name": "Magic Mirror",
+		"id": "TB_EVILBRM_LOOTA_813",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "Choose a minion and summon a copy of it. Add it to your Dungeon Deck.",
+		"dbfId": 57533,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Warlock",
 		"set": "Tb",
 		"name": "Nefarian",
-		"health": 30,
+		"health": 10,
 		"id": "TB_EVILBRM_Nefarian",
 		"audio": {
 			"play": [],
 			"death": [],
 			"attack": []
 		},
+		"text": "<i>Also goes by Victor Nefarius. He’s subtle like that.</i>",
 		"dbfId": 56542,
 		"type": "Hero",
 		"entourage": [
@@ -146300,28 +146626,29 @@ var parseCardsText = {
 			"BRMA13_5",
 			"BRMA13_6"
 		],
-		"cardClass": "NEUTRAL"
+		"cardClass": "WARLOCK"
 	},
 	{
-		"playerClass": "Neutral",
+		"playerClass": "Paladin",
 		"set": "Tb",
 		"name": "Omnotron Defense System",
-		"health": 30,
+		"health": 10,
 		"id": "TB_EVILBRM_Omnotron01",
 		"audio": {
 			"play": [],
 			"death": [],
 			"attack": []
 		},
+		"text": "<i>Programmed to delete all intruders!</i>",
 		"dbfId": 56286,
 		"type": "Hero",
-		"cardClass": "NEUTRAL"
+		"cardClass": "PALADIN"
 	},
 	{
-		"playerClass": "Neutral",
+		"playerClass": "Warrior",
 		"set": "Tb",
 		"name": "Highlord Omokk",
-		"health": 30,
+		"health": 15,
 		"id": "TB_EVILBRM_Omokk",
 		"audio": {
 			"play": [],
@@ -146330,15 +146657,16 @@ var parseCardsText = {
 			],
 			"attack": []
 		},
+		"text": "<i>He’ll show you a smashing time!</i>",
 		"dbfId": 56553,
 		"type": "Hero",
-		"cardClass": "NEUTRAL"
+		"cardClass": "WARRIOR"
 	},
 	{
 		"playerClass": "Neutral",
 		"set": "Tb",
 		"name": "Onyxia",
-		"health": 30,
+		"health": 10,
 		"id": "TB_EVILBRM_Onyxia01",
 		"audio": {
 			"play": [],
@@ -146351,9 +146679,232 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Tb",
+		"name": "Whelp Waves",
+		"mechanics": [
+			"AI_MUST_PLAY"
+		],
+		"id": "TB_EVILBRM_OnyxiaHeroPower",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<b>Hero Power</b>\nSummon one extra whelp each turn.",
+		"dbfId": 57534,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Afterlife",
+		"id": "TB_EVILBRM_Priest_02",
+		"dbfId": 57654,
+		"type": "Spell",
+		"entourage": [
+			"DAL_030",
+			"BOT_509",
+			"LOE_006",
+			"DAL_413",
+			"LOOT_534",
+			"LOOT_534",
+			"UNG_037",
+			"DAL_040",
+			"UNG_900",
+			"DAL_039",
+			"BOT_566",
+			"GIL_805",
+			"EX1_016",
+			"DAL_775",
+			"TRL_537",
+			"GVG_114",
+			"ICC_214",
+			"OG_133",
+			"LOOT_187"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Shadows",
+		"id": "TB_EVILBRM_Priest_04",
+		"dbfId": 57655,
+		"type": "Spell",
+		"entourage": [
+			"GVG_009",
+			"DAL_030",
+			"TRL_501",
+			"ICC_210",
+			"ICC_212",
+			"AT_014",
+			"EX1_591",
+			"EX1_334",
+			"OG_101",
+			"DAL_723",
+			"DAL_011",
+			"CFM_603",
+			"DS1_233",
+			"CS2_234",
+			"UNG_029",
+			"EX1_622",
+			"TRL_500",
+			"ICC_235",
+			"ICC_830"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "What's Mind is Mine",
+		"id": "TB_EVILBRM_Priest_05",
+		"dbfId": 57656,
+		"type": "Spell",
+		"entourage": [
+			"GIL_142",
+			"UNG_032",
+			"DAL_729",
+			"OG_335",
+			"EX1_091",
+			"EX1_016",
+			"ICC_215",
+			"TRL_259",
+			"CS2_003",
+			"LOOT_353",
+			"TRL_097",
+			"BOT_435",
+			"EX1_339",
+			"EX1_345",
+			"EX1_334",
+			"GIL_134",
+			"ICC_207",
+			"CS1_113"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Old God",
+		"id": "TB_EVILBRM_Priest_06",
+		"dbfId": 57657,
+		"type": "Spell",
+		"entourage": [
+			"OG_281",
+			"OG_284",
+			"OG_162",
+			"OG_286",
+			"OG_283",
+			"OG_334",
+			"OG_096",
+			"OG_321",
+			"OG_339",
+			"OG_131",
+			"OG_255",
+			"OG_280"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Pint-Sized",
+		"id": "TB_EVILBRM_Priest_07",
+		"dbfId": 57658,
+		"type": "Spell",
+		"entourage": [
+			"DAL_544",
+			"FP1_001",
+			"UNG_809",
+			"DAL_030",
+			"TRL_502",
+			"UNG_022",
+			"TRL_131",
+			"DAL_773",
+			"LOOT_394",
+			"GIL_212",
+			"NEW1_026",
+			"KAR_114",
+			"GIL_620",
+			"OG_316",
+			"TRL_260",
+			"GVG_110",
+			"LOOT_278",
+			"GIL_813",
+			"BOT_567"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Priest",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Miracles",
+		"id": "TB_EVILBRM_Priest_11",
+		"dbfId": 57660,
+		"type": "Spell",
+		"entourage": [
+			"BOT_558",
+			"EX1_055",
+			"UNG_034",
+			"NEW1_020",
+			"EX1_044",
+			"TRL_131",
+			"KAR_035",
+			"NEW1_026",
+			"UNG_963",
+			"BOT_258",
+			"EX1_095",
+			"TRL_408",
+			"CS2_004",
+			"UNG_029",
+			"ICC_802",
+			"BOT_219",
+			"LOOT_278",
+			"BOT_529",
+			"LOOT_209"
+		],
+		"cardClass": "PRIEST"
+	},
+	{
+		"playerClass": "Warlock",
+		"set": "Tb",
+		"name": "Rafaam",
+		"health": 30,
+		"id": "TB_EVILBRM_RafaamH",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 57267,
+		"type": "Hero",
+		"cardClass": "WARLOCK"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 2,
+		"set": "Tb",
+		"name": "Arch-Villainy",
+		"id": "TB_EVILBRM_RafaamHeroPower",
+		"text": "<b>Hero Power</b>\nSteal a card from your opponent's deck. If it's a minion, summon it.",
+		"dbfId": 57696,
+		"type": "Hero_power",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Mage",
 		"set": "Tb",
 		"name": "Ragnaros the Firelord",
-		"health": 60,
+		"health": 10,
 		"id": "TB_EVILBRM_Ragnaros01",
 		"audio": {
 			"play": [],
@@ -146364,9 +146915,737 @@ var parseCardsText = {
 				"VO_BRM_027h_Attack_15.ogg"
 			]
 		},
+		"text": "<i>Excellent firelord and insect repeller.</i>",
 		"dbfId": 56295,
 		"type": "Hero",
-		"cardClass": "NEUTRAL"
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Combo",
+		"id": "TB_EVILBRM_Rogue_01",
+		"dbfId": 57677,
+		"type": "Spell",
+		"entourage": [
+			"OG_070",
+			"EX1_131",
+			"EX1_613",
+			"DAL_415",
+			"EX1_134",
+			"LOOT_211",
+			"TRL_092",
+			"UNG_064",
+			"GIL_557",
+			"CS2_073",
+			"EX1_124",
+			"CFM_690"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Thief",
+		"id": "TB_EVILBRM_Rogue_02",
+		"dbfId": 57678,
+		"type": "Spell",
+		"entourage": [
+			"KAR_069",
+			"OG_330",
+			"DAL_714",
+			"GIL_827",
+			"GIL_677",
+			"CFM_781",
+			"DAL_416",
+			"ICC_811",
+			"KAR_070",
+			"GVG_028",
+			"GIL_598",
+			"GIL_598",
+			"BRM_030",
+			"UNG_856",
+			"DAL_716",
+			"GIL_672"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Trickery",
+		"id": "TB_EVILBRM_Rogue_03",
+		"dbfId": 57685,
+		"type": "Spell",
+		"entourage": [
+			"BOT_288",
+			"DAL_400",
+			"DAL_415",
+			"LOOT_165",
+			"BOT_559",
+			"LOOT_026",
+			"LOOT_412",
+			"DAL_417",
+			"DAL_719",
+			"TRL_541",
+			"DAL_010",
+			"EX1_581",
+			"AT_035",
+			"BOT_087",
+			"DAL_366",
+			"OG_073",
+			"DAL_720",
+			"ICC_827"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Deathrattle",
+		"id": "TB_EVILBRM_Rogue_05",
+		"dbfId": 57679,
+		"type": "Spell",
+		"entourage": [
+			"CFM_691",
+			"LOE_019",
+			"LOE_012",
+			"FP1_031",
+			"DAL_749",
+			"BOT_243",
+			"DAL_775",
+			"TRL_537",
+			"AT_036",
+			"OG_133",
+			"OG_072",
+			"BOT_084",
+			"BOT_508",
+			"LOOT_503",
+			"BOT_286"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Scallywags",
+		"id": "TB_EVILBRM_Rogue_07",
+		"dbfId": 57680,
+		"type": "Spell",
+		"entourage": [
+			"KAR_069",
+			"CS2_146",
+			"GVG_075",
+			"TRL_071",
+			"NEW1_027",
+			"AT_032",
+			"TRL_015",
+			"OG_267",
+			"NEW1_024",
+			"AT_070",
+			"TRL_126",
+			"TRL_124",
+			"TRL_157",
+			"GIL_687",
+			"TRL_127",
+			"TRL_074"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Cutthroat",
+		"id": "TB_EVILBRM_Rogue_08",
+		"dbfId": 57681,
+		"type": "Spell",
+		"entourage": [
+			"CS2_188",
+			"EX1_008",
+			"EX1_162",
+			"UNG_075",
+			"AT_087",
+			"EX1_046",
+			"ICC_029",
+			"DAL_749",
+			"EX1_116",
+			"DAL_592",
+			"CS2_073",
+			"EX1_124",
+			"GVG_022"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Draw!",
+		"id": "TB_EVILBRM_Rogue_09",
+		"dbfId": 57676,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"EX1_096",
+			"EX1_007",
+			"EX1_050",
+			"LOOT_211",
+			"DAL_582",
+			"DAL_565",
+			"BRM_031",
+			"EX1_145",
+			"EX1_278",
+			"UNG_060",
+			"EX1_129",
+			"BOT_242",
+			"OG_073",
+			"CS2_077"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Battlecry",
+		"id": "TB_EVILBRM_Rogue_10",
+		"dbfId": 57682,
+		"type": "Spell",
+		"entourage": [
+			"BOT_283",
+			"LOE_077",
+			"GIL_827",
+			"LOOT_165",
+			"GVG_107",
+			"LOOT_026",
+			"DAL_416",
+			"TRL_092",
+			"OG_080",
+			"TRL_409",
+			"ICC_257",
+			"OG_291",
+			"TRL_077",
+			"UNG_848",
+			"ICC_705",
+			"EX1_144",
+			"DAL_728",
+			"DAL_010",
+			"NEW1_004"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Spellslinger",
+		"id": "TB_EVILBRM_Rogue_11",
+		"dbfId": 57686,
+		"type": "Spell",
+		"entourage": [
+			"EX1_012",
+			"UNG_058",
+			"NEW1_026",
+			"DAL_095",
+			"EX1_284",
+			"EX1_095",
+			"EX1_563",
+			"OG_134",
+			"CS2_072",
+			"EX1_145",
+			"GIL_506",
+			"EX1_124",
+			"CFM_690",
+			"EX1_278",
+			"EX1_129",
+			"OG_176",
+			"EX1_044"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Rogue",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Legends",
+		"id": "TB_EVILBRM_Rogue_12",
+		"dbfId": 57683,
+		"type": "Spell",
+		"entourage": [
+			"EX1_613",
+			"GIL_677",
+			"BOT_243",
+			"FP1_030",
+			"EX1_116",
+			"BRM_028",
+			"EX1_110",
+			"EX1_016",
+			"ICC_314",
+			"AT_036",
+			"EX1_563",
+			"EX1_572",
+			"FP1_010",
+			"GVG_110",
+			"LOOT_357",
+			"EX1_298",
+			"GVG_114"
+		],
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Flood",
+		"id": "TB_EVILBRM_Shaman_01",
+		"dbfId": 57669,
+		"type": "Spell",
+		"entourage": [
+			"EX1_565",
+			"UNG_201",
+			"AT_046",
+			"LOOT_167",
+			"DAL_566",
+			"ICC_900",
+			"BOT_102",
+			"LOE_089",
+			"UNG_010",
+			"CS2_222",
+			"EX1_562",
+			"TRL_012",
+			"BOT_451",
+			"KAR_073",
+			"EX1_248",
+			"UNG_956",
+			"CFM_310",
+			"CS2_046",
+			"TRL_351"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Fishy",
+		"id": "TB_EVILBRM_Shaman_03",
+		"dbfId": 57670,
+		"type": "Spell",
+		"entourage": [
+			"DAL_077",
+			"GIL_678",
+			"DAL_049",
+			"UNG_073",
+			"EX1_507",
+			"EX1_103",
+			"UNG_937",
+			"UNG_089",
+			"TRL_520",
+			"EX1_062",
+			"GVG_040",
+			"DAL_726",
+			"CFM_344",
+			"OG_161",
+			"GVG_042",
+			"ICC_089",
+			"DAL_710",
+			"CFM_310",
+			"LOE_113"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Big Shaman",
+		"id": "TB_EVILBRM_Shaman_05",
+		"dbfId": 57671,
+		"type": "Spell",
+		"entourage": [
+			"ICC_912",
+			"DAL_052",
+			"BOT_548",
+			"CFM_324",
+			"NEW1_010",
+			"DAL_047",
+			"GIL_616",
+			"ICC_314",
+			"EX1_563",
+			"EX1_572",
+			"DAL_553",
+			"OG_042",
+			"CS2_039",
+			"BOT_099"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Elemental Wrath",
+		"id": "TB_EVILBRM_Shaman_06",
+		"dbfId": 57672,
+		"type": "Spell",
+		"entourage": [
+			"UNG_809",
+			"UNG_202",
+			"BOT_533",
+			"GIL_581",
+			"UNG_070",
+			"UNG_816",
+			"EX1_250",
+			"CS2_042",
+			"UNG_208",
+			"EX1_249",
+			"UNG_847",
+			"EX1_298",
+			"UNG_211",
+			"DAL_047",
+			"UNG_907",
+			"BOT_093"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Battlecry",
+		"id": "TB_EVILBRM_Shaman_07",
+		"dbfId": 57673,
+		"type": "Spell",
+		"entourage": [
+			"ICC_058",
+			"LOOT_517",
+			"LOE_077",
+			"LOOT_516",
+			"LOE_016",
+			"DAL_546",
+			"ICC_466",
+			"CFM_668",
+			"FP1_030",
+			"LOOT_167",
+			"ICC_257",
+			"LOOT_358",
+			"AT_054",
+			"UNG_848",
+			"GIL_820",
+			"DAL_431",
+			"GIL_836"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Spells",
+		"id": "TB_EVILBRM_Shaman_08",
+		"dbfId": 57674,
+		"type": "Spell",
+		"entourage": [
+			"GIL_531",
+			"TRL_060",
+			"BOT_411",
+			"KAR_021",
+			"EX1_284",
+			"GIL_807",
+			"EX1_563",
+			"OG_134",
+			"EX1_245",
+			"EX1_238",
+			"GVG_038",
+			"KAR_073",
+			"EX1_241",
+			"TRL_058",
+			"EX1_259",
+			"DAL_009",
+			"LOOT_506",
+			"GIL_504"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Shaman",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Regeneration",
+		"id": "TB_EVILBRM_Shaman_10",
+		"dbfId": 57675,
+		"type": "Spell",
+		"entourage": [
+			"DAL_544",
+			"CFM_120",
+			"UNG_938",
+			"CS2_117",
+			"LOOT_291",
+			"GIL_622",
+			"CFM_061",
+			"OG_209",
+			"GIL_667",
+			"GVG_069",
+			"GIL_118",
+			"DAL_432",
+			"LOOT_373",
+			"AT_048",
+			"UNG_817"
+		],
+		"cardClass": "SHAMAN"
+	},
+	{
+		"playerClass": "Rogue",
+		"set": "Tb",
+		"name": "King Togwaggle",
+		"health": 30,
+		"id": "TB_EVILBRM_TogwaggleH",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"dbfId": 57256,
+		"type": "Hero",
+		"cardClass": "ROGUE"
+	},
+	{
+		"playerClass": "Mage",
+		"set": "Tb",
+		"name": "Vaelastrasz the Corrupt",
+		"health": 30,
+		"id": "TB_EVILBRM_Vaelastrasz",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": []
+		},
+		"text": "<i>Too corrupt to care about your innocent little cards.</i>",
+		"dbfId": 57617,
+		"type": "Hero",
+		"cardClass": "MAGE"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Mercenaries",
+		"id": "TB_EVILBRM_Warrior_01",
+		"dbfId": 57662,
+		"type": "Spell",
+		"entourage": [
+			"OG_312",
+			"CFM_637",
+			"CS2_146",
+			"NEW1_018",
+			"TRL_507",
+			"GVG_075",
+			"OG_315",
+			"GIL_681",
+			"NEW1_027",
+			"NEW1_022",
+			"CFM_651",
+			"TRL_015",
+			"NEW1_024",
+			"GVG_070",
+			"AT_070",
+			"CS2_106",
+			"FP1_021",
+			"CS2_112",
+			"KAR_028",
+			"CFM_631"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Bombs Away!",
+		"id": "TB_EVILBRM_Warrior_04",
+		"dbfId": 57663,
+		"type": "Spell",
+		"entourage": [
+			"EX1_082",
+			"BOT_431",
+			"GIL_815",
+			"LOE_077",
+			"BOT_532",
+			"DAL_060",
+			"BOT_559",
+			"EX1_050",
+			"GVG_099",
+			"CFM_667",
+			"GVG_090",
+			"BOT_511",
+			"GVG_056",
+			"DAL_064",
+			"GVG_110",
+			"ICC_091",
+			"DAL_063"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Rush",
+		"id": "TB_EVILBRM_Warrior_05",
+		"dbfId": 57664,
+		"type": "Spell",
+		"entourage": [
+			"TRL_327",
+			"GIL_580",
+			"GIL_155",
+			"GIL_113",
+			"GIL_803",
+			"NEW1_011",
+			"EX1_116",
+			"GIL_547",
+			"EX1_067",
+			"TRL_550",
+			"TRL_329",
+			"EX1_414",
+			"GIL_202",
+			"DAL_070",
+			"NEW1_036",
+			"DAL_062",
+			"CS2_105",
+			"BOT_069",
+			"GIL_653"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Iron and Steel",
+		"id": "TB_EVILBRM_Warrior_06",
+		"dbfId": 57665,
+		"type": "Spell",
+		"entourage": [
+			"GVG_051",
+			"DAL_759",
+			"GVG_085",
+			"BOT_907",
+			"GVG_006",
+			"DAL_060",
+			"DAL_770",
+			"BOT_312",
+			"BOT_563",
+			"BOT_548",
+			"BOT_104",
+			"BOT_107",
+			"GVG_056",
+			"BOT_218",
+			"BOT_237",
+			"GVG_114",
+			"DAL_070",
+			"BOT_299",
+			"GVG_050",
+			"BOT_406",
+			"BOT_238"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Armored Up",
+		"id": "TB_EVILBRM_Warrior_08",
+		"dbfId": 57666,
+		"type": "Spell",
+		"entourage": [
+			"BOT_059",
+			"BOT_447",
+			"LOOT_413",
+			"EX1_402",
+			"LOOT_367",
+			"DAL_759",
+			"ICC_062",
+			"CFM_756",
+			"LOOT_365",
+			"GVG_053",
+			"LOOT_519",
+			"EX1_410",
+			"ICC_837",
+			"BOT_042",
+			"AT_064",
+			"DAL_008",
+			"LOOT_364",
+			"EX1_606",
+			"KAR_091",
+			"LOOT_285"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Arsenal",
+		"id": "TB_EVILBRM_Warrior_09",
+		"dbfId": 57667,
+		"type": "Spell",
+		"entourage": [
+			"CS2_146",
+			"NEW1_018",
+			"CFM_643",
+			"BOT_083",
+			"CFM_755",
+			"AT_066",
+			"EX1_398",
+			"NEW1_024",
+			"OG_220",
+			"EX1_409",
+			"GIL_537",
+			"LOOT_203",
+			"UNG_929",
+			"CFM_631",
+			"ICC_064",
+			"CS2_112",
+			"BOT_406",
+			"TRL_325",
+			"EX1_411"
+		],
+		"cardClass": "WARRIOR"
+	},
+	{
+		"playerClass": "Warrior",
+		"cost": 0,
+		"set": "Tb",
+		"name": "All Might",
+		"id": "TB_EVILBRM_Warrior_10",
+		"dbfId": 57668,
+		"type": "Spell",
+		"entourage": [
+			"NEW1_021",
+			"NEW1_041",
+			"AT_130",
+			"EX1_002",
+			"GIL_124",
+			"UNG_933",
+			"NEW1_030",
+			"TRL_321",
+			"CFM_716",
+			"EX1_391",
+			"CS2_104",
+			"CS2_114",
+			"CS2_108",
+			"EX1_407",
+			"GVG_052",
+			"GVG_054"
+		],
+		"cardClass": "WARRIOR"
 	},
 	{
 		"playerClass": "Neutral",
@@ -146779,11 +148058,40 @@ var parseCardsText = {
 		"name": "Mini-Rag",
 		"id": "TB_FireFestival_MRag",
 		"audio": {
-			"play": [
-				"VO_EX1_298_Play_01.ogg"
-			],
+			"play": [],
 			"death": [
 				"VO_EX1_298_Death_04.ogg"
+			],
+			"attack": [
+				"VO_EX1_298_Attack_02.ogg"
+			]
+		},
+		"text": "Can't attack. <b>Immune</b>.\nAt the end of each turn, burn your enemies randomly.",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"cost": 1,
+		"set": "Tb",
+		"race": "ELEMENTAL",
+		"health": 3,
+		"mechanics": [
+			"CANT_ATTACK",
+			"IMMUNE",
+			"TRIGGER_VISUAL"
+		],
+		"dbfId": 56903,
+		"type": "Minion",
+		"playerClass": "Neutral",
+		"elite": true,
+		"attack": 2,
+		"name": "Rakanishu",
+		"id": "TB_FireFestival_Rakanishu",
+		"audio": {
+			"play": [
+				"VO_Rakanishu_Male_Elemental_FF-Start_03.ogg"
+			],
+			"death": [
+				"VO_DALA_Rakanishu_Male_Elemental_Death_05.ogg"
 			],
 			"attack": [
 				"VO_EX1_298_Attack_02.ogg"
@@ -151368,6 +152676,33 @@ var parseCardsText = {
 	{
 		"playerClass": "Neutral",
 		"set": "Tb",
+		"name": "Random Hand Enchant - Not Player Facing",
+		"id": "TB_RandomHand_ench",
+		"dbfId": 54478,
+		"type": "Enchantment",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Random Hand Spell - Not Player Facing",
+		"id": "TB_RandomHand_spell",
+		"audio": {
+			"play": [],
+			"death": [],
+			"attack": [],
+			"ArmsDealing_Impact_Sound": [
+				"ArmsDealing_Impact_Sound.ogg"
+			]
+		},
+		"dbfId": 57167,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"set": "Tb",
 		"name": "TB_EnchRandomManaCost",
 		"id": "TB_RMC_001",
 		"audio": {
@@ -151590,6 +152925,39 @@ var parseCardsText = {
 			"TRLA_170",
 			"TRLA_171"
 		],
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "End Speed Run Duration",
+		"id": "TB_SpeedRun_End",
+		"text": "Start the Speed Run",
+		"dbfId": 56709,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Show Speed Run Duration",
+		"id": "TB_SpeedRun_Show",
+		"text": "Start the Speed Run",
+		"dbfId": 56699,
+		"type": "Spell",
+		"cardClass": "NEUTRAL"
+	},
+	{
+		"playerClass": "Neutral",
+		"cost": 0,
+		"set": "Tb",
+		"name": "Start the Speed Run",
+		"id": "TB_SpeedRun_Start",
+		"text": "Start the Speed Run",
+		"dbfId": 56698,
+		"type": "Spell",
 		"cardClass": "NEUTRAL"
 	},
 	{
@@ -156806,24 +158174,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Grito de Guerra:</b> Se seu Poder Heroico causou 8 de dano nesta partida, evoque Ragnaros, o Senhor do Fogo.\n",
-			"zhCN": "<b>战吼：</b>\n在本局对战中，如果你的英雄技能累计造成了8点伤害，则召唤炎魔之王拉格纳罗斯。",
-			"itIT": "[x]<b>Grido di Battaglia:</b> se il tuo\nPotere Eroe ha inflitto 8 danni in\nquesta partita, evoca Ragnaros.\n",
-			"enUS": "[x]<b>Battlecry:</b> If your Hero Power\ndealt 8 damage this game,\nsummon Ragnaros the\nFirelord.",
-			"frFR": "<b>Cri de guerre :</b> si votre pouvoir héroïque inflige 8 points de dégâts pendant cette partie, invoque Ragnaros, seigneur du feu.",
-			"zhTW": "[x]<b>戰吼：</b>若你的英雄能力\n已在本賽局造成8點\n傷害，召喚拉格納羅斯\n",
-			"deDE": "<b>Kampfschrei:</b> Ruft Ragnaros den\nFeuerfürsten herbei, wenn Eure\nHeldenfähigkeit in diesem Spiel\n8 Schaden verursacht hat.",
-			"jaJP": "[x]<b>雄叫び:</b> この対戦で自分の\nヒーローパワーが8ダメージ\n以上与えていた場合「炎の王\nラグナロス」を召喚する。\n",
-			"plPL": "<b>Okrzyk bojowy:</b> Jeśli twoja moc specjalna zadała w tej grze 8 pkt. obrażeń, przyzwij Ragnarosa, Władcę Ognia.\n",
-			"esES": "[x]<b>Grito de batalla:</b> Si tu poder\nde héroe ha infligido 8 p. de daño\nen esta partida, invoca a\nRagnaros, Señor del Fuego.\n",
-			"ruRU": "<b>Боевой клич:</b> если ваша сила героя нанесла 8 ед. урона в этом матче, призывает Рагнароса.",
-			"esMX": "<b>Grito de batalla:</b> si tu Poder de héroe infligió 8 de daño en esta partida, invoca a Ragnaros, el Señor del Fuego.",
-			"koKR": "<b>전투의 함성:</b> 이번 게임에서\n내 영웅 능력으로 피해를 8 이상 줬다면, 불의 군주 라그나로스를 소환합니다.",
-			"thTH": "<b>คำรามสู้ศึก:</b> ถ้าในเกมนี้พลังฮีโร่[b]ของคุณสร้างความเสียหายไป[b]แล้ว 8 แต้ม เรียกแร็กนารอส เจ้าแห่งเพลิง"
-		},
 		"cost": 7,
 		"set": "Troll",
+		"collectionText": "[x]<b>Battlecry:</b> If your Hero Power\ndealt 8 damage this game,\nsummon Ragnaros the\nFirelord.",
 		"race": "BEAST",
 		"artist": "Jakub Kasper",
 		"health": 4,
@@ -159850,24 +161203,9 @@ var parseCardsText = {
 	},
 	{
 		"collectible": true,
-		"collectionText": {
-			"ptBR": "<b>Grito de Guerra:</b> Se você tiver restaurado 10 de Vida nesta partida, receba +4/+4 e <b>Provocar</b>.",
-			"zhCN": "<b>战吼：</b>在本局对战中，如果你累计恢复了10点生命值，则获得+4/+4和<b>嘲讽</b>。",
-			"itIT": "[x]<b>Grido di Battaglia:</b> se hai\nrigenerato 10 Salute in\nquesta partita, ottiene +4/+4 e\n <b>Provocazione</b>.",
-			"enUS": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.",
-			"frFR": "<b>Cri de guerre :</b> si vous avez rendu 10 points de vie pendant cette partie, gagne +4/+4 et <b>Provocation</b>.",
-			"zhTW": "<b>戰吼：</b>若你在本賽局中已恢復10點生命值，獲得+4/+4和<b>嘲諷</b>",
-			"deDE": "<b>Kampfschrei:</b> Erhält +4/+4 und <b>Spott</b>, wenn Ihr in diesem Spiel 10 Leben wieder[d]herge[d]stellt habt.",
-			"jaJP": "[x]<b>雄叫び:</b>\nこの対戦で自分が体力を\n10以上回復していた場合\n+4/+4と<b>挑発</b>を獲得する。\n",
-			"plPL": "<b>Okrzyk bojowy:</b> Jeśli udało ci się przywrócić 10 pkt. zdrowia w tej grze, otrzymuje +4/+4 oraz <b>Prowokację</b>.",
-			"esES": "[x]<b>Grito de batalla:</b> Si has\nrestaurado 10 p. de salud\nen esta partida, obtiene +4/+4\ny <b>Provocar</b>.",
-			"ruRU": "<b>Боевой клич:</b> если вы\nвосстановили 10 ед. здоровья в течение матча, получает +4/+4 и <b>«Провокацию»</b>.",
-			"esMX": "<b>Grito de batalla:</b> si has restaurado 10 de salud en esta partida, obtiene +4/+4 y <b>Provocación</b>.",
-			"koKR": "<b>전투의 함성:</b> 이번 게임에서 생명력을 10 이상 회복했으면, +4/+4와 <b>도발</b>을 얻습니다.",
-			"thTH": "<b>คำรามสู้ศึก:</b> ถ้าในเกมนี้คุณ[b]ฟื้นฟูพลังชีวิตไปแล้ว 10 แต้ม ได้รับ +4/+4 และ <b>ยั่วยุ</b>"
-		},
 		"cost": 4,
 		"set": "Troll",
+		"collectionText": "[x]<b>Battlecry:</b> If you've restored\n10 Health this game, gain\n+4/+4 and <b>Taunt</b>.",
 		"artist": "James Ryman",
 		"health": 4,
 		"mechanics": [
@@ -160293,24 +161631,9 @@ var parseCardsText = {
 	},
 	{
 		"playerClass": "Hunter",
-		"collectionText": {
-			"ptBR": "<b>Poder Heroico</b>\nCause $2 de dano.",
-			"zhCN": "<b>英雄技能</b>\n造成$2点伤害。",
-			"itIT": "<b>Potere Eroe</b>\nInfligge $2 danni.",
-			"enUS": "<b>Hero Power</b>\nDeal $2 damage.",
-			"frFR": "<b>Pouvoir héroïque</b>\nInflige $2 points de dégâts.",
-			"zhTW": "<b>英雄能力</b>\n造成$2點傷害",
-			"deDE": "<b>Heldenfähigkeit</b>\nVerursacht $2 Schaden.",
-			"jaJP": "<b>ヒーローパワー</b>\n$2ダメージを\n与える。",
-			"plPL": "<b>Moc specjalna</b>\nZadaj $2 pkt. obrażeń.",
-			"esES": "<b>Poder de héroe</b>\nInflige $2 p. de daño.",
-			"ruRU": "<b>Сила героя</b>\nНаносит $2 ед. урона.",
-			"esMX": "<b>Poder de héroe</b>\nInflige $2 de daño.",
-			"koKR": "<b>영웅 능력</b>\n피해를 $2 줍니다.",
-			"thTH": "<b>พลังฮีโร่</b> สร้างความเสียหาย $2 แต้ม"
-		},
 		"cost": 2,
 		"set": "Troll",
+		"collectionText": "<b>Hero Power</b>\nDeal $2 damage.",
 		"name": "Steady Throw",
 		"id": "TRLA_065p",
 		"audio": {
@@ -167173,8 +168496,7 @@ var parseCardsText = {
 		},
 		"dbfId": 1086,
 		"type": "Minion",
-		"cardClass": "MAGE",
-		"rarity": "Epic"
+		"cardClass": "MAGE"
 	},
 	{
 		"playerClass": "Neutral",
