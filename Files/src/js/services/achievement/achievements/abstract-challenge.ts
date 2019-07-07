@@ -19,6 +19,9 @@ export abstract class AbstractChallenge implements Challenge {
 			modeOrScenarioIds: ReadonlyArray<number>, 
 			events: Events,
 			resetEvents: ReadonlyArray<string>) {
+        if (!achievement) {
+            console.error('Trying to set an empty achievement', modeOrScenarioIds, resetEvents, this);
+        }
 		this.achievementId = achievement.id;
 		this.modeOrScenarioIds = modeOrScenarioIds;
 		this.events = events;

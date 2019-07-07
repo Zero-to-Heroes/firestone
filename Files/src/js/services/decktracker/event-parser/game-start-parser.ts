@@ -44,7 +44,13 @@ export class GameStartParser implements EventParser {
 			return null;
 		}
 		return currentDeck.deck.heroes
-				.map((hero) => this.allCards.getCardFromDbfId(hero))
+                .map((hero) => this.allCards.getCardFromDbfId(hero))
+                .map(heroCard => {
+                    if (!heroCard) {
+                        console.error('could not map empty hero card', currentDeck.deck.heroes, currentDeck.deck, currentDeck);
+                    }
+                    return heroCard;
+                })
 				.map((heroCard) => Object.assign(new HeroCard(), { 
 					cardId: heroCard.id,
 					name: heroCard.name
@@ -65,6 +71,9 @@ export class GameStartParser implements EventParser {
 
 	private buildDeckCards(pair): DeckCard[] {
         const card = this.allCards.getCardFromDbfId(pair[0]);
+        if (!card) {
+            console.error('Could not build deck card', pair);
+        }
         let result: DeckCard[] = [];
         for (let i = 0; i < pair[1]; i++) {
             result.push(Object.assign(new DeckCard(), { 
