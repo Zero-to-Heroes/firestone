@@ -41,7 +41,9 @@ declare var overwolf: any;
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div (mousedown)="showDecktracker()" class="app deck-tracker last">
+            <div (mousedown)="showDecktracker()" 
+                    class="app deck-tracker last"
+					[ngClass]="{'inactive': noCollection}">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
@@ -94,10 +96,16 @@ export class AppChoiceComponent implements AfterViewInit {
 	}
 
 	showCollection() {
+		if (this.noCollection) {
+			return;
+		}
 		this.showMainWindow('collection');
 	}
 
 	showDecktracker() {
+		if (this.noCollection) {
+			return;
+		}
 		this.showMainWindow('decktracker');
 	}
 
