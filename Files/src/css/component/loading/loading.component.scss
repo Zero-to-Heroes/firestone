@@ -91,11 +91,11 @@ body {
 		    	height: 30px;
 		    	display: flex;
 
-		    	button {
+		    	button, a {
 		    		color: $green01;
 		    	}
 
-		    	button:hover {
+		    	button:hover, a:hover {
 		    		background-color: $brown01;
 		    	}
 
