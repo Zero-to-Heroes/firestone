@@ -111,7 +111,8 @@ export class AllCardsService {
 		const found = parseCardsText.jsonDatabase
 			.find((card) => card.id === id);
 		if (!found) {
-			console.error('Could not find card in json database ' + id, id);
+            const stack = id ? '' : new Error().stack;
+			console.error('Could not find card in json database ' + id, id, stack);
 		}
 		return found;
 	}
