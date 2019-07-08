@@ -8,6 +8,7 @@ import { NotificationsComponent }  from '../../components/notifications.componen
 import { DebugService } from '../../services/debug.service';
 import { init } from '@sentry/browser';
 import { HttpClientModule } from '@angular/common/http';
+import { OverwolfService } from '../../services/overwolf.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -31,7 +32,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		NotificationsComponent,
 	],
 	providers: [
-		DebugService,
+        DebugService,
+        OverwolfService,
 	],
 })
 
