@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { PreferencesService } from '../preferences.service';
 
-const EBS_URL = 'https://twitch.firestoneapp.com/deck/event';
+const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
+// const EBS_URL = 'http://ec2-52-42-105-37.us-west-2.compute.amazonaws.com/deck/event';
 // const EBS_URL = 'http://localhost:8081/deck/event';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';

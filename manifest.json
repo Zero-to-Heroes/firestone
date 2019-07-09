@@ -128,7 +128,9 @@
 				"https://*.zam.com",
                 "https://*.execute-api.us-west-2.amazonaws.com",
                 "https://api.twitch.tv",
-                "https://localhost"
+                "https://localhost",
+                "https://*.firestoneapp.com",
+                "http://*.amazonaws.com"
 			]
 		},
 		"extra-objects": {
