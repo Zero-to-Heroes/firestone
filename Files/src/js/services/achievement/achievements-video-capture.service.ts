@@ -132,30 +132,31 @@ export class AchievementsVideoCaptureService {
             console.info('[recording] capture ongoing, doing nothing', this.achievementsBeingRecorded);
             return;
         }
-        // Here we can have custom settings based on achievement
         this.captureOngoing = true;
-        this.planCaptureStop(recordDuration);
-        // const conf = this.config.getConfig(achievement.type);
         console.log('[recording] start recording achievement', achievement, challenge.getRecordPastDurationMillis());
         const captureDuration = parseInt(challenge.getRecordPastDurationMillis() + '', 10);
         console.log('[recording] starting capture for duration', captureDuration);
         overwolf.media.replays.startCapture(
             captureDuration,
             (status) => {
-                console.log('[recording] capture started', status);
-                this.currentReplayId = status.url;
+                if (status === 'error') {
+                    console.warn('[recording] could not start capture', status);
+                    this.captureOngoing = false;
+                    clearTimeout(this.currentRecordEndTimer);
+                    setTimeout(() => this.capture(achievement, challenge, recordDuration));
+                }
+                else {
+                    console.log('[recording] capture started', status);
+                    // Here we can have custom settings based on achievement
+                    this.planCaptureStop(recordDuration);
+                    this.currentReplayId = status.url;
+                }
             }
         );
     }
 
     private planCaptureStop(recordDuration: number) {
         console.log('[recording] planning recording end', recordDuration);
-        // const achievementId = data.data[0];
-        // if (this.achievementsBeingRecorded.indexOf(achievementId) === -1) {
-        //     console.log('[recording] Not recording achievement, so not planning capture stop', achievementId, this.achievementsBeingRecorded)
-        //     return;
-        // }
-		// const requestedTime: number = data.data[1];
 		// Record duration is capped to 140s on Twitter, and we're taking some buffer
 		const cappedDuration = Math.min(120000, recordDuration)
         this.lastRecordingDate = Math.max(
