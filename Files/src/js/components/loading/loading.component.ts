@@ -194,7 +194,7 @@ export class LoadingComponent implements AfterViewInit {
 			console.log('already initializing ads, returning');
 			return;
 		}
-		if (!adsReady) {
+		if (!adsReady || !OwAd) {
 			console.log('ads container not ready, returning');
 			setTimeout(() => {
 				this.refreshAds()
