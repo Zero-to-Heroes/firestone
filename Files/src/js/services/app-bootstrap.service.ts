@@ -9,7 +9,6 @@ import { AchievementStatsService } from './achievement/achievement-stats.service
 import { CollectionManager } from './collection/collection-manager.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
-import { LogStatusService } from './log-status.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { DebugService } from './debug.service';
@@ -19,10 +18,8 @@ import { IndexedDbService as AchievementsDb } from './achievement/indexed-db.ser
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
+import { OverwolfService } from './overwolf.service';
 
-const HEARTHSTONE_GAME_ID = 9898;
-
-declare var overwolf: any;
 declare var ga: any;
 
 @Injectable()
@@ -37,6 +34,7 @@ export class AppBootstrapService {
     
     constructor(
             private store: MainWindowStoreService,
+            private ow: OverwolfService,
             private twitchAuth: TwitchAuthService,
             private debugService: DebugService,
             private dev: DevService, 
@@ -52,30 +50,23 @@ export class AppBootstrapService {
             private collectionManager: CollectionManager,
             private deckParserService: DeckParserService,
             private gameStateService: GameStateService,
-            private settingsCommunicationService: SettingsCommunicationService,
-            private logStatusService: LogStatusService) {
+            private settingsCommunicationService: SettingsCommunicationService) {
 
     }
 
-	public init() {
+	public async init() {
         console.log('in init');
         if (!this.loadingWindowShown) {
             console.log('initializing loading window');
             this.loadingWindowShown = true;
-            overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
-                this.loadingWindowId = result.window.id;
-                // console.log('retrievd loadingwindow', result);
-                overwolf.windows.restore(this.loadingWindowId, (result2) => {
-                    // console.log('loadingwindow restored', result2)
-                    overwolf.windows.hide(this.loadingWindowId);
-                    overwolf.games.getRunningGameInfo((res: any) => {
-                        // console.log('running game info', res);
-                        if (this.gameRunning(res)) {
-                            this.showLoadingScreen();
-                        }
-                    });
-                });
-            });
+            const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
+            this.loadingWindowId = window.id;
+            await this.ow.restoreWindow(this.loadingWindowId);
+            await this.ow.hideWindow(this.loadingWindowId);
+            const isRunning = await this.ow.inGame();
+            if (isRunning) {
+                this.showLoadingScreen();
+            }
         }
         
 		// Wait until DB has properly been upgraded when needed
@@ -92,193 +83,117 @@ export class AppBootstrapService {
 			return;
 		}
 		console.log('app init starting');
-
-		overwolf.settings.registerHotKey(
-			"collection",
-			(result) => {
-				console.log('hotkey pressed', result)
-				if (result.status === 'success') {
-					overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-						console.log('is CollectionWindow running?', result);
-						if (result.window.isVisible) {
-                            this.store.stateUpdater.next(new CloseMainWindowEvent());
-							overwolf.windows.hide(result.window.id);
-						}
-						else {
-							this.closeWelcomeWindow();
-							this.startApp(() => this.showCollectionWindow());
-						}
-					});
-				}
-				else {
-					console.log('could not trigger hotkey', result, this.currentState);
-				}
-			}
-		)
-		
-		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+        this.ow.addHotKeyPressedListener('collection', async (hotkeyResult) => {
+            console.log('hotkey pressed', hotkeyResult)
+            if (hotkeyResult.status === 'success') {
+                const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+                if (window.isVisible) {
+                    this.store.stateUpdater.next(new CloseMainWindowEvent());
+                    await this.ow.hideWindow(window.id);
+                }
+                else {
+                    this.closeWelcomeWindow();
+                    this.startApp(() => this.showCollectionWindow());
+                }
+            }
+            else {
+                console.log('could not trigger hotkey', hotkeyResult, this.currentState);
+            }
+        });
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			console.log('updated game status', res);
 			if (this.exitGame(res)) {
 				this.closeApp();
 			}
-			else if (this.gameRunning(res.gameInfo)) {
+			else if (await this.ow.inGame()) {
                 console.log('game is running, showing loading screen', res);
 				this.showLoadingScreen();
 			}
 		});
-
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-			overwolf.windows.restore(result.window.id, (result2) => {
-				overwolf.windows.hide(result.window.id);
-				this.startApp();
-				overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
-					this.startApp(() => this.showCollectionWindow());
-				})
-				ga('send', 'event', 'toast', 'start-app');
-			})
-		});
-
-		overwolf.windows.obtainDeclaredWindow("SettingsWindow", (result) => {
-			overwolf.windows.restore(result.window.id, (result2) => {
-				overwolf.windows.hide(result.window.id);
-			});
-		});
+        const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+        await this.ow.restoreWindow(collectionWindow.id);
+        await this.ow.hideWindow(collectionWindow.id);
+        this.startApp();
+        this.ow.addAppLaunchTriggeredListener((result) => {
+            this.startApp(() => this.showCollectionWindow());
+        })
+        ga('send', 'event', 'toast', 'start-app');
+        const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+        await this.ow.restoreWindow(settingsWindow.id);
+        await this.ow.hideWindow(settingsWindow.id);
 	}
 
-	private showLoadingScreen() {
+	private async showLoadingScreen() {
 		console.log('showing loading screen?', this.currentState, this.loadingWindowId);
 		if (this.currentState == 'READY') {
 			return;
 		}
-
-		overwolf.windows.restore(this.loadingWindowId, (result) => {
-			this.closeWelcomeWindow();
-			this.closeCollectionWindow();
-			console.log('final restore for loadingwindow done', result);
-			setTimeout(() => {
-				this.notifyAbilitiesReady();
-			},
-			AppBootstrapService.LOADING_SCREEN_DURATION);
-		});
+        const result = await this.ow.restoreWindow(this.loadingWindowId);
+        this.closeWelcomeWindow();
+        this.closeCollectionWindow();
+        console.log('final restore for loadingwindow done', result);
+        setTimeout(() => {
+            this.notifyAbilitiesReady();
+        }, AppBootstrapService.LOADING_SCREEN_DURATION);
 	}
 
 	private notifyAbilitiesReady() {
-		this.currentState = 'READY';
-		overwolf.windows.sendMessage(this.loadingWindowId, 'ready', 'ready', (result) => {
-		});
+        this.currentState = 'READY';
+        this.ow.sendMessage(this.loadingWindowId, 'ready', 'ready');
 	}
 
-	private startApp(showWhenStarted?: Function) {
-		overwolf.games.getRunningGameInfo((res: any) => {
-			// console.log('running game info', res);
-			if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
-				if (showWhenStarted) {
-					showWhenStarted();
-				}
-			}
-			else {
-				this.showWelcomePage();
-			}
-		});
-	}
-
-	private closeLoadingScreen() {
-		overwolf.windows.obtainDeclaredWindow("LoadingWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get LoadingWindow', result);
-				return;
-			}
-			overwolf.windows.hide(result.window.id);
-		});
-	}
-
-	private closeWelcomeWindow() {
-		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get WelcomeWindow', result);
-				return;
+	private async startApp(showWhenStarted?: Function) {
+        const isRunning = await this.ow.inGame();
+        if (isRunning) {
+            if (showWhenStarted) {
+                showWhenStarted();
             }
-            console.log('closing welcome window');
-			overwolf.windows.hide(result.window.id);
-		});
+        }
+        else {
+            this.showWelcomePage();
+        }
 	}
 
-	private closeCollectionWindow() {
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-			overwolf.windows.hide(result.window.id);
-		});
+	private async closeLoadingScreen() {
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
+        await this.ow.hideWindow(window.id);
 	}
 
-	private showWelcomePage() {
-		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get WelcomeWindow', result);
-				return;
-			}
-			// console.log('got welcome window', result);
-
-			overwolf.windows.restore(result.window.id, (result) => {
-				// console.log('WelcomeWindow is on?', result);
-				this.closeLoadingScreen();
-			})
-		});
+	private async closeWelcomeWindow() {
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.WELCOME_WINDOW);
+        this.ow.hideWindow(window.id);
 	}
 
-	private showCollectionWindow() {
+	private async closeCollectionWindow() {
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+        this.ow.hideWindow(window.id);
+	}
+
+	private async showWelcomePage() {
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.WELCOME_WINDOW);
+        await this.ow.restoreWindow(window.id);
+        this.closeLoadingScreen();
+	}
+
+	private async showCollectionWindow() {
         console.log('reading to show collection window');
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-            // console.log('got collection window', result);
-            console.log('sending new event', this.store);
-            this.store.stateUpdater.next(new ShowMainWindowEvent());
-            console.log('sent new event', this.store);
-			overwolf.windows.restore(result.window.id, (result) => {
-				// console.log('CollectionWindow is on?', result);
-				this.closeLoadingScreen();
-			})
-		});
-	}
-
-	private gameRunning(gameInfo: any): boolean {
-
-		if (!gameInfo) {
-			return false;
-		}
-
-		if (!gameInfo.isRunning) {
-			return false;
-		}
-
-		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			return false;
-		}
-
-		// console.log("HS running");
-		return true;
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+        console.log('sending new event', this.store);
+        this.store.stateUpdater.next(new ShowMainWindowEvent());
+        console.log('sent new event', this.store);
+        await this.ow.restoreWindow(window.id);
+        this.closeLoadingScreen();
 	}
 
 	private exitGame(gameInfoResult: any): boolean {
 		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
 	}
 
-	private closeApp() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				console.log('closing');
-				overwolf.windows.close(result.window.id);
-			}
-		});
+	private async closeApp() {
+        // Close all windows
+        const windows = await this.ow.getOpenWindows()
+        for (let window of windows) {
+            this.ow.closeWindowFromName(window);
+        }
 	}
 }

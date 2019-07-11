@@ -5,6 +5,7 @@ import { DebugService } from '../../services/debug.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { HttpClientModule } from '@angular/common/http';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
+import { OverwolfService } from '../../services/overwolf.service';
 
 console.log('version is ' + process.env.APP_VERSION);
 
@@ -23,6 +24,7 @@ console.log('version is ' + process.env.APP_VERSION);
         DebugService,
         PreferencesService,
         GenericIndexedDbService,
+        OverwolfService,
 	],
 })
 

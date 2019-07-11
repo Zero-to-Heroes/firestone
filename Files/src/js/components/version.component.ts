@@ -1,6 +1,5 @@
 import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'version',
@@ -15,18 +14,13 @@ export class VersionComponent implements AfterViewInit {
 
 	version: string;
 
-	constructor(private cdr: ChangeDetectorRef) {
+	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) { }
 
-	}
-
-	ngAfterViewInit() {
-		this.cdr.detach();
-		overwolf.extensions.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob', (result) => {
-			// console.log('retrieved manifest', result);
-			this.version = result.meta.version;
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
-		})
+	async ngAfterViewInit() {
+        this.cdr.detach();
+        this.version = await this.ow.getManifest('lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob');
+        if (!(<ViewRef>this.cdr).destroyed) {
+            this.cdr.detectChanges();
+        }
 	}
 }

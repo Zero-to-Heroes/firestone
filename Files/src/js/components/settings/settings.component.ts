@@ -3,8 +3,6 @@ import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit, Change
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare var overwolf: any;
-
 @Component({
 	selector: 'settings',
 	styleUrls: [
@@ -67,35 +65,28 @@ export class SettingsComponent implements AfterViewInit {
             private debugService: DebugService, 
             private ow: OverwolfService,
             private cdr: ChangeDetectorRef) {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.thisWindowId = result.window.id;
-			}
-		});
-		window['selectApp'] = this.onAppSelected;
-		this.settingsEventBus = overwolf.windows.getMainWindow().settingsEventBus;
-		this.settingsEventBus.subscribe((selectedApp) => this.selectApp(selectedApp));
 	}
 
-	ngAfterViewInit() {
-		overwolf.windows.onMessageReceived.addListener((message) => {
+	async ngAfterViewInit() {
+        this.thisWindowId = (await this.ow.getCurrentWindow()).id;
+		window['selectApp'] = this.onAppSelected;
+		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
+        this.settingsEventBus.subscribe((selectedApp) => this.selectApp(selectedApp));
+        this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
-				overwolf.windows.getCurrentWindow((result) => {
-					if (result.status === "success") {
-						const newX = message.content.x - result.window.width / 2;
-                        const newY = message.content.y - result.window.height / 2;
-                        this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
-					}
-				});
+                const window = await this.ow.getCurrentWindow();
+                const newX = message.content.x - window.width / 2;
+                const newY = message.content.y - window.height / 2;
+                this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 			}
 		});
 
-		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-			// console.log('updated game', res);
-			if (this.exitGame(res)) {
-				this.closeApp();
-			}
-		});
+		// overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+		// 	// console.log('updated game', res);
+		// 	if (this.exitGame(res)) {
+		// 		this.closeApp();
+		// 	}
+		// });
 	}
 
 	onAppSelected(selectedApp: string) {
@@ -112,19 +103,19 @@ export class SettingsComponent implements AfterViewInit {
 
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
-		overwolf.windows.dragMove(this.thisWindowId);
+        this.ow.dragMove(this.thisWindowId);
 	};
 
-	private exitGame(gameInfoResult: any): boolean {
-		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
-	}
+	// private exitGame(gameInfoResult: any): boolean {
+	// 	return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	// }
 
-	private closeApp() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				console.log('closing');
-				overwolf.windows.close(result.window.id);
-			}
-		});
-	}
+	// private closeApp() {
+	// 	overwolf.windows.getCurrentWindow((result) => {
+	// 		if (result.status === "success") {
+	// 			console.log('closing');
+	// 			overwolf.windows.close(result.window.id);
+	// 		}
+	// 	});
+	// }
 }

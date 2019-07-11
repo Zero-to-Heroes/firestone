@@ -1,8 +1,7 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, EventEmitter, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
-
-declare var overwolf;
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'settings-broadcast',
@@ -62,12 +61,13 @@ export class SettingsBroadcastComponent implements AfterViewInit {
             private prefs: PreferencesService, 
             private cdr: ChangeDetectorRef, 
             private twitch: TwitchAuthService,
+            private ow: OverwolfService,
             private el: ElementRef) {
 		this.loadDefaultValues();
     }
 
     ngAfterViewInit() {
-        const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+        const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
         console.log('registered prefs event bus', preferencesEventBus);
 		preferencesEventBus.subscribe(async (event) => {
 			console.log('received pref event', event);
@@ -80,7 +80,7 @@ export class SettingsBroadcastComponent implements AfterViewInit {
     }
 
     connect() {
-        overwolf.utils.openUrlInOverwolfBrowser(this.twitchLoginUrl);
+        this.ow.openUrlInOverwolfBrowser(this.twitchLoginUrl);
     }
 
     disconnect() {

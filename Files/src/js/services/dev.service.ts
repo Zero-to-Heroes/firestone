@@ -8,8 +8,6 @@ import { Card } from '../models/card';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
-import { GameStateService } from './decktracker/game-state.service';
-import { GameState } from '../models/decktracker/game-state';
 import { GameEvents } from './game-events.service';
 
 const HEARTHSTONE_GAME_ID = 9898;

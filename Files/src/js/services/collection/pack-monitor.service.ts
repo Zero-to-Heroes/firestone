@@ -2,19 +2,16 @@ import { Injectable } from '@angular/core';
 import { Key } from 'ts-keycode-enum';
 
 import { Card } from '../../models/card';
-import { CardHistory } from '../../models/card-history';
 
 import { Events } from '../../services/events.service';
 import { GameEvents } from '../../services/game-events.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { LogRegisterService } from '../../services/log-register.service';
-import { CardHistoryStorageService } from './card-history-storage.service';
 import { captureEvent } from '@sentry/core';
 import { PreferencesService } from '../preferences.service';
+import { OverwolfService } from '../overwolf.service';
 
-declare var overwolf: any;
 declare var parseCardsText: any;
-declare var resemble: any;
 declare var ga: any;
 
 @Injectable()
@@ -36,7 +33,8 @@ export class PackMonitor {
         private events: Events,
         private prefs: PreferencesService,
 		private logRegisterService: LogRegisterService,
-		private gameEvents: GameEvents,
+        private gameEvents: GameEvents,
+        private ow: OverwolfService,
 		private notificationService: OwNotificationsService) {
 
 		this.gameEvents.onGameStart.subscribe(() => {
@@ -76,14 +74,9 @@ export class PackMonitor {
 				this.unrevealedCards = [];
 			});
 		this.events.on(Events.NEW_CARD).subscribe(event => this.handleNewCardEvent(event));
-		this.events.on(Events.MORE_DUST).subscribe(event => this.handleNewDustEvent(event));
-
-		overwolf.games.inputTracking.onMouseUp.addListener((data) => {
-			this.handleMouseUp(data);
-		});
-		overwolf.games.inputTracking.onKeyUp.addListener((data) => {
-			this.handleKeyUp(data);
-		});
+        this.events.on(Events.MORE_DUST).subscribe(event => this.handleNewDustEvent(event));
+        this.ow.addMouseUpListener((data) => this.handleMouseUp(data));
+        this.ow.addKeyUpListener((data) => this.handleKeyUp(data));
 	}
 
 	private handleNewCardEvent(event) {
@@ -126,13 +119,12 @@ export class PackMonitor {
 		}
 	}
 
-	private updateDpi() {
+	private async updateDpi() {
 		// You need to logout for the new dpi to take effect, so we can cache the value
-		overwolf.games.getRunningGameInfo((gameInfo) => {
-			if (gameInfo) {
-				this.dpi = gameInfo.logicalWidth / gameInfo.width;
-			}
-		});
+        const gameInfo = await this.ow.getRunningGameInfo();
+        if (gameInfo && gameInfo.width) {
+            this.dpi = gameInfo.logicalWidth / gameInfo.width;
+        }
 	}
 
 	private handleMouseUp(data) {
@@ -177,53 +169,52 @@ export class PackMonitor {
 		}
 	}
 
-	private cardClicked(data, callback: Function) {
-		overwolf.games.getRunningGameInfo((result) => {
-			let x = 1.0 * data.x / (result.width * this.dpi);
-			let y = 1.0 * data.y / (result.height * this.dpi);
-			console.log('clicked at ', x, y, this.dpi, data, result);
+	private async cardClicked(data, callback: Function) {
+        const result = await this.ow.getRunningGameInfo();
+        let x = 1.0 * data.x / (result.width * this.dpi);
+        let y = 1.0 * data.y / (result.height * this.dpi);
+        console.log('clicked at ', x, y, this.dpi, data, result);
 
-			// Top left
-			let ret = -1;
-			if (x <= 0.505 && y <= 0.52) {
-				ret = 4;
-			}
-			// Top center
-			else if (x >= 0.51 && x <= 0.65 && y <= 0.425) {
-				ret = 2;
-			}
-			// Top right
-			else if (x >= 0.66 && y <= 0.52) {
-				ret = 3;
-			}
-			// Bottom left
-			else if (x <= 0.56 && y >= 0.55) {
-				ret = 0;
-			}
-			// Bottom right
-			else if (x >= 0.59 && y >= 0.55) {
-				ret = 1;
-			}
-			else {
-				console.warn('[WARN] Could not detect the clicked on card', x, y, data, result);
-				ga('send', 'event', 'error', 'card-unidentified', {x: x, y: y, data: data, result: result});
-				captureEvent({
-					message: 'could not identify the card the user clicked on',
-					extra: {
-						x: x, 
-						y: y, 
-						data: data, 
-						result: result,
-						dpi: this.dpi,
-						unrevealedCards: this.unrevealedCards
-					}
-				})
-				return;
-			}
-			console.log('matching card position', ret);
+        // Top left
+        let ret = -1;
+        if (x <= 0.505 && y <= 0.52) {
+            ret = 4;
+        }
+        // Top center
+        else if (x >= 0.51 && x <= 0.65 && y <= 0.425) {
+            ret = 2;
+        }
+        // Top right
+        else if (x >= 0.66 && y <= 0.52) {
+            ret = 3;
+        }
+        // Bottom left
+        else if (x <= 0.56 && y >= 0.55) {
+            ret = 0;
+        }
+        // Bottom right
+        else if (x >= 0.59 && y >= 0.55) {
+            ret = 1;
+        }
+        else {
+            console.warn('[WARN] Could not detect the clicked on card', x, y, data, result);
+            ga('send', 'event', 'error', 'card-unidentified', {x: x, y: y, data: data, result: result});
+            captureEvent({
+                message: 'could not identify the card the user clicked on',
+                extra: {
+                    x: x, 
+                    y: y, 
+                    data: data, 
+                    result: result,
+                    dpi: this.dpi,
+                    unrevealedCards: this.unrevealedCards
+                }
+            })
+            return;
+        }
+        console.log('matching card position', ret);
 
-			callback(ret);
-		});
+        callback(ret);
 	}
 
 	private detectRevealedCard(i: number) {

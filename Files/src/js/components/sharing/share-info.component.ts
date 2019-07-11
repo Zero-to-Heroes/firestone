@@ -1,11 +1,9 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, AfterViewInit, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
 
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
-import { SafeUrl } from '@angular/platform-browser';
 import { ShareVideoOnSocialNetworkEvent } from '../../services/mainwindow/store/events/social/share-video-on-social-network-event';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'share-info',
@@ -28,7 +26,9 @@ export class ShareInfoComponent implements AfterViewInit {
 	textValue: string;
 	loggedIn: boolean;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 	
 	@Input() set socialInfo(value: SocialUserInfo) {
 		if (!value) {
@@ -42,7 +42,7 @@ export class ShareInfoComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	share() {

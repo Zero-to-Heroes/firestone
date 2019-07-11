@@ -1,8 +1,6 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 
-declare var overwolf;
-
 @Component({
 	selector: 'settings-achievements-storage',
 	styleUrls: [
@@ -29,26 +27,22 @@ export class SettingsAchievementsStorageComponent {
 	mediaFolder: string;
 	usedSizeInGB: number;
 
-	constructor(private owService: OverwolfService, private cdr: ChangeDetectorRef) {
+	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {
 		this.loadStorageInfo();		
-
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "SettingsWindow") {
-				return;
-			}
+        this.ow.addStateChangedListener('SettingsWindow', (message) => {
 			this.loadStorageInfo();
 		});
 	}
 
 	openVideoFolder() {
-		this.owService.openWindowsExplorer(`${this.mediaFolder}/Firestone/Hearthstone`);
+		this.ow.openWindowsExplorer(`${this.mediaFolder}/Firestone/Hearthstone`);
 	}
 
 	private async loadStorageInfo() {
-		const videoFolderResult = await this.owService.getOverwolfVideosFolder();
+		const videoFolderResult = await this.ow.getOverwolfVideosFolder();
 		this.mediaFolder = videoFolderResult.path.Value;
 		console.log('videoFolderResult', videoFolderResult);
-		const sizeResult = await this.owService.getAppVideoCaptureFolderSize();
+		const sizeResult = await this.ow.getAppVideoCaptureFolderSize();
 		this.usedSizeInGB = sizeResult.totalVideosSizeMB / 1024;
 		console.log('sizeResult', sizeResult);
 		if (!(<ViewRef>this.cdr).destroyed) {

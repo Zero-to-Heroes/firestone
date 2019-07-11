@@ -3,8 +3,7 @@ import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'app-choice',
@@ -70,29 +69,20 @@ export class AppChoiceComponent implements AfterViewInit {
 	private collectionWindowId;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef) {
+	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
 	}
 
-	ngAfterViewInit() {
-		this.cdr.detach();
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "WelcomeWindow") {
-				return;
-			}
-			// console.log('state changed app choice', message);
+	async ngAfterViewInit() {
+        this.cdr.detach();
+        this.ow.addStateChangedListener('WelcomeWindow', (message) => {
 			if (message.window_state == 'normal') {
 				this.refreshContents();
 			}
 		});
-		this.refreshContents();
-		overwolf.windows.obtainDeclaredWindow("CollectionWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get CollectionWindow', result);
-				return;
-			}
-			this.collectionWindowId = result.window.id;
-		});
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+        this.refreshContents();
+        const window = await this.ow.obtainDeclaredWindow('CollectionWindow');
+        this.collectionWindowId = window.id;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	showCollection() {
@@ -116,29 +106,20 @@ export class AppChoiceComponent implements AfterViewInit {
 		this.showMainWindow('achievements');
 	}
 
-	private showMainWindow(module: string) {
+	private async showMainWindow(module: string) {
 		if (this.noCollection) {
 			return;
 		}
 		
-		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
-
-		// overwolf.windows.sendMessage(this.collectionWindowId, 'module', module, () => {
-		// 	console.log('module message sent', module);
-		overwolf.windows.getCurrentWindow((currentWindoResult) => {
-			const center = {
-				x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
-				y: currentWindoResult.window.top + currentWindoResult.window.height / 2
-			};
-			// console.log('center is', center);
-			overwolf.windows.sendMessage(this.collectionWindowId, 'move', center, () => {
-				overwolf.windows.restore(this.collectionWindowId, () => {
-					this.close.emit(null);
-				});
-			});
-		});
-		// });
-
+        this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
+        const window = await this.ow.getCurrentWindow();
+        const center = {
+            x: window.left + window.width / 2,
+            y: window.top + window.height / 2
+        };
+        await this.ow.sendMessage(this.collectionWindowId, 'move', center);
+        await this.ow.restoreWindow(this.collectionWindowId);
+        this.close.emit(null);
 	}
 
 	private async refreshContents() {

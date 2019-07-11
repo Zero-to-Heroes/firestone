@@ -27,8 +27,7 @@ import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { PreferencesService } from '../preferences.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
-
-declare var overwolf: any;
+import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
 export class GameStateService {
@@ -47,11 +46,12 @@ export class GameStateService {
             private allCards: AllCardsService,
             private prefs: PreferencesService,
             private twitch: TwitchAuthService,
+            private ow: OverwolfService,
 			private deckParser: DeckParserService) {
 		this.registerGameEvents();
         this.eventParsers = this.buildEventParsers();
         this.buildEventEmitters();
-        const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+        const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async (event) => {
             console.log('received pref', event);
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
@@ -148,20 +148,10 @@ export class GameStateService {
 		];
 	}
 
-	private loadDecktrackerWindow() {
-		overwolf.windows.obtainDeclaredWindow("DeckTrackerWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get DeckTrackerWindow', result);
-			}
-			// console.log('got notifications window', result);
-			let windowId = result.window.id;
-
-			overwolf.windows.restore(windowId, (result) => {
-				console.log('DeckTrackerWindow is on?', result);
-				overwolf.windows.hide(windowId, (result) => {
-					console.log('DeckTrackerWindow hidden', result);
-				})
-			})
-		});
+	private async loadDecktrackerWindow() {
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
+        const windowId = window.id;
+        await this.ow.restoreWindow(windowId);
+        await this.ow.hideWindow(windowId);
 	}
 }

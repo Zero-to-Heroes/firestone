@@ -1,6 +1,5 @@
 import { Component, AfterViewInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'hotkey',
@@ -18,9 +17,7 @@ export class HotkeyComponent implements AfterViewInit {
 
     private hotkey = 'Alt+C';
 
-	constructor(private cdr: ChangeDetectorRef) {
-
-	}
+	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) { }
 
 	ngAfterViewInit() {
         this.cdr.detach();
@@ -30,22 +27,17 @@ export class HotkeyComponent implements AfterViewInit {
         }, 5000);
 	}
     
-    private detectHotKey() {
-		overwolf.settings.getHotKey('collection', (result) => {
-			// console.log('hot key is', result);
-			if (result.status == 'success') {
-                this.hotkey = result.hotkey;
-                if (this.hotkey === 'Unassigned') {
-                    this.hotkeyHtml = '<span class="text">Hotkey:</span><span class="no-hotkey">No hotkey assigned</span>';
-                }
-                else {
-                    this.hotkeyHtml = this.splitHotkey();
-                }
-                if (!(<ViewRef>this.cdr).destroyed) {
-                    this.cdr.detectChanges();
-                }
-			}
-		});
+    private async detectHotKey() {
+        this.hotkey = await this.ow.getHotKey('collection');
+        if (this.hotkey === 'Unassigned') {
+            this.hotkeyHtml = '<span class="text">Hotkey:</span><span class="no-hotkey">No hotkey assigned</span>';
+        }
+        else {
+            this.hotkeyHtml = this.splitHotkey();
+        }
+        if (!(<ViewRef>this.cdr).destroyed) {
+            this.cdr.detectChanges();
+        }
     }
 
 	private splitHotkey(): string {

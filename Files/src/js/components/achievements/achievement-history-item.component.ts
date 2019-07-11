@@ -1,10 +1,8 @@
 import { Component, Input, ChangeDetectionStrategy, HostListener, EventEmitter, AfterViewInit } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
-import { AchievementNameService } from '../../services/achievement/achievement-name.service';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeVisibleAchievementEvent } from '../../services/mainwindow/store/events/achievements/change-visible-achievement-event';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievement-history-item',
@@ -23,10 +21,12 @@ export class AchievementHistoryItemComponent implements AfterViewInit {
 	creationDate: string;
 
 	private achievementId: string;
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;		
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;		
 	}
 
 	@Input() set historyItem(history: AchievementHistory) {

@@ -5,8 +5,7 @@ import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-i
 import { SharingAchievement } from '../../models/mainwindow/achievement/sharing-achievement';
 import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
 import { CloseSocialShareModalEvent } from '../../services/mainwindow/store/events/social/close-social-share-modal-event';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievement-sharing-modal',
@@ -77,7 +76,11 @@ export class AchievementSharingModal implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private player;
 	
-	constructor(private elRef: ElementRef, private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef) { }
+	constructor(
+        private elRef: ElementRef, 
+        private ow: OverwolfService,
+        private sanitizer: DomSanitizer, 
+        private cdr: ChangeDetectorRef) { }
 
 	@Input() set sharingAchievement(value: SharingAchievement) {
 		console.log('setting sharing achievement', value);
@@ -98,16 +101,13 @@ export class AchievementSharingModal implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
         this.player = this.elRef.nativeElement.querySelector('video');
         if (!this.player) {
             setTimeout(() => this.ngAfterViewInit(), 50);
         }
         // auto pause the video when window is closed / minimized
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
-			}
+        this.ow.addStateChangedListener('CollectionWindow', (message) => {
 			if (message.window_state != 'normal') {
 				this.player.pause();
 			}

@@ -1,8 +1,7 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'control-minimize',
@@ -26,16 +25,18 @@ export class ControlMinimizeComponent implements AfterViewInit {
     @Input() windowId: string;
 	@Input() isMainWindow: boolean;
 	
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	minimizeWindow() {
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
-		}
-		overwolf.windows.minimize(this.windowId);
+        }
+        this.ow.minimizeWindow(this.windowId);
 	};
 }

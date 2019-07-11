@@ -3,9 +3,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { StartSocialSharingEvent } from '../../services/mainwindow/store/events/social/start-social-sharing-event';
 import { SafeHtml } from '@angular/platform-browser';
-
-declare var overwolf;
-declare var ga;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievement-social-shares',
@@ -52,10 +50,12 @@ export class AchievementSocialSharesComponent implements AfterViewInit {
     @Input() achievementName: string;
     @Input() socialShareUserInfo: SocialShareUserInfo;
     
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
     
     ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
     }
 
     startSharingTwitter() {

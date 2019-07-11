@@ -1,13 +1,10 @@
-import { Component, ViewEncapsulation, ElementRef, HostListener, NgZone, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
 
 import { DebugService } from '../../services/debug.service';
-import { FeatureFlags } from '../../services/feature-flags.service';
 import { AdService } from '../../services/ad.service';
-
-const HEARTHSTONE_GAME_ID = 9898;
+import { OverwolfService } from '../../services/overwolf.service';
 
 declare var ga: any;
-declare var overwolf: any;
 declare var adsReady: any;
 declare var OwAd: any;
 
@@ -36,7 +33,7 @@ declare var OwAd: any;
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
 								</svg>
 							</button>
-							<button class="i-30 close-button" (mousedown)="closeWindow(true)">
+							<button class="i-30 close-button" (mousedown)="closeWindow()">
 								<svg class="svg-icon-fill">
 									<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 								</svg>
@@ -105,7 +102,6 @@ declare var OwAd: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-// 7.1.1.17994
 export class LoadingComponent implements AfterViewInit {
 
 	title: string = 'Getting ready';
@@ -117,20 +113,16 @@ export class LoadingComponent implements AfterViewInit {
 
 	constructor(
 			private debugService: DebugService, 
-			private ngZone: NgZone, 
-			private elRef: ElementRef, 
             private adService: AdService,
+            private ow: OverwolfService,
 			private cdr: ChangeDetectorRef) {
-		console.log('in loading constructor');
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.thisWindowId = result.window.id;
-			}
-		});
+	}
 
-		this.positionWindow();
-
-		overwolf.windows.onMessageReceived.addListener((message) => {
+	async ngAfterViewInit() {
+        this.cdr.detach();
+        this.thisWindowId = (await this.ow.getCurrentWindow()).id;
+        this.positionWindow();
+        this.ow.addMessageReceivedListener((message) => {
 			console.log('received', message);
 			if (message.id === 'ready') {
 				this.title = 'Your abilities are ready!';
@@ -139,12 +131,8 @@ export class LoadingComponent implements AfterViewInit {
 					this.cdr.detectChanges();
 				}
 			}
-		});
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "LoadingWindow") {
-				return;
-			}
-			// console.log('state changed LoadingWindow', message);
+        });
+        this.ow.addStateChangedListener('LoadingWindow', (message) => {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
@@ -156,33 +144,26 @@ export class LoadingComponent implements AfterViewInit {
 				console.log('refreshing ad', message.window_state);
 				this.refreshAds();
 			}
-		});
-	}
-
-	ngAfterViewInit() {
-		this.cdr.detach();
+        });
 		this.refreshAds();
 	}
 
 
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
-		overwolf.windows.dragMove(this.thisWindowId);
+        this.ow.dragMove(this.thisWindowId);
 	};
 
-	closeWindow(quitApp: boolean) {
+	closeWindow() {
 		if (this.loading) {
 			ga('send', 'event', 'loading', 'closed-before-complete');
-		}
-		// If game is not running, we close all other windows
-		overwolf.games.getRunningGameInfo((res: any) => {
-			overwolf.windows.close(this.thisWindowId);
-		});
+        }
+        this.ow.closeWindow(this.thisWindowId);
 	};
 
-	minimizeWindow() {
-		overwolf.windows.minimize(this.thisWindowId);
-	};
+    minimizeWindow() {
+        this.ow.minimizeWindow(this.thisWindowId);
+    };
 
 	private async refreshAds() {
         const shouldDisplayAds = await this.adService.shouldDisplayAds();
@@ -202,24 +183,21 @@ export class LoadingComponent implements AfterViewInit {
 			return;
 		}
 		if (!this.adRef) {
-			this.adInit = true;
-			overwolf.windows.getCurrentWindow((result) => {
-				if (result.status === "success") {
-                    if (result.window.isVisible) {
-                        console.log('first time init ads, creating OwAd', adsReady);
-                        this.adRef = new OwAd(document.getElementById("ad-div"));
-                        this.adRef.addEventListener('impression', (data) => {
-                            ga('send', 'event', 'ad', 'loading-window');
-                        })
-                        console.log('init OwAd');
-                        if (!(<ViewRef>this.cdr).destroyed) {
-                            this.cdr.detectChanges();
-                        }
-                    }
-                    this.adInit = false;
-                    this.refreshAds();
-				}
-			});
+            this.adInit = true;
+            const window = await this.ow.getCurrentWindow();
+            if (window.isVisible) {
+                console.log('first time init ads, creating OwAd', adsReady);
+                this.adRef = new OwAd(document.getElementById("ad-div"));
+                this.adRef.addEventListener('impression', (data) => {
+                    ga('send', 'event', 'ad', 'loading-window');
+                })
+                console.log('init OwAd');
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
+            }
+            this.adInit = false;
+            this.refreshAds();
 			return;
         }
 		console.log('refreshing ads');
@@ -240,20 +218,16 @@ export class LoadingComponent implements AfterViewInit {
 		}
 	}
 
-	private positionWindow() {
-		overwolf.games.getRunningGameInfo((gameInfo) => {
-			if (!gameInfo) {
-				return;
-			}
-			let gameWidth = gameInfo.logicalWidth;
-			let gameHeight = gameInfo.logicalHeight;
-			let dpi = gameWidth / gameInfo.width;
-			let newLeft = ~~(gameWidth * 0.4) - 440;
-			let newTop = ~~(gameHeight * 0.1);
-			console.log('changing loading window position', this.thisWindowId, newLeft, newTop);
-			overwolf.windows.changePosition(this.thisWindowId, newLeft, newTop, (changePosition) => {
-				// console.log('changed window position');
-			});
-		});
+	private async positionWindow() {
+        const gameInfo = await this.ow.getRunningGameInfo();
+        if (!gameInfo) {
+            return;
+        }
+        const gameWidth = gameInfo.logicalWidth;
+        const gameHeight = gameInfo.logicalHeight;
+        const newLeft = ~~(gameWidth * 0.4) - 440;
+        const newTop = ~~(gameHeight * 0.1);
+        console.log('changing loading window position', this.thisWindowId, newLeft, newTop);
+        this.ow.changeWindowPosition(this.thisWindowId, newLeft, newTop);
 	}
 }

@@ -4,8 +4,7 @@ import { AchievementSet } from '../../models/achievement-set';
 
 import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-categories',
@@ -28,10 +27,12 @@ export class AchievementsCategoriesComponent implements AfterViewInit {
 
 	@Input() public achievementSets: AchievementSet[];
 	
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	selectSet(set: AchievementSet) {

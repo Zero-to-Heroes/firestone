@@ -7,8 +7,7 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-list',
@@ -95,8 +94,12 @@ export class AchievementsListComponent implements AfterViewInit {
 	private lastScrollPositionBeforeScrollUp: number = 0;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private domSanitizer: DomSanitizer) {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+	constructor(
+            private cdr: ChangeDetectorRef, 
+            private el: ElementRef, 
+            private ow: OverwolfService,
+            private domSanitizer: DomSanitizer) {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	ngAfterViewInit() {

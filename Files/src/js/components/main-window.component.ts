@@ -8,7 +8,6 @@ import { BehaviorSubject } from 'rxjs';
 import { AdService } from '../services/ad.service';
 import { OverwolfService } from '../services/overwolf.service';
 
-declare var overwolf: any;
 declare var adsReady: any;
 declare var OwAd: any;
 declare var ga: any;
@@ -121,29 +120,20 @@ export class MainWindowComponent implements AfterViewInit {
             private adService: AdService,
             private ow: OverwolfService,
 			private debug: DebugService) {
-		this.cdr.detach();
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.windowId = result.window.id;
-			}
-		});
-		overwolf.windows.onMessageReceived.addListener((message) => {
-			if (message.id === 'move') {
-				overwolf.windows.getCurrentWindow((result) => {
-					if (result.status === "success"){
-						const newX = message.content.x - result.window.width / 2;
-                        const newY = message.content.y - result.window.height / 2;
-                        this.ow.changeWindowPosition(this.windowId, newX, newY);
-					}
-				});
-			}
-		});
+	}
 
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
+	async ngAfterViewInit() {
+        this.cdr.detach();
+        this.windowId = (await this.ow.getCurrentWindow()).id;
+        this.ow.addMessageReceivedListener(async (message) => {
+			if (message.id === 'move') {
+                const window = await this.ow.getCurrentWindow();
+				const newX = message.content.x - window.width / 2;
+                const newY = message.content.y - window.height / 2;
+                this.ow.changeWindowPosition(this.windowId, newX, newY);
 			}
-			// console.log('state changed CollectionWindow', message);
+		});
+        this.ow.addStateChangedListener('CollectionWindow', (message) => {
 			if (message.window_state != 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
@@ -153,24 +143,20 @@ export class MainWindowComponent implements AfterViewInit {
 				this.refreshAds();
 			}
 		});
-	}
-
-	ngAfterViewInit() {
-		const storeBus: BehaviorSubject<MainWindowState> = overwolf.windows.getMainWindow().mainWindowStore;
-		console.log('retrieved storeBus', storeBus, overwolf.windows.getMainWindow());
+		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
+		console.log('retrieved storeBus', storeBus);
 		storeBus.subscribe((newState: MainWindowState) => {
-			setTimeout(() => {
-                overwolf.windows.getCurrentWindow((result) => {
-                    const currentlyVisible = result.window.isVisible;
-                    if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
-                        overwolf.windows.restore(this.windowId);
-                    }
-                    console.log('updated state after event');
-                    this.state = newState;
-                    if (!(<ViewRef>this.cdr).destroyed) {
-                        this.cdr.detectChanges();
-                    }
-                });
+			setTimeout(async () => {
+                const window = await this.ow.getCurrentWindow();
+                const currentlyVisible = window.isVisible;
+                if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
+                    await this.ow.restoreWindow(this.windowId);
+                }
+                console.log('updated state after event');
+                this.state = newState;
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
             });
 		});
 		this.refreshAds();
@@ -179,29 +165,19 @@ export class MainWindowComponent implements AfterViewInit {
 
 	@HostListener('mousedown')
 	dragMove() {
-		overwolf.windows.dragMove(this.windowId);
+        this.ow.dragMove(this.windowId);
 	};
 
-	goHome() {
-		overwolf.windows.obtainDeclaredWindow("WelcomeWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get WelcomeWindow', result);
-				return;
-			}
-			overwolf.windows.getCurrentWindow((currentWindoResult) => {
-				// console.log('current window', currentWindoResult);
-				const center = {
-					x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
-					y: currentWindoResult.window.top + currentWindoResult.window.height / 2
-				};
-				// console.log('center is', center);
-				overwolf.windows.sendMessage(result.window.id, 'move', center, (result3) => {
-					overwolf.windows.restore(result.window.id, (result2) => {
-						overwolf.windows.hide(this.windowId);
-					});
-				});
-			});
-		});
+	async goHome() {
+        const welcomeWindow = await this.ow.obtainDeclaredWindow('WelcomeWindow');
+        const window = await this.ow.getCurrentWindow();
+        const center = {
+            x: window.left + window.width / 2,
+            y: window.top + window.height / 2
+        };
+        await this.ow.sendMessage(welcomeWindow.id, 'move', center);
+        await this.ow.restoreWindow(welcomeWindow.id);
+        await this.ow.hideWindow(this.windowId);
     };
     
 	private async refreshAds() {
@@ -214,7 +190,7 @@ export class MainWindowComponent implements AfterViewInit {
 			console.log('already initializing ads, returning');
 			return;
 		}
-		if (!adsReady) {
+		if (!adsReady || !OwAd) {
 			console.log('ads container not ready, returning');
 			setTimeout(() => {
 				this.refreshAds()
@@ -222,24 +198,21 @@ export class MainWindowComponent implements AfterViewInit {
 			return;
 		}
 		if (!this.adRef) {
-			this.adInit = true;
-			overwolf.windows.getCurrentWindow((result) => {
-				if (result.status === "success") {
-                    if (result.window.isVisible) {
-                        console.log('first time init ads, creating OwAd');
-                        console.log('init OwAd');
-                        this.adRef = new OwAd(document.getElementById("ad-div"));
-                        this.adRef.addEventListener('impression', (data) => {
-                            ga('send', 'event', 'ad', 'loading-window');
-                        })
-                        if (!(<ViewRef>this.cdr).destroyed) {
-                            this.cdr.detectChanges();
-                        }
-                    }
-                    this.adInit = false;
-                    this.refreshAds();
-				}
-			});
+            this.adInit = true;
+            const window = await this.ow.getCurrentWindow();
+            if (window.isVisible) {
+                console.log('first time init ads, creating OwAd');
+                this.adRef = new OwAd(document.getElementById("ad-div"));
+                this.adRef.addEventListener('impression', (data) => {
+                    ga('send', 'event', 'ad', 'loading-window');
+                })
+                console.log('init OwAd');
+                if (!(<ViewRef>this.cdr).destroyed) {
+                    this.cdr.detectChanges();
+                }
+            }
+            this.adInit = false;
+            this.refreshAds();
 			return;
         }
 		console.log('refreshing ads');

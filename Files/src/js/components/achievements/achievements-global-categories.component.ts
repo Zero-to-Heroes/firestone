@@ -3,8 +3,7 @@ import { Component, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter 
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-global-categories',
@@ -28,10 +27,12 @@ export class AchievementsGlobalCategoriesComponent implements AfterViewInit {
 
 	@Input() globalCategories: ReadonlyArray<VisualAchievementCategory>;
 	
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	selectCategory(category: VisualAchievementCategory) {

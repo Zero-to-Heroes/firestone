@@ -2,8 +2,7 @@ import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, AfterView
 
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'menu-selection',
@@ -37,11 +36,11 @@ export class MenuSelectionComponent implements AfterViewInit {
 	
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor() {
+	constructor(private ow: OverwolfService) {
 	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	selectModule(module: string) {

@@ -3,8 +3,7 @@ import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter 
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
 import { TriggerSocialNetworkLoginToggleEvent } from '../../services/mainwindow/store/events/social/trigger-social-network-login-toggle-event';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'share-login',
@@ -34,7 +33,9 @@ export class ShareLoginComponent implements AfterViewInit {
 	loginImage: string;
 	username: string;
 
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 
 	@Input() set socialInfo(value: SocialUserInfo) { 
 		if (!value) {
@@ -48,7 +49,7 @@ export class ShareLoginComponent implements AfterViewInit {
 	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	logInOut() {

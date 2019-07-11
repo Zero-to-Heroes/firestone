@@ -3,8 +3,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievement-view',
@@ -93,11 +92,11 @@ export class AchievementViewComponent implements AfterViewInit {
 		}
 	}
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef) {
+	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
 	}
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	toggleRecordings() {

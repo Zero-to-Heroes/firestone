@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 
 declare var OverwolfPlugin: any;
-declare var overwolf: any;
 
 @Injectable()
 export class GameEventsPluginService {

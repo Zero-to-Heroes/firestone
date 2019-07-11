@@ -8,8 +8,8 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { VideoReplayDeletionRequestEvent } from '../../services/mainwindow/store/events/achievements/video-replay-deletion-request-event';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { OverwolfService } from '../../services/overwolf.service';
 
-declare var overwolf;
 declare var ga;
 
 @Component({
@@ -161,6 +161,15 @@ export class AchievementRecordingsComponent implements AfterViewInit {
     private player;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
+    constructor(
+        private io: SimpleIOService,
+        private elRef: ElementRef, 
+        private cdr: ChangeDetectorRef, 
+        private prefs: PreferencesService,
+        private ow: OverwolfService,
+        private sanitizer: DomSanitizer) { 
+    }
+
 	@Input() set achievement(achievement: VisualAchievement) {
         this._achievement = achievement;
         console.log('setting achievement', achievement);
@@ -171,31 +180,19 @@ export class AchievementRecordingsComponent implements AfterViewInit {
             }
         })
     }
-
-    constructor(
-        private io: SimpleIOService,
-        private elRef: ElementRef, 
-        private cdr: ChangeDetectorRef, 
-        private prefs: PreferencesService,
-        private sanitizer: DomSanitizer) { 
-    }
     
     ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
         this.player = this.elRef.nativeElement.querySelector('video');
         if (!this.player) {
             setTimeout(() => this.ngAfterViewInit(), 50);
         }
         // auto pause the video when window is closed / minimized
-		overwolf.windows.onStateChanged.addListener((message) => {
-			if (message.window_name != "CollectionWindow") {
-				return;
-			}
+        this.ow.addStateChangedListener('CollectionWindow', (message) => {
 			if (message.window_state != 'normal') {
 				this.player.pause();
 			}
 		});
-
     }
 
     showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
@@ -211,8 +208,9 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 		}
     }
 
-    openVideoFolder() {
-        overwolf.utils.openWindowsExplorer(this.currentReplayLocation, (result) => { console.log('opened', result) });
+    async openVideoFolder() {
+        const result = await this.ow.openWindowsExplorer(this.currentReplayLocation);
+        console.log('opened', result);
     }
 
     goToPreviousPage() {

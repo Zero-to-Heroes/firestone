@@ -7,8 +7,6 @@ import { MainWindowStoreService } from '../mainwindow/store/main-window-store.se
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 
-declare var OverwolfPlugin: any;
-declare var overwolf: any;
 declare var parseCardsText: any;
 declare var ga: any;
 

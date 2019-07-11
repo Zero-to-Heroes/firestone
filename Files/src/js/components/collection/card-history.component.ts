@@ -5,8 +5,7 @@ import { SetCard } from '../../models/set';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
 import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../services/mainwindow/store/events/collection/toggle-show-only-new-cards-in-history-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'card-history',
@@ -74,10 +73,10 @@ export class CardHistoryComponent implements AfterViewInit {
 		this._selectedCard = selectedCard;
 	}
 
-	constructor(private el: ElementRef) { }
+	constructor(private el: ElementRef, private ow: OverwolfService) { }
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	loadMore() {

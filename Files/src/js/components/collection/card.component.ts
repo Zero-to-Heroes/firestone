@@ -6,8 +6,7 @@ import { Events } from '../../services/events.service';
 import { SetCard } from '../../models/set';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-
-declare var overwolf;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'card-view',
@@ -80,9 +79,9 @@ export class CardComponent implements AfterViewInit {
 
 	constructor(
 		private el: ElementRef,
-		private events: Events,
+        private events: Events,
+        private ow: OverwolfService,
 		private cdr: ChangeDetectorRef) {
-		// console.log('constructor CollectionComponent');
 	}
 
 	@Input('card') set card(card: SetCard) {
@@ -93,7 +92,7 @@ export class CardComponent implements AfterViewInit {
 	}
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	@HostListener('mousedown') onClick() {

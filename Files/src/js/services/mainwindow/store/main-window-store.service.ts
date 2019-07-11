@@ -76,9 +76,6 @@ import { CloseSocialShareModalEvent } from './events/social/close-social-share-m
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
 import { AchievementNameService } from '../../achievement/achievement-name.service';
 
-declare var overwolf;
-const HEARTHSTONE_GAME_ID = 9898;
-
 @Injectable()
 export class MainWindowStoreService {
 
@@ -117,8 +114,8 @@ export class MainWindowStoreService {
 		});
 		setInterval(() => this.processQueue(), 50);
 
-		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-			if (this.gameLaunched(res)) {
+        this.ow.addGameInfoUpdatedListener((res: any) => {
+			if (this.ow.gameLaunched(res)) {
                 console.log('game launched, populating store', res);
 				this.populateStore();
 			}
@@ -204,26 +201,8 @@ export class MainWindowStoreService {
 	}
 
 	private listenForSocialAccountLoginUpdates() {
-		overwolf.social.twitter.onLoginStateChanged.addListener((change) => {
+        this.ow.addTwitterLoginStateChangedListener((change) => {
 			this.stateUpdater.next(new UpdateTwitterSocialInfoEvent());
 		})
-	}
-
-	private gameLaunched(gameInfoResult: any): boolean {
-		if (!gameInfoResult) {
-			return false;
-		}
-		if (!gameInfoResult.gameInfo) {
-			return false;
-		}
-		if (!gameInfoResult.gameInfo.isRunning) {
-			return false;
-		}
-		// NOTE: we divide by 10 to get the game class id without it's sequence number
-		if (Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID) {
-			return false;
-        }
-        // Only detect new game launched events when it goes from not running to running
-        return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
 	}
 }

@@ -20,6 +20,7 @@ import { MemoryInspectionService } from '../../services/plugins/memory-inspectio
 import { FeatureFlags } from '../../services/feature-flags.service';
 import { init } from '@sentry/browser';
 import { HttpClientModule } from '@angular/common/http';
+import { OverwolfService } from '../../services/overwolf.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -53,7 +54,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		FeatureFlags,
 		Events,
 		IndexedDbService,
-		MemoryInspectionService,
+        MemoryInspectionService,
+        OverwolfService,
 		RealTimeNotificationService,
 	],
 })

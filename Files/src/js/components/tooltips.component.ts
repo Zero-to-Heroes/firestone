@@ -3,9 +3,6 @@ import { ViewContainerRef, ViewChild, ComponentFactoryResolver, ViewEncapsulatio
 
 import { Events } from '../services/events.service';
 
-declare var overwolf: any;
-
-
 @Component({
   	selector: 'tooltip',
 	styleUrls: [`../../css/component/tooltip.component.scss`],
@@ -30,11 +27,9 @@ export class Tooltip {
 	@HostBinding('style.display') display: string;
 
 	image() {
-		// return `http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png`;
 		return `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
 	}
 	overlayMaskImage() {
-		// return `url('http://static.zerotoheroes.com/hearthstone/fullcard/en/256/${this.cardId}.png')`;
 		return `url('https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png')`;
 	}
 }

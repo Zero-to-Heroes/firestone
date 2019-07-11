@@ -5,8 +5,7 @@ import { Events } from '../events.service';
 import { AllCardsService } from '../all-cards.service';
 import { Card } from '../../models/card';
 import { HttpClient } from '@angular/common/http';
-
-declare var overwolf: any;
+import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
 export class PackStatsService {
@@ -18,20 +17,23 @@ export class PackStatsService {
     private userMachineId: string;
     private username: string;
 
-	constructor(private events: Events, private allCards: AllCardsService, private http: HttpClient) {
+	constructor(
+            private events: Events, 
+            private allCards: AllCardsService, 
+            private ow: OverwolfService,
+            private http: HttpClient) {
         this.events.on(Events.NEW_PACK).subscribe(event => this.publishPackStat(event));
         this.events.on(Events.NEW_CARD).subscribe(event => this.publishCardStat(event.data[0], event.data[1], true));
         this.events.on(Events.MORE_DUST).subscribe(event => this.publishCardStat(event.data[0], event.data[2], false));
         this.retrieveUserInfo();
     }
 
-    private retrieveUserInfo() {
-        overwolf.profile.getCurrentUser((user) => {
-            console.log('retrieved user', user);
-            this.userId = user.userId;
-            this.userMachineId = user.machineId;
-            this.username = user.username;
-        });
+    private async retrieveUserInfo() {
+        const user = await this.ow.getCurrentUser();
+        console.log('retrieved user', user);
+        this.userId = user.userId;
+        this.userMachineId = user.machineId;
+        this.username = user.username;
     }
     
     private publishPackStat(event: any): any {

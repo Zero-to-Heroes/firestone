@@ -118,10 +118,11 @@ export class SettingsAchievementsVideoCaptureComponent {
 	constructor(
 			private owService: OverwolfService, 
 			private prefs: PreferencesService, 
-			private cdr: ChangeDetectorRef, 
+            private cdr: ChangeDetectorRef, 
+            private ow: OverwolfService,
 			private events: Events) {
-		this.updateDefaultValues();
-		overwolf.settings.OnVideoCaptureSettingsChanged.addListener((data) => this.handleVideoSettingsChange(data));
+        this.updateDefaultValues();
+        this.ow.addVideoCaptureSettingsChangedListener((data) => this.handleVideoSettingsChange(data));
 		this.settingsForm.controls['videoQuality'].valueChanges.subscribe((value) => this.changeVideoCaptureSettings(value));
 	}
 
@@ -146,7 +147,7 @@ export class SettingsAchievementsVideoCaptureComponent {
 		}
 		console.log('changing settings with', settings);
 		const result = await this.owService.setVideoCaptureSettings(settings.resolution, settings.fps);
-		await this.owService.sendMessage('MainWindow', 'capture-settings-updated');
+		await this.owService.sendMessageWithName('MainWindow', 'capture-settings-updated');
 		console.log('recording settings changed', result);
 		if (!(await this.prefs.getPreferences()).hasSeenVideoCaptureChangeNotif) {
 			this.events.broadcast(Events.SETTINGS_DISPLAY_MODAL, 'video-capture');

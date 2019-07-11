@@ -1,15 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Events } from '../events.service';
-import { Achievement } from '../../models/achievement';
-import { ReplayInfo } from 'src/js/models/replay-info';
-import { Challenge } from './achievements/challenge';
-import { FeatureFlags } from '../feature-flags.service';
-import { AchievementConfService } from './achievement-conf.service';
 import { OverwolfService } from '../overwolf.service';
-import { PreferencesService } from '../preferences.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
-import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
 
 const HEARTHSTONE_GAME_ID = 9898;
 

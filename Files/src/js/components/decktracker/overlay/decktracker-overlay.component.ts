@@ -10,7 +10,6 @@ import { Events } from '../../../services/events.service';
 import { ScenarioId } from '../../../models/scenario-id';
 import { OverwolfService } from '../../../services/overwolf.service';
 
-declare var overwolf: any;
 declare var ga: any;
 
 @Component({
@@ -85,14 +84,19 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
             private events: Events,
             private ow: OverwolfService,
 			private debugService: DebugService) {
-		overwolf.windows.getCurrentWindow((result) => {
-			this.windowId = result.window.id;
-		});
-		overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-			if (this.exitGame(res)) {
-				this.closeApp();
-			}
-		});
+	}
+
+	async ngAfterViewInit() {
+		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
+        this.cdr.detach();
+        
+        this.windowId = (await this.ow.getCurrentWindow()).id;
+        // this.ow.addGameExitListener()
+		// overwolf.games.onGameInfoUpdated.addListener((res: any) => {
+		// 	if (this.exitGame(res)) {
+		// 		this.closeApp();
+		// 	}
+		// });
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
 			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
@@ -124,7 +128,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
                 }
 			}, data.data[0] ? data.data[0] : 200);
 		});
-		const deckEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().deckEventBus;
+		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 	 	deckEventBus.subscribe(async (event) => {
 			console.log('received deck event', event.event);
 			this.gameState = event.state;
@@ -133,22 +137,18 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		});
-		const preferencesEventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe((event) => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
 			}
-		});
-	}
-
-	ngAfterViewInit() {
-		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		this.cdr.detach();
+        });
+        
         this.handleDisplayPreferences();
         if (process.env.NODE_ENV !== 'production') {
             console.error("Should not allow debug game state from production");
-            this.gameState = overwolf.windows.getMainWindow().deckDebug.state;
+            this.gameState = this.ow.getMainWindow().deckDebug.state;
             console.log('game state', this.gameState, JSON.stringify(this.gameState));
         }
 		if (!(<ViewRef>this.cdr).destroyed) {
@@ -159,7 +159,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	@HostListener('mousedown')
 	dragMove() {
-		overwolf.windows.dragMove(this.windowId);
+        this.ow.dragMove(this.windowId);
 	}
 
 	onDisplayModeChanged(pref: string) {
@@ -237,47 +237,38 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		return this.gameState.playerDeck.deckList.length > 0;
 	}
 
-	private restoreWindow() {
-		overwolf.windows.restore(this.windowId, (result) => {
-			// console.log('window restored', result);
-			let width = 252;
-			overwolf.games.getRunningGameInfo((gameInfo) => {
-				// console.log('got running game info', gameInfo);
-				if (!gameInfo) {
-					return;
-				}
-				let gameWidth = gameInfo.logicalWidth;
-				let gameHeight = gameInfo.logicalHeight;
-				let dpi = gameWidth / gameInfo.width;
-				console.log('changing window size', this.windowId, width, gameHeight);
-				overwolf.windows.changeSize(this.windowId, width, gameHeight, (changeSize) => {
-					// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-					let newLeft = ~~(gameWidth - width* dpi - 20); // Leave a bit of room to the right
-					let newTop = 0;
-					console.log('changing position', this.windowId, newLeft, newTop);
-					overwolf.windows.changePosition(this.windowId, newLeft, newTop, (changePosition) => {
-						// console.log('changed window position', changePosition);
-					});
-				});
-			});
-		});
+	private async restoreWindow() {
+        await this.ow.restoreWindow(this.windowId);
+        // console.log('window restored', result);
+        const width = 252;
+        const gameInfo = await this.ow.getRunningGameInfo();
+        if (!gameInfo) {
+            return;
+        }
+        const gameWidth = gameInfo.logicalWidth;
+        const gameHeight = gameInfo.logicalHeight;
+        const dpi = gameWidth / gameInfo.width;
+        await this.ow.changeWindowSize(this.windowId, width, gameHeight);
+        // https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+        const newLeft = ~~(gameWidth - width* dpi - 20); // Leave a bit of room to the right
+        const newTop = 0;
+        await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
 	private hideWindow() {
-		overwolf.windows.hide(this.windowId, (result) => {
-		})
+        this.ow.hideWindow(this.windowId);
 	}
 
-	private exitGame(gameInfoResult: any): boolean {
-		return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
-	}
+	// private exitGame(gameInfoResult: any): boolean {
+	// 	return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
+	// }
 
-	private closeApp() {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success") {
-				// console.log('closing');
-				overwolf.windows.close(result.window.id);
-			}
-		});
-	}
+	// private closeApp() {
+	// 	overwolf.windows.getCurrentWindow((result) => {
+	// 		if (result.status === "success") {
+	// 			// console.log('closing');
+	// 			overwolf.windows.close(result.window.id);
+	// 		}
+	// 	});
+	// }
 }

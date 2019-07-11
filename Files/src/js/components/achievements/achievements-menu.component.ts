@@ -7,8 +7,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-menu',
@@ -48,10 +47,12 @@ export class AchievementsMenuComponent implements AfterViewInit {
 	@Input() selectedCategory: VisualAchievementCategory;
 	@Input() selectedAchievementSet: AchievementSet;
 	
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	goToAchievementsCategoriesView() {

@@ -2,8 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { Preferences } from '../models/preferences';
 import { BinderPrefs } from '../models/preferences/binder-prefs';
-
-declare var overwolf: any;
+import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class PreferencesService {
@@ -13,7 +12,7 @@ export class PreferencesService {
 
     private preferencesEventBus = new EventEmitter<any>();
     
-	constructor(private indexedDb: GenericIndexedDbService) {
+	constructor(private indexedDb: GenericIndexedDbService, private ow: OverwolfService) {
         // It will create one per window that uses the service, but we don't really care 
         // We just have to always use the one from the MainWindow
 		window['preferencesEventBus'] = this.preferencesEventBus;
@@ -140,7 +139,7 @@ export class PreferencesService {
         console.log('user pref saved', eventName);
         if (eventName) {
             console.log('broadcasting new prefs', userPrefs);
-            const eventBus: EventEmitter<any> = overwolf.windows.getMainWindow().preferencesEventBus;
+            const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
             eventBus.next({
                 name: eventName,
                 preferences: userPrefs

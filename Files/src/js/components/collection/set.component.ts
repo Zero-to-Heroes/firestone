@@ -5,8 +5,7 @@ import { Set } from '../../models/set';
 import { Events } from '../../services/events.service';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'set-view',
@@ -171,7 +170,8 @@ export class SetComponent implements AfterViewInit {
 
 	constructor(
 		private cdr: ChangeDetectorRef, 
-		private elRef: ElementRef,
+        private elRef: ElementRef,
+        private ow: OverwolfService,
 		private events: Events) {
 			this.events.on(Events.SHOWING_FTUE).subscribe((event) => {
 				// console.log('showing ftue', this._cardSet, event);
@@ -201,7 +201,7 @@ export class SetComponent implements AfterViewInit {
 	}
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	@Input('cardSet') set cardSet(set: Set) {

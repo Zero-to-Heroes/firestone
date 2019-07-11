@@ -6,8 +6,6 @@ import { Card } from '../../models/card';
 import { PackHistory } from '../../models/pack-history';
 import { PityTimer } from '../../models/pity-timer';
 
-declare var OverwolfPlugin: any;
-
 @Injectable()
 export class IndexedDbService {
 

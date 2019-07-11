@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-
-declare var OverwolfPlugin: any;
-declare var overwolf: any;
-declare var ga: any;
+import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class OwNotificationsService {
@@ -13,7 +10,7 @@ export class OwNotificationsService {
 	private retriesLeft = 10;
 	// private notificationWindowInit = false;
 
-	constructor() {
+	constructor(private ow: OverwolfService) {
 		this.detectNotificationsWindow();
 	}
 
@@ -31,32 +28,16 @@ export class OwNotificationsService {
 				return;
 			}
 		}
-
-		// overwolf.windows.restore(this.windowId, (result) => {
-		// 		console.log('notifications window is on?', result);
-		// 	})
-		let strMessage = JSON.stringify(htmlMessage);
-		overwolf.windows.sendMessage(this.windowId, '' + this.messageId++, strMessage, (result) => {
-			// console.log('Notification service sent message to notifications window', result);
-		});
+        let strMessage = JSON.stringify(htmlMessage);
+        this.ow.sendMessage(this.windowId, '' + this.messageId++, strMessage);
 	}
 
-	private detectNotificationsWindow() {
-		overwolf.windows.obtainDeclaredWindow("NotificationsWindow", (result) => {
-			if (result.status !== 'success') {
-				console.warn('Could not get NotificationsWindow', result);
-			}
-			// console.log('got notifications window', result);
-			let windowId = result.window.id;
-
-			overwolf.windows.restore(windowId, (result) => {
-				// console.log('notifications window is on?', result);
-				overwolf.windows.hide(windowId, (result) => {
-					this.windowId = windowId;
-					// console.log('notification window is minimized at start, now listening to notifications', result);
-				})
-			})
-		});
+	private async detectNotificationsWindow() {
+        const window = await this.ow.obtainDeclaredWindow(OverwolfService.NOTIFICATIONS_WINDOW);
+        const windowId = window.id;
+        await this.ow.restoreWindow(windowId);
+        await this.ow.hideWindow(windowId);
+        this.windowId = windowId;
 	}
 }
 

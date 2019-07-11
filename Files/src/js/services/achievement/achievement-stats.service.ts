@@ -6,8 +6,7 @@ import { Events } from '../events.service';
 import { AchievementsRepository } from './achievements-repository.service';
 import { Achievement } from '../../models/achievement';
 import { HttpClient } from '@angular/common/http';
-
-declare var overwolf: any;
+import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
 export class AchievementStatsService {
@@ -19,19 +18,19 @@ export class AchievementStatsService {
     private username: string;
 
 	constructor(
-        private events: Events,
-        private http: HttpClient,
-		private repository: AchievementsRepository) {
+            private events: Events,
+            private http: HttpClient,
+            private ow: OverwolfService,
+            private repository: AchievementsRepository) {
         this.events.on(Events.NEW_ACHIEVEMENT).subscribe((event) => this.publishAchievementStats(event));
         this.retrieveUserInfo();
     }
 
-    private retrieveUserInfo() {
-        overwolf.profile.getCurrentUser((user) => {
-            this.userId = user.userId;
-            this.userMachineId = user.machineId;
-            this.username = user.username;
-        });
+    private async retrieveUserInfo() {
+        const user = await this.ow.getCurrentUser();
+        this.userId = user.userId;
+        this.userMachineId = user.machineId;
+        this.username = user.username;
     }
     
     private publishAchievementStats(event, retriesLeft = 5) {

@@ -1,8 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Set } from '../../models/set';
 
-declare var overwolf: any;
-
 @Component({
 	selector: 'rarity-view',
 	styleUrls: [`../../../css/component/collection/rarity.component.scss`],

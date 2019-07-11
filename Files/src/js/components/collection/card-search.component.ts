@@ -8,8 +8,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { UpdateCardSearchResultsEvent } from '../../services/mainwindow/store/events/collection/update-card-search-results-event';
 import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'card-search',
@@ -54,12 +53,13 @@ export class CardSearchComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
-		private events: Events,
+        private events: Events,
+        private ow: OverwolfService,
 		private cdr: ChangeDetectorRef) {
 	}
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())

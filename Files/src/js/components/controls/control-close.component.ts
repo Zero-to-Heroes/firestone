@@ -1,10 +1,7 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
-
-const HEARTHSTONE_GAME_ID = 9898;
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'control-close',
@@ -29,35 +26,28 @@ export class ControlCloseComponent implements AfterViewInit {
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
 	
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+    
+    constructor(private ow: OverwolfService) { }
 
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
-	closeWindow() {
+	async closeWindow() {
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
 		}
-		// If game is not running, we close all other windows
-		overwolf.games.getRunningGameInfo((res: any) => {
-			console.log('running game info', res);
-			if (this.closeAll && !(res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID)) {
-				overwolf.windows.getOpenWindows((openWindows) => {
-					for (let windowName in openWindows) {
-						overwolf.windows.obtainDeclaredWindow(windowName, (result) => {
-							if (result.status !== 'success') {
-								return;
-							}
-							overwolf.windows.close(result.window.id, (result) => {
-							})
-						});
-					}
-				})
-			}
-			else {
-				overwolf.windows.hide(this.windowId);
-			}
-		});
+        // If game is not running, we close all other windows
+        const isRunning: boolean = await this.ow.inGame();
+        if (this.closeAll && isRunning) {
+            const openWindows = await this.ow.getOpenWindows();
+            for (let windowName of openWindows) {
+                this.ow.closeWindowFromName(windowName);
+            }
+        }
+        else {
+            this.ow.hideWindow(this.windowId);
+        }
 	};
 }

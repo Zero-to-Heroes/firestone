@@ -12,7 +12,6 @@ import { GameEvents }  from '../../services/game-events.service';
 import { HsPublicEventsListener }  from '../../services/hs-public-events-listener.service';
 import { LogListenerService }  from '../../services/log-listener.service';
 import { LogRegisterService }  from '../../services/log-register.service';
-import { LogStatusService }  from '../../services/log-status.service';
 import { OwNotificationsService }  from '../../services/notifications.service';
 
 import { MemoryInspectionService } from '../../services/plugins/memory-inspection.service';
@@ -100,7 +99,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		LogListenerService,
 		LogParserService,
 		LogRegisterService,
-		LogStatusService,
 		OverwolfService,
 		OwNotificationsService,
 		PreferencesService,

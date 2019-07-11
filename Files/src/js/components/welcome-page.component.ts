@@ -1,10 +1,7 @@
 import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 
 import { DebugService } from '../services/debug.service';
-import { CollectionManager } from '../services/collection/collection-manager.service';
-import { FeatureFlags } from '../services/feature-flags.service';
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'welcome-page',
@@ -63,34 +60,26 @@ export class WelcomePageComponent implements AfterViewInit {
 
 	thisWindowId: string;
 
-	constructor(private debugService: DebugService, private collectionManager: CollectionManager) {
-		overwolf.windows.getCurrentWindow((result) => {
-			if (result.status === "success"){
-				this.thisWindowId = result.window.id;
-			}
-		});
-	}
+	constructor(private debugService: DebugService, private ow: OverwolfService) { }
 
-	ngAfterViewInit() {
-		overwolf.windows.onMessageReceived.addListener((message) => {
+	async ngAfterViewInit() {
+        this.thisWindowId = (await this.ow.getCurrentWindow()).id;
+        this.ow.addMessageReceivedListener(async (message) => {
 			if (message.id === 'move') {
-				overwolf.windows.getCurrentWindow((result) => {
-					if (result.status === "success"){
-						const newX = message.content.x - result.window.width / 2;
-						const newY = message.content.y - result.window.height / 2;
-						overwolf.windows.changePosition(this.thisWindowId, newX, newY);
-					}
-				});
+                const window = await this.ow.getCurrentWindow();
+                const newX = message.content.x - window.width / 2;
+                const newY = message.content.y - window.height / 2;
+                this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 			}
 		});
 	}
 
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
-		overwolf.windows.dragMove(this.thisWindowId);
+		this.ow.dragMove(this.thisWindowId);
 	};
 
 	hideWindow() {
-		overwolf.windows.hide(this.thisWindowId);
+		this.ow.hideWindow(this.thisWindowId);
 	};
 }

@@ -8,8 +8,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
 import { SelectCollectionFormatEvent } from '../../services/mainwindow/store/events/collection/select-collection-format-event';
 import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'collection-menu',
@@ -55,7 +54,7 @@ export class CollectionMenuComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private _events: Events, private cards: AllCardsService) {
+	constructor(private _events: Events, private cards: AllCardsService, private ow: OverwolfService) {
 
 	}
 
@@ -65,11 +64,11 @@ export class CollectionMenuComponent implements AfterViewInit {
 	}
 
 	@Input('selectedCardId') set selectedCardId(cardId: string) {
-		this.selectedCard = this.cards.getCard(cardId);
+		this.selectedCard = cardId ? this.cards.getCard(cardId) : undefined;
 	}
 	
 	ngAfterViewInit() {
-		this.stateUpdater = overwolf.windows.getMainWindow().mainWindowStoreUpdater;
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	getSelectedFormat() {

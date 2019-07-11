@@ -3,10 +3,7 @@ import { Component, ChangeDetectionStrategy, Injector } from '@angular/core';
 import { AppBootstrapService } from '../services/app-bootstrap.service';
 import { PreferencesService } from '../services/preferences.service';
 import { DebugService } from '../services/debug.service';
-
-const HEARTHSTONE_GAME_ID = 9898;
-
-declare var overwolf: any;
+import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'app-root',
@@ -19,7 +16,11 @@ declare var overwolf: any;
 })
 export class AppComponent {
 
-	constructor(private injector: Injector, private debug: DebugService, private prefs: PreferencesService) {
+	constructor(
+            private injector: Injector, 
+            private debug: DebugService, 
+            private ow: OverwolfService,
+            private prefs: PreferencesService) {
         this.init();
     }
 
@@ -41,7 +42,7 @@ export class AppComponent {
             }
         } else {
             console.log('not starting app, waiting for manual launch');
-            overwolf.extensions.onAppLaunchTriggered.addListener((result) => {
+            this.ow.addAppLaunchTriggeredListener((result) => {
                 console.log('starting app');
                 this.injector.get(AppBootstrapService).init();
             });

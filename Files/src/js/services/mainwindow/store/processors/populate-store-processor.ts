@@ -21,8 +21,6 @@ import { SocialShareUserInfo } from "../../../../models/mainwindow/social-share-
 import { OverwolfService } from "../../../overwolf.service";
 import { AchievementNameService } from "../../../achievement/achievement-name.service";
 
-declare var overwolf;
-
 export class PopulateStoreProcessor implements Processor {
 
     constructor(

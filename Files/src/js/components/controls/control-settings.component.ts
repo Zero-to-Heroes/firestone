@@ -1,6 +1,5 @@
 import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
-
-declare var overwolf: any;
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'control-settings',
@@ -27,39 +26,33 @@ export class ControlSettingsComponent implements AfterViewInit {
 	@Input() settingsSection: string;
 
 	private settingsWindowId: string;
-	private settingsEventBus: EventEmitter<string>;
+    private settingsEventBus: EventEmitter<string>;
+    
+    constructor(private ow: OverwolfService) { }
 	
-	ngAfterViewInit() {
-        overwolf.windows.obtainDeclaredWindow("SettingsWindow", (result) => {
-			if (result.status !== 'success') {
-				// console.warn('Could not get SettingsWindow', result);
-				this.ngAfterViewInit();
-				return;
-			}
-			this.settingsWindowId = result.window.id;
-			this.settingsEventBus = overwolf.windows.getMainWindow().settingsEventBus;
-		});
+	async ngAfterViewInit() {
+        this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
+        try {
+            const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
+            this.settingsWindowId = window.id;
+        }
+        catch (e) {
+            this.ngAfterViewInit();
+        }
 	}
 
-	showSettings() {
+	async showSettings() {
 		if (this.settingsApp) {
 			this.settingsEventBus.next(this.settingsApp);
-		}
-		overwolf.windows.getCurrentWindow((currentWindoResult) => {
-			// console.log('current window', currentWindoResult);
-			const center = {
-				x: currentWindoResult.window.left + currentWindoResult.window.width / 2,
-				y: currentWindoResult.window.top + currentWindoResult.window.height / 2
-			};
-			// console.log('center is', center);
-			if (this.shouldMoveSettingsWindow) {
-				overwolf.windows.sendMessage(this.settingsWindowId, 'move', center, (result3) => {
-					overwolf.windows.restore(this.settingsWindowId);
-				});
-			}
-			else {
-				overwolf.windows.restore(this.settingsWindowId);
-			}
-		});
+        }
+        const window = await this.ow.getCurrentWindow();
+        const center = {
+            x: window.left + window.width / 2,
+            y: window.top + window.height / 2
+        };
+        if (this.shouldMoveSettingsWindow) {
+            await this.ow.sendMessage(this.settingsWindowId, 'move', center);
+        }
+        this.ow.restoreWindow(this.settingsWindowId);
 	}
 }
