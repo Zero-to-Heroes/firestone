@@ -100,7 +100,7 @@ export class AchievementViewComponent implements AfterViewInit {
 	}
 
 	toggleRecordings() {
-		if (this._achievement.replayInfo.length > 0) {
+		if (this._achievement && this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
 			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(this.showRecordings));
             if (!(<ViewRef>this.cdr).destroyed) {

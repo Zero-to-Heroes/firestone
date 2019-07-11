@@ -12,6 +12,10 @@ export class AchievementConfService {
 
     public async shouldRecord(achievement: Achievement): Promise<boolean> {
         const completedAchievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievement.id);
+        if (!completedAchievement) {
+            return true;
+        }
+        console.log('[recording] loaded completed achievement', completedAchievement);
         // Only record the first time for an encounter
         const recordOnlyOnce = [
             'dungeon_run_boss_encounter', 
