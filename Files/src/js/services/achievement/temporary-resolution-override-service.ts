@@ -56,8 +56,13 @@ export class TemporaryResolutionOverrideService {
     }
     
     private restoreSettings() {
+        if (!this.oldSettings) {
+            console.log('[temp-override] no old settings were registered, nothing to restore');
+            return;
+        }
         // Prevent the default override mechanism when restoring the settings
         this.restoring = true;
+        console.log('[temp-override] trying to restore previous settings', this.oldSettings);
         this.owService.setVideoCaptureSettings(this.RESOLUTION_ENUM[this.oldSettings.resolution], this.oldSettings.fps); 
         console.log('[temp-override] restoring previous settings', this.oldSettings);
     }
