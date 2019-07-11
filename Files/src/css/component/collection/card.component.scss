@@ -24,8 +24,7 @@
 		align-items: center;
 		height: 20px;
 	    position: relative;
-	    // top: -12px;
-	    top: -9px;
+	    top: -24px;
 
 		.non-premium, .premium {
 			@extend %dust-number;
