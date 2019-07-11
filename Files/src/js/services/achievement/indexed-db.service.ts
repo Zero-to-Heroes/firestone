@@ -33,7 +33,7 @@ export class IndexedDbService {
 			return result;
 		}
 		catch (e) {
-            console.error('[achievements] [storage] error while saving completed achievement', e.message, e.name, e);
+            console.error('[achievements] [storage] error while saving completed achievement', achievement, e.message, e.name, e);
             return achievement;
 		}
 	}
