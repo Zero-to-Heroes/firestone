@@ -102,6 +102,10 @@ export class FullCardComponent {
 					audios: []
 				}
 				for (let i = 0; i < audioClip.files.length; i++) {
+                    if (!audioClip.files[i]) {
+                        console.warn('Missing audio file', card.name, selectedCard.id, card.audio, card);
+                        continue;
+                    }
 					let audio = new Audio();
 					audio.src = `https://static.zerotoheroes.com/hearthstone/audio/${audioClip.files[i]}`;
 					audio.load();
