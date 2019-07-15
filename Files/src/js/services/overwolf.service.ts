@@ -79,6 +79,16 @@ export class OverwolfService {
     public async getOpenWindows() {
         return new Promise<any>((resolve) => {
             overwolf.windows.getOpenWindows((res: any) => {
+                console.log('[overwolf-service] retrieve all open windows', res);
+                resolve(res);
+            });
+        });
+    }
+
+    public async getWindowsStates() {
+        return new Promise<any>((resolve) => {
+            overwolf.windows.getWindowsStates((res: any) => {
+                console.log('[overwolf-service] retrieve all windows states', res);
                 resolve(res);
             });
         });
@@ -112,6 +122,7 @@ export class OverwolfService {
         const window = await this.obtainDeclaredWindow(windowName);
         return new Promise<any>((resolve) => {
             overwolf.windows.close(window.id, (result) => {
+                console.log('[overwolf-service] closed window', windowName, result);
                 resolve(result);
             })
         });

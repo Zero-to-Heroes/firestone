@@ -42,8 +42,8 @@ export class ControlCloseComponent implements AfterViewInit {
         const isRunning: boolean = await this.ow.inGame();
         if (this.closeAll && isRunning) {
             const openWindows = await this.ow.getOpenWindows();
-            for (let windowName of openWindows) {
-                this.ow.closeWindowFromName(windowName);
+            for (const [name, window] of Object.entries(openWindows)) {
+                this.ow.closeWindowFromName(name);
             }
         }
         else {

@@ -103,6 +103,7 @@ export class AppBootstrapService {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			console.log('updated game status', res);
 			if (this.exitGame(res)) {
+                console.log('left game, closing app');
 				this.closeApp();
 			}
 			else if (await this.ow.inGame()) {
@@ -191,9 +192,10 @@ export class AppBootstrapService {
 
 	private async closeApp() {
         // Close all windows
-        const windows = await this.ow.getOpenWindows()
-        for (let window of windows) {
-            this.ow.closeWindowFromName(window);
+        const windows = await this.ow.getOpenWindows();
+        console.log('closing all windows', windows);
+        for (const [name, window] of Object.entries(windows)) {
+            this.ow.closeWindowFromName(name);
         }
 	}
 }
