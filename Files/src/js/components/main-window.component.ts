@@ -45,7 +45,7 @@ declare var ga: any;
 							</button>
                             <control-discord></control-discord>
 							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
-							<control-close [windowId]="windowId" [isMainWindow]="true"></control-close>
+							<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
 						</div>
 					</section>
 					<section class="content-container">
