@@ -28,6 +28,7 @@ import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-de
 import { PreferencesService } from '../preferences.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
+import { MinionDiedParser } from './event-parser/minion-died-parser';
 
 @Injectable()
 export class GameStateService {
@@ -120,7 +121,7 @@ export class GameStateService {
 					state: this.state, 
                 };
                 this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
-				console.log('emitted deck event', emittedEvent.event.name);
+				console.log('emitted deck event', emittedEvent.event.name, this.state);
 			}
 		}
 	}
@@ -143,6 +144,7 @@ export class GameStateService {
 			new DiscardedCardParser(),
 			new CardRecruitedParser(),
 			new MinionSummonedParser(this.allCards),
+			new MinionDiedParser(this.allCards),
 			new BurnedCardParser(),
 			new SecretPlayedFromDeckParser(),
 		];

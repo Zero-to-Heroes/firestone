@@ -29,10 +29,20 @@ export class GameStartParser implements EventParser {
 				deck: deckList,
 				graveyard: [],
 				hand: [],
+				board: [],
+                otherZone: [],
+                dynamicZones: [],
+			} as DeckState,
+			opponentDeck: { 
+				deckList: [],
+				deck: [],
+				graveyard: [],
+				hand: [],
+				board: [],
                 otherZone: [],
                 dynamicZones: [],
 			} as DeckState
-		});
+		} as GameState);
     }
 
 	event(): string {

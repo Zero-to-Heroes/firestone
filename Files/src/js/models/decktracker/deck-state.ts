@@ -4,9 +4,9 @@ import { HeroCard } from './hero-card';
 import { DynamicZone } from './view/dynamic-zone';
 
 export class DeckState {
-    readonly deckstring: string;
-    readonly name: string;
-    readonly hero: HeroCard;
+    readonly deckstring?: string;
+    readonly name?: string;
+    readonly hero?: HeroCard;
     readonly deckList: ReadonlyArray<DeckCard> = [];
 
     // Graveyard is not so easy in fact - we want to know the cards that 
@@ -16,6 +16,7 @@ export class DeckState {
     // readonly graveyard: ReadonlyArray<DeckCard> = [];
     readonly hand: ReadonlyArray<DeckCard> = [];
     readonly deck: ReadonlyArray<DeckCard> = [];
+    readonly board: ReadonlyArray<DeckCard> = [];
     readonly otherZone: ReadonlyArray<DeckCard> = [];
     readonly dynamicZones: ReadonlyArray<DynamicZone> = [];
 }

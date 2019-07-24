@@ -30,8 +30,9 @@ export class DeckListByZoneComponent {
 			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost),
         ];
         // If there are no dynamic zones, we use the standard "other" zone
-        if (deckState.dynamicZones.length == 0) {
-            zones.push(this.buildZone(deckState.otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost));
+        if (deckState.dynamicZones.length === 0) {
+			const otherZone = [...deckState.otherZone, ...deckState.board];
+            zones.push(this.buildZone(otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost));
         }
         // Otherwise, we add all the dynamic zones
         deckState.dynamicZones.forEach((zone) => {

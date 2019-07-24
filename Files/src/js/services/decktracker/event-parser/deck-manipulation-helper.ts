@@ -46,15 +46,23 @@ export class DeckManipulationHelper {
             if (!found) {
                 found = zone.find((card) => card.cardId === cardId && !card.entityId);
                 found = Object.assign(new DeckCard(), found, {
-                    entityId: entityId
-                });
+					entityId: entityId,
+					cardId: cardId
+                } as DeckCard);
             }
         }
 		if (!found) {
 			console.error('Could not find card in zone', cardId, zone);
 			found = zone.find((card) => !card.cardId);
 			console.log('defaulting to getting a card without cardId', found);
-        }
+		}
+		if (!found) {
+			found = Object.assign(new DeckCard(), {
+				cardId: cardId,
+				entityId: entityId,
+			} as DeckCard);
+			console.log('could not find card, creating card with default template', found);
+		}
 		return found;
 	}
 }
