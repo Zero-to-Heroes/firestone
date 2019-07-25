@@ -44,7 +44,7 @@ export class GameEvent {
 	readonly localPlayer;
 	readonly opponentPlayer;
 	readonly entityId: number;
-	readonly gameState;
+	readonly gameState: any = {};
 
 	readonly additionalData: any;
 	
@@ -56,7 +56,7 @@ export class GameEvent {
 			localPlayer: gameEvent.Value.LocalPlayer,
 			opponentPlayer: gameEvent.Value.OpponentPlayer,
 			entityId: parseInt(gameEvent.Value.EntityId || 0),
-			gameState: gameEvent.GameState,
+			gameState: gameEvent.Value.GameState,
 			additionalData: additionalProps,
 		} as GameEvent);
 	}

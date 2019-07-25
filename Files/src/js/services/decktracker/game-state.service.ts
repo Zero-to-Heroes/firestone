@@ -29,6 +29,7 @@ import { PreferencesService } from '../preferences.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
+import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
 export class GameStateService {
@@ -43,7 +44,8 @@ export class GameStateService {
 
 	constructor(
             private gameEvents: GameEvents, 
-            private dynamicZoneHelper: DynamicZoneHelperService,
+			private dynamicZoneHelper: DynamicZoneHelperService,
+			private zoneOrdering: ZoneOrderingService,
             private allCards: AllCardsService,
             private prefs: PreferencesService,
             private twitch: TwitchAuthService,
@@ -106,9 +108,16 @@ export class GameStateService {
                     console.error('null state after processing event', gameEvent.type, parser, gameEvent);
                     continue;
                 }
-                const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
+				const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
+				const stateFromTracker = gameEvent.gameState || {};
+				console.log('getting state from tracker', stateFromTracker, gameEvent);
+				const playerDeckWithZonesOrdered = 
+						this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
+				const opponentDeckWithZonesOrdered = 
+						this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
                 this.state = Object.assign(new GameState(), newState, {
-                    playerDeck: playerDeckWithDynamicZones
+					playerDeck: playerDeckWithZonesOrdered,
+					opponentDeck: opponentDeckWithZonesOrdered
                 } as GameState);
                 if (!this.state) {
                     console.error('null state after processing event', gameEvent, this.state);

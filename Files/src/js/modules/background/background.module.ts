@@ -52,6 +52,7 @@ import { TemporaryResolutionOverrideService } from '../../services/achievement/t
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -127,7 +128,8 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		DeckParserService,
         GameStateService,
-        DynamicZoneHelperService,
+		DynamicZoneHelperService,
+		ZoneOrderingService,
 
         TemporaryResolutionOverrideService,
 	]
