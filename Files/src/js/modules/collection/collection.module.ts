@@ -57,7 +57,6 @@ import { AchievementsStorageService }  from '../../services/achievement/achievem
 import { PackHistoryService } from '../../services/collection/pack-history.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { PreferencesService } from '../../services/preferences.service';
-import { FtueElement, FtueComponent } from '../../components/ftue.component';
 import { AchievementHistoryComponent } from '../../components/achievements/achievement-history.component';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementHistoryItemComponent } from '../../components/achievements/achievement-history-item.component';
@@ -152,14 +151,10 @@ console.log('version is ' + process.env.APP_VERSION);
 
 		ShareLoginComponent,
 		ShareInfoComponent,
-
-		FtueElement,
-		FtueComponent,
 	],
 	bootstrap: [
 		MainWindowComponent,
 	],
-	entryComponents: [FtueElement],
 	providers: [
         AdService,
 		AllCardsService,

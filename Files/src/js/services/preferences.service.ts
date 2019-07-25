@@ -50,12 +50,6 @@ export class PreferencesService {
         this.savePreferences(newPrefs);
     }
     
-    public async setHasSeenPityTimerFtue(pref: boolean) {
-        const prefs = await this.getPreferences();
-        const newPrefs = { ...prefs, hasSeenPityTimerFtue: pref} as Preferences;
-        this.savePreferences(newPrefs);
-    }
-    
     public async setDontRecordAchievements(pref: boolean) {
         const prefs = await this.getPreferences();
         const newPrefs = { ...prefs, dontRecordAchievements: pref} as Preferences;

@@ -84,8 +84,6 @@ declare var ga: any;
 						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
 					</svg>
 				</i>
-
-				<ftue></ftue>
 				<tooltips></tooltips>
 			</div>
 			<div class="ads-container">
