@@ -1,6 +1,6 @@
 {
   "name": "Firestone",
-  "version": "3.1.28",
+  "version": "3.1.29",
   "scripts": {
     "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
     "build": "rimraf dist && webpack --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
