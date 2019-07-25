@@ -64,6 +64,9 @@ export class GameStateService {
         });
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckDebug'] = this;
+		window['logGameState'] = () => {
+			console.log(JSON.stringify(this.state));
+		}
 		this.loadDecktrackerWindow();
 	}
 
