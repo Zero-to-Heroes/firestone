@@ -22,9 +22,9 @@ export class CardBackToDeckParser implements EventParser {
 		}
 		const cardId: string = gameEvent.data[0];
 		const controllerId: string = gameEvent.data[1];
-		const initialZone: string = gameEvent.data[2];
 		const localPlayer = gameEvent.data[3];
-		const entityId: number = gameEvent.data[5];
+		const entityId: number = gameEvent.data[4];
+		const initialZone: string = gameEvent.data[5];
 		
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

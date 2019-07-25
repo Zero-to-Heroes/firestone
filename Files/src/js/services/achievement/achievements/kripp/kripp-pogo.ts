@@ -47,7 +47,7 @@ export class KrippPogo extends AbstractChallenge {
 		const cardId = gameEvent.data[0];
 		const controllerId = gameEvent.data[1];
         const localPlayer = gameEvent.data[2];
-        const newAttack = gameEvent.data[5];
+        const newAttack = gameEvent.data[7];
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
 			this.strongestPogoAttack = Math.max(this.strongestPogoAttack, newAttack);
 		}

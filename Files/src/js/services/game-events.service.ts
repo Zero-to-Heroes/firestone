@@ -106,192 +106,78 @@ export class GameEvents {
 				this.allEvents.next(new GameEvent(GameEvent.MONSTER_HUNT_STEP, gameEvent.Value - 1));
 				break;
 			case 'CARD_PLAYED':
-				this.allEvents.next(new GameEvent(
-					GameEvent.CARD_PLAYED, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-                    gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent));
 				break;
 			case 'DISCARD_CARD':
-				this.allEvents.next(new GameEvent(
-					GameEvent.DISCARD_CARD, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
 				break;
 			case 'MINION_DIED':
-				this.allEvents.next(new GameEvent(
-					GameEvent.MINION_DIED, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.MINION_DIED, gameEvent));
 				break;
             case 'RECRUIT_CARD':
-                this.allEvents.next(new GameEvent(
-                    GameEvent.RECRUIT_CARD, 
-                    gameEvent.Value.CardId,
-                    gameEvent.Value.ControllerId,
-                    gameEvent.Value.LocalPlayer,
-                    gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
                 break;
             case 'SECRET_PLAYED_FROM_DECK':
-                this.allEvents.next(new GameEvent(
-                    GameEvent.SECRET_PLAYED_FROM_DECK, 
-                    gameEvent.Value.CardId,
-                    gameEvent.Value.ControllerId,
-                    gameEvent.Value.LocalPlayer,
-                    gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
                 break;
 			case 'MINION_SUMMONED':
-				this.allEvents.next(new GameEvent(
-					GameEvent.MINION_SUMMONED, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent));
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
-				this.allEvents.next(new GameEvent(
-					GameEvent.CARD_CHANGED_ON_BOARD, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
-				this.allEvents.next(new GameEvent(
-					GameEvent.RECEIVE_CARD_IN_HAND, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent));
 				break;
 			case 'END_OF_ECHO_IN_HAND':
-				this.allEvents.next(new GameEvent(
-					GameEvent.END_OF_ECHO_IN_HAND, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
 				break;
 			case 'CREATE_CARD_IN_DECK':
-				this.allEvents.next(new GameEvent(
+				this.allEvents.next(GameEvent.build(
 					GameEvent.CREATE_CARD_IN_DECK, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-					gameEvent.Value.CreatorCardId,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+					gameEvent,
+					gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId));
 				break;
 			case 'SECRET_PLAYED':
-				this.allEvents.next(new GameEvent(
-					GameEvent.SECRET_PLAYED, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
 				break;
 			case 'CARD_DRAW_FROM_DECK':
-				this.allEvents.next(new GameEvent(
-					GameEvent.CARD_DRAW_FROM_DECK, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent));
 				break;
 			case 'CARD_BACK_TO_DECK':
-				this.allEvents.next(new GameEvent(
+				this.allEvents.next(GameEvent.build(
 					GameEvent.CARD_BACK_TO_DECK, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.InitialZone,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+					gameEvent,
+					gameEvent.Value.AdditionalProps.InitialZone));
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
-				this.allEvents.next(new GameEvent(
-					GameEvent.CARD_REMOVED_FROM_DECK, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
-				this.allEvents.next(new GameEvent(
-					GameEvent.CARD_REMOVED_FROM_HAND, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
 				break;
 			case 'BURNED_CARD':
-				this.allEvents.next(new GameEvent(
-					GameEvent.BURNED_CARD, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
 				break;
 			case 'MULLIGAN_INITIAL_OPTION':
-				this.allEvents.next(new GameEvent(
-					GameEvent.MULLIGAN_INITIAL_OPTION, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+				this.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
-				this.allEvents.next(new GameEvent(
-					GameEvent.CARD_ON_BOARD_AT_GAME_START, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
-				this.allEvents.next(new GameEvent(
-					GameEvent.PASSIVE_BUFF, 
-					gameEvent.Value.CardId,
-					gameEvent.Value.ControllerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-                    parseInt(gameEvent.Value.EntityId || 0)));
+				this.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
             case 'MINION_ON_BOARD_ATTACK_UPDATED':
-                this.allEvents.next(new GameEvent(
-                    GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, 
-                    gameEvent.Value.CardId,
-                    gameEvent.Value.ControllerId,
-                    gameEvent.Value.LocalPlayer,
-                    gameEvent.Value.OpponentPlayer,
+				this.allEvents.next(GameEvent.build(
+					GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, 
+					gameEvent,
                     gameEvent.Value.InitialAttack,
-                    gameEvent.Value.NewAttack,
-                    parseInt(gameEvent.Value.EntityId || 0),
-                    parseInt(gameEvent.Value.EntityId || 0)));
+                    gameEvent.Value.NewAttack));
                 break;
 			case 'FATIGUE_DAMAGE':
 				this.allEvents.next(new GameEvent(
-					GameEvent.FATIGUE_DAMAGE, 
+					GameEvent.FATIGUE_DAMAGE,
 					gameEvent.Value.PlayerId,
 					gameEvent.Value.LocalPlayer,
 					gameEvent.Value.OpponentPlayer,

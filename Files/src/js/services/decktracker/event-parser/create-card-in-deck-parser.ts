@@ -26,12 +26,12 @@ export class CreateCardInDeckParser implements EventParser {
 			return currentState;
 		}
 		const cardId: string = gameEvent.data[0];
-        const entityId: number = gameEvent.data[5];
+        const entityId: number = gameEvent.data[4];
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = Object.assign(new DeckCard(), {
             cardId: cardId,
             entityId: entityId,
-			cardName: this.buildCardName(cardData, gameEvent.data[4]),
+			cardName: this.buildCardName(cardData, gameEvent.data[5]),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 		} as DeckCard);

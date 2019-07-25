@@ -1,5 +1,4 @@
 export class GameEvent {
-
 	public static readonly MATCH_METADATA = 'MATCH_METADATA';
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
@@ -45,6 +44,17 @@ export class GameEvent {
 	constructor(type: string, ...data: any[]) {
 		this.type = type;
 		this.data = data;
+	}
+	
+	public static build(type: string, gameEvent: any, ...additionalProps): GameEvent {
+		return new GameEvent(
+			type,
+			gameEvent.Value.CardId,
+			gameEvent.Value.ControllerId,
+			gameEvent.Value.LocalPlayer,
+			gameEvent.Value.OpponentPlayer,
+			parseInt(gameEvent.Value.EntityId || 0),
+			...additionalProps);
 	}
 
 }
