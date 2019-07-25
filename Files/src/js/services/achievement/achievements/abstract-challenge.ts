@@ -67,12 +67,9 @@ export abstract class AbstractChallenge implements Challenge {
 
 	protected detectScenario(gameEvent: GameEvent) {
 		// console.log('detecting scenario', gameEvent)
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
         if (this.modeOrScenarioIds.length === 0
-                || this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].ScenarioID)) !== -1
-				|| this.modeOrScenarioIds.indexOf(parseInt(gameEvent.data[0].GameType)) !== -1) {
+                || this.modeOrScenarioIds.indexOf(parseInt(gameEvent.additionalData.metaData.ScenarioID)) !== -1
+				|| this.modeOrScenarioIds.indexOf(parseInt(gameEvent.additionalData.metaData.GameType)) !== -1) {
 			this.correctMode = true;
 			// console.log('correct scenario');
 			this.handleCompletion();

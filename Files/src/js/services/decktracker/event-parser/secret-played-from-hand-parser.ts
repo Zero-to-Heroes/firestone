@@ -16,9 +16,9 @@ export class SecretPlayedFromHandParser implements EventParser {
         if (gameEvent.type !== GameEvent.SECRET_PLAYED) {
 			return false;
 		}
-		const cardId: string = gameEvent.data[0];
-		const controllerId: string = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const cardId: string = gameEvent.cardId;
+		const controllerId: number = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		return cardId && controllerId === localPlayer.PlayerId
     }    
     
@@ -26,8 +26,8 @@ export class SecretPlayedFromHandParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-		const cardId: string = gameEvent.data[0];
-        const entityId: number = gameEvent.data[4];
+        const cardId: string = gameEvent.cardId;
+        const entityId: number = gameEvent.entityId;
 		const card = DeckManipulationHelper.findCardInZone(currentState.playerDeck.hand, cardId, entityId);
 		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(
 			currentState.playerDeck.hand, cardId, entityId);

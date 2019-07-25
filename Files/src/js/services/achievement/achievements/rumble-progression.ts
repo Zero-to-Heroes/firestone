@@ -27,12 +27,12 @@ export class RumbleProgression extends AbstractChallenge {
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.RUMBLE_RUN_STEP) {
-			this.currentRumbleStep = gameEvent.data[0];
+			this.currentRumbleStep = gameEvent.additionalData.step;
 		}
 		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START) {
-			const cardId = gameEvent.data[0];
-			const controllerId = gameEvent.data[1];
-			const localPlayer = gameEvent.data[2];
+			const cardId = gameEvent.cardId;
+			const controllerId = gameEvent.controllerId;
+			const localPlayer = gameEvent.localPlayer;
 			if (cardId == this.shrineId && controllerId == localPlayer.PlayerId) {
 				this.shrinePlayed = true;
 			}
@@ -54,11 +54,8 @@ export class RumbleProgression extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

@@ -16,9 +16,9 @@ export class CardDrawParser implements EventParser {
         if (gameEvent.type !== GameEvent.CARD_DRAW_FROM_DECK) {
 			return false;
 		}
-		const cardId: string = gameEvent.data[0];
-		const controllerId: string = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const cardId: string = gameEvent.cardId;
+		const controllerId: number = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		return cardId && controllerId === localPlayer.PlayerId
     }    
     
@@ -26,16 +26,13 @@ export class CardDrawParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-		const cardId: string = gameEvent.data[0];
-        const entityId: number = gameEvent.data[4];
+		const cardId: string = gameEvent.cardId;
+        const entityId: number = gameEvent.entityId;
         const card = DeckManipulationHelper.findCardInZone(currentState.playerDeck.deck, cardId, entityId);
-        // console.log('find card in zone', card, currentState);
 		const previousDeck = currentState.playerDeck.deck;
 		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId, entityId);
-        // console.log('deck after card removed', newDeck);
 		const previousHand = currentState.playerDeck.hand;
 		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousHand, card);
-        // console.log('hand after card added', newHand, card);
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
 			deckList: currentState.playerDeck.deckList,
 			deck: newDeck,

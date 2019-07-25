@@ -79,7 +79,7 @@ export class GameStateService {
 			}
         }, 100);
         // Reset the deck if it exists
-        this.eventQueue.enqueue(new GameEvent(GameEvent.GAME_END));
+        this.eventQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END, } as GameEvent));
     }
     
     private async buildEventEmitters() {

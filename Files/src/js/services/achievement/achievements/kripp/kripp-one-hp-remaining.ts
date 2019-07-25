@@ -35,12 +35,9 @@ export class KrippOneHpRemaining extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
-		const gameState = gameEvent.data[3];
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
+		const gameState = gameEvent.additionalData.report;
 		const hpLeft = (gameState.LocalPlayer.TotalHealth - gameState.LocalPlayer.DamageTaken);
 		const armorLeft = gameState.LocalPlayer.ArmorLeft;
 		if (localPlayer.Id === winner.Id && armorLeft == 0 && hpLeft == 1) {

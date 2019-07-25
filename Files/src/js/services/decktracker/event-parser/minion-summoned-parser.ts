@@ -19,10 +19,7 @@ export class MinionSummonedParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-        const cardId: string = gameEvent.data[0];
-		const controllerId: string = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
-		const entityId: number = gameEvent.data[4];
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

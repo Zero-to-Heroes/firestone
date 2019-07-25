@@ -40,25 +40,17 @@ export class KrippFatigue extends AbstractChallenge {
 	}
 
 	private detectDamage(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const playerId = gameEvent.data[0];
-        const localPlayer = gameEvent.data[1];
-        const opponentPlayer = gameEvent.data[2];
-        const totalDamage = gameEvent.data[3];
+		const playerId = gameEvent.additionalData.playerId;
+        const opponentPlayer = gameEvent.opponentPlayer;
+        const totalDamage = gameEvent.additionalData.fatigueDamage;
 		if (playerId == opponentPlayer.Id) {
 			this.maxFatigueDamage = Math.max(this.maxFatigueDamage, totalDamage);
-			// console.log('more fatigue!', this.maxFatigueDamage, playerId, opponentPlayer, localPlayer);
 		}
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		let winner = gameEvent.additionalData.winner;
+		let localPlayer = gameEvent.localPlayer;
 		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

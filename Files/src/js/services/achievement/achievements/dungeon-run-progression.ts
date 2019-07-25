@@ -23,7 +23,7 @@ export class DungeonRunProgression extends AbstractChallenge {
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.DUNGEON_RUN_STEP) {
-			this.currentDungeonStep = gameEvent.data[0];
+			this.currentDungeonStep = gameEvent.additionalData.step;
 		}
 
 		if (this.currentDungeonStep === this.dungeonStep && gameEvent.type == GameEvent.TURN_START) {
@@ -43,11 +43,8 @@ export class DungeonRunProgression extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
 			console.log('completed dungeon progression', this);
 			this.callback = callback;

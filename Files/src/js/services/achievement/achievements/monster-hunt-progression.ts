@@ -23,7 +23,7 @@ export class MonsterHuntProgression extends AbstractChallenge {
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
 		if (gameEvent.type == GameEvent.MONSTER_HUNT_STEP) {
-			this.currentHuntStep = gameEvent.data[0];
+			this.currentHuntStep = gameEvent.additionalData.step;
 		}
 		if (this.currentHuntStep === this.huntStep && gameEvent.type == GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
@@ -41,11 +41,8 @@ export class MonsterHuntProgression extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
 		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
 			console.log('monster dungeon progression', this);
 			this.callback = callback;

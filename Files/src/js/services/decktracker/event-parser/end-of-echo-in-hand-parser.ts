@@ -16,9 +16,9 @@ export class EndOfEchoInHandParser implements EventParser {
         if (gameEvent.type !== GameEvent.END_OF_ECHO_IN_HAND) {
 			return false;
 		}
-		const cardId: string = gameEvent.data[0];
-		const controllerId: string = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const cardId: string = gameEvent.cardId;
+		const controllerId: number = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		return cardId && controllerId === localPlayer.PlayerId
     }    
     
@@ -26,8 +26,8 @@ export class EndOfEchoInHandParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-		const cardId: string = gameEvent.data[0];
-        const entityId: number = gameEvent.data[4];
+		const cardId: string = gameEvent.cardId;
+        const entityId: number = gameEvent.entityId;
 		const newHand: ReadonlyArray<DeckCard> = DeckManipulationHelper.removeSingleCardFromZone(currentState.playerDeck.hand, cardId, entityId);
 		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
 			hand: newHand

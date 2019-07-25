@@ -39,23 +39,17 @@ export class KrippShirvallah extends AbstractChallenge {
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const cardId = gameEvent.data[0];
-		const controllerId = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const cardId = gameEvent.cardId;
+		const controllerId = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
 			this.tigerPlayed = true;
 		}
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		let winner = gameEvent.additionalData.winner;
+		let localPlayer = gameEvent.localPlayer;
 		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

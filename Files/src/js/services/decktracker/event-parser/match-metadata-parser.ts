@@ -18,9 +18,9 @@ export class MatchMetadataParser implements EventParser {
     parse(currentState: GameState, gameEvent: GameEvent): GameState {
 		return Object.assign(new GameState(), currentState, { 
 			metadata: {
-				gameType: gameEvent.data[0].GameType as number,
-				formatType: gameEvent.data[0].FormatType as number,
-				scenarioId: gameEvent.data[0].ScenarioID as number,
+				gameType: gameEvent.additionalData.metaData.GameType as number,
+				formatType: gameEvent.additionalData.metaData.FormatType as number,
+				scenarioId: gameEvent.additionalData.metaData.ScenarioID as number,
 			} as Metadata
 		} as GameState);
     }

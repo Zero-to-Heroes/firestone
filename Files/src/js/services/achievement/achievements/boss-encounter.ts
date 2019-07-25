@@ -41,10 +41,7 @@ export class BossEncounter extends AbstractChallenge {
 	}
 
 	private detectOpponentEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length === 0) {
-			return;
-		}
-		if (gameEvent.data[0].CardID === this.cardId) {
+		if (gameEvent.opponentPlayer.CardID === this.cardId) {
 			this.callback = callback;
 			// console.log('proper opponent', this);
 			this.handleCompletion();

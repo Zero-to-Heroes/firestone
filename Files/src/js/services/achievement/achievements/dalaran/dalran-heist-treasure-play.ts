@@ -27,21 +27,18 @@ export class DalaranHeistTreasurePlay extends AbstractChallenge {
         if (this.cardId === 'DALA_701') {
             // If we draw The Box, save the entity Id, so that we can match it with a treasure that is played later
             if ((gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK || gameEvent.type === GameEvent.RECEIVE_CARD_IN_HAND) 
-                    && gameEvent.data[0] === this.cardId) {
-                this.entityId = gameEvent.data[4];
+                    && gameEvent.cardId === this.cardId) {
+                this.entityId = gameEvent.entityId;
                 console.log('saved entityId', this.cardId, this.entityId);
             }            
         }
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const cardId = gameEvent.data[0];
-		const controllerId = gameEvent.data[1];
-        const localPlayer = gameEvent.data[2];
-        const entityId = gameEvent.data[4];
+		const cardId = gameEvent.cardId;
+		const controllerId = gameEvent.controllerId;
+        const localPlayer = gameEvent.localPlayer;
+        const entityId = gameEvent.entityId;
 		if (controllerId == localPlayer.PlayerId && (cardId === this.cardId || entityId === this.entityId)) {
             console.log('everything ok', this);
 			this.callback = callback;

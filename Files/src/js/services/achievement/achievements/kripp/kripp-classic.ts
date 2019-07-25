@@ -45,11 +45,8 @@ export class KrippClassic extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		let winner = gameEvent.additionalData.winner;
+		let localPlayer = gameEvent.localPlayer;
 		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

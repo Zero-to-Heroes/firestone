@@ -38,12 +38,9 @@ export class BossVictory extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
-		let opponentPlayer = gameEvent.data[2];
+		let winner = gameEvent.additionalData.winner;
+		let localPlayer = gameEvent.localPlayer;
+		let opponentPlayer = gameEvent.opponentPlayer;
 		if (opponentPlayer.CardID === this.cardId && localPlayer.Id === winner.Id) {
 			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			this.callback = callback;

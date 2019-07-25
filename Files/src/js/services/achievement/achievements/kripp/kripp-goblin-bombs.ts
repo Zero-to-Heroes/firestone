@@ -40,13 +40,10 @@ export class KrippGoblinBombs extends AbstractChallenge {
 	}
 
 	private detectDamage(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const sourceCardId = gameEvent.data[0];
-		const sourceControllerId = gameEvent.data[1];
-		const localPlayer = gameEvent.data[3];
-		const targets = gameEvent.data[2];
+		const sourceCardId = gameEvent.additionalData.sourceCardId;
+		const sourceControllerId = gameEvent.additionalData.sourceControllerId;
+		const localPlayer = gameEvent.localPlayer;
+		const targets = gameEvent.additionalData.targets;
 		if (sourceCardId == this.cardId && sourceControllerId == localPlayer.PlayerId) {
 			console.log(Object.keys(targets));
 			const totalDamage = Object.keys(targets)
@@ -58,11 +55,8 @@ export class KrippGoblinBombs extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		let winner = gameEvent.data[0];
-		let localPlayer = gameEvent.data[1];
+		let winner = gameEvent.additionalData.winner;
+		let localPlayer = gameEvent.localPlayer;
 		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

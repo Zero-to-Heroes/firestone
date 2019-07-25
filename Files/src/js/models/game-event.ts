@@ -39,22 +39,30 @@ export class GameEvent {
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
 
 	readonly type: string;
-	readonly data: any[];
+	readonly cardId: string;
+	readonly controllerId: number;
+	readonly localPlayer;
+	readonly opponentPlayer;
+	readonly entityId: number;
+	readonly gameState;
 
-	constructor(type: string, ...data: any[]) {
-		this.type = type;
-		this.data = data;
-	}
+	readonly additionalData: any;
 	
-	public static build(type: string, gameEvent: any, ...additionalProps): GameEvent {
-		return new GameEvent(
-			type,
-			gameEvent.Value.CardId,
-			gameEvent.Value.ControllerId,
-			gameEvent.Value.LocalPlayer,
-			gameEvent.Value.OpponentPlayer,
-			parseInt(gameEvent.Value.EntityId || 0),
-			...additionalProps);
+	public static build(type: string, gameEvent: any, additionalProps?: any): GameEvent {
+		return Object.assign(new GameEvent(), {
+			type: type,
+			cardId: gameEvent.Value.CardId,
+			controllerId: gameEvent.Value.ControllerId,
+			localPlayer: gameEvent.Value.LocalPlayer,
+			opponentPlayer: gameEvent.Value.OpponentPlayer,
+			entityId: parseInt(gameEvent.Value.EntityId || 0),
+			gameState: gameEvent.GameState,
+			additionalData: additionalProps,
+		} as GameEvent);
+	}
+
+	public parse(): [string, number, any, number] {
+		return [this.cardId, this.controllerId, this.localPlayer, this.entityId];
 	}
 
 }

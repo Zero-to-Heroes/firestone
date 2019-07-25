@@ -24,12 +24,9 @@ export class DungeonRunPassivePlay extends AbstractChallenge {
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const cardId = gameEvent.data[0];
-		const controllerId = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const cardId = gameEvent.cardId;
+		const controllerId = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
 			// console.log('Passive buff achievement complete');
 			this.callback = callback;

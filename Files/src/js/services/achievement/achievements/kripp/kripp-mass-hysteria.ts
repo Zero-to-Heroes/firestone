@@ -44,11 +44,8 @@ export class KrippMassHysteria extends AbstractChallenge {
 	}
 
 	private detectMinionDied(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const controllerId = gameEvent.data[1];
-		const opponentPlayer = gameEvent.data[3];
+		const controllerId = gameEvent.controllerId;
+		const opponentPlayer = gameEvent.opponentPlayer;
 		if (controllerId === opponentPlayer.PlayerId) {
 			this.minionsDeadThisTurn++;
 			// console.log('one more dead minion', this.minionsDeadThisTurn);
@@ -58,12 +55,9 @@ export class KrippMassHysteria extends AbstractChallenge {
 	}
 
 	private detectCardPlayed(gameEvent: GameEvent, callback: Function) {
-		if (!gameEvent.data || gameEvent.data.length == 0) {
-			return;
-		}
-		const cardId = gameEvent.data[0];
-		const controllerId = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const cardId = gameEvent.cardId;
+		const controllerId = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		if (cardId === this.cardId && controllerId === localPlayer.PlayerId) {
 			this.massHysteriaPlayedThisTurn = true;
 			// console.log('mass hysteria played', this.massHysteriaPlayedThisTurn);

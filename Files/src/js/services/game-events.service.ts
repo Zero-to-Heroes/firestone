@@ -78,32 +78,63 @@ export class GameEvents {
 		console.log(gameEvent.Type + ' event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
-				this.allEvents.next(new GameEvent(GameEvent.GAME_START));
-				this.onGameStart.next(new GameEvent(GameEvent.GAME_START));
+				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START, } as GameEvent);
+				this.allEvents.next(event);
+				this.onGameStart.next(event);
 				break;
 			case 'MATCH_METADATA':
-				this.allEvents.next(new GameEvent(GameEvent.MATCH_METADATA, gameEvent.Value));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.MATCH_METADATA,
+					additionalData: {
+						metaData: gameEvent.Value
+					} 
+				} as GameEvent));
 				break;
 			case 'LOCAL_PLAYER':
-				this.allEvents.next(new GameEvent(GameEvent.LOCAL_PLAYER, gameEvent.Value));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.LOCAL_PLAYER,
+					localPlayer: gameEvent.Value
+				} as GameEvent));
 				break;
 			case 'OPPONENT_PLAYER':
-				this.allEvents.next(new GameEvent(GameEvent.OPPONENT, gameEvent.Value));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.OPPONENT,
+					opponentPlayer: gameEvent.Value
+				} as GameEvent));
 				break;
 			case 'MULLIGAN_INPUT':
-				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_INPUT));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.MULLIGAN_INPUT,
+				} as GameEvent));
 				break;
 			case 'MULLIGAN_DONE':
-				this.allEvents.next(new GameEvent(GameEvent.MULLIGAN_DONE));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.MULLIGAN_DONE,
+				} as GameEvent));
 				break;
 			case 'RUMBLE_RUN_STEP':
-				this.allEvents.next(new GameEvent(GameEvent.RUMBLE_RUN_STEP, gameEvent.Value - 1));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.RUMBLE_RUN_STEP,
+					additionalData: {
+						step: gameEvent.Value - 1
+					}
+				} as GameEvent));
 				break;
 			case 'DUNGEON_RUN_STEP':
-				this.allEvents.next(new GameEvent(GameEvent.DUNGEON_RUN_STEP, gameEvent.Value - 1));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.DUNGEON_RUN_STEP,
+					additionalData: {
+						step: gameEvent.Value - 1
+					}
+				} as GameEvent));
 				break;
 			case 'MONSTER_HUNT_STEP':
-				this.allEvents.next(new GameEvent(GameEvent.MONSTER_HUNT_STEP, gameEvent.Value - 1));
+				this.allEvents.next(Object.assign(new GameEvent(), { 
+					type: GameEvent.MONSTER_HUNT_STEP,
+					additionalData: {
+						step: gameEvent.Value - 1
+					}
+				} as GameEvent));
 				break;
 			case 'CARD_PLAYED':
 				this.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent));
@@ -136,7 +167,9 @@ export class GameEvents {
 				this.allEvents.next(GameEvent.build(
 					GameEvent.CREATE_CARD_IN_DECK, 
 					gameEvent,
-					gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId));
+					{
+						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId
+					}));
 				break;
 			case 'SECRET_PLAYED':
 				this.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
@@ -148,7 +181,9 @@ export class GameEvents {
 				this.allEvents.next(GameEvent.build(
 					GameEvent.CARD_BACK_TO_DECK, 
 					gameEvent,
-					gameEvent.Value.AdditionalProps.InitialZone));
+					{
+						initialZone: gameEvent.Value.AdditionalProps.InitialZone
+					}));
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
 				this.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
@@ -172,39 +207,61 @@ export class GameEvents {
 				this.allEvents.next(GameEvent.build(
 					GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, 
 					gameEvent,
-                    gameEvent.Value.InitialAttack,
-                    gameEvent.Value.NewAttack));
+					{
+						initialAttack: gameEvent.Value.InitialAttack,
+						newAttack: gameEvent.Value.NewAttack
+					}));
                 break;
 			case 'FATIGUE_DAMAGE':
-				this.allEvents.next(new GameEvent(
-					GameEvent.FATIGUE_DAMAGE,
-					gameEvent.Value.PlayerId,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-					gameEvent.Value.FatigueDamage));
+				this.allEvents.next(Object.assign(new GameEvent(), {
+					type: GameEvent.FATIGUE_DAMAGE,
+					localPlayer: gameEvent.Value.LocalPlayer,
+					opponentPlayer: gameEvent.Value.OpponentPlayer,
+					additionalData: {
+						playerId: gameEvent.Value.PlayerId,
+						fatigueDamage: gameEvent.Value.FatigueDamage
+					}
+				} as GameEvent));
 				break;
 			case 'DAMAGE':
-				this.allEvents.next(new GameEvent(
-					GameEvent.DAMAGE, 
-					gameEvent.Value.SourceCardId,
-					gameEvent.Value.SourceControllerId,
-					gameEvent.Value.Targets,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer));
+				this.allEvents.next(Object.assign(new GameEvent(), {
+					type: GameEvent.DAMAGE, 
+					localPlayer: gameEvent.Value.LocalPlayer,
+					opponentPlayer: gameEvent.Value.OpponentPlayer,
+					additionalData: {
+						sourceCardId: gameEvent.Value.SourceCardId,
+						sourceControllerId: gameEvent.Value.SourceControllerId,
+						targets: gameEvent.Value.Targets
+					}
+				} as GameEvent));
 				break;
 			case 'TURN_START':
-				this.allEvents.next(new GameEvent(GameEvent.TURN_START, gameEvent.Value));
+				this.allEvents.next(Object.assign(new GameEvent(), {
+					type: GameEvent.TURN_START, 
+					additionalData: {
+						turnNumber: gameEvent.Value
+					}
+				} as GameEvent));
 				break;
 			case 'WINNER':
-				this.allEvents.next(new GameEvent(
-					GameEvent.WINNER,
-					gameEvent.Value.Winner,
-					gameEvent.Value.LocalPlayer,
-					gameEvent.Value.OpponentPlayer,
-					gameEvent.Value.GameState));
+				this.allEvents.next(Object.assign(new GameEvent(), {
+					type: GameEvent.WINNER,
+					localPlayer: gameEvent.Value.LocalPlayer,
+					opponentPlayer: gameEvent.Value.OpponentPlayer,
+					additionalData: {
+						winner: gameEvent.Value.Winner,
+						report: gameEvent.Value.GameStateReport
+					}
+				} as GameEvent));
 				break;
 			case 'GAME_END':
-				this.allEvents.next(new GameEvent(GameEvent.GAME_END, gameEvent.Value.Game, gameEvent.Value.ReplayXml));
+					this.allEvents.next(Object.assign(new GameEvent(), {
+						type: GameEvent.GAME_END, 
+						additionalData: {
+							game: gameEvent.Value.Game,
+							replayXWml: gameEvent.Value.ReplayXml
+						}
+					} as GameEvent));
 				break;
 			default:
 				console.log('unsupported game event', gameEvent);

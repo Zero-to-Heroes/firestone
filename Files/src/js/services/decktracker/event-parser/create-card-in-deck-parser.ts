@@ -16,8 +16,8 @@ export class CreateCardInDeckParser implements EventParser {
         if (gameEvent.type !== GameEvent.CREATE_CARD_IN_DECK) {
 			return false;
 		}
-		const controllerId: string = gameEvent.data[1];
-		const localPlayer = gameEvent.data[2];
+		const controllerId: number = gameEvent.controllerId;
+		const localPlayer = gameEvent.localPlayer;
 		return controllerId === localPlayer.PlayerId
     }    
     
@@ -25,13 +25,13 @@ export class CreateCardInDeckParser implements EventParser {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
-		const cardId: string = gameEvent.data[0];
-        const entityId: number = gameEvent.data[4];
+		const cardId: string = gameEvent.cardId;
+        const entityId: number = gameEvent.entityId;
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = Object.assign(new DeckCard(), {
             cardId: cardId,
             entityId: entityId,
-			cardName: this.buildCardName(cardData, gameEvent.data[5]),
+			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 		} as DeckCard);
