@@ -90,7 +90,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<p>Coming soon!</p>
 					</div>
 				</div>
-				<div class="box-side extra-info" [ngClass]="{'ftue': ftueHighlight}" *ngIf="released" (click)="browseSet()">
+				<div class="box-side extra-info" *ngIf="released" (click)="browseSet()">
 					<div class="title">
 						<i class="i-15 pale-theme">
 							<svg class="svg-icon-fill">
@@ -160,9 +160,7 @@ export class SetComponent implements AfterViewInit {
 	legendaryTimer: number = 40;
 	legendaryFill: number = 0;
 
-	showingPityTimerFtue: boolean = false;
 	flip: string = 'inactive';
-	ftueHighlight: boolean = false;
 	
 	private movingToSet: boolean = false;
 	private timeoutHandler;
@@ -173,31 +171,6 @@ export class SetComponent implements AfterViewInit {
         private elRef: ElementRef,
         private ow: OverwolfService,
 		private events: Events) {
-			this.events.on(Events.SHOWING_FTUE).subscribe((event) => {
-				// console.log('showing ftue', this._cardSet, event);
-				this.showingPityTimerFtue = true;
-				if (event.data[0] == this._cardSet.id) {
-					console.log('highlighting ftue', this._cardSet.id);
-					this.ftueHighlight = true;
-					if (!(<ViewRef>this.cdr).destroyed) {
-						this.cdr.detectChanges();
-					}
-				}
-			});
-			this.events.on(Events.DISMISS_FTUE).subscribe((event) => {
-				// console.log('dismissing ftue', this._cardSet);
-				this.showingPityTimerFtue = false;
-				setTimeout(() => {
-					if (!this.movingToSet && this.flip == 'active') {
-						console.log('fliplping back from event');
-						this.flip = 'inactive';
-						this.ftueHighlight = false;
-						if (!(<ViewRef>this.cdr).destroyed) {
-							this.cdr.detectChanges();
-						}
-					}
-				});
-			});
 	}
 	
 	ngAfterViewInit() {
@@ -227,7 +200,7 @@ export class SetComponent implements AfterViewInit {
 	}
 
 	browseSet() {
-		if (this.showingPityTimerFtue || !this.released) {
+		if (!this.released) {
 			return;
 		}
 		if (this.timeoutHandler) {
@@ -241,14 +214,12 @@ export class SetComponent implements AfterViewInit {
 	@HostListener('mouseenter') onMouseEnter() {
 		if (!this.released) return;
 		this.timeoutHandler = setTimeout(() => {
-			if (!this.showingPityTimerFtue) {
-				this.flip = 'active';
-				let rect = this.elRef.nativeElement.getBoundingClientRect();
-				console.log('broadcasting set mouse over', this._cardSet.id, rect);
-				this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);	
-				if (!(<ViewRef>this.cdr).destroyed) {
-					this.cdr.detectChanges();
-				}
+			this.flip = 'active';
+			let rect = this.elRef.nativeElement.getBoundingClientRect();
+			console.log('broadcasting set mouse over', this._cardSet.id, rect);
+			this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);	
+			if (!(<ViewRef>this.cdr).destroyed) {
+				this.cdr.detectChanges();
 			}
 		}, this.MOUSE_OVER_DELAY)
 	}
@@ -257,12 +228,9 @@ export class SetComponent implements AfterViewInit {
 	onMouseLeave() {
 		if (!this.released) return;
 		clearTimeout(this.timeoutHandler);
-		if (!this.showingPityTimerFtue) {
-			// console.log('flipping back');
-			this.flip = 'inactive';
-			if (!(<ViewRef>this.cdr).destroyed) {
-				this.cdr.detectChanges();
-			}
+		this.flip = 'inactive';
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 }

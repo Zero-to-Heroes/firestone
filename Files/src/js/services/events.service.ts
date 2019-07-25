@@ -36,8 +36,6 @@ export class Events {
 
 	public static readonly FORMAT_SELECTED = 'format-selected'; // For FTUE, will be refactored later
 	public static readonly SET_SELECTED = 'set-selected'; // For FTUE, will be refactored later
-	public static readonly SHOWING_FTUE = 'showing-ftue'; // For FTUE, will be refactored later
-	public static readonly DISMISS_FTUE = 'dismiss-ftue'; // For FTUE, will be refactored later
 	public static readonly SET_MOUSE_OVER = 'set-mouse-over'; // For FTUE, will be refactored later
 
 	private _eventBus: Subject<BroadcastEvent>;
