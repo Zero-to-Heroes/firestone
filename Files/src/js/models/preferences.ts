@@ -4,7 +4,7 @@ export class Preferences {
 
 	readonly id: number = 1;
 	readonly dontConfirmVideoReplayDeletion: boolean;
-	readonly dontRecordAchievements: boolean;
+	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
 	readonly decktrackerShowArena: boolean;
 	readonly decktrackerShowRanked: boolean = true;
