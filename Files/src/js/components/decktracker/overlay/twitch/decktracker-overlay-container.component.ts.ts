@@ -19,6 +19,7 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck';
 	],
 	template: `
         <div class="container drag-boundary">
+			<state-mouse-over [gameState]="gameState" *ngIf="gameState"></state-mouse-over>
 			<decktracker-overlay-standalone [gameState]="gameState"></decktracker-overlay-standalone>
             <tooltips [module]="'decktracker'" [position]="'outside'"></tooltips>
         </div>
@@ -88,7 +89,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
             this.processEvent(deckEvent);
         });
         console.log('init done');
-        // this.addDebugGameState(); 
+        this.addDebugGameState(); 
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}

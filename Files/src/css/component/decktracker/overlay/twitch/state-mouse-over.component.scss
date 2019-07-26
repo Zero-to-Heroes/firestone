@@ -1,0 +1,48 @@
+:host() {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	z-index: 1;
+	display: flex;
+}
+
+.state-mouse-over {
+	width: 100%;
+	height: 100%;
+}
+
+.board {
+    position: absolute;
+    width: 100%;
+    left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.top-board {
+    height: 18%;
+	top: 28%;
+}
+
+.bottom-board {
+    height: 17%;
+    top: 45%;
+}
+
+.bottom-hand {
+	position: absolute;
+    width: 30%;
+    left: 32%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 84%;
+	height: 16%;
+	
+	::ng-deep empty-card img {
+		height: 74%;
+	}
+}

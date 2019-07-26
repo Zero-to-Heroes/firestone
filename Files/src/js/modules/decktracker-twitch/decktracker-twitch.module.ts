@@ -13,6 +13,9 @@ import { DeckTrackerOverlayStandaloneComponent } from '../../components/decktrac
 import { HttpClientModule } from '@angular/common/http';
 import { DeckTrackerOverlayContainerComponent } from '../../components/decktracker/overlay/twitch/decktracker-overlay-container.component.ts';
 import { DeckTrackerTwitchTitleBarComponent } from '../../components/decktracker/overlay/twitch/decktracker-twitch-title-bar.component';
+import { StateMouseOverComponent } from '../../components/decktracker/overlay/twitch/state-mouse-over.component';
+import { EmptyCardComponent } from '../../components/decktracker/overlay/twitch/empty-card.component';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -33,11 +36,14 @@ console.log('version is', process.env.APP_VERSION);
         SharedDeckTrackerModule,
         DragDropModule,
         AngularResizedEventModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [
         DeckTrackerOverlayStandaloneComponent,
         DeckTrackerOverlayContainerComponent,
-        DeckTrackerTwitchTitleBarComponent,
+		DeckTrackerTwitchTitleBarComponent,
+		EmptyCardComponent,
+		StateMouseOverComponent,
 	],
 	bootstrap: [
 		DeckTrackerOverlayContainerComponent,
