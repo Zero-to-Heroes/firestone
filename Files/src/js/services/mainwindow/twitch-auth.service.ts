@@ -12,7 +12,7 @@ const REDIRECT_URI = 'overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijj
 const SCOPES = 'channel_read';
 const LOGIN_URL = `https://id.twitch.tv/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=${SCOPES}`;
 const TWITCH_VALIDATE_URL = 'https://id.twitch.tv/oauth2/validate';
-const TWITCH_USER_URL = 'https://api.twitch.tv/kraken/user';
+const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 
 @Injectable()
 export class TwitchAuthService {
@@ -78,10 +78,10 @@ export class TwitchAuthService {
     private async retrieveUserName(accessToken: string): Promise<boolean> {
 		return new Promise<boolean>((resolve) => {
             const httpHeaders: HttpHeaders = new HttpHeaders()
-                    .set('Authorization', `OAuth ${accessToken}`);
+                    .set('Authorization', `Bearer ${accessToken}`);
             this.http.get(TWITCH_USER_URL, { headers: httpHeaders} ).subscribe((data: any) => {
                 console.log('received user info', data);
-                this.prefs.setTwitchUserName(data.display_name);
+                this.prefs.setTwitchUserName(data.data && data.data.length > 0 && data.data[0].display_name);
             }, (error) => {
                 resolve(false);
             });
