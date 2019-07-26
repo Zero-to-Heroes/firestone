@@ -33,6 +33,7 @@
     "lodash": "4.17.14",
     "ng-inline-svg": "8.4.1",
     "ng-select": "1.0.1",
+	"ngx-logger": "3.3.11",
     "pako": "1.0.10",
     "queue-typescript": "1.0.1",
     "rxjs": "6.4.0",
