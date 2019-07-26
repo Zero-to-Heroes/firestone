@@ -23,13 +23,13 @@
 }
 
 .top-board {
-    height: 18%;
-	top: 28%;
+    height: 17%;
+	top: 33%;
 }
 
 .bottom-board {
     height: 17%;
-    top: 45%;
+    top: 50%;
 }
 
 .bottom-hand {
@@ -38,8 +38,9 @@
     left: 32%;
     display: flex;
     align-items: center;
-    justify-content: center;
-    top: 84%;
+	justify-content: center;
+	// Total is not 100% because the overlay doesn't go all the way to the bottom of the screen
+    top: 87%;
 	height: 16%;
 	
 	::ng-deep empty-card img {

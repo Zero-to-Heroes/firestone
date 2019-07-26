@@ -7,7 +7,7 @@ import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-e
 
 import fakeState from './gameState.json';
 
-const EBS_URL = 'https://twitch.firestoneapp.com/deck';
+const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 // const EBS_URL = 'http://localhost:8081/deck';
 
 @Component({
@@ -15,7 +15,7 @@ const EBS_URL = 'https://twitch.firestoneapp.com/deck';
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container.component.scss',
-		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
+		// '../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-container-dev.component.scss',
 	],
 	template: `
         <div class="container drag-boundary">
@@ -89,7 +89,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
             this.processEvent(deckEvent);
         });
         console.log('init done');
-        this.addDebugGameState(); 
+        // this.addDebugGameState(); 
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
