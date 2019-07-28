@@ -1,6 +1,6 @@
 import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, EventEmitter } from '@angular/core';
 
-import { NotificationsService, Notification } from 'angular2-notifications';
+import { NotificationsService, Notification, NotificationType } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
@@ -119,7 +119,7 @@ export class NotificationsComponent implements AfterViewInit {
         if (type === 'achievement-pre-record') {
             override.clickToClose = false;
         }
-        let toast = this.notificationService.html(htmlMessage, 'success', override);
+        let toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
         toast.theClass = messageObject.theClass;
         if (!(<ViewRef>this.cdr).destroyed) {
             this.cdr.detectChanges();
