@@ -1,5 +1,6 @@
 import { Component, Input, HostBinding, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ElementRef } from '@angular/core';
 import { ViewContainerRef, ViewChild, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
+import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { Events } from '../services/events.service';
 
@@ -9,9 +10,36 @@ import { Events } from '../services/events.service';
 	encapsulation: ViewEncapsulation.None,
 	template: `
 	<div class="tooltip-container" [ngClass]="{'missing': missing}">
-		<img src={{image()}} *ngIf="cardId" [ngClass]="{'removing': removing}"/>
+		<img src="/Files/assets/images/placeholder.png" class="placeholder" [@showPlaceholder]="showPlaceholder" />
+		<img src={{image()}} *ngIf="cardId" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder" [ngClass]="{'removing': removing}"/>
 		<div class="overlay" [ngStyle]="{'-webkit-mask-image': overlayMaskImage()}"></div>
 	</div>`,
+	animations: [
+		trigger('showPlaceholder', [
+			state('false',	style({
+				opacity: 0,
+				"pointer-events": "none",
+			})),
+			state('true',	style({
+				opacity: 1,
+			})),
+			transition(
+				'true => false',
+				animate(`150ms linear`)),
+		]), 
+		trigger('showRealCard', [
+			state('false',	style({
+				opacity: 0,
+				"pointer-events": "none",
+			})),
+			state('true',	style({
+				opacity: 1,
+			})),
+			transition(
+				'false => true',
+				animate(`150ms linear`)),
+		])
+	]
 	// I don't know how to make this work with OnPush
 	// changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -26,11 +54,21 @@ export class Tooltip {
 	@HostBinding('style.position') position: string;
 	@HostBinding('style.display') display: string;
 
+	showPlaceholder: boolean = true;
+
+	constructor(private cdr: ChangeDetectorRef) { }
+
 	image() {
 		return `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
 	}
 	overlayMaskImage() {
 		return `url('https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png')`;
+	}
+	imageLoadedHandler() {
+		this.showPlaceholder = false;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
 
@@ -109,6 +147,7 @@ export class TooltipsComponent implements AfterViewInit {
 					left = left - 256 - 70;
 				}
 
+				this.tooltip.instance.showPlaceholder = true;
 			    this.tooltip.instance.display = 'flex';
 		    	this.tooltip.instance.removing = false;
 			    this.tooltip.instance.cardId = cardId;
