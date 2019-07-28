@@ -1,7 +1,9 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, ElementRef, ViewRef, Input } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, ElementRef, ViewRef, Input, Output, EventEmitter } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
 
 import { GameState } from '../../../../models/decktracker/game-state';
+import { Events } from '../../../../services/events.service';
+import { DragDropRegistry } from '@angular/cdk/drag-drop';
 
 @Component({
 	selector: 'decktracker-overlay-standalone',
@@ -41,9 +43,13 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
     @Input('gameState') gameState: GameState;
     displayMode: string;
-    dragging: boolean;
+	dragging: boolean;
+	
+	@Output() dragStart = new EventEmitter<void>();
+	@Output() dragEnd = new EventEmitter<void>();
 
 	constructor(
+			private events: Events,
             private cdr: ChangeDetectorRef, 
             private el: ElementRef, 
             private renderer: Renderer2) {
@@ -108,6 +114,8 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
     startDragging() {
         this.dragging = true;
         console.log('starting dragging');
+		this.events.broadcast(Events.HIDE_TOOLTIP);
+		this.dragStart.next();
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -115,7 +123,8 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 
     stopDragging() {
         this.dragging = false;
-        console.log('stopped dragging');
+		console.log('stopped dragging');
+		this.dragEnd.next();
 		if (!(<ViewRef>this.cdr).destroyed) {
 			this.cdr.detectChanges();
 		}

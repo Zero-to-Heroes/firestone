@@ -20,7 +20,11 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 	template: `
         <div class="container drag-boundary">
 			<state-mouse-over [gameState]="gameState" *ngIf="gameState"></state-mouse-over>
-			<decktracker-overlay-standalone [gameState]="gameState"></decktracker-overlay-standalone>
+			<decktracker-overlay-standalone 
+					[gameState]="gameState"
+					(dragStart)="onDragStart()"
+					(dragEnd)="onDragEnd()">
+			</decktracker-overlay-standalone>
             <tooltips [module]="'decktracker'" [position]="'outside'"></tooltips>
         </div>
     `,
@@ -35,7 +39,9 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
     private hideTooltipTimer;
     
     private twitch;
-    private token: string;
+	private token: string;
+	
+	private dragging = false;
 
 	constructor(
             private cdr: ChangeDetectorRef, 
@@ -43,6 +49,9 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
             private http: HttpClient) {
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
 			clearTimeout(this.hideTooltipTimer);
+			if (this.dragging) {
+				return;
+			}
 			// Already in tooltip mode
 			if (this.activeTooltip) {
 				this.activeTooltip = data.data[0];
@@ -94,6 +103,20 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
     }
+	
+	onDragStart() {
+		this.dragging = true;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+	
+	onDragEnd() {
+		this.dragging = false;
+		if (!(<ViewRef>this.cdr).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 
     private fetchInitialState() {
         console.log('retrieving initial state');
@@ -132,7 +155,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
                 }
                 break;
 		}
-    }
+	}
 
     private addDebugGameState() {
         this.gameState = (<any>fakeState);
