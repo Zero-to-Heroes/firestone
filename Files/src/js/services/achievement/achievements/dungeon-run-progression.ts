@@ -4,7 +4,9 @@ import { AbstractChallenge } from './abstract-challenge';
 
 export class DungeonRunProgression extends AbstractChallenge {
 
-	private readonly heroId: string;
+	// There are alterante heroes, and we don't want to have to modify the 
+	// achievement conditions every time a new skin is released
+	private readonly baseHeroId: string;
 	private readonly dungeonStep: number;
 
 	private currentTurnStartTime: number;
@@ -12,7 +14,7 @@ export class DungeonRunProgression extends AbstractChallenge {
 
 	constructor(achievement, scenarioId: number, events: Events) {
 		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
-		this.heroId = achievement.cardId;
+		this.baseHeroId = achievement.cardId;
 		this.dungeonStep = achievement.step;
 	}
 
@@ -45,7 +47,7 @@ export class DungeonRunProgression extends AbstractChallenge {
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
 		const winner = gameEvent.additionalData.winner;
 		const localPlayer = gameEvent.localPlayer;
-		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
+		if (localPlayer.CardID && localPlayer.CardID.indexOf(this.baseHeroId) !== -1 && localPlayer.Id === winner.Id) {
 			console.log('completed dungeon progression', this);
 			this.callback = callback;
 			this.handleCompletion();

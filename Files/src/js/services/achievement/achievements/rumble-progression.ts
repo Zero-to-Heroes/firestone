@@ -4,7 +4,7 @@ import { AbstractChallenge } from './abstract-challenge';
 
 export class RumbleProgression extends AbstractChallenge {
 
-	private readonly heroId: string;
+	private readonly baseHeroId: string;
 	private readonly shrineId: string;
 	private readonly rumbleStep: number;
 
@@ -14,7 +14,7 @@ export class RumbleProgression extends AbstractChallenge {
 
 	constructor(achievement, scenarioId: number, events: Events) {
 		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
-		this.heroId = achievement.cardId;
+		this.baseHeroId = achievement.cardId;
 		this.shrineId = achievement.secondaryCardId;
 		this.rumbleStep = achievement.step;
 	}
@@ -56,7 +56,7 @@ export class RumbleProgression extends AbstractChallenge {
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
 		const winner = gameEvent.additionalData.winner;
 		const localPlayer = gameEvent.localPlayer;
-		if (localPlayer.CardID === this.heroId && localPlayer.Id === winner.Id) {
+		if (localPlayer.CardID && localPlayer.CardID.indexOf(this.baseHeroId) !== -1 && localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();
 		}
