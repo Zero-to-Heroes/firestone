@@ -158,7 +158,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	}
 
     private addDebugGameState() {
-        this.gameState = (<any>fakeState);
+        this.gameState = (<any>fakeState); 
         console.log('loaded fake state', this.gameState);
     }
 }

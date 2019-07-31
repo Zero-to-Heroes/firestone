@@ -191,6 +191,13 @@
                 "rarity": "common"
             },
             {
+                "cardId": "DAL_568",
+                "entityId": 19,
+                "cardName": "Lightforged Blessing",
+                "manaCost": 2,
+                "rarity": "common"
+            },
+            {
                 "cardId": "ICC_039",
                 "entityId": 22,
                 "cardName": "Dark Conviction",
@@ -203,6 +210,20 @@
                 "cardName": "Steward of Darkshire",
                 "manaCost": 3,
                 "rarity": "rare"
+            },
+            {
+                "cardId": "DAL_568",
+                "entityId": 13,
+                "cardName": "Lightforged Blessing",
+                "manaCost": 2,
+                "rarity": "common"
+            },
+            {
+                "cardId": "DAL_568",
+                "entityId": 13,
+                "cardName": "Lightforged Blessing",
+                "manaCost": 2,
+                "rarity": "common"
             },
             {
                 "cardId": "DAL_568",

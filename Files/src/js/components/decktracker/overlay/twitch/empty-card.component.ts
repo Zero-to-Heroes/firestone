@@ -25,7 +25,7 @@ export class EmptyCardComponent {
 
 	@HostListener('mouseenter') onMouseEnter() {
 		let rect = this.el.nativeElement.getBoundingClientRect();
-		console.log('on mouse enter', rect);
+		// console.log('on mouse enter', this.cardId, rect);
 		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
 	}
 

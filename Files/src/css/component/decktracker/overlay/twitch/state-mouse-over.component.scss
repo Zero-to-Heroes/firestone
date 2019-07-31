@@ -24,24 +24,25 @@
 
 .top-board {
     height: 17%;
-	top: 33%;
+	top: 30%;
 }
 
 .bottom-board {
     height: 17%;
-    top: 50%;
+    top: 47%;
 }
 
 .bottom-hand {
 	position: absolute;
-    width: 30%;
-    left: 32%;
+    width: 40%;
+    left: 25%;
     display: flex;
     align-items: center;
 	justify-content: center;
 	// Total is not 100% because the overlay doesn't go all the way to the bottom of the screen
-    top: 87%;
+    top: 89%;
 	height: 16%;
+	// background: rgba(122, 122, 122, 0.4);
 	
 	::ng-deep empty-card img {
 		height: 74%;
