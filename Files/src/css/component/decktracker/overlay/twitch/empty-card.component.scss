@@ -1,12 +1,13 @@
 :host() {
 	height: 100%;
+	position: relative;
 }
 
 .card {
 	position: relative;
 	width: 100%;
 	height: 100%;
-	// background: rgba(122, 122, 122, 0.5); // TMP
+	background: rgba(0, 0, 0, 0.5); // TMP
     
 	img {
 		height: 67%;
