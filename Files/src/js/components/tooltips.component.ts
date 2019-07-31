@@ -10,36 +10,12 @@ import { Events } from '../services/events.service';
 	encapsulation: ViewEncapsulation.None,
 	template: `
 	<div class="tooltip-container" [ngClass]="{'missing': missing}">
-		<img src="/Files/assets/images/placeholder.png" class="placeholder" [@showPlaceholder]="showPlaceholder" />
-		<img src={{image()}} *ngIf="cardId" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder" [ngClass]="{'removing': removing}"/>
+		<img src={{image()}} *ngIf="cardId" 
+				(load)="imageLoadedHandler()" 
+				[style.opacity]="showPlaceholder ? 0 : 1"
+				[ngClass]="{'removing': removing}"/>
 		<div class="overlay" [ngStyle]="{'-webkit-mask-image': overlayMaskImage()}"></div>
 	</div>`,
-	animations: [
-		trigger('showPlaceholder', [
-			state('false',	style({
-				opacity: 0,
-				"pointer-events": "none",
-			})),
-			state('true',	style({
-				opacity: 1,
-			})),
-			transition(
-				'true => false',
-				animate(`150ms linear`)),
-		]), 
-		trigger('showRealCard', [
-			state('false',	style({
-				opacity: 0,
-				"pointer-events": "none",
-			})),
-			state('true',	style({
-				opacity: 1,
-			})),
-			transition(
-				'false => true',
-				animate(`150ms linear`)),
-		])
-	]
 	// I don't know how to make this work with OnPush
 	// changeDetection: ChangeDetectionStrategy.OnPush,
 })
