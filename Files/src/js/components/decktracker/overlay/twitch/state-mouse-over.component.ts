@@ -22,6 +22,7 @@ import { Map } from 'immutable';
 				<empty-card *ngFor="let cardId of bottomHandCards; let i = index;" 
 						[style.transform]="handRotation(i)"
 						[style.left.%]="handPositionLeft(i)"
+						[style.top.%]="handPositionTop(i)"
 						[cardId]="cardId">
 				</empty-card>
 			</ul>
@@ -50,9 +51,9 @@ export class StateMouseOverComponent {
 			return;
 		}
 		this.topBoardCards = this._gameState.opponentDeck.board.map(card => card.cardId);
-		this.logger.debug('top board cards', this.topBoardCards, this._gameState.opponentDeck);
 		this.bottomBoardCards = this._gameState.playerDeck.board.map(card => card.cardId);
 		this.bottomHandCards = this._gameState.playerDeck.hand.map(card => card.cardId);
+		this.logger.debug('hand cards', this.bottomHandCards, this._gameState.playerDeck);
 	}
 
 	handRotation(i: number) {
@@ -66,6 +67,11 @@ export class StateMouseOverComponent {
 		return this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft.get(i, 0);
 	}
 
+	handPositionTop(i: number) {
+		const totalCards = this.bottomHandCards.length;
+		return this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop.get(i, 0);
+	}
+
 	private buildHandAdjustment() {
 		return Map.of(
 			2, {
@@ -74,7 +80,7 @@ export class StateMouseOverComponent {
 					0, 2
 				)
 			} as Adjustment,
-			3, {
+			3, { // ok
 				handRotation: Map.of(
 					0, -2,
 					1, -1,
@@ -83,10 +89,13 @@ export class StateMouseOverComponent {
 				handPositionLeft: Map.of(
 					0, 7,
 					1, 8,
-					2, 11,
+					2, 10,
+				),
+				handPositionTop: Map.of(
+					2, -10,
 				)
 			} as Adjustment,
-			4, {
+			4, { // tested
 				handRotation: Map.of(
 					0, -25,
 					1, -12.5,
@@ -94,136 +103,197 @@ export class StateMouseOverComponent {
 					3, 15,
 				),
 				handPositionLeft: Map.of(
-					0, 9,
+					0, 5,
 					1, 7,
-					2, 6,
-					3, 6
+					2, 8,
+					3, 10
+				),
+				handPositionTop: Map.of(
+					1, -6,
+					2, -9,
 				)
 			} as Adjustment,
-			5, {
+			5, { // ok
 				handRotation: Map.of(
 					0, -25,
-					1, -12.5,
+					1, -17,
 					2, -6,
 					3, 10,
-					4, 13,
+					4, 17,
 				),
 				handPositionLeft: Map.of(
 					0, 10,
 					1, 9,
 					2, 7,
-					3, 6,
-					4, 6
+					3, 5,
+					4, 4
+				),
+				handPositionTop: Map.of(
+					0, 3,
+					1, -9,
+					2, -13,
+					3, -5,
+					4, 9,
 				)
 			} as Adjustment,
-			6, {
+			6, { // ok
 				handRotation: Map.of(
 					0, -25,
 					1, -20,
 					2, -8,
 					3, 2,
 					4, 10,
-					5, 13,
+					5, 17,
 				),
 				handPositionLeft: Map.of(
-					0, 12,
-					1, 13,
+					0, 16,
+					1, 14,
 					2, 9,
 					3, 6,
 					4, 2,
 					5, -1
+				),
+				handPositionTop: Map.of(
+					0, 13,
+					1, -1,
+					2, -10,
+					3, -11,
+					4, -5,
+					5, 8,
 				)
 			} as Adjustment,
-			7, {
+			7, { // ok
 				handRotation: Map.of(
 					0, -25,
-					1, -20,
+					1, -18,
 					2, -8,
-					3, 2,
-					4, 10,
+					3, -4,
+					4, 7,
 					5, 13,
-					6, 16,
+					6, 19,
 				),
 				handPositionLeft: Map.of(
-					0, 12,
-					1, 13,
-					2, 9,
-					3, 6,
+					0, 23,
+					1, 18,
+					2, 12,
+					3, 7,
 					4, 2,
-					5, -1,
-					6, -4,
+					5, -3,
+					6, -8,
+				),
+				handPositionTop: Map.of(
+					0, 11,
+					1, -1,
+					2, -13,
+					3, -14,
+					4, -9,
+					5, 2,
+					6, 11,
 				)
 			} as Adjustment,
-			8, {
+			8, { // ok
 				handRotation: Map.of(
-					0, -25,
+					0, -29,
 					1, -20,
-					2, -8,
-					3, 2,
-					4, 10,
-					5, 13,
+					2, -13,
+					3, -5,
+					4, 0,
+					5, 7,
 					6, 16,
-					7, 19,
+					7, 20,
 				),
 				handPositionLeft: Map.of(
-					0, 12,
-					1, 13,
-					2, 9,
-					3, 6,
-					4, 2,
-					5, -1,
+					0, 29,
+					1, 23,
+					2, 17,
+					3, 10,
+					4, 4,
+					5, -3,
+					6, -9,
+					7, -15,
+				),
+				handPositionTop: Map.of(
+					0, 25,
+					1, 20,
+					2, -7,
+					3, -14,
+					4, -15,
+					5, -10,
 					6, -4,
-					7, -7,
+					7, 8,
 				)
 			} as Adjustment,
-			9, {
+			9, { // ok
 				handRotation: Map.of(
-					0, -25,
+					0, -28,
 					1, -20,
 					2, -8,
-					3, 2,
-					4, 10,
-					5, 13,
-					6, 16,
-					7, 19,
+					3, -10,
+					4, -6,
+					5, 3,
+					6, 9,
+					7, 16,
 					8, 21,
 				),
 				handPositionLeft: Map.of(
-					0, 12,
-					1, 13,
-					2, 9,
-					3, 6,
-					4, 2,
-					5, -1,
-					6, -4,
-					7, -7,
-					8, -10,
+					0, 37,
+					1, 29,
+					2, 21,
+					3, 15,
+					4, 6,
+					5, 0,
+					6, -8,
+					7, -15,
+					8, -22,
+				),
+				handPositionTop: Map.of(
+					0, 17,
+					1, 1,
+					2, -4,
+					3, -13,
+					4, -15,
+					5, -12,
+					6, -7,
+					7, 2,
+					8, 22,
 				)
 			} as Adjustment,
-			10, {
+			10, { // ok
 				handRotation: Map.of(
 					0, -25,
 					1, -20,
-					2, -20,
+					2, -17,
 					3, -14,
 					4, -5,
 					5, 2,
-					6, 4,
-					7, 8,
+					6, 6,
+					7, 11,
 					8, 15,
-					9, 17
+					9, 23
 				),
 				handPositionLeft: Map.of(
-					0, 45,
-					1, 37,
-					2, 31,
-					3, 21,
-					4, 12,
-					5, 2,
-					6, -7,
-					7, -17,
-					8, -27,
-					9, -35
+					0, 43,
+					1, 35,
+					2, 27,
+					3, 19,
+					4, 11,
+					5, 3,
+					6, -5,
+					7, -13,
+					8, -22,
+					9, -30
+				),
+				handPositionTop: Map.of(
+					0, 30,
+					1, 17,
+					2, 3,
+					3, -10,
+					4, -12,
+					5, -13,
+					6, -12,
+					7, -6,
+					8, 1,
+					9, 19
 				)
 			} as Adjustment,
 		);
@@ -233,11 +303,13 @@ export class StateMouseOverComponent {
 class Adjustment {
 	handRotation: Map<number, number>;
 	handPositionLeft: Map<number, number>;
+	handPositionTop: Map<number, number>;
 
 	static create(): Adjustment {
 		return {
 			handRotation: Map.of(),
 			handPositionLeft: Map.of(),
+			handPositionTop: Map.of(),
 		} as Adjustment;
 	}
 }
