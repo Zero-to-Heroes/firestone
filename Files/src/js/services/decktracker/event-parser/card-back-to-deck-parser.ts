@@ -58,8 +58,15 @@ export class CardBackToDeckParser implements EventParser {
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
 			return DeckManipulationHelper.findCardInZone(deckState.otherZone, cardId, entityId);
 		}
-		console.error('could not find card in card-back-to-deck', initialZone, cardId, deckState);
-		return null;
+		console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
+		const dbCard = this.allCards.getCard(cardId) || {};
+		return {
+			cardId: cardId,
+			entityId: entityId,
+			cardName: dbCard.name,
+			manaCost: dbCard.cost,
+			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
+		} as DeckCard;
 	}
 	
 	private buildNewHand(initialZone: string, previousHand: ReadonlyArray<DeckCard>, movedCard: DeckCard): ReadonlyArray<DeckCard> {
