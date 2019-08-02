@@ -14,6 +14,7 @@ export class AllCardsService {
 		['boomsday', 'The Boomsday Project'],
 		['troll', 'Rastakhan\'s Rumble'],
 		['dalaran', 'Rise of Shadows'],
+		['uldum', 'Saviors of Uldum'],
 	]
 
 	private readonly WILD_SETS = [
