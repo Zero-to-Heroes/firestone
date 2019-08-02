@@ -30,6 +30,7 @@ import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { ZoneOrderingService } from './zone-ordering.service';
+import { NGXLogger } from 'ngx-logger';
 
 @Injectable()
 export class GameStateService {
@@ -43,7 +44,8 @@ export class GameStateService {
     private eventEmitters = [];
 
 	constructor(
-            private gameEvents: GameEvents, 
+			private gameEvents: GameEvents, 
+			private logger: NGXLogger,
 			private dynamicZoneHelper: DynamicZoneHelperService,
 			private zoneOrdering: ZoneOrderingService,
             private allCards: AllCardsService,
@@ -105,35 +107,39 @@ export class GameStateService {
             return;
         }
 		for (let parser of this.eventParsers) {
-			if (parser.applies(gameEvent)) {
-                const newState = parser.parse(this.state, gameEvent);
-                if (!newState) {
-                    console.error('null state after processing event', gameEvent.type, parser, gameEvent);
-                    continue;
-                }
-				const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
-				const stateFromTracker = gameEvent.gameState || {};
-				console.log('getting state from tracker', stateFromTracker, gameEvent);
-				const playerDeckWithZonesOrdered = 
-						this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
-				const opponentDeckWithZonesOrdered = 
-						this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
-                this.state = Object.assign(new GameState(), newState, {
-					playerDeck: playerDeckWithZonesOrdered,
-					opponentDeck: opponentDeckWithZonesOrdered
-                } as GameState);
-                if (!this.state) {
-                    console.error('null state after processing event', gameEvent, this.state);
-                    continue;
-                }
-				const emittedEvent = { 
-					event: {
-						name: parser.event()
-					},
-					state: this.state, 
-                };
-                this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
-				console.log('emitted deck event', emittedEvent.event.name, this.state);
+			try {
+				if (parser.applies(gameEvent)) {
+					const newState = parser.parse(this.state, gameEvent);
+					if (!newState) {
+						console.error('null state after processing event', gameEvent.type, parser, gameEvent);
+						continue;
+					}
+					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
+					const stateFromTracker = gameEvent.gameState || {};
+					console.log('getting state from tracker', stateFromTracker, gameEvent);
+					const playerDeckWithZonesOrdered = 
+							this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
+					const opponentDeckWithZonesOrdered = 
+							this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
+					this.state = Object.assign(new GameState(), newState, {
+						playerDeck: playerDeckWithZonesOrdered,
+						opponentDeck: opponentDeckWithZonesOrdered
+					} as GameState);
+					if (!this.state) {
+						console.error('null state after processing event', gameEvent, this.state);
+						continue;
+					}
+					const emittedEvent = { 
+						event: {
+							name: parser.event()
+						},
+						state: this.state, 
+					};
+					this.eventEmitters.forEach((emitter) => emitter(emittedEvent));
+					console.log('emitted deck event', emittedEvent.event.name, this.state);
+				}
+			} catch (e) {
+				this.logger.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
 			}
 		}
 	}
