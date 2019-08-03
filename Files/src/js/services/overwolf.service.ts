@@ -306,15 +306,15 @@ export class OverwolfService {
 
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<any> {
 		return new Promise<boolean>((resolve) => {
-            console.log('[overwolf-service] changing window position', windowId, newX, newY, Math.floor(newX), Math.floor(newY));
-            overwolf.windows.changePosition(windowId, Math.floor(newX), Math.floor(newY));
+            console.log('[overwolf-service] changing window position', windowId, newX, newY, Math.round(newX), Math.round(newY));
+            overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY));
         });
 	}
 
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<any> {
 		return new Promise<boolean>((resolve) => {
-            console.log('[overwolf-service] changing window size', windowId, width, height);
-            overwolf.windows.changeSize(windowId, width, height);
+            console.log('[overwolf-service] changing window size', windowId, width, height, Math.round(width), Math.round(height));
+            overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
         });
 	}
 
