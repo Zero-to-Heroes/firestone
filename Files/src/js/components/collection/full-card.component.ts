@@ -127,7 +127,7 @@ export class FullCardComponent {
 	playSound(audioClip) {
 		this.cancelPlayingSounds();
 		audioClip.audios.forEach((audio) => {
-			console.log('playing', audio)
+			console.log('playing', audioClip, audio, this.card.id, this.card.audio, this.card);
 			audio.play();
 		})
 	}
