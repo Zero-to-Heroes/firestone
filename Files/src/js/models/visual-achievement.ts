@@ -1,5 +1,4 @@
 import { ReplayInfo } from "./replay-info";
-import { text } from "@angular/core/src/render3/instructions";
 
 export class VisualAchievement {
 

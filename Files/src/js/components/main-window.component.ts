@@ -103,9 +103,9 @@ declare var ga: any;
 })
 export class MainWindowComponent implements AfterViewInit {
 
-	@ViewChild('collection')
+	@ViewChild('collection', { static: false })
 	private collection: CollectionComponent;
-	@ViewChild('achievements')
+	@ViewChild('achievements', { static: false })
 	private achievements: AchievementsComponent;
 
 	state: MainWindowState;

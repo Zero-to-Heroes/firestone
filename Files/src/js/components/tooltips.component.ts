@@ -63,7 +63,7 @@ export class TooltipsComponent implements AfterViewInit {
 	@Input() module: string;
 	@Input() position: string = 'inside';
 
-    @ViewChild('tooltips', { read: ViewContainerRef }) tooltips: ViewContainerRef;
+    @ViewChild('tooltips', { read: ViewContainerRef, static: false }) tooltips: ViewContainerRef;
     private tooltip;
 
 	constructor(
