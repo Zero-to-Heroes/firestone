@@ -3,7 +3,6 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class MonsterHuntProgression extends AbstractChallenge {
-
 	private readonly heroId: string;
 	private readonly huntStep: number;
 
@@ -22,10 +21,10 @@ export class MonsterHuntProgression extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.MONSTER_HUNT_STEP) {
+		if (gameEvent.type === GameEvent.MONSTER_HUNT_STEP) {
 			this.currentHuntStep = gameEvent.additionalData.step;
 		}
-		if (this.currentHuntStep === this.huntStep && gameEvent.type == GameEvent.TURN_START) {
+		if (this.currentHuntStep === this.huntStep && gameEvent.type === GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}

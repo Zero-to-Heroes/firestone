@@ -3,21 +3,20 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class BossEncounter extends AbstractChallenge {
-
 	private readonly cardId: string;
 
-	private sceneChanged: boolean = false;
+	private sceneChanged = false;
 
 	constructor(achievement, scenarioIds: number[], events: Events) {
 		super(achievement, scenarioIds, events, [GameEvent.GAME_END]);
 		this.cardId = achievement.cardId;
-		
-		events.on(Events.SCENE_CHANGED).subscribe((data) => {
+
+		events.on(Events.SCENE_CHANGED).subscribe(data => {
 			if (data.data[0] === 'scene_gameplay') {
 				this.sceneChanged = true;
 				this.handleCompletion();
 			}
-		})
+		});
 	}
 
 	protected resetState() {

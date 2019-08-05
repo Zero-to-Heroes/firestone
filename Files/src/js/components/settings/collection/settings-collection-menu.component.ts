@@ -4,23 +4,22 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 	selector: 'settings-collection-menu',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/collection/settings-collection-menu.component.scss`
+		`../../../../css/component/settings/collection/settings-collection-menu.component.scss`,
 	],
 	template: `
-        <ul class="collection-menu">
-            <li [ngClass]="{'selected': selectedMenu === 'notification'}" (mousedown)="selectMenu('notification')">
-                <span>Notifications</span>
-            </li>
-        </ul>
+		<ul class="collection-menu">
+			<li [ngClass]="{ 'selected': selectedMenu === 'notification' }" (mousedown)="selectMenu('notification')">
+				<span>Notifications</span>
+			</li>
+		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsCollectionMenuComponent {
+	@Output() onMenuSelected = new EventEmitter<string>();
+	@Input() selectedMenu: string;
 
-    @Output() onMenuSelected = new EventEmitter<string>();
-    @Input() selectedMenu: string;
-
-    selectMenu(menu: string) {
-        this.onMenuSelected.next(menu);
-    }
+	selectMenu(menu: string) {
+		this.onMenuSelected.next(menu);
+	}
 }

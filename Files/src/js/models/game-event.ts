@@ -47,7 +47,7 @@ export class GameEvent {
 	readonly gameState: any = {};
 
 	readonly additionalData: any;
-	
+
 	public static build(type: string, gameEvent: any, additionalProps?: any): GameEvent {
 		return Object.assign(new GameEvent(), {
 			type: type,
@@ -64,5 +64,4 @@ export class GameEvent {
 	public parse(): [string, number, any, number] {
 		return [this.cardId, this.controllerId, this.localPlayer, this.entityId];
 	}
-
 }

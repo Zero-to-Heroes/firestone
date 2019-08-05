@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class RealTimeNotificationService {
-
 	private readonly URL = 'https://iej6sdi74d.execute-api.us-west-2.amazonaws.com/prod/get-status';
 
 	public notifications: string[];
@@ -15,14 +14,12 @@ export class RealTimeNotificationService {
 
 	private getStatus() {
 		console.log('getting status');
-		this.http.get(this.URL).subscribe(
-			(res: any) => {
-				if (res.ok) {
-					let status = JSON.parse(res._body);
-					this.notifications = status[0].status;
-					console.log('received status', this.notifications);
-				}
+		this.http.get(this.URL).subscribe((res: any) => {
+			if (res.ok) {
+				const status = JSON.parse(res._body);
+				this.notifications = status[0].status;
+				console.log('received status', this.notifications);
 			}
-		)
+		});
 	}
 }

@@ -1,15 +1,14 @@
-import { AbstractChallenge } from "../abstract-challenge";
-import { GameEvent } from "../../../../models/game-event";
-import { Events } from "../../../events.service";
-import { GameType } from "../../../../models/enums/game-type";
+import { AbstractChallenge } from '../abstract-challenge';
+import { GameEvent } from '../../../../models/game-event';
+import { Events } from '../../../events.service';
+import { GameType } from '../../../../models/enums/game-type';
 
 export class KrippMassHysteria extends AbstractChallenge {
-
 	private readonly cardId: string;
 
-	private massHysteriaPlayedThisTurn: boolean = false;
-    private minionsDeadThisTurn: number = 0;
-    private turnStartTime: number;
+	private massHysteriaPlayedThisTurn = false;
+	private minionsDeadThisTurn = 0;
+	private turnStartTime: number;
 
 	constructor(achievement, events: Events) {
 		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
@@ -23,7 +22,7 @@ export class KrippMassHysteria extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-        if (gameEvent.type === GameEvent.TURN_START) {
+		if (gameEvent.type === GameEvent.TURN_START) {
 			this.turnStartTime = Date.now();
 			this.minionsDeadThisTurn = 0;
 			this.massHysteriaPlayedThisTurn = false;

@@ -1,23 +1,24 @@
-import { PityTimer } from "./pity-timer";
+import { PityTimer } from './pity-timer';
 
 export class Set {
 	readonly id: string;
 	readonly name: string;
 	readonly standard: boolean;
-	readonly allCards: ReadonlyArray<SetCard> = [];
+	readonly allCards: readonly SetCard[] = [];
 	readonly pityTimer: PityTimer;
 
 	readonly ownedLimitCollectibleCards: number = 0;
 	readonly ownedLimitCollectiblePremiumCards: number = 0;
 
 	constructor(
-			id?: string, 
-			name?: string, 
-			isStandard?: boolean, 
-			allCards?: SetCard[],
-			pityTimer?: PityTimer,
-			ownedLimitCollectibleCards?: number, 
-			ownedLimitCollectiblePremiumCards?: number) {
+		id?: string,
+		name?: string,
+		isStandard?: boolean,
+		allCards?: SetCard[],
+		pityTimer?: PityTimer,
+		ownedLimitCollectibleCards?: number,
+		ownedLimitCollectiblePremiumCards?: number,
+	) {
 		this.id = id;
 		this.name = name;
 		this.standard = isStandard;
@@ -31,20 +32,20 @@ export class Set {
 		let totalCards = 0;
 		this.allCards.forEach((card: SetCard) => {
 			totalCards += card.rarity.toLowerCase() === 'legendary' ? 1 : 2;
-		})
+		});
 		return totalCards;
 	}
 
 	ownedForRarity(rarity: string): number {
 		return this.allCards
-			.filter((card) => card.rarity.toLowerCase() === rarity)
+			.filter(card => card.rarity.toLowerCase() === rarity)
 			.map((card: SetCard) => card.getNumberCollected())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
 
 	totalForRarity(rarity: string): number {
 		return this.allCards
-			.filter((card) => card.rarity.toLowerCase() === rarity)
+			.filter(card => card.rarity.toLowerCase() === rarity)
 			.map((card: SetCard) => card.getMaxCollectible())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
@@ -109,13 +110,14 @@ export class SetCard {
 	readonly ownedPremium: number = 0;
 
 	constructor(
-		id: string, 
-		name: string, 
-		cardClass: string, 
-		rarity: string, 
-		cost: number, 
-		ownedNonPremium?: number, 
-		ownedPremium?: number) {
+		id: string,
+		name: string,
+		cardClass: string,
+		rarity: string,
+		cost: number,
+		ownedNonPremium?: number,
+		ownedPremium?: number,
+	) {
 		this.id = id;
 		this.name = name;
 		this.cardClass = cardClass ? cardClass.toLowerCase() : cardClass;

@@ -1,8 +1,8 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { HotkeyComponent }  from '../../components/hotkey.component';
-import { VersionComponent }  from '../../components/version.component';
+import { HotkeyComponent } from '../../components/hotkey.component';
+import { VersionComponent } from '../../components/version.component';
 import { ControlHelpComponent } from '../../components/controls/control-help.component';
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
@@ -14,24 +14,22 @@ import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.comp
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 @NgModule({
-	imports: [
-		BrowserModule,
-	],
+	imports: [BrowserModule],
 	declarations: [
 		ControlHelpComponent,
 		ControlMinimizeComponent,
 		ControlCloseComponent,
-        ControlSettingsComponent,
-        ControlDiscordComponent,
+		ControlSettingsComponent,
+		ControlDiscordComponent,
 		ControlBugComponent,
-		
+
 		HotkeyComponent,
 		VersionComponent,
 
 		Tooltip,
 		TooltipsComponent,
 		HelpTooltipComponent,
-		
+
 		HelpTooltipDirective,
 	],
 	entryComponents: [Tooltip, HelpTooltipComponent],
@@ -51,5 +49,4 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 		HelpTooltipComponent,
 	],
 })
-
-export class SharedModule { }
+export class SharedModule {}

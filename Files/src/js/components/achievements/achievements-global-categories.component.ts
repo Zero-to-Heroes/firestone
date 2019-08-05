@@ -9,7 +9,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'achievements-global-categories',
 	styleUrls: [
 		`../../../css/component/achievements/achievements-global-categories.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`
+		`../../../css/global/scrollbar-achievements.scss`,
 	],
 	template: `
 		<div class="achievements-global-categories">
@@ -24,13 +24,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsGlobalCategoriesComponent implements AfterViewInit {
+	@Input() globalCategories: readonly VisualAchievementCategory[];
 
-	@Input() globalCategories: ReadonlyArray<VisualAchievementCategory>;
-	
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
-	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}

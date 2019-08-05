@@ -6,22 +6,16 @@ import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'menu-selection',
-	styleUrls: [
-		`../../css/global/menu.scss`,
-		`../../css/component/menu-selection.component.scss`,
-	],
+	styleUrls: [`../../css/global/menu.scss`, `../../css/component/menu-selection.component.scss`],
 	template: `
 		<ul class="menu-selection">
-            <li [ngClass]="{'selected': selectedModule == 'collection'}" 
-                    (mousedown)="selectModule('collection')">
+			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
 				<span>The Binder</span>
 			</li>
-			<li [ngClass]="{'selected': selectedModule == 'achievements'}" 
-				    (mousedown)="selectModule('achievements')">
+			<li [ngClass]="{ 'selected': selectedModule === 'achievements' }" (mousedown)="selectModule('achievements')">
 				<span>Achievements</span>
 			</li>
-			<li [ngClass]="{'selected': selectedModule == 'decktracker'}" 
-				    (mousedown)="selectModule('decktracker')">
+			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">
 				<span>Deck Tracker</span>
 			</li>
 		</ul>
@@ -29,15 +23,12 @@ import { OverwolfService } from '../services/overwolf.service';
 	encapsulation: ViewEncapsulation.None,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class MenuSelectionComponent implements AfterViewInit {
-
 	@Input() selectedModule: string;
-	
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {
-	}
+	constructor(private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

@@ -1,5 +1,5 @@
-import { Component,  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, Input, EventEmitter } from '@angular/core';
-import { FormControl } from '@angular/forms'; 
+import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, Input, EventEmitter } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { Events } from '../../services/events.service';
 import { SetCard } from '../../models/set';
@@ -12,29 +12,24 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'card-search',
-	styleUrls: [
-		`../../../css/component/collection/card-search.component.scss`,
-		`../../../css/global/scrollbar.scss`,
-	],
+	styleUrls: [`../../../css/component/collection/card-search.component.scss`, `../../../css/global/scrollbar.scss`],
 	template: `
 		<div class="card-search" (keyup)="onValidateSearch($event)">
-			<label class="search-label" [ngClass]="{'search-active': _searchString}">
+			<label class="search-label" [ngClass]="{ 'search-active': _searchString }">
 				<i class="i-30">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#search"/>
+						<use xlink:href="/Files/assets/svg/sprite.svg#search" />
 					</svg>
 				</i>
-				<input
-					[formControl]="searchForm"
-					(mousedown)="onMouseDown($event)"
-					(blur)="onFocusLost()"
-					placeholder="Search card..." />
+				<input [formControl]="searchForm" (mousedown)="onMouseDown($event)" (blur)="onFocusLost()" placeholder="Search card..." />
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
-				<card-search-autocomplete-item *ngFor="let result of _searchResults; trackBy: trackById"
+				<card-search-autocomplete-item
+					*ngFor="let result of _searchResults; trackBy: trackById"
 					[fullString]="result.name"
 					[searchString]="_searchString"
-					(mousedown)="showCard(result)">
+					(mousedown)="showCard(result)"
+				>
 				</card-search-autocomplete-item>
 			</ul>
 		</div>
@@ -42,21 +37,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardSearchComponent implements AfterViewInit {
-
-	_searchResults: ReadonlyArray<SetCard>;
+	_searchResults: readonly SetCard[];
 	_searchString: string;
 
 	searchForm = new FormControl();
 
 	showSearchResults = false;
-	
+
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-        private events: Events,
-        private ow: OverwolfService,
-		private cdr: ChangeDetectorRef) {
-	}
+	constructor(private events: Events, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -76,7 +66,7 @@ export class CardSearchComponent implements AfterViewInit {
 		console.log('set searchstring', this._searchString);
 	}
 
-	@Input('searchResults') set searchResults(searchResults: ReadonlyArray<SetCard>) {
+	@Input('searchResults') set searchResults(searchResults: readonly SetCard[]) {
 		this._searchResults = searchResults;
 		this.showSearchResults = searchResults && searchResults.length > 0;
 		console.log('set searchResults', this._searchResults);
@@ -96,7 +86,7 @@ export class CardSearchComponent implements AfterViewInit {
 			console.log('validating search', this.searchResults, this._searchString);
 			this.stateUpdater.next(new SearchCardsEvent(this._searchString));
 			this.showSearchResults = false;
-			if (!(<ViewRef>this.cdr).destroyed) {
+			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		}
@@ -111,7 +101,7 @@ export class CardSearchComponent implements AfterViewInit {
 		setTimeout(() => {
 			console.log('focus lost');
 			this.showSearchResults = false;
-			if (!(<ViewRef>this.cdr).destroyed) {
+			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		}, 500);

@@ -19,23 +19,21 @@ declare var ga;
 
 @Injectable()
 export class AchievementsMonitor {
-
 	constructor(
-			private gameEvents: GameEvents,
-			private notificationService: OwNotificationsService,
-			private nameService: AchievementNameService,
-			private prefs: PreferencesService,
-			private conf: AchievementConfService,
-			private repository: AchievementsRepository,
-			private store: MainWindowStoreService,
-			private events: Events) {
-		this.gameEvents.allEvents.subscribe(
-			(gameEvent: GameEvent) => {
-				this.handleEvent(gameEvent);
-			}
-		);
-		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe((data) => this.handleAchievementRecordCompleted(data));
-		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe((data) => this.handleAchievementCompleted(data));
+		private gameEvents: GameEvents,
+		private notificationService: OwNotificationsService,
+		private nameService: AchievementNameService,
+		private prefs: PreferencesService,
+		private conf: AchievementConfService,
+		private repository: AchievementsRepository,
+		private store: MainWindowStoreService,
+		private events: Events,
+	) {
+		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
+			this.handleEvent(gameEvent);
+		});
+		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.handleAchievementRecordCompleted(data));
+		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.handleAchievementCompleted(data));
 		console.log('listening for achievement completion events');
 	}
 
@@ -45,25 +43,23 @@ export class AchievementsMonitor {
 		const numberOfCompletions = data.data[1];
 		const challenge = data.data[2];
 		ga('send', 'event', 'new-achievement', achievement.id);
-		if (numberOfCompletions == 1) {
+		if (numberOfCompletions === 1) {
 			this.sendPreRecordNotification(achievement, challenge.notificationTimeout());
 		}
 	}
 
 	private async handleAchievementRecordCompleted(data) {
 		const newAchievement: CompletedAchievement = data.data[0];
-		if (newAchievement.numberOfCompletions == 1) {
-			const achievement: Achievement = this.repository.getAllAchievements()
-				.filter((ach) => ach.id == newAchievement.id)
-				[0];
-			this.sendPostRecordNotification(achievement)
+		if (newAchievement.numberOfCompletions === 1) {
+			const achievement: Achievement = this.repository.getAllAchievements().filter(ach => ach.id === newAchievement.id)[0];
+			this.sendPostRecordNotification(achievement);
 		}
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
 		// console.log('[achievements] handling events', gameEvent);
-		for (let challenge of this.repository.challengeModules) {
-			challenge.detect(gameEvent, (data) => {
+		for (const challenge of this.repository.challengeModules) {
+			challenge.detect(gameEvent, () => {
 				this.store.stateUpdater.next(new AchievementCompletedEvent(challenge));
 			});
 		}
@@ -84,7 +80,7 @@ export class AchievementsMonitor {
 			content: `
 				<div class="achievement-message-container ${achievement.id} ${unclickable}">
 					<div class="achievement-image-container">
-						<img 
+						<img
 							src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
 							class="real-achievement ${achievement.cardType}"/>
 						<i class="i-84x90 frame">
@@ -117,7 +113,7 @@ export class AchievementsMonitor {
 			type: 'achievement-pre-record',
 			cardId: achievement.id,
 			timeout: notificationTimeout,
-			theClass: recordingOff ? 'active' : undefined
+			theClass: recordingOff ? 'active' : undefined,
 		});
 	}
 
@@ -128,7 +124,7 @@ export class AchievementsMonitor {
 			content: `
 			<div class="achievement-message-container ${achievement.id}">
 				<div class="achievement-image-container">
-					<img 
+					<img
 						src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
 						class="real-achievement ${achievement.cardType}"/>
 					<i class="i-84x90 frame">
@@ -159,7 +155,7 @@ export class AchievementsMonitor {
 			</div>`,
 			theClass: 'active',
 			type: 'achievement-confirm',
-			cardId: achievement.id
+			cardId: achievement.id,
 		});
 	}
 }

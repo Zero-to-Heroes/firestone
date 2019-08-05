@@ -3,10 +3,9 @@ import { Events } from '../../../events.service';
 import { AbstractChallenge } from '../abstract-challenge';
 
 export class DalaranHeistTreasurePlay extends AbstractChallenge {
+	private readonly cardId: string;
 
-    private readonly cardId: string;
-    
-    private entityId: number;
+	private entityId: number;
 
 	constructor(achievement, scenarioIds: number[], events: Events) {
 		super(achievement, scenarioIds, events, [GameEvent.GAME_START, GameEvent.GAME_END]);
@@ -14,33 +13,35 @@ export class DalaranHeistTreasurePlay extends AbstractChallenge {
 	}
 
 	protected resetState() {
-        this.entityId = undefined;
+		this.entityId = undefined;
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type == GameEvent.CARD_CHANGED_ON_BOARD) {
+		if (gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
-        }
-        // Specific handling for The Box
-        // Maybe it should have its own handler, but it's easier to do it that way :p
-        if (this.cardId === 'DALA_701') {
-            // If we draw The Box, save the entity Id, so that we can match it with a treasure that is played later
-            if ((gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK || gameEvent.type === GameEvent.RECEIVE_CARD_IN_HAND) 
-                    && gameEvent.cardId === this.cardId) {
-                this.entityId = gameEvent.entityId;
-                console.log('saved entityId', this.cardId, this.entityId);
-            }            
-        }
+		}
+		// Specific handling for The Box
+		// Maybe it should have its own handler, but it's easier to do it that way :p
+		if (this.cardId === 'DALA_701') {
+			// If we draw The Box, save the entity Id, so that we can match it with a treasure that is played later
+			if (
+				(gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK || gameEvent.type === GameEvent.RECEIVE_CARD_IN_HAND) &&
+				gameEvent.cardId === this.cardId
+			) {
+				this.entityId = gameEvent.entityId;
+				console.log('saved entityId', this.cardId, this.entityId);
+			}
+		}
 	}
 
 	private detectCardPlayedEvent(gameEvent: GameEvent, callback: Function) {
 		const cardId = gameEvent.cardId;
 		const controllerId = gameEvent.controllerId;
-        const localPlayer = gameEvent.localPlayer;
-        const entityId = gameEvent.entityId;
-		if (controllerId == localPlayer.PlayerId && (cardId === this.cardId || entityId === this.entityId)) {
-            console.log('everything ok', this);
+		const localPlayer = gameEvent.localPlayer;
+		const entityId = gameEvent.entityId;
+		if (controllerId === localPlayer.PlayerId && (cardId === this.cardId || entityId === this.entityId)) {
+			console.log('everything ok', this);
 			this.callback = callback;
 			this.handleCompletion();
 		}

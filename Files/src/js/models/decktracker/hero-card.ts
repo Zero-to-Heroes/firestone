@@ -1,4 +1,4 @@
 export class HeroCard {
-    readonly name;
-    readonly cardId;
+	readonly name;
+	readonly cardId;
 }

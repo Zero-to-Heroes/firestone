@@ -19,40 +19,38 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlSettingsComponent implements AfterViewInit {
-
-    @Input() settingsApp: string;
-    @Input() windowId: string;
-    @Input() shouldMoveSettingsWindow: boolean = true;
+	@Input() settingsApp: string;
+	@Input() windowId: string;
+	@Input() shouldMoveSettingsWindow = true;
 	@Input() settingsSection: string;
 
 	private settingsWindowId: string;
-    private settingsEventBus: EventEmitter<string>;
-    
-    constructor(private ow: OverwolfService) { }
-	
+	private settingsEventBus: EventEmitter<string>;
+
+	constructor(private ow: OverwolfService) {}
+
 	async ngAfterViewInit() {
-        this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-        try {
-            const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
-            this.settingsWindowId = window.id;
-        }
-        catch (e) {
-            this.ngAfterViewInit();
-        }
+		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
+		try {
+			const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
+			this.settingsWindowId = window.id;
+		} catch (e) {
+			this.ngAfterViewInit();
+		}
 	}
 
 	async showSettings() {
 		if (this.settingsApp) {
 			this.settingsEventBus.next(this.settingsApp);
-        }
-        const window = await this.ow.getCurrentWindow();
-        const center = {
-            x: window.left + window.width / 2,
-            y: window.top + window.height / 2
-        };
-        if (this.shouldMoveSettingsWindow) {
-            await this.ow.sendMessage(this.settingsWindowId, 'move', center);
-        }
-        this.ow.restoreWindow(this.settingsWindowId);
+		}
+		const window = await this.ow.getCurrentWindow();
+		const center = {
+			x: window.left + window.width / 2,
+			y: window.top + window.height / 2,
+		};
+		if (this.shouldMoveSettingsWindow) {
+			await this.ow.sendMessage(this.settingsWindowId, 'move', center);
+		}
+		this.ow.restoreWindow(this.settingsWindowId);
 	}
 }

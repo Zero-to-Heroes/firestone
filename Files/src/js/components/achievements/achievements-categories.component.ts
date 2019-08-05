@@ -10,7 +10,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'achievements-categories',
 	styleUrls: [
 		`../../../css/component/achievements/achievements-categories.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`
+		`../../../css/global/scrollbar-achievements.scss`,
 	],
 	template: `
 		<div class="achievements-categories">
@@ -24,13 +24,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsCategoriesComponent implements AfterViewInit {
-
 	@Input() public achievementSets: AchievementSet[];
-	
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
-	
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
@@ -38,7 +37,7 @@ export class AchievementsCategoriesComponent implements AfterViewInit {
 	selectSet(set: AchievementSet) {
 		this.stateUpdater.next(new SelectAchievementSetEvent(set.id));
 	}
-	
+
 	trackById(achievementSet: AchievementSet, index: number) {
 		return achievementSet.id;
 	}

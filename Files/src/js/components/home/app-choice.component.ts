@@ -7,18 +7,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'app-choice',
-	styleUrls: [
-		`../../../css/global/components-global.scss`,
-		`../../../css/component/home/app-choice.component.scss`,
-	],
+	styleUrls: [`../../../css/global/components-global.scss`, `../../../css/component/home/app-choice.component.scss`],
 	template: `
 		<div class="app-choice" *ngIf="dataLoaded">
-			<div (mousedown)="showCollection()" 
-					[ngClass]="{'app binder': true, 'inactive': noCollection}">
+			<div (mousedown)="showCollection()" [ngClass]="{ 'app binder': true, 'inactive': noCollection }">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#the_binder"/>
+							<use xlink:href="/Files/assets/svg/sprite.svg#the_binder" />
 						</svg>
 					</i>
 					<span class="title">The Binder</span>
@@ -26,13 +22,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<div class="banner"></div>
 				</div>
 			</div>
-			<div (mousedown)="showAchievements()" 
-					class="app achievements" 
-					[ngClass]="{'inactive': noCollection}">
+			<div (mousedown)="showAchievements()" class="app achievements" [ngClass]="{ 'inactive': noCollection }">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#achievements"/>
+							<use xlink:href="/Files/assets/svg/sprite.svg#achievements" />
 						</svg>
 					</i>
 					<span class="title">Achievements</span>
@@ -40,13 +34,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<div class="banner"></div>
 				</div>
 			</div>
-            <div (mousedown)="showDecktracker()" 
-                    class="app deck-tracker last"
-					[ngClass]="{'inactive': noCollection}">
+			<div (mousedown)="showDecktracker()" class="app deck-tracker last" [ngClass]="{ 'inactive': noCollection }">
 				<div class="info">
 					<i class="i-150X150 gold-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#deck_tracker"/>
+							<use xlink:href="/Files/assets/svg/sprite.svg#deck_tracker" />
 						</svg>
 					</i>
 					<span class="title">Deck Tracker</span>
@@ -58,9 +50,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class AppChoiceComponent implements AfterViewInit {
-
 	@Output() close = new EventEmitter();
 
 	dataLoaded = false;
@@ -69,19 +59,18 @@ export class AppChoiceComponent implements AfterViewInit {
 	private collectionWindowId;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
-	}
+	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
-        this.cdr.detach();
-        this.ow.addStateChangedListener('WelcomeWindow', (message) => {
-			if (message.window_state == 'normal') {
+		this.cdr.detach();
+		this.ow.addStateChangedListener('WelcomeWindow', message => {
+			if (message.window_state === 'normal') {
 				this.refreshContents();
 			}
 		});
-        this.refreshContents();
-        const window = await this.ow.obtainDeclaredWindow('CollectionWindow');
-        this.collectionWindowId = window.id;
+		this.refreshContents();
+		const window = await this.ow.obtainDeclaredWindow('CollectionWindow');
+		this.collectionWindowId = window.id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
@@ -110,24 +99,24 @@ export class AppChoiceComponent implements AfterViewInit {
 		if (this.noCollection) {
 			return;
 		}
-		
-        this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
-        const window = await this.ow.getCurrentWindow();
-        const center = {
-            x: window.left + window.width / 2,
-            y: window.top + window.height / 2
-        };
-        await this.ow.sendMessage(this.collectionWindowId, 'move', center);
-        await this.ow.restoreWindow(this.collectionWindowId);
-        this.close.emit(null);
+
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent(module));
+		const window = await this.ow.getCurrentWindow();
+		const center = {
+			x: window.left + window.width / 2,
+			y: window.top + window.height / 2,
+		};
+		await this.ow.sendMessage(this.collectionWindowId, 'move', center);
+		await this.ow.restoreWindow(this.collectionWindowId);
+		this.close.emit(null);
 	}
 
 	private async refreshContents() {
 		const collection = await this.collectionManager.getCollection();
 		console.log('retrieved collection', collection);
-		this.noCollection = !collection || collection.length == 0;
+		this.noCollection = !collection || collection.length === 0;
 		this.dataLoaded = true;
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

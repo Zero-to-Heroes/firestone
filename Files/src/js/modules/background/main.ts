@@ -4,8 +4,9 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './background.module';
 
 if (process.env.NODE_ENV === 'production') {
-  enableProdMode();
+	enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+platformBrowserDynamic()
+	.bootstrapModule(AppModule)
+	.catch(err => console.log(err));

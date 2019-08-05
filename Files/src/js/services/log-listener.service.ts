@@ -8,7 +8,6 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class LogListenerService {
-
 	public subject = new Subject();
 
 	logFile: string;
@@ -18,7 +17,7 @@ export class LogListenerService {
 	fileInitiallyPresent: boolean;
 	logsLocation: string;
 
-	constructor(private io: SimpleIOService, private ow: OverwolfService) { }
+	constructor(private io: SimpleIOService, private ow: OverwolfService) {}
 
 	public configure(logFile: string, callback: Function): LogListenerService {
 		this.logFile = logFile;
@@ -39,22 +38,21 @@ export class LogListenerService {
 	}
 
 	async configureLogListeners() {
-        this.ow.addGameInfoUpdatedListener((res: any) => {
+		this.ow.addGameInfoUpdatedListener((res: any) => {
 			// console.log("onGameInfoUpdated: " + JSON.stringify(res));
 			if (this.ow.gameLaunched(res)) {
 				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
-            }
-            else {
-                console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', res);
-            }
+			} else {
+				console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', res);
+			}
 		});
-        const gameInfo = await this.ow.getRunningGameInfo();
-        if (this.ow.gameRunning(gameInfo)) {
-            console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath, gameInfo);
-            this.logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
-            this.registerLogMonitor();
-        }
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (this.ow.gameRunning(gameInfo)) {
+			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath, gameInfo);
+			this.logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
+			this.registerLogMonitor();
+		}
 	}
 
 	registerLogMonitor() {
@@ -78,24 +76,24 @@ export class LogListenerService {
 		const fileExists = await this.io.fileExists(logsLocation);
 		if (fileExists) {
 			this.listenOnFileUpdate(logsLocation);
-		}
-		else {
+		} else {
 			this.fileInitiallyPresent = false;
-			setTimeout( () => { this.listenOnFileCreation(logsLocation); }, 1000);
+			setTimeout(() => {
+				this.listenOnFileCreation(logsLocation);
+			}, 1000);
 		}
 	}
 
 	async listenOnFileUpdate(logsLocation: string) {
-		let fileIdentifier = this.logFile;
+		const fileIdentifier = this.logFile;
 		console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
 		// Register file listener
-		let handler = (id: any, status: any, data: string) => {
+		const handler = (id: any, status: any, data: string) => {
 			if (!status) {
 				if (data === 'truncated') {
 					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Going on');
-				}
-				else if (id === fileIdentifier) {
+				} else if (id === fileIdentifier) {
 					console.warn('[log-listener] [' + this.logFile + '] received an error on file: ', id, data);
 				}
 				return;
@@ -103,8 +101,7 @@ export class LogListenerService {
 
 			if (id === fileIdentifier) {
 				this.callback(data);
-			}
-			else {
+			} else {
 				// This happens frequently when listening to several files at the same time, don't do anything about it
 			}
 		};
@@ -114,10 +111,9 @@ export class LogListenerService {
 		plugin.listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
 			if (id === fileIdentifier) {
 				if (status) {
-					console.log("[" + id + "] now streaming...", this.fileInitiallyPresent, initData);
+					console.log('[' + id + '] now streaming...', this.fileInitiallyPresent, initData);
 					this.subject.next(Events.STREAMING_LOG_FILE);
-				}
-				else {
+				} else {
 					console.error('[log-listener] [' + this.logFile + '] something bad happened with: ', id);
 				}
 			}

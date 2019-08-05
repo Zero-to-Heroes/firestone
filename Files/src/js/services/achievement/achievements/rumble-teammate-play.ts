@@ -3,7 +3,6 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class RumbleTeammatePlay extends AbstractChallenge {
-
 	private readonly cardId: string;
 
 	constructor(achievement, scenarioId: number, events: Events) {
@@ -16,7 +15,7 @@ export class RumbleTeammatePlay extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type == GameEvent.CARD_CHANGED_ON_BOARD) {
+		if (gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
@@ -26,7 +25,7 @@ export class RumbleTeammatePlay extends AbstractChallenge {
 		const cardId = gameEvent.cardId;
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
-		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
+		if (cardId === this.cardId && controllerId === localPlayer.PlayerId) {
 			this.callback = callback;
 			this.handleCompletion();
 		}

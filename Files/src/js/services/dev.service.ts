@@ -16,15 +16,15 @@ declare var overwolf: any;
 
 @Injectable()
 export class DevService {
-
 	constructor(
-		private achievementMonitor: AchievementsMonitor, 
+		private achievementMonitor: AchievementsMonitor,
 		private packMonitor: PackMonitor,
 		private io: SimpleIOService,
 		private gameEvents: GameEvents,
 		private gameEventsPlugin: GameEventsPluginService,
 		private deckService: DeckParserService,
-		private storage: AchievementsStorageService) {
+		private storage: AchievementsStorageService,
+	) {
 		this.addTestCommands();
 	}
 
@@ -46,19 +46,17 @@ export class DevService {
 			null,
 			'common',
 			1,
-			[]
-		)
-		window['showAchievementNotification'] = () => {			
+			[],
+		);
+		window['showAchievementNotification'] = () => {
 			this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
-		}
+		};
 		window['addReplayInfos'] = async () => {
 			const achievements = await this.storage.loadAchievements();
-			const achievement = achievements
-					.filter((ach) => ach.replayInfo && ach.replayInfo.length > 0)
-					[0];
+			const achievement = achievements.filter(ach => ach.replayInfo && ach.replayInfo.length > 0)[0];
 			const newReplays = [
-				...achievement.replayInfo, 
+				...achievement.replayInfo,
 				achievement.replayInfo[0],
 				achievement.replayInfo[0],
 				achievement.replayInfo[0],
@@ -66,29 +64,25 @@ export class DevService {
 				achievement.replayInfo[0],
 				achievement.replayInfo[0],
 			];
-			const newAchievement = new CompletedAchievement(
-				achievement.id,
-				achievement.numberOfCompletions,
-				newReplays
-			);
+			const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, newReplays);
 			const updated = await this.storage.saveAchievement(newAchievement);
 			console.log('added lots of replays to achievement', updated.id, updated);
-		}
+		};
 	}
 
-	private addCollectionCommands() {	
+	private addCollectionCommands() {
 		window['showCardNotification'] = () => {
 			const card: Card = new Card('AT_001', 1, 1);
 			this.packMonitor.createNewCardToast(card, 'GOLDEN');
-		}
+		};
 	}
 
-	private addCustomLogLoaderCommand() {	
+	private addCustomLogLoaderCommand() {
 		window['loadLog'] = (logName, deckString) => {
-            if (deckString) {
-                this.deckService.currentDeck.deckstring = deckString;
-                this.deckService.decodeDeckString();
-            }
+			if (deckString) {
+				this.deckService.currentDeck.deckstring = deckString;
+				this.deckService.decodeDeckString();
+			}
 			overwolf.games.getRunningGameInfo(async (res: any) => {
 				if (res && res.isRunning && res.id && Math.floor(res.id / 10) === HEARTHSTONE_GAME_ID) {
 					const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + logName;
@@ -96,43 +90,42 @@ export class DevService {
 					this.loadArbitraryLogContent(logContents);
 				}
 			});
-        }
-        window['startDeckCycle'] = async (logName, deckString) => {
-            console.log('starting new deck cycle', logName, deckString);
-            this.deckService.currentDeck.deckstring = deckString;
-            this.deckService.decodeDeckString();
-            const logsLocation = `D:\\Games\\Hearthstone\\Logs\\${logName}`;
-            const logContents = await this.io.getFileContents(logsLocation);
-            const logLines = logContents.split('\n');
-            await this.processLogLines(logLines);
-            this.deckService.reset();
-            window['startDeckCycle'](logName, deckString);
-        }
-    }
+		};
+		window['startDeckCycle'] = async (logName, deckString) => {
+			console.log('starting new deck cycle', logName, deckString);
+			this.deckService.currentDeck.deckstring = deckString;
+			this.deckService.decodeDeckString();
+			const logsLocation = `D:\\Games\\Hearthstone\\Logs\\${logName}`;
+			const logContents = await this.io.getFileContents(logsLocation);
+			const logLines = logContents.split('\n');
+			await this.processLogLines(logLines);
+			this.deckService.reset();
+			window['startDeckCycle'](logName, deckString);
+		};
+	}
 
-    private async processLogLines(logLines) {
-        const plugin = await this.gameEventsPlugin.get();
-		return new Promise<void>((resolve) => {
-            plugin.initRealtimeLogConversion(async () => {
-                plugin.startDevMode();
-                for (let data of logLines) {
-                    await this.sendLogLine(data);
-                }
-                plugin.stopDevMode();
-                resolve();
-            });
-        });
-
-    }
-    
-    private async sendLogLine(data: string) {
-		return new Promise<void>((resolve) => {
-            setTimeout(() => {
-                this.gameEvents.receiveLogLine(data);
-                resolve();
-            }, 1);
+	private async processLogLines(logLines) {
+		const plugin = await this.gameEventsPlugin.get();
+		return new Promise<void>(resolve => {
+			plugin.initRealtimeLogConversion(async () => {
+				plugin.startDevMode();
+				for (const data of logLines) {
+					await this.sendLogLine(data);
+				}
+				plugin.stopDevMode();
+				resolve();
+			});
 		});
-    }
+	}
+
+	private async sendLogLine(data: string) {
+		return new Promise<void>(resolve => {
+			setTimeout(() => {
+				this.gameEvents.receiveLogLine(data);
+				resolve();
+			}, 1);
+		});
+	}
 
 	private async loadArbitraryLogContent(content: string) {
 		const plugin = await this.gameEventsPlugin.get();

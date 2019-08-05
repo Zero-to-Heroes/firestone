@@ -1,5 +1,5 @@
-import { TwitterUserInfo } from "./twitter-user-info";
+import { TwitterUserInfo } from './twitter-user-info';
 
 export class SocialShareUserInfo {
-    readonly twitter: TwitterUserInfo = new TwitterUserInfo();
+	readonly twitter: TwitterUserInfo = new TwitterUserInfo();
 }

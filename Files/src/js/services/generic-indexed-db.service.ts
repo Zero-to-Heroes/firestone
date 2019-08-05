@@ -1,29 +1,28 @@
 import { Injectable } from '@angular/core';
-import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
+import { AngularIndexedDB } from 'angular2-indexeddb';
 import { Preferences } from '../models/preferences';
 
 @Injectable()
 export class GenericIndexedDbService {
-
 	private dbInit: boolean;
 	private db: AngularIndexedDB;
 
 	constructor() {
 		this.init();
 	}
-	
-    public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
+
+	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
 		await this.waitForDbInit();
-		return new Promise<Preferences>((resolve) => {
+		return new Promise<Preferences>(resolve => {
 			this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
 				resolve(preferences);
 			});
 		});
 	}
-	
-    public async getUserPreferences(): Promise<Preferences> {
+
+	public async getUserPreferences(): Promise<Preferences> {
 		await this.waitForDbInit();
-		return new Promise<Preferences>((resolve) => {
+		return new Promise<Preferences>(resolve => {
 			this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
 				resolve(Object.assign(new Preferences(), preferences[0] || {}));
 			});
@@ -31,18 +30,17 @@ export class GenericIndexedDbService {
 	}
 
 	private waitForDbInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
+		return new Promise<void>(resolve => {
 			const dbWait = () => {
 				// console.log('Promise waiting for db');
 				if (this.dbInit) {
 					// console.log('wait for db init complete');
 					resolve();
-				} 
-				else {
+				} else {
 					// console.log('waiting for db init');
 					setTimeout(() => dbWait(), 50);
 				}
-			}
+			};
 			dbWait();
 		});
 	}
@@ -50,23 +48,23 @@ export class GenericIndexedDbService {
 	private init() {
 		console.log('[storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-generic-db', 1);
-		this.db.openDatabase(1, (evt) => {
-			console.log('[storage] upgrading db', evt);
-			if (evt.oldVersion < 1) {
-				console.log('[storage] upgrade to version 1');
-				evt.currentTarget.result.createObjectStore(
-					'user-preferences',
-					{ keyPath: "id", autoIncrement: false });
-			}
-			console.log('[storage] indexeddb upgraded');
-		}).then(
-			() => {
-				console.log('[storage] openDatabase successful', this.db.dbWrapper.dbName);
-				this.dbInit = true;
-			},
-			(error) => {
-				console.error('[storage] error in openDatabase', error);
-			}
-		);
+		this.db
+			.openDatabase(1, evt => {
+				console.log('[storage] upgrading db', evt);
+				if (evt.oldVersion < 1) {
+					console.log('[storage] upgrade to version 1');
+					evt.currentTarget.result.createObjectStore('user-preferences', { keyPath: 'id', autoIncrement: false });
+				}
+				console.log('[storage] indexeddb upgraded');
+			})
+			.then(
+				() => {
+					console.log('[storage] openDatabase successful', this.db.dbWrapper.dbName);
+					this.dbInit = true;
+				},
+				error => {
+					console.error('[storage] error in openDatabase', error);
+				},
+			);
 	}
 }

@@ -1,7 +1,6 @@
-import { ReplayInfo } from "./replay-info";
+import { ReplayInfo } from './replay-info';
 
 export class VisualAchievement {
-
 	readonly id: string;
 	readonly name: string;
 	readonly type: string;
@@ -11,17 +10,18 @@ export class VisualAchievement {
 	readonly completionSteps: CompletionStep[];
 	// readonly achievementStepIds: string[];
 	// readonly numberOfCompletions: number[] = [];
-	readonly replayInfo: ReadonlyArray<ReplayInfo> = [];
+	readonly replayInfo: readonly ReplayInfo[] = [];
 
 	constructor(
-			id: string = null, 
-			name: string = null, 
-			type: string = null, 
-			cardId: string = null, 
-			cardType: string = null,
-			text: string = null, 
-			completionSteps: CompletionStep[] = null,
-			replayInfo: ReadonlyArray<ReplayInfo> = null) {
+		id: string = null,
+		name: string = null,
+		type: string = null,
+		cardId: string = null,
+		cardType: string = null,
+		text: string = null,
+		completionSteps: CompletionStep[] = null,
+		replayInfo: readonly ReplayInfo[] = null,
+	) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
@@ -33,9 +33,7 @@ export class VisualAchievement {
 	}
 
 	public isAchieved(): boolean {
-		const totalAchieved = this.completionSteps
-				.map((step) => step.numberOfCompletions)
-				.reduce((a, b) => a + b, 0);
+		const totalAchieved = this.completionSteps.map(step => step.numberOfCompletions).reduce((a, b) => a + b, 0);
 		return totalAchieved > 0;
 	}
 }

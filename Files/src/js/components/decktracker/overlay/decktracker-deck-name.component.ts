@@ -12,22 +12,20 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 			<div class="background-image" [style.background-image]="deckImage"></div>
 			<div class="gradiant"></div>
 			<div class="inner-border">
-				<span class="name">{{deckName}}</span>
+				<span class="name">{{ deckName }}</span>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerDeckNameComponent {
-
 	deckImage: string;
 
 	@Input() deckName: string;
 
-	@Input("hero") set hero(hero: HeroCard) {
+	@Input('hero') set hero(hero: HeroCard) {
 		if (hero) {
 			this.deckImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${hero.cardId}.jpg)`;
 		}
 	}
-
 }

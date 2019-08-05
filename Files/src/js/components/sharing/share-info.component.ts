@@ -7,9 +7,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'share-info',
-	styleUrls: [
-		`../../../css/component/sharing/share-info.component.scss`,
-	],
+	styleUrls: [`../../../css/component/sharing/share-info.component.scss`],
 	template: `
 		<div class="share-info">
 			<textarea [(ngModel)]="textValue" *ngIf="loggedIn"></textarea>
@@ -20,23 +18,22 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShareInfoComponent implements AfterViewInit {
-
 	@Input() network: string;
 	@Input() videoPathOnDisk: string;
 	textValue: string;
 	loggedIn: boolean;
 
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
-	
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
 	@Input() set socialInfo(value: SocialUserInfo) {
 		if (!value) {
 			return;
 		}
 		this.loggedIn = value.id != undefined;
 	}
-	
+
 	@Input() set achievementName(value: string) {
 		this.textValue = `One more #hearthstone #achievement unlocked! | ${value} | Captured by Firestone`;
 	}

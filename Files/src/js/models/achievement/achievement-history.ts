@@ -1,5 +1,4 @@
 export class AchievementHistory {
-
 	readonly id: string;
 	readonly achievementId: string;
 	readonly achievementName: string;

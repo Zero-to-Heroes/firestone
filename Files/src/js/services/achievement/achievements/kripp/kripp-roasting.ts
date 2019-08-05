@@ -1,14 +1,12 @@
-import { AbstractChallenge } from "../abstract-challenge";
-import { GameEvent } from "../../../../models/game-event";
-import { Events } from "../../../events.service";
-import { GameType } from "../../../../models/enums/game-type";
-
+import { AbstractChallenge } from '../abstract-challenge';
+import { GameEvent } from '../../../../models/game-event';
+import { Events } from '../../../events.service';
+import { GameType } from '../../../../models/enums/game-type';
 
 export class KrippRodOfRoasting extends AbstractChallenge {
-
 	private readonly cardId: string;
 
-    private hasPlayedRodOfRoasting: boolean = false;
+	private hasPlayedRodOfRoasting = false;
 	private currentTurnStartTime: number;
 
 	constructor(achievement, events: Events) {
@@ -22,11 +20,11 @@ export class KrippRodOfRoasting extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.TURN_START) {
+		if (gameEvent.type === GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}
-		if (gameEvent.type == GameEvent.CARD_PLAYED) {
+		if (gameEvent.type === GameEvent.CARD_PLAYED) {
 			this.detectCardPlayedEvent(gameEvent, callback);
 			return;
 		}
@@ -44,14 +42,14 @@ export class KrippRodOfRoasting extends AbstractChallenge {
 		const cardId = gameEvent.cardId;
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
-		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
+		if (cardId === this.cardId && controllerId === localPlayer.PlayerId) {
 			this.hasPlayedRodOfRoasting = true;
 		}
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		let winner = gameEvent.additionalData.winner;
-		let localPlayer = gameEvent.localPlayer;
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
 		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

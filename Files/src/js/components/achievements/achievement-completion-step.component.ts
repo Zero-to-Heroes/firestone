@@ -6,23 +6,22 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 	selector: 'achievement-completion-step',
 	styleUrls: [`../../../css/component/achievements/achievement-completion-step.component.scss`],
 	template: `
-		<div class="completion-step" [ngClass]="{'completed': completedTimes > 0}" [innerHTML]="svgAndTooltip"></div>
+		<div class="completion-step" [ngClass]="{ 'completed': completedTimes > 0 }" [innerHTML]="svgAndTooltip"></div>
 	`,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	encapsulation: ViewEncapsulation.None,
 })
 export class AchievementCompletionStepComponent {
+	completionStep: CompletionStep;
+	completedTimes: number;
+	svgAndTooltip: SafeHtml;
 
-    completionStep: CompletionStep;
-    completedTimes: number;
-    svgAndTooltip: SafeHtml;
-    
-    constructor(private domSanitizer: DomSanitizer) { }
+	constructor(private domSanitizer: DomSanitizer) {}
 
 	@Input() set step(step: CompletionStep) {
-        this.completionStep = step;
-        this.completedTimes = step.numberOfCompletions;
-        this.svgAndTooltip = this.domSanitizer.bypassSecurityTrustHtml(`
+		this.completionStep = step;
+		this.completedTimes = step.numberOfCompletions;
+		this.svgAndTooltip = this.domSanitizer.bypassSecurityTrustHtml(`
 			<i class="i-30">
                 <svg class="svg-icon-fill">
                     <use xlink:href="/Files/assets/svg/sprite.svg#${step.iconSvgSymbol}"/>

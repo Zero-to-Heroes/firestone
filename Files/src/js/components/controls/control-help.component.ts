@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
 	selector: 'control-help',
@@ -17,6 +17,4 @@ import { Component, ViewEncapsulation, AfterViewInit, ChangeDetectionStrategy } 
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlHelpComponent {
-    
-}
+export class ControlHelpComponent {}

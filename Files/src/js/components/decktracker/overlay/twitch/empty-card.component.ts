@@ -10,21 +10,18 @@ import { Events } from '../../../../services/events.service';
 	template: `
 		<div class="card">
 			<!-- transparent image with 1:1 intrinsic aspect ratio -->
-			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+			<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyCardComponent {
-
 	@Input() cardId: string;
 
-	constructor(private el: ElementRef, private events: Events) {
-
-	}
+	constructor(private el: ElementRef, private events: Events) {}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		let rect = this.el.nativeElement.getBoundingClientRect();
+		const rect = this.el.nativeElement.getBoundingClientRect();
 		// console.log('on mouse enter', this.cardId, rect);
 		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
 	}

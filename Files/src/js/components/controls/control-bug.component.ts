@@ -18,25 +18,24 @@ import { LogsUploaderService } from '../../services/logs-uploader.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlBugComponent {
-    
-    constructor(private logService: LogsUploaderService) { }
+	constructor(private logService: LogsUploaderService) {}
 
 	async showBugForm() {
 		try {
 			const [appLogs, gameLogs] = await Promise.all([this.logService.uploadAppLogs(), this.logService.uploadGameLogs()]);
 			const subject = `Firestone bug report`;
 			const body = `Hey, I'd like to report a bug I found in Firestone.
-			
+
 			== Bug description ==
-			
+
 			(please fill the bug descrition here)
-			
-			== How I got there == 
-			
+
+			== How I got there ==
+
 			(if you have any idea of what might have caused the issue, or what you were doing with the app when the bug occurred)
-			
+
 			== Log files ==
-			
+
 			App logs key: ${appLogs}
 			Game logs key: ${gameLogs ? gameLogs : 'game was not running'}`;
 			console.log('Trying to prefill email with', subject, body);

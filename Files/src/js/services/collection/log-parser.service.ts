@@ -15,7 +15,9 @@ export class LogParserService {
 	plugin: any;
 
 	private cardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d+).*');
-	private rewardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) (?:.*)CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*');
+	private rewardRegex = new RegExp(
+		'D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) (?:.*)CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*',
+	);
 	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
 	private logLines: any[][] = [];
@@ -27,7 +29,7 @@ export class LogParserService {
 				return;
 			}
 			// Make sure we're not splitting a pack opening in the middle
-			if (this.logLines.length > 0 && this.isTooSoon(this.logLines[this.logLines.length -1])) {
+			if (this.logLines.length > 0 && this.isTooSoon(this.logLines[this.logLines.length - 1])) {
 				console.log('too soon, waiting before processing');
 				return;
 			}
@@ -40,17 +42,15 @@ export class LogParserService {
 				// console.log('lines to process', toProcess);
 				this.processLines(toProcess);
 				this.processingLines = false;
-			}
-			else {
+			} else {
 				this.processingLines = false;
 			}
-		},
-		200);
+		}, 200);
 	}
 
 	public receiveLogLine(data: string) {
 		// console.log('received log line', data);
-		let match = this.cardRegex.exec(data) || this.rewardRegex.exec(data);
+		const match = this.cardRegex.exec(data) || this.rewardRegex.exec(data);
 		if (match) {
 			this.logLines.push([Date.now(), data]);
 		}
@@ -67,12 +67,11 @@ export class LogParserService {
 			ga('send', 'event', 'toast', 'new-pack');
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
-        }
-        else {
-            console.log('received cards outside of pack', cards);
-        }
+		} else {
+			console.log('received cards outside of pack', cards);
+		}
 
-		for (let data of toProcess) {
+		for (const data of toProcess) {
 			// console.log('considering log line', data);
 			let match = this.cardRegex.exec(data);
 			let multipleCopies = false;
@@ -81,10 +80,10 @@ export class LogParserService {
 				multipleCopies = true;
 			}
 			if (match) {
-				let cardId = match[1];
-				let type = match[2];
-				let newCount = parseInt(match[3]);
-                // console.log('handling new card', cardId, type, newCount, data);
+				const cardId = match[1];
+				const type = match[2];
+				const newCount = parseInt(match[3]);
+				// console.log('handling new card', cardId, type, newCount, data);
 				// console.log('card in collection?', cardId, type, cardInCollection);
 				if (multipleCopies) {
 					for (let i = 0; i < newCount; i++) {
@@ -98,14 +97,13 @@ export class LogParserService {
 	}
 
 	private handleNotification(cardId, type, count) {
-		let normalCount: number = type === 'NORMAL' ? count : -1;
-		let premiumCount: number = type === 'GOLDEN' ? count : -1;
-		let cardInCollection = new Card(cardId, normalCount, premiumCount);
+		const normalCount: number = type === 'NORMAL' ? count : -1;
+		const premiumCount: number = type === 'GOLDEN' ? count : -1;
+		const cardInCollection = new Card(cardId, normalCount, premiumCount);
 		if (!this.hasReachedMaxCollectibleOf(cardInCollection, type)) {
-            // console.log('displaying new cards message', cardInCollection, type);
+			// console.log('displaying new cards message', cardInCollection, type);
 			this.displayNewCardMessage(cardInCollection, type);
-		}
-		else {
+		} else {
 			this.displayDustMessage(cardInCollection, type);
 		}
 		this.store.stateUpdater.next(new NewCardEvent(cardInCollection, type));
@@ -113,20 +111,20 @@ export class LogParserService {
 
 	private toPackCards(toProcess: string[]): any[] {
 		return toProcess
-				.map(data => this.cardRegex.exec(data))
-				.filter(match => match)
-				.map((match) => ({
-					cardId: match[1],
-					cardType: match[2]
-				}));
+			.map(data => this.cardRegex.exec(data))
+			.filter(match => match)
+			.map(match => ({
+				cardId: match[1],
+				cardType: match[2],
+			}));
 	}
 
 	private extractCards(toProcess: string[]): any[] {
 		return toProcess
-				.map(data => this.cardRegex.exec(data) || this.rewardRegex.exec(data))
-				.filter(match => match)
-				.map(match => match[1])
-				.map(cardId => this.cards.getCard(cardId));
+			.map(data => this.cardRegex.exec(data) || this.rewardRegex.exec(data))
+			.filter(match => match)
+			.map(match => match[1])
+			.map(cardId => this.cards.getCard(cardId));
 	}
 
 	private isPack(cards: any[]): boolean {
@@ -139,9 +137,9 @@ export class LogParserService {
 	}
 
 	private isTooSoon(logLine: any[]) {
-		let match = this.timestampRegex.exec(logLine[1]);
+		const match = this.timestampRegex.exec(logLine[1]);
 		if (match) {
-			let elapsed = Date.now() - parseInt(logLine[0]);
+			const elapsed = Date.now() - parseInt(logLine[0]);
 			console.log('elapsed', elapsed, Date.now(), logLine);
 			if (elapsed < 100) {
 				return true;
@@ -150,7 +148,7 @@ export class LogParserService {
 		return false;
 	}
 
-	private hasReachedMaxCollectibleOf(card: Card, type: string):boolean {
+	private hasReachedMaxCollectibleOf(card: Card, type: string): boolean {
 		// Card is not in collection at all
 		// Should never occur
 		if (!card) {
@@ -158,16 +156,16 @@ export class LogParserService {
 			return false;
 		}
 
-		let dbCard = parseCardsText.getCard(card.id);
+		const dbCard = parseCardsText.getCard(card.id);
 		if (!dbCard) {
 			console.warn('unknown card', card.id, card);
 			return false;
 		}
 		// The collection is updated immediately, so when we query it the new card has already been inserted
-		if (type == 'NORMAL' && (dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
+		if ((type === 'NORMAL' && (dbCard.rarity === 'Legendary' && card.count >= 2)) || card.count >= 3) {
 			return true;
 		}
-		if (type == 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2) || card.premiumCount >= 3) {
+		if ((type === 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2)) || card.premiumCount >= 3) {
 			return true;
 		}
 		return false;
@@ -182,9 +180,9 @@ export class LogParserService {
 	}
 
 	private displayDustMessage(card: Card, type: string) {
-		let dbCard = parseCardsText.getCard(card.id);
+		const dbCard = parseCardsText.getCard(card.id);
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
-		dust = type == 'GOLDEN' ? dust * 4 : dust;
+		dust = type === 'GOLDEN' ? dust * 4 : dust;
 		setTimeout(() => {
 			this.events.broadcast(Events.MORE_DUST, card, dust, type);
 		}, 20);
@@ -198,7 +196,7 @@ export class LogParserService {
 				return 400;
 			case 'epic':
 				return 100;
-			case 'rare': 
+			case 'rare':
 				return 20;
 			default:
 				return 5;

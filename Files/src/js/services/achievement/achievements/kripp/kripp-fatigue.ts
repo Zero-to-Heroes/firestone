@@ -1,16 +1,14 @@
-import { AbstractChallenge } from "../abstract-challenge";
-import { GameEvent } from "../../../../models/game-event";
-import { Events } from "../../../events.service";
-import { GameType } from "../../../../models/enums/game-type";
-
+import { AbstractChallenge } from '../abstract-challenge';
+import { GameEvent } from '../../../../models/game-event';
+import { Events } from '../../../events.service';
+import { GameType } from '../../../../models/enums/game-type';
 
 export class KrippFatigue extends AbstractChallenge {
-
-    private static readonly CHALLENGE_MINIMUM_DAMAGE = 4;
+	private static readonly CHALLENGE_MINIMUM_DAMAGE = 4;
 	private readonly cardId: string;
 
-    private maxFatigueDamage: number = 0;
-    private gameStartTime: number;
+	private maxFatigueDamage = 0;
+	private gameStartTime: number;
 
 	constructor(achievement, events: Events) {
 		super(achievement, [GameType.RANKED], events, [GameEvent.GAME_END]);
@@ -22,9 +20,9 @@ export class KrippFatigue extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-        if (gameEvent.type === GameEvent.GAME_START) {
-            this.gameStartTime = Date.now();
-        }
+		if (gameEvent.type === GameEvent.GAME_START) {
+			this.gameStartTime = Date.now();
+		}
 		if (gameEvent.type === GameEvent.FATIGUE_DAMAGE) {
 			this.detectDamage(gameEvent, callback);
 			return;
@@ -41,16 +39,16 @@ export class KrippFatigue extends AbstractChallenge {
 
 	private detectDamage(gameEvent: GameEvent, callback: Function) {
 		const playerId = gameEvent.additionalData.playerId;
-        const opponentPlayer = gameEvent.opponentPlayer;
-        const totalDamage = gameEvent.additionalData.fatigueDamage;
-		if (playerId == opponentPlayer.Id) {
+		const opponentPlayer = gameEvent.opponentPlayer;
+		const totalDamage = gameEvent.additionalData.fatigueDamage;
+		if (playerId === opponentPlayer.Id) {
 			this.maxFatigueDamage = Math.max(this.maxFatigueDamage, totalDamage);
 		}
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		let winner = gameEvent.additionalData.winner;
-		let localPlayer = gameEvent.localPlayer;
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
 		if (localPlayer.Id === winner.Id) {
 			this.callback = callback;
 			this.handleCompletion();

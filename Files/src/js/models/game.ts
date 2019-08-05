@@ -1,5 +1,4 @@
 export class Game {
-
 	readonly fullLogs: string;
 	readonly matchInfo: any;
 	readonly gameMode: any;
@@ -18,4 +17,3 @@ export class Game {
 		return null;
 	}
 }
-

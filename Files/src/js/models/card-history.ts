@@ -1,5 +1,4 @@
 export class CardHistory {
-
 	readonly id: string;
 	readonly cardId: string;
 	readonly cardName: string;
@@ -10,7 +9,15 @@ export class CardHistory {
 	readonly relevantCount: number;
 	readonly creationTimestamp: number;
 
-	constructor(cardId: string, cardName: string, rarity: string, dustValue: number, isPremium: boolean, isNewCard: boolean, relevantCount: number) {
+	constructor(
+		cardId: string,
+		cardName: string,
+		rarity: string,
+		dustValue: number,
+		isPremium: boolean,
+		isNewCard: boolean,
+		relevantCount: number,
+	) {
 		this.cardId = cardId;
 		this.cardName = cardName;
 		this.rarity = rarity;

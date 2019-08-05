@@ -12,23 +12,22 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-        <button class="i-30 close-button" (mousedown)="closeWindow()">
-            <svg class="svg-icon-fill">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
-            </svg>
-        </button>
+		<button class="i-30 close-button" (mousedown)="closeWindow()">
+			<svg class="svg-icon-fill">
+				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+			</svg>
+		</button>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlCloseComponent implements AfterViewInit {
-
 	@Input() windowId: string;
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
-	
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -38,16 +37,15 @@ export class ControlCloseComponent implements AfterViewInit {
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
 		}
-        // If game is not running, we close all other windows
-        const isRunning: boolean = await this.ow.inGame();
-        if (this.closeAll && !isRunning) {
-            const openWindows = await this.ow.getOpenWindows();
-            for (const [name, window] of Object.entries(openWindows)) {
-                this.ow.closeWindowFromName(name);
-            }
-        }
-        else {
-            this.ow.hideWindow(this.windowId);
-        }
-	};
+		// If game is not running, we close all other windows
+		const isRunning: boolean = await this.ow.inGame();
+		if (this.closeAll && !isRunning) {
+			const openWindows = await this.ow.getOpenWindows();
+			for (const [name] of Object.entries(openWindows)) {
+				this.ow.closeWindowFromName(name);
+			}
+		} else {
+			this.ow.hideWindow(this.windowId);
+		}
+	}
 }

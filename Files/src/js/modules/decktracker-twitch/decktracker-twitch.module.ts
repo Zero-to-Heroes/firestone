@@ -1,4 +1,4 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -18,9 +18,9 @@ import { EmptyCardComponent } from '../../components/decktracker/overlay/twitch/
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 
 init({
-	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
+	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
 	enabled: process.env.NODE_ENV === 'production',
-	release: process.env.APP_VERSION
+	release: process.env.APP_VERSION,
 });
 
 console.log('version is', process.env.APP_VERSION);
@@ -28,29 +28,24 @@ console.log('version is', process.env.APP_VERSION);
 @NgModule({
 	imports: [
 		BrowserModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
 		SharedModule,
 		FormsModule,
-        ReactiveFormsModule,
-        SharedDeckTrackerModule,
-        DragDropModule,
-        AngularResizedEventModule,
+		ReactiveFormsModule,
+		SharedDeckTrackerModule,
+		DragDropModule,
+		AngularResizedEventModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [
-        DeckTrackerOverlayStandaloneComponent,
-        DeckTrackerOverlayContainerComponent,
+		DeckTrackerOverlayStandaloneComponent,
+		DeckTrackerOverlayContainerComponent,
 		DeckTrackerTwitchTitleBarComponent,
 		EmptyCardComponent,
 		StateMouseOverComponent,
 	],
-	bootstrap: [
-		DeckTrackerOverlayContainerComponent,
-	],
-	providers: [
-        Events,
-	],
+	bootstrap: [DeckTrackerOverlayContainerComponent],
+	providers: [Events],
 })
-
-export class DeckTrackerTwitchModule { }
+export class DeckTrackerTwitchModule {}

@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 
-
 declare var OverwolfPlugin: any;
 
 @Injectable()
 export class GameEventsPluginService {
-
 	private gameEventsPlugin: any;
-	initialized: boolean = false;
+	initialized = false;
 
 	constructor() {
-		this.gameEventsPlugin = new OverwolfPlugin("overwolf-replay-converter", true);
+		this.gameEventsPlugin = new OverwolfPlugin('overwolf-replay-converter', true);
 		this.initialize();
 	}
 
@@ -21,7 +19,7 @@ export class GameEventsPluginService {
 				console.error("[game-events] Plugin couldn't be loaded??");
 				return;
 			}
-			console.log("[game-events] Plugin " + this.gameEventsPlugin.get()._PluginName_ + " was loaded!");
+			console.log('[game-events] Plugin ' + this.gameEventsPlugin.get()._PluginName_ + ' was loaded!');
 			this.initialized = true;
 		});
 	}
@@ -32,18 +30,17 @@ export class GameEventsPluginService {
 	}
 
 	private waitForInit(): Promise<void> {
-		return new Promise<void>((resolve) => {
+		return new Promise<void>(resolve => {
 			const dbWait = () => {
 				// console.log('Promise waiting for db');
 				if (this.initialized) {
 					// console.log('wait for db init complete');
 					resolve();
-				} 
-				else {
+				} else {
 					// console.log('waiting for db init');
 					setTimeout(() => dbWait(), 50);
 				}
-			}
+			};
 			dbWait();
 		});
 	}

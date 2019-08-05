@@ -9,46 +9,45 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/settings/achievements/settings-achievements-sound-capture.component.scss`,
 	],
 	template: `
-        <div class="sound-capture">
-            <div class="title">Sound capture</div>
-            <div class="sound-capture-form">
-                <input type="checkbox" name="system-capture" id="system-capture-checkbox">
-                <label for="system-capture-checkbox" (mousedown)="toggleSystemSoundCapture($event)">
-                    <i class="unselected" *ngIf="!captureSystemSound">
-                        <svg>
-                            <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>
-                        </svg>
-                    </i>
-                    <i class="checked" *ngIf="captureSystemSound">
-                        <svg>
-                            <use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
-                        </svg>
-                    </i>
-                    <p>Capture system sound</p>
+		<div class="sound-capture">
+			<div class="title">Sound capture</div>
+			<div class="sound-capture-form">
+				<input type="checkbox" name="system-capture" id="system-capture-checkbox" />
+				<label for="system-capture-checkbox" (mousedown)="toggleSystemSoundCapture($event)">
+					<i class="unselected" *ngIf="!captureSystemSound">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+						</svg>
+					</i>
+					<i class="checked" *ngIf="captureSystemSound">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+						</svg>
+					</i>
+					<p>Capture system sound</p>
 				</label>
-				
-                <input type="checkbox" name="microphone-capture" id="microphone-capture-checkbox">
-                <label for="microphone-capture-checkbox" (mousedown)="toggleMicrophoneSoundCapture($event)">
-                    <i class="unselected" *ngIf="!captureMicrophoneSound">
-                        <svg>
-                            <use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box"/>
-                        </svg>
-                    </i>
-                    <i class="checked" *ngIf="captureMicrophoneSound">
-                        <svg>
-                            <use xlink:href="/Files/assets/svg/sprite.svg#checked_box"/>
-                        </svg>
-                    </i>
-                    <p>Capture microphone sound</p>
-                </label>
-            </div>
-            <a href="overwolf://settings/sound">Advanced sound settings</a>
-        </div>
+
+				<input type="checkbox" name="microphone-capture" id="microphone-capture-checkbox" />
+				<label for="microphone-capture-checkbox" (mousedown)="toggleMicrophoneSoundCapture($event)">
+					<i class="unselected" *ngIf="!captureMicrophoneSound">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#unchecked_box" />
+						</svg>
+					</i>
+					<i class="checked" *ngIf="captureMicrophoneSound">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#checked_box" />
+						</svg>
+					</i>
+					<p>Capture microphone sound</p>
+				</label>
+			</div>
+			<a href="overwolf://settings/sound">Advanced sound settings</a>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsAchievementsSoundCaptureComponent {
-	
 	captureSystemSound: boolean;
 	captureMicrophoneSound: boolean;
 
@@ -59,7 +58,7 @@ export class SettingsAchievementsSoundCaptureComponent {
 	toggleSystemSoundCapture(event) {
 		this.captureSystemSound = !this.captureSystemSound;
 		this.changeSoundCaptureSettings();
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -67,7 +66,7 @@ export class SettingsAchievementsSoundCaptureComponent {
 	toggleMicrophoneSoundCapture(event) {
 		this.captureMicrophoneSound = !this.captureMicrophoneSound;
 		this.changeSoundCaptureSettings();
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -83,7 +82,7 @@ export class SettingsAchievementsSoundCaptureComponent {
 		console.log('sound default values', result);
 		this.captureSystemSound = result.sound_enabled;
 		this.captureMicrophoneSound = result.microphone_enabled;
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash';
 
 import allAchievements from './achievements_list.json';
 
@@ -42,32 +42,30 @@ import { MonsterHuntPassivePlay } from './achievements/monster-hunt-passive-play
 import { AchievementCategory } from '../../models/achievement-category.js';
 import { ScenarioId } from '../../models/scenario-id.js';
 import { KrippFirstInstallmentSetProvider } from './achievement-sets/kripp/kripp-first-installment.js';
-import { KrippShirvallah } from './achievements/kripp/kripp-shirvallah.js';
-import { KrippCrazyDecksSetProvider } from './achievement-sets/kripp/kripp-crazy-decks.js';
-import { KrippSoloModeSetProvider } from './achievement-sets/kripp/kripp-solo-mode.js';
-import { KrippAmazingPlaysSetProvider } from './achievement-sets/kripp/kripp-amazing-plays.js';
-import { KrippPogo } from './achievements/kripp/kripp-pogo.js';
-import { KrippTreants } from './achievements/kripp/kripp-treants.js';
 import { DeckParserService } from '../decktracker/deck-parser.service.js';
-import { KrippClassic } from './achievements/kripp/kripp-classic.js';
-import { KrippGoblinBombs } from './achievements/kripp/kripp-goblin-bombs.js';
-import { KrippFatigue } from './achievements/kripp/kripp-fatigue.js';
-import { KrippArcaneMissiles } from './achievements/kripp/kripp-arcane-missiles.js';
-import { KrippRodOfRoasting } from './achievements/kripp/kripp-roasting.js';
-import { KrippOneHpRemaining } from './achievements/kripp/kripp-one-hp-remaining.js';
-import { KrippMassHysteria } from './achievements/kripp/kripp-mass-hysteria.js';
 import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure.js';
 import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive.js';
 import { DalaranHeistTreasurePlay } from './achievements/dalaran/dalran-heist-treasure-play.js';
 import { DalaranHeistPassivePlay } from './achievements/dalaran/dalaran-heist-passive-play.js';
 import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran-heist-boss.js';
 
-const DALARAN_HEIST_SCENARIOS = [ScenarioId.DALARAN_HEIST_CHAPTER_1, ScenarioId.DALARAN_HEIST_CHAPTER_2, ScenarioId.DALARAN_HEIST_CHAPTER_3, ScenarioId.DALARAN_HEIST_CHAPTER_4, ScenarioId.DALARAN_HEIST_CHAPTER_5];
-const DALARAN_HEIST_HEROIC_SCENARIOS = [ScenarioId.DALARAN_HEIST_CHAPTER_1_HEROIC, ScenarioId.DALARAN_HEIST_CHAPTER_2_HEROIC, ScenarioId.DALARAN_HEIST_CHAPTER_3_HEROIC, ScenarioId.DALARAN_HEIST_CHAPTER_4_HEROIC, ScenarioId.DALARAN_HEIST_CHAPTER_5_HEROIC];
+const DALARAN_HEIST_SCENARIOS = [
+	ScenarioId.DALARAN_HEIST_CHAPTER_1,
+	ScenarioId.DALARAN_HEIST_CHAPTER_2,
+	ScenarioId.DALARAN_HEIST_CHAPTER_3,
+	ScenarioId.DALARAN_HEIST_CHAPTER_4,
+	ScenarioId.DALARAN_HEIST_CHAPTER_5,
+];
+const DALARAN_HEIST_HEROIC_SCENARIOS = [
+	ScenarioId.DALARAN_HEIST_CHAPTER_1_HEROIC,
+	ScenarioId.DALARAN_HEIST_CHAPTER_2_HEROIC,
+	ScenarioId.DALARAN_HEIST_CHAPTER_3_HEROIC,
+	ScenarioId.DALARAN_HEIST_CHAPTER_4_HEROIC,
+	ScenarioId.DALARAN_HEIST_CHAPTER_5_HEROIC,
+];
 
 @Injectable()
 export class AchievementsRepository {
-
 	public modulesLoaded = new BehaviorSubject<boolean>(false);
 	public challengeModules: Challenge[] = [];
 
@@ -76,11 +74,12 @@ export class AchievementsRepository {
 	private categories: AchievementCategory[] = [];
 
 	constructor(
-			private storage: AchievementsStorageService,
-			private cards: AllCardsService,
-			private conf: AchievementConfService,
-			private deckParser: DeckParserService,
-			private events: Events) {
+		private storage: AchievementsStorageService,
+		private cards: AllCardsService,
+		private conf: AchievementConfService,
+		private deckParser: DeckParserService,
+		private events: Events,
+	) {
 		this.registerModules();
 		this.modulesLoaded.next(true);
 	}
@@ -91,8 +90,9 @@ export class AchievementsRepository {
 
 	public async loadAggregatedAchievements(): Promise<AchievementSet[]> {
 		const completedAchievements: CompletedAchievement[] = await this.storage.loadAchievements();
-		const achievementSets: AchievementSet[] = this.setProviders
-				.map((provider) => provider.provide(this.allAchievements, completedAchievements));
+		const achievementSets: AchievementSet[] = this.setProviders.map(provider =>
+			provider.provide(this.allAchievements, completedAchievements),
+		);
 		return achievementSets;
 	}
 
@@ -103,7 +103,7 @@ export class AchievementsRepository {
 	private registerModules() {
 		// Create challenges
 		// console.log('achievemnt types', this.achievementTypes());
-		this.achievementTypes().forEach((achievementType) => {
+		this.achievementTypes().forEach(achievementType => {
 			this.createChallenge(achievementType.type, achievementType.challengeCreationFn);
 		});
 		// Initialize set providers
@@ -140,124 +140,171 @@ export class AchievementsRepository {
 			rumbleRunProgressionProvider,
 			rumbleRunShrinePlayProvider,
 			rumbleRunTeammateProvider,
-            rumbleRunPassiveProvider,
-            dalaranHeistPassiveProvider,
-            dalaranHeistTreasureProvider,
-            dalaranHeistBossProvider,
-            krippFirstInstallment,
-            // krippCrazyDecksProvider,
-            // krippSoloModeProvider,
-            // krippAmazingPlaysProvider,
+			rumbleRunPassiveProvider,
+			dalaranHeistPassiveProvider,
+			dalaranHeistTreasureProvider,
+			dalaranHeistBossProvider,
+			krippFirstInstallment,
+			// krippCrazyDecksProvider,
+			// krippSoloModeProvider,
+			// krippAmazingPlaysProvider,
 		];
-		const krippCategory = new AchievementCategory(
-			'kripp',
-			'Kripp',
-			'kripp',
-			[
-				krippFirstInstallment.id,
-				// krippCrazyDecksProvider.id,
-				// krippSoloModeProvider.id,
-				// krippAmazingPlaysProvider.id,
-			]
-		);
+		// const krippCategory = new AchievementCategory(
+		// 	'kripp',
+		// 	'Kripp',
+		// 	'kripp',
+		// 	[
+		// 		krippFirstInstallment.id,
+		// 		// krippCrazyDecksProvider.id,
+		// 		// krippSoloModeProvider.id,
+		// 		// krippAmazingPlaysProvider.id,
+		// 	]
+		// );
 		this.categories = [
-			new AchievementCategory(
-				'dungeon_run',
-				'Dungeon Run',
-				'dungeon_run',
-				[
-					dungeonRunProgressionProvider.id,
-					dungeonRunBossProvider.id,
-					dungeonRunTreasureProvider.id,
-					dungeonRunPassivesProvider.id,
-				]
-			),
-			new AchievementCategory(
-				'monster_hunt',
-				'Monster Hunt',
-				'monster_hunt',
-				[
-					monsterHuntProgressProvider.id,
-					monsterHuntBossProvider.id,
-					monsterHuntTreasureProvider.id,
-					monsterHuntPassiveProvider.id,
-				]
-			),
-			new AchievementCategory(
-				'rumble_run',
-				'Rumble Run',
-				'rumble_run',
-				[
-					rumbleRunProgressionProvider.id,
-					rumbleRunShrinePlayProvider.id,
-					rumbleRunTeammateProvider.id,
-					rumbleRunPassiveProvider.id,
-				]
-			),
-			new AchievementCategory(
-				'dalaran_heist',
-				'Dalaran Heist',
-				'dalaran_heist',
-				[
-					dalaranHeistPassiveProvider.id,
-                    dalaranHeistTreasureProvider.id,
-                    dalaranHeistBossProvider.id,
-				]
-			),
+			new AchievementCategory('dungeon_run', 'Dungeon Run', 'dungeon_run', [
+				dungeonRunProgressionProvider.id,
+				dungeonRunBossProvider.id,
+				dungeonRunTreasureProvider.id,
+				dungeonRunPassivesProvider.id,
+			]),
+			new AchievementCategory('monster_hunt', 'Monster Hunt', 'monster_hunt', [
+				monsterHuntProgressProvider.id,
+				monsterHuntBossProvider.id,
+				monsterHuntTreasureProvider.id,
+				monsterHuntPassiveProvider.id,
+			]),
+			new AchievementCategory('rumble_run', 'Rumble Run', 'rumble_run', [
+				rumbleRunProgressionProvider.id,
+				rumbleRunShrinePlayProvider.id,
+				rumbleRunTeammateProvider.id,
+				rumbleRunPassiveProvider.id,
+			]),
+			new AchievementCategory('dalaran_heist', 'Dalaran Heist', 'dalaran_heist', [
+				dalaranHeistPassiveProvider.id,
+				dalaranHeistTreasureProvider.id,
+				dalaranHeistBossProvider.id,
+			]),
 			// krippCategory,
-		]
+		];
 		// Create all the achievements
-		this.allAchievements = (<any>allAchievements)
-			.map((achievement) => new Achievement(
-				achievement.id,
-				achievement.name,
-				achievement.text,
-				achievement.type,
-				achievement.bossId || achievement.cardId || (achievement.cardIds && achievement.cardIds[0]),
-				achievement.cardType,
-				achievement.secondaryCardId,
-				achievement.secodaryCardType,
-				achievement.difficulty,
-				0,
-                []));
+		this.allAchievements = (allAchievements as any).map(
+			achievement =>
+				new Achievement(
+					achievement.id,
+					achievement.name,
+					achievement.text,
+					achievement.type,
+					achievement.bossId || achievement.cardId || (achievement.cardIds && achievement.cardIds[0]),
+					achievement.cardType,
+					achievement.secondaryCardId,
+					achievement.secodaryCardType,
+					achievement.difficulty,
+					0,
+					[],
+				),
+		);
 		// Create the achievement sets
-		this.loadAggregatedAchievements().then((result) => console.log('loaded aggregated achievements'));
+		this.loadAggregatedAchievements().then(() => console.log('loaded aggregated achievements'));
 		console.log('[achievements] modules registered');
 	}
 
 	private createChallenge(achievementType: string, challengeCreationFn: Function) {
-		(<any>allAchievements)
-			.filter((achievement) => achievement.type === achievementType)
+		(allAchievements as any)
+			.filter(achievement => achievement.type === achievementType)
 			.map(achievement => challengeCreationFn(achievement))
-			.map((challenge) => {
+			.map(challenge => {
 				this.challengeModules.push(challenge);
 			});
 	}
 
 	private achievementTypes() {
 		return [
-			{ type: 'dungeon_run_progression', challengeCreationFn: (achievement) => new DungeonRunProgression(achievement, ScenarioId.DUNGEON_RUN, this.events) },
-			{ type: 'dungeon_run_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, [ScenarioId.DUNGEON_RUN], this.events) },
-			{ type: 'dungeon_run_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, [ScenarioId.DUNGEON_RUN], this.events) },
-			{ type: 'dungeon_run_treasure_play', challengeCreationFn: (achievement) => new DungeonRunTreasurePlay(achievement, ScenarioId.DUNGEON_RUN, this.events) },
-			{ type: 'dungeon_run_passive_play', challengeCreationFn: (achievement) => new DungeonRunPassivePlay(achievement, ScenarioId.DUNGEON_RUN, this.events) },
-			{ type: 'monster_hunt_progression', challengeCreationFn: (achievement) => new MonsterHuntProgression(achievement, ScenarioId.MONSTER_HUNT, this.events) },
-			{ type: 'monster_hunt_final_boss', challengeCreationFn: (achievement) => new BossVictory(achievement, [ScenarioId.MONSTER_HUNT], this.events) },
-			{ type: 'monster_hunt_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, [ScenarioId.MONSTER_HUNT], this.events) },
-			{ type: 'monster_hunt_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, [ScenarioId.MONSTER_HUNT], this.events) },
-			{ type: 'monster_hunt_treasure_play', challengeCreationFn: (achievement) => new MonsterHuntTreasurePlay(achievement, ScenarioId.MONSTER_HUNT, this.events) },
-			{ type: 'monster_hunt_passive_play', challengeCreationFn: (achievement) => new MonsterHuntPassivePlay(achievement, ScenarioId.MONSTER_HUNT, this.events) },
-			{ type: 'rumble_run_progression', challengeCreationFn: (achievement) => new RumbleProgression(achievement, ScenarioId.RUMBLE_RUN, this.events) },
-			{ type: 'rumble_run_shrine_play', challengeCreationFn: (achievement) => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
-			{ type: 'rumble_run_teammate_play', challengeCreationFn: (achievement) => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
-            { type: 'rumble_run_passive_play', challengeCreationFn: (achievement) => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events) },
-            { type: 'dalaran_heist_treasure_play', challengeCreationFn: (achievement) => new DalaranHeistTreasurePlay(achievement, [...DALARAN_HEIST_SCENARIOS, ...DALARAN_HEIST_HEROIC_SCENARIOS], this.events) },
-            { type: 'dalaran_heist_passive_play', challengeCreationFn: (achievement) => new DalaranHeistPassivePlay(achievement, [...DALARAN_HEIST_SCENARIOS, ...DALARAN_HEIST_HEROIC_SCENARIOS], this.events) },
-            { type: 'dalaran_heist_boss_encounter', challengeCreationFn: (achievement) => new BossEncounter(achievement, DALARAN_HEIST_SCENARIOS, this.events) },
-			{ type: 'dalaran_heist_boss_victory', challengeCreationFn: (achievement) => new BossVictory(achievement, DALARAN_HEIST_SCENARIOS, this.events) },
-			{ type: 'dalaran_heist_boss_encounter_heroic', challengeCreationFn: (achievement) => new BossEncounter(achievement, DALARAN_HEIST_HEROIC_SCENARIOS, this.events) },
-			{ type: 'dalaran_heist_boss_victory_heroic', challengeCreationFn: (achievement) => new BossVictory(achievement, DALARAN_HEIST_HEROIC_SCENARIOS, this.events) },
-			
+			{
+				type: 'dungeon_run_progression',
+				challengeCreationFn: achievement => new DungeonRunProgression(achievement, ScenarioId.DUNGEON_RUN, this.events),
+			},
+			{
+				type: 'dungeon_run_boss_encounter',
+				challengeCreationFn: achievement => new BossEncounter(achievement, [ScenarioId.DUNGEON_RUN], this.events),
+			},
+			{
+				type: 'dungeon_run_boss_victory',
+				challengeCreationFn: achievement => new BossVictory(achievement, [ScenarioId.DUNGEON_RUN], this.events),
+			},
+			{
+				type: 'dungeon_run_treasure_play',
+				challengeCreationFn: achievement => new DungeonRunTreasurePlay(achievement, ScenarioId.DUNGEON_RUN, this.events),
+			},
+			{
+				type: 'dungeon_run_passive_play',
+				challengeCreationFn: achievement => new DungeonRunPassivePlay(achievement, ScenarioId.DUNGEON_RUN, this.events),
+			},
+			{
+				type: 'monster_hunt_progression',
+				challengeCreationFn: achievement => new MonsterHuntProgression(achievement, ScenarioId.MONSTER_HUNT, this.events),
+			},
+			{
+				type: 'monster_hunt_final_boss',
+				challengeCreationFn: achievement => new BossVictory(achievement, [ScenarioId.MONSTER_HUNT], this.events),
+			},
+			{
+				type: 'monster_hunt_boss_encounter',
+				challengeCreationFn: achievement => new BossEncounter(achievement, [ScenarioId.MONSTER_HUNT], this.events),
+			},
+			{
+				type: 'monster_hunt_boss_victory',
+				challengeCreationFn: achievement => new BossVictory(achievement, [ScenarioId.MONSTER_HUNT], this.events),
+			},
+			{
+				type: 'monster_hunt_treasure_play',
+				challengeCreationFn: achievement => new MonsterHuntTreasurePlay(achievement, ScenarioId.MONSTER_HUNT, this.events),
+			},
+			{
+				type: 'monster_hunt_passive_play',
+				challengeCreationFn: achievement => new MonsterHuntPassivePlay(achievement, ScenarioId.MONSTER_HUNT, this.events),
+			},
+			{
+				type: 'rumble_run_progression',
+				challengeCreationFn: achievement => new RumbleProgression(achievement, ScenarioId.RUMBLE_RUN, this.events),
+			},
+			{
+				type: 'rumble_run_shrine_play',
+				challengeCreationFn: achievement => new ShrinePlay(achievement, ScenarioId.RUMBLE_RUN, this.events),
+			},
+			{
+				type: 'rumble_run_teammate_play',
+				challengeCreationFn: achievement => new RumbleTeammatePlay(achievement, ScenarioId.RUMBLE_RUN, this.events),
+			},
+			{
+				type: 'rumble_run_passive_play',
+				challengeCreationFn: achievement => new RumblePassivePlay(achievement, ScenarioId.RUMBLE_RUN, this.events),
+			},
+			{
+				type: 'dalaran_heist_treasure_play',
+				challengeCreationFn: achievement =>
+					new DalaranHeistTreasurePlay(achievement, [...DALARAN_HEIST_SCENARIOS, ...DALARAN_HEIST_HEROIC_SCENARIOS], this.events),
+			},
+			{
+				type: 'dalaran_heist_passive_play',
+				challengeCreationFn: achievement =>
+					new DalaranHeistPassivePlay(achievement, [...DALARAN_HEIST_SCENARIOS, ...DALARAN_HEIST_HEROIC_SCENARIOS], this.events),
+			},
+			{
+				type: 'dalaran_heist_boss_encounter',
+				challengeCreationFn: achievement => new BossEncounter(achievement, DALARAN_HEIST_SCENARIOS, this.events),
+			},
+			{
+				type: 'dalaran_heist_boss_victory',
+				challengeCreationFn: achievement => new BossVictory(achievement, DALARAN_HEIST_SCENARIOS, this.events),
+			},
+			{
+				type: 'dalaran_heist_boss_encounter_heroic',
+				challengeCreationFn: achievement => new BossEncounter(achievement, DALARAN_HEIST_HEROIC_SCENARIOS, this.events),
+			},
+			{
+				type: 'dalaran_heist_boss_victory_heroic',
+				challengeCreationFn: achievement => new BossVictory(achievement, DALARAN_HEIST_HEROIC_SCENARIOS, this.events),
+			},
 
 			// { type: 'kripp_achievements_1_shirvallah', challengeCreationFn: (achievement) => new KrippShirvallah(achievement, this.events) },
 			// { type: 'kripp_achievements_1_pogo_hopper', challengeCreationFn: (achievement) => new KrippPogo(achievement, this.events) },

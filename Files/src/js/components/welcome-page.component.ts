@@ -5,10 +5,7 @@ import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
 	selector: 'welcome-page',
-	styleUrls: [
-		`../../css/global/components-global.scss`,
-		`../../css/component/welcome-page.component.scss`
-	],
+	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/welcome-page.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="root">
@@ -16,7 +13,7 @@ import { OverwolfService } from '../services/overwolf.service';
 				<section class="menu-bar">
 					<i class="i-117X33 gold-theme logo">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#logo"/>
+							<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
 						</svg>
 					</i>
 					<div class="controls">
@@ -34,22 +31,22 @@ import { OverwolfService } from '../services/overwolf.service';
 
 			<i class="i-54 gold-theme corner top-left">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner top-right">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner bottom-right">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner bottom-left">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 		</div>
@@ -57,19 +54,18 @@ import { OverwolfService } from '../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WelcomePageComponent implements AfterViewInit {
-
 	thisWindowId: string;
 
-	constructor(private debugService: DebugService, private ow: OverwolfService) { }
+	constructor(private debugService: DebugService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
-        this.thisWindowId = (await this.ow.getCurrentWindow()).id;
-        this.ow.addMessageReceivedListener(async (message) => {
+		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
+		this.ow.addMessageReceivedListener(async message => {
 			if (message.id === 'move') {
-                const window = await this.ow.getCurrentWindow();
-                const newX = message.content.x - window.width / 2;
-                const newY = message.content.y - window.height / 2;
-                this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
+				const window = await this.ow.getCurrentWindow();
+				const newX = message.content.x - window.width / 2;
+				const newY = message.content.y - window.height / 2;
+				this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 			}
 		});
 	}
@@ -77,9 +73,9 @@ export class WelcomePageComponent implements AfterViewInit {
 	@HostListener('mousedown', ['$event'])
 	dragMove(event: MouseEvent) {
 		this.ow.dragMove(this.thisWindowId);
-	};
+	}
 
 	hideWindow() {
 		this.ow.hideWindow(this.thisWindowId);
-	};
+	}
 }

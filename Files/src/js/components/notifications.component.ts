@@ -1,4 +1,13 @@
-import { Component, AfterViewInit, ElementRef, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, EventEmitter } from '@angular/core';
+import {
+	Component,
+	AfterViewInit,
+	ElementRef,
+	ViewEncapsulation,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	ViewRef,
+	EventEmitter,
+} from '@angular/core';
 
 import { NotificationsService, Notification, NotificationType } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
@@ -17,25 +26,21 @@ import { OverwolfService } from '../services/overwolf.service';
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="notifications">
-			<simple-notifications 
-				[options]="toastOptions" 
-				(onCreate)="created($event)" 
-				(onDestroy)="destroyed($event)">
+			<simple-notifications [options]="toastOptions" (onCreate)="created($event)" (onDestroy)="destroyed($event)">
 			</simple-notifications>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationsComponent implements AfterViewInit {
-
 	timeout = 20000;
 	// timeout = 999999999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
 		showProgressBar: false,
-		maxStack: 5
-	}
+		maxStack: 5,
+	};
 
 	private windowId: string;
 	private mainWindowId: string;
@@ -45,20 +50,20 @@ export class NotificationsComponent implements AfterViewInit {
 	constructor(
 		private notificationService: NotificationsService,
 		private cdr: ChangeDetectorRef,
-        private debugService: DebugService, 
-        private ow: OverwolfService,
-		private elRef: ElementRef) {
-	}
+		private debugService: DebugService,
+		private ow: OverwolfService,
+		private elRef: ElementRef,
+	) {}
 
 	async ngAfterViewInit() {
-        this.cdr.detach();
-        this.ow.addMessageReceivedListener((message) => {
-            console.log('received message in notification window', message);
-			let messageObject = JSON.parse(message.content);
+		this.cdr.detach();
+		this.ow.addMessageReceivedListener(message => {
+			console.log('received message in notification window', message);
+			const messageObject = JSON.parse(message.content);
 			this.sendNotification(messageObject);
 		});
-        this.windowId = (await this.ow.getCurrentWindow()).id;
-        this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
@@ -69,8 +74,7 @@ export class NotificationsComponent implements AfterViewInit {
 
 	destroyed(event) {
 		console.log('notif destroyed', event, this.notificationService, this.activeNotifications);
-		this.activeNotifications = this.activeNotifications
-				.filter((notif) => notif.toast.id != event.id);
+		this.activeNotifications = this.activeNotifications.filter(notif => notif.toast.id !== event.id);
 		this.resize();
 	}
 
@@ -81,23 +85,22 @@ export class NotificationsComponent implements AfterViewInit {
 			}, 100);
 			return;
 		}
-		const activeNotif = this.activeNotifications.find((notif) => notif.cardId === messageObject.cardId);
+		const activeNotif = this.activeNotifications.find(notif => notif.cardId === messageObject.cardId);
 		const notification = this.elRef.nativeElement.querySelector('.' + messageObject.cardId);
 		if (messageObject.type === 'achievement-confirm' && notification && activeNotif) {
 			this.confirmAchievement(messageObject.cardId, notification);
-		}
-		else {
+		} else {
 			this.showNotification(messageObject);
 		}
 	}
 
 	private confirmAchievement(cardId: string, notification) {
 		console.log('in confirm achievement', cardId);
-		const activeNotif = this.activeNotifications.find((notif) => notif.cardId === cardId);
+		const activeNotif = this.activeNotifications.find(notif => notif.cardId === cardId);
 		const toast = activeNotif.toast;
 		console.log('active notif found', activeNotif, toast);
 		toast.theClass = 'active';
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 		console.log('got notif', notification);
@@ -106,97 +109,95 @@ export class NotificationsComponent implements AfterViewInit {
 	}
 
 	private async showNotification(messageObject) {
-        console.log('showing notification', messageObject);
+		console.log('showing notification', messageObject);
 		const htmlMessage: string = messageObject.content;
 		const cardId: string = messageObject.cardId;
 		const type: string = messageObject.type;
-        const additionalTimeout: string = messageObject.timeout || 0;
-        await this.ow.restoreWindow(this.windowId);
-        const override: any = {
-            timeout: this.timeout + additionalTimeout,
-            clickToClose: true 
-        };
-        if (type === 'achievement-pre-record') {
-            override.clickToClose = false;
-        }
-        let toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
-        toast.theClass = messageObject.theClass;
-        if (!(<ViewRef>this.cdr).destroyed) {
-            this.cdr.detectChanges();
-        }
-        // console.log('running toast message in zone', toast);
-        toast.click.subscribe((event: MouseEvent) => {
-            console.log('registered click on toast', event, toast);
-            if (!(<ViewRef>this.cdr).destroyed) {
-                this.cdr.detectChanges();
-            }
-            let currentElement: any = event.srcElement;
-            // Clicked on close, don't show the card
-            if (currentElement.className.indexOf("close") !== -1) {
-                // Force close if it's not configured to auto close
-                if (override.clickToClose === false) {
-                    this.notificationService.remove(toast.id);
-                }
-                // this.notificationService.remove(toast.id);
-                return;
-            }
-            // Clicked on settings, don't show the card and don't close
-            if (currentElement.className.indexOf("open-settings") !== -1) {
-                event.preventDefault();
-                event.stopPropagation();
-                this.showSettings();
-                return;
-            }
-            while (!currentElement.classList.contains("unclickable") && currentElement.parentElement) {
-                currentElement = currentElement.parentElement;
-            }
-            if (currentElement.classList.contains("unclickable")) {
-                currentElement.classList.add("shake");
-                setTimeout(() => {
-                    currentElement.classList.remove("shake");
-                }, 500);
-            }
-            if (cardId) {
-                const isAchievement = type === 'achievement-pre-record' || type === 'achievement-confirm';
-                const isActiveAchievement = (type === 'achievement-pre-record' && toast.theClass === 'active')
-                        || type === 'achievement-confirm';
-                if (isActiveAchievement) {
-                    console.log('sending message', this.mainWindowId);
-                    this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
-                    this.notificationService.remove(toast.id);
-                }
-                // Collection
-                else if (!isAchievement) {
-                    this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
-                }
-            }
-        });
+		const additionalTimeout: string = messageObject.timeout || 0;
+		await this.ow.restoreWindow(this.windowId);
+		const override: any = {
+			timeout: this.timeout + additionalTimeout,
+			clickToClose: true,
+		};
+		if (type === 'achievement-pre-record') {
+			override.clickToClose = false;
+		}
+		const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
+		toast.theClass = messageObject.theClass;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+		// console.log('running toast message in zone', toast);
+		toast.click.subscribe((event: MouseEvent) => {
+			console.log('registered click on toast', event, toast);
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+			let currentElement: any = event.srcElement;
+			// Clicked on close, don't show the card
+			if (currentElement.className.indexOf('close') !== -1) {
+				// Force close if it's not configured to auto close
+				if (override.clickToClose === false) {
+					this.notificationService.remove(toast.id);
+				}
+				// this.notificationService.remove(toast.id);
+				return;
+			}
+			// Clicked on settings, don't show the card and don't close
+			if (currentElement.className.indexOf('open-settings') !== -1) {
+				event.preventDefault();
+				event.stopPropagation();
+				this.showSettings();
+				return;
+			}
+			while (!currentElement.classList.contains('unclickable') && currentElement.parentElement) {
+				currentElement = currentElement.parentElement;
+			}
+			if (currentElement.classList.contains('unclickable')) {
+				currentElement.classList.add('shake');
+				setTimeout(() => {
+					currentElement.classList.remove('shake');
+				}, 500);
+			}
+			if (cardId) {
+				const isAchievement = type === 'achievement-pre-record' || type === 'achievement-confirm';
+				const isActiveAchievement =
+					(type === 'achievement-pre-record' && toast.theClass === 'active') || type === 'achievement-confirm';
+				if (isActiveAchievement) {
+					console.log('sending message', this.mainWindowId);
+					this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
+					this.notificationService.remove(toast.id);
+				} else if (!isAchievement) {
+					this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
+				}
+			}
+		});
 
-        const activeNotif: ActiveNotification = {
-            toast: toast,
-            cardId: cardId,
-            type: type
-        };
-        this.activeNotifications.push(activeNotif);
+		const activeNotif: ActiveNotification = {
+			toast: toast,
+			cardId: cardId,
+			type: type,
+		};
+		this.activeNotifications.push(activeNotif);
 	}
 
 	private resize() {
 		setTimeout(async () => {
 			const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			const height = wrapper.getBoundingClientRect().height + 20;
-            const width = 500;
-            const gameInfo = await this.ow.getRunningGameInfo();
-            if (!gameInfo) {
-                return;
-            }
-            const gameWidth = gameInfo.logicalWidth;
-            const gameHeight = gameInfo.logicalHeight;
-            const dpi = gameWidth / gameInfo.width;
-            await this.ow.changeWindowSize(this.windowId, width, height);
-            // https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-            const newLeft = ~~(gameWidth - width * dpi);
-            const newTop = ~~(gameHeight - height * dpi - 10);
-            await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+			const width = 500;
+			const gameInfo = await this.ow.getRunningGameInfo();
+			if (!gameInfo) {
+				return;
+			}
+			const gameWidth = gameInfo.logicalWidth;
+			const gameHeight = gameInfo.logicalHeight;
+			const dpi = gameWidth / gameInfo.width;
+			await this.ow.changeWindowSize(this.windowId, width, height);
+			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+			const newLeft = ~~(gameWidth - width * dpi);
+			const newTop = ~~(gameHeight - height * dpi - 10);
+			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		});
 	}
 
@@ -212,11 +213,11 @@ export class NotificationsComponent implements AfterViewInit {
 	// 		}
 	// 	});
 	// }
-	
+
 	private async showSettings() {
-        console.log('showing settings');
-        const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
-        await this.ow.restoreWindow(window.id);
+		console.log('showing settings');
+		const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
+		await this.ow.restoreWindow(window.id);
 	}
 }
 

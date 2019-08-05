@@ -11,7 +11,6 @@ import { AchievementHistoryStorageService } from '../../achievement/achievement-
 @Injectable()
 // Used so that events have easy access to injected services
 export class CollaboratorsService {
-
 	constructor(
 		public cards: AllCardsService,
 		public achievementsRepository: AchievementsRepository,
@@ -20,6 +19,6 @@ export class CollaboratorsService {
 		public achievementsStorage: AchievementsStorageService,
 		public achievementHistoryStorage: AchievementHistoryStorageService,
 		public io: SimpleIOService,
-		public pityTimer: PackHistoryService) {
-	}
+		public pityTimer: PackHistoryService,
+	) {}
 }

@@ -1,11 +1,9 @@
-import { AbstractChallenge } from "../abstract-challenge";
-import { GameEvent } from "../../../../models/game-event";
-import { Events } from "../../../events.service";
-import { GameType } from "../../../../models/enums/game-type";
-
+import { AbstractChallenge } from '../abstract-challenge';
+import { GameEvent } from '../../../../models/game-event';
+import { Events } from '../../../events.service';
+import { GameType } from '../../../../models/enums/game-type';
 
 export class KrippOneHpRemaining extends AbstractChallenge {
-
 	private readonly cardId: string;
 
 	private currentTurnStartTime: number;
@@ -20,7 +18,7 @@ export class KrippOneHpRemaining extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.TURN_START) {
+		if (gameEvent.type === GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}
@@ -38,9 +36,9 @@ export class KrippOneHpRemaining extends AbstractChallenge {
 		const winner = gameEvent.additionalData.winner;
 		const localPlayer = gameEvent.localPlayer;
 		const gameState = gameEvent.additionalData.report;
-		const hpLeft = (gameState.LocalPlayer.TotalHealth - gameState.LocalPlayer.DamageTaken);
+		const hpLeft = gameState.LocalPlayer.TotalHealth - gameState.LocalPlayer.DamageTaken;
 		const armorLeft = gameState.LocalPlayer.ArmorLeft;
-		if (localPlayer.Id === winner.Id && armorLeft == 0 && hpLeft == 1) {
+		if (localPlayer.Id === winner.Id && armorLeft === 0 && hpLeft === 1) {
 			this.callback = callback;
 			this.handleCompletion();
 		}

@@ -10,21 +10,25 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],
 	template: `
-		<div class="deck-card {{rarity}} {{highlight}}">
+		<div class="deck-card {{ rarity }} {{ highlight }}">
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
-			<div class="mana-cost"><span>{{manaCost === undefined ? '?' : manaCost}}</span></div>
-			<div class="card-name"><span>{{cardName}}</span></div>
+			<div class="mana-cost">
+				<span>{{ manaCost === undefined ? '?' : manaCost }}</span>
+			</div>
+			<div class="card-name">
+				<span>{{ cardName }}</span>
+			</div>
 			<div class="number-of-copies" *ngIf="numberOfCopies > 1">
 				<div class="inner-border">
-					<span>{{numberOfCopies}}</span>
+					<span>{{ numberOfCopies }}</span>
 				</div>
 			</div>
 			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
 				<div class="inner-border">
 					<i>
 						<svg>
-							<use xlink:href="assets/svg/sprite.svg#legendary_star"/>
+							<use xlink:href="assets/svg/sprite.svg#legendary_star" />
 						</svg>
 					</i>
 				</div>
@@ -35,7 +39,6 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckCardComponent {
-
 	_activeTooltip: string;
 	cardId: string;
 	cardImage: string;
@@ -45,13 +48,11 @@ export class DeckCardComponent {
 	numberOfCopies: number;
 	highlight: string;
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {
-
-	}
+	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
 
 	@Input('activeTooltip') set activeTooltip(activeTooltip: string) {
 		this._activeTooltip = activeTooltip;
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 		// console.log('setting active tooltip', this.cardId, this._activeTooltip);
@@ -72,7 +73,7 @@ export class DeckCardComponent {
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		let rect = this.el.nativeElement.getBoundingClientRect();
+		const rect = this.el.nativeElement.getBoundingClientRect();
 		// console.log('on mouse enter', rect);
 		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
 	}

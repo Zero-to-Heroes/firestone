@@ -6,16 +6,15 @@ declare var parseCardsText: any;
 
 @Injectable()
 export class AllCardsService {
-
 	private readonly STANDARD_SETS = [
 		['core', 'Basic'],
 		['expert1', 'Classic'],
 		['gilneas', 'The Witchwood'],
 		['boomsday', 'The Boomsday Project'],
-		['troll', 'Rastakhan\'s Rumble'],
+		['troll', "Rastakhan's Rumble"],
 		['dalaran', 'Rise of Shadows'],
 		['uldum', 'Saviors of Uldum'],
-	]
+	];
 
 	private readonly WILD_SETS = [
 		['naxx', 'Naxxramas'],
@@ -27,20 +26,27 @@ export class AllCardsService {
 		['og', 'Whispers of the Old Gods'],
 		['kara', 'One Night in Karazhan'],
 		['gangs', 'Mean Streets of Gadgetzan'],
-		['ungoro', 'Journey to Un\'Goro'],
+		['ungoro', "Journey to Un'Goro"],
 		['icecrown', 'Knights of the Frozen Throne'],
 		['lootapalooza', 'Kobolds and Catacombs'],
-	]
+	];
 
 	// I can't find anything in the card data that sets these apart
 	private readonly NON_COLLECTIBLE_HEROES = [
-		'HERO_01', 'HERO_02', 'HERO_03', 'HERO_04', 'HERO_05', 'HERO_06', 'HERO_07', 'HERO_08', 'HERO_09',
+		'HERO_01',
+		'HERO_02',
+		'HERO_03',
+		'HERO_04',
+		'HERO_05',
+		'HERO_06',
+		'HERO_07',
+		'HERO_08',
+		'HERO_09',
 	];
-	
-    public getSetIds(): string[] {
-		return this.STANDARD_SETS.concat(this.WILD_SETS)
-				.map(([setId, setName]) => setId);
-    }
+
+	public getSetIds(): string[] {
+		return this.STANDARD_SETS.concat(this.WILD_SETS).map(([setId]) => setId);
+	}
 
 	public getStandardSets(): Set[] {
 		return this.getSets(this.STANDARD_SETS, true);
@@ -57,81 +63,78 @@ export class AllCardsService {
 	public getRarities(setId: string): string[] {
 		if (setId === 'core') {
 			return ['free'];
-		}
-		else {
+		} else {
 			return ['common', 'rare', 'epic', 'legendary'];
 		}
 	}
 
 	public searchCards(searchString: string): SetCard[] {
-        if (!searchString) return [];
+		if (!searchString) {
+			return [];
+		}
 
-        const filterFunctions = [];
-        
-        const fragments = searchString.indexOf(' ') !== -1
-                ? searchString.split(' ')
-                : [searchString];
-        let nameSearch = searchString;
-        let collectibleOnly: boolean = true;
-        for (let fragment of fragments) {
-            if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
-                const textToFind = searchString.split('text:')[1];
-                filterFunctions.push((card) => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1);
-            }
-            // Include non-collectible
-            if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'all') {
-                collectibleOnly = false;
-                nameSearch = nameSearch.replace(/cards:all\s?/, '');
-            }
-        }
-        nameSearch = nameSearch.trim().toLowerCase();
-        // Default filtering based on name
-        if (filterFunctions.length === 0) {
-            filterFunctions.push((card) => card.name && card.name.toLowerCase().indexOf(nameSearch) != -1);
-        }
+		const filterFunctions = [];
 
-        const basicFiltered = collectibleOnly 
-                ? parseCardsText.jsonDatabase
-                        .filter((card) => card.collectible)
-                        .filter((card) => card.set != 'Hero_skins')
-                        .filter((card) => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) == -1)
-                : parseCardsText.jsonDatabase;
-        return filterFunctions
-                .reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
-                .map((card) => {
-                    let cardName = card.name;
-                    if (card.type == 'Hero') {
-                        cardName += ' (Hero)';
-                    }
-                    const rarity = card.rarity ? card.rarity.toLowerCase() : '';
-                    return new SetCard(card.id, cardName, card.playerClass, rarity, card.cost)
-                });
+		const fragments = searchString.indexOf(' ') !== -1 ? searchString.split(' ') : [searchString];
+		let nameSearch = searchString;
+		let collectibleOnly = true;
+		for (const fragment of fragments) {
+			if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
+				const textToFind = searchString.split('text:')[1];
+				filterFunctions.push(card => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1);
+			}
+			// Include non-collectible
+			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'all') {
+				collectibleOnly = false;
+				nameSearch = nameSearch.replace(/cards:all\s?/, '');
+			}
+		}
+		nameSearch = nameSearch.trim().toLowerCase();
+		// Default filtering based on name
+		if (filterFunctions.length === 0) {
+			filterFunctions.push(card => card.name && card.name.toLowerCase().indexOf(nameSearch) !== -1);
+		}
+
+		const basicFiltered = collectibleOnly
+			? parseCardsText.jsonDatabase
+					.filter(card => card.collectible)
+					.filter(card => card.set !== 'Hero_skins')
+					.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
+			: parseCardsText.jsonDatabase;
+		return filterFunctions
+			.reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
+			.map(card => {
+				let cardName = card.name;
+				if (card.type === 'Hero') {
+					cardName += ' (Hero)';
+				}
+				const rarity = card.rarity ? card.rarity.toLowerCase() : '';
+				return new SetCard(card.id, cardName, card.playerClass, rarity, card.cost);
+			});
 	}
 
 	public getCard(id: string): any {
-		const found = parseCardsText.jsonDatabase
-			.find((card) => card.id === id);
+		const found = parseCardsText.jsonDatabase.find(card => card.id === id);
 		if (!found) {
-            const stack = id ? '' : new Error().stack;
+			const stack = id ? '' : new Error().stack;
 			console.error('Could not find card in json database ' + id, id, stack);
 		}
 		return found;
 	}
 
 	public getCardFromDbfId(dbfId: number): any {
-		return parseCardsText.jsonDatabase
-			.find((card) => card.dbfId == dbfId);
+		return parseCardsText.jsonDatabase.find(card => card.dbfId === dbfId);
 	}
 
 	public setName(setId: string) {
 		setId = setId.toLowerCase();
 		for (let i = 0; i < this.STANDARD_SETS.length; i++) {
-			if (setId == this.STANDARD_SETS[i][0]) {
+			if (setId === this.STANDARD_SETS[i][0]) {
 				return this.STANDARD_SETS[i][1];
 			}
 		}
 		for (let i = 0; i < this.WILD_SETS.length; i++) {
-			if (setId == this.WILD_SETS[i][0]) {
+			if (setId === this.WILD_SETS[i][0]) {
 				return this.WILD_SETS[i][1];
 			}
 		}
@@ -139,20 +142,20 @@ export class AllCardsService {
 	}
 
 	public getSetFromCardId(cardId: string) {
-		let card = this.getCard(cardId);
-		let setId = card.set.toLowerCase();
+		const card = this.getCard(cardId);
+		const setId = card.set.toLowerCase();
 		return this.getSet(setId);
 	}
 
 	public getSet(setId: string) {
 		setId = setId.toLowerCase();
-		for (let theSet of this.getStandardSets()) {
-			if (theSet.id == setId) {
+		for (const theSet of this.getStandardSets()) {
+			if (theSet.id === setId) {
 				return theSet;
 			}
 		}
-		for (let theSet of this.getWildSets()) {
-			if (theSet.id == setId) {
+		for (const theSet of this.getWildSets()) {
+			if (theSet.id === setId) {
 				return theSet;
 			}
 		}
@@ -160,8 +163,8 @@ export class AllCardsService {
 	}
 
 	private getSets(references, isStandard: boolean): Set[] {
-		const standardSets: Set[] = references.map((set) => new Set(set[0], set[1], isStandard));
-		return standardSets.map((set) => {
+		const standardSets: Set[] = references.map(set => new Set(set[0], set[1], isStandard));
+		return standardSets.map(set => {
 			const setCards = this.getCollectibleSetCards(set.id);
 			return new Set(set.id, set.name, set.standard, setCards);
 		});

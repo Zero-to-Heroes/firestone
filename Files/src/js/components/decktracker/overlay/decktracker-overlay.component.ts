@@ -20,41 +20,40 @@ declare var ga: any;
 		'../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
 	],
 	template: `
-        <div class="root" [ngClass]="{'clean': useCleanMode}">
-            <div class="decktracker-container">
-                <div class="decktracker" *ngIf="gameState">
-                    <decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
-                    <decktracker-deck-name 
-                        [hero]="gameState.playerDeck.hero"
-                        [deckName]="gameState.playerDeck.name">				
-                    </decktracker-deck-name>
-                    <decktracker-deck-list 
-                            [deckState]="gameState.playerDeck"
-                            [displayMode]="displayMode"
-                            (onDisplayModeChanged)="onDisplayModeChanged($event)"
-                            [activeTooltip]="activeTooltip">
-                    </decktracker-deck-list>
-                </div>
-            </div>
+		<div class="root" [ngClass]="{ 'clean': useCleanMode }">
+			<div class="decktracker-container">
+				<div class="decktracker" *ngIf="gameState">
+					<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
+					<decktracker-deck-name [hero]="gameState.playerDeck.hero" [deckName]="gameState.playerDeck.name">
+					</decktracker-deck-name>
+					<decktracker-deck-list
+						[deckState]="gameState.playerDeck"
+						[displayMode]="displayMode"
+						(onDisplayModeChanged)="onDisplayModeChanged($event)"
+						[activeTooltip]="activeTooltip"
+					>
+					</decktracker-deck-list>
+				</div>
+			</div>
 
 			<i class="i-54 gold-theme corner top-left">
 				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner top-right">
 				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner bottom-right">
 				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<i class="i-54 gold-theme corner bottom-left">
 				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner"/>
+					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 				</svg>
 			</i>
 			<tooltips [module]="'decktracker'"></tooltips>
@@ -63,95 +62,99 @@ declare var ga: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayComponent implements AfterViewInit {
-
 	// This should not be necessary, but is an additional guard
-	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = 
-		[ScenarioId.DUNGEON_RUN, ScenarioId.MONSTER_HUNT, ScenarioId.RUMBLE_RUN];
+	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = [
+		ScenarioId.DUNGEON_RUN,
+		ScenarioId.MONSTER_HUNT,
+		ScenarioId.RUMBLE_RUN,
+	];
 
 	gameState: GameState;
 	windowId: string;
-    activeTooltip: string;
-    overlayDisplayed: boolean;
-    displayMode: string;
-    useCleanMode: boolean;
+	activeTooltip: string;
+	overlayDisplayed: boolean;
+	displayMode: string;
+	useCleanMode: boolean;
 
 	private showTooltipTimer;
 	private hideTooltipTimer;
 
 	constructor(
-			private prefs: PreferencesService,
-			private cdr: ChangeDetectorRef,
-            private events: Events,
-            private ow: OverwolfService,
-			private debugService: DebugService) {
-	}
+		private prefs: PreferencesService,
+		private cdr: ChangeDetectorRef,
+		private events: Events,
+		private ow: OverwolfService,
+		private debugService: DebugService,
+	) {}
 
 	async ngAfterViewInit() {
 		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-        this.cdr.detach();
-        
-        this.windowId = (await this.ow.getCurrentWindow()).id;
-        // this.ow.addGameExitListener()
+		this.cdr.detach();
+
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+		// this.ow.addGameExitListener()
 		// overwolf.games.onGameInfoUpdated.addListener((res: any) => {
 		// 	if (this.exitGame(res)) {
 		// 		this.closeApp();
 		// 	}
 		// });
-		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe((data) => {
+		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
 			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
 			if (this.activeTooltip) {
 				this.activeTooltip = data.data[0];
 				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-                if (!(<ViewRef>this.cdr).destroyed) {
-                    this.cdr.detectChanges();
-                }
-			}
-			else {
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			} else {
 				this.showTooltipTimer = setTimeout(() => {
 					this.activeTooltip = data.data[0];
 					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-                    if (!(<ViewRef>this.cdr).destroyed) {
-                        this.cdr.detectChanges();
-                    }
-				}, 500)
+					if (!(this.cdr as ViewRef).destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 500);
 			}
 		});
-		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe((data) => {
-            clearTimeout(this.showTooltipTimer);
-			this.hideTooltipTimer = setTimeout(() => {
-                // console.log('hidigin tooltip');
-				this.activeTooltip = undefined;
-				this.events.broadcast(Events.HIDE_TOOLTIP);
-                if (!(<ViewRef>this.cdr).destroyed) {
-                    this.cdr.detectChanges();
-                }
-			}, data.data[0] ? data.data[0] : 200);
+		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
+			clearTimeout(this.showTooltipTimer);
+			this.hideTooltipTimer = setTimeout(
+				() => {
+					// console.log('hidigin tooltip');
+					this.activeTooltip = undefined;
+					this.events.broadcast(Events.HIDE_TOOLTIP);
+					if (!(this.cdr as ViewRef).destroyed) {
+						this.cdr.detectChanges();
+					}
+				},
+				data.data[0] ? data.data[0] : 200,
+			);
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
-	 	deckEventBus.subscribe(async (event) => {
+		deckEventBus.subscribe(async event => {
 			console.log('received deck event', event.event);
 			this.gameState = event.state;
 			await this.processEvent(event.event);
-			if (!(<ViewRef>this.cdr).destroyed) {
+			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		preferencesEventBus.subscribe((event) => {
+		preferencesEventBus.subscribe(event => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
 			}
-        });
-        
-        this.handleDisplayPreferences();
-        if (process.env.NODE_ENV !== 'production') {
-            console.error("Should not allow debug game state from production");
-            this.gameState = this.ow.getMainWindow().deckDebug.state;
-            console.log('game state', this.gameState, JSON.stringify(this.gameState));
-        }
-		if (!(<ViewRef>this.cdr).destroyed) {
+		});
+
+		this.handleDisplayPreferences();
+		if (process.env.NODE_ENV !== 'production') {
+			console.error('Should not allow debug game state from production');
+			this.gameState = this.ow.getMainWindow().deckDebug.state;
+			console.log('game state', this.gameState, JSON.stringify(this.gameState));
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 		console.log('handled after view init');
@@ -159,15 +162,15 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 
 	@HostListener('mousedown')
 	dragMove() {
-        this.ow.dragMove(this.windowId);
+		this.ow.dragMove(this.windowId);
 	}
 
 	onDisplayModeChanged(pref: string) {
 		this.prefs.setOverlayDisplayMode(pref);
-    }
-    
+	}
+
 	private async processEvent(event) {
-		switch(event.name) {
+		switch (event.name) {
 			case DeckEvents.MATCH_METADATA:
 				console.log('received MATCH_METADATA event');
 				this.handleDisplayPreferences();
@@ -180,83 +183,84 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
-        console.log('retrieving preferences');
-        preferences = preferences || await this.prefs.getPreferences();
-        this.useCleanMode = preferences.decktrackerSkin === 'clean';
-        this.displayMode = this.useCleanMode
-                ? 'DISPLAY_MODE_GROUPED'
-                : (preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE');
-        console.log('switching views?', this.useCleanMode, this.displayMode);
+		console.log('retrieving preferences');
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.useCleanMode = preferences.decktrackerSkin === 'clean';
+		this.displayMode = this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
+		console.log('switching views?', this.useCleanMode, this.displayMode);
 
 		const shouldDisplay = await this.shouldDisplayOverlay(preferences);
 		console.log('should display overlay?', shouldDisplay, preferences);
 		if (!this.overlayDisplayed && shouldDisplay) {
 			ga('send', 'event', 'decktracker', 'show');
 			this.restoreWindow();
-		}
-		else if (this.overlayDisplayed && !shouldDisplay) {
+		} else if (this.overlayDisplayed && !shouldDisplay) {
 			this.hideWindow();
-        }
-		if (!(<ViewRef>this.cdr).destroyed) {
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
-		const prefs = preferences || await this.prefs.getPreferences();
+		const prefs = preferences || (await this.prefs.getPreferences());
 		console.log('merged prefs', prefs, this.gameState);
-		if (!this.gameState 
-				|| !this.gameState.metadata 
-				|| !this.gameState.metadata.gameType
-				|| !this.gameState.playerDeck
-				|| !this.gameState.playerDeck.deckList) { 
+		if (
+			!this.gameState ||
+			!this.gameState.metadata ||
+			!this.gameState.metadata.gameType ||
+			!this.gameState.playerDeck ||
+			!this.gameState.playerDeck.deckList
+		) {
 			return false;
 		}
 		switch (this.gameState.metadata.gameType as GameType) {
-			case GameType.ARENA: 
+			case GameType.ARENA:
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowArena;
-			case GameType.CASUAL: 
+			case GameType.CASUAL:
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowCasual;
-			case GameType.RANKED: 
+			case GameType.RANKED:
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowRanked;
 			case GameType.VS_AI:
-				return this.gameState.playerDeck.deckList.length > 0 
-						&& prefs.decktrackerShowPractice
-						&& this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(this.gameState.metadata.scenarioId) === -1;
-			case GameType.VS_FRIEND: 
+				return (
+					this.gameState.playerDeck.deckList.length > 0 &&
+					prefs.decktrackerShowPractice &&
+					this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(this.gameState.metadata.scenarioId) === -1
+				);
+			case GameType.VS_FRIEND:
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly;
-			case GameType.FSG_BRAWL: 
-			case GameType.FSG_BRAWL_1P_VS_AI: 
-			case GameType.FSG_BRAWL_2P_COOP: 
-			case GameType.FSG_BRAWL_VS_FRIEND: 
-			case GameType.TB_1P_VS_AI: 
-			case GameType.TB_2P_COOP: 
-			case GameType.TAVERNBRAWL: 
+			case GameType.FSG_BRAWL:
+			case GameType.FSG_BRAWL_1P_VS_AI:
+			case GameType.FSG_BRAWL_2P_COOP:
+			case GameType.FSG_BRAWL_VS_FRIEND:
+			case GameType.TB_1P_VS_AI:
+			case GameType.TB_2P_COOP:
+			case GameType.TAVERNBRAWL:
 				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowTavernBrawl;
 		}
 		return this.gameState.playerDeck.deckList.length > 0;
 	}
 
 	private async restoreWindow() {
-        await this.ow.restoreWindow(this.windowId);
-        // console.log('window restored', result);
-        const width = 252;
-        const gameInfo = await this.ow.getRunningGameInfo();
-        if (!gameInfo) {
-            return;
-        }
-        const gameWidth = gameInfo.logicalWidth;
-        const gameHeight = gameInfo.logicalHeight;
-        const dpi = gameWidth / gameInfo.width;
-        await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-        // https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-        const newLeft = ~~(gameWidth - width* dpi - 20); // Leave a bit of room to the right
-        const newTop = 0;
-        await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+		await this.ow.restoreWindow(this.windowId);
+		// console.log('window restored', result);
+		const width = 252;
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!gameInfo) {
+			return;
+		}
+		const gameWidth = gameInfo.logicalWidth;
+		const gameHeight = gameInfo.logicalHeight;
+		const dpi = gameWidth / gameInfo.width;
+		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
+		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
+		const newLeft = ~~(gameWidth - width * dpi - 20); // Leave a bit of room to the right
+		const newTop = 0;
+		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
 	private hideWindow() {
-        this.ow.hideWindow(this.windowId);
+		this.ow.hideWindow(this.windowId);
 	}
 
 	// private exitGame(gameInfoResult: any): boolean {

@@ -19,12 +19,8 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" 
-									[checked]="showDust" 
-									name="" 
-									id="a-01" 
-									(change)="toggleShowDust()">
-							<label for="a-01" [ngClass]="{'enabled': showDust}">
+							<input hidden type="checkbox" [checked]="showDust" name="" id="a-01" (change)="toggleShowDust()" />
+							<label for="a-01" [ngClass]="{ 'enabled': showDust }">
 								<p class="settings-p">Dust recap</p>
 								<b></b>
 							</label>
@@ -34,12 +30,8 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" 
-									[checked]="showCommon" 
-									name="" 
-									id="a-01" 
-									(change)="toggleShowCommon()">
-							<label for="a-01" [ngClass]="{'enabled': showCommon}">
+							<input hidden type="checkbox" [checked]="showCommon" name="" id="a-01" (change)="toggleShowCommon()" />
+							<label for="a-01" [ngClass]="{ 'enabled': showCommon }">
 								<p class="settings-p">Non-golden commons</p>
 								<b></b>
 							</label>
@@ -47,12 +39,11 @@ declare var ga;
 					</fieldset>
 				</form>
 			</section>
-        </div>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsCollectionNotificationComponent {
-
 	showDust: boolean;
 	showCommon: boolean;
 
@@ -64,7 +55,7 @@ export class SettingsCollectionNotificationComponent {
 	toggleShowDust() {
 		this.showDust = !this.showDust;
 		this.prefs.setBinderShowDust(this.showDust);
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -72,7 +63,7 @@ export class SettingsCollectionNotificationComponent {
 	toggleShowCommon() {
 		this.showCommon = !this.showCommon;
 		this.prefs.setBinderShowCommon(this.showCommon);
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -81,7 +72,7 @@ export class SettingsCollectionNotificationComponent {
 		const prefs = await this.prefs.getPreferences();
 		this.showDust = prefs.binder.showDust;
 		console.log('loaded prefs', prefs);
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

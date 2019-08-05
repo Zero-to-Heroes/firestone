@@ -5,7 +5,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	selector: 'modal-video-settings-changed',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/modal/modal-video-settings-changed.component.scss`
+		`../../../../css/component/settings/modal/modal-video-settings-changed.component.scss`,
 	],
 	template: `
 		<div class="modal-video-settings-changed">
@@ -15,7 +15,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 				</svg>
 			</button>
 			<div class="title">Overwolf capture settings changed</div>
-			<p>The changes you made have been applied to Overwolf general capture settings. This will affect all your Overwolf game capture apps.</p>
+			<p>
+				The changes you made have been applied to Overwolf general capture settings. This will affect all your Overwolf game capture
+				apps.
+			</p>
 			<div class="buttons">
 				<a href="overwolf://settings/capture">View settings</a>
 				<button (mousedown)="confirm()">Got it</button>
@@ -25,12 +28,9 @@ import { PreferencesService } from '../../../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalVideoSettingsChangedComponent {
-
 	@Output() dismiss: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-	constructor(private prefs: PreferencesService) {
-
-	}
+	constructor(private prefs: PreferencesService) {}
 
 	close() {
 		this.dismiss.next(true);

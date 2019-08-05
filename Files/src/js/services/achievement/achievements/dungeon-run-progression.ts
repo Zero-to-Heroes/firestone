@@ -3,8 +3,7 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class DungeonRunProgression extends AbstractChallenge {
-
-	// There are alterante heroes, and we don't want to have to modify the 
+	// There are alterante heroes, and we don't want to have to modify the
 	// achievement conditions every time a new skin is released
 	private readonly baseHeroId: string;
 	private readonly dungeonStep: number;
@@ -24,11 +23,11 @@ export class DungeonRunProgression extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.DUNGEON_RUN_STEP) {
+		if (gameEvent.type === GameEvent.DUNGEON_RUN_STEP) {
 			this.currentDungeonStep = gameEvent.additionalData.step;
 		}
 
-		if (this.currentDungeonStep === this.dungeonStep && gameEvent.type == GameEvent.TURN_START) {
+		if (this.currentDungeonStep === this.dungeonStep && gameEvent.type === GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}

@@ -3,7 +3,6 @@ import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class OwNotificationsService {
-
 	private windowId: string;
 	private messageId: number;
 
@@ -18,9 +17,8 @@ export class OwNotificationsService {
 		// console.log('trying to display html message: ', htmlMessage);
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
-				throw new Error("NotificationsWindow was not identified at app start");
-			}
-			else {
+				throw new Error('NotificationsWindow was not identified at app start');
+			} else {
 				this.retriesLeft--;
 				setTimeout(() => {
 					this.html(htmlMessage);
@@ -28,23 +26,23 @@ export class OwNotificationsService {
 				return;
 			}
 		}
-        let strMessage = JSON.stringify(htmlMessage);
-        this.ow.sendMessage(this.windowId, '' + this.messageId++, strMessage);
+		const strMessage = JSON.stringify(htmlMessage);
+		this.ow.sendMessage(this.windowId, '' + this.messageId++, strMessage);
 	}
 
 	private async detectNotificationsWindow() {
-        const window = await this.ow.obtainDeclaredWindow(OverwolfService.NOTIFICATIONS_WINDOW);
-        const windowId = window.id;
-        await this.ow.restoreWindow(windowId);
-        await this.ow.hideWindow(windowId);
-        this.windowId = windowId;
+		const window = await this.ow.obtainDeclaredWindow(OverwolfService.NOTIFICATIONS_WINDOW);
+		const windowId = window.id;
+		await this.ow.restoreWindow(windowId);
+		await this.ow.hideWindow(windowId);
+		this.windowId = windowId;
 	}
 }
 
 export interface Message {
-	content: string,
-	cardId?: string,
-	type?: string,
-	timeout?: number,
-	theClass?: string,
+	content: string;
+	cardId?: string;
+	type?: string;
+	timeout?: number;
+	theClass?: string;
 }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
 	selector: 'decktracker-title-bar',
@@ -10,22 +10,18 @@ import { Component, ChangeDetectionStrategy, Input, AfterViewInit, ElementRef } 
 		<div class="title-bar">
 			<i class="logo">
 				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#decktracker_logo"/>
+					<use xlink:href="assets/svg/sprite.svg#decktracker_logo" />
 				</svg>
 			</i>
 			<div class="controls">
-				<control-settings 
-					[settingsApp]="'decktracker'" 
-					[shouldMoveSettingsWindow]="false"
-					[windowId]="windowId">
+				<control-settings [settingsApp]="'decktracker'" [shouldMoveSettingsWindow]="false" [windowId]="windowId">
 				</control-settings>
-                <control-close [windowId]="windowId"></control-close>
+				<control-close [windowId]="windowId"></control-close>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerTitleBarComponent {
-
 	@Input() windowId: string;
 }

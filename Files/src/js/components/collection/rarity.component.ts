@@ -7,17 +7,18 @@ import { Set } from '../../models/set';
 	template: `
 		<div *ngIf="cardSet && rarity" class="rarity-container">
 			<div class="rarity-progress" (mousedown)="toggleShowMissingCards()">
-				<img src="{{'/Files/assets/images/rarity-' + rarity.toLowerCase() + '.png'}}" class="rarity" title="{{rarity}}" />
-				<span class="rarity-progress-info">{{rarity}}: {{cardSet.ownedForRarity(rarity)}} / {{cardSet.totalForRarity(rarity)}}</span>
+				<img src="{{ '/Files/assets/images/rarity-' + rarity.toLowerCase() + '.png' }}" class="rarity" title="{{ rarity }}" />
+				<span class="rarity-progress-info"
+					>{{ rarity }}: {{ cardSet.ownedForRarity(rarity) }} / {{ cardSet.totalForRarity(rarity) }}</span
+				>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RarityComponent {
-
 	@Input() rarity: string;
 	@Input() cardSet: Set;
 
-	constructor() { }
+	constructor() {}
 }

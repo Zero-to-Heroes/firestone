@@ -1,4 +1,15 @@
-import { Component, Input, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, AfterViewInit, ViewRef, Output, EventEmitter } from '@angular/core';
+import {
+	Component,
+	Input,
+	ViewEncapsulation,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	HostListener,
+	ElementRef,
+	AfterViewInit,
+	ViewRef,
+	EventEmitter,
+} from '@angular/core';
 
 import { AchievementSet } from '../../models/achievement-set';
 import { VisualAchievement } from '../../models/visual-achievement';
@@ -11,14 +22,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-list',
-	styleUrls: [
-		`../../../css/component/achievements/achievements-list.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`,
-	],
+	styleUrls: [`../../../css/component/achievements/achievements-list.component.scss`, `../../../css/global/scrollbar-achievements.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="achievements-container" [ngClass]="{'shrink-header': shortDisplay}">
-			<div class="set-title">{{_achievementSet ?_achievementSet.displayName : ''}}</div>
+		<div class="achievements-container" [ngClass]="{ 'shrink-header': shortDisplay }">
+			<div class="set-title">{{ _achievementSet ? _achievementSet.displayName : '' }}</div>
 			<div class="show-filter">
 				<ng-select
 					class="filter"
@@ -27,12 +35,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 					(selected)="selectFilter($event)"
 					(opened)="refresh()"
 					(closed)="refresh()"
-					[noFilter]="1">
+					[noFilter]="1"
+				>
 					<ng-template #optionTemplate let-option="option">
-						<span>{{option?.label}}</span>
-						<i class="i-30 selected-icon" *ngIf="option.value == activeFilter">
+						<span>{{ option?.label }}</span>
+						<i class="i-30 selected-icon" *ngIf="option.value === activeFilter">
 							<svg class="svg-icon-fill">
-								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown"/>
+								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown" />
 							</svg>
 						</i>
 					</ng-template>
@@ -40,30 +49,29 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
 				</achievement-progress-bar>
 			</div>
-			<div class="collapse-menu" [ngClass]="{'shrink-header': shortDisplay}" (mousedown)="toggleMenu()">
+			<div class="collapse-menu" [ngClass]="{ 'shrink-header': shortDisplay }" (mousedown)="toggleMenu()">
 				<i class="i-13X7" *ngIf="showCollapse">
 					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret"/>
+						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret" />
 					</svg>
 				</i>
 			</div>
-			<ul class="achievements-list" 
-					*ngIf="activeAchievements && activeAchievements.length > 0" 
-					(scroll)="onScroll($event)">
-				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId ">
-					<achievement-view 
-							[attr.data-achievement-id]="achievement.id.toLowerCase()"
-							[socialShareUserInfo]="socialShareUserInfo"
-							[showReplays]="_selectedAchievementId === achievement.id"
-							[achievement]="achievement">
+			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0" (scroll)="onScroll($event)">
+				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId">
+					<achievement-view
+						[attr.data-achievement-id]="achievement.id.toLowerCase()"
+						[socialShareUserInfo]="socialShareUserInfo"
+						[showReplays]="_selectedAchievementId === achievement.id"
+						[achievement]="achievement"
+					>
 					</achievement-view>
 				</li>
 			</ul>
 			<section class="empty-state" *ngIf="!activeAchievements || activeAchievements.length === 0">
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme" [innerHTML]="emptyStateSvgTemplate"></i>
-					<span class="title">{{emptyStateTitle}}</span>
-					<span class="subtitle">{{emptyStateText}}</span>
+					<span class="title">{{ emptyStateTitle }}</span>
+					<span class="subtitle">{{ emptyStateText }}</span>
 				</div>
 			</section>
 		</div>
@@ -71,17 +79,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsListComponent implements AfterViewInit {
-
 	readonly SCROLL_SHRINK_START_PX = 5 * 100;
 
 	@Input() shortDisplay: boolean;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	_achievementSet: AchievementSet;
 	_selectedAchievementId: string;
-	achievements: ReadonlyArray<VisualAchievement>;
+	achievements: readonly VisualAchievement[];
 
 	activeAchievements: VisualAchievement[];
-	filterOptions: Array<IOption>;
+	filterOptions: IOption[];
 	activeFilter: string;
 	emptyStateSvgTemplate: SafeHtml;
 	emptyStateIcon: string;
@@ -89,32 +96,27 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateText: string;
 	showCollapse: boolean;
 
-	private lastScrollPosition: number = 0;
-	private lastScrollPositionBeforeScrollDown: number = 0;
-	private lastScrollPositionBeforeScrollUp: number = 0;
+	private lastScrollPosition = 0;
+	private lastScrollPositionBeforeScrollDown = 0;
+	private lastScrollPositionBeforeScrollUp = 0;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(
-            private cdr: ChangeDetectorRef, 
-            private el: ElementRef, 
-            private ow: OverwolfService,
-            private domSanitizer: DomSanitizer) {
+	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private ow: OverwolfService, private domSanitizer: DomSanitizer) {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
 	ngAfterViewInit() {
-		let singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
-		singleEls.forEach((singleEl) => {
-			let caretEl = singleEl.appendChild(document.createElement('i'));
-			caretEl.innerHTML =
-				`<svg class="svg-icon-fill">
+		const singleEls: HTMLElement[] = this.el.nativeElement.querySelectorAll('.single');
+		singleEls.forEach(singleEl => {
+			const caretEl = singleEl.appendChild(document.createElement('i'));
+			caretEl.innerHTML = `<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#arrow"/>
 				</svg>`;
 			caretEl.classList.add('i-30');
 			caretEl.classList.add('caret');
 		});
 		setTimeout(() => {
-			if (!(<ViewRef>this.cdr).destroyed) {
+			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
@@ -123,8 +125,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		this._achievementSet = achievementSet;
 		if (achievementSet) {
-			this.filterOptions = this._achievementSet.filterOptions
-				.map((option) => ({ label: option.label, value: option.value }));
+			this.filterOptions = this._achievementSet.filterOptions.map(option => ({ label: option.label, value: option.value }));
 			this.activeFilter = this.filterOptions[0].value;
 			this.updateShownAchievements();
 		}
@@ -138,8 +139,9 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
 			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
-			const achievementToShow: Element = this.el.nativeElement
-					.querySelector(`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`);
+			const achievementToShow: Element = this.el.nativeElement.querySelector(
+				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
+			);
 			achievementToShow.scrollIntoView(true);
 		}
 		this._selectedAchievementId = selectedAchievementId;
@@ -148,7 +150,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	toggleMenu() {
 		this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(!this.shortDisplay));
 	}
-	
+
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
@@ -157,9 +159,9 @@ export class AchievementsListComponent implements AfterViewInit {
 		if (!achievementsList) {
 			return;
 		}
-		let rect = achievementsList.getBoundingClientRect();
+		const rect = achievementsList.getBoundingClientRect();
 		// console.log('element rect', rect);
-		let scrollbarWidth = 5;
+		const scrollbarWidth = 5;
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
@@ -171,8 +173,7 @@ export class AchievementsListComponent implements AfterViewInit {
 		// console.log('showing header?', elem.scrollTop, this.lastScrollPosition, this.headerClass);
 		if (elem.scrollTop > this.lastScrollPosition) {
 			this.onScrollDown(elem.scrollTop);
-		}
-		else if (elem.scrollTop <= this.lastScrollPosition) {
+		} else if (elem.scrollTop <= this.lastScrollPosition) {
 			this.onScrollUp(elem.scrollTop);
 		}
 		this.lastScrollPosition = elem.scrollTop;
@@ -188,7 +189,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	refresh() {
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -211,9 +212,7 @@ export class AchievementsListComponent implements AfterViewInit {
 		if (!this.achievements || !this._achievementSet) {
 			return;
 		}
-		const filterOption = this._achievementSet.filterOptions
-				.filter((option) => option.value === this.activeFilter)
-				[0];
+		const filterOption = this._achievementSet.filterOptions.filter(option => option.value === this.activeFilter)[0];
 		const filterFunction: (VisualAchievement) => boolean = filterOption.filterFunction;
 		this.emptyStateIcon = filterOption.emptyStateIcon;
 		this.emptyStateTitle = filterOption.emptyStateTitle;
@@ -225,7 +224,7 @@ export class AchievementsListComponent implements AfterViewInit {
 		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
 		this.showCollapse = this.activeAchievements.length > 0;
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

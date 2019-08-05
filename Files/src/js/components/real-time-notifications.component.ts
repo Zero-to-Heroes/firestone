@@ -4,15 +4,12 @@ import { RealTimeNotificationService } from '../services/real-time-notifications
 
 @Component({
 	selector: 'real-time-notifications',
-	styleUrls: [
-		`../../css/global/components-global.scss`,
-		`../../css/component/real-time-notifications.component.scss`,
-	],
+	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/real-time-notifications.component.scss`],
 	template: `
-		<div class="real-time-notifications {{notifications[currentNotificationIndex].type}}" *ngIf="notifications">
+		<div class="real-time-notifications {{ notifications[currentNotificationIndex].type }}" *ngIf="notifications">
 			<i class="i-30 error-theme warning-icon">
 				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#error"/>
+					<use xlink:href="/Files/assets/svg/sprite.svg#error" />
 				</svg>
 			</i>
 			<span [innerHtml]="notifications[currentNotificationIndex].text"></span>
@@ -21,9 +18,7 @@ import { RealTimeNotificationService } from '../services/real-time-notifications
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-
 export class RealTimeNotificationsComponent implements AfterViewInit {
-
 	currentNotificationIndex = 0;
 	notifications: any[];
 
@@ -41,7 +36,7 @@ export class RealTimeNotificationsComponent implements AfterViewInit {
 		if (this.notifications) {
 			this.currentNotificationIndex = (this.currentNotificationIndex + 1) % this.notifications.length;
 		}
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

@@ -20,47 +20,45 @@ import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckListByZoneComponent {
-
 	@Input() activeTooltip: string;
-	zones: ReadonlyArray<DeckZone>;
+	zones: readonly DeckZone[];
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		const zones = [
 			this.buildZone(deckState.deck, 'deck', 'In your deck', (a, b) => a.manaCost - b.manaCost),
 			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost),
-        ];
-        // If there are no dynamic zones, we use the standard "other" zone
-        if (deckState.dynamicZones.length === 0) {
+		];
+		// If there are no dynamic zones, we use the standard "other" zone
+		if (deckState.dynamicZones.length === 0) {
 			const otherZone = [...deckState.otherZone, ...deckState.board];
-            zones.push(this.buildZone(otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost));
-        }
-        // Otherwise, we add all the dynamic zones
-        deckState.dynamicZones.forEach((zone) => {
-            zones.push(this.buildDynamicZone(zone, (a, b) => a.manaCost - b.manaCost));
-        })
-        this.zones = zones as ReadonlyArray<DeckZone>;
+			zones.push(this.buildZone(otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost));
+		}
+		// Otherwise, we add all the dynamic zones
+		deckState.dynamicZones.forEach(zone => {
+			zones.push(this.buildDynamicZone(zone, (a, b) => a.manaCost - b.manaCost));
+		});
+		this.zones = zones as readonly DeckZone[];
 	}
 
 	trackZone(index, zone: DeckZone) {
 		return zone.id;
-    }
-    
-    private buildDynamicZone(
-            zone: DynamicZone, 
-            sortingFunction: (a: DeckCard, b: DeckCard) => number): DeckZone {
-        return {
+	}
+
+	private buildDynamicZone(zone: DynamicZone, sortingFunction: (a: DeckCard, b: DeckCard) => number): DeckZone {
+		return {
 			id: zone.id,
 			name: zone.name,
 			cards: zone.cards,
 			sortingFunction: sortingFunction,
 		} as DeckZone;
-    }
+	}
 
 	private buildZone(
-			cards: ReadonlyArray<DeckCard>, 
-			id: string, 
-			name: string, 
-			sortingFunction: (a: DeckCard, b: DeckCard) => number): DeckZone {
+		cards: readonly DeckCard[],
+		id: string,
+		name: string,
+		sortingFunction: (a: DeckCard, b: DeckCard) => number,
+	): DeckZone {
 		return {
 			id: id,
 			name: name,

@@ -1,8 +1,5 @@
-
-import {map, filter} from 'rxjs/operators';
-import {Subject, Observable} from 'rxjs';
-
-
+import { map, filter } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
 
 interface BroadcastEvent {
 	key: any;
@@ -23,7 +20,7 @@ export class Events {
 	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
 	// public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
 
-	public static readonly SCENE_CHANGED = "scene-changed";
+	public static readonly SCENE_CHANGED = 'scene-changed';
 
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
@@ -32,7 +29,7 @@ export class Events {
 	public static readonly DECK_SHOW_TOOLTIP = 'deck-show-tooltip';
 	public static readonly DECK_HIDE_TOOLTIP = 'deck-hide-tooltip';
 
-	public static readonly SETTINGS_DISPLAY_MODAL = 'settings-display-modal';	
+	public static readonly SETTINGS_DISPLAY_MODAL = 'settings-display-modal';
 
 	public static readonly FORMAT_SELECTED = 'format-selected'; // For FTUE, will be refactored later
 	public static readonly SET_SELECTED = 'set-selected'; // For FTUE, will be refactored later
@@ -45,12 +42,13 @@ export class Events {
 	}
 
 	broadcast(key: any, ...data: any[]) {
-		this._eventBus.next({key, data});
+		this._eventBus.next({ key, data });
 	}
 
 	on(key: any): Observable<BroadcastEvent> {
 		return this._eventBus.asObservable().pipe(
 			filter(event => event.key === key),
-			map(event => event),);
+			map(event => event),
+		);
 	}
 }

@@ -3,7 +3,6 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class BossVictory extends AbstractChallenge {
-
 	private readonly cardId: string;
 
 	private currentTurnStartTime: number;
@@ -18,7 +17,7 @@ export class BossVictory extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.TURN_START) {
+		if (gameEvent.type === GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}
@@ -38,9 +37,9 @@ export class BossVictory extends AbstractChallenge {
 	}
 
 	private detectGameResultEvent(gameEvent: GameEvent, callback: Function) {
-		let winner = gameEvent.additionalData.winner;
-		let localPlayer = gameEvent.localPlayer;
-		let opponentPlayer = gameEvent.opponentPlayer;
+		const winner = gameEvent.additionalData.winner;
+		const localPlayer = gameEvent.localPlayer;
+		const opponentPlayer = gameEvent.opponentPlayer;
 		if (opponentPlayer.CardID === this.cardId && localPlayer.Id === winner.Id) {
 			// console.log('Achievement unlocked!', this.achievementId, this.bossId);
 			this.callback = callback;

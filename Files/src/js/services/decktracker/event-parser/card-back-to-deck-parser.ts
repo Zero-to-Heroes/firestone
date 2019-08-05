@@ -1,58 +1,55 @@
-import { EventParser } from "./event-parser";
-import { GameEvent } from "../../../models/game-event";
-import { GameState } from "../../../models/decktracker/game-state";
-import { DeckCard } from "../../../models/decktracker/deck-card";
-import { DeckParserService } from "../deck-parser.service";
-import { AllCardsService } from "../../all-cards.service";
-import { DeckState } from "../../../models/decktracker/deck-state";
-import { DeckEvents } from "./deck-events";
-import { DeckManipulationHelper as DeckManipulationHelper } from "./deck-manipulation-helper";
+import { EventParser } from './event-parser';
+import { GameEvent } from '../../../models/game-event';
+import { GameState } from '../../../models/decktracker/game-state';
+import { DeckCard } from '../../../models/decktracker/deck-card';
+import { DeckParserService } from '../deck-parser.service';
+import { AllCardsService } from '../../all-cards.service';
+import { DeckState } from '../../../models/decktracker/deck-state';
+import { DeckEvents } from './deck-events';
+import { DeckManipulationHelper } from './deck-manipulation-helper';
 
 export class CardBackToDeckParser implements EventParser {
+	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
 
-    constructor(private deckParser: DeckParserService, private allCards: AllCardsService) { }
-
-    applies(gameEvent: GameEvent): boolean {
+	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CARD_BACK_TO_DECK;
-    }    
-    
-    parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	}
+
+	parse(currentState: GameState, gameEvent: GameEvent): GameState {
 		if (currentState.playerDeck.deckList.length === 0) {
 			return currentState;
 		}
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const initialZone: string = gameEvent.additionalData.initialZone;
-		
+
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
 
-		const newHand: ReadonlyArray<DeckCard> = this.buildNewHand(initialZone, deck.hand, card);
-		const newBoard: ReadonlyArray<DeckCard> = this.buildNewBoard(initialZone, deck.board, card);
-		const newOther: ReadonlyArray<DeckCard> = this.buildNewOther(initialZone, deck.otherZone, card);
+		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
+		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
+		const newOther: readonly DeckCard[] = this.buildNewOther(initialZone, deck.otherZone, card);
 		const previousDeck = deck.deck;
-		const newDeck: ReadonlyArray<DeckCard> = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
+		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,
 			board: newBoard,
-			otherZone: newOther
+			otherZone: newOther,
 		} as DeckState);
-		return Object.assign(new GameState(), currentState, 
-			{ 
-				[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck
-			});
+		return Object.assign(new GameState(), currentState, {
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+		});
 	}
 
 	event(): string {
 		return DeckEvents.CARD_BACK_TO_DECK;
 	}
-	
+
 	private findCard(initialZone: string, deckState: DeckState, cardId: string, entityId: number): DeckCard {
 		if (initialZone === 'HAND') {
 			return DeckManipulationHelper.findCardInZone(deckState.hand, cardId, entityId);
-		}
-		else if (initialZone === 'PLAY') {
+		} else if (initialZone === 'PLAY') {
 			return DeckManipulationHelper.findCardInZone(deckState.board, cardId, entityId);
 		}
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
@@ -68,22 +65,22 @@ export class CardBackToDeckParser implements EventParser {
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 		} as DeckCard;
 	}
-	
-	private buildNewHand(initialZone: string, previousHand: ReadonlyArray<DeckCard>, movedCard: DeckCard): ReadonlyArray<DeckCard> {
+
+	private buildNewHand(initialZone: string, previousHand: readonly DeckCard[], movedCard: DeckCard): readonly DeckCard[] {
 		if (initialZone !== 'HAND') {
 			return previousHand;
 		}
 		return DeckManipulationHelper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId);
 	}
-	
-	private buildNewOther(initialZone: string, previousOther: ReadonlyArray<DeckCard>, movedCard: DeckCard): ReadonlyArray<DeckCard> {
+
+	private buildNewOther(initialZone: string, previousOther: readonly DeckCard[], movedCard: DeckCard): readonly DeckCard[] {
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
 			return DeckManipulationHelper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId);
 		}
 		return previousOther;
 	}
-	
-	private buildNewBoard(initialZone: string, previousBOard: ReadonlyArray<DeckCard>, movedCard: DeckCard): ReadonlyArray<DeckCard> {
+
+	private buildNewBoard(initialZone: string, previousBOard: readonly DeckCard[], movedCard: DeckCard): readonly DeckCard[] {
 		if (initialZone !== 'PLAY') {
 			return previousBOard;
 		}

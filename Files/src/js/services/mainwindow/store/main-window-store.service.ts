@@ -78,30 +78,30 @@ import { AchievementNameService } from '../../achievement/achievement-name.servi
 
 @Injectable()
 export class MainWindowStoreService {
-
 	public stateUpdater = new EventEmitter<MainWindowStoreEvent>();
 	private state: MainWindowState = new MainWindowState();
 	private stateEmitter = new BehaviorSubject<MainWindowState>(this.state);
-	private processors: Map<String, Processor>;
+	private processors: Map<string, Processor>;
 
 	private eventQueue: MainWindowStoreEvent[] = [];
-	private isProcessing: boolean = false;
+	private isProcessing = false;
 
 	constructor(
 		private cards: AllCardsService,
-			private achievementsRepository: AchievementsRepository,
-			private collectionManager: CollectionManager,
-			private cardHistoryStorage: CardHistoryStorageService,
-			private achievementsStorage: AchievementsStorageService,
-			private achievementHistoryStorage: AchievementHistoryStorageService,
-			private achievementNameService: AchievementNameService,
-			private io: SimpleIOService,
-			private collectionDb: IndexedDbService,
-			private achievementsDb: AchievementsDb,
-			private ow: OverwolfService,
-			private memoryReading: MemoryInspectionService,
-			private events: Events,
-			private pityTimer: PackHistoryService) {
+		private achievementsRepository: AchievementsRepository,
+		private collectionManager: CollectionManager,
+		private cardHistoryStorage: CardHistoryStorageService,
+		private achievementsStorage: AchievementsStorageService,
+		private achievementHistoryStorage: AchievementHistoryStorageService,
+		private achievementNameService: AchievementNameService,
+		private io: SimpleIOService,
+		private collectionDb: IndexedDbService,
+		private achievementsDb: AchievementsDb,
+		private ow: OverwolfService,
+		private memoryReading: MemoryInspectionService,
+		private events: Events,
+		private pityTimer: PackHistoryService,
+	) {
 		window['mainWindowStore'] = this.stateEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 
@@ -114,9 +114,9 @@ export class MainWindowStoreService {
 		});
 		setInterval(() => this.processQueue(), 50);
 
-        this.ow.addGameInfoUpdatedListener((res: any) => {
+		this.ow.addGameInfoUpdatedListener((res: any) => {
 			if (this.ow.gameLaunched(res)) {
-                console.log('game launched, populating store', res);
+				console.log('game launched, populating store', res);
 				this.populateStore();
 			}
 		});
@@ -138,18 +138,18 @@ export class MainWindowStoreService {
 		if (newState) {
 			this.state = newState;
 			this.stateEmitter.next(this.state);
-        }
-        else {
-            console.log('[store] no new state to emit');
-        }
+		} else {
+			console.log('[store] no new state to emit');
+		}
 		this.isProcessing = false;
 	}
 
-	private buildProcessors(): Map<String, Processor> {
+	private buildProcessors(): Map<string, Processor> {
 		const achievementStateHelper = new AchievementStateHelper();
 		const achievementUpdateHelper = new AchievementUpdateHelper(this.achievementsRepository, achievementStateHelper);
 		return Map.of(
-			PopulateStoreEvent.eventName(), new PopulateStoreProcessor(
+			PopulateStoreEvent.eventName(),
+			new PopulateStoreProcessor(
 				this.achievementHistoryStorage,
 				this.achievementsRepository,
 				this.cardHistoryStorage,
@@ -157,52 +157,81 @@ export class MainWindowStoreService {
 				this.pityTimer,
 				this.ow,
 				this.achievementNameService,
-				this.cards),
-			ChangeVisibleApplicationEvent.eventName(), new ChangeVisibleApplicationProcessor(),
-			CloseMainWindowEvent.eventName(), new CloseMainWindowProcessor(),
-			ShowMainWindowEvent.eventName(), new ShowMainWindowProcessor(),
+				this.cards,
+			),
+			ChangeVisibleApplicationEvent.eventName(),
+			new ChangeVisibleApplicationProcessor(),
+			CloseMainWindowEvent.eventName(),
+			new CloseMainWindowProcessor(),
+			ShowMainWindowEvent.eventName(),
+			new ShowMainWindowProcessor(),
 
-			SearchCardsEvent.eventName(), new SearchCardProcessor(this.collectionManager, this.cards),
-			LoadMoreCardHistoryEvent.eventName(), new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
-			SelectCollectionFormatEvent.eventName(), new SelectCollectionFormatProcessor(),
-			SelectCollectionSetEvent.eventName(), new SelectCollectionSetProcessor(),
-			ShowCardDetailsEvent.eventName(), new ShowCardDetailsProcessor(this.cards),
-			ToggleShowOnlyNewCardsInHistoryEvent.eventName(), new ToggleShowOnlyNewCardsInHistoryProcessor(),
-			UpdateCardSearchResultsEvent.eventName(), new UpdateCardSearchResultsProcessor(this.collectionManager, this.cards),
-			NewPackEvent.eventName(), new NewPackProcessor(this.collectionDb, this.cards),
-			NewCardEvent.eventName(), new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, 
-				this.pityTimer, this.cards),
-			
-			AchievementHistoryCreatedEvent.eventName(), new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, 
-				this.achievementNameService),
-			ChangeAchievementsShortDisplayEvent.eventName(), new ChangeAchievementsShortDisplayProcessor(),
-			ChangeVisibleAchievementEvent.eventName(), new ChangeVisibleAchievementProcessor(),
-			SelectAchievementCategoryEvent.eventName(), new SelectAchievementCategoryProcessor(),
-			SelectAchievementSetEvent.eventName(), new SelectAchievementSetProcessor(),
-			ShowAchievementDetailsEvent.eventName(), new ShowAchievementDetailsProcessor(),
-			VideoReplayDeletionRequestEvent.eventName(), new VideoReplayDeletionRequestProcessor(this.io, achievementUpdateHelper,
-				this.achievementsStorage),
-			AchievementRecordedEvent.eventName(), new AchievementRecordedProcessor(this.achievementsStorage, 
-				achievementStateHelper, this.events),
-			AchievementCompletedEvent.eventName(), new AchievementCompletedProcessor(this.achievementsStorage, 
-				this.achievementHistoryStorage, this.achievementsRepository, this.events, this.achievementNameService, achievementUpdateHelper),
+			SearchCardsEvent.eventName(),
+			new SearchCardProcessor(this.collectionManager, this.cards),
+			LoadMoreCardHistoryEvent.eventName(),
+			new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
+			SelectCollectionFormatEvent.eventName(),
+			new SelectCollectionFormatProcessor(),
+			SelectCollectionSetEvent.eventName(),
+			new SelectCollectionSetProcessor(),
+			ShowCardDetailsEvent.eventName(),
+			new ShowCardDetailsProcessor(this.cards),
+			ToggleShowOnlyNewCardsInHistoryEvent.eventName(),
+			new ToggleShowOnlyNewCardsInHistoryProcessor(),
+			UpdateCardSearchResultsEvent.eventName(),
+			new UpdateCardSearchResultsProcessor(this.collectionManager, this.cards),
+			NewPackEvent.eventName(),
+			new NewPackProcessor(this.collectionDb, this.cards),
+			NewCardEvent.eventName(),
+			new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, this.pityTimer, this.cards),
 
-			StartSocialSharingEvent.eventName(), new StartSocialSharingProcessor(),
-			TriggerSocialNetworkLoginToggleEvent.eventName(), new TriggerSocialNetworkLoginToggleProcessor(),
-			UpdateTwitterSocialInfoEvent.eventName(), new UpdateTwitterSocialInfoProcessor(this.ow),
-			ShareVideoOnSocialNetworkEvent.eventName(), new ShareVideoOnSocialNetworkProcessor(this.ow),
-			CloseSocialShareModalEvent.eventName(), new CloseSocialShareModalProcessor(),
+			AchievementHistoryCreatedEvent.eventName(),
+			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementNameService),
+			ChangeAchievementsShortDisplayEvent.eventName(),
+			new ChangeAchievementsShortDisplayProcessor(),
+			ChangeVisibleAchievementEvent.eventName(),
+			new ChangeVisibleAchievementProcessor(),
+			SelectAchievementCategoryEvent.eventName(),
+			new SelectAchievementCategoryProcessor(),
+			SelectAchievementSetEvent.eventName(),
+			new SelectAchievementSetProcessor(),
+			ShowAchievementDetailsEvent.eventName(),
+			new ShowAchievementDetailsProcessor(),
+			VideoReplayDeletionRequestEvent.eventName(),
+			new VideoReplayDeletionRequestProcessor(this.io, achievementUpdateHelper, this.achievementsStorage),
+			AchievementRecordedEvent.eventName(),
+			new AchievementRecordedProcessor(this.achievementsStorage, achievementStateHelper, this.events),
+			AchievementCompletedEvent.eventName(),
+			new AchievementCompletedProcessor(
+				this.achievementsStorage,
+				this.achievementHistoryStorage,
+				this.achievementsRepository,
+				this.events,
+				this.achievementNameService,
+				achievementUpdateHelper,
+			),
+
+			StartSocialSharingEvent.eventName(),
+			new StartSocialSharingProcessor(),
+			TriggerSocialNetworkLoginToggleEvent.eventName(),
+			new TriggerSocialNetworkLoginToggleProcessor(),
+			UpdateTwitterSocialInfoEvent.eventName(),
+			new UpdateTwitterSocialInfoProcessor(this.ow),
+			ShareVideoOnSocialNetworkEvent.eventName(),
+			new ShareVideoOnSocialNetworkProcessor(this.ow),
+			CloseSocialShareModalEvent.eventName(),
+			new CloseSocialShareModalProcessor(),
 		);
 	}
 
 	private populateStore() {
-        console.log('sending populate store event');
+		console.log('sending populate store event');
 		this.stateUpdater.next(new PopulateStoreEvent());
 	}
 
 	private listenForSocialAccountLoginUpdates() {
-        this.ow.addTwitterLoginStateChangedListener((change) => {
+		this.ow.addTwitterLoginStateChangedListener(() => {
 			this.stateUpdater.next(new UpdateTwitterSocialInfoEvent());
-		})
+		});
 	}
 }

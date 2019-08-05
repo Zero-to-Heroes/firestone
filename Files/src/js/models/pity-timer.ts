@@ -1,8 +1,7 @@
 export class PityTimer {
-
 	readonly setId: string;
-    readonly packsUntilGuaranteedEpic: number;
-    readonly packsUntilGuaranteedLegendary: number;
+	readonly packsUntilGuaranteedEpic: number;
+	readonly packsUntilGuaranteedLegendary: number;
 
 	constructor(setId: string, packsUntilGuaranteedEpic: number, packsUntilGuaranteedLegendary: number) {
 		this.setId = setId;

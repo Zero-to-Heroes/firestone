@@ -4,13 +4,11 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	selector: 'settings-achievements',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/achievements/settings-achievements.component.scss`
+		`../../../../css/component/settings/achievements/settings-achievements.component.scss`,
 	],
 	template: `
 		<ul class="achievements">
-			<settings-achievements-menu 
-					[selectedMenu]="selectedMenu"
-					(onMenuSelected)="onMenuSelected($event)">	
+			<settings-achievements-menu [selectedMenu]="selectedMenu" (onMenuSelected)="onMenuSelected($event)">
 			</settings-achievements-menu>
 			<ng-container [ngSwitch]="selectedMenu">
 				<settings-achievements-capture *ngSwitchCase="'capture'"></settings-achievements-capture>
@@ -20,8 +18,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsAchievementsComponent {
-	
-	selectedMenu: string = 'capture';
+	selectedMenu = 'capture';
 
 	onMenuSelected(selectedMenuItem) {
 		this.selectedMenu = selectedMenuItem;

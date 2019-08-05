@@ -3,36 +3,30 @@ import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
-import { Events } from '../events.service';
 
 @Injectable()
 export class CollectionManager {
-
-	constructor(
-		private memoryReading: MemoryInspectionService,
-		private db: IndexedDbService) {
-	}
+	constructor(private memoryReading: MemoryInspectionService, private db: IndexedDbService) {}
 
 	public async getCollection(delay: number = 0): Promise<Card[]> {
 		console.log('[collection-manager] getting collection');
 		const collection = await this.memoryReading.getCollection(delay);
 		console.log('[collection-manager] collection from GEP');
-		if (!collection || collection.length == 0) {
+		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();
 			console.log('[collection-manager] retrieved collection from db');
 			return collectionFromDb;
-		}
-		else {
+		} else {
 			console.log('[collection-manager] updating collection in db');
-			const savedCollection =	await this.db.saveCollection(collection);
+			const savedCollection = await this.db.saveCollection(collection);
 			return savedCollection;
 		}
 	}
 
 	// type is NORMAL or GOLDEN
 	public inCollection(collection: Card[], cardId: string): Card {
-		for (let card of collection) {
+		for (const card of collection) {
 			if (card.id === cardId) {
 				return card;
 			}

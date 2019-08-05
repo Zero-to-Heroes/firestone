@@ -17,6 +17,4 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlDiscordComponent {
-    
-}
+export class ControlDiscordComponent {}

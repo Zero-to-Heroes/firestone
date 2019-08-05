@@ -12,22 +12,21 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-        <button class="i-30 pink-button" (mousedown)="minimizeWindow()">
-            <svg class="svg-icon-fill">
-                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
-            </svg>
-        </button>
+		<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
+			<svg class="svg-icon-fill">
+				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"></use>
+			</svg>
+		</button>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlMinimizeComponent implements AfterViewInit {
-
-    @Input() windowId: string;
+	@Input() windowId: string;
 	@Input() isMainWindow: boolean;
-	
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -36,7 +35,7 @@ export class ControlMinimizeComponent implements AfterViewInit {
 	minimizeWindow() {
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
-        }
-        this.ow.minimizeWindow(this.windowId);
-	};
+		}
+		this.ow.minimizeWindow(this.windowId);
+	}
 }

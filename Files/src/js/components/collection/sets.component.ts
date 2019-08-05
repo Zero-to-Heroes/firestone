@@ -4,14 +4,12 @@ import { Set } from '../../models/set';
 
 @Component({
 	selector: 'sets',
-	styleUrls: [
-		`../../../css/component/collection/sets.component.scss`
-	],
+	styleUrls: [`../../../css/component/collection/sets.component.scss`],
 	template: `
 		<div class="sets">
 			<ul class="menu-selection">
-				<li [ngClass]="{'active': showStandard}" (mousedown)="toggleStandard()">Standard</li>
-				<li [ngClass]="{'active': showWild}" (mousedown)="toggleWild()">Wild</li>
+				<li [ngClass]="{ 'active': showStandard }" (mousedown)="toggleStandard()">Standard</li>
+				<li [ngClass]="{ 'active': showWild }" (mousedown)="toggleWild()">Wild</li>
 			</ul>
 			<sets-container [sets]="standardSets" [category]="'Standard'" *ngIf="showStandard"></sets-container>
 			<sets-container [sets]="wildSets" [category]="'Wild'" *ngIf="showWild"></sets-container>
@@ -20,16 +18,13 @@ import { Set } from '../../models/set';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SetsComponent {
-
 	@Input() standardSets: Set[];
 	@Input() wildSets: Set[];
 
 	showStandard = true;
 	showWild = false;
 
-	constructor(private cdr: ChangeDetectorRef) {
-
-	}
+	constructor(private cdr: ChangeDetectorRef) {}
 
 	@Input('selectedFormat') set selectedFormat(format: string) {
 		switch (format) {
@@ -51,7 +46,7 @@ export class SetsComponent {
 		console.log('showing standard sets');
 		this.showStandard = true;
 		this.showWild = false;
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -60,7 +55,7 @@ export class SetsComponent {
 		console.log('showing wild sets');
 		this.showStandard = false;
 		this.showWild = true;
-		if (!(<ViewRef>this.cdr).destroyed) {
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

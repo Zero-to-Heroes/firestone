@@ -1,4 +1,13 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter, ElementRef, ChangeDetectorRef, ViewRef } from '@angular/core';
+import {
+	Component,
+	Input,
+	ChangeDetectionStrategy,
+	AfterViewInit,
+	EventEmitter,
+	ElementRef,
+	ChangeDetectorRef,
+	ViewRef,
+} from '@angular/core';
 
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
@@ -16,7 +25,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/controls/control-close.component.scss`,
 	],
 	template: `
-		<div class="achievement-sharing-modal {{network}}">
+		<div class="achievement-sharing-modal {{ network }}">
 			<button class="i-30 close-button" (mousedown)="closeModal()">
 				<svg class="svg-icon-fill">
 					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
@@ -26,38 +35,39 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="social-share twitter">
 					<i>
 						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#twitter_share"/>
+							<use xlink:href="/Files/assets/svg/sprite.svg#twitter_share" />
 						</svg>
 					</i>
 				</div>
-				<div class="text">Share on {{network}}</div>
+				<div class="text">Share on {{ network }}</div>
 			</div>
 			<vg-player>
-                <div class="title" [innerHTML]="title"></div>
-                <fs-overlay-play></fs-overlay-play>
+				<div class="title" [innerHTML]="title"></div>
+				<fs-overlay-play></fs-overlay-play>
 
-                <vg-controls>
-                    <vg-play-pause></vg-play-pause>            
-                    <fs-time-display vgProperty="current" vgFormat="mm:ss"></fs-time-display>
-                    <fs-time-display vgProperty="total" vgFormat="mm:ss"></fs-time-display>
-                    <vg-scrub-bar [vgSlider]="true">
-                        <vg-scrub-bar-current-time [vgSlider]="true"></vg-scrub-bar-current-time>
-                    </vg-scrub-bar>
-                    <vg-mute></vg-mute>
-                    <vg-volume></vg-volume>
-                </vg-controls>
+				<vg-controls>
+					<vg-play-pause></vg-play-pause>
+					<fs-time-display vgProperty="current" vgFormat="mm:ss"></fs-time-display>
+					<fs-time-display vgProperty="total" vgFormat="mm:ss"></fs-time-display>
+					<vg-scrub-bar [vgSlider]="true">
+						<vg-scrub-bar-current-time [vgSlider]="true"></vg-scrub-bar-current-time>
+					</vg-scrub-bar>
+					<vg-mute></vg-mute>
+					<vg-volume></vg-volume>
+				</vg-controls>
 
-                <video [vgMedia]="media" #media id="singleVideo" preload="auto">
-                    <source [src]="videoPath" type="video/mp4">
-                </video>
+				<video [vgMedia]="media" #media id="singleVideo" preload="auto">
+					<source [src]="videoPath" type="video/mp4" />
+				</video>
 			</vg-player>
 			<section class="sharing-body">
 				<share-login [socialInfo]="socialShareUserInfo[network]" [network]="network"></share-login>
-				<share-info 
-						[achievementName]="achievementName"
-						[socialInfo]="socialShareUserInfo[network]" 
-						[videoPathOnDisk]="videoPathOnDisk" 
-						[network]="network">
+				<share-info
+					[achievementName]="achievementName"
+					[socialInfo]="socialShareUserInfo[network]"
+					[videoPathOnDisk]="videoPathOnDisk"
+					[network]="network"
+				>
 				</share-info>
 			</section>
 		</div>
@@ -65,7 +75,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementSharingModal implements AfterViewInit {
-
 	videoPath: SafeUrl;
 	videoPathOnDisk: string;
 	network: string;
@@ -75,12 +84,8 @@ export class AchievementSharingModal implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private player;
-	
-	constructor(
-        private elRef: ElementRef, 
-        private ow: OverwolfService,
-        private sanitizer: DomSanitizer, 
-        private cdr: ChangeDetectorRef) { }
+
+	constructor(private elRef: ElementRef, private ow: OverwolfService, private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef) {}
 
 	@Input() set sharingAchievement(value: SharingAchievement) {
 		console.log('setting sharing achievement', value);
@@ -102,20 +107,20 @@ export class AchievementSharingModal implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-        this.player = this.elRef.nativeElement.querySelector('video');
-        if (!this.player) {
-            setTimeout(() => this.ngAfterViewInit(), 50);
-        }
-        // auto pause the video when window is closed / minimized
-        this.ow.addStateChangedListener('CollectionWindow', (message) => {
-			if (message.window_state != 'normal') {
+		this.player = this.elRef.nativeElement.querySelector('video');
+		if (!this.player) {
+			setTimeout(() => this.ngAfterViewInit(), 50);
+		}
+		// auto pause the video when window is closed / minimized
+		this.ow.addStateChangedListener('CollectionWindow', message => {
+			if (message.window_state !== 'normal') {
 				this.player.pause();
 			}
 		});
 	}
 
 	closeModal() {
-        this.player.pause();
+		this.player.pause();
 		this.stateUpdater.next(new CloseSocialShareModalEvent());
 	}
 
@@ -124,9 +129,9 @@ export class AchievementSharingModal implements AfterViewInit {
 			setTimeout(() => this.initPlayer(), 50);
 			return;
 		}
-        this.player.load();
-        this.player.play();
-		if (!(<ViewRef>this.cdr).destroyed) {
+		this.player.load();
+		this.player.play();
+		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

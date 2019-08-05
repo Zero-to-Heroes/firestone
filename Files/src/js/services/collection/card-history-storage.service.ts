@@ -6,9 +6,7 @@ import { IndexedDbService } from './indexed-db.service';
 
 @Injectable()
 export class CardHistoryStorageService {
-
-	constructor(private indexedDb: IndexedDbService) {
-	}
+	constructor(private indexedDb: IndexedDbService) {}
 
 	public async loadAll(limit: number): Promise<CardHistory[]> {
 		return this.indexedDb.getAll(limit);

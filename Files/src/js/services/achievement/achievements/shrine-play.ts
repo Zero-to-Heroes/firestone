@@ -3,10 +3,9 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class ShrinePlay extends AbstractChallenge {
-
 	private readonly cardId: string;
 
-	private mulliganOver: boolean = false;
+	private mulliganOver = false;
 
 	constructor(achievement, scenarioId: number, events: Events) {
 		super(achievement, [scenarioId], events, [GameEvent.GAME_START, GameEvent.GAME_END]);
@@ -42,7 +41,7 @@ export class ShrinePlay extends AbstractChallenge {
 		const cardId = gameEvent.cardId;
 		const controllerId = gameEvent.controllerId;
 		const localPlayer = gameEvent.localPlayer;
-		if (cardId == this.cardId && controllerId == localPlayer.PlayerId) {
+		if (cardId === this.cardId && controllerId === localPlayer.PlayerId) {
 			console.log('achievement completed, waiting for mulligan done');
 			this.callback = callback;
 			this.handleCompletion();

@@ -10,58 +10,53 @@ import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
 export class AchievementStatsService {
+	private readonly ACHIEVEMENT_STATS_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
 
-    private readonly ACHIEVEMENT_STATS_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
+	private userId: string;
+	private userMachineId: string;
+	private username: string;
 
-    private userId: string;
-    private userMachineId: string;
-    private username: string;
+	constructor(private events: Events, private http: HttpClient, private ow: OverwolfService, private repository: AchievementsRepository) {
+		this.events.on(Events.NEW_ACHIEVEMENT).subscribe(event => this.publishAchievementStats(event));
+		this.retrieveUserInfo();
+	}
 
-	constructor(
-            private events: Events,
-            private http: HttpClient,
-            private ow: OverwolfService,
-            private repository: AchievementsRepository) {
-        this.events.on(Events.NEW_ACHIEVEMENT).subscribe((event) => this.publishAchievementStats(event));
-        this.retrieveUserInfo();
-    }
+	private async retrieveUserInfo() {
+		const user = await this.ow.getCurrentUser();
+		this.userId = user.userId;
+		this.userMachineId = user.machineId;
+		this.username = user.username;
+	}
 
-    private async retrieveUserInfo() {
-        const user = await this.ow.getCurrentUser();
-        this.userId = user.userId;
-        this.userMachineId = user.machineId;
-        this.username = user.username;
-    }
-    
-    private publishAchievementStats(event, retriesLeft = 5) {
-        if (retriesLeft <= 0) {
-            console.error('Could not upload achievemnt stats after 5 retries');
-            return;
-        }
-        const completedAchievement: CompletedAchievement = event.data[0];
-        const achievement: Achievement = this.findAchievement(completedAchievement);
-        const statEvent = {
-            "creationDate": new Date(),
-            "userId": this.userId,
-            "userMachineId": this.userMachineId,
-            "userName": this.username,
-            "achievementId": achievement.id,
-            "name": achievement.name,
-            "type": achievement.type,
-            "cardId": achievement.cardId,
-            "numberOfCompletions": completedAchievement.numberOfCompletions + 1
-        };
-        // console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
-        this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent)
-                .subscribe(
-                    (result) => console.log('achievement stat event result', result),
-                    (error) => {
-                        console.warn('Could not upload achievemnt stats, retrying', error);
-                        setTimeout(() => this.publishAchievementStats(event, retriesLeft--), 5000);
-                    });
-    }
-    
-    private findAchievement(completedchievement: CompletedAchievement): Achievement {
-        return this.repository.getAllAchievements().filter(achievement => achievement.id == completedchievement.id)[0];
-    }
+	private publishAchievementStats(event, retriesLeft = 5) {
+		if (retriesLeft <= 0) {
+			console.error('Could not upload achievemnt stats after 5 retries');
+			return;
+		}
+		const completedAchievement: CompletedAchievement = event.data[0];
+		const achievement: Achievement = this.findAchievement(completedAchievement);
+		const statEvent = {
+			'creationDate': new Date(),
+			'userId': this.userId,
+			'userMachineId': this.userMachineId,
+			'userName': this.username,
+			'achievementId': achievement.id,
+			'name': achievement.name,
+			'type': achievement.type,
+			'cardId': achievement.cardId,
+			'numberOfCompletions': completedAchievement.numberOfCompletions + 1,
+		};
+		// console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
+		this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent).subscribe(
+			result => console.log('achievement stat event result', result),
+			error => {
+				console.warn('Could not upload achievemnt stats, retrying', error);
+				setTimeout(() => this.publishAchievementStats(event, retriesLeft--), 5000);
+			},
+		);
+	}
+
+	private findAchievement(completedchievement: CompletedAchievement): Achievement {
+		return this.repository.getAllAchievements().filter(achievement => achievement.id === completedchievement.id)[0];
+	}
 }

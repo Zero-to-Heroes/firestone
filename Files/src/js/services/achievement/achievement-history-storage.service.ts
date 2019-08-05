@@ -5,9 +5,7 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 
 @Injectable()
 export class AchievementHistoryStorageService {
-
-	constructor(private indexedDb: IndexedDbService) {
-	}
+	constructor(private indexedDb: IndexedDbService) {}
 
 	public async save(history: AchievementHistory) {
 		await this.indexedDb.saveHistory(history);

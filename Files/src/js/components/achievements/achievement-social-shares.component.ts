@@ -9,15 +9,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'achievement-social-shares',
 	styleUrls: [`../../../css/component/achievements/achievement-social-shares.component.scss`],
 	template: `
-        <div class="achievement-social-shares">
-            <div class="social-share twitter" (mousedown)="startSharingTwitter()">
-                <i>
-                    <svg>
-                        <use xlink:href="/Files/assets/svg/sprite.svg#twitter_share"/>
-                    </svg>
-                </i>
-            </div>
-            <!--<div class="social-share discord disabled">
+		<div class="achievement-social-shares">
+			<div class="social-share twitter" (mousedown)="startSharingTwitter()">
+				<i>
+					<svg>
+						<use xlink:href="/Files/assets/svg/sprite.svg#twitter_share" />
+					</svg>
+				</i>
+			</div>
+			<!--<div class="social-share discord disabled">
                 <i>
                     <svg>
                         <use xlink:href="/Files/assets/svg/sprite.svg#discord_share"/>
@@ -40,27 +40,27 @@ import { OverwolfService } from '../../services/overwolf.service';
             </div>-->
 		</div>
 	`,
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementSocialSharesComponent implements AfterViewInit {
+	@Input() title: SafeHtml;
+	@Input() videoPath: string;
+	@Input() videoPathOnDisk: string;
+	@Input() achievementName: string;
+	@Input() socialShareUserInfo: SocialShareUserInfo;
 
-    @Input() title: SafeHtml;
-    @Input() videoPath: string;
-    @Input() videoPathOnDisk: string;
-    @Input() achievementName: string;
-    @Input() socialShareUserInfo: SocialShareUserInfo;
-    
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
-    
-    ngAfterViewInit() {
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
+	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-    }
+	}
 
-    startSharingTwitter() {
-        console.log('start sharing on Twitter', this.videoPath, this.socialShareUserInfo);
-        this.stateUpdater.next(
-            new StartSocialSharingEvent('twitter', this.videoPath, this.videoPathOnDisk, this.title, this.achievementName));
-    }
+	startSharingTwitter() {
+		console.log('start sharing on Twitter', this.videoPath, this.socialShareUserInfo);
+		this.stateUpdater.next(
+			new StartSocialSharingEvent('twitter', this.videoPath, this.videoPathOnDisk, this.title, this.achievementName),
+		);
+	}
 }

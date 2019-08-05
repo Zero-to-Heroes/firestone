@@ -11,46 +11,44 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-menu',
-	styleUrls: [
-		`../../../css/global/menu.scss`,
-		`../../../css/component/achievements/achievements-menu.component.scss`,
-	],
+	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/achievements/achievements-menu.component.scss`],
 	template: `
 		<ng-container [ngSwitch]="displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection-achievements menu-selection">
 				<li>Categories</li>
 			</ul>
-			<ul *ngSwitchCase="'breadcrumbs'" 
-					class="menu-selection-achievements breadcrumbs"
-					[ngClass]="{'big': !selectedAchievementSet}">
+			<ul
+				*ngSwitchCase="'breadcrumbs'"
+				class="menu-selection-achievements breadcrumbs"
+				[ngClass]="{ 'big': !selectedAchievementSet }"
+			>
 				<li (mousedown)="goToAchievementsCategoriesView()">Categories</li>
 				<li class="separator">></li>
-                <li *ngIf="selectedCategory"
-                        (mousedown)="goToAchievementsCategoryView()" 
-                        [ngClass]="{'unreachable': selectedCategory.achievementSets.length === 1}">
-                    {{selectedCategory.name}}
-                </li>
+				<li
+					*ngIf="selectedCategory"
+					(mousedown)="goToAchievementsCategoryView()"
+					[ngClass]="{ 'unreachable': selectedCategory.achievementSets.length === 1 }"
+				>
+					{{ selectedCategory.name }}
+				</li>
 				<li class="separator" *ngIf="selectedAchievementSet">></li>
-				<li class="unclickable" *ngIf="selectedAchievementSet" 
-						(mousedown)="goToAchievementSetView()">
-					{{selectedAchievementSet.displayName}}
+				<li class="unclickable" *ngIf="selectedAchievementSet" (mousedown)="goToAchievementSetView()">
+					{{ selectedAchievementSet.displayName }}
 				</li>
 			</ul>
 		</ng-container>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class AchievementsMenuComponent implements AfterViewInit {
-
 	@Input() displayType: string;
 	@Input() selectedCategory: VisualAchievementCategory;
 	@Input() selectedAchievementSet: AchievementSet;
-	
-    private stateUpdater: EventEmitter<MainWindowStoreEvent>;
-    
-    constructor(private ow: OverwolfService) { }
-	
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	constructor(private ow: OverwolfService) {}
+
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
@@ -60,9 +58,9 @@ export class AchievementsMenuComponent implements AfterViewInit {
 	}
 
 	goToAchievementsCategoryView() {
-        if (this.selectedCategory.achievementSets.length === 1) {
-            return;
-        }
+		if (this.selectedCategory.achievementSets.length === 1) {
+			return;
+		}
 		this.stateUpdater.next(new SelectAchievementCategoryEvent(this.selectedCategory.id));
 	}
 

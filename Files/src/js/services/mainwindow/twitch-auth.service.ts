@@ -16,81 +16,86 @@ const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 
 @Injectable()
 export class TwitchAuthService {
-
-    public stateUpdater = new EventEmitter<any>();
+	public stateUpdater = new EventEmitter<any>();
 
 	constructor(private prefs: PreferencesService, private http: HttpClient) {
-        console.log('assigning updater', this.stateUpdater);
-        window['twitchAuthUpdater'] = this.stateUpdater;
+		console.log('assigning updater', this.stateUpdater);
+		window['twitchAuthUpdater'] = this.stateUpdater;
 
 		this.stateUpdater.subscribe((twitchInfo: any) => {
-            console.log('received access token', twitchInfo);
-            this.saveAccessToken(twitchInfo.access_token);
-        });
-        console.log('twitch auth handler init done', window['twitchAuthUpdater'], window);
-    }
+			console.log('received access token', twitchInfo);
+			this.saveAccessToken(twitchInfo.access_token);
+		});
+		console.log('twitch auth handler init done', window['twitchAuthUpdater'], window);
+	}
 
-    public async emitDeckEvent(event: any) {
-        // console.log('ready to emit twitch event');
-        const prefs = await this.prefs.getPreferences();
-        if (!prefs.twitchAccessToken) {
-            // console.log('no twitch access token, returning');
-            return;
-        }
-        const httpHeaders: HttpHeaders = new HttpHeaders()
-                .set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
-        this.http.post(EBS_URL, event, { headers: httpHeaders} ).subscribe((data) => {
-            // Do nothing
-            // console.log('twitch event result', data);
-        }, (error) => {
-            console.error('Could not send deck event to EBS', error);
-        });
-    }
+	public async emitDeckEvent(event: any) {
+		// console.log('ready to emit twitch event');
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.twitchAccessToken) {
+			// console.log('no twitch access token, returning');
+			return;
+		}
+		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
+		this.http.post(EBS_URL, event, { headers: httpHeaders }).subscribe(
+			() => {
+				// Do nothing
+				// console.log('twitch event result', data);
+			},
+			error => {
+				console.error('Could not send deck event to EBS', error);
+			},
+		);
+	}
 
-    public buildLoginUrl(): string {
-        return LOGIN_URL;
-    }
+	public buildLoginUrl(): string {
+		return LOGIN_URL;
+	}
 
-    public async isLoggedIn(): Promise<boolean> {
-        const prefs = await this.prefs.getPreferences();
-        // Never added an access token
-        if (!prefs.twitchAccessToken) {
-            return false;
-        }
-        // Handle expired tokens?
-        const isTokenValid = await this.validateToken(prefs.twitchAccessToken);
-        return isTokenValid;
-    }
+	public async isLoggedIn(): Promise<boolean> {
+		const prefs = await this.prefs.getPreferences();
+		// Never added an access token
+		if (!prefs.twitchAccessToken) {
+			return false;
+		}
+		// Handle expired tokens?
+		const isTokenValid = await this.validateToken(prefs.twitchAccessToken);
+		return isTokenValid;
+	}
 
-    private async validateToken(accessToken: string): Promise<boolean> {
-		return new Promise<boolean>((resolve) => {
-            const httpHeaders: HttpHeaders = new HttpHeaders()
-                    .set('Authorization', `OAuth ${accessToken}`);
-            this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders} ).subscribe((data) => {
-                console.log('validating token', data);
-                resolve(true);
-            }, (error) => {
-                resolve(false);
-            });
-        });
-    }
+	private async validateToken(accessToken: string): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `OAuth ${accessToken}`);
+			this.http.get(TWITCH_VALIDATE_URL, { headers: httpHeaders }).subscribe(
+				data => {
+					console.log('validating token', data);
+					resolve(true);
+				},
+				() => {
+					resolve(false);
+				},
+			);
+		});
+	}
 
-    private async retrieveUserName(accessToken: string): Promise<boolean> {
-		return new Promise<boolean>((resolve) => {
-            const httpHeaders: HttpHeaders = new HttpHeaders()
-                    .set('Authorization', `Bearer ${accessToken}`);
-            this.http.get(TWITCH_USER_URL, { headers: httpHeaders} ).subscribe((data: any) => {
-                console.log('received user info', data);
-                this.prefs.setTwitchUserName(data.data && data.data.length > 0 && data.data[0].display_name);
-            }, (error) => {
-                resolve(false);
-            });
-        });
-    }
-    
-    private async saveAccessToken(accessToken: string) {
-        await this.validateToken(accessToken);
-        await this.prefs.setTwitchAccessToken(accessToken);
-        await this.retrieveUserName(accessToken);
-    }
+	private async retrieveUserName(accessToken: string): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${accessToken}`);
+			this.http.get(TWITCH_USER_URL, { headers: httpHeaders }).subscribe(
+				(data: any) => {
+					console.log('received user info', data);
+					this.prefs.setTwitchUserName(data.data && data.data.length > 0 && data.data[0].display_name);
+				},
+				() => {
+					resolve(false);
+				},
+			);
+		});
+	}
+
+	private async saveAccessToken(accessToken: string) {
+		await this.validateToken(accessToken);
+		await this.prefs.setTwitchAccessToken(accessToken);
+		await this.retrieveUserName(accessToken);
+	}
 }

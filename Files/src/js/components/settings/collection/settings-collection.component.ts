@@ -4,14 +4,11 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	selector: 'settings-collection',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
-		`../../../../css/component/settings/collection/settings-collection.component.scss`
+		`../../../../css/component/settings/collection/settings-collection.component.scss`,
 	],
 	template: `
 		<ul class="collection">
-			<settings-collection-menu 
-					[selectedMenu]="selectedMenu"
-					(onMenuSelected)="onMenuSelected($event)">	
-			</settings-collection-menu>
+			<settings-collection-menu [selectedMenu]="selectedMenu" (onMenuSelected)="onMenuSelected($event)"> </settings-collection-menu>
 			<ng-container [ngSwitch]="selectedMenu">
 				<settings-collection-notification *ngSwitchCase="'notification'"></settings-collection-notification>
 			</ng-container>
@@ -20,8 +17,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsCollectionComponent {
-	
-	selectedMenu: string = 'notification';
+	selectedMenu = 'notification';
 
 	onMenuSelected(selectedMenuItem) {
 		this.selectedMenu = selectedMenuItem;

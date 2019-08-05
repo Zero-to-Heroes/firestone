@@ -3,14 +3,13 @@ import { Events } from '../../events.service';
 import { AbstractChallenge } from './abstract-challenge';
 
 export class RumbleProgression extends AbstractChallenge {
-
 	private readonly baseHeroId: string;
 	private readonly shrineId: string;
 	private readonly rumbleStep: number;
 
 	private currentTurnStartTime: number;
 	private currentRumbleStep: number;
-	private shrinePlayed: boolean = false;
+	private shrinePlayed = false;
 
 	constructor(achievement, scenarioId: number, events: Events) {
 		super(achievement, [scenarioId], events, [GameEvent.GAME_START]);
@@ -26,19 +25,19 @@ export class RumbleProgression extends AbstractChallenge {
 	}
 
 	protected detectEvent(gameEvent: GameEvent, callback: Function) {
-		if (gameEvent.type == GameEvent.RUMBLE_RUN_STEP) {
+		if (gameEvent.type === GameEvent.RUMBLE_RUN_STEP) {
 			this.currentRumbleStep = gameEvent.additionalData.step;
 		}
-		if (gameEvent.type == GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START) {
+		if (gameEvent.type === GameEvent.CARD_PLAYED || gameEvent.type === GameEvent.CARD_ON_BOARD_AT_GAME_START) {
 			const cardId = gameEvent.cardId;
 			const controllerId = gameEvent.controllerId;
 			const localPlayer = gameEvent.localPlayer;
-			if (cardId == this.shrineId && controllerId == localPlayer.PlayerId) {
+			if (cardId === this.shrineId && controllerId === localPlayer.PlayerId) {
 				this.shrinePlayed = true;
 			}
 			return;
 		}
-		if (this.currentRumbleStep === this.rumbleStep && gameEvent.type == GameEvent.TURN_START) {
+		if (this.currentRumbleStep === this.rumbleStep && gameEvent.type === GameEvent.TURN_START) {
 			this.currentTurnStartTime = Date.now();
 			return;
 		}

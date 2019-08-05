@@ -7,11 +7,10 @@ import { ReplayInfo } from '../../models/replay-info';
 
 @Injectable()
 export class AchievementsStorageService {
-
 	constructor(
 		// private store: MainWindowStoreService,
-		private indexedDb: IndexedDbService) {
-	}
+		private indexedDb: IndexedDbService,
+	) {}
 
 	public async loadAchievement(achievementId: string): Promise<CompletedAchievement> {
 		return this.indexedDb.getAchievement(achievementId);
@@ -28,12 +27,12 @@ export class AchievementsStorageService {
 
 	public async removeReplay(achievementId: string, videoPath: string): Promise<CompletedAchievement> {
 		const achievement: CompletedAchievement = await this.loadAchievement(achievementId);
-		const updatedReplays: ReadonlyArray<ReplayInfo> = achievement.replayInfo
-				.filter((info) => info.path !== videoPath);
+		const updatedReplays: readonly ReplayInfo[] = achievement.replayInfo.filter(info => info.path !== videoPath);
 		const updatedAchievement: CompletedAchievement = new CompletedAchievement(
 			achievement.id,
 			achievement.numberOfCompletions,
-			updatedReplays);
+			updatedReplays,
+		);
 		return this.saveAchievement(updatedAchievement);
-  	}
+	}
 }
