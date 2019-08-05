@@ -37,6 +37,7 @@ declare var ga: any;
 						</div>
 						<hotkey></hotkey>
 						<div class="controls">
+							<control-bug></control-bug>
 							<control-settings [windowId]="windowId"></control-settings>
 							<button class="i-30 pink-button" (mousedown)="goHome()">
 								<svg class="svg-icon-fill">

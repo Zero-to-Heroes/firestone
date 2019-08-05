@@ -9,6 +9,7 @@ import { ControlSettingsComponent } from '../../components/controls/control-sett
 import { TooltipsComponent, Tooltip } from '../../components/tooltips.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { ControlDiscordComponent } from '../../components/controls/control-discord.component';
+import { ControlBugComponent } from '../../components/controls/control-bug.component';
 
 @NgModule({
 	imports: [
@@ -20,6 +21,7 @@ import { ControlDiscordComponent } from '../../components/controls/control-disco
 		ControlCloseComponent,
         ControlSettingsComponent,
         ControlDiscordComponent,
+		ControlBugComponent,
 		
 		HotkeyComponent,
 		VersionComponent,
@@ -33,7 +35,8 @@ import { ControlDiscordComponent } from '../../components/controls/control-disco
 		ControlMinimizeComponent,
 		ControlCloseComponent,
 		ControlSettingsComponent,
-        ControlDiscordComponent,
+		ControlDiscordComponent,
+		ControlBugComponent,
 
 		HotkeyComponent,
 		VersionComponent,

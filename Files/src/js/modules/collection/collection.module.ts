@@ -82,6 +82,8 @@ import { ShareLoginComponent } from '../../components/sharing/share-login.compon
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { AdService } from '../../services/ad.service';
+import { LogsUploaderService } from '../../services/logs-uploader.service';
+import { S3FileUploadService } from '../../services/s3-file-upload.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -179,6 +181,9 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementsRepository,
 		AchievementsStorageService,
 		PackHistoryService,
+
+		LogsUploaderService,
+		S3FileUploadService,
 	],
 })
 

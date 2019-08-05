@@ -53,6 +53,8 @@ import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
+import { DeckCardService } from '../../services/decktracker/deck-card.service';
+import { LogsUploaderService } from '../../services/logs-uploader.service';
 
 init({
 	dsn: "https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840",
@@ -126,12 +128,15 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementsVideoCaptureService,
 		AchievementsDb,
 
+		DeckCardService,
 		DeckParserService,
         GameStateService,
 		DynamicZoneHelperService,
 		ZoneOrderingService,
 
-        TemporaryResolutionOverrideService,
+		TemporaryResolutionOverrideService,
+		
+		LogsUploaderService,
 	]
 })
 export class AppModule { }

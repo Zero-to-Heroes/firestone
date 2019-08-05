@@ -6,6 +6,7 @@ import { S3FileUploadService } from './s3-file-upload.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { OverwolfService } from './overwolf.service';
+import { LogsUploaderService } from './logs-uploader.service';
 
 @Injectable()
 export class GameEvents {
@@ -18,10 +19,11 @@ export class GameEvents {
 	private spectating: boolean;
 
 	constructor(
-		private gameEventsPlugin: GameEventsPluginService,
-        private io: SimpleIOService,
-        private ow: OverwolfService,
-		private s3: S3FileUploadService) {
+			private gameEventsPlugin: GameEventsPluginService,
+			private io: SimpleIOService,
+			private ow: OverwolfService,
+			private logService:  LogsUploaderService,
+			private s3: S3FileUploadService) {
 		this.init();
 	}
 
@@ -292,19 +294,12 @@ export class GameEvents {
 
 	private async uploadLogsAndSendException(first, second) {
 		try {
-            // Get the HS Power.log file
-            const res = await this.ow.getRunningGameInfo();
-            const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-            const logLines = await this.io.getFileContents(logsLocation);
-            const s3LogFileKey = await this.s3.postLogs(logLines);
-            console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+            const s3LogFileKey = await this.logService.uploadGameLogs();
             const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
             const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
             console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
             const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
-            const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
-            const firstoneLogsKey = await this.s3.postBinaryFile(firestoneLogs);
-            console.log('posted Firestone logs', firstoneLogsKey);
+            const firstoneLogsKey = await this.logService.uploadAppLogs();
             captureEvent({
                 message: 'Exception while running plugin: ' + first,
                 extra: {
