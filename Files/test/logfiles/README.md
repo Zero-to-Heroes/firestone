@@ -19,3 +19,5 @@ Run `loadLog(logFileName, deckString)`. The `deckString` parameter is optional, 
 | Kripp - Rod of Roasting | Not yet |
 | Kripp - One HP Remaining | `loadLog('logFiles/kripp/onehpremaining.log', 'AAECAZ8FBO0F+ga9hgPSigMNnAKzA9wD9AX2B6f3AoT8Avz8Atn+As+GA+yGA7aYA8OdAwA=')` |
 | Kripp - Mass Hysteria | `loadLog('logFiles/kripp/mass_hysteria.log', 'AAECAa0GDvgC7QX7CNEK0wrWCtcK8vECvfMC+/4Cp4cD64oDmJsDmZsDCPsBlwKcAuUEyQbyDPsMl4cDAA==')` |
+
+startDeckCycle('shirvallah.log', 'AAECAZ8FBO0F+ga9hgPSigMNnAKzA9wD9AX2B6f3AoT8Avz8Atn+As+GA+yGA7aYA8OdAwA=')
