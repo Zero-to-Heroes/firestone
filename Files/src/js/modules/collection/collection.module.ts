@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 import { SelectModule } from 'ng-select';
 import { VgCoreModule } from 'videogular2/core';
@@ -16,7 +17,6 @@ import { SharedModule } from '../shared/shared.module';
 import { MainWindowComponent }  from '../../components/main-window.component';
 import { MenuSelectionComponent }  from '../../components/menu-selection.component';
 import { RealTimeNotificationsComponent }  from '../../components/real-time-notifications.component';
-import { TooltipsComponent, Tooltip }  from '../../components/tooltips.component';
 
 import { CollectionComponent }  from '../../components/collection/collection.component';
 import { CollectionEmptyStateComponent }  from '../../components/collection/collection-empty-state.component';
@@ -80,7 +80,6 @@ import { AchievementSocialSharesComponent } from '../../components/achievements/
 import { AchievementSharingModal } from '../../components/achievements/achievement-sharing-modal.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
-import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { AdService } from '../../services/ad.service';
 import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
@@ -100,6 +99,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		InlineSVGModule.forRoot(),
         BrowserAnimationsModule,
 		FormsModule,
+		OverlayModule,
 		ReactiveFormsModule,
         SelectModule,
 		SharedModule,

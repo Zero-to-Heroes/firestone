@@ -1,4 +1,5 @@
 import { NgModule }      from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { HotkeyComponent }  from '../../components/hotkey.component';
 import { VersionComponent }  from '../../components/version.component';
@@ -7,9 +8,10 @@ import { ControlMinimizeComponent } from '../../components/controls/control-mini
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { TooltipsComponent, Tooltip } from '../../components/tooltips.component';
-import { BrowserModule } from '@angular/platform-browser';
 import { ControlDiscordComponent } from '../../components/controls/control-discord.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
+import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
+import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 @NgModule({
 	imports: [
@@ -28,8 +30,11 @@ import { ControlBugComponent } from '../../components/controls/control-bug.compo
 
 		Tooltip,
 		TooltipsComponent,
+		HelpTooltipComponent,
+		
+		HelpTooltipDirective,
 	],
-	entryComponents: [Tooltip],
+	entryComponents: [Tooltip, HelpTooltipComponent],
 	exports: [
 		ControlHelpComponent,
 		ControlMinimizeComponent,
@@ -43,6 +48,7 @@ import { ControlBugComponent } from '../../components/controls/control-bug.compo
 
 		Tooltip,
 		TooltipsComponent,
+		HelpTooltipComponent,
 	],
 })
 
