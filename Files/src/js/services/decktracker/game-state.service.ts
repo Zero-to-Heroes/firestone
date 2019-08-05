@@ -31,6 +31,7 @@ import { OverwolfService } from '../overwolf.service';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { ZoneOrderingService } from './zone-ordering.service';
 import { NGXLogger } from 'ngx-logger';
+import { DeckCardService } from './deck-card.service';
 
 @Injectable()
 export class GameStateService {
@@ -45,12 +46,13 @@ export class GameStateService {
 
 	constructor(
 			private gameEvents: GameEvents, 
-			private logger: NGXLogger,
+			// private logger: NGXLogger,
 			private dynamicZoneHelper: DynamicZoneHelperService,
 			private zoneOrdering: ZoneOrderingService,
             private allCards: AllCardsService,
             private prefs: PreferencesService,
-            private twitch: TwitchAuthService,
+			private twitch: TwitchAuthService,
+			private deckCardService: DeckCardService,
             private ow: OverwolfService,
 			private deckParser: DeckParserService) {
 		this.registerGameEvents();
@@ -109,11 +111,14 @@ export class GameStateService {
 		for (let parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent)) {
-					const newState = parser.parse(this.state, gameEvent);
-					if (!newState) {
+					const stateAfterParser = parser.parse(this.state, gameEvent);
+					if (!stateAfterParser) {
 						console.error('null state after processing event', gameEvent.type, parser, gameEvent);
 						continue;
 					}
+					// Add missing info like card names, if the card added doesn't come from a deck state
+					// (like with the Chess brawl)
+					const newState = this.deckCardService.fillMissingCardInfo(stateAfterParser);
 					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
 					const stateFromTracker = gameEvent.gameState || {};
 					console.log('getting state from tracker', stateFromTracker, gameEvent);
@@ -139,7 +144,7 @@ export class GameStateService {
 					console.log('emitted deck event', emittedEvent.event.name, this.state);
 				}
 			} catch (e) {
-				this.logger.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
+				console.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
 			}
 		}
 	}
@@ -158,7 +163,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.deckParser, this.allCards),
 			new SecretPlayedFromHandParser(this.deckParser, this.allCards),
 			new EndOfEchoInHandParser(this.deckParser, this.allCards),
-			new GameEndParser(this.deckParser, this.allCards),
+			// new GameEndParser(this.deckParser, this.allCards),
 			new DiscardedCardParser(),
 			new CardRecruitedParser(),
 			new MinionSummonedParser(this.allCards),
