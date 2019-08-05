@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { Events } from '../events.service';
 import { Achievement } from '../../models/achievement';
-import { ReplayInfo } from 'src/js/models/replay-info';
 import { Challenge } from './achievements/challenge';
 import { AchievementConfService } from './achievement-conf.service';
 import { OverwolfService } from '../overwolf.service';
@@ -10,25 +9,26 @@ import { PreferencesService } from '../preferences.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
 import { TemporaryResolutionOverrideService } from './temporary-resolution-override-service';
+import { ReplayInfo } from '../../models/replay-info';
 
 @Injectable()
 export class AchievementsVideoCaptureService {
 
-    readonly settings = {
-        "settings": {
-            "video": { "buffer_length": 120000 },
-            "peripherals": { "capture_mouse_cursor": "both" }
-        }
-    }
+	readonly settings = {
+		'settings': {
+			'video': { 'buffer_length': 120000 }, // eslint-disable-line @typescript-eslint/camelcase
+			'peripherals': { 'capture_mouse_cursor': 'both' } // eslint-disable-line @typescript-eslint/camelcase
+		}
+	};
 
-    private captureOngoing: boolean = false;
-    private currentReplayId: string;
-    private achievementsBeingRecorded: string[] = [];
-    private settingsChanged: boolean = false;
-    private listenerRegistered: boolean = false;
+	private captureOngoing = false;
+	private currentReplayId: string;
+	private achievementsBeingRecorded: string[] = [];
+	private settingsChanged = false;
+	private listenerRegistered = false;
 
-    private lastRecordingDate: number = 0;
-    private currentRecordEndTimer;
+	private lastRecordingDate = 0;
+	private currentRecordEndTimer;
 
 	constructor(
             private events: Events,
