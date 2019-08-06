@@ -4,9 +4,9 @@
     "scripts": {
         "lint": "eslint --color --fix --ext .ts ./src/",
         "dev": "rimraf dist && webpack --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
-        "build": "rimraf dist && webpack --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
+        "build": "rimraf dist && npm audit fix && webpack --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
         "dev-twitch": "rimraf dist-twitch && webpack --watch --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
-        "build-twitch": "rimraf dist-twitch && webpack --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
+        "build-twitch": "rimraf dist-twitch && npm audit fix && webpack --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors"
     },
     "license": "MIT",
     "dependencies": {
