@@ -68,7 +68,7 @@ module.exports = function(env, argv) {
         {
           test: /\.ts$/,
           exclude: /node_modules/,
-          use: "@artonge/webpack"
+		  use: ['@artonge/webpack', 'eslint-loader']
         },
         {
           test: /.js$/,
