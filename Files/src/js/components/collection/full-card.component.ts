@@ -25,7 +25,7 @@ import { SetCard } from '../../models/set';
 	template: `
 		<div class="card-details-container" [ngClass]="{ 'owned': card.owned, 'missing': !card.owned }" *ngIf="card">
 			<div class="card-view-container">
-				<card-view [card]="card" [tooltips]="false" [showCounts]="true">/</card-view>
+				<card-view [card]="card" [tooltips]="false" [showCounts]="true" [highRes]="true">/</card-view>
 			</div>
 			<div class="details">
 				<h1>{{ card.name }}</h1>

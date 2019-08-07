@@ -12,7 +12,6 @@ import {
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 import { Events } from '../../services/events.service';
-
 import { SetCard } from '../../models/set';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
@@ -91,6 +90,7 @@ export class CardComponent implements AfterViewInit {
 	image: string;
 	overlayMaskImage: string;
 	_card: SetCard;
+	_highRes = false;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -98,9 +98,12 @@ export class CardComponent implements AfterViewInit {
 
 	@Input('card') set card(card: SetCard) {
 		this._card = card;
-		// this.image = 'http://static.zerotoheroes.com/hearthstone/fullcard/en/256/' + card.id + '.png';
-		this.image = 'https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/' + card.id + '.png';
-		this.overlayMaskImage = `url('${this.image}')`;
+		this.updateImage();
+	}
+
+	@Input() set highRes(value: boolean) {
+		this._highRes = value;
+		this.updateImage();
 	}
 
 	ngAfterViewInit() {
@@ -133,5 +136,11 @@ export class CardComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private updateImage() {
+		const imagePath = this._highRes ? '512' : 'compressed';
+		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
+		this.overlayMaskImage = `url('${this.image}')`;
 	}
 }
