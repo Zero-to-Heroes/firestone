@@ -40,6 +40,8 @@ export class DebugService {
 	private overrideError(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
 			return function() {
+				const stack = new Error().stack;
+				oldConsoleLogFunc.apply(console, arguments, stack);
 				let argsString = '';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
@@ -59,7 +61,6 @@ export class DebugService {
 						).substring(0, 1000) + ' | ';
 					cache = null; // Enable garbage collection + " | "
 				}
-				oldConsoleLogFunc.apply(console, arguments);
 				oldConsoleLogFunc.apply(console, [argsString]);
 			};
 		}
