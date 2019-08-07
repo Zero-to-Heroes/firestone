@@ -83,10 +83,11 @@ export class GameStartParser implements EventParser {
 
 	private buildDeckCards(pair): DeckCard[] {
 		const card = this.allCards.getCardFromDbfId(pair[0]);
+		const result: DeckCard[] = [];
 		if (!card) {
 			console.error('Could not build deck card', pair);
+			return result;
 		}
-		const result: DeckCard[] = [];
 		for (let i = 0; i < pair[1]; i++) {
 			result.push(
 				Object.assign(new DeckCard(), {
