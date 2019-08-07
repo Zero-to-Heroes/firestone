@@ -108,27 +108,55 @@ export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
 				emptyStateText: '100% of achievements in this category complete.',
 			},
 			{
-				value: 'ONLY_MISSING',
-				label: 'Locked achievements',
-				filterFunction: (a: VisualAchievement) => {
-					return a.completionSteps.map(step => step.numberOfCompletions).reduce((a, b) => a + b, 0) === 0;
-				},
-				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: 'Tons of achievements await you!',
-				emptyStateText: 'Find them listed here once completed.',
+				value: 'NEVER_MET_NORMAL',
+				label: 'Never met (normal)',
+				filterFunction: (a: VisualAchievement) => a.completionSteps[0].numberOfCompletions === 0,
+				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateTitle: 'Holy Moly, you are epic!',
+				emptyStateText: '100% of achievements in this category complete.',
 			},
 			{
-				value: 'ENCOUNTERED_ONLY',
-				label: 'Met but undefeated',
+				value: 'ENCOUNTERED_ONLY_NORMAL',
+				label: 'Undefeated (normal)',
+				filterFunction: (a: VisualAchievement) => {
+					return a.completionSteps[1].numberOfCompletions === 0;
+				},
+				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateTitle: 'Holy Moly, you are epic!',
+				emptyStateText: '100% of achievements in this category complete.',
+			},
+			{
+				value: 'NEVER_MET_HEROIC',
+				label: 'Never met (heroic)',
+				filterFunction: (a: VisualAchievement) => a.completionSteps[2].numberOfCompletions === 0,
+				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateTitle: 'Holy Moly, you are epic!',
+				emptyStateText: '100% of achievements in this category complete.',
+			},
+			{
+				value: 'ENCOUNTERED_ONLY_HEROIC',
+				label: 'Undefeated (heroic)',
+				filterFunction: (a: VisualAchievement) => {
+					return a.completionSteps[3].numberOfCompletions === 0;
+				},
+				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateTitle: 'Holy Moly, you are epic!',
+				emptyStateText: '100% of achievements in this category complete.',
+			},
+			{
+				value: 'ONLY_INCOMPLETE',
+				label: 'Incomplete achievements',
 				filterFunction: (a: VisualAchievement) => {
 					return (
-						(a.completionSteps[0].numberOfCompletions > 0 && a.completionSteps[1].numberOfCompletions === 0) ||
-						(a.completionSteps[2].numberOfCompletions > 0 && a.completionSteps[3].numberOfCompletions === 0)
+						a.completionSteps[0].numberOfCompletions === 0 ||
+						a.completionSteps[1].numberOfCompletions === 0 ||
+						a.completionSteps[2].numberOfCompletions === 0 ||
+						a.completionSteps[3].numberOfCompletions === 0
 					);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Tons of achievements await you!',
-				emptyStateText: 'Find them listed here once completed.',
+				emptyStateTitle: 'Holy Moly, you are epic!',
+				emptyStateText: '100% of achievements in this category complete.',
 			},
 			{
 				value: 'ONLY_COMPLETED',
@@ -141,7 +169,7 @@ export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
 						a.completionSteps[3].numberOfCompletions > 0
 					);
 				},
-				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
+				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
 				emptyStateTitle: 'Tons of achievements await you!',
 				emptyStateText: 'Find them listed here once completed.',
 			},

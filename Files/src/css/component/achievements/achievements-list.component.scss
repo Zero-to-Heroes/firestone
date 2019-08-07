@@ -2,21 +2,21 @@
 @import '../../global/fonts';
 
 .achievements-container {
-	// We want positioning to happen based on the parent, to make the 
+	// We want positioning to happen based on the parent, to make the
 	// collapse header transition smoother
 	// position: relative;
 	flex-grow: 1;
-    display: flex;
+	display: flex;
 	flex-direction: column;
-    width: 100%;
-	
+	width: 100%;
+
 	achievement-progress-bar {
 		align-self: flex-end;
 		margin-left: auto;
 		position: relative;
 		top: 1px;
 		transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
-		
+
 		.achievement-progress-bar {
 			flex-direction: row;
 			align-items: center;
@@ -44,9 +44,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		
+
 		i {
-			--icon-color: #CB9FD7;
+			--icon-color: #cb9fd7;
 			transform: scaleY(-1);
 		}
 
@@ -55,7 +55,7 @@
 		}
 
 		&:hover {
-			background-color: #4B3052;
+			background-color: #4b3052;
 		}
 	}
 
@@ -88,24 +88,25 @@
 		margin-right: 15px;
 		margin-top: 18px;
 		padding-bottom: 15px;
-		border-bottom: 1px solid #4B3052;
+		border-bottom: 1px solid #4b3052;
 		transition: margin 0.4s ease-in-out;
 
 		ng-select {
 			@extend %search-active;
-			color: #CB9FD7;
+			color: #cb9fd7;
 			height: 30px;
 			background: rgba(255, 255, 255, 0.08);
 			margin-right: 15px;
-			width: 195px;
+			width: 215px;
 			transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, max-height 0.4s ease-in-out;
 
-			&:focus, &:active {
+			&:focus,
+			&:active {
 				outline: none;
 			}
 
 			& > div {
-				border: 1px solid #7D5A87;
+				border: 1px solid #7d5a87;
 				outline: none;
 
 				div.single > div.toggle:hover {
@@ -117,8 +118,9 @@
 				display: none;
 			}
 
-			.caret, .selected-icon {
-				color: #CB9FD7;
+			.caret,
+			.selected-icon {
+				color: #cb9fd7;
 			}
 
 			.open .caret {
@@ -126,10 +128,9 @@
 			}
 
 			select-dropdown {
-
 				& > div {
 					background: $black;
-					border: 1px solid #7D5A87;
+					border: 1px solid #7d5a87;
 					border-top: none;
 					outline: none;
 				}
@@ -138,9 +139,9 @@
 					display: none;
 				}
 
-				&> div .options ul li {
-					color: #CB9FD7;
-					border-bottom: 1px solid #3B1F42;
+				& > div .options ul li {
+					color: #cb9fd7;
+					border-bottom: 1px solid #3b1f42;
 					padding: 0;
 					padding-left: 9px;
 					display: flex;
@@ -157,8 +158,9 @@
 						}
 					}
 
-					&.highlighted, &:hover {
-						background-color: #4B3052;
+					&.highlighted,
+					&:hover {
+						background-color: #4b3052;
 					}
 				}
 			}
@@ -167,31 +169,31 @@
 
 	.empty-state {
 		@extend %empty-state;
-		color: #A276AF;
+		color: #a276af;
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
 		justify-items: center;
 		align-items: center;
-	
+
 		.state-container {
 			margin: auto;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-	
+
 			i {
 				margin-bottom: 30px;
-				--icon-color: #A276AF;
+				--icon-color: #a276af;
 			}
-	
+
 			.title {
 				@extend %empty-state-title;
-				color: #CB9FD7;
+				color: #cb9fd7;
 				margin-bottom: 15px;
 			}
 		}
-	}	
+	}
 
 	&.shrink-header {
 		.show-filter {
