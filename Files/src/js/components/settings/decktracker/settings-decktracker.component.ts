@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-decktracker',
@@ -8,8 +8,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	],
 	template: `
 		<ul class="decktracker">
-			<settings-decktracker-menu [selectedMenu]="selectedMenu" (onMenuSelected)="onMenuSelected($event)"> </settings-decktracker-menu>
-			<ng-container [ngSwitch]="selectedMenu">
+			<settings-decktracker-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">
+			</settings-decktracker-menu>
+			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-decktracker-launch *ngSwitchCase="'launch'"></settings-decktracker-launch>
 				<settings-decktracker-appearance *ngSwitchCase="'appearance'"></settings-decktracker-appearance>
 				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
@@ -19,7 +20,10 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsDecktrackerComponent {
-	selectedMenu = 'launch';
+	_selectedMenu: string;
+	@Input() set selectedMenu(value: string) {
+		this._selectedMenu = value || 'launch';
+	}
 
 	onMenuSelected(selectedMenuItem) {
 		this.selectedMenu = selectedMenuItem;

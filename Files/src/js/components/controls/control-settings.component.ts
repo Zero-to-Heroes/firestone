@@ -25,7 +25,7 @@ export class ControlSettingsComponent implements AfterViewInit {
 	@Input() settingsSection: string;
 
 	private settingsWindowId: string;
-	private settingsEventBus: EventEmitter<string>;
+	private settingsEventBus: EventEmitter<[string, string]>;
 
 	constructor(private ow: OverwolfService) {}
 
@@ -41,7 +41,8 @@ export class ControlSettingsComponent implements AfterViewInit {
 
 	async showSettings() {
 		if (this.settingsApp) {
-			this.settingsEventBus.next(this.settingsApp);
+			console.log('showing settings app', this.settingsApp, this.settingsSection);
+			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
 		}
 		const window = await this.ow.getCurrentWindow();
 		const center = {

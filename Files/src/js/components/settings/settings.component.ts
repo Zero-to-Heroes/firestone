@@ -17,10 +17,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 				</section>
 				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)"> </settings-app-selection>
 				<ng-container [ngSwitch]="selectedApp">
-					<settings-general *ngSwitchCase="'general'"></settings-general>
-					<settings-collection *ngSwitchCase="'collection'"></settings-collection>
-					<settings-achievements *ngSwitchCase="'achievements'"></settings-achievements>
-					<settings-decktracker *ngSwitchCase="'decktracker'"></settings-decktracker>
+					<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
+					<settings-collection *ngSwitchCase="'collection'" [selectedMenu]="selectedMenu"></settings-collection>
+					<settings-achievements *ngSwitchCase="'achievements'" [selectedMenu]="selectedMenu"></settings-achievements>
+					<settings-decktracker *ngSwitchCase="'decktracker'" [selectedMenu]="selectedMenu"></settings-decktracker>
 				</ng-container>
 				<settings-modal></settings-modal>
 			</div>
@@ -52,7 +52,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class SettingsComponent implements AfterViewInit {
 	thisWindowId: string;
 	selectedApp = 'general';
-	private settingsEventBus: EventEmitter<string>;
+	selectedMenu: string;
+	private settingsEventBus: EventEmitter<[string, string]>;
 
 	constructor(private debugService: DebugService, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
@@ -60,7 +61,7 @@ export class SettingsComponent implements AfterViewInit {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		window['selectApp'] = this.onAppSelected;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-		this.settingsEventBus.subscribe(selectedApp => this.selectApp(selectedApp));
+		this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) => this.selectApp(selectedApp, selectedMenu));
 		this.ow.addMessageReceivedListener(async message => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
@@ -82,9 +83,10 @@ export class SettingsComponent implements AfterViewInit {
 		this.selectedApp = selectedApp;
 	}
 
-	selectApp(selectedApp: string) {
-		console.log('selectApp', selectedApp);
+	selectApp(selectedApp: string, selectedMenu: string) {
+		console.log('selectApp', selectedApp, selectedMenu);
 		this.selectedApp = selectedApp;
+		this.selectedMenu = selectedMenu;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

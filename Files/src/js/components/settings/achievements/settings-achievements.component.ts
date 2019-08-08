@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-achievements',
@@ -8,9 +8,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	],
 	template: `
 		<ul class="achievements">
-			<settings-achievements-menu [selectedMenu]="selectedMenu" (onMenuSelected)="onMenuSelected($event)">
+			<settings-achievements-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">
 			</settings-achievements-menu>
-			<ng-container [ngSwitch]="selectedMenu">
+			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-achievements-capture *ngSwitchCase="'capture'"></settings-achievements-capture>
 			</ng-container>
 		</ul>
@@ -18,7 +18,10 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SettingsAchievementsComponent {
-	selectedMenu = 'capture';
+	_selectedMenu: string;
+	@Input() set selectedMenu(value: string) {
+		this._selectedMenu = value || 'capture';
+	}
 
 	onMenuSelected(selectedMenuItem) {
 		this.selectedMenu = selectedMenuItem;
