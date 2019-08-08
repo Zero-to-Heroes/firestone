@@ -33,6 +33,10 @@ import { SettingsCollectionNotificationComponent } from '../../components/settin
 import { SettingsBroadcastComponent } from '../../components/settings/decktracker/settings-broadcast';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { SettingsGeneralBugReportComponent } from '../../components/settings/general/settings-general-bug-report.component';
+import { LogsUploaderService } from '../../services/logs-uploader.service';
+import { S3FileUploadService } from '../../services/s3-file-upload.service';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
 
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
@@ -51,6 +55,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsGeneralComponent,
 		SettingsGeneralMenuComponent,
 		SettingsGeneralLaunchComponent,
+		SettingsGeneralBugReportComponent,
 
 		SettingsCollectionComponent,
 		SettingsCollectionMenuComponent,
@@ -72,6 +77,16 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsBroadcastComponent,
 	],
 	bootstrap: [SettingsComponent],
-	providers: [DebugService, Events, GenericIndexedDbService, OverwolfService, PreferencesService, TwitchAuthService],
+	providers: [
+		DebugService,
+		Events,
+		GenericIndexedDbService,
+		OverwolfService,
+		PreferencesService,
+		TwitchAuthService,
+		LogsUploaderService,
+		S3FileUploadService,
+		SimpleIOService,
+	],
 })
 export class SettingsModule {}

@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { LogsUploaderService } from '../../services/logs-uploader.service';
+import { Component, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'control-bug',
@@ -17,31 +17,31 @@ import { LogsUploaderService } from '../../services/logs-uploader.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
+// TODO: merge this with the settings control button?
 export class ControlBugComponent {
-	constructor(private logService: LogsUploaderService) {}
+	private settingsWindowId: string;
+	private settingsEventBus: EventEmitter<[string, string]>;
+
+	constructor(private ow: OverwolfService) {}
+
+	async ngAfterViewInit() {
+		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
+		try {
+			const window = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+			this.settingsWindowId = window.id;
+		} catch (e) {
+			this.ngAfterViewInit();
+		}
+	}
 
 	async showBugForm() {
-		try {
-			const [appLogs, gameLogs] = await Promise.all([this.logService.uploadAppLogs(), this.logService.uploadGameLogs()]);
-			const subject = `Firestone bug report`;
-			const body = `Hey, I'd like to report a bug I found in Firestone.
-
-			== Bug description ==
-
-			(please fill the bug descrition here)
-
-			== How I got there ==
-
-			(if you have any idea of what might have caused the issue, or what you were doing with the app when the bug occurred)
-
-			== Log files ==
-
-			App logs key: ${appLogs}
-			Game logs key: ${gameLogs ? gameLogs : 'game was not running'}`;
-			console.log('Trying to prefill email with', subject, body);
-			window.location.href = `mailto:sebastien.tromp@gmail.com?subject=${subject}&body=${body}`;
-		} catch (e) {
-			console.error('Could not upload all relevant log files', e);
-		}
+		this.settingsEventBus.next(['general', 'bugreport']);
+		const window = await this.ow.getCurrentWindow();
+		const center = {
+			x: window.left + window.width / 2,
+			y: window.top + window.height / 2,
+		};
+		await this.ow.sendMessage(this.settingsWindowId, 'move', center);
+		this.ow.restoreWindow(this.settingsWindowId);
 	}
 }
