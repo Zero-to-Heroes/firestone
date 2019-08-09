@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
 import { OverwolfService } from '../../services/overwolf.service';
 import { HttpClientModule } from '@angular/common/http';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
@@ -30,6 +31,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BrowserAnimationsModule,
 		SharedModule,
 		SelectModule,
+		OverlayModule,
 		FormsModule,
 		ReactiveFormsModule,
 		SharedDeckTrackerModule,

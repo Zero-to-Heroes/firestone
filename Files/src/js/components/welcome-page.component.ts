@@ -17,6 +17,7 @@ import { OverwolfService } from '../services/overwolf.service';
 						</svg>
 					</i>
 					<div class="controls">
+						<control-bug></control-bug>
 						<control-settings [windowId]="thisWindowId"></control-settings>
 						<control-discord></control-discord>
 						<control-minimize [windowId]="thisWindowId"></control-minimize>

@@ -21,6 +21,7 @@ import { FeatureFlags } from '../../services/feature-flags.service';
 import { init } from '@sentry/browser';
 import { HttpClientModule } from '@angular/common/http';
 import { OverwolfService } from '../../services/overwolf.service';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
@@ -31,7 +32,7 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule, OverlayModule],
 	declarations: [WelcomePageComponent, HomeScreenInfoTextComponent, AppChoiceComponent, SocialMediaComponent],
 	bootstrap: [WelcomePageComponent],
 	providers: [

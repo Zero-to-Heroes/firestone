@@ -14,6 +14,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 				</svg>
 			</i>
 			<div class="controls">
+				<control-bug></control-bug>
 				<control-settings [settingsApp]="'decktracker'" [shouldMoveSettingsWindow]="false" [windowId]="windowId">
 				</control-settings>
 				<control-close [windowId]="windowId"></control-close>
