@@ -13,6 +13,8 @@ import { ControlBugComponent } from '../../components/controls/control-bug.compo
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { ControlMaximizeComponent } from '../../components/controls/control-maximize.component';
+import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
+import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 
 @NgModule({
 	imports: [BrowserModule],
@@ -30,11 +32,13 @@ import { ControlMaximizeComponent } from '../../components/controls/control-maxi
 
 		Tooltip,
 		TooltipsComponent,
+		CardTooltipComponent,
 		HelpTooltipComponent,
 
+		CardTooltipDirective,
 		HelpTooltipDirective,
 	],
-	entryComponents: [Tooltip, HelpTooltipComponent],
+	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent],
 	exports: [
 		ControlHelpComponent,
 		ControlMinimizeComponent,
@@ -49,7 +53,11 @@ import { ControlMaximizeComponent } from '../../components/controls/control-maxi
 
 		Tooltip,
 		TooltipsComponent,
+		CardTooltipComponent,
 		HelpTooltipComponent,
+
+		CardTooltipDirective,
+		HelpTooltipDirective,
 	],
 })
 export class SharedModule {}

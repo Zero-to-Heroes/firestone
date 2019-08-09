@@ -1,14 +1,14 @@
 import { Directive, ElementRef, HostListener, Input, OnInit, ComponentRef } from '@angular/core';
 import { OverlayRef, Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
+import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 
 @Directive({
-	selector: '[helpTooltip]',
+	selector: '[cardTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class HelpTooltipDirective implements OnInit {
-	@Input('helpTooltip') text = '';
+export class CardTooltipDirective implements OnInit {
+	@Input('cardTooltip') cardId = '';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -20,23 +20,20 @@ export class HelpTooltipDirective implements OnInit {
 			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.elementRef)
 			// Describe how to connect overlay to the elementRef
-			// Means, attach overlay's center bottom point to the
-			// top center point of the elementRef.
 			.withPositions([
 				{
-					originX: 'center',
-					originY: 'top',
-					overlayX: 'center',
-					overlayY: 'bottom',
+					originX: 'end',
+					originY: 'center',
+					overlayX: 'start',
+					overlayY: 'center',
 				},
 			])
-			// Fallback if element is close to the top
 			.withPositions([
 				{
-					originX: 'center',
-					originY: 'bottom',
-					overlayX: 'center',
-					overlayY: 'top',
+					originX: 'start',
+					originY: 'center',
+					overlayX: 'end',
+					overlayY: 'center',
 				},
 			]);
 		// Connect position strategy
@@ -46,13 +43,13 @@ export class HelpTooltipDirective implements OnInit {
 	@HostListener('mouseenter')
 	onMouseEnter() {
 		// Create tooltip portal
-		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
+		this.tooltipPortal = new ComponentPortal(CardTooltipComponent);
 
 		// Attach tooltip portal to overlay
-		const tooltipRef: ComponentRef<HelpTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
+		const tooltipRef: ComponentRef<CardTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-		tooltipRef.instance.text = this.text;
+		tooltipRef.instance.cardId = this.cardId;
 	}
 
 	@HostListener('mouseleave')

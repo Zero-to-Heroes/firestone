@@ -11,7 +11,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'card-history-item',
 	styleUrls: [`../../../css/component/collection/card-history-item.component.scss`],
 	template: `
-		<div class="card-history-item" [ngClass]="{ 'active': active }">
+		<div class="card-history-item" [ngClass]="{ 'active': active }" [cardTooltip]="cardId">
 			<img class="rarity" src="{{ rarityImg }}" />
 			<span class="name">{{ cardName }}</span>
 			<span class="dust-amount" *ngIf="!newCard">
@@ -42,8 +42,8 @@ export class CardHistoryItemComponent implements AfterViewInit {
 	cardName: string;
 	creationDate: string;
 	dustValue: number;
+	cardId: string;
 
-	private cardId: string;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private el: ElementRef, private ow: OverwolfService, private events: Events) {}
@@ -74,15 +74,15 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}
 
-	@HostListener('mouseenter') onMouseEnter() {
-		const rect = this.el.nativeElement.getBoundingClientRect();
-		const x = rect.left - rect.width + 120;
-		const y = rect.top + rect.height / 2;
-		this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true);
-	}
+	// @HostListener('mouseenter') onMouseEnter() {
+	// 	const rect = this.el.nativeElement.getBoundingClientRect();
+	// 	const x = rect.left - rect.width + 120;
+	// 	const y = rect.top + rect.height / 2;
+	// 	this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true, rect);
+	// }
 
-	@HostListener('mouseleave')
-	onMouseLeave() {
-		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
-	}
+	// @HostListener('mouseleave')
+	// onMouseLeave() {
+	// 	// this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
+	// }
 }
