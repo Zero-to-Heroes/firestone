@@ -2,53 +2,53 @@
 @import '../../global/scrollbar';
 
 .achievements {
-    flex-grow: 1;
-    display: flex;
-    padding-top: 14px;
-    height: 598px;
-    max-height: 598px;
+	flex-grow: 1;
+	display: flex;
+	padding-top: 14px;
+	// height: 598px;
+	// max-height: 598px;
 
-    achievements-menu {
-        transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, flex-shrink 0.4s ease-in-out, flex-grow 0.4s ease-in-out;
+	achievements-menu {
+		transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, flex-shrink 0.4s ease-in-out, flex-grow 0.4s ease-in-out;
 
-        &.shrink {
-            opacity: 0;
-            visibility: hidden;
-            flex-shrink: 2;
-            flex-grow: 0;
-        }
-    }
+		&.shrink {
+			opacity: 0;
+			visibility: hidden;
+			flex-shrink: 2;
+			flex-grow: 0;
+		}
+	}
 
-    .main {
-    	display: flex;
-    	flex-direction: column;
-        width: 695px;
-        padding-left: 15px;
-        margin-top: 0;
-        position: relative;
+	.main {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		padding-left: 15px;
+		margin-top: 0;
+		position: relative;
 
-        &.divider {
-            border-right: 1px solid #4B3052;
-            height: 100%;
-        }
+		&.divider {
+			border-right: 1px solid #4b3052;
+			height: 100%;
+		}
 
-        // achievements-menu {
-        //     height: 30px;
-        //     display: flex;
-        //     align-items: flex-end;
-        //     flex-shrink: 0;
-        // }
+		// achievements-menu {
+		//     height: 30px;
+		//     display: flex;
+		//     align-items: flex-end;
+		//     flex-shrink: 0;
+		// }
 
-        achievevements-global-categories {
-            display: flex;
-        }
+		achievevements-global-categories {
+			display: flex;
+		}
 
-        achievements-list {
-            display: flex;
-            flex-grow: 1;
-        }
+		achievements-list {
+			display: flex;
+			flex-grow: 1;
+		}
 
-        achievement-sharing-modal {
+		achievement-sharing-modal {
 			display: flex;
 			position: absolute;
 			background: rgba(0, 0, 0, 0.8);
@@ -56,14 +56,23 @@
 			bottom: 0;
 			left: 0;
 			height: calc(100vh - 40px);
-        }
-    }
+		}
+	}
 
-    .secondary {
-    	display: flex;
-    	flex-direction: column;
-        flex-grow: 1;
-        margin-left: 20px;
-        margin-right: 15px;
-    }
+	.secondary {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 0;
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 400px;
+		height: calc(100% - 330px);
+	}
+}
+
+achievement-history {
+	flex-grow: 1;
+	flex-shrink: 1;
+	position: relative;
+	display: flex;
 }

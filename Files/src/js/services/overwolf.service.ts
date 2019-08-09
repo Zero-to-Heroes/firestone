@@ -154,6 +154,15 @@ export class OverwolfService {
 		});
 	}
 
+	public maximizeWindow(windowId: string) {
+		return new Promise<any>(resolve => {
+			overwolf.windows.maximize(windowId, result => {
+				console.log('[overwolf-service] maximized window', windowId, result);
+				resolve(result);
+			});
+		});
+	}
+
 	public dragMove(windowId: string) {
 		overwolf.windows.dragMove(windowId);
 	}

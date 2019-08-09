@@ -4,6 +4,8 @@
 .card-history {
 	margin-top: 34px;
 	width: 400px;
+	display: flex;
+	flex-direction: column;
 
 	.top-container {
 		margin-bottom: 11px;
@@ -33,7 +35,6 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		height: 160px;
 		overflow-y: scroll;
 	}
 
@@ -77,5 +78,4 @@
 			@extend %empty-card-history;
 		}
 	}
-
 }

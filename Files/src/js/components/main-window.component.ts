@@ -55,6 +55,7 @@ declare var ga: any;
 							</button>
 							<control-discord></control-discord>
 							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+							<control-maximize [windowId]="windowId"></control-maximize>
 							<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
 						</div>
 					</section>
@@ -118,6 +119,7 @@ export class MainWindowComponent implements AfterViewInit {
 	state: MainWindowState;
 	windowId: string;
 
+	private isMaximized = false;
 	private adRef;
 	private adInit = false;
 
@@ -135,11 +137,16 @@ export class MainWindowComponent implements AfterViewInit {
 			}
 		});
 		this.ow.addStateChangedListener('CollectionWindow', message => {
-			if (message.window_state !== 'normal') {
+			if (message.window_state === 'maximized') {
+				this.isMaximized = true;
+			} else {
+				this.isMaximized = false;
+			}
+			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
-			} else {
-				console.log('refreshing ad', message.window_state);
+			} else if (message.window_previous_state !== 'normal' && message.window_previous_state !== 'maximized') {
+				console.log('refreshing ad', message.window_state, message);
 				this.refreshAds();
 			}
 		});
@@ -165,7 +172,9 @@ export class MainWindowComponent implements AfterViewInit {
 
 	@HostListener('mousedown')
 	dragMove() {
-		this.ow.dragMove(this.windowId);
+		if (!this.isMaximized) {
+			this.ow.dragMove(this.windowId);
+		}
 	}
 
 	async goHome() {
@@ -192,6 +201,13 @@ export class MainWindowComponent implements AfterViewInit {
 		}
 		if (!adsReady || !OwAd) {
 			console.log('ads container not ready, returning');
+			setTimeout(() => {
+				this.refreshAds();
+			}, 50);
+			return;
+		}
+		if (!document.getElementById('ad-div')) {
+			console.log('ad-div not ready, returning');
 			setTimeout(() => {
 				this.refreshAds();
 			}, 50);

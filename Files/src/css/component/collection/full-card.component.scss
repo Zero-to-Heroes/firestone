@@ -2,185 +2,187 @@
 @import '../../global/fonts';
 
 .card-details-container {
-    display: flex;
-    position: relative;
-    top: -17px;
+	display: flex;
+	position: relative;
+	top: -17px;
 
-    .details {
-        width: 413px;
-        padding-right: 55px;
-        padding-top: 41px;
-        display: flex;
-        flex-direction: column;
+	.details {
+		// width: 413px;
+		flex-grow: 1;
+		padding-right: 55px;
+		padding-top: 41px;
+		display: flex;
+		flex-direction: column;
 
-        h1 {
-            @extend %card-title;
-            padding-bottom: 14px;
-            border-bottom: 1px solid $yellow03;
-            margin-bottom: 20px;
-            width: 265px;
-        }
+		h1 {
+			@extend %card-title;
+			padding-bottom: 14px;
+			border-bottom: 1px solid $yellow03;
+			margin-bottom: 20px;
+			// width: 265px;
+		}
 
-        .card-details {
-            overflow-y: scroll;
-        }
+		.card-details {
+			overflow-y: scroll;
+		}
 
-        .card-info {
-            @extend %you-have-viewed;
-            margin-top: 9px;
+		.card-info {
+			@extend %you-have-viewed;
+			margin-top: 9px;
 
-            .sub-title {
-                @extend %card-details;
-                margin-right: 10px;
-            }
+			.sub-title {
+				@extend %card-details;
+				margin-right: 10px;
+			}
 
-            &.audio {
-                flex-direction: column;
+			&.audio {
+				flex-direction: column;
 
-                .label {
-                    text-transform: capitalize;
-                }
+				.label {
+					text-transform: capitalize;
+				}
 
-                ul {
-                    list-style: none;
-                    display: flex;
-                    flex-direction: column;
+				ul {
+					list-style: none;
+					display: flex;
+					flex-direction: column;
 
-                    li {
-                        display: flex;
-                        align-items: center;
-                        margin-right: 11px;
-                        padding-right: 11px;
+					li {
+						display: flex;
+						align-items: center;
+						margin-right: 11px;
+						padding-right: 11px;
 
-                        span {
-                            margin-right: 6px;
-                        }
+						span {
+							margin-right: 6px;
+						}
 
-                        &:hover {
-                            color: $green01;
+						&:hover {
+							color: $green01;
 
-                            & > button {
-                                --icon-color: #D9C3AB;
-                                background-color: transparent;
-                            }
-                        }
-                    }
+							& > button {
+								--icon-color: #d9c3ab;
+								background-color: transparent;
+							}
+						}
+					}
 
-                    li:last-child {
-                        border: none;
-                        padding-right: 0;
-                        margin-right: 0;
-                    }
+					li:last-child {
+						border: none;
+						padding-right: 0;
+						margin-right: 0;
+					}
 
-                    li:nth-child(4) {
-                        margin-left: 0;
-                    }
-                }
-            }
+					li:nth-child(4) {
+						margin-left: 0;
+					}
+				}
+			}
 
-            &.flavor-text {
-                margin-top: 20px;
+			&.flavor-text {
+				margin-top: 20px;
 
-                .sub-title {
-                    display: block;
-                }
-            }
-        }
-    }
+				.sub-title {
+					display: block;
+				}
+			}
+		}
+	}
 
-    .card-view-container {
-        padding-left: 19px;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        margin-right: 40px;
+	.card-view-container {
+		padding-left: 19px;
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		margin-right: 40px;
 
-        card-view {
-            width: 270px;
-            margin-top: 10px;
+		card-view {
+			// width: 270px;
+			width: 100%;
+			margin-top: 10px;
 
-            .card-container {
+			.card-container {
+				img {
+					opacity: 1;
+				}
 
-                img {
-                    opacity: 1;
-                }
+				.overlay.overlay {
+					display: none;
+				}
 
-                .overlay.overlay {
-                    display: none;
-                }
+				.real-card.real-card {
+					filter: none;
+				}
 
-                .real-card.real-card {
-                    filter: none;
-                }
+				.count {
+					height: 40px;
+					// top: -54px;
+					top: auto;
+					margin-top: -18%;
 
-                .count {
-                    height: 40px;
-                    top: -54px;
+					.non-premium {
+						height: 40px;
+						width: 60px;
+						justify-content: center;
 
-                    .non-premium {
-                        height: 40px;
-                        width: 60px;
-                        justify-content: center;
+						span {
+							font-size: 20px;
+						}
+					}
 
-                        span {
-                            font-size: 20px;
-                        }
-                    }
+					.premium.premium {
+						height: 40px;
+						width: 90px;
 
-                    .premium.premium {
-                        height: 40px;
-                        width: 90px;
+						.left {
+							left: -2px;
+						}
 
-                        .left {
-                            left: -2px;
-                        }
+						.right {
+							right: -2px;
+						}
 
-                        .right {
-                            right: -2px;
-                        }
+						i {
+							width: 28px !important;
+							height: 32px !important;
+							margin-bottom: -7px !important;
+						}
 
-                        i {
-                            width: 28px !important;
-                            height: 32px !important;
-                            margin-bottom: -7px !important;
-                        }
+						span {
+							font-size: 20px;
+							margin-left: 9px;
+							margin-right: 8px;
+						}
+					}
+				}
+			}
+		}
+	}
 
-                        span {
-                            font-size: 20px;
-                            margin-left: 9px;
-                            margin-right: 8px;
-                        }
-                    }
-                }
-            }
+	.deco {
+		position: absolute;
 
-        }
-    }
+		&.deco-left {
+			transform: rotate(90deg) scale(1, -1);
+			left: -29px;
+			top: calc(50% - 25px);
+		}
 
-    .deco {
-        position: absolute;
-    
-        &.deco-left {
-            transform: rotate(90deg) scale(1,-1);
-            left: -29px;
-            top: calc(50% - 25px);
-        }
-    
-        &.deco-top {
-            left: calc(50% - 25px);
-            top: -7px;
-        }
-    
-        &.deco-right {
-            transform: rotate(90deg);
-            right: -29px;
-            top: calc(50% - 25px);
-        }
-    
-        &.deco-bottom {
-            left: calc(50% - 25px);
-            bottom: -7px;
-            transform: scale(1, -1);
-        }
-    }
+		&.deco-top {
+			left: calc(50% - 25px);
+			top: -7px;
+		}
+
+		&.deco-right {
+			transform: rotate(90deg);
+			right: -29px;
+			top: calc(50% - 25px);
+		}
+
+		&.deco-bottom {
+			left: calc(50% - 25px);
+			bottom: -7px;
+			transform: scale(1, -1);
+		}
+	}
 }

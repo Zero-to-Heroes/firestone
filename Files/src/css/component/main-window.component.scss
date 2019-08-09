@@ -1,17 +1,18 @@
 @import '../global/variables';
 @import '../global/fonts';
 
-body, html {
+body,
+html {
 	width: 100%;
 	height: 100%;
 }
 
 body {
 	background-color: transparent;
-    border: 0;
-    margin: 0;
-    padding: 10px;
-    overflow: hidden;
+	border: 0;
+	margin: 0;
+	padding: 10px;
+	overflow: hidden;
 }
 
 .top {
@@ -26,8 +27,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	height: 100%;
-    overflow: hidden;
-    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
+	overflow: hidden;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 
 	.corner {
 		position: absolute;
@@ -40,31 +41,31 @@ body {
 		&.top-right {
 			top: 0;
 			right: 0;
-    		transform: rotate(90deg);
+			transform: rotate(90deg);
 		}
 
 		&.bottom-right {
 			bottom: 0;
 			right: 0;
-    		transform: rotate(180deg);
+			transform: rotate(180deg);
 		}
 
 		&.bottom-left {
 			bottom: 0;
 			left: 0;
-    		transform: rotate(270deg);
+			transform: rotate(270deg);
 		}
 	}
 
 	.app-container {
-    	position: relative;
-	    width: calc(100% - 20px);
-	    height: calc(100% - 20px);
-	    display: flex;
-	    flex-direction: column;
-    	overflow: hidden;
+		position: relative;
+		width: calc(100% - 20px);
+		height: calc(100% - 20px);
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
 		// box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
-		
+
 		&.collection {
 			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
 			outline: 1px solid $grey04;
@@ -84,7 +85,7 @@ body {
 			}
 
 			menu-selection {
-			    display: flex;
+				display: flex;
 				align-items: flex-end;
 			}
 
@@ -93,24 +94,24 @@ body {
 			}
 		}
 
-	    .menu-bar {
-	    	background: transparent;
-		    display: flex;
-		    flex-direction: row;
-		    align-items: stretch;
-		    border: none;
-		    width: 100%;
-		    height: 30px;
-		    height: 80px;
-		    z-index: 400;
-    		flex-shrink: 0;
-    		border-bottom: 1px solid $grey04;
+		.menu-bar {
+			background: transparent;
+			display: flex;
+			flex-direction: row;
+			align-items: stretch;
+			border: none;
+			width: 100%;
+			height: 30px;
+			height: 80px;
+			z-index: 400;
+			flex-shrink: 0;
+			border-bottom: 1px solid $grey04;
 
-    		.first {
-    			display: flex;
-    			flex-direction: column;
+			.first {
+				display: flex;
+				flex-direction: column;
 			}
-			
+
 			hotkey {
 				display: flex;
 				align-items: center;
@@ -119,111 +120,119 @@ body {
 				position: relative;
 			}
 
-		    real-time-notifications {
-		    	height: 29px;
+			real-time-notifications {
+				height: 29px;
 				display: flex;
-			    justify-content: flex-start;
-			    align-items: center;
-			    padding-left: 10px;
-		    }
+				justify-content: flex-start;
+				align-items: center;
+				padding-left: 10px;
+			}
 
-		    .controls {
-		    	height: 30px;
-		    	display: flex;
+			.controls {
+				height: 30px;
+				display: flex;
 
-		    	.close-button:hover {
-		    		background: $grey01;
-		    		color: $darkred;
-		    	}
-		    }
-	    }
-		
-		&.achievements, &.decktracker {
-			background-image: radial-gradient(340.00px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%), url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+				.close-button:hover {
+					background: $grey01;
+					color: $darkred;
+				}
+			}
+		}
+
+		&.achievements,
+		&.decktracker {
+			background-image: radial-gradient(340px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%),
+				url('/Files/assets/images/backgrounds/achievements_bg.jpg');
 			background-size: 100%;
-			outline: 1px solid #4B3052;
+			outline: 1px solid #4b3052;
 
 			.navigation menu-selection .menu-selection {
-				color: #7D5A87;
+				color: #7d5a87;
 			}
-			
+
 			.menu-bar {
-				border-bottom-color: #4B3052;
+				border-bottom-color: #4b3052;
 			}
 
 			.menu-selection .zth-tooltip {
-				background-color: #7D5A87;
+				background-color: #7d5a87;
 				p {
 					color: #190505;
 				}
 				.tooltip-arrow {
-					fill: #7D5A87;
+					fill: #7d5a87;
 				}
 			}
 
 			.real-time-notifications {
-				color: #A276AF;
+				color: #a276af;
 			}
 		}
 
-	    .content-container {
-		    position: relative;
-		    flex-grow: 1;
-		    display: flex;
-    		flex-direction: column;
-	    }
+		.content-container {
+			position: relative;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+
+			& > * {
+				flex-grow: 1;
+				display: flex;
+			}
+		}
 	}
 }
 
 tooltips {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9999;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 9999;
 }
 
 .ads-container {
-    width: 400px;
-    height: 300px;
-    right: 25px;
-    bottom: 25px;
-    position: absolute;
+	width: 400px;
+	height: 300px;
+	right: 25px;
+	bottom: 25px;
+	position: absolute;
 
-    .no-ads-placeholder {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+	.no-ads-placeholder {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
-        .logo {
-            width: 109px;
-            height: 154px;
-        }
-    }
+		.logo {
+			width: 109px;
+			height: 154px;
+		}
+	}
 
-    .ads {
-        width: 100%;
-        height: 100%;
-        position: absolute;
+	.ads {
+		width: 100%;
+		height: 100%;
+		position: absolute;
 	}
 }
 
 .root .app-container.achievements {
 	.menu-bar .controls {
-		button, a {
-			color: #CB9FD7;
-			
+		button,
+		a {
+			color: #cb9fd7;
+
 			&:hover {
-				background: #4B3052;
+				background: #4b3052;
 			}
 		}
 
 		.close-button:hover {
-			color: #2A1030;
-			background: #CB9FD7;
+			color: #2a1030;
+			background: #cb9fd7;
 		}
 	}
 }
@@ -236,12 +245,13 @@ tooltips {
 	}
 }
 
-.top.achievements, .top.decktracker {
+.top.achievements,
+.top.decktracker {
 	.no-ads-placeholder {
 		background-color: #190505;
 
 		.logo {
-			color: #2A1030;
+			color: #2a1030;
 		}
 	}
 }

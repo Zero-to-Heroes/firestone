@@ -2,8 +2,10 @@
 @import '../../global/fonts';
 
 .achievement-history {
-    margin-top: 12px;
+	margin-top: 12px;
 	width: 400px;
+	display: flex;
+	flex-direction: column;
 
 	.top-container {
 		display: flex;
@@ -24,7 +26,7 @@
 		padding: 0;
 		margin: 0;
 		// height: 160px;
-		height: 212px;
+		// height: 212px;
 		overflow-y: scroll;
 		overflow-x: hidden;
 
@@ -40,9 +42,9 @@
 		}
 
 		li:before {
-		   content: "•";
-		   font-size: 20px;
-		   color: #D9C3AB;
+			content: '•';
+			font-size: 20px;
+			color: #d9c3ab;
 		}
 
 		achievement-history-item {

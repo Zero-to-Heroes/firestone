@@ -1,154 +1,153 @@
 {
-	"manifest_version":1,
-	"type":"WebApp",
-	"meta":{
-		"name":"Firestone",
-		"author":"Sébastien Tromp",
-		"version":"@app-version@",
-		"minimum-overwolf-version":"0.116.3.49",
-		"description":"A Hearthtone companion to have in-game the information you want to know about your card collection and more",
-		"dock_button_title": "Firestone",
-		"icon":"IconMouseOver.png",
-		"icon_gray":"IconMouseNormal.png",
-		"launcher_icon": "launcher_icon.ico",
-		"splash_image": "Splash_icon.png"
-	},
-	"permissions": [
-		"Logging",
-		"GameInfo",
-		"FileSystem",
-		"Extensions",
-		"Profile",
-		"Hotkeys",
-		"VideoCaptureSettings",
-        "Streaming"
-	],
-	"disable_dockbutton": false,
-	"hide_from_store": false,
-	"data": {
-		"start_window":"MainWindow",
-		"windows": {
-			"MainWindow": {
-				"file": "Files/background.html",
-				"transparent": true,
-				"clickthrough": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-				"is_background_page": true,
-				"size": {"width": 0, "height": 0},
-				"start_position": {"top": 0, "left": 0},
-                "grab_keyboard_focus": false,
-                "grab_focus_on_desktop": false,
-                "block_top_window_navigation": true
-			},
-			"LoadingWindow": {
-				"file": "Files/loading.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": true,
-		        "size": {"width": 460, "height": 600},
-		        "min_size": {"width": 460, "height": 600},
-		        "max_size": {"width": 460, "height": 600},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
-			},
-			"DeckTrackerWindow": {
-				"file": "Files/decktracker.html",
-				"transparent": true,
-				"resizable": true,
-				"show_in_taskbar": false,
-				"size": {"width": 530, "height": 800},
-				"start_position": {"top": 0, "left": 0}
-			},
-			"NotificationsWindow": {
-				"file": "Files/notifications.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-				"size": {"width": 530, "height": 500},
-				"start_position": {"top": 0, "left": 0},
-                "grab_keyboard_focus": false,
-                "grab_focus_on_desktop": false,
-                "block_top_window_navigation": true
-			},
-			"SettingsWindow": {
-				"file": "Files/settings.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": true,
-		        "size": {"width": 680, "height": 620},
-		        "min_size": {"width": 680, "height": 620},
-		        "max_size": {"width": 680, "height": 620}
-			},
-			"WelcomeWindow": {
-				"file": "Files/welcome.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": true,
-		        "size": {"width": 1064, "height": 680},
-		        "min_size": {"width": 1064, "height": 680},
-		        "max_size": {"width": 1064, "height": 680}
-			},
-			"CollectionWindow": {
-				"file": "Files/collection.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": true,
-		        "size": {"width": 1170, "height": 720},
-		        "min_size": {"width": 1170, "height": 720},
-		        "max_size": {"width": 1170, "height": 720},
-		        "block_top_window_navigation": true,
-		        "popup_blocker": true,
-		        "mute": true
-			}
-		},
-		"game_targeting": {
-		  "type": "dedicated",
-		  "game_ids": [9898]
-		},
-		"force_browser": "user",
-		"game_events": [9898],
-		"launch_events": [
-			{
-				"event": "GameLaunch",
-				"event_data": {
-					"game_ids": [9898]
-				},
-				"start_minimized": false
-			}
-		],
-	    "protocol_override_domains" : {
-	    	"googlesyndication" : "http"
-	   	},
-		"externally_connectable": {
-			"matches": [
-				"http://www.zerotoheroes.com",
-				"https://www.googletagmanager.com",
-				"https://*.zam.com",
-                "https://*.execute-api.us-west-2.amazonaws.com",
-                "https://api.twitch.tv",
-                "https://localhost",
-                "https://*.firestoneapp.com",
-                "http://*.amazonaws.com"
-			]
-		},
-		"extra-objects": {
-			"simple-io-plugin-zip": {
-				"file": "Files/plugins/simple-io-plugin-zip.dll",
-				"class": "overwolf.plugins.SimpleIOPluginZip"
-			},
-			"overwolf-replay-converter": {
-				"file": "Files/plugins/HearthstoneReplays.dll",
-				"class": "HearthstoneReplays.ReplayConverterPlugin"
-			}
-		},
-		"hotkeys": {
-			"collection": {
-				"title": "Show/hide collection window",
-				"action-type": "custom",
-				"default": "Alt+C"
-			}
-		}
-	}
+  "manifest_version": 1,
+  "type": "WebApp",
+  "meta": {
+    "name": "Firestone",
+    "author": "Sébastien Tromp",
+    "version": "@app-version@",
+    "minimum-overwolf-version": "0.116.3.49",
+    "description": "A Hearthtone companion to have in-game the information you want to know about your card collection and more",
+    "dock_button_title": "Firestone",
+    "icon": "IconMouseOver.png",
+    "icon_gray": "IconMouseNormal.png",
+    "launcher_icon": "launcher_icon.ico",
+    "splash_image": "Splash_icon.png"
+  },
+  "permissions": [
+    "Logging",
+    "GameInfo",
+    "FileSystem",
+    "Extensions",
+    "Profile",
+    "Hotkeys",
+    "VideoCaptureSettings",
+    "Streaming"
+  ],
+  "disable_dockbutton": false,
+  "hide_from_store": false,
+  "data": {
+    "start_window": "MainWindow",
+    "windows": {
+      "MainWindow": {
+        "file": "Files/background.html",
+        "transparent": true,
+        "clickthrough": true,
+        "resizable": false,
+        "show_in_taskbar": false,
+        "is_background_page": true,
+        "size": { "width": 0, "height": 0 },
+        "start_position": { "top": 0, "left": 0 },
+        "grab_keyboard_focus": false,
+        "grab_focus_on_desktop": false,
+        "block_top_window_navigation": true
+      },
+      "LoadingWindow": {
+        "file": "Files/loading.html",
+        "transparent": true,
+        "resizable": false,
+        "show_in_taskbar": true,
+        "size": { "width": 460, "height": 600 },
+        "min_size": { "width": 460, "height": 600 },
+        "max_size": { "width": 460, "height": 600 },
+        "block_top_window_navigation": true,
+        "popup_blocker": true,
+        "mute": true
+      },
+      "DeckTrackerWindow": {
+        "file": "Files/decktracker.html",
+        "transparent": true,
+        "resizable": true,
+        "show_in_taskbar": false,
+        "size": { "width": 530, "height": 800 },
+        "start_position": { "top": 0, "left": 0 }
+      },
+      "NotificationsWindow": {
+        "file": "Files/notifications.html",
+        "transparent": true,
+        "resizable": false,
+        "show_in_taskbar": false,
+        "size": { "width": 530, "height": 500 },
+        "start_position": { "top": 0, "left": 0 },
+        "grab_keyboard_focus": false,
+        "grab_focus_on_desktop": false,
+        "block_top_window_navigation": true
+      },
+      "SettingsWindow": {
+        "file": "Files/settings.html",
+        "transparent": true,
+        "resizable": false,
+        "show_in_taskbar": true,
+        "size": { "width": 680, "height": 620 },
+        "min_size": { "width": 680, "height": 620 },
+        "max_size": { "width": 680, "height": 620 }
+      },
+      "WelcomeWindow": {
+        "file": "Files/welcome.html",
+        "transparent": true,
+        "resizable": false,
+        "show_in_taskbar": true,
+        "size": { "width": 1064, "height": 680 },
+        "min_size": { "width": 1064, "height": 680 },
+        "max_size": { "width": 1064, "height": 680 }
+      },
+      "CollectionWindow": {
+        "file": "Files/collection.html",
+        "transparent": true,
+        "resizable": true,
+        "show_in_taskbar": true,
+        "size": { "width": 1170, "height": 720 },
+        "min_size": { "width": 1170, "height": 720 },
+        "block_top_window_navigation": true,
+        "popup_blocker": true,
+        "mute": true
+      }
+    },
+    "game_targeting": {
+      "type": "dedicated",
+      "game_ids": [9898]
+    },
+    "force_browser": "user",
+    "game_events": [9898],
+    "launch_events": [
+      {
+        "event": "GameLaunch",
+        "event_data": {
+          "game_ids": [9898]
+        },
+        "start_minimized": false
+      }
+    ],
+    "protocol_override_domains": {
+      "googlesyndication": "http"
+    },
+    "externally_connectable": {
+      "matches": [
+        "http://www.zerotoheroes.com",
+        "https://www.googletagmanager.com",
+        "https://*.zam.com",
+        "https://*.execute-api.us-west-2.amazonaws.com",
+        "https://api.twitch.tv",
+        "https://localhost",
+        "https://*.firestoneapp.com",
+        "http://*.amazonaws.com"
+      ]
+    },
+    "extra-objects": {
+      "simple-io-plugin-zip": {
+        "file": "Files/plugins/simple-io-plugin-zip.dll",
+        "class": "overwolf.plugins.SimpleIOPluginZip"
+      },
+      "overwolf-replay-converter": {
+        "file": "Files/plugins/HearthstoneReplays.dll",
+        "class": "HearthstoneReplays.ReplayConverterPlugin"
+      }
+    },
+    "hotkeys": {
+      "collection": {
+        "title": "Show/hide collection window",
+        "action-type": "custom",
+        "default": "Alt+C"
+      }
+    }
+  }
 }

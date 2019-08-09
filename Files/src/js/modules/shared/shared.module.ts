@@ -12,12 +12,14 @@ import { ControlDiscordComponent } from '../../components/controls/control-disco
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
+import { ControlMaximizeComponent } from '../../components/controls/control-maximize.component';
 
 @NgModule({
 	imports: [BrowserModule],
 	declarations: [
 		ControlHelpComponent,
 		ControlMinimizeComponent,
+		ControlMaximizeComponent,
 		ControlCloseComponent,
 		ControlSettingsComponent,
 		ControlDiscordComponent,
@@ -36,6 +38,7 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 	exports: [
 		ControlHelpComponent,
 		ControlMinimizeComponent,
+		ControlMaximizeComponent,
 		ControlCloseComponent,
 		ControlSettingsComponent,
 		ControlDiscordComponent,

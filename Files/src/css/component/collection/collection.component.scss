@@ -2,56 +2,58 @@
 @import '../../global/scrollbar';
 
 .collection {
-    flex-grow: 1;
-    display: flex;
-    padding-top: 15px;
-    height: 602px;
+	flex-grow: 1;
+	display: flex;
+	padding-top: 15px;
+	// height: 602px;
 
-    .main {
-    	display: flex;
-    	flex-direction: column;
-        width: 695px;
-        padding-left: 14px;
-        margin-top: 0;
-        position: relative;
+	.main {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 1;
+		padding-left: 14px;
+		margin-top: 0;
+		position: relative;
 
-        &.divider {
-            border-right: 1px solid $grey04;
-            height: 100%;
-        }
+		&.divider {
+			border-right: 1px solid $grey04;
+			height: 100%;
+		}
 
-        collection-menu {
-            height: 30px;
-            display: flex;
-            align-items: flex-end;
-            flex-shrink: 0;
-        }
+		collection-menu {
+			height: 30px;
+			display: flex;
+			align-items: flex-end;
+			flex-shrink: 0;
+		}
 
-        sets {
-            display: flex;
-        }
+		sets {
+			display: flex;
+		}
 
-        cards {
-            flex-grow: 1;
-            display: flex;
-        }
+		cards {
+			flex-grow: 1;
+			display: flex;
+		}
 
-        full-card {
-            display: flex;
-        }
-    }
+		full-card {
+			display: flex;
+		}
+	}
 
-    .secondary {
-    	display: flex;
-    	flex-direction: column;
-        flex-grow: 1;
-        margin-left: 20px;
-        margin-right: 15px;
-    }
+	.secondary {
+		display: flex;
+		flex-direction: column;
+		flex-grow: 0;
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 400px;
+		height: calc(100% - 330px);
+	}
 
 	.sets {
 		display: flex;
-        overflow: auto;
+		overflow: auto;
 
 		sets-container {
 			flex-basis: 50%;
@@ -59,14 +61,22 @@
 			justify-content: space-between;
 
 			&:first-of-type {
-    			margin-right: 70px;
+				margin-right: 70px;
 			}
 		}
 	}
 }
 
-
 card-search {
-    display: flex;
-    justify-content: flex-end;
+	display: flex;
+	justify-content: flex-end;
+	height: 30px;
+	min-height: 30px;
+}
+
+card-history {
+	flex-grow: 1;
+	flex-shrink: 1;
+	position: relative;
+	display: flex;
 }
