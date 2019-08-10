@@ -1,6 +1,7 @@
-import { MainWindowStoreEvent } from '../events/main-window-store-event';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { MainWindowStoreEvent } from '../events/main-window-store-event';
+import { StateHistory } from '../state-history';
 
-export abstract class Processor {
-	abstract async process(event: MainWindowStoreEvent, state: MainWindowState): Promise<MainWindowState>;
+export interface Processor {
+	process(event: MainWindowStoreEvent, state: MainWindowState, history?: readonly StateHistory[]): Promise<MainWindowState>;
 }

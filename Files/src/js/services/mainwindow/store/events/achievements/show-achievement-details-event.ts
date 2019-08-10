@@ -13,4 +13,8 @@ export class ShowAchievementDetailsEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'ShowAchievementDetailsEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

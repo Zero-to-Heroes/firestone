@@ -1,5 +1,5 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
 import { Challenge } from '../../../../achievement/achievements/challenge';
+import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class AchievementCompletedEvent implements MainWindowStoreEvent {
 	constructor(challenge: Challenge) {
@@ -13,5 +13,9 @@ export class AchievementCompletedEvent implements MainWindowStoreEvent {
 
 	public eventName(): string {
 		return 'AchievementCompletedEvent';
+	}
+
+	public isNavigationEvent(): boolean {
+		return false;
 	}
 }

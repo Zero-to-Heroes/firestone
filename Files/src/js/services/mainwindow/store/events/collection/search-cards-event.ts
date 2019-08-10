@@ -13,4 +13,8 @@ export class SearchCardsEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'SearchCardsEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

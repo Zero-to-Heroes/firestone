@@ -1,5 +1,5 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
 import { AchievementHistory } from '../../../../../models/achievement/achievement-history';
+import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class AchievementHistoryCreatedEvent implements MainWindowStoreEvent {
 	constructor(history: AchievementHistory) {
@@ -13,5 +13,9 @@ export class AchievementHistoryCreatedEvent implements MainWindowStoreEvent {
 
 	public eventName(): string {
 		return 'AchievementHistoryCreatedEvent';
+	}
+
+	public isNavigationEvent(): boolean {
+		return false;
 	}
 }

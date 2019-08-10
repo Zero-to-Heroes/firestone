@@ -13,4 +13,8 @@ export class SelectAchievementSetEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'SelectAchievementSetEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

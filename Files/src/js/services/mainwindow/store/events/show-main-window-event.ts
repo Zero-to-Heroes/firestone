@@ -8,4 +8,8 @@ export class ShowMainWindowEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'ShowMainWindowEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

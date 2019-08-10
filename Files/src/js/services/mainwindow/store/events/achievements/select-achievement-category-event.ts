@@ -13,4 +13,8 @@ export class SelectAchievementCategoryEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'SelectAchievementCategoryEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

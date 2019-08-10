@@ -13,4 +13,8 @@ export class SelectCollectionFormatEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'SelectCollectionFormatEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

@@ -8,4 +8,8 @@ export class CloseSocialShareModalEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'CloseSocialShareModalEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

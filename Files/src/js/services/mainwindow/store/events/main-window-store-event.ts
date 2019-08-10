@@ -1,3 +1,4 @@
-export abstract class MainWindowStoreEvent {
-	abstract eventName(): string;
+export interface MainWindowStoreEvent {
+	eventName(): string;
+	isNavigationEvent(): boolean;
 }

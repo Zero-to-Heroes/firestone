@@ -13,4 +13,8 @@ export class ChangeAchievementsShortDisplayEvent implements MainWindowStoreEvent
 	public eventName(): string {
 		return 'ChangeAchievementsShortDisplayEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

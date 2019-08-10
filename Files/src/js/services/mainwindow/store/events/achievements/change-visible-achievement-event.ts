@@ -13,4 +13,8 @@ export class ChangeVisibleAchievementEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'ChangeVisibleAchievementEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

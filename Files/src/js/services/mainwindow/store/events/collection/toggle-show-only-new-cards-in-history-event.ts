@@ -8,4 +8,8 @@ export class ToggleShowOnlyNewCardsInHistoryEvent implements MainWindowStoreEven
 	public eventName(): string {
 		return 'ToggleShowOnlyNewCardsInHistoryEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

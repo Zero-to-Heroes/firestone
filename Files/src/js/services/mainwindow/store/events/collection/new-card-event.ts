@@ -1,5 +1,5 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
 import { Card } from '../../../../../models/card';
+import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class NewCardEvent implements MainWindowStoreEvent {
 	constructor(card: Card, type: string) {
@@ -15,5 +15,9 @@ export class NewCardEvent implements MainWindowStoreEvent {
 
 	public eventName(): string {
 		return 'NewCardEvent';
+	}
+
+	public isNavigationEvent(): boolean {
+		return false;
 	}
 }

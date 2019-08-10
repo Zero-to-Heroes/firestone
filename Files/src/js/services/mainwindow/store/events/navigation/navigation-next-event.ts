@@ -1,15 +1,15 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
-export class UpdateTwitterSocialInfoEvent implements MainWindowStoreEvent {
+export class NavigationNextEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
-		return 'UpdateTwitterSocialInfoEvent';
+		return 'NavigationNextEvent';
 	}
 
 	public eventName(): string {
-		return 'UpdateTwitterSocialInfoEvent';
+		return 'NavigationNextEvent';
 	}
 
 	public isNavigationEvent(): boolean {
-		return false;
+		return true;
 	}
 }

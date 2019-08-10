@@ -1,16 +1,16 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
-import { AchievementsRepository } from '../../../../achievement/achievements-repository.service';
-import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
-import { AchievementsStorageService } from '../../../../achievement/achievements-storage.service';
-import { CompletedAchievement } from '../../../../../models/completed-achievement';
-import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
-import { Events } from '../../../../events.service';
 import { Achievement } from '../../../../../models/achievement';
 import { AchievementHistory } from '../../../../../models/achievement/achievement-history';
+import { CompletedAchievement } from '../../../../../models/completed-achievement';
+import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { AchievementHistoryStorageService } from '../../../../achievement/achievement-history-storage.service';
 import { AchievementNameService } from '../../../../achievement/achievement-name.service';
+import { AchievementsRepository } from '../../../../achievement/achievements-repository.service';
+import { AchievementsStorageService } from '../../../../achievement/achievements-storage.service';
+import { Events } from '../../../../events.service';
+import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
+import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
+import { Processor } from '../processor';
 
 export class AchievementCompletedProcessor implements Processor {
 	constructor(

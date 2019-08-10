@@ -1,5 +1,5 @@
-import { MainWindowStoreEvent } from '../main-window-store-event';
 import { SafeHtml } from '@angular/platform-browser';
+import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class StartSocialSharingEvent implements MainWindowStoreEvent {
 	constructor(network: string, videoPath: string, videoPathOnDisk: string, title: SafeHtml, achievementName: string) {
@@ -21,5 +21,9 @@ export class StartSocialSharingEvent implements MainWindowStoreEvent {
 
 	public eventName(): string {
 		return 'StartSocialSharingEvent';
+	}
+
+	public isNavigationEvent(): boolean {
+		return false;
 	}
 }

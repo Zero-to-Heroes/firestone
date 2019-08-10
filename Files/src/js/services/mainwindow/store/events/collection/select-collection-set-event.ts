@@ -13,4 +13,8 @@ export class SelectCollectionSetEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'SelectCollectionSetEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

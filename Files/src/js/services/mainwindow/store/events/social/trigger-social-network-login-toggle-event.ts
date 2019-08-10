@@ -13,4 +13,8 @@ export class TriggerSocialNetworkLoginToggleEvent implements MainWindowStoreEven
 	public eventName(): string {
 		return 'TriggerSocialNetworkLoginToggleEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

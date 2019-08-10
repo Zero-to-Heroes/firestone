@@ -8,4 +8,8 @@ export class PopulateStoreEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'PopulateStoreEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

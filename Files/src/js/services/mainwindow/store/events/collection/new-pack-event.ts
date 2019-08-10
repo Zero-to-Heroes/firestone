@@ -15,4 +15,8 @@ export class NewPackEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'NewPackEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

@@ -17,4 +17,8 @@ export class ShareVideoOnSocialNetworkEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'ShareVideoOnSocialNetworkEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

@@ -13,4 +13,8 @@ export class UpdateCardSearchResultsEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'UpdateCardSearchResultsEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

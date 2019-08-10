@@ -13,4 +13,8 @@ export class ShowCardDetailsEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'ShowCardDetailsEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

@@ -15,4 +15,8 @@ export class VideoReplayDeletionRequestEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'VideoReplayDeletionRequestEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

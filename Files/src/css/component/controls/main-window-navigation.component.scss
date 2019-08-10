@@ -1,0 +1,35 @@
+.history-navigation {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.arrow {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	--icon-color: #cb9fd7;
+
+	&.disabled {
+		opacity: 0.5;
+	}
+
+	&:hover:not(.disabled) {
+		background-color: #4b3052;
+	}
+
+	svg {
+		width: 15px;
+		height: 15px;
+	}
+}
+
+.back {
+	transform: rotate(90deg);
+}
+
+.next {
+	transform: rotate(-90deg);
+}

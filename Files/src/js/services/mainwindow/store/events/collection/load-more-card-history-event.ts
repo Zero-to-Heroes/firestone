@@ -13,4 +13,8 @@ export class LoadMoreCardHistoryEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'LoadMoreCardHistoryEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }

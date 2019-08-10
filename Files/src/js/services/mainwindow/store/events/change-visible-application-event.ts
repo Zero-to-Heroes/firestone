@@ -13,4 +13,8 @@ export class ChangeVisibleApplicationEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'ChangeVisibleApplicationEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return true;
+	}
 }

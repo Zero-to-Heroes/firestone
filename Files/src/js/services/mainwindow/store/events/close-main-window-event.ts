@@ -8,4 +8,8 @@ export class CloseMainWindowEvent implements MainWindowStoreEvent {
 	public eventName(): string {
 		return 'CloseMainWindowEvent';
 	}
+
+	public isNavigationEvent(): boolean {
+		return false;
+	}
 }
