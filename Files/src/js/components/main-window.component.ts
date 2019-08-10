@@ -1,20 +1,16 @@
 import {
-	Component,
-	ViewEncapsulation,
-	HostListener,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
+	Component,
+	HostListener,
+	ViewEncapsulation,
 	ViewRef,
-	ViewChild,
 } from '@angular/core';
-
-import { DebugService } from '../services/debug.service';
-import { CollectionComponent } from './collection/collection.component';
-import { AchievementsComponent } from './achievements/achievements.component';
-import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { BehaviorSubject } from 'rxjs';
+import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { AdService } from '../services/ad.service';
+import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 
 declare var adsReady: any;
@@ -30,6 +26,7 @@ declare var ga: any;
 			<div class="root">
 				<div class="app-container {{ state.currentApp }}">
 					<section class="menu-bar">
+						<main-window-navigation [navigation]="state.navigation"></main-window-navigation>
 						<div class="first">
 							<real-time-notifications></real-time-notifications>
 							<div class="navigation">
@@ -60,10 +57,8 @@ declare var ga: any;
 						</div>
 					</section>
 					<section class="content-container">
-						<collection #collection class="main-section" [state]="state.binder" [hidden]="state.currentApp !== 'collection'">
-						</collection>
+						<collection class="main-section" [state]="state.binder" [hidden]="state.currentApp !== 'collection'"></collection>
 						<achievements
-							#achievements
 							class="main-section"
 							[state]="state.achievements"
 							[socialShareUserInfo]="state.socialShareUserInfo"
@@ -111,11 +106,6 @@ declare var ga: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainWindowComponent implements AfterViewInit {
-	@ViewChild('collection', { static: false })
-	private collection: CollectionComponent;
-	@ViewChild('achievements', { static: false })
-	private achievements: AchievementsComponent;
-
 	state: MainWindowState;
 	windowId: string;
 

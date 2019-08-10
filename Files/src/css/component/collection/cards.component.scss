@@ -5,8 +5,8 @@
 	position: relative;
 	top: -2px;
 	flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
 	.set-title {
 		@extend %set-result;
@@ -45,16 +45,18 @@
 			background: rgba(255, 255, 255, 0.08);
 			margin-right: 15px;
 
-			&.class-select, &.rarity-select {
+			&.class-select,
+			&.rarity-select {
 				width: 110px;
 			}
 
 			&.owned-select {
 				// width: 190px;
-				width: 300px;			
+				width: 300px;
 			}
 
-			&:focus, &:active {
+			&:focus,
+			&:active {
 				outline: none;
 			}
 
@@ -76,7 +78,6 @@
 			}
 
 			select-dropdown {
-
 				& > div {
 					background: $black;
 					border: 1px solid $grey03;
@@ -88,7 +89,7 @@
 					display: none;
 				}
 
-				&> div .options ul li {
+				& > div .options ul li {
 					color: $grey01;
 					border-bottom: 1px solid $grey05;
 					padding: 0;
@@ -107,7 +108,8 @@
 						}
 					}
 
-					&.highlighted, &:hover {
+					&.highlighted,
+					&:hover {
 						// grey03
 						background-color: rgba(120, 95, 107, 0.4);
 					}
@@ -126,7 +128,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		overflow-y: scroll;
-		flex-grow: 1;
+		// flex-grow: 1;
 
 		li {
 			width: 98px;

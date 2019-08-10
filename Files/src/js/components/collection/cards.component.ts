@@ -1,18 +1,16 @@
 import {
-	Component,
-	HostListener,
-	Input,
-	ViewEncapsulation,
-	ElementRef,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-
-import { IOption } from 'ng-select';
 import { sortBy } from 'lodash';
-
+import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';
 
@@ -29,7 +27,7 @@ import { Set, SetCard } from '../../models/set';
 			<span *ngIf="!_set && _searchString" class="set-title">
 				<span class="text set-name">{{ _searchString }}</span>
 			</span>
-			<div class="show-filter" *ngIf="_activeCards" [ngStyle]="{ 'display': _searchString ? 'none' : 'flex' }">
+			<div class="show-filter" *ngIf="_activeCards.length > 0" [ngStyle]="{ 'display': _searchString ? 'none' : 'flex' }">
 				<!-- Rarity -->
 				<ng-select
 					class="rarity-select"
@@ -88,8 +86,8 @@ import { Set, SetCard } from '../../models/set';
 					</ng-template>
 				</ng-select>
 			</div>
-			<ul class="cards-list" *ngIf="_activeCards && _activeCards.length > 0">
-				<li *ngFor="let card of _activeCards">
+			<ul class="cards-list">
+				<li *ngFor="let card of _activeCards; trackBy: trackByCardId">
 					<card-view [card]="card">/</card-view>
 				</li>
 			</ul>
@@ -163,7 +161,7 @@ export class CardsComponent implements AfterViewInit {
 
 	_searchString: string;
 	_cardList: SetCard[];
-	_activeCards: SetCard[];
+	_activeCards: SetCard[] = [];
 	_set: Set;
 	classActiveFilter = this.CLASS_FILTER_ALL;
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
@@ -259,11 +257,21 @@ export class CardsComponent implements AfterViewInit {
 			.filter(this.filterRarity())
 			.filter(this.filterClass())
 			.filter(this.filterCardsOwned());
-		// console.log('after filter', filteredCards);
-		this._activeCards = filteredCards.slice(0, this.MAX_CARDS_DISPLAYED_PER_PAGE);
+		// TODO: we do this to speed up the initial load of the page
+		// This should probably be improved in several ways:
+		// - Extract this to a directive, so that the logic is abstracted away from each rendering page
+		// - Be smart about how many items to display at first, so that the page looks full right away
+		// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
+		this._activeCards = filteredCards.slice(0, 20);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+		setTimeout(() => {
+			this._activeCards = filteredCards.slice(0, this.MAX_CARDS_DISPLAYED_PER_PAGE);
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+		}, 500);
 	}
 
 	private filterRarity() {

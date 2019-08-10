@@ -1,8 +1,7 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { trigger, state, transition, style, animate } from '@angular/animations';
-
-import { Set } from '../../models/set';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BinderState } from '../../models/mainwindow/binder-state';
+import { Set } from '../../models/set';
 
 const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -20,23 +19,22 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 					[searchString]="_state.searchString"
 				>
 				</collection-menu>
-				<ng-container [ngSwitch]="_state.currentView">
-					<sets
-						*ngSwitchCase="'sets'"
-						[selectedFormat]="_state.selectedFormat"
-						[standardSets]="standardSets"
-						[wildSets]="wildSets"
-					>
-					</sets>
-					<cards
-						*ngSwitchCase="'cards'"
-						[cardList]="_state.cardList"
-						[set]="_state.selectedSet"
-						[searchString]="_state.searchString"
-					>
-					</cards>
-					<full-card *ngSwitchCase="'card-details'" class="full-card" [selectedCard]="_state.selectedCard"> </full-card>
-				</ng-container>
+				<sets
+					[selectedFormat]="_state.selectedFormat"
+					[standardSets]="standardSets"
+					[wildSets]="wildSets"
+					[hidden]="_state.currentView !== 'sets'"
+				>
+				</sets>
+				<cards
+					[cardList]="_state.cardList"
+					[set]="_state.selectedSet"
+					[searchString]="_state.searchString"
+					[hidden]="_state.currentView !== 'cards'"
+				>
+				</cards>
+				<full-card class="full-card" [selectedCard]="_state.selectedCard" [hidden]="_state.currentView !== 'card-details'">
+				</full-card>
 			</section>
 			<section class="secondary">
 				<card-search [searchString]="_state.searchString" [searchResults]="_state.searchResults"></card-search>
