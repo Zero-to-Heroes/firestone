@@ -1,19 +1,18 @@
 import {
-	Component,
 	AfterViewInit,
-	ElementRef,
-	ViewEncapsulation,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	ViewRef,
+	Component,
+	ElementRef,
 	EventEmitter,
+	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
-
-import { NotificationsService, Notification, NotificationType } from 'angular2-notifications';
+import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
 import { DebugService } from '../services/debug.service';
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
+import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -32,6 +31,7 @@ import { OverwolfService } from '../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
+// Maybe use https://www.npmjs.com/package/ngx-toastr instead
 export class NotificationsComponent implements AfterViewInit {
 	timeout = 20000;
 	// timeout = 999999999999;

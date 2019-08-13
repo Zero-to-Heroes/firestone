@@ -249,7 +249,7 @@ export class OverwolfService {
 	public async sendMessageWithName(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] sending message', window.id, messageType, messageBody);
+			console.log('[overwolf-service] sending message with name', window.id, messageType, messageBody);
 			overwolf.windows.sendMessage(window.id, messageType, messageBody, () => {
 				resolve();
 			});
@@ -311,17 +311,19 @@ export class OverwolfService {
 		});
 	}
 
-	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<any> {
-		return new Promise<boolean>(() => {
+	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
+		return new Promise<void>(resolve => {
 			console.log('[overwolf-service] changing window position', windowId, newX, newY, Math.round(newX), Math.round(newY));
 			overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY));
+			resolve();
 		});
 	}
 
-	public async changeWindowSize(windowId: string, width: number, height: number): Promise<any> {
-		return new Promise<boolean>(() => {
+	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
+		return new Promise<void>(resolve => {
 			console.log('[overwolf-service] changing window size', windowId, width, height, Math.round(width), Math.round(height));
 			overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
+			resolve();
 		});
 	}
 
