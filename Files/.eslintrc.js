@@ -31,7 +31,7 @@ module.exports = {
 		'@typescript-eslint/no-unused-vars': [1, {
 			'vars': 'all',
 			'args': 'none', // When implementing interfaces, I find it's easier to read if all parameters are always declared
-			'ignoreRestSiblings': false
+			'ignoreRestSiblings': true // For object destructuring
 		}],
 		'@typescript-eslint/no-use-before-define': [2, {
 			'functions': false,
