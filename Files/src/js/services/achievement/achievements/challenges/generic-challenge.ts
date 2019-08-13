@@ -43,13 +43,7 @@ export class GenericChallenge implements Challenge {
 	}
 
 	public notificationTimeout(): number {
-		return 10000;
-	}
-
-	private resetState(): void {
-		this.callback = undefined;
-		this.correctMode = undefined;
-		this.requirements.forEach(req => req.reset());
+		return 1000;
 	}
 
 	protected testCompletion() {
@@ -59,5 +53,11 @@ export class GenericChallenge implements Challenge {
 			this.requirements.forEach(req => req.afterAchievementCompletionReset());
 			this.callback();
 		}
+	}
+
+	private resetState(): void {
+		this.callback = undefined;
+		this.correctMode = undefined;
+		this.requirements.forEach(req => req.reset());
 	}
 }

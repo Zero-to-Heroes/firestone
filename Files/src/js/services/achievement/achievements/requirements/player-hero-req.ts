@@ -19,7 +19,7 @@ export class PlayerHeroReq implements Requirement {
 	}
 
 	afterAchievementCompletionReset(): void {
-		// Do nothing
+		this.isCorrectPlayerHero = undefined;
 	}
 
 	isCompleted(): boolean {

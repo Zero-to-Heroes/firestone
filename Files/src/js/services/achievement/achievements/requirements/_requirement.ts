@@ -2,9 +2,8 @@ import { GameEvent } from '../../../../models/game-event';
 
 export interface Requirement {
 	reset(): void;
-	// Used to reset the requirement after it's been completed. Some reqs should
-	// reset their state (ie number of cards played in a turn), others should not
-	// (ie reqs that track the game mode)
+	// Used to reset the requirement after it's been completed. All reqs should be reset,
+	// unless one achievement can be unlocked multiple times in a run
 	afterAchievementCompletionReset(): void;
 	isCompleted(): boolean;
 	test(gameEvent: GameEvent): void;

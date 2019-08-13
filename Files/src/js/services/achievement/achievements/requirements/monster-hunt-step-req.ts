@@ -19,7 +19,7 @@ export class MonsterHuntStepReq implements Requirement {
 	}
 
 	afterAchievementCompletionReset(): void {
-		// Do nothing
+		this.isCorrectStep = undefined;
 	}
 
 	isCompleted(): boolean {

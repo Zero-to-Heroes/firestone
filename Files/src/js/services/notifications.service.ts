@@ -4,7 +4,7 @@ import { OverwolfService } from './overwolf.service';
 @Injectable()
 export class OwNotificationsService {
 	private windowId: string;
-	private messageId: number;
+	private messageId: number = 0;
 
 	private retriesLeft = 10;
 	// private notificationWindowInit = false;

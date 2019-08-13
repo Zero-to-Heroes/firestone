@@ -16,7 +16,7 @@ export class SceneChangedToGameReq implements Requirement {
 	}
 
 	afterAchievementCompletionReset(): void {
-		// Do nothing
+		this.sceneChanged = undefined;
 	}
 
 	isCompleted(): boolean {

@@ -54,7 +54,7 @@ export class AchievementsMonitor {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		// console.log('[achievements] handling events', gameEvent);
+		// console.log('[achievements] handling events', gameEvent, this.achievementLoader.challengeModules);
 		for (const challenge of this.achievementLoader.challengeModules) {
 			challenge.detect(gameEvent, () => {
 				this.store.stateUpdater.next(new AchievementCompletedEvent(challenge));
@@ -63,7 +63,7 @@ export class AchievementsMonitor {
 	}
 
 	public async sendPreRecordNotification(achievement: Achievement, notificationTimeout: number) {
-		console.log('sending new notification');
+		console.log('sending new notification', achievement);
 		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
 		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
 		if (recordingOff) {

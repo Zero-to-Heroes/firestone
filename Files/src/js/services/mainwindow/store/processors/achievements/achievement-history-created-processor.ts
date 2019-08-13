@@ -17,13 +17,20 @@ export class AchievementHistoryCreatedProcessor implements Processor {
 			this.achievementHistoryStorage.loadAll(),
 			this.achievementsLoader.getAchievements(),
 		]);
+		// TODO: extract this piece of code to a reusable service
 		const history = historyRef
 			.filter(history => history.numberOfCompletions === 1)
-			.map(history =>
-				Object.assign(new AchievementHistory(), history, {
+			.map(history => {
+				const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
+				// This can happen with older history items
+				if (!matchingAchievement) {
+					return null;
+				}
+				return Object.assign(new AchievementHistory(), history, {
 					displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
-				} as AchievementHistory),
-			)
+				} as AchievementHistory);
+			})
+			.filter(history => history)
 			.reverse();
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
 			achievementHistory: history as readonly AchievementHistory[],

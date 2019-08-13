@@ -14,7 +14,7 @@ export class MulliganDoneReq implements Requirement {
 	}
 
 	afterAchievementCompletionReset(): void {
-		// Do nothing
+		this.isMulliganOver = undefined;
 	}
 
 	isCompleted(): boolean {
@@ -24,14 +24,6 @@ export class MulliganDoneReq implements Requirement {
 	test(gameEvent: GameEvent): void {
 		// We want to fire it only once, and there are 2 muligans events sent
 		if (gameEvent.type === GameEvent.MULLIGAN_DONE) {
-			this.detectGameResultEvent(gameEvent);
-		}
-	}
-
-	private detectGameResultEvent(gameEvent: GameEvent): void {
-		const winner = gameEvent.additionalData.winner;
-		const localPlayer = gameEvent.localPlayer;
-		if (localPlayer.Id === winner.Id) {
 			this.isMulliganOver = true;
 		}
 	}

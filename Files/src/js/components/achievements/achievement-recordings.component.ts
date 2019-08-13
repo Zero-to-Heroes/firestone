@@ -1,24 +1,24 @@
 import {
-	Component,
-	Input,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
+	Component,
 	ElementRef,
-	AfterViewInit,
-	HostListener,
 	EventEmitter,
+	HostListener,
+	Input,
 	ViewRef,
 } from '@angular/core';
-import { VisualAchievement } from '../../models/visual-achievement';
-import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
-import { ReplayInfo } from '../../models/replay-info';
+import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
 import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
-import { PreferencesService } from '../../services/preferences.service';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { VideoReplayDeletionRequestEvent } from '../../services/mainwindow/store/events/achievements/video-replay-deletion-request-event';
-import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { ReplayInfo } from '../../models/replay-info';
+import { VisualAchievement } from '../../models/visual-achievement';
+import { VideoReplayDeletionRequestEvent } from '../../services/mainwindow/store/events/achievements/video-replay-deletion-request-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 declare var ga;
 
@@ -212,6 +212,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 	}
 
 	showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
+		console.log('[achievment-recordings] showing rplay', thumbnail);
 		event.stopPropagation();
 		if (this.currentThumbnail === thumbnail) {
 			return;
@@ -364,6 +365,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 		this.currentReplay = this.currentReplayLocation ? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation) : undefined;
 		console.log('updated current replay', this.currentReplay);
 		this.updateTitle();
+		this.cdr.detectChanges();
 	}
 
 	private async isDeleted(path: string): Promise<boolean> {

@@ -5,13 +5,13 @@ import { Requirement } from './_requirement';
 export class ScenarioIdReq implements Requirement {
 	private isCorrectScenario: boolean;
 
-	constructor(private readonly scenarioIds: readonly string[]) {}
+	constructor(private readonly scenarioIds: readonly number[]) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for ScenarioIdReq', rawReq);
 		}
-		return new ScenarioIdReq(rawReq.values);
+		return new ScenarioIdReq(rawReq.values.map(id => parseInt(id)));
 	}
 
 	reset(): void {
@@ -19,7 +19,7 @@ export class ScenarioIdReq implements Requirement {
 	}
 
 	afterAchievementCompletionReset(): void {
-		// Do nothing
+		this.isCorrectScenario = undefined;
 	}
 
 	isCompleted(): boolean {

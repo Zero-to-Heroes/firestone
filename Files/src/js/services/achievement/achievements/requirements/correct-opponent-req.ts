@@ -19,7 +19,7 @@ export class CorrectOpponentReq implements Requirement {
 	}
 
 	afterAchievementCompletionReset(): void {
-		// Do nothing, the opponent stays the same during the whole game
+		this.isCorrectOpponent = undefined;
 	}
 
 	isCompleted(): boolean {
@@ -27,7 +27,7 @@ export class CorrectOpponentReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.WINNER) {
+		if (gameEvent.type === GameEvent.OPPONENT) {
 			this.detectGameResultEvent(gameEvent);
 			return;
 		}
