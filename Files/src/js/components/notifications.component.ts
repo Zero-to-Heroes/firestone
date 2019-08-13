@@ -33,7 +33,7 @@ import { OverwolfService } from '../services/overwolf.service';
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 export class NotificationsComponent implements AfterViewInit {
-	timeout = 20000;
+	timeout = 5000;
 	// timeout = 999999999999;
 	toastOptions = {
 		timeOut: this.timeout,
