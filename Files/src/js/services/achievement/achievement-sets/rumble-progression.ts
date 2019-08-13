@@ -1,21 +1,18 @@
-import { AchievementSet } from '../../../models/achievement-set';
-import { SetProvider, IndexedVisualAchievement } from './set-provider';
-import { VisualAchievement, CompletionStep } from '../../../models/visual-achievement';
 import { Achievement } from '../../../models/achievement';
+import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
-import { AllCardsService } from '../../all-cards.service';
 import { FilterOption } from '../../../models/filter-option';
+import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
 import { AchievementConfService } from '../achievement-conf.service';
+import { IndexedVisualAchievement, SetProvider } from './set-provider';
 
 export class RumbleRunProgressionSetProvider extends SetProvider {
-	private cardsService: AllCardsService;
 	private logoName: string;
 	private conf: AchievementConfService;
 
-	constructor(cardsService: AllCardsService, conf: AchievementConfService) {
+	constructor(conf: AchievementConfService) {
 		super('rumble_run_progression', 'Progression', ['rumble_run_progression']);
 		this.logoName = 'achievements_progression';
-		this.cardsService = cardsService;
 		this.conf = conf;
 	}
 
@@ -105,8 +102,8 @@ export class RumbleRunProgressionSetProvider extends SetProvider {
 				achievement.id,
 				name,
 				this.id,
-				achievement.secondaryCardId,
-				achievement.secondaryCardType,
+				achievement.displayCardId,
+				achievement.displayCardType,
 				text,
 				invertedCompletionSteps.reverse(),
 				replayInfo,

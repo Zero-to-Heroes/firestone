@@ -1,19 +1,16 @@
 import { Injectable } from '@angular/core';
-
-import { GameEvent } from '../../models/game-event';
+import { Achievement } from 'src/js/models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
-
-import { AchievementsRepository } from './achievements-repository.service';
-
+import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { GameEvents } from '../game-events.service';
-import { OwNotificationsService } from '../notifications.service';
-import { Achievement } from 'src/js/models/achievement';
-import { AchievementNameService } from './achievement-name.service';
-import { AchievementConfService } from './achievement-conf.service';
-import { PreferencesService } from '../preferences.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { OwNotificationsService } from '../notifications.service';
+import { PreferencesService } from '../preferences.service';
+import { AchievementConfService } from './achievement-conf.service';
+import { AchievementsRepository } from './achievements-repository.service';
+import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 declare var ga;
 
@@ -22,10 +19,10 @@ export class AchievementsMonitor {
 	constructor(
 		private gameEvents: GameEvents,
 		private notificationService: OwNotificationsService,
-		private nameService: AchievementNameService,
 		private prefs: PreferencesService,
 		private conf: AchievementConfService,
 		private repository: AchievementsRepository,
+		private achievementLoader: AchievementsLoaderService,
 		private store: MainWindowStoreService,
 		private events: Events,
 	) {
@@ -51,14 +48,14 @@ export class AchievementsMonitor {
 	private async handleAchievementRecordCompleted(data) {
 		const newAchievement: CompletedAchievement = data.data[0];
 		if (newAchievement.numberOfCompletions === 1) {
-			const achievement: Achievement = this.repository.getAllAchievements().filter(ach => ach.id === newAchievement.id)[0];
+			const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 			this.sendPostRecordNotification(achievement);
 		}
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
 		// console.log('[achievements] handling events', gameEvent);
-		for (const challenge of this.repository.challengeModules) {
+		for (const challenge of this.achievementLoader.challengeModules) {
 			challenge.detect(gameEvent, () => {
 				this.store.stateUpdater.next(new AchievementCompletedEvent(challenge));
 			});
@@ -66,8 +63,7 @@ export class AchievementsMonitor {
 	}
 
 	public async sendPreRecordNotification(achievement: Achievement, notificationTimeout: number) {
-		const text = this.nameService.displayName(achievement.id);
-		console.log('sending new notification', text);
+		console.log('sending new notification');
 		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
 		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
 		if (recordingOff) {
@@ -81,8 +77,8 @@ export class AchievementsMonitor {
 				<div class="achievement-message-container ${achievement.id} ${unclickable}">
 					<div class="achievement-image-container">
 						<img
-							src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
-							class="real-achievement ${achievement.cardType}"/>
+							src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.displayCardId}.jpg"
+							class="real-achievement ${achievement.displayCardType}"/>
 						<i class="i-84x90 frame">
 							<svg>
 								<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
@@ -98,7 +94,7 @@ export class AchievementsMonitor {
 							</i>
 							<span>Achievement unlocked!</span>
 						</div>
-						<span class="text">${text}</span>
+						<span class="text">${achievement.displayName}</span>
 						<div class="recap-text">
 							<span class="pending">${recapText}</span>
 							<span class="active">Replay saved! Click to recap</span>
@@ -119,14 +115,13 @@ export class AchievementsMonitor {
 
 	public sendPostRecordNotification(achievement: Achievement) {
 		// In case the pre-record notification has already timed out, we need to send a full notif
-		const text = this.nameService.displayName(achievement.id);
 		this.notificationService.html({
 			content: `
 			<div class="achievement-message-container ${achievement.id}">
 				<div class="achievement-image-container">
 					<img
-						src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.cardId}.jpg"
-						class="real-achievement ${achievement.cardType}"/>
+						src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.displayCardId}.jpg"
+						class="real-achievement ${achievement.displayCardType}"/>
 					<i class="i-84x90 frame">
 						<svg>
 							<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
@@ -142,7 +137,7 @@ export class AchievementsMonitor {
 						</i>
 						<span>Achievement unlocked!</span>
 					</div>
-					<span class="text">${text}</span>
+					<span class="text">${achievement.displayName}</span>
 					<div class="recap-text">
 						<span>Replay saved! Click to recap</span>
 					</div>

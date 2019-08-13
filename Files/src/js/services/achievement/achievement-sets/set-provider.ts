@@ -1,5 +1,5 @@
-import { AchievementSet } from '../../../models/achievement-set';
 import { Achievement } from '../../../models/achievement';
+import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { VisualAchievement } from '../../../models/visual-achievement';
 
@@ -14,7 +14,7 @@ export abstract class SetProvider {
 		this.types = types;
 	}
 
-	public abstract provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet;
+	public abstract provide(allAchievements: readonly Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet;
 	protected abstract convertToVisual(
 		achievement: Achievement,
 		index: number,
@@ -38,19 +38,10 @@ export abstract class SetProvider {
 					const completedAchievement = completedAchievemnts.filter(compl => compl.id === ref.id).pop();
 					const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
 					const replayInfo = completedAchievement ? completedAchievement.replayInfo : [];
-					return new Achievement(
-						ref.id,
-						ref.name,
-						ref.text,
-						ref.type,
-						ref.cardId,
-						ref.cardType,
-						ref.secondaryCardId,
-						ref.secondaryCardType,
-						ref.difficulty,
-						numberOfCompletions,
-						replayInfo,
-					);
+					return Object.assign(new Achievement(), ref, {
+						numberOfCompletions: numberOfCompletions,
+						replayInfo: replayInfo,
+					} as Achievement);
 			  });
 		const fullAchievements: VisualAchievement[] = mergedAchievements
 			.filter(achievement => this.isAchievementVisualRoot(achievement))

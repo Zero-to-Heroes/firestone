@@ -1,13 +1,12 @@
-import { AllCardsService } from '../../all-cards.service';
-import { AbstractBossSetProvider } from './boss-abstract';
-import { AchievementConfService } from '../achievement-conf.service';
 import { Achievement } from '../../../models/achievement';
-import { IndexedVisualAchievement } from './set-provider';
-import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
 import { FilterOption } from '../../../models/filter-option';
+import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
+import { AchievementConfService } from '../achievement-conf.service';
+import { AbstractBossSetProvider } from './boss-abstract';
+import { IndexedVisualAchievement } from './set-provider';
 
 export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
-	constructor(cardsService: AllCardsService, conf: AchievementConfService) {
+	constructor(conf: AchievementConfService) {
 		super(
 			'dalaran_heist_boss',
 			'achievements_boss',
@@ -18,17 +17,16 @@ export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
 				'dalaran_heist_boss_encounter_heroic',
 				'dalaran_heist_boss_victory_heroic',
 			],
-			cardsService,
 			conf,
 		);
 	}
 
 	protected convertToVisual(achievement: Achievement, index: number, mergedAchievements: Achievement[]): IndexedVisualAchievement {
 		// TODO: refactor
-		const encountedId = this.types[0] + '_' + achievement.cardId;
-		const victoryId = this.types[1] + '_' + achievement.cardId;
-		const encounterHeroicId = this.types[2] + '_' + achievement.cardId;
-		const victoryHeroicId = this.types[3] + '_' + achievement.cardId;
+		const encountedId = this.types[0] + '_' + achievement.displayCardId;
+		const victoryId = this.types[1] + '_' + achievement.displayCardId;
+		const encounterHeroicId = this.types[2] + '_' + achievement.displayCardId;
+		const victoryHeroicId = this.types[3] + '_' + achievement.displayCardId;
 		const encounterAchievement = mergedAchievements.filter(ach => ach.id === encountedId)[0];
 		const victoryAchievement = mergedAchievements.filter(ach => ach.id === victoryId)[0];
 		const encounterHeroicAchievement = mergedAchievements.filter(ach => ach.id === encounterHeroicId)[0];
@@ -77,7 +75,7 @@ export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
 			...(encounterHeroicAchievement.replayInfo || []),
 			...(victoryHeroicAchievement.replayInfo || []),
 		].sort((a, b) => a.creationTimestamp - b.creationTimestamp);
-		const cardText = this.cardsService.getCard(achievement.cardId).text || '...';
+		const cardText = achievement.text || '...';
 		const text = cardText
 			.replace('<i>', '')
 			.replace('</i>', '')
@@ -87,8 +85,8 @@ export class DalaranHeistBossSetProvider extends AbstractBossSetProvider {
 				achievement.id,
 				achievement.name,
 				this.id,
-				achievement.cardId,
-				achievement.cardType,
+				achievement.displayCardId,
+				achievement.displayCardType,
 				text,
 				completionSteps,
 				replayInfo,

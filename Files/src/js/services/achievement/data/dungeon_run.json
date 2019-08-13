@@ -1,0 +1,5573 @@
+[
+	{
+		"id": "dungeon_run_progression_HERO_01_0",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 1",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 1",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_1",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 2",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 2",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_2",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 3",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 3",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_3",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 4",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 4",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_4",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 5",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 5",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_5",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 6",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 6",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_6",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 7",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 7",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_01_7",
+		"type": "dungeon_run_progression",
+		"name": "Garrosh Hellscream (Warrior) - Cleared round 8",
+		"displayName": "Garrosh Hellscream (Warrior) - Cleared round 8",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_01",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_01"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_0",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 1",
+		"displayName": "Thrall (Shaman) - Cleared round 1",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_1",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 2",
+		"displayName": "Thrall (Shaman) - Cleared round 2",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_2",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 3",
+		"displayName": "Thrall (Shaman) - Cleared round 3",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_3",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 4",
+		"displayName": "Thrall (Shaman) - Cleared round 4",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_4",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 5",
+		"displayName": "Thrall (Shaman) - Cleared round 5",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_5",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 6",
+		"displayName": "Thrall (Shaman) - Cleared round 6",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_6",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 7",
+		"displayName": "Thrall (Shaman) - Cleared round 7",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_02_7",
+		"type": "dungeon_run_progression",
+		"name": "Thrall (Shaman) - Cleared round 8",
+		"displayName": "Thrall (Shaman) - Cleared round 8",
+		"emptyText": "Clear the first round with Shaman to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_02",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_02"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_0",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 1",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 1",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_1",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 2",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 2",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_2",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 3",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 3",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_3",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 4",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 4",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_4",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 5",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 5",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_5",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 6",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 6",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_6",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 7",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 7",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_03_7",
+		"type": "dungeon_run_progression",
+		"name": "Valeera Sanguinar (Rogue) - Cleared round 8",
+		"displayName": "Valeera Sanguinar (Rogue) - Cleared round 8",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_03",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_03"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_0",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 1",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 1",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_1",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 2",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 2",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_2",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 3",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 3",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_3",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 4",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 4",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_4",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 5",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 5",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_5",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 6",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 6",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_6",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 7",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 7",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_04_7",
+		"type": "dungeon_run_progression",
+		"name": "Uther Lightbringer (Paladin) - Cleared round 8",
+		"displayName": "Uther Lightbringer (Paladin) - Cleared round 8",
+		"emptyText": "Clear the first round with Paladin to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_04",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_04"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_0",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 1",
+		"displayName": "Rexxar (Hunter) - Cleared round 1",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_1",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 2",
+		"displayName": "Rexxar (Hunter) - Cleared round 2",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_2",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 3",
+		"displayName": "Rexxar (Hunter) - Cleared round 3",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_3",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 4",
+		"displayName": "Rexxar (Hunter) - Cleared round 4",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_4",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 5",
+		"displayName": "Rexxar (Hunter) - Cleared round 5",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_5",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 6",
+		"displayName": "Rexxar (Hunter) - Cleared round 6",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_6",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 7",
+		"displayName": "Rexxar (Hunter) - Cleared round 7",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_05_7",
+		"type": "dungeon_run_progression",
+		"name": "Rexxar (Hunter) - Cleared round 8",
+		"displayName": "Rexxar (Hunter) - Cleared round 8",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_05",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_05"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_0",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 1",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 1",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_1",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 2",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 2",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_2",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 3",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 3",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_3",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 4",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 4",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_4",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 5",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 5",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_5",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 6",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 6",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_6",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 7",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 7",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_06_7",
+		"type": "dungeon_run_progression",
+		"name": "Malfurion Stormrage (Druid) - Cleared round 8",
+		"displayName": "Malfurion Stormrage (Druid) - Cleared round 8",
+		"emptyText": "Clear the first round with Druid to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_06",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_06"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_0",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 1",
+		"displayName": "Gul'dan (Warlock) - Cleared round 1",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_1",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 2",
+		"displayName": "Gul'dan (Warlock) - Cleared round 2",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_2",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 3",
+		"displayName": "Gul'dan (Warlock) - Cleared round 3",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_3",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 4",
+		"displayName": "Gul'dan (Warlock) - Cleared round 4",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_4",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 5",
+		"displayName": "Gul'dan (Warlock) - Cleared round 5",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_5",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 6",
+		"displayName": "Gul'dan (Warlock) - Cleared round 6",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_6",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 7",
+		"displayName": "Gul'dan (Warlock) - Cleared round 7",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_07_7",
+		"type": "dungeon_run_progression",
+		"name": "Gul'dan (Warlock) - Cleared round 8",
+		"displayName": "Gul'dan (Warlock) - Cleared round 8",
+		"emptyText": "Clear the first round with Warlock to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_07",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_07"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_0",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 1",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 1",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_1",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 2",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 2",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_2",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 3",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 3",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_3",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 4",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 4",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_4",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 5",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 5",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_5",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 6",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 6",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_6",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 7",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 7",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_08_7",
+		"type": "dungeon_run_progression",
+		"name": "Jaina Proudmoore (Mage) - Cleared round 8",
+		"displayName": "Jaina Proudmoore (Mage) - Cleared round 8",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_08",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_08"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_0",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 1",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 1",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_1",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 2",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 2",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_2",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 3",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 3",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_3",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 4",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 4",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_4",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 5",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 5",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_5",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 6",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 6",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_6",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 7",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 7",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_progression_HERO_09_7",
+		"type": "dungeon_run_progression",
+		"name": "Anduin Wrynn (Priest) - Cleared round 8",
+		"displayName": "Anduin Wrynn (Priest) - Cleared round 8",
+		"emptyText": "Clear the first round with Priest to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "HERO_09",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "DUNGEON_RUN_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["HERO_09"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_04h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Waxmancer Sturmi",
+		"displayName": "Boss met: Waxmancer Sturmi",
+		"text": "<i>This kobold can\ncandle-craft\nminions at will.</i>",
+		"displayCardId": "LOOTA_BOSS_04h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_04h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_05h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Pathmaker Hamm",
+		"displayName": "Boss met: Pathmaker Hamm",
+		"text": "<i>There's more than\none way for a kobold\nto dig a tunnel.</i>",
+		"displayCardId": "LOOTA_BOSS_05h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_05h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_06h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Blackseed",
+		"displayName": "Boss met: Blackseed",
+		"text": "<i>This furbolg’s dark magic twists the other dungeonfolk.</i>",
+		"displayCardId": "LOOTA_BOSS_06h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_06h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_09h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Frostfur",
+		"displayName": "Boss met: Frostfur",
+		"text": "<i>These furbolg warrens feel unnaturally cold...</i>",
+		"displayCardId": "LOOTA_BOSS_09h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_09h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_10h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Graves the Cleric",
+		"displayName": "Boss met: Graves the Cleric",
+		"text": "<i>This healing adventurer was separated from his old party.</i>",
+		"displayCardId": "LOOTA_BOSS_10h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_10h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_11h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Overseer Mogark",
+		"displayName": "Boss met: Overseer Mogark",
+		"text": "<i>This trogg commander is extra \"motivational\" to underlings.</i>",
+		"displayCardId": "LOOTA_BOSS_11h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_11h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_12h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Candlebeard",
+		"displayName": "Boss met: Candlebeard",
+		"text": "<i>This kobold pirate's favorite move is chaaaarrrge!</i>",
+		"displayCardId": "LOOTA_BOSS_12h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_12h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_13h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Thaddock the Thief",
+		"displayName": "Boss met: Thaddock the Thief",
+		"text": "<i>One moment her minions are there... the next... gone!</i>",
+		"displayCardId": "LOOTA_BOSS_13h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_13h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_15h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "George and Karl",
+		"displayName": "Boss met: George and Karl",
+		"text": "<i>These tag-team paladins went missing in Un'goro.</i>",
+		"displayCardId": "LOOTA_BOSS_15h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_15h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_16h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Spiritspeaker Azun",
+		"displayName": "Boss met: Spiritspeaker Azun",
+		"text": "<i>This troll priest speaks with the dead... twice.</i>",
+		"displayCardId": "LOOTA_BOSS_16h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_16h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_17h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Battlecrier Jin'zo",
+		"displayName": "Boss met: Battlecrier Jin'zo",
+		"text": "<i>When he calls in the troops, they listen. Twice.</i>",
+		"displayCardId": "LOOTA_BOSS_17h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_17h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_18h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Giant Rat",
+		"displayName": "Boss met: Giant Rat",
+		"text": "<i>The bane of every young adventurer.</i>",
+		"displayCardId": "LOOTA_BOSS_18h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_18h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_19h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Gutmook",
+		"displayName": "Boss met: Gutmook",
+		"text": "<i>This trogg elder and his minions flock toward sources of magic.</i>",
+		"displayCardId": "LOOTA_BOSS_19h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_19h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_20h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Brimstone Warden",
+		"displayName": "Boss met: Brimstone Warden",
+		"text": "<i>At all costs, stop him from waking the\nancient guardians...</i>",
+		"displayCardId": "LOOTA_BOSS_20h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_20h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_21h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Gnosh the Greatworm",
+		"displayName": "Boss met: Gnosh the Greatworm",
+		"text": "<i>Always looking to devour the largest, tastiest minions.</i>",
+		"displayCardId": "LOOTA_BOSS_21h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_21h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_22h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Tad",
+		"displayName": "Boss met: Tad",
+		"text": "<i>Look, this murloc just wants to fish, okay?</i>",
+		"displayCardId": "LOOTA_BOSS_22h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_22h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_23h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Bristlesnarl",
+		"displayName": "Boss met: Bristlesnarl",
+		"text": "<i>This legendary furbolg hunter can quickly call on big friends.</i>",
+		"displayCardId": "LOOTA_BOSS_23h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_23h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_24h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "The Mothergloop",
+		"displayName": "Boss met: The Mothergloop",
+		"text": "<i>Don't let its growing, gooey friends get\nout of hand.</i>",
+		"displayCardId": "LOOTA_BOSS_24h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_24h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_25h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Vustrasz the Ancient",
+		"displayName": "Boss met: Vustrasz the Ancient",
+		"text": "<i>His vast treasure stores are for the taking... if you dare!</i>",
+		"displayCardId": "LOOTA_BOSS_25h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_25h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_26h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Xol the Unscathed",
+		"displayName": "Boss met: Xol the Unscathed",
+		"text": "<i>She's got her eyes on you. ALL of her eyes.</i>",
+		"displayCardId": "LOOTA_BOSS_26h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_26h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_27h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Waxmancer Sturmi",
+		"displayName": "Boss met: Waxmancer Sturmi",
+		"text": "<i>This kobold can\ncandle-craft\nminions at will.</i>",
+		"displayCardId": "LOOTA_BOSS_27h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_27h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_28h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Pathmaker Hamm",
+		"displayName": "Boss met: Pathmaker Hamm",
+		"text": "<i>There's more than\none way for a kobold\nto dig a tunnel.</i>",
+		"displayCardId": "LOOTA_BOSS_28h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_28h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_29h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Blackseed",
+		"displayName": "Boss met: Blackseed",
+		"text": "<i>This furbolg’s dark magic twists the other dungeonfolk.</i>",
+		"displayCardId": "LOOTA_BOSS_29h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_29h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_30h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Overseer Mogark",
+		"displayName": "Boss met: Overseer Mogark",
+		"text": "<i>This trogg commander is extra \"motivational\" to underlings.</i>",
+		"displayCardId": "LOOTA_BOSS_30h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_30h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_31h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Candlebeard",
+		"displayName": "Boss met: Candlebeard",
+		"text": "<i>This kobold pirate's favorite move is chaaaarrrge!</i>",
+		"displayCardId": "LOOTA_BOSS_31h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_31h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_33h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Gutmook",
+		"displayName": "Boss met: Gutmook",
+		"text": "<i>This trogg elder and his minions flock toward sources of magic.</i>",
+		"displayCardId": "LOOTA_BOSS_33h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_33h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_34h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Azari, the Devourer",
+		"displayName": "Boss met: Azari, the Devourer",
+		"text": "<i>The most terrible of demons is loose!\nAnd VERY hungry.</i>",
+		"displayCardId": "LOOTA_BOSS_34h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_34h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_35h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Elder Brandlemar",
+		"displayName": "Boss met: Elder Brandlemar",
+		"text": "<i>The bane of magic users, this furbolg can counter any spell.</i>",
+		"displayCardId": "LOOTA_BOSS_35h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_35h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_36h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Ixlid",
+		"displayName": "Boss met: Ixlid",
+		"text": "<i>Its deadly spores can kill an adventurer instantly!</i>",
+		"displayCardId": "LOOTA_BOSS_36h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_36h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_37h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Lyris the Wild Mage",
+		"displayName": "Boss met: Lyris the Wild Mage",
+		"text": "<i>She loves fire. Her minions love that she loves fire.</i>",
+		"displayCardId": "LOOTA_BOSS_37h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_37h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_38h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Voodoomaster Vex",
+		"displayName": "Boss met: Voodoomaster Vex",
+		"text": "<i>He wants to be a troll. He cries for battle and rattles for death.</i>",
+		"displayCardId": "LOOTA_BOSS_38h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_38h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_39h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Kraxx",
+		"displayName": "Boss met: Kraxx",
+		"text": "<i>This ancient stone guardian prefers the loot to stay here.</i>",
+		"displayCardId": "LOOTA_BOSS_39h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_39h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_40h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Seriona",
+		"displayName": "Boss met: Seriona",
+		"text": "<i>A twilight dragon\nbent on draining\nyour minions.</i>",
+		"displayCardId": "LOOTA_BOSS_40h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_40h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_41h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Whompwhisker",
+		"displayName": "Boss met: Whompwhisker",
+		"text": "<i>A kobold berserker who never fights alone.</i>",
+		"displayCardId": "LOOTA_BOSS_41h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_41h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_42h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Elder Jari",
+		"displayName": "Boss met: Elder Jari",
+		"text": "<i>This furbolg elder\ncalls arcane energies to her defense.</i>",
+		"displayCardId": "LOOTA_BOSS_42h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_42h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_43h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Jeeru",
+		"displayName": "Boss met: Jeeru",
+		"text": "<i>Don't rub the lamp! You rubbed the lamp, didn't you?</i>",
+		"displayCardId": "LOOTA_BOSS_43h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_43h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_44h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Wee Whelp",
+		"displayName": "Boss met: Wee Whelp",
+		"text": "<i>It's just a baby dragon. But it's still a dragon.</i>",
+		"displayCardId": "LOOTA_BOSS_44h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_44h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_45h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Bink the Burglar",
+		"displayName": "Boss met: Bink the Burglar",
+		"text": "<i>This low-down thief preys on starting adventurers.</i>",
+		"displayCardId": "LOOTA_BOSS_45h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_45h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_46h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Fungalmancer Flurgl",
+		"displayName": "Boss met: Fungalmancer Flurgl",
+		"text": "<i>The fungalmancer empowers his friends. With fungus.</i>",
+		"displayCardId": "LOOTA_BOSS_46h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_46h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_47h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Lava-Filled Chamber",
+		"displayName": "Boss met: Lava-Filled Chamber",
+		"text": "<i>The kobolds attempted to board up this lava-filled chamber!</i>",
+		"displayCardId": "LOOTA_BOSS_47h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_47h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_48h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Trapped Room",
+		"displayName": "Boss met: Trapped Room",
+		"text": "<i>Tread carefully. Don't... touch... anything!</i>",
+		"displayCardId": "LOOTA_BOSS_48h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_48h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_49h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "The Darkness",
+		"displayName": "Boss met: The Darkness",
+		"text": "<i>There's a reason to always keep a light on down here.</i>",
+		"displayCardId": "LOOTA_BOSS_49h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_49h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_50h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Mushhuckster Max",
+		"displayName": "Boss met: Mushhuckster Max",
+		"text": "<i>You probably don't want the potions\nhe's hocking.</i>",
+		"displayCardId": "LOOTA_BOSS_50h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_50h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_51h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Russell the Bard",
+		"displayName": "Boss met: Russell the Bard",
+		"text": "<i>His tunes are catchy. Just ask your minions.</i>",
+		"displayCardId": "LOOTA_BOSS_51h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_51h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_52h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Treasure Vault",
+		"displayName": "Boss met: Treasure Vault",
+		"text": "<i>Grab all you can, as fast as you can!</i>",
+		"displayCardId": "LOOTA_BOSS_52h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_52h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_53h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "Chronomancer Inara",
+		"displayName": "Boss met: Chronomancer Inara",
+		"text": "<i>Once she powers\nup, beware of her\nmastery of time!</i>",
+		"displayCardId": "LOOTA_BOSS_53h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_53h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_54h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "A. F. Kay",
+		"displayName": "Boss met: A. F. Kay",
+		"text": "<i>Waylay this adventurer while she isn't\npaying attention!</i>",
+		"displayCardId": "LOOTA_BOSS_54h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_54h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_encounter_LOOTA_BOSS_99h",
+		"type": "dungeon_run_boss_encounter",
+		"name": "King Togwaggle",
+		"displayName": "Boss met: King Togwaggle",
+		"text": "<i>Look out! He's loaded with loot from failed adventurers.</i>",
+		"displayCardId": "LOOTA_BOSS_99h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_99h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_04h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Waxmancer Sturmi",
+		"displayName": "Boss defeated: Waxmancer Sturmi",
+		"text": "<i>This kobold can\ncandle-craft\nminions at will.</i>",
+		"displayCardId": "LOOTA_BOSS_04h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_04h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_05h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Pathmaker Hamm",
+		"displayName": "Boss defeated: Pathmaker Hamm",
+		"text": "<i>There's more than\none way for a kobold\nto dig a tunnel.</i>",
+		"displayCardId": "LOOTA_BOSS_05h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_05h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_06h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Blackseed",
+		"displayName": "Boss defeated: Blackseed",
+		"text": "<i>This furbolg’s dark magic twists the other dungeonfolk.</i>",
+		"displayCardId": "LOOTA_BOSS_06h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_06h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_09h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Frostfur",
+		"displayName": "Boss defeated: Frostfur",
+		"text": "<i>These furbolg warrens feel unnaturally cold...</i>",
+		"displayCardId": "LOOTA_BOSS_09h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_09h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_10h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Graves the Cleric",
+		"displayName": "Boss defeated: Graves the Cleric",
+		"text": "<i>This healing adventurer was separated from his old party.</i>",
+		"displayCardId": "LOOTA_BOSS_10h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_10h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_11h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Overseer Mogark",
+		"displayName": "Boss defeated: Overseer Mogark",
+		"text": "<i>This trogg commander is extra \"motivational\" to underlings.</i>",
+		"displayCardId": "LOOTA_BOSS_11h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_11h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_12h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Candlebeard",
+		"displayName": "Boss defeated: Candlebeard",
+		"text": "<i>This kobold pirate's favorite move is chaaaarrrge!</i>",
+		"displayCardId": "LOOTA_BOSS_12h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_12h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_13h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Thaddock the Thief",
+		"displayName": "Boss defeated: Thaddock the Thief",
+		"text": "<i>One moment her minions are there... the next... gone!</i>",
+		"displayCardId": "LOOTA_BOSS_13h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_13h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_15h",
+		"type": "dungeon_run_boss_victory",
+		"name": "George and Karl",
+		"displayName": "Boss defeated: George and Karl",
+		"text": "<i>These tag-team paladins went missing in Un'goro.</i>",
+		"displayCardId": "LOOTA_BOSS_15h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_15h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_16h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Spiritspeaker Azun",
+		"displayName": "Boss defeated: Spiritspeaker Azun",
+		"text": "<i>This troll priest speaks with the dead... twice.</i>",
+		"displayCardId": "LOOTA_BOSS_16h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_16h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_17h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Battlecrier Jin'zo",
+		"displayName": "Boss defeated: Battlecrier Jin'zo",
+		"text": "<i>When he calls in the troops, they listen. Twice.</i>",
+		"displayCardId": "LOOTA_BOSS_17h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_17h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_18h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Giant Rat",
+		"displayName": "Boss defeated: Giant Rat",
+		"text": "<i>The bane of every young adventurer.</i>",
+		"displayCardId": "LOOTA_BOSS_18h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_18h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_19h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Gutmook",
+		"displayName": "Boss defeated: Gutmook",
+		"text": "<i>This trogg elder and his minions flock toward sources of magic.</i>",
+		"displayCardId": "LOOTA_BOSS_19h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_19h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_20h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Brimstone Warden",
+		"displayName": "Boss defeated: Brimstone Warden",
+		"text": "<i>At all costs, stop him from waking the\nancient guardians...</i>",
+		"displayCardId": "LOOTA_BOSS_20h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_20h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_21h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Gnosh the Greatworm",
+		"displayName": "Boss defeated: Gnosh the Greatworm",
+		"text": "<i>Always looking to devour the largest, tastiest minions.</i>",
+		"displayCardId": "LOOTA_BOSS_21h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_21h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_22h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Tad",
+		"displayName": "Boss defeated: Tad",
+		"text": "<i>Look, this murloc just wants to fish, okay?</i>",
+		"displayCardId": "LOOTA_BOSS_22h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_22h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_23h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Bristlesnarl",
+		"displayName": "Boss defeated: Bristlesnarl",
+		"text": "<i>This legendary furbolg hunter can quickly call on big friends.</i>",
+		"displayCardId": "LOOTA_BOSS_23h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_23h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_24h",
+		"type": "dungeon_run_boss_victory",
+		"name": "The Mothergloop",
+		"displayName": "Boss defeated: The Mothergloop",
+		"text": "<i>Don't let its growing, gooey friends get\nout of hand.</i>",
+		"displayCardId": "LOOTA_BOSS_24h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_24h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_25h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Vustrasz the Ancient",
+		"displayName": "Boss defeated: Vustrasz the Ancient",
+		"text": "<i>His vast treasure stores are for the taking... if you dare!</i>",
+		"displayCardId": "LOOTA_BOSS_25h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_25h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_26h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Xol the Unscathed",
+		"displayName": "Boss defeated: Xol the Unscathed",
+		"text": "<i>She's got her eyes on you. ALL of her eyes.</i>",
+		"displayCardId": "LOOTA_BOSS_26h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_26h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_27h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Waxmancer Sturmi",
+		"displayName": "Boss defeated: Waxmancer Sturmi",
+		"text": "<i>This kobold can\ncandle-craft\nminions at will.</i>",
+		"displayCardId": "LOOTA_BOSS_27h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_27h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_28h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Pathmaker Hamm",
+		"displayName": "Boss defeated: Pathmaker Hamm",
+		"text": "<i>There's more than\none way for a kobold\nto dig a tunnel.</i>",
+		"displayCardId": "LOOTA_BOSS_28h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_28h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_29h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Blackseed",
+		"displayName": "Boss defeated: Blackseed",
+		"text": "<i>This furbolg’s dark magic twists the other dungeonfolk.</i>",
+		"displayCardId": "LOOTA_BOSS_29h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_29h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_30h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Overseer Mogark",
+		"displayName": "Boss defeated: Overseer Mogark",
+		"text": "<i>This trogg commander is extra \"motivational\" to underlings.</i>",
+		"displayCardId": "LOOTA_BOSS_30h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_30h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_31h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Candlebeard",
+		"displayName": "Boss defeated: Candlebeard",
+		"text": "<i>This kobold pirate's favorite move is chaaaarrrge!</i>",
+		"displayCardId": "LOOTA_BOSS_31h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_31h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_33h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Gutmook",
+		"displayName": "Boss defeated: Gutmook",
+		"text": "<i>This trogg elder and his minions flock toward sources of magic.</i>",
+		"displayCardId": "LOOTA_BOSS_33h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_33h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_34h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Azari, the Devourer",
+		"displayName": "Boss defeated: Azari, the Devourer",
+		"text": "<i>The most terrible of demons is loose!\nAnd VERY hungry.</i>",
+		"displayCardId": "LOOTA_BOSS_34h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_34h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_35h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Elder Brandlemar",
+		"displayName": "Boss defeated: Elder Brandlemar",
+		"text": "<i>The bane of magic users, this furbolg can counter any spell.</i>",
+		"displayCardId": "LOOTA_BOSS_35h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_35h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_36h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Ixlid",
+		"displayName": "Boss defeated: Ixlid",
+		"text": "<i>Its deadly spores can kill an adventurer instantly!</i>",
+		"displayCardId": "LOOTA_BOSS_36h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_36h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_37h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Lyris the Wild Mage",
+		"displayName": "Boss defeated: Lyris the Wild Mage",
+		"text": "<i>She loves fire. Her minions love that she loves fire.</i>",
+		"displayCardId": "LOOTA_BOSS_37h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_37h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_38h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Voodoomaster Vex",
+		"displayName": "Boss defeated: Voodoomaster Vex",
+		"text": "<i>He wants to be a troll. He cries for battle and rattles for death.</i>",
+		"displayCardId": "LOOTA_BOSS_38h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_38h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_39h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Kraxx",
+		"displayName": "Boss defeated: Kraxx",
+		"text": "<i>This ancient stone guardian prefers the loot to stay here.</i>",
+		"displayCardId": "LOOTA_BOSS_39h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_39h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_40h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Seriona",
+		"displayName": "Boss defeated: Seriona",
+		"text": "<i>A twilight dragon\nbent on draining\nyour minions.</i>",
+		"displayCardId": "LOOTA_BOSS_40h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_40h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_41h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Whompwhisker",
+		"displayName": "Boss defeated: Whompwhisker",
+		"text": "<i>A kobold berserker who never fights alone.</i>",
+		"displayCardId": "LOOTA_BOSS_41h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_41h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_42h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Elder Jari",
+		"displayName": "Boss defeated: Elder Jari",
+		"text": "<i>This furbolg elder\ncalls arcane energies to her defense.</i>",
+		"displayCardId": "LOOTA_BOSS_42h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_42h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_43h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Jeeru",
+		"displayName": "Boss defeated: Jeeru",
+		"text": "<i>Don't rub the lamp! You rubbed the lamp, didn't you?</i>",
+		"displayCardId": "LOOTA_BOSS_43h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_43h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_44h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Wee Whelp",
+		"displayName": "Boss defeated: Wee Whelp",
+		"text": "<i>It's just a baby dragon. But it's still a dragon.</i>",
+		"displayCardId": "LOOTA_BOSS_44h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_44h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_45h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Bink the Burglar",
+		"displayName": "Boss defeated: Bink the Burglar",
+		"text": "<i>This low-down thief preys on starting adventurers.</i>",
+		"displayCardId": "LOOTA_BOSS_45h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_45h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_46h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Fungalmancer Flurgl",
+		"displayName": "Boss defeated: Fungalmancer Flurgl",
+		"text": "<i>The fungalmancer empowers his friends. With fungus.</i>",
+		"displayCardId": "LOOTA_BOSS_46h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_46h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_47h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Lava-Filled Chamber",
+		"displayName": "Boss defeated: Lava-Filled Chamber",
+		"text": "<i>The kobolds attempted to board up this lava-filled chamber!</i>",
+		"displayCardId": "LOOTA_BOSS_47h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_47h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_48h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Trapped Room",
+		"displayName": "Boss defeated: Trapped Room",
+		"text": "<i>Tread carefully. Don't... touch... anything!</i>",
+		"displayCardId": "LOOTA_BOSS_48h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_48h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_49h",
+		"type": "dungeon_run_boss_victory",
+		"name": "The Darkness",
+		"displayName": "Boss defeated: The Darkness",
+		"text": "<i>There's a reason to always keep a light on down here.</i>",
+		"displayCardId": "LOOTA_BOSS_49h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_49h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_50h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Mushhuckster Max",
+		"displayName": "Boss defeated: Mushhuckster Max",
+		"text": "<i>You probably don't want the potions\nhe's hocking.</i>",
+		"displayCardId": "LOOTA_BOSS_50h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_50h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_51h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Russell the Bard",
+		"displayName": "Boss defeated: Russell the Bard",
+		"text": "<i>His tunes are catchy. Just ask your minions.</i>",
+		"displayCardId": "LOOTA_BOSS_51h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_51h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_52h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Treasure Vault",
+		"displayName": "Boss defeated: Treasure Vault",
+		"text": "<i>Grab all you can, as fast as you can!</i>",
+		"displayCardId": "LOOTA_BOSS_52h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_52h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_53h",
+		"type": "dungeon_run_boss_victory",
+		"name": "Chronomancer Inara",
+		"displayName": "Boss defeated: Chronomancer Inara",
+		"text": "<i>Once she powers\nup, beware of her\nmastery of time!</i>",
+		"displayCardId": "LOOTA_BOSS_53h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_53h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_54h",
+		"type": "dungeon_run_boss_victory",
+		"name": "A. F. Kay",
+		"displayName": "Boss defeated: A. F. Kay",
+		"text": "<i>Waylay this adventurer while she isn't\npaying attention!</i>",
+		"displayCardId": "LOOTA_BOSS_54h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_54h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_boss_victory_LOOTA_BOSS_99h",
+		"type": "dungeon_run_boss_victory",
+		"name": "King Togwaggle",
+		"displayName": "Boss defeated: King Togwaggle",
+		"text": "<i>Look out! He's loaded with loot from failed adventurers.</i>",
+		"displayCardId": "LOOTA_BOSS_99h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["LOOTA_BOSS_99h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOT_998k",
+		"type": "dungeon_run_treasure_play",
+		"name": "Golden Kobold",
+		"displayName": "Treasure played: Golden Kobold",
+		"text": "<b>Taunt</b>\n<b>Battlecry:</b> Replace your hand with <b>Legendary</b> minions.",
+		"displayCardId": "LOOT_998k",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOT_998k"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOT_998l",
+		"type": "dungeon_run_treasure_play",
+		"name": "Wondrous Wand",
+		"displayName": "Treasure played: Wondrous Wand",
+		"text": "Draw 3 cards. Reduce their Costs to (0).",
+		"displayCardId": "LOOT_998l",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOT_998l"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_805",
+		"type": "dungeon_run_treasure_play",
+		"name": "Amulet of Domination",
+		"displayName": "Treasure played: Amulet of Domination",
+		"text": "Take control of an enemy minion. Add it to your Dungeon Deck.",
+		"displayCardId": "LOOTA_805",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_805"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_806",
+		"type": "dungeon_run_treasure_play",
+		"name": "Wand of Disintegration",
+		"displayName": "Treasure played: Wand of Disintegration",
+		"text": "<b>Silence</b> and destroy all enemy minions.",
+		"displayCardId": "LOOTA_806",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_806"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_811",
+		"type": "dungeon_run_treasure_play",
+		"name": "Orb of Destruction",
+		"displayName": "Treasure played: Orb of Destruction",
+		"text": "Destroy 2 of your opponent's Mana Crystals and they discard 2 cards.",
+		"displayCardId": "LOOTA_811",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_811"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_812",
+		"type": "dungeon_run_treasure_play",
+		"name": "Boots of Haste",
+		"displayName": "Treasure played: Boots of Haste",
+		"text": "Your minions cost (0) this turn.",
+		"displayCardId": "LOOTA_812",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_812"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_813",
+		"type": "dungeon_run_treasure_play",
+		"name": "Magic Mirror",
+		"displayName": "Treasure played: Magic Mirror",
+		"text": "Choose a minion and summon a copy of it. Add it to your Dungeon Deck.",
+		"displayCardId": "LOOTA_813",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_813"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_814",
+		"type": "dungeon_run_treasure_play",
+		"name": "Wish",
+		"displayName": "Treasure played: Wish",
+		"text": "Fill your board with <b>Legendary</b> minions. Fully heal your hero.",
+		"displayCardId": "LOOTA_814",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_814"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_816",
+		"type": "dungeon_run_treasure_play",
+		"name": "Party Portal",
+		"displayName": "Treasure played: Party Portal",
+		"text": "Whenever you cast a spell, summon a random minion of the same Cost.",
+		"displayCardId": "LOOTA_816",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_816"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_817",
+		"type": "dungeon_run_treasure_play",
+		"name": "Primordial Wand",
+		"displayName": "Treasure played: Primordial Wand",
+		"text": "[x]<b>Adapt</b> a friendly minion.\nRepeat for each boss\nyou've defeated this run.",
+		"displayCardId": "LOOTA_817",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_817"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_819",
+		"type": "dungeon_run_treasure_play",
+		"name": "Archmage Staff",
+		"displayName": "Treasure played: Archmage Staff",
+		"text": "[x]At the start of your turn,\nadd a random Mage\nspell to your hand.",
+		"displayCardId": "LOOTA_819",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_819"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_820",
+		"type": "dungeon_run_treasure_play",
+		"name": "Aleatoric Cube",
+		"displayName": "Treasure played: Aleatoric Cube",
+		"text": "Shuffle both decks together and give\nhalf to each player.\nYour cards cost (2) less.",
+		"displayCardId": "LOOTA_820",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_820"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_821",
+		"type": "dungeon_run_treasure_play",
+		"name": "Vorpal Dagger",
+		"displayName": "Treasure played: Vorpal Dagger",
+		"text": "<b>Poisonous</b>\n<b>Mega-Windfury</b>",
+		"displayCardId": "LOOTA_821",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_821"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_822",
+		"type": "dungeon_run_treasure_play",
+		"name": "Rod of Roasting",
+		"displayName": "Treasure played: Rod of Roasting",
+		"text": "Cast 'Pyroblast' randomly until a hero dies.",
+		"displayCardId": "LOOTA_822",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_822"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_823",
+		"type": "dungeon_run_treasure_play",
+		"name": "Bag of Stuffing",
+		"displayName": "Treasure played: Bag of Stuffing",
+		"text": "Draw cards until your hand is full.",
+		"displayCardId": "LOOTA_823",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_823"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_826",
+		"type": "dungeon_run_treasure_play",
+		"name": "Portable Ice Wall",
+		"displayName": "Treasure played: Portable Ice Wall",
+		"text": "<b>Taunt</b>. Can't Attack.\n <b>Freeze</b> any character damaged by this minion.",
+		"displayCardId": "LOOTA_826",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_826"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_827",
+		"type": "dungeon_run_treasure_play",
+		"name": "Embers of Ragnaros",
+		"displayName": "Treasure played: Embers of Ragnaros",
+		"text": "Shoot three fireballs at random enemies that deal $8 damage each.",
+		"displayCardId": "LOOTA_827",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_827"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_829",
+		"type": "dungeon_run_treasure_play",
+		"name": "Loyal Sidekick",
+		"displayName": "Treasure played: Loyal Sidekick",
+		"text": "<b>Taunt</b>\nHas +1/+1 for each <b>Boss</b> you've defeated this run.",
+		"displayCardId": "LOOTA_829",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_829"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_830",
+		"type": "dungeon_run_treasure_play",
+		"name": "Shifting Hourglass",
+		"displayName": "Treasure played: Shifting Hourglass",
+		"text": "[x]Take an extra turn.\nCosts (1) less for each \n<b>Boss</b> you've defeated\nthis run.",
+		"displayCardId": "LOOTA_830",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_830"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_834",
+		"type": "dungeon_run_treasure_play",
+		"name": "Gloves of Mugging",
+		"displayName": "Treasure played: Gloves of Mugging",
+		"text": "Steal 3 cards from your opponent's hand.",
+		"displayCardId": "LOOTA_834",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_834"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_835",
+		"type": "dungeon_run_treasure_play",
+		"name": "Greedy Pickaxe",
+		"displayName": "Treasure played: Greedy Pickaxe",
+		"text": "After your hero attacks, gain an empty Mana Crystal.",
+		"displayCardId": "LOOTA_835",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_835"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_836",
+		"type": "dungeon_run_treasure_play",
+		"name": "Bag of Coins",
+		"displayName": "Treasure played: Bag of Coins",
+		"text": "Fill your hand with Coins.",
+		"displayCardId": "LOOTA_836",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_836"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_837",
+		"type": "dungeon_run_treasure_play",
+		"name": "Horn of Cenarius",
+		"displayName": "Treasure played: Horn of Cenarius",
+		"text": "<b>Recruit</b> 3 minions.",
+		"displayCardId": "LOOTA_837",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_837"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_838",
+		"type": "dungeon_run_treasure_play",
+		"name": "Dr. Boom's Boombox",
+		"displayName": "Treasure played: Dr. Boom's Boombox",
+		"text": "[x]Summon 7 'Boom Bots'.",
+		"displayCardId": "LOOTA_838",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_838"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_839",
+		"type": "dungeon_run_treasure_play",
+		"name": "Scroll of Confusion",
+		"displayName": "Treasure played: Scroll of Confusion",
+		"text": "Each minion randomly chooses a side of the battlefield.",
+		"displayCardId": "LOOTA_839",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_839"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_840",
+		"type": "dungeon_run_treasure_play",
+		"name": "Wax Rager",
+		"displayName": "Treasure played: Wax Rager",
+		"text": "<b>Deathrattle:</b> Resummon this minion.",
+		"displayCardId": "LOOTA_840",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_840"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_841",
+		"type": "dungeon_run_treasure_play",
+		"name": "Portable Forge",
+		"displayName": "Treasure played: Portable Forge",
+		"text": "<b>Discover</b> a Legendary weapon and equip it.",
+		"displayCardId": "LOOTA_841",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_841"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_842",
+		"type": "dungeon_run_treasure_play",
+		"name": "Quel'Delar",
+		"displayName": "Treasure played: Quel'Delar",
+		"text": "After your hero attacks, deal 6 damage to all enemies.",
+		"displayCardId": "LOOTA_842",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_842"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_842a",
+		"type": "dungeon_run_treasure_play",
+		"name": "Blade of Quel'Delar",
+		"displayName": "Treasure played: Blade of Quel'Delar",
+		"displayCardId": "LOOTA_842a",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_842a"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_842b",
+		"type": "dungeon_run_treasure_play",
+		"name": "Hilt of Quel'Delar",
+		"displayName": "Treasure played: Hilt of Quel'Delar",
+		"text": "Give a minion +3/+3.",
+		"displayCardId": "LOOTA_842b",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_842b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_843",
+		"type": "dungeon_run_treasure_play",
+		"name": "THE CANDLE",
+		"displayName": "Treasure played: THE CANDLE",
+		"text": "Deal $4 damage to all enemy minions. Shuffle this into your deck.",
+		"displayCardId": "LOOTA_843",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_843"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_treasure_play_LOOTA_847",
+		"type": "dungeon_run_treasure_play",
+		"name": "Mask of Mimicry",
+		"displayName": "Treasure played: Mask of Mimicry",
+		"text": "Choose a minion.\nMinions in your hand become copies of it.",
+		"displayCardId": "LOOTA_847",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["LOOTA_847"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_800",
+		"type": "dungeon_run_passive_play",
+		"name": "Potion of Vitality",
+		"displayName": "Passive ability triggered: Potion of Vitality",
+		"text": "\nDouble your\nstarting Health.",
+		"displayCardId": "LOOTA_800",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_800"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_801",
+		"type": "dungeon_run_passive_play",
+		"name": "Crystal Gem",
+		"displayName": "Passive ability triggered: Crystal Gem",
+		"text": "\nStart with an extra Mana Crystal.",
+		"displayCardId": "LOOTA_801",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_801"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_802",
+		"type": "dungeon_run_passive_play",
+		"name": "Justicar's Ring",
+		"displayName": "Passive ability triggered: Justicar's Ring",
+		"text": "\nYour Hero Power is upgraded and costs (1).",
+		"displayCardId": "LOOTA_802",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_802"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_803",
+		"type": "dungeon_run_passive_play",
+		"name": "Scepter of Summoning",
+		"displayName": "Passive ability triggered: Scepter of Summoning",
+		"text": "\nYour minions that\ncost (5) or more\ncost (5).",
+		"displayCardId": "LOOTA_803",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_803"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_804",
+		"type": "dungeon_run_passive_play",
+		"name": "Small Backpacks",
+		"displayName": "Passive ability triggered: Small Backpacks",
+		"text": "\nAt the start of the game, draw 2 cards.",
+		"displayCardId": "LOOTA_804",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_804"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_818",
+		"type": "dungeon_run_passive_play",
+		"name": "Grommash's Armguards",
+		"displayName": "Passive ability triggered: Grommash's Armguards",
+		"text": "\nYour weapons cost (1).",
+		"displayCardId": "LOOTA_818",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_818"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_824",
+		"type": "dungeon_run_passive_play",
+		"name": "Khadgar's Scrying Orb",
+		"displayName": "Passive ability triggered: Khadgar's Scrying Orb",
+		"text": "\nYour spells cost (1) less.",
+		"displayCardId": "LOOTA_824",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_824"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_825",
+		"type": "dungeon_run_passive_play",
+		"name": "Robe of the Magi",
+		"displayName": "Passive ability triggered: Robe of the Magi",
+		"text": "\n<b>Spell Damage +3</b>",
+		"displayCardId": "LOOTA_825",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_825"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_828",
+		"type": "dungeon_run_passive_play",
+		"name": "Captured Flag",
+		"displayName": "Passive ability triggered: Captured Flag",
+		"text": "\nYour minions have +1/+1.",
+		"displayCardId": "LOOTA_828",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_828"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_831",
+		"type": "dungeon_run_passive_play",
+		"name": "Glyph of Warding",
+		"displayName": "Passive ability triggered: Glyph of Warding",
+		"text": "\nEnemy minions cost (1) more.",
+		"displayCardId": "LOOTA_831",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_831"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_832",
+		"type": "dungeon_run_passive_play",
+		"name": "Cloak of Invisibility",
+		"displayName": "Passive ability triggered: Cloak of Invisibility",
+		"text": "\nYour minions have permanent <b>Stealth</b>.",
+		"displayCardId": "LOOTA_832",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_832"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_833",
+		"type": "dungeon_run_passive_play",
+		"name": "Mysterious Tome",
+		"displayName": "Passive ability triggered: Mysterious Tome",
+		"text": "\nAt the start of the game, play 3 random <b>Secrets</b>.",
+		"displayCardId": "LOOTA_833",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_833"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_845",
+		"type": "dungeon_run_passive_play",
+		"name": "Totem of the Dead",
+		"displayName": "Passive ability triggered: Totem of the Dead",
+		"text": "\nYour <b>Deathrattles</b> trigger twice.",
+		"displayCardId": "LOOTA_845",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_845"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "dungeon_run_passive_play_LOOTA_846",
+		"type": "dungeon_run_passive_play",
+		"name": "Battle Totem",
+		"displayName": "Passive ability triggered: Battle Totem",
+		"text": "\nYour <b>Battlecries</b> trigger twice.",
+		"displayCardId": "LOOTA_846",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_846"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2663"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	}
+]

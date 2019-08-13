@@ -1,21 +1,18 @@
-import { AchievementSet } from '../../../models/achievement-set';
-import { SetProvider, IndexedVisualAchievement } from './set-provider';
-import { VisualAchievement, CompletionStep } from '../../../models/visual-achievement';
 import { Achievement } from '../../../models/achievement';
+import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
-import { AllCardsService } from '../../all-cards.service';
 import { FilterOption } from '../../../models/filter-option';
+import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
 import { AchievementConfService } from '../achievement-conf.service';
+import { IndexedVisualAchievement, SetProvider } from './set-provider';
 
 export class MonsterHuntProgressionSetProvider extends SetProvider {
-	private cardsService: AllCardsService;
 	private logoName: string;
 	private conf: AchievementConfService;
 
-	constructor(cardsService: AllCardsService, conf: AchievementConfService) {
+	constructor(conf: AchievementConfService) {
 		super('monster_hunt_progression', 'Progression', ['monster_hunt_progression', 'monster_hunt_final_boss']);
 		this.logoName = 'achievements_progression';
-		this.cardsService = cardsService;
 		this.conf = conf;
 	}
 
@@ -116,8 +113,8 @@ export class MonsterHuntProgressionSetProvider extends SetProvider {
 				achievement.id,
 				name,
 				this.id,
-				achievement.cardId,
-				achievement.cardType,
+				achievement.displayCardId,
+				achievement.displayCardType,
 				text,
 				invertedCompletionSteps.reverse(),
 				replayInfo,

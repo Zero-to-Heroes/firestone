@@ -1,15 +1,16 @@
-import { ReplayInfo } from './replay-info';
+import { RawRequirement } from './raw-requirement';
 
-export class Achievement {
+export interface RawAchievement {
 	readonly id: string;
 	readonly type: string;
 	readonly name: string;
 	readonly displayName: string;
+	readonly emptyText?: string;
 	readonly text: string;
 	readonly displayCardId: string;
 	readonly displayCardType: string;
 	readonly difficulty: string;
 	readonly points: number;
-	readonly numberOfCompletions: number = 0;
-	readonly replayInfo: readonly ReplayInfo[] = [];
+	readonly requirements: readonly RawRequirement[];
+	readonly resetEvents: readonly string[];
 }

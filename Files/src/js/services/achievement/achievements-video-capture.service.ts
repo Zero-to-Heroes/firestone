@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-
-import { Events } from '../events.service';
 import { Achievement } from '../../models/achievement';
-import { Challenge } from './achievements/challenge';
-import { AchievementConfService } from './achievement-conf.service';
+import { ReplayInfo } from '../../models/replay-info';
+import { Events } from '../events.service';
+import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
-import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
+import { AchievementConfService } from './achievement-conf.service';
+import { Challenge } from './achievements/challenges/challenge';
 import { TemporaryResolutionOverrideService } from './temporary-resolution-override-service';
-import { ReplayInfo } from '../../models/replay-info';
 
 @Injectable()
 export class AchievementsVideoCaptureService {

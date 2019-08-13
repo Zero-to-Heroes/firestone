@@ -1,28 +1,18 @@
-import { AchievementSet } from '../../../models/achievement-set';
-import { SetProvider, IndexedVisualAchievement } from './set-provider';
-import { VisualAchievement, CompletionStep } from '../../../models/visual-achievement';
 import { Achievement } from '../../../models/achievement';
+import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
-import { AllCardsService } from '../../all-cards.service';
 import { FilterOption } from '../../../models/filter-option';
+import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
 import { AchievementConfService } from '../achievement-conf.service';
+import { IndexedVisualAchievement, SetProvider } from './set-provider';
 
 export abstract class AbstractBossSetProvider extends SetProvider {
-	protected cardsService: AllCardsService;
 	protected logoName: string;
 	protected conf: AchievementConfService;
 
-	constructor(
-		id: string,
-		categoryId: string,
-		displayName: string,
-		types: string[],
-		cardsService: AllCardsService,
-		conf: AchievementConfService,
-	) {
+	constructor(id: string, categoryId: string, displayName: string, types: string[], conf: AchievementConfService) {
 		super(id, displayName, types);
 		this.logoName = categoryId;
-		this.cardsService = cardsService;
 		this.conf = conf;
 	}
 
@@ -77,11 +67,11 @@ export abstract class AbstractBossSetProvider extends SetProvider {
 	}
 
 	protected convertToVisual(achievement: Achievement, index: number, mergedAchievements: Achievement[]): IndexedVisualAchievement {
-		const encountedId = this.types[0] + '_' + achievement.cardId;
-		const victoryId = this.types[1] + '_' + achievement.cardId;
+		const encountedId = this.types[0] + '_' + achievement.displayCardId;
+		const victoryId = this.types[1] + '_' + achievement.displayCardId;
 		const encounterAchievement = mergedAchievements.filter(ach => ach.id === encountedId)[0];
 		const victoryAchievement = mergedAchievements.filter(ach => ach.id === victoryId)[0];
-		const cardText = this.cardsService.getCard(achievement.cardId).text || '...';
+		const cardText = achievement.text || '...';
 		const text = cardText
 			.replace('<i>', '')
 			.replace('</i>', '')
@@ -115,8 +105,8 @@ export abstract class AbstractBossSetProvider extends SetProvider {
 				achievement.id,
 				achievement.name,
 				this.id,
-				achievement.cardId,
-				achievement.cardType,
+				achievement.displayCardId,
+				achievement.displayCardType,
 				text,
 				completionSteps,
 				replayInfo,

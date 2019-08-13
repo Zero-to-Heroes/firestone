@@ -1,12 +1,12 @@
-import { Injectable, EventEmitter } from '@angular/core';
-
-import { GameEvent } from '../models/game-event';
+import { EventEmitter, Injectable } from '@angular/core';
 import { captureEvent } from '@sentry/core';
-import { S3FileUploadService } from './s3-file-upload.service';
-import { SimpleIOService } from './plugins/simple-io.service';
-import { GameEventsPluginService } from './plugins/game-events-plugin.service';
-import { OverwolfService } from './overwolf.service';
+import { GameEvent } from '../models/game-event';
+import { Events } from './events.service';
 import { LogsUploaderService } from './logs-uploader.service';
+import { OverwolfService } from './overwolf.service';
+import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+import { SimpleIOService } from './plugins/simple-io.service';
+import { S3FileUploadService } from './s3-file-upload.service';
 
 @Injectable()
 export class GameEvents {
@@ -23,6 +23,7 @@ export class GameEvents {
 		private ow: OverwolfService,
 		private logService: LogsUploaderService,
 		private s3: S3FileUploadService,
+		private events: Events,
 	) {
 		this.init();
 	}
@@ -45,6 +46,15 @@ export class GameEvents {
 		plugin.initRealtimeLogConversion(() => {
 			console.log('[game-events] real-time log processing ready to go');
 		});
+
+		this.events.on(Events.SCENE_CHANGED).subscribe(event =>
+			this.allEvents.next(
+				Object.assign(new GameEvent(), {
+					type: GameEvent.SCENE_CHANGED,
+					additionalData: { scene: event.data[0] },
+				} as GameEvent),
+			),
+		);
 
 		setInterval(() => {
 			if (this.processingLines) {

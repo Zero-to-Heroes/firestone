@@ -1,21 +1,18 @@
-import { AchievementSet } from '../../../models/achievement-set';
-import { SetProvider, IndexedVisualAchievement } from './set-provider';
-import { VisualAchievement, CompletionStep } from '../../../models/visual-achievement';
 import { Achievement } from '../../../models/achievement';
+import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
-import { AllCardsService } from '../../all-cards.service';
 import { FilterOption } from '../../../models/filter-option';
+import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
 import { AchievementConfService } from '../achievement-conf.service';
+import { IndexedVisualAchievement, SetProvider } from './set-provider';
 
 export class DalaranHeistPassivesSetProvider extends SetProvider {
-	private cardsService: AllCardsService;
 	private logoName: string;
 	private conf: AchievementConfService;
 
-	constructor(cardsService: AllCardsService, conf: AchievementConfService) {
+	constructor(conf: AchievementConfService) {
 		super('dalaran_heist_passive', 'Passives', ['dalaran_heist_passive_play']);
 		this.logoName = 'achievements_passive';
-		this.cardsService = cardsService;
 		this.conf = conf;
 	}
 
@@ -60,7 +57,7 @@ export class DalaranHeistPassivesSetProvider extends SetProvider {
 	}
 
 	protected convertToVisual(achievement: Achievement, index: number): IndexedVisualAchievement {
-		const cardText = this.cardsService.getCard(achievement.cardId).text || '...';
+		const cardText = achievement.text || '...';
 		const text = cardText
 			.replace('Passive', '')
 			.replace('<i>', '')
@@ -84,8 +81,8 @@ export class DalaranHeistPassivesSetProvider extends SetProvider {
 				achievement.id,
 				achievement.name,
 				this.id,
-				achievement.cardId,
-				achievement.cardType,
+				achievement.displayCardId,
+				achievement.displayCardType,
 				text,
 				completionSteps,
 				replayInfo,

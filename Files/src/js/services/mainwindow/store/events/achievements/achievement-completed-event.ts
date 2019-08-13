@@ -1,4 +1,4 @@
-import { Challenge } from '../../../../achievement/achievements/challenge';
+import { Challenge } from '../../../../achievement/achievements/challenges/challenge';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class AchievementCompletedEvent implements MainWindowStoreEvent {

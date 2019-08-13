@@ -4,9 +4,8 @@ import { CompletedAchievement } from '../../../../../models/completed-achievemen
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { AchievementHistoryStorageService } from '../../../../achievement/achievement-history-storage.service';
-import { AchievementNameService } from '../../../../achievement/achievement-name.service';
-import { AchievementsRepository } from '../../../../achievement/achievements-repository.service';
 import { AchievementsStorageService } from '../../../../achievement/achievements-storage.service';
+import { AchievementsLoaderService } from '../../../../achievement/data/achievements-loader.service';
 import { Events } from '../../../../events.service';
 import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
 import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
@@ -16,14 +15,13 @@ export class AchievementCompletedProcessor implements Processor {
 	constructor(
 		private achievementsStorage: AchievementsStorageService,
 		private historyStorage: AchievementHistoryStorageService,
-		private repository: AchievementsRepository,
+		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
-		private namingService: AchievementNameService,
 		private helper: AchievementUpdateHelper,
 	) {}
 
 	public async process(event: AchievementCompletedEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		let existingAchievement = await this.achievementsStorage.loadAchievement(event.challenge.getAchievementId());
+		let existingAchievement = await this.achievementsStorage.loadAchievement(event.challenge.achievementId);
 		existingAchievement = existingAchievement || event.challenge.defaultAchievement();
 		const completedAchievement = new CompletedAchievement(
 			existingAchievement.id,
@@ -33,7 +31,7 @@ export class AchievementCompletedProcessor implements Processor {
 		await this.achievementsStorage.saveAchievement(completedAchievement);
 		const newAchievementState = await this.helper.rebuildAchievements(currentState);
 		this.events.broadcast(Events.NEW_ACHIEVEMENT, completedAchievement);
-		const achievement: Achievement = this.repository.getAllAchievements().find(ach => ach.id === completedAchievement.id);
+		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
 		// Send the notification early
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, completedAchievement.numberOfCompletions, event.challenge);
 		const historyItem = {
@@ -44,11 +42,12 @@ export class AchievementCompletedProcessor implements Processor {
 			creationTimestamp: Date.now(),
 		} as AchievementHistory;
 		await this.historyStorage.save(historyItem);
-		const history = (await this.historyStorage.loadAll())
+		const [historyRef, achievements] = await Promise.all([this.historyStorage.loadAll(), this.achievementLoader.getAchievements()]);
+		const history = historyRef
 			.filter(history => history.numberOfCompletions === 1)
 			.map(history =>
 				Object.assign(new AchievementHistory(), history, {
-					displayName: this.namingService.displayName(history.achievementId),
+					displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
 				} as AchievementHistory),
 			)
 			.reverse();

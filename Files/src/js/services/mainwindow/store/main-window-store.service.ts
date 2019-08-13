@@ -4,9 +4,9 @@ import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../models/mainwindow/navigation';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
-import { AchievementNameService } from '../../achievement/achievement-name.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { AchievementsStorageService } from '../../achievement/achievements-storage.service';
+import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
 import { IndexedDbService as AchievementsDb } from '../../achievement/indexed-db.service';
 import { AllCardsService } from '../../all-cards.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
@@ -103,7 +103,7 @@ export class MainWindowStoreService {
 		private cardHistoryStorage: CardHistoryStorageService,
 		private achievementsStorage: AchievementsStorageService,
 		private achievementHistoryStorage: AchievementHistoryStorageService,
-		private achievementNameService: AchievementNameService,
+		private achievementsLoader: AchievementsLoaderService,
 		private io: SimpleIOService,
 		private collectionDb: IndexedDbService,
 		private achievementsDb: AchievementsDb,
@@ -161,10 +161,10 @@ export class MainWindowStoreService {
 
 	private addStateToHistory(newState: MainWindowState, navigation: boolean, event: string): void {
 		const newIndex = this.stateHistory.map(state => state.state).indexOf(newState);
-		console.log('newIndex', newIndex, this.stateHistory);
+		// console.log('newIndex', newIndex, this.stateHistory);
 		// We just did a "next" or "previous", so we don't modify the history
 		if (newIndex !== -1) {
-			console.log('[store] moving through history, so not modifying history', newIndex);
+			// console.log('[store] moving through history, so not modifying history', newIndex);
 			return;
 		} else {
 			// Build a new history with the current state as tail
@@ -185,7 +185,7 @@ export class MainWindowStoreService {
 	private updateNavigationArrows(state: MainWindowState): MainWindowState {
 		const backArrowEnabled = NavigationBackProcessor.getTargetIndex(state, this.stateHistory) !== -1;
 		const nextArrowEnabled = NavigationNextProcessor.getTargetIndex(state, this.stateHistory) !== -1;
-		console.log('navigation arrows', backArrowEnabled, nextArrowEnabled, this.stateHistory);
+		// console.log('navigation arrows', backArrowEnabled, nextArrowEnabled, this.stateHistory);
 		const newNavigation: Navigation = Object.assign(new Navigation(), state.navigation, {
 			backArrowEnabled: backArrowEnabled,
 			nextArrowEnabled: nextArrowEnabled,
@@ -206,8 +206,8 @@ export class MainWindowStoreService {
 				this.cardHistoryStorage,
 				this.collectionManager,
 				this.pityTimer,
+				this.achievementsLoader,
 				this.ow,
-				this.achievementNameService,
 				this.cards,
 			),
 
@@ -254,7 +254,7 @@ export class MainWindowStoreService {
 			new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, this.pityTimer, this.cards),
 
 			AchievementHistoryCreatedEvent.eventName(),
-			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementNameService),
+			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
 
 			ChangeAchievementsShortDisplayEvent.eventName(),
 			new ChangeAchievementsShortDisplayProcessor(),
@@ -281,9 +281,8 @@ export class MainWindowStoreService {
 			new AchievementCompletedProcessor(
 				this.achievementsStorage,
 				this.achievementHistoryStorage,
-				this.achievementsRepository,
+				this.achievementsLoader,
 				this.events,
-				this.achievementNameService,
 				achievementUpdateHelper,
 			),
 

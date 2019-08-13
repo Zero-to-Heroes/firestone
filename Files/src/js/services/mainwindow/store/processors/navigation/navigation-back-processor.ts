@@ -14,7 +14,6 @@ export class NavigationBackProcessor implements Processor {
 			console.error('invalid previous state', history, currentState);
 			return currentState;
 		}
-		console.log('processing back navigation event', history);
 		return history[targetIndex].state;
 	}
 
@@ -31,7 +30,6 @@ export class NavigationBackProcessor implements Processor {
 				break;
 			}
 		}
-		console.log('back index', targetIndex, history);
 		return targetIndex;
 	}
 }

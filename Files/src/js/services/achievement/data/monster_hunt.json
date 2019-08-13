@@ -1,0 +1,5126 @@
+[
+	{
+		"id": "monster_hunt_progression_GILA_400h_0",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 1",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_1",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 2",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_2",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 3",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_3",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 4",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_4",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 5",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_5",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 6",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_6",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 7",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_400h_7",
+		"type": "monster_hunt_progression",
+		"name": "Houndmaster Shaw (Hunter) - Cleared round 8",
+		"emptyText": "Clear the first round with Hunter to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "GILA_400h",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_400h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_0",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 1",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_1",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 2",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_2",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 3",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_3",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 4",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_4",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 5",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_5",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 6",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_6",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 7",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_500h3_7",
+		"type": "monster_hunt_progression",
+		"name": "Tess Greymane (Rogue) - Cleared round 8",
+		"emptyText": "Clear the first round with Rogue to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "GILA_500h3",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_500h3"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_0",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 1",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_1",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 2",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_2",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 3",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_3",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 4",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_4",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 5",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_5",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 6",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_6",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 7",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_600h_7",
+		"type": "monster_hunt_progression",
+		"name": "Darius Crowley (Warrior) - Cleared round 8",
+		"emptyText": "Clear the first round with Warrior to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "GILA_600h",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_600h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_0",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 1",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 1",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 1,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["0"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_1",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 2",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 2",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["1"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_2",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 3",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 3",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 5,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_3",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 4",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 4",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 7,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["3"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_4",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 5",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 5",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 9,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["4"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_5",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 6",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 6",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 11,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["5"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_6",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 7",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 7",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "free",
+		"points": 13,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["6"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_progression_GILA_900h_7",
+		"type": "monster_hunt_progression",
+		"name": "Toki, Time-Tinker (Mage) - Cleared round 8",
+		"emptyText": "Clear the first round with Mage to get started",
+		"text": "Cleared round 8",
+		"displayCardId": "GILA_900h",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "MONSTER_HUNT_STEP",
+				"values": ["7"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "PLAYER_HERO",
+				"values": ["GILA_900h"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_final_boss",
+		"type": "monster_hunt_progression",
+		"name": "Defeated Hagatha the Witch!",
+		"displayCardId": "GILA_BOSS_61h",
+		"displayCardType": "hero",
+		"difficulty": "legendary",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_61h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_20h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "A Mangy Wolf",
+		"displayName": "Boss met: A Mangy Wolf",
+		"text": "<i>Unearthly howls drive the wildlife mad.</i>",
+		"displayCardId": "GILA_BOSS_20h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_20h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_21h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Rottooth",
+		"displayName": "Boss met: Rottooth",
+		"text": "<i>Incorporeal or not, those claws hurt!</i>",
+		"displayCardId": "GILA_BOSS_21h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_21h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_22h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Cutthroat Willie",
+		"displayName": "Boss met: Cutthroat Willie",
+		"text": "<i>WANTED: For doing exactly what his name suggests.</i>",
+		"displayCardId": "GILA_BOSS_22h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_22h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_23h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Grubb the Swampdrinker",
+		"displayName": "Boss met: Grubb the Swampdrinker",
+		"text": "<i>An iron gut, and quite the throwing arm.</i>",
+		"displayCardId": "GILA_BOSS_23h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_23h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_24h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Groddo the Bogwarden",
+		"displayName": "Boss met: Groddo the Bogwarden",
+		"text": "<i>Dead emerge from the swamp. It's not a pleasant scent.</i>",
+		"displayCardId": "GILA_BOSS_24h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_24h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_25h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Manhunter Ivan",
+		"displayName": "Boss met: Manhunter Ivan",
+		"text": "<i>Watch your step, this traitor is an expert trapper.</i>",
+		"displayCardId": "GILA_BOSS_25h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_25h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_26h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Gnomenapper",
+		"displayName": "Boss met: Gnomenapper",
+		"text": "<i>A collector of gnomes. Real ones.</i>",
+		"displayCardId": "GILA_BOSS_26h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_26h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_27h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Experiment 3C",
+		"displayName": "Boss met: Experiment 3C",
+		"text": "<i>It's a Murloc! It's a Dragon! It's... everything?</i>",
+		"displayCardId": "GILA_BOSS_27h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_27h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_29h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Sazzmi Gentlehorn",
+		"displayName": "Boss met: Sazzmi Gentlehorn",
+		"text": "[x]<i>This satyr has a\ntendency to attract\nmore than just rats.</i>",
+		"displayCardId": "GILA_BOSS_29h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_29h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_30h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Blood Witch Gretta",
+		"displayName": "Boss met: Blood Witch Gretta",
+		"text": "<i>Magic is powerful in her grove… but it comes at a cost.</i>",
+		"displayCardId": "GILA_BOSS_30h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_30h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_31h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Gnarlroot",
+		"displayName": "Boss met: Gnarlroot",
+		"text": "<i>Gnarled, twisting roots, splintering to life.</i>",
+		"displayCardId": "GILA_BOSS_31h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_31h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_32h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Niira the Trickster",
+		"displayName": "Boss met: Niira the Trickster",
+		"text": "<i>She plays with wee critters… until they’re big critters.</i>",
+		"displayCardId": "GILA_BOSS_32h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_32h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_33h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "The Scarecrow",
+		"displayName": "Boss met: The Scarecrow",
+		"text": "<i>His enchanted scythe drinks deep from every harvest.</i>",
+		"displayCardId": "GILA_BOSS_33h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_33h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_34h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Inquisitor Hav'nixx",
+		"displayName": "Boss met: Inquisitor Hav'nixx",
+		"text": "<i>A mind is a terrible thing to waste. It's far too delicious.</i>",
+		"displayCardId": "GILA_BOSS_34h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_34h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_35h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Chupacabran",
+		"displayName": "Boss met: Chupacabran",
+		"text": "<i>It used to feed on local livestock. Now it hungers for more.</i>",
+		"displayCardId": "GILA_BOSS_35h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_35h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_36h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Griselda",
+		"displayName": "Boss met: Griselda",
+		"text": "<i>Watch those lips, she'll kiss just about anything.</i>",
+		"displayCardId": "GILA_BOSS_36h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_36h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_37h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Wharrgarbl",
+		"displayName": "Boss met: Wharrgarbl",
+		"text": "<i>The Witchwood's curse has not been kind to the local Murlocs.</i>",
+		"displayCardId": "GILA_BOSS_37h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_37h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_38h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Ravencaller Cozzlewurt",
+		"displayName": "Boss met: Ravencaller Cozzlewurt",
+		"text": "<i>The feathered fiends of Gilneas flock to his sinister call.</i>",
+		"displayCardId": "GILA_BOSS_38h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_38h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_39h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Forlorn Lovers",
+		"displayName": "Boss met: Forlorn Lovers",
+		"text": "<i>Bound by vows, she just won't let go.</i>",
+		"displayCardId": "GILA_BOSS_39h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_39h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_40h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Splintergraft",
+		"displayName": "Boss met: Splintergraft",
+		"text": "<i>She'll take a piece of you and make it her own.</i>",
+		"displayCardId": "GILA_BOSS_40h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_40h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_41h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Brushwood Centurion",
+		"displayName": "Boss met: Brushwood Centurion",
+		"text": "<i>This once-stalwart defender of the woods now sows chaos.</i>",
+		"displayCardId": "GILA_BOSS_41h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_41h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_42h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Baran the Blind",
+		"displayName": "Boss met: Baran the Blind",
+		"text": "<i>Poor vision doesn't matter with strength like his.</i>",
+		"displayCardId": "GILA_BOSS_42h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_42h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_43h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Gravekeeper Damph",
+		"displayName": "Boss met: Gravekeeper Damph",
+		"text": "<i>The rattle of bones remain a comfort to him.</i>",
+		"displayCardId": "GILA_BOSS_43h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_43h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_44h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Doctor Sezavo",
+		"displayName": "Boss met: Doctor Sezavo",
+		"text": "<i>It’s good to give blood. But not to him. He’s not a real doctor.</i>",
+		"displayCardId": "GILA_BOSS_44h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_44h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_45h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Cultist S'thara",
+		"displayName": "Boss met: Cultist S'thara",
+		"text": "<i>A silver tongue to accompany her silver daggers.</i>",
+		"displayCardId": "GILA_BOSS_45h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_45h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_46h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Vitus the Exiled",
+		"displayName": "Boss met: Vitus the Exiled",
+		"text": "<i>Corrupted. Banished. Hungry.</i>",
+		"displayCardId": "GILA_BOSS_46h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_46h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_47h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Shudderwock",
+		"displayName": "Boss met: Shudderwock",
+		"text": "[x]<i>And 'lo in uffish\nthought he stood, crying\n\"Battle\" in the wood.</i>",
+		"displayCardId": "GILA_BOSS_47h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_47h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_48h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Infinite Toki",
+		"displayName": "Boss met: Infinite Toki",
+		"text": "<i>One either dies a hero or mangles time enough to become a villain.</i>",
+		"displayCardId": "GILA_BOSS_48h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_48h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_49h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Glinda Crowskin",
+		"displayName": "Boss met: Glinda Crowskin",
+		"text": "<i>The leader of Hagatha’s dark cult hides behind her loyal minions.</i>",
+		"displayCardId": "GILA_BOSS_49h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_49h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_50h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "The Whisperer",
+		"displayName": "Boss met: The Whisperer",
+		"text": "<i>Do you hear the echoes of his whispers?</i>",
+		"displayCardId": "GILA_BOSS_50h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_50h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_51h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Garrow, the Rancorous",
+		"displayName": "Boss met: Garrow, the Rancorous",
+		"text": "<i>Missing? Dead? He'll still collect.</i>",
+		"displayCardId": "GILA_BOSS_51h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_51h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_52h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Crooked Pete",
+		"displayName": "Boss met: Crooked Pete",
+		"text": "<i>The locals report\nthat Pete is up to\nno good again.</i>",
+		"displayCardId": "GILA_BOSS_52h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_52h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_54h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Cragtorr",
+		"displayName": "Boss met: Cragtorr",
+		"text": "<i>Seeds sewn from hatred, sustained by dark magic.</i>",
+		"displayCardId": "GILA_BOSS_54h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_54h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_55h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Azalina Soulthief",
+		"displayName": "Boss met: Azalina Soulthief",
+		"text": "[x]<i>Her children's safety\nis her top priority.\nAt any cost.</i>",
+		"displayCardId": "GILA_BOSS_55h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_55h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_56h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Face Collector",
+		"displayName": "Boss met: Face Collector",
+		"text": "[x]<i>Beware his terrible\nminions and their\never-shifting faces.</i>",
+		"displayCardId": "GILA_BOSS_56h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_56h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_57h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Raeth Ghostsong",
+		"displayName": "Boss met: Raeth Ghostsong",
+		"text": "<i>There's a reason you should burn the dead.</i>",
+		"displayCardId": "GILA_BOSS_57h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_57h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_58h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Grum",
+		"displayName": "Boss met: Grum",
+		"text": "<i>Grum likes to smash. He also likes to bash. And crash.</i>",
+		"displayCardId": "GILA_BOSS_58h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_58h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_59h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Lord Godfrey",
+		"displayName": "Boss met: Lord Godfrey",
+		"text": "<i>The Lord of Shadowfang Keep has a bullet to pick with Crowley.</i>",
+		"displayCardId": "GILA_BOSS_59h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_59h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_60h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Captain Shivers",
+		"displayName": "Boss met: Captain Shivers",
+		"text": "<i>Vowing vengeance, his cursed crew haunts Gilnean shores.</i>",
+		"displayCardId": "GILA_BOSS_60h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_60h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_61h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Hagatha the Witch",
+		"displayName": "Boss met: Hagatha the Witch",
+		"displayCardId": "GILA_BOSS_61h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_61h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_62h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Gustave, the Gutripper",
+		"displayName": "Boss met: Gustave, the Gutripper",
+		"text": "<i>Hagatha’s pet eats his way from the bottom of the food chain up.</i>",
+		"displayCardId": "GILA_BOSS_62h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_62h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_63h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Sephira Dusktalon",
+		"displayName": "Boss met: Sephira Dusktalon",
+		"text": "<i>Even your own magic can be twisted by these woods.</i>",
+		"displayCardId": "GILA_BOSS_63h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_63h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_64h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Winslow Tobtock",
+		"displayName": "Boss met: Winslow Tobtock",
+		"text": "<i>His tricks will leave you both in a daze.</i>",
+		"displayCardId": "GILA_BOSS_64h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_64h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_65h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Gobbles",
+		"displayName": "Boss met: Gobbles",
+		"text": "<i>Every dying beast makes this dreaded carrion bird stronger.</i>",
+		"displayCardId": "GILA_BOSS_65h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_65h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_66h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "The Mute",
+		"displayName": "Boss met: The Mute",
+		"text": "<i>. . .</i>",
+		"displayCardId": "GILA_BOSS_66h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_66h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_67h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Ratcatcher Hannigul",
+		"displayName": "Boss met: Ratcatcher Hannigul",
+		"text": "<i>Rats aren't always the most loyal pets.</i>",
+		"displayCardId": "GILA_BOSS_67h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_67h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_encounter_GILA_BOSS_68h",
+		"type": "monster_hunt_boss_encounter",
+		"name": "Plaguemaster Rancel",
+		"displayName": "Boss met: Plaguemaster Rancel",
+		"text": "<i>Dying to his touch is terrible. Living is even worse.</i>",
+		"displayCardId": "GILA_BOSS_68h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 2,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_68h"]
+			},
+			{
+				"type": "SCENE_CHANGED_TO_GAME"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_END"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_20h",
+		"type": "monster_hunt_boss_victory",
+		"name": "A Mangy Wolf",
+		"displayName": "Boss defeated: A Mangy Wolf",
+		"text": "<i>Unearthly howls drive the wildlife mad.</i>",
+		"displayCardId": "GILA_BOSS_20h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_20h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_21h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Rottooth",
+		"displayName": "Boss defeated: Rottooth",
+		"text": "<i>Incorporeal or not, those claws hurt!</i>",
+		"displayCardId": "GILA_BOSS_21h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_21h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_22h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Cutthroat Willie",
+		"displayName": "Boss defeated: Cutthroat Willie",
+		"text": "<i>WANTED: For doing exactly what his name suggests.</i>",
+		"displayCardId": "GILA_BOSS_22h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_22h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_23h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Grubb the Swampdrinker",
+		"displayName": "Boss defeated: Grubb the Swampdrinker",
+		"text": "<i>An iron gut, and quite the throwing arm.</i>",
+		"displayCardId": "GILA_BOSS_23h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_23h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_24h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Groddo the Bogwarden",
+		"displayName": "Boss defeated: Groddo the Bogwarden",
+		"text": "<i>Dead emerge from the swamp. It's not a pleasant scent.</i>",
+		"displayCardId": "GILA_BOSS_24h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_24h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_25h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Manhunter Ivan",
+		"displayName": "Boss defeated: Manhunter Ivan",
+		"text": "<i>Watch your step, this traitor is an expert trapper.</i>",
+		"displayCardId": "GILA_BOSS_25h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_25h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_26h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Gnomenapper",
+		"displayName": "Boss defeated: Gnomenapper",
+		"text": "<i>A collector of gnomes. Real ones.</i>",
+		"displayCardId": "GILA_BOSS_26h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_26h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_27h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Experiment 3C",
+		"displayName": "Boss defeated: Experiment 3C",
+		"text": "<i>It's a Murloc! It's a Dragon! It's... everything?</i>",
+		"displayCardId": "GILA_BOSS_27h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_27h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_29h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Sazzmi Gentlehorn",
+		"displayName": "Boss defeated: Sazzmi Gentlehorn",
+		"text": "[x]<i>This satyr has a\ntendency to attract\nmore than just rats.</i>",
+		"displayCardId": "GILA_BOSS_29h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_29h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_30h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Blood Witch Gretta",
+		"displayName": "Boss defeated: Blood Witch Gretta",
+		"text": "<i>Magic is powerful in her grove… but it comes at a cost.</i>",
+		"displayCardId": "GILA_BOSS_30h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_30h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_31h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Gnarlroot",
+		"displayName": "Boss defeated: Gnarlroot",
+		"text": "<i>Gnarled, twisting roots, splintering to life.</i>",
+		"displayCardId": "GILA_BOSS_31h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_31h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_32h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Niira the Trickster",
+		"displayName": "Boss defeated: Niira the Trickster",
+		"text": "<i>She plays with wee critters… until they’re big critters.</i>",
+		"displayCardId": "GILA_BOSS_32h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_32h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_33h",
+		"type": "monster_hunt_boss_victory",
+		"name": "The Scarecrow",
+		"displayName": "Boss defeated: The Scarecrow",
+		"text": "<i>His enchanted scythe drinks deep from every harvest.</i>",
+		"displayCardId": "GILA_BOSS_33h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_33h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_34h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Inquisitor Hav'nixx",
+		"displayName": "Boss defeated: Inquisitor Hav'nixx",
+		"text": "<i>A mind is a terrible thing to waste. It's far too delicious.</i>",
+		"displayCardId": "GILA_BOSS_34h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_34h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_35h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Chupacabran",
+		"displayName": "Boss defeated: Chupacabran",
+		"text": "<i>It used to feed on local livestock. Now it hungers for more.</i>",
+		"displayCardId": "GILA_BOSS_35h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_35h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_36h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Griselda",
+		"displayName": "Boss defeated: Griselda",
+		"text": "<i>Watch those lips, she'll kiss just about anything.</i>",
+		"displayCardId": "GILA_BOSS_36h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_36h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_37h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Wharrgarbl",
+		"displayName": "Boss defeated: Wharrgarbl",
+		"text": "<i>The Witchwood's curse has not been kind to the local Murlocs.</i>",
+		"displayCardId": "GILA_BOSS_37h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_37h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_38h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Ravencaller Cozzlewurt",
+		"displayName": "Boss defeated: Ravencaller Cozzlewurt",
+		"text": "<i>The feathered fiends of Gilneas flock to his sinister call.</i>",
+		"displayCardId": "GILA_BOSS_38h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_38h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_39h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Forlorn Lovers",
+		"displayName": "Boss defeated: Forlorn Lovers",
+		"text": "<i>Bound by vows, she just won't let go.</i>",
+		"displayCardId": "GILA_BOSS_39h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_39h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_40h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Splintergraft",
+		"displayName": "Boss defeated: Splintergraft",
+		"text": "<i>She'll take a piece of you and make it her own.</i>",
+		"displayCardId": "GILA_BOSS_40h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_40h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_41h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Brushwood Centurion",
+		"displayName": "Boss defeated: Brushwood Centurion",
+		"text": "<i>This once-stalwart defender of the woods now sows chaos.</i>",
+		"displayCardId": "GILA_BOSS_41h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_41h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_42h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Baran the Blind",
+		"displayName": "Boss defeated: Baran the Blind",
+		"text": "<i>Poor vision doesn't matter with strength like his.</i>",
+		"displayCardId": "GILA_BOSS_42h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_42h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_43h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Gravekeeper Damph",
+		"displayName": "Boss defeated: Gravekeeper Damph",
+		"text": "<i>The rattle of bones remain a comfort to him.</i>",
+		"displayCardId": "GILA_BOSS_43h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_43h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_44h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Doctor Sezavo",
+		"displayName": "Boss defeated: Doctor Sezavo",
+		"text": "<i>It’s good to give blood. But not to him. He’s not a real doctor.</i>",
+		"displayCardId": "GILA_BOSS_44h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_44h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_45h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Cultist S'thara",
+		"displayName": "Boss defeated: Cultist S'thara",
+		"text": "<i>A silver tongue to accompany her silver daggers.</i>",
+		"displayCardId": "GILA_BOSS_45h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_45h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_46h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Vitus the Exiled",
+		"displayName": "Boss defeated: Vitus the Exiled",
+		"text": "<i>Corrupted. Banished. Hungry.</i>",
+		"displayCardId": "GILA_BOSS_46h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_46h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_47h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Shudderwock",
+		"displayName": "Boss defeated: Shudderwock",
+		"text": "[x]<i>And 'lo in uffish\nthought he stood, crying\n\"Battle\" in the wood.</i>",
+		"displayCardId": "GILA_BOSS_47h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_47h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_48h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Infinite Toki",
+		"displayName": "Boss defeated: Infinite Toki",
+		"text": "<i>One either dies a hero or mangles time enough to become a villain.</i>",
+		"displayCardId": "GILA_BOSS_48h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_48h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_49h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Glinda Crowskin",
+		"displayName": "Boss defeated: Glinda Crowskin",
+		"text": "<i>The leader of Hagatha’s dark cult hides behind her loyal minions.</i>",
+		"displayCardId": "GILA_BOSS_49h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_49h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_50h",
+		"type": "monster_hunt_boss_victory",
+		"name": "The Whisperer",
+		"displayName": "Boss defeated: The Whisperer",
+		"text": "<i>Do you hear the echoes of his whispers?</i>",
+		"displayCardId": "GILA_BOSS_50h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_50h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_51h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Garrow, the Rancorous",
+		"displayName": "Boss defeated: Garrow, the Rancorous",
+		"text": "<i>Missing? Dead? He'll still collect.</i>",
+		"displayCardId": "GILA_BOSS_51h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_51h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_52h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Crooked Pete",
+		"displayName": "Boss defeated: Crooked Pete",
+		"text": "<i>The locals report\nthat Pete is up to\nno good again.</i>",
+		"displayCardId": "GILA_BOSS_52h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_52h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_54h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Cragtorr",
+		"displayName": "Boss defeated: Cragtorr",
+		"text": "<i>Seeds sewn from hatred, sustained by dark magic.</i>",
+		"displayCardId": "GILA_BOSS_54h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_54h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_55h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Azalina Soulthief",
+		"displayName": "Boss defeated: Azalina Soulthief",
+		"text": "[x]<i>Her children's safety\nis her top priority.\nAt any cost.</i>",
+		"displayCardId": "GILA_BOSS_55h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_55h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_56h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Face Collector",
+		"displayName": "Boss defeated: Face Collector",
+		"text": "[x]<i>Beware his terrible\nminions and their\never-shifting faces.</i>",
+		"displayCardId": "GILA_BOSS_56h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_56h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_57h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Raeth Ghostsong",
+		"displayName": "Boss defeated: Raeth Ghostsong",
+		"text": "<i>There's a reason you should burn the dead.</i>",
+		"displayCardId": "GILA_BOSS_57h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_57h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_58h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Grum",
+		"displayName": "Boss defeated: Grum",
+		"text": "<i>Grum likes to smash. He also likes to bash. And crash.</i>",
+		"displayCardId": "GILA_BOSS_58h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_58h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_59h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Lord Godfrey",
+		"displayName": "Boss defeated: Lord Godfrey",
+		"text": "<i>The Lord of Shadowfang Keep has a bullet to pick with Crowley.</i>",
+		"displayCardId": "GILA_BOSS_59h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_59h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_60h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Captain Shivers",
+		"displayName": "Boss defeated: Captain Shivers",
+		"text": "<i>Vowing vengeance, his cursed crew haunts Gilnean shores.</i>",
+		"displayCardId": "GILA_BOSS_60h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_60h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_61h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Hagatha the Witch",
+		"displayName": "Boss defeated: Hagatha the Witch",
+		"displayCardId": "GILA_BOSS_61h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_61h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_62h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Gustave, the Gutripper",
+		"displayName": "Boss defeated: Gustave, the Gutripper",
+		"text": "<i>Hagatha’s pet eats his way from the bottom of the food chain up.</i>",
+		"displayCardId": "GILA_BOSS_62h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_62h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_63h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Sephira Dusktalon",
+		"displayName": "Boss defeated: Sephira Dusktalon",
+		"text": "<i>Even your own magic can be twisted by these woods.</i>",
+		"displayCardId": "GILA_BOSS_63h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_63h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_64h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Winslow Tobtock",
+		"displayName": "Boss defeated: Winslow Tobtock",
+		"text": "<i>His tricks will leave you both in a daze.</i>",
+		"displayCardId": "GILA_BOSS_64h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_64h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_65h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Gobbles",
+		"displayName": "Boss defeated: Gobbles",
+		"text": "<i>Every dying beast makes this dreaded carrion bird stronger.</i>",
+		"displayCardId": "GILA_BOSS_65h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_65h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_66h",
+		"type": "monster_hunt_boss_victory",
+		"name": "The Mute",
+		"displayName": "Boss defeated: The Mute",
+		"text": "<i>. . .</i>",
+		"displayCardId": "GILA_BOSS_66h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_66h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_67h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Ratcatcher Hannigul",
+		"displayName": "Boss defeated: Ratcatcher Hannigul",
+		"text": "<i>Rats aren't always the most loyal pets.</i>",
+		"displayCardId": "GILA_BOSS_67h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_67h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_boss_victory_GILA_BOSS_68h",
+		"type": "monster_hunt_boss_victory",
+		"name": "Plaguemaster Rancel",
+		"displayName": "Boss defeated: Plaguemaster Rancel",
+		"text": "<i>Dying to his touch is terrible. Living is even worse.</i>",
+		"displayCardId": "GILA_BOSS_68h",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CORRECT_OPPONENT",
+				"values": ["GILA_BOSS_68h"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_401",
+		"type": "monster_hunt_treasure_play",
+		"name": "Sic 'Em",
+		"displayName": "Treasure played: Sic 'Em",
+		"text": "Summon 3 minions from your deck with the highest attack.",
+		"displayCardId": "GILA_401",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_401"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_403",
+		"type": "monster_hunt_treasure_play",
+		"name": "Butch",
+		"displayName": "Treasure played: Butch",
+		"text": "<b>Rush</b>\nHas +1/+1 for each\nfriendly Beast that\ndied this game.",
+		"displayCardId": "GILA_403",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_403"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_410",
+		"type": "monster_hunt_treasure_play",
+		"name": "Bubba",
+		"displayName": "Treasure played: Bubba",
+		"text": "<b>Battlecry</b>: Summon six 1/1 Bloodhounds to attack an enemy minion.",
+		"displayCardId": "GILA_410",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_410"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_411",
+		"type": "monster_hunt_treasure_play",
+		"name": "Princess",
+		"displayName": "Treasure played: Princess",
+		"text": "[x]<b>Battlecry:</b> Gain the\n<b>Deathrattles</b> of 3 random\nminions in your deck.",
+		"displayCardId": "GILA_411",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_411"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_412",
+		"type": "monster_hunt_treasure_play",
+		"name": "Blood Moon",
+		"displayName": "Treasure played: Blood Moon",
+		"text": "Give your minions +1/+1 and <b>Lifesteal</b>.",
+		"displayCardId": "GILA_412",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_412"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_413",
+		"type": "monster_hunt_treasure_play",
+		"name": "Shaw's Shank",
+		"displayName": "Treasure played: Shaw's Shank",
+		"text": "Has +1 Attack for each friendly minion you control.",
+		"displayCardId": "GILA_413",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_413"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_501",
+		"type": "monster_hunt_treasure_play",
+		"name": "Exterminate",
+		"displayName": "Treasure played: Exterminate",
+		"text": "<b>Echo</b>.\nDeal $10 damage to a minion and any excess to the enemy hero.",
+		"displayCardId": "GILA_501",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_501"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_503",
+		"type": "monster_hunt_treasure_play",
+		"name": "Hunter's Insight",
+		"displayName": "Treasure played: Hunter's Insight",
+		"text": "Reduce the cost of all cards in your hand by (3).",
+		"displayCardId": "GILA_503",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_503"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_506t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Bandage",
+		"displayName": "Treasure played: Bandage",
+		"text": "Restore all friendly minions to full Health. They can attack again this turn.",
+		"displayCardId": "GILA_506t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_506t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_507",
+		"type": "monster_hunt_treasure_play",
+		"name": "Hunter of Old",
+		"displayName": "Treasure played: Hunter of Old",
+		"text": "Whenever you cast a spell, gain <b>Spell Damage +2</b>.",
+		"displayCardId": "GILA_507",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_507"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_508",
+		"type": "monster_hunt_treasure_play",
+		"name": "The Exorcisor",
+		"displayName": "Treasure played: The Exorcisor",
+		"text": "<b>Silence</b> any minion attacked by this weapon.",
+		"displayCardId": "GILA_508",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_508"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_509",
+		"type": "monster_hunt_treasure_play",
+		"name": "Frenzied Trapper",
+		"displayName": "Treasure played: Frenzied Trapper",
+		"text": "<b>Battlecry:</b> Put 5 random Hunter <b>Secrets</b> into the battlefield.",
+		"displayCardId": "GILA_509",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_509"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_510",
+		"type": "monster_hunt_treasure_play",
+		"name": "Tools of the Trade",
+		"displayName": "Treasure played: Tools of the Trade",
+		"text": "<b>Discover</b> one of Tess's weapons and equip it. Return this to your hand.",
+		"displayCardId": "GILA_510",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_510"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_608",
+		"type": "monster_hunt_treasure_play",
+		"name": "Safe Harbor",
+		"displayName": "Treasure played: Safe Harbor",
+		"text": "Choose a minion and put it into your hand.\nIt costs (0).",
+		"displayCardId": "GILA_608",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_608"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_610",
+		"type": "monster_hunt_treasure_play",
+		"name": "Grizzled Reinforcement",
+		"displayName": "Treasure played: Grizzled Reinforcement",
+		"text": "<b>Battlecry:</b> Summon an extra Cannon.",
+		"displayCardId": "GILA_610",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_610"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_611",
+		"type": "monster_hunt_treasure_play",
+		"name": "Tuskarr Raider",
+		"displayName": "Treasure played: Tuskarr Raider",
+		"text": "<b>Rush</b>\nAfter this minion attacks, fire your Cannons.",
+		"displayCardId": "GILA_611",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_611"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_612",
+		"type": "monster_hunt_treasure_play",
+		"name": "Seabreaker Goliath",
+		"displayName": "Treasure played: Seabreaker Goliath",
+		"text": "Costs (1) less for each time you've fired your Cannons.",
+		"displayCardId": "GILA_612",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_612"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_801",
+		"type": "monster_hunt_treasure_play",
+		"name": "Gattling Gunner",
+		"displayName": "Treasure played: Gattling Gunner",
+		"text": "Whenever you play a card, deal damage equal to its Cost to a random enemy minion.",
+		"displayCardId": "GILA_801",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_801"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_802",
+		"type": "monster_hunt_treasure_play",
+		"name": "Cartographer",
+		"displayName": "Treasure played: Cartographer",
+		"text": "<b>Battlecry:</b> <b>Discover</b> a Treasure.",
+		"displayCardId": "GILA_802",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_802"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_803",
+		"type": "monster_hunt_treasure_play",
+		"name": "Gilnean Vigilante",
+		"displayName": "Treasure played: Gilnean Vigilante",
+		"text": "<b>Battlecry:</b> Destroy a\nminion and fill your\nhand with Coins.",
+		"displayCardId": "GILA_803",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_803"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_804",
+		"type": "monster_hunt_treasure_play",
+		"name": "Holy Book",
+		"displayName": "Treasure played: Holy Book",
+		"text": "<b>Silence</b> and destroy a minion. Summon a 10/10 copy of it.",
+		"displayCardId": "GILA_804",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_804"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_806",
+		"type": "monster_hunt_treasure_play",
+		"name": "Brass Lantern",
+		"displayName": "Treasure played: Brass Lantern",
+		"text": "<b>Discover</b> a copy of a card in your deck. Repeat this 2 more times.",
+		"displayCardId": "GILA_806",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_806"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_810",
+		"type": "monster_hunt_treasure_play",
+		"name": "Sneak Attack",
+		"displayName": "Treasure played: Sneak Attack",
+		"text": "Put 2 random minions from your hand into the battlefield and give them <b>Charge</b>.",
+		"displayCardId": "GILA_810",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_810"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_811",
+		"type": "monster_hunt_treasure_play",
+		"name": "Spyglass",
+		"displayName": "Treasure played: Spyglass",
+		"text": "<b>Echo</b>\nPut a copy of a random card in your opponent's hand into yours. It costs (3) less.",
+		"displayCardId": "GILA_811",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_811"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_812",
+		"type": "monster_hunt_treasure_play",
+		"name": "Bestiary",
+		"displayName": "Treasure played: Bestiary",
+		"text": "[x]Fill your board with\ncopies of random minions\nfrom your opponent's deck.",
+		"displayCardId": "GILA_812",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_812"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_816a",
+		"type": "monster_hunt_treasure_play",
+		"name": "Coin Pouch",
+		"displayName": "Treasure played: Coin Pouch",
+		"text": "Summon a random 3-Cost minion. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_816a",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_816a"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_816b",
+		"type": "monster_hunt_treasure_play",
+		"name": "Sack of Coins",
+		"displayName": "Treasure played: Sack of Coins",
+		"text": "Summon a random 6-Cost minion. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_816b",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_816b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_816c",
+		"type": "monster_hunt_treasure_play",
+		"name": "Hefty Sack of Coins",
+		"displayName": "Treasure played: Hefty Sack of Coins",
+		"text": "Summon a random 3, 6, and 9-Cost minion.",
+		"displayCardId": "GILA_816c",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_816c"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_817",
+		"type": "monster_hunt_treasure_play",
+		"name": "Creepy Curio",
+		"displayName": "Treasure played: Creepy Curio",
+		"text": "Summon three 1/1 Ghosts. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_817",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_817"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_818",
+		"type": "monster_hunt_treasure_play",
+		"name": "Haunted Curio",
+		"displayName": "Treasure played: Haunted Curio",
+		"text": "Summon three 2/2 Ghosts. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_818",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_818"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_819",
+		"type": "monster_hunt_treasure_play",
+		"name": "Cursed Curio",
+		"displayName": "Treasure played: Cursed Curio",
+		"text": "Summon three 3/3 Ghosts with <b>Lifesteal</b>.",
+		"displayCardId": "GILA_819",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_819"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_820",
+		"type": "monster_hunt_treasure_play",
+		"name": "Ricochet Shot",
+		"displayName": "Treasure played: Ricochet Shot",
+		"text": "Deal $3 damage to a random character. Repeat this 12 times.",
+		"displayCardId": "GILA_820",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_820"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_821a",
+		"type": "monster_hunt_treasure_play",
+		"name": "Surly Mob",
+		"displayName": "Treasure played: Surly Mob",
+		"text": "Destroy a random enemy minion. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_821a",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_821a"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_821b",
+		"type": "monster_hunt_treasure_play",
+		"name": "Angry Mob",
+		"displayName": "Treasure played: Angry Mob",
+		"text": "Destroy 2 random enemy minions. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_821b",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_821b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_821c",
+		"type": "monster_hunt_treasure_play",
+		"name": "Crazed Mob",
+		"displayName": "Treasure played: Crazed Mob",
+		"text": "<b>Silence</b> and destroy all enemy minions.",
+		"displayCardId": "GILA_821c",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_821c"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_824",
+		"type": "monster_hunt_treasure_play",
+		"name": "Royal Gift",
+		"displayName": "Treasure played: Royal Gift",
+		"text": "Give a minion +2/+2 for each minion you control.",
+		"displayCardId": "GILA_824",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_824"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_825",
+		"type": "monster_hunt_treasure_play",
+		"name": "Gentleman's Top Hat",
+		"displayName": "Treasure played: Gentleman's Top Hat",
+		"text": "[x]Give a minion +2/+2\nand \"<b>Deathrattle:</b> Give\nyour Top Hat to another\nrandom friendly minion.\"",
+		"displayCardId": "GILA_825",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_825"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_826",
+		"type": "monster_hunt_treasure_play",
+		"name": "Nalaa the Redeemer",
+		"displayName": "Treasure played: Nalaa the Redeemer",
+		"text": "[x]<b>Divine Shield</b>. <b>Taunt</b>.\nAfter this minion survives\n damage, gain <b>Divine Shield</b>.",
+		"displayCardId": "GILA_826",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_826"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_827",
+		"type": "monster_hunt_treasure_play",
+		"name": "Murloc Holmes",
+		"displayName": "Treasure played: Murloc Holmes",
+		"text": "Whenever your opponent draws a card, add a copy to your hand.",
+		"displayCardId": "GILA_827",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_827"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_850b",
+		"type": "monster_hunt_treasure_play",
+		"name": "Hallowed Water",
+		"displayName": "Treasure played: Hallowed Water",
+		"text": "Restore your hero\nto full Health.\n Draw 5 cards.",
+		"displayCardId": "GILA_850b",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_850b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_851a",
+		"type": "monster_hunt_treasure_play",
+		"name": "Gilnean Tracker",
+		"displayName": "Treasure played: Gilnean Tracker",
+		"text": "[x]<b>Rush</b>\nAt the start of your turn,\ntransform this into a 5/5.",
+		"displayCardId": "GILA_851a",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_851a"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_851b",
+		"type": "monster_hunt_treasure_play",
+		"name": "Transforming Tracker",
+		"displayName": "Treasure played: Transforming Tracker",
+		"text": "<b>Rush</b>\nAt the start of your turn, transform this into a 7/7 with <b>Windfury</b>.",
+		"displayCardId": "GILA_851b",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_851b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_851c",
+		"type": "monster_hunt_treasure_play",
+		"name": "Worgen Tracker",
+		"displayName": "Treasure played: Worgen Tracker",
+		"text": "<b>Rush</b>\n<b>Windfury</b>",
+		"displayCardId": "GILA_851c",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_851c"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_852a",
+		"type": "monster_hunt_treasure_play",
+		"name": "Old Militia Horn",
+		"displayName": "Treasure played: Old Militia Horn",
+		"text": "Give your minions +1/+1 and <b>Taunt</b>. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_852a",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_852a"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_852b",
+		"type": "monster_hunt_treasure_play",
+		"name": "Militia Horn",
+		"displayName": "Treasure played: Militia Horn",
+		"text": "Give your minions +2/+2 and <b>Taunt</b>. Upgrade this and shuffle it into your deck.",
+		"displayCardId": "GILA_852b",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_852b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_852c",
+		"type": "monster_hunt_treasure_play",
+		"name": "Veteran's Militia Horn",
+		"displayName": "Treasure played: Veteran's Militia Horn",
+		"text": "Give your minions +4/+4, <b>Taunt</b>, and <b>Divine Shield</b>.",
+		"displayCardId": "GILA_852c",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_852c"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_853b",
+		"type": "monster_hunt_treasure_play",
+		"name": "Pristine Compass",
+		"displayName": "Treasure played: Pristine Compass",
+		"text": "Draw a card and add 2 extra copies of it to your hand. They cost (0).",
+		"displayCardId": "GILA_853b",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_853b"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_854",
+		"type": "monster_hunt_treasure_play",
+		"name": "Beastly Beauty",
+		"displayName": "Treasure played: Beastly Beauty",
+		"text": "[x]<b>Rush</b>\nAfter this attacks a minion\nand survives, transform\nthis into an 8/8.",
+		"displayCardId": "GILA_854",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_854"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_854t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Beautiful Beast",
+		"displayName": "Treasure played: Beautiful Beast",
+		"displayCardId": "GILA_854t",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_854t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_901",
+		"type": "monster_hunt_treasure_play",
+		"name": "Chaos Theory",
+		"displayName": "Treasure played: Chaos Theory",
+		"text": "Both players cast all spells in their hand <i>(targets chosen randomly).</i>",
+		"displayCardId": "GILA_901",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_901"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_903",
+		"type": "monster_hunt_treasure_play",
+		"name": "Enhance-a-matic",
+		"displayName": "Treasure played: Enhance-a-matic",
+		"text": "Add a random spell from each class to your hand.",
+		"displayCardId": "GILA_903",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_903"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_904",
+		"type": "monster_hunt_treasure_play",
+		"name": "Stroke of Midnight",
+		"displayName": "Treasure played: Stroke of Midnight",
+		"text": "<b>Echo</b>\nDestroy a random enemy minion.",
+		"displayCardId": "GILA_904",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_904"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_906",
+		"type": "monster_hunt_treasure_play",
+		"name": "Impetuous Companion",
+		"displayName": "Treasure played: Impetuous Companion",
+		"text": "<b>Battlecry:</b> Swap hands with your opponent.",
+		"displayCardId": "GILA_906",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_906"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_907",
+		"type": "monster_hunt_treasure_play",
+		"name": "Clockwork Assistant",
+		"displayName": "Treasure played: Clockwork Assistant",
+		"text": "Has +1/+1 for each spell you've cast this game.",
+		"displayCardId": "GILA_907",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_907"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_910",
+		"type": "monster_hunt_treasure_play",
+		"name": "Puzzle Box",
+		"displayName": "Treasure played: Puzzle Box",
+		"text": "Transform all minions into random ones that cost (3) more.",
+		"displayCardId": "GILA_910",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_910"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_23t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Chuck",
+		"displayName": "Treasure played: Chuck",
+		"text": "Discard all minions\nfrom your hand and\ndeal their Attack to\nthe enemy hero.",
+		"displayCardId": "GILA_BOSS_23t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_23t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_26t2",
+		"type": "monster_hunt_treasure_play",
+		"name": "Sack of Gnomes",
+		"displayName": "Treasure played: Sack of Gnomes",
+		"text": "Fill your board with random Gnomes.",
+		"displayCardId": "GILA_BOSS_26t2",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_26t2"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_29t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Enchanting Tune",
+		"displayName": "Treasure played: Enchanting Tune",
+		"text": "Gain control of all enemy minions. Set their Attack and Health to 1.",
+		"displayCardId": "GILA_BOSS_29t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_29t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_33t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Scythe",
+		"displayName": "Treasure played: Scythe",
+		"text": "Doesn't lose Durability. When you kill a minion with this weapon, gain +1 Attack.",
+		"displayCardId": "GILA_BOSS_33t",
+		"displayCardType": "weapon",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_33t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_37t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Plague of Murlocs",
+		"displayName": "Treasure played: Plague of Murlocs",
+		"text": "Give your minions: \"<b>Deathrattle</b>: Summon a random Murloc.\"",
+		"displayCardId": "GILA_BOSS_37t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_37t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_43t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Grave Mistake",
+		"displayName": "Treasure played: Grave Mistake",
+		"text": "Trigger all minions' <b>Deathrattles</b> twice.",
+		"displayCardId": "GILA_BOSS_43t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_43t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_57t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Shallow Graves",
+		"displayName": "Treasure played: Shallow Graves",
+		"text": "Summon 7 random minions that died this game.",
+		"displayCardId": "GILA_BOSS_57t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_57t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_414",
+		"type": "monster_hunt_passive_play",
+		"name": "Companionship",
+		"displayName": "Passive ability triggered: Companionship",
+		"text": "\nYour Bloodhounds have +2 Attack.",
+		"displayCardId": "GILA_414",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_414"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_415",
+		"type": "monster_hunt_passive_play",
+		"name": "Lunar Signet",
+		"displayName": "Passive ability triggered: Lunar Signet",
+		"text": "\nAfter you play a minion, trigger its <b>Deathrattle</b> effect.",
+		"displayCardId": "GILA_415",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_415"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_506",
+		"type": "monster_hunt_passive_play",
+		"name": "First Aid Kit",
+		"displayName": "Passive ability triggered: First Aid Kit",
+		"text": "\nAt the end of your turn, restore 2 Health to all friendly characters.",
+		"displayCardId": "GILA_506",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_506"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_511",
+		"type": "monster_hunt_passive_play",
+		"name": "Sticky Fingers",
+		"displayName": "Passive ability triggered: Sticky Fingers",
+		"text": "\nCards that didn't start in your deck cost (1) less.",
+		"displayCardId": "GILA_511",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_511"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_513",
+		"type": "monster_hunt_passive_play",
+		"name": "Cult of the Wolf",
+		"displayName": "Passive ability triggered: Cult of the Wolf",
+		"text": "\nYou can use your Hero Power twice each turn.\nIt costs (1) less.",
+		"displayCardId": "GILA_513",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_513"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_602",
+		"type": "monster_hunt_passive_play",
+		"name": "Victorious Rally",
+		"displayName": "Passive ability triggered: Victorious Rally",
+		"text": "[x]\nWhenever you fire your\nCannons, give your minions\n+1 Attack this turn.",
+		"displayCardId": "GILA_602",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_602"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_603",
+		"type": "monster_hunt_passive_play",
+		"name": "Tactical Reinforcements",
+		"displayName": "Passive ability triggered: Tactical Reinforcements",
+		"text": "[x]\nWhenever you fire your\nCannons, reduce the cost of\na card in your hand by (2).",
+		"displayCardId": "GILA_603",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_603"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_605",
+		"type": "monster_hunt_passive_play",
+		"name": "Dragonfire Ammo",
+		"displayName": "Passive ability triggered: Dragonfire Ammo",
+		"text": "\nYour Cannons do\n1 extra damage.",
+		"displayCardId": "GILA_605",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_605"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_607",
+		"type": "monster_hunt_passive_play",
+		"name": "Pillage the Fallen",
+		"displayName": "Passive ability triggered: Pillage the Fallen",
+		"text": "\nWhenever your weapon is destroyed, equip a random weapon.",
+		"displayCardId": "GILA_607",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_607"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_805",
+		"type": "monster_hunt_passive_play",
+		"name": "Entrenchment",
+		"displayName": "Passive ability triggered: Entrenchment",
+		"text": "\nYour minions have +2 Health.",
+		"displayCardId": "GILA_805",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_805"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_813",
+		"type": "monster_hunt_passive_play",
+		"name": "Expedite",
+		"displayName": "Passive ability triggered: Expedite",
+		"text": "\nYour minions cost\n(1) less.",
+		"displayCardId": "GILA_813",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_813"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_814",
+		"type": "monster_hunt_passive_play",
+		"name": "Caltrops",
+		"displayName": "Passive ability triggered: Caltrops",
+		"text": "\nAfter your opponent\nplays a minion, deal 1\ndamage to it.",
+		"displayCardId": "GILA_814",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_814"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_911",
+		"type": "monster_hunt_passive_play",
+		"name": "Rewind",
+		"displayName": "Passive ability triggered: Rewind",
+		"text": "\nWhen your hero dies, restart the game and remove this from your Dungeon Deck.",
+		"displayCardId": "GILA_911",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_911"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_GILA_913",
+		"type": "monster_hunt_passive_play",
+		"name": "Double Time",
+		"displayName": "Passive ability triggered: Double Time",
+		"text": "\nAfter you cast your first spell in a turn, cast a copy of it\n(<i>targets chosen randomly</i>).",
+		"displayCardId": "GILA_913",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["GILA_913"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_800",
+		"type": "monster_hunt_passive_play",
+		"name": "Potion of Vitality",
+		"displayName": "Passive ability triggered: Potion of Vitality",
+		"text": "\nDouble your\nstarting Health.",
+		"displayCardId": "LOOTA_800",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_800"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_801",
+		"type": "monster_hunt_passive_play",
+		"name": "Crystal Gem",
+		"displayName": "Passive ability triggered: Crystal Gem",
+		"text": "\nStart with an extra Mana Crystal.",
+		"displayCardId": "LOOTA_801",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_801"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_803",
+		"type": "monster_hunt_passive_play",
+		"name": "Scepter of Summoning",
+		"displayName": "Passive ability triggered: Scepter of Summoning",
+		"text": "\nYour minions that\ncost (5) or more\ncost (5).",
+		"displayCardId": "LOOTA_803",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_803"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_804",
+		"type": "monster_hunt_passive_play",
+		"name": "Small Backpacks",
+		"displayName": "Passive ability triggered: Small Backpacks",
+		"text": "\nAt the start of the game, draw 2 cards.",
+		"displayCardId": "LOOTA_804",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_804"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_824",
+		"type": "monster_hunt_passive_play",
+		"name": "Khadgar's Scrying Orb",
+		"displayName": "Passive ability triggered: Khadgar's Scrying Orb",
+		"text": "\nYour spells cost (1) less.",
+		"displayCardId": "LOOTA_824",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_824"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_825",
+		"type": "monster_hunt_passive_play",
+		"name": "Robe of the Magi",
+		"displayName": "Passive ability triggered: Robe of the Magi",
+		"text": "\n<b>Spell Damage +3</b>",
+		"displayCardId": "LOOTA_825",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_825"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "monster_hunt_passive_play_LOOTA_831",
+		"type": "monster_hunt_passive_play",
+		"name": "Glyph of Warding",
+		"displayName": "Passive ability triggered: Glyph of Warding",
+		"text": "\nEnemy minions cost (1) more.",
+		"displayCardId": "LOOTA_831",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "PASSIVE_BUFF",
+				"values": ["LOOTA_831"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	}
+]

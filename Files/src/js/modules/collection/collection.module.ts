@@ -53,9 +53,10 @@ import { ShareLoginComponent } from '../../components/sharing/share-login.compon
 import { FsTimeDisplay, FsUtcPipe } from '../../components/video-controls/single-minute-time.component';
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
-import { AchievementNameService } from '../../services/achievement/achievement-name.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
+import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
+import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
 import { IndexedDbService as AchievementsDbService } from '../../services/achievement/indexed-db.service';
 import { AdService } from '../../services/ad.service';
 import { AllCardsService } from '../../services/all-cards.service';
@@ -170,10 +171,11 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementsDbService,
 		AchievementConfService,
 		AchievementHistoryStorageService,
-		AchievementNameService,
 		AchievementsRepository,
+		AchievementsLoaderService,
 		AchievementsStorageService,
 		PackHistoryService,
+		ChallengeBuilderService,
 
 		LogsUploaderService,
 		S3FileUploadService,

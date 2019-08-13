@@ -1,25 +1,25 @@
-import { Processor } from './processor';
-import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { BinderState } from '../../../../models/mainwindow/binder-state';
-import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
-import { PopulateStoreEvent } from '../events/populate-store-event';
-import { AchievementHistory } from '../../../../models/achievement/achievement-history';
-import { AchievementHistoryStorageService } from '../../../achievement/achievement-history-storage.service';
-import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 import { AchievementCategory } from '../../../../models/achievement-category';
 import { AchievementSet } from '../../../../models/achievement-set';
-import { CardHistory } from '../../../../models/card-history';
-import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
-import { CardHistoryStorageService } from '../../../collection/card-history-storage.service';
-import { Set, SetCard } from '../../../../models/set';
-import { CollectionManager } from '../../../collection/collection-manager.service';
+import { AchievementHistory } from '../../../../models/achievement/achievement-history';
 import { Card } from '../../../../models/card';
-import { PityTimer } from '../../../../models/pity-timer';
-import { AllCardsService } from '../../../all-cards.service';
-import { PackHistoryService } from '../../../collection/pack-history.service';
+import { CardHistory } from '../../../../models/card-history';
+import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
+import { BinderState } from '../../../../models/mainwindow/binder-state';
+import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { SocialShareUserInfo } from '../../../../models/mainwindow/social-share-user-info';
+import { PityTimer } from '../../../../models/pity-timer';
+import { Set, SetCard } from '../../../../models/set';
+import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
+import { AchievementHistoryStorageService } from '../../../achievement/achievement-history-storage.service';
+import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
+import { AchievementsLoaderService } from '../../../achievement/data/achievements-loader.service';
+import { AllCardsService } from '../../../all-cards.service';
+import { CardHistoryStorageService } from '../../../collection/card-history-storage.service';
+import { CollectionManager } from '../../../collection/collection-manager.service';
+import { PackHistoryService } from '../../../collection/pack-history.service';
 import { OverwolfService } from '../../../overwolf.service';
-import { AchievementNameService } from '../../../achievement/achievement-name.service';
+import { PopulateStoreEvent } from '../events/populate-store-event';
+import { Processor } from './processor';
 
 export class PopulateStoreProcessor implements Processor {
 	constructor(
@@ -28,8 +28,8 @@ export class PopulateStoreProcessor implements Processor {
 		private cardHistoryStorage: CardHistoryStorageService,
 		private collectionManager: CollectionManager,
 		private pityTimer: PackHistoryService,
+		private achievementsLoader: AchievementsLoaderService,
 		private ow: OverwolfService,
-		private namingService: AchievementNameService,
 		private cards: AllCardsService,
 	) {}
 
@@ -62,15 +62,24 @@ export class PopulateStoreProcessor implements Processor {
 	}
 
 	private async buildAchievementHistory(): Promise<readonly AchievementHistory[]> {
-		const history = await this.achievementHistoryStorage.loadAll();
+		const [history, achievements] = await Promise.all([
+			this.achievementHistoryStorage.loadAll(),
+			this.achievementsLoader.getAchievements(),
+		]);
 		return (
 			history
 				.filter(history => history.numberOfCompletions === 1)
-				.map(history =>
-					Object.assign(new AchievementHistory(), history, {
-						displayName: this.namingService.displayName(history.achievementId),
-					} as AchievementHistory),
-				)
+				.map(history => {
+					const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
+					// This can happen with older history items
+					if (!matchingAchievement) {
+						return null;
+					}
+					return Object.assign(new AchievementHistory(), history, {
+						displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
+					} as AchievementHistory);
+				})
+				.filter(history => history)
 				// We want to have the most recent at the top
 				.reverse()
 		);

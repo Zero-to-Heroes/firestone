@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { Achievement } from '../models/achievement';
-import { AchievementsStorageService } from './achievement/achievements-storage.service';
-import { CompletedAchievement } from '../models/completed-achievement';
-import { PackMonitor } from './collection/pack-monitor.service';
 import { Card } from '../models/card';
-import { SimpleIOService } from './plugins/simple-io.service';
-import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+import { CompletedAchievement } from '../models/completed-achievement';
+import { AchievementsMonitor } from './achievement/achievements-monitor.service';
+import { AchievementsStorageService } from './achievement/achievements-storage.service';
+import { PackMonitor } from './collection/pack-monitor.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameEvents } from './game-events.service';
+import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
@@ -35,19 +35,19 @@ export class DevService {
 	}
 
 	private addAchievementCommands() {
-		const achievement = new Achievement(
-			'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
-			'Fake Wee Whelp',
-			'Temp text',
-			'dungeon_run_boss_encounter',
-			'LOOTA_BOSS_44h',
-			'minion',
-			null,
-			null,
-			'common',
-			1,
-			[],
-		);
+		const achievement: Achievement = {
+			id: 'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
+			name: 'Fake Wee Whelp',
+			text: 'Temp text',
+			type: 'dungeon_run_boss_encounter',
+			displayCardId: 'LOOTA_BOSS_44h',
+			displayCardType: 'minion',
+			displayName: 'Boss met: Fake Wee Whelp',
+			difficulty: 'common',
+			points: 1,
+			numberOfCompletions: 0,
+			replayInfo: [],
+		};
 		window['showAchievementNotification'] = () => {
 			this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
