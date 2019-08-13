@@ -3,6 +3,7 @@
 		"id": "monster_hunt_progression_GILA_400h_0",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 1",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 1",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 1",
 		"displayCardId": "GILA_400h",
@@ -23,7 +24,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -32,6 +33,7 @@
 		"id": "monster_hunt_progression_GILA_400h_1",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 2",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 2",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 2",
 		"displayCardId": "GILA_400h",
@@ -52,7 +54,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -61,6 +63,7 @@
 		"id": "monster_hunt_progression_GILA_400h_2",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 3",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 3",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 3",
 		"displayCardId": "GILA_400h",
@@ -81,7 +84,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -90,6 +93,7 @@
 		"id": "monster_hunt_progression_GILA_400h_3",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 4",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 4",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 4",
 		"displayCardId": "GILA_400h",
@@ -110,7 +114,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -119,6 +123,7 @@
 		"id": "monster_hunt_progression_GILA_400h_4",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 5",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 5",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 5",
 		"displayCardId": "GILA_400h",
@@ -139,7 +144,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -148,6 +153,7 @@
 		"id": "monster_hunt_progression_GILA_400h_5",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 6",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 6",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 6",
 		"displayCardId": "GILA_400h",
@@ -168,7 +174,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -177,6 +183,7 @@
 		"id": "monster_hunt_progression_GILA_400h_6",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 7",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 7",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 7",
 		"displayCardId": "GILA_400h",
@@ -197,7 +204,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -206,6 +213,7 @@
 		"id": "monster_hunt_progression_GILA_400h_7",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 8",
+		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 8",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 8",
 		"displayCardId": "GILA_400h",
@@ -226,7 +234,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -235,6 +243,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_0",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 1",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 1",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 1",
 		"displayCardId": "GILA_500h3",
@@ -255,7 +264,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -264,6 +273,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_1",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 2",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 2",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 2",
 		"displayCardId": "GILA_500h3",
@@ -284,7 +294,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -293,6 +303,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_2",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 3",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 3",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 3",
 		"displayCardId": "GILA_500h3",
@@ -313,7 +324,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -322,6 +333,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_3",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 4",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 4",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 4",
 		"displayCardId": "GILA_500h3",
@@ -342,7 +354,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -351,6 +363,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_4",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 5",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 5",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 5",
 		"displayCardId": "GILA_500h3",
@@ -371,7 +384,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -380,6 +393,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_5",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 6",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 6",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 6",
 		"displayCardId": "GILA_500h3",
@@ -400,7 +414,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -409,6 +423,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_6",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 7",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 7",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 7",
 		"displayCardId": "GILA_500h3",
@@ -429,7 +444,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -438,6 +453,7 @@
 		"id": "monster_hunt_progression_GILA_500h3_7",
 		"type": "monster_hunt_progression",
 		"name": "Tess Greymane (Rogue) - Cleared round 8",
+		"displayName": "Tess Greymane (Rogue) - Cleared round 8",
 		"emptyText": "Clear the first round with Rogue to get started",
 		"text": "Cleared round 8",
 		"displayCardId": "GILA_500h3",
@@ -458,7 +474,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -467,6 +483,7 @@
 		"id": "monster_hunt_progression_GILA_600h_0",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 1",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 1",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 1",
 		"displayCardId": "GILA_600h",
@@ -487,7 +504,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -496,6 +513,7 @@
 		"id": "monster_hunt_progression_GILA_600h_1",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 2",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 2",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 2",
 		"displayCardId": "GILA_600h",
@@ -516,7 +534,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -525,6 +543,7 @@
 		"id": "monster_hunt_progression_GILA_600h_2",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 3",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 3",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 3",
 		"displayCardId": "GILA_600h",
@@ -545,7 +564,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -554,6 +573,7 @@
 		"id": "monster_hunt_progression_GILA_600h_3",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 4",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 4",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 4",
 		"displayCardId": "GILA_600h",
@@ -574,7 +594,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -583,6 +603,7 @@
 		"id": "monster_hunt_progression_GILA_600h_4",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 5",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 5",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 5",
 		"displayCardId": "GILA_600h",
@@ -603,7 +624,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -612,6 +633,7 @@
 		"id": "monster_hunt_progression_GILA_600h_5",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 6",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 6",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 6",
 		"displayCardId": "GILA_600h",
@@ -632,7 +654,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -641,6 +663,7 @@
 		"id": "monster_hunt_progression_GILA_600h_6",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 7",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 7",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 7",
 		"displayCardId": "GILA_600h",
@@ -661,7 +684,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -670,6 +693,7 @@
 		"id": "monster_hunt_progression_GILA_600h_7",
 		"type": "monster_hunt_progression",
 		"name": "Darius Crowley (Warrior) - Cleared round 8",
+		"displayName": "Darius Crowley (Warrior) - Cleared round 8",
 		"emptyText": "Clear the first round with Warrior to get started",
 		"text": "Cleared round 8",
 		"displayCardId": "GILA_600h",
@@ -690,7 +714,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -699,6 +723,7 @@
 		"id": "monster_hunt_progression_GILA_900h_0",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 1",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 1",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 1",
 		"displayCardId": "GILA_900h",
@@ -719,7 +744,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -728,6 +753,7 @@
 		"id": "monster_hunt_progression_GILA_900h_1",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 2",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 2",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 2",
 		"displayCardId": "GILA_900h",
@@ -748,7 +774,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -757,6 +783,7 @@
 		"id": "monster_hunt_progression_GILA_900h_2",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 3",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 3",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 3",
 		"displayCardId": "GILA_900h",
@@ -777,7 +804,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -786,6 +813,7 @@
 		"id": "monster_hunt_progression_GILA_900h_3",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 4",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 4",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 4",
 		"displayCardId": "GILA_900h",
@@ -806,7 +834,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -815,6 +843,7 @@
 		"id": "monster_hunt_progression_GILA_900h_4",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 5",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 5",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 5",
 		"displayCardId": "GILA_900h",
@@ -835,7 +864,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -844,6 +873,7 @@
 		"id": "monster_hunt_progression_GILA_900h_5",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 6",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 6",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 6",
 		"displayCardId": "GILA_900h",
@@ -864,7 +894,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -873,6 +903,7 @@
 		"id": "monster_hunt_progression_GILA_900h_6",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 7",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 7",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 7",
 		"displayCardId": "GILA_900h",
@@ -893,7 +924,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -902,6 +933,7 @@
 		"id": "monster_hunt_progression_GILA_900h_7",
 		"type": "monster_hunt_progression",
 		"name": "Toki, Time-Tinker (Mage) - Cleared round 8",
+		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 8",
 		"emptyText": "Clear the first round with Mage to get started",
 		"text": "Cleared round 8",
 		"displayCardId": "GILA_900h",
@@ -922,7 +954,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -931,6 +963,7 @@
 		"id": "monster_hunt_final_boss",
 		"type": "monster_hunt_progression",
 		"name": "Defeated Hagatha the Witch!",
+		"displayName": "Defeated Hagatha the Witch!",
 		"displayCardId": "GILA_BOSS_61h",
 		"displayCardType": "hero",
 		"difficulty": "legendary",
@@ -945,7 +978,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -970,7 +1003,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -995,7 +1028,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1020,7 +1053,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1045,7 +1078,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1070,7 +1103,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1095,7 +1128,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1120,7 +1153,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1145,7 +1178,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1170,7 +1203,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1195,7 +1228,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1220,7 +1253,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1245,7 +1278,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1270,7 +1303,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1295,7 +1328,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1320,7 +1353,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1345,7 +1378,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1370,7 +1403,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1395,7 +1428,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1420,7 +1453,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1445,7 +1478,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1470,7 +1503,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1495,7 +1528,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1520,7 +1553,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1545,7 +1578,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1570,7 +1603,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1595,7 +1628,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1620,7 +1653,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1645,7 +1678,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1670,7 +1703,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1695,7 +1728,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1720,7 +1753,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1745,7 +1778,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1770,7 +1803,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1795,7 +1828,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1820,7 +1853,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1845,7 +1878,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1870,7 +1903,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1895,7 +1928,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1920,7 +1953,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1944,7 +1977,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1969,7 +2002,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -1994,7 +2027,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -2019,7 +2052,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -2044,7 +2077,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -2069,7 +2102,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -2094,7 +2127,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -2119,7 +2152,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_END"]
@@ -2144,7 +2177,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2169,7 +2202,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2194,7 +2227,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2219,7 +2252,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2244,7 +2277,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2269,7 +2302,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2294,7 +2327,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2319,7 +2352,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2344,7 +2377,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2369,7 +2402,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2394,7 +2427,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2419,7 +2452,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2444,7 +2477,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2469,7 +2502,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2494,7 +2527,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2519,7 +2552,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2544,7 +2577,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2569,7 +2602,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2594,7 +2627,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2619,7 +2652,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2644,7 +2677,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2669,7 +2702,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2694,7 +2727,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2719,7 +2752,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2744,7 +2777,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2769,7 +2802,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2794,7 +2827,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2819,7 +2852,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2844,7 +2877,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2869,7 +2902,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2894,7 +2927,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2919,7 +2952,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2944,7 +2977,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2969,7 +3002,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -2994,7 +3027,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3019,7 +3052,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3044,7 +3077,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3069,7 +3102,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3094,7 +3127,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3118,7 +3151,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3143,7 +3176,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3168,7 +3201,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3193,7 +3226,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3218,7 +3251,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3243,7 +3276,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3268,7 +3301,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3293,7 +3326,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START"]
@@ -3315,7 +3348,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3337,7 +3370,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3359,7 +3392,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3381,7 +3414,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3403,7 +3436,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3425,7 +3458,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3447,7 +3480,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3469,7 +3502,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3491,7 +3524,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3513,7 +3546,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3535,7 +3568,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3557,7 +3590,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3579,7 +3612,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3601,7 +3634,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3623,7 +3656,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3645,7 +3678,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3667,7 +3700,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3689,7 +3722,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3711,7 +3744,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3733,7 +3766,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3755,7 +3788,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3777,7 +3810,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3799,7 +3832,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3821,7 +3854,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3843,7 +3876,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3865,7 +3898,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3887,7 +3920,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3909,7 +3942,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3931,7 +3964,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3953,7 +3986,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3975,7 +4008,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3997,7 +4030,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4019,7 +4052,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4041,7 +4074,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4063,7 +4096,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4085,7 +4118,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4107,7 +4140,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4129,7 +4162,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4151,7 +4184,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4173,7 +4206,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4195,7 +4228,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4217,7 +4250,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4239,7 +4272,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4261,7 +4294,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4283,7 +4316,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4305,7 +4338,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4327,7 +4360,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4349,7 +4382,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4370,7 +4403,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4392,7 +4425,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4414,7 +4447,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4436,7 +4469,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4458,7 +4491,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4480,7 +4513,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4502,7 +4535,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4524,7 +4557,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4546,7 +4579,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4568,7 +4601,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4590,7 +4623,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4612,7 +4645,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4634,7 +4667,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4656,7 +4689,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4678,7 +4711,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4700,7 +4733,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4722,7 +4755,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4744,7 +4777,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4766,7 +4799,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4788,7 +4821,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4810,7 +4843,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4832,7 +4865,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4854,7 +4887,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4876,7 +4909,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4898,7 +4931,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4920,7 +4953,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4942,7 +4975,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4964,7 +4997,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4986,7 +5019,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -5008,7 +5041,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -5030,7 +5063,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -5052,7 +5085,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -5074,7 +5107,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -5096,7 +5129,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -5118,7 +5151,7 @@
 			},
 			{
 				"type": "SCENARIO_IDS",
-				"values": ["2706"]
+				"values": ["2706", "2821"]
 			}
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
