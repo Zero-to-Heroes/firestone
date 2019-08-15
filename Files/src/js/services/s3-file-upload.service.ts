@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-
-import AWS from 'aws-sdk';
+import S3 from 'aws-sdk/clients/s3';
+import AWS from 'aws-sdk/global';
 import { v4 as uuid } from 'uuid';
 
 const BUCKET = 'com.zerotoheroes.support';
@@ -11,7 +11,7 @@ export class S3FileUploadService {
 		const fileKey = uuid();
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
-		const s3 = new AWS.S3();
+		const s3 = new S3();
 		const params = {
 			Bucket: BUCKET,
 			Key: fileKey,
@@ -44,7 +44,7 @@ export class S3FileUploadService {
 		const fileKey = uuid();
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
-		const s3 = new AWS.S3();
+		const s3 = new S3();
 		const params = {
 			Bucket: BUCKET,
 			Key: fileKey,

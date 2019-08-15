@@ -9,7 +9,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
 import { Set, SetCard } from '../../models/set';

@@ -26,7 +26,7 @@
 		"aws-sdk": "2.458.0",
 		"deckstrings": "2.1.0",
 		"immutable": "3.8.2",
-		"lodash": "4.17.14",
+		"lodash-es": "4.17.15",
 		"ng-inline-svg": "8.4.1",
 		"ng-select": "1.0.1",
 		"ngx-logger": "3.3.11",
