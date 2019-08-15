@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
-import { PackMonitor } from './collection/pack-monitor.service';
-import { PackHistoryService } from './collection/pack-history.service';
-import { HsPublicEventsListener } from './hs-public-events-listener.service';
+import { AchievementStatsService } from './achievement/achievement-stats.service';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
-import { PackStatsService } from './collection/pack-stats.service';
-import { AchievementStatsService } from './achievement/achievement-stats.service';
+import { IndexedDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { CollectionManager } from './collection/collection-manager.service';
+import { IndexedDbService } from './collection/indexed-db.service';
+import { PackHistoryService } from './collection/pack-history.service';
+import { PackMonitor } from './collection/pack-monitor.service';
+import { PackStatsService } from './collection/pack-stats.service';
+import { DebugService } from './debug.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
-import { SettingsCommunicationService } from './settings/settings-communication.service';
-import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
-import { DebugService } from './debug.service';
 import { DevService } from './dev.service';
-import { IndexedDbService } from './collection/indexed-db.service';
-import { IndexedDbService as AchievementsDb } from './achievement/indexed-db.service';
+import { HsPublicEventsListener } from './hs-public-events-listener.service';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
+import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { OverwolfService } from './overwolf.service';
+import { SettingsCommunicationService } from './settings/settings-communication.service';
 
 declare var ga: any;
 
@@ -30,6 +30,9 @@ export class AppBootstrapService {
 	private currentState = 'INIT';
 	private loadingWindowId: string;
 	private loadingWindowShown = false;
+	// Seomtimes multiple events can fire in a row, which leads to the app
+	// trying to close windows several times in a row
+	private closing = false;
 
 	constructor(
 		private store: MainWindowStoreService,
@@ -98,7 +101,7 @@ export class AppBootstrapService {
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			console.log('updated game status', res);
-			if (this.exitGame(res)) {
+			if (this.exitGame(res) && !this.closing) {
 				console.log('left game, closing app');
 				this.closeApp();
 			} else if (await this.ow.inGame()) {
@@ -185,12 +188,17 @@ export class AppBootstrapService {
 	}
 
 	private async closeApp() {
+		this.closing = true;
 		// Close all windows
 		const windows = await this.ow.getOpenWindows();
 		console.log('closing all windows', windows);
 		for (const [name, window] of Object.entries(windows)) {
-			console.log('closing app window', name, window);
-			this.ow.closeWindowFromName(name);
+			// Close the main window last
+			if (name !== OverwolfService.MAIN_WINDOW) {
+				console.log('closing window', name, window);
+				this.ow.closeWindowFromName(name);
+			}
 		}
+		this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
 	}
 }

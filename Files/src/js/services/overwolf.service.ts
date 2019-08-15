@@ -7,6 +7,7 @@ const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class OverwolfService {
+	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
 	public static SETTINGS_WINDOW = 'SettingsWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
