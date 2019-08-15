@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
+import { AllCardsService } from '../services/all-cards.service';
 import { AppBootstrapService } from '../services/app-bootstrap.service';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
@@ -13,11 +14,20 @@ import { PreferencesService } from '../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-	constructor(private injector: Injector, private debug: DebugService, private ow: OverwolfService, private prefs: PreferencesService) {
+	constructor(
+		private injector: Injector,
+		private cards: AllCardsService,
+		private debug: DebugService,
+		private ow: OverwolfService,
+		private prefs: PreferencesService,
+	) {
 		this.init();
 	}
 
 	private async init() {
+		// First initialize the cards DB, as some of the dependencies injected in
+		// app-bootstrap won't be able to start without the cards DB in place
+		await this.cards.initializeCardsDb();
 		const launchAppOnGameStart: boolean = (await this.prefs.getPreferences()).launchAppOnGameStart;
 		console.log('should launch on game start?', launchAppOnGameStart);
 		// See http://developers.overwolf.com/documentation/sdk/overwolf/extensions/#onapplaunchtriggered

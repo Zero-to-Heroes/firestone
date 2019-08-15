@@ -1,8 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { NGXLogger } from 'ngx-logger';
 import { Set, SetCard } from '../models/set';
 
-declare var parseCardsText: any;
+const CARDS_CDN_URL = 'https://static.zerotoheroes.com/hearthstone/jsoncards/cards.json';
 
 @Injectable()
 export class AllCardsService {
@@ -43,6 +44,46 @@ export class AllCardsService {
 		'HERO_08',
 		'HERO_09',
 	];
+
+	private allCards: any[];
+
+	constructor(private http: HttpClient, private logger: NGXLogger) {
+		// We don't call it in the constructor because we want the app to be in control
+		// of how they load the cards, and for it to be aware of when cards have been loaded
+		// this.retrieveAllCards();
+	}
+
+	public async initializeCardsDb(): Promise<void> {
+		this.logger.debug('[all-cards] initializing card db');
+		return new Promise<void>((resolve, reject) => {
+			if (this.allCards) {
+				this.logger.debug('[all-cards] already loaded all cards', this.allCards);
+				resolve();
+				return;
+			}
+			this.http.get('./cards.json').subscribe(
+				(result: any[]) => {
+					this.logger.debug('[all-cards] retrieved all cards locally', result);
+					this.allCards = result;
+					resolve();
+				},
+				error => {
+					this.logger.debug('[all-cards] Could not retrieve cards locally, getting them from CDN', error);
+					this.http.get(CARDS_CDN_URL).subscribe(
+						(result: any[]) => {
+							this.logger.debug('[all-cards] retrieved all cards from CDN', result);
+							this.allCards = result;
+							resolve();
+						},
+						error => {
+							this.logger.debug('[all-cards] Could not retrieve cards from CDN', error);
+							reject();
+						},
+					);
+				},
+			);
+		});
+	}
 
 	public getSetIds(): string[] {
 		return this.STANDARD_SETS.concat(this.WILD_SETS).map(([setId]) => setId);
@@ -96,11 +137,11 @@ export class AllCardsService {
 		}
 
 		const basicFiltered = collectibleOnly
-			? parseCardsText.jsonDatabase
+			? this.allCards
 					.filter(card => card.collectible)
 					.filter(card => card.set !== 'Hero_skins')
 					.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
-			: parseCardsText.jsonDatabase;
+			: this.allCards;
 		return filterFunctions
 			.reduce((data, filterFunction) => data.filter(filterFunction), basicFiltered)
 			.map(card => {
@@ -114,7 +155,7 @@ export class AllCardsService {
 	}
 
 	public getCard(id: string): any {
-		const found = parseCardsText.jsonDatabase.find(card => card.id === id);
+		const found = this.allCards.find(card => card.id === id);
 		if (!found) {
 			console.error('Could not find card in json database', id);
 		}
@@ -122,7 +163,7 @@ export class AllCardsService {
 	}
 
 	public getCardFromDbfId(dbfId: number): any {
-		return parseCardsText.jsonDatabase.find(card => card.dbfId === dbfId);
+		return this.allCards.find(card => card.dbfId === dbfId);
 	}
 
 	public setName(setId: string) {
@@ -170,7 +211,7 @@ export class AllCardsService {
 	}
 
 	private getCollectibleSetCards(setId: string): SetCard[] {
-		return parseCardsText.jsonDatabase
+		return this.allCards
 			.filter(card => card.collectible)
 			.filter(card => card.set)
 			.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)

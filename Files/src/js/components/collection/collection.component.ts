@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Set } from '../../models/set';
+import { AllCardsService } from '../../services/all-cards.service';
 
 const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -77,6 +78,16 @@ export class CollectionComponent {
 
 	_viewState = 'shown';
 	private refreshing = false;
+
+	constructor(private cards: AllCardsService) {
+		this.init();
+	}
+
+	private async init() {
+		// First initialize the cards DB, as some of the dependencies injected in
+		// app-bootstrap won't be able to start without the cards DB in place
+		await this.cards.initializeCardsDb();
+	}
 
 	@Input('state') set state(state: BinderState) {
 		this.standardSets = state.allSets.filter(set => set.standard);

@@ -1,5 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
@@ -24,7 +25,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 
 @NgModule({
-	imports: [BrowserModule],
+	imports: [BrowserModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
 	declarations: [],
 	entryComponents: [],
 	exports: [],

@@ -48,8 +48,9 @@ module.exports = function(env, argv) {
 
 		new CopyWebpackPlugin([
 			{ from: path.join(process.cwd(), 'src/assets'), to: 'assets' },
-			{ from: path.join(process.cwd(), 'dependencies'), to: 'dependencies' },
+			{ from: path.join(process.cwd(), 'dependencies/cards.json') },
 			{ from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
+			// All the OW stuff, like manifest.json
 			{ from: path.join(process.cwd(), '/../*') },
 		]),
 

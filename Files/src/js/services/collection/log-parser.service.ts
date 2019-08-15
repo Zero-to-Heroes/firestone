@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-
 import { Card } from '../../models/card';
 import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
-import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
+import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 
-declare var parseCardsText: any;
 declare var ga: any;
 
 @Injectable()
@@ -156,7 +154,7 @@ export class LogParserService {
 			return false;
 		}
 
-		const dbCard = parseCardsText.getCard(card.id);
+		const dbCard = this.cards.getCard(card.id);
 		if (!dbCard) {
 			console.warn('unknown card', card.id, card);
 			return false;
@@ -180,7 +178,7 @@ export class LogParserService {
 	}
 
 	private displayDustMessage(card: Card, type: string) {
-		const dbCard = parseCardsText.getCard(card.id);
+		const dbCard = this.cards.getCard(card.id);
 		let dust = this.dustFor(dbCard.rarity.toLowerCase());
 		dust = type === 'GOLDEN' ? dust * 4 : dust;
 		setTimeout(() => {

@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
+import { captureEvent } from '@sentry/core';
 import { Key } from 'ts-keycode-enum';
-
 import { Card } from '../../models/card';
-
 import { Events } from '../../services/events.service';
 import { GameEvents } from '../../services/game-events.service';
-import { OwNotificationsService } from '../../services/notifications.service';
 import { LogRegisterService } from '../../services/log-register.service';
-import { captureEvent } from '@sentry/core';
-import { PreferencesService } from '../preferences.service';
+import { OwNotificationsService } from '../../services/notifications.service';
+import { AllCardsService } from '../all-cards.service';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 
-declare var parseCardsText: any;
 declare var ga: any;
 
 @Injectable()
@@ -32,6 +30,7 @@ export class PackMonitor {
 		private events: Events,
 		private prefs: PreferencesService,
 		private logRegisterService: LogRegisterService,
+		private cards: AllCardsService,
 		private gameEvents: GameEvents,
 		private ow: OverwolfService,
 		private notificationService: OwNotificationsService,
@@ -262,7 +261,7 @@ export class PackMonitor {
 	}
 
 	public async createNewCardToast(card: Card, type: string) {
-		const dbCard = parseCardsText.getCard(card.id);
+		const dbCard = this.cards.getCard(card.id);
 		let cardName: string = dbCard.name;
 		let goldenClass;
 		let newLabel = 'New card';
