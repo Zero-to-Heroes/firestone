@@ -10,33 +10,19 @@
 		"removeComments": true,
 		"noImplicitAny": false,
 		"suppressImplicitAnyIndexErrors": true,
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "resolveJsonModule": true,
-        "inlineSources": true,
-        "sourceRoot": "/",
-		"lib": [
-			"dom",
-			"es2015"
-		],
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"inlineSources": true,
+		"sourceRoot": "/",
+		"lib": ["dom", "es2015"],
 		"baseUrl": ".",
-		"typeRoots": [
-			"node_modules/@types"
-		],
-		"types": [
-			"node",
-        ],
-        "paths": {
-            "core-js/es7/reflect": [
-              "node_modules/core-js/proposals/reflect-metadata"
-            ]
-          }
+		"typeRoots": ["node_modules/@types"],
+		"types": ["node"]
 	},
-    "angularCompilerOptions": {
-        "skipTemplateCodegen": false,
-        "strictMetadataEmit": false
-    },
-	"exclude": [
-    	"node_modules/*",
-	]
+	"angularCompilerOptions": {
+		"skipTemplateCodegen": false,
+		"strictMetadataEmit": false
+	},
+	"exclude": ["node_modules/*"]
 }

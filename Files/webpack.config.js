@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('@artonge/webpack');
 // const ngcWebpack = require("ngc-webpack");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -6,6 +7,8 @@ const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const DefinePlugin = require('webpack').DefinePlugin;
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 var path = require('path');
 
@@ -83,6 +86,7 @@ module.exports = function(env, argv) {
 				],
 			},
 		]),
+		new BundleAnalyzerPlugin(),
 	];
 
 	if (env.production) {
