@@ -9,6 +9,7 @@ const DefinePlugin = require('webpack').DefinePlugin;
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var path = require('path');
 
@@ -46,19 +47,57 @@ module.exports = function(env, argv) {
 		}),
 
 		new CopyWebpackPlugin([
-			{ from: path.join(process.cwd(), 'src/html/background.html') },
-			{ from: path.join(process.cwd(), 'src/html/collection.html') },
-			{ from: path.join(process.cwd(), 'src/html/loading.html') },
-			{ from: path.join(process.cwd(), 'src/html/notifications.html') },
-			{ from: path.join(process.cwd(), 'src/html/decktracker.html') },
-			{ from: path.join(process.cwd(), 'src/html/settings.html') },
-			{ from: path.join(process.cwd(), 'src/html/welcome.html') },
-			{ from: path.join(process.cwd(), 'src/html/twitch-auth-callback.html') },
-			{ from: path.join(process.cwd(), '/../*') },
 			{ from: path.join(process.cwd(), 'src/assets'), to: 'assets' },
 			{ from: path.join(process.cwd(), 'dependencies'), to: 'dependencies' },
 			{ from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
+			{ from: path.join(process.cwd(), '/../*') },
 		]),
+
+		new HtmlWebpackPlugin({
+			filename: 'background.html',
+			template: 'src/html/background.html',
+			// Exclude the other modules. This will still import all the other chunks,
+			// thus probably importing some unrelated stuff, but they should be
+			// small enough that it should not matter (and we're serving them from
+			// the local filesystem, so in the end it doesn't really matter)
+			excludeChunks: ['collection', 'decktracker', 'loading', 'notifications', 'settings', 'twitchauthcallback', 'welcome'],
+			chunksSortMode: 'manual',
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'collection.html',
+			template: 'src/html/collection.html',
+			excludeChunks: ['background', 'decktracker', 'loading', 'notifications', 'settings', 'twitchauthcallback', 'welcome'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'loading.html',
+			template: 'src/html/loading.html',
+			excludeChunks: ['collection', 'decktracker', 'background', 'notifications', 'settings', 'twitchauthcallback', 'welcome'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'notifications.html',
+			template: 'src/html/notifications.html',
+			excludeChunks: ['collection', 'decktracker', 'background', 'loading', 'settings', 'twitchauthcallback', 'welcome'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'decktracker.html',
+			template: 'src/html/decktracker.html',
+			excludeChunks: ['collection', 'notifications', 'background', 'loading', 'settings', 'twitchauthcallback', 'welcome'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'settings.html',
+			template: 'src/html/settings.html',
+			excludeChunks: ['collection', 'notifications', 'background', 'loading', 'decktracker', 'twitchauthcallback', 'welcome'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'welcome.html',
+			template: 'src/html/welcome.html',
+			excludeChunks: ['collection', 'notifications', 'background', 'loading', 'decktracker', 'twitchauthcallback', 'settings'],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'twitch-auth-callback.html',
+			template: 'src/html/twitch-auth-callback.html',
+			excludeChunks: ['collection', 'notifications', 'background', 'loading', 'decktracker', 'welcome', 'settings'],
+		}),
 
 		// Replace the version in the manifest
 		new ReplaceInFileWebpackPlugin([
@@ -104,6 +143,8 @@ module.exports = function(env, argv) {
 		mode: env.production ? 'production' : 'development',
 
 		entry: {
+			// Keep polyfills at the top so that it's imported first in the HTML
+			polyfills: './src/polyfills.ts',
 			background: './src/js/modules/background/main.ts',
 			collection: './src/js/modules/collection/main.ts',
 			loading: './src/js/modules/loading/main.ts',
@@ -112,11 +153,15 @@ module.exports = function(env, argv) {
 			settings: './src/js/modules/settings/main.ts',
 			welcome: './src/js/modules/welcome/main.ts',
 			twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
-			polyfills: './src/polyfills.ts',
 		},
 
+		// https://hackernoon.com/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
 		optimization: {
+			runtimeChunk: 'single',
 			splitChunks: {
+				chunks: 'all',
+				maxInitialRequests: Infinity,
+				minSize: 1 * 1000, // Don't split the really small chunks
 				cacheGroups: {
 					vendor: {
 						test: /node_modules/,
@@ -141,7 +186,7 @@ module.exports = function(env, argv) {
 
 		output: {
 			path: getRoot('dist/Files'),
-			publicPath: '/',
+			publicPath: './',
 			filename: '[name].js',
 		},
 

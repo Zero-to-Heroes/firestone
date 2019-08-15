@@ -12,7 +12,6 @@ import { DebugService } from './debug.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
 import { DevService } from './dev.service';
-import { HsPublicEventsListener } from './hs-public-events-listener.service';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
@@ -44,7 +43,6 @@ export class AppBootstrapService {
 		private achievementsDb: AchievementsDb,
 		private packMonitor: PackMonitor,
 		private packHistory: PackHistoryService,
-		private publicEventsListener: HsPublicEventsListener,
 		private achievementsMonitor: AchievementsMonitor,
 		private achievementsVideoCaptureService: AchievementsVideoCaptureService,
 		private packStatsService: PackStatsService,

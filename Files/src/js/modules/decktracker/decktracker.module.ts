@@ -1,20 +1,19 @@
+import { OverlayModule } from '@angular/cdk/overlay';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { DebugService } from '../../services/debug.service';
-import { DeckTrackerOverlayComponent } from '../../components/decktracker/overlay/decktracker-overlay.component';
-import { SharedModule } from '../shared/shared.module';
-import { PreferencesService } from '../../services/preferences.service';
-import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { init } from '@sentry/browser';
-import { Events } from '../../services/events.service';
 import { SelectModule } from 'ng-select';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
+import { DeckTrackerOverlayComponent } from '../../components/decktracker/overlay/decktracker-overlay.component';
+import { DebugService } from '../../services/debug.service';
+import { Events } from '../../services/events.service';
+import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
-import { HttpClientModule } from '@angular/common/http';
-import { OverlayModule } from '@angular/cdk/overlay';
+import { PreferencesService } from '../../services/preferences.service';
+import { SharedDeckTrackerModule } from '../shared-decktracker/shared-dectracker.module';
+import { SharedModule } from '../shared/shared.module';
 
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
@@ -36,16 +35,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		ReactiveFormsModule,
 		SharedDeckTrackerModule,
 	],
-	declarations: [
-		// DeckTrackerOverlayComponent,
-		// DeckTrackerDeckListComponent,
-		// DeckListByZoneComponent,
-		// GroupedDeckListComponent,
-		// DeckCardComponent,
-		// DeckZoneComponent,
-		// DeckTrackerDeckNameComponent,
-		// DeckTrackerTitleBarComponent,
-	],
+	declarations: [],
 	bootstrap: [DeckTrackerOverlayComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })
