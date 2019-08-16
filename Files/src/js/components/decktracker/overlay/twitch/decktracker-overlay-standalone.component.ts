@@ -1,17 +1,16 @@
 import {
-	Component,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Renderer2,
+	Component,
 	ElementRef,
-	ViewRef,
+	EventEmitter,
 	Input,
 	Output,
-	EventEmitter,
+	Renderer2,
+	ViewRef,
 } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
-
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../../services/events.service';
 
@@ -37,13 +36,7 @@ import { Events } from '../../../../services/events.service';
 				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="gameState">
 						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck"> </decktracker-twitch-title-bar>
-						<decktracker-deck-list
-							[deckState]="gameState.playerDeck"
-							[displayMode]="displayMode"
-							(onDisplayModeChanged)="onDisplayModeChanged($event)"
-							[activeTooltip]="activeTooltip"
-						>
-						</decktracker-deck-list>
+						<decktracker-deck-list [deckState]="gameState.playerDeck" [displayMode]="displayMode"> </decktracker-deck-list>
 					</div>
 				</div>
 			</div>

@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
 :host {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .root {
@@ -12,7 +12,11 @@
 	justify-content: center;
 	align-items: flex-start;
 	// height: 100%;
-    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+
+	.scalable {
+		transform: scale(1);
+	}
 
 	.corner {
 		position: absolute;
@@ -25,57 +29,59 @@
 		&.top-right {
 			top: 0;
 			right: 0;
-    		transform: rotate(90deg);
+			transform: rotate(90deg);
 		}
 
 		&.bottom-right {
 			bottom: 0;
 			right: 0;
-    		transform: rotate(180deg);
-    		top: auto;
+			transform: rotate(180deg);
+			top: auto;
 		}
 
 		&.bottom-left {
 			bottom: 0;
 			left: 0;
-    		transform: rotate(270deg);
-    		top: auto;
+			transform: rotate(270deg);
+			top: auto;
 		}
-    }
-    
-    .decktracker-container {
-        position: relative;
-        background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url(assets/images/backgrounds/decktracker_bg.png);
-        background-size: 100%;
-        margin: 10px;
-        width: 100%;
-        max-width: calc(100% - 20px);
-        display: flex;
-        flex-direction: column;
-    }
+	}
+
+	.decktracker-container {
+		position: relative;
+		background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+			url(assets/images/backgrounds/decktracker_bg.png);
+		background-size: 100%;
+		margin: 10px;
+		width: 100%;
+		max-width: calc(100% - 20px);
+		display: flex;
+		flex-direction: column;
+	}
 
 	.decktracker {
-    	position: relative;
-        background-image: radial-gradient(462.50px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%), url('assets/images/backgrounds/decktracker_bg.png');
-        background-size: 100%;
-	    width: 100%;
-	    // height: calc(100% - 20px);
-	    display: flex;
-	    flex-direction: column;
-        // overflow: hidden;
-        max-height: 90vh;
-        
-        decktracker-title-bar {
-            flex-grow: 0;
-            flex-shrink: 0;
-        }
-        
-        decktracker-deck-name {
-            flex-grow: 0;
-            flex-shrink: 0;
-        }
+		position: relative;
+		background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+			url('assets/images/backgrounds/decktracker_bg.png');
+		background-size: 100%;
+		width: 100%;
+		// height: calc(100% - 20px);
+		display: flex;
+		flex-direction: column;
+		// overflow: hidden;
+		max-height: 90vh;
 
-        decktracker-deck-list {
+		decktracker-title-bar {
+			flex-grow: 0;
+			flex-shrink: 0;
+		}
+
+		decktracker-deck-name {
+			flex-grow: 0;
+			flex-shrink: 0;
+		}
+
+		decktracker-deck-list {
 			flex-grow: 1;
 			flex-shrink: 1;
 			display: flex;
@@ -94,7 +100,7 @@
 			// display: flex !important;
 			align-items: center;
 			justify-content: center;
-			
+
 			.tooltip-container img {
 				width: 210px;
 				filter: drop-shadow(0 0 15px rgba(159, 182, 215, 0.7));

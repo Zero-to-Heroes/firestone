@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameType } from '../../../models/enums/game-type';
 import { Preferences } from '../../../models/preferences';
@@ -20,41 +31,43 @@ declare var ga: any;
 	],
 	template: `
 		<div class="root" [ngClass]="{ 'clean': useCleanMode }">
-			<div class="decktracker-container">
-				<div class="decktracker" *ngIf="gameState">
-					<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
-					<decktracker-deck-name [hero]="gameState.playerDeck.hero" [deckName]="gameState.playerDeck.name">
-					</decktracker-deck-name>
-					<decktracker-deck-list
-						[deckState]="gameState.playerDeck"
-						[displayMode]="displayMode"
-						(onDisplayModeChanged)="onDisplayModeChanged($event)"
-						[activeTooltip]="activeTooltip"
-					>
-					</decktracker-deck-list>
+			<div class="scalable">
+				<div class="decktracker-container">
+					<div class="decktracker" *ngIf="gameState">
+						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
+						<decktracker-deck-name [hero]="gameState.playerDeck.hero" [deckName]="gameState.playerDeck.name">
+						</decktracker-deck-name>
+						<decktracker-deck-list
+							[deckState]="gameState.playerDeck"
+							[displayMode]="displayMode"
+							(onDisplayModeChanged)="onDisplayModeChanged($event)"
+							[activeTooltip]="activeTooltip"
+						>
+						</decktracker-deck-list>
+					</div>
 				</div>
-			</div>
 
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
+				<i class="i-54 gold-theme corner top-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner top-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner bottom-right">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
+					</svg>
+				</i>
+				<i class="i-54 gold-theme corner bottom-left">
+					<svg class="svg-icon-fill">
+						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
+					</svg>
+				</i>
+			</div>
 			<tooltips [module]="'decktracker'"></tooltips>
 		</div>
 	`,
@@ -79,10 +92,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	private hideTooltipTimer;
 
 	constructor(
+		private logger: NGXLogger,
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private events: Events,
 		private ow: OverwolfService,
+		private el: ElementRef,
+		private renderer: Renderer2,
 		private debugService: DebugService,
 	) {}
 
@@ -147,6 +163,15 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
 			console.log('game state', this.gameState, JSON.stringify(this.gameState));
 		}
+
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if (res && res.resolutionChanged) {
+				this.logger.debug('[decktracker-overlay] received new game info', res);
+				this.onResized();
+			}
+		});
+
+		this.onResized();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -234,22 +259,98 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		return this.gameState.playerDeck.deckList.length > 0;
 	}
 
+	private async onResized() {
+		if (!this.useCleanMode) {
+			return;
+		}
+		console.log('resize event', event);
+		// Resize the tracker
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!gameInfo) {
+			return;
+		}
+		const scale = await this.computeScale();
+		await this.changeWindowSize(scale);
+		const element = this.el.nativeElement.querySelector('.scalable');
+		this.renderer.setStyle(element, 'transform', `scale(${scale})`);
+		await this.changeWindowPosition(scale);
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+		this.keepOverlayInBounds();
+	}
+
+	private async computeScale(): Promise<number> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		// const gameWidth = gameInfo.logicalWidth;
+		const gameHeight = gameInfo.logicalHeight;
+		const dpi = gameHeight / gameInfo.height;
+		const scale = (gameHeight / 700) * dpi;
+		return scale;
+	}
+
+	private keepOverlayInBounds() {
+		setTimeout(() => {
+			// Move the tracker so that it doesn't go over the edges
+			const rect = this.el.nativeElement.querySelector('.scalable').getBoundingClientRect();
+			const parentRect = this.el.nativeElement.parentNode.getBoundingClientRect();
+			// Get current transform values
+			const transform = window.getComputedStyle(this.el.nativeElement.querySelector('.root')).transform;
+			const matrix = new DOMMatrix(transform);
+			const matrixCurrentLeftMove = matrix.m41;
+			const matrixCurrentTopMove = matrix.m42;
+			let newTranslateLeft = matrixCurrentLeftMove;
+			let newTranslateTop = matrixCurrentTopMove;
+			if (rect.left < 0) {
+				// We move it so that the left is 0
+				const amountToMove = Math.abs(rect.left);
+				newTranslateLeft = matrixCurrentLeftMove + amountToMove;
+			} else if (rect.right > parentRect.right) {
+				const amountToMove = rect.right - parentRect.right;
+				newTranslateLeft = matrixCurrentLeftMove - amountToMove;
+			}
+			if (rect.top < 0) {
+				const amountToMove = Math.abs(rect.top);
+				newTranslateTop = matrixCurrentTopMove + amountToMove;
+			} else if (rect.bottom > parentRect.bottom) {
+				const amountToMove = rect.bottom - parentRect.bottom;
+				newTranslateTop = matrixCurrentTopMove - amountToMove;
+			}
+			const newTransform = `translate3d(${newTranslateLeft}px, ${newTranslateTop}px, 0px)`;
+			this.renderer.setStyle(this.el.nativeElement.querySelector('.root'), 'transform', newTransform);
+			// this.cdr.detectChanges();
+			// console.log('resizing done', rect, parentRect, matrix);
+			// console.log('updating transform', newTransform, matrixCurrentLeftMove, matrixCurrentTopMove, newTranslateLeft);
+		});
+	}
+
 	private async restoreWindow() {
 		await this.ow.restoreWindow(this.windowId);
-		// console.log('window restored', result);
-		const width = 252;
+		await this.onResized();
+	}
+
+	private async changeWindowPosition(scale: number): Promise<void> {
+		const width = Math.max(252, 252 * scale);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
 		const gameWidth = gameInfo.logicalWidth;
-		const gameHeight = gameInfo.logicalHeight;
 		const dpi = gameWidth / gameInfo.width;
-		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 		const newLeft = ~~(gameWidth - width * dpi - 20); // Leave a bit of room to the right
 		const newTop = 0;
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+	}
+
+	private async changeWindowSize(scale: number): Promise<void> {
+		const width = Math.max(252, 252 * scale);
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (!gameInfo) {
+			return;
+		}
+		const gameHeight = gameInfo.logicalHeight;
+		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
 	}
 
 	private hideWindow() {

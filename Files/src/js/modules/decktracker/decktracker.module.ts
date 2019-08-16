@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init } from '@sentry/browser';
 import { SelectModule } from 'ng-select';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { DeckTrackerOverlayComponent } from '../../components/decktracker/overlay/decktracker-overlay.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -34,6 +35,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		FormsModule,
 		ReactiveFormsModule,
 		SharedDeckTrackerModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [],
 	bootstrap: [DeckTrackerOverlayComponent],

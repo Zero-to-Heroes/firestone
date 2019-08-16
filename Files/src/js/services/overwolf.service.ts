@@ -322,7 +322,7 @@ export class OverwolfService {
 
 	public async changeWindowSize(windowId: string, width: number, height: number): Promise<void> {
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] changing window size', windowId, width, height, Math.round(width), Math.round(height));
+			console.log('[overwolf-service] changing window size', windowId, Math.round(width), Math.round(height));
 			overwolf.windows.changeSize(windowId, Math.round(width), Math.round(height));
 			resolve();
 		});
