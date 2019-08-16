@@ -97,6 +97,7 @@ export class AchievementsVideoCaptureService {
 				console.log('[recording] turning on replays', this.settings);
 				const result = await this.ow.turnOnReplays(this.settings);
 				console.log('[recording] turned on replay capture after settings changed', result);
+				this.settingsChanged = false;
 			});
 		}
 	}
