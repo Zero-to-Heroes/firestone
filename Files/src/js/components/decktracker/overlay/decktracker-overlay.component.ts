@@ -1,14 +1,13 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, HostListener, ViewRef } from '@angular/core';
-
-import { DebugService } from '../../../services/debug.service';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, ViewRef } from '@angular/core';
 import { GameState } from '../../../models/decktracker/game-state';
-import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
-import { Preferences } from '../../../models/preferences';
-import { PreferencesService } from '../../../services/preferences.service';
 import { GameType } from '../../../models/enums/game-type';
-import { Events } from '../../../services/events.service';
+import { Preferences } from '../../../models/preferences';
 import { ScenarioId } from '../../../models/scenario-id';
+import { DebugService } from '../../../services/debug.service';
+import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
+import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga: any;
 
@@ -92,12 +91,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		this.cdr.detach();
 
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		// this.ow.addGameExitListener()
-		// overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-		// 	if (this.exitGame(res)) {
-		// 		this.closeApp();
-		// 	}
-		// });
 		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
 			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
@@ -262,17 +255,4 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	private hideWindow() {
 		this.ow.hideWindow(this.windowId);
 	}
-
-	// private exitGame(gameInfoResult: any): boolean {
-	// 	return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
-	// }
-
-	// private closeApp() {
-	// 	overwolf.windows.getCurrentWindow((result) => {
-	// 		if (result.status === "success") {
-	// 			// console.log('closing');
-	// 			overwolf.windows.close(result.window.id);
-	// 		}
-	// 	});
-	// }
 }
