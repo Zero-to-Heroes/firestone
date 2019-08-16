@@ -1,35 +1,37 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
 import { Queue } from 'queue-typescript';
-import { GameEvents } from '../game-events.service';
-import { GameEvent } from '../../models/game-event';
 import { GameState } from '../../models/decktracker/game-state';
-import { DeckParserService } from './deck-parser.service';
+import { GameEvent } from '../../models/game-event';
 import { AllCardsService } from '../all-cards.service';
-import { EventParser } from './event-parser/event-parser';
-import { GameStartParser } from './event-parser/game-start-parser';
-import { CardDrawParser } from './event-parser/card-draw-parser';
-import { MulliganOverParser } from './event-parser/mulligan-over-parser';
-import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
-import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
-import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
-import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
-import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
-import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
-import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
-import { MatchMetadataParser } from './event-parser/match-metadata-parser';
-import { DiscardedCardParser } from './event-parser/discarded-card-parser';
-import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
-import { CardRecruitedParser } from './event-parser/card-recruited-parser';
-import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
-import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
-import { BurnedCardParser } from './event-parser/burned-card-parser';
-import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
-import { PreferencesService } from '../preferences.service';
+import { GameEvents } from '../game-events.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
-import { MinionDiedParser } from './event-parser/minion-died-parser';
-import { ZoneOrderingService } from './zone-ordering.service';
+import { PreferencesService } from '../preferences.service';
 import { DeckCardService } from './deck-card.service';
+import { DeckParserService } from './deck-parser.service';
+import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
+import { BurnedCardParser } from './event-parser/burned-card-parser';
+import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
+import { CardDrawParser } from './event-parser/card-draw-parser';
+import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
+import { CardRecruitedParser } from './event-parser/card-recruited-parser';
+import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
+import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
+import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
+import { DiscardedCardParser } from './event-parser/discarded-card-parser';
+import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
+import { EventParser } from './event-parser/event-parser';
+import { GameEndParser } from './event-parser/game-end-parser';
+import { GameStartParser } from './event-parser/game-start-parser';
+import { MatchMetadataParser } from './event-parser/match-metadata-parser';
+import { MinionDiedParser } from './event-parser/minion-died-parser';
+import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
+import { MulliganOverParser } from './event-parser/mulligan-over-parser';
+import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
+import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
+import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
+import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
 export class GameStateService {
@@ -51,6 +53,7 @@ export class GameStateService {
 		private twitch: TwitchAuthService,
 		private deckCardService: DeckCardService,
 		private ow: OverwolfService,
+		private logger: NGXLogger,
 		private deckParser: DeckParserService,
 	) {
 		this.registerGameEvents();
@@ -109,6 +112,7 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent)) {
+					this.logger.debug('[game-state] will apply parser', parser.event());
 					const stateAfterParser = parser.parse(this.state, gameEvent);
 					if (!stateAfterParser) {
 						console.error('null state after processing event', gameEvent.type, parser, gameEvent);
@@ -159,7 +163,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.deckParser, this.allCards),
 			new SecretPlayedFromHandParser(this.deckParser, this.allCards),
 			new EndOfEchoInHandParser(this.deckParser, this.allCards),
-			// new GameEndParser(this.deckParser, this.allCards),
+			new GameEndParser(this.deckParser, this.allCards),
 			new DiscardedCardParser(),
 			new CardRecruitedParser(),
 			new MinionSummonedParser(this.allCards),
