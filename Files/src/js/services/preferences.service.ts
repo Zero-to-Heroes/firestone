@@ -1,12 +1,13 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { GenericIndexedDbService } from './generic-indexed-db.service';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Preferences } from '../models/preferences';
 import { BinderPrefs } from '../models/preferences/binder-prefs';
+import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OverwolfService } from './overwolf.service';
 
 @Injectable()
 export class PreferencesService {
 	public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';
+	public static readonly DECKTRACKER_OVERLAY_SIZE = 'DECKTRACKER_OVERLAY_SIZE';
 	public static readonly TWITCH_CONNECTION_STATUS = 'TWITCH_CONNECTION_STATUS';
 
 	private preferencesEventBus = new EventEmitter<any>();
@@ -107,6 +108,12 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, overlayDisplayMode: pref };
 		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+	}
+
+	public async setDecktrackerScale(pref: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, decktrackerScale: pref };
+		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_SIZE);
 	}
 
 	public async setTwitchAccessToken(pref: string) {

@@ -1,5 +1,4 @@
-import { Component, HostListener, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef, EventEmitter, ViewRef } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, ViewRef } from '@angular/core';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -70,13 +69,6 @@ export class SettingsComponent implements AfterViewInit {
 				this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 			}
 		});
-
-		// overwolf.games.onGameInfoUpdated.addListener((res: any) => {
-		// 	// console.log('updated game', res);
-		// 	if (this.exitGame(res)) {
-		// 		this.closeApp();
-		// 	}
-		// });
 	}
 
 	onAppSelected(selectedApp: string) {
@@ -96,17 +88,4 @@ export class SettingsComponent implements AfterViewInit {
 	dragMove(event: MouseEvent) {
 		this.ow.dragMove(this.thisWindowId);
 	}
-
-	// private exitGame(gameInfoResult: any): boolean {
-	// 	return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
-	// }
-
-	// private closeApp() {
-	// 	overwolf.windows.getCurrentWindow((result) => {
-	// 		if (result.status === "success") {
-	// 			console.log('closing');
-	// 			overwolf.windows.close(result.window.id);
-	// 		}
-	// 	});
-	// }
 }

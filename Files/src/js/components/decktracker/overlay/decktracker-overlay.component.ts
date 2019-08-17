@@ -88,6 +88,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	displayMode: string;
 	useCleanMode: boolean;
 
+	private scale;
 	private showTooltipTimer;
 	private hideTooltipTimer;
 
@@ -154,10 +155,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
+			} else if (event.name === PreferencesService.DECKTRACKER_OVERLAY_SIZE) {
+				this.handleDisplaySize(event.preferences);
 			}
 		});
 
 		this.handleDisplayPreferences();
+		this.handleDisplaySize();
 		if (process.env.NODE_ENV !== 'production') {
 			console.error('Should not allow debug game state from production');
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
@@ -171,7 +175,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			}
 		});
 
-		this.onResized();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -220,6 +223,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		}
 	}
 
+	private async handleDisplaySize(preferences: Preferences = null) {
+		console.log('retrieving preferences');
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.scale = preferences.decktrackerScale;
+		this.onResized();
+	}
+
 	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
 		const prefs = preferences || (await this.prefs.getPreferences());
 		console.log('merged prefs', prefs, this.gameState);
@@ -260,68 +270,14 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	}
 
 	private async onResized() {
-		if (!this.useCleanMode) {
-			return;
-		}
-		console.log('resize event', event);
-		// Resize the tracker
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		const scale = await this.computeScale();
-		await this.changeWindowSize(scale);
+		const newScale = this.scale / 100;
+		await this.changeWindowSize(newScale);
 		const element = this.el.nativeElement.querySelector('.scalable');
-		this.renderer.setStyle(element, 'transform', `scale(${scale})`);
-		await this.changeWindowPosition(scale);
+		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
+		await this.changeWindowPosition(newScale);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-		this.keepOverlayInBounds();
-	}
-
-	private async computeScale(): Promise<number> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		// const gameWidth = gameInfo.logicalWidth;
-		const gameHeight = gameInfo.logicalHeight;
-		const dpi = gameHeight / gameInfo.height;
-		const scale = (gameHeight / 700) * dpi;
-		return scale;
-	}
-
-	private keepOverlayInBounds() {
-		setTimeout(() => {
-			// Move the tracker so that it doesn't go over the edges
-			const rect = this.el.nativeElement.querySelector('.scalable').getBoundingClientRect();
-			const parentRect = this.el.nativeElement.parentNode.getBoundingClientRect();
-			// Get current transform values
-			const transform = window.getComputedStyle(this.el.nativeElement.querySelector('.root')).transform;
-			const matrix = new DOMMatrix(transform);
-			const matrixCurrentLeftMove = matrix.m41;
-			const matrixCurrentTopMove = matrix.m42;
-			let newTranslateLeft = matrixCurrentLeftMove;
-			let newTranslateTop = matrixCurrentTopMove;
-			if (rect.left < 0) {
-				// We move it so that the left is 0
-				const amountToMove = Math.abs(rect.left);
-				newTranslateLeft = matrixCurrentLeftMove + amountToMove;
-			} else if (rect.right > parentRect.right) {
-				const amountToMove = rect.right - parentRect.right;
-				newTranslateLeft = matrixCurrentLeftMove - amountToMove;
-			}
-			if (rect.top < 0) {
-				const amountToMove = Math.abs(rect.top);
-				newTranslateTop = matrixCurrentTopMove + amountToMove;
-			} else if (rect.bottom > parentRect.bottom) {
-				const amountToMove = rect.bottom - parentRect.bottom;
-				newTranslateTop = matrixCurrentTopMove - amountToMove;
-			}
-			const newTransform = `translate3d(${newTranslateLeft}px, ${newTranslateTop}px, 0px)`;
-			this.renderer.setStyle(this.el.nativeElement.querySelector('.root'), 'transform', newTransform);
-			// this.cdr.detectChanges();
-			// console.log('resizing done', rect, parentRect, matrix);
-			// console.log('updating transform', newTransform, matrixCurrentLeftMove, matrixCurrentTopMove, newTranslateLeft);
-		});
 	}
 
 	private async restoreWindow() {

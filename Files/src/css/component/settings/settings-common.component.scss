@@ -1,122 +1,165 @@
 .title {
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    font-size: 14px;        
-    color: #D9C3AB;
-    margin-bottom: 16px;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: 600;
+	line-height: normal;
+	font-size: 14px;
+	color: #d9c3ab;
+	margin-bottom: 16px;
 }
 
 a {
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 12px;
-    color: #D9C3AB;
-    margin-top: 5px;
-    display: block;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 12px;
+	color: #d9c3ab;
+	margin-top: 5px;
+	display: block;
 
-    &:hover {
-        color: #FFB948;
-    }
+	&:hover {
+		color: #ffb948;
+	}
 }
 
-
 label {
-    display: flex;
-    margin-bottom: 15px;
+	display: flex;
+	margin-bottom: 15px;
 
-    i {
-        --icon-color: #A89782;
-        --icon-color-secondary: #FFB948;
-        width: 20px;
-        height: 20px;
-        margin-right: 15px;
+	i {
+		--icon-color: #a89782;
+		--icon-color-secondary: #ffb948;
+		width: 20px;
+		height: 20px;
+		margin-right: 15px;
 
-        svg {
-            fill: transparent;
-        }
-    }
+		svg {
+			fill: transparent;
+		}
+	}
 
-    p, input {
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: normal;
-        line-height: normal;
-        font-size: 14px;        
-        color: #A89782;
-    }
+	p,
+	input {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 14px;
+		color: #a89782;
+	}
 
-    &:hover:not([disabled]) {
-        i {
-            --icon-color: #D9C3AB;
-        }
-    }
+	&:hover:not([disabled]) {
+		i {
+			--icon-color: #d9c3ab;
+		}
+	}
 
-    &[disabled] > *:not(.info) {
-        opacity: 0.5;
-    }
+	&[disabled] > *:not(.info) {
+		opacity: 0.5;
+	}
 }
 
 input {
-    display: none;
+	display: none;
+}
+
+input[type='range'] {
+	-webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+	width: 100%; /* Specific width is required for Firefox. */
+	background: transparent; /* Otherwise white in Chrome */
+	opacity: 0.8;
+	display: block;
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+	}
+
+	&:focus {
+		outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+	}
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		border: none;
+		height: 16px;
+		width: 16px;
+		border-radius: 50%;
+		background: #d9c3ab;
+		cursor: pointer;
+		margin-top: -5px;
+	}
+
+	&::-webkit-slider-runnable-track {
+		width: 100%;
+		height: 5px;
+		cursor: pointer;
+		background: #a89782;
+		border: none;
+	}
+
+	&:focus::-webkit-slider-runnable-track {
+		background: #a89782;
+	}
+
+	&:hover {
+		opacity: 1;
+	}
 }
 
 .info {
-    margin-left: 5px;
-    position: relative;
-    width: 15px;
-    height: 15px;
+	margin-left: 5px;
+	position: relative;
+	width: 15px;
+	height: 15px;
 
-    &:hover {
-        .zth-tooltip {
-            opacity: 1;
-        }
-    }
+	&:hover {
+		.zth-tooltip {
+			opacity: 1;
+		}
+	}
 
-    .zth-tooltip {
-        background-color: #A89782;
-        padding: 15px;
-        opacity: 0;
-        position: fixed; // Because of the overflow:hidden
-        max-width: 200px;
-        pointer-events: none;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
-    
-        .tooltip-arrow {
-            position: absolute;
-            width: 16px;
-            height: 9px;
-            fill: #A89782;
-            overflow: visible;
-        }
-    
-        p {
-            cursor: default;
-            color: #2F0D0D;
-            margin: 0;
-            font-family: Open Sans;
-            font-style: normal;
-            font-weight: normal;
-            line-height: normal;
-            font-size: 13px;
-        }
-    
-        &.right {
-            right: 24px;
-            top: 78px;
-    
-            .tooltip-arrow {
-                left: -3px;
-                top: calc(50% - 5px);
-                transform: rotate(-90deg);
-            }
-        }
-    }
+	.zth-tooltip {
+		background-color: #a89782;
+		padding: 15px;
+		opacity: 0;
+		position: fixed; // Because of the overflow:hidden
+		max-width: 200px;
+		pointer-events: none;
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+
+		.tooltip-arrow {
+			position: absolute;
+			width: 16px;
+			height: 9px;
+			fill: #a89782;
+			overflow: visible;
+		}
+
+		p {
+			cursor: default;
+			color: #2f0d0d;
+			margin: 0;
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 13px;
+		}
+
+		&.right {
+			right: 24px;
+			top: 78px;
+
+			.tooltip-arrow {
+				left: -3px;
+				top: calc(50% - 5px);
+				transform: rotate(-90deg);
+			}
+		}
+	}
 }

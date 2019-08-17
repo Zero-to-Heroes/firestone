@@ -46,7 +46,7 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, FormsModule, ReactiveFormsModule, SharedModule],
+	imports: [BrowserModule, BrowserAnimationsModule, HttpClientModule, FormsModule, ReactiveFormsModule, SharedModule],
 	declarations: [
 		SettingsComponent,
 		SettingsAppSelectionComponent,

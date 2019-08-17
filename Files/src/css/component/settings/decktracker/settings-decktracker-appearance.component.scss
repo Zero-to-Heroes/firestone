@@ -1,68 +1,91 @@
 .decktracker-appearance {
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 100%; 
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
 
-    .toggle-label {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
+	.toggle-label {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
 
-        p {
-            font-family: Open Sans;
-            font-style: normal;
-            font-weight: normal;
-            line-height: normal;
-            font-size: 14px;  
-            color: #D9C3AB;
-        }
+		p {
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 14px;
+			color: #d9c3ab;
+		}
 
-        label {
-            margin-top: 15px;
-            margin-bottom: 0;
-            display: flex;
-            align-items: center;
+		label {
+			margin-top: 15px;
+			margin-bottom: 0;
+			display: flex;
+			align-items: center;
 
-            b {
-                border-color: #D9C3AB;
-                opacity: 0.4;
-                margin-right: 15px;
-                &:before {
-                    background: #D9C3AB;
-                }
-            }
+			b {
+				border-color: #d9c3ab;
+				opacity: 0.4;
+				margin-right: 15px;
+				&:before {
+					background: #d9c3ab;
+				}
+			}
 
-            &.enabled b {
-                border-color: #FFB948;
-                opacity: 1;
-                &:before {
-                    background: #FFB948;
-                }
-            }
-        }
-    }
+			&.enabled b {
+				border-color: #ffb948;
+				opacity: 1;
+				&:before {
+					background: #ffb948;
+				}
+			}
+		}
+	}
 
-    label {
-        .info {
-            margin-left: 5px;
-            .zth-tooltip {
-                position: absolute;
-                max-width: 200px;
+	label {
+		.info {
+			margin-left: 5px;
+			.zth-tooltip {
+				position: absolute;
+				max-width: 200px;
 
-                p {
-                    width: 200px;    
-                    color: #2F0D0D;
-                }
+				p {
+					width: 200px;
+					color: #2f0d0d;
+				}
 
-                &.right {
-                    top: 50%;
-                    transform: translateY(-50%);
-                    left: 35px;
-                    right: auto;
-                }
-            }
-        }
-    }
+				&.right {
+					top: 50%;
+					transform: translateY(-50%);
+					left: 35px;
+					right: auto;
+				}
+			}
+		}
+	}
+}
+
+.scale-form {
+	display: flex;
+
+	label {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 14px;
+		color: #d9c3ab;
+		margin: 0;
+		margin-right: 15px;
+	}
+
+	.scale-slider {
+		width: 200px;
+	}
+
+	&:hover .scale-slider {
+		opacity: 1;
+	}
 }

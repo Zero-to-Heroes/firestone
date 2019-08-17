@@ -1,6 +1,8 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/internal/operators';
 import { PreferencesService } from '../../../services/preferences.service';
-import { FormGroup, FormControl } from '@angular/forms';
 
 declare var ga;
 
@@ -68,6 +70,19 @@ declare var ga;
 					</i>
 				</label>
 			</form>
+			<div class="scale-form">
+				<label for="decktracker-scale">Change size: </label>
+				<input
+					type="range"
+					name="decktracker-scale"
+					class="scale-slider"
+					min="50"
+					max="200"
+					(mousedown)="onScaleMouseDown($event)"
+					[(ngModel)]="trackerScale"
+					(ngModelChange)="onScaleChange($event)"
+				/>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,11 +91,26 @@ export class SettingsDecktrackerAppearanceComponent {
 	skinForm = new FormGroup({
 		selectedSkin: new FormControl('original'),
 	});
+	trackerScale: number;
+	trackerScaleChanged: Subject<number> = new Subject<number>();
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
 		this.cdr.detach();
 		this.loadDefaultValues();
 		this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value => this.changeSkinSettings(value));
+		this.trackerScaleChanged
+			.pipe(
+				debounceTime(20),
+				distinctUntilChanged(),
+			)
+			.subscribe(model => {
+				this.trackerScale = model;
+				console.log('changing scale value', this.trackerScale);
+				this.prefs.setDecktrackerScale(this.trackerScale);
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			});
 	}
 
 	changeSkinSettings(newSkin: string) {
@@ -93,9 +123,19 @@ export class SettingsDecktrackerAppearanceComponent {
 		}
 	}
 
+	onScaleChange(newScale: number): void {
+		this.trackerScaleChanged.next(newScale);
+	}
+
+	// Prevent drag & drop while dragging the slider
+	onScaleMouseDown(event: MouseEvent) {
+		event.stopPropagation();
+	}
+
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.skinForm.controls['selectedSkin'].setValue(prefs.decktrackerSkin, { emitEvent: false });
+		this.trackerScale = prefs.decktrackerScale;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
