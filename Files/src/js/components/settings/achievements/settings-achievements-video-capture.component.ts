@@ -1,7 +1,8 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
-import { OverwolfService } from '../../../services/overwolf.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Events } from '../../../services/events.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare var overwolf;
@@ -99,7 +100,7 @@ declare var overwolf;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAchievementsVideoCaptureComponent {
+export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 	private readonly RESOLUTION_ENUM = {
 		0: overwolf.settings.enums.ResolutionSettings.Original,
 		1: overwolf.settings.enums.ResolutionSettings.R1080p,
@@ -114,6 +115,9 @@ export class SettingsAchievementsVideoCaptureComponent {
 	resolution: number;
 	fps: number;
 
+	private videoCaptureSettingsChangedListener: (message: any) => void;
+	private formControlSubscription: Subscription;
+
 	constructor(
 		private owService: OverwolfService,
 		private prefs: PreferencesService,
@@ -122,8 +126,17 @@ export class SettingsAchievementsVideoCaptureComponent {
 		private events: Events,
 	) {
 		this.updateDefaultValues();
-		this.ow.addVideoCaptureSettingsChangedListener(data => this.handleVideoSettingsChange(data));
-		this.settingsForm.controls['videoQuality'].valueChanges.subscribe(value => this.changeVideoCaptureSettings(value));
+		this.videoCaptureSettingsChangedListener = this.ow.addVideoCaptureSettingsChangedListener(data =>
+			this.handleVideoSettingsChange(data),
+		);
+		this.formControlSubscription = this.settingsForm.controls['videoQuality'].valueChanges.subscribe(value =>
+			this.changeVideoCaptureSettings(value),
+		);
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeVideoCaptureSettingsChangedListener(this.videoCaptureSettingsChangedListener);
+		this.formControlSubscription.unsubscribe();
 	}
 
 	private async changeVideoCaptureSettings(value: string) {

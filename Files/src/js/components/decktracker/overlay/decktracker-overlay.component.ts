@@ -6,10 +6,12 @@ import {
 	ElementRef,
 	EventEmitter,
 	HostListener,
+	OnDestroy,
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameType } from '../../../models/enums/game-type';
 import { Preferences } from '../../../models/preferences';
@@ -73,7 +75,7 @@ declare var ga: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayComponent implements AfterViewInit {
+export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	// This should not be necessary, but is an additional guard
 	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = [
 		ScenarioId.DUNGEON_RUN,
@@ -91,6 +93,11 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 	private scale;
 	private showTooltipTimer;
 	private hideTooltipTimer;
+	private gameInfoUpdatedListener: (message: any) => void;
+	private showTooltipSubscription: Subscription;
+	private hideTooltipSubscription: Subscription;
+	private deckSubscription: Subscription;
+	private preferencesSubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
@@ -108,7 +115,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 		this.cdr.detach();
 
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
+		this.showTooltipSubscription = this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
 			clearTimeout(this.hideTooltipTimer);
 			// Already in tooltip mode
 			if (this.activeTooltip) {
@@ -127,7 +134,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 				}, 500);
 			}
 		});
-		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
+		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
 			clearTimeout(this.showTooltipTimer);
 			this.hideTooltipTimer = setTimeout(
 				() => {
@@ -142,7 +149,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			);
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
-		deckEventBus.subscribe(async event => {
+		this.deckSubscription = deckEventBus.subscribe(async event => {
 			console.log('received deck event', event.event);
 			this.gameState = event.state;
 			await this.processEvent(event.event);
@@ -151,7 +158,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			}
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-		preferencesEventBus.subscribe(event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
@@ -168,7 +175,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			console.log('game state', this.gameState, JSON.stringify(this.gameState));
 		}
 
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				this.onResized();
@@ -179,6 +186,14 @@ export class DeckTrackerOverlayComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 		console.log('handled after view init');
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
+		this.showTooltipSubscription.unsubscribe();
+		this.hideTooltipSubscription.unsubscribe();
+		this.deckSubscription.unsubscribe();
+		this.preferencesSubscription.unsubscribe();
 	}
 
 	@HostListener('mousedown')

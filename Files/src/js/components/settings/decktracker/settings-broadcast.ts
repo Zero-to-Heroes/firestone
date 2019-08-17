@@ -1,7 +1,17 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, AfterViewInit, EventEmitter, ViewRef } from '@angular/core';
-import { PreferencesService } from '../../../services/preferences.service';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { TwitchAuthService } from '../../../services/mainwindow/twitch-auth.service';
 import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'settings-broadcast',
@@ -53,10 +63,12 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsBroadcastComponent implements AfterViewInit {
+export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 	twitchedLoggedIn: boolean;
 	twitchLoginUrl: string;
 	twitchUserName: string;
+
+	private preferencesSubscription: Subscription;
 
 	constructor(
 		private prefs: PreferencesService,
@@ -71,7 +83,7 @@ export class SettingsBroadcastComponent implements AfterViewInit {
 	ngAfterViewInit() {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		console.log('registered prefs event bus', preferencesEventBus);
-		preferencesEventBus.subscribe(async event => {
+		this.preferencesSubscription = preferencesEventBus.subscribe(async event => {
 			console.log('received pref event', event);
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 				await this.loadDefaultValues();
@@ -79,6 +91,10 @@ export class SettingsBroadcastComponent implements AfterViewInit {
 			}
 		});
 		this.cdr.detach();
+	}
+
+	ngOnDestroy() {
+		this.preferencesSubscription.unsubscribe();
 	}
 
 	connect() {

@@ -1,13 +1,22 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, Input, EventEmitter } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
-
-import { Events } from '../../services/events.service';
-import { SetCard } from '../../models/set';
+import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { UpdateCardSearchResultsEvent } from '../../services/mainwindow/store/events/collection/update-card-search-results-event';
+import { SetCard } from '../../models/set';
+import { Events } from '../../services/events.service';
 import { SearchCardsEvent } from '../../services/mainwindow/store/events/collection/search-cards-event';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { UpdateCardSearchResultsEvent } from '../../services/mainwindow/store/events/collection/update-card-search-results-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -36,7 +45,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardSearchComponent implements AfterViewInit {
+export class CardSearchComponent implements AfterViewInit, OnDestroy {
 	_searchResults: readonly SetCard[];
 	_searchString: string;
 
@@ -45,12 +54,13 @@ export class CardSearchComponent implements AfterViewInit {
 	showSearchResults = false;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private subscription: Subscription;
 
 	constructor(private events: Events, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		this.searchForm.valueChanges
+		this.subscription = this.searchForm.valueChanges
 			.pipe(debounceTime(200))
 			.pipe(distinctUntilChanged())
 			.subscribe(data => {
@@ -58,6 +68,10 @@ export class CardSearchComponent implements AfterViewInit {
 				this._searchString = data;
 				this.onSearchStringChange();
 			});
+	}
+
+	ngOnDestroy() {
+		this.subscription.unsubscribe();
 	}
 
 	@Input('searchString') set searchString(searchString: string) {

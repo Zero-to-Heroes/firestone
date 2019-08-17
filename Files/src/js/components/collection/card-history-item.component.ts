@@ -1,10 +1,8 @@
-import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
-
-import { Events } from '../../services/events.service';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input } from '@angular/core';
 import { CardHistory } from '../../models/card-history';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -73,16 +71,4 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}
-
-	// @HostListener('mouseenter') onMouseEnter() {
-	// 	const rect = this.el.nativeElement.getBoundingClientRect();
-	// 	const x = rect.left - rect.width + 120;
-	// 	const y = rect.top + rect.height / 2;
-	// 	this.events.broadcast(Events.SHOW_TOOLTIP, this.cardId, x, y, true, rect);
-	// }
-
-	// @HostListener('mouseleave')
-	// onMouseLeave() {
-	// 	// this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
-	// }
 }

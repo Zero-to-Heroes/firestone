@@ -7,6 +7,7 @@ import {
 	EventEmitter,
 	HostListener,
 	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
@@ -149,8 +150,8 @@ declare var ga;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementRecordingsComponent implements AfterViewInit {
-	private readonly THUMBNAILS_PER_PAGE = 5;
+export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy {
+	readonly THUMBNAILS_PER_PAGE = 5;
 
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	_achievement: VisualAchievement;
@@ -176,6 +177,7 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 
 	private player;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private stateChangedListener: (message: any) => void;
 
 	constructor(
 		private io: SimpleIOService,
@@ -204,11 +206,15 @@ export class AchievementRecordingsComponent implements AfterViewInit {
 			setTimeout(() => this.ngAfterViewInit(), 50);
 		}
 		// auto pause the video when window is closed / minimized
-		this.ow.addStateChangedListener('CollectionWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
 			if (message.window_state !== 'normal') {
 				this.player.pause();
 			}
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {

@@ -1,15 +1,19 @@
 import {
-	Component,
-	Input,
-	HostBinding,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	ViewRef,
+	Component,
+	ComponentFactoryResolver,
 	ElementRef,
+	HostBinding,
+	Input,
+	OnDestroy,
+	ViewChild,
+	ViewContainerRef,
+	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
-import { ViewContainerRef, ViewChild, ComponentFactoryResolver, ViewEncapsulation } from '@angular/core';
-
+import { Subscription } from 'rxjs';
 import { Events } from '../services/events.service';
 
 @Component({
@@ -69,12 +73,14 @@ export class Tooltip {
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TooltipsComponent implements AfterViewInit {
+export class TooltipsComponent implements AfterViewInit, OnDestroy {
 	@Input() module: string;
 	@Input() position = 'inside';
 
 	@ViewChild('tooltips', { read: ViewContainerRef, static: false }) tooltips: ViewContainerRef;
 	private tooltip;
+	private showTooltipSubscription: Subscription;
+	private hideTooltipSubscription: Subscription;
 
 	constructor(
 		private events: Events,
@@ -82,7 +88,7 @@ export class TooltipsComponent implements AfterViewInit {
 		private el: ElementRef,
 		private resolver: ComponentFactoryResolver,
 	) {
-		this.events.on(Events.SHOW_TOOLTIP).subscribe(data => {
+		this.showTooltipSubscription = this.events.on(Events.SHOW_TOOLTIP).subscribe(data => {
 			// let start = Date.now();
 			this.destroy();
 
@@ -139,7 +145,7 @@ export class TooltipsComponent implements AfterViewInit {
 			// console.log('Created tooltip after', (Date.now() - start));
 		});
 
-		this.events.on(Events.HIDE_TOOLTIP).subscribe(data => {
+		this.hideTooltipSubscription = this.events.on(Events.HIDE_TOOLTIP).subscribe(data => {
 			// console.log('hiding tooltip', data);
 			this.destroy();
 		});
@@ -155,6 +161,11 @@ export class TooltipsComponent implements AfterViewInit {
 			// We create the component using the factory and the injector
 			this.tooltip = this.tooltips.createComponent(factory);
 		});
+	}
+
+	ngOnDestroy() {
+		this.showTooltipSubscription.unsubscribe();
+		this.hideTooltipSubscription.unsubscribe();
 	}
 
 	private destroy() {

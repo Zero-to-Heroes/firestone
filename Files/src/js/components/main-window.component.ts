@@ -4,10 +4,11 @@ import {
 	ChangeDetectorRef,
 	Component,
 	HostListener,
+	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { AdService } from '../services/ad.service';
 import { DebugService } from '../services/debug.service';
@@ -105,20 +106,24 @@ declare var ga: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainWindowComponent implements AfterViewInit {
+export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	state: MainWindowState;
 	windowId: string;
 
 	private isMaximized = false;
 	private adRef;
 	private adInit = false;
+	private stateChangedListener: (message: any) => void;
+	private messageReceivedListener: (message: any) => void;
+	private impressionListener: (message: any) => void;
+	private storeSubscription: Subscription;
 
 	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService, private debug: DebugService) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.ow.addMessageReceivedListener(async message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
 				const newX = message.content.x - window.width / 2;
@@ -126,7 +131,7 @@ export class MainWindowComponent implements AfterViewInit {
 				this.ow.changeWindowPosition(this.windowId, newX, newY);
 			}
 		});
-		this.ow.addStateChangedListener('CollectionWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
 			if (message.window_state === 'maximized') {
 				this.isMaximized = true;
 			} else {
@@ -142,7 +147,7 @@ export class MainWindowComponent implements AfterViewInit {
 		});
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
 		console.log('retrieved storeBus', storeBus);
-		storeBus.subscribe((newState: MainWindowState) => {
+		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				const window = await this.ow.getCurrentWindow();
 				const currentlyVisible = window.isVisible;
@@ -165,6 +170,13 @@ export class MainWindowComponent implements AfterViewInit {
 		if (!this.isMaximized) {
 			this.ow.dragMove(this.windowId);
 		}
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
+		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
+		this.adRef.removeEventListener(this.impressionListener);
+		this.storeSubscription.unsubscribe();
 	}
 
 	async goHome() {
@@ -204,14 +216,18 @@ export class MainWindowComponent implements AfterViewInit {
 			return;
 		}
 		if (!this.adRef) {
+			if (this.impressionListener) {
+				console.error('[main-window] Redefining the impression listener, could cause memory leaks', this.impressionListener);
+			}
 			this.adInit = true;
 			const window = await this.ow.getCurrentWindow();
 			if (window.isVisible) {
 				console.log('first time init ads, creating OwAd');
 				this.adRef = new OwAd(document.getElementById('ad-div'));
-				this.adRef.addEventListener('impression', data => {
+				this.impressionListener = data => {
 					ga('send', 'event', 'ad', 'loading-window');
-				});
+				};
+				this.adRef.addEventListener('impression', this.impressionListener);
 				console.log('init OwAd');
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();

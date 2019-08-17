@@ -1,15 +1,15 @@
 import {
-	Component,
-	ViewEncapsulation,
-	HostListener,
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
+	Component,
+	HostListener,
+	OnDestroy,
+	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-
-import { DebugService } from '../../services/debug.service';
 import { AdService } from '../../services/ad.service';
+import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
 declare var ga: any;
@@ -113,13 +113,16 @@ declare var OwAd: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingComponent implements AfterViewInit {
+export class LoadingComponent implements AfterViewInit, OnDestroy {
 	title = 'Getting ready';
 	loading = true;
 	thisWindowId: string;
 
 	private adRef;
 	private adInit;
+	private stateChangedListener: (message: any) => void;
+	private messageReceivedListener: (message: any) => void;
+	private impressionListener: (message: any) => void;
 
 	constructor(
 		private debugService: DebugService,
@@ -132,7 +135,7 @@ export class LoadingComponent implements AfterViewInit {
 		this.cdr.detach();
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		this.positionWindow();
-		this.ow.addMessageReceivedListener(message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
 			console.log('received', message);
 			if (message.id === 'ready') {
 				this.title = 'Your abilities are ready!';
@@ -142,7 +145,7 @@ export class LoadingComponent implements AfterViewInit {
 				}
 			}
 		});
-		this.ow.addStateChangedListener('LoadingWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('LoadingWindow', message => {
 			if (message.window_state !== 'normal') {
 				console.log('removing ad', message.window_state);
 				this.removeAds();
@@ -155,6 +158,12 @@ export class LoadingComponent implements AfterViewInit {
 			}
 		});
 		this.refreshAds();
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
+		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
+		this.adRef.removeEventListener(this.impressionListener);
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -191,14 +200,18 @@ export class LoadingComponent implements AfterViewInit {
 			return;
 		}
 		if (!this.adRef) {
+			if (this.impressionListener) {
+				console.error('[loading] Redefining the impression listener, could cause memory leaks', this.impressionListener);
+			}
 			this.adInit = true;
 			const window = await this.ow.getCurrentWindow();
 			if (window.isVisible) {
 				console.log('first time init ads, creating OwAd', adsReady);
 				this.adRef = new OwAd(document.getElementById('ad-div'));
-				this.adRef.addEventListener('impression', data => {
+				this.impressionListener = data => {
 					ga('send', 'event', 'ad', 'loading-window');
-				});
+				};
+				this.adRef.addEventListener('impression', this.impressionListener);
 				console.log('init OwAd');
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();

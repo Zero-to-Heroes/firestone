@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Events } from '../../../services/events.service';
 
 @Component({
@@ -14,11 +14,19 @@ import { Events } from '../../../services/events.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsModalComponent {
+export class SettingsModalComponent implements OnInit, OnDestroy {
 	currentModal: string;
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef) {
-		this.events.on(Events.SETTINGS_DISPLAY_MODAL).subscribe(data => this.handleNewModal(data));
+	private eventsSubscription: Subscription;
+
+	constructor(private events: Events, private cdr: ChangeDetectorRef) {}
+
+	ngOnInit() {
+		this.eventsSubscription = this.events.on(Events.SETTINGS_DISPLAY_MODAL).subscribe(data => this.handleNewModal(data));
+	}
+
+	ngOnDestroy() {
+		this.eventsSubscription.unsubscribe();
 	}
 
 	closeModal() {

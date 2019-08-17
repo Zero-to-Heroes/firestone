@@ -1,4 +1,14 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	HostListener,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -48,11 +58,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsComponent implements AfterViewInit {
+export class SettingsComponent implements AfterViewInit, OnDestroy {
 	thisWindowId: string;
 	selectedApp = 'general';
 	selectedMenu: string;
+
 	private settingsEventBus: EventEmitter<[string, string]>;
+	private messageReceivedListener: (message: any) => void;
+	private settingsSubscription: Subscription;
 
 	constructor(private debugService: DebugService, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
@@ -60,8 +73,10 @@ export class SettingsComponent implements AfterViewInit {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
 		window['selectApp'] = this.onAppSelected;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-		this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) => this.selectApp(selectedApp, selectedMenu));
-		this.ow.addMessageReceivedListener(async message => {
+		this.settingsSubscription = this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) =>
+			this.selectApp(selectedApp, selectedMenu),
+		);
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
 				const newX = message.content.x - window.width / 2;
@@ -69,6 +84,11 @@ export class SettingsComponent implements AfterViewInit {
 				this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 			}
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
+		this.settingsSubscription.unsubscribe();
 	}
 
 	onAppSelected(selectedApp: string) {

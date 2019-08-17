@@ -1,8 +1,7 @@
-import { Component, AfterViewInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { RealTimeNotificationService } from '../../services/real-time-notifications.service';
 
 @Component({
 	selector: 'home-screen-info-text',
@@ -29,11 +28,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeScreenInfoTextComponent implements AfterViewInit {
+export class HomeScreenInfoTextComponent implements AfterViewInit, OnDestroy {
 	dataLoaded = false;
 	status: string;
 	statusDetails: string;
 	ftue: boolean;
+
+	private stateChangedListener: (message: any) => void;
 
 	constructor(
 		private notificationService: RealTimeNotificationService,
@@ -44,12 +45,16 @@ export class HomeScreenInfoTextComponent implements AfterViewInit {
 
 	ngAfterViewInit() {
 		this.cdr.detach();
-		this.ow.addStateChangedListener('WelcomeWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('WelcomeWindow', message => {
 			if (message.window_state === 'normal') {
 				this.refreshContents();
 			}
 		});
 		this.refreshContents();
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	private async refreshContents() {

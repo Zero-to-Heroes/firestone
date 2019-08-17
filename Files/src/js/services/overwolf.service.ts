@@ -19,21 +19,33 @@ export class OverwolfService {
 		return overwolf.windows.getMainWindow();
 	}
 
-	public addStateChangedListener(targetWindowName: string, callback) {
-		overwolf.windows.onStateChanged.addListener(message => {
+	public addStateChangedListener(targetWindowName: string, callback): (message: any) => void {
+		const listener = message => {
 			if (message.window_name !== targetWindowName) {
 				return;
 			}
 			callback(message);
-		});
+		};
+		overwolf.windows.onStateChanged.addListener(listener);
+		// So that it can be unsubscribed
+		return listener;
+	}
+
+	public removeStateChangedListener(listener: (message: any) => void): void {
+		overwolf.windows.onStateChanged.removeListener(listener);
 	}
 
 	public addAppLaunchTriggeredListener(callback) {
 		overwolf.extensions.onAppLaunchTriggered.addListener(callback);
 	}
 
-	public addGameInfoUpdatedListener(callback) {
+	public addGameInfoUpdatedListener(callback: (message: any) => void): (message: any) => void {
 		overwolf.games.onGameInfoUpdated.addListener(callback);
+		return callback;
+	}
+
+	public removeGameInfoUpdatedListener(listener: (message: any) => void): void {
+		overwolf.games.onGameInfoUpdated.removeListener(listener);
 	}
 
 	public addGameEventsErrorListener(callback) {
@@ -48,12 +60,22 @@ export class OverwolfService {
 		overwolf.games.events.onNewEvents.addListener(callback);
 	}
 
-	public addMessageReceivedListener(callback) {
+	public addMessageReceivedListener(callback: (message: any) => void): (message: any) => void {
 		overwolf.windows.onMessageReceived.addListener(callback);
+		return callback;
 	}
 
-	public addVideoCaptureSettingsChangedListener(callback) {
+	public removeMessageReceivedListener(listener: (message: any) => void): void {
+		overwolf.windows.onMessageReceived.removeListener(listener);
+	}
+
+	public addVideoCaptureSettingsChangedListener(callback: (message: any) => void): (message: any) => void {
 		overwolf.settings.OnVideoCaptureSettingsChanged.addListener(callback);
+		return callback;
+	}
+
+	public removeVideoCaptureSettingsChangedListener(listener: (message: any) => void): void {
+		overwolf.settings.OnVideoCaptureSettingsChanged.removeListener(listener);
 	}
 
 	public addTwitterLoginStateChangedListener(callback) {

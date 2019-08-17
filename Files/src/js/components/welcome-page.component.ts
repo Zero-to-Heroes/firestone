@@ -1,5 +1,4 @@
-import { Component, ViewEncapsulation, HostListener, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 
@@ -54,14 +53,16 @@ import { OverwolfService } from '../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WelcomePageComponent implements AfterViewInit {
+export class WelcomePageComponent implements AfterViewInit, OnDestroy {
 	thisWindowId: string;
+
+	private messageReceivedListener: (message: any) => void;
 
 	constructor(private debugService: DebugService, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.thisWindowId = (await this.ow.getCurrentWindow()).id;
-		this.ow.addMessageReceivedListener(async message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
 			if (message.id === 'move') {
 				const window = await this.ow.getCurrentWindow();
 				const newX = message.content.x - window.width / 2;
@@ -69,6 +70,10 @@ export class WelcomePageComponent implements AfterViewInit {
 				this.ow.changeWindowPosition(this.thisWindowId, newX, newY);
 			}
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 	}
 
 	@HostListener('mousedown', ['$event'])

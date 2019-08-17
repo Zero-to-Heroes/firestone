@@ -1,10 +1,10 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit, ViewRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
 import { inflate } from 'pako';
+import { Subscription } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
-import { Events } from '../../../../services/events.service';
 import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-events';
-
+import { Events } from '../../../../services/events.service';
 import fakeState from './gameState.json';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck';
@@ -27,7 +27,7 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
+export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
 	activeTooltip: string;
 
@@ -38,9 +38,11 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	private token: string;
 
 	private dragging = false;
+	private showTooltipSubscription: Subscription;
+	private hideTooltipSubscription: Subscription;
 
 	constructor(private cdr: ChangeDetectorRef, private events: Events, private http: HttpClient) {
-		this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
+		this.showTooltipSubscription = this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
 			clearTimeout(this.hideTooltipTimer);
 			if (this.dragging) {
 				return;
@@ -62,7 +64,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 				}, 300);
 			}
 		});
-		this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
+		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
 			clearTimeout(this.showTooltipTimer);
 			this.hideTooltipTimer = setTimeout(() => {
 				this.activeTooltip = undefined;
@@ -94,6 +96,11 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	ngOnDestroy(): void {
+		this.showTooltipSubscription.unsubscribe();
+		this.hideTooltipSubscription.unsubscribe();
 	}
 
 	onDragStart() {

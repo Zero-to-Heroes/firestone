@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/internal/operators';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -103,18 +103,21 @@ declare var ga;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerAppearanceComponent {
+export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	skinForm = new FormGroup({
 		selectedSkin: new FormControl('original'),
 	});
 	trackerScale: number;
 	trackerScaleChanged: Subject<number> = new Subject<number>();
 
+	private skinFormSubscription: Subscription;
+	private trackerScaleFormSubscription: Subscription;
+
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
 		this.cdr.detach();
 		this.loadDefaultValues();
-		this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value => this.changeSkinSettings(value));
-		this.trackerScaleChanged
+		this.skinFormSubscription = this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value => this.changeSkinSettings(value));
+		this.trackerScaleFormSubscription = this.trackerScaleChanged
 			.pipe(
 				debounceTime(20),
 				distinctUntilChanged(),
@@ -127,6 +130,11 @@ export class SettingsDecktrackerAppearanceComponent {
 					this.cdr.detectChanges();
 				}
 			});
+	}
+
+	ngOnDestroy() {
+		this.skinFormSubscription.unsubscribe();
+		this.trackerScaleFormSubscription.unsubscribe();
 	}
 
 	changeSkinSettings(newSkin: string) {

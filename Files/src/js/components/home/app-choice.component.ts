@@ -1,8 +1,16 @@
-import { Component, Output, EventEmitter, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	OnDestroy,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -50,7 +58,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppChoiceComponent implements AfterViewInit {
+export class AppChoiceComponent implements AfterViewInit, OnDestroy {
 	@Output() close = new EventEmitter();
 
 	dataLoaded = false;
@@ -58,12 +66,13 @@ export class AppChoiceComponent implements AfterViewInit {
 
 	private collectionWindowId;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private stateChangedListener: (message: any) => void;
 
 	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
-		this.ow.addStateChangedListener('WelcomeWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('WelcomeWindow', message => {
 			if (message.window_state === 'normal') {
 				this.refreshContents();
 			}
@@ -72,6 +81,10 @@ export class AppChoiceComponent implements AfterViewInit {
 		const window = await this.ow.obtainDeclaredWindow('CollectionWindow');
 		this.collectionWindowId = window.id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	showCollection() {

@@ -1,18 +1,18 @@
 import {
-	Component,
-	Input,
-	ChangeDetectionStrategy,
 	AfterViewInit,
-	EventEmitter,
-	ElementRef,
+	ChangeDetectionStrategy,
 	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
-
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
 import { SharingAchievement } from '../../models/mainwindow/achievement/sharing-achievement';
-import { DomSanitizer, SafeUrl, SafeHtml } from '@angular/platform-browser';
+import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { CloseSocialShareModalEvent } from '../../services/mainwindow/store/events/social/close-social-share-modal-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -74,7 +74,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AchievementSharingModal implements AfterViewInit {
+export class AchievementSharingModal implements AfterViewInit, OnDestroy {
 	videoPath: SafeUrl;
 	videoPathOnDisk: string;
 	network: string;
@@ -84,6 +84,7 @@ export class AchievementSharingModal implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private player;
+	private stateChangedListener: (message: any) => void;
 
 	constructor(private elRef: ElementRef, private ow: OverwolfService, private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef) {}
 
@@ -112,11 +113,15 @@ export class AchievementSharingModal implements AfterViewInit {
 			setTimeout(() => this.ngAfterViewInit(), 50);
 		}
 		// auto pause the video when window is closed / minimized
-		this.ow.addStateChangedListener('CollectionWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
 			if (message.window_state !== 'normal') {
 				this.player.pause();
 			}
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	closeModal() {

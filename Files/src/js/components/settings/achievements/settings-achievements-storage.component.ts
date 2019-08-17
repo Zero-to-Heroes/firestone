@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
@@ -22,15 +22,21 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAchievementsStorageComponent {
+export class SettingsAchievementsStorageComponent implements OnDestroy {
 	mediaFolder: string;
 	usedSizeInGB: number;
 
+	private stateChangedListener: (message: any) => void;
+
 	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {
 		this.loadStorageInfo();
-		this.ow.addStateChangedListener('SettingsWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener('SettingsWindow', message => {
 			this.loadStorageInfo();
 		});
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
 	openVideoFolder() {
