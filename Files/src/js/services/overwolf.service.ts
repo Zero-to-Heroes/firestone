@@ -336,7 +336,7 @@ export class OverwolfService {
 
 	public async changeWindowPosition(windowId: string, newX: number, newY: number): Promise<void> {
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] changing window position', windowId, newX, newY, Math.round(newX), Math.round(newY));
+			console.log('[overwolf-service] changing window position', windowId, Math.round(newX), Math.round(newY));
 			overwolf.windows.changePosition(windowId, Math.round(newX), Math.round(newY));
 			resolve();
 		});

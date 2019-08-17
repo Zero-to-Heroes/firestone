@@ -5,10 +5,12 @@ import {
 	Component,
 	ElementRef,
 	EventEmitter,
+	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
+import { Subscription } from 'rxjs';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
@@ -32,7 +34,7 @@ import { OverwolfService } from '../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
-export class NotificationsComponent implements AfterViewInit {
+export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	timeout = 5000;
 	// timeout = 999999999999;
 	toastOptions = {
@@ -46,6 +48,8 @@ export class NotificationsComponent implements AfterViewInit {
 	private mainWindowId: string;
 	private activeNotifications: ActiveNotification[] = [];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private messageReceivedListener: (message: any) => void;
+	private gameInfoListener: (message: any) => void;
 
 	constructor(
 		private notificationService: NotificationsService,
@@ -57,25 +61,41 @@ export class NotificationsComponent implements AfterViewInit {
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
-		this.ow.addMessageReceivedListener(message => {
+		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
 			console.log('received message in notification window', message);
 			const messageObject = JSON.parse(message.content);
 			this.sendNotification(messageObject);
 		});
+		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
+			console.log('state changed, resize?', message);
+			if (message.resolutionChanged) {
+				this.resize();
+			}
+		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		// this.resize();
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeGameInfoUpdatedListener(this.gameInfoListener);
+		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 	}
 
 	created(event) {
 		console.log('notif created', event, this.notificationService, this.activeNotifications);
-		this.resize();
+		// this.shouldResize = true;
+		// this.resize();
 	}
 
 	destroyed(event) {
 		console.log('notif destroyed', event, this.notificationService, this.activeNotifications);
+		const deletedNotifications = this.activeNotifications.filter(notif => notif.toast.id === event.id);
+		deletedNotifications.forEach(notif => notif.subscription.unsubscribe());
 		this.activeNotifications = this.activeNotifications.filter(notif => notif.toast.id !== event.id);
-		this.resize();
+		// this.shouldResize = true;
+		// this.resize();
 	}
 
 	private sendNotification(messageObject) {
@@ -116,7 +136,7 @@ export class NotificationsComponent implements AfterViewInit {
 		const additionalTimeout: string = messageObject.timeout || 0;
 		await this.ow.restoreWindow(this.windowId);
 		const override: any = {
-			timeout: this.timeout + additionalTimeout,
+			timeOut: this.timeout + additionalTimeout,
 			clickToClose: true,
 		};
 		if (type === 'achievement-pre-record') {
@@ -128,7 +148,7 @@ export class NotificationsComponent implements AfterViewInit {
 			this.cdr.detectChanges();
 		}
 		// console.log('running toast message in zone', toast);
-		toast.click.subscribe((event: MouseEvent) => {
+		const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
 			console.log('registered click on toast', event, toast);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -175,6 +195,7 @@ export class NotificationsComponent implements AfterViewInit {
 
 		const activeNotif: ActiveNotification = {
 			toast: toast,
+			subscription: subscription,
 			cardId: cardId,
 			type: type,
 		};
@@ -184,35 +205,22 @@ export class NotificationsComponent implements AfterViewInit {
 	private resize() {
 		setTimeout(async () => {
 			const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
-			const height = wrapper.getBoundingClientRect().height + 20;
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
+			console.log('game info', gameInfo, wrapper, wrapper.getBoundingClientRect(), this.activeNotifications.length);
 			if (!gameInfo) {
 				return;
 			}
 			const gameWidth = gameInfo.logicalWidth;
 			const gameHeight = gameInfo.logicalHeight;
 			const dpi = gameWidth / gameInfo.width;
-			await this.ow.changeWindowSize(this.windowId, width, height);
+			await this.ow.changeWindowSize(this.windowId, width, gameHeight - 1);
 			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 			const newLeft = ~~(gameWidth - width * dpi);
-			const newTop = ~~(gameHeight - height * dpi - 10);
+			const newTop = 1;
 			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		});
 	}
-
-	// private exitGame(gameInfoResult: any): boolean {
-	// 	return (!gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning);
-	// }
-
-	// private closeApp() {
-	// 	overwolf.windows.getCurrentWindow((result) => {
-	// 		if (result.status === "success") {
-	// 			console.log('closing');
-	// 			overwolf.windows.close(result.window.id);
-	// 		}
-	// 	});
-	// }
 
 	private async showSettings() {
 		console.log('showing settings');
@@ -223,6 +231,7 @@ export class NotificationsComponent implements AfterViewInit {
 
 interface ActiveNotification {
 	readonly toast: Notification;
+	readonly subscription: Subscription;
 	readonly cardId?: string;
 	readonly type?: string;
 }

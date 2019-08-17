@@ -2,53 +2,63 @@
 @import '../../global/fonts';
 
 html {
-    width: 100%;
-    height: 100%;
-    position: relative;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
 }
 
 body {
 	margin: 0;
-    width: 100%;
-    height: 100%;
-    position: relative;
+	width: 100%;
+	height: 100%;
+	position: relative;
 }
 
 .notifications {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    display: flex;
+	width: 100%;
+	height: 100%;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
 
-    simple-notifications {
-	    width: 100%;
-	    height: 100%;
-	    position: relative;
-    }
+	simple-notifications {
+		width: 100%;
+		position: relative;
+		display: flex;
+		justify-content: flex-end;
+		padding-right: 50px;
+	}
 
 	.simple-notification-wrapper.simple-notification-wrapper {
+		position: relative;
 		// We need some room to let the rarity icon overflow
-		top: 10px;
-		right: 20px;
+		top: auto;
+		right: auto;
 		bottom: auto;
+		left: auto;
 		width: 420px;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
 
 		.simple-notification {
-		    padding: 0;
-		    background: transparent;
-		    border: none;
-		    display: flex;
+			padding: 0;
+			background: transparent;
+			border: none;
+			display: flex;
 			justify-content: flex-end;
 
-		    & > div {
-		    	pointer-events: auto;
-		    }
+			& > div {
+				pointer-events: auto;
+			}
 
-		    .sn-content {
-			    padding: 0;
-			    display: flex;
-			    justify-content: flex-end;
-		    }
+			.sn-content {
+				padding: 0;
+				display: flex;
+				justify-content: flex-end;
+			}
 		}
 	}
 }
@@ -58,7 +68,7 @@ body {
 	display: flex;
 	align-items: center;
 	background-image: url('/Files/assets/images/backgrounds/collection-notif-bg.jpg');
-	border: 1px solid #513B48;
+	border: 1px solid #513b48;
 	width: 330px;
 	height: 65px;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
@@ -69,28 +79,28 @@ body {
 		.rarity {
 			position: absolute;
 			width: 18px;
-		    top: -13px;
-		    left: -9px;
-		    z-index: 1;
+			top: -13px;
+			left: -9px;
+			z-index: 1;
 		}
 
 		.art {
 			width: 91px;
-		    clip-path: inset(9% 16% 21% 15%);
-		    margin-left: -14px;
-    		margin-top: 11px;
+			clip-path: inset(9% 16% 21% 15%);
+			margin-left: -14px;
+			margin-top: 11px;
 		}
 
 		.message {
-	    	@extend %you-have-viewed;
-	    	display: flex;
-	    	flex-direction: column;
-    		position: relative;
-		    height: 100%;
-		    width: 100%;
-		    justify-content: center;
-    		padding-left: 10px;
-    		padding-right: 14px;
+			@extend %you-have-viewed;
+			display: flex;
+			flex-direction: column;
+			position: relative;
+			height: 100%;
+			width: 100%;
+			justify-content: center;
+			padding-left: 10px;
+			padding-right: 14px;
 		}
 
 		.new-card {
@@ -105,12 +115,12 @@ body {
 			border: 1px solid $yellow03;
 
 			.outer-border {
-			    position: absolute;
-			    width: calc(100% + 8px);
-			    height: calc(100% + 8px);
-			    top: -4px;
-			    left: -4px;
-			    border: 2px solid $yellow03;
+				position: absolute;
+				width: calc(100% + 8px);
+				height: calc(100% + 8px);
+				top: -4px;
+				left: -4px;
+				border: 2px solid $yellow03;
 			}
 
 			.premium-deco {
@@ -120,36 +130,36 @@ body {
 				height: 100%;
 
 				.left {
-				    transform: scale(1,-1);
-				    position: absolute;
-				    left: -29px;
-				    top: 0;
+					transform: scale(1, -1);
+					position: absolute;
+					left: -29px;
+					top: 0;
 				}
 
 				.right {
-				    transform: scale(-1,1);
-				    position: absolute;
-				    right: 10px;
-				    bottom: 0;
+					transform: scale(-1, 1);
+					position: absolute;
+					right: 10px;
+					bottom: 0;
 				}
 			}
 		}
 	}
 
 	&.message-dust {
-	    @extend %you-have-viewed;
+		@extend %you-have-viewed;
 
 		.dust {
 			margin-right: 15px;
-		    display: flex;
-		    align-items: center;
-		    justify-content: center;
-		    width: 63px;
-		    height: 100%;
-		    border-right: 1px solid $grey03;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 63px;
+			height: 100%;
+			border-right: 1px solid $grey03;
 
 			i {
-			    --size: 43px;
+				--size: 43px;
 			}
 		}
 
@@ -158,81 +168,85 @@ body {
 			flex-direction: column;
 
 			.dust-amount:before {
-				content: "+";
+				content: '+';
 			}
 		}
-
 	}
 
-    .command {
-	    display: inline-block;
-	    border: 1px solid white;
-	    padding: 5px 15px;
-	    border-radius: 6px;
+	.command {
+		display: inline-block;
+		border: 1px solid white;
+		padding: 5px 15px;
+		border-radius: 6px;
 	}
 
 	.close-button {
 		position: absolute;
 		top: 0;
 		right: 0;
-  		--icon-bg-hover: #513b48;
+		--icon-bg-hover: #513b48;
 
-	    & :hover {
-	    	pointer-events: none;
-	    }
+		& :hover {
+			pointer-events: none;
+		}
 	}
 }
 
 .message-container-app {
 	width: 320px;
 	padding: 10px;
-    margin-bottom: 5px;
-    background-color: rgba(0, 0, 0, 0.8);
+	margin-bottom: 5px;
+	background-color: rgba(0, 0, 0, 0.8);
 	border-radius: 5px 0 0 5px;
 	display: flex;
-    align-items: center;
+	align-items: center;
 
-    img {
+	img {
 		margin-right: 5px;
 		width: 24px;
 		height: 24px;
 	}
 
 	.message {
-    	padding: 0;
-    	font-size: 14px;
-    	line-height: 15px;
-    }
+		padding: 0;
+		font-size: 14px;
+		line-height: 15px;
+	}
 
-    .command {
-	    display: inline-block;
-	    border: 1px solid white;
-	    padding: 5px 15px;
-	    border-radius: 6px;
+	.command {
+		display: inline-block;
+		border: 1px solid white;
+		padding: 5px 15px;
+		border-radius: 6px;
 	}
 }
 
 .shake {
-	animation: shake 0.42s cubic-bezier(.36,.07,.19,.97) both;
+	animation: shake 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 	transform: translate3d(0, 0, 0);
 	backface-visibility: hidden;
 	perspective: 1000px;
-  }
-  
-  @keyframes shake {
-	10%, 90% {
-	  transform: translate3d(-1px, 0, 0);
+}
+
+@keyframes shake {
+	10%,
+	90% {
+		transform: translate3d(-1px, 0, 0);
 	}
-	
-	20%, 80% {
-	  transform: translate3d(2px, 0, 0);
+
+	20%,
+	80% {
+		transform: translate3d(2px, 0, 0);
 	}
-  
-	30%, 50%, 70% {
-	  transform: translate3d(-4px, 0, 0);
+
+	30%,
+	50%,
+	70% {
+		transform: translate3d(-4px, 0, 0);
 	}
-  
-	40%, 60% {
-	  transform: translate3d(4px, 0, 0);
+
+	40%,
+	60% {
+		transform: translate3d(4px, 0, 0);
 	}
-  }
+}
