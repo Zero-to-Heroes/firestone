@@ -307,6 +307,7 @@ export class PackMonitor {
 					</button>
 				</div>`,
 			cardId: dbCard.id,
+			timeout: 20000,
 		});
 	}
 
@@ -333,6 +334,7 @@ export class PackMonitor {
                             </svg>
                         </button>
                     </div>`,
+				timeout: 20000,
 			});
 		}
 	}
