@@ -68,7 +68,7 @@ input[type='range'] {
 	-webkit-appearance: none; /* Hides the slider so that custom slider can be made */
 	width: 100%; /* Specific width is required for Firefox. */
 	background: transparent; /* Otherwise white in Chrome */
-	opacity: 0.8;
+	opacity: 0.7;
 	display: block;
 
 	&::-webkit-slider-thumb {
@@ -105,6 +105,11 @@ input[type='range'] {
 	&:hover {
 		opacity: 1;
 	}
+}
+
+.settings-group {
+	background: rgba(255, 255, 255, 0.08);
+	padding: 15px;
 }
 
 .info {

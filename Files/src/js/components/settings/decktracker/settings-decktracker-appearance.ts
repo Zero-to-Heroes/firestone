@@ -17,7 +17,8 @@ declare var ga;
 	],
 	template: `
 		<div class="decktracker-appearance">
-			<form class="skin-form" [formGroup]="skinForm">
+			<form class="skin-form settings-group" [formGroup]="skinForm">
+				<div class="title">Active skin</div>
 				<input type="radio" formControlName="selectedSkin" value="original" id="skin-original" />
 				<label for="skin-original" class="skin-original">
 					<i class="unselected" *ngIf="skinForm.value.selectedSkin !== 'original'">
@@ -71,7 +72,22 @@ declare var ga;
 				</label>
 			</form>
 			<div class="scale-form">
-				<label for="decktracker-scale">Change size: </label>
+				<label for="decktracker-scale">
+					Change size
+					<i class="info">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
+						</svg>
+						<div class="zth-tooltip right">
+							<p>
+								Change the tracker size (best to use it while in-game to see the effects as you change it)
+							</p>
+							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0" />
+							</svg>
+						</div>
+					</i>
+				</label>
 				<input
 					type="range"
 					name="decktracker-scale"

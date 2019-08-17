@@ -67,6 +67,11 @@
 	}
 }
 
+.skin-form {
+	padding-bottom: 5px; // Because the radio buttons already have some padding
+	margin-bottom: 15px;
+}
+
 .scale-form {
 	display: flex;
 
