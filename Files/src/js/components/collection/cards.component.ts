@@ -27,7 +27,7 @@ import { Set, SetCard } from '../../models/set';
 			<span *ngIf="!_set && _searchString" class="set-title">
 				<span class="text set-name">{{ _searchString }}</span>
 			</span>
-			<div class="show-filter" *ngIf="_activeCards.length > 0" [ngStyle]="{ 'display': _searchString ? 'none' : 'flex' }">
+			<div class="show-filter" [ngStyle]="{ 'display': _searchString ? 'none' : 'flex' }">
 				<!-- Rarity -->
 				<ng-select
 					class="rarity-select"
