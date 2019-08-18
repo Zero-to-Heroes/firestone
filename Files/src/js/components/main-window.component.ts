@@ -43,14 +43,6 @@ declare var ga: any;
 						<div class="controls">
 							<control-bug></control-bug>
 							<control-settings [windowId]="windowId" [settingsApp]="state.currentApp"></control-settings>
-							<button class="i-30 pink-button" (mousedown)="goHome()">
-								<svg class="svg-icon-fill">
-									<use
-										xmlns:xlink="http://www.w3.org/1999/xlink"
-										xlink:href="/Files/assets/svg/sprite.svg#window-control_home"
-									></use>
-								</svg>
-							</button>
 							<control-discord></control-discord>
 							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 							<control-maximize [windowId]="windowId"></control-maximize>
@@ -177,18 +169,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
 		this.adRef.removeEventListener(this.impressionListener);
 		this.storeSubscription.unsubscribe();
-	}
-
-	async goHome() {
-		const welcomeWindow = await this.ow.obtainDeclaredWindow('WelcomeWindow');
-		const window = await this.ow.getCurrentWindow();
-		const center = {
-			x: window.left + window.width / 2,
-			y: window.top + window.height / 2,
-		};
-		await this.ow.sendMessage(welcomeWindow.id, 'move', center);
-		await this.ow.restoreWindow(welcomeWindow.id);
-		await this.ow.hideWindow(this.windowId);
 	}
 
 	private async refreshAds() {
