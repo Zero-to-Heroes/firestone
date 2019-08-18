@@ -95,10 +95,12 @@
 		align-items: flex-start;
 		justify-content: center;
 		margin-right: 40px;
+		width: 45%;
+		min-width: 45%;
 
 		card-view {
 			// width: 270px;
-			width: 100%;
+			// width: 100%;
 			margin-top: 10px;
 
 			.card-container {
