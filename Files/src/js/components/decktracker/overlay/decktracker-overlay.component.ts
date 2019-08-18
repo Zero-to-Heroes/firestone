@@ -178,7 +178,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
-				this.onResized();
+				await this.changeWindowSize();
+				await this.changeWindowPosition();
 			}
 		});
 
@@ -286,10 +287,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	private async onResized() {
 		const newScale = this.scale / 100;
-		await this.changeWindowSize(newScale);
 		const element = this.el.nativeElement.querySelector('.scalable');
 		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
-		await this.changeWindowPosition(newScale);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -300,8 +299,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.onResized();
 	}
 
-	private async changeWindowPosition(scale: number): Promise<void> {
-		const width = Math.max(252, 252 * scale);
+	private async changeWindowPosition(): Promise<void> {
+		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
@@ -314,8 +313,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
-	private async changeWindowSize(scale: number): Promise<void> {
-		const width = Math.max(252, 252 * scale);
+	private async changeWindowSize(): Promise<void> {
+		const width = Math.max(252, 252 * 2); // Max scale
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
