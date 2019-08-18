@@ -64,7 +64,7 @@ body {
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
-		// box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.7);
+		background-size: 100%;
 
 		&.collection {
 			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
@@ -143,7 +143,6 @@ body {
 		&.decktracker {
 			background-image: radial-gradient(340px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%),
 				url('/Files/assets/images/backgrounds/achievements_bg.jpg');
-			background-size: 100%;
 			outline: 1px solid #4b3052;
 
 			.navigation menu-selection .menu-selection {
