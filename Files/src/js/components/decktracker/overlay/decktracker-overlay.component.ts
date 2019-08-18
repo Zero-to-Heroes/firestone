@@ -69,8 +69,8 @@ declare var ga: any;
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
+				<tooltips [module]="'decktracker'"></tooltips>
 			</div>
-			<tooltips [module]="'decktracker'"></tooltips>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

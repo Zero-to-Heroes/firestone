@@ -92,7 +92,6 @@
 	}
 
 	tooltips {
-		z-index: 2;
 		pointer-events: none;
 
 		::ng-deep tooltip {
@@ -101,6 +100,7 @@
 			// display: flex !important;
 			align-items: center;
 			justify-content: center;
+			z-index: 1;
 
 			.tooltip-container img {
 				width: 210px;
