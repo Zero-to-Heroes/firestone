@@ -142,6 +142,13 @@ export class GameStateService {
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 					console.log('emitted deck event', emittedEvent.event.name, this.state);
+					console.log(
+						'board states',
+						this.state.playerDeck.board.length,
+						this.state.opponentDeck.board.length,
+						this.state.playerDeck.board,
+						this.state.opponentDeck.board,
+					);
 				}
 			} catch (e) {
 				console.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);

@@ -6,6 +6,10 @@ export class DeckManipulationHelper {
 		if (zone.some(card => card.entityId === entityId)) {
 			return zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card);
 		}
+		// We don't have the entityId, and the cardId is not provided, so we return
+		if (!cardId) {
+			return zone;
+		}
 		console.warn('removing a card from zone without using the entityId', cardId, entityId, zone);
 		let hasRemovedOnce = false;
 		const result = [];
@@ -34,18 +38,22 @@ export class DeckManipulationHelper {
 
 	public static findCardInZone(zone: readonly DeckCard[], cardId: string, entityId: number): DeckCard {
 		let found;
-		if (!entityId) {
+		if (!entityId && cardId) {
 			console.error('trying to get a card without providing an entityId', cardId, zone);
 			found = zone.find(card => card.cardId === cardId);
-		} else {
+		} else if (entityId) {
 			found = zone.find(card => card.entityId === entityId);
-			if (!found) {
+			if (!found && cardId) {
 				found = zone.find(card => card.cardId === cardId && !card.entityId);
 				found = Object.assign(new DeckCard(), found, {
 					entityId: entityId,
 					cardId: cardId,
 				} as DeckCard);
 			}
+		}
+		// We explicitely said we wanted a card identified by an entityId, so we don't fallback
+		if (!found && !cardId) {
+			return null;
 		}
 		if (!found) {
 			console.error('Could not find card in zone', cardId, zone);
