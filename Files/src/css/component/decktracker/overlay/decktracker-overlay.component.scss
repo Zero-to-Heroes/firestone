@@ -9,14 +9,14 @@
 .root {
 	position: relative;
 	display: flex;
-	justify-content: flex-start;
+	justify-content: flex-end;
 	align-items: flex-start;
 	// height: 100%;
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 
 	.scalable {
 		transform: scale(1);
-		transform-origin: left top;
+		transform-origin: right top;
 	}
 
 	.corner {
