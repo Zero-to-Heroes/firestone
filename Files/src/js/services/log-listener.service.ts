@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-
 import { Subject } from 'rxjs';
-
-import { SimpleIOService } from './plugins/simple-io.service';
 import { Events } from './events.service';
 import { OverwolfService } from './overwolf.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 
 @Injectable()
 export class LogListenerService {
@@ -43,8 +41,6 @@ export class LogListenerService {
 			if (this.ow.gameLaunched(res)) {
 				this.logsLocation = res.gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 				this.registerLogMonitor();
-			} else {
-				console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', res);
 			}
 		});
 		const gameInfo = await this.ow.getRunningGameInfo();
@@ -52,6 +48,8 @@ export class LogListenerService {
 			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath, gameInfo);
 			this.logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 			this.registerLogMonitor();
+		} else {
+			console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', res);
 		}
 	}
 
