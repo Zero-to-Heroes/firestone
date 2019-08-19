@@ -128,14 +128,20 @@ export class AchievementsVideoCaptureService {
 		try {
 			const status = await this.ow.startReplayCapture(captureDuration);
 			console.log('[recording] capture started', status);
+			if (status.status === 'error') {
+				console.warn('[recording] could not start achievement capture', status.error);
+				this.captureOngoing = false;
+				clearTimeout(this.currentRecordEndTimer);
+				return;
+			}
 			// Here we can have custom settings based on achievement
-			this.planCaptureStop(recordDuration);
 			this.currentReplayId = status.url;
+			this.planCaptureStop(recordDuration);
 		} catch (e) {
 			console.warn('[recording] could not start capture', status);
 			this.captureOngoing = false;
 			clearTimeout(this.currentRecordEndTimer);
-			setTimeout(() => this.capture(achievement, challenge, recordDuration));
+			// setTimeout(() => this.capture(achievement, challenge, recordDuration));
 		}
 	}
 
@@ -157,7 +163,11 @@ export class AchievementsVideoCaptureService {
 		clearTimeout(this.currentRecordEndTimer);
 		this.currentRecordEndTimer = undefined;
 		console.log('[recording] stopping capture?', this.currentReplayId, this.captureOngoing);
-		if (!this.currentReplayId || !this.captureOngoing) {
+		if (!this.currentReplayId) {
+			console.warn('[recording] trying to stop capture with no valid currentReplayId, aborting');
+			return;
+		}
+		if (!this.captureOngoing) {
 			setTimeout(() => this.performStopCapture(), 500);
 			return;
 		}
