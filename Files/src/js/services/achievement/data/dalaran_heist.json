@@ -125,31 +125,6 @@
 		"resetEvents": ["GAME_END"]
 	},
 	{
-		"id": "dalaran_heist_boss_encounter_DALA_BOSS_06dk",
-		"type": "dalaran_heist_boss_encounter",
-		"name": "Scourgelord Dazzik",
-		"displayName": "Boss met: Scourgelord Dazzik",
-		"text": "<b>Battlecry</b>: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
-		"displayCardId": "DALA_BOSS_06dk",
-		"displayCardType": "hero",
-		"difficulty": "common",
-		"points": 1,
-		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["DALA_BOSS_06dk"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["3005", "3188", "3189", "3190", "3191"]
-			}
-		],
-		"resetEvents": ["GAME_END"]
-	},
-	{
 		"id": "dalaran_heist_boss_encounter_DALA_BOSS_06h",
 		"type": "dalaran_heist_boss_encounter",
 		"name": "Dazzik Hellscream",
@@ -2013,31 +1988,6 @@
 			{
 				"type": "CORRECT_OPPONENT",
 				"values": ["DALA_BOSS_05h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["3328", "3329", "3330", "3331", "3332"]
-			}
-		],
-		"resetEvents": ["GAME_END"]
-	},
-	{
-		"id": "dalaran_heist_boss_encounter_heroic_DALA_BOSS_06dk",
-		"type": "dalaran_heist_boss_encounter_heroic",
-		"name": "Scourgelord Dazzik",
-		"displayName": "Heroic boss met: Scourgelord Dazzik",
-		"text": "<b>Battlecry</b>: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
-		"displayCardId": "DALA_BOSS_06dk",
-		"displayCardType": "hero",
-		"difficulty": "rare",
-		"points": 2,
-		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["DALA_BOSS_06dk"]
 			},
 			{
 				"type": "SCENE_CHANGED_TO_GAME"
@@ -3925,31 +3875,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "dalaran_heist_boss_victory_DALA_BOSS_06dk",
-		"type": "dalaran_heist_boss_victory",
-		"name": "Scourgelord Dazzik",
-		"displayName": "Boss defeated: Scourgelord Dazzik",
-		"text": "<b>Battlecry</b>: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
-		"displayCardId": "DALA_BOSS_06dk",
-		"displayCardType": "hero",
-		"difficulty": "common",
-		"points": 2,
-		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["DALA_BOSS_06dk"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["3005", "3188", "3189", "3190", "3191"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "dalaran_heist_boss_victory_DALA_BOSS_06h",
 		"type": "dalaran_heist_boss_victory",
 		"name": "Dazzik Hellscream",
@@ -5813,31 +5738,6 @@
 			{
 				"type": "CORRECT_OPPONENT",
 				"values": ["DALA_BOSS_05h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["3328", "3329", "3330", "3331", "3332"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "dalaran_heist_boss_victory_heroic_DALA_BOSS_06dk",
-		"type": "dalaran_heist_boss_victory_heroic",
-		"name": "Scourgelord Dazzik",
-		"displayName": "Heroic boss defeated: Scourgelord Dazzik",
-		"text": "<b>Battlecry</b>: Equip a 4/3 Shadowmourne that also damages adjacent minions.",
-		"displayCardId": "DALA_BOSS_06dk",
-		"displayCardType": "hero",
-		"difficulty": "rare",
-		"points": 3,
-		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["DALA_BOSS_06dk"]
 			},
 			{
 				"type": "GAME_WON"

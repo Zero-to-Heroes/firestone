@@ -4585,6 +4585,28 @@
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
 	{
+		"id": "monster_hunt_treasure_play_GILA_BOSS_27t",
+		"type": "monster_hunt_treasure_play",
+		"name": "Amalgamate",
+		"displayName": "Treasure played: Amalgamate",
+		"text": "Destroy all minions. Summon an Amalgamation with the combined\nAttack and Health.",
+		"displayCardId": "GILA_BOSS_27t",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"points": 3,
+		"requirements": [
+			{
+				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+				"values": ["GILA_BOSS_27t"]
+			},
+			{
+				"type": "SCENARIO_IDS",
+				"values": ["2706", "2821"]
+			}
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
 		"id": "monster_hunt_treasure_play_GILA_BOSS_29t",
 		"type": "monster_hunt_treasure_play",
 		"name": "Enchanting Tune",

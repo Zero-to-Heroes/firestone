@@ -4,7 +4,7 @@ import { RawAchievement } from '../../../models/achievement/raw-achievement.js';
 import { ReplayInfo } from '../../../models/replay-info.js';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service.js';
 import { Challenge } from '../achievements/challenges/challenge.js';
-import dalaranHeist from './dalaran_hesit.json';
+import dalaranHeist from './dalaran_heist.json';
 import dungeonRun from './dungeon_run.json';
 import monsterHunt from './monster_hunt.json';
 import rumbleRun from './rumble_run.json';
