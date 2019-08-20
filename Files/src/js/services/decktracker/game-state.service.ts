@@ -13,6 +13,7 @@ import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
+import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
@@ -167,6 +168,7 @@ export class GameStateService {
 			new CreateCardInDeckParser(this.deckParser, this.allCards),
 			new CardRemovedFromDeckParser(this.deckParser, this.allCards),
 			new CardRemovedFromHandParser(),
+			new CardChangedOnBoardParser(this.allCards),
 			new CardPlayedFromHandParser(this.deckParser, this.allCards),
 			new SecretPlayedFromHandParser(this.deckParser, this.allCards),
 			new EndOfEchoInHandParser(this.deckParser, this.allCards),
