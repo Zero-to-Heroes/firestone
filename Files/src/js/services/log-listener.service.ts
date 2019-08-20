@@ -49,7 +49,7 @@ export class LogListenerService {
 			this.logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 			this.registerLogMonitor();
 		} else {
-			console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', res);
+			console.log('[log-listener] [' + this.logFile + '] Game not launched, returning', gameInfo);
 		}
 	}
 
