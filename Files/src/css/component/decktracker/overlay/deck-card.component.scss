@@ -1,121 +1,123 @@
 :host() {
-    width: 100%;
+	width: 100%;
 }
 
 .deck-card {
-    display: flex;
-    align-items: center;
-    height: 26px;
-    position: relative;
+	display: flex;
+	align-items: center;
+	height: 26px;
+	position: relative;
+	min-width: 250px;
 
-    .background-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
+	.background-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
 
-    .gradiant {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(89.48deg, #090A0D 36.89%, rgba(9, 10, 13, 0) 99.92%);
-    }
+	.gradiant {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: linear-gradient(89.48deg, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
+	}
 
-    &.strong {
-        background: linear-gradient(89.48deg, #090A0D 36.89%, #9FB6D7 66%, #9FB6D7 100%);
-        .background-image {
-            top: 2px;
-            bottom: 2px;
-            right: 2px;
-        }
-        .gradiant {
-            margin: 2px;
-        }
-    }
+	&.strong {
+		background: linear-gradient(89.48deg, #090a0d 36.89%, #9fb6d7 66%, #9fb6d7 100%);
+		.background-image {
+			top: 2px;
+			bottom: 2px;
+			right: 2px;
+		}
+		.gradiant {
+			margin: 2px;
+		}
+	}
 
-    .mana-cost {
-        width: 30px;
-        height: 100%;
-        background: #BFC1C4;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1;
+	.mana-cost {
+		width: 30px;
+		height: 100%;
+		background: #bfc1c4;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 1;
 
-        span {
-            font-family: Sumana;
-            font-style: normal;
-            font-weight: bold;
-            line-height: normal;
-            font-size: 16px;            
-            color: #07081F;
-        }
-    }
+		span {
+			font-family: Sumana;
+			font-style: normal;
+			font-weight: bold;
+			line-height: normal;
+			font-size: 16px;
+			color: #07081f;
+		}
+	}
 
-    .card-name {
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding-left: 10px;
-        z-index: 1;
+	.card-name {
+		flex-grow: 1;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		padding-left: 10px;
+		z-index: 1;
 
-        span {
-            font-family: Open Sans;
-            font-style: normal;
-            font-weight: normal;
-            line-height: normal;
-            font-size: 13px;        
-            color: #FFE3BA;
-        }
-    }
+		span {
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 13px;
+			color: #ffe3ba;
+		}
+	}
 
-    .number-of-copies, .legendary-symbol {
-        width: 23px;
-        height: 100%;
-        background: #131010;
-        border: 1px solid #9FB6D7;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1px;
-        z-index: 1;    
+	.number-of-copies,
+	.legendary-symbol {
+		width: 23px;
+		height: 100%;
+		background: #131010;
+		border: 1px solid #9fb6d7;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1px;
+		z-index: 1;
 
-        .inner-border {
-            height: 100%;
-            flex-grow: 1;
-            border: 1px solid #9FB6D7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+		.inner-border {
+			height: 100%;
+			flex-grow: 1;
+			border: 1px solid #9fb6d7;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-        span {
-            font-family: Sumana;
-            font-style: normal;
-            font-weight: bold;
-            line-height: normal;
-            font-size: 15px;
-            color: #9FB6D7;
-        }
+		span {
+			font-family: Sumana;
+			font-style: normal;
+			font-weight: bold;
+			line-height: normal;
+			font-size: 15px;
+			color: #9fb6d7;
+		}
 
-        i {
-            width: 13px;
-            height: 12px;
-        }
-    }
+		i {
+			width: 13px;
+			height: 12px;
+		}
+	}
 
-    &.rare .mana-cost {
-        background: #357EE3;
-    }
-    &.epic .mana-cost {
-        background: #6D3E92;
-    }
-    &.legendary .mana-cost {
-        background: #AE7014;
-    }
+	&.rare .mana-cost {
+		background: #357ee3;
+	}
+	&.epic .mana-cost {
+		background: #6d3e92;
+	}
+	&.legendary .mana-cost {
+		background: #ae7014;
+	}
 }
