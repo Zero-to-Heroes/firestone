@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga;
@@ -14,7 +14,7 @@ declare var ga;
 	],
 	template: `
 		<div class="collection-notification">
-			<h2 class="modes">You can selectively show some card notiications</h2>
+			<h2 class="modes">You can selectively show some card notifications</h2>
 			<section class="toggle-label">
 				<form class="settings-section form-toggle">
 					<fieldset name="">
