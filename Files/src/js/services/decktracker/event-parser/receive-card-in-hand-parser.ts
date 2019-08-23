@@ -13,13 +13,6 @@ export class ReceiveCardInHandParser implements EventParser {
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.RECEIVE_CARD_IN_HAND;
-		if (gameEvent.type !== GameEvent.RECEIVE_CARD_IN_HAND) {
-			return false;
-		}
-		const cardId: string = gameEvent.cardId;
-		const controllerId: number = gameEvent.controllerId;
-		const localPlayer = gameEvent.localPlayer;
-		return cardId && controllerId === localPlayer.PlayerId;
 	}
 
 	parse(currentState: GameState, gameEvent: GameEvent): GameState {
@@ -33,10 +26,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		// First try and see if this card doesn't come from the board
 		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);
 		const newBoard = DeckManipulationHelper.removeSingleCardFromZone(deck.board, null, entityId);
-		console.log('receive_card', 'found card in deck?', card, gameEvent);
 
 		const cardData = this.allCards.getCard(cardId);
-		console.log('receive_card', 'carddata', cardData);
 		const cardWithDefault =
 			card ||
 			Object.assign(new DeckCard(), {
@@ -46,7 +37,6 @@ export class ReceiveCardInHandParser implements EventParser {
 				manaCost: cardData && cardData.cost,
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 			} as DeckCard);
-		console.log('receive_card', 'card with defaults', cardWithDefault);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousHand, cardWithDefault);
 
