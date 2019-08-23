@@ -6,4 +6,5 @@ export class GameState {
 	readonly opponentDeck: DeckState = new DeckState();
 	readonly mulliganOver: boolean = false;
 	readonly metadata: Metadata = new Metadata();
+	readonly currentTurn: number | 'mulligan' = 'mulligan';
 }

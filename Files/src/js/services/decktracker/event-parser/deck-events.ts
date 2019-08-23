@@ -18,5 +18,7 @@ export class DeckEvents {
 	public static readonly END_OF_ECHO_IN_HAND = 'END_OF_ECHO_IN_HAND';
 	public static readonly CREATE_CARD_IN_DECK = 'CREATE_CARD_IN_DECK';
 	public static readonly GAME_END = 'DECK_GAME_END';
+	public static readonly FIRST_PLAYER = 'FIRST_PLAYER';
 	public static readonly MULLIGAN_OVER = 'DECK_MULLIGAN_OVER';
+	public static readonly TURN_START = 'TURN_START';
 }

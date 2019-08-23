@@ -1,12 +1,12 @@
-import { EventParser } from './event-parser';
-import { GameEvent } from '../../../models/game-event';
-import { GameState } from '../../../models/decktracker/game-state';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckParserService } from '../deck-parser.service';
-import { AllCardsService } from '../../all-cards.service';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { DeckEvents } from './deck-events';
+import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
+import { GameEvent } from '../../../models/game-event';
+import { AllCardsService } from '../../all-cards.service';
+import { DeckParserService } from '../deck-parser.service';
+import { DeckEvents } from './deck-events';
+import { EventParser } from './event-parser';
 
 export class GameStartParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
@@ -31,6 +31,7 @@ export class GameStartParser implements EventParser {
 				board: [],
 				otherZone: [],
 				dynamicZones: [],
+				isFirstPlayer: false,
 			} as DeckState,
 			opponentDeck: {
 				deckList: [],
@@ -40,6 +41,7 @@ export class GameStartParser implements EventParser {
 				board: [],
 				otherZone: [],
 				dynamicZones: [],
+				isFirstPlayer: false,
 			} as DeckState,
 		} as GameState);
 	}

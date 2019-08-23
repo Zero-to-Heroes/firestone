@@ -23,15 +23,18 @@ import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parse
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
 import { EventParser } from './event-parser/event-parser';
+import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
+import { NewTurnParser } from './event-parser/new-turn-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
+import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
@@ -48,6 +51,7 @@ export class GameStateService {
 		private gameEvents: GameEvents,
 		// private logger: NGXLogger,
 		private dynamicZoneHelper: DynamicZoneHelperService,
+		private gameStateMetaInfos: GameStateMetaInfoService,
 		private zoneOrdering: ZoneOrderingService,
 		private allCards: AllCardsService,
 		private prefs: PreferencesService,
@@ -62,18 +66,19 @@ export class GameStateService {
 		this.buildEventEmitters();
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async event => {
-			console.log('received pref', event);
+			this.logger.debug('received pref', event);
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
-				console.log('rebuilding event emitters');
+				this.logger.debug('rebuilding event emitters');
 				this.buildEventEmitters();
 			}
 		});
 		window['deckEventBus'] = this.deckEventBus;
 		window['deckDebug'] = this;
 		window['logGameState'] = () => {
-			console.log(JSON.stringify(this.state));
+			this.logger.debug(JSON.stringify(this.state));
 		};
 		this.loadDecktrackerWindow();
+		this.loadMatchOverlayWindows();
 	}
 
 	private registerGameEvents() {
@@ -96,18 +101,18 @@ export class GameStateService {
 	private async buildEventEmitters() {
 		const result = [event => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
-		console.log('is logged in to Twitch?', prefs);
+		this.logger.debug('is logged in to Twitch?', prefs);
 		if (prefs.twitchAccessToken) {
 			result.push(event => this.twitch.emitDeckEvent(event));
 		}
 		this.eventEmitters = result;
-		// console.log('emitting twitch event');
+		// this.logger.debug('emitting twitch event');
 		// this.twitch.emitDeckEvent({ hop: "fakeEven" });
 	}
 
 	private processEvent(gameEvent: GameEvent) {
 		if (!this.state) {
-			console.error('null state before processing event', gameEvent, this.state);
+			this.logger.error('null state before processing event', gameEvent, this.state);
 			return;
 		}
 		for (const parser of this.eventParsers) {
@@ -116,15 +121,18 @@ export class GameStateService {
 					this.logger.debug('[game-state] will apply parser', parser.event());
 					const stateAfterParser = parser.parse(this.state, gameEvent);
 					if (!stateAfterParser) {
-						console.error('null state after processing event', gameEvent.type, parser, gameEvent);
+						this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
 						continue;
 					}
+					// Add information that is not linked to events, like the number of turns the
+					// card has been present in the zone
+					const stateWithMetaInfos = this.gameStateMetaInfos.addMetaInfos(stateAfterParser);
 					// Add missing info like card names, if the card added doesn't come from a deck state
 					// (like with the Chess brawl)
-					const newState = this.deckCardService.fillMissingCardInfo(stateAfterParser);
+					const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
 					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
 					const stateFromTracker = gameEvent.gameState || {};
-					console.log('getting state from tracker', stateFromTracker, gameEvent);
+					this.logger.debug('getting state from tracker', stateFromTracker, gameEvent);
 					const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
 					const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
 					this.state = Object.assign(new GameState(), newState, {
@@ -132,7 +140,7 @@ export class GameStateService {
 						opponentDeck: opponentDeckWithZonesOrdered,
 					} as GameState);
 					if (!this.state) {
-						console.error('null state after processing event', gameEvent, this.state);
+						this.logger.error('null state after processing event', gameEvent, this.state);
 						continue;
 					}
 					const emittedEvent = {
@@ -142,17 +150,24 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					console.log('emitted deck event', emittedEvent.event.name);
-					console.log(
-						'board states',
-						this.state.playerDeck.board.length,
-						this.state.opponentDeck.board.length,
-						this.state.playerDeck.board,
-						this.state.opponentDeck.board,
+					this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
+					// this.logger.debug(
+					// 	'board states',
+					// 	this.state.playerDeck.board.length,
+					// 	this.state.opponentDeck.board.length,
+					// 	this.state.playerDeck.board,
+					// 	this.state.opponentDeck.board,
+					// );
+					this.logger.debug(
+						'hand states',
+						this.state.playerDeck.hand.length,
+						this.state.opponentDeck.hand.length,
+						this.state.playerDeck.hand,
+						this.state.opponentDeck.hand,
 					);
 				}
 			} catch (e) {
-				console.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
+				this.logger.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
 			}
 		}
 	}
@@ -179,11 +194,20 @@ export class GameStateService {
 			new MinionDiedParser(this.allCards),
 			new BurnedCardParser(),
 			new SecretPlayedFromDeckParser(),
+			new NewTurnParser(),
+			new FirstPlayerParser(),
 		];
 	}
 
 	private async loadDecktrackerWindow() {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
+		const windowId = window.id;
+		await this.ow.restoreWindow(windowId);
+		await this.ow.hideWindow(windowId);
+	}
+
+	private async loadMatchOverlayWindows() {
+		const window = await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		const windowId = window.id;
 		await this.ow.restoreWindow(windowId);
 		await this.ow.hideWindow(windowId);

@@ -13,6 +13,7 @@ export class OverwolfService {
 	public static LOADING_WINDOW = 'LoadingWindow';
 	public static WELCOME_WINDOW = 'WelcomeWindow';
 	public static DECKTRACKER_WINDOW = 'DeckTrackerWindow';
+	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
 	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
 
 	public getMainWindow(): any {

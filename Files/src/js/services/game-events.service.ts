@@ -223,6 +223,8 @@ export class GameEvents {
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
 				this.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent));
+			case 'FIRST_PLAYER':
+				this.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
 				this.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));

@@ -3,6 +3,7 @@ import { HeroCard } from './hero-card';
 import { DynamicZone } from './view/dynamic-zone';
 
 export class DeckState {
+	readonly isFirstPlayer: boolean;
 	readonly deckstring?: string;
 	readonly name?: string;
 	readonly hero?: HeroCard;
