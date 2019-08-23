@@ -10,7 +10,7 @@ export class DeckManipulationHelper {
 		if (!cardId) {
 			return zone;
 		}
-		console.warn('removing a card from zone without using the entityId', cardId, entityId, zone);
+		console.debug('removing a card from zone without using the entityId', cardId, entityId, zone);
 		let hasRemovedOnce = false;
 		const result = [];
 		for (const card of zone) {
