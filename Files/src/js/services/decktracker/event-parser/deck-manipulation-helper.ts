@@ -52,7 +52,11 @@ export class DeckManipulationHelper {
 			}
 		}
 		// We explicitely said we wanted a card identified by an entityId, so we don't fallback
-		if (!found && !cardId) {
+		// It's important to distinguish between "force en entityId recognition" and "I didn't have
+		// the cardID to identify the card" (like when dealing with the opponent's deck).
+		// The second case is handled by passing an empty cardId (which is what is returned by the
+		// parser plugin)
+		if (!found && cardId == null) {
 			return null;
 		}
 		if (!found) {
