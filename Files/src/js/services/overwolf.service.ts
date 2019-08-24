@@ -153,10 +153,16 @@ export class OverwolfService {
 
 	public async restoreWindow(windowId: string) {
 		return new Promise<any>(resolve => {
-			overwolf.windows.restore(windowId, result => {
-				console.log('[overwolf-service] restored window', windowId, result);
-				resolve(result);
-			});
+			try {
+				overwolf.windows.restore(windowId, result => {
+					console.log('[overwolf-service] restored window', windowId, result);
+					resolve(result);
+				});
+			} catch (e) {
+				// This doesn't seem to prevent the window from being restored, so let's ignore it
+				console.warn('Exception while restoring window', e);
+				resolve(null);
+			}
 		});
 	}
 

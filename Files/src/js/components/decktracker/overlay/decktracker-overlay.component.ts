@@ -13,11 +13,10 @@ import {
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
-import { GameType } from '../../../models/enums/game-type';
 import { Preferences } from '../../../models/preferences';
-import { ScenarioId } from '../../../models/scenario-id';
 import { DebugService } from '../../../services/debug.service';
 import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
+import { OverlayDisplayService } from '../../../services/decktracker/overlay-display.service';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -76,13 +75,6 @@ declare var ga: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
-	// This should not be necessary, but is an additional guard
-	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = [
-		ScenarioId.DUNGEON_RUN,
-		ScenarioId.MONSTER_HUNT,
-		ScenarioId.RUMBLE_RUN,
-	];
-
 	gameState: GameState;
 	windowId: string;
 	activeTooltip: string;
@@ -107,7 +99,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private renderer: Renderer2,
-		private debugService: DebugService,
+		private displayService: OverlayDisplayService,
+		private init_DebugService: DebugService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -225,8 +218,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.useCleanMode = preferences.decktrackerSkin === 'clean';
 		this.displayMode = this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
 		console.log('switching views?', this.useCleanMode, this.displayMode);
-
-		const shouldDisplay = await this.shouldDisplayOverlay(preferences);
+		const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
 		console.log('should display overlay?', shouldDisplay, preferences);
 		if (!this.overlayDisplayed && shouldDisplay) {
 			ga('send', 'event', 'decktracker', 'show');
@@ -244,45 +236,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.scale = preferences.decktrackerScale;
 		this.onResized();
-	}
-
-	private async shouldDisplayOverlay(preferences: Preferences = null): Promise<boolean> {
-		const prefs = preferences || (await this.prefs.getPreferences());
-		console.log('merged prefs', prefs, this.gameState);
-		if (
-			!this.gameState ||
-			!this.gameState.metadata ||
-			!this.gameState.metadata.gameType ||
-			!this.gameState.playerDeck ||
-			!this.gameState.playerDeck.deckList
-		) {
-			return false;
-		}
-		switch (this.gameState.metadata.gameType as GameType) {
-			case GameType.ARENA:
-				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowArena;
-			case GameType.CASUAL:
-				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowCasual;
-			case GameType.RANKED:
-				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowRanked;
-			case GameType.VS_AI:
-				return (
-					this.gameState.playerDeck.deckList.length > 0 &&
-					prefs.decktrackerShowPractice &&
-					this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(this.gameState.metadata.scenarioId) === -1
-				);
-			case GameType.VS_FRIEND:
-				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly;
-			case GameType.FSG_BRAWL:
-			case GameType.FSG_BRAWL_1P_VS_AI:
-			case GameType.FSG_BRAWL_2P_COOP:
-			case GameType.FSG_BRAWL_VS_FRIEND:
-			case GameType.TB_1P_VS_AI:
-			case GameType.TB_2P_COOP:
-			case GameType.TAVERNBRAWL:
-				return this.gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowTavernBrawl;
-		}
-		return this.gameState.playerDeck.deckList.length > 0;
 	}
 
 	private async onResized() {

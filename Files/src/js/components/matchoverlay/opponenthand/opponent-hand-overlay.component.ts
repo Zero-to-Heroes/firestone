@@ -2,8 +2,10 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
+import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
+import { OverlayDisplayService } from '../../../services/decktracker/overlay-display.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -33,6 +35,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
+		private displayService: OverlayDisplayService,
 		private init_DebugService: DebugService,
 	) {}
 
@@ -50,6 +53,14 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				this.cdr.detectChanges();
 			}
 		});
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			console.log('received pref event', event);
+			if (event.name === PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY) {
+				this.handleDisplayPreferences(event.preferences);
+			}
+		});
+
 		if (process.env.NODE_ENV !== 'production') {
 			console.error('Should not allow debug game state from production');
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
@@ -63,6 +74,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				await this.changeWindowPosition();
 			}
 		});
+		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
 		await this.changeWindowPosition();
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -87,6 +99,21 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				console.log('received GAME_END event');
 				this.hideWindow();
 				break;
+		}
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		const displayFromPrefs = preferences.dectrackerShowOpponentTurnDraw;
+		const displayFromMatch = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
+		console.log('should display overlay?', displayFromMatch, preferences);
+		if (displayFromPrefs && displayFromMatch) {
+			this.restoreWindow();
+		} else {
+			this.hideWindow();
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
@@ -116,6 +143,10 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		const gameHeight = gameInfo.logicalHeight;
 		const height = gameHeight * dpi * 0.2;
 		await this.ow.changeWindowSize(this.windowId, width, height);
+	}
+
+	private async restoreWindow() {
+		await this.ow.restoreWindow(this.windowId);
 	}
 
 	private hideWindow() {

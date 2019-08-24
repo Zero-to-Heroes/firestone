@@ -8,6 +8,7 @@ import { OpponentCardInfoComponent } from '../../components/matchoverlay/opponen
 import { OpponentCardInfosComponent } from '../../components/matchoverlay/opponenthand/opponent-card-infos.component';
 import { OpponentHandOverlayComponent } from '../../components/matchoverlay/opponenthand/opponent-hand-overlay.component';
 import { DebugService } from '../../services/debug.service';
+import { OverlayDisplayService } from '../../services/decktracker/overlay-display.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -26,6 +27,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	imports: [BrowserModule, BrowserAnimationsModule, SharedModule, FormsModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
 	declarations: [OpponentHandOverlayComponent, OpponentCardInfosComponent, OpponentCardInfoComponent],
 	bootstrap: [OpponentHandOverlayComponent],
-	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
+	providers: [DebugService, Events, GenericIndexedDbService, OverlayDisplayService, PreferencesService, OverwolfService],
 })
 export class OpponentHandOverlayModule {}
