@@ -1,0 +1,80 @@
+.decktracker-features {
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+	overflow-y: scroll;
+
+	h2 {
+		margin-top: 15px;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 600;
+		line-height: normal;
+		font-size: 14px;
+		color: #d9c3ab;
+	}
+
+	.toggle-label {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+
+		p {
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 14px;
+			color: #d9c3ab;
+			width: 230px;
+			display: flex;
+		}
+
+		label {
+			margin-top: 15px;
+			margin-bottom: 0;
+			display: flex;
+			align-items: center;
+
+			b {
+				border-color: #d9c3ab;
+				opacity: 0.4;
+				&:before {
+					background: #d9c3ab;
+				}
+			}
+
+			&.enabled b {
+				border-color: #ffb948;
+				opacity: 1;
+				&:before {
+					background: #ffb948;
+				}
+			}
+		}
+	}
+}
+
+label {
+	.info {
+		margin-left: 5px;
+		.zth-tooltip {
+			position: absolute;
+			max-width: 200px;
+
+			p {
+				width: 200px;
+				color: #2f0d0d;
+			}
+
+			&.right {
+				top: 50%;
+				transform: translateY(-50%);
+				left: 35px;
+				right: auto;
+			}
+		}
+	}
+}

@@ -7,6 +7,7 @@ import { OverwolfService } from './overwolf.service';
 @Injectable()
 export class PreferencesService {
 	public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';
+	public static readonly DECKTRACKER_MATCH_OVERLAY_DISPLAY = 'DECKTRACKER_MATCH_OVERLAY_DISPLAY';
 	public static readonly DECKTRACKER_OVERLAY_SIZE = 'DECKTRACKER_OVERLAY_SIZE';
 	public static readonly TWITCH_CONNECTION_STATUS = 'TWITCH_CONNECTION_STATUS';
 
@@ -96,6 +97,12 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, decktrackerShowCasual: pref };
 		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+	}
+
+	public async setDectrackerShowOpponentTurnDraw(pref: boolean) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, dectrackerShowOpponentTurnDraw: pref };
+		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY);
 	}
 
 	public async setDecktrackerSkin(pref: string) {

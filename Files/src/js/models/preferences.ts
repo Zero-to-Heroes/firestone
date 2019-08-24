@@ -11,6 +11,7 @@ export class Preferences {
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
 	readonly decktrackerShowCasual: boolean = true;
+	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly decktrackerSkin: string = 'original';
 	readonly decktrackerScale: number = 100;
 	readonly overlayDisplayMode: string;

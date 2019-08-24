@@ -1,16 +1,19 @@
 .decktracker {
-    display: flex;
-    width: 100%;
+	display: flex;
+	width: 100%;
 
-    settings-decktracker-launch {
-        flex-grow: 1;
-    }
+	settings-decktracker-launch {
+		flex-grow: 1;
+	}
 
-    settings-decktracker-appearance {
-        flex-grow: 1;
-    }
+	settings-decktracker-appearance {
+		flex-grow: 1;
+	}
+	settings-decktracker-features {
+		flex-grow: 1;
+	}
 
-    settings-broadcast {
-        flex-grow: 1;
-    }
+	settings-broadcast {
+		flex-grow: 1;
+	}
 }

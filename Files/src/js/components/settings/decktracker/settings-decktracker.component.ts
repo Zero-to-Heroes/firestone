@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-decktracker',
@@ -13,6 +13,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-decktracker-launch *ngSwitchCase="'launch'"></settings-decktracker-launch>
 				<settings-decktracker-appearance *ngSwitchCase="'appearance'"></settings-decktracker-appearance>
+				<settings-decktracker-features *ngSwitchCase="'features'"></settings-decktracker-features>
 				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 			</ng-container>
 		</ul>
