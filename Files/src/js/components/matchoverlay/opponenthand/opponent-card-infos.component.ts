@@ -53,7 +53,7 @@ export class OpponentCardInfosComponent implements OnInit {
 				positionLeft: Map.of(0, 43),
 				positionTop: Map.of(0, 29),
 			} as Adjustment,
-			2,
+			2, // ok
 			{
 				positionLeft: Map.of(0, 35, 1, 51),
 				positionTop: Map.of(0, 28, 1, 29),
@@ -78,25 +78,25 @@ export class OpponentCardInfosComponent implements OnInit {
 				positionLeft: Map.of(0, 22, 1, 30, 2, 38, 3, 47, 4, 55, 5, 64),
 				positionTop: Map.of(0, 5, 1, 16, 2, 26, 3, 31, 4, 29, 5, 23),
 			} as Adjustment,
-			7,
+			7, // ok
 			{
-				positionLeft: Map.of(0, 23, 1, 18, 2, 12, 3, 7, 4, 2, 5, -3, 6, -8),
-				positionTop: Map.of(0, 11, 1, -1, 2, -13, 3, -14, 4, -9, 5, 2, 6, 11),
+				positionLeft: Map.of(0, 21, 1, 28, 2, 35, 3, 42, 4, 49, 5, 57, 6, 64),
+				positionTop: Map.of(0, 6, 1, 18, 2, 26, 3, 31, 4, 29, 5, 23, 6, 16),
 			} as Adjustment,
-			8,
+			8, // ok
 			{
-				positionLeft: Map.of(0, 29, 1, 23, 2, 17, 3, 10, 4, 4, 5, -3, 6, -9, 7, -15),
-				positionTop: Map.of(0, 25, 1, 20, 2, -7, 3, -14, 4, -15, 5, -10, 6, -4, 7, 8),
+				positionLeft: Map.of(0, 21, 1, 27, 2, 33, 3, 39, 4, 45, 5, 52, 6, 58, 7, 64),
+				positionTop: Map.of(0, 3, 1, 14, 2, 23, 3, 29, 4, 31, 5, 29, 6, 26, 7, 19),
 			} as Adjustment,
-			9,
+			9, // ok
 			{
-				positionLeft: Map.of(0, 37, 1, 29, 2, 21, 3, 15, 4, 6, 5, 0, 6, -8, 7, -15, 8, -22),
-				positionTop: Map.of(0, 17, 1, 1, 2, -4, 3, -13, 4, -15, 5, -12, 6, -7, 7, 2, 8, 22),
+				positionLeft: Map.of(0, 20, 1, 26, 2, 31, 3, 36, 4, 42, 5, 48, 6, 54, 7, 59, 8, 64),
+				positionTop: Map.of(0, 3, 1, 14, 2, 23, 3, 29, 4, 31, 5, 30, 6, 26, 7, 23, 8, 15),
 			} as Adjustment,
-			10,
+			10, // ok
 			{
-				positionLeft: Map.of(0, 43, 1, 35, 2, 27, 3, 19, 4, 11, 5, 3, 6, -5, 7, -13, 8, -22, 9, -30),
-				positionTop: Map.of(0, 30, 1, 17, 2, 3, 3, -10, 4, -12, 5, -13, 6, -12, 7, -6, 8, 1, 9, 19),
+				positionLeft: Map.of(0, 21, 1, 25, 2, 30, 3, 35, 4, 40, 5, 45, 6, 50, 7, 55, 8, 60, 9, 65),
+				positionTop: Map.of(0, 0, 1, 9, 2, 18, 3, 25, 4, 31, 5, 32, 6, 31, 7, 29, 8, 23, 9, 16),
 			} as Adjustment,
 		);
 	}
