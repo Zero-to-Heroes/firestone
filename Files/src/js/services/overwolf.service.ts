@@ -168,10 +168,16 @@ export class OverwolfService {
 
 	public hideWindow(windowId: string) {
 		return new Promise<any>(resolve => {
-			overwolf.windows.hide(windowId, result => {
-				console.log('[overwolf-service] hid window', windowId, result);
-				resolve(result);
-			});
+			try {
+				overwolf.windows.hide(windowId, result => {
+					console.log('[overwolf-service] hid window', windowId, result);
+					resolve(result);
+				});
+			} catch (e) {
+				// This doesn't seem to prevent the window from being restored, so let's ignore it
+				console.warn('Exception while restoring window', e);
+				resolve(null);
+			}
 		});
 	}
 
