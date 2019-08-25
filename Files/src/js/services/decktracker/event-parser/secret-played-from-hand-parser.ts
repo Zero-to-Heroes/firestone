@@ -16,9 +16,6 @@ export class SecretPlayedFromHandParser implements EventParser {
 	}
 
 	parse(currentState: GameState, gameEvent: GameEvent): GameState {
-		if (currentState.playerDeck.deckList.length === 0) {
-			return currentState;
-		}
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
