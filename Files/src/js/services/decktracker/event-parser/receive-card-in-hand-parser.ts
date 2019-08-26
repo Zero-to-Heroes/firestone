@@ -24,7 +24,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);
 		const newBoard = DeckManipulationHelper.removeSingleCardFromZone(deck.board, null, entityId);
 
-		const cardData = this.allCards.getCard(cardId);
+		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
 			card ||
 			Object.assign(new DeckCard(), {
