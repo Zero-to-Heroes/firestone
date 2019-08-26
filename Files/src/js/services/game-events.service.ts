@@ -132,6 +132,13 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'MAIN_STEP_READY':
+				this.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.MAIN_STEP_READY,
+					} as GameEvent),
+				);
+				break;
 			case 'RUMBLE_RUN_STEP':
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {

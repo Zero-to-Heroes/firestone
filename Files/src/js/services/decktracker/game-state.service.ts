@@ -26,6 +26,7 @@ import { EventParser } from './event-parser/event-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
+import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
@@ -177,6 +178,7 @@ export class GameStateService {
 			new GameStartParser(this.deckParser, this.allCards),
 			new MatchMetadataParser(this.deckParser, this.allCards),
 			new MulliganOverParser(this.deckParser, this.allCards),
+			new MainStepReadyParser(this.deckParser, this.allCards),
 			new CardDrawParser(this.deckParser, this.allCards),
 			new ReceiveCardInHandParser(this.deckParser, this.allCards),
 			new CardBackToDeckParser(this.deckParser, this.allCards),

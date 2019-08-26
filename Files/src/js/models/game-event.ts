@@ -7,6 +7,7 @@ export class GameEvent {
 	public static readonly MULLIGAN_INPUT = 'MULLIGAN_INPUT';
 	public static readonly MULLIGAN_INITIAL_OPTION = 'MULLIGAN_INITIAL_OPTION';
 	public static readonly MULLIGAN_DONE = 'MULLIGAN_DONE';
+	public static readonly MAIN_STEP_READY = 'MAIN_STEP_READY';
 	public static readonly TURN_START = 'TURN_START';
 	public static readonly GAME_RESULT = 'GAME_RESULT';
 	public static readonly MAYBE_DUNGEON_INFO_PICK = 'MAYBE_DUNGEON_INFO_PICK';
