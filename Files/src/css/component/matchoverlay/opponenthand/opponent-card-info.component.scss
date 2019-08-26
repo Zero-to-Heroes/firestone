@@ -2,23 +2,24 @@
 	margin-top: -4px;
 	margin-left: -4px;
 }
+
 .opponent-card-info {
-	background: #090a0d;
+	background: #07081f;
 	padding: 5px;
-	width: 30px;
-	height: 30px;
+	width: 25px;
+	height: 25px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	border-radius: 50%;
-	border: 1px solid #9fb6d7;
+	border: 2px solid #9fb6d7;
 }
 
 .turn-number {
-	font-family: Open Sans;
+	font-family: Sumana;
 	font-style: normal;
 	font-weight: bold;
 	line-height: normal;
-	font-size: 13px;
-	color: #ffe3ba;
+	font-size: 15px;
+	color: #9fb6d7;
 }
