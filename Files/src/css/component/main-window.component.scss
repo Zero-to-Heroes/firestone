@@ -131,6 +131,8 @@ body {
 			.controls {
 				height: 30px;
 				display: flex;
+				color: $green01;
+				--icon-color: $green01;
 
 				.close-button:hover {
 					background: $grey01;
@@ -223,6 +225,7 @@ tooltips {
 		button,
 		a {
 			color: #cb9fd7;
+			--icon-color: #cb9fd7;
 
 			&:hover {
 				background: #4b3052;
