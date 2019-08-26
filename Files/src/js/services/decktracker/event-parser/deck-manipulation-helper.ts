@@ -37,40 +37,61 @@ export class DeckManipulationHelper {
 	}
 
 	public static findCardInZone(zone: readonly DeckCard[], cardId: string, entityId: number): DeckCard {
-		let found;
-		if (!entityId && cardId) {
+		// Explicit search by entity id
+		if (entityId) {
+			const found = zone.find(card => card.entityId === entityId);
+			if (!found) {
+				// Card hasn't been found, so we provide a default return
+				if (cardId) {
+					const idByCardId = zone.find(card => card.cardId === cardId && !card.entityId);
+					return Object.assign(new DeckCard(), idByCardId, {
+						entityId: entityId,
+						cardId: cardId,
+					} as DeckCard);
+				} else if (cardId == null) {
+					// We explicitely said we wanted a card identified by an entityId, so we don't fallback
+					// It's important to distinguish between "force en entityId recognition" and "I didn't have
+					// the cardID to identify the card" (like when dealing with the opponent's deck).
+					// The second case is handled by passing an empty cardId (which is what is returned by the
+					// parser plugin)
+					return null;
+				} else {
+					// Empty card Id
+					return Object.assign(new DeckCard(), {
+						entityId: entityId,
+					} as DeckCard);
+				}
+			}
+			return found;
+		}
+		// Search by cardId only
+		if (cardId) {
 			console.error('trying to get a card without providing an entityId', cardId, zone);
-			found = zone.find(card => card.cardId === cardId);
-		} else if (entityId) {
-			found = zone.find(card => card.entityId === entityId);
-			if (!found && cardId) {
-				found = zone.find(card => card.cardId === cardId && !card.entityId);
-				found = Object.assign(new DeckCard(), found, {
-					entityId: entityId,
+			const found = zone.find(card => card.cardId === cardId);
+			if (!found) {
+				console.log('could not find card, creating card with default template', cardId, entityId);
+				return Object.assign(new DeckCard(), {
 					cardId: cardId,
+					entityId: entityId,
 				} as DeckCard);
 			}
+			return found;
 		}
-		// We explicitely said we wanted a card identified by an entityId, so we don't fallback
-		// It's important to distinguish between "force en entityId recognition" and "I didn't have
-		// the cardID to identify the card" (like when dealing with the opponent's deck).
-		// The second case is handled by passing an empty cardId (which is what is returned by the
-		// parser plugin)
-		if (!found && cardId == null) {
-			return null;
-		}
-		if (!found) {
-			console.error('Could not find card in zone', cardId, zone);
-			found = zone.find(card => !card.cardId);
-			console.log('defaulting to getting a card without cardId', found);
-		}
-		if (!found) {
-			found = Object.assign(new DeckCard(), {
-				cardId: cardId,
-				entityId: entityId,
-			} as DeckCard);
-			console.log('could not find card, creating card with default template', found);
-		}
-		return found;
+		console.error('invalid call to findCard', entityId, cardId);
+		return new DeckCard();
+
+		// if (!found) {
+		// 	console.error('Could not find card in zone', cardId, entityId, zone);
+		// 	found = zone.find(card => !card.cardId);
+		// 	console.log('defaulting to getting a card without cardId', found);
+		// }
+		// if (!found) {
+		// 	found = Object.assign(new DeckCard(), {
+		// 		cardId: cardId,
+		// 		entityId: entityId,
+		// 	} as DeckCard);
+		// 	console.log('could not find card, creating card with default template', found);
+		// }
+		// return found;
 	}
 }
