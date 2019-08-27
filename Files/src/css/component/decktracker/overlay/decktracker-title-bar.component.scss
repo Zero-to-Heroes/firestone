@@ -1,34 +1,35 @@
 .title-bar {
-    height: 40px;
-    display: flex;
-    align-items: center;
+	height: 40px;
+	display: flex;
+	align-items: center;
 
-    .logo {
-        width: 73px;
-        height: 20px;
-        margin-left: 10px;
-        --icon-color: #FFB948;
-    }
+	.logo {
+		width: 73px;
+		height: 20px;
+		margin-left: 10px;
+		--icon-color: #ffb948;
+	}
 
-    .controls {
-        display: flex;
-        margin-left: auto;
-        // To avoid having the golden corners interfere with the mouse
-        z-index: 1;
+	.controls {
+		display: flex;
+		margin-left: auto;
+		// To avoid having the golden corners interfere with the mouse
+		z-index: 1;
 
-        ::ng-deep button {
-            color: #9FB6D7;
+		::ng-deep button {
+			--icon-color: #9fb6d7;
+			color: #9fb6d7;
 
-            &:hover {
-                background: #303352;
-            }
-        }
+			&:hover {
+				background: #303352;
+			}
+		}
 
-        ::ng-deep control-close button {
-            &:hover {
-                color: #101530;
-                background: #9FB6D7;
-            }
-        }
-    }
+		::ng-deep control-close button {
+			&:hover {
+				color: #101530;
+				background: #9fb6d7;
+			}
+		}
+	}
 }
