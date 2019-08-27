@@ -84,13 +84,28 @@
 		color: #d9c3ab;
 		margin: 0;
 		margin-right: 15px;
+
+		&.disabled {
+			span,
+			.info > svg {
+				opacity: 0.5;
+			}
+		}
 	}
 
 	.scale-slider {
 		width: 200px;
+
+		&:disabled {
+			opacity: 0.5;
+
+			&::-webkit-slider-thumb {
+				cursor: auto;
+			}
+		}
 	}
 
-	&:hover .scale-slider {
+	&:hover .scale-slider:not(:disabled) {
 		opacity: 1;
 	}
 }

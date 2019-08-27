@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/internal/operators';
+import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga;
@@ -72,15 +73,19 @@ declare var ga;
 				</label>
 			</form>
 			<div class="scale-form">
-				<label for="decktracker-scale">
-					Change size
+				<label for="decktracker-scale" [ngClass]="{ 'disabled': !isScaleAvailable }">
+					<span>Change size</span>
 					<i class="info">
 						<svg>
 							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
 						</svg>
 						<div class="zth-tooltip right">
 							<p>
-								Change the tracker size (best to use it while in-game to see the effects as you change it)
+								Change the tracker size{{
+									isScaleAvailable
+										? ''
+										: '. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
+								}}
 							</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
 								<polygon points="0,0 8,-9 16,0" />
@@ -89,6 +94,7 @@ declare var ga;
 					</i>
 				</label>
 				<input
+					[disabled]="!isScaleAvailable"
 					type="range"
 					name="decktracker-scale"
 					class="scale-slider"
@@ -110,10 +116,13 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	trackerScale: number;
 	trackerScaleChanged: Subject<number> = new Subject<number>();
 
+	isScaleAvailable = false;
+
 	private skinFormSubscription: Subscription;
 	private trackerScaleFormSubscription: Subscription;
+	private displaySubscription: Subscription;
 
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
+	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
 		this.cdr.detach();
 		this.loadDefaultValues();
 		this.skinFormSubscription = this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value => this.changeSkinSettings(value));
@@ -130,11 +139,18 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 					this.cdr.detectChanges();
 				}
 			});
+
+		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
+			console.log('should display', shouldDisplay);
+			this.isScaleAvailable = shouldDisplay;
+		});
 	}
 
 	ngOnDestroy() {
 		this.skinFormSubscription.unsubscribe();
 		this.trackerScaleFormSubscription.unsubscribe();
+		this.displaySubscription.unsubscribe();
 	}
 
 	changeSkinSettings(newSkin: string) {
