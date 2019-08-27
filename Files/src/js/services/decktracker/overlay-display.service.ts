@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameType } from '../../models/enums/game-type';
 import { Preferences } from '../../models/preferences';
 import { ScenarioId } from '../../models/scenario-id';
+import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
+import { DeckEvents } from './event-parser/deck-events';
 
 @Injectable()
-export class OverlayDisplayService {
+export class OverlayDisplayService implements OnDestroy {
 	// This should not be necessary, but is an additional guard
 	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = [
 		ScenarioId.DUNGEON_RUN,
@@ -14,29 +17,75 @@ export class OverlayDisplayService {
 		ScenarioId.RUMBLE_RUN,
 	];
 
-	constructor(private prefs: PreferencesService) {}
+	private decktrackerDisplayEventBus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+	private gameState: GameState;
 
-	public async shouldDisplayOverlay(gameState: GameState, preferences: Preferences = null): Promise<boolean> {
+	private preferencesSubscription: Subscription;
+	private deckSubscription: Subscription;
+
+	constructor(private prefs: PreferencesService, private ow: OverwolfService) {
+		this.init();
+		window['decktrackerDisplayEventBus'] = this.decktrackerDisplayEventBus;
+	}
+
+	ngOnDestroy(): void {
+		this.preferencesSubscription.unsubscribe();
+		this.deckSubscription.unsubscribe();
+	}
+
+	private init() {
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+				this.handleDisplayPreferences(this.gameState, event.preferences);
+			}
+		});
+		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
+		this.deckSubscription = deckEventBus.subscribe(async event => {
+			this.gameState = event.state;
+			await this.processEvent(event.event);
+		});
+	}
+
+	private async processEvent(event) {
+		switch (event.name) {
+			case DeckEvents.MATCH_METADATA:
+				console.log('received MATCH_METADATA event');
+				this.handleDisplayPreferences(this.gameState);
+				break;
+			case DeckEvents.GAME_END:
+				console.log('received GAME_END event');
+				this.decktrackerDisplayEventBus.next(false);
+				break;
+		}
+	}
+
+	private async handleDisplayPreferences(gameState: GameState, preferences: Preferences = null): Promise<void> {
 		const prefs = preferences || (await this.prefs.getPreferences());
-		console.log('merged prefs', prefs, gameState);
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck || !gameState.playerDeck.deckList) {
-			return false;
+			this.decktrackerDisplayEventBus.next(false);
+			return;
 		}
 		switch (gameState.metadata.gameType as GameType) {
 			case GameType.ARENA:
-				return gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowArena;
+				this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowArena);
+				return;
 			case GameType.CASUAL:
-				return gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowCasual;
+				this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowCasual);
+				return;
 			case GameType.RANKED:
-				return gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowRanked;
+				this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowRanked);
+				return;
 			case GameType.VS_AI:
-				return (
+				this.decktrackerDisplayEventBus.next(
 					gameState.playerDeck.deckList.length > 0 &&
-					prefs.decktrackerShowPractice &&
-					this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(gameState.metadata.scenarioId) === -1
+						prefs.decktrackerShowPractice &&
+						this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(gameState.metadata.scenarioId) === -1,
 				);
+				return;
 			case GameType.VS_FRIEND:
-				return gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly;
+				this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowFriendly);
+				return;
 			case GameType.FSG_BRAWL:
 			case GameType.FSG_BRAWL_1P_VS_AI:
 			case GameType.FSG_BRAWL_2P_COOP:
@@ -44,8 +93,10 @@ export class OverlayDisplayService {
 			case GameType.TB_1P_VS_AI:
 			case GameType.TB_2P_COOP:
 			case GameType.TAVERNBRAWL:
-				return gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowTavernBrawl;
+				this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0 && prefs.decktrackerShowTavernBrawl);
+				return;
 		}
-		return gameState.playerDeck.deckList.length > 0;
+		this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0);
+		return;
 	}
 }

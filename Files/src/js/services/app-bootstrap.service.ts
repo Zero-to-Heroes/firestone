@@ -11,6 +11,7 @@ import { PackStatsService } from './collection/pack-stats.service';
 import { DebugService } from './debug.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameStateService } from './decktracker/game-state.service';
+import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
@@ -51,6 +52,7 @@ export class AppBootstrapService {
 		private deckParserService: DeckParserService,
 		private gameStateService: GameStateService,
 		private settingsCommunicationService: SettingsCommunicationService,
+		private init_decktrackerDisplayService: OverlayDisplayService,
 	) {}
 
 	public async init() {

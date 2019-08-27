@@ -9,7 +9,6 @@ import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { DeckTrackerOverlayComponent } from '../../components/decktracker/overlay/decktracker-overlay.component';
 import { DebugService } from '../../services/debug.service';
-import { OverlayDisplayService } from '../../services/decktracker/overlay-display.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -40,6 +39,6 @@ console.log('version is ' + process.env.APP_VERSION);
 	],
 	declarations: [],
 	bootstrap: [DeckTrackerOverlayComponent],
-	providers: [DebugService, Events, GenericIndexedDbService, OverlayDisplayService, PreferencesService, OverwolfService],
+	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })
 export class DeckTrackerModule {}

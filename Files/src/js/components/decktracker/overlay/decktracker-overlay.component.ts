@@ -11,12 +11,10 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
-import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
-import { OverlayDisplayService } from '../../../services/decktracker/overlay-display.service';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -90,6 +88,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	private hideTooltipSubscription: Subscription;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
+	private displaySubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
@@ -99,7 +98,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private renderer: Renderer2,
-		private displayService: OverlayDisplayService,
 		private init_DebugService: DebugService,
 	) {}
 
@@ -145,21 +143,24 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			console.log('received deck event', event.event);
 			this.gameState = event.state;
-			await this.processEvent(event.event);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
+		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		this.displaySubscription = displayEventBus.asObservable().subscribe(event => {
+			if (event) {
+				this.restoreWindow();
+			} else {
+				this.hideWindow();
+			}
+		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			console.log('received pref event', event);
-			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
-				this.handleDisplayPreferences(event.preferences);
-			} else if (event.name === PreferencesService.DECKTRACKER_OVERLAY_SIZE) {
+			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_SIZE) {
 				this.handleDisplaySize(event.preferences);
 			}
 		});
-
 		this.handleDisplayPreferences();
 		this.handleDisplaySize();
 		if (process.env.NODE_ENV !== 'production') {
@@ -167,7 +168,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
 			console.log('game state', this.gameState, JSON.stringify(this.gameState));
 		}
-
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
@@ -188,6 +188,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.hideTooltipSubscription.unsubscribe();
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
+		this.displaySubscription.unsubscribe();
 	}
 
 	@HostListener('mousedown')
@@ -199,40 +200,18 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.prefs.setOverlayDisplayMode(pref);
 	}
 
-	private async processEvent(event) {
-		switch (event.name) {
-			case DeckEvents.MATCH_METADATA:
-				console.log('received MATCH_METADATA event');
-				this.handleDisplayPreferences();
-				break;
-			case DeckEvents.GAME_END:
-				console.log('received GAME_END event');
-				this.hideWindow();
-				break;
-		}
-	}
-
 	private async handleDisplayPreferences(preferences: Preferences = null) {
-		console.log('retrieving preferences');
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.useCleanMode = preferences.decktrackerSkin === 'clean';
 		this.displayMode = this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
-		console.log('switching views?', this.useCleanMode, this.displayMode);
-		const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
-		console.log('should display overlay?', shouldDisplay, preferences);
-		if (!this.overlayDisplayed && shouldDisplay) {
-			ga('send', 'event', 'decktracker', 'show');
-			this.restoreWindow();
-		} else if (this.overlayDisplayed && !shouldDisplay) {
-			this.hideWindow();
-		}
+		// console.log('switching views?', this.useCleanMode, this.displayMode);
+		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	private async handleDisplaySize(preferences: Preferences = null) {
-		console.log('retrieving preferences');
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.scale = preferences.decktrackerScale;
 		this.onResized();
@@ -250,6 +229,10 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	private async restoreWindow() {
 		await this.ow.restoreWindow(this.windowId);
 		await this.onResized();
+	}
+
+	private hideWindow() {
+		this.ow.hideWindow(this.windowId);
 	}
 
 	private async changeWindowPosition(): Promise<void> {
@@ -274,9 +257,5 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 		const gameHeight = gameInfo.logicalHeight;
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
-	}
-
-	private hideWindow() {
-		this.ow.hideWindow(this.windowId);
 	}
 }

@@ -1,11 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, ViewRef } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
-import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
-import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
-import { OverlayDisplayService } from '../../../services/decktracker/overlay-display.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -26,16 +23,19 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
 	windowId: string;
 
+	private displayFromMatch = false;
+	private displayFromPrefs = false;
+
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
+	private displaySubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
-		private displayService: OverlayDisplayService,
 		private init_DebugService: DebugService,
 	) {}
 
@@ -46,18 +46,28 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			// this.logger.debug('received deck event', event.event, event.state);
 			this.gameState = event.state;
-			await this.processEvent(event.event);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
+		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
+			this.displayFromMatch = shouldDisplay;
+			this.handleDisplayPreferences();
+		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			console.log('received pref event', event);
 			if (event.name === PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY) {
-				this.handleDisplayPreferences(event.preferences);
+				this.displayFromPrefs = event.preferences.dectrackerShowOpponentTurnDraw;
+				this.handleDisplayPreferences();
+			}
+		});
+		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if (res && res.resolutionChanged) {
+				this.logger.debug('[decktracker-overlay] received new game info', res);
+				await this.changeWindowSize();
+				await this.changeWindowPosition();
 			}
 		});
 
@@ -66,14 +76,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
 			console.log('game state', this.gameState, JSON.stringify(this.gameState));
 		}
-
-		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			if (res && res.resolutionChanged) {
-				this.logger.debug('[decktracker-overlay] received new game info', res);
-				await this.changeWindowSize();
-				await this.changeWindowPosition();
-			}
-		});
+		this.displayFromPrefs = (await this.prefs.getPreferences()).dectrackerShowOpponentTurnDraw;
 		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
 		await this.changeWindowPosition();
@@ -87,33 +90,14 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
+		this.displaySubscription.unsubscribe();
 	}
 
-	private async processEvent(event) {
-		switch (event.name) {
-			case DeckEvents.GAME_START:
-				console.log('received MATCH_METADATA event');
-				this.ow.restoreWindow(this.windowId);
-				break;
-			case DeckEvents.GAME_END:
-				console.log('received GAME_END event');
-				this.hideWindow();
-				break;
-		}
-	}
-
-	private async handleDisplayPreferences(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		const displayFromPrefs = preferences.dectrackerShowOpponentTurnDraw;
-		const displayFromMatch = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
-		console.log('should display overlay?', displayFromMatch, preferences);
-		if (displayFromPrefs && displayFromMatch) {
+	private async handleDisplayPreferences() {
+		if (this.displayFromPrefs && this.displayFromMatch) {
 			this.restoreWindow();
 		} else {
 			this.hideWindow();
-		}
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
 		}
 	}
 

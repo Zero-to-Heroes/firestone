@@ -17,6 +17,7 @@ import { DeckParserService } from '../../services/decktracker/deck-parser.servic
 import { DynamicZoneHelperService } from '../../services/decktracker/dynamic-zone-helper.service';
 import { GameStateMetaInfoService } from '../../services/decktracker/game-state-meta-info.service';
 import { GameStateService } from '../../services/decktracker/game-state.service';
+import { OverlayDisplayService } from '../../services/decktracker/overlay-display.service';
 import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
 import { DevService } from '../../services/dev.service';
 import { GameEvents } from '../../services/game-events.service';
@@ -72,6 +73,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementStatsService,
 		AchievementsVideoCaptureService,
 
+		OverlayDisplayService,
 		DeckCardService,
 		DeckParserService,
 		GameStateService,
