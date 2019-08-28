@@ -1,17 +1,17 @@
 import {
-	Component,
-	ChangeDetectionStrategy,
-	Input,
-	HostListener,
-	ElementRef,
 	AfterViewInit,
-	ViewRef,
+	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	Output,
+	Component,
+	ElementRef,
 	EventEmitter,
+	HostListener,
+	Input,
+	Output,
+	ViewRef,
 } from '@angular/core';
-import { DeckState } from '../../../models/decktracker/deck-state';
 import { IOption } from 'ng-select';
+import { DeckState } from '../../../models/decktracker/deck-state';
 import { Events } from '../../../services/events.service';
 
 @Component({
@@ -105,7 +105,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 	}
 
 	onScroll(event) {
-		console.log('scrolling');
+		// console.log('scrolling');
 		// Force immediate clean of the tooltip
 		this.events.broadcast(Events.DECK_HIDE_TOOLTIP, 0);
 	}
