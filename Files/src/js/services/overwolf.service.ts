@@ -216,9 +216,15 @@ export class OverwolfService {
 
 	public async getRunningGameInfo() {
 		return new Promise<any>(resolve => {
-			overwolf.games.getRunningGameInfo((res: any) => {
-				resolve(res);
-			});
+			try {
+				overwolf.games.getRunningGameInfo((res: any) => {
+					resolve(res);
+				});
+			} catch (e) {
+				// This doesn't seem to prevent the window from being restored, so let's ignore it
+				console.warn('Exception while getting running game info', e);
+				resolve(null);
+			}
 		});
 	}
 

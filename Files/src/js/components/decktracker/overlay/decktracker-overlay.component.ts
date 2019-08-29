@@ -159,6 +159,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_SIZE) {
 				this.handleDisplaySize(event.preferences);
+			} else if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+				this.handleDisplayPreferences(event.preferences);
 			}
 		});
 		this.handleDisplayPreferences();
