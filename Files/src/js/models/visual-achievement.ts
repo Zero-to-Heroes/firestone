@@ -1,3 +1,4 @@
+import { AchievementStatus } from './achievement/achievement-status.type';
 import { ReplayInfo } from './replay-info';
 
 export class VisualAchievement {
@@ -32,9 +33,13 @@ export class VisualAchievement {
 		this.replayInfo = replayInfo;
 	}
 
-	public isAchieved(): boolean {
-		const totalAchieved = this.completionSteps.map(step => step.numberOfCompletions).reduce((a, b) => a + b, 0);
-		return totalAchieved > 0;
+	public achievementStatus(): AchievementStatus {
+		if (this.completionSteps.every(step => step.numberOfCompletions > 0)) {
+			return 'completed';
+		} else if (this.completionSteps.some(step => step.numberOfCompletions > 0)) {
+			return 'partially-completed';
+		}
+		return 'missing';
 	}
 }
 

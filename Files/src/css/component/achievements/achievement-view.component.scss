@@ -36,7 +36,7 @@
 		position: absolute;
 		bottom: -2px;
 		right: 0;
-		color: #7D5A87;
+		color: #7d5a87;
 		font-family: Open Sans;
 		font-style: normal;
 		font-weight: normal;
@@ -53,17 +53,17 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		
+
 		i {
-			--icon-color: #CB9FD7;
+			--icon-color: #cb9fd7;
 
 			&.open {
 				transform: scaleY(-1);
-			}		
+			}
 		}
 
 		&:hover {
-			background-color: #4B3052;
+			background-color: #4b3052;
 		}
 	}
 
@@ -76,7 +76,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: #D9C3AB;
+		color: #d9c3ab;
 		padding-right: 15px;
 		border-right: 1px solid;
 		margin-right: 15px;
@@ -92,24 +92,24 @@
 		}
 
 		i {
-			--icon-color: #D9C3AB;
+			--icon-color: #d9c3ab;
 		}
 	}
 
 	&.missing {
 		.achievement-name {
-			color: #CB9FD7;
+			color: #cb9fd7;
 		}
 		.achievement-text {
-			color: #7D5A87;
+			color: #7d5a87;
 		}
 		::ng-deep .completion-progress .completion-step i {
-			--icon-color: #7D5A87;
+			--icon-color: #7d5a87;
 		}
 		.recordings {
-			color: #7D5A87;
+			color: #7d5a87;
 			i {
-				--icon-color: #7D5A87;
+				--icon-color: #7d5a87;
 			}
 		}
 	}

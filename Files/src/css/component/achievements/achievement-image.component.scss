@@ -1,59 +1,66 @@
 .achievement-image-container {
-    display: flex;
-    margin-right: 20px;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    height: 100%;
+	display: flex;
+	margin-right: 20px;
+	justify-content: center;
+	align-items: center;
+	position: relative;
+	height: 100%;
 
-    .overlay {
-        display: none;
-    }
+	.overlay {
+		display: none;
+	}
 
 	svg {
 		fill: transparent;
 	}
-    
-    .real-achievement {
-        width: 100%;
-        margin: auto;
-        position: absolute;
-        clip-path: ellipse(34% 48% at 50% 50%);
 
-        &.spell {
-            width: 120%;
-            clip-path: ellipse(28% 40% at 50% 50%);
-        }
-    }
-    
-    .frame {
-        --icon-color: #ffb948;
-        --icon-color-secondary: #8e5b23;
-    }
-    
-    .placeholder {
-        position: absolute;
-        margin: auto;
-    }
+	.real-achievement {
+		width: 100%;
+		margin: auto;
+		position: absolute;
+		clip-path: ellipse(34% 48% at 50% 50%);
+
+		&.spell {
+			width: 120%;
+			clip-path: ellipse(28% 40% at 50% 50%);
+		}
+	}
+
+	.frame {
+		--icon-color: #ffb948;
+		--icon-color-secondary: #8e5b23;
+	}
+
+	.placeholder {
+		position: absolute;
+		margin: auto;
+	}
 }
 
 .missing .achievement-image-container {
-    .real-achievement {
-        // https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
-        filter: grayscale(1);
-    }
-    .overlay {
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        margin: auto;
-        background: #5A116C;
-        opacity: 0.5;
-        clip-path: ellipse(34% 51% at 50% 50%);    
-    }
-    .frame {
-        --icon-color: #CB9FD7;
-        --icon-color-secondary: #7D5A87;
-    }
+	.real-achievement {
+		// https://stackoverflow.com/questions/17357125/css-filter-as-a-color-modifier-for-one-image
+		filter: grayscale(1);
+	}
+	.overlay {
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		margin: auto;
+		background: #5a116c;
+		opacity: 0.5;
+		clip-path: ellipse(34% 51% at 50% 50%);
+	}
+	.frame {
+		--icon-color: #cb9fd7;
+		--icon-color-secondary: #7d5a87;
+	}
+}
+
+.partially-completed .achievement-image-container {
+	.frame {
+		--icon-color: #cb9fd7;
+		--icon-color-secondary: #7d5a87;
+	}
 }

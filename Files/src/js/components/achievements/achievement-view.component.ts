@@ -1,26 +1,27 @@
 import {
-	Component,
-	Input,
-	ChangeDetectionStrategy,
-	ElementRef,
-	ChangeDetectorRef,
-	EventEmitter,
 	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	Input,
 	ViewRef,
 } from '@angular/core';
-import { VisualAchievement } from '../../models/visual-achievement';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { VisualAchievement } from '../../models/visual-achievement';
+import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievement-view',
 	styleUrls: [`../../../css/component/achievements/achievement-view.component.scss`],
 	template: `
-		<div class="achievement-container" [ngClass]="{ 'missing': !achieved }">
+		<div class="achievement-container {{ achievementStatus }}">
 			<div class="stripe" (mousedown)="toggleRecordings()">
-				<achievement-image [imageId]="_achievement.cardId" [imageType]="_achievement.cardType"> </achievement-image>
+				<achievement-image [imageId]="_achievement.cardId" [imageType]="_achievement.cardType"></achievement-image>
 				<div class="achievement-body">
 					<div class="text">
 						<div class="achievement-name">{{ _achievement.name }}</div>
@@ -59,8 +60,8 @@ export class AchievementViewComponent implements AfterViewInit {
 	_achievement: VisualAchievement;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 
+	achievementStatus: AchievementStatus;
 	achievementText: string;
-	achieved = false;
 	completionDate: string;
 	numberOfRecordings: number;
 
@@ -76,7 +77,7 @@ export class AchievementViewComponent implements AfterViewInit {
 	@Input() set achievement(achievement: VisualAchievement) {
 		this._achievement = achievement;
 		this.completionDate = undefined;
-		this.achieved = this._achievement.isAchieved();
+		this.achievementStatus = this._achievement.achievementStatus();
 		this.achievementText = this._achievement.text;
 		this.numberOfRecordings = this._achievement.replayInfo.length;
 		if (this._achievement.replayInfo.length > 0) {
