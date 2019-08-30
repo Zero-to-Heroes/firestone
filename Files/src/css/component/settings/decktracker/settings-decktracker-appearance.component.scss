@@ -98,8 +98,12 @@
 
 		&:disabled {
 			opacity: 0.5;
+			cursor: auto;
 
 			&::-webkit-slider-thumb {
+				cursor: auto;
+			}
+			&::-webkit-slider-runnable-track {
 				cursor: auto;
 			}
 		}
