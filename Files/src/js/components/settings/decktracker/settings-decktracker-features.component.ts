@@ -46,6 +46,38 @@ declare var ga;
 							</label>
 						</div>
 					</fieldset>
+					<fieldset name="">
+						<div class="form-section">
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showOpponentGuess"
+								name=""
+								id="a-02"
+								(change)="toggleOpponentGuess()"
+							/>
+							<label for="a-02" [ngClass]="{ 'enabled': showOpponentGuess }">
+								<p class="settings-p">
+									Opponent guessed cards
+									<i class="info">
+										<svg>
+											<use xlink:href="/Files/assets/svg/sprite.svg#info" />
+										</svg>
+										<div class="zth-tooltip right">
+											<p>
+												Show what card is in the opponent's hand when we know it (after it has been sent back to
+												their hand with a Sap for instance)
+											</p>
+											<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+												<polygon points="0,0 8,-9 16,0" />
+											</svg>
+										</div>
+									</i>
+								</p>
+								<b></b>
+							</label>
+						</div>
+					</fieldset>
 				</form>
 			</section>
 		</div>
@@ -54,6 +86,7 @@ declare var ga;
 })
 export class SettingsDecktrackerFeaturesComponent {
 	showOpponentTurnDraw: boolean;
+	showOpponentGuess: boolean;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef) {
 		this.cdr.detach();
@@ -68,9 +101,18 @@ export class SettingsDecktrackerFeaturesComponent {
 		}
 	}
 
+	toggleOpponentGuess() {
+		this.showOpponentGuess = !this.showOpponentGuess;
+		this.prefs.setDectrackerShowOpponentGuess(this.showOpponentGuess);
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.showOpponentTurnDraw = prefs.dectrackerShowOpponentTurnDraw;
+		this.showOpponentGuess = prefs.dectrackerShowOpponentGuess;
 		console.log('loaded prefs', prefs);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

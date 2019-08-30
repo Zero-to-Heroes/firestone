@@ -105,6 +105,12 @@ export class PreferencesService {
 		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY);
 	}
 
+	public async setDectrackerShowOpponentGuess(pref: boolean) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, dectrackerShowOpponentGuess: pref };
+		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY);
+	}
+
 	public async setDecktrackerSkin(pref: string) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, decktrackerSkin: pref };
