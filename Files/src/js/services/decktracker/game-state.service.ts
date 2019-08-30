@@ -159,13 +159,13 @@ export class GameStateService {
 					// 	this.state.playerDeck.board,
 					// 	this.state.opponentDeck.board,
 					// );
-					this.logger.debug(
-						'hand states',
-						this.state.playerDeck.hand.length,
-						this.state.opponentDeck.hand.length,
-						this.state.playerDeck.hand,
-						this.state.opponentDeck.hand,
-					);
+					// this.logger.debug(
+					// 	'hand states',
+					// 	this.state.playerDeck.hand.length,
+					// 	this.state.opponentDeck.hand.length,
+					// 	this.state.playerDeck.hand,
+					// 	this.state.opponentDeck.hand,
+					// );
 				}
 			} catch (e) {
 				this.logger.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
