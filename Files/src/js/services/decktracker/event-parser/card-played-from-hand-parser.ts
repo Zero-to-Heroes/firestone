@@ -21,6 +21,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = DeckManipulationHelper.findCardInZone(deck.hand, cardId, entityId);
+		console.log('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
 
 		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(deck.hand, cardId, entityId);
 		// Only minions end up on the board
