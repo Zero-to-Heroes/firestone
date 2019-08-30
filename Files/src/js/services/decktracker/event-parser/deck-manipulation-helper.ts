@@ -62,6 +62,14 @@ export class DeckManipulationHelper {
 					} as DeckCard);
 				}
 			}
+			// Fill the card ID typically when an opponent plays a card from their hand
+			// We always override with the ID in input, as it's guaranteed to be accurate (for
+			// instance if the card changed in hand and our info is outdated)
+			if (cardId) {
+				return Object.assign(new DeckCard(), found, {
+					cardId: cardId,
+				} as DeckCard);
+			}
 			return found;
 		}
 		// Search by cardId only
