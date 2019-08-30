@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
 	selector: 'opponent-card-info',
@@ -8,19 +9,22 @@ import { NGXLogger } from 'ngx-logger';
 		'../../../../css/component/matchoverlay/opponenthand/opponent-card-info.component.scss',
 	],
 	template: `
-		<ul class="opponent-card-info">
-			<span class="turn-number">{{ _turn }}</span>
-		</ul>
+		<div class="opponent-card-info">
+			<opponent-card-turn-number *ngIf="displayTurnNumber" [card]="_card"></opponent-card-turn-number>
+			<opponent-card-info-id *ngIf="displayGuess" [card]="_card"></opponent-card-info-id>
+		</div>
 	`,
 })
 export class OpponentCardInfoComponent implements OnInit {
-	_turn: number | 'M';
+	@Input() displayGuess: boolean;
+	@Input() displayTurnNumber: boolean;
+	_card: DeckCard;
 
 	constructor(private logger: NGXLogger) {}
 
 	ngOnInit(): void {}
 
-	@Input() set turn(value: number | 'M') {
-		this._turn = value;
+	@Input() set card(value: DeckCard) {
+		this._card = value;
 	}
 }

@@ -1,4 +1,3 @@
-import { OverlayModule } from '@angular/cdk/overlay';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -71,7 +70,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		InlineSVGModule.forRoot(),
 		BrowserAnimationsModule,
 		FormsModule,
-		OverlayModule,
 		ReactiveFormsModule,
 		SelectModule,
 		SharedModule,

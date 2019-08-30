@@ -12,8 +12,10 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	template: `
 		<ul class="opponent-card-infos">
 			<opponent-card-info
-				*ngFor="let turnNumber of cardTurnNumbers; let i = index"
-				[turn]="turnNumber"
+				*ngFor="let card of _cards; let i = index; trackBy: trackById"
+				[card]="card"
+				[displayTurnNumber]="displayTurnNumber"
+				[displayGuess]="displayGuess"
 				[style.left.%]="cardPositionLeft(i)"
 				[style.top.%]="cardPositionTop(i)"
 			></opponent-card-info>
@@ -21,7 +23,9 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 	`,
 })
 export class OpponentCardInfosComponent implements OnInit {
-	cardTurnNumbers: readonly (number | 'M')[];
+	@Input() displayGuess: boolean;
+	@Input() displayTurnNumber: boolean;
+	_cards: readonly DeckCard[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
@@ -30,20 +34,21 @@ export class OpponentCardInfosComponent implements OnInit {
 	ngOnInit(): void {}
 
 	@Input() set cards(value: readonly DeckCard[]) {
-		this.logger.debug('[opponent-card-infos] setting card turn numbers', value);
-		this.cardTurnNumbers = value
-			.map(card => card.metaInfo.turnAtWhichCardEnteredCurrentZone)
-			.map(turn => (turn === 'mulligan' ? 'M' : turn));
+		this._cards = value;
 	}
 
 	cardPositionLeft(i: number) {
-		const totalCards = this.cardTurnNumbers.length;
+		const totalCards = this._cards.length;
 		return this.handAdjustment.get(totalCards, Adjustment.create()).positionLeft.get(i, 0);
 	}
 
 	cardPositionTop(i: number) {
-		const totalCards = this.cardTurnNumbers.length;
+		const totalCards = this._cards.length;
 		return this.handAdjustment.get(totalCards, Adjustment.create()).positionTop.get(i, 0);
+	}
+
+	trackById(index, card: DeckCard) {
+		return card.entityId;
 	}
 
 	private buildHandAdjustment() {

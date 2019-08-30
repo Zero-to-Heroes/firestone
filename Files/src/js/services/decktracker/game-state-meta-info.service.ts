@@ -10,7 +10,6 @@ export class GameStateMetaInfoService {
 		if (!gameState) {
 			return gameState;
 		}
-		console.log('adding meta info', gameState.currentTurn, gameState);
 		const playerDeck = this.updateDeck(gameState.playerDeck, gameState.currentTurn);
 		const opponentDeck = this.updateDeck(gameState.opponentDeck, gameState.currentTurn);
 
@@ -54,7 +53,6 @@ export class GameStateMetaInfoService {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: currentTurn,
 		} as CardMetaInfo);
-		console.log('updating card meta data', card, newMeta, currentTurn);
 		return Object.assign(new DeckCard(), card, {
 			metaInfo: newMeta,
 		} as DeckCard);

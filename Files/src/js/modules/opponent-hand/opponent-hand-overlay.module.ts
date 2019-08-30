@@ -4,8 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init } from '@sentry/browser';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { OpponentCardInfoIdComponent } from '../../components/matchoverlay/opponenthand/opponent-card-info-id.component';
 import { OpponentCardInfoComponent } from '../../components/matchoverlay/opponenthand/opponent-card-info.component';
 import { OpponentCardInfosComponent } from '../../components/matchoverlay/opponenthand/opponent-card-infos.component';
+import { OpponentCardTurnNumberComponent } from '../../components/matchoverlay/opponenthand/opponent-card-turn-number.component';
 import { OpponentHandOverlayComponent } from '../../components/matchoverlay/opponenthand/opponent-hand-overlay.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -24,7 +26,13 @@ console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
 	imports: [BrowserModule, BrowserAnimationsModule, SharedModule, FormsModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
-	declarations: [OpponentHandOverlayComponent, OpponentCardInfosComponent, OpponentCardInfoComponent],
+	declarations: [
+		OpponentHandOverlayComponent,
+		OpponentCardInfosComponent,
+		OpponentCardInfoComponent,
+		OpponentCardInfoIdComponent,
+		OpponentCardTurnNumberComponent,
+	],
 	bootstrap: [OpponentHandOverlayComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })

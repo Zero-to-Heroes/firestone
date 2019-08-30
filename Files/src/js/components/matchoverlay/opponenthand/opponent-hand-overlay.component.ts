@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, E
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
+import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -14,7 +15,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 	],
 	template: `
 		<div class="opponent-hand-overlay">
-			<opponent-card-infos [cards]="gameState.opponentDeck.hand" *ngIf="gameState && gameState.opponentDeck"></opponent-card-infos>
+			<opponent-card-infos
+				[cards]="gameState.opponentDeck.hand"
+				[displayTurnNumber]="displayTurnNumber"
+				[displayGuess]="displayGuess"
+				*ngIf="gameState && gameState.opponentDeck"
+			></opponent-card-infos>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +28,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
 	windowId: string;
+	displayTurnNumber: boolean = true;
+	displayGuess: boolean = true;
 
 	private displayFromMatch = false;
 	private displayFromPrefs = false;
@@ -59,8 +67,11 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			if (event.name === PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY) {
-				this.displayFromPrefs = event.preferences.dectrackerShowOpponentTurnDraw;
+				this.setDisplayPreferences(event.preferences);
 				this.handleDisplayPreferences();
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
@@ -74,9 +85,8 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		if (process.env.NODE_ENV !== 'production') {
 			console.error('Should not allow debug game state from production');
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
-			console.log('game state', this.gameState, JSON.stringify(this.gameState));
 		}
-		this.displayFromPrefs = (await this.prefs.getPreferences()).dectrackerShowOpponentTurnDraw;
+		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
 		await this.changeWindowPosition();
@@ -91,6 +101,12 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
 		this.displaySubscription.unsubscribe();
+	}
+
+	private setDisplayPreferences(preferences: Preferences) {
+		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
+		this.displayGuess = preferences.dectrackerShowOpponentGuess;
+		this.displayFromPrefs = this.displayTurnNumber || this.displayGuess;
 	}
 
 	private async handleDisplayPreferences() {

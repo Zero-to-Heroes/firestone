@@ -1,22 +1,28 @@
-import { Directive, ElementRef, HostListener, Input, OnInit, ComponentRef } from '@angular/core';
-import { OverlayRef, Overlay, OverlayPositionBuilder } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { AfterViewInit, ChangeDetectorRef, ComponentRef, Directive, ElementRef, HostListener, Input, ViewRef } from '@angular/core';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 
 @Directive({
 	selector: '[cardTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class CardTooltipDirective implements OnInit {
+export class CardTooltipDirective implements AfterViewInit {
 	@Input('cardTooltip') cardId = '';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
+	private positionStrategy: PositionStrategy;
 
-	constructor(private overlayPositionBuilder: OverlayPositionBuilder, private elementRef: ElementRef, private overlay: Overlay) {}
+	constructor(
+		private overlayPositionBuilder: OverlayPositionBuilder,
+		private elementRef: ElementRef,
+		private overlay: Overlay,
+		private cdr: ChangeDetectorRef,
+	) {}
 
-	ngOnInit() {
-		const positionStrategy = this.overlayPositionBuilder
+	ngAfterViewInit() {
+		this.positionStrategy = this.overlayPositionBuilder
 			// Create position attached to the elementRef
 			.flexibleConnectedTo(this.elementRef)
 			// Describe how to connect overlay to the elementRef
@@ -27,17 +33,31 @@ export class CardTooltipDirective implements OnInit {
 					overlayX: 'start',
 					overlayY: 'center',
 				},
-			])
-			.withPositions([
 				{
 					originX: 'start',
 					originY: 'center',
 					overlayX: 'end',
 					overlayY: 'center',
 				},
+				{
+					originX: 'start',
+					originY: 'top',
+					overlayX: 'end',
+					overlayY: 'top',
+				},
+				{
+					originX: 'end',
+					originY: 'top',
+					overlayX: 'start',
+					overlayY: 'top',
+				},
 			]);
+
 		// Connect position strategy
-		this.overlayRef = this.overlay.create({ positionStrategy });
+		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('mouseenter')
@@ -50,10 +70,17 @@ export class CardTooltipDirective implements OnInit {
 
 		// Pass content to tooltip component instance
 		tooltipRef.instance.cardId = this.cardId;
+		this.positionStrategy.apply();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		this.overlayRef.detach();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

@@ -1,0 +1,21 @@
+:host() {
+	margin-left: 3px;
+}
+
+.opponent-card-info-id {
+	background: #07081f;
+	padding: 5px;
+	width: 25px;
+	height: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 2px solid #9fb6d7;
+	overflow: hidden;
+}
+
+.card-image {
+	width: 220%;
+	clip-path: ellipse(50% 50% at 50% 50%);
+}
