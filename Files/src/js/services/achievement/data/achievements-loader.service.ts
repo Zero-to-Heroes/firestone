@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Achievement } from '../../../models/achievement.js';
-import { RawAchievement } from '../../../models/achievement/raw-achievement.js';
-import { ReplayInfo } from '../../../models/replay-info.js';
-import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service.js';
-import { Challenge } from '../achievements/challenges/challenge.js';
+import { Achievement } from '../../../models/achievement';
+import { RawAchievement } from '../../../models/achievement/raw-achievement';
+import { ReplayInfo } from '../../../models/replay-info';
+import { Challenge } from '../achievements/challenges/challenge';
+import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
 import dalaranHeist from './dalaran_heist.json';
 import dungeonRun from './dungeon_run.json';
 import monsterHunt from './monster_hunt.json';
@@ -27,15 +27,17 @@ export class AchievementsLoaderService {
 		return this.achievements;
 	}
 
-	public async initializeAchievements(): Promise<[readonly Achievement[], readonly Challenge[]]> {
+	public async initializeAchievements(
+		inputAchievements?: readonly RawAchievement[],
+	): Promise<[readonly Achievement[], readonly Challenge[]]> {
+		console.log('[achievements-loader] Initializing achievements');
+		const rawAchievements: readonly RawAchievement[] = inputAchievements || [
+			...(dungeonRun as readonly RawAchievement[]),
+			...(monsterHunt as readonly RawAchievement[]),
+			...(rumbleRun as readonly RawAchievement[]),
+			...(dalaranHeist as readonly RawAchievement[]),
+		];
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
-			console.log('[achievements-loader] Initializing achievements');
-			const rawAchievements: readonly RawAchievement[] = [
-				...(dungeonRun as readonly RawAchievement[]),
-				...(monsterHunt as readonly RawAchievement[]),
-				...(rumbleRun as readonly RawAchievement[]),
-				...(dalaranHeist as readonly RawAchievement[]),
-			];
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
 			this.challengeModules = rawAchievements.map(rawAchievement => this.challengeBuilder.buildChallenge(rawAchievement));
 			resolve([this.achievements, this.challengeModules]);

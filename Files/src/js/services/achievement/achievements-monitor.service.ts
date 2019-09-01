@@ -9,7 +9,6 @@ import { MainWindowStoreService } from '../mainwindow/store/main-window-store.se
 import { OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { AchievementConfService } from './achievement-conf.service';
-import { AchievementsRepository } from './achievements-repository.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 declare var ga;
@@ -21,7 +20,6 @@ export class AchievementsMonitor {
 		private notificationService: OwNotificationsService,
 		private prefs: PreferencesService,
 		private conf: AchievementConfService,
-		private repository: AchievementsRepository,
 		private achievementLoader: AchievementsLoaderService,
 		private store: MainWindowStoreService,
 		private events: Events,

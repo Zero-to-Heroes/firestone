@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { AchievementCategory } from '../../models/achievement-category.js';
+import { AchievementCategory } from '../../models/achievement-category';
 import { AchievementSet } from '../../models/achievement-set';
-import { AchievementConfService } from './achievement-conf.service.js';
-import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran-heist-boss.js';
-import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive.js';
-import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure.js';
+import { AchievementConfService } from './achievement-conf.service';
+import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran-heist-boss';
+import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive';
+import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure';
 import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run-boss';
-import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run-progression.js';
-import { DungeonRunTreasureSetProvider } from './achievement-sets/dungeon-run-treasure.js';
-import { DungeonRunPassivesSetProvider } from './achievement-sets/dungeon-un-passive.js';
-import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss.js';
-import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-passive.js';
-import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster-hunt-progression.js';
-import { MonsterHuntTreasureSetProvider } from './achievement-sets/monster-hunt-treasure.js';
-import { RumbleRunPassivesSetProvider } from './achievement-sets/rumble-passive.js';
-import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progression.js';
-import { RumbleRunShrinePlaySetProvider } from './achievement-sets/rumble-shrine-play.js';
-import { RumbleRunTeammatesSetProvider } from './achievement-sets/rumble-teammate.js';
+import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run-progression';
+import { DungeonRunTreasureSetProvider } from './achievement-sets/dungeon-run-treasure';
+import { DungeonRunPassivesSetProvider } from './achievement-sets/dungeon-un-passive';
+import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss';
+import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-passive';
+import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster-hunt-progression';
+import { MonsterHuntTreasureSetProvider } from './achievement-sets/monster-hunt-treasure';
+import { RumbleRunPassivesSetProvider } from './achievement-sets/rumble-passive';
+import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progression';
+import { RumbleRunShrinePlaySetProvider } from './achievement-sets/rumble-shrine-play';
+import { RumbleRunTeammatesSetProvider } from './achievement-sets/rumble-teammate';
 import { SetProvider } from './achievement-sets/set-provider';
 import { AchievementsStorageService } from './achievements-storage.service';
-import { AchievementsLoaderService } from './data/achievements-loader.service.js';
+import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 @Injectable()
 export class AchievementsRepository {

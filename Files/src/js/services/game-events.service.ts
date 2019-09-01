@@ -3,9 +3,7 @@ import { captureEvent } from '@sentry/core';
 import { GameEvent } from '../models/game-event';
 import { Events } from './events.service';
 import { LogsUploaderService } from './logs-uploader.service';
-import { OverwolfService } from './overwolf.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
-import { SimpleIOService } from './plugins/simple-io.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
 @Injectable()
@@ -19,8 +17,6 @@ export class GameEvents {
 
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
-		private io: SimpleIOService,
-		private ow: OverwolfService,
 		private logService: LogsUploaderService,
 		private s3: S3FileUploadService,
 		private events: Events,
@@ -328,7 +324,7 @@ export class GameEvents {
 		this.logLines.push(data);
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
-			console.log('[game-events] received CREATE_GAME log', data, this.logLines);
+			console.log('[game-events] received CREATE_GAME log', data);
 		}
 	}
 
