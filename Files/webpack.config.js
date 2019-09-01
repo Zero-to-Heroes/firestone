@@ -296,7 +296,6 @@ module.exports = function(env, argv) {
 					include: getRoot('src', 'css'),
 					use: ['raw-loader', 'sass-loader'],
 				},
-
 				{
 					test: /\.scss$/,
 					exclude: getRoot('src', 'css'),
