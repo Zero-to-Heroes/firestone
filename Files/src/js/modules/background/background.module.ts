@@ -26,6 +26,7 @@ import { LogRegisterService } from '../../services/log-register.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
+import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -65,6 +66,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		LogRegisterService,
 		SettingsCommunicationService,
 		TwitchAuthService,
+		PlayersInfoService,
 
 		PackMonitor,
 		PackStatsService,

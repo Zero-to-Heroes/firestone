@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Card } from '../../models/card';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -8,7 +7,12 @@ import { OverwolfService } from '../overwolf.service';
 export class MemoryInspectionService {
 	private triesLeft = 50;
 
-	readonly g_interestedInFeatures = ['scene_state', 'collection'];
+	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
+	readonly g_interestedInFeatures = [
+		'scene_state', // Used to detect when the UI shows the game
+		'collection',
+		'match', // Used to get the rank info of the player
+	];
 
 	constructor(private events: Events, private ow: OverwolfService) {
 		this.init();
@@ -67,9 +71,24 @@ export class MemoryInspectionService {
 	}
 
 	private handleInfoUpdate(info) {
+		// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 		if (info.feature === 'scene_state') {
-			console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+			// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
 			this.events.broadcast(Events.SCENE_CHANGED, info.info.game_info.scene_state);
+		} else if (info.feature === 'match') {
+			// This info is only sent when it changed since the last time. So we need to cache it
+			// console.log('[memory service] INFO UPDATE: ', info, info.feature, info.info);
+			if (info.info.playersInfo) {
+				const localPlayer: string = info.info.playersInfo.localPlayer;
+				const opponent: string = info.info.playersInfo.opponent;
+				console.log('[memory service] match playersInfo: ', info.info.playersInfo, localPlayer, opponent);
+				if (localPlayer) {
+					this.events.broadcast(Events.PLAYER_INFO, JSON.parse(localPlayer));
+				}
+				if (opponent) {
+					this.events.broadcast(Events.OPPONENT_INFO, JSON.parse(opponent));
+				}
+			}
 		}
 	}
 

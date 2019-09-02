@@ -1,5 +1,5 @@
-import { map, filter } from 'rxjs/operators';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 interface BroadcastEvent {
 	key: any;
@@ -21,6 +21,8 @@ export class Events {
 	// public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
 
 	public static readonly SCENE_CHANGED = 'scene-changed';
+	public static readonly PLAYER_INFO = 'player-info';
+	public static readonly OPPONENT_INFO = 'opponent-info';
 
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';

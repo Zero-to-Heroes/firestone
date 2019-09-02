@@ -3,6 +3,7 @@ import { captureEvent } from '@sentry/core';
 import { GameEvent } from '../models/game-event';
 import { Events } from './events.service';
 import { LogsUploaderService } from './logs-uploader.service';
+import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
@@ -20,6 +21,7 @@ export class GameEvents {
 		private logService: LogsUploaderService,
 		private s3: S3FileUploadService,
 		private events: Events,
+		private playersInfoService: PlayersInfoService,
 	) {
 		this.init();
 	}
@@ -99,18 +101,38 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER':
+				const localPlayer = Object.assign({}, gameEvent.Value, {
+					standardRank: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.standardRank : undefined,
+					standardLegendRank: this.playersInfoService.playerInfo
+						? this.playersInfoService.playerInfo.standardLegendRank
+						: undefined,
+					wildRank: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.wildRank : undefined,
+					wildLegendRank: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.wildLegendRank : undefined,
+					cardBackId: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.cardBackId : undefined,
+				});
+				console.log('sending LOCAL_PLAYER info', localPlayer);
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER,
-						localPlayer: gameEvent.Value,
+						localPlayer: localPlayer,
 					} as GameEvent),
 				);
 				break;
 			case 'OPPONENT_PLAYER':
+				const opponentPlayer = Object.assign({}, gameEvent.Value, {
+					standardRank: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.standardRank : undefined,
+					standardLegendRank: this.playersInfoService.opponentInfo
+						? this.playersInfoService.opponentInfo.standardLegendRank
+						: undefined,
+					wildRank: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.wildRank : undefined,
+					wildLegendRank: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.wildLegendRank : undefined,
+					cardBackId: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.cardBackId : undefined,
+				});
+				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.OPPONENT,
-						opponentPlayer: gameEvent.Value,
+						opponentPlayer: opponentPlayer,
 					} as GameEvent),
 				);
 				break;
@@ -294,8 +316,11 @@ export class GameEvents {
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.GAME_END,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
 							game: gameEvent.Value.Game,
+							report: gameEvent.Value.GameStateReport,
 							replayXWml: gameEvent.Value.ReplayXml,
 						},
 					} as GameEvent),
