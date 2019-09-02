@@ -1,5 +1,5 @@
 import { achievementsValidation } from '../../../achievement-event-validation';
-// These are created by copy-paste of the csharp plugin output after 
+// These are created by copy-paste of the csharp plugin output after
 // processing the power.log file
 // Ideally, we will not have to go through this manual generation step
 // and be able to plug the C# plugin directly
@@ -28,12 +28,12 @@ describe('Rumble Run - Shrines - Dark Reliquary', () => {
 	};
 
 	describe('in play', () => {
-		test('is completed when all events are emitted', async () => {
+		test('is completed when full events created by CSharp plugin are emitted', async () => {
 			const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents);
 			expect(isAchievementComplete).toBe(true);
 		});
 
-		test('is completed when full events created by CSharp plugin are emitted', async () => {
+		test('is completed when all events are emitted', async () => {
 			const minimalPluginEvents = [cardPlayedEvent, mulliganDoneEvent, matchMetadataEvent];
 			const isAchievementComplete = await achievementsValidation([rawAchievement], minimalPluginEvents);
 			expect(isAchievementComplete).toBe(true);
