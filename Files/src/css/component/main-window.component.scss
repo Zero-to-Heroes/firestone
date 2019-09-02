@@ -65,6 +65,7 @@ body {
 		flex-direction: column;
 		overflow: hidden;
 		background-size: 100%;
+		background-repeat: round;
 
 		&.collection {
 			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
