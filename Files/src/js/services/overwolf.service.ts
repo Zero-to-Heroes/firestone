@@ -451,11 +451,11 @@ export class OverwolfService {
 				file: filePathOnDisk,
 				message: message,
 			};
-			console.log('[overwolf-service] sharing on Twitter', shareParam),
-				overwolf.social.twitter.share(shareParam, (res, error) => {
-					console.log('uploaded file to twitter', res, error);
-					resolve(res);
-				});
+			console.log('[overwolf-service] sharing on Twitter', shareParam);
+			overwolf.social.twitter.share(shareParam, (res, error) => {
+				console.log('uploaded file to twitter', res, error);
+				resolve(res);
+			});
 		});
 	}
 

@@ -1,0 +1,37 @@
+{
+	"id": "amazing_play_win_with_one_hp",
+	"type": "amazing_plays",
+	"name": "One HP matters",
+	"displayName": "Win with 1 HP (and no armor) remaining",
+	"text": "One HP matters",
+	"displayCardId": "GILA_BOSS_49p",
+	"displayCardType": "minion",
+	"difficulty": "rare",
+	"points": 5.0,
+	"requirements": [
+		{
+			"type": "GAME_TYPE",
+			"values": ["7", "5"]
+		},
+		{
+			"type": "RANKED_MIN_RANK",
+			"values": ["19"]
+		},
+		{
+			"type": "RANKED_FORMAT_TYPE",
+			"values": ["2"]
+		},
+		{
+			"type": "GAME_WON"
+		},
+		{
+			"type": "HEALTH_AT_END",
+			"values": ["1"]
+		},
+		{
+			"type": "ARMOR_AT_END",
+			"values": ["0"]
+		}
+	],
+	"resetEvents": ["GAME_START"]
+}

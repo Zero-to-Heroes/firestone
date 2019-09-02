@@ -6,9 +6,14 @@ import { Events } from '../../../src/js/services/events.service';
 import { GameEvents } from '../../../src/js/services/game-events.service';
 import { AchievementCompletedEvent } from '../../../src/js/services/mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../../../src/js/services/mainwindow/store/main-window-store.service';
+import { PlayersInfoService } from '../../../src/js/services/players-info.service';
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 
-export const achievementsValidation = async (rawAchievements: RawAchievement[], pluginEvents) => {
+export const achievementsValidation = async (
+	rawAchievements: RawAchievement[],
+	pluginEvents,
+	additionalEvents?: readonly { key: string; value: any }[],
+) => {
 	const challengeBuilder = new ChallengeBuilderService();
 	const loader = new AchievementsLoaderService(challengeBuilder);
 	await loader.initializeAchievements(rawAchievements);
@@ -22,7 +27,8 @@ export const achievementsValidation = async (rawAchievements: RawAchievement[], 
 			return new Promise<any>(() => {});
 		},
 	} as GameEventsPluginService;
-	const gameEventsService = new GameEvents(mockPlugin, null, null, events);
+	const playersInfoService = new PlayersInfoService(events);
+	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService);
 	// Setup achievement monitor, that will check for completion
 	let isAchievementComplete = false;
 	const store: MainWindowStoreService = {
@@ -36,7 +42,17 @@ export const achievementsValidation = async (rawAchievements: RawAchievement[], 
 	} as MainWindowStoreService;
 	new AchievementsMonitor(gameEventsService, null, null, null, loader, store, events);
 
+	if (additionalEvents) {
+		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
+	}
+
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
+
+	// loader.challengeModules.forEach((challenge: GenericChallenge) => {
+	// 	challenge.requirements.forEach(req => {
+	// 		console.debug('is req completed?', req, req.isCompleted());
+	// 	});
+	// });
 
 	return isAchievementComplete;
 };
