@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { AchievementCategory } from '../../models/achievement-category';
 import { AchievementSet } from '../../models/achievement-set';
 import { AchievementConfService } from './achievement-conf.service';
+import { AmazingPlaysSetProvider } from './achievement-sets/amazing-plays/amazing-plays';
 import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran-heist-boss';
 import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive';
 import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure';
@@ -73,6 +74,8 @@ export class AchievementsRepository {
 		const dalaranHeistPassiveProvider = new DalaranHeistPassivesSetProvider(this.conf);
 		const dalaranHeistBossProvider = new DalaranHeistBossSetProvider(this.conf);
 
+		const amazingPlaysProvider = new AmazingPlaysSetProvider(this.conf);
+
 		this.setProviders = [
 			dungeonRunProgressionProvider,
 			dungeonRunBossProvider,
@@ -89,8 +92,10 @@ export class AchievementsRepository {
 			dalaranHeistPassiveProvider,
 			dalaranHeistTreasureProvider,
 			dalaranHeistBossProvider,
+			amazingPlaysProvider,
 		];
 		this.categories = [
+			new AchievementCategory('amazing_plays', 'Amazing Plays', 'amazing_plays', [amazingPlaysProvider.id]),
 			new AchievementCategory('dungeon_run', 'Dungeon Run', 'dungeon_run', [
 				dungeonRunProgressionProvider.id,
 				dungeonRunBossProvider.id,

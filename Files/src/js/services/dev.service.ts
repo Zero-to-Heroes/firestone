@@ -47,6 +47,10 @@ export class DevService {
 			points: 1,
 			numberOfCompletions: 0,
 			replayInfo: [],
+			root: null,
+			priority: 0,
+			emptyText: null,
+			completedText: null,
 		};
 		window['showAchievementNotification'] = () => {
 			this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
