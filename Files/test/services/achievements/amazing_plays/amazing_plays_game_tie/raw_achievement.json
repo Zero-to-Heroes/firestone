@@ -3,6 +3,7 @@
 	"type": "amazing_plays_game_tie",
 	"root": true,
 	"priority": -25,
+	"name": "That's A Nice Tie",
 	"displayName": "That's A Nice Tie",
 	"emptyText": "End the game with a tie in Ranked Standard",
 	"completedText": "You tied a game at rank 25 or better",

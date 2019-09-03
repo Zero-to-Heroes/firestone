@@ -1,11 +1,11 @@
 [
 	{
-		"id": "amazing_play_win_with_one_hp_25",
-		"type": "amazing_play_win_with_one_hp",
+		"id": "amazing_plays_win_with_one_hp_25",
+		"type": "amazing_plays_win_with_one_hp",
 		"name": "One HP matters",
 		"root": true,
 		"priority": -25,
-		"displayName": "One HP matters",
+		"displayName": "Achievement completed: One HP matters (rank 25)",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
 		"completedText": "You won with one HP left at rank 25 or better",
 		"displayCardId": "GILA_BOSS_49p",
@@ -40,12 +40,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_one_hp_20",
-		"type": "amazing_play_win_with_one_hp",
+		"id": "amazing_plays_win_with_one_hp_20",
+		"type": "amazing_plays_win_with_one_hp",
 		"name": "One HP matters",
 		"root": false,
 		"priority": -20,
-		"displayName": "One HP matters",
+		"displayName": "Achievement completed: One HP matters (rank 20)",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
 		"completedText": "You won with one HP left at rank 20 or better",
 		"displayCardId": "GILA_BOSS_49p",
@@ -80,12 +80,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_one_hp_15",
-		"type": "amazing_play_win_with_one_hp",
+		"id": "amazing_plays_win_with_one_hp_15",
+		"type": "amazing_plays_win_with_one_hp",
 		"name": "One HP matters",
 		"root": false,
 		"priority": -15,
-		"displayName": "One HP matters",
+		"displayName": "Achievement completed: One HP matters (rank 15)",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
 		"completedText": "You won with one HP left at rank 15 or better",
 		"displayCardId": "GILA_BOSS_49p",
@@ -120,12 +120,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_one_hp_10",
-		"type": "amazing_play_win_with_one_hp",
+		"id": "amazing_plays_win_with_one_hp_10",
+		"type": "amazing_plays_win_with_one_hp",
 		"name": "One HP matters",
 		"root": false,
 		"priority": -10,
-		"displayName": "One HP matters",
+		"displayName": "Achievement completed: One HP matters (rank 10)",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
 		"completedText": "You won with one HP left at rank 10 or better",
 		"displayCardId": "GILA_BOSS_49p",
@@ -160,12 +160,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_one_hp_5",
-		"type": "amazing_play_win_with_one_hp",
+		"id": "amazing_plays_win_with_one_hp_5",
+		"type": "amazing_plays_win_with_one_hp",
 		"name": "One HP matters",
 		"root": false,
 		"priority": -5,
-		"displayName": "One HP matters",
+		"displayName": "Achievement completed: One HP matters (rank 5)",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
 		"completedText": "You won with one HP left at rank 5 or better",
 		"displayCardId": "GILA_BOSS_49p",
@@ -200,12 +200,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_one_hp_1",
-		"type": "amazing_play_win_with_one_hp",
+		"id": "amazing_plays_win_with_one_hp_1",
+		"type": "amazing_plays_win_with_one_hp",
 		"name": "One HP matters",
 		"root": false,
 		"priority": -1,
-		"displayName": "One HP matters",
+		"displayName": "Achievement completed: One HP matters (rank 1)",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
 		"completedText": "You won with one HP left at rank 1 or better",
 		"displayCardId": "GILA_BOSS_49p",
@@ -240,12 +240,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_full_hp_25",
+		"id": "amazing_plays_win_with_full_hp_25",
 		"type": "amazing_plays_win_with_full_hp",
 		"name": "Don't Hit Me!",
 		"root": true,
 		"priority": -25,
-		"displayName": "Don't Hit Me!",
+		"displayName": "Achievement completed: Don't Hit Me! (rank 25)",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
 		"completedText": "You won with your full HP left at rank 25 or better",
 		"displayCardId": "BRMA10_4",
@@ -280,12 +280,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_full_hp_20",
+		"id": "amazing_plays_win_with_full_hp_20",
 		"type": "amazing_plays_win_with_full_hp",
 		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -20,
-		"displayName": "Don't Hit Me!",
+		"displayName": "Achievement completed: Don't Hit Me! (rank 20)",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
 		"completedText": "You won with your full HP left at rank 20 or better",
 		"displayCardId": "BRMA10_4",
@@ -320,12 +320,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_full_hp_15",
+		"id": "amazing_plays_win_with_full_hp_15",
 		"type": "amazing_plays_win_with_full_hp",
 		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -15,
-		"displayName": "Don't Hit Me!",
+		"displayName": "Achievement completed: Don't Hit Me! (rank 15)",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
 		"completedText": "You won with your full HP left at rank 15 or better",
 		"displayCardId": "BRMA10_4",
@@ -360,12 +360,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_full_hp_10",
+		"id": "amazing_plays_win_with_full_hp_10",
 		"type": "amazing_plays_win_with_full_hp",
 		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -10,
-		"displayName": "Don't Hit Me!",
+		"displayName": "Achievement completed: Don't Hit Me! (rank 10)",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
 		"completedText": "You won with your full HP left at rank 10 or better",
 		"displayCardId": "BRMA10_4",
@@ -400,12 +400,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_full_hp_5",
+		"id": "amazing_plays_win_with_full_hp_5",
 		"type": "amazing_plays_win_with_full_hp",
 		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -5,
-		"displayName": "Don't Hit Me!",
+		"displayName": "Achievement completed: Don't Hit Me! (rank 5)",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
 		"completedText": "You won with your full HP left at rank 5 or better",
 		"displayCardId": "BRMA10_4",
@@ -440,12 +440,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_win_with_full_hp_1",
+		"id": "amazing_plays_win_with_full_hp_1",
 		"type": "amazing_plays_win_with_full_hp",
 		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -1,
-		"displayName": "Don't Hit Me!",
+		"displayName": "Achievement completed: Don't Hit Me! (rank 1)",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
 		"completedText": "You won with your full HP left at rank 1 or better",
 		"displayCardId": "BRMA10_4",
@@ -480,12 +480,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_game_tie_25",
+		"id": "amazing_plays_game_tie_25",
 		"type": "amazing_plays_game_tie",
 		"name": "That's A Nice Tie",
 		"root": true,
 		"priority": -25,
-		"displayName": "That's A Nice Tie",
+		"displayName": "Achievement completed: That's A Nice Tie (rank 25)",
 		"emptyText": "End the game with a tie in Ranked Standard",
 		"completedText": "You tied a game at rank 25 or better",
 		"displayCardId": "KAR_044a",
@@ -495,11 +495,11 @@
 		"requirements": [
 			{
 				"type": "GAME_TYPE",
-				"values": ["7", "5"]
+				"values": ["7"]
 			},
 			{
 				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
+				"values": ["25"]
 			},
 			{
 				"type": "RANKED_FORMAT_TYPE",
@@ -512,12 +512,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_game_tie_20",
+		"id": "amazing_plays_game_tie_20",
 		"type": "amazing_plays_game_tie",
 		"name": "That's A Nice Tie",
 		"root": false,
 		"priority": -20,
-		"displayName": "That's A Nice Tie",
+		"displayName": "Achievement completed: That's A Nice Tie (rank 20)",
 		"emptyText": "End the game with a tie in Ranked Standard",
 		"completedText": "You tied a game at rank 20 or better",
 		"displayCardId": "KAR_044a",
@@ -527,11 +527,11 @@
 		"requirements": [
 			{
 				"type": "GAME_TYPE",
-				"values": ["7", "5"]
+				"values": ["7"]
 			},
 			{
 				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
+				"values": ["20"]
 			},
 			{
 				"type": "RANKED_FORMAT_TYPE",
@@ -544,12 +544,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_game_tie_15",
+		"id": "amazing_plays_game_tie_15",
 		"type": "amazing_plays_game_tie",
 		"name": "That's A Nice Tie",
 		"root": false,
 		"priority": -15,
-		"displayName": "That's A Nice Tie",
+		"displayName": "Achievement completed: That's A Nice Tie (rank 15)",
 		"emptyText": "End the game with a tie in Ranked Standard",
 		"completedText": "You tied a game at rank 15 or better",
 		"displayCardId": "KAR_044a",
@@ -559,11 +559,11 @@
 		"requirements": [
 			{
 				"type": "GAME_TYPE",
-				"values": ["7", "5"]
+				"values": ["7"]
 			},
 			{
 				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
+				"values": ["15"]
 			},
 			{
 				"type": "RANKED_FORMAT_TYPE",
@@ -576,12 +576,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_game_tie_10",
+		"id": "amazing_plays_game_tie_10",
 		"type": "amazing_plays_game_tie",
 		"name": "That's A Nice Tie",
 		"root": false,
 		"priority": -10,
-		"displayName": "That's A Nice Tie",
+		"displayName": "Achievement completed: That's A Nice Tie (rank 10)",
 		"emptyText": "End the game with a tie in Ranked Standard",
 		"completedText": "You tied a game at rank 10 or better",
 		"displayCardId": "KAR_044a",
@@ -591,11 +591,11 @@
 		"requirements": [
 			{
 				"type": "GAME_TYPE",
-				"values": ["7", "5"]
+				"values": ["7"]
 			},
 			{
 				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
+				"values": ["10"]
 			},
 			{
 				"type": "RANKED_FORMAT_TYPE",
@@ -608,12 +608,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_game_tie_5",
+		"id": "amazing_plays_game_tie_5",
 		"type": "amazing_plays_game_tie",
 		"name": "That's A Nice Tie",
 		"root": false,
 		"priority": -5,
-		"displayName": "That's A Nice Tie",
+		"displayName": "Achievement completed: That's A Nice Tie (rank 5)",
 		"emptyText": "End the game with a tie in Ranked Standard",
 		"completedText": "You tied a game at rank 5 or better",
 		"displayCardId": "KAR_044a",
@@ -623,11 +623,11 @@
 		"requirements": [
 			{
 				"type": "GAME_TYPE",
-				"values": ["7", "5"]
+				"values": ["7"]
 			},
 			{
 				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
+				"values": ["5"]
 			},
 			{
 				"type": "RANKED_FORMAT_TYPE",
@@ -640,12 +640,12 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "amazing_play_game_tie_1",
+		"id": "amazing_plays_game_tie_1",
 		"type": "amazing_plays_game_tie",
 		"name": "That's A Nice Tie",
 		"root": false,
 		"priority": -1,
-		"displayName": "That's A Nice Tie",
+		"displayName": "Achievement completed: That's A Nice Tie (rank 1)",
 		"emptyText": "End the game with a tie in Ranked Standard",
 		"completedText": "You tied a game at rank 1 or better",
 		"displayCardId": "KAR_044a",
@@ -655,11 +655,11 @@
 		"requirements": [
 			{
 				"type": "GAME_TYPE",
-				"values": ["7", "5"]
+				"values": ["7"]
 			},
 			{
 				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
+				"values": ["1"]
 			},
 			{
 				"type": "RANKED_FORMAT_TYPE",
