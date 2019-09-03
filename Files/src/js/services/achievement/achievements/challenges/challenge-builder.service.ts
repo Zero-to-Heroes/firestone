@@ -10,6 +10,7 @@ import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
+import { GameTieReq } from '../requirements/game-tie-req';
 import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
@@ -50,6 +51,7 @@ export class ChallengeBuilderService {
 			case 'SCENARIO_IDS': return ScenarioIdReq.create(rawReq);
 			case 'MULLIGAN_DONE': return MulliganDoneReq.create(rawReq);
 			case 'GAME_WON': return GameWonReq.create(rawReq);
+			case 'GAME_TIE': return GameTieReq.create(rawReq);
 			case 'GAME_MIN_TURNS': return GameMinTurnsReq.create(rawReq);
 			case 'PLAYER_HERO': return PlayerHeroReq.create(rawReq);
 			case 'CORRECT_OPPONENT': return CorrectOpponentReq.create(rawReq);

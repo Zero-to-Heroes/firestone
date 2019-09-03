@@ -5,10 +5,9 @@
 		"name": "One HP matters",
 		"root": true,
 		"priority": -25,
-		"displayName": "Win with 1 HP left and no armor remaining (in Ranked Standard, at least rank 25)",
+		"displayName": "One HP matters",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"text": "One HP matters (Standard, rank 25)",
-		"completedText": "You won with one HP left at rank 25",
+		"completedText": "You won with one HP left at rank 25 or better",
 		"displayCardId": "GILA_BOSS_49p",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -46,10 +45,9 @@
 		"name": "One HP matters",
 		"root": false,
 		"priority": -20,
-		"displayName": "Win with 1 HP left and no armor remaining (in Ranked Standard, at least rank 20)",
+		"displayName": "One HP matters",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"text": "One HP matters (Standard, rank 20)",
-		"completedText": "You won with one HP left at rank 20",
+		"completedText": "You won with one HP left at rank 20 or better",
 		"displayCardId": "GILA_BOSS_49p",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -87,10 +85,9 @@
 		"name": "One HP matters",
 		"root": false,
 		"priority": -15,
-		"displayName": "Win with 1 HP left and no armor remaining (in Ranked Standard, at least rank 15)",
+		"displayName": "One HP matters",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"text": "One HP matters (Standard, rank 15)",
-		"completedText": "You won with one HP left at rank 15",
+		"completedText": "You won with one HP left at rank 15 or better",
 		"displayCardId": "GILA_BOSS_49p",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -128,10 +125,9 @@
 		"name": "One HP matters",
 		"root": false,
 		"priority": -10,
-		"displayName": "Win with 1 HP left and no armor remaining (in Ranked Standard, at least rank 10)",
+		"displayName": "One HP matters",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"text": "One HP matters (Standard, rank 10)",
-		"completedText": "You won with one HP left at rank 10",
+		"completedText": "You won with one HP left at rank 10 or better",
 		"displayCardId": "GILA_BOSS_49p",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -169,10 +165,9 @@
 		"name": "One HP matters",
 		"root": false,
 		"priority": -5,
-		"displayName": "Win with 1 HP left and no armor remaining (in Ranked Standard, at least rank 5)",
+		"displayName": "One HP matters",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"text": "One HP matters (Standard, rank 5)",
-		"completedText": "You won with one HP left at rank 5",
+		"completedText": "You won with one HP left at rank 5 or better",
 		"displayCardId": "GILA_BOSS_49p",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -210,10 +205,9 @@
 		"name": "One HP matters",
 		"root": false,
 		"priority": -1,
-		"displayName": "Win with 1 HP left and no armor remaining (in Ranked Standard, at least rank 1)",
+		"displayName": "One HP matters",
 		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"text": "One HP matters (Standard, rank 1)",
-		"completedText": "You won with one HP left at rank 1",
+		"completedText": "You won with one HP left at rank 1 or better",
 		"displayCardId": "GILA_BOSS_49p",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -248,13 +242,12 @@
 	{
 		"id": "amazing_play_win_with_full_hp_25",
 		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't hit me",
+		"name": "Don't Hit Me!",
 		"root": true,
 		"priority": -25,
-		"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 25)",
+		"displayName": "Don't Hit Me!",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"text": "Don't hit me (Standard, rank 25)",
-		"completedText": "You won with your full HP left at rank 25",
+		"completedText": "You won with your full HP left at rank 25 or better",
 		"displayCardId": "BRMA10_4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -276,7 +269,8 @@
 				"type": "GAME_WON"
 			},
 			{
-				"type": "FULL_HEALTH_AT_END"
+				"type": "DAMAGE_AT_END",
+				"values": ["0"]
 			},
 			{
 				"type": "GAME_MIN_TURNS",
@@ -288,13 +282,12 @@
 	{
 		"id": "amazing_play_win_with_full_hp_20",
 		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't hit me",
+		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -20,
-		"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 20)",
+		"displayName": "Don't Hit Me!",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"text": "Don't hit me (Standard, rank 20)",
-		"completedText": "You won with your full HP left at rank 20",
+		"completedText": "You won with your full HP left at rank 20 or better",
 		"displayCardId": "BRMA10_4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -316,7 +309,8 @@
 				"type": "GAME_WON"
 			},
 			{
-				"type": "FULL_HEALTH_AT_END"
+				"type": "DAMAGE_AT_END",
+				"values": ["0"]
 			},
 			{
 				"type": "GAME_MIN_TURNS",
@@ -328,13 +322,12 @@
 	{
 		"id": "amazing_play_win_with_full_hp_15",
 		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't hit me",
+		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -15,
-		"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 15)",
+		"displayName": "Don't Hit Me!",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"text": "Don't hit me (Standard, rank 15)",
-		"completedText": "You won with your full HP left at rank 15",
+		"completedText": "You won with your full HP left at rank 15 or better",
 		"displayCardId": "BRMA10_4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -356,7 +349,8 @@
 				"type": "GAME_WON"
 			},
 			{
-				"type": "FULL_HEALTH_AT_END"
+				"type": "DAMAGE_AT_END",
+				"values": ["0"]
 			},
 			{
 				"type": "GAME_MIN_TURNS",
@@ -368,13 +362,12 @@
 	{
 		"id": "amazing_play_win_with_full_hp_10",
 		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't hit me",
+		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -10,
-		"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 10)",
+		"displayName": "Don't Hit Me!",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"text": "Don't hit me (Standard, rank 10)",
-		"completedText": "You won with your full HP left at rank 10",
+		"completedText": "You won with your full HP left at rank 10 or better",
 		"displayCardId": "BRMA10_4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -396,7 +389,8 @@
 				"type": "GAME_WON"
 			},
 			{
-				"type": "FULL_HEALTH_AT_END"
+				"type": "DAMAGE_AT_END",
+				"values": ["0"]
 			},
 			{
 				"type": "GAME_MIN_TURNS",
@@ -408,13 +402,12 @@
 	{
 		"id": "amazing_play_win_with_full_hp_5",
 		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't hit me",
+		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -5,
-		"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 5)",
+		"displayName": "Don't Hit Me!",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"text": "Don't hit me (Standard, rank 5)",
-		"completedText": "You won with your full HP left at rank 5",
+		"completedText": "You won with your full HP left at rank 5 or better",
 		"displayCardId": "BRMA10_4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -436,7 +429,8 @@
 				"type": "GAME_WON"
 			},
 			{
-				"type": "FULL_HEALTH_AT_END"
+				"type": "DAMAGE_AT_END",
+				"values": ["0"]
 			},
 			{
 				"type": "GAME_MIN_TURNS",
@@ -448,13 +442,12 @@
 	{
 		"id": "amazing_play_win_with_full_hp_1",
 		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't hit me",
+		"name": "Don't Hit Me!",
 		"root": false,
 		"priority": -1,
-		"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 1)",
+		"displayName": "Don't Hit Me!",
 		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"text": "Don't hit me (Standard, rank 1)",
-		"completedText": "You won with your full HP left at rank 1",
+		"completedText": "You won with your full HP left at rank 1 or better",
 		"displayCardId": "BRMA10_4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
@@ -476,11 +469,204 @@
 				"type": "GAME_WON"
 			},
 			{
-				"type": "FULL_HEALTH_AT_END"
+				"type": "DAMAGE_AT_END",
+				"values": ["0"]
 			},
 			{
 				"type": "GAME_MIN_TURNS",
 				"values": ["4"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "amazing_play_game_tie_25",
+		"type": "amazing_plays_game_tie",
+		"name": "That's A Nice Tie",
+		"root": true,
+		"priority": -25,
+		"displayName": "That's A Nice Tie",
+		"emptyText": "End the game with a tie in Ranked Standard",
+		"completedText": "You tied a game at rank 25 or better",
+		"displayCardId": "KAR_044a",
+		"displayCardType": "minion",
+		"difficulty": "legendary",
+		"points": 15,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7", "5"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["19"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_TIE"
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "amazing_play_game_tie_20",
+		"type": "amazing_plays_game_tie",
+		"name": "That's A Nice Tie",
+		"root": false,
+		"priority": -20,
+		"displayName": "That's A Nice Tie",
+		"emptyText": "End the game with a tie in Ranked Standard",
+		"completedText": "You tied a game at rank 20 or better",
+		"displayCardId": "KAR_044a",
+		"displayCardType": "minion",
+		"difficulty": "legendary",
+		"points": 20,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7", "5"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["19"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_TIE"
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "amazing_play_game_tie_15",
+		"type": "amazing_plays_game_tie",
+		"name": "That's A Nice Tie",
+		"root": false,
+		"priority": -15,
+		"displayName": "That's A Nice Tie",
+		"emptyText": "End the game with a tie in Ranked Standard",
+		"completedText": "You tied a game at rank 15 or better",
+		"displayCardId": "KAR_044a",
+		"displayCardType": "minion",
+		"difficulty": "legendary",
+		"points": 25,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7", "5"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["19"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_TIE"
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "amazing_play_game_tie_10",
+		"type": "amazing_plays_game_tie",
+		"name": "That's A Nice Tie",
+		"root": false,
+		"priority": -10,
+		"displayName": "That's A Nice Tie",
+		"emptyText": "End the game with a tie in Ranked Standard",
+		"completedText": "You tied a game at rank 10 or better",
+		"displayCardId": "KAR_044a",
+		"displayCardType": "minion",
+		"difficulty": "legendary",
+		"points": 30,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7", "5"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["19"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_TIE"
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "amazing_play_game_tie_5",
+		"type": "amazing_plays_game_tie",
+		"name": "That's A Nice Tie",
+		"root": false,
+		"priority": -5,
+		"displayName": "That's A Nice Tie",
+		"emptyText": "End the game with a tie in Ranked Standard",
+		"completedText": "You tied a game at rank 5 or better",
+		"displayCardId": "KAR_044a",
+		"displayCardType": "minion",
+		"difficulty": "legendary",
+		"points": 35,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7", "5"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["19"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_TIE"
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "amazing_play_game_tie_1",
+		"type": "amazing_plays_game_tie",
+		"name": "That's A Nice Tie",
+		"root": false,
+		"priority": -1,
+		"displayName": "That's A Nice Tie",
+		"emptyText": "End the game with a tie in Ranked Standard",
+		"completedText": "You tied a game at rank 1 or better",
+		"displayCardId": "KAR_044a",
+		"displayCardType": "minion",
+		"difficulty": "legendary",
+		"points": 39,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7", "5"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["19"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_TIE"
 			}
 		],
 		"resetEvents": ["GAME_START"]

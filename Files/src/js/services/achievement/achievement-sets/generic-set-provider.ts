@@ -85,7 +85,7 @@ export abstract class GenericSetProvider extends SetProvider {
 			const completions: number = Math.max(maxNumberOfCompletions, achv.numberOfCompletions);
 			maxNumberOfCompletions = completions;
 			if (completions > 0 && !alreadyDefinedText) {
-				text = achv.text;
+				text = achv.completedText;
 				alreadyDefinedText = true;
 			}
 			invertedCompletionSteps.push({
