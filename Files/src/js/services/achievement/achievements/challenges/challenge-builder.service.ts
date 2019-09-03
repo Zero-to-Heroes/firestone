@@ -14,6 +14,7 @@ import { GameTieReq } from '../requirements/game-tie-req';
 import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
+import { MinionSummonedReq } from '../requirements/minion-summoned-req';
 import { MonsterHuntStepReq } from '../requirements/monster-hunt-step-req';
 import { MulliganDoneReq } from '../requirements/mulligan-done-req';
 import { PassiveBuffReq } from '../requirements/passive-buff-req';
@@ -60,6 +61,7 @@ export class ChallengeBuilderService {
 			case 'CARD_PLAYED_OR_CHANGED_ON_BOARD': return CardPlayedOrChangedOnBoardReq.create(rawReq);
 			case 'CARD_PLAYED_OR_ON_BOARD_AT_GAME_START': return CardPlayedOrOnBoardAtGameStartReq.create(rawReq);
 			case 'CARD_DRAWN_OR_RECEIVED_IN_HAND': return CardDrawnOrReceivedInHandReq.create(rawReq);
+			case 'MINION_SUMMONED': return MinionSummonedReq.create(rawReq);
 			case 'PASSIVE_BUFF': return PassiveBuffReq.create(rawReq);
 			case 'HEALTH_AT_END': return HealthAtEndReq.create(rawReq);
 			case 'DAMAGE_AT_END': return DamageAtEndReq.create(rawReq);

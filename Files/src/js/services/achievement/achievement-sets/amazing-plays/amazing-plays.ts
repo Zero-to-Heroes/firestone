@@ -11,6 +11,7 @@ export class AmazingPlaysSetProvider extends GenericSetProvider {
 				'amazing_plays_win_with_full_hp',
 				'amazing_plays_game_tie',
 				'amazing_plays_win_without_taking_damage',
+				'amazing_plays_summon_highkeeper_ra',
 			],
 			'achievements_amazing_plays',
 			conf,
