@@ -23,6 +23,6 @@ describe('Amazing Play - Tie agame', () => {
 	});
 	test('is not completed when GEP event is missing', async () => {
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents);
-		expect(isAchievementComplete).toBe(true);
+		expect(isAchievementComplete).toBeFalsy();
 	});
 });

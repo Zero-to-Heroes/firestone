@@ -413,7 +413,7 @@ D 10:35:30.3873777 GameState.DebugPrintPower() -     TAG_CHANGE Entity=1 tag=10 
 D 10:35:30.3873777 GameState.DebugPrintPower() -     TAG_CHANGE Entity=1 tag=NEXT_STEP value=BEGIN_MULLIGAN 
 D 10:35:30.3873777 GameState.DebugPrintPower() - BLOCK_END
 D 10:35:30.4969123 GameState.DebugPrintGame() - BuildNumber=33402
-D 10:35:30.4969123 GameState.DebugPrintGame() - GameType=GT_VS_FRIEND
+D 10:35:30.4969123 GameState.DebugPrintGame() - GameType=GT_RANKED
 D 10:35:30.4969123 GameState.DebugPrintGame() - FormatType=FT_STANDARD
 D 10:35:30.4969123 GameState.DebugPrintGame() - ScenarioID=2
 D 10:35:30.4969123 GameState.DebugPrintGame() - PlayerID=1, PlayerName=Daedin#2991

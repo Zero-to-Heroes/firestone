@@ -41,6 +41,7 @@ export const achievementsValidation = async (
 		stateUpdater: {
 			next: data => {
 				if (data instanceof AchievementCompletedEvent) {
+					// console.debug('achievmement complete');
 					isAchievementComplete = true;
 				}
 			},
@@ -52,19 +53,23 @@ export const achievementsValidation = async (
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
 	}
 
-	// wait for a short while, so that all events are processed
-	// await sleep(10);
+	// wait for a short while, so that all events are processed. The integration tests
+	// take a long time to load (probably because of the big files?), so this small
+	// delay has almost no impact
+	await sleep(50);
 
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
 
+	await sleep(50);
+
 	// if (!isAchievementComplete) {
-	// loader.challengeModules.forEach((challenge: GenericChallenge) => {
-	// 	challenge.requirements.forEach(req => {
-	// 		if (!req.isCompleted()) {
-	// 			console.debug('is req completed?', req, req.isCompleted());
-	// 		}
+	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
+	// 		challenge.requirements.forEach(req => {
+	// 			if (!req.isCompleted()) {
+	// 				console.debug('req not completed', req, req.isCompleted());
+	// 			}
+	// 		});
 	// 	});
-	// });
 	// }
 
 	return isAchievementComplete;

@@ -14,7 +14,7 @@
 	"requirements": [
 		{
 			"type": "GAME_TYPE",
-			"values": ["7", "5"]
+			"values": ["7"]
 		},
 		{
 			"type": "RANKED_MIN_RANK",
