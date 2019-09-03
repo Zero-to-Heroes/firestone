@@ -310,6 +310,13 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'TIE':
+				this.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.TIE,
+					} as GameEvent),
+				);
+				break;
 			case 'GAME_END':
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {
