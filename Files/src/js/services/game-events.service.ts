@@ -82,7 +82,7 @@ export class GameEvents {
 		}, 500);
 	}
 
-	public dispatchGameEvent(gameEvent) {
+	public async dispatchGameEvent(gameEvent) {
 		console.log(gameEvent.Type + ' event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
@@ -101,14 +101,13 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER':
+				const playerInfo = await this.playersInfoService.getPlayerInfo();
 				const localPlayer = Object.assign({}, gameEvent.Value, {
-					standardRank: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.standardRank : undefined,
-					standardLegendRank: this.playersInfoService.playerInfo
-						? this.playersInfoService.playerInfo.standardLegendRank
-						: undefined,
-					wildRank: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.wildRank : undefined,
-					wildLegendRank: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.wildLegendRank : undefined,
-					cardBackId: this.playersInfoService.playerInfo ? this.playersInfoService.playerInfo.cardBackId : undefined,
+					standardRank: playerInfo ? playerInfo.standardRank : undefined,
+					standardLegendRank: playerInfo ? playerInfo.standardLegendRank : undefined,
+					wildRank: playerInfo ? playerInfo.wildRank : undefined,
+					wildLegendRank: playerInfo ? playerInfo.wildLegendRank : undefined,
+					cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
 				});
 				console.log('sending LOCAL_PLAYER info', localPlayer);
 				this.allEvents.next(
@@ -119,14 +118,13 @@ export class GameEvents {
 				);
 				break;
 			case 'OPPONENT_PLAYER':
+				const opponentInfo = await this.playersInfoService.getOpponentInfo();
 				const opponentPlayer = Object.assign({}, gameEvent.Value, {
-					standardRank: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.standardRank : undefined,
-					standardLegendRank: this.playersInfoService.opponentInfo
-						? this.playersInfoService.opponentInfo.standardLegendRank
-						: undefined,
-					wildRank: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.wildRank : undefined,
-					wildLegendRank: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.wildLegendRank : undefined,
-					cardBackId: this.playersInfoService.opponentInfo ? this.playersInfoService.opponentInfo.cardBackId : undefined,
+					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
+					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
+					wildRank: opponentInfo ? opponentInfo.wildRank : undefined,
+					wildLegendRank: opponentInfo ? opponentInfo.wildLegendRank : undefined,
+					cardBackId: opponentInfo ? opponentInfo.cardBackId : undefined,
 				});
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.allEvents.next(

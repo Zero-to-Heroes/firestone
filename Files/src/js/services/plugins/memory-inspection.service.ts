@@ -27,6 +27,23 @@ export class MemoryInspectionService {
 		});
 	}
 
+	public getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
+		return new Promise<any>(async resolve => {
+			const info = await this.ow.getGameEventsInfo();
+			if (info && info.res && info.res.playersInfo) {
+				console.log('[memory-service] fetched playersInfo', info.res.playersInfo);
+				const localPlayer: string = info.res.playersInfo.localPlayer;
+				const opponent: string = info.res.playersInfo.opponent;
+				resolve({
+					localPlayer: JSON.parse(localPlayer),
+					oppoennt: JSON.parse(opponent),
+				});
+			}
+			console.warn('[memory-service] could not fetch playersInfo', info);
+			resolve(null);
+		});
+	}
+
 	private async init() {
 		this.ow.addGameInfoUpdatedListener(res => {
 			if (this.ow.gameLaunched(res)) {

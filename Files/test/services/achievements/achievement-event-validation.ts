@@ -8,6 +8,7 @@ import { AchievementCompletedEvent } from '../../../src/js/services/mainwindow/s
 import { MainWindowStoreService } from '../../../src/js/services/mainwindow/store/main-window-store.service';
 import { PlayersInfoService } from '../../../src/js/services/players-info.service';
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
+import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';
 
 export const achievementsValidation = async (
 	rawAchievements: RawAchievement[],
@@ -27,7 +28,12 @@ export const achievementsValidation = async (
 			return new Promise<any>(() => {});
 		},
 	} as GameEventsPluginService;
-	const playersInfoService = new PlayersInfoService(events);
+	const memoryService: MemoryInspectionService = {
+		getPlayerInfo: () => {
+			return new Promise<any>(() => {});
+		},
+	} as MemoryInspectionService;
+	const playersInfoService = new PlayersInfoService(events, memoryService);
 	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService);
 	// Setup achievement monitor, that will check for completion
 	let isAchievementComplete = false;
@@ -46,6 +52,9 @@ export const achievementsValidation = async (
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
 	}
 
+	// wait for a short while, so that all events are processed
+	// await sleep(10);
+
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
 
 	// loader.challengeModules.forEach((challenge: GenericChallenge) => {
@@ -56,3 +65,7 @@ export const achievementsValidation = async (
 
 	return isAchievementComplete;
 };
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
