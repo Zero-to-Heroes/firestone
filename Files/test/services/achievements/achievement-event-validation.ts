@@ -57,11 +57,15 @@ export const achievementsValidation = async (
 
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
 
+	// if (!isAchievementComplete) {
 	// loader.challengeModules.forEach((challenge: GenericChallenge) => {
 	// 	challenge.requirements.forEach(req => {
-	// 		console.debug('is req completed?', req, req.isCompleted());
+	// 		if (!req.isCompleted()) {
+	// 			console.debug('is req completed?', req, req.isCompleted());
+	// 		}
 	// 	});
 	// });
+	// }
 
 	return isAchievementComplete;
 };

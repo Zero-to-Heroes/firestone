@@ -6,8 +6,10 @@ import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-rece
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
 import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-or-on-board-at-game-start-req';
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
+import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
+import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
 import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
@@ -48,6 +50,7 @@ export class ChallengeBuilderService {
 			case 'SCENARIO_IDS': return ScenarioIdReq.create(rawReq);
 			case 'MULLIGAN_DONE': return MulliganDoneReq.create(rawReq);
 			case 'GAME_WON': return GameWonReq.create(rawReq);
+			case 'GAME_MIN_TURNS': return GameMinTurnsReq.create(rawReq);
 			case 'PLAYER_HERO': return PlayerHeroReq.create(rawReq);
 			case 'CORRECT_OPPONENT': return CorrectOpponentReq.create(rawReq);
 			case 'SCENE_CHANGED_TO_GAME': return SceneChangedToGameReq.create(rawReq);
@@ -56,6 +59,7 @@ export class ChallengeBuilderService {
 			case 'CARD_DRAWN_OR_RECEIVED_IN_HAND': return CardDrawnOrReceivedInHandReq.create(rawReq);
 			case 'PASSIVE_BUFF': return PassiveBuffReq.create(rawReq);
 			case 'HEALTH_AT_END': return HealthAtEndReq.create(rawReq);
+			case 'DAMAGE_AT_END': return DamageAtEndReq.create(rawReq);
 			case 'ARMOR_AT_END': return ArmorAtEndReq.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
