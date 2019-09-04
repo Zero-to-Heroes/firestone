@@ -47,7 +47,6 @@ export class GenericChallenge implements Challenge {
 	}
 
 	protected testCompletion() {
-		// console.log('handling completion', this.correctMode, this.callback, this);
 		const allRequirementsCompleted = this.requirements.every(req => req.isCompleted());
 		if (this.callback && allRequirementsCompleted) {
 			this.requirements.forEach(req => req.afterAchievementCompletionReset());

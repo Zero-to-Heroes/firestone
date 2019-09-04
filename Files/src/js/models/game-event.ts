@@ -44,7 +44,7 @@ export class GameEvent {
 
 	readonly type: string;
 	readonly cardId: string;
-	readonly controllerId: number;
+	readonly controllerId: number; // matches a PlayerId
 	readonly localPlayer;
 	readonly opponentPlayer;
 	readonly entityId: number;
