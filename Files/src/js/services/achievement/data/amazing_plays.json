@@ -1748,7 +1748,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
-        "points": 5,
+        "points": 7,
         "requirements": [
             {
                 "type": "GAME_TYPE",
@@ -1793,7 +1793,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
-        "points": 5,
+        "points": 10,
         "requirements": [
             {
                 "type": "GAME_TYPE",
@@ -1838,7 +1838,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
-        "points": 5,
+        "points": 12,
         "requirements": [
             {
                 "type": "GAME_TYPE",
@@ -1883,7 +1883,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
-        "points": 5,
+        "points": 15,
         "requirements": [
             {
                 "type": "GAME_TYPE",
@@ -1928,7 +1928,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
-        "points": 5,
+        "points": 17,
         "requirements": [
             {
                 "type": "GAME_TYPE",
@@ -1953,6 +1953,276 @@
                 "type": "TOTAL_HERO_HEAL",
                 "values": [
                     "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_deal_damage_25",
+        "type": "amazing_plays_deal_damage",
+        "name": "Burn Them All!",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Burn Them All! (rank 25)",
+        "emptyText": "Deal at least 120 during one Ranked Standard game",
+        "completedText": "You dealt 120 damage at rank 25 or better",
+        "displayCardId": "BRM_027p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "values": [
+                    "120",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_deal_damage_20",
+        "type": "amazing_plays_deal_damage",
+        "name": "Burn Them All!",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Burn Them All! (rank 20)",
+        "emptyText": "Deal at least 120 during one Ranked Standard game",
+        "completedText": "You dealt 120 damage at rank 20 or better",
+        "displayCardId": "BRM_027p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 7,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "values": [
+                    "120",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_deal_damage_15",
+        "type": "amazing_plays_deal_damage",
+        "name": "Burn Them All!",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Burn Them All! (rank 15)",
+        "emptyText": "Deal at least 120 during one Ranked Standard game",
+        "completedText": "You dealt 120 damage at rank 15 or better",
+        "displayCardId": "BRM_027p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 10,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "values": [
+                    "120",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_deal_damage_10",
+        "type": "amazing_plays_deal_damage",
+        "name": "Burn Them All!",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Burn Them All! (rank 10)",
+        "emptyText": "Deal at least 120 during one Ranked Standard game",
+        "completedText": "You dealt 120 damage at rank 10 or better",
+        "displayCardId": "BRM_027p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 12,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "values": [
+                    "120",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_deal_damage_5",
+        "type": "amazing_plays_deal_damage",
+        "name": "Burn Them All!",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Burn Them All! (rank 5)",
+        "emptyText": "Deal at least 120 during one Ranked Standard game",
+        "completedText": "You dealt 120 damage at rank 5 or better",
+        "displayCardId": "BRM_027p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 15,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "values": [
+                    "120",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_deal_damage_1",
+        "type": "amazing_plays_deal_damage",
+        "name": "Burn Them All!",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Burn Them All! (rank 1)",
+        "emptyText": "Deal at least 120 during one Ranked Standard game",
+        "completedText": "You dealt 120 damage at rank 1 or better",
+        "displayCardId": "BRM_027p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 17,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "values": [
+                    "120",
                     "AT_LEAST"
                 ]
             }
