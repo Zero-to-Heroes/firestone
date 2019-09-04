@@ -5,8 +5,8 @@ import { MemoryInspectionService } from './plugins/memory-inspection.service';
 
 @Injectable()
 export class PlayersInfoService {
-	private playerInfo: PlayerInfo;
-	private opponentInfo: PlayerInfo;
+	public playerInfo: PlayerInfo;
+	public opponentInfo: PlayerInfo;
 
 	constructor(private events: Events, private memoryService: MemoryInspectionService) {
 		this.events.on(Events.PLAYER_INFO).subscribe(event => {
