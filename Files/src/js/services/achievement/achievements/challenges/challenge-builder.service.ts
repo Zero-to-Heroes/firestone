@@ -25,6 +25,7 @@ import { SceneChangedToGameReq } from '../requirements/scene-changed-to-game-req
 import { StandardRankedMinRankReq } from '../requirements/standard-ranked-min-rank-req';
 import { TotalDamageTakenReq } from '../requirements/total-damage-taken-req';
 import { TotalDiscardedCardsReq } from '../requirements/total-discarded-cards-req';
+import { TotalHeroHealReq } from '../requirements/total-hero-heal-req';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 import { GenericChallenge } from './generic-challenge';
@@ -68,6 +69,7 @@ export class ChallengeBuilderService {
 			case 'DAMAGE_AT_END': return DamageAtEndReq.create(rawReq);
 			case 'ARMOR_AT_END': return ArmorAtEndReq.create(rawReq);
 			case 'TOTAL_DAMAGE_TAKEN': return TotalDamageTakenReq.create(rawReq);
+			case 'TOTAL_HERO_HEAL': return TotalHeroHealReq.create(rawReq);
 			case 'TOTAL_DISCARD': return TotalDiscardedCardsReq.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);

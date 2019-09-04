@@ -1,947 +1,1964 @@
 [
-	{
-		"id": "amazing_plays_win_with_one_hp_25",
-		"type": "amazing_plays_win_with_one_hp",
-		"name": "One HP matters",
-		"root": true,
-		"priority": -25,
-		"displayName": "Achievement completed: One HP matters (rank 25)",
-		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"completedText": "You won with one HP left at rank 25 or better",
-		"displayCardId": "GILA_BOSS_49p",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "HEALTH_AT_END",
-				"values": ["1"]
-			},
-			{
-				"type": "ARMOR_AT_END",
-				"values": ["0"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_one_hp_20",
-		"type": "amazing_plays_win_with_one_hp",
-		"name": "One HP matters",
-		"root": false,
-		"priority": -20,
-		"displayName": "Achievement completed: One HP matters (rank 20)",
-		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"completedText": "You won with one HP left at rank 20 or better",
-		"displayCardId": "GILA_BOSS_49p",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "HEALTH_AT_END",
-				"values": ["1"]
-			},
-			{
-				"type": "ARMOR_AT_END",
-				"values": ["0"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_one_hp_15",
-		"type": "amazing_plays_win_with_one_hp",
-		"name": "One HP matters",
-		"root": false,
-		"priority": -15,
-		"displayName": "Achievement completed: One HP matters (rank 15)",
-		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"completedText": "You won with one HP left at rank 15 or better",
-		"displayCardId": "GILA_BOSS_49p",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "HEALTH_AT_END",
-				"values": ["1"]
-			},
-			{
-				"type": "ARMOR_AT_END",
-				"values": ["0"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_one_hp_10",
-		"type": "amazing_plays_win_with_one_hp",
-		"name": "One HP matters",
-		"root": false,
-		"priority": -10,
-		"displayName": "Achievement completed: One HP matters (rank 10)",
-		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"completedText": "You won with one HP left at rank 10 or better",
-		"displayCardId": "GILA_BOSS_49p",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "HEALTH_AT_END",
-				"values": ["1"]
-			},
-			{
-				"type": "ARMOR_AT_END",
-				"values": ["0"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_one_hp_5",
-		"type": "amazing_plays_win_with_one_hp",
-		"name": "One HP matters",
-		"root": false,
-		"priority": -5,
-		"displayName": "Achievement completed: One HP matters (rank 5)",
-		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"completedText": "You won with one HP left at rank 5 or better",
-		"displayCardId": "GILA_BOSS_49p",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "HEALTH_AT_END",
-				"values": ["1"]
-			},
-			{
-				"type": "ARMOR_AT_END",
-				"values": ["0"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_one_hp_1",
-		"type": "amazing_plays_win_with_one_hp",
-		"name": "One HP matters",
-		"root": false,
-		"priority": -1,
-		"displayName": "Achievement completed: One HP matters (rank 1)",
-		"emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
-		"completedText": "You won with one HP left at rank 1 or better",
-		"displayCardId": "GILA_BOSS_49p",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "HEALTH_AT_END",
-				"values": ["1"]
-			},
-			{
-				"type": "ARMOR_AT_END",
-				"values": ["0"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_full_hp_25",
-		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't Hit Me!",
-		"root": true,
-		"priority": -25,
-		"displayName": "Achievement completed: Don't Hit Me! (rank 25)",
-		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"completedText": "You won with your full HP left at rank 25 or better",
-		"displayCardId": "BRMA10_4",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DAMAGE_AT_END",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_full_hp_20",
-		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't Hit Me!",
-		"root": false,
-		"priority": -20,
-		"displayName": "Achievement completed: Don't Hit Me! (rank 20)",
-		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"completedText": "You won with your full HP left at rank 20 or better",
-		"displayCardId": "BRMA10_4",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DAMAGE_AT_END",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_full_hp_15",
-		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't Hit Me!",
-		"root": false,
-		"priority": -15,
-		"displayName": "Achievement completed: Don't Hit Me! (rank 15)",
-		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"completedText": "You won with your full HP left at rank 15 or better",
-		"displayCardId": "BRMA10_4",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DAMAGE_AT_END",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_full_hp_10",
-		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't Hit Me!",
-		"root": false,
-		"priority": -10,
-		"displayName": "Achievement completed: Don't Hit Me! (rank 10)",
-		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"completedText": "You won with your full HP left at rank 10 or better",
-		"displayCardId": "BRMA10_4",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DAMAGE_AT_END",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_full_hp_5",
-		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't Hit Me!",
-		"root": false,
-		"priority": -5,
-		"displayName": "Achievement completed: Don't Hit Me! (rank 5)",
-		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"completedText": "You won with your full HP left at rank 5 or better",
-		"displayCardId": "BRMA10_4",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DAMAGE_AT_END",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_with_full_hp_1",
-		"type": "amazing_plays_win_with_full_hp",
-		"name": "Don't Hit Me!",
-		"root": false,
-		"priority": -1,
-		"displayName": "Achievement completed: Don't Hit Me! (rank 1)",
-		"emptyText": "Win one game with your full HP left in Ranked Standard",
-		"completedText": "You won with your full HP left at rank 1 or better",
-		"displayCardId": "BRMA10_4",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DAMAGE_AT_END",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_game_tie_25",
-		"type": "amazing_plays_game_tie",
-		"name": "That's A Nice Tie",
-		"root": true,
-		"priority": -25,
-		"displayName": "Achievement completed: That's A Nice Tie (rank 25)",
-		"emptyText": "End the game with a tie in Ranked Standard",
-		"completedText": "You tied a game at rank 25 or better",
-		"displayCardId": "KAR_044a",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 15,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_TIE"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_game_tie_20",
-		"type": "amazing_plays_game_tie",
-		"name": "That's A Nice Tie",
-		"root": false,
-		"priority": -20,
-		"displayName": "Achievement completed: That's A Nice Tie (rank 20)",
-		"emptyText": "End the game with a tie in Ranked Standard",
-		"completedText": "You tied a game at rank 20 or better",
-		"displayCardId": "KAR_044a",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 20,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_TIE"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_game_tie_15",
-		"type": "amazing_plays_game_tie",
-		"name": "That's A Nice Tie",
-		"root": false,
-		"priority": -15,
-		"displayName": "Achievement completed: That's A Nice Tie (rank 15)",
-		"emptyText": "End the game with a tie in Ranked Standard",
-		"completedText": "You tied a game at rank 15 or better",
-		"displayCardId": "KAR_044a",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 25,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_TIE"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_game_tie_10",
-		"type": "amazing_plays_game_tie",
-		"name": "That's A Nice Tie",
-		"root": false,
-		"priority": -10,
-		"displayName": "Achievement completed: That's A Nice Tie (rank 10)",
-		"emptyText": "End the game with a tie in Ranked Standard",
-		"completedText": "You tied a game at rank 10 or better",
-		"displayCardId": "KAR_044a",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 30,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_TIE"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_game_tie_5",
-		"type": "amazing_plays_game_tie",
-		"name": "That's A Nice Tie",
-		"root": false,
-		"priority": -5,
-		"displayName": "Achievement completed: That's A Nice Tie (rank 5)",
-		"emptyText": "End the game with a tie in Ranked Standard",
-		"completedText": "You tied a game at rank 5 or better",
-		"displayCardId": "KAR_044a",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 35,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_TIE"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_game_tie_1",
-		"type": "amazing_plays_game_tie",
-		"name": "That's A Nice Tie",
-		"root": false,
-		"priority": -1,
-		"displayName": "Achievement completed: That's A Nice Tie (rank 1)",
-		"emptyText": "End the game with a tie in Ranked Standard",
-		"completedText": "You tied a game at rank 1 or better",
-		"displayCardId": "KAR_044a",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 39,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_TIE"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_without_taking_damage_25",
-		"type": "amazing_plays_win_without_taking_damage",
-		"name": "Immune",
-		"root": true,
-		"priority": -25,
-		"displayName": "Achievement completed: Immune (rank 25)",
-		"emptyText": "Win the game without taking any damage in Ranked Standard",
-		"completedText": "You won a game without taking any damage at rank 25 or better",
-		"displayCardId": "CRED_69",
-		"displayCardType": "minion",
-		"difficulty": "epic",
-		"points": 10,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "TOTAL_DAMAGE_TAKEN",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_without_taking_damage_20",
-		"type": "amazing_plays_win_without_taking_damage",
-		"name": "Immune",
-		"root": false,
-		"priority": -20,
-		"displayName": "Achievement completed: Immune (rank 20)",
-		"emptyText": "Win the game without taking any damage in Ranked Standard",
-		"completedText": "You won a game without taking any damage at rank 20 or better",
-		"displayCardId": "CRED_69",
-		"displayCardType": "minion",
-		"difficulty": "epic",
-		"points": 15,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "TOTAL_DAMAGE_TAKEN",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_without_taking_damage_15",
-		"type": "amazing_plays_win_without_taking_damage",
-		"name": "Immune",
-		"root": false,
-		"priority": -15,
-		"displayName": "Achievement completed: Immune (rank 15)",
-		"emptyText": "Win the game without taking any damage in Ranked Standard",
-		"completedText": "You won a game without taking any damage at rank 15 or better",
-		"displayCardId": "CRED_69",
-		"displayCardType": "minion",
-		"difficulty": "epic",
-		"points": 20,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "TOTAL_DAMAGE_TAKEN",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_without_taking_damage_10",
-		"type": "amazing_plays_win_without_taking_damage",
-		"name": "Immune",
-		"root": false,
-		"priority": -10,
-		"displayName": "Achievement completed: Immune (rank 10)",
-		"emptyText": "Win the game without taking any damage in Ranked Standard",
-		"completedText": "You won a game without taking any damage at rank 10 or better",
-		"displayCardId": "CRED_69",
-		"displayCardType": "minion",
-		"difficulty": "epic",
-		"points": 25,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "TOTAL_DAMAGE_TAKEN",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_without_taking_damage_5",
-		"type": "amazing_plays_win_without_taking_damage",
-		"name": "Immune",
-		"root": false,
-		"priority": -5,
-		"displayName": "Achievement completed: Immune (rank 5)",
-		"emptyText": "Win the game without taking any damage in Ranked Standard",
-		"completedText": "You won a game without taking any damage at rank 5 or better",
-		"displayCardId": "CRED_69",
-		"displayCardType": "minion",
-		"difficulty": "epic",
-		"points": 30,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "TOTAL_DAMAGE_TAKEN",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_win_without_taking_damage_1",
-		"type": "amazing_plays_win_without_taking_damage",
-		"name": "Immune",
-		"root": false,
-		"priority": -1,
-		"displayName": "Achievement completed: Immune (rank 1)",
-		"emptyText": "Win the game without taking any damage in Ranked Standard",
-		"completedText": "You won a game without taking any damage at rank 1 or better",
-		"displayCardId": "CRED_69",
-		"displayCardType": "minion",
-		"difficulty": "epic",
-		"points": 34,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "TOTAL_DAMAGE_TAKEN",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_MIN_TURNS",
-				"values": ["4"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "amazing_plays_summon_highkeeper_ra",
-		"type": "amazing_plays_summon_highkeeper_ra",
-		"name": "Highkeeper Ra",
-		"root": true,
-		"priority": 0,
-		"displayName": "Achievement completed: Highkeeper Ra is among us!",
-		"emptyText": "Summon Highkeeper Ra in Ranked Standard (at least rank 19)",
-		"completedText": "You summoned Highkeeper Ra!",
-		"displayCardId": "ULD_705t",
-		"displayCardType": "minion",
-		"difficulty": "legendary",
-		"points": 40,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["19"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "MINION_SUMMONED",
-				"values": ["ULD_705t"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	}
+    {
+        "id": "amazing_plays_win_with_one_hp_25",
+        "type": "amazing_plays_win_with_one_hp",
+        "name": "One HP matters",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: One HP matters (rank 25)",
+        "emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
+        "completedText": "You won with one HP left at rank 25 or better",
+        "displayCardId": "GILA_BOSS_49p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "HEALTH_AT_END",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "ARMOR_AT_END",
+                "values": [
+                    "0"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_one_hp_20",
+        "type": "amazing_plays_win_with_one_hp",
+        "name": "One HP matters",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: One HP matters (rank 20)",
+        "emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
+        "completedText": "You won with one HP left at rank 20 or better",
+        "displayCardId": "GILA_BOSS_49p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "HEALTH_AT_END",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "ARMOR_AT_END",
+                "values": [
+                    "0"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_one_hp_15",
+        "type": "amazing_plays_win_with_one_hp",
+        "name": "One HP matters",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: One HP matters (rank 15)",
+        "emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
+        "completedText": "You won with one HP left at rank 15 or better",
+        "displayCardId": "GILA_BOSS_49p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "HEALTH_AT_END",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "ARMOR_AT_END",
+                "values": [
+                    "0"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_one_hp_10",
+        "type": "amazing_plays_win_with_one_hp",
+        "name": "One HP matters",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: One HP matters (rank 10)",
+        "emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
+        "completedText": "You won with one HP left at rank 10 or better",
+        "displayCardId": "GILA_BOSS_49p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "HEALTH_AT_END",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "ARMOR_AT_END",
+                "values": [
+                    "0"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_one_hp_5",
+        "type": "amazing_plays_win_with_one_hp",
+        "name": "One HP matters",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: One HP matters (rank 5)",
+        "emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
+        "completedText": "You won with one HP left at rank 5 or better",
+        "displayCardId": "GILA_BOSS_49p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "HEALTH_AT_END",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "ARMOR_AT_END",
+                "values": [
+                    "0"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_one_hp_1",
+        "type": "amazing_plays_win_with_one_hp",
+        "name": "One HP matters",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: One HP matters (rank 1)",
+        "emptyText": "Win one game with one HP left and no armor remaining in Ranked Standard",
+        "completedText": "You won with one HP left at rank 1 or better",
+        "displayCardId": "GILA_BOSS_49p",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "HEALTH_AT_END",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "ARMOR_AT_END",
+                "values": [
+                    "0"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_full_hp_25",
+        "type": "amazing_plays_win_with_full_hp",
+        "name": "Don't Hit Me!",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Don't Hit Me! (rank 25)",
+        "emptyText": "Win one game with your full HP left in Ranked Standard",
+        "completedText": "You won with your full HP left at rank 25 or better",
+        "displayCardId": "BRMA10_4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DAMAGE_AT_END",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_full_hp_20",
+        "type": "amazing_plays_win_with_full_hp",
+        "name": "Don't Hit Me!",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Don't Hit Me! (rank 20)",
+        "emptyText": "Win one game with your full HP left in Ranked Standard",
+        "completedText": "You won with your full HP left at rank 20 or better",
+        "displayCardId": "BRMA10_4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DAMAGE_AT_END",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_full_hp_15",
+        "type": "amazing_plays_win_with_full_hp",
+        "name": "Don't Hit Me!",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Don't Hit Me! (rank 15)",
+        "emptyText": "Win one game with your full HP left in Ranked Standard",
+        "completedText": "You won with your full HP left at rank 15 or better",
+        "displayCardId": "BRMA10_4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DAMAGE_AT_END",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_full_hp_10",
+        "type": "amazing_plays_win_with_full_hp",
+        "name": "Don't Hit Me!",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Don't Hit Me! (rank 10)",
+        "emptyText": "Win one game with your full HP left in Ranked Standard",
+        "completedText": "You won with your full HP left at rank 10 or better",
+        "displayCardId": "BRMA10_4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DAMAGE_AT_END",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_full_hp_5",
+        "type": "amazing_plays_win_with_full_hp",
+        "name": "Don't Hit Me!",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Don't Hit Me! (rank 5)",
+        "emptyText": "Win one game with your full HP left in Ranked Standard",
+        "completedText": "You won with your full HP left at rank 5 or better",
+        "displayCardId": "BRMA10_4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DAMAGE_AT_END",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_with_full_hp_1",
+        "type": "amazing_plays_win_with_full_hp",
+        "name": "Don't Hit Me!",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Don't Hit Me! (rank 1)",
+        "emptyText": "Win one game with your full HP left in Ranked Standard",
+        "completedText": "You won with your full HP left at rank 1 or better",
+        "displayCardId": "BRMA10_4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DAMAGE_AT_END",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_game_tie_25",
+        "type": "amazing_plays_game_tie",
+        "name": "That's A Nice Tie",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: That's A Nice Tie (rank 25)",
+        "emptyText": "End the game with a tie in Ranked Standard",
+        "completedText": "You tied a game at rank 25 or better",
+        "displayCardId": "KAR_044a",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 15,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_game_tie_20",
+        "type": "amazing_plays_game_tie",
+        "name": "That's A Nice Tie",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: That's A Nice Tie (rank 20)",
+        "emptyText": "End the game with a tie in Ranked Standard",
+        "completedText": "You tied a game at rank 20 or better",
+        "displayCardId": "KAR_044a",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 20,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_game_tie_15",
+        "type": "amazing_plays_game_tie",
+        "name": "That's A Nice Tie",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: That's A Nice Tie (rank 15)",
+        "emptyText": "End the game with a tie in Ranked Standard",
+        "completedText": "You tied a game at rank 15 or better",
+        "displayCardId": "KAR_044a",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_game_tie_10",
+        "type": "amazing_plays_game_tie",
+        "name": "That's A Nice Tie",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: That's A Nice Tie (rank 10)",
+        "emptyText": "End the game with a tie in Ranked Standard",
+        "completedText": "You tied a game at rank 10 or better",
+        "displayCardId": "KAR_044a",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 30,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_game_tie_5",
+        "type": "amazing_plays_game_tie",
+        "name": "That's A Nice Tie",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: That's A Nice Tie (rank 5)",
+        "emptyText": "End the game with a tie in Ranked Standard",
+        "completedText": "You tied a game at rank 5 or better",
+        "displayCardId": "KAR_044a",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 35,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_game_tie_1",
+        "type": "amazing_plays_game_tie",
+        "name": "That's A Nice Tie",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: That's A Nice Tie (rank 1)",
+        "emptyText": "End the game with a tie in Ranked Standard",
+        "completedText": "You tied a game at rank 1 or better",
+        "displayCardId": "KAR_044a",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 39,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_without_taking_damage_25",
+        "type": "amazing_plays_win_without_taking_damage",
+        "name": "Immune",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Immune (rank 25)",
+        "emptyText": "Win the game without taking any damage in Ranked Standard",
+        "completedText": "You won a game without taking any damage at rank 25 or better",
+        "displayCardId": "CRED_69",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 10,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "TOTAL_DAMAGE_TAKEN",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_without_taking_damage_20",
+        "type": "amazing_plays_win_without_taking_damage",
+        "name": "Immune",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Immune (rank 20)",
+        "emptyText": "Win the game without taking any damage in Ranked Standard",
+        "completedText": "You won a game without taking any damage at rank 20 or better",
+        "displayCardId": "CRED_69",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 15,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "TOTAL_DAMAGE_TAKEN",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_without_taking_damage_15",
+        "type": "amazing_plays_win_without_taking_damage",
+        "name": "Immune",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Immune (rank 15)",
+        "emptyText": "Win the game without taking any damage in Ranked Standard",
+        "completedText": "You won a game without taking any damage at rank 15 or better",
+        "displayCardId": "CRED_69",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 20,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "TOTAL_DAMAGE_TAKEN",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_without_taking_damage_10",
+        "type": "amazing_plays_win_without_taking_damage",
+        "name": "Immune",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Immune (rank 10)",
+        "emptyText": "Win the game without taking any damage in Ranked Standard",
+        "completedText": "You won a game without taking any damage at rank 10 or better",
+        "displayCardId": "CRED_69",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "TOTAL_DAMAGE_TAKEN",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_without_taking_damage_5",
+        "type": "amazing_plays_win_without_taking_damage",
+        "name": "Immune",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Immune (rank 5)",
+        "emptyText": "Win the game without taking any damage in Ranked Standard",
+        "completedText": "You won a game without taking any damage at rank 5 or better",
+        "displayCardId": "CRED_69",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 30,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "TOTAL_DAMAGE_TAKEN",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_win_without_taking_damage_1",
+        "type": "amazing_plays_win_without_taking_damage",
+        "name": "Immune",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Immune (rank 1)",
+        "emptyText": "Win the game without taking any damage in Ranked Standard",
+        "completedText": "You won a game without taking any damage at rank 1 or better",
+        "displayCardId": "CRED_69",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "TOTAL_DAMAGE_TAKEN",
+                "values": [
+                    "0"
+                ]
+            },
+            {
+                "type": "GAME_MIN_TURNS",
+                "values": [
+                    "4"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_summon_highkeeper_ra_25",
+        "type": "amazing_plays_summon_highkeeper_ra (rank 25)",
+        "name": "Highkeeper Ra",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 25)",
+        "emptyText": "Summon Highkeeper Ra in Ranked Standard",
+        "completedText": "You summoned Highkeeper Ra at rank 25 or better",
+        "displayCardId": "ULD_705t",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 40,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "MINION_SUMMONED",
+                "values": [
+                    "ULD_705t"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_summon_highkeeper_ra_20",
+        "type": "amazing_plays_summon_highkeeper_ra (rank 20)",
+        "name": "Highkeeper Ra",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 20)",
+        "emptyText": "Summon Highkeeper Ra in Ranked Standard",
+        "completedText": "You summoned Highkeeper Ra at rank 20 or better",
+        "displayCardId": "ULD_705t",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 40,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "MINION_SUMMONED",
+                "values": [
+                    "ULD_705t"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_summon_highkeeper_ra_15",
+        "type": "amazing_plays_summon_highkeeper_ra (rank 15)",
+        "name": "Highkeeper Ra",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 15)",
+        "emptyText": "Summon Highkeeper Ra in Ranked Standard",
+        "completedText": "You summoned Highkeeper Ra at rank 15 or better",
+        "displayCardId": "ULD_705t",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 40,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "MINION_SUMMONED",
+                "values": [
+                    "ULD_705t"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_summon_highkeeper_ra_10",
+        "type": "amazing_plays_summon_highkeeper_ra (rank 10)",
+        "name": "Highkeeper Ra",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 10)",
+        "emptyText": "Summon Highkeeper Ra in Ranked Standard",
+        "completedText": "You summoned Highkeeper Ra at rank 10 or better",
+        "displayCardId": "ULD_705t",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 40,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "MINION_SUMMONED",
+                "values": [
+                    "ULD_705t"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_summon_highkeeper_ra_5",
+        "type": "amazing_plays_summon_highkeeper_ra (rank 5)",
+        "name": "Highkeeper Ra",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 5)",
+        "emptyText": "Summon Highkeeper Ra in Ranked Standard",
+        "completedText": "You summoned Highkeeper Ra at rank 5 or better",
+        "displayCardId": "ULD_705t",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 40,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "MINION_SUMMONED",
+                "values": [
+                    "ULD_705t"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_summon_highkeeper_ra_1",
+        "type": "amazing_plays_summon_highkeeper_ra (rank 1)",
+        "name": "Highkeeper Ra",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 1)",
+        "emptyText": "Summon Highkeeper Ra in Ranked Standard",
+        "completedText": "You summoned Highkeeper Ra at rank 1 or better",
+        "displayCardId": "ULD_705t",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "points": 40,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "MINION_SUMMONED",
+                "values": [
+                    "ULD_705t"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_discard_cards_25",
+        "type": "amazing_plays_discard_cards",
+        "name": "Put it Away",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Put it Away (rank 25)",
+        "emptyText": "Discard 8 cards in a single game in Ranked Standard",
+        "completedText": "You discarded 8 cards in a single game at rank 25 or better",
+        "displayCardId": "TRL_252",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DISCARD",
+                "values": [
+                    "8"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_discard_cards_20",
+        "type": "amazing_plays_discard_cards",
+        "name": "Put it Away",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Put it Away (rank 20)",
+        "emptyText": "Discard 8 cards in a single game in Ranked Standard",
+        "completedText": "You discarded 8 cards in a single game at rank 20 or better",
+        "displayCardId": "TRL_252",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 10,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DISCARD",
+                "values": [
+                    "8"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_discard_cards_15",
+        "type": "amazing_plays_discard_cards",
+        "name": "Put it Away",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Put it Away (rank 15)",
+        "emptyText": "Discard 8 cards in a single game in Ranked Standard",
+        "completedText": "You discarded 8 cards in a single game at rank 15 or better",
+        "displayCardId": "TRL_252",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 15,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DISCARD",
+                "values": [
+                    "8"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_discard_cards_10",
+        "type": "amazing_plays_discard_cards",
+        "name": "Put it Away",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Put it Away (rank 10)",
+        "emptyText": "Discard 8 cards in a single game in Ranked Standard",
+        "completedText": "You discarded 8 cards in a single game at rank 10 or better",
+        "displayCardId": "TRL_252",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 20,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DISCARD",
+                "values": [
+                    "8"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_discard_cards_5",
+        "type": "amazing_plays_discard_cards",
+        "name": "Put it Away",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Put it Away (rank 5)",
+        "emptyText": "Discard 8 cards in a single game in Ranked Standard",
+        "completedText": "You discarded 8 cards in a single game at rank 5 or better",
+        "displayCardId": "TRL_252",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DISCARD",
+                "values": [
+                    "8"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_discard_cards_1",
+        "type": "amazing_plays_discard_cards",
+        "name": "Put it Away",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Put it Away (rank 1)",
+        "emptyText": "Discard 8 cards in a single game in Ranked Standard",
+        "completedText": "You discarded 8 cards in a single game at rank 1 or better",
+        "displayCardId": "TRL_252",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "points": 29,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_DISCARD",
+                "values": [
+                    "8"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_hero_heal_25",
+        "type": "amazing_plays_hero_heal",
+        "name": "Healed!",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Healed! (rank 25)",
+        "emptyText": "Heal your hero for 30 health in Ranked Standard",
+        "completedText": "You healed your hero for 30 health at rank 25 or better",
+        "displayCardId": "CS1h_001_H2_AT_132",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_HERO_HEAL",
+                "values": [
+                    "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_hero_heal_20",
+        "type": "amazing_plays_hero_heal",
+        "name": "Healed!",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Healed! (rank 20)",
+        "emptyText": "Heal your hero for 30 health in Ranked Standard",
+        "completedText": "You healed your hero for 30 health at rank 20 or better",
+        "displayCardId": "CS1h_001_H2_AT_132",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_HERO_HEAL",
+                "values": [
+                    "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_hero_heal_15",
+        "type": "amazing_plays_hero_heal",
+        "name": "Healed!",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Healed! (rank 15)",
+        "emptyText": "Heal your hero for 30 health in Ranked Standard",
+        "completedText": "You healed your hero for 30 health at rank 15 or better",
+        "displayCardId": "CS1h_001_H2_AT_132",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_HERO_HEAL",
+                "values": [
+                    "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_hero_heal_10",
+        "type": "amazing_plays_hero_heal",
+        "name": "Healed!",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Healed! (rank 10)",
+        "emptyText": "Heal your hero for 30 health in Ranked Standard",
+        "completedText": "You healed your hero for 30 health at rank 10 or better",
+        "displayCardId": "CS1h_001_H2_AT_132",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_HERO_HEAL",
+                "values": [
+                    "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_hero_heal_5",
+        "type": "amazing_plays_hero_heal",
+        "name": "Healed!",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Healed! (rank 5)",
+        "emptyText": "Heal your hero for 30 health in Ranked Standard",
+        "completedText": "You healed your hero for 30 health at rank 5 or better",
+        "displayCardId": "CS1h_001_H2_AT_132",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_HERO_HEAL",
+                "values": [
+                    "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "amazing_plays_hero_heal_1",
+        "type": "amazing_plays_hero_heal",
+        "name": "Healed!",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Healed! (rank 1)",
+        "emptyText": "Heal your hero for 30 health in Ranked Standard",
+        "completedText": "You healed your hero for 30 health at rank 1 or better",
+        "displayCardId": "CS1h_001_H2_AT_132",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7",
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "TOTAL_HERO_HEAL",
+                "values": [
+                    "30",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    }
 ]

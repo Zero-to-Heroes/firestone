@@ -101,7 +101,6 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER':
-				const start = Date.now();
 				// First try without waiting for a callback, which is most of the cases
 				const playerInfo = this.playersInfoService.playerInfo || (await this.playersInfoService.getPlayerInfo());
 				const localPlayer = Object.assign({}, gameEvent.Value, {
@@ -279,6 +278,20 @@ export class GameEvents {
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DAMAGE,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						additionalData: {
+							sourceCardId: gameEvent.Value.SourceCardId,
+							sourceControllerId: gameEvent.Value.SourceControllerId,
+							targets: gameEvent.Value.Targets,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'HEALING':
+				this.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.HEALING,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
