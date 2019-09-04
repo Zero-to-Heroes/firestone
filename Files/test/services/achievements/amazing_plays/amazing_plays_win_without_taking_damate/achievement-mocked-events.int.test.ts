@@ -21,8 +21,8 @@ describe('Amazing Play - Win without taking any damage', () => {
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, additionalEvents);
 		expect(isAchievementComplete).toBe(true);
 	});
-	// test('is not completed when GEP event is missing', async () => {
-	// 	const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents);
-	// 	expect(isAchievementComplete).toBeFalsy();
-	// });
+	test('is not completed when GEP event is missing', async () => {
+		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents);
+		expect(isAchievementComplete).toBeFalsy();
+	});
 });
