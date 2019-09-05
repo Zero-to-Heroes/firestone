@@ -20,6 +20,7 @@ import { MonsterHuntStepReq } from '../requirements/monster-hunt-step-req';
 import { MulliganDoneReq } from '../requirements/mulligan-done-req';
 import { PassiveBuffReq } from '../requirements/passive-buff-req';
 import { PlayerHeroReq } from '../requirements/player-hero-req';
+import { ResummonRecurringVillainRew } from '../requirements/resummon-recurring-villain-req';
 import { RumbleRunStepReq } from '../requirements/rumble-run-step-req';
 import { ScenarioIdReq } from '../requirements/scenario-id-req';
 import { SceneChangedToGameReq } from '../requirements/scene-changed-to-game-req';
@@ -77,6 +78,7 @@ export class ChallengeBuilderService {
 			case 'TOTAL_DAMAGE_DEALT': return TotalDamageDealtReq.create(rawReq);
 			case 'TOTAL_ARMOR_GAINED': return TotalArmorGainReq.create(rawReq);
 			case 'MINIONS_CONTROLLED_DURING_TURN': return MinionsControlledDuringTurnReq.create(rawReq);
+			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {
