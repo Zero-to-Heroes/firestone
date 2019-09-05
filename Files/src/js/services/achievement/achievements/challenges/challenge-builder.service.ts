@@ -15,6 +15,7 @@ import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
 import { MinionSummonedReq } from '../requirements/minion-summoned-req';
+import { MinionsControlledDuringTurnReq } from '../requirements/minions-controlled-during-turn-req';
 import { MonsterHuntStepReq } from '../requirements/monster-hunt-step-req';
 import { MulliganDoneReq } from '../requirements/mulligan-done-req';
 import { PassiveBuffReq } from '../requirements/passive-buff-req';
@@ -75,6 +76,7 @@ export class ChallengeBuilderService {
 			case 'TOTAL_DISCARD': return TotalDiscardedCardsReq.create(rawReq);
 			case 'TOTAL_DAMAGE_DEALT': return TotalDamageDealtReq.create(rawReq);
 			case 'TOTAL_ARMOR_GAINED': return TotalArmorGainReq.create(rawReq);
+			case 'MINIONS_CONTROLLED_DURING_TURN': return MinionsControlledDuringTurnReq.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {
