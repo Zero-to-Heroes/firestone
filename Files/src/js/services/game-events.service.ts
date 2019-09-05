@@ -202,7 +202,12 @@ export class GameEvents {
 				this.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
 				break;
 			case 'MINION_SUMMONED':
-				this.allEvents.next(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent));
+				const summonAdditionProps = gameEvent.Value.AdditionalProps
+					? {
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					  }
+					: null;
+				this.allEvents.next(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				this.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
