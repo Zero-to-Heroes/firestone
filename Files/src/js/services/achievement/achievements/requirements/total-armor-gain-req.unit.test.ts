@@ -58,7 +58,7 @@ describe('total-armor-gain-req', () => {
 			const event = Object.assign(new GameEvent(), {
 				type: GameEvent.ARMOR_CHANGED,
 				controllerId: 1,
-				localPlayer: { PlayerId: 3 },
+				localPlayer: { PlayerId: 1 },
 				additionalData: {
 					armorChange: 2,
 				},
@@ -114,7 +114,7 @@ describe('total-armor-gain-req', () => {
 			const eventGain = Object.assign(new GameEvent(), {
 				type: GameEvent.ARMOR_CHANGED,
 				controllerId: 1,
-				localPlayer: { PlayerId: 3 },
+				localPlayer: { PlayerId: 1 },
 				additionalData: {
 					armorChange: 4,
 				},
@@ -122,7 +122,7 @@ describe('total-armor-gain-req', () => {
 			const eventLoss = Object.assign(new GameEvent(), {
 				type: GameEvent.ARMOR_CHANGED,
 				controllerId: 1,
-				localPlayer: { PlayerId: 3 },
+				localPlayer: { PlayerId: 1 },
 				additionalData: {
 					armorChange: -4,
 				},
@@ -139,7 +139,7 @@ describe('total-armor-gain-req', () => {
 			const event = Object.assign(new GameEvent(), {
 				type: GameEvent.ARMOR_CHANGED,
 				controllerId: 1,
-				localPlayer: { PlayerId: 3 },
+				localPlayer: { PlayerId: 1 },
 				additionalData: {
 					armorChange: -4,
 				},
@@ -147,7 +147,7 @@ describe('total-armor-gain-req', () => {
 
 			req.test(event);
 
-			expect(req.isCompleted()).toBe(true);
+			expect(req.isCompleted()).toBeFalsy();
 		});
 	});
 
