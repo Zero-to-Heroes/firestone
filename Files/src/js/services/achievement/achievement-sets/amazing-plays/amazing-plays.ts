@@ -15,6 +15,7 @@ export class AmazingPlaysSetProvider extends GenericSetProvider {
 				'amazing_plays_discard_cards',
 				'amazing_plays_hero_heal',
 				'amazing_plays_deal_damage',
+				'amazing_plays_gain_armor',
 			],
 			'achievements_amazing_plays',
 			conf,

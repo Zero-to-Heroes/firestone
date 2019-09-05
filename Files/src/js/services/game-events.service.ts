@@ -261,6 +261,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'ARMOR_CHANGED':
+				this.allEvents.next(
+					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
+						armorChange: gameEvent.Value.ArmorChange,
+					}),
+				);
+				break;
 			case 'FATIGUE_DAMAGE':
 				this.allEvents.next(
 					Object.assign(new GameEvent(), {
