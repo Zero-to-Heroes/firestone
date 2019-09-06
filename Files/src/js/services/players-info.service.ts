@@ -23,6 +23,10 @@ export class PlayersInfoService {
 		}
 		console.warn('[players-info] playerInfo not present in cache, fetching it from GEP');
 		const infoFromGep = await this.memoryService.getPlayerInfo();
+		if (!infoFromGep) {
+			console.error('[players-info] No player info returned from the GEP');
+			return null;
+		}
 		return infoFromGep.localPlayer;
 	}
 
@@ -33,6 +37,10 @@ export class PlayersInfoService {
 		// It's usually less important to have the opponent info, so we only add this as a log
 		console.log('[players-info] opponentInfo not present in cache, fetching it from GEP');
 		const infoFromGep = await this.memoryService.getPlayerInfo();
+		if (!infoFromGep) {
+			console.error('[players-info] No player info returned from the GEP');
+			return null;
+		}
 		return infoFromGep.opponent;
 	}
 }

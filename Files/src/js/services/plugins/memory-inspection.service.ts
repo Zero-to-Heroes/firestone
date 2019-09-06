@@ -5,7 +5,8 @@ import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
 export class MemoryInspectionService {
-	private triesLeft = 50;
+	private collectionTriesLeft = 50;
+	private playersInfoTriesLeft = 50;
 
 	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
 	readonly g_interestedInFeatures = [
@@ -19,7 +20,7 @@ export class MemoryInspectionService {
 	}
 
 	public getCollection(delay: number = 0): Promise<Card[]> {
-		this.triesLeft = 20;
+		this.collectionTriesLeft = 20;
 		return new Promise<Card[]>(resolve => {
 			this.getCollectionInternal((collection: Card[]) => {
 				resolve(collection);
@@ -28,19 +29,11 @@ export class MemoryInspectionService {
 	}
 
 	public getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
-		return new Promise<any>(async resolve => {
-			const info = await this.ow.getGameEventsInfo();
-			if (info && info.res && info.res.playersInfo) {
-				console.log('[memory-service] fetched playersInfo', info.res.playersInfo);
-				const localPlayer: string = info.res.playersInfo.localPlayer;
-				const opponent: string = info.res.playersInfo.opponent;
-				resolve({
-					localPlayer: JSON.parse(localPlayer),
-					oppoennt: JSON.parse(opponent),
-				});
-			}
-			console.warn('[memory-service] could not fetch playersInfo', info);
-			resolve(null);
+		this.playersInfoTriesLeft = 20;
+		return new Promise<{ localPlayer: any; opponent: any }>(resolve => {
+			this.getPlayerInfoInternal((playersInfo: { localPlayer: any; opponent: any }) => {
+				resolve(playersInfo);
+			});
 		});
 	}
 
@@ -59,7 +52,7 @@ export class MemoryInspectionService {
 	}
 
 	private getCollectionInternal(callback, delay: number = 0) {
-		this.triesLeft--;
+		this.collectionTriesLeft--;
 		// I observed some cases where the new card information was not present in the memory reading
 		// right after I had gotten it from a pack, so let's add a little delay
 		setTimeout(async () => {
@@ -71,7 +64,7 @@ export class MemoryInspectionService {
 				// use an app
 				// console.log('[memory service] [collection-manager] no collection info', info);
 				const gameInfo = await this.ow.getRunningGameInfo();
-				if (this.ow.gameRunning(gameInfo) && this.triesLeft > 0) {
+				if (this.ow.gameRunning(gameInfo) && this.collectionTriesLeft > 0) {
 					console.log('[memory service] [collection-manager] game is running, GEP should return a collection. Waiting...');
 					setTimeout(() => this.getCollectionInternal(callback, delay), 2000);
 					return;
@@ -85,6 +78,24 @@ export class MemoryInspectionService {
 			// console.log('callback', collection);
 			callback(collection);
 		}, delay);
+	}
+
+	private async getPlayerInfoInternal(callback) {
+		this.playersInfoTriesLeft--;
+		const info = await this.ow.getGameEventsInfo();
+		if (info && info.res && info.res.playersInfo) {
+			console.log('[memory-service] fetched playersInfo', info.res.playersInfo);
+			const localPlayer: string = info.res.playersInfo.localPlayer;
+			const opponent: string = info.res.playersInfo.opponent;
+			callback({
+				localPlayer: JSON.parse(localPlayer),
+				oppoennt: JSON.parse(opponent),
+			});
+			return;
+		}
+		setTimeout(() => this.getPlayerInfoInternal(callback), 2000);
+		// console.warn('[memory-service] could not fetch playersInfo', info);
+		// resolve(null);
 	}
 
 	private handleInfoUpdate(info) {
