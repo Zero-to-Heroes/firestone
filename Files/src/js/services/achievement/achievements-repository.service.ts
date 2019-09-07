@@ -4,9 +4,9 @@ import { AchievementCategory } from '../../models/achievement-category';
 import { AchievementSet } from '../../models/achievement-set';
 import { AchievementConfService } from './achievement-conf.service';
 import { AmazingPlaysSetProvider } from './achievement-sets/amazing-plays/amazing-plays';
-import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran-heist-boss';
-import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive';
-import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure';
+import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran_heist/dalaran-heist-boss';
+import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran_heist/dalaran-heist-passves';
+import { DalaranHeistTreasuresSetProvider } from './achievement-sets/dalaran_heist/dalaran-heist-treasures';
 import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run/dungeon-run-boss';
 import { DungeonRunPassivesSetProvider } from './achievement-sets/dungeon-run/dungeon-run-passives';
 import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run/dungeon-run-progression';
@@ -70,7 +70,7 @@ export class AchievementsRepository {
 		const rumbleRunShrinePlayProvider = new RumbleRunShrinesSetProvider(this.conf);
 		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.conf);
 		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.conf);
-		const dalaranHeistTreasureProvider = new DalaranHeistTreasureSetProvider(this.conf);
+		const dalaranHeistTreasureProvider = new DalaranHeistTreasuresSetProvider(this.conf);
 		const dalaranHeistPassiveProvider = new DalaranHeistPassivesSetProvider(this.conf);
 		const dalaranHeistBossProvider = new DalaranHeistBossSetProvider(this.conf);
 
