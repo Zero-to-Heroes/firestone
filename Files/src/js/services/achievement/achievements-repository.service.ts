@@ -15,10 +15,10 @@ import { MonsterHuntBossSetProvider } from './achievement-sets/monster_hunt/mons
 import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster_hunt/monster-hunt-passves';
 import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster_hunt/monster-hunt-progression';
 import { MonsterHuntTreasuresSetProvider } from './achievement-sets/monster_hunt/monster-hunt-treasures';
-import { RumbleRunPassivesSetProvider } from './achievement-sets/rumble-passive';
-import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progression';
-import { RumbleRunShrinePlaySetProvider } from './achievement-sets/rumble-shrine-play';
-import { RumbleRunTeammatesSetProvider } from './achievement-sets/rumble-teammate';
+import { RumbleRunPassivesSetProvider } from './achievement-sets/rumble_run/rumble-run-passves';
+import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble_run/rumble-run-progression';
+import { RumbleRunShrinesSetProvider } from './achievement-sets/rumble_run/rumble-run-shrine-play';
+import { RumbleRunTeammatesSetProvider } from './achievement-sets/rumble_run/rumble-run-teammates';
 import { SetProvider } from './achievement-sets/set-provider';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
@@ -67,7 +67,7 @@ export class AchievementsRepository {
 		const monsterHuntTreasureProvider = new MonsterHuntTreasuresSetProvider(this.conf);
 		const monsterHuntPassiveProvider = new MonsterHuntPassivesSetProvider(this.conf);
 		const rumbleRunProgressionProvider = new RumbleRunProgressionSetProvider(this.conf);
-		const rumbleRunShrinePlayProvider = new RumbleRunShrinePlaySetProvider(this.conf);
+		const rumbleRunShrinePlayProvider = new RumbleRunShrinesSetProvider(this.conf);
 		const rumbleRunTeammateProvider = new RumbleRunTeammatesSetProvider(this.conf);
 		const rumbleRunPassiveProvider = new RumbleRunPassivesSetProvider(this.conf);
 		const dalaranHeistTreasureProvider = new DalaranHeistTreasureSetProvider(this.conf);
