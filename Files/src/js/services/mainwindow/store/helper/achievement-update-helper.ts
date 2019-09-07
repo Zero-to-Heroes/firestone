@@ -1,9 +1,9 @@
+import { AchievementCategory } from '../../../../models/achievement-category';
 import { AchievementSet } from '../../../../models/achievement-set';
-import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
 import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
-import { AchievementCategory } from '../../../../models/achievement-category';
 import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
+import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
 import { AchievementStateHelper } from './achievement-state-helper';
 
 export class AchievementUpdateHelper {
@@ -15,7 +15,7 @@ export class AchievementUpdateHelper {
 	}
 
 	private async buildGlobalCategories(): Promise<readonly VisualAchievementCategory[]> {
-		const globalCategories: AchievementCategory[] = this.achievementsRepository.getCategories();
+		const globalCategories: readonly AchievementCategory[] = this.achievementsRepository.getCategories();
 		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements();
 		return globalCategories.map(category => {
 			return {
