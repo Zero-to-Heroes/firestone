@@ -2,6 +2,7 @@
 	"id": "amazing_plays_recurring_villains_20",
 	"type": "amazing_plays_recurring_villains",
 	"name": "Recurring Villains",
+	"icon": "boss_encounter",
 	"root": false,
 	"priority": -20,
 	"displayName": "Achievement completed: Recurring Villains (rank 20)",

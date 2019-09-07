@@ -23,11 +23,6 @@ export abstract class SetProvider {
 	protected abstract filterOptions();
 	protected abstract isAchievementVisualRoot(achievement: Achievement): boolean;
 
-	public supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean {
-		const type = allAchievements.find(achievement => achievement.id === achievementId).type;
-		return this.types.indexOf(type) !== -1;
-	}
-
 	protected visualAchievements(
 		allAchievements: Achievement[],
 		completedAchievemnts?: CompletedAchievement[],
@@ -44,6 +39,7 @@ export abstract class SetProvider {
 					} as Achievement);
 			  });
 		const fullAchievements: VisualAchievement[] = mergedAchievements
+			.filter(achievement => this.supportsAchievement(mergedAchievements, achievement.id))
 			.filter(achievement => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
 			.sort((a, b) => {
@@ -53,6 +49,11 @@ export abstract class SetProvider {
 			})
 			.map(obj => obj.achievement);
 		return fullAchievements;
+	}
+
+	private supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean {
+		const type = allAchievements.find(achievement => achievement.id === achievementId).type;
+		return this.types.indexOf(type) !== -1;
 	}
 
 	private sortPriority(achievement: VisualAchievement): number {

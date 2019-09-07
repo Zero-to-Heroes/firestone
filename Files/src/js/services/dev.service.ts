@@ -44,6 +44,7 @@ export class DevService {
 			displayCardType: 'minion',
 			displayName: 'Boss met: Fake Wee Whelp',
 			difficulty: 'common',
+			'icon': 'boss_encounter',
 			points: 1,
 			numberOfCompletions: 0,
 			replayInfo: [],

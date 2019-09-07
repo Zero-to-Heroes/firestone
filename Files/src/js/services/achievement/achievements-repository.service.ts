@@ -7,10 +7,10 @@ import { AmazingPlaysSetProvider } from './achievement-sets/amazing-plays/amazin
 import { DalaranHeistBossSetProvider } from './achievement-sets/dalaran-heist-boss';
 import { DalaranHeistPassivesSetProvider } from './achievement-sets/dalaran-heist-passive';
 import { DalaranHeistTreasureSetProvider } from './achievement-sets/dalaran-heist-treasure';
-import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run-boss';
-import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run-progression';
-import { DungeonRunTreasureSetProvider } from './achievement-sets/dungeon-run-treasure';
-import { DungeonRunPassivesSetProvider } from './achievement-sets/dungeon-un-passive';
+import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run/dungeon-run-boss';
+import { DungeonRunPassivesSetProvider } from './achievement-sets/dungeon-run/dungeon-run-passives';
+import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run/dungeon-run-progression';
+import { DungeonRunTreasuresSetProvider } from './achievement-sets/dungeon-run/dungeon-run-treasures';
 import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss';
 import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-passive';
 import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster-hunt-progression';
@@ -60,7 +60,7 @@ export class AchievementsRepository {
 		// Initialize set providers
 		const dungeonRunProgressionProvider = new DungeonRunProgressionSetProvider(this.conf);
 		const dungeonRunBossProvider = new DungeonRunBossSetProvider(this.conf);
-		const dungeonRunTreasureProvider = new DungeonRunTreasureSetProvider(this.conf);
+		const dungeonRunTreasureProvider = new DungeonRunTreasuresSetProvider(this.conf);
 		const dungeonRunPassivesProvider = new DungeonRunPassivesSetProvider(this.conf);
 		const monsterHuntProgressProvider = new MonsterHuntProgressionSetProvider(this.conf);
 		const monsterHuntBossProvider = new MonsterHuntBossSetProvider(this.conf);

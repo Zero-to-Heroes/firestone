@@ -2,6 +2,7 @@
 	"id": "amazing_play_win_with_full_hp_15",
 	"type": "amazing_plays_win_with_full_hp",
 	"name": "Don't hit me",
+	"icon": "boss_encounter",
 	"root": false,
 	"priority": -15,
 	"displayName": "Win with your full health remaining (in Ranked Standard, at least rank 15)",

@@ -2,6 +2,7 @@
 	"id": "rumble_run_shrine_play_TRLA_178",
 	"type": "rumble_run_shrine_play",
 	"name": "Dark Reliquary",
+	"icon": "boss_encounter",
 	"displayName": "Shrine played: Dark Reliquary",
 	"text": "[x]\nWhenever you discard a\ncard, summon a\nrandom Demon.",
 	"displayCardId": "TRLA_178",

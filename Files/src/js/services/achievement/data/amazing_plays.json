@@ -3,6 +3,7 @@
         "id": "amazing_plays_win_with_one_hp_25",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
+		"icon": "boss_encounter",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: One HP matters (rank 25)",

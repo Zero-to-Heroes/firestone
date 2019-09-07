@@ -2,6 +2,7 @@
 	"id": "amazing_plays_summon_highkeeper_ra",
 	"type": "amazing_plays_summon_highkeeper_ra",
 	"name": "Highkeeper Ra",
+	"icon": "boss_encounter",
 	"root": true,
 	"priority": 0,
 	"displayName": "Achievement completed: Highkeeper Ra is among us!",

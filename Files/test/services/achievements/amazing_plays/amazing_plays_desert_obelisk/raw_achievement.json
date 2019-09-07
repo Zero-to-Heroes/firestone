@@ -2,6 +2,7 @@
 	"id": "amazing_plays_desert_obelisk_20",
 	"type": "amazing_plays_desert_obelisk",
 	"name": "Desert Obelisks",
+	"icon": "boss_encounter",
 	"root": false,
 	"priority": -20,
 	"displayName": "Achievement completed: Desert Obelisks (rank 20)",

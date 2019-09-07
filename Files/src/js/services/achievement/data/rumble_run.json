@@ -3,6 +3,7 @@
 		"id": "rumble_run_progression_TRLA_209h_Druid_TRLA_112_0",
 		"type": "rumble_run_progression",
 		"name": "Gonk's Armament (Druid) - Cleared round 1",
+		"icon": "boss_encounter",
 		"displayName": "Gonk's Armament (Druid) - Cleared round 1",
 		"emptyText": "Clear the first round with Rikkar (Druid) to get started",
 		"text": "Cleared round 1",

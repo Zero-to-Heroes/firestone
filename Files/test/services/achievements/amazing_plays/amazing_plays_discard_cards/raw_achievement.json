@@ -2,6 +2,7 @@
 	"id": "amazing_plays_discard_cards_10",
 	"type": "amazing_plays_discard_cards",
 	"name": "Put it Away",
+	"icon": "boss_encounter",
 	"root": false,
 	"priority": -10,
 	"displayName": "Achievement completed: Put it Away (rank 10)",

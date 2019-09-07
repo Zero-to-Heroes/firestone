@@ -75,8 +75,8 @@ export abstract class GenericSetProvider extends SetProvider {
 		const achievementForCompletionSteps: Achievement[] = allAchievements
 			.filter(achv => achv.type === achievement.type)
 			.sort((a, b) => a.priority - b.priority);
-		let text = achievement.emptyText;
-		let alreadyDefinedText = false;
+		let text = achievement.text || achievement.emptyText;
+		let alreadyDefinedText = achievement.text || false;
 		// Useful to make sure we have some consistency in the number of comletions
 		let maxNumberOfCompletions = 0;
 		const invertedCompletionSteps = [];
@@ -91,7 +91,7 @@ export abstract class GenericSetProvider extends SetProvider {
 			invertedCompletionSteps.push({
 				id: `${achv.id}`,
 				numberOfCompletions: completions,
-				iconSvgSymbol: this.conf.icon(`${achv.type}_${i}`),
+				iconSvgSymbol: achv.icon,
 				text(showTimes: boolean = false): string {
 					const times = showTimes ? `${completions} times` : ``;
 					return `${achv.completedText} <span class="number-of-times">${times}</span>`;

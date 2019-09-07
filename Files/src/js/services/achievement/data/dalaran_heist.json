@@ -3,6 +3,7 @@
 		"id": "dalaran_heist_boss_encounter_DALA_BOSS_01h",
 		"type": "dalaran_heist_boss_encounter",
 		"name": "Chomper",
+		"icon": "boss_encounter",
 		"displayName": "Boss met: Chomper",
 		"text": "<i>Chomper survives the sewers by snacking on smaller minions.</i>",
 		"displayCardId": "DALA_BOSS_01h",

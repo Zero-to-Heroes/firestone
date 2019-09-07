@@ -2,6 +2,7 @@
 	"id": "amazing_plays_gain_armor_1",
 	"type": "amazing_plays_gain_armor",
 	"name": "Iron Defense",
+	"icon": "boss_encounter",
 	"root": false,
 	"priority": -1,
 	"displayName": "Achievement completed: Iron Defense (rank 1)",

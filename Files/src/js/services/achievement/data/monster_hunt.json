@@ -3,6 +3,7 @@
 		"id": "monster_hunt_progression_GILA_400h_0",
 		"type": "monster_hunt_progression",
 		"name": "Houndmaster Shaw (Hunter) - Cleared round 1",
+		"icon": "boss_encounter",
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 1",
 		"emptyText": "Clear the first round with Hunter to get started",
 		"text": "Cleared round 1",
