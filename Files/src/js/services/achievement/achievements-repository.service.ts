@@ -11,10 +11,10 @@ import { DungeonRunBossSetProvider } from './achievement-sets/dungeon-run/dungeo
 import { DungeonRunPassivesSetProvider } from './achievement-sets/dungeon-run/dungeon-run-passives';
 import { DungeonRunProgressionSetProvider } from './achievement-sets/dungeon-run/dungeon-run-progression';
 import { DungeonRunTreasuresSetProvider } from './achievement-sets/dungeon-run/dungeon-run-treasures';
-import { MonsterHuntBossSetProvider } from './achievement-sets/monster-hunt-boss';
-import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster-hunt-passive';
-import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster-hunt-progression';
-import { MonsterHuntTreasureSetProvider } from './achievement-sets/monster-hunt-treasure';
+import { MonsterHuntBossSetProvider } from './achievement-sets/monster_hunt/monster-hunt-boss';
+import { MonsterHuntPassivesSetProvider } from './achievement-sets/monster_hunt/monster-hunt-passves';
+import { MonsterHuntProgressionSetProvider } from './achievement-sets/monster_hunt/monster-hunt-progression';
+import { MonsterHuntTreasuresSetProvider } from './achievement-sets/monster_hunt/monster-hunt-treasures';
 import { RumbleRunPassivesSetProvider } from './achievement-sets/rumble-passive';
 import { RumbleRunProgressionSetProvider } from './achievement-sets/rumble-progression';
 import { RumbleRunShrinePlaySetProvider } from './achievement-sets/rumble-shrine-play';
@@ -64,7 +64,7 @@ export class AchievementsRepository {
 		const dungeonRunPassivesProvider = new DungeonRunPassivesSetProvider(this.conf);
 		const monsterHuntProgressProvider = new MonsterHuntProgressionSetProvider(this.conf);
 		const monsterHuntBossProvider = new MonsterHuntBossSetProvider(this.conf);
-		const monsterHuntTreasureProvider = new MonsterHuntTreasureSetProvider(this.conf);
+		const monsterHuntTreasureProvider = new MonsterHuntTreasuresSetProvider(this.conf);
 		const monsterHuntPassiveProvider = new MonsterHuntPassivesSetProvider(this.conf);
 		const rumbleRunProgressionProvider = new RumbleRunProgressionSetProvider(this.conf);
 		const rumbleRunShrinePlayProvider = new RumbleRunShrinePlaySetProvider(this.conf);
