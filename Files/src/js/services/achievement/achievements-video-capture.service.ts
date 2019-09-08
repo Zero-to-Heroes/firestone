@@ -6,7 +6,7 @@ import { AchievementRecordedEvent } from '../mainwindow/store/events/achievement
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
-import { AchievementConfService } from './achievement-conf.service';
+import { AchievementRecordingService } from './achievement-recording.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { TemporaryResolutionOverrideService } from './temporary-resolution-override-service';
 
@@ -31,9 +31,9 @@ export class AchievementsVideoCaptureService {
 	constructor(
 		private events: Events,
 		private prefs: PreferencesService,
-		private achievementConf: AchievementConfService,
+		private achievementRecording: AchievementRecordingService,
 		private store: MainWindowStoreService,
-		private temporaryResolutionOverride: TemporaryResolutionOverrideService,
+		private init_TemporaryResolutionOverride: TemporaryResolutionOverrideService,
 		private ow: OverwolfService,
 	) {
 		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.onAchievementComplete(data));
@@ -112,7 +112,7 @@ export class AchievementsVideoCaptureService {
 	}
 
 	private async capture(achievement: Achievement, challenge: Challenge, recordDuration: number) {
-		if (!(await this.achievementConf.shouldRecord(achievement))) {
+		if (!(await this.achievementRecording.shouldRecord(achievement))) {
 			console.log('[recording] Not recording achievement', achievement);
 			return;
 		}

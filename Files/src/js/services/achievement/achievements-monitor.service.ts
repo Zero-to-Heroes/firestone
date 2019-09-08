@@ -87,7 +87,7 @@ export class AchievementsMonitor {
 						<div class="title">
 							<i class="icon-svg">
 								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#${this.conf.icon(achievement.type)}"/>
+									<use xlink:href="/Files/assets/svg/sprite.svg#${achievement.icon}"/>
 								</svg>
 							</i>
 							<span>Achievement unlocked!</span>
@@ -130,7 +130,7 @@ export class AchievementsMonitor {
 					<div class="title">
 						<i class="icon-svg">
 							<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#${this.conf.icon(achievement.type)}"/>
+							<use xlink:href="/Files/assets/svg/sprite.svg#${achievement.icon}"/>
 							</svg>
 						</i>
 						<span>Achievement unlocked!</span>

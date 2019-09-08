@@ -14,6 +14,7 @@ export class Achievement {
 	readonly displayCardId: string;
 	readonly displayCardType: string;
 	readonly difficulty: string;
+	readonly maxNumberOfRecords: number;
 	readonly points: number;
 	readonly numberOfCompletions: number = 0;
 	readonly replayInfo: readonly ReplayInfo[] = [];

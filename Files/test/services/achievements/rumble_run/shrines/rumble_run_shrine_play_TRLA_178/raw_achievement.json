@@ -9,6 +9,7 @@
 	"displayCardType": "minion",
 	"difficulty": "common",
 	"points": 1,
+	"maxNumberOfRecords": 1,
 	"requirements": [
 		{
 			"type": "CARD_PLAYED_OR_ON_BOARD_AT_GAME_START",

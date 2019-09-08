@@ -16,6 +16,7 @@ export interface RawAchievement {
 	readonly displayCardId: string;
 	readonly displayCardType: string;
 	readonly difficulty: string;
+	readonly maxNumberOfRecords: number;
 	readonly points: number;
 	readonly requirements: readonly RawRequirement[];
 	readonly resetEvents: readonly string[];

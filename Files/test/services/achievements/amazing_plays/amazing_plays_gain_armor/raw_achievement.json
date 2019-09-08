@@ -12,6 +12,7 @@
 	"displayCardType": "spell",
 	"difficulty": "rare",
 	"points": 17,
+	"maxNumberOfRecords": 1,
 	"requirements": [
 		{
 			"type": "GAME_TYPE",

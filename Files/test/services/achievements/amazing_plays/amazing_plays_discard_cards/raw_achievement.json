@@ -12,6 +12,7 @@
 	"displayCardType": "minion",
 	"difficulty": "epic",
 	"points": 20.0,
+	"maxNumberOfRecords": 1,
 	"requirements": [
 		{
 			"type": "GAME_TYPE",

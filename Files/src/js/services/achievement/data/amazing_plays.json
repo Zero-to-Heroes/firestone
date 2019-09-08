@@ -3,7 +3,7 @@
         "id": "amazing_plays_win_with_one_hp_25",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
-		"icon": "boss_encounter",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: One HP matters (rank 25)",
@@ -12,6 +12,7 @@
         "displayCardId": "GILA_BOSS_49p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -56,6 +57,7 @@
         "id": "amazing_plays_win_with_one_hp_20",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: One HP matters (rank 20)",
@@ -64,6 +66,7 @@
         "displayCardId": "GILA_BOSS_49p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -108,6 +111,7 @@
         "id": "amazing_plays_win_with_one_hp_15",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: One HP matters (rank 15)",
@@ -116,6 +120,7 @@
         "displayCardId": "GILA_BOSS_49p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -160,6 +165,7 @@
         "id": "amazing_plays_win_with_one_hp_10",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: One HP matters (rank 10)",
@@ -168,6 +174,7 @@
         "displayCardId": "GILA_BOSS_49p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -212,6 +219,7 @@
         "id": "amazing_plays_win_with_one_hp_5",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: One HP matters (rank 5)",
@@ -220,6 +228,7 @@
         "displayCardId": "GILA_BOSS_49p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -264,6 +273,7 @@
         "id": "amazing_plays_win_with_one_hp_1",
         "type": "amazing_plays_win_with_one_hp",
         "name": "One HP matters",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: One HP matters (rank 1)",
@@ -272,6 +282,7 @@
         "displayCardId": "GILA_BOSS_49p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -316,6 +327,7 @@
         "id": "amazing_plays_win_with_full_hp_25",
         "type": "amazing_plays_win_with_full_hp",
         "name": "Don't Hit Me!",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Don't Hit Me! (rank 25)",
@@ -324,6 +336,7 @@
         "displayCardId": "BRMA10_4",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -368,6 +381,7 @@
         "id": "amazing_plays_win_with_full_hp_20",
         "type": "amazing_plays_win_with_full_hp",
         "name": "Don't Hit Me!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Don't Hit Me! (rank 20)",
@@ -376,6 +390,7 @@
         "displayCardId": "BRMA10_4",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -420,6 +435,7 @@
         "id": "amazing_plays_win_with_full_hp_15",
         "type": "amazing_plays_win_with_full_hp",
         "name": "Don't Hit Me!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Don't Hit Me! (rank 15)",
@@ -428,6 +444,7 @@
         "displayCardId": "BRMA10_4",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -472,6 +489,7 @@
         "id": "amazing_plays_win_with_full_hp_10",
         "type": "amazing_plays_win_with_full_hp",
         "name": "Don't Hit Me!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Don't Hit Me! (rank 10)",
@@ -480,6 +498,7 @@
         "displayCardId": "BRMA10_4",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -524,6 +543,7 @@
         "id": "amazing_plays_win_with_full_hp_5",
         "type": "amazing_plays_win_with_full_hp",
         "name": "Don't Hit Me!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Don't Hit Me! (rank 5)",
@@ -532,6 +552,7 @@
         "displayCardId": "BRMA10_4",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -576,6 +597,7 @@
         "id": "amazing_plays_win_with_full_hp_1",
         "type": "amazing_plays_win_with_full_hp",
         "name": "Don't Hit Me!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Don't Hit Me! (rank 1)",
@@ -584,6 +606,7 @@
         "displayCardId": "BRMA10_4",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -628,6 +651,7 @@
         "id": "amazing_plays_game_tie_25",
         "type": "amazing_plays_game_tie",
         "name": "That's A Nice Tie",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: That's A Nice Tie (rank 25)",
@@ -668,6 +692,7 @@
         "id": "amazing_plays_game_tie_20",
         "type": "amazing_plays_game_tie",
         "name": "That's A Nice Tie",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: That's A Nice Tie (rank 20)",
@@ -708,6 +733,7 @@
         "id": "amazing_plays_game_tie_15",
         "type": "amazing_plays_game_tie",
         "name": "That's A Nice Tie",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: That's A Nice Tie (rank 15)",
@@ -748,6 +774,7 @@
         "id": "amazing_plays_game_tie_10",
         "type": "amazing_plays_game_tie",
         "name": "That's A Nice Tie",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: That's A Nice Tie (rank 10)",
@@ -788,6 +815,7 @@
         "id": "amazing_plays_game_tie_5",
         "type": "amazing_plays_game_tie",
         "name": "That's A Nice Tie",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: That's A Nice Tie (rank 5)",
@@ -828,6 +856,7 @@
         "id": "amazing_plays_game_tie_1",
         "type": "amazing_plays_game_tie",
         "name": "That's A Nice Tie",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: That's A Nice Tie (rank 1)",
@@ -868,6 +897,7 @@
         "id": "amazing_plays_win_without_taking_damage_25",
         "type": "amazing_plays_win_without_taking_damage",
         "name": "Immune",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Immune (rank 25)",
@@ -876,6 +906,7 @@
         "displayCardId": "CRED_69",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -920,6 +951,7 @@
         "id": "amazing_plays_win_without_taking_damage_20",
         "type": "amazing_plays_win_without_taking_damage",
         "name": "Immune",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Immune (rank 20)",
@@ -928,6 +960,7 @@
         "displayCardId": "CRED_69",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -972,6 +1005,7 @@
         "id": "amazing_plays_win_without_taking_damage_15",
         "type": "amazing_plays_win_without_taking_damage",
         "name": "Immune",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Immune (rank 15)",
@@ -980,6 +1014,7 @@
         "displayCardId": "CRED_69",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 20,
         "requirements": [
             {
@@ -1024,6 +1059,7 @@
         "id": "amazing_plays_win_without_taking_damage_10",
         "type": "amazing_plays_win_without_taking_damage",
         "name": "Immune",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Immune (rank 10)",
@@ -1032,6 +1068,7 @@
         "displayCardId": "CRED_69",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 25,
         "requirements": [
             {
@@ -1076,6 +1113,7 @@
         "id": "amazing_plays_win_without_taking_damage_5",
         "type": "amazing_plays_win_without_taking_damage",
         "name": "Immune",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Immune (rank 5)",
@@ -1084,6 +1122,7 @@
         "displayCardId": "CRED_69",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 30,
         "requirements": [
             {
@@ -1128,6 +1167,7 @@
         "id": "amazing_plays_win_without_taking_damage_1",
         "type": "amazing_plays_win_without_taking_damage",
         "name": "Immune",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Immune (rank 1)",
@@ -1136,6 +1176,7 @@
         "displayCardId": "CRED_69",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 34,
         "requirements": [
             {
@@ -1180,6 +1221,7 @@
         "id": "amazing_plays_summon_highkeeper_ra_25",
         "type": "amazing_plays_summon_highkeeper_ra (rank 25)",
         "name": "Highkeeper Ra",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 25)",
@@ -1223,6 +1265,7 @@
         "id": "amazing_plays_summon_highkeeper_ra_20",
         "type": "amazing_plays_summon_highkeeper_ra (rank 20)",
         "name": "Highkeeper Ra",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 20)",
@@ -1266,6 +1309,7 @@
         "id": "amazing_plays_summon_highkeeper_ra_15",
         "type": "amazing_plays_summon_highkeeper_ra (rank 15)",
         "name": "Highkeeper Ra",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 15)",
@@ -1309,6 +1353,7 @@
         "id": "amazing_plays_summon_highkeeper_ra_10",
         "type": "amazing_plays_summon_highkeeper_ra (rank 10)",
         "name": "Highkeeper Ra",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 10)",
@@ -1352,6 +1397,7 @@
         "id": "amazing_plays_summon_highkeeper_ra_5",
         "type": "amazing_plays_summon_highkeeper_ra (rank 5)",
         "name": "Highkeeper Ra",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 5)",
@@ -1395,6 +1441,7 @@
         "id": "amazing_plays_summon_highkeeper_ra_1",
         "type": "amazing_plays_summon_highkeeper_ra (rank 1)",
         "name": "Highkeeper Ra",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Highkeeper Ra is among us! (rank 1)",
@@ -1438,6 +1485,7 @@
         "id": "amazing_plays_discard_cards_25",
         "type": "amazing_plays_discard_cards",
         "name": "Put it Away",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Put it Away (rank 25)",
@@ -1446,6 +1494,7 @@
         "displayCardId": "TRL_252",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -1481,6 +1530,7 @@
         "id": "amazing_plays_discard_cards_20",
         "type": "amazing_plays_discard_cards",
         "name": "Put it Away",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Put it Away (rank 20)",
@@ -1489,6 +1539,7 @@
         "displayCardId": "TRL_252",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -1524,6 +1575,7 @@
         "id": "amazing_plays_discard_cards_15",
         "type": "amazing_plays_discard_cards",
         "name": "Put it Away",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Put it Away (rank 15)",
@@ -1532,6 +1584,7 @@
         "displayCardId": "TRL_252",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -1567,6 +1620,7 @@
         "id": "amazing_plays_discard_cards_10",
         "type": "amazing_plays_discard_cards",
         "name": "Put it Away",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Put it Away (rank 10)",
@@ -1575,6 +1629,7 @@
         "displayCardId": "TRL_252",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 20,
         "requirements": [
             {
@@ -1610,6 +1665,7 @@
         "id": "amazing_plays_discard_cards_5",
         "type": "amazing_plays_discard_cards",
         "name": "Put it Away",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Put it Away (rank 5)",
@@ -1618,6 +1674,7 @@
         "displayCardId": "TRL_252",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 25,
         "requirements": [
             {
@@ -1653,6 +1710,7 @@
         "id": "amazing_plays_discard_cards_1",
         "type": "amazing_plays_discard_cards",
         "name": "Put it Away",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Put it Away (rank 1)",
@@ -1661,6 +1719,7 @@
         "displayCardId": "TRL_252",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 29,
         "requirements": [
             {
@@ -1696,6 +1755,7 @@
         "id": "amazing_plays_hero_heal_25",
         "type": "amazing_plays_hero_heal",
         "name": "Healed!",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Healed! (rank 25)",
@@ -1704,6 +1764,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -1740,6 +1801,7 @@
         "id": "amazing_plays_hero_heal_20",
         "type": "amazing_plays_hero_heal",
         "name": "Healed!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Healed! (rank 20)",
@@ -1748,6 +1810,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 7,
         "requirements": [
             {
@@ -1784,6 +1847,7 @@
         "id": "amazing_plays_hero_heal_15",
         "type": "amazing_plays_hero_heal",
         "name": "Healed!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Healed! (rank 15)",
@@ -1792,6 +1856,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -1828,6 +1893,7 @@
         "id": "amazing_plays_hero_heal_10",
         "type": "amazing_plays_hero_heal",
         "name": "Healed!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Healed! (rank 10)",
@@ -1836,6 +1902,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 12,
         "requirements": [
             {
@@ -1872,6 +1939,7 @@
         "id": "amazing_plays_hero_heal_5",
         "type": "amazing_plays_hero_heal",
         "name": "Healed!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Healed! (rank 5)",
@@ -1880,6 +1948,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -1916,6 +1985,7 @@
         "id": "amazing_plays_hero_heal_1",
         "type": "amazing_plays_hero_heal",
         "name": "Healed!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Healed! (rank 1)",
@@ -1924,6 +1994,7 @@
         "displayCardId": "CS1h_001_H2_AT_132",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 17,
         "requirements": [
             {
@@ -1960,6 +2031,7 @@
         "id": "amazing_plays_deal_damage_25",
         "type": "amazing_plays_deal_damage",
         "name": "Burn Them All!",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Burn Them All! (rank 25)",
@@ -1968,6 +2040,7 @@
         "displayCardId": "BRM_027p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -2004,6 +2077,7 @@
         "id": "amazing_plays_deal_damage_20",
         "type": "amazing_plays_deal_damage",
         "name": "Burn Them All!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Burn Them All! (rank 20)",
@@ -2012,6 +2086,7 @@
         "displayCardId": "BRM_027p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 7,
         "requirements": [
             {
@@ -2048,6 +2123,7 @@
         "id": "amazing_plays_deal_damage_15",
         "type": "amazing_plays_deal_damage",
         "name": "Burn Them All!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Burn Them All! (rank 15)",
@@ -2056,6 +2132,7 @@
         "displayCardId": "BRM_027p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -2092,6 +2169,7 @@
         "id": "amazing_plays_deal_damage_10",
         "type": "amazing_plays_deal_damage",
         "name": "Burn Them All!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Burn Them All! (rank 10)",
@@ -2100,6 +2178,7 @@
         "displayCardId": "BRM_027p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 12,
         "requirements": [
             {
@@ -2136,6 +2215,7 @@
         "id": "amazing_plays_deal_damage_5",
         "type": "amazing_plays_deal_damage",
         "name": "Burn Them All!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Burn Them All! (rank 5)",
@@ -2144,6 +2224,7 @@
         "displayCardId": "BRM_027p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -2180,6 +2261,7 @@
         "id": "amazing_plays_deal_damage_1",
         "type": "amazing_plays_deal_damage",
         "name": "Burn Them All!",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Burn Them All! (rank 1)",
@@ -2188,6 +2270,7 @@
         "displayCardId": "BRM_027p",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 17,
         "requirements": [
             {
@@ -2224,6 +2307,7 @@
         "id": "amazing_plays_gain_armor_25",
         "type": "amazing_plays_gain_armor",
         "name": "Iron Defense",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Iron Defense (rank 25)",
@@ -2232,6 +2316,7 @@
         "displayCardId": "EX1_606",
         "displayCardType": "spell",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -2268,6 +2353,7 @@
         "id": "amazing_plays_gain_armor_20",
         "type": "amazing_plays_gain_armor",
         "name": "Iron Defense",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Iron Defense (rank 20)",
@@ -2276,6 +2362,7 @@
         "displayCardId": "EX1_606",
         "displayCardType": "spell",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 7,
         "requirements": [
             {
@@ -2312,6 +2399,7 @@
         "id": "amazing_plays_gain_armor_15",
         "type": "amazing_plays_gain_armor",
         "name": "Iron Defense",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Iron Defense (rank 15)",
@@ -2320,6 +2408,7 @@
         "displayCardId": "EX1_606",
         "displayCardType": "spell",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -2356,6 +2445,7 @@
         "id": "amazing_plays_gain_armor_10",
         "type": "amazing_plays_gain_armor",
         "name": "Iron Defense",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Iron Defense (rank 10)",
@@ -2364,6 +2454,7 @@
         "displayCardId": "EX1_606",
         "displayCardType": "spell",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 12,
         "requirements": [
             {
@@ -2400,6 +2491,7 @@
         "id": "amazing_plays_gain_armor_5",
         "type": "amazing_plays_gain_armor",
         "name": "Iron Defense",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Iron Defense (rank 5)",
@@ -2408,6 +2500,7 @@
         "displayCardId": "EX1_606",
         "displayCardType": "spell",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -2444,6 +2537,7 @@
         "id": "amazing_plays_gain_armor_1",
         "type": "amazing_plays_gain_armor",
         "name": "Iron Defense",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Iron Defense (rank 1)",
@@ -2452,6 +2546,7 @@
         "displayCardId": "EX1_606",
         "displayCardType": "spell",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 17,
         "requirements": [
             {
@@ -2488,6 +2583,7 @@
         "id": "amazing_plays_desert_obelisk_25",
         "type": "amazing_plays_desert_obelisk",
         "name": "Desert Obelisks",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Desert Obelisks (rank 25)",
@@ -2496,6 +2592,7 @@
         "displayCardId": "ULD_703",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -2533,6 +2630,7 @@
         "id": "amazing_plays_desert_obelisk_20",
         "type": "amazing_plays_desert_obelisk",
         "name": "Desert Obelisks",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Desert Obelisks (rank 20)",
@@ -2541,6 +2639,7 @@
         "displayCardId": "ULD_703",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 7,
         "requirements": [
             {
@@ -2578,6 +2677,7 @@
         "id": "amazing_plays_desert_obelisk_15",
         "type": "amazing_plays_desert_obelisk",
         "name": "Desert Obelisks",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Desert Obelisks (rank 15)",
@@ -2586,6 +2686,7 @@
         "displayCardId": "ULD_703",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -2623,6 +2724,7 @@
         "id": "amazing_plays_desert_obelisk_10",
         "type": "amazing_plays_desert_obelisk",
         "name": "Desert Obelisks",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Desert Obelisks (rank 10)",
@@ -2631,6 +2733,7 @@
         "displayCardId": "ULD_703",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 12,
         "requirements": [
             {
@@ -2668,6 +2771,7 @@
         "id": "amazing_plays_desert_obelisk_5",
         "type": "amazing_plays_desert_obelisk",
         "name": "Desert Obelisks",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Desert Obelisks (rank 5)",
@@ -2676,6 +2780,7 @@
         "displayCardId": "ULD_703",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -2713,6 +2818,7 @@
         "id": "amazing_plays_desert_obelisk_1",
         "type": "amazing_plays_desert_obelisk",
         "name": "Desert Obelisks",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Desert Obelisks (rank 1)",
@@ -2721,6 +2827,7 @@
         "displayCardId": "ULD_703",
         "displayCardType": "minion",
         "difficulty": "epic",
+        "maxNumberOfRecords": 3,
         "points": 17,
         "requirements": [
             {
@@ -2758,6 +2865,7 @@
         "id": "amazing_plays_recurring_villains_25",
         "type": "amazing_plays_recurring_villains",
         "name": "Recurring Villains",
+        "icon": "boss_victory",
         "root": true,
         "priority": -25,
         "displayName": "Achievement completed: Recurring Villains (rank 25)",
@@ -2766,6 +2874,7 @@
         "displayCardId": "DAL_749",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 5,
         "requirements": [
             {
@@ -2802,6 +2911,7 @@
         "id": "amazing_plays_recurring_villains_20",
         "type": "amazing_plays_recurring_villains",
         "name": "Recurring Villains",
+        "icon": "boss_victory",
         "root": false,
         "priority": -20,
         "displayName": "Achievement completed: Recurring Villains (rank 20)",
@@ -2810,6 +2920,7 @@
         "displayCardId": "DAL_749",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 7,
         "requirements": [
             {
@@ -2846,6 +2957,7 @@
         "id": "amazing_plays_recurring_villains_15",
         "type": "amazing_plays_recurring_villains",
         "name": "Recurring Villains",
+        "icon": "boss_victory",
         "root": false,
         "priority": -15,
         "displayName": "Achievement completed: Recurring Villains (rank 15)",
@@ -2854,6 +2966,7 @@
         "displayCardId": "DAL_749",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 10,
         "requirements": [
             {
@@ -2890,6 +3003,7 @@
         "id": "amazing_plays_recurring_villains_10",
         "type": "amazing_plays_recurring_villains",
         "name": "Recurring Villains",
+        "icon": "boss_victory",
         "root": false,
         "priority": -10,
         "displayName": "Achievement completed: Recurring Villains (rank 10)",
@@ -2898,6 +3012,7 @@
         "displayCardId": "DAL_749",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 12,
         "requirements": [
             {
@@ -2934,6 +3049,7 @@
         "id": "amazing_plays_recurring_villains_5",
         "type": "amazing_plays_recurring_villains",
         "name": "Recurring Villains",
+        "icon": "boss_victory",
         "root": false,
         "priority": -5,
         "displayName": "Achievement completed: Recurring Villains (rank 5)",
@@ -2942,6 +3058,7 @@
         "displayCardId": "DAL_749",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 15,
         "requirements": [
             {
@@ -2978,6 +3095,7 @@
         "id": "amazing_plays_recurring_villains_1",
         "type": "amazing_plays_recurring_villains",
         "name": "Recurring Villains",
+        "icon": "boss_victory",
         "root": false,
         "priority": -1,
         "displayName": "Achievement completed: Recurring Villains (rank 1)",
@@ -2986,6 +3104,7 @@
         "displayCardId": "DAL_749",
         "displayCardType": "minion",
         "difficulty": "rare",
+        "maxNumberOfRecords": 3,
         "points": 17,
         "requirements": [
             {

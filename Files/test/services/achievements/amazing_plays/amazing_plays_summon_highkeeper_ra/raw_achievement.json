@@ -12,6 +12,7 @@
 	"displayCardType": "minion",
 	"difficulty": "legendary",
 	"points": 40.0,
+	"maxNumberOfRecords": 1,
 	"requirements": [
 		{
 			"type": "GAME_TYPE",

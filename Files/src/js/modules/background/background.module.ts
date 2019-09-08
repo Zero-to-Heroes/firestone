@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { captureException, init } from '@sentry/browser';
 import { AppComponent } from '../../components/app.component';
+import { AchievementRecordingService } from '../../services/achievement/achievement-recording.service';
 import { AchievementStatsService } from '../../services/achievement/achievement-stats.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
@@ -74,6 +75,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementsMonitor,
 		AchievementStatsService,
 		AchievementsVideoCaptureService,
+		AchievementRecordingService,
 
 		OverlayDisplayService,
 		DeckCardService,
