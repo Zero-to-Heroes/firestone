@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class DungeonRunPassivesSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'dungeon_run_passive',
 			'Passives',
@@ -23,7 +22,6 @@ export class DungeonRunPassivesSetProvider extends GenericSetProvider {
 				'dungeon_run_passive_play_LOOTA_846',
 			],
 			'achievements_passive',
-			conf,
 		);
 	}
 }

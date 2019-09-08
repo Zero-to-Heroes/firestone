@@ -3,19 +3,16 @@ import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { FilterOption } from '../../../models/filter-option';
 import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
-import { AchievementConfService } from '../achievement-conf.service';
 import { IndexedVisualAchievement, SetProvider } from './set-provider';
 
 // The idea is that everything should be driven now by the achievement data itself
 // so the only need for specific sets is to handle the grouping
 export abstract class GenericSetProvider extends SetProvider {
 	protected logoName: string;
-	protected conf: AchievementConfService;
 
-	constructor(id: string, displayName: string, types: string[], logoName: string, conf: AchievementConfService) {
+	constructor(id: string, displayName: string, types: string[], logoName: string) {
 		super(id, displayName, types);
 		this.logoName = logoName;
-		this.conf = conf;
 	}
 
 	// Used only for display

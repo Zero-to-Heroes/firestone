@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class RumbleRunPassivesSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'rumble_run_passive',
 			'Passives',
@@ -18,7 +17,6 @@ export class RumbleRunPassivesSetProvider extends GenericSetProvider {
 				'rumble_run_passive_play_TRLA_809',
 			],
 			'achievements_passive',
-			conf,
 		);
 	}
 }

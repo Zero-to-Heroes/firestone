@@ -1,7 +1,6 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { AchievementConfService } from '../../services/achievement/achievement-conf.service';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
 import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
@@ -47,7 +46,6 @@ export class SharedServicesModule {
 				S3FileUploadService,
 				SimpleIOService,
 
-				AchievementConfService,
 				AchievementHistoryStorageService,
 				AchievementsRepository,
 				AchievementsStorageService,

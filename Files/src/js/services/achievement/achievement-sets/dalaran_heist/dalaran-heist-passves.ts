@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class DalaranHeistPassivesSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'dalaran_heist_passive',
 			'Passives',
@@ -38,7 +37,6 @@ export class DalaranHeistPassivesSetProvider extends GenericSetProvider {
 				'dalaran_heist_passive_play_LOOTA_846',
 			],
 			'achievements_passive',
-			conf,
 		);
 	}
 }

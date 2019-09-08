@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class RumbleRunTeammatesSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'rumble_run_teammate',
 			'Teammates',
@@ -63,7 +62,6 @@ export class RumbleRunTeammatesSetProvider extends GenericSetProvider {
 				'rumble_run_teammate_play_TRLA_193',
 			],
 			'achievements_teammate',
-			conf,
 		);
 	}
 }

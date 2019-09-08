@@ -3,10 +3,8 @@ import { NGXLogger } from 'ngx-logger';
 import { Achievement } from 'src/js/models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { Events } from '../events.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
-import { AchievementConfService } from './achievement-conf.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 declare var ga;
@@ -17,9 +15,7 @@ export class AchievementsNotificationService {
 		private logger: NGXLogger,
 		private notificationService: OwNotificationsService,
 		private prefs: PreferencesService,
-		private conf: AchievementConfService,
 		private achievementLoader: AchievementsLoaderService,
-		private store: MainWindowStoreService,
 		private events: Events,
 	) {
 		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.handleAchievementCompleted(data));
@@ -31,9 +27,8 @@ export class AchievementsNotificationService {
 	private async handleAchievementCompleted(data) {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', data);
 		const achievement: Achievement = data.data[0];
-		const numberOfCompletions = (data.data[1] as CompletedAchievement).numberOfCompletions;
-		const challenge = data.data[2];
-		if (numberOfCompletions > 1) {
+		const challenge = data.data[1];
+		if (achievement.numberOfCompletions > 1) {
 			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif');
 			return;
 		}

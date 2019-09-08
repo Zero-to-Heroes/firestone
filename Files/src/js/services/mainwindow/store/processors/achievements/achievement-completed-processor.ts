@@ -32,13 +32,17 @@ export class AchievementCompletedProcessor implements Processor {
 		const newAchievementState = await this.helper.rebuildAchievements(currentState);
 		this.events.broadcast(Events.NEW_ACHIEVEMENT, completedAchievement);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
-		// Send the notification early
-		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, completedAchievement, event.challenge);
-		const historyItem = {
-			achievementId: achievement.id,
-			achievementName: achievement.name,
+		const mergedAchievement = Object.assign(new Achievement(), achievement, {
 			numberOfCompletions: completedAchievement.numberOfCompletions,
-			difficulty: achievement.difficulty,
+			replayInfo: completedAchievement.replayInfo,
+		} as Achievement);
+		// Send the notification early
+		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, mergedAchievement, event.challenge);
+		const historyItem = {
+			achievementId: mergedAchievement.id,
+			achievementName: mergedAchievement.name,
+			numberOfCompletions: mergedAchievement.numberOfCompletions,
+			difficulty: mergedAchievement.difficulty,
 			creationTimestamp: Date.now(),
 		} as AchievementHistory;
 		await this.historyStorage.save(historyItem);

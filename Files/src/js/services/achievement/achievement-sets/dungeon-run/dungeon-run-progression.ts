@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class DungeonRunProgressionSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'dungeon_run_progression',
 			'Progression',
@@ -18,7 +17,6 @@ export class DungeonRunProgressionSetProvider extends GenericSetProvider {
 				'dungeon_run_progression_HERO_09',
 			],
 			'achievements_progression',
-			conf,
 		);
 	}
 }

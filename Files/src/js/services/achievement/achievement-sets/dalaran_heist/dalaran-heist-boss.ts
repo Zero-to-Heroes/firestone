@@ -1,10 +1,9 @@
 import { FilterOption } from '../../../../models/filter-option';
 import { VisualAchievement } from '../../../../models/visual-achievement';
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class DalaranHeistBossSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'dalaran_heist_boss',
 			'Bosses',
@@ -86,7 +85,6 @@ export class DalaranHeistBossSetProvider extends GenericSetProvider {
 				'dalaran_heist_boss_DALA_BOSS_75h',
 			],
 			'achievements_boss',
-			conf,
 		);
 	}
 

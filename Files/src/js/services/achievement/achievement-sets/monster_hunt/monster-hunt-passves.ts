@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class MonsterHuntPassivesSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'monster_hunt_passive',
 			'Passives',
@@ -30,7 +29,6 @@ export class MonsterHuntPassivesSetProvider extends GenericSetProvider {
 				'monster_hunt_passive_play_LOOTA_831',
 			],
 			'achievements_passive',
-			conf,
 		);
 	}
 }

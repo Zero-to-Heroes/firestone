@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class DungeonRunTreasuresSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'dungeon_run_treasure',
 			'Treasures',
@@ -41,7 +40,6 @@ export class DungeonRunTreasuresSetProvider extends GenericSetProvider {
 				'dungeon_run_treasure_play_LOOTA_847',
 			],
 			'achievements_treasure',
-			conf,
 		);
 	}
 }

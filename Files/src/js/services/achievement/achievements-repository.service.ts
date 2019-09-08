@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AchievementCategory } from '../../models/achievement-category';
 import { AchievementSet } from '../../models/achievement-set';
-import { AchievementConfService } from './achievement-conf.service';
 import { AchievementCategoryProvider } from './achievement-sets/achievement-category-provider';
 import { AmazingPlaysCategoryProvider } from './achievement-sets/amazing-plays/amazing-plays-category';
 import { DalaranHeistCategoryProvider } from './achievement-sets/dalaran_heist/dalaran-heist-category';
@@ -20,11 +19,7 @@ export class AchievementsRepository {
 	private setProviders: readonly SetProvider[] = [];
 	private categories: readonly AchievementCategory[] = [];
 
-	constructor(
-		private storage: AchievementsStorageService,
-		private conf: AchievementConfService,
-		private achievementsLoader: AchievementsLoaderService,
-	) {
+	constructor(private storage: AchievementsStorageService, private achievementsLoader: AchievementsLoaderService) {
 		this.init();
 	}
 
@@ -48,11 +43,11 @@ export class AchievementsRepository {
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
-			new AmazingPlaysCategoryProvider(this.conf),
-			new DungeonRunCategoryProvider(this.conf),
-			new MonsterHuntCategoryProvider(this.conf),
-			new RumbleRunCategoryProvider(this.conf),
-			new DalaranHeistCategoryProvider(this.conf),
+			new AmazingPlaysCategoryProvider(),
+			new DungeonRunCategoryProvider(),
+			new MonsterHuntCategoryProvider(),
+			new RumbleRunCategoryProvider(),
+			new DalaranHeistCategoryProvider(),
 		];
 
 		this.categories = categoryProviders.map(provider => provider.buildCategory());

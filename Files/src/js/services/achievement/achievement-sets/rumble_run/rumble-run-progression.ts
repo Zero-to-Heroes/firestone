@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class RumbleRunProgressionSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'rumble_run_progression',
 			'Progression',
@@ -36,7 +35,6 @@ export class RumbleRunProgressionSetProvider extends GenericSetProvider {
 				'rumble_run_progression_TRLA_209h_Warrior_TRLA_171',
 			],
 			'achievements_progression',
-			conf,
 		);
 	}
 }

@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class DalaranHeistTreasuresSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'dalaran_heist_treasure',
 			'Treasures',
@@ -38,7 +37,6 @@ export class DalaranHeistTreasuresSetProvider extends GenericSetProvider {
 				'dalaran_heist_treasure_play_DALA_730',
 			],
 			'achievements_treasure',
-			conf,
 		);
 	}
 }

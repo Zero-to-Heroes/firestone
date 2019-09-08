@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class AmazingPlaysSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'amazing_plays',
 			'Amazing Plays',
@@ -20,7 +19,6 @@ export class AmazingPlaysSetProvider extends GenericSetProvider {
 				'amazing_plays_recurring_villains',
 			],
 			'achievements_amazing_plays',
-			conf,
 		);
 	}
 }

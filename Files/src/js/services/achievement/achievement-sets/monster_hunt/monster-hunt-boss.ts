@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class MonsterHuntBossSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'monster_hunt_boss',
 			'Bosses',
@@ -56,7 +55,6 @@ export class MonsterHuntBossSetProvider extends GenericSetProvider {
 				'monster_hunt_boss_GILA_BOSS_68h',
 			],
 			'achievements_boss',
-			conf,
 		);
 	}
 }

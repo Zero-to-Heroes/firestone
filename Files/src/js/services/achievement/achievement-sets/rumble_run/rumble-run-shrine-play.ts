@@ -1,8 +1,7 @@
-import { AchievementConfService } from '../../achievement-conf.service';
 import { GenericSetProvider } from '../generic-set-provider';
 
 export class RumbleRunShrinesSetProvider extends GenericSetProvider {
-	constructor(conf: AchievementConfService) {
+	constructor() {
 		super(
 			'rumble_run_shrine_play',
 			'Shrines Played',
@@ -36,7 +35,6 @@ export class RumbleRunShrinesSetProvider extends GenericSetProvider {
 				'rumble_run_shrine_play_TRLA_187',
 			],
 			'achievements_shrine',
-			conf,
 		);
 	}
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
-import { CompletedAchievement } from '../../models/completed-achievement';
 import { ReplayInfo } from '../../models/replay-info';
 import { Events } from '../events.service';
 import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
@@ -104,11 +103,7 @@ export class AchievementsVideoCaptureService {
 	}
 
 	private async onAchievementComplete(data) {
-		const completedAchievement: CompletedAchievement = data.data[1];
-		const mergedAchievement = Object.assign(new Achievement(), data.data[0], {
-			numberOfCompletions: completedAchievement.numberOfCompletions,
-			replayInfo: completedAchievement.replayInfo,
-		} as Achievement);
+		const mergedAchievement: Achievement = data.data[0];
 		const challenge: Challenge = data.data[2];
 		const recordDuration: number = challenge.getRecordingDuration();
 		console.log('[recording] achievment complete', mergedAchievement, mergedAchievement.numberOfCompletions);
