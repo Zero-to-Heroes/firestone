@@ -1,13 +1,20 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Achievement } from '../../models/achievement';
+import { PreferencesService } from '../preferences.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 @Injectable()
 export class AchievementRecordingService {
-	constructor(private logger: NGXLogger, private loader: AchievementsLoaderService) {}
+	constructor(private logger: NGXLogger, private loader: AchievementsLoaderService, private prefs: PreferencesService) {}
 
 	public async shouldRecord(achievement: Achievement): Promise<boolean> {
+		// If the user asked to not record, don't record
+		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
+		if (recordingOff) {
+			this.logger.debug('[achievements-recording] recording is turned off, not recording achievement', achievement.id);
+			return false;
+		}
 		// If it's not the highest step of any achievement, don't record it
 		const allAchievements = await this.loader.getAchievements();
 		const priorityAchievements = allAchievements
@@ -28,6 +35,7 @@ export class AchievementRecordingService {
 			this.logger.debug('[achievements-recording] Already recorded the max number of achievements', achievement.replayInfo);
 			return false;
 		}
+		this.logger.debug('[achievements-recording] Will record', achievement);
 		return true;
 	}
 }

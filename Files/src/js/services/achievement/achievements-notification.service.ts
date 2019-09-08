@@ -1,0 +1,126 @@
+import { Injectable } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
+import { Achievement } from 'src/js/models/achievement';
+import { CompletedAchievement } from '../../models/completed-achievement';
+import { Events } from '../events.service';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { Message, OwNotificationsService } from '../notifications.service';
+import { PreferencesService } from '../preferences.service';
+import { AchievementConfService } from './achievement-conf.service';
+import { AchievementsLoaderService } from './data/achievements-loader.service';
+
+declare var ga;
+
+@Injectable()
+export class AchievementsNotificationService {
+	constructor(
+		private logger: NGXLogger,
+		private notificationService: OwNotificationsService,
+		private prefs: PreferencesService,
+		private conf: AchievementConfService,
+		private achievementLoader: AchievementsLoaderService,
+		private store: MainWindowStoreService,
+		private events: Events,
+	) {
+		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.handleAchievementCompleted(data));
+		this.events.on(Events.ACHIEVEMENT_RECORDING_STARTED).subscribe(data => this.handleAchievementRecordingStarted(data));
+		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.handleAchievementRecordCompleted(data));
+		this.logger.debug('[achievements-notification] listening for achievement completion events');
+	}
+
+	private async handleAchievementCompleted(data) {
+		this.logger.debug('[achievements-notification] preparing achievement completed notification', data);
+		const achievement: Achievement = data.data[0];
+		const numberOfCompletions = (data.data[1] as CompletedAchievement).numberOfCompletions;
+		const challenge = data.data[2];
+		if (numberOfCompletions > 1) {
+			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif');
+			return;
+		}
+		ga('send', 'event', 'new-achievement', achievement.id);
+		const notificationTimeout = challenge.notificationTimeout();
+		this.logger.debug('[achievements-notification] sending new achievement completed notification', achievement.id);
+		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
+		const recapText = recordingOff
+			? `Recording is disabled - <a class="open-settings">click here</a> to turn it on`
+			: `Your replay is being recorded...<span class="loader"></span>`;
+		this.notificationService.html({
+			notificationId: achievement.id,
+			content: this.buildNotificationTemplate(achievement, recapText),
+			type: 'achievement-no-record',
+			app: 'achievement',
+			cardId: achievement.id,
+			timeout: notificationTimeout,
+			theClass: 'no-record',
+		} as Message);
+	}
+
+	private async handleAchievementRecordingStarted(data) {
+		this.logger.debug('[achievements-notification] in pre-record notification');
+		const achievement: Achievement = data.data[0];
+		const challenge = data.data[1];
+		const notificationTimeout = challenge.notificationTimeout();
+		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
+		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
+		this.notificationService.html({
+			notificationId: achievement.id,
+			content: this.buildNotificationTemplate(achievement, recapText, 'unclickable'),
+			type: 'achievement-pre-record',
+			app: 'achievement',
+			cardId: achievement.id,
+			timeout: notificationTimeout,
+			theClass: 'pending',
+		});
+	}
+
+	private async handleAchievementRecordCompleted(data) {
+		const newAchievement: CompletedAchievement = data.data[0];
+		const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
+		// In case the pre-record notification has already timed out, we need to send a full notif
+		this.notificationService.html({
+			notificationId: achievement.id,
+			content: this.buildNotificationTemplate(achievement, undefined),
+			type: 'achievement-confirm',
+			app: 'achievement',
+			cardId: achievement.id,
+			theClass: 'active',
+		});
+	}
+
+	private buildNotificationTemplate(achievement: Achievement, recapText: string, unclickable?: 'unclickable'): string {
+		return `
+			<div class="achievement-message-container ${achievement.id} ${unclickable}">
+				<div class="achievement-image-container">
+					<img
+						src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${achievement.displayCardId}.jpg"
+						class="real-achievement ${achievement.displayCardType}"/>
+					<i class="i-84x90 frame">
+						<svg>
+							<use xlink:href="/Files/assets/svg/sprite.svg#achievement_frame"/>
+						</svg>
+					</i>
+				</div>
+				<div class="message">
+					<div class="title">
+						<i class="icon-svg">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#${achievement.icon}"/>
+							</svg>
+						</i>
+						<span>Achievement unlocked!</span>
+					</div>
+					<span class="text">${achievement.displayName}</span>
+					<div class="recap-text">
+						<span class="pending">${recapText}</span>
+						<span class="active">Replay saved! Click to recap</span>
+						<span class="no-record">Achievement saved! Click to recap</span>
+					</div>
+				</div>
+				<button class="i-30 close-button">
+					<svg class="svg-icon-fill">
+						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+					</svg>
+				</button>
+			</div>`;
+	}
+}

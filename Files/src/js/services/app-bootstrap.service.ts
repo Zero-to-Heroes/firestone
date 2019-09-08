@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AchievementStatsService } from './achievement/achievement-stats.service';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
+import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
 import { IndexedDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { CollectionManager } from './collection/collection-manager.service';
@@ -45,6 +46,7 @@ export class AppBootstrapService {
 		private packMonitor: PackMonitor,
 		private packHistory: PackHistoryService,
 		private achievementsMonitor: AchievementsMonitor,
+		private init_AchievementsNotifications: AchievementsNotificationService,
 		private achievementsVideoCaptureService: AchievementsVideoCaptureService,
 		private packStatsService: PackStatsService,
 		private achievementStatsService: AchievementStatsService,

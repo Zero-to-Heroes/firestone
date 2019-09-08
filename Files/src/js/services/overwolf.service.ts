@@ -145,7 +145,7 @@ export class OverwolfService {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<any>(resolve => {
 			overwolf.windows.close(window.id, result => {
-				console.log('[overwolf-service] closed window', windowName, result);
+				console.log('[overwolf-service] closed window', windowName);
 				resolve(result);
 			});
 		});
@@ -155,7 +155,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.restore(windowId, result => {
-					console.log('[overwolf-service] restored window', windowId, result);
+					console.log('[overwolf-service] restored window', windowId);
 					resolve(result);
 				});
 			} catch (e) {
@@ -170,7 +170,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.hide(windowId, result => {
-					console.log('[overwolf-service] hid window', windowId, result);
+					console.log('[overwolf-service] hid window', windowId);
 					resolve(result);
 				});
 			} catch (e) {
@@ -184,7 +184,7 @@ export class OverwolfService {
 	public minimizeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.minimize(windowId, result => {
-				console.log('[overwolf-service] minimized window', windowId, result);
+				console.log('[overwolf-service] minimized window', windowId);
 				resolve(result);
 			});
 		});
@@ -193,7 +193,7 @@ export class OverwolfService {
 	public maximizeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.maximize(windowId, result => {
-				console.log('[overwolf-service] maximized window', windowId, result);
+				console.log('[overwolf-service] maximized window', windowId);
 				resolve(result);
 			});
 		});
@@ -291,7 +291,7 @@ export class OverwolfService {
 	public async sendMessageWithName(windowName: string, messageType: string, messageBody?: string): Promise<void> {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] sending message with name', window.id, messageType, messageBody);
+			console.log('[overwolf-service] sending message with name', window.id, messageType);
 			overwolf.windows.sendMessage(window.id, messageType, messageBody, () => {
 				resolve();
 			});
@@ -300,7 +300,7 @@ export class OverwolfService {
 
 	public async sendMessage(windowId: string, messageType: string, messageBody?: any): Promise<void> {
 		return new Promise<void>(resolve => {
-			console.log('[overwolf-service] sending message', windowId, messageType, messageBody);
+			console.log('[overwolf-service] sending message', windowId, messageType);
 			overwolf.windows.sendMessage(windowId, messageType, messageBody, () => {
 				resolve();
 			});

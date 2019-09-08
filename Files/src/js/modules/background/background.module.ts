@@ -7,6 +7,7 @@ import { AppComponent } from '../../components/app.component';
 import { AchievementRecordingService } from '../../services/achievement/achievement-recording.service';
 import { AchievementStatsService } from '../../services/achievement/achievement-stats.service';
 import { AchievementsMonitor } from '../../services/achievement/achievements-monitor.service';
+import { AchievementsNotificationService } from '../../services/achievement/achievements-notification.service';
 import { AchievementsVideoCaptureService } from '../../services/achievement/achievements-video-capture.service';
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
@@ -73,6 +74,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		PackStatsService,
 
 		AchievementsMonitor,
+		AchievementsNotificationService,
 		AchievementStatsService,
 		AchievementsVideoCaptureService,
 		AchievementRecordingService,

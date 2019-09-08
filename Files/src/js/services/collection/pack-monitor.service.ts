@@ -306,6 +306,7 @@ export class PackMonitor {
 						</svg>
 					</button>
 				</div>`,
+			notificationId: `cards-${Date.now()}-${dbCard.id}`,
 			cardId: dbCard.id,
 			timeout: 5000,
 		});
@@ -314,6 +315,7 @@ export class PackMonitor {
 	private async createDustToast(dust: number, numberOfCards: number) {
 		const prefs = await this.prefs.getPreferences();
 		if (prefs.binder.showDust) {
+			console.log('showing dust notification', dust, numberOfCards);
 			this.notificationService.html({
 				content: `
                     <div class="message-container message-dust">
@@ -335,6 +337,7 @@ export class PackMonitor {
                         </button>
                     </div>`,
 				timeout: 5000,
+				notificationId: `dust-${Date.now()}-${dust}-${numberOfCards}`,
 			});
 		}
 	}

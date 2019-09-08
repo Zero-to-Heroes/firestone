@@ -40,9 +40,11 @@ export class OwNotificationsService {
 }
 
 export interface Message {
+	notificationId: string;
 	content: string;
 	cardId?: string;
 	type?: string;
+	app?: 'achievement' | 'collection';
 	timeout?: number;
 	theClass?: string;
 }

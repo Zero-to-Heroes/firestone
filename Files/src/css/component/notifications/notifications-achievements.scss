@@ -6,8 +6,8 @@
 	align-items: center;
 	background-image: url('/Files/assets/images/backgrounds/achievement-notif-bg.jpg');
 	background-size: 100%;
-    background-position: center center;
-	outline: 1px solid #4B3052;
+	background-position: center center;
+	outline: 1px solid #4b3052;
 	width: 410px;
 	height: 110px;
 	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
@@ -19,28 +19,28 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
-	
+
 		svg {
 			fill: transparent;
 		}
-		
+
 		.real-achievement {
 			width: 100%;
 			margin: auto;
 			position: absolute;
 			clip-path: ellipse(34% 48% at 50% 50%);
-			
+
 			&.spell {
 				width: 120%;
 				clip-path: ellipse(28% 40% at 50% 50%);
 			}
 		}
-		
+
 		.frame {
 			--icon-color: #ffb948;
 			--icon-color-secondary: #8e5b23;
 		}
-		
+
 		.placeholder {
 			position: absolute;
 			margin: auto;
@@ -57,7 +57,7 @@
 			align-items: center;
 
 			i {
-				--icon-color: #FFB948;
+				--icon-color: #ffb948;
 				margin-right: 10px;
 			}
 		}
@@ -69,11 +69,11 @@
 
 		.recap-text {
 			@extend %achievements-recap-text;
-            margin-top: 5px;
+			margin-top: 5px;
 			position: relative;
-			color: #A89782;
+			color: #a89782;
 
-			.pending {				
+			.pending {
 				display: flex;
 				align-items: center;
 			}
@@ -87,9 +87,9 @@
 				animation-duration: 1500ms;
 				animation-iteration-count: infinite;
 				animation-timing-function: linear;
-				
+
 				&::before {
-					content: "";
+					content: '';
 					background: url(/Files/assets/svg/loader.svg) center center;
 					background-size: 10px 10px;
 					position: absolute;
@@ -106,7 +106,7 @@
 	a.open-settings {
 		margin-left: 5px;
 		margin-right: 5px;
-		color: #D9C3AB;
+		color: #d9c3ab;
 
 		&:hover {
 			color: #ffb948;
@@ -117,41 +117,73 @@
 		position: absolute;
 		top: 0;
 		right: 0;
-		--icon-color: #CB9FD7;
+		--icon-color: #cb9fd7;
 
-	    &:hover {
-			color: #2A1030;
-			background: #CB9FD7;
-	    }
-    }
+		&:hover {
+			color: #2a1030;
+			background: #cb9fd7;
+		}
+	}
 
-    .pending {
-        opacity: 1;
-    }
+	.pending {
+		opacity: 0;
+	}
 
-    .active {
-        opacity: 0;
-        position: absolute;
+	.active {
+		opacity: 0;
+		position: absolute;
 		top: 0;
 		left: 0;
-    }
-    
-    &.active {
-        .pending {
-            opacity: 0;
-        }
-        .active {
-            opacity: 1;
-            position: absolute;
-        }
-    }
+	}
+
+	.no-record {
+		opacity: 0;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	// The order in which they are defined is important
+	&.no-record {
+		.pending {
+			opacity: 0;
+		}
+		.no-record {
+			opacity: 1;
+		}
+		.active {
+			opacity: 0;
+		}
+	}
+	&.pending {
+		.pending {
+			opacity: 1;
+		}
+		.no-record {
+			opacity: 0;
+		}
+		.active {
+			opacity: 0;
+		}
+	}
+	&.active {
+		.pending {
+			opacity: 0;
+		}
+		.no-record {
+			opacity: 0;
+		}
+		.active {
+			opacity: 1;
+		}
+	}
 }
 
 @keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }

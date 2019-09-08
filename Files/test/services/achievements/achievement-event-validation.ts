@@ -47,7 +47,7 @@ export const achievementsValidation = async (
 			},
 		} as any,
 	} as MainWindowStoreService;
-	new AchievementsMonitor(gameEventsService, null, null, null, loader, store, events);
+	new AchievementsMonitor(gameEventsService, loader, store);
 
 	if (additionalEvents) {
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));

@@ -33,7 +33,7 @@ export class AchievementCompletedProcessor implements Processor {
 		this.events.broadcast(Events.NEW_ACHIEVEMENT, completedAchievement);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
 		// Send the notification early
-		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, completedAchievement.numberOfCompletions, event.challenge);
+		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, completedAchievement, event.challenge);
 		const historyItem = {
 			achievementId: achievement.id,
 			achievementName: achievement.name,

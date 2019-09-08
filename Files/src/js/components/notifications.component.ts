@@ -15,6 +15,7 @@ import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
+import { Message } from '../services/notifications.service';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -51,6 +52,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
 
+	private pendingNotificationQueue: Message[] = [];
+	private processingNotifs = false;
+
 	constructor(
 		private notificationService: NotificationsService,
 		private cdr: ChangeDetectorRef,
@@ -62,9 +66,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
-			console.log('received message in notification window', message);
-			const messageObject = JSON.parse(message.content);
-			this.sendNotification(messageObject);
+			const messageObject: Message = JSON.parse(message.content);
+			console.log('received message in notification window', messageObject.notificationId, messageObject.theClass);
+			this.pendingNotificationQueue.push(messageObject);
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
 			console.log('state changed, resize?', message);
@@ -75,7 +79,19 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
-		// this.resize();
+
+		setInterval(async () => {
+			if (this.processingNotifs) {
+				return;
+			}
+			this.processingNotifs = true;
+			let toProcess: Message;
+			if (this.pendingNotificationQueue.length > 0) {
+				toProcess = this.pendingNotificationQueue.shift();
+				await this.sendNotification(toProcess);
+			}
+			this.processingNotifs = false;
+		}, 50);
 	}
 
 	ngOnDestroy(): void {
@@ -84,122 +100,125 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	created(event) {
-		console.log('notif created', event, this.notificationService, this.activeNotifications);
-		// this.shouldResize = true;
-		// this.resize();
+		console.log('notif created', event.html, this.activeNotifications);
 	}
 
 	destroyed(event) {
-		console.log('notif destroyed', event, this.notificationService, this.activeNotifications);
+		console.log('notif destroyed', event, this.activeNotifications);
 		const deletedNotifications = this.activeNotifications.filter(notif => notif.toast.id === event.id);
 		deletedNotifications.forEach(notif => notif.subscription.unsubscribe());
 		this.activeNotifications = this.activeNotifications.filter(notif => notif.toast.id !== event.id);
-		// this.shouldResize = true;
-		// this.resize();
 	}
 
-	private sendNotification(messageObject) {
-		if (!this.windowId) {
-			setTimeout(() => {
-				this.sendNotification(messageObject);
-			}, 100);
-			return;
-		}
-		const activeNotif = this.activeNotifications.find(notif => notif.cardId === messageObject.cardId);
-		const notification = this.elRef.nativeElement.querySelector('.' + messageObject.cardId);
-		if (messageObject.type === 'achievement-confirm' && notification && activeNotif) {
-			this.confirmAchievement(messageObject.cardId, notification);
-		} else {
-			this.showNotification(messageObject);
-		}
+	private async sendNotification(messageObject: Message): Promise<void> {
+		return new Promise<void>(async resolve => {
+			await this.waitForInit();
+			const activeNotif = this.activeNotifications.find(notif => notif.notificationId === messageObject.notificationId);
+			const notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
+			if (notification && activeNotif) {
+				await this.updateAchievementNotification(messageObject.notificationId, messageObject.theClass, notification);
+			} else {
+				await this.showNotification(messageObject);
+			}
+			resolve();
+		});
 	}
 
-	private confirmAchievement(cardId: string, notification) {
-		console.log('in confirm achievement', cardId);
-		const activeNotif = this.activeNotifications.find(notif => notif.cardId === cardId);
+	private async updateAchievementNotification(notificationId: string, newClass: string, notification) {
+		console.log('in confirm achievement', notificationId);
+		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
 		const toast = activeNotif.toast;
-		console.log('active notif found', activeNotif, toast);
-		toast.theClass = 'active';
+		console.log('active notif found', notificationId, activeNotif.notificationId);
+		toast.theClass = newClass;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('got notif', notification);
-		notification.classList.add('active');
+		notification.classList.add(newClass);
 		console.log('updated notif', notification);
 	}
 
-	private async showNotification(messageObject) {
-		console.log('showing notification', messageObject);
-		const htmlMessage: string = messageObject.content;
-		const cardId: string = messageObject.cardId;
-		const type: string = messageObject.type;
-		const additionalTimeout: string = messageObject.timeout || 0;
-		await this.ow.restoreWindow(this.windowId);
-		const override: any = {
-			timeOut: this.timeout + additionalTimeout,
-			clickToClose: true,
-		};
-		if (type === 'achievement-pre-record') {
-			override.clickToClose = false;
-		}
-		const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
-		toast.theClass = messageObject.theClass;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-		// console.log('running toast message in zone', toast);
-		const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
-			console.log('registered click on toast', event, toast);
+	private async showNotification(messageObject: Message) {
+		return new Promise<void>(async resolve => {
+			console.log('showing notification', messageObject.notificationId);
+			const htmlMessage: string = messageObject.content;
+			const cardId: string = messageObject.cardId;
+			const type: string = messageObject.type;
+			const additionalTimeout: number = messageObject.timeout || 0;
+			await this.ow.restoreWindow(this.windowId);
+			const override: any = {
+				timeOut: this.timeout + additionalTimeout,
+				clickToClose: true,
+			};
+			if (type === 'achievement-pre-record') {
+				override.clickToClose = false;
+			}
+			const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
+			toast.theClass = messageObject.theClass;
+			console.log('created toast', toast.id, messageObject.notificationId);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
-			let currentElement: any = event.srcElement;
-			// Clicked on close, don't show the card
-			if (currentElement.className.indexOf('close') !== -1) {
-				// Force close if it's not configured to auto close
-				if (override.clickToClose === false) {
-					this.notificationService.remove(toast.id);
+			// console.log('running toast message in zone', toast);
+			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
+				console.log('registered click on toast', event, toast);
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
 				}
-				// this.notificationService.remove(toast.id);
-				return;
-			}
-			// Clicked on settings, don't show the card and don't close
-			if (currentElement.className.indexOf('open-settings') !== -1) {
-				event.preventDefault();
-				event.stopPropagation();
-				this.showSettings();
-				return;
-			}
-			while (!currentElement.classList.contains('unclickable') && currentElement.parentElement) {
-				currentElement = currentElement.parentElement;
-			}
-			if (currentElement.classList.contains('unclickable')) {
-				currentElement.classList.add('shake');
-				setTimeout(() => {
-					currentElement.classList.remove('shake');
-				}, 500);
-			}
-			if (cardId) {
-				const isAchievement = type === 'achievement-pre-record' || type === 'achievement-confirm';
-				const isActiveAchievement =
-					(type === 'achievement-pre-record' && toast.theClass === 'active') || type === 'achievement-confirm';
-				if (isActiveAchievement) {
-					console.log('sending message', this.mainWindowId);
-					this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
-					this.notificationService.remove(toast.id);
-				} else if (!isAchievement) {
-					this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
+				let currentElement: any = event.srcElement;
+				// Clicked on close, don't show the card
+				if (currentElement.className.indexOf('close') !== -1) {
+					// Force close if it's not configured to auto close
+					if (override.clickToClose === false) {
+						this.notificationService.remove(toast.id);
+					}
+					// this.notificationService.remove(toast.id);
+					return;
 				}
-			}
-		});
+				// Clicked on settings, don't show the card and don't close
+				if (currentElement.className.indexOf('open-settings') !== -1) {
+					event.preventDefault();
+					event.stopPropagation();
+					this.showSettings();
+					return;
+				}
+				while (!currentElement.classList.contains('unclickable') && currentElement.parentElement) {
+					currentElement = currentElement.parentElement;
+				}
+				if (currentElement.classList.contains('unclickable')) {
+					currentElement.classList.add('shake');
+					setTimeout(() => {
+						currentElement.classList.remove('shake');
+					}, 500);
+					return;
+				}
+				if (cardId) {
+					const isAchievement = messageObject.app === 'achievement';
+					if (isAchievement) {
+						console.log('sending message', this.mainWindowId);
+						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
+						this.notificationService.remove(toast.id);
+					} else {
+						this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
+					}
+				}
+			});
 
-		const activeNotif: ActiveNotification = {
-			toast: toast,
-			subscription: subscription,
-			cardId: cardId,
-			type: type,
-		};
-		this.activeNotifications.push(activeNotif);
+			const activeNotif: ActiveNotification = {
+				toast: toast,
+				subscription: subscription,
+				notificationId: messageObject.notificationId,
+				type: type,
+			};
+			this.activeNotifications.push(activeNotif);
+			resolve();
+
+			setTimeout(() => {
+				const notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
+				if (notification) {
+					notification.classList.add(messageObject.theClass);
+				}
+			}, 200);
+		});
 	}
 
 	private resize() {
@@ -227,11 +246,27 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
 		await this.ow.restoreWindow(window.id);
 	}
+
+	private waitForInit(): Promise<void> {
+		return new Promise<void>(resolve => {
+			const theWait = () => {
+				// console.log('Promise waiting for db');
+				if (this.windowId) {
+					// console.log('wait for db init complete');
+					resolve();
+				} else {
+					// console.log('waiting for db init');
+					setTimeout(() => theWait(), 50);
+				}
+			};
+			theWait();
+		});
+	}
 }
 
 interface ActiveNotification {
 	readonly toast: Notification;
 	readonly subscription: Subscription;
-	readonly cardId?: string;
+	readonly notificationId: string;
 	readonly type?: string;
 }

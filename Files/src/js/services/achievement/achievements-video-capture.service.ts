@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
+import { CompletedAchievement } from '../../models/completed-achievement';
 import { ReplayInfo } from '../../models/replay-info';
 import { Events } from '../events.service';
 import { AchievementRecordedEvent } from '../mainwindow/store/events/achievements/achievement-recorded-event';
@@ -102,27 +103,31 @@ export class AchievementsVideoCaptureService {
 		}
 	}
 
-	private onAchievementComplete(data) {
-		const achievement: Achievement = data.data[0];
-		const numberOfCompletions: number = data.data[1];
+	private async onAchievementComplete(data) {
+		const completedAchievement: CompletedAchievement = data.data[1];
+		const mergedAchievement = Object.assign(new Achievement(), data.data[0], {
+			numberOfCompletions: completedAchievement.numberOfCompletions,
+			replayInfo: completedAchievement.replayInfo,
+		} as Achievement);
 		const challenge: Challenge = data.data[2];
 		const recordDuration: number = challenge.getRecordingDuration();
-		console.log('[recording] achievment complete', achievement, numberOfCompletions);
-		this.capture(achievement, challenge, recordDuration);
+		console.log('[recording] achievment complete', mergedAchievement, mergedAchievement.numberOfCompletions);
+		if (!(await this.achievementRecording.shouldRecord(mergedAchievement))) {
+			console.log('[recording] Not recording achievement', mergedAchievement);
+			return;
+		}
+		this.capture(mergedAchievement, challenge, recordDuration);
 	}
 
 	private async capture(achievement: Achievement, challenge: Challenge, recordDuration: number) {
-		if (!(await this.achievementRecording.shouldRecord(achievement))) {
-			console.log('[recording] Not recording achievement', achievement);
-			return;
-		}
 		this.achievementsBeingRecorded.push(achievement.id);
+		console.log('[recording] start recording achievement', achievement, challenge.getRecordPastDurationMillis());
+		this.events.broadcast(Events.ACHIEVEMENT_RECORDING_STARTED, achievement, challenge);
 		if (this.captureOngoing) {
 			console.info('[recording] capture ongoing, doing nothing', this.achievementsBeingRecorded);
 			return;
 		}
 		this.captureOngoing = true;
-		console.log('[recording] start recording achievement', achievement, challenge.getRecordPastDurationMillis());
 		const captureDuration = parseInt(challenge.getRecordPastDurationMillis() + '', 10);
 		console.log('[recording] starting capture for duration', captureDuration);
 		try {

@@ -18,6 +18,7 @@ export class Events {
 	public static readonly NEW_ACHIEVEMENT = 'new-achievement';
 	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
 	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
+	public static readonly ACHIEVEMENT_RECORDING_STARTED = 'achievement-recording-started';
 	// public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
 
 	public static readonly SCENE_CHANGED = 'scene-changed';
