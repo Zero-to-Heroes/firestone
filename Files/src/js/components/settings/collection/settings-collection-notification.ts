@@ -30,8 +30,8 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showCommon" name="" id="a-01" (change)="toggleShowCommon()" />
-							<label for="a-01" [ngClass]="{ 'enabled': showCommon }">
+							<input hidden type="checkbox" [checked]="showCommon" name="" id="a-02" (change)="toggleShowCommon()" />
+							<label for="a-02" [ngClass]="{ 'enabled': showCommon }">
 								<p class="settings-p">Non-golden commons</p>
 								<b></b>
 							</label>
@@ -71,6 +71,7 @@ export class SettingsCollectionNotificationComponent {
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.showDust = prefs.binder.showDust;
+		this.showCommon = prefs.binder.showCommon;
 		console.log('loaded prefs', prefs);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
