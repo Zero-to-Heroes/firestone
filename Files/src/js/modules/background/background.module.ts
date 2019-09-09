@@ -22,6 +22,11 @@ import { GameStateService } from '../../services/decktracker/game-state.service'
 import { OverlayDisplayService } from '../../services/decktracker/overlay-display.service';
 import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
 import { DevService } from '../../services/dev.service';
+import { EndGameListenerService } from '../../services/endgame/end-game-listener.service';
+import { EndGameUploaderService } from '../../services/endgame/end-game-uploader.service';
+import { GameHelper } from '../../services/endgame/game-helper.service';
+import { GameParserService } from '../../services/endgame/game-parser.service';
+import { ReplayUploadService } from '../../services/endgame/replay-upload.service';
 import { GameEvents } from '../../services/game-events.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
@@ -78,6 +83,12 @@ export class SentryErrorHandler implements ErrorHandler {
 		AchievementStatsService,
 		AchievementsVideoCaptureService,
 		AchievementRecordingService,
+
+		EndGameListenerService,
+		EndGameUploaderService,
+		GameHelper,
+		GameParserService,
+		ReplayUploadService,
 
 		OverlayDisplayService,
 		DeckCardService,

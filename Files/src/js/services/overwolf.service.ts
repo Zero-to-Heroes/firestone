@@ -421,6 +421,15 @@ export class OverwolfService {
 		});
 	}
 
+	public async isManastormRunning(): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			overwolf.extensions.getRunningState('kfnacgfblhkjdgcndfdobooemjaapcefaminngbk', (res: any) => {
+				console.warn('[overwolf-service] is Manastorm running?', res);
+				resolve(res);
+			});
+		});
+	}
+
 	public async getTwitterUserInfo(): Promise<TwitterUserInfo> {
 		return new Promise<TwitterUserInfo>(resolve => {
 			overwolf.social.twitter.getUserInfo(res => {

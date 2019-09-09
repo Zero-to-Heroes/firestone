@@ -13,6 +13,7 @@ export class MemoryInspectionService {
 		'scene_state', // Used to detect when the UI shows the game
 		'collection',
 		'match', // Used to get the rank info of the player
+		'match_info', // For the GEP game ID
 	];
 
 	constructor(private events: Events, private ow: OverwolfService) {
@@ -117,6 +118,8 @@ export class MemoryInspectionService {
 					this.events.broadcast(Events.OPPONENT_INFO, JSON.parse(opponent));
 				}
 			}
+		} else if (info.feature === 'match_info' && info.info && info.info.match_info && info.info.match_info.pseudo_match_id) {
+			this.events.broadcast(Events.NEW_GAME_ID, info.info.match_info.pseudo_match_id);
 		}
 	}
 

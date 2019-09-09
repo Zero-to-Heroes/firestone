@@ -1,0 +1,1 @@
+This is a copy/paste from Manastorm. If things go well, I'll extract this code in a shared module
