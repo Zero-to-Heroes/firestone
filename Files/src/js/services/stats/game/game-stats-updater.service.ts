@@ -31,7 +31,7 @@ export class GameStatsUpdaterService {
 		// Build the new stat ourselves, as we have no way of being notified when
 		// the new stat will be available on the remote db
 		const gameStat: GameStat = this.buildGameStat();
-		const newStats = [gameStat, ...gameStats.stats];
+		const newStats: readonly GameStat[] = [gameStat, ...gameStats.stats];
 		this.logger.debug('[game-stats-updater] built new game stats', newStats);
 		return Object.assign(new GameStats(), gameStats, {
 			stats: newStats,

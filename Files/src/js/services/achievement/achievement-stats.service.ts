@@ -53,7 +53,7 @@ export class AchievementStatsService {
 		};
 		// console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
 		this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent).subscribe(
-			result => console.log('achievement stat event result', result),
+			result => {},
 			error => {
 				console.warn('Could not upload achievemnt stats, retrying', error);
 				setTimeout(() => this.publishAchievementStats(event, retriesLeft--), 5000);
