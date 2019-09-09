@@ -17,7 +17,7 @@ describe('game-tie-req', () => {
 		const req = new GameTieReq();
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.WINNER,
-			localPlayer: { id: 2 },
+			localPlayer: { PlayerId: 2 },
 			additionalData: { winner: 2 },
 		} as GameEvent);
 

@@ -47,8 +47,8 @@ export class GameEvent {
 	readonly type: string;
 	readonly cardId: string;
 	readonly controllerId: number; // matches a PlayerId
-	readonly localPlayer;
-	readonly opponentPlayer;
+	readonly localPlayer: GameEventPlayer;
+	readonly opponentPlayer: GameEventPlayer;
 	readonly entityId: number;
 	readonly gameState: any = {};
 
@@ -70,4 +70,18 @@ export class GameEvent {
 	public parse(): [string, number, any, number] {
 		return [this.cardId, this.controllerId, this.localPlayer, this.entityId];
 	}
+}
+
+export interface GameEventPlayer {
+	Id: number;
+	AccountHi: string;
+	AccountLo: string;
+	PlayerId: number;
+	Name: string;
+	CardID: string;
+	standardRank: number;
+	standardLegendRank: number;
+	wildRank: number;
+	wildLegendRank: number;
+	cardBackId: number;
 }

@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { captureEvent } from '@sentry/core';
-import { GameEvent } from '../models/game-event';
+import { GameEvent, GameEventPlayer } from '../models/game-event';
 import { Events } from './events.service';
 import { LogsUploaderService } from './logs-uploader.service';
 import { PlayersInfoService } from './players-info.service';
@@ -103,7 +103,7 @@ export class GameEvents {
 			case 'LOCAL_PLAYER':
 				// First try without waiting for a callback, which is most of the cases
 				const playerInfo = this.playersInfoService.playerInfo || (await this.playersInfoService.getPlayerInfo());
-				const localPlayer = Object.assign({}, gameEvent.Value, {
+				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: playerInfo ? playerInfo.standardRank : undefined,
 					standardLegendRank: playerInfo ? playerInfo.standardLegendRank : undefined,
 					wildRank: playerInfo ? playerInfo.wildRank : undefined,
@@ -120,7 +120,7 @@ export class GameEvents {
 				break;
 			case 'OPPONENT_PLAYER':
 				const opponentInfo = this.playersInfoService.opponentInfo || (await this.playersInfoService.getOpponentInfo());
-				const opponentPlayer = Object.assign({}, gameEvent.Value, {
+				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
 					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
 					wildRank: opponentInfo ? opponentInfo.wildRank : undefined,
