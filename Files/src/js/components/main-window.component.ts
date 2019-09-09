@@ -105,6 +105,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private isMaximized = false;
 	private adRef;
 	private adInit = false;
+	private shouldDisplayAds = true;
 	private stateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
@@ -153,6 +154,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				}
 			});
 		});
+		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
 		this.refreshAds();
 		ga('send', 'event', 'collection', 'show');
 	}
@@ -172,8 +174,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async refreshAds() {
-		const shouldDisplayAds = await this.adService.shouldDisplayAds();
-		if (!shouldDisplayAds) {
+		if (!this.shouldDisplayAds) {
 			console.log('ad-free app, not showing ads and returning');
 			return;
 		}

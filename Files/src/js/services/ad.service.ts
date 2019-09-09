@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { OverwolfService } from './overwolf.service';
 
 const SUBSCRIPTION_STATUS_ENDPOINT_GET = 'https://rpeze8ckdl.execute-api.us-west-2.amazonaws.com/Prod/subscriptions';
@@ -11,7 +11,7 @@ export class AdService {
 	public async shouldDisplayAds(): Promise<boolean> {
 		return new Promise<boolean>(async resolve => {
 			const user = await this.ow.getCurrentUser();
-			if (!user || !user.user) {
+			if (!user || !user.username) {
 				resolve(true);
 				return;
 			}
@@ -22,7 +22,7 @@ export class AdService {
 				return;
 			}
 			console.log('contacting subscription API');
-			this.http.get(`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.user.userId}/${username}`).subscribe(
+			this.http.get(`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`).subscribe(
 				res => {
 					console.log('retrieved sub status for', username, res);
 					resolve(false);

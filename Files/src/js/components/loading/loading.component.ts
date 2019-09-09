@@ -120,6 +120,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 
 	private adRef;
 	private adInit;
+	private shouldDisplayAds = true;
 	private stateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
@@ -157,6 +158,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 				this.refreshAds();
 			}
 		});
+		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
 		this.refreshAds();
 	}
 
@@ -183,8 +185,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async refreshAds() {
-		const shouldDisplayAds = await this.adService.shouldDisplayAds();
-		if (!shouldDisplayAds) {
+		if (!this.shouldDisplayAds) {
 			console.log('ad-free app, not showing ads and returning');
 			return;
 		}
