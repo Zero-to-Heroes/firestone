@@ -28,7 +28,7 @@ export class AchievementsNotificationService {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', data);
 		const achievement: Achievement = data.data[0];
 		const challenge = data.data[1];
-		if (achievement.numberOfCompletions > 1) {
+		if (achievement.numberOfCompletions >= 1) {
 			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif');
 			return;
 		}
