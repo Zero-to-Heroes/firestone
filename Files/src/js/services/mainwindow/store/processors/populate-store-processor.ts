@@ -7,6 +7,8 @@ import { AchievementsState } from '../../../../models/mainwindow/achievements-st
 import { BinderState } from '../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { SocialShareUserInfo } from '../../../../models/mainwindow/social-share-user-info';
+import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
+import { StatsState } from '../../../../models/mainwindow/stats/stats-state';
 import { PityTimer } from '../../../../models/pity-timer';
 import { Set, SetCard } from '../../../../models/set';
 import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
@@ -18,6 +20,7 @@ import { CardHistoryStorageService } from '../../../collection/card-history-stor
 import { CollectionManager } from '../../../collection/collection-manager.service';
 import { PackHistoryService } from '../../../collection/pack-history.service';
 import { OverwolfService } from '../../../overwolf.service';
+import { GameStatsLoaderService } from '../../../stats/game/game-stats-loader.service';
 import { PopulateStoreEvent } from '../events/populate-store-event';
 import { Processor } from './processor';
 
@@ -29,20 +32,25 @@ export class PopulateStoreProcessor implements Processor {
 		private collectionManager: CollectionManager,
 		private pityTimer: PackHistoryService,
 		private achievementsLoader: AchievementsLoaderService,
+		private gameStatsLoader: GameStatsLoaderService,
 		private ow: OverwolfService,
 		private cards: AllCardsService,
 	) {}
 
 	public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		console.log('populating store');
-		const collection = await this.populateCollectionState(currentState.binder);
-		const achievements = await this.populateAchievementState(currentState.achievements);
-		const socialShareUserInfo = await this.initializeSocialShareUserInfo(currentState.socialShareUserInfo);
+		const [collection, achievements, socialShareUserInfo, stats] = await Promise.all([
+			this.populateCollectionState(currentState.binder),
+			this.populateAchievementState(currentState.achievements),
+			this.initializeSocialShareUserInfo(currentState.socialShareUserInfo),
+			this.initialiseGameStats(currentState.stats),
+		]);
 		console.log('almost done');
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: achievements,
 			binder: collection,
 			socialShareUserInfo: socialShareUserInfo,
+			stats: stats,
 			isVisible: false,
 		} as MainWindowState);
 	}
@@ -52,6 +60,13 @@ export class PopulateStoreProcessor implements Processor {
 		return Object.assign(new SocialShareUserInfo(), socialShareUserInfo, {
 			twitter: twitter,
 		} as SocialShareUserInfo);
+	}
+
+	private async initialiseGameStats(stats: StatsState): Promise<StatsState> {
+		const newGameStats: GameStats = await this.gameStatsLoader.retrieveStats();
+		return Object.assign(new StatsState(), stats, {
+			gameStats: newGameStats,
+		} as StatsState);
 	}
 
 	private async populateAchievementState(currentState: AchievementsState): Promise<AchievementsState> {

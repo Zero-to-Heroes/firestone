@@ -10,7 +10,53 @@ export class GameParserService {
 
 	constructor(private gameHelper: GameHelper, private cards: AllCardsService) {}
 
-	extractDuration(game: Game) {
+	public toFormatType(formatType: number) {
+		switch (formatType) {
+			case 0:
+				return 'unknown';
+			case 1:
+				return 'wild';
+			case 2:
+				return 'standard';
+			default:
+				console.error('unsupported format type', formatType);
+				return 'unknown';
+		}
+	}
+
+	public toGameType(gameType: number) {
+		switch (gameType) {
+			case 0:
+				return 'unknown';
+			case 1:
+				return 'practice';
+			case 2:
+				return 'friendly';
+			case 4:
+				return 'tutorial';
+			case 5:
+				return 'arena';
+			case 7:
+				return 'ranked';
+			case 8:
+				return 'casual';
+			case 16:
+			case 17:
+			case 18:
+			case 19:
+			case 20:
+			case 21:
+			case 22:
+				return 'tavernbrawl';
+			case 23:
+				return 'tournament';
+			default:
+				console.log('unsupported game type', gameType);
+				return 'unknown';
+		}
+	}
+
+	public extractDuration(game: Game) {
 		const parser = new DOMParser();
 		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
 		console.log('parsed', replayXml);
@@ -30,13 +76,13 @@ export class GameParserService {
 		game.durationTurns = (tagChangeNodes.length + 1) / 2;
 	}
 
-	toTimestamp(ts: string): number {
+	public toTimestamp(ts: string): number {
 		const split = ts.split(':');
 		const total = parseInt(split[0]) * 3600 + parseInt(split[1]) * 60 + parseInt(split[2].split('.')[0]);
 		return total;
 	}
 
-	extractMatchup(game: Game): void {
+	public extractMatchup(game: Game): void {
 		const parser = new DOMParser();
 		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
 		console.log('parsed', replayXml);
@@ -66,7 +112,7 @@ export class GameParserService {
 		console.log('parsed game');
 	}
 
-	extractPlayers(replayXml: any, mainPlayerId: number): Player[] {
+	public extractPlayers(replayXml: any, mainPlayerId: number): Player[] {
 		const gamePlayers: Player[] = [];
 		const players = replayXml.getElementsByTagName('Player');
 		for (const player of players) {
@@ -93,7 +139,7 @@ export class GameParserService {
 		return nameOrBTag.indexOf('#') !== -1 ? nameOrBTag.split('#')[0] : nameOrBTag;
 	}
 
-	getMainPlayerId(replayXml: any): number {
+	public getMainPlayerId(replayXml: any): number {
 		const showEntities = replayXml.getElementsByTagName('ShowEntity');
 		// console.log('there are ' + showEntities.length + ' ShowEntity elements')
 		const fullEntities = replayXml.getElementsByTagName('FullEntity');
@@ -125,7 +171,7 @@ export class GameParserService {
 		return null;
 	}
 
-	getTagValue(fullEntity: any, type: number): number {
+	public getTagValue(fullEntity: any, type: number): number {
 		const tags = fullEntity.getElementsByTagName('Tag');
 		for (const tag of tags) {
 			if (parseInt(tag.getAttribute('tag')) === type) {
@@ -135,7 +181,7 @@ export class GameParserService {
 		return null;
 	}
 
-	extractClassCard(replayXml: any, player: any) {
+	public extractClassCard(replayXml: any, player: any) {
 		// console.log('building playerClass for ', player, replayXml);
 		let playerId: any;
 		const nodes = player.childNodes;
@@ -162,14 +208,14 @@ export class GameParserService {
 		return cardId;
 	}
 
-	extractClassFromHero(hero: string) {
+	public extractClassFromHero(hero: string) {
 		const heroCard = this.cards.getCard(hero);
 		const playerClass = heroCard && heroCard.playerClass && heroCard.playerClass.toLowerCase();
 		console.log('extractClassFromHero', hero, playerClass);
 		return playerClass;
 	}
 
-	extractResult(replayXml: any, mainPlayerId: number): string {
+	public extractResult(replayXml: any, mainPlayerId: number): string {
 		const tagChanges = replayXml.getElementsByTagName('TagChange');
 		// console.log('found ' + tagChanges.length + ' tag changes');
 		let winnerTag: any;

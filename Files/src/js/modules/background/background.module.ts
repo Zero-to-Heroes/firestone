@@ -3,6 +3,7 @@ import { ErrorHandler, Injectable, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { captureException, init } from '@sentry/browser';
+import { LZStringModule, LZStringService } from 'ng-lz-string';
 import { AppComponent } from '../../components/app.component';
 import { AchievementRecordingService } from '../../services/achievement/achievement-recording.service';
 import { AchievementStatsService } from '../../services/achievement/achievement-stats.service';
@@ -36,6 +37,8 @@ import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service
 import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
+import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
+import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 
 init({
@@ -57,7 +60,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 @NgModule({
 	bootstrap: [AppComponent],
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedServicesModule.forRoot()],
+	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedServicesModule.forRoot(), LZStringModule],
 	declarations: [AppComponent],
 	providers: [
 		{ provide: ErrorHandler, useClass: SentryErrorHandler },
@@ -90,6 +93,9 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameParserService,
 		ReplayUploadService,
 
+		GameStatsLoaderService,
+		GameStatsUpdaterService,
+
 		OverlayDisplayService,
 		DeckCardService,
 		DeckParserService,
@@ -99,6 +105,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameStateMetaInfoService,
 
 		TemporaryResolutionOverrideService,
+		LZStringService,
 	],
 })
 export class AppModule {}

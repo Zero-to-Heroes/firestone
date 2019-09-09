@@ -25,9 +25,9 @@ export class EndGameListenerService {
 			this.logger.debug('Received new game id event', event);
 			this.currentGameId = event.data[0];
 		});
-		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
+		this.gameEvents.allEvents.subscribe(async (event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
-				this.endGameUploader.upload(event, this.currentGameId, this.deckService.currentDeck.deckstring);
+				await this.endGameUploader.upload(event, this.currentGameId, this.deckService.currentDeck.deckstring);
 			}
 		});
 	}
