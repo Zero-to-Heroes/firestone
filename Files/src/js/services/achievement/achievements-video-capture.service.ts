@@ -104,7 +104,7 @@ export class AchievementsVideoCaptureService {
 
 	private async onAchievementComplete(data) {
 		const mergedAchievement: Achievement = data.data[0];
-		const challenge: Challenge = data.data[2];
+		const challenge: Challenge = data.data[1];
 		const recordDuration: number = challenge.getRecordingDuration();
 		console.log('[recording] achievment complete', mergedAchievement, mergedAchievement.numberOfCompletions);
 		if (!(await this.achievementRecording.shouldRecord(mergedAchievement))) {
