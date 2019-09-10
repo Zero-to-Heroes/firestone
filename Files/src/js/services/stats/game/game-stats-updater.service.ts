@@ -8,7 +8,6 @@ import { GameParserService } from '../../endgame/game-parser.service';
 import { GameEvents } from '../../game-events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
-import { OverwolfService } from '../../overwolf.service';
 
 @Injectable()
 export class GameStatsUpdaterService {
@@ -22,7 +21,6 @@ export class GameStatsUpdaterService {
 		private cards: AllCardsService,
 		private gameParserService: GameParserService,
 		private logger: NGXLogger,
-		private ow: OverwolfService,
 	) {
 		this.init();
 	}
