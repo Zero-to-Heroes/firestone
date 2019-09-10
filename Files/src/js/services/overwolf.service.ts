@@ -125,12 +125,21 @@ export class OverwolfService {
 		});
 	}
 
-	public async getCurrentUser() {
-		return new Promise<any>(resolve => {
-			overwolf.profile.getCurrentUser(user => {
-				resolve(user);
-			});
-		});
+	public async getCurrentUser(): Promise<{
+		status: string;
+		username: string;
+		userId: string;
+		machineId: string;
+		partnerId: number;
+		channel: string;
+	}> {
+		return new Promise<{ status: string; username: string; userId: string; machineId: string; partnerId: number; channel: string }>(
+			resolve => {
+				overwolf.profile.getCurrentUser(user => {
+					resolve(user);
+				});
+			},
+		);
 	}
 
 	public async closeWindow(windowId: string) {
