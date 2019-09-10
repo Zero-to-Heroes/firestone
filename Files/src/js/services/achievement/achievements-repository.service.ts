@@ -40,7 +40,7 @@ export class AchievementsRepository {
 	private async init() {
 		await this.achievementsLoader.initializeAchievements();
 		this.buildCategories();
-		console.log('[achievements-repository] achievements initialised', this.setProviders, this.categories);
+		console.log('[achievements-repository] achievements initialised');
 		this.modulesLoaded.next(true);
 	}
 

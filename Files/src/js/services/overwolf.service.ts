@@ -320,7 +320,7 @@ export class OverwolfService {
 		return new Promise<any>((resolve, reject) => {
 			overwolf.windows.obtainDeclaredWindow(windowName, (res: any) => {
 				if (res.status === 'success') {
-					console.log('[overwolf-service] obtained declared window', windowName, res.window);
+					// console.log('[overwolf-service] obtained declared window', windowName, res.window);
 					resolve(res.window);
 				} else {
 					reject(res);

@@ -45,7 +45,7 @@ export class LogListenerService {
 		});
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (this.ow.gameRunning(gameInfo)) {
-			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath, gameInfo);
+			console.log('[log-listener] [' + this.logFile + '] Game is running!', gameInfo.executionPath);
 			this.logsLocation = gameInfo.executionPath.split('Hearthstone.exe')[0] + 'Logs\\' + this.logFile;
 			this.registerLogMonitor();
 		} else {

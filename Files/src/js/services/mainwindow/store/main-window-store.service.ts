@@ -147,7 +147,7 @@ export class MainWindowStoreService {
 		}
 		this.isProcessing = true;
 		const event = this.eventQueue.shift();
-		console.log('[store] processing event', event.eventName(), event);
+		console.log('[store] processing event', event.eventName());
 		const processor: Processor = this.processors.get(event.eventName());
 		const newState = await processor.process(event, this.state, this.stateHistory);
 		if (newState) {

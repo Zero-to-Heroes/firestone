@@ -22,9 +22,9 @@ export class ReceiveCardInHandParser implements EventParser {
 
 		// First try and see if this card doesn't come from the board
 		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);
-		console.log('[receive-card-in-hand] trying to get card from zone', deck.board, entityId, card, cardId);
+		// console.log('[receive-card-in-hand] trying to get card from zone', deck.board, entityId, card, cardId);
 		const newBoard = DeckManipulationHelper.removeSingleCardFromZone(deck.board, null, entityId);
-		console.log('[receive-card-in-hand] new board', newBoard);
+		// console.log('[receive-card-in-hand] new board', newBoard);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
@@ -36,10 +36,10 @@ export class ReceiveCardInHandParser implements EventParser {
 				manaCost: cardData && cardData.cost,
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
 			} as DeckCard);
-		console.log('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
+		// console.log('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousHand, cardWithDefault);
-		console.log('[receive-card-in-hand] new hand', newHand);
+		// console.log('[receive-card-in-hand] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,

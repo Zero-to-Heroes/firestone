@@ -1,6 +1,5 @@
-import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { EventEmitter, Injectable } from '@angular/core';
 import { PreferencesService } from '../preferences.service';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
@@ -19,14 +18,13 @@ export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
 	constructor(private prefs: PreferencesService, private http: HttpClient) {
-		console.log('assigning updater', this.stateUpdater);
 		window['twitchAuthUpdater'] = this.stateUpdater;
 
 		this.stateUpdater.subscribe((twitchInfo: any) => {
 			console.log('received access token', twitchInfo);
 			this.saveAccessToken(twitchInfo.access_token);
 		});
-		console.log('twitch auth handler init done', window['twitchAuthUpdater'], window);
+		console.log('twitch auth handler init done');
 	}
 
 	public async emitDeckEvent(event: any) {

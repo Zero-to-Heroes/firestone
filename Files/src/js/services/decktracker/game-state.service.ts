@@ -102,7 +102,7 @@ export class GameStateService {
 	private async buildEventEmitters() {
 		const result = [event => this.deckEventBus.next(event)];
 		const prefs = await this.prefs.getPreferences();
-		this.logger.debug('is logged in to Twitch?', prefs);
+		this.logger.debug('is logged in to Twitch?', prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
 			result.push(event => this.twitch.emitDeckEvent(event));
 		}
@@ -133,7 +133,6 @@ export class GameStateService {
 					const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
 					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
 					const stateFromTracker = gameEvent.gameState || {};
-					this.logger.debug('getting state from tracker', stateFromTracker, gameEvent);
 					const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
 					const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
 					this.state = Object.assign(new GameState(), newState, {
@@ -151,7 +150,7 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
+					// this.logger.debug('emitted deck event', emittedEvent.event.name);
 					// this.logger.debug(
 					// 	'board states',
 					// 	this.state.playerDeck.board.length,

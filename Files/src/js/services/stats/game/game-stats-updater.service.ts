@@ -73,24 +73,24 @@ export class GameStatsUpdaterService {
 		const newStat = Object.assign(new GameStat(), this.currentGameStat, {
 			coinPlay: coinPlay,
 		} as GameStat);
-		this.logger.debug('[game-stats-updater] assigned coinPlay', this.currentGameStat);
+		// this.logger.debug('[game-stats-updater] assigned coinPlay', coinPlay);
 		return newStat;
 	}
 
 	private assignMetadata(event: GameEvent): GameStat {
-		this.logger.debug('[game-stats-updater] assigning metadata', event);
+		this.logger.debug('[game-stats-updater] assigning metadata');
 		const gameType = this.gameParserService.toGameType(event.additionalData.metaData.GameType);
 		const formatType = this.gameParserService.toFormatType(event.additionalData.metaData.FormatType);
 		const newStat = Object.assign(new GameStat(), this.currentGameStat, {
 			gameMode: gameType,
 			gameFormat: formatType,
 		} as GameStat);
-		this.logger.debug('[game-stats-updater] assigned meta data', this.currentGameStat);
+		// this.logger.debug('[game-stats-updater] assigned meta data', this.currentGameStat);
 		return newStat;
 	}
 
 	private assignLocalPlayer(event: GameEvent): GameStat {
-		this.logger.debug('[game-stats-updater] assigning local player', event);
+		this.logger.debug('[game-stats-updater] assigning local player');
 		const playerCardId = event.localPlayer.CardID;
 		const playerClass =
 			playerCardId && this.cards && this.cards.getCard(playerCardId)
@@ -100,12 +100,12 @@ export class GameStatsUpdaterService {
 			playerClass: playerClass,
 			playerCardId: playerCardId,
 		} as GameStat);
-		this.logger.debug('[game-stats-updater] assigned local player', this.currentGameStat);
+		// this.logger.debug('[game-stats-updater] assigned local player', this.currentGameStat);
 		return newStat;
 	}
 
 	private assignOpponent(event: GameEvent): GameStat {
-		this.logger.debug('[game-stats-updater] assigning opponent', event);
+		this.logger.debug('[game-stats-updater] assigning opponent');
 		const opponentCardId = event.opponentPlayer.CardID;
 		const opponentClass =
 			opponentCardId && this.cards && this.cards.getCard(opponentCardId)
@@ -115,17 +115,17 @@ export class GameStatsUpdaterService {
 			opponentClass: opponentClass,
 			opponentCardId: opponentCardId,
 		} as GameStat);
-		this.logger.debug('[game-stats-updater] assigned opponent', this.currentGameStat);
+		// this.logger.debug('[game-stats-updater] assigned opponent', this.currentGameStat);
 		return newStat;
 	}
 
 	private assignResult(event: GameEvent): GameStat {
-		this.logger.debug('[game-stats-updater] assigning winner', event);
+		this.logger.debug('[game-stats-updater] assigning winner');
 		const result = event.localPlayer.Id === event.additionalData.winner.Id ? 'won' : 'lost';
 		const newStat = Object.assign(new GameStat(), this.currentGameStat, {
 			result: result,
 		} as GameStat);
-		this.logger.debug('[game-stats-updater] assigned winner', this.currentGameStat);
+		// this.logger.debug('[game-stats-updater] assigned winner', this.currentGameStat);
 		return newStat;
 	}
 

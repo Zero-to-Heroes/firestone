@@ -71,14 +71,14 @@ export class GameEvents {
 			let toProcess: string[] = [];
 			let shouldDebug = false;
 			if (this.logLines.some(data => data.indexOf('CREATE_GAME') !== -1)) {
-				console.log('[game-events] preparing log lines that include game creation to feed to the plugin', this.logLines);
+				console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 				shouldDebug = true;
 			}
 			while (this.logLines.length > 0) {
 				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length)];
 			}
 			if (shouldDebug) {
-				console.log('[game-events] build log logs to feed to the plugin', toProcess);
+				console.log('[game-events] build log logs to feed to the plugin');
 			}
 			if (toProcess.length > 0) {
 				// console.log('processing start', toProcess);
@@ -96,7 +96,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		console.log(gameEvent.Type + ' event', gameEvent);
+		console.log(gameEvent.Type + ' event');
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START } as GameEvent);
