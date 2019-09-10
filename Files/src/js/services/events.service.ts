@@ -1,7 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-interface BroadcastEvent {
+export interface BroadcastEvent {
 	key: any;
 	data: any[];
 }

@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Achievement } from 'src/js/models/achievement';
-import { CompletedAchievement } from '../../models/completed-achievement';
-import { Events } from '../events.service';
+import { BroadcastEvent, Events } from '../events.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
+import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 declare var ga;
 
 @Injectable()
 export class AchievementsNotificationService {
+	private eventsToProcess: InternalEvent[] = [];
+	private processingEvents = false;
+	private intervalHandle;
+	private lastReceivedTimestamp;
+
 	constructor(
 		private logger: NGXLogger,
 		private notificationService: OwNotificationsService,
@@ -18,16 +23,71 @@ export class AchievementsNotificationService {
 		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 	) {
-		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.handleAchievementCompleted(data));
-		this.events.on(Events.ACHIEVEMENT_RECORDING_STARTED).subscribe(data => this.handleAchievementRecordingStarted(data));
-		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.handleAchievementRecordCompleted(data));
+		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.enqueue(data, 'completion'));
+		this.events.on(Events.ACHIEVEMENT_RECORDING_STARTED).subscribe(data => this.enqueue(data, 'pre-record'));
+		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.enqueue(data, 'record-complete'));
 		this.logger.debug('[achievements-notification] listening for achievement completion events');
+		this.init();
 	}
 
-	private async handleAchievementCompleted(data) {
-		this.logger.debug('[achievements-notification] preparing achievement completed notification', data);
-		const achievement: Achievement = data.data[0];
-		const challenge = data.data[1];
+	private init() {
+		this.lastReceivedTimestamp = Date.now();
+		this.intervalHandle = setInterval(() => {
+			// Process one at a time
+			if (this.processingEvents || this.eventsToProcess.length === 0) {
+				return;
+			}
+			// Don't process an event if we've just received one, as it could indicate that other
+			// related events will come soon as well
+			if (this.eventsToProcess.length > 0 && Date.now() - this.lastReceivedTimestamp < 500) {
+				this.logger.debug('[achievements-notification] too soon, waiting before processing');
+				return;
+			}
+			this.processingEvents = true;
+
+			const candidate: InternalEvent = this.eventsToProcess[0];
+			this.logger.debug('[achievements-notification] found a candidate', candidate);
+			// Is there a better candidate?
+			const betterCandidate: InternalEvent = this.eventsToProcess
+				.filter(event => event.notificationType === candidate.notificationType)
+				.filter(event => event.achievement.type === candidate.achievement.type)
+				.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
+			this.logger.debug('[achievements-notification] top candidate', betterCandidate, this.eventsToProcess);
+			// Now remove all the related events
+			this.eventsToProcess = this.eventsToProcess.filter(
+				event =>
+					event.notificationType !== betterCandidate.notificationType ||
+					event.achievement.type !== betterCandidate.achievement.type,
+			);
+			this.logger.debug('[achievements-notification] new events to process', this.eventsToProcess);
+			switch (betterCandidate.notificationType) {
+				case 'completion':
+					this.handleAchievementCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
+					break;
+				case 'pre-record':
+					this.handleAchievementRecordingStarted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
+					break;
+				case 'record-complete':
+					this.handleAchievementRecordCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
+					break;
+			}
+			this.processingEvents = false;
+		}, 1000);
+	}
+
+	private enqueue(event: BroadcastEvent, type: 'completion' | 'pre-record' | 'record-complete') {
+		this.logger.debug('[achievements-notification] enqueuing event', event, type);
+		const internalEvent: InternalEvent = {
+			achievement: event.data[0],
+			initialEvent: event,
+			notificationType: type,
+		};
+		this.lastReceivedTimestamp = Date.now();
+		this.eventsToProcess.push(internalEvent);
+	}
+
+	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
+		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
 		if (achievement.numberOfCompletions >= 1) {
 			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif');
 			return;
@@ -50,10 +110,8 @@ export class AchievementsNotificationService {
 		} as Message);
 	}
 
-	private async handleAchievementRecordingStarted(data) {
+	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] in pre-record notification');
-		const achievement: Achievement = data.data[0];
-		const challenge = data.data[1];
 		const notificationTimeout = challenge.notificationTimeout();
 		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
 		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
@@ -68,8 +126,7 @@ export class AchievementsNotificationService {
 		});
 	}
 
-	private async handleAchievementRecordCompleted(data) {
-		const newAchievement: CompletedAchievement = data.data[0];
+	private async handleAchievementRecordCompleted(newAchievement: Achievement, challenge: Challenge) {
 		const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 		// In case the pre-record notification has already timed out, we need to send a full notif
 		this.notificationService.html({
@@ -118,4 +175,10 @@ export class AchievementsNotificationService {
 				</button>
 			</div>`;
 	}
+}
+
+interface InternalEvent {
+	readonly initialEvent: BroadcastEvent;
+	readonly achievement: Achievement;
+	readonly notificationType: 'completion' | 'pre-record' | 'record-complete';
 }
