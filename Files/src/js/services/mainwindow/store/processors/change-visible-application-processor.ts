@@ -1,12 +1,11 @@
-import { Processor } from './processor';
+import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
+import { BinderState } from '../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
-import { BinderState } from '../../../../models/mainwindow/binder-state';
-import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
+import { Processor } from './processor';
 
 export class ChangeVisibleApplicationProcessor implements Processor {
 	public async process(event: ChangeVisibleApplicationEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		console.log('in process');
 		const binder =
 			event.module === 'collection'
 				? Object.assign(new BinderState(), currentState.binder, {
@@ -14,7 +13,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						menuDisplayType: 'menu',
 				  } as BinderState)
 				: currentState.binder;
-		console.log('updated binder');
 		const achievements =
 			event.module === 'achievements'
 				? Object.assign(new AchievementsState(), currentState.achievements, {
@@ -22,7 +20,6 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 						menuDisplayType: 'menu',
 				  } as AchievementsState)
 				: currentState.achievements;
-		console.log('updated achievements');
 		return Object.assign(new MainWindowState(), currentState, {
 			isVisible: true,
 			currentApp: event.module,

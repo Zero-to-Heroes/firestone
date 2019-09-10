@@ -7,9 +7,9 @@ import { GameEvents } from './game-events.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 
-const HEARTHSTONE_GAME_ID = 9898;
+// const HEARTHSTONE_GAME_ID = 9898;
 
-declare var overwolf: any;
+// declare var overwolf: any;
 
 @Injectable()
 export class DevService {
