@@ -29,6 +29,7 @@
 		"immutable": "3.8.2",
 		"lodash-es": "4.17.15",
 		"ng-inline-svg": "8.4.1",
+		"ng-lz-string": "1.5.3",
 		"ng-select": "1.0.1",
 		"ngx-logger": "3.3.11",
 		"pako": "1.0.10",
