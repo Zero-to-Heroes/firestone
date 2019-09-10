@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class DebugService {
 	constructor() {
-		const debugMode = process.env.NODE_ENV === 'production';
+		const debugMode = process.env.NODE_ENV === 'production' || process.env.LOCAL_TEST != null;
 		console.log = this.override(console.log, debugMode);
 		console.warn = this.override(console.warn, debugMode);
 		console.error = this.overrideError(console.error, debugMode);

@@ -25,6 +25,7 @@ module.exports = function(env, argv) {
 		// Define environment variables to export to Angular
 		new DefinePlugin({
 			'process.env.APP_VERSION': JSON.stringify(env.appversion),
+			'process.env.LOCAL_TEST': env.localTest,
 		}),
 
 		new AngularCompilerPlugin({
