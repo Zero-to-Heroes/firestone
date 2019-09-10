@@ -101,7 +101,7 @@ export class PopulateStoreProcessor implements Processor {
 	}
 
 	private async buildGlobalCategories(): Promise<readonly VisualAchievementCategory[]> {
-		const globalCategories: readonly AchievementCategory[] = this.achievementsRepository.getCategories();
+		const globalCategories: readonly AchievementCategory[] = await this.achievementsRepository.getCategories();
 		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements();
 		return globalCategories.map(category => {
 			return {

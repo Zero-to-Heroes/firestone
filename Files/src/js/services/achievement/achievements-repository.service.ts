@@ -32,27 +32,45 @@ export class AchievementsRepository {
 		return this.setProviders.map(provider => provider.provide(allAchievements, completedAchievements));
 	}
 
-	public getCategories(): readonly AchievementCategory[] {
+	public async getCategories(): Promise<readonly AchievementCategory[]> {
+		await this.waitForInit();
 		return this.categories;
 	}
 
 	private async init() {
 		await this.achievementsLoader.initializeAchievements();
 		this.buildCategories();
+		console.log('[achievements-repository] achievements initialised', this.setProviders, this.categories);
 		this.modulesLoaded.next(true);
 	}
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
+			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DungeonRunCategoryProvider(),
 			new MonsterHuntCategoryProvider(),
 			new RumbleRunCategoryProvider(),
 			new DalaranHeistCategoryProvider(),
-			new CompetitiveLadderCategoryProvider(),
 		];
 
 		this.categories = categoryProviders.map(provider => provider.buildCategory());
 		this.setProviders = categoryProviders.map(provider => provider.setProviders).reduce((a, b) => a.concat(b));
+	}
+
+	private waitForInit(): Promise<void> {
+		return new Promise<void>(resolve => {
+			const dbWait = () => {
+				// console.log('Promise waiting for db');
+				if (this.setProviders) {
+					// console.log('wait for db init complete');
+					resolve();
+				} else {
+					// console.log('waiting for db init');
+					setTimeout(() => dbWait(), 50);
+				}
+			};
+			dbWait();
+		});
 	}
 }
