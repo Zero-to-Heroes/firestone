@@ -23,6 +23,14 @@ export class GameTypeReq implements Requirement {
 	}
 
 	isCompleted(): boolean {
+		if (process.env.NODE_ENV === 'local-test') {
+			console.error(
+				'Validating requirement in local test to make achievemnet validation easier',
+				'should never be turned on in prod',
+				this,
+			);
+			return true;
+		}
 		return this.isCorrectGameType;
 	}
 
