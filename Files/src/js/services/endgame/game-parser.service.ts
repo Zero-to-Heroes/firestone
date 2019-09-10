@@ -19,7 +19,7 @@ export class GameParserService {
 			case 2:
 				return 'standard';
 			default:
-				console.error('unsupported format type', formatType);
+				console.warn('unsupported format type', formatType);
 				return 'unknown';
 		}
 	}
@@ -51,7 +51,7 @@ export class GameParserService {
 			case 23:
 				return 'tournament';
 			default:
-				console.log('unsupported game type', gameType);
+				console.warn('unsupported game type', gameType);
 				return 'unknown';
 		}
 	}
