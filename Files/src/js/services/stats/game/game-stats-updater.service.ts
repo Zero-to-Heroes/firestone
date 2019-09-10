@@ -5,6 +5,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { AllCardsService } from '../../all-cards.service';
 import { GameParserService } from '../../endgame/game-parser.service';
+import { Events } from '../../events.service';
 import { GameEvents } from '../../game-events.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
@@ -18,6 +19,7 @@ export class GameStatsUpdaterService {
 
 	constructor(
 		private gameEvents: GameEvents,
+		private events: Events,
 		private cards: AllCardsService,
 		private gameParserService: GameParserService,
 		private logger: NGXLogger,
@@ -25,15 +27,21 @@ export class GameStatsUpdaterService {
 		this.init();
 	}
 
+	// I'm not sure whether I should remove this completely from the store
+	// (which is probably a bad idea, since the UI will need the stats at some point)
+	// or move the event notification somewhere else (in the processor?). The event
+	// is needed by the achievement requirements
 	public recomputeGameStats(gameStats: GameStats): GameStats {
 		// Build the new stat ourselves, as we have no way of being notified when
 		// the new stat will be available on the remote db
 		const gameStat: GameStat = this.buildGameStat();
 		const newStats: readonly GameStat[] = [gameStat, ...gameStats.stats];
 		this.logger.debug('[game-stats-updater] built new game stats', newStats);
-		return Object.assign(new GameStats(), gameStats, {
+		const result = Object.assign(new GameStats(), gameStats, {
 			stats: newStats,
 		} as GameStats);
+		this.events.broadcast(Events.GAME_STATS_UPDATED, result);
+		return result;
 	}
 
 	private init() {
@@ -48,6 +56,12 @@ export class GameStatsUpdaterService {
 				this.currentGameStat = this.assignLocalPlayer(event);
 			} else if (event.type === GameEvent.OPPONENT) {
 				this.currentGameStat = this.assignOpponent(event);
+			} else if (event.type === GameEvent.WINNER) {
+				this.currentGameStat = this.assignResult(event);
+			} else if (event.type === GameEvent.TIE) {
+				this.currentGameStat = Object.assign(new GameStat(), this.currentGameStat, {
+					result: 'tied',
+				} as GameStat);
 			} else if (event.type === GameEvent.GAME_END) {
 				this.stateUpdater.next(new RecomputeGameStatsEvent());
 			}
@@ -78,7 +92,10 @@ export class GameStatsUpdaterService {
 	private assignLocalPlayer(event: GameEvent): GameStat {
 		this.logger.debug('[game-stats-updater] assigning local player', event);
 		const playerCardId = event.localPlayer.CardID;
-		const playerClass = playerCardId ? this.cards.getCard(playerCardId).playerClass.toLowerCase() : undefined;
+		const playerClass =
+			playerCardId && this.cards && this.cards.getCard(playerCardId)
+				? this.cards.getCard(playerCardId).playerClass.toLowerCase()
+				: undefined;
 		const newStat = Object.assign(new GameStat(), this.currentGameStat, {
 			playerClass: playerClass,
 			playerCardId: playerCardId,
@@ -90,12 +107,25 @@ export class GameStatsUpdaterService {
 	private assignOpponent(event: GameEvent): GameStat {
 		this.logger.debug('[game-stats-updater] assigning opponent', event);
 		const opponentCardId = event.opponentPlayer.CardID;
-		const opponentClass = opponentCardId ? this.cards.getCard(opponentCardId).playerClass.toLowerCase() : undefined;
+		const opponentClass =
+			opponentCardId && this.cards && this.cards.getCard(opponentCardId)
+				? this.cards.getCard(opponentCardId).playerClass.toLowerCase()
+				: undefined;
 		const newStat = Object.assign(new GameStat(), this.currentGameStat, {
 			opponentClass: opponentClass,
 			opponentCardId: opponentCardId,
 		} as GameStat);
 		this.logger.debug('[game-stats-updater] assigned opponent', this.currentGameStat);
+		return newStat;
+	}
+
+	private assignResult(event: GameEvent): GameStat {
+		this.logger.debug('[game-stats-updater] assigning winner', event);
+		const result = event.localPlayer.Id === event.additionalData.winner.Id ? 'won' : 'lost';
+		const newStat = Object.assign(new GameStat(), this.currentGameStat, {
+			result: result,
+		} as GameStat);
+		this.logger.debug('[game-stats-updater] assigned winner', this.currentGameStat);
 		return newStat;
 	}
 

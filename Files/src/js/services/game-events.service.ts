@@ -16,6 +16,10 @@ export class GameEvents {
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
 
+	private logLines: string[] = [];
+	private processingLines = false;
+	private intervalHandle;
+
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
 		private logService: LogsUploaderService,
@@ -25,26 +29,23 @@ export class GameEvents {
 	) {
 		this.init();
 	}
-
-	private logLines: string[] = [];
-	private processingLines = false;
-
 	async init() {
 		console.log('init game events monitor');
 		const plugin = await this.gameEventsPlugin.get();
-		plugin.onGlobalEvent.addListener((first: string, second: string) => {
-			console.log('[game-events] received global event', first, second);
-			if (first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1) {
-				this.uploadLogsAndSendException(first, second);
-			}
-		});
-		plugin.onGameEvent.addListener(gameEvent => {
-			this.dispatchGameEvent(JSON.parse(gameEvent));
-		});
-		plugin.initRealtimeLogConversion(() => {
-			console.log('[game-events] real-time log processing ready to go');
-		});
-
+		if (plugin) {
+			plugin.onGlobalEvent.addListener((first: string, second: string) => {
+				console.log('[game-events] received global event', first, second);
+				if (first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1) {
+					this.uploadLogsAndSendException(first, second);
+				}
+			});
+			plugin.onGameEvent.addListener(gameEvent => {
+				this.dispatchGameEvent(JSON.parse(gameEvent));
+			});
+			plugin.initRealtimeLogConversion(() => {
+				console.log('[game-events] real-time log processing ready to go');
+			});
+		}
 		this.events.on(Events.SCENE_CHANGED).subscribe(event =>
 			this.allEvents.next(
 				Object.assign(new GameEvent(), {
@@ -53,8 +54,16 @@ export class GameEvents {
 				} as GameEvent),
 			),
 		);
+		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
+			this.allEvents.next(
+				Object.assign(new GameEvent(), {
+					type: GameEvent.GAME_STATS_UPDATED,
+					additionalData: { gameStats: event.data[0] },
+				} as GameEvent),
+			);
+		});
 
-		setInterval(() => {
+		this.intervalHandle = setInterval(() => {
 			if (this.processingLines) {
 				return;
 			}
@@ -80,6 +89,10 @@ export class GameEvents {
 				this.processingLines = false;
 			}
 		}, 500);
+	}
+
+	public cleanup() {
+		clearInterval(this.intervalHandle);
 	}
 
 	public async dispatchGameEvent(gameEvent) {

@@ -30,6 +30,7 @@ import { TotalDamageDealtReq } from '../requirements/total-damage-dealt-req';
 import { TotalDamageTakenReq } from '../requirements/total-damage-taken-req';
 import { TotalDiscardedCardsReq } from '../requirements/total-discarded-cards-req';
 import { TotalHeroHealReq } from '../requirements/total-hero-heal-req';
+import { WinStreakReq } from '../requirements/win-streak-req';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 import { GenericChallenge } from './generic-challenge';
@@ -79,6 +80,7 @@ export class ChallengeBuilderService {
 			case 'TOTAL_ARMOR_GAINED': return TotalArmorGainReq.create(rawReq);
 			case 'MINIONS_CONTROLLED_DURING_TURN': return MinionsControlledDuringTurnReq.create(rawReq);
 			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
+			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {
