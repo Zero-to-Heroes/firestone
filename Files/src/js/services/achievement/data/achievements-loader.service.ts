@@ -5,6 +5,7 @@ import { ReplayInfo } from '../../../models/replay-info';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
 import amazingPlays from './amazing_plays.json';
+import competitiveLadder from './competitive_ladder.json';
 import dalaranHeist from './dalaran_heist.json';
 import dungeonRun from './dungeon_run.json';
 import monsterHunt from './monster_hunt.json';
@@ -38,6 +39,7 @@ export class AchievementsLoaderService {
 			...(rumbleRun as readonly RawAchievement[]),
 			...(dalaranHeist as readonly RawAchievement[]),
 			...(amazingPlays as readonly RawAchievement[]),
+			...(competitiveLadder as readonly RawAchievement[]),
 		];
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
