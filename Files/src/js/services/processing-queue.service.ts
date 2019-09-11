@@ -6,11 +6,8 @@ export class ProcessingQueue<T> {
 	constructor(
 		private readonly processingFunction: (eventQueue: readonly T[]) => Promise<readonly T[]>,
 		private readonly processFrequency: number,
-	) {
-		this.init();
-	}
-
-	private async init() {}
+		private readonly queueName?: string,
+	) {}
 
 	public enqueue(event: T) {
 		this.eventQueue = [...this.eventQueue, event];
@@ -18,7 +15,7 @@ export class ProcessingQueue<T> {
 	}
 
 	private async processQueue() {
-		// console.log('interval - processing queue');
+		// console.log('interval - processing queue', this.queueName);
 		if (this.isProcessing) {
 			return;
 		}
@@ -34,7 +31,9 @@ export class ProcessingQueue<T> {
 		if (!this.interval) {
 			this.interval = setInterval(() => this.processQueue(), this.processFrequency);
 		}
-		this.eventQueue = await this.processingFunction([...this.eventQueue]);
+		while (this.eventQueue.length !== 0) {
+			this.eventQueue = await this.processingFunction([...this.eventQueue]);
+		}
 		this.isProcessing = false;
 	}
 }

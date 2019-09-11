@@ -97,7 +97,11 @@ export class MainWindowStoreService {
 
 	private stateHistory: readonly StateHistory[] = [];
 
-	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(eventQueue => this.processQueue(eventQueue), 50);
+	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(
+		eventQueue => this.processQueue(eventQueue),
+		50,
+		'main-window-store',
+	);
 
 	constructor(
 		private cards: AllCardsService,

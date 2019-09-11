@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { Queue } from 'queue-typescript';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { AllCardsService } from '../all-cards.service';
@@ -8,6 +7,7 @@ import { GameEvents } from '../game-events.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
+import { ProcessingQueue } from '../processing-queue.service';
 import { DeckCardService } from './deck-card.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
@@ -42,9 +42,12 @@ import { ZoneOrderingService } from './zone-ordering.service';
 export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: readonly EventParser[];
+
+	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 100, 'game-state');
+
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
-	private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
+	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
 	private deckEventBus = new EventEmitter<any>();
 	private eventEmitters = [];
 
@@ -62,8 +65,8 @@ export class GameStateService {
 		private logger: NGXLogger,
 		private deckParser: DeckParserService,
 	) {
-		this.registerGameEvents();
 		this.eventParsers = this.buildEventParsers();
+		this.registerGameEvents();
 		this.buildEventEmitters();
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async event => {
@@ -84,31 +87,26 @@ export class GameStateService {
 
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
-			this.eventQueue.enqueue(gameEvent);
+			this.processingQueue.enqueue(gameEvent);
 		});
-		setInterval(() => {
-			if (!this.deckParser.currentDeck) {
-				return;
-			}
-			let gameEvent: GameEvent;
-			while ((gameEvent = this.eventQueue.dequeue())) {
-				this.processEvent(gameEvent);
-			}
-		}, 100);
+		// setInterval(() => {
+		// 	console.log('interval - gs events');
+		// 	// if (!this.deckParser.currentDeck) {
+		// 	// 	return;
+		// 	// }
+		// 	let gameEvent: GameEvent;
+		// 	while ((gameEvent = this.eventQueue.dequeue())) {
+		// 		this.processEvent(gameEvent);
+		// 	}
+		// }, 100);
 		// Reset the deck if it exists
-		this.eventQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
+		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}
 
-	private async buildEventEmitters() {
-		const result = [event => this.deckEventBus.next(event)];
-		const prefs = await this.prefs.getPreferences();
-		this.logger.debug('is logged in to Twitch?', prefs.twitchAccessToken);
-		if (prefs.twitchAccessToken) {
-			result.push(event => this.twitch.emitDeckEvent(event));
-		}
-		this.eventEmitters = result;
-		// this.logger.debug('emitting twitch event');
-		// this.twitch.emitDeckEvent({ hop: "fakeEven" });
+	private async processQueue(eventQueue: readonly GameEvent[]) {
+		const gameEvent = eventQueue[0];
+		this.processEvent(gameEvent);
+		return eventQueue.slice(1);
 	}
 
 	private processEvent(gameEvent: GameEvent) {
@@ -170,6 +168,18 @@ export class GameStateService {
 				this.logger.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
 			}
 		}
+	}
+
+	private async buildEventEmitters() {
+		const result = [event => this.deckEventBus.next(event)];
+		const prefs = await this.prefs.getPreferences();
+		this.logger.debug('is logged in to Twitch?', prefs.twitchAccessToken);
+		if (prefs.twitchAccessToken) {
+			result.push(event => this.twitch.emitDeckEvent(event));
+		}
+		this.eventEmitters = result;
+		// this.logger.debug('emitting twitch event');
+		// this.twitch.emitDeckEvent({ hop: "fakeEven" });
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
