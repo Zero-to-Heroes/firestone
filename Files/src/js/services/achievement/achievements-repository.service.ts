@@ -10,6 +10,7 @@ import { DungeonRunCategoryProvider } from './achievement-sets/dungeon-run/dunge
 import { MonsterHuntCategoryProvider } from './achievement-sets/monster_hunt/monster-hunt-category';
 import { RumbleRunCategoryProvider } from './achievement-sets/rumble_run/rumble-run-category';
 import { SetProvider } from './achievement-sets/set-provider';
+import { TombsOfTerrorCategoryProvider } from './achievement-sets/tombs_of_terror/tombs-of-terror-category';
 import { AchievementsStorageService } from './achievements-storage.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
@@ -52,6 +53,7 @@ export class AchievementsRepository {
 			new MonsterHuntCategoryProvider(),
 			new RumbleRunCategoryProvider(),
 			new DalaranHeistCategoryProvider(),
+			new TombsOfTerrorCategoryProvider(),
 		];
 
 		this.categories = categoryProviders.map(provider => provider.buildCategory());

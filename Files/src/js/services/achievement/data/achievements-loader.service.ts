@@ -10,6 +10,7 @@ import dalaranHeist from './dalaran_heist.json';
 import dungeonRun from './dungeon_run.json';
 import monsterHunt from './monster_hunt.json';
 import rumbleRun from './rumble_run.json';
+import tombsOfTerror from './tombs_of_terror.json';
 
 @Injectable()
 export class AchievementsLoaderService {
@@ -38,6 +39,7 @@ export class AchievementsLoaderService {
 			...(monsterHunt as readonly RawAchievement[]),
 			...(rumbleRun as readonly RawAchievement[]),
 			...(dalaranHeist as readonly RawAchievement[]),
+			...(tombsOfTerror as readonly RawAchievement[]),
 			...(amazingPlays as readonly RawAchievement[]),
 			...(competitiveLadder as readonly RawAchievement[]),
 		];
