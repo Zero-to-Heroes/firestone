@@ -16,6 +16,7 @@ import { Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { SimpleIOService } from '../../plugins/simple-io.service';
+import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
@@ -96,8 +97,7 @@ export class MainWindowStoreService {
 
 	private stateHistory: readonly StateHistory[] = [];
 
-	private eventQueue: MainWindowStoreEvent[] = [];
-	private isProcessing = false;
+	private processingQueue = new ProcessingQueue<MainWindowStoreEvent>(eventQueue => this.processQueue(eventQueue), 50);
 
 	constructor(
 		private cards: AllCardsService,
@@ -123,11 +123,8 @@ export class MainWindowStoreService {
 		this.processors = this.buildProcessors();
 
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
-			this.eventQueue.push(event);
-			// So that we don't wait for the next tick in case the event can be processed right away
-			this.processQueue();
+			this.processingQueue.enqueue(event);
 		});
-		setInterval(() => this.processQueue(), 50);
 
 		this.ow.addGameInfoUpdatedListener((res: any) => {
 			if (this.ow.gameLaunched(res)) {
@@ -141,12 +138,8 @@ export class MainWindowStoreService {
 	}
 
 	// We want events to be processed sequentially
-	private async processQueue() {
-		if (this.isProcessing || this.eventQueue.length === 0) {
-			return;
-		}
-		this.isProcessing = true;
-		const event = this.eventQueue.shift();
+	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]) {
+		const event = eventQueue[0];
 		console.log('[store] processing event', event.eventName());
 		const processor: Processor = this.processors.get(event.eventName());
 		const newState = await processor.process(event, this.state, this.stateHistory);
@@ -161,7 +154,7 @@ export class MainWindowStoreService {
 		} else {
 			console.log('[store] no new state to emit');
 		}
-		this.isProcessing = false;
+		return eventQueue.slice(1);
 	}
 
 	private addStateToHistory(newState: MainWindowState, navigation: boolean, event: string): void {
