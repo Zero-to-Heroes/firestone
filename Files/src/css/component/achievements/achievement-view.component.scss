@@ -96,6 +96,12 @@
 		}
 	}
 
+	achievement-completion-step {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	&.missing {
 		.achievement-name {
 			color: #cb9fd7;
