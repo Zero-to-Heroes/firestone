@@ -53,14 +53,15 @@ declare var ga;
 					<vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen>
 				</vg-controls>
 
-                <achievement-social-shares
-                        *ngIf="!currentThumbnail.isDeleted"
-                        [socialShareUserInfo]="socialShareUserInfo"
-                        [achievementName]="_achievement.name"
-                        [title]="title"
-                        [videoPathOnDisk]="currentVideoPathOnDisk"
-                        [videoPath]="currentReplayLocation">
-                </achievement-social-shares>
+				<achievement-social-shares
+					*ngIf="!currentThumbnail.isDeleted"
+					[socialShareUserInfo]="socialShareUserInfo"
+					[achievementName]="_achievement.name"
+					[title]="title"
+					[videoPathOnDisk]="currentVideoPathOnDisk"
+					[videoPath]="currentReplayLocation"
+				>
+				</achievement-social-shares>
 
 				<video [vgMedia]="media" #media id="singleVideo" preload="auto">
 					<source [src]="currentReplay" type="video/mp4" />
@@ -202,6 +203,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		this.player = this.elRef.nativeElement.querySelector('video');
 		if (!this.player) {
 			setTimeout(() => this.ngAfterViewInit(), 50);
+			return;
 		}
 		// auto pause the video when window is closed / minimized
 		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
