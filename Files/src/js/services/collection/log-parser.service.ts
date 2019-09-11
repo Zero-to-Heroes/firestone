@@ -5,6 +5,7 @@ import { Events } from '../events.service';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { ProcessingQueue } from '../processing-queue.service';
 
 declare var ga: any;
 
@@ -18,39 +19,32 @@ export class LogParserService {
 	);
 	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
-	private logLines: any[][] = [];
-	private processingLines = false;
+	// private logLines: any[][] = [];
+	// private processingLines = false;
 
-	constructor(private cards: AllCardsService, private events: Events, private store: MainWindowStoreService) {
-		setInterval(() => {
-			if (this.processingLines) {
-				return;
-			}
-			// Make sure we're not splitting a pack opening in the middle
-			if (this.logLines.length > 0 && this.isTooSoon(this.logLines[this.logLines.length - 1])) {
-				console.log('too soon, waiting before processing');
-				return;
-			}
-			this.processingLines = true;
-			let toProcess: string[] = [];
-			while (this.logLines.length > 0) {
-				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length).map(logLine => logLine[1])];
-			}
-			if (toProcess.length > 0) {
-				// console.log('lines to process', toProcess);
-				this.processLines(toProcess);
-				this.processingLines = false;
-			} else {
-				this.processingLines = false;
-			}
-		}, 200);
+	private processingQueue = new ProcessingQueue<any[]>(eventQueue => this.processQueue(eventQueue), 200, 'log-parser');
+
+	constructor(private cards: AllCardsService, private events: Events, private store: MainWindowStoreService) {}
+
+	private async processQueue(eventQueue: readonly any[][]): Promise<readonly any[][]> {
+		if (eventQueue.length > 0 && this.isTooSoon(eventQueue[eventQueue.length - 1])) {
+			// console.log('too soon, waiting before processing');
+			return eventQueue;
+		}
+		const toProcess: string[] = eventQueue.map(logLine => logLine[1]);
+		if (toProcess.length > 0) {
+			// console.log('lines to process', toProcess);
+			this.processLines(toProcess);
+		}
+		// We always process all the events
+		return [];
 	}
 
 	public receiveLogLine(data: string) {
 		// console.log('received log line', data);
 		const match = this.cardRegex.exec(data) || this.rewardRegex.exec(data);
 		if (match) {
-			this.logLines.push([Date.now(), data]);
+			this.processingQueue.enqueue([Date.now(), data]);
 		}
 	}
 
@@ -138,8 +132,10 @@ export class LogParserService {
 		const match = this.timestampRegex.exec(logLine[1]);
 		if (match) {
 			const elapsed = Date.now() - parseInt(logLine[0]);
-			console.log('elapsed', elapsed, Date.now(), logLine);
-			if (elapsed < 100) {
+			// console.log('elapsed', elapsed, Date.now(), logLine);
+			// Because the queue processing is async, it can take more time
+			// to process all the events
+			if (elapsed < 200) {
 				return true;
 			}
 		}

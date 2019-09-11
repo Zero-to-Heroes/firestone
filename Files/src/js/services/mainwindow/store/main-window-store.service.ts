@@ -141,8 +141,7 @@ export class MainWindowStoreService {
 		this.listenForSocialAccountLoginUpdates();
 	}
 
-	// We want events to be processed sequentially
-	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]) {
+	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
 		console.log('[store] processing event', event.eventName());
 		const processor: Processor = this.processors.get(event.eventName());
