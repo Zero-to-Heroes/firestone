@@ -1,5 +1,320 @@
 [
     {
+        "id": "rumble_run_passive_play_TRLA_801",
+        "type": "rumble_run_passive_play_TRLA_801",
+        "name": "Sacred Ritual",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Sacred Ritual",
+        "text": "Passive Your Shrines have \"Your spells cost (1) less.\"",
+        "emptyText": null,
+        "completedText": "You triggered Sacred Ritual",
+        "displayCardId": "TRLA_801",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_801"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_802",
+        "type": "rumble_run_passive_play_TRLA_802",
+        "name": "Favor of the Gods",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Favor of the Gods",
+        "text": "Passive Minions adjacent to your Shrines have Taunt.",
+        "emptyText": null,
+        "completedText": "You triggered Favor of the Gods",
+        "displayCardId": "TRLA_802",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_802"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_803",
+        "type": "rumble_run_passive_play_TRLA_803",
+        "name": "Fortified Spirit",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Fortified Spirit",
+        "text": "Passive At the start of each turn, restore your Shrines to full Health.",
+        "emptyText": null,
+        "completedText": "You triggered Fortified Spirit",
+        "displayCardId": "TRLA_803",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_803"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_804",
+        "type": "rumble_run_passive_play_TRLA_804",
+        "name": "Everlasting Devotion",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Everlasting Devotion",
+        "text": "Passive Start the game with a copy of your Shrine.",
+        "emptyText": null,
+        "completedText": "You triggered Everlasting Devotion",
+        "displayCardId": "TRLA_804",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_804"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_805",
+        "type": "rumble_run_passive_play_TRLA_805",
+        "name": "Pact with the Loa",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Pact with the Loa",
+        "text": "Passive Your Shrines revive in 2 turns instead of 3.",
+        "emptyText": null,
+        "completedText": "You triggered Pact with the Loa",
+        "displayCardId": "TRLA_805",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_805"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_806",
+        "type": "rumble_run_passive_play_TRLA_806",
+        "name": "Wrath of the Loas",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Wrath of the Loas",
+        "text": "Passive Your Shrines have \"Deathrattle: Destroy all enemy Shrines.\"",
+        "emptyText": null,
+        "completedText": "You triggered Wrath of the Loas",
+        "displayCardId": "TRLA_806",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_806"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_807",
+        "type": "rumble_run_passive_play_TRLA_807",
+        "name": "Boon Reaper",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Boon Reaper",
+        "text": "Passive Your Shrines have \"Deathrattle: Draw cards until your hand is full.\"",
+        "emptyText": null,
+        "completedText": "You triggered Boon Reaper",
+        "displayCardId": "TRLA_807",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_807"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_808",
+        "type": "rumble_run_passive_play_TRLA_808",
+        "name": "Roaring Edifice",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Roaring Edifice",
+        "text": "Passive Your Shrines have \"Deathrattle: Cards in your hand cost (2) less.\"",
+        "emptyText": null,
+        "completedText": "You triggered Roaring Edifice",
+        "displayCardId": "TRLA_808",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_808"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "rumble_run_passive_play_TRLA_809",
+        "type": "rumble_run_passive_play_TRLA_809",
+        "name": "Windfall Blessing",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Windfall Blessing",
+        "text": "Passive Your Shrines have \"Deathrattle: Give minions in your deck +1/+1.\"",
+        "emptyText": null,
+        "completedText": "You triggered Windfall Blessing",
+        "displayCardId": "TRLA_809",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "TRLA_809"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "2890"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "rumble_run_progression_TRLA_209h_Druid_TRLA_112_0",
         "type": "rumble_run_progression_TRLA_209h_Druid_TRLA_112",
         "name": "Rumble Run progression Gonk's Armament (Druid)",
@@ -7,6 +322,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Gonk's Armament (Druid) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_112",
@@ -22,7 +338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -55,6 +372,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Gonk's Armament (Druid) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_112",
@@ -70,7 +388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -103,6 +422,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Gonk's Armament (Druid) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_112",
@@ -118,7 +438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -151,6 +472,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Gonk's Armament (Druid) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_112",
@@ -166,7 +488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -199,6 +522,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Gonk's Armament (Druid) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_112",
@@ -214,7 +538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -247,6 +572,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Gonk's Armament (Druid) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_112",
@@ -262,7 +588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -295,6 +622,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Gonk's Armament (Druid) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_112",
@@ -310,7 +638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -343,6 +672,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Gonk's Armament (Druid) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_112",
@@ -358,7 +688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -391,6 +722,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Gonk's Mark (Druid) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_115",
@@ -406,7 +738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -439,6 +772,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Gonk's Mark (Druid) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_115",
@@ -454,7 +788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -487,6 +822,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Gonk's Mark (Druid) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_115",
@@ -502,7 +838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -535,6 +872,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Gonk's Mark (Druid) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_115",
@@ -550,7 +888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -583,6 +922,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Gonk's Mark (Druid) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_115",
@@ -598,7 +938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -631,6 +972,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Gonk's Mark (Druid) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_115",
@@ -646,7 +988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -679,6 +1022,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Gonk's Mark (Druid) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_115",
@@ -694,7 +1038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -727,6 +1072,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Gonk's Mark (Druid) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_115",
@@ -742,7 +1088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -775,6 +1122,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Bonds of Balance (Druid) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_116",
@@ -790,7 +1138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -823,6 +1172,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Bonds of Balance (Druid) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_116",
@@ -838,7 +1188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -871,6 +1222,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Bonds of Balance (Druid) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_116",
@@ -886,7 +1238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -919,6 +1272,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Bonds of Balance (Druid) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_116",
@@ -934,7 +1288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -967,6 +1322,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Bonds of Balance (Druid) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_116",
@@ -982,7 +1338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1015,6 +1372,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Bonds of Balance (Druid) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_116",
@@ -1030,7 +1388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1063,6 +1422,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Bonds of Balance (Druid) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_116",
@@ -1078,7 +1438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1111,6 +1472,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Bonds of Balance (Druid) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Druid) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_116",
@@ -1126,7 +1488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1159,6 +1522,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_110",
@@ -1174,7 +1538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1207,6 +1572,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_110",
@@ -1222,7 +1588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1255,6 +1622,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_110",
@@ -1270,7 +1638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1303,6 +1672,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_110",
@@ -1318,7 +1688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1351,6 +1722,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_110",
@@ -1366,7 +1738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1399,6 +1772,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_110",
@@ -1414,7 +1788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1447,6 +1822,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_110",
@@ -1462,7 +1838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1495,6 +1872,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Halazzi's Trap (Hunter) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_110",
@@ -1510,7 +1888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1543,6 +1922,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_162",
@@ -1558,7 +1938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1591,6 +1972,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_162",
@@ -1606,7 +1988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1639,6 +2022,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_162",
@@ -1654,7 +2038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1687,6 +2072,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_162",
@@ -1702,7 +2088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1735,6 +2122,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_162",
@@ -1750,7 +2138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1783,6 +2172,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_162",
@@ -1798,7 +2188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1831,6 +2222,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_162",
@@ -1846,7 +2238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1879,6 +2272,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Halazzi's Hunt (Hunter) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_162",
@@ -1894,7 +2288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1927,6 +2322,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_163",
@@ -1942,7 +2338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -1975,6 +2372,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_163",
@@ -1990,7 +2388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2023,6 +2422,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_163",
@@ -2038,7 +2438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2071,6 +2472,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_163",
@@ -2086,7 +2488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2119,6 +2522,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_163",
@@ -2134,7 +2538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2167,6 +2572,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_163",
@@ -2182,7 +2588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2215,6 +2622,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_163",
@@ -2230,7 +2638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2263,6 +2672,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Halazzi's Guise (Hunter) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Hunter) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_163",
@@ -2278,7 +2688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2311,6 +2722,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_108",
@@ -2326,7 +2738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2359,6 +2772,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_108",
@@ -2374,7 +2788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2407,6 +2822,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_108",
@@ -2422,7 +2838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2455,6 +2872,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_108",
@@ -2470,7 +2888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2503,6 +2922,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_108",
@@ -2518,7 +2938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2551,6 +2972,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_108",
@@ -2566,7 +2988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2599,6 +3022,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_108",
@@ -2614,7 +3038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2647,6 +3072,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Jan'alai's Mantle (Mage) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_108",
@@ -2662,7 +3088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2695,6 +3122,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_128",
@@ -2710,7 +3138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2743,6 +3172,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_128",
@@ -2758,7 +3188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2791,6 +3222,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_128",
@@ -2806,7 +3238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2839,6 +3272,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_128",
@@ -2854,7 +3288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2887,6 +3322,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_128",
@@ -2902,7 +3338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2935,6 +3372,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_128",
@@ -2950,7 +3388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -2983,6 +3422,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_128",
@@ -2998,7 +3438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3031,6 +3472,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Jan'alai's Flame (Mage) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_128",
@@ -3046,7 +3488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3079,6 +3522,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_129",
@@ -3094,7 +3538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3127,6 +3572,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_129",
@@ -3142,7 +3588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3175,6 +3622,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_129",
@@ -3190,7 +3638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3223,6 +3672,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_129",
@@ -3238,7 +3688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3271,6 +3722,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_129",
@@ -3286,7 +3738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3319,6 +3772,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_129",
@@ -3334,7 +3788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3367,6 +3822,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_129",
@@ -3382,7 +3838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3415,6 +3872,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Jan'alai's Progeny (Mage) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Mage) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_129",
@@ -3430,7 +3888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3463,6 +3922,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_105",
@@ -3478,7 +3938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3511,6 +3972,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_105",
@@ -3526,7 +3988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3559,6 +4022,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_105",
@@ -3574,7 +4038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3607,6 +4072,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_105",
@@ -3622,7 +4088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3655,6 +4122,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_105",
@@ -3670,7 +4138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3703,6 +4172,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_105",
@@ -3718,7 +4188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3751,6 +4222,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_105",
@@ -3766,7 +4238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3799,6 +4272,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Shirvallah's Protection (Paladin) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_105",
@@ -3814,7 +4288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3847,6 +4322,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_137",
@@ -3862,7 +4338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3895,6 +4372,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_137",
@@ -3910,7 +4388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3943,6 +4422,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_137",
@@ -3958,7 +4438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -3991,6 +4472,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_137",
@@ -4006,7 +4488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4039,6 +4522,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_137",
@@ -4054,7 +4538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4087,6 +4572,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_137",
@@ -4102,7 +4588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4135,6 +4622,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_137",
@@ -4150,7 +4638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4183,6 +4672,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Shirvallah's Vengeance (Paladin) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_137",
@@ -4198,7 +4688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4231,6 +4722,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_138",
@@ -4246,7 +4738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4279,6 +4772,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_138",
@@ -4294,7 +4788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4327,6 +4822,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_138",
@@ -4342,7 +4838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4375,6 +4872,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_138",
@@ -4390,7 +4888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4423,6 +4922,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_138",
@@ -4438,7 +4938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4471,6 +4972,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_138",
@@ -4486,7 +4988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4519,6 +5022,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_138",
@@ -4534,7 +5038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4567,6 +5072,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Shirvallah's Grace (Paladin) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Paladin) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_138",
@@ -4582,7 +5088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4615,6 +5122,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_114",
@@ -4630,7 +5138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4663,6 +5172,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_114",
@@ -4678,7 +5188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4711,6 +5222,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_114",
@@ -4726,7 +5238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4759,6 +5272,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_114",
@@ -4774,7 +5288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4807,6 +5322,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_114",
@@ -4822,7 +5338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4855,6 +5372,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_114",
@@ -4870,7 +5388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4903,6 +5422,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_114",
@@ -4918,7 +5438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4951,6 +5472,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Bwonsamdi's Sanctum (Priest) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_114",
@@ -4966,7 +5488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -4999,6 +5522,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_146",
@@ -5014,7 +5538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5047,6 +5572,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_146",
@@ -5062,7 +5588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5095,6 +5622,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_146",
@@ -5110,7 +5638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5143,6 +5672,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_146",
@@ -5158,7 +5688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5191,6 +5722,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_146",
@@ -5206,7 +5738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5239,6 +5772,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_146",
@@ -5254,7 +5788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5287,6 +5822,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_146",
@@ -5302,7 +5838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5335,6 +5872,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Bwonsamdi's Tome (Priest) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_146",
@@ -5350,7 +5888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5383,6 +5922,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_147",
@@ -5398,7 +5938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5431,6 +5972,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_147",
@@ -5446,7 +5988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5479,6 +6022,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_147",
@@ -5494,7 +6038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5527,6 +6072,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_147",
@@ -5542,7 +6088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5575,6 +6122,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_147",
@@ -5590,7 +6138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5623,6 +6172,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_147",
@@ -5638,7 +6188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5671,6 +6222,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_147",
@@ -5686,7 +6238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5719,6 +6272,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Bwonsamdi's Covenant (Priest) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Priest) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_147",
@@ -5734,7 +6288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5767,6 +6322,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Bottled Terror (Rogue) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_106",
@@ -5782,7 +6338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5815,6 +6372,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Bottled Terror (Rogue) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_106",
@@ -5830,7 +6388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5863,6 +6422,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Bottled Terror (Rogue) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_106",
@@ -5878,7 +6438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5911,6 +6472,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Bottled Terror (Rogue) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_106",
@@ -5926,7 +6488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -5959,6 +6522,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Bottled Terror (Rogue) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_106",
@@ -5974,7 +6538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6007,6 +6572,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Bottled Terror (Rogue) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_106",
@@ -6022,7 +6588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6055,6 +6622,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Bottled Terror (Rogue) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_106",
@@ -6070,7 +6638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6103,6 +6672,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Bottled Terror (Rogue) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_106",
@@ -6118,7 +6688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6151,6 +6722,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Treasure from Below (Rogue) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_186",
@@ -6166,7 +6738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6199,6 +6772,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Treasure from Below (Rogue) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_186",
@@ -6214,7 +6788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6247,6 +6822,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Treasure from Below (Rogue) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_186",
@@ -6262,7 +6838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6295,6 +6872,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Treasure from Below (Rogue) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_186",
@@ -6310,7 +6888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6343,6 +6922,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Treasure from Below (Rogue) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_186",
@@ -6358,7 +6938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6391,6 +6972,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Treasure from Below (Rogue) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_186",
@@ -6406,7 +6988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6439,6 +7022,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Treasure from Below (Rogue) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_186",
@@ -6454,7 +7038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6487,6 +7072,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Treasure from Below (Rogue) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_186",
@@ -6502,7 +7088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6535,6 +7122,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_187",
@@ -6550,7 +7138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6583,6 +7172,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_187",
@@ -6598,7 +7188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6631,6 +7222,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_187",
@@ -6646,7 +7238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6679,6 +7272,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_187",
@@ -6694,7 +7288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6727,6 +7322,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_187",
@@ -6742,7 +7338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6775,6 +7372,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_187",
@@ -6790,7 +7388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6823,6 +7422,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_187",
@@ -6838,7 +7438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6871,6 +7472,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Pirate's Mark (Rogue) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Rogue) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_187",
@@ -6886,7 +7488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6919,6 +7522,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_109",
@@ -6934,7 +7538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -6967,6 +7572,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_109",
@@ -6982,7 +7588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7015,6 +7622,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_109",
@@ -7030,7 +7638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7063,6 +7672,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_109",
@@ -7078,7 +7688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7111,6 +7722,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_109",
@@ -7126,7 +7738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7159,6 +7772,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_109",
@@ -7174,7 +7788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7207,6 +7822,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_109",
@@ -7222,7 +7838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7255,6 +7872,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Krag'wa's Lure (Shaman) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_109",
@@ -7270,7 +7888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7303,6 +7922,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_154",
@@ -7318,7 +7938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7351,6 +7972,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_154",
@@ -7366,7 +7988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7399,6 +8022,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_154",
@@ -7414,7 +8038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7447,6 +8072,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_154",
@@ -7462,7 +8088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7495,6 +8122,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_154",
@@ -7510,7 +8138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7543,6 +8172,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_154",
@@ -7558,7 +8188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7591,6 +8222,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_154",
@@ -7606,7 +8238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7639,6 +8272,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Tribute from the Tides (Shaman) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_154",
@@ -7654,7 +8288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7687,6 +8322,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_155",
@@ -7702,7 +8338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7735,6 +8372,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_155",
@@ -7750,7 +8388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7783,6 +8422,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_155",
@@ -7798,7 +8438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7831,6 +8472,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_155",
@@ -7846,7 +8488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7879,6 +8522,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_155",
@@ -7894,7 +8538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7927,6 +8572,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_155",
@@ -7942,7 +8588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -7975,6 +8622,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_155",
@@ -7990,7 +8638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8023,6 +8672,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Krag'wa's Grace (Shaman) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Shaman) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_155",
@@ -8038,7 +8688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8071,6 +8722,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Blood Pact (Warlock) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_113",
@@ -8086,7 +8738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8119,6 +8772,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Blood Pact (Warlock) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_113",
@@ -8134,7 +8788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8167,6 +8822,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Blood Pact (Warlock) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_113",
@@ -8182,7 +8838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8215,6 +8872,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Blood Pact (Warlock) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_113",
@@ -8230,7 +8888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8263,6 +8922,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Blood Pact (Warlock) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_113",
@@ -8278,7 +8938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8311,6 +8972,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Blood Pact (Warlock) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_113",
@@ -8326,7 +8988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8359,6 +9022,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Blood Pact (Warlock) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_113",
@@ -8374,7 +9038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8407,6 +9072,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Blood Pact (Warlock) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_113",
@@ -8422,7 +9088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8455,6 +9122,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_178",
@@ -8470,7 +9138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8503,6 +9172,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_178",
@@ -8518,7 +9188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8551,6 +9222,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_178",
@@ -8566,7 +9238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8599,6 +9272,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_178",
@@ -8614,7 +9288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8647,6 +9322,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_178",
@@ -8662,7 +9338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8695,6 +9372,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_178",
@@ -8710,7 +9388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8743,6 +9422,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_178",
@@ -8758,7 +9438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8791,6 +9472,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Dark Reliquary (Warlock) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_178",
@@ -8806,7 +9488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8839,6 +9522,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_179",
@@ -8854,7 +9538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8887,6 +9572,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_179",
@@ -8902,7 +9588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8935,6 +9622,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_179",
@@ -8950,7 +9638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -8983,6 +9672,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_179",
@@ -8998,7 +9688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9031,6 +9722,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_179",
@@ -9046,7 +9738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9079,6 +9772,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_179",
@@ -9094,7 +9788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9127,6 +9822,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_179",
@@ -9142,7 +9838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9175,6 +9872,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Hir'eek's Hunger (Warlock) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warlock) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_179",
@@ -9190,7 +9888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9223,6 +9922,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Akali's Champion (Warrior) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_104",
@@ -9238,7 +9938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9271,6 +9972,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Akali's Champion (Warrior) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_104",
@@ -9286,7 +9988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9319,6 +10022,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Akali's Champion (Warrior) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_104",
@@ -9334,7 +10038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9367,6 +10072,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Akali's Champion (Warrior) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_104",
@@ -9382,7 +10088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9415,6 +10122,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Akali's Champion (Warrior) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_104",
@@ -9430,7 +10138,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9463,6 +10172,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Akali's Champion (Warrior) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_104",
@@ -9478,7 +10188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9511,6 +10222,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Akali's Champion (Warrior) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_104",
@@ -9526,7 +10238,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9559,6 +10272,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Akali's Champion (Warrior) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_104",
@@ -9574,7 +10288,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9607,6 +10322,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_170",
@@ -9622,7 +10338,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9655,6 +10372,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_170",
@@ -9670,7 +10388,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9703,6 +10422,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_170",
@@ -9718,7 +10438,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9751,6 +10472,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_170",
@@ -9766,7 +10488,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9799,6 +10522,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_170",
@@ -9814,7 +10538,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9847,6 +10572,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_170",
@@ -9862,7 +10588,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9895,6 +10622,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_170",
@@ -9910,7 +10638,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9943,6 +10672,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Akali's War Drum (Warrior) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_170",
@@ -9958,7 +10688,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -9991,6 +10722,7 @@
         "root": true,
         "priority": 0,
         "displayName": "Akali's Horn (Warrior) - Cleared round 1",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 1",
         "displayCardId": "TRLA_171",
@@ -10006,7 +10738,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10039,6 +10772,7 @@
         "root": false,
         "priority": 1,
         "displayName": "Akali's Horn (Warrior) - Cleared round 2",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 2",
         "displayCardId": "TRLA_171",
@@ -10054,7 +10788,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10087,6 +10822,7 @@
         "root": false,
         "priority": 2,
         "displayName": "Akali's Horn (Warrior) - Cleared round 3",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 3",
         "displayCardId": "TRLA_171",
@@ -10102,7 +10838,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10135,6 +10872,7 @@
         "root": false,
         "priority": 3,
         "displayName": "Akali's Horn (Warrior) - Cleared round 4",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 4",
         "displayCardId": "TRLA_171",
@@ -10150,7 +10888,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10183,6 +10922,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Akali's Horn (Warrior) - Cleared round 5",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 5",
         "displayCardId": "TRLA_171",
@@ -10198,7 +10938,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10231,6 +10972,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Akali's Horn (Warrior) - Cleared round 6",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 6",
         "displayCardId": "TRLA_171",
@@ -10246,7 +10988,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10279,6 +11022,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Akali's Horn (Warrior) - Cleared round 7",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 7",
         "displayCardId": "TRLA_171",
@@ -10294,7 +11038,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10327,6 +11072,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Akali's Horn (Warrior) - Cleared round 8",
+        "text": null,
         "emptyText": "Clear the first round with Rikkar (Warrior) to get started",
         "completedText": "You cleared Rumble Run's round 8",
         "displayCardId": "TRLA_171",
@@ -10342,7 +11088,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "PLAYER_HERO",
@@ -10375,7 +11122,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Akali's Champion",
-        "text": ". This minion's Attack. is always equal to. your Armor.",
+        "text": " This minion's Attack is always equal to your Armor.",
+        "emptyText": null,
         "completedText": "You played Akali's Champion",
         "displayCardId": "TRLA_104",
         "displayCardType": "minion",
@@ -10390,7 +11138,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10412,7 +11161,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Shirvallah's Protection",
-        "text": ". After a friendly minion. survives damage, give it. Divine Shield.",
+        "text": " After a friendly minion survives damage, give it Divine Shield.",
+        "emptyText": null,
         "completedText": "You played Shirvallah's Protection",
         "displayCardId": "TRLA_105",
         "displayCardType": "minion",
@@ -10427,7 +11177,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10449,7 +11200,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Bottled Terror",
-        "text": ". Your other minions have Stealth..  Deathrattle: Give your minions. +2 Attack.",
+        "text": " Your other minions have Stealth.  Deathrattle: Give your minions +2 Attack.",
+        "emptyText": null,
         "completedText": "You played Bottled Terror",
         "displayCardId": "TRLA_106",
         "displayCardType": "minion",
@@ -10464,7 +11216,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10486,7 +11239,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Jan'alai's Mantle",
-        "text": ". Has Spell Damage +1 for. each spell in your hand.",
+        "text": " Has Spell Damage +1 for each spell in your hand.",
+        "emptyText": null,
         "completedText": "You played Jan'alai's Mantle",
         "displayCardId": "TRLA_108",
         "displayCardType": "minion",
@@ -10501,7 +11255,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10523,7 +11278,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Krag'wa's Lure",
-        "text": ". After you Overload,. give your minions that. much Attack.",
+        "text": " After you Overload, give your minions that much Attack.",
+        "emptyText": null,
         "completedText": "You played Krag'wa's Lure",
         "displayCardId": "TRLA_109",
         "displayCardType": "minion",
@@ -10538,7 +11294,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10560,7 +11317,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Halazzi's Trap",
-        "text": ". After you cast a spell, put. a random Hunter Secret. into the battlefield.",
+        "text": " After you cast a spell, put a random Hunter Secret into the battlefield.",
+        "emptyText": null,
         "completedText": "You played Halazzi's Trap",
         "displayCardId": "TRLA_110",
         "displayCardType": "minion",
@@ -10575,7 +11333,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10597,7 +11356,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Gonk's Armament",
-        "text": ". Whenever you gain Armor,. refresh your Mana. Crystals.",
+        "text": " Whenever you gain Armor, refresh your Mana Crystals.",
+        "emptyText": null,
         "completedText": "You played Gonk's Armament",
         "displayCardId": "TRLA_112",
         "displayCardType": "minion",
@@ -10612,7 +11372,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10634,7 +11395,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Blood Pact",
-        "text": ". Your spells cost Health. instead of Mana.",
+        "text": " Your spells cost Health instead of Mana.",
+        "emptyText": null,
         "completedText": "You played Blood Pact",
         "displayCardId": "TRLA_113",
         "displayCardType": "minion",
@@ -10649,7 +11411,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10671,7 +11434,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Bwonsamdi's Sanctum",
-        "text": ". Your Deathrattles trigger. two additional times.",
+        "text": " Your Deathrattles trigger two additional times.",
+        "emptyText": null,
         "completedText": "You played Bwonsamdi's Sanctum",
         "displayCardId": "TRLA_114",
         "displayCardType": "minion",
@@ -10686,7 +11450,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10708,7 +11473,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Gonk's Mark",
-        "text": ". After you summon a. minion, give it +1/+1.",
+        "text": " After you summon a minion, give it +1/+1.",
+        "emptyText": null,
         "completedText": "You played Gonk's Mark",
         "displayCardId": "TRLA_115",
         "displayCardType": "minion",
@@ -10723,7 +11489,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10745,7 +11512,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Bonds of Balance",
-        "text": ". At the end of your turn,. gain Attack equal to your. hero's Attack.",
+        "text": " At the end of your turn, gain Attack equal to your hero's Attack.",
+        "emptyText": null,
         "completedText": "You played Bonds of Balance",
         "displayCardId": "TRLA_116",
         "displayCardType": "minion",
@@ -10760,7 +11528,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10782,7 +11551,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Jan'alai's Flame",
-        "text": ". Your Hero Power costs (0).. Whenever it kills. a minion, refresh it.",
+        "text": " Your Hero Power costs (0). Whenever it kills a minion, refresh it.",
+        "emptyText": null,
         "completedText": "You played Jan'alai's Flame",
         "displayCardId": "TRLA_128",
         "displayCardType": "minion",
@@ -10797,7 +11567,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10819,7 +11590,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Jan'alai's Progeny",
-        "text": ". Whenever you Freeze a. character, put a Frostfire. into your hand.",
+        "text": " Whenever you Freeze a character, put a Frostfire into your hand.",
+        "emptyText": null,
         "completedText": "You played Jan'alai's Progeny",
         "displayCardId": "TRLA_129",
         "displayCardType": "minion",
@@ -10834,7 +11606,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10856,7 +11629,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Shirvallah's Vengeance",
-        "text": ". After your hero takes. damage, deal 5 damage. to the enemy hero.",
+        "text": " After your hero takes damage, deal 5 damage to the enemy hero.",
+        "emptyText": null,
         "completedText": "You played Shirvallah's Vengeance",
         "displayCardId": "TRLA_137",
         "displayCardType": "minion",
@@ -10871,7 +11645,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10893,7 +11668,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Shirvallah's Grace",
-        "text": ". After you cast a spell. on a friendly minion, cast a.   copy of it on this one.",
+        "text": " After you cast a spell on a friendly minion, cast a   copy of it on this one.",
+        "emptyText": null,
         "completedText": "You played Shirvallah's Grace",
         "displayCardId": "TRLA_138",
         "displayCardType": "minion",
@@ -10908,7 +11684,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10930,7 +11707,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Bwonsamdi's Tome",
-        "text": ". After you cast a spell,. add a random Priest spell. to your hand.",
+        "text": " After you cast a spell, add a random Priest spell to your hand.",
+        "emptyText": null,
         "completedText": "You played Bwonsamdi's Tome",
         "displayCardId": "TRLA_146",
         "displayCardType": "minion",
@@ -10945,7 +11723,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -10967,7 +11746,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Bwonsamdi's Covenant",
-        "text": ". Healing enemies. damages them instead.",
+        "text": " Healing enemies damages them instead.",
+        "emptyText": null,
         "completedText": "You played Bwonsamdi's Covenant",
         "displayCardId": "TRLA_147",
         "displayCardType": "minion",
@@ -10982,7 +11762,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11004,7 +11785,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Tribute from the Tides",
-        "text": ". Your Battlecries trigger. two additional times.",
+        "text": " Your Battlecries trigger two additional times.",
+        "emptyText": null,
         "completedText": "You played Tribute from the Tides",
         "displayCardId": "TRLA_154",
         "displayCardType": "minion",
@@ -11019,7 +11801,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11041,7 +11824,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Krag'wa's Grace",
-        "text": ". Your spells cost (2) less.",
+        "text": " Your spells cost (2) less.",
+        "emptyText": null,
         "completedText": "You played Krag'wa's Grace",
         "displayCardId": "TRLA_155",
         "displayCardType": "minion",
@@ -11056,7 +11840,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11078,7 +11863,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Halazzi's Hunt",
-        "text": ". Your minions have. \"Overkill: Cards in your. hand cost (1) less.\"",
+        "text": " Your minions have \"Overkill: Cards in your hand cost (1) less.\"",
+        "emptyText": null,
         "completedText": "You played Halazzi's Hunt",
         "displayCardId": "TRLA_162",
         "displayCardType": "minion",
@@ -11093,7 +11879,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11115,7 +11902,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Halazzi's Guise",
-        "text": ". Whenever you summon a. Beast, it gains Rush,. Taunt, or Poisonous",
+        "text": " Whenever you summon a Beast, it gains Rush, Taunt, or Poisonous",
+        "emptyText": null,
         "completedText": "You played Halazzi's Guise",
         "displayCardId": "TRLA_163",
         "displayCardType": "minion",
@@ -11130,7 +11918,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11152,7 +11941,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Akali's War Drum",
-        "text": ". After you summon a Dragon,. reduce the Costs of Dragons. in your hand by (1).",
+        "text": " After you summon a Dragon, reduce the Costs of Dragons in your hand by (1).",
+        "emptyText": null,
         "completedText": "You played Akali's War Drum",
         "displayCardId": "TRLA_170",
         "displayCardType": "minion",
@@ -11167,7 +11957,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11189,7 +11980,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Akali's Horn",
-        "text": ". Your minions have. \"Overkill: This can. attack again.\"",
+        "text": " Your minions have \"Overkill: This can attack again.\"",
+        "emptyText": null,
         "completedText": "You played Akali's Horn",
         "displayCardId": "TRLA_171",
         "displayCardType": "minion",
@@ -11204,7 +11996,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11226,7 +12019,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Dark Reliquary",
-        "text": ". Whenever you discard a. card, summon a. random Demon.",
+        "text": " Whenever you discard a card, summon a random Demon.",
+        "emptyText": null,
         "completedText": "You played Dark Reliquary",
         "displayCardId": "TRLA_178",
         "displayCardType": "minion",
@@ -11241,7 +12035,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11263,7 +12058,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Hir'eek's Hunger",
-        "text": ". Whenever your hero takes. damage on your turn, the enemy. hero takes it instead.",
+        "text": " Whenever your hero takes damage on your turn, the enemy hero takes it instead.",
+        "emptyText": null,
         "completedText": "You played Hir'eek's Hunger",
         "displayCardId": "TRLA_179",
         "displayCardType": "minion",
@@ -11278,7 +12074,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11300,7 +12097,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Treasure from Below",
-        "text": ". At the start of your turn, steal. a card from your opponent's. deck. It costs (2) less.",
+        "text": " At the start of your turn, steal a card from your opponent's deck. It costs (2) less.",
+        "emptyText": null,
         "completedText": "You played Treasure from Below",
         "displayCardId": "TRLA_186",
         "displayCardType": "minion",
@@ -11315,7 +12113,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11337,7 +12136,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Shrine played: Pirate's Mark",
-        "text": ". After you cast a spell,. cast it again. (on the same target).",
+        "text": " After you cast a spell, cast it again (on the same target).",
+        "emptyText": null,
         "completedText": "You played Pirate's Mark",
         "displayCardId": "TRLA_187",
         "displayCardType": "minion",
@@ -11352,7 +12152,8 @@
                 ]
             },
             {
-                "type": "MULLIGAN_DONE"
+                "type": "MULLIGAN_DONE",
+                "values": null
             },
             {
                 "type": "SCENARIO_IDS",
@@ -11374,7 +12175,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Water Spirit",
-        "text": "Start of Game: Draw this.. Deathrattle: Gain 2 Mana Crystals.",
+        "text": "Start of Game: Draw this. Deathrattle: Gain 2 Mana Crystals.",
+        "emptyText": null,
         "completedText": "Teammate Water Spirit joined",
         "displayCardId": "TRLA_121",
         "displayCardType": "minion",
@@ -11408,7 +12210,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Direhorn Stomper",
-        "text": "Rush. Overkill: Summon a minion from your deck with the highest Attack.",
+        "text": "Rush Overkill: Summon a minion from your deck with the highest Attack.",
+        "emptyText": null,
         "completedText": "Teammate Direhorn Stomper joined",
         "displayCardId": "TRLA_122",
         "displayCardType": "minion",
@@ -11442,7 +12245,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Succoring Skyscreamer",
-        "text": "Whenever you gain. Armor, draw a card.. It costs (2) less.",
+        "text": "Whenever you gain Armor, draw a card. It costs (2) less.",
+        "emptyText": null,
         "completedText": "Teammate Succoring Skyscreamer joined",
         "displayCardId": "TRLA_123",
         "displayCardType": "minion",
@@ -11476,7 +12280,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Zandalari Striker",
-        "text": "After your hero attacks, give your minions. +2 Attack.",
+        "text": "After your hero attacks, give your minions +2 Attack.",
+        "emptyText": null,
         "completedText": "Teammate Zandalari Striker joined",
         "displayCardId": "TRLA_124",
         "displayCardType": "minion",
@@ -11511,6 +12316,7 @@
         "priority": 0,
         "displayName": "Teammate joined: The Fan Favorite",
         "text": "Overkill: Give your hero +10 Attack this turn.",
+        "emptyText": null,
         "completedText": "Teammate The Fan Favorite joined",
         "displayCardId": "TRLA_125",
         "displayCardType": "minion",
@@ -11544,7 +12350,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Astral Raptor",
-        "text": "Rush. Overkill: Summon another Astral Raptor.",
+        "text": "Rush Overkill: Summon another Astral Raptor.",
+        "emptyText": null,
         "completedText": "Teammate Astral Raptor joined",
         "displayCardId": "TRLA_127",
         "displayCardType": "minion",
@@ -11578,7 +12385,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Razzle Dazzler",
-        "text": "Taunt. Battlecry: Fill your hand with Arcane Missiles.",
+        "text": "Taunt Battlecry: Fill your hand with Arcane Missiles.",
+        "emptyText": null,
         "completedText": "Teammate Razzle Dazzler joined",
         "displayCardId": "TRLA_130",
         "displayCardType": "minion",
@@ -11613,6 +12421,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Glyph Guardian",
         "text": "Whenever a character is Frozen, gain Spell Damage +1.",
+        "emptyText": null,
         "completedText": "Teammate Glyph Guardian joined",
         "displayCardId": "TRLA_131",
         "displayCardType": "minion",
@@ -11646,7 +12455,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Frostweaver",
-        "text": "Your Hero Power also Freezes the target.. If the target is a Frozen minion, destroy it.",
+        "text": "Your Hero Power also Freezes the target. If the target is a Frozen minion, destroy it.",
+        "emptyText": null,
         "completedText": "Teammate Frostweaver joined",
         "displayCardId": "TRLA_132",
         "displayCardType": "minion",
@@ -11680,7 +12490,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Fireslinger",
-        "text": "After you cast a spell,. cast a Fireball at a random enemy.",
+        "text": "After you cast a spell, cast a Fireball at a random enemy.",
+        "emptyText": null,
         "completedText": "Teammate Fireslinger joined",
         "displayCardId": "TRLA_133",
         "displayCardType": "minion",
@@ -11714,7 +12525,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Showstopping Conjurer",
-        "text": "Rush. Overkill: Draw a spell from your deck.",
+        "text": "Rush Overkill: Draw a spell from your deck.",
+        "emptyText": null,
         "completedText": "Teammate Showstopping Conjurer joined",
         "displayCardId": "TRLA_134",
         "displayCardType": "minion",
@@ -11748,7 +12560,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Fan of Flames",
-        "text": "Start of Game: Draw this.. Battlecry: Upgrade your Hero Power.",
+        "text": "Start of Game: Draw this. Battlecry: Upgrade your Hero Power.",
+        "emptyText": null,
         "completedText": "Teammate Fan of Flames joined",
         "displayCardId": "TRLA_135",
         "displayCardType": "minion",
@@ -11782,7 +12595,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Parading Marshal",
-        "text": "Start of Game: Draw this.. Battlecry: Equip a Truesilver Champion.",
+        "text": "Start of Game: Draw this. Battlecry: Equip a Truesilver Champion.",
+        "emptyText": null,
         "completedText": "Teammate Parading Marshal joined",
         "displayCardId": "TRLA_139",
         "displayCardType": "minion",
@@ -11817,6 +12631,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Blessed One",
         "text": "Battlecry: Draw spells until your hand is full.",
+        "emptyText": null,
         "completedText": "Teammate Blessed One joined",
         "displayCardId": "TRLA_140",
         "displayCardType": "minion",
@@ -11850,7 +12665,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Lightchucker",
-        "text": "After a character is healed, destroy a random. enemy minion.",
+        "text": "After a character is healed, destroy a random enemy minion.",
+        "emptyText": null,
         "completedText": "Teammate Lightchucker joined",
         "displayCardId": "TRLA_141",
         "displayCardType": "minion",
@@ -11884,7 +12700,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: The Walking Fort",
-        "text": "Taunt. This minion can only take. 1 damage at a time.",
+        "text": "Taunt This minion can only take 1 damage at a time.",
+        "emptyText": null,
         "completedText": "Teammate The Walking Fort joined",
         "displayCardId": "TRLA_142",
         "displayCardType": "minion",
@@ -11919,6 +12736,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Gloryseeker",
         "text": "Whenever this minion takes damage, your hero takes it instead.",
+        "emptyText": null,
         "completedText": "Teammate Gloryseeker joined",
         "displayCardId": "TRLA_143",
         "displayCardType": "minion",
@@ -11952,7 +12770,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Exactor of Justice",
-        "text": "Divine Shield. Overkill: Gain Divine Shield.",
+        "text": "Divine Shield Overkill: Gain Divine Shield.",
+        "emptyText": null,
         "completedText": "Teammate Exactor of Justice joined",
         "displayCardId": "TRLA_144",
         "displayCardType": "minion",
@@ -11986,7 +12805,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Weaponized Zombie",
-        "text": "Start of Game: Draw this.. Deathrattle: Give a random friendly minion +1/+1.",
+        "text": "Start of Game: Draw this. Deathrattle: Give a random friendly minion +1/+1.",
+        "emptyText": null,
         "completedText": "Teammate Weaponized Zombie joined",
         "displayCardId": "TRLA_148",
         "displayCardType": "minion",
@@ -12020,7 +12840,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Ghastcoiler",
-        "text": "Deathrattle: Summon. 2 random Deathrattle minions.",
+        "text": "Deathrattle: Summon 2 random Deathrattle minions.",
+        "emptyText": null,
         "completedText": "Teammate Ghastcoiler joined",
         "displayCardId": "TRLA_149",
         "displayCardType": "minion",
@@ -12054,7 +12875,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Bloodwash Medic",
-        "text": "Rush. Overkill: Add 3 healing spells to your hand.",
+        "text": "Rush Overkill: Add 3 healing spells to your hand.",
+        "emptyText": null,
         "completedText": "Teammate Bloodwash Medic joined",
         "displayCardId": "TRLA_150",
         "displayCardType": "minion",
@@ -12089,6 +12911,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Bwonsamdi's Keeper",
         "text": "Battlecry: Restore all minions to full Health.",
+        "emptyText": null,
         "completedText": "Teammate Bwonsamdi's Keeper joined",
         "displayCardId": "TRLA_151",
         "displayCardType": "minion",
@@ -12123,6 +12946,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Soulsapper",
         "text": "Deathrattle: Steal 2 spells from your opponent's deck.",
+        "emptyText": null,
         "completedText": "Teammate Soulsapper joined",
         "displayCardId": "TRLA_152",
         "displayCardType": "minion",
@@ -12157,6 +12981,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Conjuring Attendant",
         "text": "Your spells cost (2) less.",
+        "emptyText": null,
         "completedText": "Teammate Conjuring Attendant joined",
         "displayCardId": "TRLA_153",
         "displayCardType": "minion",
@@ -12190,7 +13015,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Deepsea Diver",
-        "text": "Start of Game: Draw this.. Battlecry: Unlock your.   Overloaded Mana Crystals.",
+        "text": "Start of Game: Draw this. Battlecry: Unlock your   Overloaded Mana Crystals.",
+        "emptyText": null,
         "completedText": "Teammate Deepsea Diver joined",
         "displayCardId": "TRLA_156",
         "displayCardType": "minion",
@@ -12224,7 +13050,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Leap Frog",
-        "text": "Battlecry: Deal 3 damage. to a random enemy minion.. If it dies, repeat this.",
+        "text": "Battlecry: Deal 3 damage to a random enemy minion. If it dies, repeat this.",
+        "emptyText": null,
         "completedText": "Teammate Leap Frog joined",
         "displayCardId": "TRLA_157",
         "displayCardType": "minion",
@@ -12258,7 +13085,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Overcharged Totem",
-        "text": "After you Overload,. deal 2 damage to all enemy minions.",
+        "text": "After you Overload, deal 2 damage to all enemy minions.",
+        "emptyText": null,
         "completedText": "Teammate Overcharged Totem joined",
         "displayCardId": "TRLA_158",
         "displayCardType": "minion",
@@ -12292,7 +13120,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Croak Jouster",
-        "text": "Battlecry: Discover a spell.. If you're Overloaded,. keep all 3.",
+        "text": "Battlecry: Discover a spell. If you're Overloaded, keep all 3.",
+        "emptyText": null,
         "completedText": "Teammate Croak Jouster joined",
         "displayCardId": "TRLA_159",
         "displayCardType": "minion",
@@ -12327,6 +13156,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Naga Tonguelasher",
         "text": "Battlecry: Overload 3 of your opponent's Mana Crystals.",
+        "emptyText": null,
         "completedText": "Teammate Naga Tonguelasher joined",
         "displayCardId": "TRLA_160",
         "displayCardType": "minion",
@@ -12360,7 +13190,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: War Heralder",
-        "text": "Rush. Overkill: Add 3 random Shaman spells to your hand.",
+        "text": "Rush Overkill: Add 3 random Shaman spells to your hand.",
+        "emptyText": null,
         "completedText": "Teammate War Heralder joined",
         "displayCardId": "TRLA_161",
         "displayCardType": "minion",
@@ -12394,7 +13225,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Shadowmaw Panther",
-        "text": "Your Beasts have Rush.. Start of Game: Draw this.",
+        "text": "Your Beasts have Rush. Start of Game: Draw this.",
+        "emptyText": null,
         "completedText": "Teammate Shadowmaw Panther joined",
         "displayCardId": "TRLA_164",
         "displayCardType": "minion",
@@ -12429,6 +13261,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Battlestarved Lynx",
         "text": "Battlecry: Draw Beasts until your hand is full.",
+        "emptyText": null,
         "completedText": "Teammate Battlestarved Lynx joined",
         "displayCardId": "TRLA_165",
         "displayCardType": "minion",
@@ -12462,7 +13295,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Troll Harbinger",
-        "text": "Taunt. After a minion dies, add a random Hunter spell to your hand.",
+        "text": "Taunt After a minion dies, add a random Hunter spell to your hand.",
+        "emptyText": null,
         "completedText": "Teammate Troll Harbinger joined",
         "displayCardId": "TRLA_166",
         "displayCardType": "minion",
@@ -12496,7 +13330,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Rabid Saurolisk",
-        "text": "Poisonous. Deathrattle: Deal 1 damage to all enemies.",
+        "text": "Poisonous Deathrattle: Deal 1 damage to all enemies.",
+        "emptyText": null,
         "completedText": "Teammate Rabid Saurolisk joined",
         "displayCardId": "TRLA_167",
         "displayCardType": "minion",
@@ -12531,6 +13366,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Streetsmuggler",
         "text": "After a friendly Secret is revealed, put a random Hunter Secret into the battlefield.",
+        "emptyText": null,
         "completedText": "Teammate Streetsmuggler joined",
         "displayCardId": "TRLA_168",
         "displayCardType": "minion",
@@ -12565,6 +13401,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Slamma Jamma",
         "text": "Battlecry: Double the Attack of all your other minions.",
+        "emptyText": null,
         "completedText": "Teammate Slamma Jamma joined",
         "displayCardId": "TRLA_169",
         "displayCardType": "minion",
@@ -12598,7 +13435,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Rallying Quilboar",
-        "text": "Adjacent minions have Taunt.. Start of Game: Draw this.",
+        "text": "Adjacent minions have Taunt. Start of Game: Draw this.",
+        "emptyText": null,
         "completedText": "Teammate Rallying Quilboar joined",
         "displayCardId": "TRLA_172",
         "displayCardType": "minion",
@@ -12632,7 +13470,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Redcrest Rocker",
-        "text": "Rush. Overkill: Discover a Dragon.. If you control a Dragon,. keep all 3.",
+        "text": "Rush Overkill: Discover a Dragon. If you control a Dragon, keep all 3.",
+        "emptyText": null,
         "completedText": "Teammate Redcrest Rocker joined",
         "displayCardId": "TRLA_173",
         "displayCardType": "minion",
@@ -12667,6 +13506,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Ironhorn Drummer",
         "text": "Your minions can't be reduced below 1 Health on your turn.",
+        "emptyText": null,
         "completedText": "Teammate Ironhorn Drummer joined",
         "displayCardId": "TRLA_174",
         "displayCardType": "minion",
@@ -12701,6 +13541,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Seasoned Pitbrawler",
         "text": "Whenever you gain Armor, gain twice as much.",
+        "emptyText": null,
         "completedText": "Teammate Seasoned Pitbrawler joined",
         "displayCardId": "TRLA_175",
         "displayCardType": "minion",
@@ -12735,6 +13576,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Herald of Flame",
         "text": "Whenever you play a Dragon, give it Rush and draw a Dragon.",
+        "emptyText": null,
         "completedText": "Teammate Herald of Flame joined",
         "displayCardId": "TRLA_176",
         "displayCardType": "minion",
@@ -12768,7 +13610,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Unbound Punisher",
-        "text": "Battlecry: Destroy all. enemy minions.. Gain 2 Armor for each minion destroyed.",
+        "text": "Battlecry: Destroy all enemy minions. Gain 2 Armor for each minion destroyed.",
+        "emptyText": null,
         "completedText": "Teammate Unbound Punisher joined",
         "displayCardId": "TRLA_177",
         "displayCardType": "minion",
@@ -12802,7 +13645,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Leering Bat",
-        "text": "Your hero is Immune. on your turn..    Start of Game: Draw this.",
+        "text": "Your hero is Immune on your turn.    Start of Game: Draw this.",
+        "emptyText": null,
         "completedText": "Teammate Leering Bat joined",
         "displayCardId": "TRLA_180",
         "displayCardType": "minion",
@@ -12836,7 +13680,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Ravenous Familiar",
-        "text": "Rush. Overkill: Discard your. lowest Cost card and. draw a card.",
+        "text": "Rush Overkill: Discard your lowest Cost card and draw a card.",
+        "emptyText": null,
         "completedText": "Teammate Ravenous Familiar joined",
         "displayCardId": "TRLA_181",
         "displayCardType": "minion",
@@ -12870,7 +13715,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Vile Necrodoctor",
-        "text": "Lifesteal. Battlecry: Deal 3 damage to all enemy minions.",
+        "text": "Lifesteal Battlecry: Deal 3 damage to all enemy minions.",
+        "emptyText": null,
         "completedText": "Teammate Vile Necrodoctor joined",
         "displayCardId": "TRLA_182",
         "displayCardType": "minion",
@@ -12904,7 +13750,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Warp Stalker",
-        "text": "Stealth. You can use your Hero Power. any number of times.",
+        "text": "Stealth You can use your Hero Power any number of times.",
+        "emptyText": null,
         "completedText": "Teammate Warp Stalker joined",
         "displayCardId": "TRLA_183",
         "displayCardType": "minion",
@@ -12939,6 +13786,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Dark Diviner",
         "text": "Battlecry: Fill your hand with random spells.",
+        "emptyText": null,
         "completedText": "Teammate Dark Diviner joined",
         "displayCardId": "TRLA_184",
         "displayCardType": "minion",
@@ -12972,7 +13820,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Blood Portal",
-        "text": "Whenever your hero takes damage, add a random Warlock spell to. your hand.",
+        "text": "Whenever your hero takes damage, add a random Warlock spell to your hand.",
+        "emptyText": null,
         "completedText": "Teammate Blood Portal joined",
         "displayCardId": "TRLA_185",
         "displayCardType": "minion",
@@ -13006,7 +13855,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Pesky Rascal",
-        "text": "Immune. Start of Game: Draw this.",
+        "text": "Immune Start of Game: Draw this.",
+        "emptyText": null,
         "completedText": "Teammate Pesky Rascal joined",
         "displayCardId": "TRLA_188",
         "displayCardType": "minion",
@@ -13040,7 +13890,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Parrot Mascot",
-        "text": "Combo: Add a copy of. each card you've played. this turn to your hand.",
+        "text": "Combo: Add a copy of each card you've played this turn to your hand.",
+        "emptyText": null,
         "completedText": "Teammate Parrot Mascot joined",
         "displayCardId": "TRLA_189",
         "displayCardType": "minion",
@@ -13075,6 +13926,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Salty Looter",
         "text": "Battlecry and Deathrattle: Steal a card from your opponent's hand.",
+        "emptyText": null,
         "completedText": "Teammate Salty Looter joined",
         "displayCardId": "TRLA_190",
         "displayCardType": "minion",
@@ -13109,6 +13961,7 @@
         "priority": 0,
         "displayName": "Teammate joined: Sharktoothed Harpooner",
         "text": "Battlecry: If you're holding any cards that didn't start in your deck, reduce their Cost by (4).",
+        "emptyText": null,
         "completedText": "Teammate Sharktoothed Harpooner joined",
         "displayCardId": "TRLA_191",
         "displayCardType": "minion",
@@ -13142,7 +13995,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Lobstrok Tastetester",
-        "text": "After you cast a spell, draw. a spell from your deck.. It costs (2) less.",
+        "text": "After you cast a spell, draw a spell from your deck. It costs (2) less.",
+        "emptyText": null,
         "completedText": "Teammate Lobstrok Tastetester joined",
         "displayCardId": "TRLA_192",
         "displayCardType": "minion",
@@ -13176,7 +14030,8 @@
         "root": true,
         "priority": 0,
         "displayName": "Teammate joined: Raging Contender",
-        "text": "Rush. Deathrattle: Fill your board with random Pirates.",
+        "text": "Rush Deathrattle: Fill your board with random Pirates.",
+        "emptyText": null,
         "completedText": "Teammate Raging Contender joined",
         "displayCardId": "TRLA_193",
         "displayCardType": "minion",
@@ -13188,312 +14043,6 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "TRLA_193"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_801",
-        "type": "rumble_run_passive_play_TRLA_801",
-        "name": "Sacred Ritual",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Sacred Ritual",
-        "text": "Passive. Your Shrines have \"Your spells cost (1) less.\"",
-        "completedText": "You triggered Sacred Ritual",
-        "displayCardId": "TRLA_801",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_801"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_802",
-        "type": "rumble_run_passive_play_TRLA_802",
-        "name": "Favor of the Gods",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Favor of the Gods",
-        "text": "Passive. Minions adjacent to your Shrines have Taunt.",
-        "completedText": "You triggered Favor of the Gods",
-        "displayCardId": "TRLA_802",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_802"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_803",
-        "type": "rumble_run_passive_play_TRLA_803",
-        "name": "Fortified Spirit",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Fortified Spirit",
-        "text": "Passive. At the start of each turn, restore your Shrines to. full Health.",
-        "completedText": "You triggered Fortified Spirit",
-        "displayCardId": "TRLA_803",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_803"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_804",
-        "type": "rumble_run_passive_play_TRLA_804",
-        "name": "Everlasting Devotion",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Everlasting Devotion",
-        "text": "Passive. Start the game with a copy of your Shrine.",
-        "completedText": "You triggered Everlasting Devotion",
-        "displayCardId": "TRLA_804",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_804"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_805",
-        "type": "rumble_run_passive_play_TRLA_805",
-        "name": "Pact with the Loa",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Pact with the Loa",
-        "text": "Passive. Your Shrines revive in. 2 turns instead of 3.",
-        "completedText": "You triggered Pact with the Loa",
-        "displayCardId": "TRLA_805",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_805"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_806",
-        "type": "rumble_run_passive_play_TRLA_806",
-        "name": "Wrath of the Loas",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Wrath of the Loas",
-        "text": "Passive. Your Shrines have \"Deathrattle: Destroy. all enemy Shrines.\"",
-        "completedText": "You triggered Wrath of the Loas",
-        "displayCardId": "TRLA_806",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_806"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_807",
-        "type": "rumble_run_passive_play_TRLA_807",
-        "name": "Boon Reaper",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Boon Reaper",
-        "text": "Passive. Your Shrines have \"Deathrattle: Draw cards until your hand is full.\"",
-        "completedText": "You triggered Boon Reaper",
-        "displayCardId": "TRLA_807",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_807"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_808",
-        "type": "rumble_run_passive_play_TRLA_808",
-        "name": "Roaring Edifice",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Roaring Edifice",
-        "text": "Passive. Your Shrines have. \"Deathrattle: Cards in your. hand cost (2) less.\"",
-        "completedText": "You triggered Roaring Edifice",
-        "displayCardId": "TRLA_808",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_808"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "2890"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "rumble_run_passive_play_TRLA_809",
-        "type": "rumble_run_passive_play_TRLA_809",
-        "name": "Windfall Blessing",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Passive ability triggered: Windfall Blessing",
-        "text": "Passive. Your Shrines have \"Deathrattle: Give minions in your deck +1/+1.\"",
-        "completedText": "You triggered Windfall Blessing",
-        "displayCardId": "TRLA_809",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 1,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "PASSIVE_BUFF",
-                "values": [
-                    "TRLA_809"
                 ]
             },
             {

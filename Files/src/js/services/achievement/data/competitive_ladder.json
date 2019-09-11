@@ -7,6 +7,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: Win Streaks (3 games)",
+        "text": null,
         "emptyText": "Win 3 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 3 games in a row",
         "displayCardId": "TRL_074",
@@ -28,7 +29,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -50,6 +52,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: Win Streaks (4 games)",
+        "text": null,
         "emptyText": "Win 4 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 4 games in a row",
         "displayCardId": "TRL_074",
@@ -71,7 +74,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -93,6 +97,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: Win Streaks (5 games)",
+        "text": null,
         "emptyText": "Win 5 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 5 games in a row",
         "displayCardId": "TRL_074",
@@ -114,7 +119,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -136,6 +142,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: Win Streaks (6 games)",
+        "text": null,
         "emptyText": "Win 6 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 6 games in a row",
         "displayCardId": "TRL_074",
@@ -157,7 +164,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -179,6 +187,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: Win Streaks (7 games)",
+        "text": null,
         "emptyText": "Win 7 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 7 games in a row",
         "displayCardId": "TRL_074",
@@ -200,7 +209,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -222,6 +232,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: Win Streaks (8 games)",
+        "text": null,
         "emptyText": "Win 8 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 8 games in a row",
         "displayCardId": "TRL_074",
@@ -243,7 +254,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -265,6 +277,7 @@
         "root": false,
         "priority": 9,
         "displayName": "Achievement completed: Win Streaks (9 games)",
+        "text": null,
         "emptyText": "Win 9 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 9 games in a row",
         "displayCardId": "TRL_074",
@@ -286,7 +299,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -308,6 +322,7 @@
         "root": false,
         "priority": 10,
         "displayName": "Achievement completed: Win Streaks (10 games)",
+        "text": null,
         "emptyText": "Win 10 games in a row (without a tie or a loss) in Ranked Standard",
         "completedText": "You won 10 games in a row",
         "displayCardId": "TRL_074",
@@ -329,7 +344,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WIN_STREAK_LENGTH",
@@ -351,6 +367,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: druid Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against druid in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against druid in less than 12 hours",
         "displayCardId": "CRED_48",
@@ -372,7 +389,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -396,6 +414,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: druid Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against druid in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against druid in less than 12 hours",
         "displayCardId": "CRED_48",
@@ -417,7 +436,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -441,6 +461,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: druid Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against druid in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against druid in less than 12 hours",
         "displayCardId": "CRED_48",
@@ -462,7 +483,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -486,6 +508,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: druid Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against druid in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against druid in less than 12 hours",
         "displayCardId": "CRED_48",
@@ -507,7 +530,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -531,6 +555,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: druid Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against druid in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against druid in less than 12 hours",
         "displayCardId": "CRED_48",
@@ -552,7 +577,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -576,6 +602,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: druid Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against druid in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against druid in less than 12 hours",
         "displayCardId": "CRED_48",
@@ -597,7 +624,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -621,6 +649,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: hunter Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against hunter in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against hunter in less than 12 hours",
         "displayCardId": "CRED_17",
@@ -642,7 +671,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -666,6 +696,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: hunter Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against hunter in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against hunter in less than 12 hours",
         "displayCardId": "CRED_17",
@@ -687,7 +718,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -711,6 +743,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: hunter Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against hunter in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against hunter in less than 12 hours",
         "displayCardId": "CRED_17",
@@ -732,7 +765,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -756,6 +790,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: hunter Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against hunter in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against hunter in less than 12 hours",
         "displayCardId": "CRED_17",
@@ -777,7 +812,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -801,6 +837,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: hunter Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against hunter in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against hunter in less than 12 hours",
         "displayCardId": "CRED_17",
@@ -822,7 +859,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -846,6 +884,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: hunter Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against hunter in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against hunter in less than 12 hours",
         "displayCardId": "CRED_17",
@@ -867,7 +906,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -891,6 +931,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: mage Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against mage in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against mage in less than 12 hours",
         "displayCardId": "CRED_38",
@@ -912,7 +953,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -936,6 +978,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: mage Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against mage in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against mage in less than 12 hours",
         "displayCardId": "CRED_38",
@@ -957,7 +1000,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -981,6 +1025,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: mage Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against mage in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against mage in less than 12 hours",
         "displayCardId": "CRED_38",
@@ -1002,7 +1047,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1026,6 +1072,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: mage Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against mage in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against mage in less than 12 hours",
         "displayCardId": "CRED_38",
@@ -1047,7 +1094,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1071,6 +1119,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: mage Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against mage in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against mage in less than 12 hours",
         "displayCardId": "CRED_38",
@@ -1092,7 +1141,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1116,6 +1166,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: mage Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against mage in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against mage in less than 12 hours",
         "displayCardId": "CRED_38",
@@ -1137,7 +1188,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1161,6 +1213,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: paladin Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against paladin in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against paladin in less than 12 hours",
         "displayCardId": "CRED_13",
@@ -1182,7 +1235,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1206,6 +1260,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: paladin Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against paladin in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against paladin in less than 12 hours",
         "displayCardId": "CRED_13",
@@ -1227,7 +1282,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1251,6 +1307,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: paladin Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against paladin in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against paladin in less than 12 hours",
         "displayCardId": "CRED_13",
@@ -1272,7 +1329,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1296,6 +1354,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: paladin Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against paladin in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against paladin in less than 12 hours",
         "displayCardId": "CRED_13",
@@ -1317,7 +1376,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1341,6 +1401,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: paladin Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against paladin in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against paladin in less than 12 hours",
         "displayCardId": "CRED_13",
@@ -1362,7 +1423,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1386,6 +1448,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: paladin Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against paladin in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against paladin in less than 12 hours",
         "displayCardId": "CRED_13",
@@ -1407,7 +1470,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1431,6 +1495,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: priest Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against priest in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against priest in less than 12 hours",
         "displayCardId": "CRED_19",
@@ -1452,7 +1517,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1476,6 +1542,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: priest Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against priest in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against priest in less than 12 hours",
         "displayCardId": "CRED_19",
@@ -1497,7 +1564,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1521,6 +1589,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: priest Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against priest in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against priest in less than 12 hours",
         "displayCardId": "CRED_19",
@@ -1542,7 +1611,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1566,6 +1636,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: priest Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against priest in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against priest in less than 12 hours",
         "displayCardId": "CRED_19",
@@ -1587,7 +1658,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1611,6 +1683,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: priest Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against priest in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against priest in less than 12 hours",
         "displayCardId": "CRED_19",
@@ -1632,7 +1705,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1656,6 +1730,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: priest Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against priest in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against priest in less than 12 hours",
         "displayCardId": "CRED_19",
@@ -1677,7 +1752,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1701,6 +1777,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: rogue Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against rogue in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against rogue in less than 12 hours",
         "displayCardId": "CRED_01",
@@ -1722,7 +1799,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1746,6 +1824,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: rogue Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against rogue in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against rogue in less than 12 hours",
         "displayCardId": "CRED_01",
@@ -1767,7 +1846,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1791,6 +1871,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: rogue Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against rogue in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against rogue in less than 12 hours",
         "displayCardId": "CRED_01",
@@ -1812,7 +1893,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1836,6 +1918,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: rogue Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against rogue in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against rogue in less than 12 hours",
         "displayCardId": "CRED_01",
@@ -1857,7 +1940,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1881,6 +1965,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: rogue Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against rogue in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against rogue in less than 12 hours",
         "displayCardId": "CRED_01",
@@ -1902,7 +1987,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1926,6 +2012,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: rogue Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against rogue in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against rogue in less than 12 hours",
         "displayCardId": "CRED_01",
@@ -1947,7 +2034,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -1971,6 +2059,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: shaman Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against shaman in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against shaman in less than 12 hours",
         "displayCardId": "CRED_22",
@@ -1992,7 +2081,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2016,6 +2106,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: shaman Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against shaman in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against shaman in less than 12 hours",
         "displayCardId": "CRED_22",
@@ -2037,7 +2128,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2061,6 +2153,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: shaman Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against shaman in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against shaman in less than 12 hours",
         "displayCardId": "CRED_22",
@@ -2082,7 +2175,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2106,6 +2200,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: shaman Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against shaman in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against shaman in less than 12 hours",
         "displayCardId": "CRED_22",
@@ -2127,7 +2222,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2151,6 +2247,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: shaman Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against shaman in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against shaman in less than 12 hours",
         "displayCardId": "CRED_22",
@@ -2172,7 +2269,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2196,6 +2294,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: shaman Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against shaman in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against shaman in less than 12 hours",
         "displayCardId": "CRED_22",
@@ -2217,7 +2316,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2241,6 +2341,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: warlock Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against warlock in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against warlock in less than 12 hours",
         "displayCardId": "CRED_29",
@@ -2262,7 +2363,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2286,6 +2388,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: warlock Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against warlock in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against warlock in less than 12 hours",
         "displayCardId": "CRED_29",
@@ -2307,7 +2410,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2331,6 +2435,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: warlock Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against warlock in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against warlock in less than 12 hours",
         "displayCardId": "CRED_29",
@@ -2352,7 +2457,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2376,6 +2482,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: warlock Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against warlock in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against warlock in less than 12 hours",
         "displayCardId": "CRED_29",
@@ -2397,7 +2504,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2421,6 +2529,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: warlock Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against warlock in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against warlock in less than 12 hours",
         "displayCardId": "CRED_29",
@@ -2442,7 +2551,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2466,6 +2576,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: warlock Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against warlock in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against warlock in less than 12 hours",
         "displayCardId": "CRED_29",
@@ -2487,7 +2598,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2511,6 +2623,7 @@
         "root": true,
         "priority": 3,
         "displayName": "Achievement completed: warrior Nemesis (3 games)",
+        "text": null,
         "emptyText": "Win 3 games against warrior in less than 12 hours in Ranked Standard",
         "completedText": "You won 3 games against warrior in less than 12 hours",
         "displayCardId": "CRED_09",
@@ -2532,7 +2645,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2556,6 +2670,7 @@
         "root": false,
         "priority": 4,
         "displayName": "Achievement completed: warrior Nemesis (4 games)",
+        "text": null,
         "emptyText": "Win 4 games against warrior in less than 12 hours in Ranked Standard",
         "completedText": "You won 4 games against warrior in less than 12 hours",
         "displayCardId": "CRED_09",
@@ -2577,7 +2692,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2601,6 +2717,7 @@
         "root": false,
         "priority": 5,
         "displayName": "Achievement completed: warrior Nemesis (5 games)",
+        "text": null,
         "emptyText": "Win 5 games against warrior in less than 12 hours in Ranked Standard",
         "completedText": "You won 5 games against warrior in less than 12 hours",
         "displayCardId": "CRED_09",
@@ -2622,7 +2739,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2646,6 +2764,7 @@
         "root": false,
         "priority": 6,
         "displayName": "Achievement completed: warrior Nemesis (6 games)",
+        "text": null,
         "emptyText": "Win 6 games against warrior in less than 12 hours in Ranked Standard",
         "completedText": "You won 6 games against warrior in less than 12 hours",
         "displayCardId": "CRED_09",
@@ -2667,7 +2786,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2691,6 +2811,7 @@
         "root": false,
         "priority": 7,
         "displayName": "Achievement completed: warrior Nemesis (7 games)",
+        "text": null,
         "emptyText": "Win 7 games against warrior in less than 12 hours in Ranked Standard",
         "completedText": "You won 7 games against warrior in less than 12 hours",
         "displayCardId": "CRED_09",
@@ -2712,7 +2833,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
@@ -2736,6 +2858,7 @@
         "root": false,
         "priority": 8,
         "displayName": "Achievement completed: warrior Nemesis (8 games)",
+        "text": null,
         "emptyText": "Win 8 games against warrior in less than 12 hours in Ranked Standard",
         "completedText": "You won 8 games against warrior in less than 12 hours",
         "displayCardId": "CRED_09",
@@ -2757,7 +2880,8 @@
                 ]
             },
             {
-                "type": "GAME_WON"
+                "type": "GAME_WON",
+                "values": null
             },
             {
                 "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
