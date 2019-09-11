@@ -30,6 +30,7 @@ import { TotalDamageDealtReq } from '../requirements/total-damage-dealt-req';
 import { TotalDamageTakenReq } from '../requirements/total-damage-taken-req';
 import { TotalDiscardedCardsReq } from '../requirements/total-discarded-cards-req';
 import { TotalHeroHealReq } from '../requirements/total-hero-heal-req';
+import { WinAgsinstClassInRankedStandardInLimitedTimeReq } from '../requirements/win-against-class-in-ranked-standard-in-limited-time-req';
 import { WinStreakReq } from '../requirements/win-streak-req';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
@@ -81,6 +82,7 @@ export class ChallengeBuilderService {
 			case 'MINIONS_CONTROLLED_DURING_TURN': return MinionsControlledDuringTurnReq.create(rawReq);
 			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
 			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
+			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {

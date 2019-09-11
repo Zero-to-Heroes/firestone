@@ -1,274 +1,2776 @@
 [
-	{
-		"id": "competitive_ladder_win_streak_3",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": true,
-		"priority": 3,
-		"displayName": "Achievement completed: Win Streaks (3 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 3 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["3", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_4",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 4,
-		"displayName": "Achievement completed: Win Streaks (4 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 4 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["4", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_5",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 5,
-		"displayName": "Achievement completed: Win Streaks (5 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 5 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["5", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_6",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 6,
-		"displayName": "Achievement completed: Win Streaks (6 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 6 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["6", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_7",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 7,
-		"displayName": "Achievement completed: Win Streaks (7 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 7 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["7", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_8",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 8,
-		"displayName": "Achievement completed: Win Streaks (8 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 8 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["8", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_9",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 9,
-		"displayName": "Achievement completed: Win Streaks (9 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 9 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["9", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "competitive_ladder_win_streak_10",
-		"type": "competitive_ladder_win_streak",
-		"name": "Win Streaks",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": 10,
-		"displayName": "Achievement completed: Win Streaks (10 games)",
-		"emptyText": "Win several games in a row (without a tie or a loss) in Ranked Standard",
-		"completedText": "You won 10 games in a row",
-		"displayCardId": "TRL_074",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "WIN_STREAK_LENGTH",
-				"values": ["10", "AT_LEAST"]
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	}
+    {
+        "id": "competitive_ladder_win_streak_3",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: Win Streaks (3 games)",
+        "emptyText": "Win 3 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 3 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "3",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_4",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: Win Streaks (4 games)",
+        "emptyText": "Win 4 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 4 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "4",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_5",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: Win Streaks (5 games)",
+        "emptyText": "Win 5 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 5 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "5",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_6",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: Win Streaks (6 games)",
+        "emptyText": "Win 6 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 6 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "6",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_7",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: Win Streaks (7 games)",
+        "emptyText": "Win 7 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 7 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "7",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_8",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: Win Streaks (8 games)",
+        "emptyText": "Win 8 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 8 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_9",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 9,
+        "displayName": "Achievement completed: Win Streaks (9 games)",
+        "emptyText": "Win 9 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 9 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "9",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_win_streak_10",
+        "type": "competitive_ladder_win_streak",
+        "name": "Win Streaks",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 10,
+        "displayName": "Achievement completed: Win Streaks (10 games)",
+        "emptyText": "Win 10 games in a row (without a tie or a loss) in Ranked Standard",
+        "completedText": "You won 10 games in a row",
+        "displayCardId": "TRL_074",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WIN_STREAK_LENGTH",
+                "values": [
+                    "10",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_druid_3",
+        "type": "competitive_ladder_nemesis_druid",
+        "name": "Nemesis - Druid",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: druid Nemesis (3 games)",
+        "emptyText": "Win 3 games against druid in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against druid in less than 12 hours",
+        "displayCardId": "CRED_48",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "druid",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_druid_4",
+        "type": "competitive_ladder_nemesis_druid",
+        "name": "Nemesis - Druid",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: druid Nemesis (4 games)",
+        "emptyText": "Win 4 games against druid in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against druid in less than 12 hours",
+        "displayCardId": "CRED_48",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "druid",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_druid_5",
+        "type": "competitive_ladder_nemesis_druid",
+        "name": "Nemesis - Druid",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: druid Nemesis (5 games)",
+        "emptyText": "Win 5 games against druid in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against druid in less than 12 hours",
+        "displayCardId": "CRED_48",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "druid",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_druid_6",
+        "type": "competitive_ladder_nemesis_druid",
+        "name": "Nemesis - Druid",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: druid Nemesis (6 games)",
+        "emptyText": "Win 6 games against druid in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against druid in less than 12 hours",
+        "displayCardId": "CRED_48",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "druid",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_druid_7",
+        "type": "competitive_ladder_nemesis_druid",
+        "name": "Nemesis - Druid",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: druid Nemesis (7 games)",
+        "emptyText": "Win 7 games against druid in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against druid in less than 12 hours",
+        "displayCardId": "CRED_48",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "druid",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_druid_8",
+        "type": "competitive_ladder_nemesis_druid",
+        "name": "Nemesis - Druid",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: druid Nemesis (8 games)",
+        "emptyText": "Win 8 games against druid in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against druid in less than 12 hours",
+        "displayCardId": "CRED_48",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "druid",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_hunter_3",
+        "type": "competitive_ladder_nemesis_hunter",
+        "name": "Nemesis - Hunter",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: hunter Nemesis (3 games)",
+        "emptyText": "Win 3 games against hunter in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against hunter in less than 12 hours",
+        "displayCardId": "CRED_17",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "hunter",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_hunter_4",
+        "type": "competitive_ladder_nemesis_hunter",
+        "name": "Nemesis - Hunter",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: hunter Nemesis (4 games)",
+        "emptyText": "Win 4 games against hunter in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against hunter in less than 12 hours",
+        "displayCardId": "CRED_17",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "hunter",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_hunter_5",
+        "type": "competitive_ladder_nemesis_hunter",
+        "name": "Nemesis - Hunter",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: hunter Nemesis (5 games)",
+        "emptyText": "Win 5 games against hunter in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against hunter in less than 12 hours",
+        "displayCardId": "CRED_17",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "hunter",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_hunter_6",
+        "type": "competitive_ladder_nemesis_hunter",
+        "name": "Nemesis - Hunter",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: hunter Nemesis (6 games)",
+        "emptyText": "Win 6 games against hunter in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against hunter in less than 12 hours",
+        "displayCardId": "CRED_17",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "hunter",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_hunter_7",
+        "type": "competitive_ladder_nemesis_hunter",
+        "name": "Nemesis - Hunter",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: hunter Nemesis (7 games)",
+        "emptyText": "Win 7 games against hunter in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against hunter in less than 12 hours",
+        "displayCardId": "CRED_17",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "hunter",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_hunter_8",
+        "type": "competitive_ladder_nemesis_hunter",
+        "name": "Nemesis - Hunter",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: hunter Nemesis (8 games)",
+        "emptyText": "Win 8 games against hunter in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against hunter in less than 12 hours",
+        "displayCardId": "CRED_17",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "hunter",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_mage_3",
+        "type": "competitive_ladder_nemesis_mage",
+        "name": "Nemesis - Mage",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: mage Nemesis (3 games)",
+        "emptyText": "Win 3 games against mage in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against mage in less than 12 hours",
+        "displayCardId": "CRED_38",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "mage",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_mage_4",
+        "type": "competitive_ladder_nemesis_mage",
+        "name": "Nemesis - Mage",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: mage Nemesis (4 games)",
+        "emptyText": "Win 4 games against mage in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against mage in less than 12 hours",
+        "displayCardId": "CRED_38",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "mage",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_mage_5",
+        "type": "competitive_ladder_nemesis_mage",
+        "name": "Nemesis - Mage",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: mage Nemesis (5 games)",
+        "emptyText": "Win 5 games against mage in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against mage in less than 12 hours",
+        "displayCardId": "CRED_38",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "mage",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_mage_6",
+        "type": "competitive_ladder_nemesis_mage",
+        "name": "Nemesis - Mage",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: mage Nemesis (6 games)",
+        "emptyText": "Win 6 games against mage in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against mage in less than 12 hours",
+        "displayCardId": "CRED_38",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "mage",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_mage_7",
+        "type": "competitive_ladder_nemesis_mage",
+        "name": "Nemesis - Mage",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: mage Nemesis (7 games)",
+        "emptyText": "Win 7 games against mage in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against mage in less than 12 hours",
+        "displayCardId": "CRED_38",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "mage",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_mage_8",
+        "type": "competitive_ladder_nemesis_mage",
+        "name": "Nemesis - Mage",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: mage Nemesis (8 games)",
+        "emptyText": "Win 8 games against mage in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against mage in less than 12 hours",
+        "displayCardId": "CRED_38",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "mage",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_paladin_3",
+        "type": "competitive_ladder_nemesis_paladin",
+        "name": "Nemesis - Paladin",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: paladin Nemesis (3 games)",
+        "emptyText": "Win 3 games against paladin in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against paladin in less than 12 hours",
+        "displayCardId": "CRED_13",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "paladin",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_paladin_4",
+        "type": "competitive_ladder_nemesis_paladin",
+        "name": "Nemesis - Paladin",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: paladin Nemesis (4 games)",
+        "emptyText": "Win 4 games against paladin in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against paladin in less than 12 hours",
+        "displayCardId": "CRED_13",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "paladin",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_paladin_5",
+        "type": "competitive_ladder_nemesis_paladin",
+        "name": "Nemesis - Paladin",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: paladin Nemesis (5 games)",
+        "emptyText": "Win 5 games against paladin in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against paladin in less than 12 hours",
+        "displayCardId": "CRED_13",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "paladin",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_paladin_6",
+        "type": "competitive_ladder_nemesis_paladin",
+        "name": "Nemesis - Paladin",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: paladin Nemesis (6 games)",
+        "emptyText": "Win 6 games against paladin in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against paladin in less than 12 hours",
+        "displayCardId": "CRED_13",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "paladin",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_paladin_7",
+        "type": "competitive_ladder_nemesis_paladin",
+        "name": "Nemesis - Paladin",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: paladin Nemesis (7 games)",
+        "emptyText": "Win 7 games against paladin in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against paladin in less than 12 hours",
+        "displayCardId": "CRED_13",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "paladin",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_paladin_8",
+        "type": "competitive_ladder_nemesis_paladin",
+        "name": "Nemesis - Paladin",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: paladin Nemesis (8 games)",
+        "emptyText": "Win 8 games against paladin in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against paladin in less than 12 hours",
+        "displayCardId": "CRED_13",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "paladin",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_priest_3",
+        "type": "competitive_ladder_nemesis_priest",
+        "name": "Nemesis - Priest",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: priest Nemesis (3 games)",
+        "emptyText": "Win 3 games against priest in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against priest in less than 12 hours",
+        "displayCardId": "CRED_19",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "priest",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_priest_4",
+        "type": "competitive_ladder_nemesis_priest",
+        "name": "Nemesis - Priest",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: priest Nemesis (4 games)",
+        "emptyText": "Win 4 games against priest in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against priest in less than 12 hours",
+        "displayCardId": "CRED_19",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "priest",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_priest_5",
+        "type": "competitive_ladder_nemesis_priest",
+        "name": "Nemesis - Priest",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: priest Nemesis (5 games)",
+        "emptyText": "Win 5 games against priest in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against priest in less than 12 hours",
+        "displayCardId": "CRED_19",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "priest",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_priest_6",
+        "type": "competitive_ladder_nemesis_priest",
+        "name": "Nemesis - Priest",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: priest Nemesis (6 games)",
+        "emptyText": "Win 6 games against priest in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against priest in less than 12 hours",
+        "displayCardId": "CRED_19",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "priest",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_priest_7",
+        "type": "competitive_ladder_nemesis_priest",
+        "name": "Nemesis - Priest",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: priest Nemesis (7 games)",
+        "emptyText": "Win 7 games against priest in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against priest in less than 12 hours",
+        "displayCardId": "CRED_19",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "priest",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_priest_8",
+        "type": "competitive_ladder_nemesis_priest",
+        "name": "Nemesis - Priest",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: priest Nemesis (8 games)",
+        "emptyText": "Win 8 games against priest in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against priest in less than 12 hours",
+        "displayCardId": "CRED_19",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "priest",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_rogue_3",
+        "type": "competitive_ladder_nemesis_rogue",
+        "name": "Nemesis - Rogue",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: rogue Nemesis (3 games)",
+        "emptyText": "Win 3 games against rogue in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against rogue in less than 12 hours",
+        "displayCardId": "CRED_01",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "rogue",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_rogue_4",
+        "type": "competitive_ladder_nemesis_rogue",
+        "name": "Nemesis - Rogue",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: rogue Nemesis (4 games)",
+        "emptyText": "Win 4 games against rogue in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against rogue in less than 12 hours",
+        "displayCardId": "CRED_01",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "rogue",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_rogue_5",
+        "type": "competitive_ladder_nemesis_rogue",
+        "name": "Nemesis - Rogue",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: rogue Nemesis (5 games)",
+        "emptyText": "Win 5 games against rogue in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against rogue in less than 12 hours",
+        "displayCardId": "CRED_01",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "rogue",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_rogue_6",
+        "type": "competitive_ladder_nemesis_rogue",
+        "name": "Nemesis - Rogue",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: rogue Nemesis (6 games)",
+        "emptyText": "Win 6 games against rogue in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against rogue in less than 12 hours",
+        "displayCardId": "CRED_01",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "rogue",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_rogue_7",
+        "type": "competitive_ladder_nemesis_rogue",
+        "name": "Nemesis - Rogue",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: rogue Nemesis (7 games)",
+        "emptyText": "Win 7 games against rogue in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against rogue in less than 12 hours",
+        "displayCardId": "CRED_01",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "rogue",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_rogue_8",
+        "type": "competitive_ladder_nemesis_rogue",
+        "name": "Nemesis - Rogue",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: rogue Nemesis (8 games)",
+        "emptyText": "Win 8 games against rogue in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against rogue in less than 12 hours",
+        "displayCardId": "CRED_01",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "rogue",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_shaman_3",
+        "type": "competitive_ladder_nemesis_shaman",
+        "name": "Nemesis - Shaman",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: shaman Nemesis (3 games)",
+        "emptyText": "Win 3 games against shaman in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against shaman in less than 12 hours",
+        "displayCardId": "CRED_22",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "shaman",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_shaman_4",
+        "type": "competitive_ladder_nemesis_shaman",
+        "name": "Nemesis - Shaman",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: shaman Nemesis (4 games)",
+        "emptyText": "Win 4 games against shaman in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against shaman in less than 12 hours",
+        "displayCardId": "CRED_22",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "shaman",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_shaman_5",
+        "type": "competitive_ladder_nemesis_shaman",
+        "name": "Nemesis - Shaman",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: shaman Nemesis (5 games)",
+        "emptyText": "Win 5 games against shaman in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against shaman in less than 12 hours",
+        "displayCardId": "CRED_22",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "shaman",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_shaman_6",
+        "type": "competitive_ladder_nemesis_shaman",
+        "name": "Nemesis - Shaman",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: shaman Nemesis (6 games)",
+        "emptyText": "Win 6 games against shaman in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against shaman in less than 12 hours",
+        "displayCardId": "CRED_22",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "shaman",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_shaman_7",
+        "type": "competitive_ladder_nemesis_shaman",
+        "name": "Nemesis - Shaman",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: shaman Nemesis (7 games)",
+        "emptyText": "Win 7 games against shaman in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against shaman in less than 12 hours",
+        "displayCardId": "CRED_22",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "shaman",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_shaman_8",
+        "type": "competitive_ladder_nemesis_shaman",
+        "name": "Nemesis - Shaman",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: shaman Nemesis (8 games)",
+        "emptyText": "Win 8 games against shaman in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against shaman in less than 12 hours",
+        "displayCardId": "CRED_22",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "shaman",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warlock_3",
+        "type": "competitive_ladder_nemesis_warlock",
+        "name": "Nemesis - Warlock",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: warlock Nemesis (3 games)",
+        "emptyText": "Win 3 games against warlock in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against warlock in less than 12 hours",
+        "displayCardId": "CRED_29",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "warlock",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warlock_4",
+        "type": "competitive_ladder_nemesis_warlock",
+        "name": "Nemesis - Warlock",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: warlock Nemesis (4 games)",
+        "emptyText": "Win 4 games against warlock in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against warlock in less than 12 hours",
+        "displayCardId": "CRED_29",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "warlock",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warlock_5",
+        "type": "competitive_ladder_nemesis_warlock",
+        "name": "Nemesis - Warlock",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: warlock Nemesis (5 games)",
+        "emptyText": "Win 5 games against warlock in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against warlock in less than 12 hours",
+        "displayCardId": "CRED_29",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "warlock",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warlock_6",
+        "type": "competitive_ladder_nemesis_warlock",
+        "name": "Nemesis - Warlock",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: warlock Nemesis (6 games)",
+        "emptyText": "Win 6 games against warlock in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against warlock in less than 12 hours",
+        "displayCardId": "CRED_29",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "warlock",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warlock_7",
+        "type": "competitive_ladder_nemesis_warlock",
+        "name": "Nemesis - Warlock",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: warlock Nemesis (7 games)",
+        "emptyText": "Win 7 games against warlock in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against warlock in less than 12 hours",
+        "displayCardId": "CRED_29",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "warlock",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warlock_8",
+        "type": "competitive_ladder_nemesis_warlock",
+        "name": "Nemesis - Warlock",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: warlock Nemesis (8 games)",
+        "emptyText": "Win 8 games against warlock in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against warlock in less than 12 hours",
+        "displayCardId": "CRED_29",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "warlock",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warrior_3",
+        "type": "competitive_ladder_nemesis_warrior",
+        "name": "Nemesis - Warrior",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 3,
+        "displayName": "Achievement completed: warrior Nemesis (3 games)",
+        "emptyText": "Win 3 games against warrior in less than 12 hours in Ranked Standard",
+        "completedText": "You won 3 games against warrior in less than 12 hours",
+        "displayCardId": "CRED_09",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 19,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "3",
+                    "AT_LEAST",
+                    "warrior",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warrior_4",
+        "type": "competitive_ladder_nemesis_warrior",
+        "name": "Nemesis - Warrior",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 4,
+        "displayName": "Achievement completed: warrior Nemesis (4 games)",
+        "emptyText": "Win 4 games against warrior in less than 12 hours in Ranked Standard",
+        "completedText": "You won 4 games against warrior in less than 12 hours",
+        "displayCardId": "CRED_09",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 22,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "4",
+                    "AT_LEAST",
+                    "warrior",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warrior_5",
+        "type": "competitive_ladder_nemesis_warrior",
+        "name": "Nemesis - Warrior",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 5,
+        "displayName": "Achievement completed: warrior Nemesis (5 games)",
+        "emptyText": "Win 5 games against warrior in less than 12 hours in Ranked Standard",
+        "completedText": "You won 5 games against warrior in less than 12 hours",
+        "displayCardId": "CRED_09",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 25,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "5",
+                    "AT_LEAST",
+                    "warrior",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warrior_6",
+        "type": "competitive_ladder_nemesis_warrior",
+        "name": "Nemesis - Warrior",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 6,
+        "displayName": "Achievement completed: warrior Nemesis (6 games)",
+        "emptyText": "Win 6 games against warrior in less than 12 hours in Ranked Standard",
+        "completedText": "You won 6 games against warrior in less than 12 hours",
+        "displayCardId": "CRED_09",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 28,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "6",
+                    "AT_LEAST",
+                    "warrior",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warrior_7",
+        "type": "competitive_ladder_nemesis_warrior",
+        "name": "Nemesis - Warrior",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 7,
+        "displayName": "Achievement completed: warrior Nemesis (7 games)",
+        "emptyText": "Win 7 games against warrior in less than 12 hours in Ranked Standard",
+        "completedText": "You won 7 games against warrior in less than 12 hours",
+        "displayCardId": "CRED_09",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 31,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "7",
+                    "AT_LEAST",
+                    "warrior",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "competitive_ladder_nemesis_warrior_8",
+        "type": "competitive_ladder_nemesis_warrior",
+        "name": "Nemesis - Warrior",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": 8,
+        "displayName": "Achievement completed: warrior Nemesis (8 games)",
+        "emptyText": "Win 8 games against warrior in less than 12 hours in Ranked Standard",
+        "completedText": "You won 8 games against warrior in less than 12 hours",
+        "displayCardId": "CRED_09",
+        "displayCardType": "minion",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 34,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME",
+                "values": [
+                    "8",
+                    "AT_LEAST",
+                    "warrior",
+                    "12"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    }
 ]
