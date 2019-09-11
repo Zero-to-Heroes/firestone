@@ -5,6 +5,7 @@ import { Events } from './events.service';
 import { LogsUploaderService } from './logs-uploader.service';
 import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
+import { ProcessingQueue } from './processing-queue.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
 @Injectable()
@@ -15,10 +16,12 @@ export class GameEvents {
 
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
+	private plugin;
 
-	private logLines: string[] = [];
-	private processingLines = false;
-	private intervalHandle;
+	// private logLines: string[] = [];
+	// private processingLines = false;
+	// private intervalHandle;
+	private processingQueue = new ProcessingQueue<string>(eventQueue => this.processQueue(eventQueue), 500, 'game-events');
 
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
@@ -31,18 +34,18 @@ export class GameEvents {
 	}
 	async init() {
 		console.log('init game events monitor');
-		const plugin = await this.gameEventsPlugin.get();
-		if (plugin) {
-			plugin.onGlobalEvent.addListener((first: string, second: string) => {
+		this.plugin = await this.gameEventsPlugin.get();
+		if (this.plugin) {
+			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
 				if (first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1) {
 					this.uploadLogsAndSendException(first, second);
 				}
 			});
-			plugin.onGameEvent.addListener(gameEvent => {
+			this.plugin.onGameEvent.addListener(gameEvent => {
 				this.dispatchGameEvent(JSON.parse(gameEvent));
 			});
-			plugin.initRealtimeLogConversion(() => {
+			this.plugin.initRealtimeLogConversion(() => {
 				console.log('[game-events] real-time log processing ready to go');
 			});
 		}
@@ -62,37 +65,22 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-
-		this.intervalHandle = setInterval(() => {
-			if (this.processingLines) {
-				return;
-			}
-			this.processingLines = true;
-			let toProcess: string[] = [];
-			let shouldDebug = false;
-			if (this.logLines.some(data => data.indexOf('CREATE_GAME') !== -1)) {
-				console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
-				shouldDebug = true;
-			}
-			while (this.logLines.length > 0) {
-				toProcess = [...toProcess, ...this.logLines.splice(0, this.logLines.length)];
-			}
-			if (shouldDebug) {
-				console.log('[game-events] build log logs to feed to the plugin');
-			}
-			if (toProcess.length > 0) {
-				// console.log('processing start', toProcess);
-				plugin.realtimeLogProcessing(toProcess, () => {
-					this.processingLines = false;
-				});
-			} else {
-				this.processingLines = false;
-			}
-		}, 500);
 	}
 
-	public cleanup() {
-		clearInterval(this.intervalHandle);
+	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
+		if (eventQueue.some(data => data.indexOf('CREATE_GAME') !== -1)) {
+			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
+		}
+		await this.processLogs(eventQueue);
+		return [];
+	}
+
+	private async processLogs(eventQueue: readonly string[]): Promise<void> {
+		return new Promise<void>(resolve => {
+			this.plugin.realtimeLogProcessing(eventQueue, () => {
+				resolve();
+			});
+		});
 	}
 
 	public async dispatchGameEvent(gameEvent) {
@@ -391,7 +379,7 @@ export class GameEvents {
 			return;
 		}
 
-		this.logLines.push(data);
+		this.processingQueue.enqueue(data);
 
 		if (data.indexOf('CREATE_GAME') !== -1) {
 			console.log('[game-events] received CREATE_GAME log', data);
@@ -415,7 +403,6 @@ export class GameEvents {
 					logFileKey: s3LogFileKey,
 					pluginLogsFileKey: pluginLogsFileKey,
 					firestoneLogs: firstoneLogsKey,
-					typeScriptLogLines: this.logLines,
 				},
 			});
 			console.log('uploaded event to sentry');
