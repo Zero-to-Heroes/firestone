@@ -112,6 +112,7 @@ export class CardsComponent implements AfterViewInit {
 	readonly RARITY_FILTER_LEGENDARY = 'legendary';
 
 	readonly CLASS_FILTER_ALL = 'class-all';
+	readonly CLASS_FILTER_NEUTRAL = 'neutral';
 	readonly CLASS_DRUID = 'druid';
 	readonly CLASS_HUNTER = 'hunter';
 	readonly CLASS_MAGE = 'mage';
@@ -139,6 +140,7 @@ export class CardsComponent implements AfterViewInit {
 
 	classSelectOptions: IOption[] = [
 		{ label: this.labelFor(this.CLASS_FILTER_ALL), value: this.CLASS_FILTER_ALL },
+		{ label: this.labelFor(this.CLASS_FILTER_NEUTRAL), value: this.CLASS_FILTER_NEUTRAL },
 		{ label: this.labelFor(this.CLASS_DRUID), value: this.CLASS_DRUID },
 		{ label: this.labelFor(this.CLASS_HUNTER), value: this.CLASS_HUNTER },
 		{ label: this.labelFor(this.CLASS_MAGE), value: this.CLASS_MAGE },
@@ -326,6 +328,8 @@ export class CardsComponent implements AfterViewInit {
 
 			case this.CLASS_FILTER_ALL:
 				return 'All classes';
+			case this.CLASS_FILTER_NEUTRAL:
+				return 'Neutral';
 			case this.CLASS_DRUID:
 				return 'Druid';
 			case this.CLASS_HUNTER:
