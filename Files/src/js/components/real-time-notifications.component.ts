@@ -1,5 +1,4 @@
-import { Component, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ViewEncapsulation } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation, ViewRef } from '@angular/core';
 import { RealTimeNotificationService } from '../services/real-time-notifications.service';
 
 @Component({
@@ -22,17 +21,15 @@ export class RealTimeNotificationsComponent implements AfterViewInit {
 	currentNotificationIndex = 0;
 	notifications: any[];
 
-	constructor(private notificationService: RealTimeNotificationService, private cdr: ChangeDetectorRef) {
-		setInterval(() => this.refresh(), 15 * 1000);
-		setTimeout(() => this.refresh(), 1000);
-	}
+	constructor(private notificationService: RealTimeNotificationService, private cdr: ChangeDetectorRef) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		this.cdr.detach();
+		await this.getNotifications();
 	}
 
-	private refresh() {
-		this.notifications = this.notificationService.notifications;
+	private async getNotifications() {
+		this.notifications = await this.notificationService.getStatus();
 		if (this.notifications) {
 			this.currentNotificationIndex = (this.currentNotificationIndex + 1) % this.notifications.length;
 		}

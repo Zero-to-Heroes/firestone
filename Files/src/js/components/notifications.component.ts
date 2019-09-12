@@ -17,6 +17,7 @@ import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collec
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { Message } from '../services/notifications.service';
 import { OverwolfService } from '../services/overwolf.service';
+import { ProcessingQueue } from '../services/processing-queue.service';
 
 @Component({
 	selector: 'notifications',
@@ -52,8 +53,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
 
-	private pendingNotificationQueue: Message[] = [];
-	private processingNotifs = false;
+	private processingQueue = new ProcessingQueue<Message>(eventQueue => this.processQueue(eventQueue), 200, 'notifications');
 
 	constructor(
 		private notificationService: NotificationsService,
@@ -68,7 +68,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
 			const messageObject: Message = JSON.parse(message.content);
 			console.log('received message in notification window', messageObject.notificationId, messageObject.theClass);
-			this.pendingNotificationQueue.push(messageObject);
+			this.processingQueue.enqueue(messageObject);
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
 			console.log('state changed, resize?', message);
@@ -79,19 +79,12 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
 
-		setInterval(async () => {
-			if (this.processingNotifs) {
-				return;
-			}
-			this.processingNotifs = true;
-			let toProcess: Message;
-			if (this.pendingNotificationQueue.length > 0) {
-				toProcess = this.pendingNotificationQueue.shift();
-				await this.sendNotification(toProcess);
-			}
-			this.processingNotifs = false;
-		}, 50);
+	private async processQueue(eventQueue: readonly Message[]): Promise<readonly Message[]> {
+		const event = eventQueue[0];
+		await this.sendNotification(event);
+		return eventQueue.slice(1);
 	}
 
 	ngOnDestroy(): void {

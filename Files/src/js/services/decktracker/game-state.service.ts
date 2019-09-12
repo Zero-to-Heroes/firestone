@@ -89,16 +89,6 @@ export class GameStateService {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
-		// setInterval(() => {
-		// 	console.log('interval - gs events');
-		// 	// if (!this.deckParser.currentDeck) {
-		// 	// 	return;
-		// 	// }
-		// 	let gameEvent: GameEvent;
-		// 	while ((gameEvent = this.eventQueue.dequeue())) {
-		// 		this.processEvent(gameEvent);
-		// 	}
-		// }, 100);
 		// Reset the deck if it exists
 		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
 	}

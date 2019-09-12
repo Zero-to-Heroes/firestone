@@ -87,6 +87,18 @@ export class OverwolfService {
 		overwolf.settings.registerHotKey(hotkey, callback);
 	}
 
+	public addHotkeyChangedListener(callback: (message: any) => void): (message: any) => void {
+		const listener = message => {
+			callback(message);
+		};
+		overwolf.settings.OnHotKeyChanged.addListener(listener);
+		return listener;
+	}
+
+	public removeHotkeyChangedListener(listener: (message: any) => void): void {
+		overwolf.settings.OnHotKeyChanged.removeListener(listener);
+	}
+
 	public addMouseUpListener(callback) {
 		overwolf.games.inputTracking.onMouseUp.addListener(callback);
 	}

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
 @Injectable()
 export class RealTimeNotificationService {
@@ -7,19 +7,19 @@ export class RealTimeNotificationService {
 
 	public notifications: string[];
 
-	constructor(private http: HttpClient) {
-		console.log('init real time notifications');
-		this.getStatus();
-	}
+	constructor(private http: HttpClient) {}
 
-	private getStatus() {
-		console.log('getting status');
-		this.http.get(this.URL).subscribe((res: any) => {
-			if (res.ok) {
-				const status = JSON.parse(res._body);
-				this.notifications = status[0].status;
-				console.log('received status', this.notifications);
-			}
+	public async getStatus(): Promise<string[]> {
+		return new Promise<string[]>(resolve => {
+			console.log('getting status');
+			this.http.get(this.URL).subscribe((res: any) => {
+				if (res.ok) {
+					const status = JSON.parse(res._body);
+					this.notifications = status[0].status;
+					console.log('received status', this.notifications);
+				}
+				resolve(this.notifications);
+			});
 		});
 	}
 }

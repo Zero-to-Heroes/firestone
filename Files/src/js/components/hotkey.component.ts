@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewEncapsulation, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -10,19 +10,24 @@ import { OverwolfService } from '../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,
 })
-export class HotkeyComponent implements AfterViewInit {
+export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	hotkeyHtml = '';
 
 	private hotkey = 'Alt+C';
+	private hotkeyChangedListener;
 
 	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
 		this.cdr.detach();
 		this.detectHotKey();
-		setInterval(() => {
+		this.hotkeyChangedListener = this.ow.addHotkeyChangedListener(() => {
 			this.detectHotKey();
-		}, 5000);
+		});
+	}
+
+	ngOnDestroy() {
+		this.ow.removeHotkeyChangedListener(this.hotkeyChangedListener);
 	}
 
 	private async detectHotKey() {
