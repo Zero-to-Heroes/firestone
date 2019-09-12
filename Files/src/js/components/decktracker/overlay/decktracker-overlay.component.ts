@@ -149,7 +149,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(event => {
-			if (event) {
+			if (
+				event &&
+				this.gameState &&
+				this.gameState.playerDeck &&
+				this.gameState.playerDeck.deckList &&
+				this.gameState.playerDeck.deckList.length > 0
+			) {
 				this.restoreWindow();
 			} else {
 				this.hideWindow();
