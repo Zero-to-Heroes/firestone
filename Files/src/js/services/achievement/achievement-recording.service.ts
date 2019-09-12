@@ -35,7 +35,7 @@ export class AchievementRecordingService {
 			this.logger.debug('[achievements-recording] Already recorded the max number of achievements', achievement.replayInfo);
 			return false;
 		}
-		this.logger.debug('[achievements-recording] Will record', achievement);
+		this.logger.debug('[achievements-recording] Will record', achievement.id);
 		return true;
 	}
 }

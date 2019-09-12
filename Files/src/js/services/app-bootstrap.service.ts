@@ -104,12 +104,12 @@ export class AppBootstrapService {
 			}
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			console.log('updated game status', res);
+			console.log('updated game status');
 			if (this.exitGame(res) && !this.closing) {
 				console.log('left game, closing app');
 				this.closeApp();
 			} else if (await this.ow.inGame()) {
-				console.log('game is running, showing loading screen', res);
+				console.log('game is running, showing loading screen');
 				this.showLoadingScreen();
 			}
 		});

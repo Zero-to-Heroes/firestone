@@ -36,7 +36,7 @@ export class GameStatsUpdaterService {
 		// the new stat will be available on the remote db
 		const gameStat: GameStat = this.buildGameStat();
 		const newStats: readonly GameStat[] = [gameStat, ...gameStats.stats];
-		this.logger.debug('[game-stats-updater] built new game stats', newStats);
+		this.logger.debug('[game-stats-updater] built new game stats');
 		const result = Object.assign(new GameStats(), gameStats, {
 			stats: newStats,
 		} as GameStats);

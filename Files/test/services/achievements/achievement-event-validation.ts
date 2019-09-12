@@ -1,7 +1,9 @@
 import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { RawAchievement } from '../../../src/js/models/achievement/raw-achievement';
+import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
 import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
 import { AchievementsMonitor } from '../../../src/js/services/achievement/achievements-monitor.service';
+import { AchievementsStorageService } from '../../../src/js/services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../../src/js/services/achievement/data/achievements-loader.service';
 import { GameParserService } from '../../../src/js/services/endgame/game-parser.service';
@@ -71,8 +73,16 @@ export const achievementsValidation = async (
 		new NGXLoggerMock() as NGXLogger,
 	);
 	statsUpdater.stateUpdater = store.stateUpdater;
+	const storage: AchievementsStorageService = {
+		loadAchievement: async (achievementId: string) => {
+			return null;
+		},
+		saveAchievement: async (achievement: CompletedAchievement) => {
+			return null;
+		},
+	} as AchievementsStorageService;
 
-	new AchievementsMonitor(gameEventsService, loader, store);
+	new AchievementsMonitor(gameEventsService, loader, events, new NGXLoggerMock() as NGXLogger, store, storage);
 
 	if (additionalEvents) {
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
@@ -81,11 +91,12 @@ export const achievementsValidation = async (
 	// wait for a short while, so that all events are processed. The integration tests
 	// take a long time to load (probably because of the big files?), so this small
 	// delay has almost no impact
-	await sleep(50);
+	// The processing queue is configured with a 1s delay, se we need to wait for a long time
+	await sleep(1500);
 
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
 
-	await sleep(50);
+	await sleep(1500);
 
 	// if (!isAchievementComplete) {
 	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
@@ -97,6 +108,7 @@ export const achievementsValidation = async (
 	// 	});
 	// }
 
+	// console.debug('returning', isAchievementComplete);
 	return isAchievementComplete;
 };
 

@@ -93,6 +93,6 @@ export class CollectionComponent {
 		this.standardSets = state.allSets.filter(set => set.standard);
 		this.wildSets = state.allSets.filter(set => !set.standard);
 		this._state = state;
-		console.log('set state in collection', this._state);
+		console.log('set state in collection');
 	}
 }

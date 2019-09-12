@@ -110,7 +110,7 @@ export class AchievementsVideoCaptureService {
 		const mergedAchievement: Achievement = data.data[0];
 		const challenge: Challenge = data.data[1];
 		const recordDuration: number = challenge.getRecordingDuration();
-		console.log('[recording] achievment complete', mergedAchievement, mergedAchievement.numberOfCompletions);
+		console.log('[recording] achievement complete', mergedAchievement.id, mergedAchievement.numberOfCompletions);
 		if (!(await this.achievementRecording.shouldRecord(mergedAchievement))) {
 			console.log('[recording] Not recording achievement', mergedAchievement);
 			return;
@@ -120,7 +120,7 @@ export class AchievementsVideoCaptureService {
 
 	private async capture(achievement: Achievement, challenge: Challenge, recordDuration: number) {
 		this.achievementsBeingRecorded.push(achievement.id);
-		console.log('[recording] start recording achievement', achievement, challenge.getRecordPastDurationMillis());
+		console.log('[recording] start recording achievement', achievement.id, challenge.getRecordPastDurationMillis());
 		this.events.broadcast(Events.ACHIEVEMENT_RECORDING_STARTED, achievement, challenge);
 		if (this.captureOngoing) {
 			console.info('[recording] capture ongoing, doing nothing', this.achievementsBeingRecorded);
@@ -131,7 +131,6 @@ export class AchievementsVideoCaptureService {
 		console.log('[recording] starting capture for duration', captureDuration);
 		try {
 			const status = await this.ow.startReplayCapture(captureDuration);
-			console.log('[recording] capture started', status);
 			if (status.status === 'error') {
 				console.warn('[recording] could not start achievement capture', status.error);
 				this.captureOngoing = false;
@@ -177,7 +176,6 @@ export class AchievementsVideoCaptureService {
 		}
 		console.log('[recording] stopping capture, was scheduled for', this.currentReplayId, this.lastRecordingDate, Date.now());
 		const result = await this.ow.stopReplayCapture(this.currentReplayId);
-		console.log('[recording] stopped capture', result, this.achievementsBeingRecorded);
 		this.captureOngoing = false;
 		this.currentReplayId = undefined;
 		for (const achievementId of this.achievementsBeingRecorded) {
@@ -189,7 +187,7 @@ export class AchievementsVideoCaptureService {
 				thumbnailPath: result.thumbnail_path,
 				completionStepId: achievementId,
 			};
-			console.log('[recording] capture finished', result.status, achievementId, replayInfo);
+			console.log('[recording] capture finished', result.status, achievementId);
 			this.store.stateUpdater.next(new AchievementRecordedEvent(achievementId, replayInfo));
 			if (this.settingsChanged) {
 				await this.handleVideoSettingsChange();

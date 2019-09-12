@@ -1,11 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Achievement } from '../../models/achievement';
-import { CompletedAchievement } from '../../models/completed-achievement';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
-import { AchievementsRepository } from './achievements-repository.service';
-import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 @Injectable()
 export class AchievementStatsService {
@@ -15,14 +12,8 @@ export class AchievementStatsService {
 	private userMachineId: string;
 	private username: string;
 
-	constructor(
-		private events: Events,
-		private http: HttpClient,
-		private ow: OverwolfService,
-		private achievementsLoader: AchievementsLoaderService,
-		private repository: AchievementsRepository,
-	) {
-		this.events.on(Events.NEW_ACHIEVEMENT).subscribe(event => this.publishAchievementStats(event));
+	constructor(private events: Events, private http: HttpClient, private ow: OverwolfService) {
+		this.events.on(Events.ACHIEVEMENT_UNLOCKED).subscribe(event => this.publishAchievementStats(event));
 		this.retrieveUserInfo();
 	}
 
@@ -38,8 +29,7 @@ export class AchievementStatsService {
 			console.error('Could not upload achievemnt stats after 5 retries');
 			return;
 		}
-		const completedAchievement: CompletedAchievement = event.data[0];
-		const achievement: Achievement = await this.findAchievement(completedAchievement);
+		const achievement: Achievement = event.data[0];
 		const statEvent = {
 			'creationDate': new Date(),
 			'userId': this.userId,
@@ -49,7 +39,7 @@ export class AchievementStatsService {
 			'name': achievement.name,
 			'type': achievement.type,
 			'cardId': achievement.displayCardId,
-			'numberOfCompletions': completedAchievement.numberOfCompletions + 1,
+			'numberOfCompletions': achievement.numberOfCompletions + 1,
 		};
 		// console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
 		this.http.post(this.ACHIEVEMENT_STATS_URL, statEvent).subscribe(
@@ -59,9 +49,5 @@ export class AchievementStatsService {
 				setTimeout(() => this.publishAchievementStats(event, retriesLeft--), 5000);
 			},
 		);
-	}
-
-	private async findAchievement(completedchievement: CompletedAchievement): Promise<Achievement> {
-		return await this.achievementsLoader.getAchievement(completedchievement.id);
 	}
 }

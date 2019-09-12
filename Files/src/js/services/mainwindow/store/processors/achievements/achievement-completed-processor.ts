@@ -1,48 +1,29 @@
-import { Achievement } from '../../../../../models/achievement';
 import { AchievementHistory } from '../../../../../models/achievement/achievement-history';
-import { CompletedAchievement } from '../../../../../models/completed-achievement';
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { AchievementHistoryStorageService } from '../../../../achievement/achievement-history-storage.service';
-import { AchievementsStorageService } from '../../../../achievement/achievements-storage.service';
 import { AchievementsLoaderService } from '../../../../achievement/data/achievements-loader.service';
-import { Events } from '../../../../events.service';
 import { AchievementCompletedEvent } from '../../events/achievements/achievement-completed-event';
 import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
 import { Processor } from '../processor';
 
 export class AchievementCompletedProcessor implements Processor {
 	constructor(
-		private achievementsStorage: AchievementsStorageService,
 		private historyStorage: AchievementHistoryStorageService,
 		private achievementLoader: AchievementsLoaderService,
-		private events: Events,
 		private helper: AchievementUpdateHelper,
 	) {}
 
 	public async process(event: AchievementCompletedEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		let existingAchievement = await this.achievementsStorage.loadAchievement(event.challenge.achievementId);
-		existingAchievement = existingAchievement || event.challenge.defaultAchievement();
-		const completedAchievement = new CompletedAchievement(
-			existingAchievement.id,
-			existingAchievement.numberOfCompletions + 1,
-			existingAchievement.replayInfo,
-		);
-		await this.achievementsStorage.saveAchievement(completedAchievement);
-		const newAchievementState = await this.helper.rebuildAchievements(currentState);
-		this.events.broadcast(Events.NEW_ACHIEVEMENT, completedAchievement);
-		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
-		const mergedAchievement = Object.assign(new Achievement(), achievement, {
-			numberOfCompletions: completedAchievement.numberOfCompletions,
-			replayInfo: completedAchievement.replayInfo,
-		} as Achievement);
-		// Send the notification early
-		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, mergedAchievement, event.challenge);
+		const achievement = event.achievement;
+		// TODO: all this can probably be done here with a little effort, instead of rebuilding everything
+		const newAchievementState: AchievementsState = await this.helper.rebuildAchievements(currentState);
+		console.log('[achievement-completed-processor] rebuilt achievement state');
 		const historyItem = {
-			achievementId: mergedAchievement.id,
-			achievementName: mergedAchievement.name,
-			numberOfCompletions: mergedAchievement.numberOfCompletions,
-			difficulty: mergedAchievement.difficulty,
+			achievementId: achievement.id,
+			achievementName: achievement.name,
+			numberOfCompletions: achievement.numberOfCompletions,
+			difficulty: achievement.difficulty,
 			creationTimestamp: Date.now(),
 		} as AchievementHistory;
 		await this.historyStorage.save(historyItem);

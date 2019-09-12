@@ -280,13 +280,7 @@ export class MainWindowStoreService {
 			new AchievementRecordedProcessor(this.achievementsStorage, achievementStateHelper, this.events),
 
 			AchievementCompletedEvent.eventName(),
-			new AchievementCompletedProcessor(
-				this.achievementsStorage,
-				this.achievementHistoryStorage,
-				this.achievementsLoader,
-				this.events,
-				achievementUpdateHelper,
-			),
+			new AchievementCompletedProcessor(this.achievementHistoryStorage, this.achievementsLoader, achievementUpdateHelper),
 
 			StartSocialSharingEvent.eventName(),
 			new StartSocialSharingProcessor(),

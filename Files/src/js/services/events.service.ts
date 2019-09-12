@@ -15,7 +15,9 @@ export class Events {
 	public static readonly NEW_CARD = 'new-card';
 	public static readonly MORE_DUST = 'more-dust';
 
-	public static readonly NEW_ACHIEVEMENT = 'new-achievement';
+	// When achievement has been completed, and before all similar achievements have been filtered out
+	public static readonly ACHIEVEMENT_UNLOCKED = 'achievement-unlocked';
+	// When similar achievements have been filtered out to only keep the more relevant one
 	public static readonly ACHIEVEMENT_COMPLETE = 'achievement-complete';
 	public static readonly ACHIEVEMENT_RECORDED = 'achievement-recorded';
 	public static readonly ACHIEVEMENT_RECORDING_STARTED = 'achievement-recording-started';

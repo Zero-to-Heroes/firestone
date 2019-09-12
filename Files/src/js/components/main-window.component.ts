@@ -139,7 +139,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
-		console.log('retrieved storeBus', storeBus);
+		console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				const window = await this.ow.getCurrentWindow();

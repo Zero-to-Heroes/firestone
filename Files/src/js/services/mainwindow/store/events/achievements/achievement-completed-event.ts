@@ -1,11 +1,8 @@
-import { Challenge } from '../../../../achievement/achievements/challenges/challenge';
+import { Achievement } from '../../../../../models/achievement';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class AchievementCompletedEvent implements MainWindowStoreEvent {
-	constructor(challenge: Challenge) {
-		this.challenge = challenge;
-	}
-	readonly challenge: Challenge;
+	constructor(public readonly achievement: Achievement) {}
 
 	public static eventName(): string {
 		return 'AchievementCompletedEvent';

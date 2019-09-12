@@ -28,7 +28,7 @@ export class AdService {
 					resolve(false);
 				},
 				error => {
-					console.log('no subscription, showign ads', error);
+					console.log('no subscription, showign ads');
 					resolve(true);
 				},
 			);
