@@ -81,7 +81,7 @@ export class SimpleIOService {
 					// console.log('wait for db init complete');
 					resolve();
 				} else {
-					// console.log('waiting for db init');
+					// console.log('[simple-io] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

@@ -82,6 +82,7 @@ export class PackMonitor {
 	}
 
 	private handleNewCardEvent(event) {
+		// console.log('[pack-monitor] preparing to handle new card event');
 		if (this.busy) {
 			setTimeout(() => this.handleNewCardEvent(event), 100);
 			return;
@@ -102,6 +103,7 @@ export class PackMonitor {
 	}
 
 	private handleNewDustEvent(event) {
+		// console.log('[pack-monitor] preparing to handle new dust event');
 		if (this.busy) {
 			setTimeout(() => this.handleNewDustEvent(event), 100);
 			return;
@@ -131,6 +133,7 @@ export class PackMonitor {
 	}
 
 	private handleMouseUp(data) {
+		// console.log('[pack-monitor] preparing to handle mosue up event');
 		if (this.unrevealedCards.length > 0 && data.onGame) {
 			if (this.unrevealedCards.length !== 5) {
 				console.log('all cards not revealed yet', this.unrevealedCards);
@@ -147,7 +150,7 @@ export class PackMonitor {
 	}
 
 	private handleKeyUp(data) {
-		// console.log('key pressed', data, this.unrevealedCards);
+		// console.log('[pack-monitor] preparing to handle key up event');
 		if (this.unrevealedCards.length > 0 && data.onGame && parseInt(data.key) === Key.Space) {
 			if (this.unrevealedCards.length !== 5) {
 				console.log('all cards not revealed yet', this.unrevealedCards);
@@ -210,6 +213,7 @@ export class PackMonitor {
 	}
 
 	private detectRevealedCard(i: number) {
+		console.log('[pack-monitor] preparing to detect revealed card');
 		if (this.busy) {
 			setTimeout(() => {
 				this.detectRevealedCard(i);

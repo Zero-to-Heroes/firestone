@@ -189,7 +189,7 @@ export class AchievementsVideoCaptureService {
 				thumbnailPath: result.thumbnail_path,
 				completionStepId: achievementId,
 			};
-			console.log('[recording] capture finished', result, achievementId, replayInfo);
+			console.log('[recording] capture finished', result.status, achievementId, replayInfo);
 			this.store.stateUpdater.next(new AchievementRecordedEvent(achievementId, replayInfo));
 			if (this.settingsChanged) {
 				await this.handleVideoSettingsChange();

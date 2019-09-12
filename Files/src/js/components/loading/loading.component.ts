@@ -185,6 +185,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async refreshAds() {
+		// console.log('[loading] refreshing ads');
 		if (!this.shouldDisplayAds) {
 			console.log('ad-free app, not showing ads and returning');
 			return;
@@ -197,7 +198,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 			console.log('ads container not ready, returning');
 			setTimeout(() => {
 				this.refreshAds();
-			}, 50);
+			}, 1000);
 			return;
 		}
 		if (!this.adRef) {
@@ -219,11 +220,13 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 				}
 			}
 			this.adInit = false;
-			this.refreshAds();
+			setTimeout(() => {
+				this.refreshAds();
+			}, 1000);
 			return;
 		}
-		console.log('refreshing ads');
 		this.adRef.refreshAd();
+		console.log('[loading] refreshed ads');
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -243,7 +243,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private waitForInit(): Promise<void> {
 		return new Promise<void>(resolve => {
 			const theWait = () => {
-				// console.log('Promise waiting for db');
+				// console.log('[notificationbs] waiting for init');
 				if (this.windowId) {
 					// console.log('wait for db init complete');
 					resolve();

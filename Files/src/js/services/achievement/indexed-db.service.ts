@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
-
-import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { CompletedAchievement } from '../../models/completed-achievement';
 
 @Injectable()
 export class IndexedDbService {
@@ -98,12 +97,10 @@ export class IndexedDbService {
 	private waitForDbInit(): Promise<void> {
 		return new Promise<void>(resolve => {
 			const dbWait = () => {
-				// console.log('Promise waiting for db');
 				if (this.dbInit) {
-					// console.log('wait for db init complete');
 					resolve();
 				} else {
-					// console.log('waiting for db init');
+					// console.log('[achievements] [storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

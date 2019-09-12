@@ -199,6 +199,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	ngAfterViewInit() {
+		// console.log('[achievement-recordings] init');
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.player = this.elRef.nativeElement.querySelector('video');
 		if (!this.player) {

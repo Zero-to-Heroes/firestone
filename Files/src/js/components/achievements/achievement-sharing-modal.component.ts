@@ -107,6 +107,7 @@ export class AchievementSharingModal implements AfterViewInit, OnDestroy {
 	}
 
 	ngAfterViewInit() {
+		// console.log('[achievement-sharing-modal] init');
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.player = this.elRef.nativeElement.querySelector('video');
 		if (!this.player) {
@@ -131,6 +132,7 @@ export class AchievementSharingModal implements AfterViewInit, OnDestroy {
 	}
 
 	private initPlayer() {
+		// console.log('[achievement-sharing-modal] init player');
 		if (!this.player) {
 			setTimeout(() => this.initPlayer(), 50);
 			return;

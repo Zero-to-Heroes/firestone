@@ -63,12 +63,10 @@ export class AchievementsRepository {
 	private waitForInit(): Promise<void> {
 		return new Promise<void>(resolve => {
 			const dbWait = () => {
-				// console.log('Promise waiting for db');
 				if (this.setProviders) {
-					// console.log('wait for db init complete');
 					resolve();
 				} else {
-					// console.log('waiting for db init');
+					// console.log('[achievement-repository] waiting for DB init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

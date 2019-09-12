@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularIndexedDB, IndexDetails } from 'angular2-indexeddb';
-
-import { CardHistory } from '../../models/card-history';
 import { Card } from '../../models/card';
+import { CardHistory } from '../../models/card-history';
 import { PackHistory } from '../../models/pack-history';
 import { PityTimer } from '../../models/pity-timer';
 
@@ -189,6 +188,7 @@ export class IndexedDbService {
 				if (this.dbInit) {
 					resolve();
 				} else {
+					// console.log('[collection] [storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};

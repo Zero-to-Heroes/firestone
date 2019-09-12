@@ -14,7 +14,7 @@ export class ProcessingQueue<T> {
 		// What happens if this happens while we're waiting for the processingFunction
 		// to complete? As it's async
 		if (this.isProcessing) {
-			console.log('adding event while processing is ongoing', this.eventQueue, this.pendingQueue);
+			// console.log('adding event while processing is ongoing', this.eventQueue, this.pendingQueue);
 			// Don't modify the queue while processing is ongoing
 			this.pendingQueue = [...this.pendingQueue, event];
 		} else {

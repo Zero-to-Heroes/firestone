@@ -82,6 +82,7 @@ export class MemoryInspectionService {
 	}
 
 	private async getPlayerInfoInternal(callback) {
+		// console.log('[memory service] trying to get player info');
 		this.playersInfoTriesLeft--;
 		const info = await this.ow.getGameEventsInfo();
 		if (info && info.res && info.res.playersInfo) {
@@ -137,12 +138,12 @@ export class MemoryInspectionService {
 	}
 
 	private async setFeatures() {
+		console.log('[memory service] trying to set features for GEP');
 		const info = await this.ow.setGameEventsRequiredFeatures(this.g_interestedInFeatures);
 		if (info.status === 'error') {
-			window.setTimeout(() => this.setFeatures(), 2000);
+			setTimeout(() => this.setFeatures(), 2000);
 			return;
 		}
-		console.log('[memory service] Set required features:');
-		console.log('[memory service] ', info);
+		console.log('[memory service] Set required features:', info);
 	}
 }

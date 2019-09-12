@@ -14,7 +14,7 @@ export class OwNotificationsService {
 	}
 
 	public html(htmlMessage: Message) {
-		// console.log('trying to display html message: ', htmlMessage);
+		// console.log('[notifications-service] trying to send notification to component');
 		if (!this.windowId) {
 			if (this.retriesLeft <= 0) {
 				throw new Error('NotificationsWindow was not identified at app start');

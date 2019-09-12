@@ -40,17 +40,17 @@ export class AchievementsNotificationService {
 		// Don't process an event if we've just received one, as it could indicate that other
 		// related events will come soon as well
 		if (Date.now() - this.lastReceivedTimestamp < 500) {
-			this.logger.debug('[achievements-notification] too soon, waiting before processing');
+			// this.logger.debug('[achievements-notification] too soon, waiting before processing');
 			return eventQueue;
 		}
 		const candidate: InternalEvent = eventQueue[0];
-		this.logger.debug('[achievements-notification] found a candidate', candidate);
+		// this.logger.debug('[achievements-notification] found a candidate', candidate);
 		// Is there a better candidate?
 		const betterCandidate: InternalEvent = eventQueue
 			.filter(event => event.notificationType === candidate.notificationType)
 			.filter(event => event.achievement.type === candidate.achievement.type)
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
-		this.logger.debug('[achievements-notification] top candidate', betterCandidate, eventQueue);
+		// this.logger.debug('[achievements-notification] top candidate', betterCandidate, eventQueue);
 		switch (betterCandidate.notificationType) {
 			case 'completion':
 				this.handleAchievementCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
@@ -70,12 +70,12 @@ export class AchievementsNotificationService {
 	}
 
 	private enqueue(event: BroadcastEvent, type: 'completion' | 'pre-record' | 'record-complete') {
-		this.logger.debug('[achievements-notification] enqueuing event', event, type);
 		const internalEvent: InternalEvent = {
 			achievement: event.data[0],
 			initialEvent: event,
 			notificationType: type,
 		};
+		// this.logger.debug('[achievements-notification] enqueuing event', internalEvent.achievement.id, type);
 		this.lastReceivedTimestamp = Date.now();
 		this.processingQueue.enqueue(internalEvent);
 	}
@@ -83,7 +83,7 @@ export class AchievementsNotificationService {
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
 		if (achievement.numberOfCompletions >= 1) {
-			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif');
+			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
 			return;
 		}
 		ga('send', 'event', 'new-achievement', achievement.id);

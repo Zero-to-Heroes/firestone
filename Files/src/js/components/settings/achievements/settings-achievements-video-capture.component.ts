@@ -181,6 +181,7 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 	}
 
 	private async updateDefaultValues() {
+		// console.log('[settings-achievements-video-capture] updating default values');
 		const settings = await this.owService.getVideoCaptureSettings();
 		if (!settings) {
 			console.warn('Could not access video capture settings');

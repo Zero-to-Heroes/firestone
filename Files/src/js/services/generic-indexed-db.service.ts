@@ -32,12 +32,10 @@ export class GenericIndexedDbService {
 	private waitForDbInit(): Promise<void> {
 		return new Promise<void>(resolve => {
 			const dbWait = () => {
-				// console.log('Promise waiting for db');
 				if (this.dbInit) {
-					// console.log('wait for db init complete');
 					resolve();
 				} else {
-					// console.log('waiting for db init');
+					// console.log('[storage] waiting for init');
 					setTimeout(() => dbWait(), 50);
 				}
 			};
