@@ -97,8 +97,6 @@ export const achievementsValidation = async (
 	// 	});
 	// }
 
-	gameEventsService.cleanup();
-
 	return isAchievementComplete;
 };
 

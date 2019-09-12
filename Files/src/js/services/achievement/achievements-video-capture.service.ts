@@ -61,7 +61,7 @@ export class AchievementsVideoCaptureService {
 
 	private async turnOnRecording() {
 		if (!(await this.ow.inGame())) {
-			setTimeout(() => this.turnOnRecording(), 50);
+			setTimeout(() => this.turnOnRecording(), 1000);
 			return;
 		}
 

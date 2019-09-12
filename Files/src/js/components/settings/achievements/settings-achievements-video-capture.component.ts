@@ -184,7 +184,7 @@ export class SettingsAchievementsVideoCaptureComponent implements OnDestroy {
 		const settings = await this.owService.getVideoCaptureSettings();
 		if (!settings) {
 			console.warn('Could not access video capture settings');
-			setTimeout(() => this.updateDefaultValues());
+			setTimeout(() => this.updateDefaultValues(), 200);
 			return;
 		}
 		const oldResolution = this.resolution;

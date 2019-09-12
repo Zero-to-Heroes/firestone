@@ -39,8 +39,13 @@ export class PackMonitor {
 			this.unrevealedCards = [];
 			this.updateDpi();
 		});
-
-		setInterval(() => this.updateDpi(), 10 * 1000);
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			// If the user changes the DPI while in-game they have to switch the focus
+			// outside of the game. So when going back to the game, this will be captured
+			if (res && (res.resolutionChanged || res.focusChanged)) {
+				this.updateDpi();
+			}
+		});
 
 		this.events.on(Events.NEW_PACK).subscribe(event => {
 			this.openingPack = true;
@@ -78,7 +83,7 @@ export class PackMonitor {
 
 	private handleNewCardEvent(event) {
 		if (this.busy) {
-			setTimeout(() => this.handleNewCardEvent(event), 50);
+			setTimeout(() => this.handleNewCardEvent(event), 100);
 			return;
 		}
 		const card: Card = event.data[0];
@@ -98,7 +103,7 @@ export class PackMonitor {
 
 	private handleNewDustEvent(event) {
 		if (this.busy) {
-			setTimeout(() => this.handleNewDustEvent(event), 50);
+			setTimeout(() => this.handleNewDustEvent(event), 100);
 			return;
 		}
 		const card: Card = event.data[0];
@@ -208,7 +213,7 @@ export class PackMonitor {
 		if (this.busy) {
 			setTimeout(() => {
 				this.detectRevealedCard(i);
-			}, 10);
+			}, 50);
 			return;
 		}
 

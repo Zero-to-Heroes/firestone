@@ -4,6 +4,7 @@ import { Achievement } from 'src/js/models/achievement';
 import { BroadcastEvent, Events } from '../events.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
+import { ProcessingQueue } from '../processing-queue.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
@@ -11,9 +12,14 @@ declare var ga;
 
 @Injectable()
 export class AchievementsNotificationService {
-	private eventsToProcess: InternalEvent[] = [];
-	private processingEvents = false;
-	private intervalHandle;
+	// private eventsToProcess: InternalEvent[] = [];
+	// private processingEvents = false;
+	// private intervalHandle;
+	private processingQueue = new ProcessingQueue<InternalEvent>(
+		eventQueue => this.processQueue(eventQueue),
+		1000,
+		'achievement-notification',
+	);
 	private lastReceivedTimestamp;
 
 	constructor(
@@ -27,52 +33,40 @@ export class AchievementsNotificationService {
 		this.events.on(Events.ACHIEVEMENT_RECORDING_STARTED).subscribe(data => this.enqueue(data, 'pre-record'));
 		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.enqueue(data, 'record-complete'));
 		this.logger.debug('[achievements-notification] listening for achievement completion events');
-		this.init();
+		this.lastReceivedTimestamp = Date.now();
 	}
 
-	private init() {
-		this.lastReceivedTimestamp = Date.now();
-		this.intervalHandle = setInterval(() => {
-			// Process one at a time
-			if (this.processingEvents || this.eventsToProcess.length === 0) {
-				return;
-			}
-			// Don't process an event if we've just received one, as it could indicate that other
-			// related events will come soon as well
-			if (this.eventsToProcess.length > 0 && Date.now() - this.lastReceivedTimestamp < 500) {
-				this.logger.debug('[achievements-notification] too soon, waiting before processing');
-				return;
-			}
-			this.processingEvents = true;
-
-			const candidate: InternalEvent = this.eventsToProcess[0];
-			this.logger.debug('[achievements-notification] found a candidate', candidate);
-			// Is there a better candidate?
-			const betterCandidate: InternalEvent = this.eventsToProcess
-				.filter(event => event.notificationType === candidate.notificationType)
-				.filter(event => event.achievement.type === candidate.achievement.type)
-				.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
-			this.logger.debug('[achievements-notification] top candidate', betterCandidate, this.eventsToProcess);
-			// Now remove all the related events
-			this.eventsToProcess = this.eventsToProcess.filter(
-				event =>
-					event.notificationType !== betterCandidate.notificationType ||
-					event.achievement.type !== betterCandidate.achievement.type,
-			);
-			this.logger.debug('[achievements-notification] new events to process', this.eventsToProcess);
-			switch (betterCandidate.notificationType) {
-				case 'completion':
-					this.handleAchievementCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
-					break;
-				case 'pre-record':
-					this.handleAchievementRecordingStarted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
-					break;
-				case 'record-complete':
-					this.handleAchievementRecordCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
-					break;
-			}
-			this.processingEvents = false;
-		}, 1000);
+	private async processQueue(eventQueue: readonly InternalEvent[]): Promise<readonly InternalEvent[]> {
+		// Don't process an event if we've just received one, as it could indicate that other
+		// related events will come soon as well
+		if (Date.now() - this.lastReceivedTimestamp < 500) {
+			this.logger.debug('[achievements-notification] too soon, waiting before processing');
+			return eventQueue;
+		}
+		const candidate: InternalEvent = eventQueue[0];
+		this.logger.debug('[achievements-notification] found a candidate', candidate);
+		// Is there a better candidate?
+		const betterCandidate: InternalEvent = eventQueue
+			.filter(event => event.notificationType === candidate.notificationType)
+			.filter(event => event.achievement.type === candidate.achievement.type)
+			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
+		this.logger.debug('[achievements-notification] top candidate', betterCandidate, eventQueue);
+		switch (betterCandidate.notificationType) {
+			case 'completion':
+				this.handleAchievementCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
+				break;
+			case 'pre-record':
+				this.handleAchievementRecordingStarted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
+				break;
+			case 'record-complete':
+				this.handleAchievementRecordCompleted(betterCandidate.initialEvent.data[0], betterCandidate.initialEvent.data[1]);
+				break;
+		}
+		// Now remove all the related events
+		return eventQueue.filter(
+			event =>
+				event.notificationType !== betterCandidate.notificationType || event.achievement.type !== betterCandidate.achievement.type,
+		);
 	}
 
 	private enqueue(event: BroadcastEvent, type: 'completion' | 'pre-record' | 'record-complete') {
@@ -83,7 +77,7 @@ export class AchievementsNotificationService {
 			notificationType: type,
 		};
 		this.lastReceivedTimestamp = Date.now();
-		this.eventsToProcess.push(internalEvent);
+		this.processingQueue.enqueue(internalEvent);
 	}
 
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
