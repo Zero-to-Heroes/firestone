@@ -17,6 +17,7 @@ export class ReceiveCardInHandParser implements EventParser {
 
 	parse(currentState: GameState, gameEvent: GameEvent): GameState {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		// console.log('[receive-card-in-hand] handling event', cardId, entityId);
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
