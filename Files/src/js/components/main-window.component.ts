@@ -174,6 +174,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async refreshAds() {
+		console.log('[main-window] refreshing ads');
 		if (!this.shouldDisplayAds) {
 			console.log('ad-free app, not showing ads and returning');
 			return;
@@ -186,19 +187,19 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			console.log('ads container not ready, returning');
 			setTimeout(() => {
 				this.refreshAds();
-			}, 50);
+			}, 1000);
 			return;
 		}
 		if (!document.getElementById('ad-div')) {
 			console.log('ad-div not ready, returning');
 			setTimeout(() => {
 				this.refreshAds();
-			}, 50);
+			}, 1000);
 			return;
 		}
 		if (!this.adRef) {
 			if (this.impressionListener) {
-				console.error('[main-window] Redefining the impression listener, could cause memory leaks', this.impressionListener);
+				console.warn('[main-window] Redefining the impression listener, could cause memory leaks', this.impressionListener);
 			}
 			this.adInit = true;
 			const window = await this.ow.getCurrentWindow();
@@ -215,10 +216,12 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				}
 			}
 			this.adInit = false;
-			this.refreshAds();
+			setTimeout(() => {
+				this.refreshAds();
+			}, 1000);
 			return;
 		}
-		console.log('refreshing ads');
+		console.log('[main-window] refreshed ads');
 		this.adRef.refreshAd();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

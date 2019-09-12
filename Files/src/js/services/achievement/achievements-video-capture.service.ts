@@ -43,6 +43,9 @@ export class AchievementsVideoCaptureService {
 	private async listenToRecordingPrefUpdates() {
 		// Do nothing while a capture is ongoing, we'll update the prefs with the next
 		// tick
+		// There is no way to avoid this regular polling, as there are no events
+		// on the OW API that we can listen to
+		// console.log('[achievement-video-capture] listening to recording pref updates');
 		const isInGame: boolean = await this.ow.inGame();
 		if (!this.captureOngoing && isInGame) {
 			const isOn: boolean = await this.ow.getReplayMediaState();
@@ -56,10 +59,11 @@ export class AchievementsVideoCaptureService {
 				this.actuallyTurnOnRecording();
 			}
 		}
-		setTimeout(() => this.listenToRecordingPrefUpdates(), 3000);
+		setTimeout(() => this.listenToRecordingPrefUpdates(), 5000);
 	}
 
 	private async turnOnRecording() {
+		console.log('[achievement-video-capture] turning recording on');
 		if (!(await this.ow.inGame())) {
 			setTimeout(() => this.turnOnRecording(), 1000);
 			return;

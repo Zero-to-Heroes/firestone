@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -18,7 +18,7 @@ export class TwitchAuthCallbackComponent implements AfterViewInit {
 	constructor(private debugService: DebugService, private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
-		console.log('handling twitch auth callback', this.ow.getMainWindow());
+		console.log('handling twitch auth callback');
 		this.stateUpdater = this.ow.getMainWindow().twitchAuthUpdater;
 		if (!this.stateUpdater) {
 			setTimeout(() => this.ngAfterViewInit(), 100);
