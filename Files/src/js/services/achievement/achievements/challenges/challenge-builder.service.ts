@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
+import { AllCardsService } from '../../../all-cards.service';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
 import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-received-in-hand-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
 import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-or-on-board-at-game-start-req';
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
 import { DamageAtEndReq } from '../requirements/damage-at-end-req';
+import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
@@ -38,7 +40,7 @@ import { GenericChallenge } from './generic-challenge';
 
 @Injectable()
 export class ChallengeBuilderService {
-	constructor() {}
+	constructor(private readonly cards: AllCardsService) {}
 
 	public buildChallenge(raw: RawAchievement): Challenge {
 		const requirements: readonly Requirement[] = this.buildRequirements(raw.requirements);
@@ -83,6 +85,7 @@ export class ChallengeBuilderService {
 			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
 			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
 			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
+			case 'DECK_CLASSIC': return DeckbuildingClassicReq.create(rawReq, this.cards);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {

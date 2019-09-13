@@ -85,4 +85,5 @@ export interface GameEventPlayer {
 	wildRank: number;
 	wildLegendRank: number;
 	cardBackId: number;
+	deck: { deckstring: string; deck };
 }

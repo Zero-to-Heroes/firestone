@@ -6,7 +6,7 @@ import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { AllCardsService } from '../../all-cards.service';
 import { GameParserService } from '../../endgame/game-parser.service';
 import { Events } from '../../events.service';
-import { GameEvents } from '../../game-events.service';
+import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
 
@@ -18,7 +18,7 @@ export class GameStatsUpdaterService {
 	private currentGameStat: GameStat = undefined;
 
 	constructor(
-		private gameEvents: GameEvents,
+		private gameEvents: GameEventsEmitterService,
 		private events: Events,
 		private cards: AllCardsService,
 		private gameParserService: GameParserService,

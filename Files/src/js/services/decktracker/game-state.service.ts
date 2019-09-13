@@ -3,7 +3,7 @@ import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { AllCardsService } from '../all-cards.service';
-import { GameEvents } from '../game-events.service';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -52,7 +52,7 @@ export class GameStateService {
 	private eventEmitters = [];
 
 	constructor(
-		private gameEvents: GameEvents,
+		private gameEvents: GameEventsEmitterService,
 		// private logger: NGXLogger,
 		private dynamicZoneHelper: DynamicZoneHelperService,
 		private gameStateMetaInfos: GameStateMetaInfoService,

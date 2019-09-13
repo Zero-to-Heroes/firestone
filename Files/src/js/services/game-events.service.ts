@@ -1,7 +1,9 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { captureEvent } from '@sentry/core';
 import { GameEvent, GameEventPlayer } from '../models/game-event';
+import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
+import { GameEventsEmitterService } from './game-events-emitter.service';
 import { LogsUploaderService } from './logs-uploader.service';
 import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
@@ -10,17 +12,10 @@ import { S3FileUploadService } from './s3-file-upload.service';
 
 @Injectable()
 export class GameEvents {
-	public allEvents = new EventEmitter<GameEvent>();
-	public newLogLineEvents = new EventEmitter<GameEvent>();
-	public onGameStart = new EventEmitter<GameEvent>();
-
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
 	private plugin;
 
-	// private logLines: string[] = [];
-	// private processingLines = false;
-	// private intervalHandle;
 	private processingQueue = new ProcessingQueue<string>(eventQueue => this.processQueue(eventQueue), 500, 'game-events');
 
 	constructor(
@@ -29,9 +24,12 @@ export class GameEvents {
 		private s3: S3FileUploadService,
 		private events: Events,
 		private playersInfoService: PlayersInfoService,
+		private gameEventsEmitter: GameEventsEmitterService,
+		private deckParser: DeckParserService,
 	) {
 		this.init();
 	}
+
 	async init() {
 		console.log('init game events monitor');
 		this.plugin = await this.gameEventsPlugin.get();
@@ -50,7 +48,7 @@ export class GameEvents {
 			});
 		}
 		this.events.on(Events.SCENE_CHANGED).subscribe(event =>
-			this.allEvents.next(
+			this.gameEventsEmitter.allEvents.next(
 				Object.assign(new GameEvent(), {
 					type: GameEvent.SCENE_CHANGED,
 					additionalData: { scene: event.data[0] },
@@ -58,7 +56,7 @@ export class GameEvents {
 			),
 		);
 		this.events.on(Events.GAME_STATS_UPDATED).subscribe(event => {
-			this.allEvents.next(
+			this.gameEventsEmitter.allEvents.next(
 				Object.assign(new GameEvent(), {
 					type: GameEvent.GAME_STATS_UPDATED,
 					additionalData: { gameStats: event.data[0] },
@@ -88,11 +86,11 @@ export class GameEvents {
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START } as GameEvent);
-				this.allEvents.next(event);
-				this.onGameStart.next(event);
+				this.gameEventsEmitter.allEvents.next(event);
+				this.gameEventsEmitter.onGameStart.next(event);
 				break;
 			case 'MATCH_METADATA':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
 						additionalData: {
@@ -110,9 +108,10 @@ export class GameEvents {
 					wildRank: playerInfo ? playerInfo.wildRank : undefined,
 					wildLegendRank: playerInfo ? playerInfo.wildLegendRank : undefined,
 					cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
+					deck: this.deckParser.currentDeck,
 				});
 				console.log('sending LOCAL_PLAYER info', localPlayer);
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER,
 						localPlayer: localPlayer,
@@ -129,7 +128,7 @@ export class GameEvents {
 					cardBackId: opponentInfo ? opponentInfo.cardBackId : undefined,
 				});
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.OPPONENT,
 						opponentPlayer: opponentPlayer,
@@ -137,28 +136,28 @@ export class GameEvents {
 				);
 				break;
 			case 'MULLIGAN_INPUT':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MULLIGAN_INPUT,
 					} as GameEvent),
 				);
 				break;
 			case 'MULLIGAN_DONE':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MULLIGAN_DONE,
 					} as GameEvent),
 				);
 				break;
 			case 'MAIN_STEP_READY':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MAIN_STEP_READY,
 					} as GameEvent),
 				);
 				break;
 			case 'RUMBLE_RUN_STEP':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.RUMBLE_RUN_STEP,
 						additionalData: {
@@ -168,7 +167,7 @@ export class GameEvents {
 				);
 				break;
 			case 'DUNGEON_RUN_STEP':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
 						additionalData: {
@@ -178,7 +177,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MONSTER_HUNT_STEP':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
 						additionalData: {
@@ -188,19 +187,19 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_PLAYED':
-				this.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent));
 				break;
 			case 'DISCARD_CARD':
-				this.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
 				break;
 			case 'MINION_DIED':
-				this.allEvents.next(GameEvent.build(GameEvent.MINION_DIED, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_DIED, gameEvent));
 				break;
 			case 'RECRUIT_CARD':
-				this.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
 				break;
 			case 'SECRET_PLAYED_FROM_DECK':
-				this.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
 				break;
 			case 'MINION_SUMMONED':
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
@@ -208,59 +207,59 @@ export class GameEvents {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					  }
 					: null;
-				this.allEvents.next(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
-				this.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
-				this.allEvents.next(GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent));
 				break;
 			case 'END_OF_ECHO_IN_HAND':
-				this.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
 				break;
 			case 'CREATE_CARD_IN_DECK':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
 					}),
 				);
 				break;
 			case 'SECRET_PLAYED':
-				this.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
 				break;
 			case 'CARD_DRAW_FROM_DECK':
-				this.allEvents.next(GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent));
 				break;
 			case 'CARD_BACK_TO_DECK':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_BACK_TO_DECK, gameEvent, {
 						initialZone: gameEvent.Value.AdditionalProps.InitialZone,
 					}),
 				);
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
-				this.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
-				this.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
 				break;
 			case 'BURNED_CARD':
-				this.allEvents.next(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
 				break;
 			case 'MULLIGAN_INITIAL_OPTION':
-				this.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
-				this.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent));
 			case 'FIRST_PLAYER':
-				this.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
-				this.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, gameEvent, {
 						initialAttack: gameEvent.Value.InitialAttack,
 						newAttack: gameEvent.Value.NewAttack,
@@ -268,14 +267,14 @@ export class GameEvents {
 				);
 				break;
 			case 'ARMOR_CHANGED':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ARMOR_CHANGED, gameEvent, {
 						armorChange: gameEvent.Value.ArmorChange,
 					}),
 				);
 				break;
 			case 'FATIGUE_DAMAGE':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.FATIGUE_DAMAGE,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -288,7 +287,7 @@ export class GameEvents {
 				);
 				break;
 			case 'DAMAGE':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DAMAGE,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -302,7 +301,7 @@ export class GameEvents {
 				);
 				break;
 			case 'HEALING':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.HEALING,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -316,7 +315,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
 						additionalData: {
@@ -326,7 +325,7 @@ export class GameEvents {
 				);
 				break;
 			case 'WINNER':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.WINNER,
 						localPlayer: gameEvent.Value.LocalPlayer,
@@ -339,14 +338,14 @@ export class GameEvents {
 				);
 				break;
 			case 'TIE':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TIE,
 					} as GameEvent),
 				);
 				break;
 			case 'GAME_END':
-				this.allEvents.next(
+				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.GAME_END,
 						localPlayer: gameEvent.Value.LocalPlayer,

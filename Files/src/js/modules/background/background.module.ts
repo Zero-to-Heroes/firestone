@@ -28,6 +28,7 @@ import { EndGameUploaderService } from '../../services/endgame/end-game-uploader
 import { GameHelper } from '../../services/endgame/game-helper.service';
 import { GameParserService } from '../../services/endgame/game-parser.service';
 import { ReplayUploadService } from '../../services/endgame/replay-upload.service';
+import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
@@ -76,6 +77,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		DevService,
 		GameEvents,
+		GameEventsEmitterService,
 		GameEventsPluginService,
 		LogListenerService,
 		LogParserService,

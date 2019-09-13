@@ -166,6 +166,10 @@ export class AllCardsService {
 		return this.allCards.find(card => card.dbfId === dbfId);
 	}
 
+	public getCardsFromDbfIds(dbfIds: number[]): any[] {
+		return this.allCards.filter(card => dbfIds.indexOf(card.dbfId) !== -1);
+	}
+
 	public setName(setId: string) {
 		setId = setId.toLowerCase();
 		for (let i = 0; i < this.STANDARD_SETS.length; i++) {

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-
 import { decode } from 'deckstrings';
-import { GameEvents } from '../game-events.service';
 import { GameEvent } from '../../models/game-event';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 
 @Injectable()
 export class DeckParserService {
@@ -17,7 +16,7 @@ export class DeckParserService {
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
-	constructor(private gameEvents: GameEvents) {
+	constructor(private gameEvents: GameEventsEmitterService) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
@@ -66,11 +65,16 @@ export class DeckParserService {
 	}
 
 	public decodeDeckString() {
-		// console.log('[decks] deck updated', this.currentDeck);
-		const deck = decode(this.currentDeck.deckstring);
-		console.log('[decks] deck decoded', deck);
-		this.currentDeck.deck = deck;
-		return;
+		if (this.currentDeck) {
+			if (this.currentDeck.deckstring) {
+				// console.log('[decks] deck updated', this.currentDeck);
+				const deck = decode(this.currentDeck.deckstring);
+				this.currentDeck.deck = deck;
+				return;
+			} else {
+				this.currentDeck.deck = undefined;
+			}
+		}
 	}
 
 	// By doing this we make sure we don't get a leftover deckstring caused by

@@ -4,7 +4,7 @@ import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
-import { GameEvents } from '../game-events.service';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { ProcessingQueue } from '../processing-queue.service';
@@ -18,7 +18,7 @@ export class AchievementsMonitor {
 	private lastReceivedTimestamp;
 
 	constructor(
-		private gameEvents: GameEvents,
+		private gameEvents: GameEventsEmitterService,
 		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 		private logger: NGXLogger,

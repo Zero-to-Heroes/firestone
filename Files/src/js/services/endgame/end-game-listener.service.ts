@@ -3,7 +3,7 @@ import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { Events } from '../events.service';
-import { GameEvents } from '../game-events.service';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { EndGameUploaderService } from './end-game-uploader.service';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class EndGameListenerService {
 	private currentGameId: string;
 
 	constructor(
-		private gameEvents: GameEvents,
+		private gameEvents: GameEventsEmitterService,
 		private events: Events,
 		private logger: NGXLogger,
 		private deckService: DeckParserService,

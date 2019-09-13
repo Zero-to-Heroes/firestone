@@ -3,10 +3,10 @@ import { captureEvent } from '@sentry/core';
 import { Key } from 'ts-keycode-enum';
 import { Card } from '../../models/card';
 import { Events } from '../../services/events.service';
-import { GameEvents } from '../../services/game-events.service';
 import { LogRegisterService } from '../../services/log-register.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { AllCardsService } from '../all-cards.service';
+import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
@@ -31,7 +31,7 @@ export class PackMonitor {
 		private prefs: PreferencesService,
 		private logRegisterService: LogRegisterService,
 		private cards: AllCardsService,
-		private gameEvents: GameEvents,
+		private gameEvents: GameEventsEmitterService,
 		private ow: OverwolfService,
 		private notificationService: OwNotificationsService,
 	) {

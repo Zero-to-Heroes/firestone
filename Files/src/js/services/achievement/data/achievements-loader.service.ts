@@ -7,6 +7,7 @@ import { ChallengeBuilderService } from '../achievements/challenges/challenge-bu
 import amazingPlays from './amazing_plays.json';
 import competitiveLadder from './competitive_ladder.json';
 import dalaranHeist from './dalaran_heist.json';
+import deckbuilding from './deckbuilding.json';
 import dungeonRun from './dungeon_run.json';
 import monsterHunt from './monster_hunt.json';
 import rumbleRun from './rumble_run.json';
@@ -42,6 +43,7 @@ export class AchievementsLoaderService {
 			...(tombsOfTerror as readonly RawAchievement[]),
 			...(amazingPlays as readonly RawAchievement[]),
 			...(competitiveLadder as readonly RawAchievement[]),
+			...(deckbuilding as readonly RawAchievement[]),
 		];
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));

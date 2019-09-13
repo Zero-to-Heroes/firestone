@@ -1,4 +1,5 @@
 import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
+import cardsJson from '../../../dependencies/cards.json';
 import { RawAchievement } from '../../../src/js/models/achievement/raw-achievement';
 import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
 import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
@@ -6,8 +7,11 @@ import { AchievementsMonitor } from '../../../src/js/services/achievement/achiev
 import { AchievementsStorageService } from '../../../src/js/services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../../src/js/services/achievement/data/achievements-loader.service';
+import { AllCardsService } from '../../../src/js/services/all-cards.service';
+import { DeckParserService } from '../../../src/js/services/decktracker/deck-parser.service';
 import { GameParserService } from '../../../src/js/services/endgame/game-parser.service';
 import { Events } from '../../../src/js/services/events.service';
+import { GameEventsEmitterService } from '../../../src/js/services/game-events-emitter.service';
 import { GameEvents } from '../../../src/js/services/game-events.service';
 import { AchievementCompletedEvent } from '../../../src/js/services/mainwindow/store/events/achievements/achievement-completed-event';
 import { RecomputeGameStatsEvent } from '../../../src/js/services/mainwindow/store/events/stats/recompute-game-stats-event';
@@ -23,9 +27,11 @@ export const achievementsValidation = async (
 	additionalEvents?: readonly { key: string; value: any }[],
 	collaborators?: {
 		gameStats?: GameStats;
+		deckstring?: string;
 	},
 ) => {
-	const challengeBuilder = new ChallengeBuilderService();
+	const cards = buildCardsService();
+	const challengeBuilder = new ChallengeBuilderService(cards);
 	const loader = new AchievementsLoaderService(challengeBuilder);
 	await loader.initializeAchievements(rawAchievements);
 	if (loader.challengeModules.length !== 1) {
@@ -47,15 +53,18 @@ export const achievementsValidation = async (
 			});
 		},
 	} as MemoryInspectionService;
+	const emitter = new GameEventsEmitterService();
 	const playersInfoService = new PlayersInfoService(events, memoryService);
-	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService);
+	const deckService = new DeckParserService(emitter);
+	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
+	deckService.decodeDeckString();
+	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService, emitter, deckService);
 	// Setup achievement monitor, that will check for completion
 	let isAchievementComplete = false;
 	const store: MainWindowStoreService = {
 		stateUpdater: {
 			next: data => {
 				if (data instanceof AchievementCompletedEvent) {
-					// console.debug('achievmement complete');
 					isAchievementComplete = true;
 				} else if (data instanceof RecomputeGameStatsEvent && collaborators && collaborators.gameStats) {
 					// This will send an event to be processed by the requirements
@@ -66,7 +75,7 @@ export const achievementsValidation = async (
 		} as any,
 	} as MainWindowStoreService;
 	const statsUpdater = new GameStatsUpdaterService(
-		gameEventsService,
+		emitter,
 		events,
 		null,
 		new GameParserService(null, null),
@@ -82,7 +91,8 @@ export const achievementsValidation = async (
 		},
 	} as AchievementsStorageService;
 
-	new AchievementsMonitor(gameEventsService, loader, events, new NGXLoggerMock() as NGXLogger, store, storage);
+	// Launch the monitoring
+	new AchievementsMonitor(emitter, loader, events, new NGXLoggerMock() as NGXLogger, store, storage);
 
 	if (additionalEvents) {
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
@@ -102,16 +112,21 @@ export const achievementsValidation = async (
 	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
 	// 		challenge.requirements.forEach(req => {
 	// 			if (!req.isCompleted()) {
-	// 				console.debug('req not completed', req, req.isCompleted());
+	// 				console.debug('req not completed');
 	// 			}
 	// 		});
 	// 	});
 	// }
 
-	// console.debug('returning', isAchievementComplete);
 	return isAchievementComplete;
 };
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function buildCardsService() {
+	const service = new AllCardsService(null, null);
+	service['allCards'] = [...(cardsJson as any[])];
+	return service;
 }

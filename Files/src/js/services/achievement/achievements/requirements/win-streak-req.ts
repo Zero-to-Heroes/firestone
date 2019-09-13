@@ -42,6 +42,5 @@ export class WinStreakReq implements Requirement {
 		// The most recent event is first
 		const i = standardRanked.findIndex(stat => stat.result !== 'won');
 		this.currentWinStreak = i === -1 ? standardRanked.length : i;
-		console.debug('received stats', standardRanked, i, this.currentWinStreak);
 	}
 }
