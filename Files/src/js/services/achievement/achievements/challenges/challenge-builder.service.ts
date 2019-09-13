@@ -12,6 +12,7 @@ import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuildin
 import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-epic-req';
 import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
 import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuilding/deckbuilding-no-card-with-letter-in-name-req';
+import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
@@ -93,6 +94,9 @@ export class ChallengeBuilderService {
 			case 'DECK_EPIC': return DeckbuildingEpicReq.create(rawReq, this.cards);
 			case 'DECK_MECHANIC': return DeckbuildingMechanicReq.create(rawReq, this.cards);
 			case 'DECK_NO_CARD_WITH_LETTER_IN_NAME': return DeckbuildingNoCardWithLetterInNameReq.create(rawReq, this.cards);
+			case 'DECK_NUMBER_OF_MINIONS': 
+				console.debug(''); // No idea why I have to add this for jest to pick up the line
+				return DeckbuildingNumberOfMinionsReq.create(rawReq, this.cards);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {

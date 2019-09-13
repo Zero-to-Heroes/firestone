@@ -3,18 +3,17 @@ import { GameEvent } from '../../../../../models/game-event';
 import { AllCardsService } from '../../../../all-cards.service';
 import { Requirement } from '../_requirement';
 
-export class DeckbuildingMechanicReq implements Requirement {
+export class DeckbuildingNumberOfMinionsReq implements Requirement {
 	private doesDeckMeetSpec: boolean;
 
 	constructor(
-		private readonly targetLifestealMinions: number,
-		private readonly mechanic: string,
+		private readonly targetNumberOfMinions: number,
 		private readonly qualifier: string,
 		private readonly cards: AllCardsService,
 	) {}
 
 	public static create(rawReq: RawRequirement, cards: AllCardsService): Requirement {
-		return new DeckbuildingMechanicReq(parseInt(rawReq.values[0]), rawReq.values[1], rawReq.values[2], cards);
+		return new DeckbuildingNumberOfMinionsReq(parseInt(rawReq.values[0]), rawReq.values[1], cards);
 	}
 
 	reset(): void {
@@ -41,15 +40,13 @@ export class DeckbuildingMechanicReq implements Requirement {
 			const cards = deck.cards
 				.map(pair => this.fillArray(this.cards.getCardFromDbfId(pair[0]), pair[1]))
 				.reduce((a, b) => a.concat(b));
-			const numberOfMatchingCards: number = cards.filter(card => card.mechanics && card.mechanics.indexOf(this.mechanic) !== -1)
-				.length;
-			// console.debug('number of matching', numberOfMatchingCards, cards);
+			const numberOfMatchingCards: number = cards.filter(card => card.type === 'Minion').length;
 			if (this.qualifier === 'AT_LEAST') {
-				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetLifestealMinions;
+				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfMinions;
 			} else if (this.qualifier === 'AT_MOST') {
-				this.doesDeckMeetSpec = numberOfMatchingCards <= this.targetLifestealMinions;
+				this.doesDeckMeetSpec = numberOfMatchingCards <= this.targetNumberOfMinions;
 			} else {
-				this.doesDeckMeetSpec = numberOfMatchingCards === this.targetLifestealMinions;
+				this.doesDeckMeetSpec = numberOfMatchingCards === this.targetNumberOfMinions;
 			}
 		} else {
 			this.doesDeckMeetSpec = false;
