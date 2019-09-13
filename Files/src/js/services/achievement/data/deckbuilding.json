@@ -1,224 +1,842 @@
 [
-	{
-		"id": "deckbuilding_win_classic_1",
-		"type": "deckbuilding_win_classic",
-		"name": "Classic",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": -1,
-		"displayName": "Achievement completed: Classic (rank 1)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-		"completedText": "You won with a deck containing only Classic and Basic cards at rank 1 or better",
-		"displayCardId": "CS2_127",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "deckbuilding_win_classic_10",
-		"type": "deckbuilding_win_classic",
-		"name": "Classic",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": -10,
-		"displayName": "Achievement completed: Classic (rank 10)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-		"completedText": "You won with a deck containing only Classic and Basic cards at rank 10 or better",
-		"displayCardId": "CS2_127",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "deckbuilding_win_classic_15",
-		"type": "deckbuilding_win_classic",
-		"name": "Classic",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": -15,
-		"displayName": "Achievement completed: Classic (rank 15)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-		"completedText": "You won with a deck containing only Classic and Basic cards at rank 15 or better",
-		"displayCardId": "CS2_127",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "deckbuilding_win_classic_20",
-		"type": "deckbuilding_win_classic",
-		"name": "Classic",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": -20,
-		"displayName": "Achievement completed: Classic (rank 20)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-		"completedText": "You won with a deck containing only Classic and Basic cards at rank 20 or better",
-		"displayCardId": "CS2_127",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "deckbuilding_win_classic_25",
-		"type": "deckbuilding_win_classic",
-		"name": "Classic",
-		"icon": "boss_victory",
-		"root": true,
-		"priority": -25,
-		"displayName": "Achievement completed: Classic (rank 25)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-		"completedText": "You won with a deck containing only Classic and Basic cards at rank 25 or better",
-		"displayCardId": "CS2_127",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "deckbuilding_win_classic_5",
-		"type": "deckbuilding_win_classic",
-		"name": "Classic",
-		"icon": "boss_victory",
-		"root": false,
-		"priority": -5,
-		"displayName": "Achievement completed: Classic (rank 5)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-		"completedText": "You won with a deck containing only Classic and Basic cards at rank 5 or better",
-		"displayCardId": "CS2_127",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 5,
-		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
-		],
-		"resetEvents": ["GAME_START"]
-	}
+    {
+        "id": "deckbuilding_win_classic_1",
+        "type": "deckbuilding_win_classic",
+        "name": "Classic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Classic (rank 1)",
+        "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only Classic and Basic cards at rank 1 or better",
+        "displayCardId": "CS2_127",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CLASSIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_classic_10",
+        "type": "deckbuilding_win_classic",
+        "name": "Classic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Classic (rank 10)",
+        "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only Classic and Basic cards at rank 10 or better",
+        "displayCardId": "CS2_127",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CLASSIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_classic_15",
+        "type": "deckbuilding_win_classic",
+        "name": "Classic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Classic (rank 15)",
+        "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only Classic and Basic cards at rank 15 or better",
+        "displayCardId": "CS2_127",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CLASSIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_classic_20",
+        "type": "deckbuilding_win_classic",
+        "name": "Classic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Classic (rank 20)",
+        "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only Classic and Basic cards at rank 20 or better",
+        "displayCardId": "CS2_127",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CLASSIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_classic_25",
+        "type": "deckbuilding_win_classic",
+        "name": "Classic",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Classic (rank 25)",
+        "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only Classic and Basic cards at rank 25 or better",
+        "displayCardId": "CS2_127",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CLASSIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_classic_5",
+        "type": "deckbuilding_win_classic",
+        "name": "Classic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Classic (rank 5)",
+        "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only Classic and Basic cards at rank 5 or better",
+        "displayCardId": "CS2_127",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CLASSIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_epic_1",
+        "type": "deckbuilding_win_epic",
+        "name": "Epic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Epic (rank 1)",
+        "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only epic cards at rank 1 or better",
+        "displayCardId": "TB_KTRAF_HP_RAF4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_epic_10",
+        "type": "deckbuilding_win_epic",
+        "name": "Epic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Epic (rank 10)",
+        "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only epic cards at rank 10 or better",
+        "displayCardId": "TB_KTRAF_HP_RAF4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_epic_15",
+        "type": "deckbuilding_win_epic",
+        "name": "Epic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Epic (rank 15)",
+        "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only epic cards at rank 15 or better",
+        "displayCardId": "TB_KTRAF_HP_RAF4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_epic_20",
+        "type": "deckbuilding_win_epic",
+        "name": "Epic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Epic (rank 20)",
+        "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only epic cards at rank 20 or better",
+        "displayCardId": "TB_KTRAF_HP_RAF4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_epic_25",
+        "type": "deckbuilding_win_epic",
+        "name": "Epic",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Epic (rank 25)",
+        "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only epic cards at rank 25 or better",
+        "displayCardId": "TB_KTRAF_HP_RAF4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_epic_5",
+        "type": "deckbuilding_win_epic",
+        "name": "Epic",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Epic (rank 5)",
+        "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+        "completedText": "You won with a deck containing only epic cards at rank 5 or better",
+        "displayCardId": "TB_KTRAF_HP_RAF4",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_lifesteal_1",
+        "type": "deckbuilding_win_lifesteal",
+        "name": "Lifesteal",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Lifesteal (rank 1)",
+        "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 1 or better",
+        "displayCardId": "DAL_047",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_MECHANIC",
+                "values": [
+                    "12",
+                    "LIFESTEAL",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_lifesteal_10",
+        "type": "deckbuilding_win_lifesteal",
+        "name": "Lifesteal",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Lifesteal (rank 10)",
+        "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 10 or better",
+        "displayCardId": "DAL_047",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_MECHANIC",
+                "values": [
+                    "12",
+                    "LIFESTEAL",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_lifesteal_15",
+        "type": "deckbuilding_win_lifesteal",
+        "name": "Lifesteal",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Lifesteal (rank 15)",
+        "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 15 or better",
+        "displayCardId": "DAL_047",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_MECHANIC",
+                "values": [
+                    "12",
+                    "LIFESTEAL",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_lifesteal_20",
+        "type": "deckbuilding_win_lifesteal",
+        "name": "Lifesteal",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Lifesteal (rank 20)",
+        "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 20 or better",
+        "displayCardId": "DAL_047",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_MECHANIC",
+                "values": [
+                    "12",
+                    "LIFESTEAL",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_lifesteal_25",
+        "type": "deckbuilding_win_lifesteal",
+        "name": "Lifesteal",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Lifesteal (rank 25)",
+        "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 25 or better",
+        "displayCardId": "DAL_047",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_MECHANIC",
+                "values": [
+                    "12",
+                    "LIFESTEAL",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_lifesteal_5",
+        "type": "deckbuilding_win_lifesteal",
+        "name": "Lifesteal",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Lifesteal (rank 5)",
+        "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 5 or better",
+        "displayCardId": "DAL_047",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_MECHANIC",
+                "values": [
+                    "12",
+                    "LIFESTEAL",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    }
 ]

@@ -9,6 +9,8 @@ import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-o
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
 import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
+import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-epic-req';
+import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
@@ -86,6 +88,8 @@ export class ChallengeBuilderService {
 			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
 			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
 			case 'DECK_CLASSIC': return DeckbuildingClassicReq.create(rawReq, this.cards);
+			case 'DECK_EPIC': return DeckbuildingEpicReq.create(rawReq, this.cards);
+			case 'DECK_MECHANIC': return DeckbuildingMechanicReq.create(rawReq, this.cards);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {
