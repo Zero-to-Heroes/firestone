@@ -93,11 +93,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	created(event) {
-		console.log('notif created', event.html, this.activeNotifications);
+		console.log('notif created', event.id);
 	}
 
 	destroyed(event) {
-		console.log('notif destroyed', event, this.activeNotifications);
+		console.log('notif destroyed', event.id);
 		const deletedNotifications = this.activeNotifications.filter(notif => notif.toast.id === event.id);
 		deletedNotifications.forEach(notif => notif.subscription.unsubscribe());
 		this.activeNotifications = this.activeNotifications.filter(notif => notif.toast.id !== event.id);
@@ -128,6 +128,13 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		}
 		notification.classList.add(newClass);
 		console.log('updated notif', notification);
+		if (newClass === 'pending' && activeNotif.timeoutHandler) {
+			clearTimeout(activeNotif.timeoutHandler);
+		} else if (newClass === 'active') {
+			setTimeout(() => {
+				this.notificationService.remove(toast.id);
+			}, 5000);
+		}
 	}
 
 	private async showNotification(messageObject: Message) {
@@ -139,7 +146,8 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const additionalTimeout: number = messageObject.timeout || 0;
 			await this.ow.restoreWindow(this.windowId);
 			const override: any = {
-				timeOut: this.timeout + additionalTimeout,
+				// Achievement apps are timed out manually
+				timeOut: messageObject.app === 'achievement' ? 999999 : this.timeout + additionalTimeout,
 				clickToClose: true,
 			};
 			if (type === 'achievement-pre-record') {
@@ -196,9 +204,17 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				}
 			});
 
+			let timeoutHandler;
+			if (type === 'achievement-no-record') {
+				timeoutHandler = setTimeout(() => {
+					console.debug('manually closing achievmeent notif');
+					this.notificationService.remove(toast.id);
+				}, this.timeout + additionalTimeout);
+			}
 			const activeNotif: ActiveNotification = {
 				toast: toast,
 				subscription: subscription,
+				timeoutHandler: timeoutHandler,
 				notificationId: messageObject.notificationId,
 				type: type,
 			};
@@ -262,4 +278,5 @@ interface ActiveNotification {
 	readonly subscription: Subscription;
 	readonly notificationId: string;
 	readonly type?: string;
+	readonly timeoutHandler?: NodeJS.Timeout;
 }

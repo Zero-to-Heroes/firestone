@@ -61,7 +61,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-pre-record',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: notificationTimeout,
+			timeout: 9999999, // We will manually remove this notification once the replay is recorded
 			theClass: 'pending',
 		});
 	}
