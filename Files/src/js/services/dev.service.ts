@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Achievement } from '../models/achievement';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
+import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsStorageService } from './achievement/achievements-storage.service';
+import { Challenge } from './achievement/achievements/challenges/challenge';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
+import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { SimpleIOService } from './plugins/simple-io.service';
@@ -14,7 +18,9 @@ import { SimpleIOService } from './plugins/simple-io.service';
 @Injectable()
 export class DevService {
 	constructor(
+		private events: Events,
 		private achievementMonitor: AchievementsMonitor,
+		private achievementNotifications: AchievementsNotificationService,
 		private packMonitor: PackMonitor,
 		private io: SimpleIOService,
 		private gameEvents: GameEvents,
@@ -22,56 +28,63 @@ export class DevService {
 		private deckService: DeckParserService,
 		private storage: AchievementsStorageService,
 	) {
-		// this.addTestCommands();
+		if (process.env.NODE_ENV === 'production') {
+			return;
+		}
+		this.addTestCommands();
 	}
 
-	// private addTestCommands() {
-	// 	this.addCollectionCommands();
-	// 	this.addAchievementCommands();
-	// 	this.addCustomLogLoaderCommand();
-	// }
+	private addTestCommands() {
+		// this.addCollectionCommands();
+		this.addAchievementCommands();
+		// this.addCustomLogLoaderCommand();
+	}
 
-	// private addAchievementCommands() {
-	// 	const achievement: Achievement = {
-	// 		id: 'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
-	// 		name: 'Fake Wee Whelp',
-	// 		text: 'Temp text',
-	// 		type: 'dungeon_run_boss_encounter',
-	// 		displayCardId: 'LOOTA_BOSS_44h',
-	// 		displayCardType: 'minion',
-	// 		displayName: 'Boss met: Fake Wee Whelp',
-	// 		difficulty: 'common',
-	// 		icon: 'boss_encounter',
-	// 		maxNumberOfRecords: 1,
-	// 		points: 1,
-	// 		numberOfCompletions: 0,
-	// 		replayInfo: [],
-	// 		root: null,
-	// 		priority: 0,
-	// 		emptyText: null,
-	// 		completedText: null,
-	// 	};
-	// 	window['showAchievementNotification'] = () => {
-	// 		this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
-	// 		setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
-	// 	};
-	// 	window['addReplayInfos'] = async () => {
-	// 		const achievements = await this.storage.loadAchievements();
-	// 		const achievement = achievements.filter(ach => ach.replayInfo && ach.replayInfo.length > 0)[0];
-	// 		const newReplays = [
-	// 			...achievement.replayInfo,
-	// 			achievement.replayInfo[0],
-	// 			achievement.replayInfo[0],
-	// 			achievement.replayInfo[0],
-	// 			achievement.replayInfo[0],
-	// 			achievement.replayInfo[0],
-	// 			achievement.replayInfo[0],
-	// 		];
-	// 		const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, newReplays);
-	// 		const updated = await this.storage.saveAchievement(newAchievement);
-	// 		console.log('added lots of replays to achievement', updated.id, updated);
-	// 	};
-	// }
+	private addAchievementCommands() {
+		const achievement: Achievement = {
+			id: 'dungeon_run_boss_encounter_LOOTA_BOSS_44h',
+			name: 'Fake Wee Whelp',
+			text: 'Temp text',
+			type: 'dungeon_run_boss_encounter',
+			displayCardId: 'LOOTA_BOSS_44h',
+			displayCardType: 'minion',
+			displayName: 'Boss met: Fake Wee Whelp',
+			difficulty: 'common',
+			icon: 'boss_encounter',
+			maxNumberOfRecords: 1,
+			points: 1,
+			numberOfCompletions: 0,
+			replayInfo: [],
+			root: null,
+			priority: 0,
+			emptyText: null,
+			completedText: null,
+		};
+		window['showAchievementNotification'] = () => {
+			this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, achievement, {
+				notificationTimeout: () => {},
+				getRecordingDuration: () => 0,
+			} as Challenge);
+			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
+			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
+		};
+		// window['addReplayInfos'] = async () => {
+		// 	const achievements = await this.storage.loadAchievements();
+		// 	const achievement = achievements.filter(ach => ach.replayInfo && ach.replayInfo.length > 0)[0];
+		// 	const newReplays = [
+		// 		...achievement.replayInfo,
+		// 		achievement.replayInfo[0],
+		// 		achievement.replayInfo[0],
+		// 		achievement.replayInfo[0],
+		// 		achievement.replayInfo[0],
+		// 		achievement.replayInfo[0],
+		// 		achievement.replayInfo[0],
+		// 	];
+		// 	const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, newReplays);
+		// 	const updated = await this.storage.saveAchievement(newAchievement);
+		// 	console.log('added lots of replays to achievement', updated.id, updated);
+		// };
+	}
 
 	// private addCollectionCommands() {
 	// 	window['showCardNotification'] = () => {

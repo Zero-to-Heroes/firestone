@@ -132,7 +132,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			clearTimeout(activeNotif.timeoutHandler);
 		} else if (newClass === 'active') {
 			setTimeout(() => {
-				this.notificationService.remove(toast.id);
+				this.fadeNotificationOut(notificationId);
 			}, 5000);
 		}
 	}
@@ -197,7 +197,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					if (isAchievement) {
 						console.log('sending message', this.mainWindowId);
 						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
-						this.notificationService.remove(toast.id);
+						this.fadeNotificationOut(messageObject.notificationId);
 					} else {
 						this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
 					}
@@ -208,7 +208,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			if (type === 'achievement-no-record') {
 				timeoutHandler = setTimeout(() => {
 					console.debug('manually closing achievmeent notif');
-					this.notificationService.remove(toast.id);
+					this.fadeNotificationOut(messageObject.notificationId);
 				}, this.timeout + additionalTimeout);
 			}
 			const activeNotif: ActiveNotification = {
@@ -228,6 +228,23 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				}
 			}, 200);
 		});
+	}
+
+	private fadeNotificationOut(notificationId: string) {
+		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
+		if (!activeNotif) {
+			console.log('notif already removed', notificationId, this.activeNotifications);
+			return;
+		}
+		const notification = this.elRef.nativeElement.querySelector('.' + notificationId);
+		notification.classList.add('fade-out');
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+		const toast = activeNotif.toast;
+		setTimeout(() => {
+			this.notificationService.remove(toast.id);
+		}, 500);
 	}
 
 	private resize() {
