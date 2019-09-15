@@ -116,13 +116,18 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 					this.cdr.detectChanges();
 				}
 			} else {
-				this.showTooltipTimer = setTimeout(() => {
-					this.activeTooltip = data.data[0];
-					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 1000);
+				this.activeTooltip = data.data[0];
+				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+				// this.showTooltipTimer = setTimeout(() => {
+				// 	this.activeTooltip = data.data[0];
+				// 	this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+				// 	if (!(this.cdr as ViewRef).destroyed) {
+				// 		this.cdr.detectChanges();
+				// 	}
+				// }, 200);
 			}
 		});
 		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
@@ -136,12 +141,12 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 						this.cdr.detectChanges();
 					}
 				},
-				data.data[0] ? data.data[0] : 200,
+				data.data[0] ? data.data[0] : 0,
 			);
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			console.log('received deck event', event.event);
+			// console.log('received deck event', event.event);
 			this.gameState = event.state;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -169,12 +174,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 				this.handleDisplayPreferences(event.preferences);
 			}
 		});
-		this.handleDisplayPreferences();
-		this.handleDisplaySize();
 		if (process.env.NODE_ENV !== 'production') {
 			console.error('Should not allow debug game state from production');
 			this.gameState = this.ow.getMainWindow().deckDebug.state;
-			console.log('game state', this.gameState, JSON.stringify(this.gameState));
+			console.log('game state', this.gameState);
+			if (this.gameState) {
+				this.restoreWindow();
+			}
 		}
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
@@ -184,6 +190,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 
+		this.handleDisplayPreferences();
+		this.handleDisplaySize();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -254,8 +262,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		const gameWidth = gameInfo.logicalWidth;
 		const dpi = gameWidth / gameInfo.width;
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-		const newLeft = ~~(gameWidth - width * dpi - 20); // Leave a bit of room to the right
-		const newTop = 0;
+		const newLeft = gameWidth - width * dpi - 40; // Leave a bit of room to the right
+		const newTop = 10;
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 	}
 
