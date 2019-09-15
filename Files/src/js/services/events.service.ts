@@ -50,12 +50,12 @@ export class Events {
 	}
 
 	broadcast(key: any, ...data: any[]) {
-		console.log('broadcasting', key);
+		// console.log('broadcasting', key);
 		this._eventBus.next({ key, data });
 	}
 
 	on(key: any): Observable<BroadcastEvent> {
-		console.log('wubwcribing', key);
+		// console.log('wubwcribing', key);
 		return this._eventBus.asObservable().pipe(
 			filter(event => event.key === key),
 			map(event => event),
