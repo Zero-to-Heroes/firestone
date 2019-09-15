@@ -122,7 +122,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 					if (!(this.cdr as ViewRef).destroyed) {
 						this.cdr.detectChanges();
 					}
-				}, 500);
+				}, 1000);
 			}
 		});
 		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {

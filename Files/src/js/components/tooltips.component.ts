@@ -169,12 +169,12 @@ export class TooltipsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private destroy() {
-		if (this.tooltip) {
+		if (this.tooltip && this.tooltip.instance) {
 			this.tooltip.instance.removing = true;
 			this.tooltip.instance.display = 'none';
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 }
