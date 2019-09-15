@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, ViewRef } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
@@ -31,7 +31,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	displayTurnNumber: boolean = true;
 	displayGuess: boolean = true;
 
-	private displayFromMatch = false;
 	private displayFromPrefs = false;
 
 	private gameInfoUpdatedListener: (message: any) => void;
@@ -58,11 +57,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
-		});
-		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
-			this.displayFromMatch = shouldDisplay;
-			this.handleDisplayPreferences();
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
@@ -110,7 +104,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async handleDisplayPreferences() {
-		if (this.displayFromPrefs && this.displayFromMatch) {
+		if (this.displayFromPrefs) {
 			this.restoreWindow();
 		} else {
 			this.hideWindow();
