@@ -14,14 +14,20 @@ export class GameEventsPluginService {
 
 	initialize() {
 		this.initialized = false;
-		this.gameEventsPlugin.initialize((status: boolean) => {
-			if (status === false) {
-				console.error("[game-events] Plugin couldn't be loaded??");
-				return;
-			}
-			console.log('[game-events] Plugin ' + this.gameEventsPlugin.get()._PluginName_ + ' was loaded!');
-			this.initialized = true;
-		});
+		try {
+			this.gameEventsPlugin.initialize((status: boolean) => {
+				if (status === false) {
+					console.error("[game-events] Plugin couldn't be loaded??", 'retrying');
+					setTimeout(() => this.initialize(), 2000);
+					return;
+				}
+				console.log('[game-events] Plugin ' + this.gameEventsPlugin.get()._PluginName_ + ' was loaded!');
+				this.initialized = true;
+			});
+		} catch (e) {
+			console.warn('Could not load plugin, retrying', e);
+			setTimeout(() => this.initialize(), 2000);
+		}
 	}
 
 	public async get() {
