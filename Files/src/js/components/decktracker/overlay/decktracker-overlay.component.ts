@@ -146,7 +146,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			// console.log('received deck event', event.event);
+			console.log('received deck event', event.event);
 			this.gameState = event.state;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();

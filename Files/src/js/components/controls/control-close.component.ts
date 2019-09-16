@@ -1,6 +1,6 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, ViewEncapsulation } from '@angular/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -45,6 +45,7 @@ export class ControlCloseComponent implements AfterViewInit {
 				this.ow.closeWindowFromName(name);
 			}
 		} else {
+			console.log('[control-close] requested window close', this.windowId);
 			this.ow.hideWindow(this.windowId);
 		}
 	}
