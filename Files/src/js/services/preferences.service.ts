@@ -149,7 +149,7 @@ export class PreferencesService {
 
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
-		console.log('user pref saved', eventName);
+		// console.log('user pref saved', eventName);
 		if (eventName) {
 			console.log('broadcasting new prefs', userPrefs);
 			const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;

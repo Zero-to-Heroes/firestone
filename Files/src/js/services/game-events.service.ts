@@ -82,14 +82,15 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		console.log(gameEvent.Type + ' event');
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
+				console.log(gameEvent.Type + ' event');
 				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START } as GameEvent);
 				this.gameEventsEmitter.allEvents.next(event);
 				this.gameEventsEmitter.onGameStart.next(event);
 				break;
 			case 'MATCH_METADATA':
+				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
@@ -100,6 +101,7 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER':
+				console.log(gameEvent.Type + ' event');
 				// First try without waiting for a callback, which is most of the cases
 				const playerInfo = this.playersInfoService.playerInfo || (await this.playersInfoService.getPlayerInfo());
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
@@ -119,6 +121,7 @@ export class GameEvents {
 				);
 				break;
 			case 'OPPONENT_PLAYER':
+				console.log(gameEvent.Type + ' event');
 				const opponentInfo = this.playersInfoService.opponentInfo || (await this.playersInfoService.getOpponentInfo());
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
@@ -325,6 +328,7 @@ export class GameEvents {
 				);
 				break;
 			case 'WINNER':
+				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.WINNER,
@@ -338,6 +342,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TIE':
+				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TIE,
@@ -345,6 +350,7 @@ export class GameEvents {
 				);
 				break;
 			case 'GAME_END':
+				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.GAME_END,

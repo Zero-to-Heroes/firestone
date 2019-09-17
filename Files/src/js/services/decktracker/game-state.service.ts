@@ -70,7 +70,6 @@ export class GameStateService {
 		this.buildEventEmitters();
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async event => {
-			this.logger.debug('received pref', event);
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 				this.logger.debug('rebuilding event emitters');
 				this.buildEventEmitters();

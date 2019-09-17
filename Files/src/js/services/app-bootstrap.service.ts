@@ -180,9 +180,7 @@ export class AppBootstrapService {
 	private async showCollectionWindow() {
 		console.log('reading to show collection window');
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		console.log('sending new event', this.store);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
-		console.log('sent new event', this.store);
 		await this.ow.restoreWindow(window.id);
 		this.closeLoadingScreen();
 	}

@@ -72,7 +72,7 @@ export class SettingsCollectionNotificationComponent {
 		const prefs = await this.prefs.getPreferences();
 		this.showDust = prefs.binder.showDust;
 		this.showCommon = prefs.binder.showCommon;
-		console.log('loaded prefs', prefs);
+		// console.log('loaded prefs', prefs);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

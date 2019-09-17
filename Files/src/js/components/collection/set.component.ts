@@ -1,20 +1,19 @@
+import { animate, keyframes, state, style, transition, trigger } from '@angular/animations';
 import {
-	Component,
-	HostListener,
-	Input,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
+	Component,
 	ElementRef,
-	ViewRef,
 	EventEmitter,
-	AfterViewInit,
+	HostListener,
+	Input,
+	ViewRef,
 } from '@angular/core';
-import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
-
 import { Set } from '../../models/set';
 import { Events } from '../../services/events.service';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { SelectCollectionSetEvent } from '../../services/mainwindow/store/events/collection/select-collection-set-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -229,7 +228,7 @@ export class SetComponent implements AfterViewInit {
 		this.timeoutHandler = setTimeout(() => {
 			this.flip = 'active';
 			const rect = this.elRef.nativeElement.getBoundingClientRect();
-			console.log('broadcasting set mouse over', this._cardSet.id, rect);
+			// console.log('broadcasting set mouse over', this._cardSet.id, rect);
 			this.events.broadcast(Events.SET_MOUSE_OVER, rect, this._cardSet.id);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();

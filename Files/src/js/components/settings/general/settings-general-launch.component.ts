@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
@@ -52,7 +52,6 @@ export class SettingsGeneralLaunchComponent {
 
 	private async updateDefaultValues() {
 		const preferences = await this.prefs.getPreferences();
-		console.log('preferences', preferences);
 		this.launchAppOnGameStart = preferences.launchAppOnGameStart;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

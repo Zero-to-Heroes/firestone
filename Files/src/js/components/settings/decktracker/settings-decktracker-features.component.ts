@@ -113,7 +113,7 @@ export class SettingsDecktrackerFeaturesComponent {
 		const prefs = await this.prefs.getPreferences();
 		this.showOpponentTurnDraw = prefs.dectrackerShowOpponentTurnDraw;
 		this.showOpponentGuess = prefs.dectrackerShowOpponentGuess;
-		console.log('loaded prefs', prefs);
+		// console.log('loaded prefs', prefs);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

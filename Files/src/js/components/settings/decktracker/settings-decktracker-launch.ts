@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga;
@@ -156,7 +156,7 @@ export class SettingsDecktrackerLaunchComponent {
 		this.showPractice = prefs.decktrackerShowPractice;
 		this.showFriendly = prefs.decktrackerShowFriendly;
 		this.showCasual = prefs.decktrackerShowCasual;
-		console.log('loaded prefs', prefs);
+		// console.log('loaded prefs', prefs);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
