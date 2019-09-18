@@ -14,6 +14,7 @@ import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuildi
 import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuilding/deckbuilding-no-card-with-letter-in-name-req';
 import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
+import { ExcludedScenarioIdReq } from '../requirements/excluded-scenario-id-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
 import { GameTieReq } from '../requirements/game-tie-req';
@@ -65,6 +66,7 @@ export class ChallengeBuilderService {
 			case 'RANKED_MIN_RANK': return StandardRankedMinRankReq.create(rawReq);
 			case 'RANKED_FORMAT_TYPE': return FormatTypeReq.create(rawReq);
 			case 'SCENARIO_IDS': return ScenarioIdReq.create(rawReq);
+			case 'EXCLUDED_SCENARIO_IDS': return ExcludedScenarioIdReq.create(rawReq);
 			case 'MULLIGAN_DONE': return MulliganDoneReq.create(rawReq);
 			case 'GAME_WON': return GameWonReq.create(rawReq);
 			case 'GAME_TIE': return GameTieReq.create(rawReq);
