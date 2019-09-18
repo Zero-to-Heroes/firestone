@@ -8,6 +8,7 @@ export class TombsOfTerrorPassivesSetProvider extends GenericSetProvider {
 			[
 				'tombs_of_terror_passive_play_DALA_746',
 				'tombs_of_terror_passive_play_DALA_747',
+				'tombs_of_terror_passive_play_LOOTA_803',
 				'tombs_of_terror_passive_play_LOOTA_824',
 				'tombs_of_terror_passive_play_LOOTA_831',
 				'tombs_of_terror_passive_play_ULDA_005',

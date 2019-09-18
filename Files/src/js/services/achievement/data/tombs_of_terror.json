@@ -9230,6 +9230,60 @@
         ]
     },
     {
+        "id": "tombs_of_terror_passive_play_LOOTA_803",
+        "type": "tombs_of_terror_passive_play_LOOTA_803",
+        "name": "Scepter of Summoning",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Scepter of Summoning",
+        "text": "Your minions that cost (5) or more cost (5).",
+        "completedText": "You triggered Scepter of Summoning",
+        "displayCardId": "LOOTA_803",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "LOOTA_803"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_passive_play_LOOTA_824",
         "type": "tombs_of_terror_passive_play_LOOTA_824",
         "name": "Khadgar's Scrying Orb",
@@ -10221,6 +10275,60 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "DALA_904"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_DALA_905",
+        "type": "tombs_of_terror_bob_treat_DALA_905",
+        "name": "Right Hand Man",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Right Hand Man",
+        "text": "Choose a friendly minion. It always starts in your hand.",
+        "completedText": "You received Right Hand Man from Bob",
+        "displayCardId": "DALA_905",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_905"
                 ]
             },
             {
@@ -11391,14 +11499,14 @@
     },
     {
         "id": "tombs_of_terror_treasure_play_ULDA_019",
-        "type": "tombs_of_terror_treasure_play_ULDA_019",
+        "type": "tombs_of_terror_bob_treat_ULDA_019",
         "name": "Pack Mule",
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Treasure played: Pack Mule",
+        "displayName": "Bob's Treat: Pack Mule",
         "text": "Reduce the Cost of your 10 starter cards by (1).",
-        "completedText": "You played Pack Mule",
+        "completedText": "You received Pack Mule from Bob",
         "displayCardId": "ULDA_019",
         "displayCardType": "spell",
         "difficulty": "rare",
