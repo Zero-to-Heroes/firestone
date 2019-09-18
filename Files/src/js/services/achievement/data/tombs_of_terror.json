@@ -2392,7 +2392,7 @@
         "icon": "boss_encounter",
         "root": true,
         "priority": 0,
-        "displayName": "Boss met: Xatma, Plague Lord of Death",
+        "displayName": "Plague Lord met: Xatma, Plague Lord of Death",
         "text": "The third plague rests in final breath: You face the  ancient Lord of Death!",
         "completedText": "You met Xatma, Plague Lord of Death",
         "displayCardId": "ULDA_BOSS_37h",
@@ -2450,7 +2450,7 @@
         "icon": "boss_encounter",
         "root": true,
         "priority": 0,
-        "displayName": "Boss met: K'zrath, Plague Lord of Madness",
+        "displayName": "Plague Lord met: K'zrath, Plague Lord of Madness",
         "text": "The second plague is in the brain: Among these dunes, Madness reigns.",
         "completedText": "You met K'zrath, Plague Lord of Madness",
         "displayCardId": "ULDA_BOSS_38h",
@@ -2508,7 +2508,7 @@
         "icon": "boss_encounter",
         "root": true,
         "priority": 0,
-        "displayName": "Boss met: Vesh, Plague Lord of Murlocs",
+        "displayName": "Plague Lord met: Vesh, Plague Lord of Murlocs",
         "text": "The first plague is a finful  pox: Beware, beware the Lord of 'Locs.",
         "completedText": "You met Vesh, Plague Lord of Murlocs",
         "displayCardId": "ULDA_BOSS_39h",
@@ -2566,7 +2566,7 @@
         "icon": "boss_encounter",
         "root": true,
         "priority": 0,
-        "displayName": "Boss met: Icarax, Plague Lord of Wrath",
+        "displayName": "Plague Lord met: Icarax, Plague Lord of Wrath",
         "text": "The fourth plague roots within the heart: Wrath tears friend and foe apart.",
         "completedText": "You met Icarax, Plague Lord of Wrath",
         "displayCardId": "ULDA_BOSS_40h",
@@ -4024,7 +4024,7 @@
         "icon": "boss_encounter",
         "root": true,
         "priority": 0,
-        "displayName": "Boss met: Tekahn, Plague Lord of Flame",
+        "displayName": "Plague Lord met: Tekahn, Plague Lord of Flame",
         "text": "The fifth plague, Tekhan laid claim: behold the mighty Lord of Flame!",
         "completedText": "You met Tekahn, Plague Lord of Flame",
         "displayCardId": "ULDA_BOSS_67h",
@@ -6768,7 +6768,7 @@
         "icon": "boss_victory",
         "root": false,
         "priority": 1,
-        "displayName": "Boss defeated: Xatma, Plague Lord of Death",
+        "displayName": "Plague Lord defeated: Xatma, Plague Lord of Death",
         "text": "The third plague rests in final breath: You face the  ancient Lord of Death!",
         "completedText": "You defeated Xatma, Plague Lord of Death",
         "displayCardId": "ULDA_BOSS_37h",
@@ -6826,7 +6826,7 @@
         "icon": "boss_victory",
         "root": false,
         "priority": 1,
-        "displayName": "Boss defeated: K'zrath, Plague Lord of Madness",
+        "displayName": "Plague Lord defeated: K'zrath, Plague Lord of Madness",
         "text": "The second plague is in the brain: Among these dunes, Madness reigns.",
         "completedText": "You defeated K'zrath, Plague Lord of Madness",
         "displayCardId": "ULDA_BOSS_38h",
@@ -6884,7 +6884,7 @@
         "icon": "boss_victory",
         "root": false,
         "priority": 1,
-        "displayName": "Boss defeated: Vesh, Plague Lord of Murlocs",
+        "displayName": "Plague Lord defeated: Vesh, Plague Lord of Murlocs",
         "text": "The first plague is a finful  pox: Beware, beware the Lord of 'Locs.",
         "completedText": "You defeated Vesh, Plague Lord of Murlocs",
         "displayCardId": "ULDA_BOSS_39h",
@@ -6942,7 +6942,7 @@
         "icon": "boss_victory",
         "root": false,
         "priority": 1,
-        "displayName": "Boss defeated: Icarax, Plague Lord of Wrath",
+        "displayName": "Plague Lord defeated: Icarax, Plague Lord of Wrath",
         "text": "The fourth plague roots within the heart: Wrath tears friend and foe apart.",
         "completedText": "You defeated Icarax, Plague Lord of Wrath",
         "displayCardId": "ULDA_BOSS_40h",
@@ -8400,7 +8400,7 @@
         "icon": "boss_victory",
         "root": false,
         "priority": 1,
-        "displayName": "Boss defeated: Tekahn, Plague Lord of Flame",
+        "displayName": "Plague Lord defeated: Tekahn, Plague Lord of Flame",
         "text": "The fifth plague, Tekhan laid claim: behold the mighty Lord of Flame!",
         "completedText": "You defeated Tekahn, Plague Lord of Flame",
         "displayCardId": "ULDA_BOSS_67h",
@@ -10310,6 +10310,60 @@
         ]
     },
     {
+        "id": "tombs_of_terror_treasure_play_DALA_907",
+        "type": "tombs_of_terror_bob_treat_DALA_907",
+        "name": "Recruit a Veteran",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Recruit a Veteran",
+        "text": "Discover a Legendary minion. Add it to your Adventure Deck.",
+        "completedText": "You received Recruit a Veteran from Bob",
+        "displayCardId": "DALA_907",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_907"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_treasure_play_DALA_908",
         "type": "tombs_of_terror_bob_treat_DALA_908",
         "name": "Tell a Story",
@@ -10383,6 +10437,114 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "DALA_909"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_DALA_910",
+        "type": "tombs_of_terror_bob_treat_DALA_910",
+        "name": "The Gang's All Here!",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: The Gang's All Here!",
+        "text": "Choose a friendly minion. Add three new copies of it to your Adventure Deck.",
+        "completedText": "You received The Gang's All Here! from Bob",
+        "displayCardId": "DALA_910",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_910"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_DALA_912",
+        "type": "tombs_of_terror_bob_treat_DALA_912",
+        "name": "Brood",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Brood",
+        "text": "Fill the tavern with new minions.",
+        "completedText": "You received Brood from Bob",
+        "displayCardId": "DALA_912",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_912"
                 ]
             },
             {
