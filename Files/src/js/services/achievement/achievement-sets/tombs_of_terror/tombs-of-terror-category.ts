@@ -1,4 +1,5 @@
 import { AchievementCategoryProvider } from '../achievement-category-provider';
+import { TombsOfTerrorAmazingPlaysSetProvider } from './tombs-of-terror-amazing-plays';
 import { TombsOfTerrorBobTreatsSetProvider } from './tombs-of-terror-bob-treats';
 import { TombsOfTerrorBossSetProvider } from './tombs-of-terror-boss';
 import { TombsOfTerrorPassivesSetProvider } from './tombs-of-terror-passves';
@@ -13,6 +14,7 @@ export class TombsOfTerrorCategoryProvider extends AchievementCategoryProvider {
 			new TombsOfTerrorBobTreatsSetProvider(),
 			new TombsOfTerrorBossSetProvider(),
 			new TombsOfTerrorPlagueLordsProvider(),
+			new TombsOfTerrorAmazingPlaysSetProvider(),
 		]);
 	}
 }

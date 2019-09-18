@@ -7,6 +7,7 @@ import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-rece
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
 import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-or-on-board-at-game-start-req';
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
+import { CorrectStartingHealthReq } from '../requirements/correct-starting-health-req';
 import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
 import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-epic-req';
@@ -73,6 +74,7 @@ export class ChallengeBuilderService {
 			case 'GAME_MIN_TURNS': return GameMinTurnsReq.create(rawReq);
 			case 'PLAYER_HERO': return PlayerHeroReq.create(rawReq);
 			case 'CORRECT_OPPONENT': return CorrectOpponentReq.create(rawReq);
+			case 'CORRECT_STARTING_HEALTH': return CorrectStartingHealthReq.create(rawReq);
 			case 'SCENE_CHANGED_TO_GAME': return SceneChangedToGameReq.create(rawReq);
 			case 'CARD_PLAYED_OR_CHANGED_ON_BOARD': return CardPlayedOrChangedOnBoardReq.create(rawReq);
 			case 'CARD_PLAYED_OR_ON_BOARD_AT_GAME_START': return CardPlayedOrOnBoardAtGameStartReq.create(rawReq);

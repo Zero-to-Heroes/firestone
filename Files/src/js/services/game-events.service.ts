@@ -254,7 +254,12 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent));
+				const additionalProps = gameEvent.Value.AdditionalProps
+					? {
+							health: gameEvent.Value.AdditionalProps.Health,
+					  }
+					: null;
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps));
 			case 'FIRST_PLAYER':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
