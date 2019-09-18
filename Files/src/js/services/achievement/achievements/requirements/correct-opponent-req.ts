@@ -5,13 +5,13 @@ import { Requirement } from './_requirement';
 export class CorrectOpponentReq implements Requirement {
 	private isCorrectOpponent: boolean;
 
-	constructor(private readonly cardId: string) {}
+	constructor(private readonly cardIds: readonly string[]) {}
 
 	public static create(rawReq: RawRequirement): Requirement {
-		if (!rawReq.values || rawReq.values.length !== 1) {
+		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for CorrectOpponentReq', rawReq);
 		}
-		return new CorrectOpponentReq(rawReq.values[0]);
+		return new CorrectOpponentReq(rawReq.values);
 	}
 
 	reset(): void {
@@ -35,7 +35,7 @@ export class CorrectOpponentReq implements Requirement {
 
 	private detectGameResultEvent(gameEvent: GameEvent) {
 		const opponentPlayer = gameEvent.opponentPlayer;
-		if (opponentPlayer.CardID === this.cardId) {
+		if (this.cardIds.indexOf(opponentPlayer.CardID) !== -1) {
 			this.isCorrectOpponent = true;
 		}
 	}
