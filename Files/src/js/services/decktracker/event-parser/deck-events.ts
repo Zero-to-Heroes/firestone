@@ -21,4 +21,5 @@ export class DeckEvents {
 	public static readonly FIRST_PLAYER = 'FIRST_PLAYER';
 	public static readonly MULLIGAN_OVER = 'DECK_MULLIGAN_OVER';
 	public static readonly TURN_START = 'TURN_START';
+	public static readonly CARD_STOLEN = 'CARD_STOLEN';
 }

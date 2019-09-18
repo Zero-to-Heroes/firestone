@@ -41,6 +41,7 @@ export class GameEvent {
 	public static readonly FATIGUE_DAMAGE = 'FATIGUE_DAMAGE';
 	public static readonly DAMAGE = 'DAMAGE';
 	public static readonly HEALING = 'HEALING';
+	public static readonly CARD_STOLEN = 'CARD_STOLEN';
 	public static readonly RUMBLE_RUN_STEP = 'RUMBLE_RUN_STEP';
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';

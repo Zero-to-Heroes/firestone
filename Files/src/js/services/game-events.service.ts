@@ -260,6 +260,14 @@ export class GameEvents {
 					  }
 					: null;
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps));
+				break;
+			case 'CARD_STOLEN':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_STOLEN, gameEvent, {
+						newControllerId: gameEvent.Value.AdditionalProps.newControllerId,
+					}),
+				);
+				break;
 			case 'FIRST_PLAYER':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;

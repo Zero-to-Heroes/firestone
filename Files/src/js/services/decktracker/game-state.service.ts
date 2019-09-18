@@ -19,6 +19,7 @@ import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-p
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
+import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
@@ -196,6 +197,7 @@ export class GameStateService {
 			new SecretPlayedFromDeckParser(),
 			new NewTurnParser(),
 			new FirstPlayerParser(),
+			new CardStolenParser(),
 		];
 	}
 
