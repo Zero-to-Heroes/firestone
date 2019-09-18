@@ -52,7 +52,11 @@ export class AchievementsNotificationService {
 
 	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] in pre-record notification');
-		const notificationTimeout = challenge.notificationTimeout();
+		if (achievement.numberOfCompletions > 1) {
+			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
+			return;
+		}
+		// const notificationTimeout = challenge.notificationTimeout();
 		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
 		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
 		this.notificationService.html({
@@ -68,6 +72,10 @@ export class AchievementsNotificationService {
 
 	private async handleAchievementRecordCompleted(newAchievement: Achievement, challenge: Challenge) {
 		const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
+		if (achievement.numberOfCompletions > 1) {
+			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
+			return;
+		}
 		// In case the pre-record notification has already timed out, we need to send a full notif
 		this.notificationService.html({
 			notificationId: achievement.id,
