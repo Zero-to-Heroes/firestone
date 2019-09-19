@@ -1,13 +1,23 @@
 import { Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { AfterViewInit, ChangeDetectorRef, ComponentRef, Directive, ElementRef, HostListener, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	ComponentRef,
+	Directive,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 
 @Directive({
 	selector: '[cardTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class CardTooltipDirective implements AfterViewInit {
+export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input('cardTooltip') cardId = '';
 
 	private tooltipPortal;
@@ -55,6 +65,13 @@ export class CardTooltipDirective implements AfterViewInit {
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	ngOnDestroy() {
+		this.overlayRef.detach();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
