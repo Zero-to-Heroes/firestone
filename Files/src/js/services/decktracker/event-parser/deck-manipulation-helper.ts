@@ -102,4 +102,10 @@ export class DeckManipulationHelper {
 		// }
 		// return found;
 	}
+
+	public static obfuscateCard(card: DeckCard): DeckCard {
+		return Object.assign(new DeckCard(), card, {
+			cardId: undefined,
+		} as DeckCard);
+	}
 }

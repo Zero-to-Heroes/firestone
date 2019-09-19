@@ -1,12 +1,12 @@
-import { EventParser } from './event-parser';
-import { GameEvent } from '../../../models/game-event';
-import { GameState } from '../../../models/decktracker/game-state';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckParserService } from '../deck-parser.service';
-import { AllCardsService } from '../../all-cards.service';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { GameState } from '../../../models/decktracker/game-state';
+import { GameEvent } from '../../../models/game-event';
+import { AllCardsService } from '../../all-cards.service';
+import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { EventParser } from './event-parser';
 
 export class CreateCardInDeckParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
@@ -27,6 +27,7 @@ export class CreateCardInDeckParser implements EventParser {
 		const cardId: string = gameEvent.cardId;
 		const entityId: number = gameEvent.entityId;
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
+		// TODO: when handling this for the opponent, pay attention to info leak
 		const card = Object.assign(new DeckCard(), {
 			cardId: cardId,
 			entityId: entityId,

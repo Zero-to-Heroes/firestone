@@ -27,7 +27,10 @@ export class CardBackToDeckParser implements EventParser {
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
 		const newOther: readonly DeckCard[] = this.buildNewOther(initialZone, deck.otherZone, card);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
+		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
+			previousDeck,
+			DeckManipulationHelper.obfuscateCard(card),
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,
