@@ -24,7 +24,13 @@ export class SceneChangedToGameReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.SCENE_CHANGED && gameEvent.additionalData.scene === 'scene_gameplay') {
+		if (gameEvent.type === GameEvent.SCENE_CHANGED) {
+			this.handleEvent(gameEvent);
+		}
+	}
+
+	private handleEvent(gameEvent: GameEvent) {
+		if (gameEvent.additionalData.scene === 'scene_gameplay') {
 			this.sceneChanged = true;
 		}
 	}

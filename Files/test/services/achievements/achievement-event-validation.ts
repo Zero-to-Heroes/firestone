@@ -94,13 +94,14 @@ export const achievementsValidation = async (
 	// Launch the monitoring
 	new AchievementsMonitor(emitter, loader, events, new NGXLoggerMock() as NGXLogger, store, storage);
 
+	// So that it has time to register all the events first
+	await sleep(100);
+
 	if (additionalEvents) {
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
 	}
 
-	// wait for a short while, so that all events are processed. The integration tests
-	// take a long time to load (probably because of the big files?), so this small
-	// delay has almost no impact
+	// wait for a short while, so that all events are processed.
 	// The processing queue is configured with a 1s delay, se we need to wait for a long time
 	await sleep(1500);
 
@@ -112,7 +113,7 @@ export const achievementsValidation = async (
 	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
 	// 		challenge.requirements.forEach(req => {
 	// 			if (!req.isCompleted()) {
-	// 				console.debug('req not completed');
+	// 				console.debug('req not completed', req);
 	// 			}
 	// 		});
 	// 	});
