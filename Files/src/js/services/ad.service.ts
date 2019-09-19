@@ -21,7 +21,7 @@ export class AdService {
 				resolve(true);
 				return;
 			}
-			console.log('contacting subscription API');
+			console.log('contacting subscription API', `${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`);
 			this.http.get(`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`).subscribe(
 				res => {
 					console.log('retrieved sub status for', username, res);
