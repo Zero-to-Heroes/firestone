@@ -16,8 +16,8 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 				[card]="card"
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
-				[style.left.%]="cardPositionLeft(i)"
-				[style.top.%]="cardPositionTop(i)"
+				[leftVhOffset]="cardPositionLeft(i)"
+				[topVhOffset]="cardPositionTop(i)"
 			></opponent-card-info>
 		</ul>
 	`,
@@ -53,54 +53,54 @@ export class OpponentCardInfosComponent implements OnInit {
 
 	private buildHandAdjustment() {
 		return Map.of(
-			1, // ok
+			1,
 			{
-				positionLeft: Map.of(0, 43),
+				positionLeft: Map.of(0, -31),
 				positionTop: Map.of(0, 29),
 			} as Adjustment,
-			2, // ok
+			2,
 			{
-				positionLeft: Map.of(0, 35, 1, 51),
+				positionLeft: Map.of(0, -58, 1, -4),
 				positionTop: Map.of(0, 28, 1, 29),
 			} as Adjustment,
-			3, // ok
+			3,
 			{
-				positionLeft: Map.of(0, 27, 1, 43, 2, 59),
-				positionTop: Map.of(0, 20, 1, 28, 2, 24),
+				positionLeft: Map.of(0, -85, 1, -28, 2, 30),
+				positionTop: Map.of(0, 20, 1, 28, 2, 23),
 			} as Adjustment,
-			4, // ok
+			4,
 			{
-				positionLeft: Map.of(0, 24, 1, 36, 2, 48, 3, 62),
-				positionTop: Map.of(0, 12, 1, 24, 2, 31, 3, 28),
+				positionLeft: Map.of(0, -93, 1, -50, 2, -8, 3, 36),
+				positionTop: Map.of(0, 12, 1, 24, 2, 29, 3, 26),
 			} as Adjustment,
-			5, // ok
+			5,
 			{
-				positionLeft: Map.of(0, 23, 1, 33, 2, 43, 3, 53, 4, 63),
-				positionTop: Map.of(0, 13, 1, 24, 2, 30, 3, 28, 4, 21),
+				positionLeft: Map.of(0, -96, 1, -63, 2, -29, 3, 6, 4, 40),
+				positionTop: Map.of(0, 13, 1, 22, 2, 30, 3, 27, 4, 21),
 			} as Adjustment,
-			6, // ok
+			6,
 			{
-				positionLeft: Map.of(0, 22, 1, 30, 2, 38, 3, 47, 4, 55, 5, 64),
-				positionTop: Map.of(0, 5, 1, 16, 2, 26, 3, 31, 4, 29, 5, 23),
+				positionLeft: Map.of(0, -102, 1, -74, 2, -44, 3, -15, 4, 14, 5, 42),
+				positionTop: Map.of(0, 5, 1, 18, 2, 26, 3, 31, 4, 29, 5, 23),
 			} as Adjustment,
-			7, // ok
+			7,
 			{
-				positionLeft: Map.of(0, 21, 1, 28, 2, 35, 3, 42, 4, 49, 5, 57, 6, 64),
-				positionTop: Map.of(0, 6, 1, 18, 2, 26, 3, 31, 4, 29, 5, 23, 6, 16),
+				positionLeft: Map.of(0, -104, 1, -79, 2, -54, 3, -29, 4, -3, 5, 21, 6, 45),
+				positionTop: Map.of(0, 8, 1, 18, 2, 26, 3, 31, 4, 30, 5, 23, 6, 16),
 			} as Adjustment,
-			8, // ok
+			8,
 			{
-				positionLeft: Map.of(0, 21, 1, 27, 2, 33, 3, 39, 4, 45, 5, 52, 6, 58, 7, 64),
-				positionTop: Map.of(0, 3, 1, 14, 2, 23, 3, 29, 4, 31, 5, 29, 6, 26, 7, 19),
+				positionLeft: Map.of(0, -103, 1, -83, 2, -62, 3, -40, 4, -17, 5, 4, 6, 24, 7, 48),
+				positionTop: Map.of(0, 2, 1, 13, 2, 23, 3, 29, 4, 31, 5, 30, 6, 26, 7, 19),
 			} as Adjustment,
-			9, // ok
+			9,
 			{
-				positionLeft: Map.of(0, 20, 1, 26, 2, 31, 3, 36, 4, 42, 5, 48, 6, 54, 7, 59, 8, 64),
+				positionLeft: Map.of(0, -106, 1, -87, 2, -69, 3, -49, 4, -30, 5, -10, 6, 9, 7, 29, 8, 49),
 				positionTop: Map.of(0, 3, 1, 14, 2, 23, 3, 29, 4, 31, 5, 30, 6, 26, 7, 23, 8, 15),
 			} as Adjustment,
-			10, // ok
+			10,
 			{
-				positionLeft: Map.of(0, 21, 1, 25, 2, 30, 3, 35, 4, 40, 5, 45, 6, 50, 7, 55, 8, 60, 9, 65),
+				positionLeft: Map.of(0, -108, 1, -90, 2, -74, 3, -56, 4, -39, 5, -21, 6, -3, 7, 15, 8, 33, 9, 50),
 				positionTop: Map.of(0, 0, 1, 9, 2, 18, 3, 25, 4, 31, 5, 32, 6, 31, 7, 29, 8, 23, 9, 16),
 			} as Adjustment,
 		);

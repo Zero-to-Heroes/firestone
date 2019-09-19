@@ -1,7 +1,7 @@
 :host() {
 	display: flex;
-	margin-top: -4px;
-	margin-left: -4px;
+	// margin-top: -4px;
+	// margin-left: -4px;
 }
 
 .opponent-card-infos {
@@ -11,4 +11,6 @@
 
 opponent-card-info {
 	position: absolute;
+	left: 50%;
+	top: 0;
 }

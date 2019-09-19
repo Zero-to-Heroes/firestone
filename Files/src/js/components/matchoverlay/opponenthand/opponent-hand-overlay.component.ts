@@ -72,7 +72,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
-				await this.changeWindowPosition();
+				// await this.changeWindowPosition();
 			}
 		});
 
@@ -83,7 +83,7 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
-		await this.changeWindowPosition();
+		// await this.changeWindowPosition();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -111,18 +111,20 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	private async changeWindowPosition(): Promise<void> {
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (!gameInfo) {
-			return;
-		}
-		// Window takes 30% of the size of the screen width
-		const gameWidth = gameInfo.logicalWidth;
-		// And the position
-		const newLeft = gameWidth * 0.3;
-		const newTop = 0;
-		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-	}
+	// private async changeWindowPosition(): Promise<void> {
+	// 	const gameInfo = await this.ow.getRunningGameInfo();
+	// 	if (!gameInfo) {
+	// 		return;
+	// 	}
+	// 	// Window takes 30% of the size of the screen width
+	// 	const gameWidth = gameInfo.logicalWidth;
+	// 	const dpi = gameWidth / gameInfo.width;
+	// 	// And the position
+	// 	const newLeft = gameWidth * 0.3;
+	// 	const newTop = 0;
+	// 	this.logger.debug('[opponent-hand-overlay] new game width is', gameWidth, 'with dpi', dpi, 'and overlay left position', newLeft);
+	// 	await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+	// }
 
 	private async changeWindowSize(): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
@@ -132,7 +134,8 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		// Window takes 30% of the size of the screen width
 		const gameWidth = gameInfo.logicalWidth;
 		const dpi = gameWidth / gameInfo.width;
-		const width = gameWidth * dpi * 0.4;
+		const width = gameWidth * dpi * 1;
+		this.logger.debug('[opponent-hand-overlay] new game width is', gameWidth, 'with dpi', dpi, 'and overlay width', width, gameInfo);
 		// Height
 		const gameHeight = gameInfo.logicalHeight;
 		const height = gameHeight * dpi * 0.2;
