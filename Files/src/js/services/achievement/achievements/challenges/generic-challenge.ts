@@ -26,7 +26,12 @@ export class GenericChallenge implements Challenge {
 		if (this.resetEvents.indexOf(gameEvent.type) !== -1) {
 			this.resetState();
 		}
-		this.requirements.forEach(req => req.test(gameEvent));
+		this.requirements.forEach(req => {
+			if (req.individualResetEvents && req.individualResetEvents.indexOf(gameEvent.type) !== -1) {
+				req.reset();
+			}
+			req.test(gameEvent);
+		});
 		this.testCompletion();
 	}
 

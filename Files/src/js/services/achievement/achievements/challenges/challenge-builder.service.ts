@@ -9,6 +9,7 @@ import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-o
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
 import { CorrectStartingHealthReq } from '../requirements/correct-starting-health-req';
 import { DamageAtEndReq } from '../requirements/damage-at-end-req';
+import { DeathrattleTriggeredReq } from '../requirements/deathrattle-triggered-req';
 import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
 import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-epic-req';
 import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
@@ -32,6 +33,7 @@ import { ResummonRecurringVillainRew } from '../requirements/resummon-recurring-
 import { RumbleRunStepReq } from '../requirements/rumble-run-step-req';
 import { ScenarioIdReq } from '../requirements/scenario-id-req';
 import { SceneChangedToGameReq } from '../requirements/scene-changed-to-game-req';
+import { SecretTriggeredReq } from '../requirements/secret-triggered-req';
 import { StandardRankedMinRankReq } from '../requirements/standard-ranked-min-rank-req';
 import { TotalArmorGainReq } from '../requirements/total-armor-gain-req';
 import { TotalDamageDealtReq } from '../requirements/total-damage-dealt-req';
@@ -80,6 +82,10 @@ export class ChallengeBuilderService {
 			case 'CARD_PLAYED_OR_ON_BOARD_AT_GAME_START': return CardPlayedOrOnBoardAtGameStartReq.create(rawReq);
 			case 'CARD_DRAWN_OR_RECEIVED_IN_HAND': return CardDrawnOrReceivedInHandReq.create(rawReq);
 			case 'MINION_SUMMONED': return MinionSummonedReq.create(rawReq);
+			case 'SECRET_TRIGGERED': return SecretTriggeredReq.create(rawReq);
+			case 'DEATHRATTLE_TRIGGERED': 
+				console.debug(''); // No idea why I have to add this for jest to pick up the line
+				return DeathrattleTriggeredReq.create(rawReq);
 			case 'PASSIVE_BUFF': return PassiveBuffReq.create(rawReq);
 			case 'HEALTH_AT_END': return HealthAtEndReq.create(rawReq);
 			case 'DAMAGE_AT_END': return DamageAtEndReq.create(rawReq);

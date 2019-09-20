@@ -34,7 +34,6 @@ export class CorrectStartingHealthReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
-		console.debug('handling', gameEvent, this.targetCardId, this.targetStartingHealth);
 		if (
 			gameEvent.cardId === this.targetCardId &&
 			gameEvent.additionalData &&
