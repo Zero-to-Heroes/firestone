@@ -9122,6 +9122,222 @@
         ]
     },
     {
+        "id": "tombs_of_terror_passive_play_DALA_728",
+        "type": "tombs_of_terror_passive_play_DALA_728",
+        "name": "Recycling",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Recycling",
+        "text": "After a friendly minion dies, gain 2 armor.",
+        "completedText": "You triggered Recycling",
+        "displayCardId": "DALA_728",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "DALA_728"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_DALA_731",
+        "type": "tombs_of_terror_passive_play_DALA_731",
+        "name": "Rocket Backpacks",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Rocket Backpacks",
+        "text": "Your minions have Rush.",
+        "completedText": "You triggered Rocket Backpacks",
+        "displayCardId": "DALA_731",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "DALA_731"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_DALA_737",
+        "type": "tombs_of_terror_passive_play_DALA_737",
+        "name": "Resourcefulness",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Resourcefulness",
+        "text": "At the start of the game, equip a random weapon. Give it +1/+1.",
+        "completedText": "You triggered Resourcefulness",
+        "displayCardId": "DALA_737",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "DALA_737"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_DALA_739",
+        "type": "tombs_of_terror_passive_play_DALA_739",
+        "name": "Book of Wonders",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Book of Wonders",
+        "text": "At the start of the game, shuffle 10 'Scrolls of Wonder' into your deck.",
+        "completedText": "You triggered Book of Wonders",
+        "displayCardId": "DALA_739",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "DALA_739"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_passive_play_DALA_746",
         "type": "tombs_of_terror_passive_play_DALA_746",
         "name": "Elixir of Vigor",
@@ -9195,6 +9411,60 @@
                 "type": "PASSIVE_BUFF",
                 "values": [
                     "DALA_747"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_GILA_506",
+        "type": "tombs_of_terror_passive_play_GILA_506",
+        "name": "First Aid Kit",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: First Aid Kit",
+        "text": "At the end of your turn, restore 2 Health to all friendly characters.",
+        "completedText": "You triggered First Aid Kit",
+        "displayCardId": "GILA_506",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "GILA_506"
                 ]
             },
             {
@@ -9338,6 +9608,60 @@
         ]
     },
     {
+        "id": "tombs_of_terror_passive_play_LOOTA_828",
+        "type": "tombs_of_terror_passive_play_LOOTA_828",
+        "name": "Captured Flag",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Captured Flag",
+        "text": "Your minions have +1/+1.",
+        "completedText": "You triggered Captured Flag",
+        "displayCardId": "LOOTA_828",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "LOOTA_828"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_passive_play_LOOTA_831",
         "type": "tombs_of_terror_passive_play_LOOTA_831",
         "name": "Glyph of Warding",
@@ -9357,6 +9681,168 @@
                 "type": "PASSIVE_BUFF",
                 "values": [
                     "LOOTA_831"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_LOOTA_832",
+        "type": "tombs_of_terror_passive_play_LOOTA_832",
+        "name": "Cloak of Invisibility",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Cloak of Invisibility",
+        "text": "Your minions have permanent Stealth.",
+        "completedText": "You triggered Cloak of Invisibility",
+        "displayCardId": "LOOTA_832",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "LOOTA_832"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_LOOTA_833",
+        "type": "tombs_of_terror_passive_play_LOOTA_833",
+        "name": "Mysterious Tome",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Mysterious Tome",
+        "text": "At the start of the game, play 3 random Secrets.",
+        "completedText": "You triggered Mysterious Tome",
+        "displayCardId": "LOOTA_833",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "LOOTA_833"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_passive_play_LOOTA_846",
+        "type": "tombs_of_terror_passive_play_LOOTA_846",
+        "name": "Battle Totem",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Passive ability triggered: Battle Totem",
+        "text": "Your Battlecries trigger twice.",
+        "completedText": "You triggered Battle Totem",
+        "displayCardId": "LOOTA_846",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 1,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "PASSIVE_BUFF",
+                "values": [
+                    "LOOTA_846"
                 ]
             },
             {
@@ -10256,6 +10742,114 @@
         ]
     },
     {
+        "id": "tombs_of_terror_treasure_play_DALA_902",
+        "type": "tombs_of_terror_bob_treat_DALA_902",
+        "name": "Dismiss",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Dismiss",
+        "text": "Choose a friendly minion. Remove it from your Adventure Deck.",
+        "completedText": "You received Dismiss from Bob",
+        "displayCardId": "DALA_902",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_902"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_DALA_903",
+        "type": "tombs_of_terror_bob_treat_DALA_903",
+        "name": "Take a Chance",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Take a Chance",
+        "text": "Reduce the cost of a random card in your Adventure Deck to (0).",
+        "completedText": "You received Take a Chance from Bob",
+        "displayCardId": "DALA_903",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_903"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_treasure_play_DALA_904",
         "type": "tombs_of_terror_bob_treat_DALA_904",
         "name": "Good Food",
@@ -10707,6 +11301,60 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "DALA_913"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_DALA_914",
+        "type": "tombs_of_terror_bob_treat_DALA_914",
+        "name": "The Upper Hand",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: The Upper Hand",
+        "text": "Look at four spells from your deck. Reduce the cost of one by (3) for this run.",
+        "completedText": "You received The Upper Hand from Bob",
+        "displayCardId": "DALA_914",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "DALA_914"
                 ]
             },
             {
@@ -11769,14 +12417,14 @@
     },
     {
         "id": "tombs_of_terror_treasure_play_ULDA_024",
-        "type": "tombs_of_terror_treasure_play_ULDA_024",
+        "type": "tombs_of_terror_bob_treat_ULDA_024",
         "name": "Upgraded Pack Mule",
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Treasure played: Upgraded Pack Mule",
+        "displayName": "Bob's Treat: Upgraded Pack Mule",
         "text": "Reduce the Cost of all cards in your deck by (1).",
-        "completedText": "You played Upgraded Pack Mule",
+        "completedText": "You received Upgraded Pack Mule from Bob",
         "displayCardId": "ULDA_024",
         "displayCardType": "spell",
         "difficulty": "rare",
@@ -12057,6 +12705,60 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "ULDA_036"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_ULDA_038",
+        "type": "tombs_of_terror_bob_treat_ULDA_038",
+        "name": "Explorer Retraining",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Explorer Retraining",
+        "text": "Choose a new starting Hero Power.",
+        "completedText": "You received Explorer Retraining from Bob",
+        "displayCardId": "ULDA_038",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "ULDA_038"
                 ]
             },
             {
@@ -13983,14 +14685,14 @@
     },
     {
         "id": "tombs_of_terror_treasure_play_ULDA_504",
-        "type": "tombs_of_terror_treasure_play_ULDA_504",
+        "type": "tombs_of_terror_bob_treat_ULDA_504",
         "name": "Tea Time",
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Treasure played: Tea Time",
+        "displayName": "Bob's Treat: Tea Time",
         "text": "Gain 4 Mana Crystals and draw 2 extra cards for the next boss only.",
-        "completedText": "You played Tea Time",
+        "completedText": "You received Tea Time from Bob",
         "displayCardId": "ULDA_504",
         "displayCardType": "spell",
         "difficulty": "rare",
@@ -14541,6 +15243,114 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "ULDA_608"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_ULDA_911",
+        "type": "tombs_of_terror_bob_treat_ULDA_911",
+        "name": "Kindle",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Kindle",
+        "text": "Look at four spells from your Adventure Deck. Choose one to remove.",
+        "completedText": "You received Kindle from Bob",
+        "displayCardId": "ULDA_911",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "ULDA_911"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_treasure_play_ULDA_912",
+        "type": "tombs_of_terror_bob_treat_ULDA_912",
+        "name": "Recruit",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Bob's Treat: Recruit",
+        "text": "Choose an enemy minion. Add it to your Adventure Deck.",
+        "completedText": "You received Recruit from Bob",
+        "displayCardId": "ULDA_912",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 2,
+        "points": 3,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "ULDA_912"
                 ]
             },
             {
