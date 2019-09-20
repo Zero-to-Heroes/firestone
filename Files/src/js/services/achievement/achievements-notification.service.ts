@@ -45,7 +45,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-no-record',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: notificationTimeout,
+			timeout: notificationTimeout, // Used to close the notif if no record notif takes its place
 			theClass: 'no-record',
 		} as Message);
 	}
@@ -76,6 +76,7 @@ export class AchievementsNotificationService {
 			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
 			return;
 		}
+		const notificationTimeout = challenge.notificationTimeout();
 		// In case the pre-record notification has already timed out, we need to send a full notif
 		this.notificationService.html({
 			notificationId: achievement.id,
@@ -83,6 +84,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-confirm',
 			app: 'achievement',
 			cardId: achievement.id,
+			timeout: notificationTimeout, // Used in case something goes wrong and this is the first notif that is being shown
 			theClass: 'active',
 		});
 	}

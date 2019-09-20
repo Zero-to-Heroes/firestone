@@ -147,7 +147,8 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			await this.ow.restoreWindow(this.windowId);
 			const override: any = {
 				// Achievement apps are timed out manually
-				timeOut: messageObject.app === 'achievement' ? 999999 : this.timeout + additionalTimeout,
+				// timeOut: messageObject.app === 'achievement' ? 999999 : this.timeout + additionalTimeout,
+				timeOut: this.timeout + additionalTimeout,
 				clickToClose: true,
 			};
 			if (type === 'achievement-pre-record') {
