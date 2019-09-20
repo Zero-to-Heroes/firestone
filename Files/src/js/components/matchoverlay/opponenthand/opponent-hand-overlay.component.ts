@@ -6,6 +6,7 @@ import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
 
 @Component({
 	selector: 'opponent-hand-overlay',
@@ -54,6 +55,9 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			this.gameState = event.state;
+			if (event.event.name === DeckEvents.MATCH_METADATA) {
+				this.changeWindowSize();
+			}
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -72,7 +76,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
-				// await this.changeWindowPosition();
 			}
 		});
 
@@ -110,21 +113,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			this.hideWindow();
 		}
 	}
-
-	// private async changeWindowPosition(): Promise<void> {
-	// 	const gameInfo = await this.ow.getRunningGameInfo();
-	// 	if (!gameInfo) {
-	// 		return;
-	// 	}
-	// 	// Window takes 30% of the size of the screen width
-	// 	const gameWidth = gameInfo.logicalWidth;
-	// 	const dpi = gameWidth / gameInfo.width;
-	// 	// And the position
-	// 	const newLeft = gameWidth * 0.3;
-	// 	const newTop = 0;
-	// 	this.logger.debug('[opponent-hand-overlay] new game width is', gameWidth, 'with dpi', dpi, 'and overlay left position', newLeft);
-	// 	await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-	// }
 
 	private async changeWindowSize(): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
