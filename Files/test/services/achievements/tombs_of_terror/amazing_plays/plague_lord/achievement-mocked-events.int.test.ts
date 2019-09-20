@@ -4,7 +4,7 @@ import { achievementsValidation } from '../../../achievement-event-validation';
 // processing the power.log file
 // Ideally, we will not have to go through this manual generation step
 // and be able to plug the C# plugin directly
-import pluginEvents from './plugin-events.json';
+import pluginEvents from './plugin-events_2.json';
 import rawAchievement from './raw_achievement.json';
 
 describe('Tombs of Terror - Amazing Play - Plague Lord', () => {
