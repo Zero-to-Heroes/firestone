@@ -231,6 +231,12 @@ export class GameEvents {
 			case 'SECRET_PLAYED':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
 				break;
+			case 'SECRET_TRIGGERED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_TRIGGERED, gameEvent));
+				break;
+			case 'DEATHRATTLE_TRIGGERED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DEATHRATTLE_TRIGGERED, gameEvent));
+				break;
 			case 'CARD_DRAW_FROM_DECK':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent));
 				break;

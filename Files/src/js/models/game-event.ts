@@ -26,6 +26,8 @@ export class GameEvent {
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
 	public static readonly SECRET_PLAYED = 'SECRET_PLAYED';
+	public static readonly SECRET_TRIGGERED = 'SECRET_TRIGGERED';
+	public static readonly DEATHRATTLE_TRIGGERED = 'DEATHRATTLE_TRIGGERED';
 	public static readonly CARD_DRAW_FROM_DECK = 'CARD_DRAW_FROM_DECK';
 	public static readonly RECEIVE_CARD_IN_HAND = 'RECEIVE_CARD_IN_HAND';
 	public static readonly END_OF_ECHO_IN_HAND = 'END_OF_ECHO_IN_HAND';
