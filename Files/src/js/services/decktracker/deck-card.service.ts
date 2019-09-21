@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DeckState } from '../../models/decktracker/deck-state';
 import { DeckCard } from '../../models/decktracker/deck-card';
+import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { AllCardsService } from '../all-cards.service';
 
@@ -26,17 +26,22 @@ export class DeckCardService {
 	}
 
 	private fillZone(zone: readonly DeckCard[]): readonly DeckCard[] {
-		return zone ? zone.map(card => this.tryFillCard(card)) : zone;
+		return zone ? zone.map(card => this.doFillCard(card)) : zone;
 	}
 
-	private tryFillCard(card: DeckCard): DeckCard {
-		return card.cardName || !card.cardId ? card : this.doFillCard(card);
-	}
+	// private tryFillCard(card: DeckCard): DeckCard {
+	// 	return card.cardName || !card.cardId ? card : this.doFillCard(card);
+	// }
 
 	private doFillCard(card: DeckCard): DeckCard {
 		const dbCard = this.cards.getCard(card.cardId);
+		if (!dbCard) {
+			return card;
+		}
 		return Object.assign(new DeckCard(), card, {
-			cardName: dbCard ? dbCard.name : card.cardName,
+			cardName: card.cardName || dbCard.name,
+			manaCost: card.manaCost || dbCard.cost,
+			rarity: card.rarity || dbCard.rarity ? dbCard.rarity.toLowerCase() : undefined,
 		} as DeckCard);
 	}
 }

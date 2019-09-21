@@ -21,30 +21,29 @@ export class CreateCardInDeckParser implements EventParser {
 	}
 
 	parse(currentState: GameState, gameEvent: GameEvent): GameState {
-		if (currentState.playerDeck.deckList.length === 0) {
-			return currentState;
-		}
-		const cardId: string = gameEvent.cardId;
-		const entityId: number = gameEvent.entityId;
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+
+		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
-		// TODO: when handling this for the opponent, pay attention to info leak
 		const card = Object.assign(new DeckCard(), {
-			cardId: cardId,
+			cardId: isPlayer ? cardId : undefined,
 			entityId: entityId,
 			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 		} as DeckCard);
-		const previousDeck = currentState.playerDeck.deck;
+		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
-		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
+		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 		});
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
 		}
 		return Object.assign(new GameState(), currentState, {
-			playerDeck: newPlayerDeck,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}
 

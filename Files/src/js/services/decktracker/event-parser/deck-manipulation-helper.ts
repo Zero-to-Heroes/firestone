@@ -87,20 +87,6 @@ export class DeckManipulationHelper {
 		}
 		console.error('invalid call to findCard', entityId, cardId);
 		return new DeckCard();
-
-		// if (!found) {
-		// 	console.error('Could not find card in zone', cardId, entityId, zone);
-		// 	found = zone.find(card => !card.cardId);
-		// 	console.log('defaulting to getting a card without cardId', found);
-		// }
-		// if (!found) {
-		// 	found = Object.assign(new DeckCard(), {
-		// 		cardId: cardId,
-		// 		entityId: entityId,
-		// 	} as DeckCard);
-		// 	console.log('could not find card, creating card with default template', found);
-		// }
-		// return found;
 	}
 
 	public static obfuscateCard(card: DeckCard): DeckCard {

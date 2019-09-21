@@ -44,7 +44,10 @@ export class CardStolenParser implements EventParser {
 			? DeckManipulationHelper.addSingleCardToZone(stealingToDeck.board, cardInBoard)
 			: stealingToDeck.board;
 		const stealingDeck = cardInDeck
-			? DeckManipulationHelper.addSingleCardToZone(stealingToDeck.deck, DeckManipulationHelper.obfuscateCard(cardInDeck))
+			? DeckManipulationHelper.addSingleCardToZone(
+					stealingToDeck.deck,
+					isPlayerStolenFrom ? DeckManipulationHelper.obfuscateCard(cardInDeck) : cardInDeck,
+			  )
 			: stealingToDeck.deck;
 		const newStealingDeck = Object.assign(new DeckState(), stolenFromDeck, {
 			hand: stealingHand,

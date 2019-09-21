@@ -4,20 +4,12 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameType } from '../../models/enums/game-type';
 import { Preferences } from '../../models/preferences';
-import { ScenarioId } from '../../models/scenario-id';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { DeckEvents } from './event-parser/deck-events';
 
 @Injectable()
 export class OverlayDisplayService implements OnDestroy {
-	// This should not be necessary, but is an additional guard
-	private readonly SCENARIO_IDS_WITH_UNAVAILABLE_LISTS: number[] = [
-		ScenarioId.DUNGEON_RUN,
-		ScenarioId.MONSTER_HUNT,
-		ScenarioId.RUMBLE_RUN,
-	];
-
 	private decktrackerDisplayEventBus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	private gameState: GameState;
 
@@ -63,30 +55,27 @@ export class OverlayDisplayService implements OnDestroy {
 
 	private async handleDisplayPreferences(gameState: GameState, preferences: Preferences = null): Promise<void> {
 		const prefs = preferences || (await this.prefs.getPreferences());
+		const shouldDisplay = this.shouldDisplay(gameState, prefs);
+		this.logger.debug('[overlay-display] should display?', shouldDisplay, prefs);
+		this.decktrackerDisplayEventBus.next(shouldDisplay);
+	}
+
+	private shouldDisplay(gameState: GameState, prefs: Preferences): boolean {
 		if (!gameState || !gameState.metadata || !gameState.metadata.gameType || !gameState.playerDeck) {
-			this.decktrackerDisplayEventBus.next(false);
-			return;
+			this.logger.debug('[overlay-display] not enough info to display');
+			return false;
 		}
 		switch (gameState.metadata.gameType as GameType) {
 			case GameType.ARENA:
-				this.decktrackerDisplayEventBus.next(prefs.decktrackerShowArena);
-				return;
+				return prefs.decktrackerShowArena;
 			case GameType.CASUAL:
-				this.decktrackerDisplayEventBus.next(prefs.decktrackerShowCasual);
-				return;
+				return prefs.decktrackerShowCasual;
 			case GameType.RANKED:
-				this.decktrackerDisplayEventBus.next(prefs.decktrackerShowRanked);
-				return;
+				return prefs.decktrackerShowRanked;
 			case GameType.VS_AI:
-				this.decktrackerDisplayEventBus.next(
-					gameState.playerDeck.deckList.length > 0 &&
-						prefs.decktrackerShowPractice &&
-						this.SCENARIO_IDS_WITH_UNAVAILABLE_LISTS.indexOf(gameState.metadata.scenarioId) === -1,
-				);
-				return;
+				return prefs.decktrackerShowPractice;
 			case GameType.VS_FRIEND:
-				this.decktrackerDisplayEventBus.next(prefs.decktrackerShowFriendly);
-				return;
+				return prefs.decktrackerShowFriendly;
 			case GameType.FSG_BRAWL:
 			case GameType.FSG_BRAWL_1P_VS_AI:
 			case GameType.FSG_BRAWL_2P_COOP:
@@ -94,10 +83,9 @@ export class OverlayDisplayService implements OnDestroy {
 			case GameType.TB_1P_VS_AI:
 			case GameType.TB_2P_COOP:
 			case GameType.TAVERNBRAWL:
-				this.decktrackerDisplayEventBus.next(prefs.decktrackerShowTavernBrawl);
-				return;
+				return prefs.decktrackerShowTavernBrawl;
 		}
-		this.decktrackerDisplayEventBus.next(gameState.playerDeck.deckList.length > 0);
-		return;
+		this.logger.debug('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
+		return gameState.playerDeck.deckList.length > 0;
 	}
 }

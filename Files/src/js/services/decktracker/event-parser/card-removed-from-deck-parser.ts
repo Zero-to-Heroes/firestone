@@ -1,12 +1,12 @@
-import { EventParser } from './event-parser';
-import { GameEvent } from '../../../models/game-event';
-import { GameState } from '../../../models/decktracker/game-state';
 import { DeckCard } from '../../../models/decktracker/deck-card';
-import { DeckParserService } from '../deck-parser.service';
-import { AllCardsService } from '../../all-cards.service';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { GameState } from '../../../models/decktracker/game-state';
+import { GameEvent } from '../../../models/game-event';
+import { AllCardsService } from '../../all-cards.service';
+import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
+import { EventParser } from './event-parser';
 
 export class CardRemovedFromDeckParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
@@ -22,25 +22,25 @@ export class CardRemovedFromDeckParser implements EventParser {
 	}
 
 	parse(currentState: GameState, gameEvent: GameEvent): GameState {
-		if (currentState.playerDeck.deckList.length === 0) {
-			return currentState;
-		}
-		const cardId: string = gameEvent.cardId;
-		const entityId: number = gameEvent.entityId;
-		const card = DeckManipulationHelper.findCardInZone(currentState.playerDeck.deck, cardId, entityId);
-		const previousDeck = currentState.playerDeck.deck;
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+
+		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+
+		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
+		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId, entityId);
 		const cardWithZone = Object.assign(new DeckCard(), card, {
 			zone: 'SETASIDE',
 		} as DeckCard);
-		const previousOtherZone = currentState.playerDeck.otherZone;
+		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousOtherZone, cardWithZone);
-		const newPlayerDeck = Object.assign(new DeckState(), currentState.playerDeck, {
+		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			otherZone: newOtherZone,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
-			playerDeck: newPlayerDeck,
+			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}
 

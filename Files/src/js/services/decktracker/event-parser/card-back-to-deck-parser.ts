@@ -29,7 +29,7 @@ export class CardBackToDeckParser implements EventParser {
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
 			previousDeck,
-			DeckManipulationHelper.obfuscateCard(card),
+			isPlayer ? card : DeckManipulationHelper.obfuscateCard(card),
 		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,

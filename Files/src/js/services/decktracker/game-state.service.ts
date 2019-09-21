@@ -44,7 +44,7 @@ export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: readonly EventParser[];
 
-	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 100, 'game-state');
+	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 20, 'game-state');
 
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
@@ -95,6 +95,8 @@ export class GameStateService {
 
 	private async processQueue(eventQueue: readonly GameEvent[]) {
 		const gameEvent = eventQueue[0];
+		// TODO: process several events if the queue is long, as otherwise it can cause a big lag
+		// (eg shudderwok)
 		this.processEvent(gameEvent);
 		return eventQueue.slice(1);
 	}
@@ -138,7 +140,7 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					// this.logger.debug('emitted deck event', emittedEvent.event.name);
+					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
 					// this.logger.debug(
 					// 	'board states',
 					// 	this.state.playerDeck.board.length,
@@ -168,8 +170,6 @@ export class GameStateService {
 			result.push(event => this.twitch.emitDeckEvent(event));
 		}
 		this.eventEmitters = result;
-		// this.logger.debug('emitting twitch event');
-		// this.twitch.emitDeckEvent({ hop: "fakeEven" });
 	}
 
 	private buildEventParsers(): readonly EventParser[] {

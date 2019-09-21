@@ -146,7 +146,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			// console.log('received deck event', event.event);
+			console.log('received deck event', event.event, event.state);
 			this.gameState = event.state;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -154,13 +154,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(event => {
-			if (
-				event &&
-				this.gameState &&
-				this.gameState.playerDeck &&
-				this.gameState.playerDeck.deckList &&
-				this.gameState.playerDeck.deckList.length > 0
-			) {
+			console.log('display subscription', event, this.gameState);
+			if (event && this.gameState && this.gameState.playerDeck) {
 				this.restoreWindow();
 			} else {
 				this.hideWindow();
