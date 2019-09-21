@@ -44,7 +44,7 @@ export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: readonly EventParser[];
 
-	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 20, 'game-state');
+	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 10, 'game-state');
 
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
