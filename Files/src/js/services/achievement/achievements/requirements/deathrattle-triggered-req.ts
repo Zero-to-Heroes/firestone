@@ -1,17 +1,22 @@
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
+import { AbstractRequirement } from './_abstract-requirement';
 import { Requirement } from './_requirement';
 
-export class DeathrattleTriggeredReq implements Requirement {
+export class DeathrattleTriggeredReq extends AbstractRequirement {
 	private hasTriggered: boolean;
 
-	constructor(private readonly targetCardId: string, readonly individualResetEvents: readonly string[]) {}
+	constructor(private readonly targetCardId: string) {
+		super();
+	}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for DeathrattleTriggeredReq', rawReq);
 		}
-		return new DeathrattleTriggeredReq(rawReq.values[0], rawReq.individualRestEvents);
+		const req = new DeathrattleTriggeredReq(rawReq.values[0]);
+		req.individualResetEvents = rawReq.individualRestEvents;
+		return req;
 	}
 
 	reset(): void {

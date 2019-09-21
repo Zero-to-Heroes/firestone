@@ -120,6 +120,64 @@
         ]
     },
     {
+        "id": "tombs_of_terror_amazing_plays_gatling_wand",
+        "type": "tombs_of_terror_amazing_plays_gatling_wand",
+        "name": "The Gatling Wand",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "The Gatling Wand",
+        "emptyText": "Deal at least 100 damage with The Gatling Wand treasure",
+        "completedText": "You dealt at least 100 damage with The Gatling Wand",
+        "displayCardId": "ULDA_207",
+        "displayCardType": "spell",
+        "difficulty": "legendary",
+        "maxNumberOfRecords": 3,
+        "points": 40,
+        "requirements": [
+            {
+                "type": "TOTAL_DAMAGE_DEALT",
+                "individualResetEvents": [
+                    "TURN_START"
+                ],
+                "values": [
+                    "100",
+                    "AT_LEAST",
+                    "ULDA_207"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_37h",
         "type": "tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_37h",
         "name": "Xatma, Plague Lord of Death",

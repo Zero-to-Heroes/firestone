@@ -4,7 +4,7 @@ import { SecretTriggeredReq } from './secret-triggered-req';
 
 describe('secret-triggered-req', () => {
 	test('is completed when event has right secret card id', () => {
-		const req = new SecretTriggeredReq('ULDA_045t', ['TURN_START']);
+		const req = new SecretTriggeredReq('ULDA_045t');
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.SECRET_TRIGGERED,
 			cardId: 'ULDA_045t',
@@ -17,7 +17,7 @@ describe('secret-triggered-req', () => {
 		expect(req.isCompleted()).toBe(true);
 	});
 	test('is not completed when event has incorrect secret card id', () => {
-		const req = new SecretTriggeredReq('ULDA_045', ['TURN_START']);
+		const req = new SecretTriggeredReq('ULDA_045');
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.SECRET_TRIGGERED,
 			cardId: 'ULDA_045t',
@@ -30,7 +30,7 @@ describe('secret-triggered-req', () => {
 		expect(req.isCompleted()).toBeFalsy();
 	});
 	test('is not completed when controller is opponent', () => {
-		const req = new SecretTriggeredReq('ULDA_045t', ['TURN_START']);
+		const req = new SecretTriggeredReq('ULDA_045t');
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.SECRET_TRIGGERED,
 			cardId: 'ULDA_045t',

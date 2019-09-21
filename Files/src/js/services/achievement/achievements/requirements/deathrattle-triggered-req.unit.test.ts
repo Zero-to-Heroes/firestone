@@ -4,7 +4,7 @@ import { DeathrattleTriggeredReq } from './deathrattle-triggered-req';
 
 describe('deathrattle-triggered-req', () => {
 	test('is completed when event has right secret card id', () => {
-		const req = new DeathrattleTriggeredReq('ULDA_114', ['TURN_START']);
+		const req = new DeathrattleTriggeredReq('ULDA_114');
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.DEATHRATTLE_TRIGGERED,
 			cardId: 'ULDA_114',
@@ -17,7 +17,7 @@ describe('deathrattle-triggered-req', () => {
 		expect(req.isCompleted()).toBe(true);
 	});
 	test('is not completed when event has incorrect secret card id', () => {
-		const req = new DeathrattleTriggeredReq('ULDA_113', ['TURN_START']);
+		const req = new DeathrattleTriggeredReq('ULDA_113');
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.DEATHRATTLE_TRIGGERED,
 			cardId: 'ULDA_114',
@@ -30,7 +30,7 @@ describe('deathrattle-triggered-req', () => {
 		expect(req.isCompleted()).toBeFalsy();
 	});
 	test('is not completed when controller is opponent', () => {
-		const req = new DeathrattleTriggeredReq('ULDA_114', ['TURN_START']);
+		const req = new DeathrattleTriggeredReq('ULDA_114');
 		const event = Object.assign(new GameEvent(), {
 			type: GameEvent.DEATHRATTLE_TRIGGERED,
 			cardId: 'ULDA_114',

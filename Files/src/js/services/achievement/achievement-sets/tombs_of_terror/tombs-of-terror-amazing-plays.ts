@@ -8,6 +8,7 @@ export class TombsOfTerrorAmazingPlaysSetProvider extends GenericSetProvider {
 			[
 				'tombs_of_terror_amazing_plays_aegis_bulwark',
 				'tombs_of_terror_amazing_plays_full_tinyfin',
+				'tombs_of_terror_amazing_plays_gatling_wand',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_37h',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_38h',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_39h',

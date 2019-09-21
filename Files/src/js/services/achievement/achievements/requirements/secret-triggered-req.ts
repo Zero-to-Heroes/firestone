@@ -1,17 +1,22 @@
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
+import { AbstractRequirement } from './_abstract-requirement';
 import { Requirement } from './_requirement';
 
-export class SecretTriggeredReq implements Requirement {
+export class SecretTriggeredReq extends AbstractRequirement {
 	private hasTriggered: boolean;
 
-	constructor(private readonly targetSecret: string, readonly individualResetEvents: readonly string[]) {}
+	constructor(private readonly targetSecret: string) {
+		super();
+	}
 
 	public static create(rawReq: RawRequirement): Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for SecretTriggeredReq', rawReq);
 		}
-		return new SecretTriggeredReq(rawReq.values[0], rawReq.individualRestEvents);
+		const req = new SecretTriggeredReq(rawReq.values[0]);
+		req.individualResetEvents = rawReq.individualRestEvents;
+		return req;
 	}
 
 	reset(): void {
