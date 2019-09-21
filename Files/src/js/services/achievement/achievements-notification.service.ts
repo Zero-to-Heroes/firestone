@@ -22,7 +22,7 @@ export class AchievementsNotificationService {
 		this.events
 			.on(Events.ACHIEVEMENT_RECORDING_STARTED)
 			.subscribe(data => this.handleAchievementRecordingStarted(data.data[0], data.data[1]));
-		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.handleAchievementRecordCompleted(data.data[0], data.data[1]));
+		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.handleAchievementRecordCompleted(data.data[0]));
 		this.logger.debug('[achievements-notification] listening for achievement completion events');
 	}
 
@@ -65,18 +65,17 @@ export class AchievementsNotificationService {
 			type: 'achievement-pre-record',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: 9999999, // We will manually remove this notification once the replay is recorded
+			timeout: 30000, // We will manually remove this notification once the replay is recorded
 			theClass: 'pending',
 		});
 	}
 
-	private async handleAchievementRecordCompleted(newAchievement: Achievement, challenge: Challenge) {
+	private async handleAchievementRecordCompleted(newAchievement: Achievement) {
 		const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 		if (achievement.numberOfCompletions > 1) {
 			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
 			return;
 		}
-		const notificationTimeout = challenge.notificationTimeout();
 		// In case the pre-record notification has already timed out, we need to send a full notif
 		this.notificationService.html({
 			notificationId: achievement.id,
@@ -84,7 +83,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-confirm',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: notificationTimeout, // Used in case something goes wrong and this is the first notif that is being shown
+			timeout: 30000, // Used in case something goes wrong and this is the first notif that is being shown
 			theClass: 'active',
 		});
 	}

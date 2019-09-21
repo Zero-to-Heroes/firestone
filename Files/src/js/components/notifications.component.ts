@@ -129,6 +129,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		notification.classList.add(newClass);
 		console.log('updated notif', notification);
 		if (newClass === 'pending' && activeNotif.timeoutHandler) {
+			console.log('canceling fade out timeout');
 			clearTimeout(activeNotif.timeoutHandler);
 		} else if (newClass === 'active') {
 			setTimeout(() => {
@@ -151,9 +152,20 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				timeOut: this.timeout + additionalTimeout,
 				clickToClose: true,
 			};
+			console.log('will override with options', override, messageObject);
 			if (type === 'achievement-pre-record') {
 				override.clickToClose = false;
 			}
+
+			let timeoutHandler;
+			if (type === 'achievement-no-record') {
+				override.timeOut = 999999; // Closing this one manually
+				timeoutHandler = setTimeout(() => {
+					console.debug('manually closing achievmeent notif');
+					this.fadeNotificationOut(messageObject.notificationId);
+				}, this.timeout + additionalTimeout);
+			}
+
 			const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
 			toast.theClass = messageObject.theClass;
 			console.log('created toast', toast.id, messageObject.notificationId);
@@ -204,14 +216,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					}
 				}
 			});
-
-			let timeoutHandler;
-			if (type === 'achievement-no-record') {
-				timeoutHandler = setTimeout(() => {
-					console.debug('manually closing achievmeent notif');
-					this.fadeNotificationOut(messageObject.notificationId);
-				}, this.timeout + additionalTimeout);
-			}
 			const activeNotif: ActiveNotification = {
 				toast: toast,
 				subscription: subscription,
@@ -239,6 +243,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		}
 		const notification = this.elRef.nativeElement.querySelector('.' + notificationId);
 		notification.classList.add('fade-out');
+		console.log('manually fading out notification', notificationId);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
