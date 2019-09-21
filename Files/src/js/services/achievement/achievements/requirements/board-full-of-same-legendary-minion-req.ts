@@ -38,9 +38,7 @@ export class BoardFullOfSameLegendaryMinionReq implements Requirement {
 			const numberOfDifferentMinions =
 				realBoard && realBoard.length > 0 ? [...new Set(realBoard.map(entity => entity.cardId))].length : 0;
 			const isMinionLegendary =
-				realBoard &&
-				realBoard.length > 0 &&
-				(this.cards.getCard(realBoard[0].cardId).rarity || '').toLowerCase() === 'legendary';
+				realBoard && realBoard.length > 0 && (this.cards.getCard(realBoard[0].cardId).rarity || '').toLowerCase() === 'legendary';
 			this.isConditionMet = numberOfMinions === 7 && numberOfDifferentMinions === 1 && isMinionLegendary;
 		}
 	}

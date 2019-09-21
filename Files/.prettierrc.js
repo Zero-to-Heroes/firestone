@@ -4,6 +4,6 @@ module.exports = {
 	singleQuote: true,
 	tabWidth: 4,
 	useTabs: true,
-	printWidth: 120,
+	printWidth: 140,
 	quoteProps: 'preserve', // Needed for angular templates, like ngClass
 };
