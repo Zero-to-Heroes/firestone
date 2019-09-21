@@ -83,7 +83,7 @@ export class AchievementsNotificationService {
 			type: 'achievement-confirm',
 			app: 'achievement',
 			cardId: achievement.id,
-			timeout: 30000, // Used in case something goes wrong and this is the first notif that is being shown
+			timeout: 5000, // Used in case something goes wrong and this is the first notif that is being shown
 			theClass: 'active',
 		});
 	}
