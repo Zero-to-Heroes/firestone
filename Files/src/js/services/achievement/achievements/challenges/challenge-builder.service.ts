@@ -3,6 +3,7 @@ import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { AllCardsService } from '../../../all-cards.service';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
+import { BoardFullOfSameLegendaryMinionReq } from '../requirements/board-full-of-same-legendary-minion-req';
 import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-received-in-hand-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
 import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-or-on-board-at-game-start-req';
@@ -96,10 +97,14 @@ export class ChallengeBuilderService {
 			case 'TOTAL_DAMAGE_DEALT': return TotalDamageDealtReq.create(rawReq);
 			case 'TOTAL_ARMOR_GAINED': return TotalArmorGainReq.create(rawReq);
 			case 'MINIONS_CONTROLLED_DURING_TURN': return MinionsControlledDuringTurnReq.create(rawReq);
-			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
 			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
-			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
 			
+			// The very specific reqs
+			case 'BOARD_FULL_OF_SAME_LEGENDARY_MINION': return BoardFullOfSameLegendaryMinionReq.create(rawReq, this.cards);
+			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
+			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
+			
+			// The deckbuilding reqs
 			case 'DECK_CLASSIC': return DeckbuildingClassicReq.create(rawReq, this.cards);
 			case 'DECK_EPIC': return DeckbuildingEpicReq.create(rawReq, this.cards);
 			case 'DECK_MECHANIC': return DeckbuildingMechanicReq.create(rawReq, this.cards);

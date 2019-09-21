@@ -6,7 +6,7 @@
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Bulwark of Death",
+        "displayName": "Achievement completed: Bulwark of Death",
         "emptyText": "Reflect your Aegis of Death's deathrattle with Primordial Bulwark",
         "completedText": "You reflected your Aegis of Death's deathrattle with Primordial Bulwark",
         "displayCardId": "ULDA_114",
@@ -126,7 +126,7 @@
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "The Gatling Wand",
+        "displayName": "Achievement completed: The Gatling Wand",
         "emptyText": "Deal at least 100 damage with The Gatling Wand treasure",
         "completedText": "You dealt at least 100 damage with The Gatling Wand",
         "displayCardId": "ULDA_207",
@@ -178,13 +178,63 @@
         ]
     },
     {
+        "id": "tombs_of_terror_amazing_plays_legendary_seven_copies_on_board",
+        "type": "tombs_of_terror_amazing_plays_legendary_seven_copies_on_board",
+        "name": "Not so legendary",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Achievement completed: Not so legendary",
+        "emptyText": "Get a board with 7 copies of the same legendary minion in a Tombs of Terrors game",
+        "completedText": "You've built a board with 7 copies of the same legendary minion",
+        "displayCardId": "ULDA_014",
+        "displayCardType": "spell",
+        "difficulty": "epic",
+        "maxNumberOfRecords": 3,
+        "points": 20,
+        "requirements": [
+            {
+                "type": "BOARD_FULL_OF_SAME_LEGENDARY_MINION"
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "EXCLUDED_SCENARIO_IDS",
+                "values": [
+                    "3005",
+                    "3188",
+                    "3189",
+                    "3190",
+                    "3191",
+                    "3328",
+                    "3329",
+                    "3330",
+                    "3331",
+                    "3332",
+                    "2663",
+                    "2706",
+                    "2821",
+                    "2890",
+                    "263"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
         "id": "tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_37h",
         "type": "tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_37h",
         "name": "Xatma, Plague Lord of Death",
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Unstoppable: Xatma, Plague Lord of Death",
+        "displayName": "Achievement completed: Unstoppable  - Xatma, Plague Lord of Death",
         "emptyText": "Defeat Xatma, Plague Lord of Death in a single encounter",
         "completedText": "You defeated Xatma, Plague Lord of Death in a single encounter",
         "displayCardId": "ULDA_BOSS_37h",
@@ -247,7 +297,7 @@
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Unstoppable: K'zrath, Plague Lord of Madness",
+        "displayName": "Achievement completed: Unstoppable  - K'zrath, Plague Lord of Madness",
         "emptyText": "Defeat K'zrath, Plague Lord of Madness in a single encounter",
         "completedText": "You defeated K'zrath, Plague Lord of Madness in a single encounter",
         "displayCardId": "ULDA_BOSS_38h",
@@ -310,7 +360,7 @@
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Unstoppable: Vesh, Plague Lord of Murlocs",
+        "displayName": "Achievement completed: Unstoppable  - Vesh, Plague Lord of Murlocs",
         "emptyText": "Defeat Vesh, Plague Lord of Murlocs in a single encounter",
         "completedText": "You defeated Vesh, Plague Lord of Murlocs in a single encounter",
         "displayCardId": "ULDA_BOSS_39h",
@@ -373,7 +423,7 @@
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Unstoppable: Icarax, Plague Lord of Wrath",
+        "displayName": "Achievement completed: Unstoppable  - Icarax, Plague Lord of Wrath",
         "emptyText": "Defeat Icarax, Plague Lord of Wrath in a single encounter",
         "completedText": "You defeated Icarax, Plague Lord of Wrath in a single encounter",
         "displayCardId": "ULDA_BOSS_40h",
@@ -436,7 +486,7 @@
         "icon": "boss_victory",
         "root": true,
         "priority": 0,
-        "displayName": "Unstoppable: Tekahn, Plague Lord of Flame",
+        "displayName": "Achievement completed: Unstoppable  - Tekahn, Plague Lord of Flame",
         "emptyText": "Defeat Tekahn, Plague Lord of Flame in a single encounter",
         "completedText": "You defeated Tekahn, Plague Lord of Flame in a single encounter",
         "displayCardId": "ULDA_BOSS_67h",
