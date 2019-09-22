@@ -116,18 +116,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 					this.cdr.detectChanges();
 				}
 			} else {
-				this.activeTooltip = data.data[0];
-				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-				// this.showTooltipTimer = setTimeout(() => {
-				// 	this.activeTooltip = data.data[0];
-				// 	this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-				// 	if (!(this.cdr as ViewRef).destroyed) {
-				// 		this.cdr.detectChanges();
-				// 	}
-				// }, 200);
+				this.showTooltipTimer = setTimeout(() => {
+					this.activeTooltip = data.data[0];
+					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
+					if (!(this.cdr as ViewRef).destroyed) {
+						this.cdr.detectChanges();
+					}
+				}, 1000);
 			}
 		});
 		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
@@ -146,7 +141,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			console.log('received deck event', event.event, event.state);
+			// console.log('received deck event', event.event);
 			this.gameState = event.state;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();

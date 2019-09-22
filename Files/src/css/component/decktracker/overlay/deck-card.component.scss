@@ -111,6 +111,15 @@
 		}
 	}
 
+	.mouse-over {
+		position: absolute;
+		top: 0;
+		left: 30px;
+		bottom: 0;
+		right: 30px;
+		z-index: 1;
+	}
+
 	&.rare .mana-cost {
 		background: #357ee3;
 	}
