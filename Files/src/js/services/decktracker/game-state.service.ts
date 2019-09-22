@@ -44,7 +44,7 @@ export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: readonly EventParser[];
 
-	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 10, 'game-state');
+	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 50, 'game-state');
 
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
@@ -109,7 +109,7 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent)) {
-					this.logger.debug('[game-state] will apply parser', parser.event());
+					this.logger.debug('[game-state] will apply parser', parser.event(), gameEvent.cardId, gameEvent.entityId);
 					const stateAfterParser = parser.parse(this.state, gameEvent);
 					if (!stateAfterParser) {
 						this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
