@@ -12,6 +12,7 @@ export class TombsOfTerrorAmazingPlaysSetProvider extends GenericSetProvider {
 				'tombs_of_terror_amazing_plays_gatling_wand',
 				'tombs_of_terror_amazing_plays_high_attack_minion',
 				'tombs_of_terror_amazing_plays_legendary_seven_copies_on_board',
+				'tombs_of_terror_amazing_plays_siamat_servant',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_37h',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_38h',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_39h',

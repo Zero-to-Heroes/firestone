@@ -25,6 +25,7 @@ import { GameTieReq } from '../requirements/game-tie-req';
 import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
+import { LastDamageDoneByMinionReq } from '../requirements/last-damage-done-by-minion-req';
 import { MinionAttackReq } from '../requirements/minion-attack-req';
 import { MinionSummonedReq } from '../requirements/minion-summoned-req';
 import { MinionsControlledDuringTurnReq } from '../requirements/minions-controlled-during-turn-req';
@@ -104,6 +105,7 @@ export class ChallengeBuilderService {
 			case 'WIN_STREAK_LENGTH': return WinStreakReq.create(rawReq);
 			
 			// The very specific reqs
+			case 'LAST_DAMAGE_DONE_BY_MINION': return LastDamageDoneByMinionReq.create(rawReq);
 			case 'BOARD_FULL_OF_SAME_LEGENDARY_MINION': return BoardFullOfSameLegendaryMinionReq.create(rawReq, this.cards);
 			case 'WINS_AGAINST_CLASS_IN_RANKED_STANDARD_IN_LIMITED_TIME': return WinAgsinstClassInRankedStandardInLimitedTimeReq.create(rawReq);
 			case 'RESUMMONED_RECURRING_VILLAIN': return ResummonRecurringVillainRew.create(rawReq);
