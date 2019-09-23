@@ -52,6 +52,7 @@ module.exports = function(env, argv) {
 			{ from: path.join(process.cwd(), 'src/assets'), to: 'assets' },
 			{ from: path.join(process.cwd(), 'dependencies/cards.json') },
 			{ from: path.join(process.cwd(), 'plugins'), to: 'plugins' },
+			{ from: path.join(process.cwd(), 'dependencies/achievements'), to: 'achievements' },
 			// All the OW stuff, like manifest.json
 			{ from: path.join(process.cwd(), '/../*') },
 		]),
@@ -162,7 +163,16 @@ module.exports = function(env, argv) {
 		new HtmlWebpackPlugin({
 			filename: 'twitch-auth-callback.html',
 			template: 'src/html/twitch-auth-callback.html',
-			excludeChunks: ['collection', 'notifications', 'background', 'loading', 'decktracker', 'welcome', 'settings', 'opponentHand'],
+			excludeChunks: [
+				'collection',
+				'notifications',
+				'background',
+				'loading',
+				'decktracker',
+				'welcome',
+				'settings',
+				'opponentHand',
+			],
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'match_overlay_opponent_hand.html',
@@ -213,7 +223,7 @@ module.exports = function(env, argv) {
 			new SentryWebpackPlugin({
 				include: '.',
 				ignoreFile: '.sentrycliignore',
-				ignore: ['node_modules', 'webpack.config.js', 'webpack-twitch.config.js'],
+				ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
 				configFile: 'sentry.properties',
 			}),
 		);
@@ -262,7 +272,7 @@ module.exports = function(env, argv) {
 		watch: true,
 
 		watchOptions: {
-			ignored: ['node_modules'],
+			ignored: ['node_modules', 'test', 'dependencies'],
 		},
 
 		output: {
@@ -283,11 +293,16 @@ module.exports = function(env, argv) {
 			rules: [
 				{
 					test: /\.ts$/,
-					exclude: /node_modules/,
+					exclude: [
+						path.resolve(__dirname, 'node_modules'),
+						path.resolve(__dirname, 'test'),
+						path.resolve(__dirname, 'dependencies'),
+					],
 					use: ['@artonge/webpack', 'eslint-loader'],
 				},
 				{
 					test: /.js$/,
+					exclude: [path.resolve(__dirname, 'test'), path.resolve(__dirname, 'dependencies')],
 					parser: {
 						system: true,
 					},
@@ -295,11 +310,16 @@ module.exports = function(env, argv) {
 				{
 					test: /\.scss$/,
 					include: getRoot('src', 'css'),
+					exclude: [path.resolve(__dirname, 'test'), path.resolve(__dirname, 'dependencies')],
 					use: ['raw-loader', 'sass-loader'],
 				},
 				{
 					test: /\.scss$/,
-					exclude: getRoot('src', 'css'),
+					exclude: [
+						getRoot('src', 'css'),
+						path.resolve(__dirname, 'test'),
+						path.resolve(__dirname, 'dependencies'),
+					],
 					use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
 				},
 			],

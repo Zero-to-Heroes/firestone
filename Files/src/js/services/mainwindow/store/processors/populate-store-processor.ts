@@ -38,14 +38,14 @@ export class PopulateStoreProcessor implements Processor {
 	) {}
 
 	public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		console.log('populating store');
+		console.log('[populate-store] populating store');
 		const [collection, achievements, socialShareUserInfo, stats] = await Promise.all([
 			this.populateCollectionState(currentState.binder),
 			this.populateAchievementState(currentState.achievements),
 			this.initializeSocialShareUserInfo(currentState.socialShareUserInfo),
 			this.initialiseGameStats(currentState.stats),
 		]);
-		console.log('almost done');
+		console.log('[populate-store] almost done');
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: achievements,
 			binder: collection,

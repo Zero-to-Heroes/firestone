@@ -19,8 +19,8 @@ import { AchievementsLoaderService } from './data/achievements-loader.service';
 export class AchievementsRepository {
 	public modulesLoaded = new BehaviorSubject<boolean>(false);
 
-	private setProviders: readonly SetProvider[] = [];
-	private categories: readonly AchievementCategory[] = [];
+	private setProviders: readonly SetProvider[];
+	private categories: readonly AchievementCategory[];
 
 	constructor(private storage: AchievementsStorageService, private achievementsLoader: AchievementsLoaderService) {
 		this.init();
