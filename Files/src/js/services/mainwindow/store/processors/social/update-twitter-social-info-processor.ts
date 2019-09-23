@@ -14,7 +14,9 @@ export class UpdateTwitterSocialInfoProcessor implements Processor {
 		} as MainWindowState);
 	}
 
-	private async initializeSocialShareUserInfo(socialShareUserInfo: SocialShareUserInfo): Promise<SocialShareUserInfo> {
+	private async initializeSocialShareUserInfo(
+		socialShareUserInfo: SocialShareUserInfo,
+	): Promise<SocialShareUserInfo> {
 		const twitter = await this.ow.getTwitterUserInfo();
 		return Object.assign(new SocialShareUserInfo(), socialShareUserInfo, {
 			twitter: twitter,

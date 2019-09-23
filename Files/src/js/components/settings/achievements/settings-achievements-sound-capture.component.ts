@@ -73,7 +73,10 @@ export class SettingsAchievementsSoundCaptureComponent {
 
 	private async changeSoundCaptureSettings() {
 		console.log('changing settings with', this.captureSystemSound, this.captureMicrophoneSound);
-		const result = await this.owService.setAudioCaptureSettings(this.captureSystemSound, this.captureMicrophoneSound);
+		const result = await this.owService.setAudioCaptureSettings(
+			this.captureSystemSound,
+			this.captureMicrophoneSound,
+		);
 		console.log('recording settings changed', result);
 	}
 

@@ -35,8 +35,10 @@ import { Events } from '../../../../services/events.service';
 			<div class="scalable">
 				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="gameState">
-						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck"> </decktracker-twitch-title-bar>
-						<decktracker-deck-list [deckState]="gameState.playerDeck" [displayMode]="displayMode"> </decktracker-deck-list>
+						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck">
+						</decktracker-twitch-title-bar>
+						<decktracker-deck-list [deckState]="gameState.playerDeck" [displayMode]="displayMode">
+						</decktracker-deck-list>
 					</div>
 				</div>
 			</div>
@@ -52,7 +54,12 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
 
-	constructor(private events: Events, private cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+	constructor(
+		private events: Events,
+		private cdr: ChangeDetectorRef,
+		private el: ElementRef,
+		private renderer: Renderer2,
+	) {}
 
 	ngAfterViewInit() {
 		this.displayMode = 'DISPLAY_MODE_GROUPED';

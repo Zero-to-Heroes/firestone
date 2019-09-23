@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, AfterViewInit, EventEmitter } from '@angular/core';
+import {
+	Component,
+	ChangeDetectionStrategy,
+	ViewEncapsulation,
+	Input,
+	AfterViewInit,
+	EventEmitter,
+} from '@angular/core';
 
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
@@ -12,7 +19,10 @@ import { OverwolfService } from '../services/overwolf.service';
 			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
 				<span>The Binder</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedModule === 'achievements' }" (mousedown)="selectModule('achievements')">
+			<li
+				[ngClass]="{ 'selected': selectedModule === 'achievements' }"
+				(mousedown)="selectModule('achievements')"
+			>
 				<span>Achievements</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">

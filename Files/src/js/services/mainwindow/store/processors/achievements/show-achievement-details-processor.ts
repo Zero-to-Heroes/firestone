@@ -7,7 +7,10 @@ import { VisualAchievementCategory } from '../../../../../models/visual-achievem
 
 export class ShowAchievementDetailsProcessor implements Processor {
 	public async process(event: ShowAchievementDetailsEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		const selectedSet: AchievementSet = this.pickSet(currentState.achievements.globalCategories, event.achievementId);
+		const selectedSet: AchievementSet = this.pickSet(
+			currentState.achievements.globalCategories,
+			event.achievementId,
+		);
 		const newAchievements = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
@@ -26,6 +29,10 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		return allCategories
 			.map(cat => cat.achievementSets)
 			.reduce((a, b) => a.concat(b), [])
-			.find(set => set.achievements.some(achievement => achievement.completionSteps.some(step => step.id === achievementId)));
+			.find(set =>
+				set.achievements.some(achievement =>
+					achievement.completionSteps.some(step => step.id === achievementId),
+				),
+			);
 	}
 }

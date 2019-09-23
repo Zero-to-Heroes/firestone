@@ -21,8 +21,15 @@ export class AchievementRecordedProcessor implements Processor {
 		const achievementId: string = event.achievementId;
 		const replayInfo: ReplayInfo = event.replayInfo;
 		const updatedAchievement = await this.saveReplayInfo(achievementId, replayInfo);
-		const newGlobalCategories = this.updateGlobalCategories(currentState.achievements.globalCategories, achievementId, replayInfo);
-		const newState = this.achievementStateHelper.updateStateFromNewGlobalCategories(currentState.achievements, newGlobalCategories);
+		const newGlobalCategories = this.updateGlobalCategories(
+			currentState.achievements.globalCategories,
+			achievementId,
+			replayInfo,
+		);
+		const newState = this.achievementStateHelper.updateStateFromNewGlobalCategories(
+			currentState.achievements,
+			newGlobalCategories,
+		);
 		// TODO: Raising events here feels weird, and it's probably a design flaw.
 		this.events.broadcast(Events.ACHIEVEMENT_RECORDED, updatedAchievement);
 		return Object.assign(new MainWindowState(), currentState, {
@@ -37,7 +44,9 @@ export class AchievementRecordedProcessor implements Processor {
 	): readonly VisualAchievementCategory[] {
 		const globalCategory = globalCategories.find(cat =>
 			cat.achievementSets.some(set =>
-				set.achievements.some(achievement => achievement.completionSteps.some(step => step.id === achievementId)),
+				set.achievements.some(achievement =>
+					achievement.completionSteps.some(step => step.id === achievementId),
+				),
 			),
 		);
 		const achievementSet = globalCategory.achievementSets.find(set =>
@@ -46,26 +55,39 @@ export class AchievementRecordedProcessor implements Processor {
 		const updatedSet = this.updateReplayInfo(achievementSet, achievementId, replayInfo);
 		const updatedGlobalCategory = this.updateCategory(globalCategory, updatedSet);
 
-		const newCategories = globalCategories.map(cat => (cat.id === updatedGlobalCategory.id ? updatedGlobalCategory : cat));
+		const newCategories = globalCategories.map(cat =>
+			cat.id === updatedGlobalCategory.id ? updatedGlobalCategory : cat,
+		);
 		return newCategories as readonly VisualAchievementCategory[];
 	}
 
-	private updateCategory(globalCategory: VisualAchievementCategory, newSet: AchievementSet): VisualAchievementCategory {
+	private updateCategory(
+		globalCategory: VisualAchievementCategory,
+		newSet: AchievementSet,
+	): VisualAchievementCategory {
 		const newAchievements = globalCategory.achievementSets.map(set => (set.id === newSet.id ? newSet : set));
 		return Object.assign({} as VisualAchievementCategory, globalCategory, {
 			achievementSets: newAchievements as readonly AchievementSet[],
 		} as VisualAchievementCategory);
 	}
 
-	private updateReplayInfo(achievementSet: AchievementSet, achievementId: string, replayInfo: ReplayInfo): AchievementSet {
-		const existingAchievement = achievementSet.achievements.find(achv => achv.completionSteps.some(step => step.id === achievementId));
+	private updateReplayInfo(
+		achievementSet: AchievementSet,
+		achievementId: string,
+		replayInfo: ReplayInfo,
+	): AchievementSet {
+		const existingAchievement = achievementSet.achievements.find(achv =>
+			achv.completionSteps.some(step => step.id === achievementId),
+		);
 		const updatedReplayInfo = [replayInfo, ...existingAchievement.replayInfo] as readonly ReplayInfo[];
 		const updatedAchievement = Object.assign(new VisualAchievement(), existingAchievement, {
 			replayInfo: updatedReplayInfo,
 		} as VisualAchievement);
 
 		const existingIndex = achievementSet.achievements.indexOf(existingAchievement);
-		const updatedAchievements = achievementSet.achievements.map((item, index) => (index === existingIndex ? updatedAchievement : item));
+		const updatedAchievements = achievementSet.achievements.map((item, index) =>
+			index === existingIndex ? updatedAchievement : item,
+		);
 		return Object.assign(new AchievementSet(), achievementSet, {
 			achievements: updatedAchievements as readonly VisualAchievement[],
 		} as AchievementSet);

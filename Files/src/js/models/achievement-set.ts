@@ -23,11 +23,14 @@ export class AchievementSet {
 	}
 
 	public findAchievementId(achievementId: string): string {
-		return this.achievements.find(achievement => achievement.completionSteps.map(step => step.id).indexOf(achievementId) !== -1)
-			.completionSteps[0].id;
+		return this.achievements.find(
+			achievement => achievement.completionSteps.map(step => step.id).indexOf(achievementId) !== -1,
+		).completionSteps[0].id;
 	}
 
 	public findAchievement(achievementId: string): VisualAchievement {
-		return this.achievements.find(achievement => achievement.completionSteps.map(step => step.id).indexOf(achievementId) !== -1);
+		return this.achievements.find(
+			achievement => achievement.completionSteps.map(step => step.id).indexOf(achievementId) !== -1,
+		);
 	}
 }

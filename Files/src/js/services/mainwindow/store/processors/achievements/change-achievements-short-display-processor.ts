@@ -6,7 +6,10 @@ import { ChangeAchievementsShortDisplayEvent } from '../../events/achievements/c
 export class ChangeAchievementsShortDisplayProcessor implements Processor {
 	constructor() {}
 
-	public async process(event: ChangeAchievementsShortDisplayEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: ChangeAchievementsShortDisplayEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
 			shortDisplay: event.shortDisplay,
 		} as AchievementsState);

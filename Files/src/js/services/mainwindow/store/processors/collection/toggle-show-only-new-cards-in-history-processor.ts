@@ -5,7 +5,10 @@ import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../events/collection/to
 import { CardHistory } from '../../../../../models/card-history';
 
 export class ToggleShowOnlyNewCardsInHistoryProcessor implements Processor {
-	public async process(event: ToggleShowOnlyNewCardsInHistoryEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: ToggleShowOnlyNewCardsInHistoryEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const showOnlyNewCardsInHistory = !currentState.binder.showOnlyNewCardsInHistory;
 		const shownHistory: readonly CardHistory[] = showOnlyNewCardsInHistory
 			? currentState.binder.cardHistory.filter((card: CardHistory) => card.isNewCard)

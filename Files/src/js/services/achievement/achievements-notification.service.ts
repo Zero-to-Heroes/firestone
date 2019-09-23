@@ -18,18 +18,25 @@ export class AchievementsNotificationService {
 		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 	) {
-		this.events.on(Events.ACHIEVEMENT_COMPLETE).subscribe(data => this.handleAchievementCompleted(data.data[0], data.data[1]));
+		this.events
+			.on(Events.ACHIEVEMENT_COMPLETE)
+			.subscribe(data => this.handleAchievementCompleted(data.data[0], data.data[1]));
 		this.events
 			.on(Events.ACHIEVEMENT_RECORDING_STARTED)
 			.subscribe(data => this.handleAchievementRecordingStarted(data.data[0], data.data[1]));
-		this.events.on(Events.ACHIEVEMENT_RECORDED).subscribe(data => this.handleAchievementRecordCompleted(data.data[0]));
+		this.events
+			.on(Events.ACHIEVEMENT_RECORDED)
+			.subscribe(data => this.handleAchievementRecordCompleted(data.data[0]));
 		this.logger.debug('[achievements-notification] listening for achievement completion events');
 	}
 
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
 		if (achievement.numberOfCompletions > 1) {
-			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
+			this.logger.debug(
+				'[achievements-notification] achievement already completed, not sending any notif',
+				achievement.id,
+			);
 			return;
 		}
 		ga('send', 'event', 'new-achievement', achievement.id);
@@ -53,7 +60,10 @@ export class AchievementsNotificationService {
 	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] in pre-record notification');
 		if (achievement.numberOfCompletions > 1) {
-			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
+			this.logger.debug(
+				'[achievements-notification] achievement already completed, not sending any notif',
+				achievement.id,
+			);
 			return;
 		}
 		// const notificationTimeout = challenge.notificationTimeout();
@@ -73,7 +83,10 @@ export class AchievementsNotificationService {
 	private async handleAchievementRecordCompleted(newAchievement: Achievement) {
 		const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 		if (achievement.numberOfCompletions > 1) {
-			this.logger.debug('[achievements-notification] achievement already completed, not sending any notif', achievement.id);
+			this.logger.debug(
+				'[achievements-notification] achievement already completed, not sending any notif',
+				achievement.id,
+			);
 			return;
 		}
 		// In case the pre-record notification has already timed out, we need to send a full notif
@@ -88,7 +101,11 @@ export class AchievementsNotificationService {
 		});
 	}
 
-	private buildNotificationTemplate(achievement: Achievement, recapText: string, unclickable?: 'unclickable'): string {
+	private buildNotificationTemplate(
+		achievement: Achievement,
+		recapText: string,
+		unclickable?: 'unclickable',
+	): string {
 		return `
 			<div class="achievement-message-container ${achievement.id} ${unclickable}">
 				<div class="achievement-image-container">

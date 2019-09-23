@@ -146,14 +146,20 @@ import { OverwolfService } from '../../services/overwolf.service';
 				'active => inactive',
 				animate(
 					'600ms cubic-bezier(0.65,-0.29,0.40,1.5)',
-					keyframes([style({ transform: 'rotateY(179deg)', offset: 0 }), style({ transform: 'rotateY(0)', offset: 1 })]),
+					keyframes([
+						style({ transform: 'rotateY(179deg)', offset: 0 }),
+						style({ transform: 'rotateY(0)', offset: 1 }),
+					]),
 				),
 			),
 			transition(
 				'inactive => active',
 				animate(
 					'600ms cubic-bezier(0.65,-0.29,0.40,1.5)',
-					keyframes([style({ transform: 'rotateY(0)', offset: 0 }), style({ transform: 'rotateY(179deg)', offset: 1 })]),
+					keyframes([
+						style({ transform: 'rotateY(0)', offset: 0 }),
+						style({ transform: 'rotateY(179deg)', offset: 1 }),
+					]),
 				),
 			),
 		]),
@@ -177,7 +183,12 @@ export class SetComponent implements AfterViewInit {
 	private timeoutHandler;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private cdr: ChangeDetectorRef, private elRef: ElementRef, private ow: OverwolfService, private events: Events) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private elRef: ElementRef,
+		private ow: OverwolfService,
+		private events: Events,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;

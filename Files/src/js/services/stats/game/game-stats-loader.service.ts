@@ -19,8 +19,9 @@ export class GameStatsLoaderService {
 		}
 		const user = await this.ow.getCurrentUser();
 		const userId = user.userId || user.machineId || user.username;
-		const endpointResult: readonly GameStat[] = ((await this.http.get(`${GAME_STATS_ENDPOINT}/overwolf-${userId}`).toPromise()) as any)
-			.results;
+		const endpointResult: readonly GameStat[] = ((await this.http
+			.get(`${GAME_STATS_ENDPOINT}/overwolf-${userId}`)
+			.toPromise()) as any).results;
 		this.gameStats = Object.assign(new GameStats(), {
 			stats: endpointResult,
 		} as GameStats);

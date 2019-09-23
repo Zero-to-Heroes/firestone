@@ -21,7 +21,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="achievement-container {{ achievementStatus }}">
 			<div class="stripe" (mousedown)="toggleRecordings()">
-				<achievement-image [imageId]="_achievement.cardId" [imageType]="_achievement.cardType"></achievement-image>
+				<achievement-image
+					[imageId]="_achievement.cardId"
+					[imageType]="_achievement.cardType"
+				></achievement-image>
 				<div class="achievement-body">
 					<div class="text">
 						<div class="achievement-name">{{ _achievement.name }}</div>
@@ -37,7 +40,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 								</svg>
 							</i>
 						</div>
-						<achievement-completion-step *ngFor="let completionStep of _achievement.completionSteps" [step]="completionStep">
+						<achievement-completion-step
+							*ngFor="let completionStep of _achievement.completionSteps"
+							[step]="completionStep"
+						>
 						</achievement-completion-step>
 					</div>
 				</div>
@@ -49,7 +55,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</i>
 				</div>
 			</div>
-			<achievement-recordings *ngIf="showRecordings" [socialShareUserInfo]="socialShareUserInfo" [achievement]="_achievement">
+			<achievement-recordings
+				*ngIf="showRecordings"
+				[socialShareUserInfo]="socialShareUserInfo"
+				[achievement]="_achievement"
+			>
 			</achievement-recordings>
 		</div>
 	`,

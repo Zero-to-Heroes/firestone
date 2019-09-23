@@ -1,7 +1,11 @@
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 export class DeckManipulationHelper {
-	public static removeSingleCardFromZone(zone: readonly DeckCard[], cardId: string, entityId: number): readonly DeckCard[] {
+	public static removeSingleCardFromZone(
+		zone: readonly DeckCard[],
+		cardId: string,
+		entityId: number,
+	): readonly DeckCard[] {
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
 			return zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card);

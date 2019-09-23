@@ -53,7 +53,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
 
-	private processingQueue = new ProcessingQueue<Message>(eventQueue => this.processQueue(eventQueue), 200, 'notifications');
+	private processingQueue = new ProcessingQueue<Message>(
+		eventQueue => this.processQueue(eventQueue),
+		200,
+		'notifications',
+	);
 
 	constructor(
 		private notificationService: NotificationsService,
@@ -67,7 +71,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
 			const messageObject: Message = JSON.parse(message.content);
-			console.log('received message in notification window', messageObject.notificationId, messageObject.theClass);
+			console.log(
+				'received message in notification window',
+				messageObject.notificationId,
+				messageObject.theClass,
+			);
 			this.processingQueue.enqueue(messageObject);
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
@@ -106,10 +114,16 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private async sendNotification(messageObject: Message): Promise<void> {
 		return new Promise<void>(async resolve => {
 			await this.waitForInit();
-			const activeNotif = this.activeNotifications.find(notif => notif.notificationId === messageObject.notificationId);
+			const activeNotif = this.activeNotifications.find(
+				notif => notif.notificationId === messageObject.notificationId,
+			);
 			const notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
 			if (notification && activeNotif) {
-				await this.updateAchievementNotification(messageObject.notificationId, messageObject.theClass, notification);
+				await this.updateAchievementNotification(
+					messageObject.notificationId,
+					messageObject.theClass,
+					notification,
+				);
 			} else {
 				await this.showNotification(messageObject);
 			}
@@ -258,7 +272,13 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
-			console.log('game info', gameInfo, wrapper, wrapper.getBoundingClientRect(), this.activeNotifications.length);
+			console.log(
+				'game info',
+				gameInfo,
+				wrapper,
+				wrapper.getBoundingClientRect(),
+				this.activeNotifications.length,
+			);
 			if (!gameInfo) {
 				return;
 			}

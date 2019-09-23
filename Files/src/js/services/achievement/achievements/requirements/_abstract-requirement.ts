@@ -9,7 +9,10 @@ export abstract class AbstractRequirement implements Requirement {
 	public abstract isCompleted(): boolean;
 	public abstract test(gameEvent: GameEvent): void;
 
-	public static initialize<T extends Requirement>(initFunction: (rawReq: RawRequirement) => T, rawReq: RawRequirement): T {
+	public static initialize<T extends Requirement>(
+		initFunction: (rawReq: RawRequirement) => T,
+		rawReq: RawRequirement,
+	): T {
 		const req = initFunction(rawReq);
 		req.individualResetEvents = rawReq.individualRestEvents;
 		return req;

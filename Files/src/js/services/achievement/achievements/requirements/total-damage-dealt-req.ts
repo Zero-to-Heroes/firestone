@@ -6,7 +6,11 @@ import { Requirement } from './_requirement';
 export class TotalDamageDealtReq extends AbstractRequirement {
 	private totalDamageDealt: number = 0;
 
-	constructor(private readonly targetDamage: number, private readonly qualifier: string, private readonly sourceCardId?: string) {
+	constructor(
+		private readonly targetDamage: number,
+		private readonly qualifier: string,
+		private readonly sourceCardId?: string,
+	) {
 		super();
 	}
 

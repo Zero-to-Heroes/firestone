@@ -24,7 +24,15 @@ init({
 console.log('version is', process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule, SelectModule, FormsModule, ReactiveFormsModule],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		SharedModule,
+		SelectModule,
+		FormsModule,
+		ReactiveFormsModule,
+	],
 	declarations: [
 		DeckTrackerOverlayComponent,
 		DeckTrackerDeckListComponent,

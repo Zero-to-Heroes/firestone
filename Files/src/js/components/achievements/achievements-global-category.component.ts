@@ -53,7 +53,9 @@ export class AchievementsGlobalCategoryComponent {
 		this.categoryIcon = `/Files/assets/svg/achievements/categories/${category.icon}.svg`;
 		this.displayName = category.name;
 		this.allAchievements = category.achievementSets.map(set => set.achievements).reduce((a, b) => a.concat(b), []);
-		const flatCompletions = this.allAchievements.map(achievement => achievement.completionSteps).reduce((a, b) => a.concat(b), []);
+		const flatCompletions = this.allAchievements
+			.map(achievement => achievement.completionSteps)
+			.reduce((a, b) => a.concat(b), []);
 		const total = flatCompletions.length;
 		const achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
 		this.complete = total === achieved && total > 0;

@@ -305,7 +305,8 @@ export class CardsComponent implements AfterViewInit {
 			case this.FILTER_NON_PREMIUM_NOT_COMPLETED:
 				return (card: SetCard) => card.ownedNonPremium < card.getMaxCollectible();
 			case this.FILTER_NOT_COMPLETED:
-				return (card: SetCard) => card.ownedPremium < card.getMaxCollectible() || card.ownedNonPremium < card.getMaxCollectible();
+				return (card: SetCard) =>
+					card.ownedPremium < card.getMaxCollectible() || card.ownedNonPremium < card.getMaxCollectible();
 			case this.FILTER_DONT_OWN:
 				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium === 0;
 			default:

@@ -66,7 +66,9 @@ export class MemoryInspectionService {
 				// console.log('[memory service] [collection-manager] no collection info', info);
 				const gameInfo = await this.ow.getRunningGameInfo();
 				if (this.ow.gameRunning(gameInfo) && this.collectionTriesLeft > 0) {
-					console.log('[memory service] [collection-manager] game is running, GEP should return a collection. Waiting...');
+					console.log(
+						'[memory service] [collection-manager] game is running, GEP should return a collection. Waiting...',
+					);
 					setTimeout(() => this.getCollectionInternal(callback, delay), 2000);
 					return;
 				} else {
@@ -119,7 +121,12 @@ export class MemoryInspectionService {
 					this.events.broadcast(Events.OPPONENT_INFO, JSON.parse(opponent));
 				}
 			}
-		} else if (info.feature === 'match_info' && info.info && info.info.match_info && info.info.match_info.pseudo_match_id) {
+		} else if (
+			info.feature === 'match_info' &&
+			info.info &&
+			info.info.match_info &&
+			info.info.match_info.pseudo_match_id
+		) {
 			this.events.broadcast(Events.NEW_GAME_ID, info.info.match_info.pseudo_match_id);
 		}
 	}

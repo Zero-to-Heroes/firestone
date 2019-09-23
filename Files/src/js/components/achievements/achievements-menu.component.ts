@@ -11,7 +11,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-menu',
-	styleUrls: [`../../../css/global/menu.scss`, `../../../css/component/achievements/achievements-menu.component.scss`],
+	styleUrls: [
+		`../../../css/global/menu.scss`,
+		`../../../css/component/achievements/achievements-menu.component.scss`,
+	],
 	template: `
 		<ng-container [ngSwitch]="displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection-achievements menu-selection">

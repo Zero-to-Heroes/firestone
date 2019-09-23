@@ -13,7 +13,11 @@ export class HelpTooltipDirective implements OnInit {
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
 
-	constructor(private overlayPositionBuilder: OverlayPositionBuilder, private elementRef: ElementRef, private overlay: Overlay) {}
+	constructor(
+		private overlayPositionBuilder: OverlayPositionBuilder,
+		private elementRef: ElementRef,
+		private overlay: Overlay,
+	) {}
 
 	ngOnInit() {
 		const positionStrategy = this.overlayPositionBuilder

@@ -146,13 +146,18 @@ export class OverwolfService {
 		partnerId: number;
 		channel: string;
 	}> {
-		return new Promise<{ status: string; username: string; userId: string; machineId: string; partnerId: number; channel: string }>(
-			resolve => {
-				overwolf.profile.getCurrentUser(user => {
-					resolve(user);
-				});
-			},
-		);
+		return new Promise<{
+			status: string;
+			username: string;
+			userId: string;
+			machineId: string;
+			partnerId: number;
+			channel: string;
+		}>(resolve => {
+			overwolf.profile.getCurrentUser(user => {
+				resolve(user);
+			});
+		});
 	}
 
 	public async closeWindow(windowId: string) {
@@ -295,7 +300,11 @@ export class OverwolfService {
 
 	public async setAudioCaptureSettings(captureSystemSound: boolean, captureMicrophoneSound: boolean): Promise<any> {
 		return new Promise<boolean>(resolve => {
-			console.log('[overwolf-service] setting audio capture settings', captureSystemSound, captureMicrophoneSound);
+			console.log(
+				'[overwolf-service] setting audio capture settings',
+				captureSystemSound,
+				captureMicrophoneSound,
+			);
 			overwolf.settings.setAudioCaptureSettings(captureSystemSound, captureMicrophoneSound, (res: any) => {
 				resolve(res);
 			});

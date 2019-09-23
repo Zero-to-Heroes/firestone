@@ -89,7 +89,12 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events, private renderer: Renderer2) {}
+	constructor(
+		private el: ElementRef,
+		private cdr: ChangeDetectorRef,
+		private events: Events,
+		private renderer: Renderer2,
+	) {}
 
 	ngAfterViewInit() {
 		this.mouseEnterListener = this.renderer.listen(this.mouseOverElement.nativeElement, 'mouseenter', () => {

@@ -13,7 +13,9 @@ declare var ga: any;
 export class LogParserService {
 	plugin: any;
 
-	private cardRegex = new RegExp('D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d+).*');
+	private cardRegex = new RegExp(
+		'D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) NotifyOfCardGained: \\[.* cardId=(.*) .*\\] (.*) (\\d+).*',
+	);
 	private rewardRegex = new RegExp(
 		'D (?:\\d*):(?:\\d*):(?:\\d*).(?:\\d*) (?:.*)CardRewardData:.* CardID=(.*), Premium=(.*) Count=(\\d).*',
 	);
@@ -22,7 +24,11 @@ export class LogParserService {
 	// private logLines: any[][] = [];
 	// private processingLines = false;
 
-	private processingQueue = new ProcessingQueue<any[]>(eventQueue => this.processQueue(eventQueue), 200, 'log-parser');
+	private processingQueue = new ProcessingQueue<any[]>(
+		eventQueue => this.processQueue(eventQueue),
+		200,
+		'log-parser',
+	);
 
 	constructor(private cards: AllCardsService, private events: Events, private store: MainWindowStoreService) {}
 
@@ -146,7 +152,9 @@ export class LogParserService {
 		// Card is not in collection at all
 		// Should never occur
 		if (!card) {
-			console.warn('Should never have a missing card in collection, since the collection is retrieved after card pack opening');
+			console.warn(
+				'Should never have a missing card in collection, since the collection is retrieved after card pack opening',
+			);
 			return false;
 		}
 
@@ -159,7 +167,10 @@ export class LogParserService {
 		if ((type === 'NORMAL' && (dbCard.rarity === 'Legendary' && card.count >= 2)) || card.count >= 3) {
 			return true;
 		}
-		if ((type === 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2)) || card.premiumCount >= 3) {
+		if (
+			(type === 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2)) ||
+			card.premiumCount >= 3
+		) {
 			return true;
 		}
 		return false;

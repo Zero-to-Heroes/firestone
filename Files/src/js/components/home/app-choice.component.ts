@@ -68,7 +68,11 @@ export class AppChoiceComponent implements AfterViewInit, OnDestroy {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private stateChangedListener: (message: any) => void;
 
-	constructor(private collectionManager: CollectionManager, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
+	constructor(
+		private collectionManager: CollectionManager,
+		private cdr: ChangeDetectorRef,
+		private ow: OverwolfService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();

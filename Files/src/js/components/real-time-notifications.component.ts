@@ -1,9 +1,19 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ViewEncapsulation,
+	ViewRef,
+} from '@angular/core';
 import { RealTimeNotificationService } from '../services/real-time-notifications.service';
 
 @Component({
 	selector: 'real-time-notifications',
-	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/real-time-notifications.component.scss`],
+	styleUrls: [
+		`../../css/global/components-global.scss`,
+		`../../css/component/real-time-notifications.component.scss`,
+	],
 	template: `
 		<div class="real-time-notifications {{ notifications[currentNotificationIndex].type }}" *ngIf="notifications">
 			<i class="i-30 error-theme warning-icon">

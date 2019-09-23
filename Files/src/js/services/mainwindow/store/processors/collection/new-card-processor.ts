@@ -31,7 +31,15 @@ export class NewCardProcessor implements Processor {
 		const dbCard = this.cards.getCard(event.card.id);
 		const relevantCount = event.type === 'GOLDEN' ? event.card.premiumCount : event.card.count;
 		const history = this.isDust(event.card, event.type)
-			? new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, this.getDust(dbCard, event.type), event.type === 'GOLDEN', false, -1)
+			? new CardHistory(
+					dbCard.id,
+					dbCard.name,
+					dbCard.rarity,
+					this.getDust(dbCard, event.type),
+					event.type === 'GOLDEN',
+					false,
+					-1,
+			  )
 			: new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, event.type === 'GOLDEN', true, relevantCount);
 		await this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];
@@ -56,7 +64,9 @@ export class NewCardProcessor implements Processor {
 
 	private mergeSet(collection: Card[], set: Set, pityTimer: PityTimer): Set {
 		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
-		const ownedLimitCollectibleCards = updatedCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
+		const ownedLimitCollectibleCards = updatedCards
+			.map((card: SetCard) => card.getNumberCollected())
+			.reduce((c1, c2) => c1 + c2, 0);
 		const ownedLimitCollectiblePremiumCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollectedPremium())
 			.reduce((c1, c2) => c1 + c2, 0);
@@ -76,7 +86,15 @@ export class NewCardProcessor implements Processor {
 			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
 			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
 			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
-			return new SetCard(card.id, card.name, card.cardClass, card.rarity, card.cost, ownedNonPremium, ownedPremium);
+			return new SetCard(
+				card.id,
+				card.name,
+				card.cardClass,
+				card.rarity,
+				card.cost,
+				ownedNonPremium,
+				ownedPremium,
+			);
 		});
 	}
 
@@ -84,7 +102,9 @@ export class NewCardProcessor implements Processor {
 		// Card is not in collection at all
 		// Should never occur
 		if (!card) {
-			console.warn('Should never have a missing card in collection, since the collection is retrieved after card pack opening');
+			console.warn(
+				'Should never have a missing card in collection, since the collection is retrieved after card pack opening',
+			);
 			return false;
 		}
 
@@ -97,7 +117,10 @@ export class NewCardProcessor implements Processor {
 		if ((type === 'NORMAL' && (dbCard.rarity === 'Legendary' && card.count >= 2)) || card.count >= 3) {
 			return true;
 		}
-		if ((type === 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2)) || card.premiumCount >= 3) {
+		if (
+			(type === 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2)) ||
+			card.premiumCount >= 3
+		) {
 			return true;
 		}
 		return false;

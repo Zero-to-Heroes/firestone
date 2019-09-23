@@ -1,4 +1,12 @@
-import { Component, Input, ElementRef, HostListener, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
+import {
+	Component,
+	Input,
+	ElementRef,
+	HostListener,
+	ChangeDetectionStrategy,
+	AfterViewInit,
+	EventEmitter,
+} from '@angular/core';
 
 import { CardHistory } from '../../models/card-history';
 import { SetCard } from '../../models/set';
@@ -41,7 +49,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</card-history-item>
 				</li>
 				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
-					<span class="more-data-text">You've viewed {{ cardHistory.length }} of {{ totalHistoryLength }} cards</span>
+					<span class="more-data-text"
+						>You've viewed {{ cardHistory.length }} of {{ totalHistoryLength }} cards</span
+					>
 					<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
 				</li>
 				<section *ngIf="!cardHistory || cardHistory.length === 0" class="empty-state">

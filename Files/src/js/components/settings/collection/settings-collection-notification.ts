@@ -19,7 +19,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showDust" name="" id="a-01" (change)="toggleShowDust()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showDust"
+								name=""
+								id="a-01"
+								(change)="toggleShowDust()"
+							/>
 							<label for="a-01" [ngClass]="{ 'enabled': showDust }">
 								<p class="settings-p">Dust recap</p>
 								<b></b>
@@ -30,7 +37,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showCommon" name="" id="a-02" (change)="toggleShowCommon()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showCommon"
+								name=""
+								id="a-02"
+								(change)="toggleShowCommon()"
+							/>
 							<label for="a-02" [ngClass]="{ 'enabled': showCommon }">
 								<p class="settings-p">Non-golden commons</p>
 								<b></b>

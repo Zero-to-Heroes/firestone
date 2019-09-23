@@ -91,7 +91,11 @@ export class LogListenerService {
 		const handler = (id: any, status: any, data: string) => {
 			if (!status) {
 				if (data === 'truncated') {
-					console.log('[log-listener] [' + this.logFile + '] truncated log file - HS probably just overwrote the file. Going on');
+					console.log(
+						'[log-listener] [' +
+							this.logFile +
+							'] truncated log file - HS probably just overwrote the file. Going on',
+					);
 				} else if (id === fileIdentifier) {
 					console.warn('[log-listener] [' + this.logFile + '] received an error on file: ', id, data);
 				}
@@ -107,15 +111,20 @@ export class LogListenerService {
 		const plugin = await this.io.get();
 		plugin.onFileListenerChanged.addListener(handler);
 
-		plugin.listenOnFile(fileIdentifier, logsLocation, this.fileInitiallyPresent, (id: string, status: boolean, initData: any) => {
-			if (id === fileIdentifier) {
-				if (status) {
-					console.log('[' + id + '] now streaming...', this.fileInitiallyPresent, initData);
-					this.subject.next(Events.STREAMING_LOG_FILE);
-				} else {
-					console.error('[log-listener] [' + this.logFile + '] something bad happened with: ', id);
+		plugin.listenOnFile(
+			fileIdentifier,
+			logsLocation,
+			this.fileInitiallyPresent,
+			(id: string, status: boolean, initData: any) => {
+				if (id === fileIdentifier) {
+					if (status) {
+						console.log('[' + id + '] now streaming...', this.fileInitiallyPresent, initData);
+						this.subject.next(Events.STREAMING_LOG_FILE);
+					} else {
+						console.error('[log-listener] [' + this.logFile + '] something bad happened with: ', id);
+					}
 				}
-			}
-		});
+			},
+		);
 	}
 }

@@ -1,5 +1,12 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { inflate } from 'pako';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';

@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, ViewRef } from '@angular/core';
+import {
+	Component,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	HostListener,
+	ElementRef,
+	ViewRef,
+} from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
 declare var ga;
@@ -32,7 +39,10 @@ declare var ga;
 							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
 						</svg>
 						<div class="zth-tooltip right">
-							<p>Disabling it prevents automated video recording. Uncheck if the game's performances are affected.</p>
+							<p>
+								Disabling it prevents automated video recording. Uncheck if the game's performances are
+								affected.
+							</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
 								<polygon points="0,0 8,-9 16,0" />
 							</svg>

@@ -15,7 +15,11 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 			</i>
 			<div class="controls">
 				<control-bug></control-bug>
-				<control-settings [settingsApp]="'decktracker'" [shouldMoveSettingsWindow]="false" [windowId]="windowId">
+				<control-settings
+					[settingsApp]="'decktracker'"
+					[shouldMoveSettingsWindow]="false"
+					[windowId]="windowId"
+				>
 				</control-settings>
 				<control-close [windowId]="windowId"></control-close>
 			</div>

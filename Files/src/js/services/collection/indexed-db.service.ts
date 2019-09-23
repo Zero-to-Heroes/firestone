@@ -153,7 +153,10 @@ export class IndexedDbService {
 				console.log('[collection] [storage] upgrading db', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[collection] [storage] upgrade to version 1');
-					const objectStore = evt.currentTarget.result.createObjectStore('card-history', { keyPath: 'id', autoIncrement: true });
+					const objectStore = evt.currentTarget.result.createObjectStore('card-history', {
+						keyPath: 'id',
+						autoIncrement: true,
+					});
 					objectStore.createIndex('creationTimestamp', 'creationTimestamp', { unique: false });
 					objectStore.createIndex('isNewCard', 'isNewCard', { unique: false });
 				}
@@ -167,7 +170,10 @@ export class IndexedDbService {
 				}
 				if (evt.oldVersion < 9) {
 					console.log('[collection] [storage] upgrade to version 9');
-					evt.currentTarget.result.createObjectStore('pity-timer', { keyPath: 'setId', autoIncrement: false });
+					evt.currentTarget.result.createObjectStore('pity-timer', {
+						keyPath: 'setId',
+						autoIncrement: false,
+					});
 				}
 				console.log('[collection] [storage] indexeddb upgraded');
 			})

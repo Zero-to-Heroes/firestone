@@ -46,11 +46,19 @@ declare var ga: any;
 							<control-discord></control-discord>
 							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 							<control-maximize [windowId]="windowId"></control-maximize>
-							<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
+							<control-close
+								[windowId]="windowId"
+								[isMainWindow]="true"
+								[closeAll]="true"
+							></control-close>
 						</div>
 					</section>
 					<section class="content-container">
-						<collection class="main-section" [state]="state.binder" [hidden]="state.currentApp !== 'collection'"></collection>
+						<collection
+							class="main-section"
+							[state]="state.binder"
+							[hidden]="state.currentApp !== 'collection'"
+						></collection>
 						<achievements
 							class="main-section"
 							[state]="state.achievements"
@@ -111,7 +119,12 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private impressionListener: (message: any) => void;
 	private storeSubscription: Subscription;
 
-	constructor(private cdr: ChangeDetectorRef, private adService: AdService, private ow: OverwolfService, private debug: DebugService) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private adService: AdService,
+		private ow: OverwolfService,
+		private debug: DebugService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
@@ -199,7 +212,10 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		}
 		if (!this.adRef) {
 			if (this.impressionListener) {
-				console.warn('[main-window] Redefining the impression listener, could cause memory leaks', this.impressionListener);
+				console.warn(
+					'[main-window] Redefining the impression listener, could cause memory leaks',
+					this.impressionListener,
+				);
 			}
 			this.adInit = true;
 			const window = await this.ow.getCurrentWindow();

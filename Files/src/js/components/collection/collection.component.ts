@@ -34,7 +34,11 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 					[hidden]="_state.currentView !== 'cards'"
 				>
 				</cards>
-				<full-card class="full-card" [selectedCard]="_state.selectedCard" [hidden]="_state.currentView !== 'card-details'">
+				<full-card
+					class="full-card"
+					[selectedCard]="_state.selectedCard"
+					[hidden]="_state.currentView !== 'card-details'"
+				>
 				</full-card>
 			</section>
 			<section class="secondary">

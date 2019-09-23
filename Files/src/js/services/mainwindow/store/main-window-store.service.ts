@@ -198,7 +198,10 @@ export class MainWindowStoreService {
 
 	private buildProcessors(): Map<string, Processor> {
 		const achievementStateHelper = new AchievementStateHelper();
-		const achievementUpdateHelper = new AchievementUpdateHelper(this.achievementsRepository, achievementStateHelper);
+		const achievementUpdateHelper = new AchievementUpdateHelper(
+			this.achievementsRepository,
+			achievementStateHelper,
+		);
 		return Map.of(
 			PopulateStoreEvent.eventName(),
 			new PopulateStoreProcessor(
@@ -253,7 +256,13 @@ export class MainWindowStoreService {
 			new NewPackProcessor(this.collectionDb, this.cards),
 
 			NewCardEvent.eventName(),
-			new NewCardProcessor(this.collectionDb, this.memoryReading, this.cardHistoryStorage, this.pityTimer, this.cards),
+			new NewCardProcessor(
+				this.collectionDb,
+				this.memoryReading,
+				this.cardHistoryStorage,
+				this.pityTimer,
+				this.cards,
+			),
 
 			AchievementHistoryCreatedEvent.eventName(),
 			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
@@ -280,7 +289,11 @@ export class MainWindowStoreService {
 			new AchievementRecordedProcessor(this.achievementsStorage, achievementStateHelper, this.events),
 
 			AchievementCompletedEvent.eventName(),
-			new AchievementCompletedProcessor(this.achievementHistoryStorage, this.achievementsLoader, achievementUpdateHelper),
+			new AchievementCompletedProcessor(
+				this.achievementHistoryStorage,
+				this.achievementsLoader,
+				achievementUpdateHelper,
+			),
 
 			StartSocialSharingEvent.eventName(),
 			new StartSocialSharingProcessor(),

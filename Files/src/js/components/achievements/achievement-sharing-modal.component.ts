@@ -28,7 +28,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="achievement-sharing-modal {{ network }}">
 			<button class="i-30 close-button" (mousedown)="closeModal()">
 				<svg class="svg-icon-fill">
-					<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+					<use
+						xmlns:xlink="http://www.w3.org/1999/xlink"
+						xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
+					></use>
 				</svg>
 			</button>
 			<div class="modal-title">
@@ -86,7 +89,12 @@ export class AchievementSharingModal implements AfterViewInit, OnDestroy {
 	private player;
 	private stateChangedListener: (message: any) => void;
 
-	constructor(private elRef: ElementRef, private ow: OverwolfService, private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private elRef: ElementRef,
+		private ow: OverwolfService,
+		private sanitizer: DomSanitizer,
+		private cdr: ChangeDetectorRef,
+	) {}
 
 	@Input() set sharingAchievement(value: SharingAchievement) {
 		console.log('setting sharing achievement', value);

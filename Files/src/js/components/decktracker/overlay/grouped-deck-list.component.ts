@@ -27,7 +27,9 @@ export class GroupedDeckListComponent {
 		const deck =
 			deckList.length > 0
 				? deckState.deck
-				: [...deckState.deck, ...deckState.hand, ...deckState.otherZone].sort((a, b) => a.manaCost - b.manaCost);
+				: [...deckState.deck, ...deckState.hand, ...deckState.otherZone].sort(
+						(a, b) => a.manaCost - b.manaCost,
+				  );
 		// console.log('grouping deck list?', deckState.deckList, deck, deckState);
 		// The zone in this view is the decklist + cards in the deck that didn't
 		// start in the decklist

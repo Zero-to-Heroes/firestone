@@ -51,7 +51,10 @@ export class GenericIndexedDbService {
 				console.log('[storage] upgrading db', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[storage] upgrade to version 1');
-					evt.currentTarget.result.createObjectStore('user-preferences', { keyPath: 'id', autoIncrement: false });
+					evt.currentTarget.result.createObjectStore('user-preferences', {
+						keyPath: 'id',
+						autoIncrement: false,
+					});
 				}
 				console.log('[storage] indexeddb upgraded');
 			})

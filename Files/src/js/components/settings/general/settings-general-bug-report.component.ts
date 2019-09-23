@@ -15,7 +15,11 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 	template: `
 		<div class="general-bug-report">
 			<div class="title">Send feedback / Report a bug</div>
-			<input class="email" [ngModel]="email" placeholder="Your email (optional, please fill it if you'd like to hear back from us)" />
+			<input
+				class="email"
+				[ngModel]="email"
+				placeholder="Your email (optional, please fill it if you'd like to hear back from us)"
+			/>
 			<textarea
 				class="body"
 				[ngModel]="body"
@@ -53,7 +57,10 @@ export class SettingsGeneralBugReportComponent {
 			this.cdr.detectChanges();
 		}
 		try {
-			const [appLogs, gameLogs] = await Promise.all([this.logService.uploadAppLogs(), this.logService.uploadGameLogs()]);
+			const [appLogs, gameLogs] = await Promise.all([
+				this.logService.uploadAppLogs(),
+				this.logService.uploadGameLogs(),
+			]);
 			const submission = {
 				email: this.email,
 				message: this.body,

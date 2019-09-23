@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, ViewEncapsulation } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	Input,
+	ViewEncapsulation,
+} from '@angular/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -14,7 +21,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<button class="i-30 close-button" (mousedown)="closeWindow()">
 			<svg class="svg-icon-fill">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+				<use
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
+				></use>
 			</svg>
 		</button>
 	`,

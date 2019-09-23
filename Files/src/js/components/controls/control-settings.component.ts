@@ -1,4 +1,11 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, AfterViewInit, EventEmitter } from '@angular/core';
+import {
+	Component,
+	ViewEncapsulation,
+	ChangeDetectionStrategy,
+	Input,
+	AfterViewInit,
+	EventEmitter,
+} from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -12,7 +19,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<button class="i-30 pink-button" (mousedown)="showSettings()">
 			<svg class="svg-icon-fill">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"></use>
+				<use
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"
+				></use>
 			</svg>
 		</button>
 	`,

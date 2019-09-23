@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewEncapsulation,
+	ViewRef,
+} from '@angular/core';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { RealTimeNotificationService } from '../../services/real-time-notifications.service';

@@ -47,7 +47,9 @@ export class AchievementsLoaderService {
 		];
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
-			this.challengeModules = rawAchievements.map(rawAchievement => this.challengeBuilder.buildChallenge(rawAchievement));
+			this.challengeModules = rawAchievements.map(rawAchievement =>
+				this.challengeBuilder.buildChallenge(rawAchievement),
+			);
 			resolve([this.achievements, this.challengeModules]);
 		});
 	}

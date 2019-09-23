@@ -64,7 +64,10 @@ declare var ga;
 							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
 						</svg>
 						<div class="zth-tooltip right">
-							<p>Removes almost everything that is not your decklist. You can't group the cards by zone in this mode</p>
+							<p>
+								Removes almost everything that is not your decklist. You can't group the cards by zone
+								in this mode
+							</p>
 							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
 								<polygon points="0,0 8,-9 16,0" />
 							</svg>
@@ -125,7 +128,9 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
 		this.cdr.detach();
 		this.loadDefaultValues();
-		this.skinFormSubscription = this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value => this.changeSkinSettings(value));
+		this.skinFormSubscription = this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value =>
+			this.changeSkinSettings(value),
+		);
 		this.trackerScaleFormSubscription = this.trackerScaleChanged
 			.pipe(
 				debounceTime(20),

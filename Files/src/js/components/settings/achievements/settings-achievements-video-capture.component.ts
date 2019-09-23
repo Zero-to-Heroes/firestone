@@ -86,7 +86,10 @@ declare var overwolf;
 							<use xlink:href="/Files/assets/svg/sprite.svg#radio_selected" />
 						</svg>
 					</i>
-					<div class="custom-video-quality" [ngClass]="{ 'unselected': settingsForm.value.videoQuality !== 'custom' }">
+					<div
+						class="custom-video-quality"
+						[ngClass]="{ 'unselected': settingsForm.value.videoQuality !== 'custom' }"
+					>
 						<div class="label-custom">Custom</div>
 						<div *ngIf="settingsForm.value.videoQuality === 'custom'" class="custom-info">
 							<div>({{ resolution }}p {{ fps }}fps).</div>

@@ -8,7 +8,8 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 	],
 	template: `
 		<ul class="collection">
-			<settings-collection-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)"> </settings-collection-menu>
+			<settings-collection-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">
+			</settings-collection-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-collection-notification *ngSwitchCase="'notification'"></settings-collection-notification>
 			</ng-container>

@@ -66,21 +66,33 @@ export class CardBackToDeckParser implements EventParser {
 		} as DeckCard;
 	}
 
-	private buildNewHand(initialZone: string, previousHand: readonly DeckCard[], movedCard: DeckCard): readonly DeckCard[] {
+	private buildNewHand(
+		initialZone: string,
+		previousHand: readonly DeckCard[],
+		movedCard: DeckCard,
+	): readonly DeckCard[] {
 		if (initialZone !== 'HAND') {
 			return previousHand;
 		}
 		return DeckManipulationHelper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId);
 	}
 
-	private buildNewOther(initialZone: string, previousOther: readonly DeckCard[], movedCard: DeckCard): readonly DeckCard[] {
+	private buildNewOther(
+		initialZone: string,
+		previousOther: readonly DeckCard[],
+		movedCard: DeckCard,
+	): readonly DeckCard[] {
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
 			return DeckManipulationHelper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId);
 		}
 		return previousOther;
 	}
 
-	private buildNewBoard(initialZone: string, previousBOard: readonly DeckCard[], movedCard: DeckCard): readonly DeckCard[] {
+	private buildNewBoard(
+		initialZone: string,
+		previousBOard: readonly DeckCard[],
+		movedCard: DeckCard,
+	): readonly DeckCard[] {
 		if (initialZone !== 'PLAY') {
 			return previousBOard;
 		}

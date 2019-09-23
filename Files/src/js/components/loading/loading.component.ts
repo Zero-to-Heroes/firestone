@@ -203,7 +203,10 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 		}
 		if (!this.adRef) {
 			if (this.impressionListener) {
-				console.error('[loading] Redefining the impression listener, could cause memory leaks', this.impressionListener);
+				console.error(
+					'[loading] Redefining the impression listener, could cause memory leaks',
+					this.impressionListener,
+				);
 			}
 			this.adInit = true;
 			const window = await this.ow.getCurrentWindow();

@@ -22,7 +22,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'achievements-list',
-	styleUrls: [`../../../css/component/achievements/achievements-list.component.scss`, `../../../css/global/scrollbar-achievements.scss`],
+	styleUrls: [
+		`../../../css/component/achievements/achievements-list.component.scss`,
+		`../../../css/global/scrollbar-achievements.scss`,
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="achievements-container" [ngClass]="{ 'shrink-header': shortDisplay }">
@@ -56,7 +59,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</svg>
 				</i>
 			</div>
-			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0" (scroll)="onScroll($event)">
+			<ul
+				class="achievements-list"
+				*ngIf="activeAchievements && activeAchievements.length > 0"
+				(scroll)="onScroll($event)"
+			>
 				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId">
 					<achievement-view
 						[attr.data-achievement-id]="achievement.id.toLowerCase()"
@@ -101,7 +108,12 @@ export class AchievementsListComponent implements AfterViewInit {
 	private lastScrollPositionBeforeScrollUp = 0;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private cdr: ChangeDetectorRef, private el: ElementRef, private ow: OverwolfService, private domSanitizer: DomSanitizer) {
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private el: ElementRef,
+		private ow: OverwolfService,
+		private domSanitizer: DomSanitizer,
+	) {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 	}
 
@@ -125,7 +137,10 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
 		this._achievementSet = achievementSet;
 		if (achievementSet) {
-			this.filterOptions = this._achievementSet.filterOptions.map(option => ({ label: option.label, value: option.value }));
+			this.filterOptions = this._achievementSet.filterOptions.map(option => ({
+				label: option.label,
+				value: option.value,
+			}));
 			this.activeFilter = this.filterOptions[0].value;
 			this.updateShownAchievements();
 		}
@@ -196,14 +211,20 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	private onScrollDown(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollUp = scrollPosition;
-		if (scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX && !this.shortDisplay) {
+		if (
+			scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX &&
+			!this.shortDisplay
+		) {
 			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
 		}
 	}
 
 	private onScrollUp(scrollPosition: number) {
 		this.lastScrollPositionBeforeScrollDown = scrollPosition;
-		if (this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX && this.shortDisplay) {
+		if (
+			this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX &&
+			this.shortDisplay
+		) {
 			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(false));
 		}
 	}

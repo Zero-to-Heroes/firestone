@@ -9,7 +9,9 @@ export class SelectAchievementSetProcessor implements Processor {
 		const globalCategory = currentState.achievements.globalCategories.find(cat =>
 			cat.achievementSets.some(set => set.id === event.achievementSetId),
 		);
-		const achievementSet: AchievementSet = globalCategory.achievementSets.find(set => set.id === event.achievementSetId);
+		const achievementSet: AchievementSet = globalCategory.achievementSets.find(
+			set => set.id === event.achievementSetId,
+		);
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',

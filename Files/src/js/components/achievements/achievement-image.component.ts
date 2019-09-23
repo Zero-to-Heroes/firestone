@@ -1,4 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef, ViewEncapsulation } from '@angular/core';
+import {
+	Component,
+	Input,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	ViewRef,
+	ViewEncapsulation,
+} from '@angular/core';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 
 @Component({

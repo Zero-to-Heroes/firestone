@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -123,7 +131,15 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		const gameWidth = gameInfo.logicalWidth;
 		const dpi = gameWidth / gameInfo.width;
 		const width = gameWidth * dpi * 1;
-		this.logger.debug('[opponent-hand-overlay] new game width is', gameWidth, 'with dpi', dpi, 'and overlay width', width, gameInfo);
+		this.logger.debug(
+			'[opponent-hand-overlay] new game width is',
+			gameWidth,
+			'with dpi',
+			dpi,
+			'and overlay width',
+			width,
+			gameInfo,
+		);
 		// Height
 		const gameHeight = gameInfo.logicalHeight;
 		const height = gameHeight * dpi * 0.2;

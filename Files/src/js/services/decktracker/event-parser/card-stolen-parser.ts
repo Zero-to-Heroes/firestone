@@ -39,7 +39,9 @@ export class CardStolenParser implements EventParser {
 		});
 
 		const stealingToDeck = isPlayerStolenFrom ? currentState.opponentDeck : currentState.playerDeck;
-		const stealingHand = cardInHand ? DeckManipulationHelper.addSingleCardToZone(stealingToDeck.hand, cardInHand) : stealingToDeck.hand;
+		const stealingHand = cardInHand
+			? DeckManipulationHelper.addSingleCardToZone(stealingToDeck.hand, cardInHand)
+			: stealingToDeck.hand;
 		const stealingBoard = cardInBoard
 			? DeckManipulationHelper.addSingleCardToZone(stealingToDeck.board, cardInBoard)
 			: stealingToDeck.board;

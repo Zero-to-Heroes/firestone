@@ -15,7 +15,10 @@ import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from 
 			<li [ngClass]="{ 'selected': selectedApp === 'collection' }" (mousedown)="changeSelection('collection')">
 				<span>The Binder</span>
 			</li>
-			<li [ngClass]="{ 'selected': selectedApp === 'achievements' }" (mousedown)="changeSelection('achievements')">
+			<li
+				[ngClass]="{ 'selected': selectedApp === 'achievements' }"
+				(mousedown)="changeSelection('achievements')"
+			>
 				<span>Achievements</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'decktracker' }" (mousedown)="changeSelection('decktracker')">

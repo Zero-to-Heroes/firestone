@@ -12,7 +12,10 @@ export class AchievementHistoryCreatedProcessor implements Processor {
 		private achievementsLoader: AchievementsLoaderService,
 	) {}
 
-	public async process(event: AchievementHistoryCreatedEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: AchievementHistoryCreatedEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const [historyRef, achievements] = await Promise.all([
 			this.achievementHistoryStorage.loadAll(),
 			this.achievementsLoader.getAchievements(),

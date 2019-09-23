@@ -5,7 +5,10 @@ import { ChangeVisibleApplicationEvent } from '../events/change-visible-applicat
 import { Processor } from './processor';
 
 export class ChangeVisibleApplicationProcessor implements Processor {
-	public async process(event: ChangeVisibleApplicationEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: ChangeVisibleApplicationEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const binder =
 			event.module === 'collection'
 				? Object.assign(new BinderState(), currentState.binder, {

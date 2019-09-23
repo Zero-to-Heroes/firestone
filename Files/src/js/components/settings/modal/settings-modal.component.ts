@@ -4,11 +4,15 @@ import { Events } from '../../../services/events.service';
 
 @Component({
 	selector: 'settings-modal',
-	styleUrls: [`../../../../css/global/components-global.scss`, `../../../../css/component/settings/modal/settings-modal.component.scss`],
+	styleUrls: [
+		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/settings/modal/settings-modal.component.scss`,
+	],
 	template: `
 		<div class="settings-modal" *ngIf="currentModal">
 			<ng-container [ngSwitch]="currentModal">
-				<modal-video-settings-changed *ngSwitchCase="'video-capture'" (dismiss)="closeModal()"> </modal-video-settings-changed>
+				<modal-video-settings-changed *ngSwitchCase="'video-capture'" (dismiss)="closeModal()">
+				</modal-video-settings-changed>
 			</ng-container>
 		</div>
 	`,
@@ -22,7 +26,9 @@ export class SettingsModalComponent implements OnInit, OnDestroy {
 	constructor(private events: Events, private cdr: ChangeDetectorRef) {}
 
 	ngOnInit() {
-		this.eventsSubscription = this.events.on(Events.SETTINGS_DISPLAY_MODAL).subscribe(data => this.handleNewModal(data));
+		this.eventsSubscription = this.events
+			.on(Events.SETTINGS_DISPLAY_MODAL)
+			.subscribe(data => this.handleNewModal(data));
 	}
 
 	ngOnDestroy() {

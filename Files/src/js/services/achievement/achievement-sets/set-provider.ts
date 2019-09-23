@@ -14,7 +14,10 @@ export abstract class SetProvider {
 		this.types = types;
 	}
 
-	public abstract provide(allAchievements: readonly Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet;
+	public abstract provide(
+		allAchievements: readonly Achievement[],
+		completedAchievemnts?: CompletedAchievement[],
+	): AchievementSet;
 	protected abstract convertToVisual(
 		achievement: Achievement,
 		index: number,

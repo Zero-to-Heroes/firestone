@@ -29,7 +29,13 @@ export class IndexedDbService {
 			const result = await this.db.update('achievements', achievement);
 			return result;
 		} catch (e) {
-			console.error('[achievements] [storage] error while saving completed achievement', achievement, e.message, e.name, e);
+			console.error(
+				'[achievements] [storage] error while saving completed achievement',
+				achievement,
+				e.message,
+				e.name,
+				e,
+			);
 			return achievement;
 		}
 	}
@@ -40,7 +46,12 @@ export class IndexedDbService {
 			const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
 			return achievements;
 		} catch (e) {
-			console.error('[achievements] [storage] error while getting all completed achievements', e.message, e.name, e);
+			console.error(
+				'[achievements] [storage] error while getting all completed achievements',
+				e.message,
+				e.name,
+				e,
+			);
 			return [];
 		}
 	}
@@ -78,7 +89,10 @@ export class IndexedDbService {
 				}
 				if (evt.oldVersion < 2) {
 					console.log('[achievements] [storage] upgrade to version 2');
-					evt.currentTarget.result.createObjectStore('achievement-history', { keyPath: 'id', autoIncrement: true });
+					evt.currentTarget.result.createObjectStore('achievement-history', {
+						keyPath: 'id',
+						autoIncrement: true,
+					});
 				}
 				console.log('[achievements] [storage] indexeddb upgraded');
 				this.dbInit = true;

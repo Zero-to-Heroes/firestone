@@ -16,7 +16,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="achievements-categories">
 			<ol>
 				<li *ngFor="let achievementSet of achievementSets; trackBy: trackById">
-					<achievement-set-view [achievementSet]="achievementSet" (mousedown)="selectSet(achievementSet)"></achievement-set-view>
+					<achievement-set-view
+						[achievementSet]="achievementSet"
+						(mousedown)="selectSet(achievementSet)"
+					></achievement-set-view>
 				</li>
 			</ol>
 		</div>

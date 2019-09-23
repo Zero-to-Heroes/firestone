@@ -1,4 +1,11 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy, ViewEncapsulation } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	HostListener,
+	OnDestroy,
+	ViewEncapsulation,
+} from '@angular/core';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 

@@ -369,7 +369,9 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		this.currentThumbnail = thumbnail;
 		this.currentVideoPathOnDisk = this.currentThumbnail ? this.currentThumbnail.videoPath : undefined;
 		this.currentReplayLocation = this.currentThumbnail ? this.currentThumbnail.videoLocation : undefined;
-		this.currentReplay = this.currentReplayLocation ? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation) : undefined;
+		this.currentReplay = this.currentReplayLocation
+			? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation)
+			: undefined;
 		console.log('updated current replay', this.currentReplay);
 		this.updateTitle();
 		this.cdr.detectChanges();
@@ -436,7 +438,12 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	private buildText(): string {
 		const step = this._achievement.completionSteps.find(step => step.id === this.currentThumbnail.stepId);
 		if (!step) {
-			console.error('Could not find step for', this.currentThumbnail.stepId, this._achievement, this.currentThumbnail);
+			console.error(
+				'Could not find step for',
+				this.currentThumbnail.stepId,
+				this._achievement,
+				this.currentThumbnail,
+			);
 			return '';
 		}
 		return step.text(false);

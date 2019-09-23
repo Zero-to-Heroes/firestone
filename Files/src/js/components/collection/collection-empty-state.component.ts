@@ -3,14 +3,19 @@ import { Set } from '../../models/set';
 
 @Component({
 	selector: 'collection-empty-state',
-	styleUrls: [`../../../css/global/components-global.scss`, `../../../css/component/collection/collection-empty-state.component.scss`],
+	styleUrls: [
+		`../../../css/global/components-global.scss`,
+		`../../../css/component/collection/collection-empty-state.component.scss`,
+	],
 	template: `
 		<ng-container [ngSwitch]="sectionSelector">
 			<section class="empty-state no-missing-card-in-set" *ngSwitchCase="NO_MISSING_CARD_IN_SET">
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration" />
+							<use
+								xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_cards_I_don’t_have_illustration"
+							/>
 						</svg>
 					</i>
 					<span class="title">This set is complete and you have it all!</span>
@@ -32,7 +37,9 @@ import { Set } from '../../models/set';
 				<div class="state-container">
 					<i class="i-236X165 pale-pink-theme">
 						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration" />
+							<use
+								xlink:href="/Files/assets/svg/sprite.svg#empty_state_Only_golden_cards_I_have_illustration"
+							/>
 						</svg>
 					</i>
 					<span class="title">No golden cards from this set yet!</span>
@@ -98,6 +105,12 @@ export class CollectionEmptyStateComponent {
 		} else if (this._searchString) {
 			this.sectionSelector = this.NO_SEARCH_RESULT;
 		}
-		console.log('updated section selector', this.sectionSelector, this._set, this._activeFilter, this._searchString);
+		console.log(
+			'updated section selector',
+			this.sectionSelector,
+			this._set,
+			this._activeFilter,
+			this._searchString,
+		);
 	}
 }

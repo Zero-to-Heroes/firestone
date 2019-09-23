@@ -4,7 +4,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
 	selector: 'achievement-set-view',
-	styleUrls: [`../../../css/component/achievements/achievement-set.component.scss`, `../../../css/global/components-global.scss`],
+	styleUrls: [
+		`../../../css/component/achievements/achievement-set.component.scss`,
+		`../../../css/global/components-global.scss`,
+	],
 	template: `
 		<div class="achievement-set" [ngClass]="{ 'empty': empty }">
 			<div class="frame complete-simple" *ngIf="complete">

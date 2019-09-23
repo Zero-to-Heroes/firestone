@@ -11,7 +11,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<button class="i-30 pink-button" (mousedown)="showBugForm()" helpTooltip="Report a bug">
 			<svg class="svg-icon-fill">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_bug"></use>
+				<use
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="/Files/assets/svg/sprite.svg#window-control_bug"
+				></use>
 			</svg>
 		</button>
 	`,

@@ -22,7 +22,11 @@ export class CardDrawParser implements EventParser {
 
 		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(previousDeck, cardId, entityId);
+		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
+			previousDeck,
+			cardId,
+			entityId,
+		);
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousHand, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

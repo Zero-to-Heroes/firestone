@@ -55,7 +55,8 @@ export class ReplayUploadService {
 						'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
 						'game-rank': rank && rank !== 'legend' ? rank.toString() : '',
 						'game-legend-rank': rank === 'legend' ? rank.toString() : '',
-						'opponent-game-rank': game.opponentRank && game.opponentRank !== 'legend' ? game.opponentRank.toString() : '',
+						'opponent-game-rank':
+							game.opponentRank && game.opponentRank !== 'legend' ? game.opponentRank.toString() : '',
 						'opponent-game-legend-rank': game.opponentRank === 'legend' ? game.opponentRank.toString() : '',
 						'game-mode': game.gameMode,
 						'game-format': game.gameMode !== 'Arena' ? game.gameFormat : '',

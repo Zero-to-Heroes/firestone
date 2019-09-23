@@ -14,7 +14,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'settings',
-	styleUrls: [`../../../css/global/components-global.scss`, `../../../css/component/settings/settings.component.scss`],
+	styleUrls: [
+		`../../../css/global/components-global.scss`,
+		`../../../css/component/settings/settings.component.scss`,
+	],
 	template: `
 		<div class="root">
 			<div class="app-container">
@@ -24,12 +27,22 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<control-close [windowId]="thisWindowId"></control-close>
 					</div>
 				</section>
-				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)"> </settings-app-selection>
+				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
+				</settings-app-selection>
 				<ng-container [ngSwitch]="selectedApp">
 					<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
-					<settings-collection *ngSwitchCase="'collection'" [selectedMenu]="selectedMenu"></settings-collection>
-					<settings-achievements *ngSwitchCase="'achievements'" [selectedMenu]="selectedMenu"></settings-achievements>
-					<settings-decktracker *ngSwitchCase="'decktracker'" [selectedMenu]="selectedMenu"></settings-decktracker>
+					<settings-collection
+						*ngSwitchCase="'collection'"
+						[selectedMenu]="selectedMenu"
+					></settings-collection>
+					<settings-achievements
+						*ngSwitchCase="'achievements'"
+						[selectedMenu]="selectedMenu"
+					></settings-achievements>
+					<settings-decktracker
+						*ngSwitchCase="'decktracker'"
+						[selectedMenu]="selectedMenu"
+					></settings-decktracker>
 				</ng-container>
 				<settings-modal></settings-modal>
 			</div>

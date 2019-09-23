@@ -44,7 +44,11 @@ export class GameStateService {
 	public state: GameState = new GameState();
 	private eventParsers: readonly EventParser[];
 
-	private processingQueue = new ProcessingQueue<GameEvent>(eventQueue => this.processQueue(eventQueue), 50, 'game-state');
+	private processingQueue = new ProcessingQueue<GameEvent>(
+		eventQueue => this.processQueue(eventQueue),
+		50,
+		'game-state',
+	);
 
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
@@ -109,7 +113,12 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent)) {
-					this.logger.debug('[game-state] will apply parser', parser.event(), gameEvent.cardId, gameEvent.entityId);
+					this.logger.debug(
+						'[game-state] will apply parser',
+						parser.event(),
+						gameEvent.cardId,
+						gameEvent.entityId,
+					);
 					const stateAfterParser = parser.parse(this.state, gameEvent);
 					if (!stateAfterParser) {
 						this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
@@ -123,8 +132,14 @@ export class GameStateService {
 					const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
 					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
 					const stateFromTracker = gameEvent.gameState || ({} as any);
-					const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
-					const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
+					const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(
+						playerDeckWithDynamicZones,
+						stateFromTracker.Player,
+					);
+					const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(
+						newState.opponentDeck,
+						stateFromTracker.Opponent,
+					);
 					this.state = Object.assign(new GameState(), newState, {
 						playerDeck: playerDeckWithZonesOrdered,
 						opponentDeck: opponentDeckWithZonesOrdered,

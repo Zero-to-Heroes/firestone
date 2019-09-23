@@ -68,7 +68,11 @@ export abstract class GenericSetProvider extends SetProvider {
 		];
 	}
 
-	protected convertToVisual(achievement: Achievement, index: number, allAchievements: Achievement[]): IndexedVisualAchievement {
+	protected convertToVisual(
+		achievement: Achievement,
+		index: number,
+		allAchievements: Achievement[],
+	): IndexedVisualAchievement {
 		const achievementForCompletionSteps: Achievement[] = allAchievements
 			.filter(achv => achv.type === achievement.type)
 			.sort((a, b) => a.priority - b.priority);

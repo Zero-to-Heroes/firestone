@@ -40,7 +40,8 @@ export class ShareLoginComponent implements AfterViewInit {
 		}
 		this.username = value.name;
 		this.loggedIn = value.id != undefined;
-		this.loginImage = this.loggedIn && value.avatarUrl ? value.avatarUrl : '/Files/assets/images/social-share-login.png';
+		this.loginImage =
+			this.loggedIn && value.avatarUrl ? value.avatarUrl : '/Files/assets/images/social-share-login.png';
 	}
 
 	ngAfterViewInit() {

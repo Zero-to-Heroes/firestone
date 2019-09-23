@@ -12,7 +12,9 @@ export class ZoneOrderingService {
 		if (!stateFromTracker) {
 			return deckState;
 		}
-		const newBoard = stateFromTracker.Board ? this.orderZone(deckState.board, stateFromTracker.Board) : deckState.board;
+		const newBoard = stateFromTracker.Board
+			? this.orderZone(deckState.board, stateFromTracker.Board)
+			: deckState.board;
 		const newHand = stateFromTracker.Hand ? this.orderZone(deckState.hand, stateFromTracker.Hand) : deckState.hand;
 
 		return Object.assign(new DeckState(), deckState, {

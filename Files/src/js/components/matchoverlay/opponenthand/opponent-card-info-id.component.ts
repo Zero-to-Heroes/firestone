@@ -22,6 +22,8 @@ export class OpponentCardInfoIdComponent {
 
 	@Input() set card(value: DeckCard) {
 		this.cardId = value.cardId;
-		this.cardUrl = this.cardId ? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg` : undefined;
+		this.cardUrl = this.cardId
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${this.cardId}.jpg`
+			: undefined;
 	}
 }

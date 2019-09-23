@@ -34,7 +34,10 @@ declare var ga: any;
 				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="gameState">
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
-						<decktracker-deck-name [hero]="gameState.playerDeck.hero" [deckName]="gameState.playerDeck.name">
+						<decktracker-deck-name
+							[hero]="gameState.playerDeck.hero"
+							[deckName]="gameState.playerDeck.name"
+						>
 						</decktracker-deck-name>
 						<decktracker-deck-list
 							[deckState]="gameState.playerDeck"
@@ -209,7 +212,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.useCleanMode = preferences.decktrackerSkin === 'clean';
-		this.displayMode = this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
+		this.displayMode = this.useCleanMode
+			? 'DISPLAY_MODE_GROUPED'
+			: preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
 		// console.log('switching views?', this.useCleanMode, this.displayMode);
 		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
 		if (!(this.cdr as ViewRef).destroyed) {

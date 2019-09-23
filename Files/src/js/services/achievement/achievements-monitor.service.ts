@@ -14,7 +14,11 @@ import { AchievementsLoaderService } from './data/achievements-loader.service';
 
 @Injectable()
 export class AchievementsMonitor {
-	private processingQueue = new ProcessingQueue<InternalEvent>(eventQueue => this.processQueue(eventQueue), 1000, 'achievement-monitor');
+	private processingQueue = new ProcessingQueue<InternalEvent>(
+		eventQueue => this.processQueue(eventQueue),
+		1000,
+		'achievement-monitor',
+	);
 	private lastReceivedTimestamp;
 
 	constructor(

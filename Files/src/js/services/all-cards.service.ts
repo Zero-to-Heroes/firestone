@@ -122,11 +122,15 @@ export class AllCardsService {
 		for (const fragment of fragments) {
 			if (fragment.indexOf('text:') !== -1 && fragment.split('text:')[1]) {
 				const textToFind = searchString.split('text:')[1];
-				filterFunctions.push(card => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1);
+				filterFunctions.push(
+					card => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1,
+				);
 			}
 			if (fragment.indexOf('-name:') !== -1 && fragment.split('name:')[1]) {
 				const textToFind = searchString.split('name:')[1];
-				filterFunctions.push(card => card.name && card.name.toLowerCase().indexOf(textToFind.toLowerCase()) === -1);
+				filterFunctions.push(
+					card => card.name && card.name.toLowerCase().indexOf(textToFind.toLowerCase()) === -1,
+				);
 			}
 			// Include non-collectible
 			if (fragment.indexOf('cards:') !== -1 && fragment.split('cards:')[1] === 'all') {

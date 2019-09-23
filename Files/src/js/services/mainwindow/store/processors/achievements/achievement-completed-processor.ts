@@ -27,7 +27,10 @@ export class AchievementCompletedProcessor implements Processor {
 			creationTimestamp: Date.now(),
 		} as AchievementHistory;
 		await this.historyStorage.save(historyItem);
-		const [historyRef, achievements] = await Promise.all([this.historyStorage.loadAll(), this.achievementLoader.getAchievements()]);
+		const [historyRef, achievements] = await Promise.all([
+			this.historyStorage.loadAll(),
+			this.achievementLoader.getAchievements(),
+		]);
 		const history = historyRef
 			.filter(history => history.numberOfCompletions === 1)
 			.map(history => {

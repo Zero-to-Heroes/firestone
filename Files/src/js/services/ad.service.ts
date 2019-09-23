@@ -11,7 +11,10 @@ export class AdService {
 	public async shouldDisplayAds(): Promise<boolean> {
 		return new Promise<boolean>(async resolve => {
 			// Use OW's subscription mechanism
-			const [activePlans, user] = await Promise.all([this.ow.getActiveSubscriptionPlans(), this.ow.getCurrentUser()]);
+			const [activePlans, user] = await Promise.all([
+				this.ow.getActiveSubscriptionPlans(),
+				this.ow.getCurrentUser(),
+			]);
 			if (!user || !user.username) {
 				resolve(true);
 				return;
@@ -22,7 +25,10 @@ export class AdService {
 				resolve(true);
 				return;
 			}
-			console.log('contacting subscription API', `${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`);
+			console.log(
+				'contacting subscription API',
+				`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`,
+			);
 			this.http.get(`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`).subscribe(
 				res => {
 					console.log('retrieved sub status for', username, res);

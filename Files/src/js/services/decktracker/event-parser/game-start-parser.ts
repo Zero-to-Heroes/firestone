@@ -58,7 +58,12 @@ export class GameStartParser implements EventParser {
 			.map(hero => this.allCards.getCardFromDbfId(hero))
 			.map(heroCard => {
 				if (!heroCard) {
-					console.error('could not map empty hero card', currentDeck.deck.heroes, currentDeck.deck, currentDeck);
+					console.error(
+						'could not map empty hero card',
+						currentDeck.deck.heroes,
+						currentDeck.deck,
+						currentDeck,
+					);
 				}
 				return heroCard;
 			})

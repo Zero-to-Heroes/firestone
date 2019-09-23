@@ -8,7 +8,10 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 @Component({
 	selector: 'achievements',
-	styleUrls: [`../../../css/component/achievements/achievements.component.scss`, `../../../css/global/components-global.scss`],
+	styleUrls: [
+		`../../../css/component/achievements/achievements.component.scss`,
+		`../../../css/global/components-global.scss`,
+	],
 	template: `
 		<div class="achievements">
 			<section class="main" [ngClass]="{ 'divider': state.currentView === 'list' }" [@viewState]="_viewState">
@@ -19,9 +22,15 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 					[selectedAchievementSet]="state.selectedCategory"
 				>
 				</achievements-menu>
-				<achievements-global-categories [hidden]="state.currentView !== 'categories'" [globalCategories]="state.globalCategories">
+				<achievements-global-categories
+					[hidden]="state.currentView !== 'categories'"
+					[globalCategories]="state.globalCategories"
+				>
 				</achievements-global-categories>
-				<achievements-categories [hidden]="state.currentView !== 'category'" [achievementSets]="state.achievementCategories">
+				<achievements-categories
+					[hidden]="state.currentView !== 'category'"
+					[achievementSets]="state.achievementCategories"
+				>
 				</achievements-categories>
 				<achievements-list
 					[hidden]="state.currentView !== 'list'"

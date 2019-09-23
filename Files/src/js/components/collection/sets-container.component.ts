@@ -4,7 +4,10 @@ import { Set } from '../../models/set';
 
 @Component({
 	selector: 'sets-container',
-	styleUrls: [`../../../css/component/collection/sets-container.component.scss`, `../../../css/global/scrollbar.scss`],
+	styleUrls: [
+		`../../../css/component/collection/sets-container.component.scss`,
+		`../../../css/global/scrollbar.scss`,
+	],
 	template: `
 		<div *ngIf="category" class="sets-container">
 			<div class="category-container {{ category.toLowerCase() }}">

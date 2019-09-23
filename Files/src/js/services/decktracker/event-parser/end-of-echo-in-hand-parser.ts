@@ -21,7 +21,11 @@ export class EndOfEchoInHandParser implements EventParser {
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(deck.hand, cardId, entityId);
+		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
+			deck.hand,
+			cardId,
+			entityId,
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 		});

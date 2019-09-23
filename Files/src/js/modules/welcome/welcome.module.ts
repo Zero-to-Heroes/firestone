@@ -21,7 +21,14 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule, OverlayModule, SharedServicesModule.forRoot()],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		SharedModule,
+		OverlayModule,
+		SharedServicesModule.forRoot(),
+	],
 	declarations: [WelcomePageComponent, HomeScreenInfoTextComponent, AppChoiceComponent, SocialMediaComponent],
 	bootstrap: [WelcomePageComponent],
 	providers: [RealTimeNotificationService],

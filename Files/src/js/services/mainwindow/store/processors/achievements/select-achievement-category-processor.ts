@@ -8,7 +8,10 @@ import { SelectAchievementSetEvent } from '../../events/achievements/select-achi
 import { SelectAchievementSetProcessor } from './select-achievement-set-processor';
 
 export class SelectAchievementCategoryProcessor implements Processor {
-	public async process(event: SelectAchievementCategoryEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: SelectAchievementCategoryEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const globalCategory: VisualAchievementCategory = currentState.achievements.globalCategories.find(
 			cat => cat.id === event.globalCategoryId,
 		);

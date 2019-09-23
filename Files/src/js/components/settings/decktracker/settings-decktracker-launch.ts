@@ -19,7 +19,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showRanked" name="" id="a-01" (change)="toggleRanked()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showRanked"
+								name=""
+								id="a-01"
+								(change)="toggleRanked()"
+							/>
 							<label for="a-01" [ngClass]="{ 'enabled': showRanked }">
 								<p class="settings-p">Ranked</p>
 								<b></b>
@@ -30,7 +37,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showArena" name="" id="a-02" (change)="toggleArena()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showArena"
+								name=""
+								id="a-02"
+								(change)="toggleArena()"
+							/>
 							<label for="a-02" [ngClass]="{ 'enabled': showArena }">
 								<p class="settings-p">Arena</p>
 								<b></b>
@@ -41,7 +55,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showTavernBrawl" name="" id="a-03" (change)="toggleTavernBrawl()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showTavernBrawl"
+								name=""
+								id="a-03"
+								(change)="toggleTavernBrawl()"
+							/>
 							<label for="a-03" [ngClass]="{ 'enabled': showTavernBrawl }">
 								<p class="settings-p">Tavern Brawl</p>
 								<b></b>
@@ -52,7 +73,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showPractice" name="" id="a-04" (change)="togglePractice()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showPractice"
+								name=""
+								id="a-04"
+								(change)="togglePractice()"
+							/>
 							<label for="a-04" [ngClass]="{ 'enabled': showPractice }">
 								<p class="settings-p">Practice</p>
 								<b></b>
@@ -63,7 +91,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showFriendly" name="" id="a-05" (change)="toggleFriendly()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showFriendly"
+								name=""
+								id="a-05"
+								(change)="toggleFriendly()"
+							/>
 							<label for="a-05" [ngClass]="{ 'enabled': showFriendly }">
 								<p class="settings-p">Friendly</p>
 								<b></b>
@@ -74,7 +109,14 @@ declare var ga;
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">
-							<input hidden type="checkbox" [checked]="showCasual" name="" id="a-06" (change)="toggleCasual()" />
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showCasual"
+								name=""
+								id="a-06"
+								(change)="toggleCasual()"
+							/>
 							<label for="a-06" [ngClass]="{ 'enabled': showCasual }">
 								<p class="settings-p">Casual</p>
 								<b></b>

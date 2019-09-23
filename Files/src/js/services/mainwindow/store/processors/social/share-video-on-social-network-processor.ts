@@ -7,7 +7,10 @@ import { OverwolfService } from '../../../../overwolf.service';
 export class ShareVideoOnSocialNetworkProcessor implements Processor {
 	constructor(private ow: OverwolfService) {}
 
-	public async process(event: ShareVideoOnSocialNetworkEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: ShareVideoOnSocialNetworkEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		switch (event.network) {
 			case 'twitter':
 				await this.ow.twitterShare(event.videoPathOnDisk, event.message);

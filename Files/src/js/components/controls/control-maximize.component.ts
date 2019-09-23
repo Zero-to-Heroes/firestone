@@ -1,4 +1,11 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy, Input, ChangeDetectorRef, ViewRef } from '@angular/core';
+import {
+	Component,
+	ViewEncapsulation,
+	ChangeDetectionStrategy,
+	Input,
+	ChangeDetectorRef,
+	ViewRef,
+} from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -12,10 +19,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<button class="i-30 pink-button" (click)="toggleMaximizeWindow()">
 			<svg class="svg-icon-fill" *ngIf="!maximized">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_maximize"></use>
+				<use
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="/Files/assets/svg/sprite.svg#window-control_maximize"
+				></use>
 			</svg>
 			<svg class="svg-icon-fill" *ngIf="maximized">
-				<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_restore"></use>
+				<use
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:href="/Files/assets/svg/sprite.svg#window-control_restore"
+				></use>
 			</svg>
 		</button>
 	`,

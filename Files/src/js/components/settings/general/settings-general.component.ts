@@ -8,7 +8,8 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 	],
 	template: `
 		<ul class="general">
-			<settings-general-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)"> </settings-general-menu>
+			<settings-general-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">
+			</settings-general-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-general-launch *ngSwitchCase="'launch'"></settings-general-launch>
 				<settings-general-bug-report *ngSwitchCase="'bugreport'"></settings-general-bug-report>

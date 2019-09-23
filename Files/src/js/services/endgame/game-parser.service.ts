@@ -65,7 +65,9 @@ export class GameParserService {
 		console.log('timestampedNodes', timestampedNodes);
 		const firstTimestampInSeconds = this.toTimestamp(timestampedNodes[0].getAttribute('ts'));
 		console.log('firstTimestampInSeconds', firstTimestampInSeconds);
-		const lastTimestampInSeconds = this.toTimestamp(timestampedNodes[timestampedNodes.length - 1].getAttribute('ts'));
+		const lastTimestampInSeconds = this.toTimestamp(
+			timestampedNodes[timestampedNodes.length - 1].getAttribute('ts'),
+		);
 		console.log('lastTimestampInSeconds', lastTimestampInSeconds);
 		const durationInSeconds = lastTimestampInSeconds - firstTimestampInSeconds;
 		game.durationTimeSeconds = durationInSeconds;

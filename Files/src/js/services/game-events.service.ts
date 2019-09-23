@@ -16,7 +16,11 @@ export class GameEvents {
 	private spectating: boolean;
 	private plugin;
 
-	private processingQueue = new ProcessingQueue<string>(eventQueue => this.processQueue(eventQueue), 500, 'game-events');
+	private processingQueue = new ProcessingQueue<string>(
+		eventQueue => this.processQueue(eventQueue),
+		500,
+		'game-events',
+	);
 
 	constructor(
 		private gameEventsPlugin: GameEventsPluginService,
@@ -103,7 +107,8 @@ export class GameEvents {
 			case 'LOCAL_PLAYER':
 				console.log(gameEvent.Type + ' event');
 				// First try without waiting for a callback, which is most of the cases
-				const playerInfo = this.playersInfoService.playerInfo || (await this.playersInfoService.getPlayerInfo());
+				const playerInfo =
+					this.playersInfoService.playerInfo || (await this.playersInfoService.getPlayerInfo());
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: playerInfo ? playerInfo.standardRank : undefined,
 					standardLegendRank: playerInfo ? playerInfo.standardLegendRank : undefined,
@@ -122,7 +127,8 @@ export class GameEvents {
 				break;
 			case 'OPPONENT_PLAYER':
 				console.log(gameEvent.Type + ' event');
-				const opponentInfo = this.playersInfoService.opponentInfo || (await this.playersInfoService.getOpponentInfo());
+				const opponentInfo =
+					this.playersInfoService.opponentInfo || (await this.playersInfoService.getOpponentInfo());
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
 					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
@@ -210,7 +216,9 @@ export class GameEvents {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
 					  }
 					: null;
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps),
+				);
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
@@ -265,7 +273,9 @@ export class GameEvents {
 							health: gameEvent.Value.AdditionalProps.Health,
 					  }
 					: null;
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_ON_BOARD_AT_GAME_START, gameEvent, additionalProps),
+				);
 				break;
 			case 'CARD_STOLEN':
 				this.gameEventsEmitter.allEvents.next(
@@ -283,8 +293,12 @@ export class GameEvents {
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, gameEvent, {
-						initialAttack: gameEvent.Value.AdditionalProps ? gameEvent.Value.AdditionalProps.InitialAttack : undefined,
-						newAttack: gameEvent.Value.AdditionalProps ? gameEvent.Value.AdditionalProps.NewAttack : undefined,
+						initialAttack: gameEvent.Value.AdditionalProps
+							? gameEvent.Value.AdditionalProps.InitialAttack
+							: undefined,
+						newAttack: gameEvent.Value.AdditionalProps
+							? gameEvent.Value.AdditionalProps.NewAttack
+							: undefined,
 					}),
 				);
 				break;
@@ -422,7 +436,10 @@ export class GameEvents {
 				message: 'Exception while running plugin: ' + first,
 				extra: {
 					first: first,
-					firstProcessedLine: fullLogsFromPlugin.indexOf('\n') !== -1 ? fullLogsFromPlugin.split('\n')[0] : fullLogsFromPlugin,
+					firstProcessedLine:
+						fullLogsFromPlugin.indexOf('\n') !== -1
+							? fullLogsFromPlugin.split('\n')[0]
+							: fullLogsFromPlugin,
 					lastLogsReceivedInPlugin: lastLogsReceivedInPlugin,
 					logFileKey: s3LogFileKey,
 					pluginLogsFileKey: pluginLogsFileKey,

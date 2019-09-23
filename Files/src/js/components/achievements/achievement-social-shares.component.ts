@@ -60,7 +60,13 @@ export class AchievementSocialSharesComponent implements AfterViewInit {
 	startSharingTwitter() {
 		console.log('start sharing on Twitter', this.videoPath, this.socialShareUserInfo);
 		this.stateUpdater.next(
-			new StartSocialSharingEvent('twitter', this.videoPath, this.videoPathOnDisk, this.title, this.achievementName),
+			new StartSocialSharingEvent(
+				'twitter',
+				this.videoPath,
+				this.videoPathOnDisk,
+				this.title,
+				this.achievementName,
+			),
 		);
 	}
 }

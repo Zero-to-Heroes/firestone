@@ -6,7 +6,10 @@ import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { AchievementSet } from '../../../../../models/achievement-set';
 
 export class ChangeVisibleAchievementProcessor implements Processor {
-	public async process(event: ChangeVisibleAchievementEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: ChangeVisibleAchievementEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const globalCategory = currentState.achievements.globalCategories.find(cat =>
 			cat.achievementSets.some(set =>
 				set.achievements.some(achv => achv.completionSteps.some(setp => setp.id === event.achievementId)),

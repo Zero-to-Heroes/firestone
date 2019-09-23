@@ -45,9 +45,17 @@ import { Events } from '../../../services/events.service';
 				<div class="dim-overlay" *ngIf="activeTooltip"></div>
 			</div>
 			<ng-container [ngSwitch]="displayMode">
-				<deck-list-by-zone *ngSwitchCase="'DISPLAY_MODE_ZONE'" [deckState]="_deckState" [activeTooltip]="activeTooltip">
+				<deck-list-by-zone
+					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
+					[deckState]="_deckState"
+					[activeTooltip]="activeTooltip"
+				>
 				</deck-list-by-zone>
-				<grouped-deck-list *ngSwitchCase="'DISPLAY_MODE_GROUPED'" [deckState]="_deckState" [activeTooltip]="activeTooltip">
+				<grouped-deck-list
+					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
+					[deckState]="_deckState"
+					[activeTooltip]="activeTooltip"
+				>
 				</grouped-deck-list>
 			</ng-container>
 		</div>

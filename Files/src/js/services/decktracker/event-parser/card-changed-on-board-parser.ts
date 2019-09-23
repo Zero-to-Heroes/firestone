@@ -22,7 +22,12 @@ export class CardChangedOnBoardParser implements EventParser {
 		// We don't pass the cardId because we know it has changed
 		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);
 		if (!card) {
-			console.error('[card-changed-on-board] could not find card change on board', gameEvent, deck.board, isPlayer);
+			console.error(
+				'[card-changed-on-board] could not find card change on board',
+				gameEvent,
+				deck.board,
+				isPlayer,
+			);
 			return currentState;
 		}
 		// The CARD_CHANGED* events keep the same entityId, but change the cardId, and thus the card name
@@ -33,8 +38,15 @@ export class CardChangedOnBoardParser implements EventParser {
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 		} as DeckCard);
-		const boardWithRemovedCard: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(deck.board, null, entityId);
-		const newBoard: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(boardWithRemovedCard, updatedCard);
+		const boardWithRemovedCard: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
+			deck.board,
+			null,
+			entityId,
+		);
+		const newBoard: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
+			boardWithRemovedCard,
+			updatedCard,
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
 		});

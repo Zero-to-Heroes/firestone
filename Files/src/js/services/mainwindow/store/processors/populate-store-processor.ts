@@ -55,7 +55,9 @@ export class PopulateStoreProcessor implements Processor {
 		} as MainWindowState);
 	}
 
-	private async initializeSocialShareUserInfo(socialShareUserInfo: SocialShareUserInfo): Promise<SocialShareUserInfo> {
+	private async initializeSocialShareUserInfo(
+		socialShareUserInfo: SocialShareUserInfo,
+	): Promise<SocialShareUserInfo> {
 		const twitter = await this.ow.getTwitterUserInfo();
 		return Object.assign(new SocialShareUserInfo(), socialShareUserInfo, {
 			twitter: twitter,
@@ -142,7 +144,9 @@ export class PopulateStoreProcessor implements Processor {
 
 	private mergeSet(collection: Card[], set: Set, pityTimer: PityTimer): Set {
 		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
-		const ownedLimitCollectibleCards = updatedCards.map((card: SetCard) => card.getNumberCollected()).reduce((c1, c2) => c1 + c2, 0);
+		const ownedLimitCollectibleCards = updatedCards
+			.map((card: SetCard) => card.getNumberCollected())
+			.reduce((c1, c2) => c1 + c2, 0);
 		const ownedLimitCollectiblePremiumCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollectedPremium())
 			.reduce((c1, c2) => c1 + c2, 0);
@@ -162,7 +166,15 @@ export class PopulateStoreProcessor implements Processor {
 			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
 			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;
 			const ownedNonPremium = collectionCard ? collectionCard.count : 0;
-			return new SetCard(card.id, card.name, card.cardClass, card.rarity, card.cost, ownedNonPremium, ownedPremium);
+			return new SetCard(
+				card.id,
+				card.name,
+				card.cardClass,
+				card.rarity,
+				card.cost,
+				ownedNonPremium,
+				ownedPremium,
+			);
 		});
 	}
 }

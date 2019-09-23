@@ -24,7 +24,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<li class="separator">></li>
 					<li (mousedown)="goToFormatView()" class="highlight-on-hover">{{ getSelectedFormat() }}</li>
 					<li class="separator">></li>
-					<li (mousedown)="goToSetView()" class="highlight-on-hover" *ngIf="selectedSet">{{ selectedSet.name }}</li>
+					<li (mousedown)="goToSetView()" class="highlight-on-hover" *ngIf="selectedSet">
+						{{ selectedSet.name }}
+					</li>
 					<li *ngIf="selectedCard" class="separator">></li>
 					<li *ngIf="selectedCard" class="unclickable">{{ selectedCard.name }}</li>
 				</ul>

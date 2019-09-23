@@ -35,7 +35,9 @@ export class DeckbuildingNoCardWithLetterInNameReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const dbfIds = deck.cards.map(pair => pair[0]);
 			const cards: any[] = this.cards.getCardsFromDbfIds(dbfIds);
-			this.doesDeckMeetSpec = cards.every(card => card.name.toLowerCase().indexOf(this.letterToAvoid.toLowerCase()) === -1);
+			this.doesDeckMeetSpec = cards.every(
+				card => card.name.toLowerCase().indexOf(this.letterToAvoid.toLowerCase()) === -1,
+			);
 		} else {
 			this.doesDeckMeetSpec = false;
 		}

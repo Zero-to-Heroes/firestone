@@ -22,7 +22,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{ 'missing': _card.ownedNonPremium + _card.ownedPremium === 0 }">
-			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" [@showPlaceholder]="showPlaceholder" />
+			<img
+				src="/Files/assets/images/placeholder.png"
+				class="pale-theme placeholder"
+				[@showPlaceholder]="showPlaceholder"
+			/>
 			<img src="{{ image }}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder" />
 			<div class="overlay" [ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"></div>
 
@@ -94,7 +98,12 @@ export class CardComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private el: ElementRef, private events: Events, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(
+		private el: ElementRef,
+		private events: Events,
+		private ow: OverwolfService,
+		private cdr: ChangeDetectorRef,
+	) {}
 
 	@Input('card') set card(card: SetCard) {
 		this._card = card;

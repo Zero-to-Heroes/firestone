@@ -7,7 +7,11 @@ import { Set } from '../../models/set';
 	template: `
 		<div *ngIf="cardSet && rarity" class="rarity-container">
 			<div class="rarity-progress" (mousedown)="toggleShowMissingCards()">
-				<img src="{{ '/Files/assets/images/rarity-' + rarity.toLowerCase() + '.png' }}" class="rarity" title="{{ rarity }}" />
+				<img
+					src="{{ '/Files/assets/images/rarity-' + rarity.toLowerCase() + '.png' }}"
+					class="rarity"
+					title="{{ rarity }}"
+				/>
 				<span class="rarity-progress-info"
 					>{{ rarity }}: {{ cardSet.ownedForRarity(rarity) }} / {{ cardSet.totalForRarity(rarity) }}</span
 				>

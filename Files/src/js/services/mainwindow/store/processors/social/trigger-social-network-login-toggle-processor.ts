@@ -5,7 +5,10 @@ import { TriggerSocialNetworkLoginToggleEvent } from '../../events/social/trigge
 declare var overwolf;
 
 export class TriggerSocialNetworkLoginToggleProcessor implements Processor {
-	public async process(event: TriggerSocialNetworkLoginToggleEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: TriggerSocialNetworkLoginToggleEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		if (event.network === 'twitter') {
 			const twitter = currentState.socialShareUserInfo.twitter;
 			if (twitter.id) {

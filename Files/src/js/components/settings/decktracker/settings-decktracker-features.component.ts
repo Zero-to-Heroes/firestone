@@ -36,7 +36,11 @@ declare var ga;
 										</svg>
 										<div class="zth-tooltip right">
 											<p>Show the turn at which a card in the opponent's hand was drawn</p>
-											<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+											<svg
+												class="tooltip-arrow"
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 16 9"
+											>
 												<polygon points="0,0 8,-9 16,0" />
 											</svg>
 										</div>
@@ -65,10 +69,14 @@ declare var ga;
 										</svg>
 										<div class="zth-tooltip right">
 											<p>
-												Show what card is in the opponent's hand when we know it (after it has been sent back to
-												their hand with a Sap for instance)
+												Show what card is in the opponent's hand when we know it (after it has
+												been sent back to their hand with a Sap for instance)
 											</p>
-											<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
+											<svg
+												class="tooltip-arrow"
+												xmlns="http://www.w3.org/2000/svg"
+												viewBox="0 0 16 9"
+											>
 												<polygon points="0,0 8,-9 16,0" />
 											</svg>
 										</div>

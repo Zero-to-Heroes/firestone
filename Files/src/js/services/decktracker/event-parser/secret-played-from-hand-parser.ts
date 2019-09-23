@@ -22,7 +22,11 @@ export class SecretPlayedFromHandParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = DeckManipulationHelper.findCardInZone(deck.hand, cardId, entityId);
 
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(deck.hand, cardId, entityId);
+		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
+			deck.hand,
+			cardId,
+			entityId,
+		);
 		const previousOtherZone = deck.otherZone;
 		const newOtherZone: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousOtherZone, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

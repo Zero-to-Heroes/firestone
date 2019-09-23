@@ -12,7 +12,10 @@ export class VideoReplayDeletionRequestProcessor implements Processor {
 		private achievementsStorage: AchievementsStorageService,
 	) {}
 
-	public async process(event: VideoReplayDeletionRequestEvent, currentState: MainWindowState): Promise<MainWindowState> {
+	public async process(
+		event: VideoReplayDeletionRequestEvent,
+		currentState: MainWindowState,
+	): Promise<MainWindowState> {
 		const result: boolean = await this.io.deleteFile(event.videoPath);
 		if (!result) {
 			return currentState;

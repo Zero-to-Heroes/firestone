@@ -40,7 +40,11 @@ export class DeckParserService {
 			return;
 		}
 
-		if (this.lastDeckTimestamp && Date.now() - this.lastDeckTimestamp < 1000 && this.currentBlock !== 'DECK_SLECTED') {
+		if (
+			this.lastDeckTimestamp &&
+			Date.now() - this.lastDeckTimestamp < 1000 &&
+			this.currentBlock !== 'DECK_SLECTED'
+		) {
 			console.log('[decks] Doesnt look like a deck selection, exiting block', this.currentBlock);
 			this.reset();
 			return;

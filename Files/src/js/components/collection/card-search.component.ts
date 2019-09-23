@@ -30,7 +30,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<use xlink:href="/Files/assets/svg/sprite.svg#search" />
 					</svg>
 				</i>
-				<input [formControl]="searchForm" (mousedown)="onMouseDown($event)" (blur)="onFocusLost()" placeholder="Search card..." />
+				<input
+					[formControl]="searchForm"
+					(mousedown)="onMouseDown($event)"
+					(blur)="onFocusLost()"
+					placeholder="Search card..."
+				/>
 			</label>
 			<ul *ngIf="showSearchResults" class="search-results">
 				<card-search-autocomplete-item

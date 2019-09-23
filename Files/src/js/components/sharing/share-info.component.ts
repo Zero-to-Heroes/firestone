@@ -11,7 +11,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="share-info">
 			<textarea [(ngModel)]="textValue" *ngIf="loggedIn"></textarea>
-			<div class="login-message" *ngIf="!loggedIn">Please use the button on the left to login before posting a message</div>
+			<div class="login-message" *ngIf="!loggedIn">
+				Please use the button on the left to login before posting a message
+			</div>
 			<button *ngIf="loggedIn" (mousedown)="share()">Share</button>
 		</div>
 	`,

@@ -39,6 +39,10 @@ export class PackHistoryService {
 				return pityTimer;
 			}
 		}
-		return new PityTimer(setId, PackHistoryService.DEFAULT_EPIC_PITY_TIMER, PackHistoryService.DEFAULT_LEGENDARY_PITY_TIMER);
+		return new PityTimer(
+			setId,
+			PackHistoryService.DEFAULT_EPIC_PITY_TIMER,
+			PackHistoryService.DEFAULT_LEGENDARY_PITY_TIMER,
+		);
 	}
 }

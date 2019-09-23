@@ -21,7 +21,9 @@ export class AchievementProgressBarComponent {
 
 	@Input('achievements') set achievements(achievements: readonly VisualAchievement[]) {
 		if (achievements) {
-			const flatCompletions = achievements.map(achievement => achievement.completionSteps).reduce((a, b) => a.concat(b), []);
+			const flatCompletions = achievements
+				.map(achievement => achievement.completionSteps)
+				.reduce((a, b) => a.concat(b), []);
 			this.total = flatCompletions.length;
 			this.achieved = flatCompletions.map(step => step.numberOfCompletions).filter(a => a > 0).length;
 		}

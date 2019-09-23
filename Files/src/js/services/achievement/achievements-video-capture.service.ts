@@ -174,7 +174,12 @@ export class AchievementsVideoCaptureService {
 			setTimeout(() => this.performStopCapture(), 500);
 			return;
 		}
-		console.log('[recording] stopping capture, was scheduled for', this.currentReplayId, this.lastRecordingDate, Date.now());
+		console.log(
+			'[recording] stopping capture, was scheduled for',
+			this.currentReplayId,
+			this.lastRecordingDate,
+			Date.now(),
+		);
 		const result = await this.ow.stopReplayCapture(this.currentReplayId);
 		this.captureOngoing = false;
 		this.currentReplayId = undefined;

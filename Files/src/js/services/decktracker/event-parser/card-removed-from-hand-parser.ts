@@ -21,12 +21,19 @@ export class CardRemovedFromHandParser implements EventParser {
 		const card = DeckManipulationHelper.findCardInZone(deck.hand, cardId, entityId);
 
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(previousHand, cardId, entityId);
+		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
+			previousHand,
+			cardId,
+			entityId,
+		);
 		const cardWithZone = Object.assign(new DeckCard(), card, {
 			zone: 'SETASIDE',
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousOtherZone, cardWithZone);
+		const newOtherZone: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
+			previousOtherZone,
+			cardWithZone,
+		);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			otherZone: newOtherZone,

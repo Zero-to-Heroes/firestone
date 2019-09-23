@@ -1,4 +1,13 @@
-import { Component, OnInit, Input, ElementRef, HostListener, ViewEncapsulation, OnDestroy, HostBinding } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Input,
+	ElementRef,
+	HostListener,
+	ViewEncapsulation,
+	OnDestroy,
+	HostBinding,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { VgAPI, VgFullscreenAPI, VgControlsHidden, VgStates } from 'videogular2/core';
 
@@ -6,7 +15,11 @@ import { VgAPI, VgFullscreenAPI, VgControlsHidden, VgStates } from 'videogular2/
 	selector: 'fs-overlay-play',
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="fs-overlay-play" [class.native-fullscreen]="isNativeFullscreen" [class.controls-hidden]="areControlsHidden">
+		<div
+			class="fs-overlay-play"
+			[class.native-fullscreen]="isNativeFullscreen"
+			[class.controls-hidden]="areControlsHidden"
+		>
 			<div class="overlay-play-container" [class.vg-icon-play_arrow]="getState() !== 'playing'"></div>
 		</div>
 	`,
@@ -60,7 +73,12 @@ import { VgAPI, VgFullscreenAPI, VgControlsHidden, VgStates } from 'videogular2/
 	],
 })
 export class FsOverlayPlay implements OnInit, OnDestroy {
-	constructor(ref: ElementRef, public API: VgAPI, public fsAPI: VgFullscreenAPI, private controlsHidden: VgControlsHidden) {
+	constructor(
+		ref: ElementRef,
+		public API: VgAPI,
+		public fsAPI: VgFullscreenAPI,
+		private controlsHidden: VgControlsHidden,
+	) {
 		this.elem = ref.nativeElement;
 	}
 	private readonly DOUBLE_CLICK_TIME: number = 300;
@@ -92,7 +110,9 @@ export class FsOverlayPlay implements OnInit, OnDestroy {
 		this.target = this.API.getMediaById(this.vgFor);
 		this.subscriptions.push(this.fsAPI.onChangeFullscreen.subscribe(this.onChangeFullscreen.bind(this)));
 		this.subscriptions.push(this.controlsHidden.isHidden.subscribe(this.onHideControls.bind(this)));
-		this.subscriptions.push(this.target.subscriptions.bufferDetected.subscribe(isBuffering => this.onUpdateBuffer(isBuffering)));
+		this.subscriptions.push(
+			this.target.subscriptions.bufferDetected.subscribe(isBuffering => this.onUpdateBuffer(isBuffering)),
+		);
 	}
 
 	onUpdateBuffer(isBuffering) {

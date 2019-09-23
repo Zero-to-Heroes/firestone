@@ -6,7 +6,8 @@ import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
 export class AchievementStatsService {
-	private readonly ACHIEVEMENT_STATS_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
+	private readonly ACHIEVEMENT_STATS_URL =
+		'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
 
 	private userId: string;
 	private userMachineId: string;

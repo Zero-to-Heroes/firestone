@@ -26,7 +26,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 		<div class="decktracker-broadcast">
 			<h2>Broadcast on Twitch</h2>
 			<p class="text">
-				Firestone twitch extension allows you to stream while showing your deck tracker in Twitch player. To do so you will need to:
+				Firestone twitch extension allows you to stream while showing your deck tracker in Twitch player. To do
+				so you will need to:
 			</p>
 			<ol class="todo">
 				<li>
@@ -48,7 +49,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			</div>
 			<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
 				<div class="user-name">
-					Logged in as: <a href="https://www.twitch.tv/{{ twitchUserName }}" target="_blank">{{ twitchUserName }}</a>
+					Logged in as:
+					<a href="https://www.twitch.tv/{{ twitchUserName }}" target="_blank">{{ twitchUserName }}</a>
 				</div>
 				<button (mousedown)="disconnect()" class="text">
 					<i class="twitch-icon">

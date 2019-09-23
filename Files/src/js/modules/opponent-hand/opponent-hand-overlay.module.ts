@@ -25,7 +25,13 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, BrowserAnimationsModule, SharedModule, FormsModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		SharedModule,
+		FormsModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+	],
 	declarations: [
 		OpponentHandOverlayComponent,
 		OpponentCardInfosComponent,
