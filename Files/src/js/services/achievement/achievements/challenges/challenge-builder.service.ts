@@ -24,6 +24,7 @@ import { GameTieReq } from '../requirements/game-tie-req';
 import { GameTypeReq } from '../requirements/game-type-req';
 import { GameWonReq } from '../requirements/game-won-req';
 import { HealthAtEndReq } from '../requirements/health-at-end-req';
+import { MinionAttackReq } from '../requirements/minion-attack-req';
 import { MinionSummonedReq } from '../requirements/minion-summoned-req';
 import { MinionsControlledDuringTurnReq } from '../requirements/minions-controlled-during-turn-req';
 import { MonsterHuntStepReq } from '../requirements/monster-hunt-step-req';
@@ -88,6 +89,7 @@ export class ChallengeBuilderService {
 				console.debug(''); // No idea why I have to add this for jest to pick up the line
 				return DeathrattleTriggeredReq.create(rawReq);
 			case 'PASSIVE_BUFF': return PassiveBuffReq.create(rawReq);
+			case 'MINION_ATTACK_ON_BOARD': return MinionAttackReq.create(rawReq);
 			case 'HEALTH_AT_END': return HealthAtEndReq.create(rawReq);
 			case 'DAMAGE_AT_END': return DamageAtEndReq.create(rawReq);
 			case 'ARMOR_AT_END': return ArmorAtEndReq.create(rawReq);
