@@ -7,6 +7,7 @@ export class TombsOfTerrorAmazingPlaysSetProvider extends GenericSetProvider {
 			'Amazing Plays',
 			[
 				'tombs_of_terror_amazing_plays_aegis_bulwark',
+				'tombs_of_terror_amazing_plays_fatigue_vash',
 				'tombs_of_terror_amazing_plays_full_tinyfin',
 				'tombs_of_terror_amazing_plays_gatling_wand',
 				'tombs_of_terror_amazing_plays_high_attack_minion',

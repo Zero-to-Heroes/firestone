@@ -32,7 +32,7 @@ export class BoardFullOfSameLegendaryMinionReq implements Requirement {
 
 	private handleEvent(gameEvent: GameEvent) {
 		if (gameEvent.gameState && gameEvent.gameState.Player && gameEvent.gameState.Player.Board) {
-			const board: { entityId: number; cardId: string }[] = gameEvent.gameState.Player.Board;
+			const board = gameEvent.gameState.Player.Board;
 			const realBoard = board.filter(entity => entity.cardId && entity.cardId.length > 0);
 			const numberOfMinions = board.length;
 			const numberOfDifferentMinions =

@@ -1,6 +1,6 @@
 import cardsJson from '../../../../../../dependencies/cards.json';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { GameEvent } from '../../../../models/game-event';
+import { GameEvent, GameState } from '../../../../models/game-event';
 import { AllCardsService } from '../../../all-cards.service';
 import { BoardFullOfSameLegendaryMinionReq } from './board-full-of-same-legendary-minion-req';
 
@@ -11,7 +11,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 		const req = new BoardFullOfSameLegendaryMinionReq(cards);
 		const event = Object.assign(new GameEvent(), {
 			type: 'whatever-event-with-gameState',
-			gameState: {
+			gameState: ({
 				Player: {
 					Board: [
 						{ cardId: 'EX1_563' }, // Malygos
@@ -23,7 +23,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 						{ cardId: 'EX1_563' },
 					],
 				},
-			},
+			} as unknown) as GameState,
 		} as GameEvent);
 
 		req.test(event);
@@ -34,7 +34,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 		const req = new BoardFullOfSameLegendaryMinionReq(cards);
 		const event = Object.assign(new GameEvent(), {
 			type: 'whatever-event-with-gameState',
-			gameState: {
+			gameState: ({
 				Player: {
 					Board: [
 						{ cardId: 'EX1_563' }, // Malygos
@@ -46,7 +46,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 						{ cardId: 'EX1_572' }, // Ysera
 					],
 				},
-			},
+			} as unknown) as GameState,
 		} as GameEvent);
 
 		req.test(event);
@@ -57,7 +57,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 		const req = new BoardFullOfSameLegendaryMinionReq(cards);
 		const event = Object.assign(new GameEvent(), {
 			type: 'whatever-event-with-gameState',
-			gameState: {
+			gameState: ({
 				Player: {
 					Board: [
 						{ cardId: 'EX1_563' }, // Malygos
@@ -68,7 +68,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 						{ cardId: 'EX1_563' },
 					],
 				},
-			},
+			} as unknown) as GameState,
 		} as GameEvent);
 
 		req.test(event);
@@ -79,7 +79,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 		const req = new BoardFullOfSameLegendaryMinionReq(cards);
 		const event = Object.assign(new GameEvent(), {
 			type: 'whatever-event-with-gameState',
-			gameState: {
+			gameState: ({
 				Player: {
 					Board: [
 						{ cardId: 'EX1_586' }, // Sea Giant
@@ -91,7 +91,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 						{ cardId: 'EX1_586' },
 					],
 				},
-			},
+			} as unknown) as GameState,
 		} as GameEvent);
 
 		req.test(event);

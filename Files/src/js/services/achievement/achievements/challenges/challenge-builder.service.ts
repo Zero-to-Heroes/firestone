@@ -18,6 +18,7 @@ import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuild
 import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { ExcludedScenarioIdReq } from '../requirements/excluded-scenario-id-req';
+import { FatigueDamageReq } from '../requirements/fatigue-damage-req';
 import { FormatTypeReq } from '../requirements/format-type-req';
 import { GameMinTurnsReq } from '../requirements/game-min-turns-req';
 import { GameTieReq } from '../requirements/game-tie-req';
@@ -92,6 +93,7 @@ export class ChallengeBuilderService {
 			case 'MINION_ATTACK_ON_BOARD': return MinionAttackReq.create(rawReq);
 			case 'HEALTH_AT_END': return HealthAtEndReq.create(rawReq);
 			case 'DAMAGE_AT_END': return DamageAtEndReq.create(rawReq);
+			case 'FATIGUE_DAMAGE': return FatigueDamageReq.create(rawReq);
 			case 'ARMOR_AT_END': return ArmorAtEndReq.create(rawReq);
 			case 'TOTAL_DAMAGE_TAKEN': return TotalDamageTakenReq.create(rawReq);
 			case 'TOTAL_HERO_HEAL': return TotalHeroHealReq.create(rawReq);

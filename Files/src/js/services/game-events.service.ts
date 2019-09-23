@@ -302,7 +302,7 @@ export class GameEvents {
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
-							playerId: gameEvent.Value.PlayerId,
+							entityId: gameEvent.Value.EntityId,
 							fatigueDamage: gameEvent.Value.FatigueDamage,
 						},
 					} as GameEvent),

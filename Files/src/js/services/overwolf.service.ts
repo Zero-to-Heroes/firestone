@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
+import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
 
 declare var overwolf: any;
 
@@ -446,6 +447,15 @@ export class OverwolfService {
 		return new Promise<boolean>(resolve => {
 			overwolf.extensions.getRunningState('kfnacgfblhkjdgcndfdobooemjaapcefaminngbk', (res: any) => {
 				console.warn('[overwolf-service] is Manastorm running?', res);
+				resolve(res);
+			});
+		});
+	}
+
+	public async getActiveSubscriptionPlans(): Promise<ActiveSubscriptionPlan> {
+		return new Promise<ActiveSubscriptionPlan>(resolve => {
+			overwolf.profile.subscriptions.getActivePlans((res: ActiveSubscriptionPlan) => {
+				console.log('[overwolf-service] ActiveSubscriptionPlan', res);
 				resolve(res);
 			});
 		});

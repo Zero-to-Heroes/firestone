@@ -122,7 +122,7 @@ export class GameStateService {
 					// (like with the Chess brawl)
 					const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
 					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
-					const stateFromTracker = gameEvent.gameState || {};
+					const stateFromTracker = gameEvent.gameState || ({} as any);
 					const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, stateFromTracker.Player);
 					const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(newState.opponentDeck, stateFromTracker.Opponent);
 					this.state = Object.assign(new GameState(), newState, {

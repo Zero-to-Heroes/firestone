@@ -10,7 +10,8 @@ export class AdService {
 
 	public async shouldDisplayAds(): Promise<boolean> {
 		return new Promise<boolean>(async resolve => {
-			const user = await this.ow.getCurrentUser();
+			// Use OW's subscription mechanism
+			const [activePlans, user] = await Promise.all([this.ow.getActiveSubscriptionPlans(), this.ow.getCurrentUser()]);
 			if (!user || !user.username) {
 				resolve(true);
 				return;
@@ -26,10 +27,12 @@ export class AdService {
 				res => {
 					console.log('retrieved sub status for', username, res);
 					resolve(false);
+					return;
 				},
 				error => {
 					console.log('no subscription, showign ads');
 					resolve(true);
+					return;
 				},
 			);
 		});

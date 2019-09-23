@@ -6,6 +6,7 @@ import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
 import { AchievementsMonitor } from '../../../src/js/services/achievement/achievements-monitor.service';
 import { AchievementsStorageService } from '../../../src/js/services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
+import { GenericChallenge } from '../../../src/js/services/achievement/achievements/challenges/generic-challenge.js';
 import { AchievementsLoaderService } from '../../../src/js/services/achievement/data/achievements-loader.service';
 import { AllCardsService } from '../../../src/js/services/all-cards.service';
 import { DeckParserService } from '../../../src/js/services/decktracker/deck-parser.service';

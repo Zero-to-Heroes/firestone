@@ -45,9 +45,9 @@ export class TotalDamageTakenReq implements Requirement {
 	}
 
 	private handleFatigueDamageEvent(gameEvent: GameEvent) {
-		const localPlayerId = gameEvent.localPlayer.PlayerId;
+		const localPlayerId = gameEvent.localPlayer.Id;
 		// We check that the cardID is indeed our cardId, in case of mirror matches for instance
-		if (gameEvent.additionalData.playerId === localPlayerId) {
+		if (gameEvent.additionalData.entityId === localPlayerId) {
 			this.totalDamageTaken += gameEvent.additionalData.fatigueDamage;
 		}
 	}
