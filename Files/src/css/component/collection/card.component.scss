@@ -14,56 +14,58 @@
 	}
 
 	.placeholder {
-	    position: absolute;
-    	margin: auto;
+		position: absolute;
+		margin: auto;
 	}
 
 	.count {
 		display: flex;
-    	justify-content: center;
+		justify-content: center;
 		align-items: center;
-		height: 20px;
-	    position: relative;
-	    top: -24px;
+		height: 15%;
+		position: relative;
+		top: -16%;
 
-		.non-premium, .premium {
+		.non-premium,
+		.premium {
 			@extend %dust-number;
+			font-size: 1.7vh;
 			border: 1px solid;
-    		border-top: none;
-    		padding: 0 5px 2px 5px;
-    		display: flex;
-    		align-items: center;
+			border-top: none;
+			padding: 0 5px 2px 5px;
+			display: flex;
+			align-items: center;
 
 			span:before {
-				content: "x";
+				content: 'x';
 			}
 		}
 
 		.premium {
 			border-color: $yellow03;
-    		position: relative;
-    		width: 44px;
+			position: relative;
+			width: 44px;
 			justify-content: center;
 
-    		i {
-    			width: 14px;
-    			height: 16px;
-    			margin-bottom: -4px;
-    			position: absolute;
-    		}
+			i {
+				width: 14px;
+				height: 16px;
+				margin-bottom: -4px;
+				position: absolute;
+			}
 
-    		span {
-    			margin: 0 1px 0 0;
-    		}
+			span {
+				margin: 0 1px 0 0;
+			}
 
-    		.left {
-                left: 0;
-            }
+			.left {
+				left: 0;
+			}
 
-    		.right {
-   				transform: scale(-1, 1);
+			.right {
+				transform: scale(-1, 1);
 				right: 0;
-    		}
+			}
 		}
 
 		div:nth-child(2) {
@@ -99,7 +101,6 @@
 	}
 
 	&:hover {
-
 		img {
 			opacity: 1;
 		}
