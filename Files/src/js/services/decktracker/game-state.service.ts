@@ -182,7 +182,13 @@ export class GameStateService {
 		const prefs = await this.prefs.getPreferences();
 		this.logger.debug('is logged in to Twitch?', prefs.twitchAccessToken);
 		if (prefs.twitchAccessToken) {
-			result.push(event => this.twitch.emitDeckEvent(event));
+			const isTokenValid = await this.twitch.validateToken(prefs.twitchAccessToken);
+			if (!isTokenValid) {
+				this.prefs.setTwitchAccessToken(undefined);
+				await this.twitch.sendExpiredTwitchTokenNotification();
+			} else {
+				result.push(event => this.twitch.emitDeckEvent(event));
+			}
 		}
 		this.eventEmitters = result;
 	}

@@ -10,7 +10,8 @@ export class OwNotificationsService {
 	// private notificationWindowInit = false;
 
 	constructor(private ow: OverwolfService) {
-		this.detectNotificationsWindow();
+		// Give it time to boot
+		setTimeout(() => this.detectNotificationsWindow(), 5000);
 	}
 
 	public html(htmlMessage: Message) {
