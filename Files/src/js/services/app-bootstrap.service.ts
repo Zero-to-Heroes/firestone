@@ -147,12 +147,16 @@ export class AppBootstrapService {
 
 	private async startApp(showWhenStarted?: Function) {
 		const isRunning = await this.ow.inGame();
+		console.log('are we in game?', isRunning);
 		if (isRunning) {
 			if (showWhenStarted) {
 				showWhenStarted();
 			}
 		} else {
-			this.showWelcomePage();
+			const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+			if (!window.isVisible) {
+				this.showWelcomePage();
+			}
 		}
 	}
 
