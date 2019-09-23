@@ -54,7 +54,7 @@ export class GameEvent {
 	readonly localPlayer: GameEventPlayer;
 	readonly opponentPlayer: GameEventPlayer;
 	readonly entityId: number;
-	readonly gameState: any = {};
+	readonly gameState: GameState = {} as GameState;
 
 	readonly additionalData: any;
 
@@ -89,4 +89,21 @@ export interface GameEventPlayer {
 	wildLegendRank: number;
 	cardBackId: number;
 	deck: { deckstring: string; deck };
+}
+
+export interface GameState {
+	readonly Player: PlayerGameState;
+	readonly Opponent: PlayerGameState;
+}
+
+export interface PlayerGameState {
+	readonly Hand: readonly EntityGameState[];
+	readonly Board: readonly EntityGameState[];
+}
+
+export interface EntityGameState {
+	readonly entityId: number;
+	readonly cardId: string;
+	readonly attack: number;
+	readonly health: number;
 }

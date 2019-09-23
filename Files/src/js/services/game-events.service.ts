@@ -283,8 +283,8 @@ export class GameEvents {
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_ON_BOARD_ATTACK_UPDATED, gameEvent, {
-						initialAttack: gameEvent.Value.InitialAttack,
-						newAttack: gameEvent.Value.NewAttack,
+						initialAttack: gameEvent.Value.AdditionalProps ? gameEvent.Value.AdditionalProps.InitialAttack : undefined,
+						newAttack: gameEvent.Value.AdditionalProps ? gameEvent.Value.AdditionalProps.NewAttack : undefined,
 					}),
 				);
 				break;
