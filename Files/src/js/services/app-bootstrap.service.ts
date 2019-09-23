@@ -107,7 +107,9 @@ export class AppBootstrapService {
 			console.log('updated game status');
 			if (this.exitGame(res) && !this.closing) {
 				console.log('left game, closing app');
-				this.closeApp();
+				setTimeout(() => {
+					this.closeApp();
+				}, 5000); // Give some time to the other windows to close
 			} else if (await this.ow.inGame()) {
 				console.log('game is running, showing loading screen');
 				this.showLoadingScreen();
