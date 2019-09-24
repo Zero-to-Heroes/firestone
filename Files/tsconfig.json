@@ -24,5 +24,5 @@
 		"skipTemplateCodegen": false,
 		"strictMetadataEmit": false
 	},
-	"exclude": ["node_modules/*", "**/*.log"]
+	"exclude": ["node_modules/*", "**/*.log", "test/**/*"]
 }
