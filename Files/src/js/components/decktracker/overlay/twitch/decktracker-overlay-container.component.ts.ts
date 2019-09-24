@@ -85,10 +85,17 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDe
 
 	ngAfterViewInit() {
 		this.cdr.detach();
+		if (!(window as any).Twitch) {
+			setTimeout(() => this.ngAfterViewInit(), 500);
+			return;
+		}
 		this.twitch = (window as any).Twitch.ext;
 		// this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
 		this.twitch.onAuthorized(auth => {
+			console.debug('on authorized debug', auth);
 			console.log('on authorized', auth);
+			console.warn('on authorized war,', auth);
+			console.error('on authorized error', auth);
 			this.token = auth.token;
 			console.log('set token', this.token);
 			this.fetchInitialState();

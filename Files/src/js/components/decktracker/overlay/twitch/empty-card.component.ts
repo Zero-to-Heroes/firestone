@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, HostListener, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, Input } from '@angular/core';
 import { Events } from '../../../../services/events.service';
 
 @Component({
@@ -16,14 +16,22 @@ import { Events } from '../../../../services/events.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyCardComponent {
-	@Input() cardId: string;
+	_cardId: string;
+
+	@Input('cardId') set cardId(value: string) {
+		this._cardId = value;
+		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
+		const image = new Image();
+		image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
+		image.src = imageUrl;
+	}
 
 	constructor(private el: ElementRef, private events: Events) {}
 
 	@HostListener('mouseenter') onMouseEnter() {
 		const rect = this.el.nativeElement.getBoundingClientRect();
 		// console.log('on mouse enter', this.cardId, rect);
-		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
+		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this._cardId, rect.left, rect.top, true, rect);
 	}
 
 	@HostListener('mouseleave')
