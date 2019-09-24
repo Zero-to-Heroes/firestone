@@ -12,12 +12,7 @@ export class CreateCardInDeckParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent): boolean {
-		if (gameEvent.type !== GameEvent.CREATE_CARD_IN_DECK) {
-			return false;
-		}
-		const controllerId: number = gameEvent.controllerId;
-		const localPlayer = gameEvent.localPlayer;
-		return controllerId === localPlayer.PlayerId;
+		return gameEvent.type === GameEvent.CREATE_CARD_IN_DECK;
 	}
 
 	parse(currentState: GameState, gameEvent: GameEvent): GameState {
