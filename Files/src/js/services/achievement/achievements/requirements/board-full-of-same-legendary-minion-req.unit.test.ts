@@ -30,7 +30,7 @@ describe('board-full-of-same-legendary-minion-req', () => {
 
 		expect(req.isCompleted()).toBe(true);
 	});
-	test('is not completed not when any event has a board with less than 7 copies of the same leg minion', () => {
+	test('is not completed not when any event has a board 7 leg minions, but two different ones', () => {
 		const req = new BoardFullOfSameLegendaryMinionReq(cards);
 		const event = Object.assign(new GameEvent(), {
 			type: 'whatever-event-with-gameState',
