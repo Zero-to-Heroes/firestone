@@ -1,23 +1,22 @@
 import {
-	Component,
-	Input,
-	ViewEncapsulation,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	HostListener,
+	Component,
 	ElementRef,
-	AfterViewInit,
-	ViewRef,
 	EventEmitter,
+	HostListener,
+	Input,
+	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
-
-import { AchievementSet } from '../../models/achievement-set';
-import { VisualAchievement } from '../../models/visual-achievement';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IOption } from 'ng-select';
-import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+import { AchievementSet } from '../../models/achievement-set';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { VisualAchievement } from '../../models/visual-achievement';
+import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -49,6 +48,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						</i>
 					</ng-template>
 				</ng-select>
+				<achievements-filter></achievements-filter>
 				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
 				</achievement-progress-bar>
 			</div>

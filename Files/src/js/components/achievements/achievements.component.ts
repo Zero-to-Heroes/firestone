@@ -1,6 +1,5 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { trigger, state, transition, style, animate } from '@angular/animations';
-
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 
@@ -36,7 +35,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 					[hidden]="state.currentView !== 'list'"
 					[shortDisplay]="state.shortDisplay"
 					[socialShareUserInfo]="socialShareUserInfo"
-					[achievementsList]="state.achievementsList"
+					[achievementsList]="state.displayedAchievementsList"
 					[selectedAchievementId]="state.selectedAchievementId"
 					[achievementSet]="state.selectedCategory"
 				>

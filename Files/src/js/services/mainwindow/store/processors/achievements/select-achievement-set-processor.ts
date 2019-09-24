@@ -1,8 +1,8 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { AchievementSet } from '../../../../../models/achievement-set';
+import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { SelectAchievementSetEvent } from '../../events/achievements/select-achievement-set-event';
+import { Processor } from '../processor';
 
 export class SelectAchievementSetProcessor implements Processor {
 	public async process(event: SelectAchievementSetEvent, currentState: MainWindowState): Promise<MainWindowState> {
@@ -19,6 +19,7 @@ export class SelectAchievementSetProcessor implements Processor {
 			selectedCategory: achievementSet,
 			achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
 			achievementsList: achievementSet.achievements,
+			displayedAchievementsList: achievementSet.achievements,
 			selectedAchievementId: undefined,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {

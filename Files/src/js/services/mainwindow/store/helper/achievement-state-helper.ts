@@ -1,7 +1,7 @@
-import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
-import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 import { AchievementSet } from '../../../../models/achievement-set';
+import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
 import { VisualAchievement } from '../../../../models/visual-achievement';
+import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 
 export class AchievementStateHelper {
 	public updateStateFromNewGlobalCategories(
@@ -24,6 +24,7 @@ export class AchievementStateHelper {
 			achievementCategories: achievementCategories,
 			selectedCategory: selectedCategory,
 			achievementsList: achievementsList,
+			displayedAchievementsList: achievementsList,
 		} as AchievementsState);
 	}
 

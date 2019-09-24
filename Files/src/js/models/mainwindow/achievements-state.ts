@@ -1,7 +1,7 @@
-import { VisualAchievementCategory } from '../visual-achievement-category';
 import { AchievementSet } from '../achievement-set';
-import { VisualAchievement } from '../visual-achievement';
 import { AchievementHistory } from '../achievement/achievement-history';
+import { VisualAchievement } from '../visual-achievement';
+import { VisualAchievementCategory } from '../visual-achievement-category';
 import { SharingAchievement } from './achievement/sharing-achievement';
 
 export class AchievementsState {
@@ -12,6 +12,7 @@ export class AchievementsState {
 	readonly achievementCategories: readonly AchievementSet[] = [];
 	readonly selectedCategory: AchievementSet;
 	readonly achievementsList: readonly VisualAchievement[] = [];
+	readonly displayedAchievementsList: readonly VisualAchievement[] = [];
 	readonly selectedAchievementId: string;
 	readonly shortDisplay: boolean = false;
 	readonly achievementHistory: readonly AchievementHistory[] = [];

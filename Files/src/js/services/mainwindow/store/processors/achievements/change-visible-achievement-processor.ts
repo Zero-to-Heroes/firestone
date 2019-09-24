@@ -1,9 +1,9 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
-import { ChangeVisibleAchievementEvent } from '../../events/achievements/change-visible-achievement-event';
-import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { AchievementSet } from '../../../../../models/achievement-set';
+import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { VisualAchievement } from '../../../../../models/visual-achievement';
+import { ChangeVisibleAchievementEvent } from '../../events/achievements/change-visible-achievement-event';
+import { Processor } from '../processor';
 
 export class ChangeVisibleAchievementProcessor implements Processor {
 	public async process(
@@ -28,6 +28,7 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 			selectedCategory: achievementSet,
 			achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
 			achievementsList: achievementSet.achievements as readonly VisualAchievement[],
+			displayedAchievementsList: achievementSet.achievements as readonly VisualAchievement[],
 			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
 			sharingAchievement: undefined,
 			shortDisplay: true,

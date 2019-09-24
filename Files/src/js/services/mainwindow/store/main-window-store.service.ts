@@ -24,6 +24,7 @@ import { AchievementHistoryCreatedEvent } from './events/achievements/achievemen
 import { AchievementRecordedEvent } from './events/achievements/achievement-recorded-event';
 import { ChangeAchievementsShortDisplayEvent } from './events/achievements/change-achievements-short-display-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
+import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
 import { SelectAchievementSetEvent } from './events/achievements/select-achievement-set-event';
 import { ShowAchievementDetailsEvent } from './events/achievements/show-achievement-details-event';
@@ -57,6 +58,7 @@ import { AchievementHistoryCreatedProcessor } from './processors/achievements/ac
 import { AchievementRecordedProcessor } from './processors/achievements/achievement-recorded-processor';
 import { ChangeAchievementsShortDisplayProcessor } from './processors/achievements/change-achievements-short-display-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
+import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
 import { SelectAchievementSetProcessor } from './processors/achievements/select-achievement-set-processor';
 import { ShowAchievementDetailsProcessor } from './processors/achievements/show-achievement-details-processor';
@@ -231,6 +233,7 @@ export class MainWindowStoreService {
 			ShowMainWindowEvent.eventName(),
 			new ShowMainWindowProcessor(),
 
+			// Collection
 			SearchCardsEvent.eventName(),
 			new SearchCardProcessor(this.collectionManager, this.cards),
 
@@ -264,6 +267,7 @@ export class MainWindowStoreService {
 				this.cards,
 			),
 
+			// Achievements
 			AchievementHistoryCreatedEvent.eventName(),
 			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
 
@@ -295,6 +299,10 @@ export class MainWindowStoreService {
 				achievementUpdateHelper,
 			),
 
+			FilterShownAchievementsEvent.eventName(),
+			new FilterShownAchievementsProcessor(),
+
+			// Social
 			StartSocialSharingEvent.eventName(),
 			new StartSocialSharingProcessor(),
 

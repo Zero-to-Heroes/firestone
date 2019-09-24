@@ -23,6 +23,7 @@ import { AchievementSocialSharesComponent } from '../../components/achievements/
 import { AchievementThumbnailComponent } from '../../components/achievements/achievement-thumbnail.component';
 import { AchievementViewComponent } from '../../components/achievements/achievement-view.component';
 import { AchievementsCategoriesComponent } from '../../components/achievements/achievements-categories.component';
+import { AchievementsFilterComponent } from '../../components/achievements/achievements-filter.component.ts';
 import { AchievementsGlobalCategoriesComponent } from '../../components/achievements/achievements-global-categories.component';
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
@@ -121,6 +122,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementViewComponent,
 		AchievementSocialSharesComponent,
 		AchievementSharingModal,
+		AchievementsFilterComponent,
 
 		DecktrackerComponent,
 

@@ -1,9 +1,9 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { AchievementSet } from '../../../../../models/achievement-set';
-import { ShowAchievementDetailsEvent } from '../../events/achievements/show-achievement-details-event';
+import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
+import { ShowAchievementDetailsEvent } from '../../events/achievements/show-achievement-details-event';
+import { Processor } from '../processor';
 
 export class ShowAchievementDetailsProcessor implements Processor {
 	public async process(event: ShowAchievementDetailsEvent, currentState: MainWindowState): Promise<MainWindowState> {
@@ -16,6 +16,7 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			menuDisplayType: 'breadcrumbs',
 			selectedCategory: selectedSet,
 			achievementsList: selectedSet.achievements,
+			displayedAchievementsList: selectedSet.achievements,
 			selectedAchievementId: selectedSet.findAchievement(event.achievementId).completionSteps[0].id,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {
