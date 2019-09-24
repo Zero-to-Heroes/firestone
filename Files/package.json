@@ -1,10 +1,10 @@
 {
 	"name": "firestone",
-	"version": "3.4.10",
+	"version": "3.4.11",
 	"scripts": {
 		"lint": "eslint --color --fix --ext .ts ./src/",
 		"test": "jest --colors",
-		"dev": "rimraf dist && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
+		"dev": "rimraf dist && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors --verbose",
 		"local-test": "rimraf dist && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.localTest --progress --profile --bail --colors",
 		"build": "rimraf dist && npm audit fix && npm run test && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --config webpack.config.js --env.appversion=%npm_package_version% --env.production --progress --profile --bail --colors",
 		"dev-twitch": "rimraf dist-twitch && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --watch --config webpack-twitch.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
@@ -71,13 +71,12 @@
 		"raw-loader": "1.0.0",
 		"replace-in-file-webpack-plugin": "1.0.6",
 		"rimraf": "2.6.3",
-		"sass-loader": "7.1.0",
+		"sass-loader": "8.0.0",
 		"style-loader": "0.23.1",
 		"ts-jest": "24.0.2",
 		"typescript": "3.4.5",
-		"webpack": "4.30.0",
+		"webpack": "4.40.2",
 		"webpack-bundle-analyzer": "3.4.1",
-		"webpack-cli": "3.3.0",
-		"webpack-dev-server": "3.3.1"
+		"webpack-cli": "3.3.0"
 	}
 }
