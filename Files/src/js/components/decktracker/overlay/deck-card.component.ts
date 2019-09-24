@@ -87,6 +87,11 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', card);
 		}
+		// Preload
+		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
+		const image = new Image();
+		image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
+		image.src = imageUrl;
 	}
 
 	constructor(
