@@ -1,5 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
+import { DeckCard } from '../../models/decktracker/deck-card';
+import { DeckState } from '../../models/decktracker/deck-state';
+import { GameState } from '../../models/decktracker/game-state';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 
@@ -33,14 +36,33 @@ export class TwitchAuthService {
 	}
 
 	public async emitDeckEvent(event: any) {
-		// console.log('ready to emit twitch event');
+		// console.log('ready to emit twitch event', event);
+		let newEvent = Object.assign({}, event);
+		// Tmp fix until we fix the twitch extension
+		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
+			const newDeck: readonly DeckCard[] = [
+				...newEvent.state.playerDeck.deck,
+				...newEvent.state.playerDeck.hand,
+				...newEvent.state.playerDeck.otherZone,
+			].sort((a, b) => a.manaCost - b.manaCost);
+			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
+				deck: newDeck,
+			} as DeckState);
+			const newState = Object.assign(new GameState(), newEvent.state, {
+				playerDeck: newPlayerDeck,
+			} as GameState);
+			newEvent = Object.assign({}, newEvent, {
+				state: newState,
+			});
+			// console.log('fixed event to send', newEvent, event);
+		}
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
 			// console.log('no twitch access token, returning');
 			return;
 		}
 		const httpHeaders: HttpHeaders = new HttpHeaders().set('Authorization', `Bearer ${prefs.twitchAccessToken}`);
-		this.http.post(EBS_URL, event, { headers: httpHeaders }).subscribe(
+		this.http.post(EBS_URL, newEvent, { headers: httpHeaders }).subscribe(
 			() => {
 				// Do nothing
 				// console.log('twitch event result', data);
