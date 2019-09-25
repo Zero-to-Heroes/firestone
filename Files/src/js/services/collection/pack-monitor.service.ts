@@ -19,12 +19,9 @@ export class PackMonitor {
 	private busy = false;
 	private spacePressed: number;
 
-	private dpi = 1;
-
 	private totalDustInPack = 0;
 	private totalDuplicateCards = 0;
 	private openingPack = false;
-	// private timer: any;
 
 	constructor(
 		private events: Events,
@@ -37,14 +34,6 @@ export class PackMonitor {
 	) {
 		this.gameEvents.onGameStart.subscribe(() => {
 			this.unrevealedCards = [];
-			this.updateDpi();
-		});
-		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			// If the user changes the DPI while in-game they have to switch the focus
-			// outside of the game. So when going back to the game, this will be captured
-			if (res && (res.resolutionChanged || res.focusChanged)) {
-				this.updateDpi();
-			}
 		});
 
 		this.events.on(Events.NEW_PACK).subscribe(event => {
@@ -111,6 +100,7 @@ export class PackMonitor {
 		const card: Card = event.data[0];
 		const dust: number = event.data[1];
 		if (this.openingPack) {
+			console.log('[pack-monitor] opening pack, waiting to show dust');
 			if (!card.id) {
 				console.error('Trying to add an empty card id to unrevealed cards', card, dust);
 			}
@@ -120,15 +110,8 @@ export class PackMonitor {
 				this.totalDuplicateCards++;
 			};
 		} else {
+			console.log('[pack-monitor] not opening pack, showing dust');
 			this.createDustToast(dust, 1);
-		}
-	}
-
-	private async updateDpi() {
-		// You need to logout for the new dpi to take effect, so we can cache the value
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (gameInfo && gameInfo.width) {
-			this.dpi = gameInfo.logicalWidth / gameInfo.width;
 		}
 	}
 
@@ -175,9 +158,9 @@ export class PackMonitor {
 
 	private async cardClicked(data, callback: Function) {
 		const result = await this.ow.getRunningGameInfo();
-		const x = (1.0 * data.x) / (result.width * this.dpi);
-		const y = (1.0 * data.y) / (result.height * this.dpi);
-		console.log('clicked at ', x, y, this.dpi, data, result);
+		const x = (1.0 * data.x) / result.logicalWidth;
+		const y = (1.0 * data.y) / result.logicalHeight;
+		console.log('clicked at ', x, y, data, result);
 
 		// Top left
 		let ret = -1;
@@ -201,7 +184,6 @@ export class PackMonitor {
 					y: y,
 					data: data,
 					result: result,
-					dpi: this.dpi,
 					unrevealedCards: this.unrevealedCards,
 				},
 			});
