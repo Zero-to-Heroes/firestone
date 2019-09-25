@@ -36,6 +36,10 @@ export class MatchSummaryService {
 		this.http.get(`${MATCH_STATS_ENDPOINT}/${reviewId}`).subscribe(
 			(data: any) => {
 				this.logger.debug('[match-summary] received stats', data);
+				if (!data || !data.results || data.results.length === 0) {
+					setTimeout(() => this.queryServerForStats(reviewId, retriesLeft - 1), 1000);
+					return;
+				}
 				const stats: MatchStats = data.results ? data.results[0] : undefined;
 				this.store.stateUpdater.next(new MatchStatsAvailableEvent(stats));
 			},
