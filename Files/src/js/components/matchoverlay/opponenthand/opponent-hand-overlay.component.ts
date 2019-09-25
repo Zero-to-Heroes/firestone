@@ -12,9 +12,9 @@ import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
+import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
-import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
 
 @Component({
 	selector: 'opponent-hand-overlay',
@@ -128,21 +128,19 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 		// Window takes 30% of the size of the screen width
-		const gameWidth = gameInfo.logicalWidth;
-		const dpi = gameWidth / gameInfo.width;
-		const width = gameWidth * dpi * 1;
+		const gameWidth = gameInfo.width;
+		const width = gameWidth * 1;
 		this.logger.debug(
 			'[opponent-hand-overlay] new game width is',
 			gameWidth,
 			'with dpi',
-			dpi,
 			'and overlay width',
 			width,
 			gameInfo,
 		);
 		// Height
-		const gameHeight = gameInfo.logicalHeight;
-		const height = gameHeight * dpi * 0.2;
+		const gameHeight = gameInfo.height;
+		const height = gameHeight * 0.2;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 	}
 

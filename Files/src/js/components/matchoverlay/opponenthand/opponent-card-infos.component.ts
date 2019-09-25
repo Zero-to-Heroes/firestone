@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Map } from 'immutable';
 import { NGXLogger } from 'ngx-logger';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'opponent-card-infos',
@@ -22,16 +23,14 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		</ul>
 	`,
 })
-export class OpponentCardInfosComponent implements OnInit {
+export class OpponentCardInfosComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayTurnNumber: boolean;
 	_cards: readonly DeckCard[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
 
-	constructor(private logger: NGXLogger) {}
-
-	ngOnInit(): void {}
+	constructor(private logger: NGXLogger, private ow: OverwolfService) {}
 
 	@Input() set cards(value: readonly DeckCard[]) {
 		this._cards = value;
