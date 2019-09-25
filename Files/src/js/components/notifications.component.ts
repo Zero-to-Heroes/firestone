@@ -285,7 +285,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const gameWidth = gameInfo.logicalWidth;
 			const gameHeight = gameInfo.logicalHeight;
 			const dpi = gameWidth / gameInfo.width;
-			await this.ow.changeWindowSize(this.windowId, width, gameHeight - 1);
+			await this.ow.changeWindowSize(this.windowId, width, gameHeight - 20);
 			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 			const newLeft = ~~(gameWidth - width * dpi);
 			const newTop = 1;
