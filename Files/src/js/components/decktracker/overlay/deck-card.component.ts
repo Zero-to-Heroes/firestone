@@ -90,7 +90,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		// Preload
 		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
 		const image = new Image();
-		image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
+		// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 		image.src = imageUrl;
 	}
 
