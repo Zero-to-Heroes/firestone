@@ -22,7 +22,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<button class="i-30 close-button" (mousedown)="closeWindow()">
 			<svg class="svg-icon-fill">
 				<use
-					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xmlns:xlink="https://www.w3.org/1999/xlink"
 					xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
 				></use>
 			</svg>

@@ -1,10 +1,10 @@
 import {
-	Component,
-	ViewEncapsulation,
-	ChangeDetectionStrategy,
-	Input,
 	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
 	EventEmitter,
+	Input,
+	ViewEncapsulation,
 } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -20,7 +20,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<button class="i-30 pink-button" (mousedown)="showSettings()">
 			<svg class="svg-icon-fill">
 				<use
-					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xmlns:xlink="https://www.w3.org/1999/xlink"
 					xlink:href="/Files/assets/svg/sprite.svg#window-control_settings"
 				></use>
 			</svg>

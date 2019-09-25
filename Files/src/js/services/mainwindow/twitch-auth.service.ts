@@ -7,8 +7,8 @@ import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
-// const EBS_URL = 'http://ec2-52-42-105-37.us-west-2.compute.amazonaws.com/deck/event';
-// const EBS_URL = 'http://localhost:8081/deck/event';
+// const EBS_URL = 'https://ec2-52-42-105-37.us-west-2.compute.amazonaws.com/deck/event';
+// const EBS_URL = 'https://localhost:8081/deck/event';
 
 const CLIENT_ID = 'jbmhw349lqbus9j8tx4wac18nsja9u';
 const REDIRECT_URI = 'overwolf-extension://lnknbakkpommmjjdnelmfbjjdbocfpnpbkijjnob/Files/twitch-auth-callback.html';
@@ -91,7 +91,7 @@ export class TwitchAuthService {
 				</div>
 				<button class="i-30 close-button">
 					<svg class="svg-icon-fill">
-						<use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
+						<use xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="/Files/assets/svg/sprite.svg#window-control_close"></use>
 					</svg>
 				</button>
 			</div>`;

@@ -1,13 +1,13 @@
 import {
-	Component,
-	ViewEncapsulation,
-	ChangeDetectionStrategy,
-	Input,
 	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
 	EventEmitter,
+	Input,
+	ViewEncapsulation,
 } from '@angular/core';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -22,7 +22,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
 			<svg class="svg-icon-fill">
 				<use
-					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xmlns:xlink="https://www.w3.org/1999/xlink"
 					xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"
 				></use>
 			</svg>

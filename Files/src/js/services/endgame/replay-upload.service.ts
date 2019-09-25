@@ -23,7 +23,7 @@ export class ReplayUploadService {
 				console.log('Created empty shell review', res, reviewId);
 
 				const bytes = game.replayBytes;
-				// http://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
+				// https://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
 				const byteArray = new Uint8Array(bytes);
 				const blob = new Blob([byteArray], { type: 'application/zip' });
 				const fileKey = Date.now() + '_' + reviewId + '.hszip';
@@ -52,7 +52,7 @@ export class ReplayUploadService {
 						'application-key': 'overwolf',
 						'user-key': userId,
 						'file-type': 'hszip',
-						'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
+						'review-text': 'Created by [Overwolf](https://www.overwolf.com)',
 						'game-rank': rank && rank !== 'legend' ? rank.toString() : '',
 						'game-legend-rank': rank === 'legend' ? rank.toString() : '',
 						'opponent-game-rank':

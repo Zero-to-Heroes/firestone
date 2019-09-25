@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
 	selector: 'control-help',
@@ -12,7 +12,7 @@ import { Component, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/
 		<a class="i-30 pink-button" href="https://discord.gg/H4Hj7bC" target="_blank">
 			<svg class="svg-icon-fill">
 				<use
-					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xmlns:xlink="https://www.w3.org/1999/xlink"
 					xlink:href="/Files/assets/svg/sprite.svg#window-control_support"
 				></use>
 			</svg>

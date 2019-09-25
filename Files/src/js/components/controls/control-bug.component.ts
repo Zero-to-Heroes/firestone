@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter } from '@angular/core';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<button class="i-30 pink-button" (mousedown)="showBugForm()" helpTooltip="Report a bug">
 			<svg class="svg-icon-fill">
 				<use
-					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xmlns:xlink="https://www.w3.org/1999/xlink"
 					xlink:href="/Files/assets/svg/sprite.svg#window-control_bug"
 				></use>
 			</svg>

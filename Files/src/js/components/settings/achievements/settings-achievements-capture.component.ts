@@ -1,9 +1,9 @@
 import {
-	Component,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	HostListener,
+	Component,
 	ElementRef,
+	HostListener,
 	ViewRef,
 } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';

@@ -30,7 +30,7 @@ export class AppComponent {
 		await this.cards.initializeCardsDb();
 		const launchAppOnGameStart: boolean = (await this.prefs.getPreferences()).launchAppOnGameStart;
 		console.log('should launch on game start?', launchAppOnGameStart);
-		// See http://developers.overwolf.com/documentation/sdk/overwolf/extensions/#onapplaunchtriggered
+		// See https://developers.overwolf.com/documentation/sdk/overwolf/extensions/#onapplaunchtriggered
 		const appLaunchedByGameLaunch: boolean = this.isLaunchedByGameEvent();
 		console.log('is app launched by a game event?', appLaunchedByGameLaunch);
 		// If the app was launched and the game was not running, this means that

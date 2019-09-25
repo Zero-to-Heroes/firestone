@@ -36,7 +36,7 @@ declare var OwAd: any;
 							<button class="i-30 pink-button" (mousedown)="minimizeWindow()">
 								<svg class="svg-icon-fill">
 									<use
-										xmlns:xlink="http://www.w3.org/1999/xlink"
+										xmlns:xlink="https://www.w3.org/1999/xlink"
 										xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"
 									></use>
 								</svg>
@@ -44,7 +44,7 @@ declare var OwAd: any;
 							<button class="i-30 close-button" (mousedown)="closeWindow()">
 								<svg class="svg-icon-fill">
 									<use
-										xmlns:xlink="http://www.w3.org/1999/xlink"
+										xmlns:xlink="https://www.w3.org/1999/xlink"
 										xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
 									></use>
 								</svg>

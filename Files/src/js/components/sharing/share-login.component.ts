@@ -1,7 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
-
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { SocialUserInfo } from '../../models/mainwindow/social-user-info';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { TriggerSocialNetworkLoginToggleEvent } from '../../services/mainwindow/store/events/social/trigger-social-network-login-toggle-event';
 import { OverwolfService } from '../../services/overwolf.service';
 

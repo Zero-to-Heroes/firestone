@@ -37,8 +37,8 @@ import { ProcessingQueue } from '../services/processing-queue.service';
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
-	timeout = 5000;
-	// timeout = 999999999999;
+	// timeout = 5000;
+	timeout = 999999999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
@@ -95,6 +95,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				this.processingQueue.enqueue(message);
 			}
 		});
+		this.resize();
 	}
 
 	private async processQueue(eventQueue: readonly Message[]): Promise<readonly Message[]> {
@@ -295,11 +296,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			const gameWidth = gameInfo.logicalWidth;
-			const gameHeight = gameInfo.logicalHeight;
+			// const gameHeight = gameInfo.logicalHeight;
 			const dpi = gameWidth / gameInfo.width;
-			await this.ow.changeWindowSize(this.windowId, width, gameHeight - 20);
+			await this.ow.changeWindowSize(this.windowId, width, gameInfo.height - 20);
 			// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-			const newLeft = ~~(gameWidth - width * dpi);
+			const newLeft = gameWidth - width * dpi;
 			const newTop = 1;
 			await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		});

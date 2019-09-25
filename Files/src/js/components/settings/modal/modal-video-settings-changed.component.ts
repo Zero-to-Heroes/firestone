@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 			<button class="i-30 close-button" (mousedown)="close()">
 				<svg class="svg-icon-fill">
 					<use
-						xmlns:xlink="http://www.w3.org/1999/xlink"
+						xmlns:xlink="https://www.w3.org/1999/xlink"
 						xlink:href="/Files/assets/svg/sprite.svg#window-control_close"
 					></use>
 				</svg>
