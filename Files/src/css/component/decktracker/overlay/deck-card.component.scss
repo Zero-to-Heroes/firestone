@@ -8,6 +8,7 @@
 	height: 26px;
 	position: relative;
 	min-width: 250px;
+	overflow: hidden;
 
 	.background-image {
 		position: absolute;
@@ -22,7 +23,7 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		bottom: 0;
+		bottom: -1px; // Otherwise there is a little band of color showing at the bottom
 		background: linear-gradient(89.48deg, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
 	}
 
