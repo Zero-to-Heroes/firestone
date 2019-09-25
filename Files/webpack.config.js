@@ -33,6 +33,7 @@ module.exports = function(env, argv) {
 			entryModules: [
 				'./src/js/modules/background/background.module#AppModule',
 				'./src/js/modules/collection/collection.module#CollectionModule',
+				'./src/js/modules/match-stats/match-stats.module#MatchStatsModule',
 				'./src/js/modules/loading/loading.module#LoadingModule',
 				'./src/js/modules/notifications/notifications.module#NotificationsModule',
 				'./src/js/modules/decktracker/decktracker.module#DeckTrackerModule',
@@ -73,6 +74,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'welcome',
 				'opponentHand',
+				'matchStats',
 			],
 			chunksSortMode: 'manual',
 		}),
@@ -88,6 +90,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'welcome',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -102,6 +105,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'welcome',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -116,6 +120,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'welcome',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -130,6 +135,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'welcome',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -144,6 +150,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'welcome',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -158,6 +165,7 @@ module.exports = function(env, argv) {
 				'twitchauthcallback',
 				'settings',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -172,6 +180,7 @@ module.exports = function(env, argv) {
 				'welcome',
 				'settings',
 				'opponentHand',
+				'matchStats',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -186,6 +195,22 @@ module.exports = function(env, argv) {
 				'welcome',
 				'settings',
 				'twitchauthcallback',
+				'matchStats',
+			],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'match_stats.html',
+			template: 'src/html/match_stats.html',
+			excludeChunks: [
+				'collection',
+				'notifications',
+				'background',
+				'loading',
+				'decktracker',
+				'welcome',
+				'settings',
+				'twitchauthcallback',
+				'opponentHand',
 			],
 		}),
 
@@ -237,6 +262,7 @@ module.exports = function(env, argv) {
 			polyfills: './src/polyfills.ts',
 			background: './src/js/modules/background/main.ts',
 			collection: './src/js/modules/collection/main.ts',
+			matchStats: './src/js/modules/match-stats/main.ts',
 			loading: './src/js/modules/loading/main.ts',
 			notifications: './src/js/modules/notifications/main.ts',
 			decktracker: './src/js/modules/decktracker/main.ts',

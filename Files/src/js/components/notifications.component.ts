@@ -10,7 +10,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { DebugService } from '../services/debug.service';
 import { ShowAchievementDetailsEvent } from '../services/mainwindow/store/events/achievements/show-achievement-details-event';
 import { ShowCardDetailsEvent } from '../services/mainwindow/store/events/collection/show-card-details-event';
@@ -50,6 +50,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private mainWindowId: string;
 	private activeNotifications: ActiveNotification[] = [];
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private notificationsEmitterBus: BehaviorSubject<Message>;
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
 
@@ -79,14 +80,21 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			this.processingQueue.enqueue(messageObject);
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
-			console.log('state changed, resize?', message);
-			if (message.resolutionChanged) {
-				this.resize();
-			}
+			console.log('state changed, resizing and repositioning', message);
+			// if (message.resolutionChanged) {
+			this.resize();
+			// }
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.notificationsEmitterBus = this.ow.getMainWindow().notificationsEmitterBus;
+		this.notificationsEmitterBus.subscribe((message: Message) => {
+			if (message) {
+				console.log('received message from bus in notification window', message.notificationId);
+				this.processingQueue.enqueue(message);
+			}
+		});
 	}
 
 	private async processQueue(eventQueue: readonly Message[]): Promise<readonly Message[]> {
@@ -218,6 +226,10 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 						currentElement.classList.remove('shake');
 					}, 500);
 					return;
+				}
+				if (messageObject.eventToSendOnClick) {
+					const eventToSend = messageObject.eventToSendOnClick();
+					this.stateUpdater.next(eventToSend);
 				}
 				if (cardId) {
 					const isAchievement = messageObject.app === 'achievement';

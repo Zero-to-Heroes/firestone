@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Google Analytics -->
+		<script>
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-65945334-2']);
+			_gaq.push(['_trackPageview']);
+
+			(function(i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				(i[r] =
+					i[r] ||
+					function() {
+						(i[r].q = i[r].q || []).push(arguments);
+					}),
+					(i[r].l = 1 * new Date());
+				(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m);
+			})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', 'UA-65945334-2', 'auto');
+			console.log('create ga', ga.q);
+			ga('set', 'checkProtocolTask', null);
+		</script>
+		<!-- End Google Analytics -->
+		<script>
+			var adsReady = false;
+		</script>
+
+		<title>Firestone</title>
+		<meta charset="UTF-8" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet" />
+
+		<script src="plugins/overwolfplugin.js"></script>
+
+		<style>
+			.cdk-global-overlay-wrapper,
+			.cdk-overlay-container {
+				pointer-events: none;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+			}
+			.cdk-overlay-container {
+				position: fixed;
+				z-index: 1000;
+			}
+			.cdk-overlay-container:empty {
+				display: none;
+			}
+			.cdk-global-overlay-wrapper {
+				display: flex;
+				position: absolute;
+				z-index: 1000;
+			}
+			.cdk-overlay-pane {
+				position: absolute;
+				pointer-events: auto;
+				box-sizing: border-box;
+				z-index: 1000;
+				display: flex;
+				max-width: 100%;
+				max-height: 100%;
+			}
+			.cdk-overlay-backdrop {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				z-index: 1000;
+				pointer-events: auto;
+				-webkit-tap-highlight-color: transparent;
+				transition: opacity 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+				opacity: 0;
+			}
+			.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+				opacity: 1;
+			}
+			@media screen and (-ms-high-contrast: active) {
+				.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+					opacity: 0.6;
+				}
+			}
+			.cdk-overlay-dark-backdrop {
+				background: rgba(0, 0, 0, 0.32);
+			}
+			.cdk-overlay-transparent-backdrop,
+			.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+				opacity: 0;
+			}
+			.cdk-overlay-connected-position-bounding-box {
+				position: absolute;
+				z-index: 1000;
+				display: flex;
+				flex-direction: column;
+				min-width: 1px;
+				min-height: 1px;
+			}
+			.cdk-global-scrollblock {
+				position: fixed;
+				width: 100%;
+				overflow-y: scroll;
+			}
+		</style>
+	</head>
+
+	<body>
+		<match-stats-window></match-stats-window>
+
+		<script>
+			function onOwAdReady() {
+				adsReady = true;
+			}
+		</script>
+		<script src="http://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+	</body>
+</html>

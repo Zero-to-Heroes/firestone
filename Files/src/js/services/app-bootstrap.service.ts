@@ -19,6 +19,7 @@ import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-windo
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
+import { MatchSummaryService } from './match-summary/match-summary.service';
 import { OverwolfService } from './overwolf.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 
@@ -57,6 +58,7 @@ export class AppBootstrapService {
 		private settingsCommunicationService: SettingsCommunicationService,
 		private init_decktrackerDisplayService: OverlayDisplayService,
 		private init_endGameListenerService: EndGameListenerService,
+		private init_matchSummaryService: MatchSummaryService,
 	) {}
 
 	public async init() {
@@ -122,10 +124,13 @@ export class AppBootstrapService {
 		this.ow.addAppLaunchTriggeredListener(() => {
 			this.startApp(() => this.showCollectionWindow());
 		});
-		ga('send', 'event', 'toast', 'start-app');
 		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
 		await this.ow.restoreWindow(settingsWindow.id);
 		await this.ow.hideWindow(settingsWindow.id);
+		const matchStatsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_STATS_WINDOW);
+		await this.ow.restoreWindow(matchStatsWindow.id);
+		await this.ow.hideWindow(matchStatsWindow.id);
+		ga('send', 'event', 'toast', 'start-app');
 	}
 
 	private async showLoadingScreen() {

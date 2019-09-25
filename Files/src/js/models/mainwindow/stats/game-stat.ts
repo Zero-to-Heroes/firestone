@@ -1,5 +1,8 @@
+import { MatchStats } from './match-stats';
+
 // this mirrors the data structure in the replay_summary DB
 export class GameStat {
+	readonly reviewId: string;
 	readonly coinPlay: 'coin' | 'play';
 	readonly opponentClass: string;
 	readonly playerClass: string;
@@ -10,4 +13,5 @@ export class GameStat {
 	readonly gameFormat: 'standard' | 'wild';
 	readonly playerCardId: string;
 	readonly opponentCardId: string;
+	readonly matchStat: MatchStats;
 }

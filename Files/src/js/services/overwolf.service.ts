@@ -8,8 +8,11 @@ const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class OverwolfService {
+	public static MANASTORM_ID = 'kfnacgfblhkjdgcndfdobooemjaapcefaminngbk';
+
 	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
+	public static MATCH_STATS_WINDOW = 'MatchStatsWindow';
 	public static SETTINGS_WINDOW = 'SettingsWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
 	public static WELCOME_WINDOW = 'WelcomeWindow';
@@ -452,9 +455,68 @@ export class OverwolfService {
 		});
 	}
 
+	public async isGSEnabled(): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.egs.isEnabled((egsEnabledResult: any) => {
+				resolve(egsEnabledResult);
+			});
+		});
+	}
+
+	public async requestGSDisplay(): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.egs.requestToDisplay((displayRequestResult: any) => {
+				resolve(displayRequestResult);
+			});
+		});
+	}
+
+	public async getExtensionInfo(extensionId: string): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.extensions.getInfo('nafihghfcpikebhfhdhljejkcifgbdahdhngepfb', callbackInfo => {
+				console.debug('[overwolf-service] Got extension info', callbackInfo);
+				resolve(callbackInfo);
+			});
+		});
+	}
+
+	public async setExtensionInfo(info): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.extensions.setInfo(info);
+			resolve();
+		});
+	}
+
+	public async registerInfo(id: string, eventsCallback): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.extensions.registerInfo(id, eventsCallback, () => {
+				resolve();
+			});
+		});
+	}
+
+	public async setShelfStatusReady(): Promise<any> {
+		return new Promise<any>(resolve => {
+			if (!overwolf || !overwolf.egs || !overwolf.egs.setStatus) {
+				setTimeout(() => {
+					console.log('egs.setStatus not ready yet, waiting');
+					this.setShelfStatusReady();
+				}, 100);
+				return;
+			}
+
+			console.log('sending shelf ready message');
+			// Start loading the shelf page
+			overwolf.egs.setStatus(overwolf.egs.enums.ShelfStatus.Ready, (result: any) => {
+				console.log('confirmed ready', result);
+				resolve();
+			});
+		});
+	}
+
 	public async isManastormRunning(): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
-			overwolf.extensions.getRunningState('kfnacgfblhkjdgcndfdobooemjaapcefaminngbk', (res: any) => {
+			overwolf.extensions.getRunningState(OverwolfService.MANASTORM_ID, (res: any) => {
 				console.warn('[overwolf-service] is Manastorm running?', res);
 				resolve(res);
 			});

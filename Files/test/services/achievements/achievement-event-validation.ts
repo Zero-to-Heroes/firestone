@@ -113,7 +113,7 @@ export const achievementsValidation = async (
 	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
 	// 		challenge.requirements.forEach(req => {
 	// 			if (!req.isCompleted()) {
-	// 				console.debug('req not completed', req);
+	// 				console.debug('req not completed', Object.assign({}, req, { cards: undefined }));
 	// 			}
 	// 		});
 	// 	});

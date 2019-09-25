@@ -13,6 +13,7 @@ import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
 import { Events } from '../../events.service';
+import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { SimpleIOService } from '../../plugins/simple-io.service';
@@ -50,7 +51,9 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { MatchStatsAvailableEvent } from './events/stats/match-stats-available-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
+import { ShowMatchStatsEvent } from './events/stats/show-match-stats-event';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
 import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
@@ -84,7 +87,9 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { MatchStatsAvailableProcessor } from './processors/stats/match-stats-available-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
+import { ShowMatchStatsProcessor } from './processors/stats/show-match-stats-processor';
 import { StateHistory } from './state-history';
 
 const MAX_HISTORY_SIZE = 30;
@@ -121,6 +126,7 @@ export class MainWindowStoreService {
 		private memoryReading: MemoryInspectionService,
 		private events: Events,
 		private pityTimer: PackHistoryService,
+		private notifs: OwNotificationsService,
 	) {
 		window['mainWindowStore'] = this.stateEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
@@ -318,8 +324,15 @@ export class MainWindowStoreService {
 			CloseSocialShareModalEvent.eventName(),
 			new CloseSocialShareModalProcessor(),
 
+			// Stats
 			RecomputeGameStatsEvent.eventName(),
 			new RecomputeGameStatsProcessor(this.gameStatsUpdater),
+
+			MatchStatsAvailableEvent.eventName(),
+			new MatchStatsAvailableProcessor(this.notifs),
+
+			ShowMatchStatsEvent.eventName(),
+			new ShowMatchStatsProcessor(),
 		);
 	}
 
