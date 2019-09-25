@@ -29,7 +29,19 @@ declare var ga: any;
 	template: `
 		<div class="top" *ngIf="state">
 			<div class="root">
-				<div class="app-container"></div>
+				<div class="app-container">
+					<div class="title">Match Summary</div>
+					<div class="content-container">
+						<match-stats-menu [selectedMenu]="state.currentStat"></match-stats-menu>
+						<div class="main-zone">
+							<game-replay
+								[ngClass]="{ 'active': state.currentStat === 'replay' }"
+								[replayKey]="state.matchStats ? state.matchStats.replayKey : undefined"
+								[reviewId]="state.matchStats ? state.matchStats.reviewId : undefined"
+							></game-replay>
+						</div>
+					</div>
+				</div>
 
 				<i class="i-54 gold-theme corner top-left">
 					<svg class="svg-icon-fill">
@@ -173,7 +185,7 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			const window = await this.ow.getCurrentWindow();
 			if (window.isVisible) {
 				console.log('first time init ads, creating OwAd');
-				this.adRef = new OwAd(document.getElementById('ad-div'));
+				this.adRef = new OwAd(document.getElementById('ad-div'), { width: 300, height: 250 });
 				this.impressionListener = data => {
 					ga('send', 'event', 'ad', 'loading-window');
 				};

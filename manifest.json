@@ -151,7 +151,8 @@
         "https://api.twitch.tv",
         "https://localhost",
         "https://*.firestoneapp.com",
-        "http://*.amazonaws.com"
+        "http://*.amazonaws.com",
+        "https://*.amazonaws.com"
       ]
     },
     "extra-objects": {

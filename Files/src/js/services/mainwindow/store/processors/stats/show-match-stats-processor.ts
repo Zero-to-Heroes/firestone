@@ -9,10 +9,12 @@ export class ShowMatchStatsProcessor implements Processor {
 	constructor() {}
 
 	public async process(event: ShowMatchStatsEvent, currentState: MainWindowState): Promise<MainWindowState> {
+		console.log('showmatchstatsevent', event);
 		const matchStat: MatchStats = this.findMatchStat(currentState.stats, event.reviewId);
 		const newState = Object.assign(new MatchStatsState(), currentState.matchStats, {
 			visible: true,
 			matchStats: matchStat,
+			currentStat: 'replay',
 		} as MatchStatsState);
 		console.log('showing match stats', event, newState);
 		return Object.assign(new MainWindowState(), currentState, {

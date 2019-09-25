@@ -4,6 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init } from '@sentry/browser';
+import { GameReplayComponent } from '../../components/match-stats/game-replay/game-replay.component';
+import { MatchStatsMenuComponent } from '../../components/match-stats/match-stats-menu.component';
 import { MatchStatsWindowComponent } from '../../components/match-stats/match-stats-window.component';
 import { AdService } from '../../services/ad.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
@@ -27,7 +29,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SharedModule,
 		SharedServicesModule.forRoot(),
 	],
-	declarations: [MatchStatsWindowComponent],
+	declarations: [MatchStatsWindowComponent, GameReplayComponent, MatchStatsMenuComponent],
 	bootstrap: [MatchStatsWindowComponent],
 	providers: [AdService],
 })
