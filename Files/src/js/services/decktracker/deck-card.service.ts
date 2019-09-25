@@ -26,7 +26,7 @@ export class DeckCardService {
 	}
 
 	private fillZone(zone: readonly DeckCard[]): readonly DeckCard[] {
-		return zone ? zone.map(card => this.doFillCard(card)) : zone;
+		return zone ? zone.map(card => (card.cardId ? this.doFillCard(card) : card)) : zone;
 	}
 
 	// private tryFillCard(card: DeckCard): DeckCard {
