@@ -81,9 +81,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
 			console.log('state changed, resizing and repositioning', message);
-			// if (message.resolutionChanged) {
 			this.resize();
-			// }
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
