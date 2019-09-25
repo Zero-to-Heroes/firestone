@@ -1,8 +1,8 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Map } from 'immutable';
 import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../../services/events.service';
-import { Map } from 'immutable';
 
 @Component({
 	selector: 'state-mouse-over',
@@ -56,17 +56,44 @@ export class StateMouseOverComponent {
 
 	handRotation(i: number) {
 		const totalCards = this.bottomHandCards.length;
+		if (
+			!this.handAdjustment ||
+			!this.handAdjustment.has(totalCards) ||
+			!this.handAdjustment.get(totalCards, Adjustment.create()).handRotation ||
+			!this.handAdjustment.get(totalCards, Adjustment.create()).handRotation.has(i)
+		) {
+			// this.logger.warn('could not get handrotation', i);
+			return `rotate(0deg)`;
+		}
 		const rotation = this.handAdjustment.get(totalCards, Adjustment.create()).handRotation.get(i, 0);
 		return `rotate(${rotation}deg)`;
 	}
 
 	handPositionLeft(i: number) {
 		const totalCards = this.bottomHandCards.length;
+		if (
+			!this.handAdjustment ||
+			!this.handAdjustment.has(totalCards) ||
+			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft ||
+			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft.has(i)
+		) {
+			// this.logger.warn('could not get handPositionLeft', i);
+			return `rotate(0deg)`;
+		}
 		return this.handAdjustment.get(totalCards, Adjustment.create()).handPositionLeft.get(i, 0);
 	}
 
 	handPositionTop(i: number) {
 		const totalCards = this.bottomHandCards.length;
+		if (
+			!this.handAdjustment ||
+			!this.handAdjustment.has(totalCards) ||
+			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop ||
+			!this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop.has(i)
+		) {
+			// this.logger.warn('could not get handPositionTop', i);
+			return `rotate(0deg)`;
+		}
 		return this.handAdjustment.get(totalCards, Adjustment.create()).handPositionTop.get(i, 0);
 	}
 

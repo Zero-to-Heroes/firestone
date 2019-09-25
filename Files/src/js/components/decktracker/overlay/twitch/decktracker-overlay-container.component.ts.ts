@@ -15,7 +15,7 @@ import { Events } from '../../../../services/events.service';
 import fakeState from './gameState.json';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck';
-// const EBS_URL = 'http://localhost:8081/deck';
+// const EBS_URL = 'https://localhost:8081/deck';
 
 @Component({
 	selector: 'decktracker-overlay-container',
@@ -81,6 +81,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDe
 				}
 			}, 200);
 		});
+		console.log('hop hop hop hop hop');
 	}
 
 	ngAfterViewInit() {
@@ -92,18 +93,15 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDe
 		this.twitch = (window as any).Twitch.ext;
 		// this.twitch.onContext((context, contextfields) => console.log('oncontext', context, contextfields));
 		this.twitch.onAuthorized(auth => {
-			console.debug('on authorized debug', auth);
 			console.log('on authorized', auth);
-			console.warn('on authorized war,', auth);
-			console.error('on authorized error', auth);
 			this.token = auth.token;
 			console.log('set token', this.token);
 			this.fetchInitialState();
-		});
-		this.twitch.listen('broadcast', (target, contentType, event) => {
-			const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
-			console.log('received event', deckEvent);
-			this.processEvent(deckEvent);
+			this.twitch.listen('broadcast', (target, contentType, event) => {
+				const deckEvent = JSON.parse(inflate(event, { to: 'string' }));
+				console.log('received event', deckEvent);
+				this.processEvent(deckEvent);
+			});
 		});
 		console.log('init done');
 		// this.addDebugGameState();
@@ -160,11 +158,9 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDe
 				break;
 			default:
 				console.log('received deck event');
-				if (event.state.playerDeck.deckList.length > 0) {
-					this.gameState = event.state;
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
-					}
+				this.gameState = event.state;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
 				}
 				break;
 		}
