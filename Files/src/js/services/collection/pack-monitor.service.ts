@@ -189,13 +189,13 @@ export class PackMonitor {
 			});
 			return;
 		}
-		console.log('matching card position', ret);
+		// console.log('matching card position', ret);
 
 		callback(ret);
 	}
 
 	private detectRevealedCard(i: number) {
-		console.log('[pack-monitor] preparing to detect revealed card');
+		// console.log('[pack-monitor] preparing to detect revealed card');
 		if (this.busy) {
 			setTimeout(() => {
 				this.detectRevealedCard(i);
