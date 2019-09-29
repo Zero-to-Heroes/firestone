@@ -94,7 +94,7 @@ export class GameEvents {
 				this.gameEventsEmitter.onGameStart.next(event);
 				break;
 			case 'MATCH_METADATA':
-				console.log(gameEvent.Type + ' event');
+				console.log(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MATCH_METADATA,
@@ -166,6 +166,7 @@ export class GameEvents {
 				);
 				break;
 			case 'RUMBLE_RUN_STEP':
+				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.RUMBLE_RUN_STEP,
@@ -176,6 +177,7 @@ export class GameEvents {
 				);
 				break;
 			case 'DUNGEON_RUN_STEP':
+				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.DUNGEON_RUN_STEP,
@@ -186,6 +188,7 @@ export class GameEvents {
 				);
 				break;
 			case 'MONSTER_HUNT_STEP':
+				console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.MONSTER_HUNT_STEP,
@@ -196,21 +199,27 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_PLAYED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent));
 				break;
 			case 'DISCARD_CARD':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DISCARD_CARD, gameEvent));
 				break;
 			case 'MINION_DIED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_DIED, gameEvent));
 				break;
 			case 'RECRUIT_CARD':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
 				break;
 			case 'SECRET_PLAYED_FROM_DECK':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
 				break;
 			case 'MINION_SUMMONED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
 					? {
 							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
@@ -221,15 +230,18 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent));
 				break;
 			case 'END_OF_ECHO_IN_HAND':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
 				break;
 			case 'CREATE_CARD_IN_DECK':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
@@ -237,18 +249,23 @@ export class GameEvents {
 				);
 				break;
 			case 'SECRET_PLAYED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
 				break;
 			case 'SECRET_TRIGGERED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_TRIGGERED, gameEvent));
 				break;
 			case 'DEATHRATTLE_TRIGGERED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DEATHRATTLE_TRIGGERED, gameEvent));
 				break;
 			case 'CARD_DRAW_FROM_DECK':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent));
 				break;
 			case 'CARD_BACK_TO_DECK':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_BACK_TO_DECK, gameEvent, {
 						initialZone: gameEvent.Value.AdditionalProps.InitialZone,
@@ -256,18 +273,22 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_REMOVED_FROM_DECK':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_DECK, gameEvent));
 				break;
 			case 'CARD_REMOVED_FROM_HAND':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
 				break;
 			case 'BURNED_CARD':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.BURNED_CARD, gameEvent));
 				break;
 			case 'MULLIGAN_INITIAL_OPTION':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MULLIGAN_INITIAL_OPTION, gameEvent));
 				break;
 			case 'CARD_ON_BOARD_AT_GAME_START':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				const additionalProps = gameEvent.Value.AdditionalProps
 					? {
 							health: gameEvent.Value.AdditionalProps.Health,
@@ -278,6 +299,7 @@ export class GameEvents {
 				);
 				break;
 			case 'CARD_STOLEN':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CARD_STOLEN, gameEvent, {
 						newControllerId: gameEvent.Value.AdditionalProps.newControllerId,
@@ -288,6 +310,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.FIRST_PLAYER, gameEvent));
 				break;
 			case 'PASSIVE_BUFF':
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.PASSIVE_BUFF, gameEvent));
 				break;
 			case 'MINION_ON_BOARD_ATTACK_UPDATED':
@@ -351,6 +374,7 @@ export class GameEvents {
 				);
 				break;
 			case 'TURN_START':
+				console.log(gameEvent.Type + ' event', gameEvent.Value);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
