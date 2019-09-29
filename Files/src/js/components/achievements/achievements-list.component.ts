@@ -157,7 +157,9 @@ export class AchievementsListComponent implements AfterViewInit {
 			const achievementToShow: Element = this.el.nativeElement.querySelector(
 				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
 			);
-			achievementToShow.scrollIntoView(true);
+			if (achievementToShow) {
+				achievementToShow.scrollIntoView(true);
+			}
 		}
 		this._selectedAchievementId = selectedAchievementId;
 	}
