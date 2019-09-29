@@ -113,12 +113,12 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent)) {
-					this.logger.debug(
-						'[game-state] will apply parser',
-						parser.event(),
-						gameEvent.cardId,
-						gameEvent.entityId,
-					);
+					// this.logger.debug(
+					// 	'[game-state] will apply parser',
+					// 	parser.event(),
+					// 	gameEvent.cardId,
+					// 	gameEvent.entityId,
+					// );
 					const stateAfterParser = parser.parse(this.state, gameEvent);
 					if (!stateAfterParser) {
 						this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
