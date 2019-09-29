@@ -164,7 +164,7 @@ export class AllCardsService {
 
 	public getCard(id: string): any {
 		const found = this.allCards.find(card => card.id === id);
-		if (!found) {
+		if (id && !found) {
 			console.error('Could not find card in json database', id);
 		}
 		return found;
