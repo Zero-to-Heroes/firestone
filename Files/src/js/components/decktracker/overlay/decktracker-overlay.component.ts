@@ -183,6 +183,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 
+		await this.changeWindowSize();
+		await this.changeWindowPosition();
 		this.handleDisplayPreferences();
 		this.handleDisplaySize();
 		if (!(this.cdr as ViewRef).destroyed) {

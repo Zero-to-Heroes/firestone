@@ -21,8 +21,8 @@ export class MatchSummaryService {
 
 	private async init() {
 		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
+			this.logger.debug('[match-summary] received manastorm info update', result);
 			const info: ManastormInfo = JSON.parse(result.info);
-			this.logger.debug('[match-summary] received manastorm info update', result, info);
 			// Here, regularly query the server for the match stats
 			this.queryServerForStats(info.reviewId, 30);
 		});
