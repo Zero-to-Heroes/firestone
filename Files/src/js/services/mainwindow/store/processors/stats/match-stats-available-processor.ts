@@ -5,7 +5,6 @@ import { MatchStats } from '../../../../../models/mainwindow/stats/match-stats';
 import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { OwNotificationsService } from '../../../../notifications.service';
 import { MatchStatsAvailableEvent } from '../../events/stats/match-stats-available-event';
-import { ShowMatchStatsEvent } from '../../events/stats/show-match-stats-event';
 import { Processor } from '../processor';
 
 export class MatchStatsAvailableProcessor implements Processor {
@@ -59,13 +58,13 @@ export class MatchStatsAvailableProcessor implements Processor {
 					</svg>
 				</button>
 			</div>`;
-		this.notifs.emitNewNotification({
-			notificationId: `game-replay-saved-${stats.reviewId}`,
-			content: content,
-			type: 'game-replay-saved',
-			app: 'decktracker',
-			timeout: 5000,
-			eventToSendOnClick: () => new ShowMatchStatsEvent(stats.reviewId),
-		});
+		// this.notifs.emitNewNotification({
+		// 	notificationId: `game-replay-saved-${stats.reviewId}`,
+		// 	content: content,
+		// 	type: 'game-replay-saved',
+		// 	app: 'decktracker',
+		// 	timeout: 5000,
+		// 	eventToSendOnClick: () => new ShowMatchStatsEvent(stats.reviewId),
+		// });
 	}
 }
