@@ -8,6 +8,7 @@
 	height: 26px;
 	position: relative;
 	min-width: 250px;
+	max-width: 250px;
 	overflow: hidden;
 
 	.background-image {
@@ -65,6 +66,10 @@
 		justify-content: flex-start;
 		padding-left: 10px;
 		z-index: 1;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		width: 130px;
 
 		span {
 			font-family: Open Sans;
