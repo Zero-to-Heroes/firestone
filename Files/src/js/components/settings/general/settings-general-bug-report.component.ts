@@ -1,6 +1,7 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-import { LogsUploaderService } from '../../../services/logs-uploader.service';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { LogsUploaderService } from '../../../services/logs-uploader.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazonaws.com/Prod/feedback';
 
@@ -39,7 +40,12 @@ export class SettingsGeneralBugReportComponent {
 	body: string;
 	status: string;
 
-	constructor(private logService: LogsUploaderService, private cdr: ChangeDetectorRef, private http: HttpClient) {}
+	constructor(
+		private logService: LogsUploaderService,
+		private ow: OverwolfService,
+		private cdr: ChangeDetectorRef,
+		private http: HttpClient,
+	) {}
 
 	onBodyChange(newBody: string) {
 		this.body = newBody;
@@ -57,13 +63,15 @@ export class SettingsGeneralBugReportComponent {
 			this.cdr.detectChanges();
 		}
 		try {
-			const [appLogs, gameLogs] = await Promise.all([
+			const [appLogs, gameLogs, currentUser] = await Promise.all([
 				this.logService.uploadAppLogs(),
 				this.logService.uploadGameLogs(),
+				this.ow.getCurrentUser(),
 			]);
 			const submission = {
 				email: this.email,
 				message: this.body,
+				user: currentUser ? currentUser.username || currentUser.userId || currentUser.machineId : undefined,
 				appLogsKey: appLogs,
 				gameLogsKey: gameLogs,
 			};
