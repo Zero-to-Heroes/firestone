@@ -29,6 +29,12 @@ export class DeckManipulationHelper {
 	}
 
 	public static addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard): readonly DeckCard[] {
+		// Safeguard to not add twice the same card to the zone
+		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
+		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
+		if (zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
+			return zone;
+		}
 		const newCard = Object.assign(new DeckCard(), {
 			cardId: cardTemplate.cardId,
 			entityId: cardTemplate.entityId,
