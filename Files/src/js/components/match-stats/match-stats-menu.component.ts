@@ -5,7 +5,7 @@ import { MatchStatsCurrentStat } from '../../models/mainwindow/stats/current-sta
 	selector: 'match-stats-menu',
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
-		`../../../css/component/settings/decktracker/settings-decktracker-menu.component.scss`,
+		`../../../css/component/match-stats/match-stats-menu.component.scss`,
 	],
 	template: `
 		<ul class="match-stats-menu">

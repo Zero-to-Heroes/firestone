@@ -5,7 +5,6 @@ import {
 	Component,
 	HostListener,
 	OnDestroy,
-	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
@@ -25,12 +24,20 @@ declare var ga: any;
 		`../../../css/global/components-global.scss`,
 		`../../../css/component/match-stats/match-stats-window.component.scss`,
 	],
-	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="top" *ngIf="state">
 			<div class="root">
 				<div class="app-container">
-					<div class="title">Match Summary</div>
+					<section class="menu-bar">
+						<div class="title">Match Summary</div>
+						<div class="controls">
+							<control-bug></control-bug>
+							<control-discord></control-discord>
+							<control-minimize [windowId]="windowId"></control-minimize>
+							<control-maximize [windowId]="windowId"></control-maximize>
+							<control-close [windowId]="windowId"></control-close>
+						</div>
+					</section>
 					<div class="content-container">
 						<match-stats-menu [selectedMenu]="state.currentStat"></match-stats-menu>
 						<div class="main-zone">
@@ -161,7 +168,7 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 		if (!adsReady || !OwAd) {
-			console.log('ads container not ready, returning');
+			console.log('ads container not ready, returning', adsReady, OwAd);
 			setTimeout(() => {
 				this.refreshAds();
 			}, 1000);

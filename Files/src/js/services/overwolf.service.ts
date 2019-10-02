@@ -525,6 +525,10 @@ export class OverwolfService {
 
 	public async getActiveSubscriptionPlans(): Promise<ActiveSubscriptionPlan> {
 		return new Promise<ActiveSubscriptionPlan>(resolve => {
+			if (!overwolf.profile.subscriptions) {
+				resolve({} as ActiveSubscriptionPlan);
+				return;
+			}
 			overwolf.profile.subscriptions.getActivePlans((res: ActiveSubscriptionPlan) => {
 				console.log('[overwolf-service] ActiveSubscriptionPlan', res);
 				resolve(res);

@@ -9,7 +9,6 @@
 .game-replay {
 	display: flex;
 	height: 100%;
-	background: white;
 }
 
 .close-button {
@@ -21,10 +20,10 @@
 
 .external-player {
 	width: 100%;
-	background: white;
 }
 
 ::ng-deep {
+	--foreground-third: red:
 	.player-controls-content-left {
 		.divider,
 		.discuss {

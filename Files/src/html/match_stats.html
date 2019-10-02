@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%;width: 100%;">
 	<head>
 		<!-- Google Analytics -->
 		<script>
@@ -110,14 +110,19 @@
 				width: 100%;
 				overflow-y: scroll;
 			}
+			.help-tooltip {
+				color: #101530 !important;
+				background: #9fb6d7 !important;
+			}
 		</style>
 	</head>
 
-	<body>
+	<body style="height: 100%;width: 100%;">
 		<match-stats-window></match-stats-window>
 
 		<script>
 			function onOwAdReady() {
+				console.log('ads ready');
 				adsReady = true;
 			}
 		</script>

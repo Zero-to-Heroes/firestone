@@ -63,9 +63,11 @@ body {
 		overflow: hidden;
 		background-size: 100%;
 		background-repeat: round;
-		background-image: radial-gradient(340px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%),
+		background-image: radial-gradient(44.58% 50% at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
 			url('/Files/assets/images/backgrounds/achievements_bg.jpg');
-		outline: 1px solid #4b3052;
+		outline: 1px solid #303352;
+		padding: 10px;
+		z-index: 1;
 
 		.content-container {
 			position: relative;
@@ -76,12 +78,51 @@ body {
 
 		match-stats-menu {
 			width: 320px;
-			border-right: 1px solid #4b3052;
+			border-right: 1px solid #303352;
 		}
 
 		.main-zone {
 			flex-grow: 1;
 			position: relative;
+			margin-left: 15px;
+		}
+	}
+
+	.menu-bar {
+		display: flex;
+		margin-top: 5px;
+		margin-bottom: 15px;
+	}
+
+	.title {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 24px;
+		line-height: 22px;
+		color: #ffb948;
+		flex-grow: 1;
+		text-align: center;
+	}
+
+	.controls {
+		display: flex;
+		position: relative;
+		top: -10px;
+
+		::ng-deep button,
+		::ng-deep a {
+			--icon-color: #9fb6d7;
+			color: #9fb6d7;
+
+			&:hover {
+				background: #303352;
+
+				&.close-button {
+					color: #101530;
+					background: #9fb6d7;
+				}
+			}
 		}
 	}
 }
@@ -89,8 +130,8 @@ body {
 .ads-container {
 	width: 300px;
 	height: 250px;
-	left: 15px;
-	bottom: 15px;
+	left: 20px;
+	bottom: 20px;
 	position: absolute;
 
 	.no-ads-placeholder {
@@ -100,12 +141,12 @@ body {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: #190505;
+		background-color: #07081f;
 
 		.logo {
 			width: 109px;
 			height: 154px;
-			color: #2a1030;
+			color: #101530;
 		}
 	}
 
