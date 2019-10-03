@@ -332,6 +332,13 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'HEALTH_DEF_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.HEALTH_DEF_CHANGED, gameEvent, {
+						newHealth: gameEvent.Value.NewHealth,
+					}),
+				);
+				break;
 			case 'FATIGUE_DAMAGE':
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {

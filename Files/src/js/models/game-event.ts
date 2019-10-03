@@ -40,6 +40,7 @@ export class GameEvent {
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';
 	public static readonly MINION_ON_BOARD_ATTACK_UPDATED = 'MINION_ON_BOARD_ATTACK_UPDATED';
 	public static readonly ARMOR_CHANGED = 'ARMOR_CHANGED';
+	public static readonly HEALTH_DEF_CHANGED = 'HEALTH_DEF_CHANGED';
 	public static readonly FATIGUE_DAMAGE = 'FATIGUE_DAMAGE';
 	public static readonly DAMAGE = 'DAMAGE';
 	public static readonly HEALING = 'HEALING';

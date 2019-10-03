@@ -4,6 +4,7 @@ import { Requirement } from './_requirement';
 
 export class CorrectStartingHealthReq implements Requirement {
 	private isCorrectStartingHealth: boolean;
+	private hasDefChangeOccured: boolean;
 
 	constructor(private readonly targetCardId: string, private readonly targetStartingHealth: number) {}
 
@@ -16,10 +17,12 @@ export class CorrectStartingHealthReq implements Requirement {
 
 	reset(): void {
 		this.isCorrectStartingHealth = undefined;
+		this.hasDefChangeOccured = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isCorrectStartingHealth = undefined;
+		this.hasDefChangeOccured = undefined;
 	}
 
 	isCompleted(): boolean {
@@ -31,15 +34,27 @@ export class CorrectStartingHealthReq implements Requirement {
 			this.handleEvent(gameEvent);
 			return;
 		}
+		if (gameEvent.type === GameEvent.HEALTH_DEF_CHANGED) {
+			this.handleDefChangeEvent(gameEvent);
+			return;
+		}
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
 		if (
 			gameEvent.cardId === this.targetCardId &&
 			gameEvent.additionalData &&
-			gameEvent.additionalData.health === this.targetStartingHealth
+			gameEvent.additionalData.health === this.targetStartingHealth &&
+			!this.hasDefChangeOccured
 		) {
 			this.isCorrectStartingHealth = true;
+		}
+	}
+
+	private handleDefChangeEvent(gameEvent: GameEvent) {
+		if (gameEvent.cardId === this.targetCardId && !this.hasDefChangeOccured) {
+			this.hasDefChangeOccured = true;
+			this.isCorrectStartingHealth = gameEvent.additionalData.newHealth === this.targetStartingHealth;
 		}
 	}
 }
