@@ -20,6 +20,7 @@ export class MatchSummaryService {
 	}
 
 	private async init() {
+		// TODO:
 		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
 			this.logger.debug('[match-summary] received manastorm info update', result);
 			const info: ManastormInfo = JSON.parse(result.info);
@@ -35,11 +36,11 @@ export class MatchSummaryService {
 		}
 		this.http.get(`${MATCH_STATS_ENDPOINT}/${reviewId}`).subscribe(
 			(data: any) => {
-				this.logger.debug('[match-summary] received stats', data);
 				if (!data || !data.results || data.results.length === 0) {
 					setTimeout(() => this.queryServerForStats(reviewId, retriesLeft - 1), 1000);
 					return;
 				}
+				this.logger.debug('[match-summary] received stats', data);
 				const stats: MatchStats = data.results ? data.results[0] : undefined;
 				this.store.stateUpdater.next(new MatchStatsAvailableEvent(stats));
 			},

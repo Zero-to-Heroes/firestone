@@ -25,6 +25,7 @@ import { ProcessingQueue } from '../services/processing-queue.service';
 		'../../css/global/components-global.scss',
 		'../../css/component/notifications/notifications.component.scss',
 		'../../css/component/notifications/notifications-achievements.scss',
+		'../../css/component/notifications/notifications-decktracker.scss',
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `

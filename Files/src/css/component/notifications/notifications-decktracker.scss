@@ -1,0 +1,56 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.decktracker-message-container {
+	display: flex;
+	align-items: center;
+	background-image: radial-gradient(44.58% 50% at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+		url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+	background-size: 100%;
+	background-position: center center;
+	outline: 1px solid #4b3052;
+	width: 300px;
+	height: 80px;
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
+	padding: 15px;
+
+	.message {
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			@extend %achievement-name;
+			display: flex;
+			align-items: center;
+
+			i {
+				--icon-color: #ffb948;
+				margin-right: 10px;
+			}
+		}
+
+		.text {
+			@extend %achievements-notification-text;
+			margin-top: 3px;
+		}
+
+		.recap-text {
+			@extend %achievements-recap-text;
+			margin-top: 5px;
+			position: relative;
+			color: #a89782;
+		}
+	}
+
+	.close-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		--icon-color: #9fb6d7;
+
+		&:hover {
+			color: #101530;
+			background: #9fb6d7;
+		}
+	}
+}

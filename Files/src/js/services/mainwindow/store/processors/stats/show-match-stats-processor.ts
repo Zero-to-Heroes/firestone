@@ -9,7 +9,7 @@ export class ShowMatchStatsProcessor implements Processor {
 	constructor() {}
 
 	public async process(event: ShowMatchStatsEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		console.log('showmatchstatsevent', event);
+		console.log('showmatchstatsevent', event, currentState);
 		const matchStat: MatchStats = this.findMatchStat(currentState.stats, event.reviewId);
 		const newState = Object.assign(new MatchStatsState(), currentState.matchStats, {
 			visible: true,
@@ -23,6 +23,7 @@ export class ShowMatchStatsProcessor implements Processor {
 	}
 
 	private findMatchStat(stats: StatsState, reviewId: string): MatchStats {
+		console.log('finding match stats', stats, reviewId);
 		return stats.gameStats.stats.find(stat => stat.matchStat && stat.matchStat.reviewId === reviewId).matchStat;
 	}
 }
