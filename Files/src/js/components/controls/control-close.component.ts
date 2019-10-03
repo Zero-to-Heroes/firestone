@@ -34,6 +34,7 @@ export class ControlCloseComponent implements AfterViewInit {
 	@Input() windowId: string;
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
+	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -46,6 +47,11 @@ export class ControlCloseComponent implements AfterViewInit {
 	async closeWindow() {
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
+		}
+		// Delegate all the logic
+		if (this.eventProvider) {
+			this.stateUpdater.next(this.eventProvider());
+			return;
 		}
 		// If game is not running, we close all other windows
 		const isRunning: boolean = await this.ow.inGame();

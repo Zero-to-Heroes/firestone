@@ -356,9 +356,14 @@ export class OverwolfService {
 
 	public async getCurrentWindow(): Promise<any> {
 		return new Promise<any>(resolve => {
-			overwolf.windows.getCurrentWindow((res: any) => {
-				resolve(res.window);
-			});
+			try {
+				overwolf.windows.getCurrentWindow((res: any) => {
+					resolve(res.window);
+				});
+			} catch (e) {
+				console.warn('Exception while getting current window window');
+				resolve(null);
+			}
 		});
 	}
 

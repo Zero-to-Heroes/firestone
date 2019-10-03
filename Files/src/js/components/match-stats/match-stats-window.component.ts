@@ -12,6 +12,10 @@ import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { MatchStatsState } from '../../models/mainwindow/stats/match-stats-state';
 import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { CloseMatchStatsWindowEvent } from '../../services/mainwindow/store/events/stats/close-match-stats-window-event';
+import { MaximizeMatchStatsWindowEvent } from '../../services/mainwindow/store/events/stats/maximize-match-stats-window-event';
+import { MinimizeMatchStatsWindowEvent } from '../../services/mainwindow/store/events/stats/minimize-match-stats-window-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 declare var adsReady: any;
@@ -33,9 +37,15 @@ declare var ga: any;
 						<div class="controls">
 							<control-bug></control-bug>
 							<control-discord></control-discord>
-							<control-minimize [windowId]="windowId"></control-minimize>
-							<control-maximize [windowId]="windowId"></control-maximize>
-							<control-close [windowId]="windowId"></control-close>
+							<control-minimize
+								[windowId]="windowId"
+								[eventProvider]="minimizeEventProvider"
+							></control-minimize>
+							<control-maximize
+								[windowId]="windowId"
+								[eventProvider]="maximizeEventProvider"
+							></control-maximize>
+							<control-close [windowId]="windowId" [eventProvider]="closeEventProvider"></control-close>
 						</div>
 					</section>
 					<div class="content-container">
@@ -90,6 +100,10 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 	state: MatchStatsState;
 	windowId: string;
 
+	closeEventProvider: () => MainWindowStoreEvent;
+	minimizeEventProvider: () => MainWindowStoreEvent;
+	maximizeEventProvider: () => MainWindowStoreEvent;
+
 	private isMaximized = false;
 	private adRef;
 	private adInit = false;
@@ -133,12 +147,24 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			} else if (!newState.visible && currentlyVisible) {
 				await this.ow.hideWindow(this.windowId);
 			}
+			if (newState.minimized) {
+				await this.ow.minimizeWindow(this.windowId);
+			}
+
+			if (newState.maximized) {
+				await this.ow.maximizeWindow(this.windowId);
+			} else if (this.state && this.state.maximized) {
+				await this.ow.restoreWindow(this.windowId);
+			}
 			console.log('updated state after event', newState);
 			this.state = newState;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
+		this.closeEventProvider = () => new CloseMatchStatsWindowEvent();
+		this.minimizeEventProvider = () => new MinimizeMatchStatsWindowEvent();
+		this.maximizeEventProvider = () => new MaximizeMatchStatsWindowEvent();
 		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
 		this.refreshAds();
 		ga('send', 'event', 'collection', 'show');
@@ -205,7 +231,7 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			this.adInit = false;
 			setTimeout(() => {
 				this.refreshAds();
-			}, 1000);
+			}, 2000);
 			return;
 		}
 		console.log('[main-window] refreshed ads');

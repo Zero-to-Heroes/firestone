@@ -51,7 +51,10 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { CloseMatchStatsWindowEvent } from './events/stats/close-match-stats-window-event';
 import { MatchStatsAvailableEvent } from './events/stats/match-stats-available-event';
+import { MaximizeMatchStatsWindowEvent } from './events/stats/maximize-match-stats-window-event';
+import { MinimizeMatchStatsWindowEvent } from './events/stats/minimize-match-stats-window-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { ShowMatchStatsEvent } from './events/stats/show-match-stats-event';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
@@ -87,7 +90,10 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { CloseMatchStatsWindowProcessor } from './processors/stats/close-match-stats-window-processor';
 import { MatchStatsAvailableProcessor } from './processors/stats/match-stats-available-processor';
+import { MaximizeMatchStatsWindowProcessor } from './processors/stats/maximize-match-stats-window-processor';
+import { MinimizeMatchStatsWindowProcessor } from './processors/stats/minimize-match-stats-window-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { ShowMatchStatsProcessor } from './processors/stats/show-match-stats-processor';
 import { StateHistory } from './state-history';
@@ -333,6 +339,15 @@ export class MainWindowStoreService {
 
 			ShowMatchStatsEvent.eventName(),
 			new ShowMatchStatsProcessor(),
+
+			CloseMatchStatsWindowEvent.eventName(),
+			new CloseMatchStatsWindowProcessor(),
+
+			MinimizeMatchStatsWindowEvent.eventName(),
+			new MinimizeMatchStatsWindowProcessor(),
+
+			MaximizeMatchStatsWindowEvent.eventName(),
+			new MaximizeMatchStatsWindowProcessor(),
 		);
 	}
 

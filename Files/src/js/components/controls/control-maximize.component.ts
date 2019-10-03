@@ -1,11 +1,14 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	EventEmitter,
 	Input,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -34,17 +37,26 @@ import { OverwolfService } from '../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlMaximizeComponent {
+export class ControlMaximizeComponent implements AfterViewInit {
 	@Input() windowId: string;
+	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	maximized = false;
 
-	// private previousWidth: number;
-	// private previousHeight: number;
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
+	ngAfterViewInit() {
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
 	async toggleMaximizeWindow() {
+		// Delegate all the logic
+		if (this.eventProvider) {
+			this.stateUpdater.next(this.eventProvider());
+			return;
+		}
 		if (this.maximized) {
 			await this.ow.restoreWindow(this.windowId);
 			this.maximized = false;

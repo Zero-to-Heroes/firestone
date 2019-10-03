@@ -33,6 +33,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class ControlMinimizeComponent implements AfterViewInit {
 	@Input() windowId: string;
 	@Input() isMainWindow: boolean;
+	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -45,6 +46,11 @@ export class ControlMinimizeComponent implements AfterViewInit {
 	minimizeWindow() {
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
+		}
+		// Delegate all the logic
+		if (this.eventProvider) {
+			this.stateUpdater.next(this.eventProvider());
+			return;
 		}
 		this.ow.minimizeWindow(this.windowId);
 	}
