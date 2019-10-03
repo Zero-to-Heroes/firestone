@@ -45,12 +45,23 @@ export class PopulateStoreProcessor implements Processor {
 			this.initializeSocialShareUserInfo(currentState.socialShareUserInfo),
 			this.initialiseGameStats(currentState.stats),
 		]);
+		// console.error('Adding fake game stats for dev purposes', stats);
+		// const matchStats = Object.assign(new MatchStatsState(), currentState.matchStats, {
+		// 	visible: true,
+		// 	matchStats: {
+		// 		id: 1285443,
+		// 		reviewId: '5d95de9ed500ca00017f2aff',
+		// 		replayKey: 'hearthstone/replay/2019/10/3/3d15b3cb-fcad-4b1a-a53d-a99d845a11a8',
+		// 	} as MatchStats,
+		// 	currentStat: 'replay',
+		// } as MatchStatsState);
 		console.log('[populate-store] almost done');
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: achievements,
 			binder: collection,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: stats,
+			// matchStats: matchStats,
 			isVisible: false,
 		} as MainWindowState);
 	}

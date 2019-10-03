@@ -22,11 +22,13 @@ export class GameReplayComponent implements OnInit, AfterViewInit {
 
 	@Input() set replayKey(value: string) {
 		this._replayKey = value;
+		this.logger.debug('[game-replay] set replayKey', value, this);
 		this.loadReplay();
 	}
 
 	@Input() set reviewId(value: string) {
 		this._reviewId = value;
+		this.logger.debug('[game-replay] set reviewId', value, this);
 		this.loadReplay();
 	}
 
@@ -57,6 +59,7 @@ export class GameReplayComponent implements OnInit, AfterViewInit {
 			this.resetGame();
 			return;
 		}
+		this.logger.debug('[game-replay] loading replay', this._replayKey, this._replayKey);
 		const replayXml = await this.loadReplayXml();
 		await this.reload(replayXml, this._reviewId);
 	}

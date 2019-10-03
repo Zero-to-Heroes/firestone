@@ -22,8 +22,19 @@
 	width: 100%;
 }
 
-::ng-deep {
-	--foreground-third: red:
+::ng-deep .coliseum.coliseum {
+	.player-controls-content {
+		color: #9fb6d7;
+		button {
+			color: #9fb6d7;
+			&:hover {
+				background: #303352;
+			}
+		}
+		.btn-gs-icon.toggled {
+			background: #303352;
+		}
+	}
 	.player-controls-content-left {
 		.divider,
 		.discuss {
@@ -31,6 +42,16 @@
 		}
 		.view-online {
 			width: auto;
+			&:hover {
+				background: #303352;
+				color: #9fb6d7;
+			}
 		}
+	}
+	.turn-narrator {
+		color: #9fb6d7;
+	}
+	.player-seeker-track {
+		--background-third: #9fb6d7;
 	}
 }
