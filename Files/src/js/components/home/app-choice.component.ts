@@ -25,7 +25,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 							<use xlink:href="/Files/assets/svg/sprite.svg#the_binder" />
 						</svg>
 					</i>
-					<span class="title">The Binder</span>
+					<span class="title">Collection</span>
 					<span class="sub-title">Deep dive into your card collection</span>
 					<div class="banner"></div>
 				</div>

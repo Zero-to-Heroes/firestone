@@ -1,14 +1,13 @@
 import {
-	Component,
-	ChangeDetectionStrategy,
-	ViewEncapsulation,
-	Input,
 	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
 	EventEmitter,
+	Input,
+	ViewEncapsulation,
 } from '@angular/core';
-
-import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/events/change-visible-application-event';
+import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { OverwolfService } from '../services/overwolf.service';
 	template: `
 		<ul class="menu-selection">
 			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
-				<span>The Binder</span>
+				<span>Collection</span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedModule === 'achievements' }"

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
 	selector: 'settings-app-selection',
@@ -13,7 +13,7 @@ import { Component, ChangeDetectionStrategy, Output, EventEmitter, Input } from 
 				<span>General</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedApp === 'collection' }" (mousedown)="changeSelection('collection')">
-				<span>The Binder</span>
+				<span>Collection</span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedApp === 'achievements' }"
