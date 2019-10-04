@@ -80,8 +80,9 @@ export class AchievementsNotificationService {
 		});
 	}
 
-	private async handleAchievementRecordCompleted(newAchievement: Achievement) {
-		const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
+	private async handleAchievementRecordCompleted(achievement: Achievement) {
+		this.logger.debug('[achievements-notification] in post-record notification');
+		// const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 		if (achievement.numberOfCompletions > 1) {
 			this.logger.debug(
 				'[achievements-notification] achievement already completed, not sending any notif',
