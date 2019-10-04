@@ -109,6 +109,7 @@ export class GameEvents {
 				// First try without waiting for a callback, which is most of the cases
 				const playerInfo =
 					this.playersInfoService.playerInfo || (await this.playersInfoService.getPlayerInfo());
+				console.log('LOCAL_PLAYER info', playerInfo);
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: playerInfo ? playerInfo.standardRank : undefined,
 					standardLegendRank: playerInfo ? playerInfo.standardLegendRank : undefined,
@@ -129,6 +130,7 @@ export class GameEvents {
 				console.log(gameEvent.Type + ' event');
 				const opponentInfo =
 					this.playersInfoService.opponentInfo || (await this.playersInfoService.getOpponentInfo());
+				console.log('OPPONENT_PLAYER info', opponentInfo);
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
 					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
