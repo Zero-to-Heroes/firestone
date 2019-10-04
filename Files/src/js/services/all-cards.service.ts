@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { ReferenceCard } from '../models/reference-cards/reference-card';
 import { Set, SetCard } from '../models/set';
 
 const CARDS_CDN_URL = 'https://static.zerotoheroes.com/hearthstone/jsoncards/cards.json';
@@ -162,7 +163,7 @@ export class AllCardsService {
 			});
 	}
 
-	public getCard(id: string): any {
+	public getCard(id: string): ReferenceCard {
 		const found = this.allCards.find(card => card.id === id);
 		if (id && !found) {
 			console.error('Could not find card in json database', id);
@@ -170,11 +171,11 @@ export class AllCardsService {
 		return found;
 	}
 
-	public getCardFromDbfId(dbfId: number): any {
+	public getCardFromDbfId(dbfId: number): ReferenceCard {
 		return this.allCards.find(card => card.dbfId === dbfId);
 	}
 
-	public getCardsFromDbfIds(dbfIds: number[]): any[] {
+	public getCardsFromDbfIds(dbfIds: number[]): ReferenceCard[] {
 		return this.allCards.filter(card => dbfIds.indexOf(card.dbfId) !== -1);
 	}
 

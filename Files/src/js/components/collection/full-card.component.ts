@@ -1,18 +1,16 @@
 import {
+	ChangeDetectionStrategy,
 	Component,
-	Output,
-	Input,
+	ElementRef,
 	EventEmitter,
 	HostListener,
+	Input,
+	Output,
 	ViewEncapsulation,
-	ChangeDetectionStrategy,
-	ElementRef,
 } from '@angular/core';
-
+import { SetCard } from '../../models/set';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
-
-import { SetCard } from '../../models/set';
 
 @Component({
 	selector: 'full-card',
@@ -118,13 +116,13 @@ export class FullCardComponent {
 				this.audioClips.push(audioClip);
 			});
 		}
-		card.ownedPremium = selectedCard.ownedPremium;
-		card.ownedNonPremium = selectedCard.ownedNonPremium;
-		card.owned = card.ownedPremium || card.ownedNonPremium;
+		this.card = card;
+		this.card.ownedPremium = selectedCard.ownedPremium;
+		this.card.ownedNonPremium = selectedCard.ownedNonPremium;
+		this.card.owned = this.card.ownedPremium || this.card.ownedNonPremium;
 		this.class = card.playerClass === 'Neutral' ? 'All classes' : card.playerClass;
 		this.type = card.type;
 		this.set = this.cards.setName(card.set);
-		this.card = card;
 		this.rarity = card.rarity;
 	}
 

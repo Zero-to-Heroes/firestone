@@ -1,9 +1,9 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { Set, SetCard } from '../../../../../models/set';
-import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
 import { AllCardsService } from '../../../../all-cards.service';
+import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
+import { Processor } from '../processor';
 
 export class ShowCardDetailsProcessor implements Processor {
 	constructor(private cards: AllCardsService) {}
@@ -30,7 +30,7 @@ export class ShowCardDetailsProcessor implements Processor {
 		let card = selectedSet.allCards.find(card => card.id === cardId);
 		if (!card) {
 			const rawCard = this.cards.getCard(cardId);
-			card = new SetCard(cardId, rawCard.name, rawCard.class, rawCard.rarity, rawCard.cost, 0, 0);
+			card = new SetCard(cardId, rawCard.name, rawCard.playerClass, rawCard.rarity, rawCard.cost, 0, 0);
 		}
 		return card;
 	}
