@@ -218,7 +218,7 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			const window = await this.ow.getCurrentWindow();
 			if (window.isVisible) {
 				console.log('first time init ads, creating OwAd');
-				this.adRef = new OwAd(document.getElementById('ad-div'), { width: 300, height: 250 });
+				this.adRef = new OwAd(document.getElementById('ad-div'));
 				this.impressionListener = data => {
 					ga('send', 'event', 'ad', 'loading-window');
 				};
