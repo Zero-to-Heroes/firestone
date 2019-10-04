@@ -11,11 +11,13 @@ import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
 import { CorrectStartingHealthReq } from '../requirements/correct-starting-health-req';
 import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DeathrattleTriggeredReq } from '../requirements/deathrattle-triggered-req';
+import { DeckbuildingCardAttributeReq } from '../requirements/deckbuilding/deckbuilding-card-attribute-req';
 import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
 import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-epic-req';
 import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
 import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuilding/deckbuilding-no-card-with-letter-in-name-req';
 import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
+import { DeckbuildingTypeReq } from '../requirements/deckbuilding/deckbuilding-type-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { ExcludedScenarioIdReq } from '../requirements/excluded-scenario-id-req';
 import { FatigueDamageReq } from '../requirements/fatigue-damage-req';
@@ -114,6 +116,8 @@ export class ChallengeBuilderService {
 			case 'DECK_CLASSIC': return DeckbuildingClassicReq.create(rawReq, this.cards);
 			case 'DECK_EPIC': return DeckbuildingEpicReq.create(rawReq, this.cards);
 			case 'DECK_MECHANIC': return DeckbuildingMechanicReq.create(rawReq, this.cards);
+			case 'DECK_TYPE': return DeckbuildingTypeReq.create(rawReq, this.cards);
+			case 'DECK_CARD_ATTRIBUTE_VALUE': return DeckbuildingCardAttributeReq.create(rawReq, this.cards);
 			case 'DECK_NO_CARD_WITH_LETTER_IN_NAME': return DeckbuildingNoCardWithLetterInNameReq.create(rawReq, this.cards);
 			case 'DECK_NUMBER_OF_MINIONS': 
 				console.debug(''); // No idea why I have to add this for jest to pick up the line

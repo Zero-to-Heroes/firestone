@@ -8,7 +8,7 @@
         "priority": -1,
         "displayName": "Achievement completed: Classic (rank 1)",
         "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only Classic and Basic cards at rank 1 or better",
+        "completedText": "Completed at rank 1 or better",
         "displayCardId": "CS2_127",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -53,7 +53,7 @@
         "priority": -10,
         "displayName": "Achievement completed: Classic (rank 10)",
         "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only Classic and Basic cards at rank 10 or better",
+        "completedText": "Completed at rank 10 or better",
         "displayCardId": "CS2_127",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -98,7 +98,7 @@
         "priority": -15,
         "displayName": "Achievement completed: Classic (rank 15)",
         "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only Classic and Basic cards at rank 15 or better",
+        "completedText": "Completed at rank 15 or better",
         "displayCardId": "CS2_127",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -143,7 +143,7 @@
         "priority": -20,
         "displayName": "Achievement completed: Classic (rank 20)",
         "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only Classic and Basic cards at rank 20 or better",
+        "completedText": "Completed at rank 20 or better",
         "displayCardId": "CS2_127",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -188,7 +188,7 @@
         "priority": -25,
         "displayName": "Achievement completed: Classic (rank 25)",
         "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only Classic and Basic cards at rank 25 or better",
+        "completedText": "Completed at rank 25 or better",
         "displayCardId": "CS2_127",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -233,7 +233,7 @@
         "priority": -5,
         "displayName": "Achievement completed: Classic (rank 5)",
         "emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only Classic and Basic cards at rank 5 or better",
+        "completedText": "Completed at rank 5 or better",
         "displayCardId": "CS2_127",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -278,7 +278,7 @@
         "priority": -1,
         "displayName": "Achievement completed: Epic (rank 1)",
         "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only epic cards at rank 1 or better",
+        "completedText": "Completed at rank 1 or better",
         "displayCardId": "TB_KTRAF_HP_RAF4",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -323,7 +323,7 @@
         "priority": -10,
         "displayName": "Achievement completed: Epic (rank 10)",
         "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only epic cards at rank 10 or better",
+        "completedText": "Completed at rank 10 or better",
         "displayCardId": "TB_KTRAF_HP_RAF4",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -368,7 +368,7 @@
         "priority": -15,
         "displayName": "Achievement completed: Epic (rank 15)",
         "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only epic cards at rank 15 or better",
+        "completedText": "Completed at rank 15 or better",
         "displayCardId": "TB_KTRAF_HP_RAF4",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -413,7 +413,7 @@
         "priority": -20,
         "displayName": "Achievement completed: Epic (rank 20)",
         "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only epic cards at rank 20 or better",
+        "completedText": "Completed at rank 20 or better",
         "displayCardId": "TB_KTRAF_HP_RAF4",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -458,7 +458,7 @@
         "priority": -25,
         "displayName": "Achievement completed: Epic (rank 25)",
         "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only epic cards at rank 25 or better",
+        "completedText": "Completed at rank 25 or better",
         "displayCardId": "TB_KTRAF_HP_RAF4",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -503,7 +503,7 @@
         "priority": -5,
         "displayName": "Achievement completed: Epic (rank 5)",
         "emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-        "completedText": "You won with a deck containing only epic cards at rank 5 or better",
+        "completedText": "Completed at rank 5 or better",
         "displayCardId": "TB_KTRAF_HP_RAF4",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -548,7 +548,7 @@
         "priority": -1,
         "displayName": "Achievement completed: Lifesteal (rank 1)",
         "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
-        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 1 or better",
+        "completedText": "Completed at rank 1 or better",
         "displayCardId": "DAL_047",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -598,7 +598,7 @@
         "priority": -10,
         "displayName": "Achievement completed: Lifesteal (rank 10)",
         "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
-        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 10 or better",
+        "completedText": "Completed at rank 10 or better",
         "displayCardId": "DAL_047",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -648,7 +648,7 @@
         "priority": -15,
         "displayName": "Achievement completed: Lifesteal (rank 15)",
         "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
-        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 15 or better",
+        "completedText": "Completed at rank 15 or better",
         "displayCardId": "DAL_047",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -698,7 +698,7 @@
         "priority": -20,
         "displayName": "Achievement completed: Lifesteal (rank 20)",
         "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
-        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 20 or better",
+        "completedText": "Completed at rank 20 or better",
         "displayCardId": "DAL_047",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -748,7 +748,7 @@
         "priority": -25,
         "displayName": "Achievement completed: Lifesteal (rank 25)",
         "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
-        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 25 or better",
+        "completedText": "Completed at rank 25 or better",
         "displayCardId": "DAL_047",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -798,7 +798,7 @@
         "priority": -5,
         "displayName": "Achievement completed: Lifesteal (rank 5)",
         "emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
-        "completedText": "You won with a deck containing at least 12 cards with lifesteal at rank 5 or better",
+        "completedText": "Completed at rank 5 or better",
         "displayCardId": "DAL_047",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -848,7 +848,7 @@
         "priority": -1,
         "displayName": "Achievement completed: So Quiet (rank 1)",
         "emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
-        "completedText": "You won with a deck containing at least 15 minions and no battlecry or deathrattle card at rank 1 or better",
+        "completedText": "Completed at rank 1 or better",
         "displayCardId": "LOE_077",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -913,7 +913,7 @@
         "priority": -10,
         "displayName": "Achievement completed: So Quiet (rank 10)",
         "emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
-        "completedText": "You won with a deck containing at least 15 minions and no battlecry or deathrattle card at rank 10 or better",
+        "completedText": "Completed at rank 10 or better",
         "displayCardId": "LOE_077",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -978,7 +978,7 @@
         "priority": -15,
         "displayName": "Achievement completed: So Quiet (rank 15)",
         "emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
-        "completedText": "You won with a deck containing at least 15 minions and no battlecry or deathrattle card at rank 15 or better",
+        "completedText": "Completed at rank 15 or better",
         "displayCardId": "LOE_077",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1043,7 +1043,7 @@
         "priority": -20,
         "displayName": "Achievement completed: So Quiet (rank 20)",
         "emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
-        "completedText": "You won with a deck containing at least 15 minions and no battlecry or deathrattle card at rank 20 or better",
+        "completedText": "Completed at rank 20 or better",
         "displayCardId": "LOE_077",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1108,7 +1108,7 @@
         "priority": -25,
         "displayName": "Achievement completed: So Quiet (rank 25)",
         "emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
-        "completedText": "You won with a deck containing at least 15 minions and no battlecry or deathrattle card at rank 25 or better",
+        "completedText": "Completed at rank 25 or better",
         "displayCardId": "LOE_077",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1173,7 +1173,7 @@
         "priority": -5,
         "displayName": "Achievement completed: So Quiet (rank 5)",
         "emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
-        "completedText": "You won with a deck containing at least 15 minions and no battlecry or deathrattle card at rank 5 or better",
+        "completedText": "Completed at rank 5 or better",
         "displayCardId": "LOE_077",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1238,7 +1238,7 @@
         "priority": -1,
         "displayName": "Achievement completed: The Void (rank 1)",
         "emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
-        "completedText": "You won with a deck containing no cards with the letter \"e\" in its name at rank 1 or better",
+        "completedText": "Completed at rank 1 or better",
         "displayCardId": "ULD_134",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1286,7 +1286,7 @@
         "priority": -10,
         "displayName": "Achievement completed: The Void (rank 10)",
         "emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
-        "completedText": "You won with a deck containing no cards with the letter \"e\" in its name at rank 10 or better",
+        "completedText": "Completed at rank 10 or better",
         "displayCardId": "ULD_134",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1334,7 +1334,7 @@
         "priority": -15,
         "displayName": "Achievement completed: The Void (rank 15)",
         "emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
-        "completedText": "You won with a deck containing no cards with the letter \"e\" in its name at rank 15 or better",
+        "completedText": "Completed at rank 15 or better",
         "displayCardId": "ULD_134",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1382,7 +1382,7 @@
         "priority": -20,
         "displayName": "Achievement completed: The Void (rank 20)",
         "emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
-        "completedText": "You won with a deck containing no cards with the letter \"e\" in its name at rank 20 or better",
+        "completedText": "Completed at rank 20 or better",
         "displayCardId": "ULD_134",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1430,7 +1430,7 @@
         "priority": -25,
         "displayName": "Achievement completed: The Void (rank 25)",
         "emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
-        "completedText": "You won with a deck containing no cards with the letter \"e\" in its name at rank 25 or better",
+        "completedText": "Completed at rank 25 or better",
         "displayCardId": "ULD_134",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1478,7 +1478,7 @@
         "priority": -5,
         "displayName": "Achievement completed: The Void (rank 5)",
         "emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
-        "completedText": "You won with a deck containing no cards with the letter \"e\" in its name at rank 5 or better",
+        "completedText": "Completed at rank 5 or better",
         "displayCardId": "ULD_134",
         "displayCardType": "minion",
         "difficulty": "rare",
@@ -1510,6 +1510,366 @@
                 "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
                 "values": [
                     "e"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_thousand_cuts_1",
+        "type": "deckbuilding_win_thousand_cuts",
+        "name": "Death by a Thousand Cuts",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Death by a Thousand Cuts (rank 1)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+        "completedText": "Completed at rank 1 or better",
+        "displayCardId": "DAL_773",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "attack",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_thousand_cuts_10",
+        "type": "deckbuilding_win_thousand_cuts",
+        "name": "Death by a Thousand Cuts",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Death by a Thousand Cuts (rank 10)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+        "completedText": "Completed at rank 10 or better",
+        "displayCardId": "DAL_773",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "attack",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_thousand_cuts_15",
+        "type": "deckbuilding_win_thousand_cuts",
+        "name": "Death by a Thousand Cuts",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Death by a Thousand Cuts (rank 15)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+        "completedText": "Completed at rank 15 or better",
+        "displayCardId": "DAL_773",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "attack",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_thousand_cuts_20",
+        "type": "deckbuilding_win_thousand_cuts",
+        "name": "Death by a Thousand Cuts",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Death by a Thousand Cuts (rank 20)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+        "completedText": "Completed at rank 20 or better",
+        "displayCardId": "DAL_773",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "attack",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_thousand_cuts_25",
+        "type": "deckbuilding_win_thousand_cuts",
+        "name": "Death by a Thousand Cuts",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Death by a Thousand Cuts (rank 25)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+        "completedText": "Completed at rank 25 or better",
+        "displayCardId": "DAL_773",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "attack",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_thousand_cuts_5",
+        "type": "deckbuilding_win_thousand_cuts",
+        "name": "Death by a Thousand Cuts",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Death by a Thousand Cuts (rank 5)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+        "completedText": "Completed at rank 5 or better",
+        "displayCardId": "DAL_773",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "attack",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
                 ]
             }
         ],
