@@ -13308,60 +13308,6 @@
         ]
     },
     {
-        "id": "tombs_of_terror_treasure_play_ULDA_045t",
-        "type": "tombs_of_terror_treasure_play_ULDA_045t",
-        "name": "Primordial Bulwark",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Treasure played: Primordial Bulwark",
-        "text": "Secret: Block fatal damage and deal 20 damage to the enemy hero (can trigger on your turn).",
-        "completedText": "You played Primordial Bulwark",
-        "displayCardId": "ULDA_045t",
-        "displayCardType": "spell",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 2,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-                "values": [
-                    "ULDA_045t"
-                ]
-            },
-            {
-                "type": "GAME_TYPE",
-                "values": [
-                    "1"
-                ]
-            },
-            {
-                "type": "EXCLUDED_SCENARIO_IDS",
-                "values": [
-                    "3005",
-                    "3188",
-                    "3189",
-                    "3190",
-                    "3191",
-                    "3328",
-                    "3329",
-                    "3330",
-                    "3331",
-                    "3332",
-                    "2663",
-                    "2706",
-                    "2821",
-                    "2890",
-                    "263"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
         "id": "tombs_of_terror_treasure_play_ULDA_110",
         "type": "tombs_of_terror_treasure_play_ULDA_110",
         "name": "Crawling Claw",

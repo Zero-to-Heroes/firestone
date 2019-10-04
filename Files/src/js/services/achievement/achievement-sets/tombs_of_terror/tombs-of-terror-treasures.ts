@@ -32,7 +32,6 @@ export class TombsOfTerrorTreasuresSetProvider extends GenericSetProvider {
 				'tombs_of_terror_treasure_play_ULDA_041',
 				'tombs_of_terror_treasure_play_ULDA_043',
 				'tombs_of_terror_treasure_play_ULDA_044',
-				'tombs_of_terror_treasure_play_ULDA_045t',
 				'tombs_of_terror_treasure_play_ULDA_110',
 				'tombs_of_terror_treasure_play_ULDA_111',
 				'tombs_of_terror_treasure_play_ULDA_112',
