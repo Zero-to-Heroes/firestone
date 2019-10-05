@@ -33,7 +33,7 @@ declare var ga: any;
 			<div class="root">
 				<div class="app-container">
 					<section class="menu-bar">
-						<div class="title">Match Summary</div>
+						<div class="title">Match Summary (experimental)</div>
 						<div class="controls">
 							<control-bug></control-bug>
 							<control-discord></control-discord>
@@ -144,17 +144,16 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			const currentlyVisible = window.isVisible;
 			if (newState.visible && !currentlyVisible) {
 				await this.ow.restoreWindow(this.windowId);
+				if (newState.minimized) {
+					await this.ow.minimizeWindow(this.windowId);
+				}
+				if (newState.maximized) {
+					await this.ow.maximizeWindow(this.windowId);
+				} else if (this.state && this.state.maximized) {
+					await this.ow.restoreWindow(this.windowId);
+				}
 			} else if (!newState.visible && currentlyVisible) {
 				await this.ow.hideWindow(this.windowId);
-			}
-			if (newState.minimized) {
-				await this.ow.minimizeWindow(this.windowId);
-			}
-
-			if (newState.maximized) {
-				await this.ow.maximizeWindow(this.windowId);
-			} else if (this.state && this.state.maximized) {
-				await this.ow.restoreWindow(this.windowId);
 			}
 			console.log('updated state after event', newState);
 			this.state = newState;
@@ -184,60 +183,67 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async refreshAds() {
-		console.log('[main-window] refreshing ads');
-		if (!this.shouldDisplayAds) {
-			console.log('ad-free app, not showing ads and returning');
-			return;
-		}
-		if (this.adInit) {
-			console.log('already initializing ads, returning');
-			return;
-		}
-		if (!adsReady || !OwAd) {
-			console.log('ads container not ready, returning', adsReady, OwAd);
-			setTimeout(() => {
-				this.refreshAds();
-			}, 1000);
-			return;
-		}
-		if (!document.getElementById('ad-div')) {
-			console.log('ad-div not ready, returning');
-			setTimeout(() => {
-				this.refreshAds();
-			}, 1000);
-			return;
-		}
-		if (!this.adRef) {
-			if (this.impressionListener) {
-				console.warn(
-					'[main-window] Redefining the impression listener, could cause memory leaks',
-					this.impressionListener,
-				);
+		try {
+			console.log('[main-window] refreshing ads');
+			if (!this.shouldDisplayAds) {
+				console.log('ad-free app, not showing ads and returning');
+				return;
 			}
-			this.adInit = true;
-			const window = await this.ow.getCurrentWindow();
-			if (window.isVisible) {
-				console.log('first time init ads, creating OwAd');
-				this.adRef = new OwAd(document.getElementById('ad-div'));
-				this.impressionListener = data => {
-					ga('send', 'event', 'ad', 'loading-window');
-				};
-				this.adRef.addEventListener('impression', this.impressionListener);
-				console.log('init OwAd');
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
+			if (this.adInit) {
+				console.log('already initializing ads, returning');
+				return;
+			}
+			if (!adsReady || !OwAd) {
+				console.log('ads container not ready, returning', adsReady, OwAd);
+				setTimeout(() => {
+					this.refreshAds();
+				}, 1000);
+				return;
+			}
+			if (!document.getElementById('ad-div')) {
+				console.log('ad-div not ready, returning');
+				setTimeout(() => {
+					this.refreshAds();
+				}, 1000);
+				return;
+			}
+			if (!this.adRef) {
+				if (this.impressionListener) {
+					console.warn(
+						'[main-window] Redefining the impression listener, could cause memory leaks',
+						this.impressionListener,
+					);
 				}
+				this.adInit = true;
+				const window = await this.ow.getCurrentWindow();
+				if (window.isVisible) {
+					console.log('first time init ads, creating OwAd');
+					this.adRef = new OwAd(document.getElementById('ad-div'));
+					this.impressionListener = data => {
+						ga('send', 'event', 'ad', 'match-stats');
+					};
+					this.adRef.addEventListener('impression', this.impressionListener);
+					console.log('init OwAd');
+					if (!(this.cdr as ViewRef).destroyed) {
+						this.cdr.detectChanges();
+					}
+				}
+				this.adInit = false;
+				setTimeout(() => {
+					this.refreshAds();
+				}, 2000);
+				return;
 			}
-			this.adInit = false;
+			console.log('[main-window] refreshed ads');
+			this.adRef.refreshAd();
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+		} catch (e) {
+			console.warn('[main-window] exception while initializing ads, retrying', e);
 			setTimeout(() => {
 				this.refreshAds();
 			}, 2000);
-			return;
-		}
-		console.log('[main-window] refreshed ads');
-		this.adRef.refreshAd();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
 		}
 	}
 
