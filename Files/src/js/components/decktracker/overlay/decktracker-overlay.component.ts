@@ -241,8 +241,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	private async restoreWindow() {
 		await this.ow.restoreWindow(this.windowId);
-		await this.changeWindowSize();
-		await this.changeWindowPosition();
+		// await this.changeWindowSize();
+		// await this.changeWindowPosition();
 		await this.onResized();
 	}
 
