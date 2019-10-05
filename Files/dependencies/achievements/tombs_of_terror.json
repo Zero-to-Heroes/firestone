@@ -926,6 +926,108 @@
         ]
     },
     {
+        "id": "tombs_of_terror_amazing_treasure_play_ULDA_032",
+        "type": "tombs_of_terror_amazing_treasure_play_ULDA_032",
+        "name": "Enflamed Golem",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Treasure played: Enflamed Golem",
+        "text": "Play Enflamed Golem by stealing it from the boss",
+        "completedText": "You played Enflamed Golem",
+        "displayCardId": "ULDA_032",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "maxNumberOfRecords": 3,
+        "points": 50,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "ULDA_032"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "3428",
+                    "3429",
+                    "3430",
+                    "3431",
+                    "3432",
+                    "3438",
+                    "3433",
+                    "3434",
+                    "3435",
+                    "3436",
+                    "3437",
+                    "3439"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
+        "id": "tombs_of_terror_amazing_treasure_play_ULDA_033",
+        "type": "tombs_of_terror_amazing_treasure_play_ULDA_033",
+        "name": "Rakanishu",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Treasure played: Rakanishu",
+        "text": "Play Rakanishu by stealing it from the boss",
+        "completedText": "You played Rakanishu",
+        "displayCardId": "ULDA_033",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "maxNumberOfRecords": 3,
+        "points": 50,
+        "requirements": [
+            {
+                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
+                "values": [
+                    "ULDA_033"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "3428",
+                    "3429",
+                    "3430",
+                    "3431",
+                    "3432",
+                    "3438",
+                    "3433",
+                    "3434",
+                    "3435",
+                    "3436",
+                    "3437",
+                    "3439"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START",
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_boss_encounter_ULDA_BOSS_01h",
         "type": "tombs_of_terror_boss_ULDA_BOSS_01h",
         "name": "Waste Wanderer Cardish",
@@ -12715,108 +12817,6 @@
                 "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
                 "values": [
                     "ULDA_024"
-                ]
-            },
-            {
-                "type": "GAME_TYPE",
-                "values": [
-                    "1"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "3428",
-                    "3429",
-                    "3430",
-                    "3431",
-                    "3432",
-                    "3438",
-                    "3433",
-                    "3434",
-                    "3435",
-                    "3436",
-                    "3437",
-                    "3439"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "tombs_of_terror_treasure_play_ULDA_032",
-        "type": "tombs_of_terror_treasure_play_ULDA_032",
-        "name": "Enflamed Golem",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Treasure played: Enflamed Golem",
-        "text": "Deathrattle: Deal 3 damage to all minions and summon a Sanctum Golem.",
-        "completedText": "You played Enflamed Golem",
-        "displayCardId": "ULDA_032",
-        "displayCardType": "minion",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 2,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-                "values": [
-                    "ULDA_032"
-                ]
-            },
-            {
-                "type": "GAME_TYPE",
-                "values": [
-                    "1"
-                ]
-            },
-            {
-                "type": "SCENARIO_IDS",
-                "values": [
-                    "3428",
-                    "3429",
-                    "3430",
-                    "3431",
-                    "3432",
-                    "3438",
-                    "3433",
-                    "3434",
-                    "3435",
-                    "3436",
-                    "3437",
-                    "3439"
-                ]
-            }
-        ],
-        "resetEvents": [
-            "GAME_START",
-            "GAME_END"
-        ]
-    },
-    {
-        "id": "tombs_of_terror_treasure_play_ULDA_033",
-        "type": "tombs_of_terror_treasure_play_ULDA_033",
-        "name": "Rakanishu",
-        "icon": "boss_victory",
-        "root": true,
-        "priority": 0,
-        "displayName": "Treasure played: Rakanishu",
-        "text": "Battlecry: For the rest of the game, your Lackeys are 4/4.",
-        "completedText": "You played Rakanishu",
-        "displayCardId": "ULDA_033",
-        "displayCardType": "minion",
-        "difficulty": "rare",
-        "maxNumberOfRecords": 2,
-        "points": 3,
-        "requirements": [
-            {
-                "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-                "values": [
-                    "ULDA_033"
                 ]
             },
             {

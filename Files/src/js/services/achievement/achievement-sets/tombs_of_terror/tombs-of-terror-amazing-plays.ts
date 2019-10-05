@@ -18,6 +18,8 @@ export class TombsOfTerrorAmazingPlaysSetProvider extends GenericSetProvider {
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_39h',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_40h',
 				'tombs_of_terror_amazing_plays_unstoppable_ULDA_BOSS_67h',
+				'tombs_of_terror_amazing_treasure_play_ULDA_032',
+				'tombs_of_terror_amazing_treasure_play_ULDA_033',
 			],
 			'achievements_shrine',
 		);
