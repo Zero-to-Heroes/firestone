@@ -85,8 +85,11 @@
 				margin-left: 5px;
 				animation-name: spin;
 				animation-duration: 1500ms;
-				animation-iteration-count: infinite;
+				animation-iteration-count: 50; // In case something goes wrong, we don't hog the CPU all the time
 				animation-timing-function: linear;
+				transform: translateZ(
+					0
+				); // https://stackoverflow.com/questions/13176746/css-keyframe-animation-cpu-usage-is-high-should-it-be-this-way
 
 				&::before {
 					content: '';
