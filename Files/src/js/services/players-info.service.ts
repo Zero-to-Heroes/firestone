@@ -21,7 +21,7 @@ export class PlayersInfoService {
 		if (this.playerInfo) {
 			return this.playerInfo;
 		}
-		console.warn('[players-info] playerInfo not present in cache, fetching it from GEP');
+		console.log('[players-info] playerInfo not present in cache, fetching it from GEP');
 		const infoFromGep = await this.memoryService.getPlayerInfo();
 		if (!infoFromGep) {
 			console.error('[players-info] No player info returned from the GEP');
