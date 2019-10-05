@@ -17,6 +17,8 @@ import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-e
 import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
 import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuilding/deckbuilding-no-card-with-letter-in-name-req';
 import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
+import { DeckbuildingTextNumberOfWordsReq } from '../requirements/deckbuilding/deckbuilding-text-number-of-words-req';
+import { DeckbuildingTextReq } from '../requirements/deckbuilding/deckbuilding-text-req';
 import { DeckbuildingTypeReq } from '../requirements/deckbuilding/deckbuilding-type-req';
 import { DungeonRunStepReq } from '../requirements/dungeon-run-step-req';
 import { ExcludedScenarioIdReq } from '../requirements/excluded-scenario-id-req';
@@ -118,6 +120,8 @@ export class ChallengeBuilderService {
 			case 'DECK_MECHANIC': return DeckbuildingMechanicReq.create(rawReq, this.cards);
 			case 'DECK_TYPE': return DeckbuildingTypeReq.create(rawReq, this.cards);
 			case 'DECK_CARD_ATTRIBUTE_VALUE': return DeckbuildingCardAttributeReq.create(rawReq, this.cards);
+			case 'DECK_CARD_TEXT_VALUE': return DeckbuildingTextReq.create(rawReq, this.cards);
+			case 'DECK_CARD_TEXT_NUMBER_OF_WORDS': return DeckbuildingTextNumberOfWordsReq.create(rawReq, this.cards);
 			case 'DECK_NO_CARD_WITH_LETTER_IN_NAME': return DeckbuildingNoCardWithLetterInNameReq.create(rawReq, this.cards);
 			case 'DECK_NUMBER_OF_MINIONS': 
 				console.debug(''); // No idea why I have to add this for jest to pick up the line

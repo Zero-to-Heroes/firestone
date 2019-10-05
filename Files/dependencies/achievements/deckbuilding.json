@@ -270,6 +270,312 @@
         ]
     },
     {
+        "id": "deckbuilding_win_complex_1",
+        "type": "deckbuilding_win_complex",
+        "name": "Complexity",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Complexity (rank 1)",
+        "emptyText": "Win one game with a deck containing only cards with at leat 8 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 1 or better",
+        "displayCardId": "CS2_233",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_complex_10",
+        "type": "deckbuilding_win_complex",
+        "name": "Complexity",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Complexity (rank 10)",
+        "emptyText": "Win one game with a deck containing only cards with at leat 8 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 10 or better",
+        "displayCardId": "CS2_233",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_complex_15",
+        "type": "deckbuilding_win_complex",
+        "name": "Complexity",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Complexity (rank 15)",
+        "emptyText": "Win one game with a deck containing only cards with at leat 8 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 15 or better",
+        "displayCardId": "CS2_233",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_complex_20",
+        "type": "deckbuilding_win_complex",
+        "name": "Complexity",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Complexity (rank 20)",
+        "emptyText": "Win one game with a deck containing only cards with at leat 8 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 20 or better",
+        "displayCardId": "CS2_233",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_complex_25",
+        "type": "deckbuilding_win_complex",
+        "name": "Complexity",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Complexity (rank 25)",
+        "emptyText": "Win one game with a deck containing only cards with at leat 8 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 25 or better",
+        "displayCardId": "CS2_233",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_complex_5",
+        "type": "deckbuilding_win_complex",
+        "name": "Complexity",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Complexity (rank 5)",
+        "emptyText": "Win one game with a deck containing only cards with at leat 8 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 5 or better",
+        "displayCardId": "CS2_233",
+        "displayCardType": "spell",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "8",
+                    "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
         "id": "deckbuilding_win_epic_1",
         "type": "deckbuilding_win_epic",
         "name": "Epic",
@@ -533,6 +839,366 @@
             },
             {
                 "type": "DECK_EPIC"
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_fragile_nature_1",
+        "type": "deckbuilding_win_fragile_nature",
+        "name": "Fragile Nature",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Fragile Nature (rank 1)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+        "completedText": "Completed at rank 1 or better",
+        "displayCardId": "GIL_665",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "health",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_fragile_nature_10",
+        "type": "deckbuilding_win_fragile_nature",
+        "name": "Fragile Nature",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Fragile Nature (rank 10)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+        "completedText": "Completed at rank 10 or better",
+        "displayCardId": "GIL_665",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "health",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_fragile_nature_15",
+        "type": "deckbuilding_win_fragile_nature",
+        "name": "Fragile Nature",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Fragile Nature (rank 15)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+        "completedText": "Completed at rank 15 or better",
+        "displayCardId": "GIL_665",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "health",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_fragile_nature_20",
+        "type": "deckbuilding_win_fragile_nature",
+        "name": "Fragile Nature",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Fragile Nature (rank 20)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+        "completedText": "Completed at rank 20 or better",
+        "displayCardId": "GIL_665",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "health",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_fragile_nature_25",
+        "type": "deckbuilding_win_fragile_nature",
+        "name": "Fragile Nature",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Fragile Nature (rank 25)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+        "completedText": "Completed at rank 25 or better",
+        "displayCardId": "GIL_665",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "health",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_fragile_nature_5",
+        "type": "deckbuilding_win_fragile_nature",
+        "name": "Fragile Nature",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Fragile Nature (rank 5)",
+        "emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+        "completedText": "Completed at rank 5 or better",
+        "displayCardId": "GIL_665",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_ATTRIBUTE_VALUE",
+                "values": [
+                    "15",
+                    "AT_LEAST",
+                    "health",
+                    "1",
+                    "AT_MOST"
+                ]
+            },
+            {
+                "type": "DECK_TYPE",
+                "values": [
+                    "0",
+                    "SPELL",
+                    "AT_MOST"
+                ]
             }
         ],
         "resetEvents": [
@@ -832,6 +1498,312 @@
                     "12",
                     "LIFESTEAL",
                     "AT_LEAST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_simple_1",
+        "type": "deckbuilding_win_simple",
+        "name": "Keeping it Simple",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Keeping it Simple (rank 1)",
+        "emptyText": "Win one game with a deck containing only cards with at most 3 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 1 or better",
+        "displayCardId": "CS2_182",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "3",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_simple_10",
+        "type": "deckbuilding_win_simple",
+        "name": "Keeping it Simple",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Keeping it Simple (rank 10)",
+        "emptyText": "Win one game with a deck containing only cards with at most 3 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 10 or better",
+        "displayCardId": "CS2_182",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "3",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_simple_15",
+        "type": "deckbuilding_win_simple",
+        "name": "Keeping it Simple",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Keeping it Simple (rank 15)",
+        "emptyText": "Win one game with a deck containing only cards with at most 3 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 15 or better",
+        "displayCardId": "CS2_182",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "3",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_simple_20",
+        "type": "deckbuilding_win_simple",
+        "name": "Keeping it Simple",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Keeping it Simple (rank 20)",
+        "emptyText": "Win one game with a deck containing only cards with at most 3 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 20 or better",
+        "displayCardId": "CS2_182",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "3",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_simple_25",
+        "type": "deckbuilding_win_simple",
+        "name": "Keeping it Simple",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Keeping it Simple (rank 25)",
+        "emptyText": "Win one game with a deck containing only cards with at most 3 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 25 or better",
+        "displayCardId": "CS2_182",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "3",
+                    "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_simple_5",
+        "type": "deckbuilding_win_simple",
+        "name": "Keeping it Simple",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Keeping it Simple (rank 5)",
+        "emptyText": "Win one game with a deck containing only cards with at most 3 works in their text in Ranked Standard",
+        "completedText": "Completed at rank 5 or better",
+        "displayCardId": "CS2_182",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "3",
+                    "AT_MOST"
                 ]
             }
         ],
@@ -1222,6 +2194,312 @@
                     "0",
                     "DEATHRATTLE",
                     "AT_MOST"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_summoner_1",
+        "type": "deckbuilding_win_summoner",
+        "name": "Summoner",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -1,
+        "displayName": "Achievement completed: Summoner (rank 1)",
+        "emptyText": "Win one game with a deck containing only cards with the \"Summon\" word in their text or name in Ranked Standard",
+        "completedText": "Completed at rank 1 or better",
+        "displayCardId": "DAL_575",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_VALUE",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "summon",
+                    "CONTAINS"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_summoner_10",
+        "type": "deckbuilding_win_summoner",
+        "name": "Summoner",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -10,
+        "displayName": "Achievement completed: Summoner (rank 10)",
+        "emptyText": "Win one game with a deck containing only cards with the \"Summon\" word in their text or name in Ranked Standard",
+        "completedText": "Completed at rank 10 or better",
+        "displayCardId": "DAL_575",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "10"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_VALUE",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "summon",
+                    "CONTAINS"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_summoner_15",
+        "type": "deckbuilding_win_summoner",
+        "name": "Summoner",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -15,
+        "displayName": "Achievement completed: Summoner (rank 15)",
+        "emptyText": "Win one game with a deck containing only cards with the \"Summon\" word in their text or name in Ranked Standard",
+        "completedText": "Completed at rank 15 or better",
+        "displayCardId": "DAL_575",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "15"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_VALUE",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "summon",
+                    "CONTAINS"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_summoner_20",
+        "type": "deckbuilding_win_summoner",
+        "name": "Summoner",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -20,
+        "displayName": "Achievement completed: Summoner (rank 20)",
+        "emptyText": "Win one game with a deck containing only cards with the \"Summon\" word in their text or name in Ranked Standard",
+        "completedText": "Completed at rank 20 or better",
+        "displayCardId": "DAL_575",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "20"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_VALUE",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "summon",
+                    "CONTAINS"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_summoner_25",
+        "type": "deckbuilding_win_summoner",
+        "name": "Summoner",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": -25,
+        "displayName": "Achievement completed: Summoner (rank 25)",
+        "emptyText": "Win one game with a deck containing only cards with the \"Summon\" word in their text or name in Ranked Standard",
+        "completedText": "Completed at rank 25 or better",
+        "displayCardId": "DAL_575",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "25"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_VALUE",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "summon",
+                    "CONTAINS"
+                ]
+            }
+        ],
+        "resetEvents": [
+            "GAME_START"
+        ]
+    },
+    {
+        "id": "deckbuilding_win_summoner_5",
+        "type": "deckbuilding_win_summoner",
+        "name": "Summoner",
+        "icon": "boss_victory",
+        "root": false,
+        "priority": -5,
+        "displayName": "Achievement completed: Summoner (rank 5)",
+        "emptyText": "Win one game with a deck containing only cards with the \"Summon\" word in their text or name in Ranked Standard",
+        "completedText": "Completed at rank 5 or better",
+        "displayCardId": "DAL_575",
+        "displayCardType": "minion",
+        "difficulty": "rare",
+        "maxNumberOfRecords": 3,
+        "points": 5,
+        "requirements": [
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "7"
+                ]
+            },
+            {
+                "type": "RANKED_MIN_RANK",
+                "values": [
+                    "5"
+                ]
+            },
+            {
+                "type": "RANKED_FORMAT_TYPE",
+                "values": [
+                    "2"
+                ]
+            },
+            {
+                "type": "GAME_WON"
+            },
+            {
+                "type": "DECK_CARD_TEXT_VALUE",
+                "values": [
+                    "30",
+                    "AT_LEAST",
+                    "summon",
+                    "CONTAINS"
                 ]
             }
         ],
