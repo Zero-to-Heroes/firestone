@@ -1,3 +1,4 @@
+import { RarityTYpe } from './rarity.type';
 import { ReferencePlayerClass } from './reference-player-class';
 
 export interface ReferenceCard {
@@ -15,5 +16,5 @@ export interface ReferenceCard {
 	readonly flavor: string;
 	readonly type: string;
 	readonly mechanics: string[];
-	readonly rarity?: string;
+	readonly rarity?: RarityTYpe;
 }
