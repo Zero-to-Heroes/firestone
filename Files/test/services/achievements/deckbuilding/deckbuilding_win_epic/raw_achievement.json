@@ -1,13 +1,13 @@
 {
-	"id": "deckbuilding_win_epic_15",
+	"id": "deckbuilding_win_epic_25",
 	"type": "deckbuilding_win_epic",
 	"name": "Epic",
 	"icon": "boss_victory",
-	"root": false,
-	"priority": -15,
-	"displayName": "Achievement completed: Epic (rank 15)",
+	"root": true,
+	"priority": -25,
+	"displayName": "Achievement completed: Epic (rank 25)",
 	"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
-	"completedText": "You won with a deck containing only epic cards at rank 15 or better",
+	"completedText": "Completed at rank 25 or better",
 	"displayCardId": "TB_KTRAF_HP_RAF4",
 	"displayCardType": "minion",
 	"difficulty": "rare",
@@ -20,7 +20,7 @@
 		},
 		{
 			"type": "RANKED_MIN_RANK",
-			"values": ["15"]
+			"values": ["25"]
 		},
 		{
 			"type": "RANKED_FORMAT_TYPE",
@@ -30,7 +30,8 @@
 			"type": "GAME_WON"
 		},
 		{
-			"type": "DECK_EPIC"
+			"type": "DECK_RARITY",
+			"values": ["30", "AT_LEAST", "epic"]
 		}
 	],
 	"resetEvents": ["GAME_START"]

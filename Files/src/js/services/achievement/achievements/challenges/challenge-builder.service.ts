@@ -13,10 +13,10 @@ import { DamageAtEndReq } from '../requirements/damage-at-end-req';
 import { DeathrattleTriggeredReq } from '../requirements/deathrattle-triggered-req';
 import { DeckbuildingCardAttributeReq } from '../requirements/deckbuilding/deckbuilding-card-attribute-req';
 import { DeckbuildingClassicReq } from '../requirements/deckbuilding/deckbuilding-classic-req';
-import { DeckbuildingEpicReq } from '../requirements/deckbuilding/deckbuilding-epic-req';
 import { DeckbuildingMechanicReq } from '../requirements/deckbuilding/deckbuilding-mechanic-req';
 import { DeckbuildingNoCardWithLetterInNameReq } from '../requirements/deckbuilding/deckbuilding-no-card-with-letter-in-name-req';
 import { DeckbuildingNumberOfMinionsReq } from '../requirements/deckbuilding/deckbuilding-number-of-minions-req';
+import { DeckbuildingRarityReq } from '../requirements/deckbuilding/deckbuilding-rarity-req';
 import { DeckbuildingTextNumberOfWordsReq } from '../requirements/deckbuilding/deckbuilding-text-number-of-words-req';
 import { DeckbuildingTextReq } from '../requirements/deckbuilding/deckbuilding-text-req';
 import { DeckbuildingTypeReq } from '../requirements/deckbuilding/deckbuilding-type-req';
@@ -116,7 +116,7 @@ export class ChallengeBuilderService {
 			
 			// The deckbuilding reqs
 			case 'DECK_CLASSIC': return DeckbuildingClassicReq.create(rawReq, this.cards);
-			case 'DECK_EPIC': return DeckbuildingEpicReq.create(rawReq, this.cards);
+			case 'DECK_RARITY': return DeckbuildingRarityReq.create(rawReq, this.cards);
 			case 'DECK_MECHANIC': return DeckbuildingMechanicReq.create(rawReq, this.cards);
 			case 'DECK_TYPE': return DeckbuildingTypeReq.create(rawReq, this.cards);
 			case 'DECK_CARD_ATTRIBUTE_VALUE': return DeckbuildingCardAttributeReq.create(rawReq, this.cards);
