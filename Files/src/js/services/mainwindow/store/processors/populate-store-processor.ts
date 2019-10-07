@@ -38,7 +38,7 @@ export class PopulateStoreProcessor implements Processor {
 		console.log('[populate-store] populating store');
 		const [collection, achievements, socialShareUserInfo, stats] = await Promise.all([
 			this.populateCollectionState(currentState.binder),
-			this.populateAchievementState(currentState.achievements),
+			this.populateAchievementState(currentState),
 			this.initializeSocialShareUserInfo(currentState.socialShareUserInfo),
 			this.initialiseGameStats(currentState.stats),
 		]);
@@ -79,9 +79,9 @@ export class PopulateStoreProcessor implements Processor {
 		} as StatsState);
 	}
 
-	private async populateAchievementState(currentState: AchievementsState): Promise<AchievementsState> {
-		return Object.assign(new AchievementsState(), currentState, {
-			globalCategories: await this.achievementsHelper.buildGlobalCategories(),
+	private async populateAchievementState(currentState: MainWindowState): Promise<AchievementsState> {
+		return Object.assign(new AchievementsState(), currentState.achievements, {
+			globalCategories: await this.achievementsHelper.buildGlobalCategories(currentState),
 			achievementHistory: await this.buildAchievementHistory(),
 		} as AchievementsState);
 	}

@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { CurrentUser } from '../../models/overwolf/profile/current-user';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -17,6 +18,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 				<achievements-menu
 					[ngClass]="{ 'shrink': state.shortDisplay }"
 					[displayType]="state.menuDisplayType"
+					[currentUser]="currentUser"
 					[selectedCategory]="state.selectedGlobalCategory"
 					[selectedAchievementSet]="state.selectedCategory"
 				>
@@ -74,6 +76,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 })
 export class AchievementsComponent {
 	@Input() state: AchievementsState;
+	@Input() currentUser: CurrentUser;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 
 	_viewState = 'shown';

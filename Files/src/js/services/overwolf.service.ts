@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
 import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
+import { CurrentUser } from '../models/overwolf/profile/current-user';
 
 declare var overwolf: any;
 
@@ -141,26 +142,16 @@ export class OverwolfService {
 		});
 	}
 
-	public async getCurrentUser(): Promise<{
-		status: string;
-		username: string;
-		userId: string;
-		machineId: string;
-		partnerId: number;
-		channel: string;
-	}> {
-		return new Promise<{
-			status: string;
-			username: string;
-			userId: string;
-			machineId: string;
-			partnerId: number;
-			channel: string;
-		}>(resolve => {
+	public async getCurrentUser(): Promise<CurrentUser> {
+		return new Promise<CurrentUser>(resolve => {
 			overwolf.profile.getCurrentUser(user => {
 				resolve(user);
 			});
 		});
+	}
+
+	public openLoginDialog() {
+		overwolf.profile.openLoginDialog();
 	}
 
 	public addLoginStateChangedListener(callback) {

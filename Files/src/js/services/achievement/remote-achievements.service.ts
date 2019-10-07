@@ -4,6 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { OverwolfService } from '../overwolf.service';
+import { UserService } from '../user.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
 
 const ACHIEVEMENTS_POST_URL = 'https://d37acgsdwl.execute-api.us-west-2.amazonaws.com/Prod/achievementstats';
@@ -11,24 +12,25 @@ const ACHIEVEMENTS_RETRIEVE_URL = ' https://mtpdm7a1e5.execute-api.us-west-2.ama
 
 @Injectable()
 export class RemoteAchievementsService {
-	private userId: string;
-	private userMachineId: string;
-	private username: string;
+	// private userId: string;
+	// private userMachineId: string;
+	// private username: string;
 
 	constructor(
 		private logger: NGXLogger,
 		private http: HttpClient,
 		private indexedDb: AchievementsLocalDbService,
 		private ow: OverwolfService,
+		private userService: UserService,
 	) {
 		// this.events.on(Events.ACHIEVEMENT_UNLOCKED).subscribe(event => this.publishAchievementStats(event));
-		this.retrieveUserInfo();
-		this.ow.addLoginStateChangedListener(() => this.retrieveUserInfo());
+		// this.retrieveUserInfo();
+		// this.ow.addLoginStateChangedListener(() => this.retrieveUserInfo());
 	}
 
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
+		const currentUser = await this.userService.getCurrentUser();
 		// Load from remote
-		const currentUser = await this.ow.getCurrentUser();
 		const postEvent = {
 			userName: currentUser.username,
 			userId: currentUser.userId,
@@ -45,17 +47,19 @@ export class RemoteAchievementsService {
 		return result.results;
 	}
 
+	// TODO: at some point, use the CurrentUser from the state?
 	public async publishRemoteAchievement(achievement: Achievement, retriesLeft = 15): Promise<void> {
 		if (retriesLeft <= 0) {
 			console.error('Could not upload achievemnt stats after 15 retries');
 			return;
 		}
+		const currentUser = await this.userService.getCurrentUser();
 		// const achievement: Achievement = event.data[0];
 		const statEvent = {
 			'creationDate': new Date(),
-			'userId': this.userId,
-			'userMachineId': this.userMachineId,
-			'userName': this.username,
+			'userId': currentUser.userId,
+			'userMachineId': currentUser.machineId,
+			'userName': currentUser.username,
 			'achievementId': achievement.id,
 			'name': achievement.name,
 			'type': achievement.type,
@@ -91,12 +95,5 @@ export class RemoteAchievementsService {
 				setTimeout(() => this.loadAchievementsInternal(userInfo, callback, retriesLeft - 1), 2000);
 			},
 		);
-	}
-
-	private async retrieveUserInfo() {
-		const user = await this.ow.getCurrentUser();
-		this.userId = user.userId;
-		this.userMachineId = user.machineId;
-		this.username = user.username;
 	}
 }

@@ -1,12 +1,19 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
-
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	EventEmitter,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { AchievementSet } from '../../models/achievement-set';
-
+import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
-import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
+import { ChangeVisibleApplicationEvent } from '../../services/mainwindow/store/events/change-visible-application-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -18,7 +25,28 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<ng-container [ngSwitch]="displayType">
 			<ul *ngSwitchCase="'menu'" class="menu-selection-achievements menu-selection">
-				<li>Categories</li>
+				<li>
+					Categories
+					<div *ngIf="!currentUser || !currentUser.username" class="attention-icon-container">
+						<svg
+							class="svg-icon-fill attention-icon"
+							(click)="toggleLoginPopup()"
+							[ngClass]="{ 'active': loginPopupActive }"
+						>
+							<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
+						</svg>
+						<div class="login-conf-popup" *ngIf="loginPopupActive">
+							<div class="text">Log in to Overwolf to save your achievements online</div>
+							<div class="buttons">
+								<button class="cancel" (click)="cancel()">Cancel</button>
+								<button class="log-in" (click)="login()">Log in</button>
+							</div>
+							<svg class="svg-icon-fill tooltip-arrow" viewBox="0 0 16 9">
+								<polygon points="0,0 8,-9 16,0" />
+							</svg>
+						</div>
+					</div>
+				</li>
 			</ul>
 			<ul
 				*ngSwitchCase="'breadcrumbs'"
@@ -47,10 +75,13 @@ export class AchievementsMenuComponent implements AfterViewInit {
 	@Input() displayType: string;
 	@Input() selectedCategory: VisualAchievementCategory;
 	@Input() selectedAchievementSet: AchievementSet;
+	@Input() currentUser: CurrentUser;
+
+	loginPopupActive: boolean;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -69,5 +100,27 @@ export class AchievementsMenuComponent implements AfterViewInit {
 
 	goToAchievementSetView() {
 		this.stateUpdater.next(new SelectAchievementSetEvent(this.selectedAchievementSet.id));
+	}
+
+	toggleLoginPopup() {
+		this.loginPopupActive = !this.loginPopupActive;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	cancel() {
+		this.loginPopupActive = false;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	login() {
+		this.ow.openLoginDialog();
+		this.loginPopupActive = false;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

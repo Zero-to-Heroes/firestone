@@ -15,11 +15,14 @@ export class AchievementUpdateHelper {
 	) {}
 
 	public async rebuildAchievements(currentState: MainWindowState): Promise<AchievementsState> {
-		const globalCategories = await this.buildGlobalCategories(true);
+		const globalCategories = await this.buildGlobalCategories(currentState, true);
 		return this.helper.updateStateFromNewGlobalCategories(currentState.achievements, globalCategories);
 	}
 
-	public async buildGlobalCategories(useCache = false): Promise<readonly VisualAchievementCategory[]> {
+	public async buildGlobalCategories(
+		currentState: MainWindowState,
+		useCache = false,
+	): Promise<readonly VisualAchievementCategory[]> {
 		const globalCategories: readonly AchievementCategory[] = await this.achievementsRepository.getCategories();
 		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements(
 			useCache,

@@ -62,6 +62,7 @@ declare var ga: any;
 						<achievements
 							class="main-section"
 							[state]="state.achievements"
+							[currentUser]="state.currentUser"
 							[socialShareUserInfo]="state.socialShareUserInfo"
 							[hidden]="state.currentApp !== 'achievements'"
 						>

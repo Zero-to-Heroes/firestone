@@ -8,14 +8,14 @@
 }
 
 .menu-selection-achievements {
-
 	&.menu-selection {
 		margin-bottom: 14px;
-		border-bottom: 1px solid #4B3052;
+		border-bottom: 1px solid #4b3052;
 
 		li {
 			@extend %achievements-category-name;
 			padding-bottom: 10px;
+			display: flex;
 		}
 	}
 
@@ -29,7 +29,7 @@
 		margin-bottom: 10px;
 
 		li:not(.unclickable):not(.separator):not(.unreachable):hover {
-			color: #A276AF;
+			color: #a276af;
 		}
 
 		li.separator {
@@ -40,7 +40,7 @@
 		&.big {
 			margin-top: 0;
 			margin-bottom: 14px;
-			border-bottom: 1px solid #4B3052;
+			border-bottom: 1px solid #4b3052;
 			padding-bottom: 10px;
 			width: 100%;
 
@@ -48,17 +48,105 @@
 				font-size: 16px;
 
 				&:hover {
-					color: #A276AF;
+					color: #a276af;
 				}
 
 				&:last-of-type {
-					color: #FFB948;
+					color: #ffb948;
 
 					&:hover {
-						color: #FFB948;
+						color: #ffb948;
 					}
 				}
 			}
 		}
+	}
+}
+
+.attention-icon-container {
+	margin-left: 10px;
+	display: flex;
+	align-items: center;
+	position: relative;
+}
+
+.attention-icon {
+	color: transparent;
+	--icon-color: #d9c3ab;
+	width: 17px;
+	height: 17px;
+
+	&.active,
+	&:hover {
+		--icon-color: #ffb948;
+	}
+}
+
+.login-conf-popup {
+	position: absolute;
+	background: #7d5a87;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.75);
+	padding: 15px;
+	left: 40px;
+	z-index: 99999;
+	top: -49px;
+
+	.text {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 13px;
+		line-height: 18px;
+		text-align: center;
+		color: #1b071f;
+	}
+
+	.buttons {
+		display: flex;
+		margin-top: 15px;
+	}
+
+	button {
+		width: 80px;
+		height: 30px;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 13px;
+		line-height: 18px;
+		text-align: center;
+		opacity: 0.8;
+		background: transparent;
+	}
+
+	.cancel {
+		color: #2f0d0d;
+		border: 1px solid #2f0d0d;
+
+		&:hover {
+			background: rgba(75, 48, 82, 0.3);
+			opacity: 1;
+		}
+	}
+
+	.log-in {
+		color: #a276af;
+		background: #4b3052;
+		margin-left: 10px;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.tooltip-arrow {
+		position: absolute;
+		width: 16px;
+		height: 9px;
+		fill: #7d5a87;
+		overflow: visible;
+		transform: rotate(-90deg);
+		left: -3px;
+		top: 50%;
 	}
 }

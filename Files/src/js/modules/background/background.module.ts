@@ -41,6 +41,7 @@ import { GameEventsPluginService } from '../../services/plugins/game-events-plug
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
+import { UserService } from '../../services/user.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 
 init({
@@ -75,6 +76,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		AppBootstrapService,
 		MainWindowStoreService,
 		CollaboratorsService,
+		UserService,
 
 		DevService,
 		GameEvents,

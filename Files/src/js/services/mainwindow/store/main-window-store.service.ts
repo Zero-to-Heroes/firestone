@@ -21,6 +21,7 @@ import { SimpleIOService } from '../../plugins/simple-io.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
+import { UserService } from '../../user.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementRecordedEvent } from './events/achievements/achievement-recorded-event';
@@ -42,6 +43,7 @@ import { SelectCollectionSetEvent } from './events/collection/select-collection-
 import { ShowCardDetailsEvent } from './events/collection/show-card-details-event';
 import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle-show-only-new-cards-in-history-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
+import { CurrentUserEvent } from './events/current-user-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
@@ -81,6 +83,7 @@ import { SelectCollectionSetProcessor } from './processors/collection/select-col
 import { ShowCardDetailsProcessor } from './processors/collection/show-card-details-processor';
 import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collection/toggle-show-only-new-cards-in-history-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
+import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { PopulateStoreProcessor } from './processors/populate-store-processor';
@@ -135,7 +138,9 @@ export class MainWindowStoreService {
 		private events: Events,
 		private pityTimer: PackHistoryService,
 		private notifs: OwNotificationsService,
+		private userService: UserService,
 	) {
+		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
 		window['mainWindowStoreUpdater'] = this.stateUpdater;
 		this.gameStatsUpdater.stateUpdater = this.stateUpdater;
@@ -247,6 +252,9 @@ export class MainWindowStoreService {
 
 			ShowMainWindowEvent.eventName(),
 			new ShowMainWindowProcessor(),
+
+			CurrentUserEvent.eventName(),
+			new CurrentUserProcessor(),
 
 			// Collection
 			SearchCardsEvent.eventName(),
