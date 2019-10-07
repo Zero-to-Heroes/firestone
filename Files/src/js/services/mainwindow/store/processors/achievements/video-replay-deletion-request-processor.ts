@@ -1,15 +1,15 @@
-import { Processor } from '../processor';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { VideoReplayDeletionRequestEvent } from '../../events/achievements/video-replay-deletion-request-event';
+import { AchievementsLocalStorageService } from '../../../../achievement/achievements-local-storage.service';
 import { SimpleIOService } from '../../../../plugins/simple-io.service';
-import { AchievementsStorageService } from '../../../../achievement/achievements-storage.service';
+import { VideoReplayDeletionRequestEvent } from '../../events/achievements/video-replay-deletion-request-event';
 import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
+import { Processor } from '../processor';
 
 export class VideoReplayDeletionRequestProcessor implements Processor {
 	constructor(
 		private io: SimpleIOService,
 		private helper: AchievementUpdateHelper,
-		private achievementsStorage: AchievementsStorageService,
+		private achievementsStorage: AchievementsLocalStorageService,
 	) {}
 
 	public async process(

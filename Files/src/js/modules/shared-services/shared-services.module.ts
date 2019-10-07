@@ -2,11 +2,11 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { AchievementHistoryStorageService } from '../../services/achievement/achievement-history-storage.service';
+import { AchievementsLocalStorageService } from '../../services/achievement/achievements-local-storage.service';
 import { AchievementsRepository } from '../../services/achievement/achievements-repository.service';
-import { AchievementsStorageService } from '../../services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
-import { IndexedDbService as AchievementsDb } from '../../services/achievement/indexed-db.service';
+import { AchievementsLocalDbService as AchievementsDb } from '../../services/achievement/indexed-db.service';
 import { AllCardsService } from '../../services/all-cards.service';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
@@ -48,7 +48,7 @@ export class SharedServicesModule {
 
 				AchievementHistoryStorageService,
 				AchievementsRepository,
-				AchievementsStorageService,
+				AchievementsLocalStorageService,
 				ChallengeBuilderService,
 				AchievementsLoaderService,
 				AchievementsDb,

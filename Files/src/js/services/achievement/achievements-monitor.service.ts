@@ -8,9 +8,10 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { AchievementCompletedEvent } from '../mainwindow/store/events/achievements/achievement-completed-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { ProcessingQueue } from '../processing-queue.service';
-import { AchievementsStorageService } from './achievements-storage.service';
+import { AchievementsLocalStorageService } from './achievements-local-storage.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
+import { RemoteAchievementsService } from './remote-achievements.service';
 
 @Injectable()
 export class AchievementsMonitor {
@@ -27,7 +28,8 @@ export class AchievementsMonitor {
 		private events: Events,
 		private logger: NGXLogger,
 		private store: MainWindowStoreService,
-		private achievementsStorage: AchievementsStorageService,
+		private achievementStats: RemoteAchievementsService,
+		private achievementsStorage: AchievementsLocalStorageService,
 	) {
 		this.lastReceivedTimestamp = Date.now();
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
@@ -47,7 +49,8 @@ export class AchievementsMonitor {
 	private async sendUnlockEvent(challenge: Challenge) {
 		console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
 		const existingAchievement: CompletedAchievement =
-			(await this.achievementsStorage.loadAchievement(challenge.achievementId)) || challenge.defaultAchievement();
+			(await this.achievementsStorage.loadAchievementFromCache(challenge.achievementId)) ||
+			challenge.defaultAchievement();
 		// console.log('[achievement-monitor] loaded existing completed achievement');
 		const completedAchievement = new CompletedAchievement(
 			existingAchievement.id,
@@ -61,9 +64,10 @@ export class AchievementsMonitor {
 			replayInfo: completedAchievement.replayInfo,
 		} as Achievement);
 
-		await this.achievementsStorage.saveAchievement(completedAchievement);
+		this.achievementStats.publishRemoteAchievement(mergedAchievement);
+		await this.achievementsStorage.cacheAchievement(completedAchievement);
 		// console.log('[achievement-monitor] broadcasting event completion event', challenge.achievementId);
-		this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
+		// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
 
 		this.enqueue({ achievement: mergedAchievement, challenge: challenge } as InternalEvent);
 	}

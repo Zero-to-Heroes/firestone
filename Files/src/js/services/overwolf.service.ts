@@ -163,6 +163,10 @@ export class OverwolfService {
 		});
 	}
 
+	public addLoginStateChangedListener(callback) {
+		overwolf.profile.onLoginStateChanged.addListener(callback);
+	}
+
 	public async closeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.close(windowId, result => {

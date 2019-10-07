@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AchievementStatsService } from './achievement/achievement-stats.service';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
-import { IndexedDbService as AchievementsDb } from './achievement/indexed-db.service';
+import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
+import { RemoteAchievementsService } from './achievement/remote-achievements.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';
@@ -51,7 +51,7 @@ export class AppBootstrapService {
 		private init_AchievementsNotifications: AchievementsNotificationService,
 		private achievementsVideoCaptureService: AchievementsVideoCaptureService,
 		private packStatsService: PackStatsService,
-		private achievementStatsService: AchievementStatsService,
+		private achievementStatsService: RemoteAchievementsService,
 		private collectionManager: CollectionManager,
 		private deckParserService: DeckParserService,
 		private gameStateService: GameStateService,

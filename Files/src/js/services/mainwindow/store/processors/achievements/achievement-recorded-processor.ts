@@ -1,18 +1,18 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { AchievementRecordedEvent } from '../../events/achievements/achievement-recorded-event';
-import { ReplayInfo } from '../../../../../models/replay-info';
-import { CompletedAchievement } from '../../../../../models/completed-achievement';
-import { AchievementsStorageService } from '../../../../achievement/achievements-storage.service';
 import { AchievementSet } from '../../../../../models/achievement-set';
-import { Events } from '../../../../events.service';
-import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
+import { CompletedAchievement } from '../../../../../models/completed-achievement';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { ReplayInfo } from '../../../../../models/replay-info';
 import { VisualAchievement } from '../../../../../models/visual-achievement';
+import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
+import { AchievementsLocalStorageService } from '../../../../achievement/achievements-local-storage.service';
+import { Events } from '../../../../events.service';
+import { AchievementRecordedEvent } from '../../events/achievements/achievement-recorded-event';
 import { AchievementStateHelper } from '../../helper/achievement-state-helper';
+import { Processor } from '../processor';
 
 export class AchievementRecordedProcessor implements Processor {
 	constructor(
-		private achievementStorage: AchievementsStorageService,
+		private achievementStorage: AchievementsLocalStorageService,
 		private achievementStateHelper: AchievementStateHelper,
 		private events: Events,
 	) {}
@@ -94,11 +94,11 @@ export class AchievementRecordedProcessor implements Processor {
 	}
 
 	private async saveReplayInfo(achievementId: string, replayInfo: ReplayInfo) {
-		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievement(achievementId);
+		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievementFromCache(achievementId);
 		const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, [
 			replayInfo,
 			...achievement.replayInfo,
 		]);
-		return await this.achievementStorage.saveAchievement(newAchievement);
+		return await this.achievementStorage.cacheAchievement(newAchievement);
 	}
 }

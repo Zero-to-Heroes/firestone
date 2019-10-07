@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AchievementCategory } from '../../models/achievement-category';
 import { AchievementSet } from '../../models/achievement-set';
+import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementCategoryProvider } from './achievement-sets/achievement-category-provider';
 import { AmazingPlaysCategoryProvider } from './achievement-sets/amazing-plays/amazing-plays-category';
 import { CompetitiveLadderCategoryProvider } from './achievement-sets/competitive-ladder/competitive-ladder-category';
@@ -12,8 +13,9 @@ import { MonsterHuntCategoryProvider } from './achievement-sets/monster_hunt/mon
 import { RumbleRunCategoryProvider } from './achievement-sets/rumble_run/rumble-run-category';
 import { SetProvider } from './achievement-sets/set-provider';
 import { TombsOfTerrorCategoryProvider } from './achievement-sets/tombs_of_terror/tombs-of-terror-category';
-import { AchievementsStorageService } from './achievements-storage.service';
+import { AchievementsLocalStorageService } from './achievements-local-storage.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
+import { RemoteAchievementsService } from './remote-achievements.service';
 
 @Injectable()
 export class AchievementsRepository {
@@ -22,16 +24,22 @@ export class AchievementsRepository {
 	private setProviders: readonly SetProvider[];
 	private categories: readonly AchievementCategory[];
 
-	constructor(private storage: AchievementsStorageService, private achievementsLoader: AchievementsLoaderService) {
+	constructor(
+		private storage: AchievementsLocalStorageService,
+		private remoteAchievements: RemoteAchievementsService,
+		private achievementsLoader: AchievementsLoaderService,
+	) {
 		this.init();
 	}
 
-	public async loadAggregatedAchievements(): Promise<AchievementSet[]> {
+	public async loadAggregatedAchievements(useCache = false): Promise<AchievementSet[]> {
 		const [allAchievements, completedAchievements] = await Promise.all([
 			this.achievementsLoader.getAchievements(),
-			this.storage.loadAchievements(),
+			useCache ? this.storage.loadAchievementsFromCache() : this.remoteAchievements.loadAchievements(),
 		]);
-		return this.setProviders.map(provider => provider.provide(allAchievements, completedAchievements));
+		return this.setProviders.map(provider =>
+			provider.provide(allAchievements, completedAchievements as CompletedAchievement[]),
+		);
 	}
 
 	public async getCategories(): Promise<readonly AchievementCategory[]> {

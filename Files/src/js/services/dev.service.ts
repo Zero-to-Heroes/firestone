@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../models/achievement';
+import { AchievementsLocalStorageService } from './achievement/achievements-local-storage.service';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
-import { AchievementsStorageService } from './achievement/achievements-storage.service';
 import { Challenge } from './achievement/achievements/challenges/challenge';
 import { PackMonitor } from './collection/pack-monitor.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
@@ -26,7 +26,7 @@ export class DevService {
 		private gameEvents: GameEvents,
 		private gameEventsPlugin: GameEventsPluginService,
 		private deckService: DeckParserService,
-		private storage: AchievementsStorageService,
+		private storage: AchievementsLocalStorageService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;

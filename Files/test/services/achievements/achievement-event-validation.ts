@@ -3,8 +3,8 @@ import cardsJson from '../../../dependencies/cards.json';
 import { RawAchievement } from '../../../src/js/models/achievement/raw-achievement';
 import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
 import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
+import { AchievementsLocalStorageService } from '../../../src/js/services/achievement/achievements-local-storage.service.js';
 import { AchievementsMonitor } from '../../../src/js/services/achievement/achievements-monitor.service';
-import { AchievementsStorageService } from '../../../src/js/services/achievement/achievements-storage.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../../src/js/services/achievement/data/achievements-loader.service';
 import { AllCardsService } from '../../../src/js/services/all-cards.service';
@@ -82,17 +82,17 @@ export const achievementsValidation = async (
 		new NGXLoggerMock() as NGXLogger,
 	);
 	statsUpdater.stateUpdater = store.stateUpdater;
-	const storage: AchievementsStorageService = {
-		loadAchievement: async (achievementId: string) => {
+	const storage: AchievementsLocalStorageService = {
+		loadAchievementFromCache: async (achievementId: string) => {
 			return null;
 		},
-		saveAchievement: async (achievement: CompletedAchievement) => {
+		cacheAchievement: async (achievement: CompletedAchievement) => {
 			return null;
 		},
-	} as AchievementsStorageService;
+	} as AchievementsLocalStorageService;
 
 	// Launch the monitoring
-	new AchievementsMonitor(emitter, loader, events, new NGXLoggerMock() as NGXLogger, store, storage);
+	new AchievementsMonitor(emitter, loader, events, new NGXLoggerMock() as NGXLogger, store, null, storage);
 
 	// So that it has time to register all the events first
 	await sleep(100);

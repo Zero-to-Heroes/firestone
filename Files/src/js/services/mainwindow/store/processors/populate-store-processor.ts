@@ -1,5 +1,3 @@
-import { AchievementCategory } from '../../../../models/achievement-category';
-import { AchievementSet } from '../../../../models/achievement-set';
 import { AchievementHistory } from '../../../../models/achievement/achievement-history';
 import { Card } from '../../../../models/card';
 import { CardHistory } from '../../../../models/card-history';
@@ -11,9 +9,7 @@ import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../models/mainwindow/stats/stats-state';
 import { PityTimer } from '../../../../models/pity-timer';
 import { Set, SetCard } from '../../../../models/set';
-import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 import { AchievementHistoryStorageService } from '../../../achievement/achievement-history-storage.service';
-import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
 import { AchievementsLoaderService } from '../../../achievement/data/achievements-loader.service';
 import { AllCardsService } from '../../../all-cards.service';
 import { CardHistoryStorageService } from '../../../collection/card-history-storage.service';
@@ -22,12 +18,13 @@ import { PackHistoryService } from '../../../collection/pack-history.service';
 import { OverwolfService } from '../../../overwolf.service';
 import { GameStatsLoaderService } from '../../../stats/game/game-stats-loader.service';
 import { PopulateStoreEvent } from '../events/populate-store-event';
+import { AchievementUpdateHelper } from '../helper/achievement-update-helper';
 import { Processor } from './processor';
 
 export class PopulateStoreProcessor implements Processor {
 	constructor(
 		private achievementHistoryStorage: AchievementHistoryStorageService,
-		private achievementsRepository: AchievementsRepository,
+		private achievementsHelper: AchievementUpdateHelper,
 		private cardHistoryStorage: CardHistoryStorageService,
 		private collectionManager: CollectionManager,
 		private pityTimer: PackHistoryService,
@@ -84,7 +81,7 @@ export class PopulateStoreProcessor implements Processor {
 
 	private async populateAchievementState(currentState: AchievementsState): Promise<AchievementsState> {
 		return Object.assign(new AchievementsState(), currentState, {
-			globalCategories: await this.buildGlobalCategories(),
+			globalCategories: await this.achievementsHelper.buildGlobalCategories(),
 			achievementHistory: await this.buildAchievementHistory(),
 		} as AchievementsState);
 	}
@@ -111,23 +108,6 @@ export class PopulateStoreProcessor implements Processor {
 				// We want to have the most recent at the top
 				.reverse()
 		);
-	}
-
-	private async buildGlobalCategories(): Promise<readonly VisualAchievementCategory[]> {
-		const globalCategories: readonly AchievementCategory[] = await this.achievementsRepository.getCategories();
-		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements();
-		return globalCategories.map(category => {
-			return {
-				id: category.id,
-				name: category.name,
-				icon: category.icon,
-				achievementSets: this.buildSetsForCategory(achievementSets, category.achievementSetIds),
-			} as VisualAchievementCategory;
-		});
-	}
-
-	private buildSetsForCategory(achievementSets: AchievementSet[], achievementSetIds: string[]): AchievementSet[] {
-		return achievementSets.filter(set => achievementSetIds.indexOf(set.id) !== -1);
 	}
 
 	private async populateCollectionState(currentState: BinderState): Promise<BinderState> {

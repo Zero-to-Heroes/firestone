@@ -4,9 +4,10 @@ import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../models/mainwindow/navigation';
 import { AchievementHistoryStorageService } from '../../achievement/achievement-history-storage.service';
+import { AchievementsLocalStorageService } from '../../achievement/achievements-local-storage.service';
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
-import { AchievementsStorageService } from '../../achievement/achievements-storage.service';
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
+import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
 import { AllCardsService } from '../../all-cards.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
@@ -121,9 +122,10 @@ export class MainWindowStoreService {
 		private achievementsRepository: AchievementsRepository,
 		private collectionManager: CollectionManager,
 		private cardHistoryStorage: CardHistoryStorageService,
-		private achievementsStorage: AchievementsStorageService,
+		private achievementsStorage: AchievementsLocalStorageService,
 		private achievementHistoryStorage: AchievementHistoryStorageService,
 		private achievementsLoader: AchievementsLoaderService,
+		private remoteAchievements: RemoteAchievementsService,
 		private io: SimpleIOService,
 		private collectionDb: IndexedDbService,
 		private gameStatsUpdater: GameStatsUpdaterService,
@@ -214,13 +216,14 @@ export class MainWindowStoreService {
 		const achievementStateHelper = new AchievementStateHelper();
 		const achievementUpdateHelper = new AchievementUpdateHelper(
 			this.achievementsRepository,
+			this.remoteAchievements,
 			achievementStateHelper,
 		);
 		return Map.of(
 			PopulateStoreEvent.eventName(),
 			new PopulateStoreProcessor(
 				this.achievementHistoryStorage,
-				this.achievementsRepository,
+				achievementUpdateHelper,
 				this.cardHistoryStorage,
 				this.collectionManager,
 				this.pityTimer,

@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-
-import { IndexedDbService } from './indexed-db.service';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
+import { AchievementsLocalDbService } from './indexed-db.service';
 
 @Injectable()
 export class AchievementHistoryStorageService {
-	constructor(private indexedDb: IndexedDbService) {}
+	constructor(private indexedDb: AchievementsLocalDbService) {}
 
 	public async save(history: AchievementHistory) {
 		await this.indexedDb.saveHistory(history);

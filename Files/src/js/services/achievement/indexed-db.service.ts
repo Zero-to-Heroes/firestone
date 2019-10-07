@@ -4,56 +4,66 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 import { CompletedAchievement } from '../../models/completed-achievement';
 
 @Injectable()
-export class IndexedDbService {
+export class AchievementsLocalDbService {
 	public dbInit: boolean;
 
 	private db: AngularIndexedDB;
+	private achievementsCache: { [achievementId: string]: CompletedAchievement } = {};
 
 	constructor() {
 		this.init();
 	}
 
 	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
-		await this.waitForDbInit();
-		try {
-			const achievement = await this.db.getByKey('achievements', achievementId);
-			return achievement;
-		} catch (e) {
-			console.error('[achievements] [storage] error while loading completed achievement', e.message, e.name, e);
-		}
+		return this.achievementsCache[achievementId];
+		// await this.waitForDbInit();
+		// try {
+		// 	const achievement = await this.db.getByKey('achievements', achievementId);
+		// 	return achievement;
+		// } catch (e) {
+		// 	console.error('[achievements] [storage] error while loading completed achievement', e.message, e.name, e);
+		// }
 	}
 
 	public async save(achievement: CompletedAchievement): Promise<CompletedAchievement> {
-		await this.waitForDbInit();
-		try {
-			const result = await this.db.update('achievements', achievement);
-			return result;
-		} catch (e) {
-			console.error(
-				'[achievements] [storage] error while saving completed achievement',
-				achievement,
-				e.message,
-				e.name,
-				e,
-			);
-			return achievement;
-		}
+		this.achievementsCache[achievement.id] = achievement;
+		return achievement;
+		// await this.waitForDbInit();
+		// try {
+		// 	const result = await this.db.update('achievements', achievement);
+		// 	return result;
+		// } catch (e) {
+		// 	console.error(
+		// 		'[achievements] [storage] error while saving completed achievement',
+		// 		achievement,
+		// 		e.message,
+		// 		e.name,
+		// 		e,
+		// 	);
+		// 	return achievement;
+		// }
+	}
+
+	public async saveAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
+		achievements.forEach(achievement => this.save(achievement));
+		return this.getAll();
 	}
 
 	public async getAll(): Promise<CompletedAchievement[]> {
-		await this.waitForDbInit();
-		try {
-			const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
-			return achievements;
-		} catch (e) {
-			console.error(
-				'[achievements] [storage] error while getting all completed achievements',
-				e.message,
-				e.name,
-				e,
-			);
-			return [];
-		}
+		return Object.values(this.achievementsCache);
+		// await this.waitForDbInit();
+		// try {
+		// 	const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
+		// 	return achievements;
+		// } catch (e) {
+		// 	console.error(
+		// 		'[achievements] [storage] error while getting all completed achievements',
+		// 		e.message,
+		// 		e.name,
+		// 		e,
+		// 	);
+		// 	return [];
+		// }
 	}
 
 	public async loadAllHistory(): Promise<AchievementHistory[]> {
