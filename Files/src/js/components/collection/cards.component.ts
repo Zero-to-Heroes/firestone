@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	HostListener,
 	Input,
+	OnDestroy,
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
@@ -102,7 +103,7 @@ import { Set, SetCard } from '../../models/set';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardsComponent implements AfterViewInit {
+export class CardsComponent implements AfterViewInit, OnDestroy {
 	readonly MAX_CARDS_DISPLAYED_PER_PAGE = 100000;
 
 	readonly RARITY_FILTER_ALL = 'rarity-all';
@@ -169,6 +170,8 @@ export class CardsComponent implements AfterViewInit {
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
 	cardsOwnedActiveFilter = this.FILTER_ALL;
 
+	private processingTimeout;
+
 	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
@@ -186,6 +189,12 @@ export class CardsComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		});
+	}
+
+	ngOnDestroy() {
+		if (this.processingTimeout) {
+			clearTimeout(this.processingTimeout);
+		}
 	}
 
 	@Input('set') set cardSet(set: Set) {
@@ -254,7 +263,14 @@ export class CardsComponent implements AfterViewInit {
 	}
 
 	private updateShownCards() {
-		// console.log('updating card list', this._cardList, this.classActiveFilter);
+		if (!this._cardList || this._cardList.length === 0) {
+			this._activeCards = [];
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+			return;
+		}
+		console.log('updating card list', this._cardList, this.classActiveFilter);
 		const filteredCards = this._cardList
 			.filter(this.filterRarity())
 			.filter(this.filterClass())
@@ -264,16 +280,43 @@ export class CardsComponent implements AfterViewInit {
 		// - Extract this to a directive, so that the logic is abstracted away from each rendering page
 		// - Be smart about how many items to display at first, so that the page looks full right away
 		// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
-		this._activeCards = filteredCards.slice(0, 20);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+		console.log('showing cards', filteredCards);
+		this.gradualLoadActiveCards(filteredCards);
+	}
+
+	private gradualLoadActiveCards(cards: SetCard[]) {
+		const it = this.doGradualLoad(cards);
+		this.progressiveLoad(it);
+	}
+
+	private progressiveLoad(it: IterableIterator<void>) {
+		const itValue = it.next();
+		if (!itValue.done) {
+			this.processingTimeout = setTimeout(() => this.progressiveLoad(it), 300);
 		}
-		setTimeout(() => {
-			this._activeCards = filteredCards.slice(0, this.MAX_CARDS_DISPLAYED_PER_PAGE);
+	}
+
+	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
+		this._activeCards = [];
+		const workingCards = [...cards];
+		const step = 15;
+		while (workingCards.length > 0) {
+			console.log('working with array of', workingCards.length);
+			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
+			this._activeCards.push(...cardsToAdd);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
-		}, 500);
+			yield;
+		}
+		console.log('dragual load over');
+		return;
+		// setTimeout(() => {
+		// 	this._activeCards = cards.slice(0, this.MAX_CARDS_DISPLAYED_PER_PAGE);
+		// 	if (!(this.cdr as ViewRef).destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// }, 500);
 	}
 
 	private filterRarity() {

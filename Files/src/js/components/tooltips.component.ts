@@ -21,15 +21,23 @@ import { Events } from '../services/events.service';
 	styleUrls: [`../../css/component/tooltip.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="tooltip-container" [ngClass]="{ 'missing': missing }">
+		<div class="tooltip-container" [ngClass]="{ 'missing': missing }" *ngIf="cardId">
+			<img
+				src="/Files/assets/images/placeholder.png"
+				class="pale-theme placeholder"
+				[style.opacity]="showPlaceholder ? 1 : 0"
+			/>
 			<img
 				src="{{ image() }}"
-				*ngIf="cardId"
 				(load)="imageLoadedHandler()"
 				[style.opacity]="showPlaceholder ? 0 : 1"
 				[ngClass]="{ 'removing': removing }"
 			/>
-			<div class="overlay" [ngStyle]="{ '-webkit-mask-image': overlayMaskImage() }"></div>
+			<div
+				class="overlay"
+				[ngStyle]="{ '-webkit-mask-image': overlayMaskImage() }"
+				[hidden]="showPlaceholder"
+			></div>
 		</div>
 	`,
 	// I don't know how to make this work with OnPush
@@ -98,7 +106,7 @@ export class TooltipsComponent implements AfterViewInit, OnDestroy {
 			const owned: boolean = data.data[3];
 			const elementRect = data.data[4];
 			let top: number = Math.min(window.innerHeight - 400, elementTop - 388 / 2);
-			// console.log('displaying tooltip', elementRect);
+			console.log('displaying tooltip', elementRect);
 
 			if (this.position === 'outside') {
 				top = elementRect.top - 275 / 2;

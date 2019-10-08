@@ -1,40 +1,43 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
-	Component,
-	Input,
-	ElementRef,
-	HostListener,
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
-	ViewRef,
+	Component,
+	ElementRef,
 	EventEmitter,
-	AfterViewInit,
+	HostListener,
+	Input,
+	ViewRef,
 } from '@angular/core';
-import { trigger, state, transition, style, animate } from '@angular/animations';
-
-import { Events } from '../../services/events.service';
 import { SetCard } from '../../models/set';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'card-view',
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
-		<div class="card-container" [ngClass]="{ 'missing': _card.ownedNonPremium + _card.ownedPremium === 0 }">
+		<div class="card-container" [ngClass]="{ 'missing': missing }">
 			<img
 				src="/Files/assets/images/placeholder.png"
 				class="pale-theme placeholder"
 				[@showPlaceholder]="showPlaceholder"
 			/>
 			<img src="{{ image }}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder" />
-			<div class="overlay" [ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"></div>
+			<div
+				class="overlay"
+				[ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"
+				[hidden]="showPlaceholder"
+			></div>
 
 			<div class="count" *ngIf="!showPlaceholder">
-				<div class="non-premium" *ngIf="_card.ownedNonPremium > 0 || showCounts">
+				<div class="non-premium" *ngIf="showNonPremiumCount">
 					<span>{{ _card.ownedNonPremium }}</span>
 				</div>
-				<div class="premium" *ngIf="_card.ownedPremium > 0 || showCounts">
+				<div class="premium" *ngIf="showPremiumCount">
 					<i class="gold-theme left">
 						<svg class="svg-icon-fill">
 							<use xlink:href="/Files/assets/svg/sprite.svg#two_gold_leaves" />
@@ -57,7 +60,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				'false',
 				style({
 					opacity: 0,
-					'pointer-events': 'none',
+					// 'pointer-events': 'none',
 				}),
 			),
 			state(
@@ -73,7 +76,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				'false',
 				style({
 					opacity: 0,
-					'pointer-events': 'none',
+					// 'pointer-events': 'none',
 				}),
 			),
 			state(
@@ -91,8 +94,12 @@ export class CardComponent implements AfterViewInit {
 	@Input() public showCounts = false;
 
 	showPlaceholder = true;
+	showNonPremiumCount: boolean;
+	showPremiumCount: boolean;
+
 	image: string;
 	overlayMaskImage: string;
+	missing: boolean;
 	_card: SetCard;
 	_highRes = false;
 
@@ -107,6 +114,9 @@ export class CardComponent implements AfterViewInit {
 
 	@Input('card') set card(card: SetCard) {
 		this._card = card;
+		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
+		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
+		this.showNonPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
 		this.updateImage();
 	}
 
@@ -142,6 +152,7 @@ export class CardComponent implements AfterViewInit {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
+		// console.log('image loaded', )
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
