@@ -127,6 +127,24 @@ describe('deckbuilding-text-number-of-words-req', () => {
 
 				expect(req.isCompleted()).toBeFalsy();
 			});
+
+			test('sanity wioth another deckstring', () => {
+				const deckstring = 'AAECAf0EBu4CyQOmhwOWmgOKngPYoAMMwwGxCKP9AoOWA6aYA5+bA6CbA+KbA4ukA76kA9alA/SrAwA=';
+				const req = new DeckbuildingTextNumberOfWordsReq(30, 'AT_LEAST', 8, 'AT_LEAST', cards);
+				const event = Object.assign(new GameEvent(), {
+					type: GameEvent.LOCAL_PLAYER,
+					localPlayer: {
+						deck: {
+							deckstring: deckstring,
+							deck: decode(deckstring),
+						},
+					},
+				} as GameEvent);
+
+				req.test(event);
+
+				expect(req.isCompleted()).toBe(true);
+			});
 		});
 		describe('wordsQualifier is AT_MOST', () => {
 			test('is completed when deck contains exactly the number of cards that include exactly the expected number of words', () => {
