@@ -38,7 +38,7 @@ export class AchievementRecordingService {
 		}
 
 		// If it is, don't record it more than the max number of allowed records
-		if (achievement.replayInfo.length >= achievement.maxNumberOfRecords) {
+		if (achievement && achievement.replayInfo && achievement.replayInfo.length >= achievement.maxNumberOfRecords) {
 			this.logger.debug(
 				'[achievements-recording] Already recorded the max number of achievements',
 				achievement.replayInfo,

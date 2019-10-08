@@ -55,7 +55,7 @@ export class AchievementsMonitor {
 		const completedAchievement = new CompletedAchievement(
 			existingAchievement.id,
 			existingAchievement.numberOfCompletions + 1,
-			existingAchievement.replayInfo,
+			existingAchievement.replayInfo || [],
 		);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
 		// console.log('[achievement-monitor] retrieved achievement from repository', challenge.achievementId);
