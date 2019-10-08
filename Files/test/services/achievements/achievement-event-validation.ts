@@ -20,6 +20,7 @@ import { PlayersInfoService } from '../../../src/js/services/players-info.servic
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';
 import { GameStatsUpdaterService } from '../../../src/js/services/stats/game/game-stats-updater.service';
+import { RemoteAchievementsService } from '../../../src/js/services/achievement/remote-achievements.service.js';
 
 export const achievementsValidation = async (
 	rawAchievements: RawAchievement[],
@@ -90,9 +91,20 @@ export const achievementsValidation = async (
 			return null;
 		},
 	} as AchievementsLocalStorageService;
+	const achievementStats = {
+		publishRemoteAchievement: async achievement => {},
+	} as RemoteAchievementsService;
 
 	// Launch the monitoring
-	new AchievementsMonitor(emitter, loader, events, new NGXLoggerMock() as NGXLogger, store, null, storage);
+	new AchievementsMonitor(
+		emitter,
+		loader,
+		events,
+		new NGXLoggerMock() as NGXLogger,
+		store,
+		achievementStats,
+		storage,
+	);
 
 	// So that it has time to register all the events first
 	await sleep(100);
