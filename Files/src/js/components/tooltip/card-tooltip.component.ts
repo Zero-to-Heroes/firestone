@@ -17,7 +17,7 @@ export class CardTooltipComponent {
 
 	@Input() set cardId(value: string) {
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${value}.png`;
-		console.log('setting tooltip', value, this.image);
+		// console.log('setting tooltip', value, this.image);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -108,13 +108,14 @@ export class SetCard {
 	readonly cost: number;
 	readonly ownedNonPremium: number = 0;
 	readonly ownedPremium: number = 0;
+	readonly displayed: boolean = true;
 
 	constructor(
-		id: string,
-		name: string,
-		cardClass: string,
-		rarity: string,
-		cost: number,
+		id?: string,
+		name?: string,
+		cardClass?: string,
+		rarity?: string,
+		cost?: number,
 		ownedNonPremium?: number,
 		ownedPremium?: number,
 	) {

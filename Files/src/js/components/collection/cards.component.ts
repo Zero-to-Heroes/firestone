@@ -87,8 +87,12 @@ import { Set, SetCard } from '../../models/set';
 					</ng-template>
 				</ng-select>
 			</div>
-			<ul class="cards-list">
-				<li *ngFor="let card of _activeCards; trackBy: trackByCardId">
+			<div class="loading" [hidden]="!loading"><div>Loading cards...</div></div>
+			<ul class="cards-list" [hidden]="loading">
+				<li
+					*ngFor="let card of _activeCards; trackBy: trackByCardId"
+					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
+				>
 					<card-view [card]="card">/</card-view>
 				</li>
 			</ul>
@@ -169,6 +173,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	classActiveFilter = this.CLASS_FILTER_ALL;
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
 	cardsOwnedActiveFilter = this.FILTER_ALL;
+	loading = true;
 
 	private processingTimeout;
 
@@ -206,6 +211,14 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		this.classActiveFilter = this.CLASS_FILTER_ALL;
 		this.rarityActiveFilter = this.RARITY_FILTER_ALL;
 		this.cardsOwnedActiveFilter = this.FILTER_ALL;
+		// Now render all the card items
+		// TODO: we do this to speed up the initial load of the page
+		// This should probably be improved in several ways:
+		// - Extract this to a directive, so that the logic is abstracted away from each rendering page
+		// - Be smart about how many items to display at first, so that the page looks full right away
+		// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
+		this.gradualLoadActiveCards(this._cardList);
+		// And hide some of them depending on the filters
 		this.updateShownCards();
 	}
 
@@ -263,25 +276,19 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private updateShownCards() {
-		if (!this._cardList || this._cardList.length === 0) {
-			this._activeCards = [];
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-			return;
-		}
-		console.log('updating card list', this._cardList, this.classActiveFilter);
-		const filteredCards = this._cardList
-			.filter(this.filterRarity())
-			.filter(this.filterClass())
-			.filter(this.filterCardsOwned());
-		// TODO: we do this to speed up the initial load of the page
-		// This should probably be improved in several ways:
-		// - Extract this to a directive, so that the logic is abstracted away from each rendering page
-		// - Be smart about how many items to display at first, so that the page looks full right away
-		// Maybe have a look at https://www.telerik.com/blogs/blazing-fast-list-rendering-in-angular?
-		console.log('showing cards', filteredCards);
-		this.gradualLoadActiveCards(filteredCards);
+		this._activeCards = (this._cardList || []).map(card =>
+			this.shouldBeShown(card)
+				? card
+				: Object.assign(new SetCard(), card, {
+						displayed: false,
+				  } as SetCard),
+		);
+	}
+
+	private shouldBeShown(card: SetCard): boolean {
+		const shouldBeShown = this.filterRarity()(card) && this.filterClass()(card) && this.filterCardsOwned()(card);
+		// console.log('should be shown?', shouldBeShown, card);
+		return shouldBeShown;
 	}
 
 	private gradualLoadActiveCards(cards: SetCard[]) {
@@ -292,16 +299,22 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	private progressiveLoad(it: IterableIterator<void>) {
 		const itValue = it.next();
 		if (!itValue.done) {
-			this.processingTimeout = setTimeout(() => this.progressiveLoad(it), 300);
+			// For now, do it in a single big step, and show the results once evrything is loaded
+			this.processingTimeout = setTimeout(() => this.progressiveLoad(it), 1);
 		}
 	}
 
 	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
+		console.log('starting loading cards');
+		this.loading = true;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 		this._activeCards = [];
 		const workingCards = [...cards];
-		const step = 15;
+		const step = 2000;
 		while (workingCards.length > 0) {
-			console.log('working with array of', workingCards.length);
+			// console.log('working with array of', workingCards.length);
 			const cardsToAdd = workingCards.splice(0, Math.min(step, workingCards.length));
 			this._activeCards.push(...cardsToAdd);
 			if (!(this.cdr as ViewRef).destroyed) {
@@ -309,14 +322,12 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			}
 			yield;
 		}
-		console.log('dragual load over');
+		this.loading = false;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+		console.log('dragual load over', this._activeCards.length);
 		return;
-		// setTimeout(() => {
-		// 	this._activeCards = cards.slice(0, this.MAX_CARDS_DISPLAYED_PER_PAGE);
-		// 	if (!(this.cdr as ViewRef).destroyed) {
-		// 		this.cdr.detectChanges();
-		// 	}
-		// }, 500);
 	}
 
 	private filterRarity() {

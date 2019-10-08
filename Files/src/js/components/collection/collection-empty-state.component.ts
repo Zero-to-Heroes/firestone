@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Set } from '../../models/set';
 
 @Component({
@@ -75,9 +75,9 @@ export class CollectionEmptyStateComponent {
 
 	sectionSelector: string;
 
-	private _set: Set;
-	private _activeFilter: string;
-	private _searchString: string;
+	_set: Set;
+	_activeFilter: string;
+	_searchString: string;
 
 	@Input('set') set set(set: Set) {
 		this._set = set;

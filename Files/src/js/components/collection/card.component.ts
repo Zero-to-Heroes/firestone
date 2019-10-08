@@ -159,6 +159,10 @@ export class CardComponent implements AfterViewInit {
 	}
 
 	private updateImage() {
+		this.showPlaceholder = true;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;

@@ -106,7 +106,7 @@ export class TooltipsComponent implements AfterViewInit, OnDestroy {
 			const owned: boolean = data.data[3];
 			const elementRect = data.data[4];
 			let top: number = Math.min(window.innerHeight - 400, elementTop - 388 / 2);
-			console.log('displaying tooltip', elementRect);
+			// console.log('displaying tooltip', elementRect);
 
 			if (this.position === 'outside') {
 				top = elementRect.top - 275 / 2;
