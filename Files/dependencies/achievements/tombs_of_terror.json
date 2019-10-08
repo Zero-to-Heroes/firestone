@@ -327,6 +327,71 @@
         ]
     },
     {
+        "id": "tombs_of_terror_amazing_plays_plague_lord_tie",
+        "type": "tombs_of_terror_amazing_plays_plague_lord_tie",
+        "name": "Tied a Plague Lord",
+        "icon": "boss_victory",
+        "root": true,
+        "priority": 0,
+        "displayName": "Achievement completed: Tied a Plague Lord",
+        "emptyText": "End the game with a Plague Lord in a tie",
+        "completedText": "You ended a game with a Plague Lord in a tie",
+        "displayCardId": "BOTA_601",
+        "displayCardType": "minion",
+        "difficulty": "legendary",
+        "maxNumberOfRecords": 3,
+        "points": 40,
+        "requirements": [
+            {
+                "type": "CORRECT_OPPONENT",
+                "values": [
+                    "ULDA_BOSS_39h",
+                    "ULDA_BOSS_39h2",
+                    "ULDA_BOSS_39h3",
+                    "ULDA_BOSS_40h",
+                    "ULDA_BOSS_40h2",
+                    "ULDA_BOSS_40h3",
+                    "ULDA_BOSS_37h",
+                    "ULDA_BOSS_37h2",
+                    "ULDA_BOSS_37h3",
+                    "ULDA_BOSS_38h",
+                    "ULDA_BOSS_38h2",
+                    "ULDA_BOSS_38h3",
+                    "ULDA_BOSS_67h"
+                ]
+            },
+            {
+                "type": "GAME_TYPE",
+                "values": [
+                    "1"
+                ]
+            },
+            {
+                "type": "SCENARIO_IDS",
+                "values": [
+                    "3428",
+                    "3429",
+                    "3430",
+                    "3431",
+                    "3432",
+                    "3438",
+                    "3433",
+                    "3434",
+                    "3435",
+                    "3436",
+                    "3437",
+                    "3439"
+                ]
+            },
+            {
+                "type": "GAME_TIE"
+            }
+        ],
+        "resetEvents": [
+            "GAME_END"
+        ]
+    },
+    {
         "id": "tombs_of_terror_amazing_plays_siamat_servant",
         "type": "tombs_of_terror_amazing_plays_siamat_servant",
         "name": "For Siamat!",
