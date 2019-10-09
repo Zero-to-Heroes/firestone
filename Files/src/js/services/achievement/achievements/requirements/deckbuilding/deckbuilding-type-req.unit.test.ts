@@ -67,6 +67,24 @@ describe('deckbuilding-type-req', () => {
 		});
 	});
 
+	test('sanity deckstring', () => {
+		const deckstring = 'AAECAf0ECE3DAbsC7gKrBOwHpocDuaUDC3G0BLwIo/0CppgDn5sDoJsD/50DwqEDv6QD9KsDAA==';
+		const req = new DeckbuildingTypeReq(30, 'SPELL', 'AT_LEAST', cards);
+		const event = Object.assign(new GameEvent(), {
+			type: GameEvent.LOCAL_PLAYER,
+			localPlayer: {
+				deck: {
+					deckstring: deckstring,
+					deck: decode(deckstring),
+				},
+			},
+		} as GameEvent);
+
+		req.test(event);
+
+		expect(req.isCompleted()).toBe(true);
+	});
+
 	test('req is intantiated with the correct expected info', () => {
 		const rawReq: RawRequirement = {
 			'type': 'DECK_TYPE',

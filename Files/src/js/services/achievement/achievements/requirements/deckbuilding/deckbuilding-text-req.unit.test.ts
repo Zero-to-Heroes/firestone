@@ -151,6 +151,23 @@ describe('deckbuilding-text-req', () => {
 
 				expect(req.isCompleted()).toBeFalsy();
 			});
+			test('sanity random deckstring', () => {
+				const deckstring = 'AAECAf0EBt4Fw/gChvsCpocD1pkD2KADDLQE+gWxCPvsAsLzAqP9AomWA6aYA+KbA8KhA4ukA4ipAwA=';
+				const req = new DeckbuildingTextReq(30, 'AT_LEAST', 'random', 'CONTAINS', cards);
+				const event = Object.assign(new GameEvent(), {
+					type: GameEvent.LOCAL_PLAYER,
+					localPlayer: {
+						deck: {
+							deckstring: deckstring,
+							deck: decode(deckstring),
+						},
+					},
+				} as GameEvent);
+
+				req.test(event);
+
+				expect(req.isCompleted()).toBe(true);
+			});
 		});
 	});
 

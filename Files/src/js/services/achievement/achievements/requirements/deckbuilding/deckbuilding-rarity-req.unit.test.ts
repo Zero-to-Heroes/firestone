@@ -134,6 +134,54 @@ describe('deckbuilding-rarity-req', () => {
 
 			expect(req.isCompleted()).toBeFalsy();
 		});
+		test('sanity deckstring', () => {
+			const deckstring = 'AAECAf0ECnGKAZ4C7gLJA+wFo/0C9YkD4psDi6QDCp4B5gTtBKCbA/+dA8KhA76kA7+kA92pA/SrAwA=';
+
+			const reqC = new DeckbuildingRarityReq(10, 'AT_LEAST', 'common' as RarityTYpe, cards);
+			const eventC = Object.assign(new GameEvent(), {
+				type: GameEvent.LOCAL_PLAYER,
+				localPlayer: {
+					deck: {
+						deckstring: deckstring,
+						deck: decode(deckstring),
+					},
+				},
+			} as GameEvent);
+
+			reqC.test(eventC);
+
+			expect(reqC.isCompleted()).toBe(true);
+
+			const reqR = new DeckbuildingRarityReq(10, 'AT_LEAST', 'rare' as RarityTYpe, cards);
+			const eventR = Object.assign(new GameEvent(), {
+				type: GameEvent.LOCAL_PLAYER,
+				localPlayer: {
+					deck: {
+						deckstring: deckstring,
+						deck: decode(deckstring),
+					},
+				},
+			} as GameEvent);
+
+			reqR.test(eventR);
+
+			expect(reqR.isCompleted()).toBe(true);
+
+			const reqE = new DeckbuildingRarityReq(10, 'AT_LEAST', 'epic' as RarityTYpe, cards);
+			const eventE = Object.assign(new GameEvent(), {
+				type: GameEvent.LOCAL_PLAYER,
+				localPlayer: {
+					deck: {
+						deckstring: deckstring,
+						deck: decode(deckstring),
+					},
+				},
+			} as GameEvent);
+
+			reqE.test(eventE);
+
+			expect(reqE.isCompleted()).toBe(true);
+		});
 	});
 
 	test('req is intantiated with the correct expected info', () => {
