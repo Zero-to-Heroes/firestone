@@ -1,0 +1,29 @@
+@import '../global/variables';
+@import '../global/fonts';
+
+.ads-container {
+	width: 100%;
+	height: 100%;
+
+	.no-ads-placeholder {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background-color: var(--ads-background-color);
+
+		.logo {
+			width: 109px;
+			height: 154px;
+			color: var(--ads-color);
+		}
+	}
+
+	.ads {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+}

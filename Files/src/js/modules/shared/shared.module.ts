@@ -1,6 +1,7 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AdsComponent } from '../../components/ads.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
 import { ControlDiscordComponent } from '../../components/controls/control-discord.component';
@@ -37,6 +38,8 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 		CardTooltipDirective,
 		HelpTooltipDirective,
+
+		AdsComponent,
 	],
 	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent],
 	exports: [
@@ -58,6 +61,8 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 		CardTooltipDirective,
 		HelpTooltipDirective,
+
+		AdsComponent,
 	],
 })
 export class SharedModule {}

@@ -23,7 +23,7 @@ export class MatchSummaryService {
 		// TODO:
 		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
 			this.logger.debug('[match-summary] received manastorm info update', result);
-			const info: ManastormInfo = result ? JSON.parse(result.info) : undefined;
+			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
 			if (info) {
 				// Here, regularly query the server for the match stats
 				this.queryServerForStats(info.reviewId, 30);

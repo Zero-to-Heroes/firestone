@@ -193,32 +193,23 @@ tooltips {
 	z-index: 9999;
 }
 
-.ads-container {
+ads {
 	width: 400px;
 	height: 300px;
 	right: 25px;
 	bottom: 25px;
 	position: absolute;
+}
 
-	.no-ads-placeholder {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+.top.collection {
+	--ads-background-color: #190505;
+	--ads-color: #2f0d0d;
+}
 
-		.logo {
-			width: 109px;
-			height: 154px;
-		}
-	}
-
-	.ads {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-	}
+.top.achievements,
+.top.decktracker {
+	--ads-background-color: #190505;
+	--ads-color: #2a1030;
 }
 
 .root .app-container.achievements {
@@ -236,25 +227,6 @@ tooltips {
 		.close-button:hover {
 			color: #2a1030;
 			background: #cb9fd7;
-		}
-	}
-}
-
-.top.collection .no-ads-placeholder {
-	background-color: $black;
-
-	.logo {
-		color: $darkred;
-	}
-}
-
-.top.achievements,
-.top.decktracker {
-	.no-ads-placeholder {
-		background-color: #190505;
-
-		.logo {
-			color: #2a1030;
 		}
 	}
 }
