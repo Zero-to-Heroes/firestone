@@ -8,18 +8,14 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
 declare var ga: any;
-declare var adsReady: any;
-declare var OwAd: any;
 
 @Component({
 	selector: 'loading',
 	styleUrls: [`../../../css/global/components-global.scss`, `../../../css/component/loading/loading.component.scss`],
-	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="top">
 			<div class="root">
@@ -99,38 +95,21 @@ declare var OwAd: any;
 					</svg>
 				</i>
 			</div>
-			<div class="ads-container">
-				<div class="no-ads-placeholder">
-					<i class="i-117X33 gold-theme logo">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
-						</svg>
-					</i>
-				</div>
-				<div class="ads" id="ad-div" #ads></div>
-			</div>
+			<ads [parentComponent]="'loading-window'"></ads>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	encapsulation: ViewEncapsulation.None, // TODO: clean this
 })
 export class LoadingComponent implements AfterViewInit, OnDestroy {
 	title = 'Getting ready';
 	loading = true;
 	thisWindowId: string;
 
-	private adRef;
-	private adInit;
-	private shouldDisplayAds = true;
 	private stateChangedListener: (message: any) => void;
 	private messageReceivedListener: (message: any) => void;
-	private impressionListener: (message: any) => void;
 
-	constructor(
-		private debugService: DebugService,
-		private adService: AdService,
-		private ow: OverwolfService,
-		private cdr: ChangeDetectorRef,
-	) {}
+	constructor(private debugService: DebugService, private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
@@ -146,26 +125,11 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 				}
 			}
 		});
-		this.stateChangedListener = this.ow.addStateChangedListener('LoadingWindow', message => {
-			if (message.window_state !== 'normal') {
-				console.log('removing ad', message.window_state);
-				this.removeAds();
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-			} else {
-				console.log('refreshing ad', message.window_state);
-				this.refreshAds();
-			}
-		});
-		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
-		this.refreshAds();
 	}
 
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.ow.removeMessageReceivedListener(this.messageReceivedListener);
-		this.adRef.removeEventListener(this.impressionListener);
 	}
 
 	@HostListener('mousedown', ['$event'])
@@ -182,68 +146,6 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 
 	minimizeWindow() {
 		this.ow.minimizeWindow(this.thisWindowId);
-	}
-
-	private async refreshAds() {
-		// console.log('[loading] refreshing ads');
-		if (!this.shouldDisplayAds) {
-			console.log('ad-free app, not showing ads and returning');
-			return;
-		}
-		if (this.adInit) {
-			console.log('already initializing ads, returning');
-			return;
-		}
-		if (!adsReady || !OwAd) {
-			console.log('ads container not ready, returning');
-			setTimeout(() => {
-				this.refreshAds();
-			}, 1000);
-			return;
-		}
-		if (!this.adRef) {
-			if (this.impressionListener) {
-				console.error(
-					'[loading] Redefining the impression listener, could cause memory leaks',
-					this.impressionListener,
-				);
-			}
-			this.adInit = true;
-			const window = await this.ow.getCurrentWindow();
-			if (window.isVisible) {
-				console.log('first time init ads, creating OwAd', adsReady);
-				this.adRef = new OwAd(document.getElementById('ad-div'));
-				this.impressionListener = data => {
-					ga('send', 'event', 'ad', 'loading-window');
-				};
-				this.adRef.addEventListener('impression', this.impressionListener);
-				console.log('init OwAd');
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-			}
-			this.adInit = false;
-			setTimeout(() => {
-				this.refreshAds();
-			}, 1000);
-			return;
-		}
-		this.adRef.refreshAd();
-		console.log('[loading] refreshed ads');
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private removeAds() {
-		if (!this.adRef) {
-			return;
-		}
-		console.log('removing ads');
-		this.adRef.removeAd();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
 	}
 
 	private async positionWindow() {

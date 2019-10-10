@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init } from '@sentry/browser';
+import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
@@ -18,7 +19,13 @@ init({
 console.log('version is ' + process.env.APP_VERSION);
 
 @NgModule({
-	imports: [BrowserModule, HttpClientModule, BrowserAnimationsModule, SharedModule],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		SharedModule,
+		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+	],
 	declarations: [LoadingComponent],
 	bootstrap: [LoadingComponent],
 	providers: [DebugService, AdService, OverwolfService],

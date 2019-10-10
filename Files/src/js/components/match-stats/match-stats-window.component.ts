@@ -10,7 +10,6 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../../models/mainwindow/main-window-state';
 import { MatchStatsState } from '../../models/mainwindow/stats/match-stats-state';
-import { AdService } from '../../services/ad.service';
 import { DebugService } from '../../services/debug.service';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { CloseMatchStatsWindowEvent } from '../../services/mainwindow/store/events/stats/close-match-stats-window-event';
@@ -18,8 +17,6 @@ import { MaximizeMatchStatsWindowEvent } from '../../services/mainwindow/store/e
 import { MinimizeMatchStatsWindowEvent } from '../../services/mainwindow/store/events/stats/minimize-match-stats-window-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare var adsReady: any;
-declare var OwAd: any;
 declare var ga: any;
 
 @Component({
@@ -82,16 +79,7 @@ declare var ga: any;
 				</i>
 				<tooltips></tooltips>
 			</div>
-			<div class="ads-container">
-				<div class="no-ads-placeholder">
-					<i class="i-117X33 gold-theme logo">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
-						</svg>
-					</i>
-				</div>
-				<div class="ads" id="ad-div"></div>
-			</div>
+			<ads [parentComponent]="'match-stats'"></ads>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,19 +93,10 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 	maximizeEventProvider: () => MainWindowStoreEvent;
 
 	private isMaximized = false;
-	private adRef;
-	private adInit = false;
-	private shouldDisplayAds = true;
 	private stateChangedListener: (message: any) => void;
-	private impressionListener: (message: any) => void;
 	private storeSubscription: Subscription;
 
-	constructor(
-		private cdr: ChangeDetectorRef,
-		private adService: AdService,
-		private ow: OverwolfService,
-		private debug: DebugService,
-	) {}
+	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService, private debug: DebugService) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
@@ -127,13 +106,6 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 				this.isMaximized = true;
 			} else {
 				this.isMaximized = false;
-			}
-			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
-				console.log('removing ad', message.window_state);
-				this.removeAds();
-			} else if (message.window_previous_state !== 'normal' && message.window_previous_state !== 'maximized') {
-				console.log('refreshing ad', message.window_state, message);
-				this.refreshAds();
 			}
 		});
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
@@ -146,11 +118,12 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 				await this.ow.restoreWindow(this.windowId);
 				if (newState.minimized) {
 					await this.ow.minimizeWindow(this.windowId);
-				}
-				if (newState.maximized) {
+				} else if (newState.maximized) {
 					await this.ow.maximizeWindow(this.windowId);
+					ga('send', 'event', 'match-stats', 'show');
 				} else if (this.state && this.state.maximized) {
-					await this.ow.restoreWindow(this.windowId);
+					// await this.ow.restoreWindow(this.windowId);
+					ga('send', 'event', 'match-stats', 'show');
 				}
 			} else if (!newState.visible && currentlyVisible) {
 				await this.ow.hideWindow(this.windowId);
@@ -164,9 +137,6 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 		this.closeEventProvider = () => new CloseMatchStatsWindowEvent();
 		this.minimizeEventProvider = () => new MinimizeMatchStatsWindowEvent();
 		this.maximizeEventProvider = () => new MaximizeMatchStatsWindowEvent();
-		this.shouldDisplayAds = await this.adService.shouldDisplayAds();
-		this.refreshAds();
-		ga('send', 'event', 'collection', 'show');
 	}
 
 	@HostListener('mousedown')
@@ -178,80 +148,6 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
-		this.adRef.removeEventListener(this.impressionListener);
 		this.storeSubscription.unsubscribe();
-	}
-
-	private async refreshAds() {
-		try {
-			console.log('[main-window] refreshing ads');
-			if (!this.shouldDisplayAds) {
-				console.log('ad-free app, not showing ads and returning');
-				return;
-			}
-			if (this.adInit) {
-				console.log('already initializing ads, returning');
-				return;
-			}
-			if (!adsReady || !OwAd) {
-				console.log('ads container not ready, returning', adsReady, OwAd);
-				setTimeout(() => {
-					this.refreshAds();
-				}, 1000);
-				return;
-			}
-			if (!document.getElementById('ad-div')) {
-				console.log('ad-div not ready, returning');
-				setTimeout(() => {
-					this.refreshAds();
-				}, 1000);
-				return;
-			}
-			if (!this.adRef) {
-				if (this.impressionListener) {
-					console.warn(
-						'[main-window] Redefining the impression listener, could cause memory leaks',
-						this.impressionListener,
-					);
-				}
-				this.adInit = true;
-				const window = await this.ow.getCurrentWindow();
-				if (window.isVisible) {
-					console.log('first time init ads, creating OwAd');
-					this.adRef = new OwAd(document.getElementById('ad-div'));
-					this.impressionListener = data => {
-						ga('send', 'event', 'ad', 'match-stats');
-					};
-					this.adRef.addEventListener('impression', this.impressionListener);
-					console.log('init OwAd');
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
-					}
-				}
-				this.adInit = false;
-				setTimeout(() => {
-					this.refreshAds();
-				}, 2000);
-				return;
-			}
-			console.log('[main-window] refreshed ads');
-			this.adRef.refreshAd();
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-		} catch (e) {
-			console.warn('[main-window] exception while initializing ads, retrying', e);
-			setTimeout(() => {
-				this.refreshAds();
-			}, 2000);
-		}
-	}
-
-	private removeAds() {
-		if (!this.adRef) {
-			return;
-		}
-		console.log('removing ads');
-		this.adRef.removeAd();
 	}
 }

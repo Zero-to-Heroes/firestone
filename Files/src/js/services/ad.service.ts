@@ -10,6 +10,10 @@ export class AdService {
 	constructor(private http: HttpClient, private ow: OverwolfService) {}
 
 	public async shouldDisplayAds(): Promise<boolean> {
+		if (process.env.NODE_ENV !== 'production') {
+			console.error('forcing display in dev');
+			return true;
+		}
 		return new Promise<boolean>(async resolve => {
 			// Use OW's subscription mechanism
 			const [activePlans, user] = await Promise.all([

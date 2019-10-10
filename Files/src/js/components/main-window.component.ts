@@ -90,7 +90,7 @@ declare var ga: any;
 				</i>
 				<tooltips></tooltips>
 			</div>
-			<ads></ads>
+			<ads [parentComponent]="'main-window'"></ads>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

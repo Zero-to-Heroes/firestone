@@ -128,32 +128,12 @@ body {
 	}
 }
 
-.ads-container {
+ads {
 	width: 400px;
 	height: 300px;
 	left: 20px;
 	bottom: 20px;
 	position: absolute;
-
-	.no-ads-placeholder {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		background-color: #07081f;
-
-		.logo {
-			width: 109px;
-			height: 154px;
-			color: #101530;
-		}
-	}
-
-	.ads {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-	}
+	--ads-background-color: #07081f;
+	--ads-color: #101530;
 }

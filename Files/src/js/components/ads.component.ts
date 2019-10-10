@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	Input,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
@@ -32,6 +33,8 @@ declare var ga: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdsComponent implements AfterViewInit, OnDestroy {
+	@Input() parentComponent: string;
+
 	windowId: string;
 
 	private adRef;
@@ -106,7 +109,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 					this.logger.info('[ads] first time init ads, creating OwAd');
 					this.adRef = new OwAd(document.getElementById('ad-div'));
 					this.impressionListener = data => {
-						ga('send', 'event', 'ad', 'loading-window');
+						ga('send', 'event', 'ad', this.parentComponent);
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
 					this.logger.info('[ads] init OwAd');
