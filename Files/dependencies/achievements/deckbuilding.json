@@ -1,5 +1,233 @@
 [
 	{
+		"id": "deckbuilding_win_free_speech_1",
+		"type": "deckbuilding_win_free_speech",
+		"name": "Free Speech",
+		"icon": "boss_victory",
+		"root": false,
+		"priority": -1,
+		"displayName": "Achievement completed: Free Speech (rank 1)",
+		"emptyText": "Win one game with a deck containing 30 battlecry cards in Ranked Standard",
+		"completedText": "Completed at rank 1 or better",
+		"displayCardId": "ICC_809",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 5.0,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "deckbuilding_win_free_speech_10",
+		"type": "deckbuilding_win_free_speech",
+		"name": "Free Speech",
+		"icon": "boss_victory",
+		"root": false,
+		"priority": -10,
+		"displayName": "Achievement completed: Free Speech (rank 10)",
+		"emptyText": "Win one game with a deck containing 30 battlecry cards in Ranked Standard",
+		"completedText": "Completed at rank 10 or better",
+		"displayCardId": "ICC_809",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 5.0,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "deckbuilding_win_free_speech_15",
+		"type": "deckbuilding_win_free_speech",
+		"name": "Free Speech",
+		"icon": "boss_victory",
+		"root": false,
+		"priority": -15,
+		"displayName": "Achievement completed: Free Speech (rank 15)",
+		"emptyText": "Win one game with a deck containing 30 battlecry cards in Ranked Standard",
+		"completedText": "Completed at rank 15 or better",
+		"displayCardId": "ICC_809",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 5.0,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "deckbuilding_win_free_speech_20",
+		"type": "deckbuilding_win_free_speech",
+		"name": "Free Speech",
+		"icon": "boss_victory",
+		"root": false,
+		"priority": -20,
+		"displayName": "Achievement completed: Free Speech (rank 20)",
+		"emptyText": "Win one game with a deck containing 30 battlecry cards in Ranked Standard",
+		"completedText": "Completed at rank 20 or better",
+		"displayCardId": "ICC_809",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 5.0,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "deckbuilding_win_free_speech_25",
+		"type": "deckbuilding_win_free_speech",
+		"name": "Free Speech",
+		"icon": "boss_victory",
+		"root": true,
+		"priority": -25,
+		"displayName": "Achievement completed: Free Speech (rank 25)",
+		"emptyText": "Win one game with a deck containing 30 battlecry cards in Ranked Standard",
+		"completedText": "Completed at rank 25 or better",
+		"displayCardId": "ICC_809",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 5.0,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "deckbuilding_win_free_speech_5",
+		"type": "deckbuilding_win_free_speech",
+		"name": "Free Speech",
+		"icon": "boss_victory",
+		"root": false,
+		"priority": -5,
+		"displayName": "Achievement completed: Free Speech (rank 5)",
+		"emptyText": "Win one game with a deck containing 30 battlecry cards in Ranked Standard",
+		"completedText": "Completed at rank 5 or better",
+		"displayCardId": "ICC_809",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 5.0,
+		"requirements": [
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
 		"id": "deckbuilding_win_classic_1",
 		"type": "deckbuilding_win_classic",
 		"name": "Classic",
