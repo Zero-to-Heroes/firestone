@@ -27,9 +27,10 @@ declare var ga: any;
 		'../../../../css/global/components-global.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
+		`../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div class="root" [ngClass]="{ 'clean': useCleanMode }">
+		<div class="root" [ngClass]="{ 'clean': useCleanMode }" [activeTheme]="'decktracker'">
 			<div class="scalable">
 				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="gameState">

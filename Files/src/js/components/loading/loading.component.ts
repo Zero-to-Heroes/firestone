@@ -15,9 +15,13 @@ declare var ga: any;
 
 @Component({
 	selector: 'loading',
-	styleUrls: [`../../../css/global/components-global.scss`, `../../../css/component/loading/loading.component.scss`],
+	styleUrls: [
+		`../../../css/global/components-global.scss`,
+		`../../../css/component/loading/loading.component.scss`,
+		`../../../css/themes/general-theme.scss`,
+	],
 	template: `
-		<div class="top">
+		<div class="top" [activeTheme]="'general'">
 			<div class="root">
 				<div class="app-container">
 					<section class="menu-bar">

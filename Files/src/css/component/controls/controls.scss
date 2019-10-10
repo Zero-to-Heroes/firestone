@@ -1,35 +1,42 @@
 @import '../../global/variables';
 
-a {
-    --icon-color: rgb(204, 162, 179);
-    --icon-bg: transparent;
-    color: var(--icon-color);
-    background-color: var(--icon-bg);
-    position: relative;
-    width: var(--size, 30px);
-    height: var(--size, 30px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 auto;
-    cursor: default;
-    transition: $fast-hover;
-  
-    svg {
-      width: 100%;
-      height: 100%;
-      flex: 0 0 auto;
-      pointer-events: none;
-      user-select: none;
-    }
+a,
+button {
+	// --icon-color: rgb(204, 162, 179);
+	// --icon-bg: transparent;
+	// color: var(--icon-color);
+	// background-color: var(--icon-bg);
+	position: relative;
+	width: var(--size, 30px);
+	height: var(--size, 30px);
+	--icon-color: var(--control-button-color);
+	color: var(--control-button-color);
+	background-color: trasnparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	transition: $fast-hover;
+
+	svg {
+		width: 100%;
+		height: 100%;
+		flex: 0 0 auto;
+		pointer-events: none;
+		user-select: none;
+	}
 }
 
-button, a {
-    color: #CCA2B3;
-}
+// button,
+// a {
+// 	color: #cca2b3;
+// }
 
-button:hover, a:hover {
-    --icon-color: var(--icon-color-hover);
-    --icon-bg: var(--icon-bg-hover);
-    background-color: #513B48;
+button:hover,
+a:hover {
+	background: var(--on-control-button-background-color);
+	// --icon-color: var(--icon-color-hover);
+	// --icon-bg: var(--icon-bg-hover);
+	// background-color: #513b48;
 }

@@ -14,6 +14,7 @@ import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.comp
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
 import { Tooltip, TooltipsComponent } from '../../components/tooltips.component';
 import { VersionComponent } from '../../components/version.component';
+import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
@@ -38,6 +39,7 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 		CardTooltipDirective,
 		HelpTooltipDirective,
+		ActiveThemeDirective,
 
 		AdsComponent,
 	],
@@ -61,6 +63,7 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 		CardTooltipDirective,
 		HelpTooltipDirective,
+		ActiveThemeDirective,
 
 		AdsComponent,
 	],

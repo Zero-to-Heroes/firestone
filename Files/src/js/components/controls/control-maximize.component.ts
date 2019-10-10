@@ -5,7 +5,6 @@ import {
 	Component,
 	EventEmitter,
 	Input,
-	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -18,9 +17,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-maximize.component.scss`,
 	],
-	encapsulation: ViewEncapsulation.None,
 	template: `
-		<button class="i-30 pink-button" (click)="toggleMaximizeWindow()">
+		<button (click)="toggleMaximizeWindow()">
 			<svg class="svg-icon-fill" *ngIf="!maximized">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

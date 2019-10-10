@@ -17,10 +17,16 @@ declare var ga: any;
 
 @Component({
 	selector: 'main-window',
-	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
+	styleUrls: [
+		`../../css/global/components-global.scss`,
+		`../../css/component/main-window.component.scss`,
+		`../../css/themes/collection-theme.scss`,
+		`../../css/themes/achievements-theme.scss`,
+		`../../css/themes/decktracker-theme.scss`,
+	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="top {{ state.currentApp }}" *ngIf="state">
+		<div class="top {{ state.currentApp }}" *ngIf="state" [activeTheme]="state.currentApp">
 			<div class="root">
 				<div class="app-container {{ state.currentApp }}">
 					<section class="menu-bar">
@@ -104,7 +110,11 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	private messageReceivedListener: (message: any) => void;
 	private storeSubscription: Subscription;
 
-	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService, private debug: DebugService) {}
+	constructor(
+		private readonly cdr: ChangeDetectorRef,
+		private readonly ow: OverwolfService,
+		private readonly debug: DebugService,
+	) {}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();

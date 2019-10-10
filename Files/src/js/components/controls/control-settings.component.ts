@@ -17,7 +17,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<button class="i-30 pink-button" (mousedown)="showSettings()">
+		<button (mousedown)="showSettings()">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

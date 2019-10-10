@@ -9,7 +9,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/controls/control-bug.component.scss`,
 	],
 	template: `
-		<button class="i-30 pink-button" (mousedown)="showBugForm()" helpTooltip="Report a bug">
+		<button (mousedown)="showBugForm()" helpTooltip="Report a bug">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"

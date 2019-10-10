@@ -201,32 +201,21 @@ ads {
 	position: absolute;
 }
 
-.top.collection {
-	--ads-background-color: #190505;
-	--ads-color: #2f0d0d;
-}
+// .root .app-container.achievements {
+// 	.menu-bar .controls {
+// 		button,
+// 		a {
+// 			color: #cb9fd7;
+// 			--icon-color: #cb9fd7;
 
-.top.achievements,
-.top.decktracker {
-	--ads-background-color: #190505;
-	--ads-color: #2a1030;
-}
+// 			&:hover {
+// 				background: #4b3052;
+// 			}
+// 		}
 
-.root .app-container.achievements {
-	.menu-bar .controls {
-		button,
-		a {
-			color: #cb9fd7;
-			--icon-color: #cb9fd7;
-
-			&:hover {
-				background: #4b3052;
-			}
-		}
-
-		.close-button:hover {
-			color: #2a1030;
-			background: #cb9fd7;
-		}
-	}
-}
+// 		.close-button:hover {
+// 			color: #2a1030;
+// 			background: #cb9fd7;
+// 		}
+// 	}
+// }

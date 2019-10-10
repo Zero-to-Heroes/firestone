@@ -17,9 +17,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
 		`../../../css/component/settings/settings.component.scss`,
+		`../../../css/themes/general-theme.scss`,
 	],
 	template: `
-		<div class="root">
+		<div class="root" [activeTheme]="'general'">
 			<div class="app-container">
 				<section class="title-bar">
 					<div class="title">Settings</div>

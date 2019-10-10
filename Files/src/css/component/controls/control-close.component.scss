@@ -1,6 +1,7 @@
-@import '../../global/variables';
+// @import '../../global/variables';
 
-.close-button:hover {
-    background: #2F0D0D;
-    color: #CCA2B3;
+button:hover {
+	background: var(--on-close-button-background-color); // #2F0D0D;
+	color: var(--on-close-button-color); //#CCA2B3;
+	--icon-color: var(--on-close-button-color); //#CCA2B3;
 }

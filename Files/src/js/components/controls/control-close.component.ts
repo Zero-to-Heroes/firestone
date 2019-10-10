@@ -1,11 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	Component,
-	EventEmitter,
-	Input,
-	ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/close-main-window-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -17,9 +10,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-close.component.scss`,
 	],
-	encapsulation: ViewEncapsulation.None,
 	template: `
-		<button class="i-30 close-button" (mousedown)="closeWindow()">
+		<button (mousedown)="closeWindow()">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
