@@ -6,6 +6,7 @@
 	width: 400px;
 	display: flex;
 	flex-direction: column;
+	flex-grow: 1;
 
 	.top-container {
 		margin-bottom: 11px;
