@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "3.4.19",
+	"version": "3.4.20",
 	"scripts": {
 		"lint": "eslint --color --fix --ext .ts ./src/",
 		"test": "jest --colors",
