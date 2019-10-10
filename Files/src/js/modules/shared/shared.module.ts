@@ -14,6 +14,7 @@ import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.comp
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
 import { Tooltip, TooltipsComponent } from '../../components/tooltips.component';
 import { VersionComponent } from '../../components/version.component';
+import { WindowWrapperComponent } from '../../components/window-wrapper.component';
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
@@ -21,6 +22,8 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 @NgModule({
 	imports: [BrowserModule, OverlayModule],
 	declarations: [
+		WindowWrapperComponent,
+
 		ControlHelpComponent,
 		ControlMinimizeComponent,
 		ControlMaximizeComponent,
@@ -45,6 +48,8 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 	],
 	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent],
 	exports: [
+		WindowWrapperComponent,
+
 		ControlHelpComponent,
 		ControlMinimizeComponent,
 		ControlMaximizeComponent,

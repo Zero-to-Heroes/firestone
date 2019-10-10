@@ -1,186 +1,129 @@
 @import '../global/variables';
 @import '../global/fonts';
 
-body,
-html {
-	width: 100%;
-	height: 100%;
-}
-
-body {
-	background-color: transparent;
-	border: 0;
-	margin: 0;
-	padding: 10px;
-	overflow: hidden;
-}
-
-.top {
+.app-container {
 	position: relative;
-	height: 100%;
-	overflow: hidden;
-}
-
-.root {
-	position: relative;
+	width: calc(100% - 20px);
+	height: calc(100% - 20px);
 	display: flex;
-	justify-content: center;
-	align-items: center;
-	height: 100%;
+	flex-direction: column;
 	overflow: hidden;
-	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+	background-size: 100%;
+	background-repeat: round;
 
-	.corner {
-		position: absolute;
+	&.collection {
+		background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
+		outline: 1px solid $grey04;
+	}
 
-		&.top-left {
-			top: 0;
-			left: 0;
+	.navigation {
+		display: flex;
+		position: relative;
+		flex-shrink: 0;
+		height: 50px;
+
+		.logo {
+			position: relative;
+			top: 6px;
+			margin-left: 15px;
+			margin-right: 120px;
 		}
 
-		&.top-right {
-			top: 0;
-			right: 0;
-			transform: rotate(90deg);
+		menu-selection {
+			display: flex;
+			align-items: flex-end;
 		}
 
-		&.bottom-right {
-			bottom: 0;
-			right: 0;
-			transform: rotate(180deg);
-		}
-
-		&.bottom-left {
-			bottom: 0;
-			left: 0;
-			transform: rotate(270deg);
+		.main-section {
+			display: flex;
 		}
 	}
 
-	.app-container {
-		position: relative;
-		width: calc(100% - 20px);
-		height: calc(100% - 20px);
+	.menu-bar {
+		background: transparent;
 		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-		background-size: 100%;
-		background-repeat: round;
+		flex-direction: row;
+		align-items: stretch;
+		border: none;
+		width: 100%;
+		height: 30px;
+		height: 80px;
+		z-index: 400;
+		flex-shrink: 0;
+		border-bottom: 1px solid $grey04;
 
-		&.collection {
-			background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
-			outline: 1px solid $grey04;
+		.first {
+			display: flex;
+			flex-direction: column;
 		}
 
-		.navigation {
+		hotkey {
 			display: flex;
+			align-items: center;
+			justify-content: flex-start;
+			flex-grow: 1;
 			position: relative;
-			flex-shrink: 0;
-			height: 50px;
+		}
 
-			.logo {
-				position: relative;
-				top: 6px;
-				margin-left: 15px;
-				margin-right: 120px;
-			}
+		real-time-notifications {
+			height: 29px;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			padding-left: 10px;
+		}
 
-			menu-selection {
-				display: flex;
-				align-items: flex-end;
-			}
+		.controls {
+			height: 30px;
+			display: flex;
+			color: $green01;
+			--icon-color: $green01;
 
-			.main-section {
-				display: flex;
+			.close-button:hover {
+				background: $grey01;
+				color: $darkred;
 			}
+		}
+	}
+
+	&.achievements,
+	&.decktracker {
+		background-image: radial-gradient(340px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%),
+			url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+		outline: 1px solid #4b3052;
+
+		.navigation menu-selection .menu-selection {
+			color: #7d5a87;
 		}
 
 		.menu-bar {
-			background: transparent;
-			display: flex;
-			flex-direction: row;
-			align-items: stretch;
-			border: none;
-			width: 100%;
-			height: 30px;
-			height: 80px;
-			z-index: 400;
-			flex-shrink: 0;
-			border-bottom: 1px solid $grey04;
+			border-bottom-color: #4b3052;
+		}
 
-			.first {
-				display: flex;
-				flex-direction: column;
+		.menu-selection .zth-tooltip {
+			background-color: #7d5a87;
+			p {
+				color: #190505;
 			}
-
-			hotkey {
-				display: flex;
-				align-items: center;
-				justify-content: flex-start;
-				flex-grow: 1;
-				position: relative;
-			}
-
-			real-time-notifications {
-				height: 29px;
-				display: flex;
-				justify-content: flex-start;
-				align-items: center;
-				padding-left: 10px;
-			}
-
-			.controls {
-				height: 30px;
-				display: flex;
-				color: $green01;
-				--icon-color: $green01;
-
-				.close-button:hover {
-					background: $grey01;
-					color: $darkred;
-				}
+			.tooltip-arrow {
+				fill: #7d5a87;
 			}
 		}
 
-		&.achievements,
-		&.decktracker {
-			background-image: radial-gradient(340px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%),
-				url('/Files/assets/images/backgrounds/achievements_bg.jpg');
-			outline: 1px solid #4b3052;
-
-			.navigation menu-selection .menu-selection {
-				color: #7d5a87;
-			}
-
-			.menu-bar {
-				border-bottom-color: #4b3052;
-			}
-
-			.menu-selection .zth-tooltip {
-				background-color: #7d5a87;
-				p {
-					color: #190505;
-				}
-				.tooltip-arrow {
-					fill: #7d5a87;
-				}
-			}
-
-			.real-time-notifications {
-				color: #a276af;
-			}
+		.real-time-notifications {
+			color: #a276af;
 		}
+	}
 
-		.content-container {
-			position: relative;
+	.content-container {
+		position: relative;
+		flex-grow: 1;
+		display: flex;
+		flex-direction: column;
+
+		& > * {
 			flex-grow: 1;
 			display: flex;
-			flex-direction: column;
-
-			& > * {
-				flex-grow: 1;
-				display: flex;
-			}
 		}
 	}
 }
@@ -196,26 +139,7 @@ tooltips {
 ads {
 	width: 400px;
 	height: 300px;
-	right: 25px;
-	bottom: 25px;
+	right: 15px;
+	bottom: 15px;
 	position: absolute;
 }
-
-// .root .app-container.achievements {
-// 	.menu-bar .controls {
-// 		button,
-// 		a {
-// 			color: #cb9fd7;
-// 			--icon-color: #cb9fd7;
-
-// 			&:hover {
-// 				background: #4b3052;
-// 			}
-// 		}
-
-// 		.close-button:hover {
-// 			color: #2a1030;
-// 			background: #cb9fd7;
-// 		}
-// 	}
-// }

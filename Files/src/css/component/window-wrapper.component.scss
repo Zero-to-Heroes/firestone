@@ -1,0 +1,59 @@
+@import '../global/variables';
+@import '../global/fonts';
+
+body,
+html {
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color: transparent;
+	border: 0;
+	margin: 0;
+	padding: 10px;
+	overflow: hidden;
+}
+
+.top {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+}
+
+.root {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	overflow: hidden;
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+
+	.corner {
+		position: absolute;
+
+		&.top-left {
+			top: 0;
+			left: 0;
+		}
+
+		&.top-right {
+			top: 0;
+			right: 0;
+			transform: rotate(90deg);
+		}
+
+		&.bottom-right {
+			bottom: 0;
+			right: 0;
+			transform: rotate(180deg);
+		}
+
+		&.bottom-left {
+			bottom: 0;
+			left: 0;
+			transform: rotate(270deg);
+		}
+	}
+}

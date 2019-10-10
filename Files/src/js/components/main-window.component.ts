@@ -17,87 +17,54 @@ declare var ga: any;
 
 @Component({
 	selector: 'main-window',
-	styleUrls: [
-		`../../css/global/components-global.scss`,
-		`../../css/component/main-window.component.scss`,
-		`../../css/themes/collection-theme.scss`,
-		`../../css/themes/achievements-theme.scss`,
-		`../../css/themes/decktracker-theme.scss`,
-	],
+	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="top {{ state.currentApp }}" *ngIf="state" [activeTheme]="state.currentApp">
-			<div class="root">
-				<div class="app-container {{ state.currentApp }}">
-					<section class="menu-bar">
-						<main-window-navigation [navigation]="state.navigation"></main-window-navigation>
-						<div class="first">
-							<real-time-notifications></real-time-notifications>
-							<div class="navigation">
-								<i class="i-117X33 gold-theme logo">
-									<svg class="svg-icon-fill">
-										<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
-									</svg>
-								</i>
-								<menu-selection [selectedModule]="state.currentApp"></menu-selection>
-							</div>
+		<window-wrapper>
+			<div *ngIf="state" class="app-container {{ state.currentApp }}" [activeTheme]="state.currentApp">
+				<section class="menu-bar">
+					<main-window-navigation [navigation]="state.navigation"></main-window-navigation>
+					<div class="first">
+						<real-time-notifications></real-time-notifications>
+						<div class="navigation">
+							<i class="i-117X33 gold-theme logo">
+								<svg class="svg-icon-fill">
+									<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
+								</svg>
+							</i>
+							<menu-selection [selectedModule]="state.currentApp"></menu-selection>
 						</div>
-						<hotkey></hotkey>
-						<div class="controls">
-							<control-bug></control-bug>
-							<control-settings [windowId]="windowId" [settingsApp]="state.currentApp"></control-settings>
-							<control-discord></control-discord>
-							<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
-							<control-maximize [windowId]="windowId"></control-maximize>
-							<control-close
-								[windowId]="windowId"
-								[isMainWindow]="true"
-								[closeAll]="true"
-							></control-close>
-						</div>
-					</section>
-					<section class="content-container">
-						<collection
-							class="main-section"
-							[state]="state.binder"
-							[hidden]="state.currentApp !== 'collection'"
-						></collection>
-						<achievements
-							class="main-section"
-							[state]="state.achievements"
-							[currentUser]="state.currentUser"
-							[socialShareUserInfo]="state.socialShareUserInfo"
-							[hidden]="state.currentApp !== 'achievements'"
-						>
-						</achievements>
-						<decktracker class="main-section" [hidden]="state.currentApp !== 'decktracker'"> </decktracker>
-					</section>
-				</div>
-
-				<i class="i-54 gold-theme corner top-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner top-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner bottom-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner bottom-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
+					</div>
+					<hotkey></hotkey>
+					<div class="controls">
+						<control-bug></control-bug>
+						<control-settings [windowId]="windowId" [settingsApp]="state.currentApp"></control-settings>
+						<control-discord></control-discord>
+						<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+						<control-maximize [windowId]="windowId"></control-maximize>
+						<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
+					</div>
+				</section>
+				<section class="content-container">
+					<collection
+						class="main-section"
+						[state]="state.binder"
+						[hidden]="state.currentApp !== 'collection'"
+					></collection>
+					<achievements
+						class="main-section"
+						[state]="state.achievements"
+						[currentUser]="state.currentUser"
+						[socialShareUserInfo]="state.socialShareUserInfo"
+						[hidden]="state.currentApp !== 'achievements'"
+					>
+					</achievements>
+					<decktracker class="main-section" [hidden]="state.currentApp !== 'decktracker'"> </decktracker>
+				</section>
 				<tooltips></tooltips>
+				<ads [parentComponent]="'main-window'"></ads>
 			</div>
-			<ads [parentComponent]="'main-window'"></ads>
-		</div>
+		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
