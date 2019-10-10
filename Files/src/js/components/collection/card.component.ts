@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
@@ -21,16 +20,17 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{ 'missing': missing }">
+			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" />
 			<img
-				src="/Files/assets/images/placeholder.png"
-				class="pale-theme placeholder"
-				[@showPlaceholder]="showPlaceholder"
+				[style.opacity]="showPlaceholder ? 0 : 1"
+				src="{{ image }}"
+				class="real-card"
+				(load)="imageLoadedHandler()"
 			/>
-			<img src="{{ image }}" class="real-card" (load)="imageLoadedHandler()" [@showRealCard]="!showPlaceholder" />
 			<div
+				[hidden]="showPlaceholder"
 				class="overlay"
 				[ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"
-				[hidden]="showPlaceholder"
 			></div>
 
 			<div class="count" *ngIf="!showPlaceholder">
@@ -54,40 +54,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger('showPlaceholder', [
-			state(
-				'false',
-				style({
-					opacity: 0,
-					// 'pointer-events': 'none',
-				}),
-			),
-			state(
-				'true',
-				style({
-					opacity: 1,
-				}),
-			),
-			transition('true => false', animate(`150ms linear`)),
-		]),
-		trigger('showRealCard', [
-			state(
-				'false',
-				style({
-					opacity: 0,
-					// 'pointer-events': 'none',
-				}),
-			),
-			state(
-				'true',
-				style({
-					opacity: 1,
-				}),
-			),
-			transition('false => true', animate(`150ms linear`)),
-		]),
-	],
 })
 export class CardComponent implements AfterViewInit {
 	@Input() public tooltips = true;
@@ -159,10 +125,10 @@ export class CardComponent implements AfterViewInit {
 	}
 
 	private updateImage() {
-		this.showPlaceholder = true;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
+		// this.showPlaceholder = true;
+		// if (!(this.cdr as ViewRef).destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
