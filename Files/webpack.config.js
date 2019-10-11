@@ -320,34 +320,13 @@ module.exports = function(env, argv) {
 			rules: [
 				{
 					test: /\.ts$/,
-					exclude: [
-						path.resolve(__dirname, 'node_modules'),
-						path.resolve(__dirname, 'test'),
-						path.resolve(__dirname, 'dependencies'),
-					],
-					use: ['@artonge/webpack', 'eslint-loader'],
-				},
-				{
-					test: /.js$/,
-					exclude: [path.resolve(__dirname, 'test'), path.resolve(__dirname, 'dependencies')],
-					parser: {
-						system: true,
-					},
+					exclude: [/node_modules/, /test/],
+					use: ['@artonge/webpack'],
 				},
 				{
 					test: /\.scss$/,
-					include: getRoot('src', 'css'),
-					exclude: [path.resolve(__dirname, 'test'), path.resolve(__dirname, 'dependencies')],
-					use: ['raw-loader', 'sass-loader'],
-				},
-				{
-					test: /\.scss$/,
-					exclude: [
-						getRoot('src', 'css'),
-						path.resolve(__dirname, 'test'),
-						path.resolve(__dirname, 'dependencies'),
-					],
-					use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+					exclude: /node_modules/,
+					use: ['css-to-string-loader', 'css-loader', 'sass-loader'],
 				},
 			],
 		},
