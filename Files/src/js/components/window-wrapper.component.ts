@@ -13,7 +13,9 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 	template: `
 		<div class="top">
 			<div class="root">
-				<ng-content></ng-content>
+				<div class="app-container">
+					<ng-content></ng-content>
+				</div>
 
 				<i class="i-54 gold-theme corner top-left">
 					<svg class="svg-icon-fill">

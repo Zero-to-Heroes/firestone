@@ -17,11 +17,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
 		`../../../css/component/settings/settings.component.scss`,
-		`../../../css/themes/general-theme.scss`,
 	],
 	template: `
-		<div class="root" [activeTheme]="'general'">
-			<div class="app-container">
+		<window-wrapper>
+			<div class="app-container" [activeTheme]="'general'">
 				<section class="title-bar">
 					<div class="title">Settings</div>
 					<div class="controls">
@@ -47,28 +46,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				</ng-container>
 				<settings-modal></settings-modal>
 			</div>
-
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-		</div>
+		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

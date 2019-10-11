@@ -14,49 +14,26 @@ import { OverwolfService } from '../services/overwolf.service';
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/welcome-page.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="root">
-			<div class="app-container">
-				<section class="menu-bar">
-					<i class="i-117X33 gold-theme logo">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
-						</svg>
-					</i>
-					<div class="controls">
-						<control-bug></control-bug>
-						<control-settings [windowId]="thisWindowId"></control-settings>
-						<control-discord></control-discord>
-						<control-minimize [windowId]="thisWindowId"></control-minimize>
-						<control-close [windowId]="thisWindowId" [closeAll]="true"></control-close>
-					</div>
-				</section>
-				<home-screen-info-text></home-screen-info-text>
-				<app-choice (close)="hideWindow()"></app-choice>
-				<social-media></social-media>
-				<version></version>
-			</div>
-
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-		</div>
+		<window-wrapper [activeTheme]="'general'">
+			<section class="menu-bar">
+				<i class="i-117X33 gold-theme logo">
+					<svg class="svg-icon-fill">
+						<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
+					</svg>
+				</i>
+				<div class="controls">
+					<control-bug></control-bug>
+					<control-settings [windowId]="thisWindowId"></control-settings>
+					<control-discord></control-discord>
+					<control-minimize [windowId]="thisWindowId"></control-minimize>
+					<control-close [windowId]="thisWindowId" [closeAll]="true"></control-close>
+				</div>
+			</section>
+			<home-screen-info-text></home-screen-info-text>
+			<app-choice (close)="hideWindow()"></app-choice>
+			<social-media></social-media>
+			<version></version>
+		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

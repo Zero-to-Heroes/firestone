@@ -1,10 +1,21 @@
 :host.decktracker-theme,
 .decktracker-theme {
-	--ads-background-color: #190505;
-	--ads-color: #2a1030;
+	--window-background-image: radial-gradient(
+			44.58% 50% at 50% 50%,
+			rgba(48, 35, 128, 0.7) 0%,
+			rgba(24, 24, 43, 0.7) 100%
+		),
+		url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+	--window-outline-color: #303352;
 
-	--control-button-color: #cb9fd7;
-	--on-control-button-background-color: #4b3052;
-	--on-close-button-color: #2a1030;
-	--on-close-button-background-color: #cb9fd7;
+	--menu-selection-color: #7d5a87;
+	--menu-bar-bottom-border-color: #303352;
+
+	--ads-background-color: #07081f;
+	--ads-color: #101530;
+
+	--control-button-color: #9fb6d7;
+	--on-control-button-background-color: #303352;
+	--on-close-button-color: #101530;
+	--on-close-button-background-color: #9fb6d7;
 }

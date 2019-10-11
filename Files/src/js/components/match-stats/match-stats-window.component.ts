@@ -26,61 +26,30 @@ declare var ga: any;
 		`../../../css/component/match-stats/match-stats-window.component.scss`,
 	],
 	template: `
-		<div class="top" *ngIf="state">
-			<div class="root">
-				<div class="app-container">
-					<section class="menu-bar">
-						<div class="title">Match Summary (experimental)</div>
-						<div class="controls">
-							<control-bug></control-bug>
-							<control-discord></control-discord>
-							<control-minimize
-								[windowId]="windowId"
-								[eventProvider]="minimizeEventProvider"
-							></control-minimize>
-							<control-maximize
-								[windowId]="windowId"
-								[eventProvider]="maximizeEventProvider"
-							></control-maximize>
-							<control-close [windowId]="windowId" [eventProvider]="closeEventProvider"></control-close>
-						</div>
-					</section>
-					<div class="content-container">
-						<match-stats-menu [selectedMenu]="state.currentStat"></match-stats-menu>
-						<div class="main-zone">
-							<game-replay
-								[ngClass]="{ 'active': state.currentStat === 'replay' }"
-								[replayKey]="state.matchStats ? state.matchStats.replayKey : undefined"
-								[reviewId]="state.matchStats ? state.matchStats.reviewId : undefined"
-							></game-replay>
-						</div>
-					</div>
+		<window-wrapper *ngIf="state" [activeTheme]="'decktracker'">
+			<section class="menu-bar">
+				<div class="title">Match Summary (experimental)</div>
+				<div class="controls">
+					<control-bug></control-bug>
+					<control-discord></control-discord>
+					<control-minimize [windowId]="windowId" [eventProvider]="minimizeEventProvider"></control-minimize>
+					<control-maximize [windowId]="windowId" [eventProvider]="maximizeEventProvider"></control-maximize>
+					<control-close [windowId]="windowId" [eventProvider]="closeEventProvider"></control-close>
 				</div>
-
-				<i class="i-54 gold-theme corner top-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner top-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner bottom-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner bottom-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<tooltips></tooltips>
+			</section>
+			<div class="content-container">
+				<match-stats-menu [selectedMenu]="state.currentStat"></match-stats-menu>
+				<div class="main-zone">
+					<game-replay
+						[ngClass]="{ 'active': state.currentStat === 'replay' }"
+						[replayKey]="state.matchStats ? state.matchStats.replayKey : undefined"
+						[reviewId]="state.matchStats ? state.matchStats.reviewId : undefined"
+					></game-replay>
+				</div>
 			</div>
+			<tooltips></tooltips>
 			<ads [parentComponent]="'match-stats'"></ads>
-		</div>
+		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

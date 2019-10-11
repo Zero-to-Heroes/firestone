@@ -20,50 +20,48 @@ declare var ga: any;
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper>
-			<div *ngIf="state" class="app-container {{ state.currentApp }}" [activeTheme]="state.currentApp">
-				<section class="menu-bar">
-					<main-window-navigation [navigation]="state.navigation"></main-window-navigation>
-					<div class="first">
-						<real-time-notifications></real-time-notifications>
-						<div class="navigation">
-							<i class="i-117X33 gold-theme logo">
-								<svg class="svg-icon-fill">
-									<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
-								</svg>
-							</i>
-							<menu-selection [selectedModule]="state.currentApp"></menu-selection>
-						</div>
+		<window-wrapper *ngIf="state" [activeTheme]="state.currentApp">
+			<section class="menu-bar">
+				<main-window-navigation [navigation]="state.navigation"></main-window-navigation>
+				<div class="first">
+					<real-time-notifications></real-time-notifications>
+					<div class="navigation">
+						<i class="i-117X33 gold-theme logo">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
+							</svg>
+						</i>
+						<menu-selection [selectedModule]="state.currentApp"></menu-selection>
 					</div>
-					<hotkey></hotkey>
-					<div class="controls">
-						<control-bug></control-bug>
-						<control-settings [windowId]="windowId" [settingsApp]="state.currentApp"></control-settings>
-						<control-discord></control-discord>
-						<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
-						<control-maximize [windowId]="windowId"></control-maximize>
-						<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
-					</div>
-				</section>
-				<section class="content-container">
-					<collection
-						class="main-section"
-						[state]="state.binder"
-						[hidden]="state.currentApp !== 'collection'"
-					></collection>
-					<achievements
-						class="main-section"
-						[state]="state.achievements"
-						[currentUser]="state.currentUser"
-						[socialShareUserInfo]="state.socialShareUserInfo"
-						[hidden]="state.currentApp !== 'achievements'"
-					>
-					</achievements>
-					<decktracker class="main-section" [hidden]="state.currentApp !== 'decktracker'"> </decktracker>
-				</section>
-				<tooltips></tooltips>
-				<ads [parentComponent]="'main-window'"></ads>
-			</div>
+				</div>
+				<hotkey></hotkey>
+				<div class="controls">
+					<control-bug></control-bug>
+					<control-settings [windowId]="windowId" [settingsApp]="state.currentApp"></control-settings>
+					<control-discord></control-discord>
+					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
+					<control-maximize [windowId]="windowId"></control-maximize>
+					<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
+				</div>
+			</section>
+			<section class="content-container">
+				<collection
+					class="main-section"
+					[state]="state.binder"
+					[hidden]="state.currentApp !== 'collection'"
+				></collection>
+				<achievements
+					class="main-section"
+					[state]="state.achievements"
+					[currentUser]="state.currentUser"
+					[socialShareUserInfo]="state.socialShareUserInfo"
+					[hidden]="state.currentApp !== 'achievements'"
+				>
+				</achievements>
+				<decktracker class="main-section" [hidden]="state.currentApp !== 'decktracker'"> </decktracker>
+			</section>
+			<tooltips></tooltips>
+			<ads [parentComponent]="'main-window'"></ads>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
