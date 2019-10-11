@@ -1,5 +1,8 @@
-@import '../global/variables';
-@import '../global/fonts';
+:host() {
+	position: absolute;
+	width: 400px;
+	height: 300px;
+}
 
 .ads-container {
 	width: 100%;

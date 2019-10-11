@@ -30,7 +30,6 @@ match-stats-menu {
 	line-height: 22px;
 	color: #ffb948;
 	flex-grow: 1;
-	// text-align: center;
 	text-indent: 20px;
 }
 
@@ -38,29 +37,9 @@ match-stats-menu {
 	display: flex;
 	position: relative;
 	top: -10px;
-
-	// ::ng-deep button,
-	// ::ng-deep a {
-	// 	--icon-color: #9fb6d7;
-	// 	color: #9fb6d7;
-
-	// 	&:hover {
-	// 		background: #303352;
-
-	// 		&.close-button {
-	// 			color: #101530;
-	// 			background: #9fb6d7;
-	// 		}
-	// 	}
-	// }
 }
 
 ads {
-	width: 400px;
-	height: 300px;
-	left: 20px;
-	bottom: 20px;
-	position: absolute;
-	// --ads-background-color: #07081f;
-	// --ads-color: #101530;
+	left: 10px;
+	bottom: 10px;
 }
