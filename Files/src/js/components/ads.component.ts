@@ -73,7 +73,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 
 	private async refreshAds() {
 		try {
-			this.logger.info('[ads] refreshing ads');
+			// this.logger.info('[ads] refreshing ads');
 			if (!this.shouldDisplayAds) {
 				this.logger.info('[ads] ad-free app, not showing ads and returning');
 				return;
