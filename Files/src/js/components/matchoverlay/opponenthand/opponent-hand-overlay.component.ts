@@ -5,6 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	OnDestroy,
+	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
@@ -20,10 +21,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 	selector: 'opponent-hand-overlay',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
+		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/matchoverlay/opponenthand/opponent-hand-overlay.component.scss',
 	],
 	template: `
-		<div class="opponent-hand-overlay">
+		<div class="opponent-hand-overlay overlay-container-parent">
 			<opponent-card-infos
 				[cards]="gameState.opponentDeck.hand"
 				[displayTurnNumber]="displayTurnNumber"
@@ -33,6 +35,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	encapsulation: ViewEncapsulation.None, // Needed to the cdk overlay styling to work
 })
 export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;

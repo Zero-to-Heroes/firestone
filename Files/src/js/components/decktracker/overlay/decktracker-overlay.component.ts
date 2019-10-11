@@ -25,6 +25,7 @@ declare var ga: any;
 	selector: 'decktracker-overlay',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
+		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
 		`../../../../css/themes/decktracker-theme.scss`,
@@ -32,7 +33,7 @@ declare var ga: any;
 	template: `
 		<div class="root" [ngClass]="{ 'clean': useCleanMode }" [activeTheme]="'decktracker'">
 			<div class="scalable">
-				<div class="decktracker-container">
+				<div class="decktracker-container overlay-container-parent">
 					<div class="decktracker" *ngIf="gameState">
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name

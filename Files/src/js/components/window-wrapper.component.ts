@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 	selector: 'window-wrapper',
 	styleUrls: [
 		`../../css/global/components-global.scss`,
+		`../../css/global/cdk-overlay.scss`,
 		`../../css/component/window-wrapper.component.scss`,
 		`../../css/themes/collection-theme.scss`,
 		`../../css/themes/achievements-theme.scss`,
@@ -13,7 +14,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 	template: `
 		<div class="top">
 			<div class="root">
-				<div class="app-container">
+				<div class="app-container overlay-container-parent">
 					<ng-content></ng-content>
 				</div>
 

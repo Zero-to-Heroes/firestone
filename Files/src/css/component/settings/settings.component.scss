@@ -1,69 +1,58 @@
 @import '../../global/variables';
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
-.app-container {
-	position: relative;
-	background-image: url('/Files/assets/images/backgrounds/settings_bg.jpg');
-	width: calc(100% - 20px);
-	height: calc(100% - 20px);
+.title-bar {
 	display: flex;
-	flex-direction: column;
-	overflow: hidden;
-	outline: 1px solid $brown01;
+	padding-left: 15px;
+	justify-content: space-between;
+	flex-grow: 0;
+	flex-shrink: 0;
+	height: 30px;
+}
 
-	.title-bar {
-		display: flex;
-		padding-left: 15px;
-		justify-content: space-between;
-		flex-grow: 0;
-		flex-shrink: 0;
-		height: 30px;
-	}
+.title {
+	font-family: 'Sumana';
+	font-weight: 400;
+	font-size: 14px;
+	color: #ffb948;
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	align-items: flex-end;
+	position: relative;
+	top: 3px;
+}
 
-	.title {
-		font-family: 'Sumana';
-		font-weight: 400;
-		font-size: 14px;
-		color: #ffb948;
-		flex-grow: 0;
-		flex-shrink: 0;
-		display: flex;
-		align-items: flex-end;
-		position: relative;
-		top: 3px;
-	}
+::ng-deep .controls {
+	height: 30px;
+	display: flex;
+	z-index: 1;
 
-	::ng-deep .controls {
-		height: 30px;
-		display: flex;
-		z-index: 1;
+	// .close-button {
+	// 	--icon-color: #D9C3AB;
+	// }
 
-		// .close-button {
-		// 	--icon-color: #D9C3AB;
-		// }
+	// .close-button:hover {
+	// 	background: #D9C3AB;
+	// 	color: #2F0D0D;
+	// }
+}
 
-		// .close-button:hover {
-		// 	background: #D9C3AB;
-		// 	color: #2F0D0D;
-		// }
-	}
+settings-app-selection {
+	margin-bottom: 15px;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
 
-	settings-app-selection {
-		margin-bottom: 15px;
-		flex-grow: 0;
-		flex-shrink: 0;
-	}
-
-	settings-achievements,
-	settings-decktracker,
-	settings-general,
-	settings-collection {
-		flex-grow: 1;
-		flex-shrink: 0;
-		margin-left: 15px;
-		display: flex;
-		// flex-grow will make sure it is properly dimensioned, but we need a height
-		// for the scroll
-		height: 10%;
-	}
+settings-achievements,
+settings-decktracker,
+settings-general,
+settings-collection {
+	flex-grow: 1;
+	flex-shrink: 0;
+	margin-left: 15px;
+	display: flex;
+	// flex-grow will make sure it is properly dimensioned, but we need a height
+	// for the scroll
+	height: 10%;
 }

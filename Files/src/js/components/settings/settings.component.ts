@@ -19,33 +19,28 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/settings/settings.component.scss`,
 	],
 	template: `
-		<window-wrapper>
-			<div class="app-container" [activeTheme]="'general'">
-				<section class="title-bar">
-					<div class="title">Settings</div>
-					<div class="controls">
-						<control-close [windowId]="thisWindowId"></control-close>
-					</div>
-				</section>
-				<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
-				</settings-app-selection>
-				<ng-container [ngSwitch]="selectedApp">
-					<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
-					<settings-collection
-						*ngSwitchCase="'collection'"
-						[selectedMenu]="selectedMenu"
-					></settings-collection>
-					<settings-achievements
-						*ngSwitchCase="'achievements'"
-						[selectedMenu]="selectedMenu"
-					></settings-achievements>
-					<settings-decktracker
-						*ngSwitchCase="'decktracker'"
-						[selectedMenu]="selectedMenu"
-					></settings-decktracker>
-				</ng-container>
-				<settings-modal></settings-modal>
-			</div>
+		<window-wrapper [activeTheme]="'general'">
+			<section class="title-bar">
+				<div class="title">Settings</div>
+				<div class="controls">
+					<control-close [windowId]="thisWindowId"></control-close>
+				</div>
+			</section>
+			<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">
+			</settings-app-selection>
+			<ng-container [ngSwitch]="selectedApp">
+				<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
+				<settings-collection *ngSwitchCase="'collection'" [selectedMenu]="selectedMenu"></settings-collection>
+				<settings-achievements
+					*ngSwitchCase="'achievements'"
+					[selectedMenu]="selectedMenu"
+				></settings-achievements>
+				<settings-decktracker
+					*ngSwitchCase="'decktracker'"
+					[selectedMenu]="selectedMenu"
+				></settings-decktracker>
+			</ng-container>
+			<settings-modal></settings-modal>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

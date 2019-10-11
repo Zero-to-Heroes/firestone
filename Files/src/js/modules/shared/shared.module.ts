@@ -1,7 +1,8 @@
-import { OverlayModule } from '@angular/cdk/overlay';
+import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AdsComponent } from '../../components/ads.component';
+import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
 import { ControlCloseComponent } from '../../components/controls/control-close.component';
 import { ControlDiscordComponent } from '../../components/controls/control-discord.component';
@@ -72,5 +73,6 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 
 		AdsComponent,
 	],
+	providers: [{ provide: OverlayContainer, useClass: CdkOverlayContainer }],
 })
 export class SharedModule {}
