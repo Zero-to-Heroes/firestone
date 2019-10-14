@@ -2,12 +2,10 @@ import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { MindVisionService } from './mind-vision.service';
 
 @Injectable()
 export class MemoryInspectionService {
-	private collectionTriesLeft = 50;
-	// private playersInfoTriesLeft = 50;
-
 	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
 	readonly g_interestedInFeatures = [
 		'scene_state', // Used to detect when the UI shows the game
@@ -16,16 +14,13 @@ export class MemoryInspectionService {
 		'match_info', // For the GEP game ID
 	];
 
-	constructor(private events: Events, private ow: OverwolfService) {
+	constructor(private events: Events, private ow: OverwolfService, private mindVision: MindVisionService) {
 		this.init();
 	}
 
 	public getCollection(delay: number = 0): Promise<Card[]> {
-		this.collectionTriesLeft = 20;
 		return new Promise<Card[]>(resolve => {
-			this.getCollectionInternal((collection: Card[]) => {
-				resolve(collection);
-			}, delay);
+			this.getCollectionInternal((collection: Card[]) => resolve(collection), 20, delay);
 		});
 	}
 
@@ -52,33 +47,43 @@ export class MemoryInspectionService {
 		}
 	}
 
-	private getCollectionInternal(callback, delay: number = 0) {
-		this.collectionTriesLeft--;
+	private getCollectionInternal(callback, retriesLeft = 20, delay: number = 0) {
+		if (retriesLeft <= 0) {
+			console.error('[memory-service] [collection-manager] could not retrieve collection');
+			callback([]);
+			return;
+		}
 		// I observed some cases where the new card information was not present in the memory reading
 		// right after I had gotten it from a pack, so let's add a little delay
 		setTimeout(async () => {
-			const info = await this.ow.getGameEventsInfo();
-			if (!info.res || !info.res.collection) {
+			const memoryCollection = await this.mindVision.getCollection();
+			if (!memoryCollection) {
 				// If game is running, we should have something in the collection
 				// This might cause an issue if we're dealing with someone who has zero
 				// cards in their collection, but it's unlikely that totally beginners would
 				// use an app
 				// console.log('[memory service] [collection-manager] no collection info', info);
 				const gameInfo = await this.ow.getRunningGameInfo();
-				if (this.ow.gameRunning(gameInfo) && this.collectionTriesLeft > 0) {
+				if (this.ow.gameRunning(gameInfo)) {
 					console.log(
 						'[memory service] [collection-manager] game is running, GEP should return a collection. Waiting...',
 					);
-					setTimeout(() => this.getCollectionInternal(callback, delay), 2000);
-					return;
+					setTimeout(() => this.getCollectionInternal(callback, retriesLeft - 1, delay), 2000);
 				} else {
 					callback([]);
-					return;
 				}
+				return;
 			}
-			// console.log('[memory service] [collection-manager] collection info', info);
-			const collection: Card[] = (Object as any).values(info.res.collection).map(strCard => JSON.parse(strCard));
-			// console.log('callback', collection);
+			// console.log('[memory service] [collection-manager] collection info', memoryCollection);
+			const collection: Card[] = memoryCollection.map(
+				memoryCard =>
+					({
+						id: memoryCard.CardId,
+						count: memoryCard.Count,
+						premiumCount: memoryCard.PremiumCount,
+					} as Card),
+			);
+			// console.log('[memory service] [collection-manager] final collection', collection);
 			callback(collection);
 		}, delay);
 	}
