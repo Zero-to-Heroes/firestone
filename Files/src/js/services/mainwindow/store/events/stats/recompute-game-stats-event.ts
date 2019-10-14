@@ -10,6 +10,6 @@ export class RecomputeGameStatsEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 }

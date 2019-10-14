@@ -10,6 +10,6 @@ export class CloseMatchStatsWindowEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 }

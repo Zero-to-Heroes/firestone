@@ -12,6 +12,6 @@ export class ShowMatchStatsEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 }

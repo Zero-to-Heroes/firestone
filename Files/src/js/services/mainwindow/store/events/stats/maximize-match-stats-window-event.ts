@@ -10,6 +10,6 @@ export class MaximizeMatchStatsWindowEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 }
