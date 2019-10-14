@@ -7,6 +7,7 @@ import { AchievementsLocalStorageService } from '../../../src/js/services/achiev
 import { AchievementsMonitor } from '../../../src/js/services/achievement/achievements-monitor.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../../src/js/services/achievement/data/achievements-loader.service';
+import { RemoteAchievementsService } from '../../../src/js/services/achievement/remote-achievements.service.js';
 import { AllCardsService } from '../../../src/js/services/all-cards.service';
 import { DeckParserService } from '../../../src/js/services/decktracker/deck-parser.service';
 import { GameParserService } from '../../../src/js/services/endgame/game-parser.service';
@@ -20,7 +21,6 @@ import { PlayersInfoService } from '../../../src/js/services/players-info.servic
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';
 import { GameStatsUpdaterService } from '../../../src/js/services/stats/game/game-stats-updater.service';
-import { RemoteAchievementsService } from '../../../src/js/services/achievement/remote-achievements.service.js';
 
 export const achievementsValidation = async (
 	rawAchievements: RawAchievement[],
@@ -38,6 +38,8 @@ export const achievementsValidation = async (
 	if (loader.challengeModules.length !== 1) {
 		throw new Error('Can only handle single achievements for now');
 	}
+	// Don't reset achievements
+	loader.challengeModules.forEach(challenge => (challenge['resetState'] = () => {}));
 	// Setup events
 	const events = new Events();
 	const mockPlugin: GameEventsPluginService = {
@@ -107,7 +109,7 @@ export const achievementsValidation = async (
 	);
 
 	// So that it has time to register all the events first
-	await sleep(100);
+	await sleep(500);
 
 	if (additionalEvents) {
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
