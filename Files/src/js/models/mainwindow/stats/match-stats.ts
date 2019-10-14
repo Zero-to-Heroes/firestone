@@ -1,5 +1,9 @@
 export class MatchStats {
-	readonly id: number;
 	readonly reviewId: string;
 	readonly replayKey: string;
+	readonly numberOfTurns: number;
+	readonly playerTotalManaSpent: number;
+	readonly opponentTotalManaSpent: number;
+	readonly playerTotalCardsPlayed: number;
+	readonly opponentTotalCardsPlayed: number;
 }

@@ -45,6 +45,11 @@ declare var ga: any;
 						[replayKey]="state.matchStats ? state.matchStats.replayKey : undefined"
 						[reviewId]="state.matchStats ? state.matchStats.reviewId : undefined"
 					></game-replay>
+					<match-overview
+						[ngClass]="{ 'active': state.currentStat === 'overview' }"
+						[stats]="state.matchStats"
+					>
+					</match-overview>
 				</div>
 			</div>
 			<tooltips></tooltips>
@@ -83,18 +88,21 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			const newState = event.matchStats;
 			const window = await this.ow.getCurrentWindow();
 			const currentlyVisible = window.isVisible;
-			if (newState.visible && !currentlyVisible) {
-				await this.ow.restoreWindow(this.windowId);
+			if (newState.visible) {
+				if (!currentlyVisible) {
+					await this.ow.restoreWindow(this.windowId);
+					ga('send', 'event', 'match-stats', 'show');
+				}
 				if (newState.minimized) {
 					await this.ow.minimizeWindow(this.windowId);
 				} else if (newState.maximized) {
 					await this.ow.maximizeWindow(this.windowId);
-					ga('send', 'event', 'match-stats', 'show');
 				} else if (this.state && this.state.maximized) {
-					// await this.ow.restoreWindow(this.windowId);
-					ga('send', 'event', 'match-stats', 'show');
+					// Redimension window
+					await this.ow.restoreWindow(this.windowId);
 				}
 			} else if (!newState.visible && currentlyVisible) {
+				ga('send', 'event', 'match-stats', 'hide');
 				await this.ow.hideWindow(this.windowId);
 			}
 			console.log('updated state after event', newState);

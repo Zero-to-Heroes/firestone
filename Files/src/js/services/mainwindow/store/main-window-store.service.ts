@@ -54,6 +54,7 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
+import { ChangeMatchStatCurrentStatEvent } from './events/stats/change-match-stat-current-stat-event';
 import { CloseMatchStatsWindowEvent } from './events/stats/close-match-stats-window-event';
 import { MatchStatsAvailableEvent } from './events/stats/match-stats-available-event';
 import { MaximizeMatchStatsWindowEvent } from './events/stats/maximize-match-stats-window-event';
@@ -94,6 +95,7 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
+import { ChangeMatchStatCurrentStatProcessor } from './processors/stats/change-match-stat-current-stat-processor';
 import { CloseMatchStatsWindowProcessor } from './processors/stats/close-match-stats-window-processor';
 import { MatchStatsAvailableProcessor } from './processors/stats/match-stats-available-processor';
 import { MaximizeMatchStatsWindowProcessor } from './processors/stats/maximize-match-stats-window-processor';
@@ -350,6 +352,9 @@ export class MainWindowStoreService {
 
 			ShowMatchStatsEvent.eventName(),
 			new ShowMatchStatsProcessor(),
+
+			ChangeMatchStatCurrentStatEvent.eventName(),
+			new ChangeMatchStatCurrentStatProcessor(),
 
 			CloseMatchStatsWindowEvent.eventName(),
 			new CloseMatchStatsWindowProcessor(),

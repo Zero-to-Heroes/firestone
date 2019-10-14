@@ -1,0 +1,43 @@
+.stats-container {
+	background: rgba(255, 255, 255, 0.08);
+	padding: 15px;
+	display: flex;
+	flex-direction: column;
+	color: #d9c3ab;
+}
+
+.title,
+.subtitle {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: 600;
+	font-size: 20px;
+	line-height: 19px;
+	text-align: center;
+	margin-top: 10px;
+	margin-bottom: 25px;
+}
+
+.subtitle {
+	display: flex;
+
+	&.face-off {
+		padding-left: 250px;
+	}
+}
+
+.stat {
+	display: flex;
+	margin-top: 5px;
+	margin-bottom: 5px;
+
+	.stat-name {
+		width: 250px;
+	}
+}
+
+.face-off-player,
+.face-off .stat-value {
+	width: 150px;
+	text-align: center;
+}

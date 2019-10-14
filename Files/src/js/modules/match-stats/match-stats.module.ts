@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { init } from '@sentry/browser';
 import { GameReplayComponent } from '../../components/match-stats/game-replay/game-replay.component';
+import { MatchOverviewComponent } from '../../components/match-stats/match-overview.component';
 import { MatchStatsMenuComponent } from '../../components/match-stats/match-stats-menu.component';
 import { MatchStatsWindowComponent } from '../../components/match-stats/match-stats-window.component';
 import { AdService } from '../../services/ad.service';
@@ -29,7 +30,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SharedModule,
 		SharedServicesModule.forRoot(),
 	],
-	declarations: [MatchStatsWindowComponent, GameReplayComponent, MatchStatsMenuComponent],
+	declarations: [MatchStatsWindowComponent, GameReplayComponent, MatchStatsMenuComponent, MatchOverviewComponent],
 	bootstrap: [MatchStatsWindowComponent],
 	providers: [AdService],
 })

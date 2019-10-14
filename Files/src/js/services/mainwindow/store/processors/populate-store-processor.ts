@@ -47,8 +47,13 @@ export class PopulateStoreProcessor implements Processor {
 		// 	visible: true,
 		// 	matchStats: {
 		// 		id: 1285443,
-		// 		reviewId: '5d95de9ed500ca00017f2aff',
-		// 		replayKey: 'hearthstone/replay/2019/10/3/3d15b3cb-fcad-4b1a-a53d-a99d845a11a8',
+		// 		reviewId: '5da0a66be94e960001ca8cc0',
+		// 		replayKey: 'hearthstone/replay/2019/10/11/4f4670df-7e00-46b4-890c-70f250449029',
+		// 		numberOfTurns: 22,
+		// 		opponentTotalCardsPlayed: 45,
+		// 		opponentTotalManaSpent: 23,
+		// 		playerTotalCardsPlayed: 44,
+		// 		playerTotalManaSpent: 24,
 		// 	} as MatchStats,
 		// 	currentStat: 'replay',
 		// } as MatchStatsState);

@@ -1,1 +1,1 @@
-export type MatchStatsCurrentStat = 'replay';
+export type MatchStatsCurrentStat = 'replay' | 'overview';
