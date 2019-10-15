@@ -1,6 +1,6 @@
 export interface PlayerInfo {
 	readonly name: string;
-	readonly cardId: string;
+	// readonly cardId: string;
 	readonly cardBackId: number;
 	readonly standardRank: number;
 	readonly standardLegendRank: number;

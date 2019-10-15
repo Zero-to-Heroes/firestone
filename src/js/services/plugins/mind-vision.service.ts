@@ -28,6 +28,22 @@ export class MindVisionService {
 		});
 	}
 
+	public async getMatchInfo(): Promise<any> {
+		return new Promise<any[]>(async resolve => {
+			const plugin = await this.get();
+			plugin.getMatchInfo(matchInfo => {
+				try {
+					if (matchInfo) {
+						console.debug('[mind-vision] retrieved matchInfo', matchInfo);
+						resolve(JSON.parse(matchInfo));
+					}
+				} catch (e) {
+					console.debug('[mind-vision] could not parse matchInfo', e, matchInfo);
+				}
+			});
+		});
+	}
+
 	public async get() {
 		await this.waitForInit();
 		return this.mindVisionPlugin.get();

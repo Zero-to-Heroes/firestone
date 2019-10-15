@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
+import { PlayerInfo } from '../../models/player-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { MindVisionService } from './mind-vision.service';
@@ -9,8 +10,8 @@ export class MemoryInspectionService {
 	// https://overwolf.github.io/docs/api/overwolf-games-events-heartstone
 	readonly g_interestedInFeatures = [
 		'scene_state', // Used to detect when the UI shows the game
-		'collection',
-		'match', // Used to get the rank info of the player
+		// 'collection',
+		// 'match', // Used to get the rank info of the player
 		'match_info', // For the GEP game ID
 	];
 
@@ -31,20 +32,6 @@ export class MemoryInspectionService {
 				resolve(playersInfo);
 			});
 		});
-	}
-
-	private async init() {
-		this.ow.addGameInfoUpdatedListener(res => {
-			if (this.ow.gameLaunched(res)) {
-				this.registerEvents();
-				setTimeout(() => this.setFeatures(), 1000);
-			}
-		});
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (this.ow.gameRunning(gameInfo)) {
-			this.registerEvents();
-			setTimeout(() => this.setFeatures(), 1000);
-		}
 	}
 
 	private getCollectionInternal(callback, retriesLeft = 20, delay: number = 0) {
@@ -95,20 +82,43 @@ export class MemoryInspectionService {
 			callback(null);
 			return;
 		}
-		const info = await this.ow.getGameEventsInfo();
-		if (info && info.res && info.res.playersInfo) {
-			console.log('[memory-service] fetched playersInfo', info.res.playersInfo);
-			const localPlayer: string = info.res.playersInfo.localPlayer;
-			const opponent: string = info.res.playersInfo.opponent;
+		const matchInfo = await this.mindVision.getMatchInfo();
+		if (matchInfo) {
+			console.log('[memory-service] fetched matchInfo', matchInfo);
+			const localPlayer = this.extractPlayerInfo(matchInfo.LocalPlayer);
+			const opponent = this.extractPlayerInfo(matchInfo.OpposingPlayer);
 			callback({
-				localPlayer: JSON.parse(localPlayer),
-				oppoennt: JSON.parse(opponent),
+				localPlayer: localPlayer,
+				opponent: opponent,
 			});
 			return;
 		}
 		setTimeout(() => this.getPlayerInfoInternal(callback, triesLeft - 1), 2000);
-		// console.warn('[memory-service] could not fetch playersInfo', info);
-		// resolve(null);
+	}
+
+	private extractPlayerInfo(matchPlayer: any): PlayerInfo {
+		return {
+			name: matchPlayer.Name,
+			cardBackId: matchPlayer.CardBackId,
+			standardLegendRank: matchPlayer.StandardLegendRank,
+			standardRank: matchPlayer.StandardRank,
+			wildLegendRank: matchPlayer.WildLegendRank,
+			wildRank: matchPlayer.WildRank,
+		} as PlayerInfo;
+	}
+
+	private async init() {
+		this.ow.addGameInfoUpdatedListener(res => {
+			if (this.ow.gameLaunched(res)) {
+				this.registerEvents();
+				setTimeout(() => this.setFeatures(), 1000);
+			}
+		});
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (this.ow.gameRunning(gameInfo)) {
+			this.registerEvents();
+			setTimeout(() => this.setFeatures(), 1000);
+		}
 	}
 
 	private handleInfoUpdate(info) {
