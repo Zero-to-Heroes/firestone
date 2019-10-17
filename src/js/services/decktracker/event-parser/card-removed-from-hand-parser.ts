@@ -13,7 +13,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		return gameEvent.type === GameEvent.CARD_REMOVED_FROM_HAND;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;

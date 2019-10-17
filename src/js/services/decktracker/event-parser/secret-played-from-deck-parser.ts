@@ -19,7 +19,7 @@ export class SecretPlayedFromDeckParser implements EventParser {
 		return cardId && controllerId === localPlayer.PlayerId;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;

@@ -15,7 +15,7 @@ export class EndOfEchoInHandParser implements EventParser {
 		return gameEvent.type === GameEvent.END_OF_ECHO_IN_HAND;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;

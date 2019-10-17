@@ -15,7 +15,7 @@ export class SecretPlayedFromHandParser implements EventParser {
 		return gameEvent.type === GameEvent.SECRET_PLAYED;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;

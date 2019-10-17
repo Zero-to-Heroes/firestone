@@ -15,7 +15,7 @@ export class CardChangedOnBoardParser implements EventParser {
 		return gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;

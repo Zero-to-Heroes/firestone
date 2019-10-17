@@ -1,10 +1,10 @@
-import { EventParser } from './event-parser';
-import { GameEvent } from '../../../models/game-event';
 import { GameState } from '../../../models/decktracker/game-state';
-import { DeckParserService } from '../deck-parser.service';
-import { AllCardsService } from '../../all-cards.service';
-import { DeckEvents } from './deck-events';
 import { Metadata } from '../../../models/decktracker/metadata';
+import { GameEvent } from '../../../models/game-event';
+import { AllCardsService } from '../../all-cards.service';
+import { DeckParserService } from '../deck-parser.service';
+import { DeckEvents } from './deck-events';
+import { EventParser } from './event-parser';
 
 export class MatchMetadataParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
@@ -13,7 +13,7 @@ export class MatchMetadataParser implements EventParser {
 		return gameEvent.type === GameEvent.MATCH_METADATA;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		return Object.assign(new GameState(), currentState, {
 			metadata: {
 				gameType: gameEvent.additionalData.metaData.GameType as number,

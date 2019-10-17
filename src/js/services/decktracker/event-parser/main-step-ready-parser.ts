@@ -12,7 +12,7 @@ export class MainStepReadyParser implements EventParser {
 		return gameEvent.type === GameEvent.MAIN_STEP_READY;
 	}
 
-	parse(currentState: GameState): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		// We use this to distinguish between mulligan over but getting cards from mulligan and
 		// real draw start
 		if (currentState.currentTurn !== 0) {

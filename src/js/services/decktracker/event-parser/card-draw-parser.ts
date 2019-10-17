@@ -15,7 +15,7 @@ export class CardDrawParser implements EventParser {
 		return gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

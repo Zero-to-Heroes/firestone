@@ -15,8 +15,9 @@ export class GameStartParser implements EventParser {
 		return gameEvent.type === GameEvent.GAME_START;
 	}
 
-	parse(): GameState {
-		const currentDeck = this.deckParser.currentDeck;
+	async parse(): Promise<GameState> {
+		const currentDeck = await this.deckParser.getCurrentDeck();
+		console.log('[game-start-parser] init game with deck', currentDeck);
 		const deckList: readonly DeckCard[] = this.buildDeckList(currentDeck);
 		const hero: HeroCard = this.buildHero(currentDeck);
 		return Object.assign(new GameState(), {
@@ -51,7 +52,7 @@ export class GameStartParser implements EventParser {
 	}
 
 	private buildHero(currentDeck: any): HeroCard {
-		if (!currentDeck || !currentDeck.deck) {
+		if (!currentDeck || !currentDeck.deck || !currentDeck.deck.heroes || currentDeck.deck.heroes.length === 0) {
 			return null;
 		}
 		return currentDeck.deck.heroes
@@ -93,6 +94,10 @@ export class GameStartParser implements EventParser {
 		const result: DeckCard[] = [];
 		if (!card) {
 			console.error('Could not build deck card', pair);
+			return result;
+		}
+		// Don't include passive buffs in the decklist
+		if (card.mechanics && card.mechanics.indexOf('DUNGEON_PASSIVE_BUFF') !== -1) {
 			return result;
 		}
 		for (let i = 0; i < pair[1]; i++) {

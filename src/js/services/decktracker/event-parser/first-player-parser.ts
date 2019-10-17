@@ -11,7 +11,7 @@ export class FirstPlayerParser implements EventParser {
 		return gameEvent.type === GameEvent.FIRST_PLAYER;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [, , localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = entityId === localPlayer.Id;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

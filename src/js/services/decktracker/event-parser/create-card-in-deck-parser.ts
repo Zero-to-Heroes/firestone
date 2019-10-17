@@ -15,7 +15,7 @@ export class CreateCardInDeckParser implements EventParser {
 		return gameEvent.type === GameEvent.CREATE_CARD_IN_DECK;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;

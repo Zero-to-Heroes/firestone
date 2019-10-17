@@ -12,7 +12,7 @@ export class CardStolenParser implements EventParser {
 		return gameEvent.type === GameEvent.CARD_STOLEN;
 	}
 
-	parse(currentState: GameState, gameEvent: GameEvent): GameState {
+	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		console.log('Handling stolen card event', gameEvent, currentState);
 		// Ideally ,this should just use the entity tags for the zone instead of
 		// relying on finding the card somewhere

@@ -101,11 +101,11 @@ export class GameStateService {
 		const gameEvent = eventQueue[0];
 		// TODO: process several events if the queue is long, as otherwise it can cause a big lag
 		// (eg shudderwok)
-		this.processEvent(gameEvent);
+		await this.processEvent(gameEvent);
 		return eventQueue.slice(1);
 	}
 
-	private processEvent(gameEvent: GameEvent) {
+	private async processEvent(gameEvent: GameEvent) {
 		if (!this.state) {
 			this.logger.error('null state before processing event', gameEvent, this.state);
 			return;
@@ -119,7 +119,7 @@ export class GameStateService {
 					// 	gameEvent.cardId,
 					// 	gameEvent.entityId,
 					// );
-					const stateAfterParser = parser.parse(this.state, gameEvent);
+					const stateAfterParser = await parser.parse(this.state, gameEvent);
 					if (!stateAfterParser) {
 						this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
 						continue;
