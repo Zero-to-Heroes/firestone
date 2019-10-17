@@ -13,17 +13,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "common"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_balanced_10",
@@ -39,17 +59,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "common"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_balanced_15",
@@ -65,17 +105,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "common"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_balanced_20",
@@ -91,17 +151,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "common"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_balanced_25",
@@ -117,17 +197,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "common"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_balanced_5",
@@ -143,17 +243,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "common"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_classic_1",
@@ -169,15 +289,28 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CLASSIC" }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CLASSIC"
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_classic_10",
@@ -193,15 +326,28 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CLASSIC" }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CLASSIC"
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_classic_15",
@@ -217,15 +363,28 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CLASSIC" }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CLASSIC"
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_classic_20",
@@ -241,15 +400,28 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CLASSIC" }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CLASSIC"
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_classic_25",
@@ -265,15 +437,28 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CLASSIC" }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CLASSIC"
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_classic_5",
@@ -289,15 +474,28 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CLASSIC" }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CLASSIC"
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_complex_1",
@@ -307,21 +505,35 @@
 		"root": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Complexity (rank 1)",
-		"emptyText": "Win one game with a deck containing only cards with at leat 8 words in their text in Ranked Standard",
+		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_complex_10",
@@ -331,21 +543,35 @@
 		"root": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Complexity (rank 10)",
-		"emptyText": "Win one game with a deck containing only cards with at leat 8 words in their text in Ranked Standard",
+		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_complex_15",
@@ -355,21 +581,35 @@
 		"root": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Complexity (rank 15)",
-		"emptyText": "Win one game with a deck containing only cards with at leat 8 words in their text in Ranked Standard",
+		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_complex_20",
@@ -379,21 +619,35 @@
 		"root": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Complexity (rank 20)",
-		"emptyText": "Win one game with a deck containing only cards with at leat 8 words in their text in Ranked Standard",
+		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_complex_25",
@@ -403,21 +657,35 @@
 		"root": true,
 		"priority": -25,
 		"displayName": "Achievement completed: Complexity (rank 25)",
-		"emptyText": "Win one game with a deck containing only cards with at leat 8 words in their text in Ranked Standard",
+		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_complex_5",
@@ -427,21 +695,35 @@
 		"root": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Complexity (rank 5)",
-		"emptyText": "Win one game with a deck containing only cards with at leat 8 words in their text in Ranked Standard",
+		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_epic_1",
@@ -457,15 +739,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["30", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_epic_10",
@@ -481,15 +777,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["30", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_epic_15",
@@ -505,15 +815,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["30", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_epic_20",
@@ -529,15 +853,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["30", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_epic_25",
@@ -553,15 +891,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["30", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_epic_5",
@@ -577,15 +929,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["30", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_fragile_nature_1",
@@ -601,16 +967,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_fragile_nature_10",
@@ -626,16 +1009,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_fragile_nature_15",
@@ -651,16 +1051,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_fragile_nature_20",
@@ -676,16 +1093,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_fragile_nature_25",
@@ -701,16 +1135,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_fragile_nature_5",
@@ -726,16 +1177,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_free_speech_1",
@@ -751,15 +1219,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_free_speech_10",
@@ -775,15 +1257,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_free_speech_15",
@@ -799,15 +1295,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_free_speech_20",
@@ -823,15 +1333,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_free_speech_25",
@@ -847,15 +1371,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_free_speech_5",
@@ -871,15 +1409,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["30", "BATTLECRY", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lifesteal_1",
@@ -895,15 +1447,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["12", "LIFESTEAL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lifesteal_10",
@@ -919,15 +1485,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["12", "LIFESTEAL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lifesteal_15",
@@ -943,15 +1523,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["12", "LIFESTEAL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lifesteal_20",
@@ -967,15 +1561,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["12", "LIFESTEAL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lifesteal_25",
@@ -991,15 +1599,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["12", "LIFESTEAL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lifesteal_5",
@@ -1015,15 +1637,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["12", "LIFESTEAL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lone_survivor_1",
@@ -1039,16 +1675,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "SPELL", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "MINION", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lone_survivor_10",
@@ -1064,16 +1717,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "SPELL", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "MINION", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lone_survivor_15",
@@ -1089,16 +1759,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "SPELL", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "MINION", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lone_survivor_20",
@@ -1114,16 +1801,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "SPELL", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "MINION", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lone_survivor_25",
@@ -1139,16 +1843,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "SPELL", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "MINION", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_lone_survivor_5",
@@ -1164,16 +1885,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "SPELL", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "MINION", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_minion_1",
@@ -1189,15 +1927,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["30", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_minion_10",
@@ -1213,15 +1965,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["30", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_minion_15",
@@ -1237,15 +2003,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["30", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_minion_20",
@@ -1261,15 +2041,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["30", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_minion_25",
@@ -1285,15 +2079,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["30", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_minion_5",
@@ -1309,15 +2117,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["30", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_miracle_1",
@@ -1333,16 +2155,33 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_miracle_10",
@@ -1358,16 +2197,33 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_miracle_15",
@@ -1383,16 +2239,33 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_miracle_20",
@@ -1408,16 +2281,33 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_miracle_25",
@@ -1433,16 +2323,33 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_miracle_5",
@@ -1458,16 +2365,33 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["29", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["1", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_random_1",
@@ -1483,15 +2407,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_random_10",
@@ -1507,15 +2445,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_random_15",
@@ -1531,15 +2483,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_random_20",
@@ -1555,15 +2521,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_random_25",
@@ -1579,15 +2559,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_random_5",
@@ -1603,15 +2597,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_richly_balanced_1",
@@ -1627,17 +2635,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "legendary"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_richly_balanced_10",
@@ -1653,17 +2681,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "legendary"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_richly_balanced_15",
@@ -1679,17 +2727,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "legendary"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_richly_balanced_20",
@@ -1705,17 +2773,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "legendary"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_richly_balanced_25",
@@ -1731,17 +2819,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "legendary"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_richly_balanced_5",
@@ -1757,17 +2865,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
-			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "legendary"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "rare"]
+			},
+			{
+				"type": "DECK_RARITY",
+				"values": ["10", "AT_LEAST", "epic"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_simple_1",
@@ -1783,15 +2911,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_simple_10",
@@ -1807,15 +2949,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_simple_15",
@@ -1831,15 +2987,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_simple_20",
@@ -1855,15 +3025,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_simple_25",
@@ -1879,15 +3063,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_simple_5",
@@ -1903,15 +3101,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
+				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_so_quiet_1",
@@ -1927,17 +3139,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["15", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "BATTLECRY", "AT_MOST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "DEATHRATTLE", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_so_quiet_10",
@@ -1953,17 +3185,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["15", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "BATTLECRY", "AT_MOST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "DEATHRATTLE", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_so_quiet_15",
@@ -1979,17 +3231,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["15", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "BATTLECRY", "AT_MOST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "DEATHRATTLE", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_so_quiet_20",
@@ -2005,17 +3277,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["15", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "BATTLECRY", "AT_MOST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "DEATHRATTLE", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_so_quiet_25",
@@ -2031,17 +3323,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["15", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "BATTLECRY", "AT_MOST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "DEATHRATTLE", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_so_quiet_5",
@@ -2057,17 +3369,37 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
-			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NUMBER_OF_MINIONS",
+				"values": ["15", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "BATTLECRY", "AT_MOST"]
+			},
+			{
+				"type": "DECK_MECHANIC",
+				"values": ["0", "DEATHRATTLE", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sorcerer_1",
@@ -2083,15 +3415,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["30", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sorcerer_10",
@@ -2107,15 +3453,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["30", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sorcerer_15",
@@ -2131,15 +3491,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["30", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sorcerer_20",
@@ -2155,15 +3529,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["30", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sorcerer_25",
@@ -2179,15 +3567,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["30", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sorcerer_5",
@@ -2203,15 +3605,29 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["30", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_summoner_1",
@@ -2227,15 +3643,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_summoner_10",
@@ -2251,15 +3681,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_summoner_15",
@@ -2275,15 +3719,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_summoner_20",
@@ -2299,15 +3757,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_summoner_25",
@@ -2323,15 +3795,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_summoner_5",
@@ -2347,15 +3833,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_TEXT_VALUE",
+				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sword_and_spell_1",
@@ -2371,16 +3871,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sword_and_spell_10",
@@ -2396,16 +3913,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sword_and_spell_15",
@@ -2421,16 +3955,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sword_and_spell_20",
@@ -2446,16 +3997,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sword_and_spell_25",
@@ -2471,16 +4039,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_sword_and_spell_5",
@@ -2496,16 +4081,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
-			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "MINION", "AT_LEAST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["15", "SPELL", "AT_LEAST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_the_void_1",
@@ -2521,15 +4123,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
+				"values": ["e"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_the_void_10",
@@ -2545,15 +4161,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
+				"values": ["e"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_the_void_15",
@@ -2569,15 +4199,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
+				"values": ["e"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_the_void_20",
@@ -2593,15 +4237,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
+				"values": ["e"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_the_void_25",
@@ -2617,15 +4275,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
+				"values": ["e"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_the_void_5",
@@ -2641,15 +4313,29 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
+				"values": ["e"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_thousand_cuts_1",
@@ -2665,16 +4351,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["1"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_thousand_cuts_10",
@@ -2690,16 +4393,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["10"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_thousand_cuts_15",
@@ -2715,16 +4435,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["15"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_thousand_cuts_20",
@@ -2740,16 +4477,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["20"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_thousand_cuts_25",
@@ -2765,16 +4519,33 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["25"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	},
 	{
 		"id": "deckbuilding_win_thousand_cuts_5",
@@ -2790,15 +4561,32 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5.0,
+		"points": 5,
 		"requirements": [
-			{ "type": "GAME_TYPE", "values": ["7"] },
-			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
-			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
-			{ "type": "GAME_WON" },
-			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
-			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
+			{
+				"type": "GAME_TYPE",
+				"values": ["7"]
+			},
+			{
+				"type": "RANKED_MIN_RANK",
+				"values": ["5"]
+			},
+			{
+				"type": "RANKED_FORMAT_TYPE",
+				"values": ["2"]
+			},
+			{
+				"type": "GAME_WON"
+			},
+			{
+				"type": "DECK_CARD_ATTRIBUTE_VALUE",
+				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
+			},
+			{
+				"type": "DECK_TYPE",
+				"values": ["0", "SPELL", "AT_MOST"]
+			}
 		],
-		"resetEvents": ["GAME_START"]
+		"resetEvents": ["GAME_END"]
 	}
 ]
