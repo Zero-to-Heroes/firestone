@@ -42,5 +42,5 @@
 			"values": ["0", "DEATHRATTLE", "AT_MOST"]
 		}
 	],
-	"resetEvents": ["GAME_START"]
+	"resetEvents": ["GAME_END"]
 }

@@ -1,4 +1,3 @@
-import { Events } from '../../../../../src/js/services/events.service';
 import { achievementsValidation } from '../../achievement-event-validation';
 // These are created by copy-paste of the csharp plugin output after
 // processing the power.log file
@@ -9,16 +8,10 @@ import rawAchievement from './raw_achievement.json';
 
 describe('Deckbuilding - Epic', () => {
 	test('is completed when full events created by CSharp plugin and GEP are emitted', async () => {
-		// Injecting the GEP events
-		const additionalEvents = [
-			{
-				key: Events.PLAYER_INFO,
-				value: { standardRank: 10 },
-			},
-		];
 		const deckstring = 'AAECAZ8FBsD9AvWAA+OGA+aGA9+gA8WhAwyKAbsD0gTzBZYJp/cC/PwC3f4C+v4CsZQDhpwDk6gDAA==';
-		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, additionalEvents, {
+		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
+			playerRank: 10,
 		});
 		expect(isAchievementComplete).toBe(true);
 	});
@@ -29,31 +22,19 @@ describe('Deckbuilding - Epic', () => {
 	});
 
 	test('is not completed when deckstring does not fullfill the condition', async () => {
-		// Injecting the GEP events
-		const additionalEvents = [
-			{
-				key: Events.PLAYER_INFO,
-				value: { standardRank: 10 },
-			},
-		];
 		const deckstring = 'AAECAf0GAo+CA5eXAw4w0wHyAfUF2QexCMII9v0C+v4C3IYDxIkD7IwDiJ0DtZ8DAA==';
-		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, additionalEvents, {
+		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
+			playerRank: 10,
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});
 
 	test('is not completed when deckstring is empty', async () => {
-		// Injecting the GEP events
-		const additionalEvents = [
-			{
-				key: Events.PLAYER_INFO,
-				value: { standardRank: 10 },
-			},
-		];
 		const deckstring = undefined;
-		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, additionalEvents, {
+		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			deckstring: deckstring,
+			playerRank: 10,
 		});
 		expect(isAchievementComplete).toBeFalsy();
 	});

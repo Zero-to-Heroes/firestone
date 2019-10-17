@@ -38,5 +38,5 @@
 			"values": ["0", "SPELL", "AT_MOST"]
 		}
 	],
-	"resetEvents": ["GAME_START"]
+	"resetEvents": ["GAME_END"]
 }

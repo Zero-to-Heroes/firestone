@@ -4,6 +4,7 @@ import { Requirement } from './_requirement';
 
 export class TotalDiscardedCardsReq implements Requirement {
 	private totalDiscardedCards: number = 0;
+	private completed = false;
 
 	constructor(private readonly targetDiscardedCards: number) {}
 
@@ -16,14 +17,16 @@ export class TotalDiscardedCardsReq implements Requirement {
 
 	reset(): void {
 		this.totalDiscardedCards = 0;
+		this.completed = false;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.totalDiscardedCards = 0;
+		this.completed = true;
 	}
 
 	isCompleted(): boolean {
-		return this.totalDiscardedCards === this.targetDiscardedCards;
+		return !this.completed && this.totalDiscardedCards >= this.targetDiscardedCards;
 	}
 
 	test(gameEvent: GameEvent): void {

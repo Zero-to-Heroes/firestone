@@ -33,5 +33,5 @@
 			"type": "DECK_CLASSIC"
 		}
 	],
-	"resetEvents": ["GAME_START"]
+	"resetEvents": ["GAME_END"]
 }

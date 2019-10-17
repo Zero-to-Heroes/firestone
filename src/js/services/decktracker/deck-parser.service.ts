@@ -33,6 +33,7 @@ export class DeckParserService {
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
 			}
 		}
+		// console.log('returning current deck', this.currentDeck);
 		return this.currentDeck;
 	}
 
@@ -87,7 +88,7 @@ export class DeckParserService {
 	public decodeDeckString() {
 		if (this.currentDeck) {
 			if (this.currentDeck.deckstring) {
-				// console.log('[decks] deck updated', this.currentDeck);
+				// console.debug('[decks] deck updated', this.currentDeck);
 				const deck = decode(this.currentDeck.deckstring);
 				this.currentDeck.deck = deck;
 				return;
@@ -101,6 +102,6 @@ export class DeckParserService {
 	// a game mode that doesn't interact with the Decks.log
 	public reset() {
 		this.currentDeck = {};
-		// console.log('[decks] resetting deck');
+		console.log('[decks] resetting deck');
 	}
 }

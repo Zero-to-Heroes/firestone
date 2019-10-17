@@ -3,6 +3,7 @@ import cardsJson from '../../../dependencies/cards.json';
 import { RawAchievement } from '../../../src/js/models/achievement/raw-achievement';
 import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
 import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
+import { PlayerInfo } from '../../../src/js/models/player-info.js';
 import { AchievementsLocalStorageService } from '../../../src/js/services/achievement/achievements-local-storage.service.js';
 import { AchievementsMonitor } from '../../../src/js/services/achievement/achievements-monitor.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
@@ -29,6 +30,7 @@ export const achievementsValidation = async (
 	collaborators?: {
 		gameStats?: GameStats;
 		deckstring?: string;
+		playerRank?: number;
 	},
 ) => {
 	const cards = buildCardsService();
@@ -52,7 +54,15 @@ export const achievementsValidation = async (
 	const memoryService: MemoryInspectionService = {
 		getPlayerInfo: () => {
 			return new Promise<any>(resolve => {
-				resolve({});
+				resolve(
+					collaborators && collaborators.playerRank
+						? {
+								localPlayer: {
+									standardRank: collaborators.playerRank,
+								} as PlayerInfo,
+						  }
+						: {},
+				);
 			});
 		},
 	} as MemoryInspectionService;
@@ -61,6 +71,8 @@ export const achievementsValidation = async (
 	const deckService = new DeckParserService(emitter, null);
 	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
 	deckService.decodeDeckString();
+	deckService['reset'] = () => {};
+	// console.debug('built current deck', deckService);
 	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService, emitter, deckService);
 	// Setup achievement monitor, that will check for completion
 	let isAchievementComplete = false;

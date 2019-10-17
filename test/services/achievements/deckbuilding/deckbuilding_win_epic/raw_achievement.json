@@ -34,5 +34,5 @@
 			"values": ["30", "AT_LEAST", "epic"]
 		}
 	],
-	"resetEvents": ["GAME_START"]
+	"resetEvents": ["GAME_END"]
 }
