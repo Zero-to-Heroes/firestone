@@ -17,6 +17,7 @@ export class Preferences {
 	readonly decktrackerScale: number = 100;
 	readonly overlayDisplayMode: string;
 	readonly launchAppOnGameStart: boolean = true;
+	readonly alwaysShowNotificationPopups = false;
 	readonly binder: BinderPrefs = new BinderPrefs();
 
 	readonly twitchAccessToken: string;

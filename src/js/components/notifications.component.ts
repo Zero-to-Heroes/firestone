@@ -39,7 +39,7 @@ import { ProcessingQueue } from '../services/processing-queue.service';
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	timeout = 5000;
-	// timeout = 999999999999;
+	// timeout = 999999;
 	toastOptions = {
 		timeOut: this.timeout,
 		pauseOnHover: false,
