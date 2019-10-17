@@ -2,6 +2,7 @@ import { RawRequirement } from '../../../../../models/achievement/raw-requiremen
 import { GameEvent } from '../../../../../models/game-event';
 import { AllCardsService } from '../../../../all-cards.service';
 import { Requirement } from '../_requirement';
+import { buildCardArraysFromDeck } from './deckbuilding-helper';
 
 export class DeckbuildingNumberOfMinionsReq implements Requirement {
 	private doesDeckMeetSpec: boolean;
@@ -37,9 +38,7 @@ export class DeckbuildingNumberOfMinionsReq implements Requirement {
 	private handleEvent(gameEvent: GameEvent) {
 		const deck = gameEvent.localPlayer.deck ? gameEvent.localPlayer.deck.deck : null;
 		if (deck && deck.cards && deck.cards.length > 0) {
-			const cards = deck.cards
-				.map(pair => this.fillArray(this.cards.getCardFromDbfId(pair[0]), pair[1]))
-				.reduce((a, b) => a.concat(b));
+			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards.filter(card => card.type === 'Minion').length;
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfMinions;
@@ -51,13 +50,5 @@ export class DeckbuildingNumberOfMinionsReq implements Requirement {
 		} else {
 			this.doesDeckMeetSpec = false;
 		}
-	}
-
-	private fillArray(value, len) {
-		var arr = [];
-		for (var i = 0; i < len; i++) {
-			arr.push(value);
-		}
-		return arr;
 	}
 }

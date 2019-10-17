@@ -13,34 +13,65 @@ export class MindVisionService {
 	}
 
 	public async getCollection(): Promise<any[]> {
-		return new Promise<any[]>(async resolve => {
+		return new Promise<any[]>(async (resolve, reject) => {
+			console.debug('[mind-vision] retrieving collection');
 			const plugin = await this.get();
-			plugin.getCollection(collection => {
-				try {
-					if (collection) {
-						// console.debug('[mind-vision] retrieved collection', collection);
-						resolve(JSON.parse(collection));
-					}
-				} catch (e) {
-					console.debug('[mind-vision] could not parse collection', e, collection);
-				}
-			});
+			try {
+				plugin.getCollection(collection => {
+					console.debug('[mind-vision] retrieved collection');
+					resolve(collection ? JSON.parse(collection) : null);
+				});
+			} catch (e) {
+				console.debug('[mind-vision] could not parse collection', e);
+				resolve(null);
+			}
 		});
 	}
 
 	public async getMatchInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
+			console.debug('[mind-vision] retrieving matchInfo');
 			const plugin = await this.get();
-			plugin.getMatchInfo(matchInfo => {
-				try {
-					if (matchInfo) {
-						console.debug('[mind-vision] retrieved matchInfo', matchInfo);
-						resolve(JSON.parse(matchInfo));
-					}
-				} catch (e) {
-					console.debug('[mind-vision] could not parse matchInfo', e, matchInfo);
-				}
-			});
+			try {
+				plugin.getMatchInfo(matchInfo => {
+					resolve(matchInfo ? JSON.parse(matchInfo) : null);
+				});
+			} catch (e) {
+				console.debug('[mind-vision] could not parse matchInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getDungeonInfo(): Promise<any> {
+		return new Promise<any[]>(async resolve => {
+			console.debug('[mind-vision] retrieving dungeonInfo');
+			const plugin = await this.get();
+			try {
+				plugin.getDungeonInfo(dungeonInfo => {
+					console.debug('[mind-vision] retrieved dungeonInfo');
+					resolve(dungeonInfo ? JSON.parse(dungeonInfo) : null);
+				});
+			} catch (e) {
+				console.debug('[mind-vision] could not parse dungeonInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getActiveDeck(): Promise<any> {
+		return new Promise<any[]>(async resolve => {
+			console.debug('[mind-vision] retrieving activeDeck');
+			const plugin = await this.get();
+			try {
+				plugin.getActiveDeck(activeDeck => {
+					console.debug('[mind-vision] retrieved activeDeck');
+					resolve(activeDeck ? JSON.parse(activeDeck) : null);
+				});
+			} catch (e) {
+				console.debug('[mind-vision] could not parse activeDeck', e);
+				resolve(null);
+			}
 		});
 	}
 

@@ -58,7 +58,7 @@ export const achievementsValidation = async (
 	} as MemoryInspectionService;
 	const emitter = new GameEventsEmitterService();
 	const playersInfoService = new PlayersInfoService(events, memoryService);
-	const deckService = new DeckParserService(emitter);
+	const deckService = new DeckParserService(emitter, null);
 	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
 	deckService.decodeDeckString();
 	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService, emitter, deckService);

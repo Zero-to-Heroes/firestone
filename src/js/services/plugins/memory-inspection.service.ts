@@ -57,11 +57,12 @@ export class MemoryInspectionService {
 					);
 					setTimeout(() => this.getCollectionInternal(callback, retriesLeft - 1, delay), 2000);
 				} else {
+					console.log('[memory service] [collection-manager] game not running, returning empty collection');
 					callback([]);
 				}
 				return;
 			}
-			// console.log('[memory service] [collection-manager] collection info', memoryCollection);
+			console.log('[memory service] [collection-manager] collection info', memoryCollection.length);
 			const collection: Card[] = memoryCollection.map(
 				memoryCard =>
 					({
@@ -70,7 +71,7 @@ export class MemoryInspectionService {
 						premiumCount: memoryCard.PremiumCount,
 					} as Card),
 			);
-			// console.log('[memory service] [collection-manager] final collection', collection);
+			console.log('[memory service] [collection-manager] final collection', collection.length);
 			callback(collection);
 		}, delay);
 	}

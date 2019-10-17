@@ -38,7 +38,6 @@ import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service
 import { MatchSummaryService } from '../../services/match-summary/match-summary.service';
 import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
-import { MindVisionService } from '../../services/plugins/mind-vision.service';
 import { SettingsCommunicationService } from '../../services/settings/settings-communication.service';
 import { GameStatsLoaderService } from '../../services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-updater.service';
@@ -120,8 +119,6 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		TemporaryResolutionOverrideService,
 		LZStringService,
-
-		MindVisionService,
 	],
 })
 export class AppModule {}

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { decode } from 'deckstrings';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { MindVisionService } from '../plugins/mind-vision.service';
 
 @Injectable()
 export class DeckParserService {
@@ -16,12 +17,27 @@ export class DeckParserService {
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
-	constructor(private gameEvents: GameEventsEmitterService) {
+	constructor(private gameEvents: GameEventsEmitterService, private mindVision: MindVisionService) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
 			}
 		});
+	}
+
+	public async getCurrentDeck(): Promise<any> {
+		if (this.mindVision) {
+			const activeDeck = await this.mindVision.getActiveDeck();
+			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
+				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
+				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
+			}
+		}
+		return this.currentDeck;
+	}
+
+	private explodeDecklist(decklist: number[]): any[] {
+		return decklist.map(dbfId => [dbfId, 1]);
 	}
 
 	public parseActiveDeck(data: string) {
