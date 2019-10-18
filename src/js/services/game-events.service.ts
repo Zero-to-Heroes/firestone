@@ -423,7 +423,7 @@ export class GameEvents {
 						additionalData: {
 							game: gameEvent.Value.Game,
 							report: gameEvent.Value.GameStateReport,
-							replayXWml: gameEvent.Value.ReplayXml,
+							replayXml: gameEvent.Value.ReplayXml,
 						},
 					} as GameEvent),
 				);

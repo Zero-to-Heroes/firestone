@@ -7,10 +7,11 @@ export class GameForUpload {
 
 	gameMode: string;
 	gameFormat: string;
-	rank: string;
+	buildNumber: number;
+	scenarioId: string;
+	playerRank: string;
 	opponentRank: string;
 	result: string;
-	matchInfo: any;
 	arenaInfo: any;
 	durationTimeSeconds: number;
 	durationTurns: number;
@@ -20,7 +21,9 @@ export class GameForUpload {
 	opponent: Player = new Player();
 
 	deckstring: string;
+	deckName: string;
 	replay: string;
+
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
 	uncompressedXmlReplay: string;
@@ -31,36 +34,6 @@ export class GameForUpload {
 		const game = new GameForUpload();
 		game.id = id;
 		return game;
-	}
-
-	public extractMatchInfoData() {
-		if (this.matchInfo != null && this.matchInfo.LocalPlayer != null) {
-			if ('Wild' === this.gameFormat) {
-				if (this.matchInfo.LocalPlayer.WildLegendRank > 0) {
-					this.rank = 'legend';
-				} else {
-					this.rank = this.matchInfo.LocalPlayer.WildRank;
-				}
-
-				if (this.matchInfo.OpposingPlayer.WildLegendRank > 0) {
-					this.opponentRank = 'legend';
-				} else {
-					this.opponentRank = this.matchInfo.OpposingPlayer.WildRank;
-				}
-			} else if ('Standard' === this.gameFormat) {
-				if (this.matchInfo.LocalPlayer.StandardLegendRank > 0) {
-					this.rank = 'legend';
-				} else {
-					this.rank = this.matchInfo.LocalPlayer.StandardRank;
-				}
-
-				if (this.matchInfo.OpposingPlayer.StandardLegendRank > 0) {
-					this.opponentRank = 'legend';
-				} else {
-					this.opponentRank = this.matchInfo.OpposingPlayer.StandardRank;
-				}
-			}
-		}
 	}
 }
 

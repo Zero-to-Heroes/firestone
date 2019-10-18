@@ -9,6 +9,10 @@ import { EndGameUploaderService } from './end-game-uploader.service';
 @Injectable()
 export class EndGameListenerService {
 	private currentGameId: string;
+	private currentDeckstring: string;
+	private currentDeckname: string;
+	private currentBuildNumber: number;
+	private currentScenarioId: string;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -25,9 +29,26 @@ export class EndGameListenerService {
 			this.logger.debug('Received new game id event', event);
 			this.currentGameId = event.data[0];
 		});
-		this.gameEvents.allEvents.subscribe(async (event: GameEvent) => {
-			if (event.type === GameEvent.GAME_END) {
-				await this.endGameUploader.upload(event, this.currentGameId, this.deckService.currentDeck.deckstring);
+		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
+			switch (gameEvent.type) {
+				case 'LOCAL_PLAYER':
+					this.currentDeckstring = this.deckService.currentDeck.deckstring;
+					this.currentDeckname = this.deckService.currentDeck.name;
+					break;
+				case 'MATCH_METADATA':
+					this.currentBuildNumber = gameEvent.additionalData.metaData.BuildNumber;
+					this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
+					break;
+				case 'GAME_END':
+					this.logger.debug('[eng-game] end game, uploading?');
+					await this.endGameUploader.upload(
+						gameEvent,
+						this.currentGameId,
+						this.currentDeckstring,
+						this.currentDeckname,
+						this.currentBuildNumber,
+						this.currentScenarioId,
+					);
 			}
 		});
 	}

@@ -12,70 +12,80 @@ const BUCKET = 'com.zerotoheroes.batch';
 export class ReplayUploadService {
 	constructor(private http: HttpClient, private ow: OverwolfService) {}
 
-	public async uploadGame(game: GameForUpload): Promise<void> {
-		return new Promise<void>(async (resolve, reject) => {
-			const user = await this.ow.getCurrentUser();
-			const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
+	public async uploadGame(game: GameForUpload, retriesLeft = 30) {
+		if (retriesLeft < 0) {
+			console.error('Could not create empty review');
+			return;
+		}
+		const user = await this.ow.getCurrentUser();
+		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 
-			// Build an empty review
-			this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(res => {
+		// Build an empty review
+		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
+			res => {
 				const reviewId: string = res as string;
 				console.log('Created empty shell review', res, reviewId);
+				this.postFullReview(reviewId, userId, game);
+			},
+			error => {
+				setTimeout(() => this.uploadGame(game, retriesLeft - 1), 1000);
+			},
+		);
+	}
 
-				const bytes = game.replayBytes;
-				// https://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
-				const byteArray = new Uint8Array(bytes);
-				const blob = new Blob([byteArray], { type: 'application/zip' });
-				const fileKey = Date.now() + '_' + reviewId + '.hszip';
-				console.log('built file key', fileKey);
+	private postFullReview(reviewId: string, userId: string, game: GameForUpload) {
+		const bytes = game.replayBytes;
+		// https://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
+		const byteArray = new Uint8Array(bytes);
+		const blob = new Blob([byteArray], { type: 'application/zip' });
+		const fileKey = Date.now() + '_' + reviewId + '.hszip';
+		console.log('built file key', fileKey);
 
-				// Configure The S3 Object
-				AWS.config.region = 'us-west-2';
-				AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
+		// Configure The S3 Object
+		AWS.config.region = 'us-west-2';
+		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-				let rank = game.rank;
-				if ('Arena' === game.gameMode) {
-					if (game.arenaInfo) {
-						rank = game.arenaInfo.Wins;
-					} else {
-						rank = null;
-					}
-				}
-				const s3 = new S3();
-				const params = {
-					Bucket: BUCKET,
-					Key: fileKey,
-					ACL: 'public-read-write',
-					Body: blob,
-					Metadata: {
-						'review-id': reviewId,
-						'application-key': 'overwolf',
-						'user-key': userId,
-						'file-type': 'hszip',
-						'review-text': 'Created by [Overwolf](https://www.overwolf.com)',
-						'game-rank': rank && rank !== 'legend' ? rank.toString() : '',
-						'game-legend-rank': rank === 'legend' ? rank.toString() : '',
-						'opponent-game-rank':
-							game.opponentRank && game.opponentRank !== 'legend' ? game.opponentRank.toString() : '',
-						'opponent-game-legend-rank': game.opponentRank === 'legend' ? game.opponentRank.toString() : '',
-						'game-mode': game.gameMode,
-						'game-format': game.gameMode !== 'Arena' ? game.gameFormat : '',
-						'deckstring': game.deckstring,
-					},
-				};
-				console.log('uploading with params', params);
-				s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
-					// There Was An Error With Your S3 Config
-					if (err) {
-						console.warn('An error during upload', err);
-						reject();
-					} else {
-						console.log('Uploaded game', data2, reviewId);
-						game.reviewId = reviewId;
-						resolve();
-					}
-				});
-			});
+		let playerRank = game.playerRank;
+		if ('Arena' === game.gameMode) {
+			if (game.arenaInfo) {
+				playerRank = game.arenaInfo.Wins;
+			} else {
+				playerRank = undefined;
+			}
+		}
+		const s3 = new S3();
+		const params = {
+			Bucket: BUCKET,
+			Key: fileKey,
+			ACL: 'public-read-write',
+			Body: blob,
+			Metadata: {
+				'review-id': reviewId,
+				'application-key': 'overwolf',
+				'user-key': userId,
+				'file-type': 'hszip',
+				'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
+				'player-rank': playerRank ? '' + playerRank : '',
+				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
+				'game-mode': game.gameMode,
+				'game-format': game.gameFormat,
+				'build-number': '' + game.buildNumber,
+				'deckstring': game.deckstring,
+				'deck-name': game.deckName,
+				'scenario-id': '' + game.scenarioId,
+			},
+		};
+		console.log('uploading with params', params);
+		s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
+			// There Was An Error With Your S3 Config
+			if (err) {
+				console.warn('An error during upload', err);
+				// reject();
+			} else {
+				console.log('Uploaded game', data2, reviewId);
+				game.reviewId = reviewId;
+				// resolve();
+			}
 		});
 	}
 }
