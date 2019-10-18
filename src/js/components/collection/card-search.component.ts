@@ -32,6 +32,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				</i>
 				<input
 					[formControl]="searchForm"
+					(keypress)="filterKeyPress($event)"
 					(mousedown)="onMouseDown($event)"
 					(blur)="onFocusLost()"
 					placeholder="Search card..."
@@ -89,6 +90,12 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 		this._searchResults = searchResults;
 		this.showSearchResults = searchResults && searchResults.length > 0;
 		console.log('set searchResults', this._searchResults);
+	}
+
+	filterKeyPress(event: KeyboardEvent) {
+		if (event.altKey) {
+			event.preventDefault();
+		}
 	}
 
 	onSearchStringChange() {
