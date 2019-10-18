@@ -25,6 +25,9 @@ export class AppComponent {
 	}
 
 	private async init() {
+		this.ow.addUncaughtExceptionHandler(error => {
+			console.error('Global uncaught exception', error);
+		});
 		// First initialize the cards DB, as some of the dependencies injected in
 		// app-bootstrap won't be able to start without the cards DB in place
 		await this.cards.initializeCardsDb();

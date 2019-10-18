@@ -90,10 +90,10 @@ export class MindVisionService {
 					return;
 				}
 				console.log('[mind-vision] Plugin ' + this.mindVisionPlugin.get()._PluginName_ + ' was loaded!');
-				this.initialized = true;
 				this.mindVisionPlugin.get().onGlobalEvent.addListener((first: string, second: string) => {
 					console.log('[mind-vision] received global event', first, second);
 				});
+				this.initialized = true;
 			});
 		} catch (e) {
 			console.warn('[mind-vision]Could not load plugin, retrying', e);

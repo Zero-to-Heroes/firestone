@@ -112,6 +112,10 @@ export class OverwolfService {
 		overwolf.games.inputTracking.onKeyUp.addListener(callback);
 	}
 
+	public addUncaughtExceptionHandler(handler) {
+		overwolf.extensions.onUncaughtException.addListener(handler);
+	}
+
 	public openUrlInOverwolfBrowser(url) {
 		overwolf.utils.openUrlInOverwolfBrowser(url);
 	}
@@ -519,7 +523,7 @@ export class OverwolfService {
 		return new Promise<boolean>(resolve => {
 			overwolf.extensions.getRunningState(OverwolfService.MANASTORM_ID, (res: any) => {
 				console.warn('[overwolf-service] is Manastorm running?', res);
-				resolve(res);
+				resolve(res && res.isRunning);
 			});
 		});
 	}
