@@ -25,7 +25,11 @@ body {
 	align-items: center;
 	height: 100%;
 	overflow: hidden;
-	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
+	// For an obscure reason, the drop-shadow makes the ads not clickable
+	// A solution could be to include the ads in the parent, outside of the div
+	// that has the drop-shadow. Will do that if we feel the shadown is really
+	// missing
+	// filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 
 	.corner {
 		position: absolute;
