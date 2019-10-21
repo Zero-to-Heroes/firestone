@@ -10,6 +10,8 @@
 	cursor: default;
 	padding-left: 15px;
 	padding-right: 15px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -17,6 +19,6 @@
 	@extend %achievements-tooltip;
 	background-color: var(--tooltip-background-color);
 	color: var(--tooltip-color);
-	white-space: nowrap;
 	margin: 10px;
+	max-width: 200px;
 }
