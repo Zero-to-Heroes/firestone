@@ -22,7 +22,7 @@ export class HelpTooltipDirective implements OnInit {
 
 	ngOnInit() {
 		console.log('targeting tooltip help element', this.position);
-		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget') || this.elementRef;
+		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
 
 		const positionStrategy =
 			this.position === 'bottom'
