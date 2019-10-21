@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Map } from 'immutable';
+import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../models/mainwindow/navigation';
@@ -13,6 +14,7 @@ import { CardHistoryStorageService } from '../../collection/card-history-storage
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
+import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { Events } from '../../events.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
@@ -44,6 +46,7 @@ import { ShowCardDetailsEvent } from './events/collection/show-card-details-even
 import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle-show-only-new-cards-in-history-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
 import { CurrentUserEvent } from './events/current-user-event';
+import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
@@ -85,6 +88,7 @@ import { ShowCardDetailsProcessor } from './processors/collection/show-card-deta
 import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collection/toggle-show-only-new-cards-in-history-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
+import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { PopulateStoreProcessor } from './processors/populate-store-processor';
@@ -141,6 +145,8 @@ export class MainWindowStoreService {
 		private pityTimer: PackHistoryService,
 		private notifs: OwNotificationsService,
 		private userService: UserService,
+		private decktrackerStateLoader: DecktrackerStateLoaderService,
+		private readonly logger: NGXLogger,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -235,6 +241,7 @@ export class MainWindowStoreService {
 				this.collectionManager,
 				this.pityTimer,
 				this.achievementsLoader,
+				this.decktrackerStateLoader,
 				this.gameStatsLoader,
 				this.ow,
 				this.cards,
@@ -345,7 +352,7 @@ export class MainWindowStoreService {
 
 			// Stats
 			RecomputeGameStatsEvent.eventName(),
-			new RecomputeGameStatsProcessor(this.gameStatsUpdater),
+			new RecomputeGameStatsProcessor(this.gameStatsUpdater, this.decktrackerStateLoader),
 
 			MatchStatsAvailableEvent.eventName(),
 			new MatchStatsAvailableProcessor(this.notifs),
@@ -364,6 +371,10 @@ export class MainWindowStoreService {
 
 			MaximizeMatchStatsWindowEvent.eventName(),
 			new MaximizeMatchStatsWindowProcessor(),
+
+			// Decktracker
+			SelectDecksViewEvent.eventName(),
+			new SelectDeckViewProcessor(),
 		);
 	}
 

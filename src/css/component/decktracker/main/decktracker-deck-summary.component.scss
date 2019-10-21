@@ -1,0 +1,67 @@
+.decktracker-deck-summary {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.08);
+	position: relative;
+	padding-top: 10px;
+	padding-bottom: 12px;
+
+	&:hover {
+		// background: rgba(255, 255, 255, 0.12);
+	}
+
+	.deck-name {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		color: var(--default-title-color);
+		font-size: 16px;
+		line-height: 22px;
+		text-align: center;
+		position: relative;
+		margin: auto;
+		flex-grow: 0;
+		flex-shrink: 0;
+		margin-bottom: 10px;
+	}
+
+	.deck-image {
+		width: 48%;
+		position: relative;
+		flex-grow: 1;
+		margin-bottom: 10px;
+
+		.skin {
+			width: 100%;
+			clip-path: polygon(0% 100%, 0% 56%, 15% 20%, 50% 5%, 80% 20%, 90% 56%, 90% 100%);
+		}
+		.frame {
+			position: absolute;
+			top: -8%;
+			left: -16%;
+			width: 120%;
+		}
+	}
+
+	.stats {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 12px;
+		line-height: 16px;
+		color: var(--default-title-color);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		.last-used {
+			color: var(--default-text-color);
+		}
+
+		& > div {
+			margin-bottom: 2px;
+		}
+	}
+}

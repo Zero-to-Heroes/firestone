@@ -94,6 +94,8 @@ export const achievementsValidation = async (
 		events,
 		null,
 		new GameParserService(null, null),
+		deckService,
+		playersInfoService,
 		new NGXLoggerMock() as NGXLogger,
 	);
 	statsUpdater.stateUpdater = store.stateUpdater;

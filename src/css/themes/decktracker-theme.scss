@@ -5,10 +5,13 @@
 			rgba(48, 35, 128, 0.7) 0%,
 			rgba(24, 24, 43, 0.7) 100%
 		),
-		url('/Files/assets/images/backgrounds/achievements_bg.jpg');
+		url('/Files/assets/images/backgrounds/decktracker_main_window.png');
 	--window-outline-color: #303352;
+	--default-text-color: #d9c3ab;
+	--default-title-color: #ffb948;
 
-	--menu-selection-color: #9fb6d7;
+	--menu-selection-color: #5a5f87;
+	--on-menu-selection-color: #ffb948;
 	--menu-bar-bottom-border-color: #303352;
 
 	--tooltip-background-color: #9fb6d7;

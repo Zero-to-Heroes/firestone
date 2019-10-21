@@ -15,6 +15,7 @@ import { AllCardsService } from '../../../all-cards.service';
 import { CardHistoryStorageService } from '../../../collection/card-history-storage.service';
 import { CollectionManager } from '../../../collection/collection-manager.service';
 import { PackHistoryService } from '../../../collection/pack-history.service';
+import { DecktrackerStateLoaderService } from '../../../decktracker/main/decktracker-state-loader.service';
 import { OverwolfService } from '../../../overwolf.service';
 import { GameStatsLoaderService } from '../../../stats/game/game-stats-loader.service';
 import { PopulateStoreEvent } from '../events/populate-store-event';
@@ -29,6 +30,7 @@ export class PopulateStoreProcessor implements Processor {
 		private collectionManager: CollectionManager,
 		private pityTimer: PackHistoryService,
 		private achievementsLoader: AchievementsLoaderService,
+		private decktrackerStateLoader: DecktrackerStateLoaderService,
 		private gameStatsLoader: GameStatsLoaderService,
 		private ow: OverwolfService,
 		private cards: AllCardsService,
@@ -57,10 +59,12 @@ export class PopulateStoreProcessor implements Processor {
 		// 	} as MatchStats,
 		// 	currentStat: 'replay',
 		// } as MatchStatsState);
+		const decktracker = this.decktrackerStateLoader.buildState(currentState.decktracker, stats);
 		console.log('[populate-store] almost done');
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: achievements,
 			binder: collection,
+			decktracker: decktracker,
 			socialShareUserInfo: socialShareUserInfo,
 			stats: stats,
 			// matchStats: matchStats,

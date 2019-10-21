@@ -1,58 +1,35 @@
-@import '../../global/variables';
-@import '../../global/scrollbar';
-
 .decktracker {
 	flex-grow: 1;
 	display: flex;
 	padding-top: 14px;
-	// height: 598px;
-	// max-height: 598px;
+
+	decktracker-menu {
+		transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, flex-shrink 0.4s ease-in-out,
+			flex-grow 0.4s ease-in-out;
+	}
 
 	.main {
 		display: flex;
 		flex-direction: column;
-		width: 695px;
+		flex-grow: 1;
 		padding-left: 15px;
+		padding-right: 15px;
 		margin-top: 0;
 		position: relative;
 
 		&.divider {
-			border-right: 1px solid #4b3052;
+			border-right: 1px solid var(--menu-bar-bottom-border-color);
 			height: 100%;
 		}
 	}
 
-	.state-container {
-		margin: auto;
+	.secondary {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-
-		i {
-			margin-bottom: 30px;
-			width: 256px;
-			height: 259px;
-		}
-
-		.title {
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: 600;
-			font-size: 14px;
-			line-height: normal;
-			text-align: center;
-			color: #cb9fd7;
-			margin-bottom: 15px;
-		}
-
-		.subtitle {
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: normal;
-			font-size: 13px;
-			line-height: normal;
-			text-align: center;
-			color: #a276af;
-		}
+		flex-grow: 0;
+		margin-left: 15px;
+		margin-right: 15px;
+		width: 400px;
+		height: calc(100% - 350px);
 	}
 }

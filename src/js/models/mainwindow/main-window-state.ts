@@ -2,6 +2,7 @@ import { CurrentUser } from '../overwolf/profile/current-user';
 import { AchievementsState } from './achievements-state';
 import { BinderState } from './binder-state';
 import { CurrentAppType } from './current-app.type';
+import { DecktrackerState } from './decktracker/decktracker-state';
 import { Navigation } from './navigation';
 import { SocialShareUserInfo } from './social-share-user-info';
 import { MatchStatsState } from './stats/match-stats-state';
@@ -13,6 +14,7 @@ export class MainWindowState {
 	readonly currentApp: CurrentAppType = 'collection';
 	readonly binder: BinderState = new BinderState();
 	readonly achievements: AchievementsState = new AchievementsState();
+	readonly decktracker: DecktrackerState = new DecktrackerState();
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly matchStats: MatchStatsState = new MatchStatsState();

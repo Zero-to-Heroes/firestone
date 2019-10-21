@@ -1,0 +1,21 @@
+.decktracker-grouped-replays {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 10px;
+}
+
+.header {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 19px;
+	color: var(--default-title-color);
+	margin-bottom: 5px;
+}
+
+.replays {
+	li {
+		margin-bottom: 5px;
+	}
+}

@@ -1,0 +1,103 @@
+.deck-replay-info {
+	background: rgba(255, 255, 255, 0.08);
+	display: flex;
+	align-items: center;
+	height: 40px;
+	padding: 10px;
+}
+
+.player-rank {
+	width: 30px;
+	height: 30px;
+	margin-right: 5px;
+}
+
+.player-name {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--default-text-color);
+	width: 100px;
+
+	&.player {
+		text-align: right;
+		margin-right: 5px;
+	}
+}
+
+.player-class {
+	width: 30px;
+	height: 30px;
+
+	&.opponent {
+		margin-right: 5px;
+	}
+}
+
+.icon,
+.watch-icon {
+	width: 30px;
+	height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	cursor: default;
+	transition: 0.15s;
+	color: transparent;
+}
+
+.vs {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--default-text-color);
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
+.divider {
+	border-right: 1px solid var(--default-text-color);
+	height: 100%;
+	margin-left: 15px;
+	margin-right: 15px;
+}
+
+.result-icon {
+	margin-right: 5px;
+}
+
+.result {
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--default-text-color);
+}
+
+.play-coin-icon {
+	width: 20px;
+	height: 20px;
+}
+
+.replay {
+	display: flex;
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+	line-height: 18px;
+	color: var(--default-text-color);
+	align-items: center;
+	flex-grow: 1;
+	justify-content: flex-end;
+
+	.watch {
+		margin-right: 10px;
+	}
+}

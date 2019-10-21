@@ -1,0 +1,25 @@
+:host {
+	display: flex;
+	flex-shrink: 0;
+	flex-grow: 0;
+}
+
+.menu-selection-decktracker {
+	&.menu-selection {
+		margin-bottom: 14px;
+		border-bottom: 1px solid var(--menu-bar-bottom-border-color);
+
+		li {
+			font-family: 'Open Sans', sans-serif;
+			font-weight: 400;
+			font-size: 16px;
+			padding-bottom: 10px;
+			color: var(--menu-selection-color);
+
+			&.selected,
+			&:hover {
+				color: var(--on-menu-selection-color);
+			}
+		}
+	}
+}

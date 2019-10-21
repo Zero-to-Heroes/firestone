@@ -58,7 +58,12 @@ declare var ga: any;
 					[hidden]="state.currentApp !== 'achievements'"
 				>
 				</achievements>
-				<decktracker class="main-section" [hidden]="state.currentApp !== 'decktracker'"> </decktracker>
+				<decktracker
+					class="main-section"
+					[state]="state.decktracker"
+					[hidden]="state.currentApp !== 'decktracker'"
+				>
+				</decktracker>
 			</section>
 			<tooltips></tooltips>
 			<ads [parentComponent]="'main-window'"></ads>

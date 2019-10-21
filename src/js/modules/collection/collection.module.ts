@@ -45,6 +45,12 @@ import { SetsContainer } from '../../components/collection/sets-container.compon
 import { SetsComponent } from '../../components/collection/sets.component';
 import { MainWindowNavigationComponent } from '../../components/controls/main-window-navigation.component';
 import { DecktrackerComponent } from '../../components/decktracker/decktracker.component';
+import { DeckReplayInfoComponent } from '../../components/decktracker/main/deck-replay-info.component';
+import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
+import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
+import { DecktrackerGroupedReplaysComponent } from '../../components/decktracker/main/decktracker-grouped-replays.component';
+import { DecktrackerMenuComponent } from '../../components/decktracker/main/decktracker-menu.component';
+import { DecktrackerReplaysComponent } from '../../components/decktracker/main/decktracker-replays.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
 import { RealTimeNotificationsComponent } from '../../components/real-time-notifications.component';
@@ -125,6 +131,12 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementsFilterComponent,
 
 		DecktrackerComponent,
+		DecktrackerMenuComponent,
+		DecktrackerDecksComponent,
+		DecktrackerDeckSummaryComponent,
+		DecktrackerReplaysComponent,
+		DecktrackerGroupedReplaysComponent,
+		DeckReplayInfoComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,
