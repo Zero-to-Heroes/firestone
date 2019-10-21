@@ -8,6 +8,12 @@
 			flex-grow 0.4s ease-in-out;
 	}
 
+	decktracker-filters {
+		position: absolute;
+		right: 0;
+		top: 1%;
+	}
+
 	.main {
 		display: flex;
 		flex-direction: column;

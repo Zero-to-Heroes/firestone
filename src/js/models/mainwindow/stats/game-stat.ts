@@ -1,14 +1,18 @@
+import { CoinPlayType } from '../decktracker/coin-play.type';
+import { MatchResultType } from '../decktracker/match-result.type';
 import { MatchStats } from './match-stats';
+import { StatGameFormatType } from './stat-game-format.type';
+import { StatGameModeType } from './stat-game-mode.type';
 
 // this mirrors the data structure in the replay_summary DB
 export class GameStat {
 	readonly creationTimestamp: number;
-	readonly gameMode: 'arena' | 'arena-draft' | 'casual' | 'friendly' | 'practice' | 'ranked' | 'tavern-brawl';
-	readonly gameFormat: 'standard' | 'wild';
+	readonly gameMode: StatGameModeType;
+	readonly gameFormat: StatGameFormatType;
 	readonly buildNumber: number | undefined;
 	readonly scenarioId: number | undefined;
-	readonly result: 'won' | 'lost' | 'tied';
-	readonly coinPlay: 'coin' | 'play';
+	readonly result: MatchResultType;
+	readonly coinPlay: CoinPlayType;
 	readonly playerName: string;
 	readonly playerClass: string;
 	readonly playerRank: string | undefined;

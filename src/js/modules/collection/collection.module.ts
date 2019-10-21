@@ -48,6 +48,7 @@ import { DecktrackerComponent } from '../../components/decktracker/decktracker.c
 import { DeckReplayInfoComponent } from '../../components/decktracker/main/deck-replay-info.component';
 import { DecktrackerDeckSummaryComponent } from '../../components/decktracker/main/decktracker-deck-summary.component';
 import { DecktrackerDecksComponent } from '../../components/decktracker/main/decktracker-decks.component';
+import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
 import { DecktrackerGroupedReplaysComponent } from '../../components/decktracker/main/decktracker-grouped-replays.component';
 import { DecktrackerMenuComponent } from '../../components/decktracker/main/decktracker-menu.component';
 import { DecktrackerReplaysComponent } from '../../components/decktracker/main/decktracker-replays.component';
@@ -137,6 +138,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		DecktrackerReplaysComponent,
 		DecktrackerGroupedReplaysComponent,
 		DeckReplayInfoComponent,
+		DecktrackerFiltersComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,

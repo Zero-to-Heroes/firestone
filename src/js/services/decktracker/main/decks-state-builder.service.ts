@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { DeckFilters } from '../../../models/mainwindow/decktracker/deck-filters';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { StatsState } from '../../../models/mainwindow/stats/stats-state';
@@ -9,11 +10,11 @@ import { StatsState } from '../../../models/mainwindow/stats/stats-state';
 export class DecksStateBuilderService {
 	constructor(private readonly logger: NGXLogger) {}
 
-	public buildState(stats: StatsState): readonly DeckSummary[] {
+	public buildState(stats: StatsState, filters: DeckFilters): readonly DeckSummary[] {
 		this.logger.debug('[decktracker-stats-loader] update with stats', stats);
 		const standardRanked = stats.gameStats.stats
-			.filter(stat => stat.gameFormat === 'standard')
-			.filter(stat => stat.gameMode === 'ranked')
+			.filter(stat => stat.gameFormat === filters.gameFormat)
+			.filter(stat => stat.gameMode === filters.gameMode)
 			.filter(stat => stat.playerDecklist && stat.playerDecklist !== 'undefined');
 		const groupByDeckstring = groupBy('playerDecklist');
 		const statsByDeck = groupByDeckstring(standardRanked);

@@ -1,0 +1,29 @@
+.decktracker-filters {
+	display: flex;
+	color: var(--secondary-text-color);
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 13px;
+}
+
+.title {
+	color: var(--default-title-color);
+	margin-right: 15px;
+}
+
+.filters {
+	display: flex;
+	list-style: none;
+
+	li:after {
+		border-right: 1px solid;
+		content: '';
+		padding-right: 10px;
+		margin-right: 10px;
+	}
+
+	li:last-child:after {
+		border-right: none;
+	}
+}

@@ -14,6 +14,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 					[displayType]="state.menuDisplayType"
 					[currentView]="state.currentView"
 				></decktracker-menu>
+				<decktracker-filters [state]="state.filters"></decktracker-filters>
 				<decktracker-decks [hidden]="state.currentView !== 'decks'" [decks]="state.decks"></decktracker-decks>
 				<decktracker-replays
 					[hidden]="state.currentView !== 'replays'"
