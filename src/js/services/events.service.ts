@@ -24,6 +24,7 @@ export class Events {
 	// public static readonly ACHIEVEMENT_RECORD_END = 'achievement-record-end';
 
 	public static readonly NEW_GAME_ID = 'new-game-id';
+	public static readonly REPLAY_UPLOADED = 'replay-uploaded';
 	public static readonly SCENE_CHANGED = 'scene-changed';
 	public static readonly PLAYER_INFO = 'player-info';
 	public static readonly OPPONENT_INFO = 'opponent-info';

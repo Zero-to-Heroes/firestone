@@ -6,6 +6,7 @@ import { PlayersInfoService } from '../players-info.service';
 import { GameForUpload } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
 import { GameParserService } from './game-parser.service';
+import { ReplayManager } from './replay-manager.service';
 import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class EndGameUploaderService {
 		private logger: NGXLogger,
 		private ow: OverwolfService,
 		private gameHelper: GameHelper,
+		private replayManager: ReplayManager,
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
@@ -44,7 +46,8 @@ export class EndGameUploaderService {
 			buildNumber,
 			scenarioId,
 		);
-		await this.replayUploadService.uploadGame(game);
+		const savedGame = await this.replayManager.saveLocally(game);
+		await this.replayUploadService.uploadGame(savedGame);
 	}
 
 	private async initializeGame(
@@ -60,7 +63,7 @@ export class EndGameUploaderService {
 		if (!replayXml) {
 			this.logger.warn('[end-game] could not convert replay');
 		}
-		this.logger.debug('[end-game] Creating new game', currentGameId);
+		this.logger.debug('[end-game] Creating new game', currentGameId, 'with replay length', replayXml.length);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);

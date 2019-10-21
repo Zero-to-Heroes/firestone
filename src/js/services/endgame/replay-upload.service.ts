@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import S3 from 'aws-sdk/clients/s3';
 import AWS from 'aws-sdk/global';
+import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { GameForUpload } from './game-for-upload';
 
@@ -10,7 +11,7 @@ const BUCKET = 'com.zerotoheroes.batch';
 
 @Injectable()
 export class ReplayUploadService {
-	constructor(private http: HttpClient, private ow: OverwolfService) {}
+	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {}
 
 	public async uploadGame(game: GameForUpload, retriesLeft = 30) {
 		if (retriesLeft < 0) {
@@ -34,8 +35,8 @@ export class ReplayUploadService {
 	}
 
 	private postFullReview(reviewId: string, userId: string, game: GameForUpload) {
-		const bytes = game.replayBytes;
 		// https://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
+		const bytes = game.replayBytes;
 		const byteArray = new Uint8Array(bytes);
 		const blob = new Blob([byteArray], { type: 'application/zip' });
 		const fileKey = Date.now() + '_' + reviewId + '.hszip';
@@ -84,7 +85,12 @@ export class ReplayUploadService {
 			} else {
 				console.log('Uploaded game', data2, reviewId);
 				game.reviewId = reviewId;
-				// resolve();
+				const info = {
+					type: 'new-review',
+					reviewId: reviewId,
+					replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
+				};
+				this.events.broadcast(Events.REPLAY_UPLOADED, info);
 			}
 		});
 	}
