@@ -522,7 +522,7 @@ export class OverwolfService {
 	public async isManastormRunning(): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			overwolf.extensions.getRunningState(OverwolfService.MANASTORM_ID, (res: any) => {
-				console.warn('[overwolf-service] is Manastorm running?', res);
+				console.log('[overwolf-service] is Manastorm running?', res);
 				resolve(res && res.isRunning);
 			});
 		});

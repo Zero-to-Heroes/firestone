@@ -59,21 +59,21 @@ export class GameParserService {
 	public extractDuration(game: Game) {
 		const parser = new DOMParser();
 		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
-		console.log('parsed', replayXml);
+		// console.log('parsed', replayXml);
 
 		const timestampedNodes = replayXml.querySelectorAll('[ts]');
-		console.log('timestampedNodes', timestampedNodes);
+		// console.log('timestampedNodes', timestampedNodes);
 		const firstTimestampInSeconds = this.toTimestamp(timestampedNodes[0].getAttribute('ts'));
-		console.log('firstTimestampInSeconds', firstTimestampInSeconds);
+		// console.log('firstTimestampInSeconds', firstTimestampInSeconds);
 		const lastTimestampInSeconds = this.toTimestamp(
 			timestampedNodes[timestampedNodes.length - 1].getAttribute('ts'),
 		);
-		console.log('lastTimestampInSeconds', lastTimestampInSeconds);
+		// console.log('lastTimestampInSeconds', lastTimestampInSeconds);
 		const durationInSeconds = lastTimestampInSeconds - firstTimestampInSeconds;
 		game.durationTimeSeconds = durationInSeconds;
 
 		const tagChangeNodes = replayXml.querySelectorAll('TagChange[entity="1"][tag="19"][value="6"]');
-		console.log('tagChangeNodes', tagChangeNodes);
+		// console.log('tagChangeNodes', tagChangeNodes);
 		// Count the number of times the player gets a turn
 		game.durationTurns = (tagChangeNodes.length + 1) / 2;
 	}
@@ -87,7 +87,7 @@ export class GameParserService {
 	public extractMatchup(game: Game): void {
 		const parser = new DOMParser();
 		const replayXml = parser.parseFromString(this.gameHelper.getXmlReplay(game), 'text/xml');
-		console.log('parsed', replayXml);
+		// console.log('parsed', replayXml);
 		// console.log('replayXML', replayXml);
 		if (!replayXml) {
 			console.warn('invalid game, not adding any meta data');
@@ -98,12 +98,12 @@ export class GameParserService {
 		}
 
 		const mainPlayerId: number = this.getMainPlayerId(replayXml);
-		console.log('main player ID', mainPlayerId);
+		// console.log('main player ID', mainPlayerId);
 		const mainPlayerEntityId: number = mainPlayerId + 1;
-		console.log('mainPlayerEntityId: ', mainPlayerEntityId);
+		// console.log('mainPlayerEntityId: ', mainPlayerEntityId);
 
 		const gamePlayers: Player[] = this.extractPlayers(replayXml, mainPlayerId);
-		console.log('players', gamePlayers);
+		// console.log('players', gamePlayers);
 
 		game.player = gamePlayers[0];
 		game.opponent = gamePlayers[1];
@@ -111,7 +111,7 @@ export class GameParserService {
 		game.title = game.player.name.replace('"', '') + ' vs ' + game.opponent.name.replace('"', '');
 
 		game.result = this.extractResult(replayXml, mainPlayerEntityId);
-		console.log('parsed game');
+		// console.log('parsed game');
 	}
 
 	public extractPlayers(replayXml: any, mainPlayerId: number): Player[] {
@@ -213,7 +213,7 @@ export class GameParserService {
 	public extractClassFromHero(hero: string) {
 		const heroCard = this.cards.getCard(hero);
 		const playerClass = heroCard && heroCard.playerClass && heroCard.playerClass.toLowerCase();
-		console.log('extractClassFromHero', hero, playerClass);
+		// console.log('extractClassFromHero', hero, playerClass);
 		return playerClass;
 	}
 

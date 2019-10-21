@@ -37,7 +37,10 @@ export class RemoteAchievementsService {
 			machineId: currentUser.machineId,
 		};
 		const result = await this.loadRemoteAchievements(postEvent);
-		this.logger.debug('[remote-achievements] loaded from server', result);
+		this.logger.debug(
+			'[remote-achievements] loaded from server',
+			result && result.results && result.results.length,
+		);
 
 		// Update local cache
 		await this.indexedDb.saveAll(result.results);
