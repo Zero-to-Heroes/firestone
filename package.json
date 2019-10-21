@@ -2,7 +2,7 @@
 	"name": "firestone",
 	"version": "3.5.0",
 	"scripts": {
-		"lint": "eslint --color --fix --ext .ts ./src/",
+		"lint": "node --max_old_space_size=6000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --colors",
 		"singleTest": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --runInBand -t",
 		"dev": "rimraf dist && node --max_old_space_size=6000 ./node_modules/webpack/bin/webpack.js --watch --config webpack.config.js --env.appversion=%npm_package_version% --env.development --progress --profile --bail --colors",
@@ -46,7 +46,7 @@
 		"@angular/compiler-cli": "8.1.1",
 		"@artonge/webpack": "6.0.1",
 		"@calebmer/extract-text-webpack-plugin": "4.0.2",
-		"@sentry/cli": "1.46.0",
+		"@sentry/cli": "^1.48.0",
 		"@sentry/webpack-plugin": "1.6.2",
 		"@types/core-js": "2.5.0",
 		"@types/jest": "24.0.18",
