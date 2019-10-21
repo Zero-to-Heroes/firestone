@@ -70,10 +70,10 @@ export class ReplayUploadService {
 				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
 				'game-mode': game.gameMode,
 				'game-format': game.gameFormat,
-				'build-number': '' + game.buildNumber,
+				'build-number': game.buildNumber ? '' + game.buildNumber : '',
 				'deckstring': game.deckstring,
 				'deck-name': game.deckName,
-				'scenario-id': '' + game.scenarioId,
+				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 			},
 		};
 		console.log('uploading with params', params);
