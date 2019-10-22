@@ -73,12 +73,31 @@
 .attention-icon {
 	color: transparent;
 	--icon-color: #d9c3ab;
+	// See https://github.com/sass/node-sass/issues/2251
+	--icon-blink-color: 217, 195, 171; // The RGBA equivalent of the above --icon-color
 	width: 17px;
 	height: 17px;
 
 	&.active,
 	&:hover {
 		--icon-color: #ffb948;
+	}
+}
+
+.pulse {
+	animation: shadow-pulse 2s infinite;
+	border-radius: 50%;
+	overflow: visible;
+	z-index: 9999;
+	transform: translateZ(0);
+}
+
+@keyframes shadow-pulse {
+	0% {
+		box-shadow: 0 0 0 0px rgba(var(--icon-blink-color), 0.4);
+	}
+	100% {
+		box-shadow: 0 0 0 30px rgba(var(--icon-blink-color), 0);
 	}
 }
 

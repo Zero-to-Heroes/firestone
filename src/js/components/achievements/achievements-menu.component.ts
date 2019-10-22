@@ -29,7 +29,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 					Categories
 					<div *ngIf="!currentUser || !currentUser.username" class="attention-icon-container">
 						<svg
-							class="svg-icon-fill attention-icon"
+							helpTooltip="Login to save your achievements online"
+							helpTooltipPosition="right"
+							class="svg-icon-fill attention-icon pulse"
 							(click)="toggleLoginPopup()"
 							[ngClass]="{ 'active': loginPopupActive }"
 						>
