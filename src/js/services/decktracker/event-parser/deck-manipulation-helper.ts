@@ -100,6 +100,7 @@ export class DeckManipulationHelper {
 	}
 
 	public static obfuscateCard(card: DeckCard): DeckCard {
+		// console.log('ofuscating card', card);
 		return Object.assign(new DeckCard(), card, {
 			cardId: undefined,
 		} as DeckCard);

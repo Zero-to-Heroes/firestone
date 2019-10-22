@@ -32,6 +32,7 @@ export class CardBackToDeckParser implements EventParser {
 			previousDeck,
 			isPlayer ? card : DeckManipulationHelper.obfuscateCard(card),
 		);
+		// console.log('updated deck', isPlayer, newDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,

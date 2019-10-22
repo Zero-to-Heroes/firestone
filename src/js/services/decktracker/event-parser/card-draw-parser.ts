@@ -17,10 +17,12 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		// console.log('drawing from deck', cardId, gameEvent);
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
+		// console.log('found card in zone', card, deck);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
 			previousDeck,
@@ -28,7 +30,11 @@ export class CardDrawParser implements EventParser {
 			entityId,
 		);
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousHand, card);
+		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
+			previousHand,
+			isPlayer ? card : DeckManipulationHelper.obfuscateCard(card),
+		);
+		// console.log('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,

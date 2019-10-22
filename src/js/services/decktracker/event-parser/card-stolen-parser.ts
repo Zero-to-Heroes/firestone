@@ -44,6 +44,8 @@ export class CardStolenParser implements EventParser {
 		});
 		// console.log('\tnew stolen deck', newStolenDeck);
 
+		// Here we just keep the card in the same zone, but in the other deck. Another event will
+		// trigger afterwards to put the card in the right zone, if needed
 		const stealingToDeck = isPlayerStolenFrom ? currentState.opponentDeck : currentState.playerDeck;
 		const stealingHand = cardInHand
 			? DeckManipulationHelper.addSingleCardToZone(stealingToDeck.hand, cardInHand)
@@ -57,6 +59,8 @@ export class CardStolenParser implements EventParser {
 					isPlayerStolenFrom ? DeckManipulationHelper.obfuscateCard(cardInDeck) : cardInDeck,
 			  )
 			: stealingToDeck.deck;
+		// console.log('new stealing deck', stealingDeck, cardInDeck);
+		// console.log('new stolen from deck', stolenFromDeck);
 		const newStealingDeck = Object.assign(new DeckState(), stealingToDeck, {
 			hand: stealingHand,
 			board: stealingBoard,
