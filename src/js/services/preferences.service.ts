@@ -1,6 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Preferences } from '../models/preferences';
 import { BinderPrefs } from '../models/preferences/binder-prefs';
+import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OverwolfService } from './overwolf.service';
 
@@ -145,6 +146,14 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, twitchAccessToken: undefined };
 		this.savePreferences(newPrefs, PreferencesService.TWITCH_CONNECTION_STATUS);
+	}
+
+	public async acknowledgeFtue(pref: string) {
+		const prefs = await this.getPreferences();
+		const ftue = prefs.ftue;
+		const newFtue = { ...ftue, [pref]: true } as Ftue;
+		const newPrefs: Preferences = { ...prefs, ftue: newFtue };
+		this.savePreferences(newPrefs);
 	}
 
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {

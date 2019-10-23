@@ -32,6 +32,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 							helpTooltip="Login to save your achievements online"
 							helpTooltipPosition="right"
 							class="svg-icon-fill attention-icon pulse"
+							pulse="hasSeenAchievementsLoginButton"
 							(click)="toggleLoginPopup()"
 							[ngClass]="{ 'active': loginPopupActive }"
 						>

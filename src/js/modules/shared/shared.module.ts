@@ -19,6 +19,7 @@ import { WindowWrapperComponent } from '../../components/window-wrapper.componen
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
+import { PulseDirective } from '../../directives/pulse.directive';
 
 @NgModule({
 	imports: [BrowserModule, OverlayModule],
@@ -44,6 +45,7 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 		CardTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
+		PulseDirective,
 
 		AdsComponent,
 	],
@@ -70,6 +72,7 @@ import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 		CardTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
+		PulseDirective,
 
 		AdsComponent,
 	],

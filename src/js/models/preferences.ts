@@ -1,4 +1,5 @@
 import { BinderPrefs } from './preferences/binder-prefs';
+import { Ftue } from './preferences/ftue';
 
 export class Preferences {
 	readonly id: number = 1;
@@ -22,4 +23,6 @@ export class Preferences {
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;
+
+	readonly ftue: Ftue = new Ftue();
 }
