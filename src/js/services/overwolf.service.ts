@@ -382,7 +382,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.getCurrentWindow((res: any) => {
-					console.log('[overwolf-service] retrieve current window', res);
+					// console.log('[overwolf-service] retrieve current window', res);
 					resolve(res.window);
 				});
 			} catch (e) {
