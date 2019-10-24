@@ -24,7 +24,7 @@ export class MatchStatsAvailableProcessor implements Processor {
 		// Also send a notification
 		// TODO: only do so if prefs say so
 		// this.sendNotification(event.stats);
-		console.log('[match-stats-available-processor] sending new state', newStatsState);
+		console.log('[match-stats-available-processor] sending new state');
 		return Object.assign(new MainWindowState(), currentState, {
 			stats: newStatsState,
 		} as MainWindowState);
