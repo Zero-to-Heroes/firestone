@@ -1,45 +1,45 @@
 .achievements-capture {
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 100%;
-    overflow-y: scroll;
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
 
-    .record-video {
-        margin-top: 15px;
+	.record-video {
+		margin-top: 15px;
 
-        p {
-            font-family: Open Sans;
-            font-style: normal;
-            font-weight: 600;
-            line-height: normal;
-            font-size: 14px;
-            color: #D9C3AB;
-            display: flex;
+		p {
+			font-family: Open Sans;
+			font-style: normal;
+			font-weight: 600;
+			line-height: normal;
+			font-size: 14px;
+			color: #d9c3ab;
+			display: flex;
 
-            .info {
-                .zth-tooltip {
-                    position: fixed; // Because of the overflow:hidden
-                    max-width: 200px;
-                    &.right {
-                        right: 24px;
-                        top: 78px;
-                    }
-                }
-            }
-        }
-    }
-    
+			.info {
+				.zth-tooltip {
+					position: fixed; // Because of the overflow:hidden
+					max-width: 200px;
+					&.right {
+						right: 24px;
+						top: 78px;
+					}
+				}
+			}
+		}
+	}
 
-    &.disabled {
-        ::ng-deep settings-achievements-video-capture .video-capture,
-        ::ng-deep settings-achievements-sound-capture .sound-capture,
-        ::ng-deep settings-achievements-storage .achievements-storage {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-    }
+	&.disabled {
+		::ng-deep settings-achievements-video-capture .video-capture,
+		::ng-deep settings-achievements-sound-capture .sound-capture,
+		::ng-deep settings-achievements-storage .achievements-storage {
+			pointer-events: none;
+			opacity: 0.5;
+		}
+	}
 
-    ::ng-deep settings-achievements-video-capture .video-capture {
-        margin-bottom: 15px;
-    }
+	::ng-deep settings-achievements-video-capture .video-capture {
+		margin-bottom: 15px;
+	}
 }

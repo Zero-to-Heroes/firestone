@@ -1,99 +1,102 @@
 .decktracker-broadcast {
-    padding-left: 15px;
-    padding-right: 15px;
-    height: 100%;
-    overflow-y: scroll;
-    
-    font-family: Open Sans;
-    font-style: normal;
-    font-weight: normal;
-    line-height: normal;
-    font-size: 14px;
-    color: #D9C3AB;
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+	overflow-y: scroll;
 
-    h2 {
-        margin-top: 15px;
-        margin-bottom: 15px;
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: 600;
-        line-height: normal;
-        font-size: 14px;        
-        color: #D9C3AB;
-    }
+	font-family: Open Sans;
+	font-style: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 14px;
+	color: #d9c3ab;
 
-    p, li, span, a {
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 13px;
-        line-height: 18px;
-        color: #D9C3AB;
-        margin-top: 0;
-    }
+	h2 {
+		margin-top: 15px;
+		margin-bottom: 15px;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 600;
+		line-height: normal;
+		font-size: 14px;
+		color: #d9c3ab;
+	}
 
-    ol {
-        margin-top: 15px;
-    }
+	p,
+	li,
+	span,
+	a {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 13px;
+		line-height: 18px;
+		color: #d9c3ab;
+		margin-top: 0;
+	}
 
-    li {
-        display: flex;
-        align-items: center;
-        margin-top: -5px;
-    }
+	ol {
+		margin-top: 15px;
+	}
 
-    .twitch {
-        margin-top: 30px;
-    }
+	li {
+		display: flex;
+		align-items: center;
+	}
 
-    a {
-        display: flex;
-        margin-left: 5px;
-        text-decoration: underline;
-        width: auto;
-    }
+	.twitch {
+		margin-top: 30px;
+	}
 
-    .user-name {
-        display: flex;
-        align-items: center;
-        position: relative;
-        top: -10px;
+	a {
+		display: flex;
+		margin-left: 5px;
+		text-decoration: underline;
+		width: auto;
+	}
 
-        a:hover {
-            color: #FFB948;
-            background: transparent;
-        }
-    }
+	.user-name {
+		display: flex;
+		align-items: center;
+		position: relative;
+		top: -10px;
 
-    button {
-        border: 1px solid #D9C3AB;
-        padding-left: 25px;
-        padding-right: 25px;
-        width: auto;
-        height: 35px;
+		a:hover {
+			color: #ffb948;
+			background: transparent;
+		}
+	}
 
-        i {
-            width: 18px;
-            height: 18px;
-            margin-right: 5px;
-            --icon-color: #FFB948;
-        }
+	button {
+		border: 1px solid #d9c3ab;
+		padding-left: 25px;
+		padding-right: 25px;
+		width: auto;
+		height: 35px;
+		display: flex;
 
-        div {
-            display: flex;
-        }
+		i {
+			width: 18px;
+			height: 18px;
+			margin-right: 5px;
+			--icon-color: #ffb948;
+		}
 
-        &:hover {
-            background: #FFB948;
-            border: none;
+		div {
+			display: flex;
+		}
 
-            span {
-                color: #2F0D0D;
-            }
+		&:hover {
+			background: #ffb948;
+			border: none;
 
-            i {
-                --icon-color: #2F0D0D;
-            }
-        }
-    }
+			span {
+				color: #2f0d0d;
+			}
+
+			i {
+				--icon-color: #2f0d0d;
+			}
+		}
+	}
 }
