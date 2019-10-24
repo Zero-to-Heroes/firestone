@@ -16,6 +16,13 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 	template: `
 		<div class="general-bug-report">
 			<div class="title">Send feedback / Report a bug</div>
+			<div class="note">
+				Don't forget to check out
+				<a href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting" target="_blank"
+					>the FAQ</a
+				>
+				as well!
+			</div>
 			<input
 				class="email"
 				[ngModel]="email"
