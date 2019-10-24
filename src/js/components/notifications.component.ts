@@ -19,6 +19,8 @@ import { Message } from '../services/notifications.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { ProcessingQueue } from '../services/processing-queue.service';
 
+declare var amplitude;
+
 @Component({
 	selector: 'notifications',
 	styleUrls: [
@@ -197,6 +199,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			// console.log('running toast message in zone', toast);
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
 				console.log('registered click on toast', event, toast);
+				amplitude
+					.getInstance()
+					.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': type });
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();
 				}
@@ -250,6 +255,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				type: type,
 			};
 			this.activeNotifications.push(activeNotif);
+			amplitude
+				.getInstance()
+				.logEvent('notification', { 'event': 'show', 'app': messageObject.app, 'type': type });
 			resolve();
 
 			setTimeout(() => {

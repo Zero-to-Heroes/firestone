@@ -1,7 +1,7 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { SelectCollectionFormatEvent } from '../../events/collection/select-collection-format-event';
+import { Processor } from '../processor';
 
 export class SelectCollectionFormatProcessor implements Processor {
 	public async process(event: SelectCollectionFormatEvent, currentState: MainWindowState): Promise<MainWindowState> {

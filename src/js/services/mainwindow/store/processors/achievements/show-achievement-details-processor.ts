@@ -11,13 +11,14 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			currentState.achievements.globalCategories,
 			event.achievementId,
 		);
+		const achievement = selectedSet.findAchievement(event.achievementId).completionSteps[0].id;
 		const newAchievements = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
 			selectedCategory: selectedSet,
 			achievementsList: selectedSet.achievements,
 			displayedAchievementsList: selectedSet.achievements,
-			selectedAchievementId: selectedSet.findAchievement(event.achievementId).completionSteps[0].id,
+			selectedAchievementId: achievement,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {
 			isVisible: true,

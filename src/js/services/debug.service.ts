@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+declare var overwolf;
+
 @Injectable()
 export class DebugService {
 	constructor() {
@@ -42,7 +44,7 @@ export class DebugService {
 			return function() {
 				const stack = new Error().stack;
 				oldConsoleLogFunc.apply(console, arguments, stack);
-				let argsString = '';
+				let argsString = stack + '|';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
 					argsString +=

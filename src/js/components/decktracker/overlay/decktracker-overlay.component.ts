@@ -19,8 +19,6 @@ import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var ga: any;
-
 @Component({
 	selector: 'decktracker-overlay',
 	styleUrls: [

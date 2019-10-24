@@ -7,7 +7,7 @@ import { PreferencesService } from '../preferences.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
-declare var ga;
+declare var amplitude;
 
 @Injectable()
 export class AchievementsNotificationService {
@@ -40,7 +40,7 @@ export class AchievementsNotificationService {
 			);
 			return;
 		}
-		ga('send', 'event', 'new-achievement', achievement.id);
+		amplitude.getInstance().logEvent('new-achievement', { 'id': achievement.id });
 		const notificationTimeout = challenge.notificationTimeout();
 		this.logger.debug('[achievements-notification] sending new achievement completed notification', achievement.id);
 		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;

@@ -11,7 +11,7 @@ import {
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare var ga: any;
+declare var amplitude: any;
 
 @Component({
 	selector: 'loading',
@@ -114,7 +114,7 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 
 	closeWindow() {
 		if (this.loading) {
-			ga('send', 'event', 'loading', 'closed-before-complete');
+			amplitude.getInstance().logEvent('loading', { 'timing': 'close-before-complete' });
 		}
 		this.ow.closeWindow(this.thisWindowId);
 	}

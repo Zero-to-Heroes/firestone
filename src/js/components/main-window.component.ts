@@ -13,7 +13,7 @@ import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 
-declare var ga: any;
+declare var amplitude: any;
 
 @Component({
 	selector: 'main-window',
@@ -111,7 +111,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				const window = await this.ow.getCurrentWindow();
 				const currentlyVisible = window.isVisible;
 				if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
-					ga('send', 'event', 'collection', 'show');
+					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 					await this.ow.restoreWindow(this.windowId);
 				}
 				console.log('updated state after event');

@@ -1,10 +1,10 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
-import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
-import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
 import { AchievementSet } from '../../../../../models/achievement-set';
+import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
+import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
 import { SelectAchievementSetEvent } from '../../events/achievements/select-achievement-set-event';
+import { Processor } from '../processor';
 import { SelectAchievementSetProcessor } from './select-achievement-set-processor';
 
 export class SelectAchievementCategoryProcessor implements Processor {

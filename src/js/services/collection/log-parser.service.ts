@@ -7,7 +7,7 @@ import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-eve
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { ProcessingQueue } from '../processing-queue.service';
 
-declare var ga: any;
+declare var amplitude: any;
 
 @Injectable()
 export class LogParserService {
@@ -62,7 +62,7 @@ export class LogParserService {
 			const setId = cards[0].set;
 			const packCards = this.toPackCards(toProcess);
 			// console.log('notifying new pack opening', setId, packCards);
-			ga('send', 'event', 'toast', 'new-pack');
+			amplitude.getInstance().logEvent('new-pack', { 'set': setId });
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		} else {
@@ -181,7 +181,7 @@ export class LogParserService {
 		setTimeout(() => {
 			this.events.broadcast(Events.NEW_CARD, card, type);
 		}, 20);
-		ga('send', 'event', 'toast', 'new-card', card.id);
+		amplitude.getInstance().logEvent('new-card', { 'id': card.id });
 	}
 
 	private displayDustMessage(card: Card, type: string) {
@@ -191,7 +191,7 @@ export class LogParserService {
 		setTimeout(() => {
 			this.events.broadcast(Events.MORE_DUST, card, dust, type);
 		}, 20);
-		ga('send', 'event', 'toast', 'dust', dust);
+		amplitude.getInstance().logEvent('dust', { 'amount': dust });
 		console.log('Got ' + dust + ' dust', card.id, type);
 	}
 

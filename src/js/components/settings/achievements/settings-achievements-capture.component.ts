@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var ga;
+declare var amplitude;
 
 @Component({
 	selector: 'settings-achievements-capture',
@@ -70,7 +70,7 @@ export class SettingsAchievementsCaptureComponent {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-		ga('send', 'event', 'video-capture-toggle', this.captureVideo);
+		amplitude.getInstance().logEvent('video-capture-toggle', { 'state': this.captureVideo });
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click

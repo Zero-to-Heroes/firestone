@@ -5,8 +5,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/internal/operators';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var ga;
-
 @Component({
 	selector: 'settings-decktracker-appearance',
 	styleUrls: [

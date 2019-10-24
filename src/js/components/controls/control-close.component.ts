@@ -3,6 +3,8 @@ import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/clo
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare var amplitude;
+
 @Component({
 	selector: 'control-close',
 	styleUrls: [
@@ -37,6 +39,9 @@ export class ControlCloseComponent implements AfterViewInit {
 	}
 
 	async closeWindow() {
+		const windowName = (await this.ow.getCurrentWindow()).name;
+		amplitude.getInstance().logEvent('close', { 'window': windowName });
+
 		if (this.isMainWindow) {
 			this.stateUpdater.next(new CloseMainWindowEvent());
 		}

@@ -12,6 +12,8 @@ import { SetCard } from '../../models/set';
 import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
 
+declare var amplitude;
+
 @Component({
 	selector: 'full-card',
 	styleUrls: [
@@ -127,6 +129,9 @@ export class FullCardComponent {
 	}
 
 	playSound(audioClip) {
+		amplitude.getInstance().logEvent('sound', {
+			'card-id': this.card.id,
+		});
 		this.cancelPlayingSounds();
 		audioClip.audios.forEach(audio => {
 			console.log('playing', audioClip, audio, this.card.id, this.card.audio, this.card);

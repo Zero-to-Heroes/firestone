@@ -108,6 +108,8 @@ import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-s
 import { ShowMatchStatsProcessor } from './processors/stats/show-match-stats-processor';
 import { StateHistory } from './state-history';
 
+declare var amplitude;
+
 const MAX_HISTORY_SIZE = 30;
 
 @Injectable()
@@ -197,6 +199,9 @@ export class MainWindowStoreService {
 			// console.log('[store] moving through history, so not modifying history', newIndex);
 			return;
 		} else {
+			amplitude.getInstance().logEvent('navigation', {
+				'event': event,
+			});
 			// Build a new history with the current state as tail
 			const currentIndex = this.stateHistory.map(state => state.state).indexOf(this.state);
 			const historyTrunk = this.stateHistory.slice(0, currentIndex + 1);

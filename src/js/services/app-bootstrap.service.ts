@@ -23,7 +23,7 @@ import { MatchSummaryService } from './match-summary/match-summary.service';
 import { OverwolfService } from './overwolf.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 
-declare var ga: any;
+declare var amplitude: any;
 
 @Injectable()
 export class AppBootstrapService {
@@ -130,7 +130,7 @@ export class AppBootstrapService {
 		const matchStatsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_STATS_WINDOW);
 		await this.ow.restoreWindow(matchStatsWindow.id);
 		await this.ow.hideWindow(matchStatsWindow.id);
-		ga('send', 'event', 'toast', 'start-app');
+		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 	}
 
 	private async showLoadingScreen() {

@@ -1,8 +1,8 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
-import { SelectCollectionSetEvent } from '../../events/collection/select-collection-set-event';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { Set } from '../../../../../models/set';
+import { SelectCollectionSetEvent } from '../../events/collection/select-collection-set-event';
+import { Processor } from '../processor';
 
 export class SelectCollectionSetProcessor implements Processor {
 	public async process(event: SelectCollectionSetEvent, currentState: MainWindowState): Promise<MainWindowState> {

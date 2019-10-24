@@ -10,8 +10,6 @@ import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 
-declare var ga: any;
-
 @Injectable()
 export class PackMonitor {
 	private unrevealedCards: string[] = [];
@@ -52,7 +50,6 @@ export class PackMonitor {
 			}
 			if (anyUndetected) {
 				console.warn('opening new pack with cards still undetected', anyUndetected, undetectedCards);
-				ga('send', 'event', 'error', 'undetected-cards', JSON.stringify(anyUndetected));
 			}
 
 			if (this.totalDustInPack > 0) {
@@ -176,7 +173,6 @@ export class PackMonitor {
 			ret = 1;
 		} else {
 			console.warn('[WARN] Could not detect the clicked on card', x, y, data, result);
-			ga('send', 'event', 'error', 'card-unidentified', { x: x, y: y, data: data, result: result });
 			captureEvent({
 				message: 'could not identify the card the user clicked on',
 				extra: {

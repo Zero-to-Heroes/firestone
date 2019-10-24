@@ -13,6 +13,8 @@ import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/col
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare var amplitude;
+
 @Component({
 	selector: 'card-history-item',
 	styleUrls: [`../../../css/component/collection/card-history-item.component.scss`],
@@ -76,6 +78,9 @@ export class CardHistoryItemComponent implements AfterViewInit {
 	}
 
 	@HostListener('mousedown') onClick() {
+		amplitude.getInstance().logEvent('history', {
+			'page': 'collection',
+		});
 		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
 	}

@@ -1,31 +1,93 @@
 <!DOCTYPE html>
 <html style="width: 100%; overflow: hidden; height: 100%;">
 	<head>
-		<!-- Google Analytics -->
-		<script>
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-65945334-2']);
-			_gaq.push(['_trackPageview']);
+		<script type="text/javascript">
+			(function(e, t) {
+				var n = e.amplitude || { _q: [], _iq: {} };
+				var r = t.createElement('script');
+				r.type = 'text/javascript';
+				r.integrity = 'sha384-d/yhnowERvm+7eCU79T/bYjOiMmq4F11ElWYLmt0ktvYEVgqLDazh4+gW9CKMpYW';
+				r.crossOrigin = 'anonymous';
+				r.async = true;
+				r.src = 'https://cdn.amplitude.com/libs/amplitude-5.2.2-min.gz.js';
+				r.onload = function() {
+					if (!e.amplitude.runQueuedFunctions) {
+						console.log('[Amplitude] Error: could not load SDK');
+					}
+				};
+				var i = t.getElementsByTagName('script')[0];
+				i.parentNode.insertBefore(r, i);
+				function s(e, t) {
+					e.prototype[t] = function() {
+						this._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
+						return this;
+					};
+				}
+				var o = function() {
+					this._q = [];
+					return this;
+				};
+				var a = ['add', 'append', 'clearAll', 'prepend', 'set', 'setOnce', 'unset'];
+				for (var u = 0; u < a.length; u++) {
+					s(o, a[u]);
+				}
+				n.Identify = o;
+				var c = function() {
+					this._q = [];
+					return this;
+				};
+				var l = ['setProductId', 'setQuantity', 'setPrice', 'setRevenueType', 'setEventProperties'];
+				for (var p = 0; p < l.length; p++) {
+					s(c, l[p]);
+				}
+				n.Revenue = c;
+				var d = [
+					'init',
+					'logEvent',
+					'logRevenue',
+					'setUserId',
+					'setUserProperties',
+					'setOptOut',
+					'setVersionName',
+					'setDomain',
+					'setDeviceId',
+					'setGlobalUserProperties',
+					'identify',
+					'clearUserProperties',
+					'setGroup',
+					'logRevenueV2',
+					'regenerateDeviceId',
+					'groupIdentify',
+					'onInit',
+					'logEventWithTimestamp',
+					'logEventWithGroups',
+					'setSessionId',
+					'resetSessionId',
+				];
+				function v(e) {
+					function t(t) {
+						e[t] = function() {
+							e._q.push([t].concat(Array.prototype.slice.call(arguments, 0)));
+						};
+					}
+					for (var n = 0; n < d.length; n++) {
+						t(d[n]);
+					}
+				}
+				v(n);
+				n.getInstance = function(e) {
+					e = (!e || e.length === 0 ? '$default_instance' : e).toLowerCase();
+					if (!n._iq.hasOwnProperty(e)) {
+						n._iq[e] = { _q: [] };
+						v(n._iq[e]);
+					}
+					return n._iq[e];
+				};
+				e.amplitude = n;
+			})(window, document);
 
-			(function(i, s, o, g, r, a, m) {
-				i['GoogleAnalyticsObject'] = r;
-				(i[r] =
-					i[r] ||
-					function() {
-						(i[r].q = i[r].q || []).push(arguments);
-					}),
-					(i[r].l = 1 * new Date());
-				(a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-				a.async = 1;
-				a.src = g;
-				m.parentNode.insertBefore(a, m);
-			})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
-			ga('create', 'UA-65945334-2', 'auto');
-			console.log('create ga', ga.q);
-			ga('set', 'checkProtocolTask', null);
+			amplitude.getInstance().init('9c277b849857b1e890eef22bc4471f2e');
 		</script>
-		<!-- End Google Analytics -->
 
 		<title>Firestone</title>
 		<meta charset="UTF-8" />

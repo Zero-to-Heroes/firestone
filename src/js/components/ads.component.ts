@@ -13,7 +13,7 @@ import { OverwolfService } from '../services/overwolf.service';
 
 declare var adsReady: any;
 declare var OwAd: any;
-declare var ga: any;
+declare var amplitude: any;
 
 @Component({
 	selector: 'ads',
@@ -109,7 +109,7 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 					this.logger.info('[ads] first time init ads, creating OwAd');
 					this.adRef = new OwAd(document.getElementById('ad-div'));
 					this.impressionListener = data => {
-						ga('send', 'event', 'ad', this.parentComponent);
+						amplitude.getInstance().logEvent('ad', { 'page': this.parentComponent });
 					};
 					this.adRef.addEventListener('impression', this.impressionListener);
 					this.logger.info('[ads] init OwAd');

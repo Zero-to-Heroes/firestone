@@ -17,7 +17,7 @@ import { MaximizeMatchStatsWindowEvent } from '../../services/mainwindow/store/e
 import { MinimizeMatchStatsWindowEvent } from '../../services/mainwindow/store/events/stats/minimize-match-stats-window-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare var ga: any;
+declare var amplitude: any;
 
 @Component({
 	selector: 'match-stats-window',
@@ -91,7 +91,7 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 			if (newState.visible) {
 				if (!currentlyVisible) {
 					await this.ow.restoreWindow(this.windowId);
-					ga('send', 'event', 'match-stats', 'show');
+					amplitude.getInstance().logEvent('show', { 'page': 'match-stats' });
 				}
 				if (newState.minimized) {
 					await this.ow.minimizeWindow(this.windowId);
@@ -102,7 +102,6 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 					await this.ow.restoreWindow(this.windowId);
 				}
 			} else if (!newState.visible && currentlyVisible) {
-				ga('send', 'event', 'match-stats', 'hide');
 				await this.ow.hideWindow(this.windowId);
 			}
 			console.log('updated state after event', newState);

@@ -10,6 +10,8 @@ import {
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
+declare var amplitude;
+
 @Component({
 	selector: 'control-maximize',
 	styleUrls: [
@@ -50,6 +52,9 @@ export class ControlMaximizeComponent implements AfterViewInit {
 	}
 
 	async toggleMaximizeWindow() {
+		const windowName = (await this.ow.getCurrentWindow()).name;
+		amplitude.getInstance().logEvent('maximize', { 'window': windowName });
+
 		// Delegate all the logic
 		if (this.eventProvider) {
 			this.stateUpdater.next(this.eventProvider());

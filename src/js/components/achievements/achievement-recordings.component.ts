@@ -21,7 +21,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 
-declare var ga;
+declare var amplitude;
 
 @Component({
 	selector: 'achievement-recordings',
@@ -219,6 +219,9 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
+		amplitude.getInstance().logEvent('achievement-video', {
+			'action': 'play',
+		});
 		console.log('[achievment-recordings] showing rplay', thumbnail);
 		event.stopPropagation();
 		if (this.currentThumbnail === thumbnail) {
@@ -233,11 +236,17 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	async openVideoFolder() {
+		amplitude.getInstance().logEvent('achievement-video', {
+			'action': 'open-folder',
+		});
 		const result = await this.ow.openWindowsExplorer(this.currentReplayLocation);
 		console.log('opened', result);
 	}
 
 	goToPreviousPage() {
+		amplitude.getInstance().logEvent('achievement-video', {
+			'action': 'previous-page',
+		});
 		this.indexOfFirstShown = Math.max(0, this.indexOfFirstShown - this.THUMBNAILS_PER_PAGE);
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -246,6 +255,9 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	goToNextPage() {
+		amplitude.getInstance().logEvent('achievement-video', {
+			'action': 'next-page',
+		});
 		this.indexOfFirstShown = Math.min(
 			this.indexOfFirstShown + this.THUMBNAILS_PER_PAGE,
 			this.thumbnails.length - this.THUMBNAILS_PER_PAGE,
@@ -258,6 +270,9 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	async onDeletionRequest(thumbnail: ThumbnailInfo, event) {
+		amplitude.getInstance().logEvent('achievement-video', {
+			'action': 'request-delete',
+		});
 		console.log('on deletionRequest', thumbnail, event);
 		this.dontAsk = (await this.prefs.getPreferences()).dontConfirmVideoReplayDeletion;
 		if (this.dontAsk) {
@@ -275,7 +290,6 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	async deleteMedia(thumbnail: ThumbnailInfo) {
-		ga('send', 'event', 'delete-media');
 		console.log('deleting media', thumbnail);
 		// All this is not really clean, we should probably have the state drive ALL of the UI interactions,
 		// and just have the views reflect the state of the store
@@ -327,6 +341,9 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 
 	@HostListener('document:webkitfullscreenchange', ['$event'])
 	onFullScreenChange(event) {
+		amplitude.getInstance().logEvent('achievement-video', {
+			'action': 'full-screen',
+		});
 		this.fullscreen = !this.fullscreen;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

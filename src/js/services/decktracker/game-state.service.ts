@@ -172,7 +172,7 @@ export class GameStateService {
 					// );
 				}
 			} catch (e) {
-				this.logger.error('Exception while applying parser', parser.event(), gameEvent, e, this.state);
+				this.logger.error('Exception while applying parser', parser.event(), e);
 			}
 		}
 	}

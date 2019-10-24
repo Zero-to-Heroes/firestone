@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var ga;
-
 @Component({
 	selector: 'settings-decktracker-launch',
 	styleUrls: [

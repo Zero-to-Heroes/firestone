@@ -1,8 +1,10 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
-import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { OverwolfService } from '../../../../overwolf.service';
+import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
+import { Processor } from '../processor';
+
+declare var amplitude;
 
 export class ShareVideoOnSocialNetworkProcessor implements Processor {
 	constructor(private ow: OverwolfService) {}
@@ -11,6 +13,9 @@ export class ShareVideoOnSocialNetworkProcessor implements Processor {
 		event: ShareVideoOnSocialNetworkEvent,
 		currentState: MainWindowState,
 	): Promise<MainWindowState> {
+		amplitude.getInstance().logEvent('share-video', {
+			'network': event.network,
+		});
 		switch (event.network) {
 			case 'twitter':
 				await this.ow.twitterShare(event.videoPathOnDisk, event.message);

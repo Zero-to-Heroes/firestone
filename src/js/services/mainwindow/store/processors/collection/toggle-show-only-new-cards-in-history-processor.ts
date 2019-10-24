@@ -1,8 +1,8 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
-import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../events/collection/toggle-show-only-new-cards-in-history-event';
 import { CardHistory } from '../../../../../models/card-history';
+import { BinderState } from '../../../../../models/mainwindow/binder-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../events/collection/toggle-show-only-new-cards-in-history-event';
+import { Processor } from '../processor';
 
 export class ToggleShowOnlyNewCardsInHistoryProcessor implements Processor {
 	public async process(
