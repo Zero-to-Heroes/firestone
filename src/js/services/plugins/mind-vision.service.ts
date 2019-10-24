@@ -13,15 +13,15 @@ export class MindVisionService {
 
 	public async getCollection(): Promise<any[]> {
 		return new Promise<any[]>(async (resolve, reject) => {
-			console.debug('[mind-vision] retrieving collection');
+			console.log('[mind-vision] retrieving collection');
 			const plugin = await this.get();
 			try {
 				plugin.getCollection(collection => {
-					console.debug('[mind-vision] retrieved collection');
+					console.log('[mind-vision] retrieved collection');
 					resolve(collection ? JSON.parse(collection) : null);
 				});
 			} catch (e) {
-				console.debug('[mind-vision] could not parse collection', e);
+				console.log('[mind-vision] could not parse collection', e);
 				resolve(null);
 			}
 		});
@@ -29,14 +29,14 @@ export class MindVisionService {
 
 	public async getMatchInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			console.debug('[mind-vision] retrieving matchInfo');
+			console.log('[mind-vision] retrieving matchInfo');
 			const plugin = await this.get();
 			try {
 				plugin.getMatchInfo(matchInfo => {
 					resolve(matchInfo ? JSON.parse(matchInfo) : null);
 				});
 			} catch (e) {
-				console.debug('[mind-vision] could not parse matchInfo', e);
+				console.log('[mind-vision] could not parse matchInfo', e);
 				resolve(null);
 			}
 		});
@@ -44,15 +44,15 @@ export class MindVisionService {
 
 	public async getDungeonInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			console.debug('[mind-vision] retrieving dungeonInfo');
+			console.log('[mind-vision] retrieving dungeonInfo');
 			const plugin = await this.get();
 			try {
 				plugin.getDungeonInfo(dungeonInfo => {
-					console.debug('[mind-vision] retrieved dungeonInfo');
+					console.log('[mind-vision] retrieved dungeonInfo');
 					resolve(dungeonInfo ? JSON.parse(dungeonInfo) : null);
 				});
 			} catch (e) {
-				console.debug('[mind-vision] could not parse dungeonInfo', e);
+				console.log('[mind-vision] could not parse dungeonInfo', e);
 				resolve(null);
 			}
 		});
@@ -60,11 +60,11 @@ export class MindVisionService {
 
 	public async getActiveDeck(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
-			console.debug('[mind-vision] retrieving activeDeck');
+			console.log('[mind-vision] retrieving activeDeck');
 			const plugin = await this.get();
 			try {
 				plugin.getActiveDeck(activeDeck => {
-					console.debug('[mind-vision] retrieved activeDeck');
+					console.log('[mind-vision] retrieved activeDeck', activeDeck);
 					resolve(activeDeck ? JSON.parse(activeDeck) : null);
 				});
 			} catch (e) {

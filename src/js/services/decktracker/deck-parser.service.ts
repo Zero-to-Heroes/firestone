@@ -48,7 +48,7 @@ export class DeckParserService {
 			callback(null);
 			return;
 		}
-		const activeDeck = this.mindVision.getActiveDeck();
+		const activeDeck = await this.mindVision.getActiveDeck();
 		if (activeDeck == null) {
 			setTimeout(() => {
 				this.getActiveDeckInternal(callback, retriesLeft - 1);
