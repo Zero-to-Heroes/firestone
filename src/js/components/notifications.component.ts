@@ -52,10 +52,12 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private windowId: string;
 	private mainWindowId: string;
 	private activeNotifications: ActiveNotification[] = [];
-	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private notificationsEmitterBus: BehaviorSubject<Message>;
 	private messageReceivedListener: (message: any) => void;
 	private gameInfoListener: (message: any) => void;
+
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private settingsEventBus: EventEmitter<[string, string]>;
 
 	private processingQueue = new ProcessingQueue<Message>(
 		eventQueue => this.processQueue(eventQueue),
@@ -89,6 +91,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		this.notificationsEmitterBus = this.ow.getMainWindow().notificationsEmitterBus;
 		this.notificationsEmitterBus.subscribe((message: Message) => {
 			if (message) {
@@ -315,6 +318,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	private async showSettings() {
 		console.log('showing settings');
+		this.settingsEventBus.next(['achievements', 'capture']);
 		const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
 		await this.ow.restoreWindow(window.id);
 	}

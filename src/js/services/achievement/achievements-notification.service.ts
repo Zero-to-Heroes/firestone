@@ -45,7 +45,7 @@ export class AchievementsNotificationService {
 		this.logger.debug('[achievements-notification] sending new achievement completed notification', achievement.id);
 		const recordingOff = (await this.prefs.getPreferences()).dontRecordAchievements;
 		const recapText = recordingOff
-			? `Recording is disabled - <a class="open-settings">click here</a> to turn it on`
+			? `Recording disabled, <a class="open-settings">click here</a> to turn it on`
 			: `Your replay is being recorded...<span class="loader"></span>`;
 		this.notificationService.html({
 			notificationId: achievement.id,
@@ -135,7 +135,7 @@ export class AchievementsNotificationService {
 					<div class="recap-text">
 						<span class="pending">${recapText}</span>
 						<span class="active">Replay saved! Click to recap</span>
-						<span class="no-record">Achievement saved! Click to recap</span>
+						<span class="no-record">${recapText}</span>
 					</div>
 				</div>
 				<button class="i-30 close-button">
