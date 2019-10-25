@@ -30,8 +30,8 @@ export class MatchSummaryService {
 			this.logger.warn('[match-summary] Manastorm is not running, listening for Firestone end game');
 			this.events.on(Events.REPLAY_UPLOADED).subscribe(event => {
 				this.logger.debug('[match-summary] Firestone replay created, received info', event.data[0]);
-				const info = event.data[0];
-				if (info) {
+				const info: ManastormInfo = event.data[0];
+				if (info && info.type === 'new-review') {
 					// Here, regularly query the server for the match stats
 					this.queryServerForStats(info.reviewId, 30);
 				}
@@ -46,7 +46,7 @@ export class MatchSummaryService {
 		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
 			this.logger.debug('[match-summary] received manastorm info update', result);
 			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
-			if (info) {
+			if (info && info.type === 'new-review') {
 				// Here, regularly query the server for the match stats
 				this.queryServerForStats(info.reviewId, 30);
 			}
