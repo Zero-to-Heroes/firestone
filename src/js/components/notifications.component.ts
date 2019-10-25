@@ -202,15 +202,18 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			// console.log('running toast message in zone', toast);
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
 				console.log('registered click on toast', event, toast);
-				amplitude
-					.getInstance()
-					.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': type });
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();
 				}
 				let currentElement: any = event.srcElement;
+				while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
+					currentElement = currentElement.parentElement;
+				}
 				// Clicked on close, don't show the card
-				if (currentElement.className && currentElement.className.indexOf('close') !== -1) {
+				if (currentElement && currentElement.className && currentElement.className.indexOf('close') !== -1) {
+					amplitude
+						.getInstance()
+						.logEvent('notification', { 'event': 'close', 'app': messageObject.app, 'type': type });
 					// Force close if it's not configured to auto close
 					if (override.clickToClose === false) {
 						this.notificationService.remove(toast.id);
@@ -219,22 +222,39 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					return;
 				}
 				// Clicked on settings, don't show the card and don't close
-				if (currentElement.className && currentElement.className.indexOf('open-settings') !== -1) {
+				if (
+					currentElement &&
+					currentElement.className &&
+					currentElement.className.indexOf('open-settings') !== -1
+				) {
+					amplitude
+						.getInstance()
+						.logEvent('notification', { 'event': 'show-settings', 'app': messageObject.app, 'type': type });
 					event.preventDefault();
 					event.stopPropagation();
 					this.showSettings();
 					return;
 				}
-				while (!currentElement.classList.contains('unclickable') && currentElement.parentElement) {
+				while (
+					currentElement &&
+					!currentElement.classList.contains('unclickable') &&
+					currentElement.parentElement
+				) {
 					currentElement = currentElement.parentElement;
 				}
-				if (currentElement.classList.contains('unclickable')) {
+				if (currentElement && currentElement.classList.contains('unclickable')) {
+					amplitude
+						.getInstance()
+						.logEvent('notification', { 'event': 'unclickable', 'app': messageObject.app, 'type': type });
 					currentElement.classList.add('shake');
 					setTimeout(() => {
 						currentElement.classList.remove('shake');
 					}, 500);
 					return;
 				}
+				amplitude
+					.getInstance()
+					.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': type });
 				if (messageObject.eventToSendOnClick) {
 					const eventToSend = messageObject.eventToSendOnClick();
 					this.stateUpdater.next(eventToSend);

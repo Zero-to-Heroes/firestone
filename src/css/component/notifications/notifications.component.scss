@@ -187,10 +187,6 @@ body {
 		width: 30px;
 		height: 30px;
 		--icon-bg-hover: #513b48;
-
-		& :hover {
-			pointer-events: none;
-		}
 	}
 }
 
