@@ -1,6 +1,6 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { AchievementSet } from '../../models/achievement-set';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { AchievementSet } from '../../models/achievement-set';
 
 @Component({
 	selector: 'achievement-set-view',
