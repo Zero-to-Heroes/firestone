@@ -11,10 +11,10 @@ export class NewTurnParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		// const numericTurn = currentState.playerDeck.isFirstPlayer
-		// 	? Math.floor(gameEvent.additionalData.turnNumber / 2)
-		// 	: Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
-		const numericTurn = Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
+		const numericTurn = currentState.playerDeck.isFirstPlayer
+			? Math.floor(gameEvent.additionalData.turnNumber / 2)
+			: Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
+		// const numericTurn = Math.floor((gameEvent.additionalData.turnNumber + 1) / 2);
 		const currentTurn = currentState.mulliganOver ? numericTurn : 'mulligan';
 		return Object.assign(new GameState(), currentState, {
 			currentTurn: currentTurn,
