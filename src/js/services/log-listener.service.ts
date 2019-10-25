@@ -8,21 +8,26 @@ import { SimpleIOService } from './plugins/simple-io.service';
 export class LogListenerService {
 	public subject = new Subject();
 
-	logFile: string;
-	callback: Function;
+	private logFile: string;
+	private callback: Function;
 
-	monitoring: boolean;
-	fileInitiallyPresent: boolean;
-	logsLocation: string;
+	private monitoring: boolean;
+	private fileInitiallyPresent: boolean;
+	private logsLocation: string;
+	private existingLineHandler: Function;
 
 	constructor(private io: SimpleIOService, private ow: OverwolfService) {}
 
-	public configure(logFile: string, callback: Function): LogListenerService {
+	public configure(logFile: string, callback: Function, existingLineHandler: Function = null): LogListenerService {
 		this.logFile = logFile;
 		this.callback = callback;
 		console.log('[log-listener] [' + this.logFile + '] initializing', this.logFile);
 		this.monitoring = false;
 		this.fileInitiallyPresent = true;
+		this.existingLineHandler = existingLineHandler;
+		if (existingLineHandler) {
+			console.log('[log-listener] [' + this.logFile + '] will read from start of file');
+		}
 		return this;
 	}
 
@@ -89,7 +94,8 @@ export class LogListenerService {
 
 		try {
 			// Register file listener
-			const handler = (id: any, status: any, data: string) => {
+			const handler = (id: string, status: boolean, isNewLine: boolean, data: string) => {
+				// console.log('processing', id, status, isNewLine, data);
 				if (!status) {
 					if (data === 'truncated') {
 						console.log(
@@ -104,7 +110,11 @@ export class LogListenerService {
 				}
 
 				if (id === fileIdentifier) {
-					this.callback(data);
+					if (isNewLine && this.existingLineHandler) {
+						this.existingLineHandler(data);
+					} else {
+						this.callback(data);
+					}
 				} else {
 					// This happens frequently when listening to several files at the same time, don't do anything about it
 				}
@@ -112,10 +122,11 @@ export class LogListenerService {
 			const plugin = await this.io.get();
 			plugin.onFileListenerChanged.addListener(handler);
 
+			const skipToEnd = this.fileInitiallyPresent && !this.existingLineHandler;
 			plugin.listenOnFile(
 				fileIdentifier,
 				logsLocation,
-				this.fileInitiallyPresent,
+				skipToEnd,
 				(id: string, status: boolean, initData: any) => {
 					if (id === fileIdentifier) {
 						if (status) {

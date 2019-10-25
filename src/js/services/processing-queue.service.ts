@@ -23,6 +23,19 @@ export class ProcessingQueue<T> {
 		this.processQueue();
 	}
 
+	public async enqueueAll(events: T[]) {
+		// What happens if this happens while we're waiting for the processingFunction
+		// to complete? As it's async
+		if (this.isProcessing) {
+			// console.log('adding event while processing is ongoing', this.eventQueue, this.pendingQueue);
+			// Don't modify the queue while processing is ongoing
+			this.pendingQueue = [...this.pendingQueue, ...events];
+		} else {
+			this.eventQueue = [...this.eventQueue, ...events];
+		}
+		this.processQueue();
+	}
+
 	private async processQueue() {
 		// console.log('interval - processing queue', this.queueName);
 		if (this.isProcessing) {

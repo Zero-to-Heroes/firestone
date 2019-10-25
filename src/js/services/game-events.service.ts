@@ -455,6 +455,40 @@ export class GameEvents {
 		}
 	}
 
+	private existingLogLines: string[] = [];
+
+	// Handles reading a log file mid-game, i.e. this data is already
+	// present in the log file when we're trying to read it
+	public receiveExistingLogLine(existingLine: string) {
+		if (existingLine.indexOf('Begin Spectating') !== -1) {
+			console.log('[game-events] [existing] begin spectating', existingLine);
+			this.spectating = true;
+		}
+		if (existingLine.indexOf('End Spectator Mode') !== -1) {
+			console.log('[game-events] [existing] end spectating', existingLine);
+			this.spectating = false;
+		}
+
+		if (this.spectating) {
+			// For now we're not interested in spectating events, but that will come out later
+			return;
+		}
+
+		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
+			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
+			this.existingLogLines = [];
+		}
+		if (existingLine === 'end_of_existing_data') {
+			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
+			// We've caught up
+			console.log('[game-events] [existing] enqueueing finished');
+			this.processingQueue.enqueueAll(this.existingLogLines);
+			this.existingLogLines = [];
+			return;
+		}
+		this.existingLogLines.push(existingLine);
+	}
+
 	private async uploadLogsAndSendException(first, second) {
 		try {
 			const s3LogFileKey = await this.logService.uploadGameLogs();

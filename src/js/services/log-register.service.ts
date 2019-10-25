@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-
-import { SimpleIOService } from './plugins/simple-io.service';
+import { Events } from '../services/events.service';
 import { LogParserService } from './collection/log-parser.service';
+import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
-import { Events } from '../services/events.service';
-import { DeckParserService } from './decktracker/deck-parser.service';
 import { OverwolfService } from './overwolf.service';
+import { SimpleIOService } from './plugins/simple-io.service';
 
 @Injectable()
 export class LogRegisterService {
@@ -37,7 +36,11 @@ export class LogRegisterService {
 			})
 			.start();
 		new LogListenerService(this.plugin, this.ow)
-			.configure('Power.log', data => this.gameEvents.receiveLogLine(data))
+			.configure(
+				'Power.log',
+				data => this.gameEvents.receiveLogLine(data),
+				existingLine => this.gameEvents.receiveExistingLogLine(existingLine),
+			)
 			.subscribe(status => {
 				console.log('[log-register] status for power.log', status);
 				// this.events.broadcast(status, "Power.log");
