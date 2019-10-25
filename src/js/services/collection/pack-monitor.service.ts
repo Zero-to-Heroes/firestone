@@ -249,6 +249,13 @@ export class PackMonitor {
 
 	public async createNewCardToast(card: Card, type: string) {
 		const dbCard = this.cards.getCard(card.id);
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.binder.showCommon && dbCard.rarity === 'Common') {
+			return;
+		}
+		if (!this.openingPack && !prefs.binder.showCardsOutsideOfPacks) {
+			return;
+		}
 		let cardName: string = dbCard.name;
 		let goldenClass;
 		let newLabel = 'New card';
@@ -262,10 +269,6 @@ export class PackMonitor {
 			newLabel = 'Second copy';
 		}
 		console.log('displaying new card toast notification for ' + cardName);
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs.binder.showCommon && dbCard.rarity === 'Common') {
-			return;
-		}
 		this.notificationService.html({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>

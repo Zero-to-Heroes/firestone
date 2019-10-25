@@ -46,6 +46,14 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async setBinderShowCardsOutsideOfPack(pref: boolean) {
+		const prefs = await this.getPreferences();
+		const binder = prefs.binder;
+		const newBinder: BinderPrefs = { ...binder, showCardsOutsideOfPacks: pref };
+		const newPrefs: Preferences = { ...prefs, binder: newBinder };
+		this.savePreferences(newPrefs);
+	}
+
 	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };

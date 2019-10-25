@@ -50,6 +50,24 @@ import { PreferencesService } from '../../../services/preferences.service';
 						</div>
 					</fieldset>
 				</form>
+				<form class="settings-section form-toggle">
+					<fieldset name="">
+						<div class="form-section">
+							<input
+								hidden
+								type="checkbox"
+								[checked]="showCardsOutsideOfPacks"
+								name=""
+								id="a-03"
+								(change)="toggleShowCardsOutsideOfPacks()"
+							/>
+							<label for="a-03" [ngClass]="{ 'enabled': showCardsOutsideOfPacks }">
+								<p class="settings-p">Rewards</p>
+								<b></b>
+							</label>
+						</div>
+					</fieldset>
+				</form>
 			</section>
 		</div>
 	`,
@@ -58,6 +76,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class SettingsCollectionNotificationComponent {
 	showDust: boolean;
 	showCommon: boolean;
+	showCardsOutsideOfPacks: boolean;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
 		this.cdr.detach();
@@ -80,10 +99,19 @@ export class SettingsCollectionNotificationComponent {
 		}
 	}
 
+	toggleShowCardsOutsideOfPacks() {
+		this.showCardsOutsideOfPacks = !this.showCardsOutsideOfPacks;
+		this.prefs.setBinderShowCardsOutsideOfPack(this.showCardsOutsideOfPacks);
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.showDust = prefs.binder.showDust;
 		this.showCommon = prefs.binder.showCommon;
+		this.showCardsOutsideOfPacks = prefs.binder.showCardsOutsideOfPacks;
 		// console.log('loaded prefs', prefs);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
