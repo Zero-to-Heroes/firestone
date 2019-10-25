@@ -4,7 +4,7 @@ export class CompetitiveLadderSetProvider extends GenericSetProvider {
 	constructor() {
 		super(
 			'competitive_ladder',
-			'Competitive Ladder',
+			'Ladder',
 			[
 				'competitive_ladder_win_streak',
 				'competitive_ladder_nemesis_druid',
