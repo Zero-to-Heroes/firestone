@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
+import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { PlayersInfoService } from '../players-info.service';
 import { GameForUpload } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
 import { GameParserService } from './game-parser.service';
+import { ManastormInfo } from './manastorm-info';
 import { ReplayManager } from './replay-manager.service';
 import { ReplayUploadService } from './replay-upload.service';
 
@@ -15,16 +17,35 @@ export class EndGameUploaderService {
 
 	constructor(
 		private logger: NGXLogger,
+		private events: Events,
 		private ow: OverwolfService,
 		private gameHelper: GameHelper,
 		private replayManager: ReplayManager,
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
-	) {}
+	) {
+		this.init();
+	}
+
+	private async init() {
+		this.listenForEndGame();
+	}
+
+	private async listenForEndGame() {
+		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
+			this.logger.debug('[manastorm-bridge] received manastorm info update', result);
+			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
+			if (info && info.type === 'new-review') {
+				// Here, regularly query the server for the match stats
+				this.events.broadcast(Events.REVIEW_FINALIZED, info);
+			}
+		});
+	}
 
 	public async upload(
 		gameEvent: GameEvent,
+		currentReviewId: string,
 		currentGameId: string,
 		deckstring: any,
 		deckName: string,
@@ -40,6 +61,7 @@ export class EndGameUploaderService {
 		this.logger.debug('[end-game] Manastorm not running, uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
+			currentReviewId,
 			currentGameId,
 			deckstring,
 			deckName,
@@ -52,6 +74,7 @@ export class EndGameUploaderService {
 
 	private async initializeGame(
 		gameEvent: GameEvent,
+		currentReviewId: string,
 		currentGameId: string,
 		deckstring: any,
 		deckName: string,
@@ -67,6 +90,7 @@ export class EndGameUploaderService {
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
+		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
 		if (this.supportedModesDeckRetrieve.indexOf(game.gameMode) !== -1) {

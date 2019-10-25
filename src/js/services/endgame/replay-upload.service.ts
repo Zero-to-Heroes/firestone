@@ -90,7 +90,7 @@ export class ReplayUploadService {
 					reviewId: reviewId,
 					replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
 				};
-				this.events.broadcast(Events.REPLAY_UPLOADED, info);
+				this.events.broadcast(Events.REVIEW_FINALIZED, info);
 			}
 		});
 	}

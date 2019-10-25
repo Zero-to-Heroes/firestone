@@ -5,6 +5,7 @@ import { MatchStats } from '../../models/mainwindow/stats/match-stats';
 import { Events } from '../events.service';
 import { MatchStatsAvailableEvent } from '../mainwindow/store/events/stats/match-stats-available-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 
 const MATCH_STATS_ENDPOINT = 'https://lig1nivwu6.execute-api.us-west-2.amazonaws.com/Prod';
@@ -25,27 +26,10 @@ export class MatchSummaryService {
 		this.listenForEndGame();
 	}
 
-	private async listenForEndGame(retriesLeft = 10) {
-		if (retriesLeft <= 0) {
-			this.logger.warn('[match-summary] Manastorm is not running, listening for Firestone end game');
-			this.events.on(Events.REPLAY_UPLOADED).subscribe(event => {
-				this.logger.debug('[match-summary] Firestone replay created, received info', event.data[0]);
-				const info: ManastormInfo = event.data[0];
-				if (info && info.type === 'new-review') {
-					// Here, regularly query the server for the match stats
-					this.queryServerForStats(info.reviewId, 30);
-				}
-			});
-			return;
-		}
-		if (!(await this.ow.isManastormRunning())) {
-			setTimeout(() => this.listenForEndGame(retriesLeft - 1), 2000);
-			return;
-		}
-		this.logger.debug('[match-summary] manastorm running, listen for game uploaded');
-		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
-			this.logger.debug('[match-summary] received manastorm info update', result);
-			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
+	private async listenForEndGame() {
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(event => {
+			this.logger.debug('[match-summary] Replay created, received info', event.data[0]);
+			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review') {
 				// Here, regularly query the server for the match stats
 				this.queryServerForStats(info.reviewId, 30);
@@ -73,10 +57,4 @@ export class MatchSummaryService {
 			},
 		);
 	}
-}
-
-interface ManastormInfo {
-	readonly type: 'new-review';
-	readonly reviewId: string;
-	readonly replayUrl: string;
 }

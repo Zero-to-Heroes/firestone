@@ -3,6 +3,7 @@ import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { AllCardsService } from '../all-cards.service';
+import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
 import { OverwolfService } from '../overwolf.service';
@@ -56,8 +57,11 @@ export class GameStateService {
 	private deckEventBus = new EventEmitter<any>();
 	private eventEmitters = [];
 
+	private currentReviewId: string;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
+		private events: Events,
 		// private logger: NGXLogger,
 		private dynamicZoneHelper: DynamicZoneHelperService,
 		private gameStateMetaInfos: GameStateMetaInfoService,
@@ -89,9 +93,37 @@ export class GameStateService {
 		this.loadMatchOverlayWindows();
 	}
 
+	public async getCurrentReviewId(): Promise<string> {
+		return new Promise<string>(resolve => this.getCurrentReviewIdInternal(reviewId => resolve(reviewId)));
+	}
+
+	private async getCurrentReviewIdInternal(callback, retriesLeft = 20) {
+		if (retriesLeft <= 0) {
+			this.logger.error('[game-state] Could not get current review id');
+			callback(null);
+		}
+		if (!this.currentReviewId) {
+			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 1000);
+			return;
+		}
+		this.logger.log('[game-state] returning review id', this.currentReviewId);
+		callback(this.currentReviewId);
+	}
+
 	private registerGameEvents() {
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
+		});
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
+			this.logger.debug('[game-state] Received new review id event', event);
+			const info = event.data[0];
+			// Reset once the game is completed
+			if (info && info.type === 'new-review') {
+				this.currentReviewId = undefined;
+			}
+			// else if (info && info.type === 'new-empty-review') {
+			// 	this.currentReviewId = info.reviewId;
+			// }
 		});
 		// Reset the deck if it exists
 		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));
