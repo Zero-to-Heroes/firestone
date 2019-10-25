@@ -11,6 +11,7 @@ export class AchievementsLocalDbService {
 	private achievementsCache: { [achievementId: string]: CompletedAchievement } = {};
 
 	constructor() {
+		// Necessary for history
 		this.init();
 	}
 
@@ -45,6 +46,9 @@ export class AchievementsLocalDbService {
 	}
 
 	public async saveAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
+		if (!achievements) {
+			return [];
+		}
 		achievements.forEach(achievement => this.save(achievement));
 		return this.getAll();
 	}
