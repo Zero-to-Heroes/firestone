@@ -10,14 +10,14 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	--icon-color: #cb9fd7;
+	--icon-color: var(--control-button-color);
 
 	&.disabled {
 		opacity: 0.5;
 	}
 
 	&:hover:not(.disabled) {
-		background-color: #4b3052;
+		background-color: --on-control-button-background-color;
 	}
 
 	svg {
