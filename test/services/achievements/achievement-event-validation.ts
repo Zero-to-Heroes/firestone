@@ -11,13 +11,13 @@ import { AchievementsLoaderService } from '../../../src/js/services/achievement/
 import { RemoteAchievementsService } from '../../../src/js/services/achievement/remote-achievements.service.js';
 import { AllCardsService } from '../../../src/js/services/all-cards.service';
 import { DeckParserService } from '../../../src/js/services/decktracker/deck-parser.service';
-import { GameParserService } from '../../../src/js/services/endgame/game-parser.service';
 import { Events } from '../../../src/js/services/events.service';
 import { GameEventsEmitterService } from '../../../src/js/services/game-events-emitter.service';
 import { GameEvents } from '../../../src/js/services/game-events.service';
 import { AchievementCompletedEvent } from '../../../src/js/services/mainwindow/store/events/achievements/achievement-completed-event';
 import { RecomputeGameStatsEvent } from '../../../src/js/services/mainwindow/store/events/stats/recompute-game-stats-event';
 import { MainWindowStoreService } from '../../../src/js/services/mainwindow/store/main-window-store.service';
+import { GameParserService } from '../../../src/js/services/manastorm-bridge/game-parser.service';
 import { PlayersInfoService } from '../../../src/js/services/players-info.service';
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';

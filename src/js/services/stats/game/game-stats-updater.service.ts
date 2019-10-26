@@ -5,11 +5,11 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { AllCardsService } from '../../all-cards.service';
 import { DeckParserService } from '../../decktracker/deck-parser.service';
-import { GameParserService } from '../../endgame/game-parser.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
 import { RecomputeGameStatsEvent } from '../../mainwindow/store/events/stats/recompute-game-stats-event';
+import { GameParserService } from '../../manastorm-bridge/game-parser.service';
 import { PlayersInfoService } from '../../players-info.service';
 
 @Injectable()

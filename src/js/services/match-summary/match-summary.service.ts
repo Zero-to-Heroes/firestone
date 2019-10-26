@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { MatchStats } from '../../models/mainwindow/stats/match-stats';
-import { ManastormInfo } from '../endgame/manastorm-info';
 import { Events } from '../events.service';
 import { MatchStatsAvailableEvent } from '../mainwindow/store/events/stats/match-stats-available-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
+import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 
 const MATCH_STATS_ENDPOINT = 'https://lig1nivwu6.execute-api.us-west-2.amazonaws.com/Prod';
