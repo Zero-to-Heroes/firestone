@@ -3,6 +3,7 @@ import { NGXLogger } from 'ngx-logger';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { AllCardsService } from '../all-cards.service';
+import { ManastormInfo } from '../endgame/manastorm-info';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
@@ -97,7 +98,7 @@ export class GameStateService {
 		return new Promise<string>(resolve => this.getCurrentReviewIdInternal(reviewId => resolve(reviewId)));
 	}
 
-	private async getCurrentReviewIdInternal(callback, retriesLeft = 20) {
+	private async getCurrentReviewIdInternal(callback, retriesLeft = 10) {
 		if (retriesLeft <= 0) {
 			this.logger.error('[game-state] Could not get current review id');
 			callback(null);
@@ -121,9 +122,13 @@ export class GameStateService {
 			if (info && info.type === 'new-review') {
 				this.currentReviewId = undefined;
 			}
-			// else if (info && info.type === 'new-empty-review') {
-			// 	this.currentReviewId = info.reviewId;
-			// }
+		});
+		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
+			this.logger.debug('[game-state] Received new review id event', event);
+			const info: ManastormInfo = event.data[0];
+			if (info && info.type === 'new-empty-review') {
+				this.currentReviewId = info.reviewId;
+			}
 		});
 		// Reset the deck if it exists
 		this.processingQueue.enqueue(Object.assign(new GameEvent(), { type: GameEvent.GAME_END } as GameEvent));

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
+import { GameStateService } from '../decktracker/game-state.service';
 import { OverwolfService } from '../overwolf.service';
 import { UserService } from '../user.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
@@ -22,6 +23,7 @@ export class RemoteAchievementsService {
 		private indexedDb: AchievementsLocalDbService,
 		private ow: OverwolfService,
 		private userService: UserService,
+		private gameService: GameStateService,
 	) {
 		// this.events.on(Events.ACHIEVEMENT_UNLOCKED).subscribe(event => this.publishAchievementStats(event));
 		// this.retrieveUserInfo();
@@ -56,10 +58,14 @@ export class RemoteAchievementsService {
 			console.error('Could not upload achievemnt stats after 15 retries');
 			return;
 		}
-		const currentUser = await this.userService.getCurrentUser();
+		const [currentUser, reviewId] = await Promise.all([
+			this.userService.getCurrentUser(),
+			this.gameService.getCurrentReviewId(),
+		]);
 		// const achievement: Achievement = event.data[0];
 		const statEvent = {
 			'creationDate': new Date(),
+			'reviewId': reviewId,
 			'userId': currentUser.userId,
 			'userMachineId': currentUser.machineId,
 			'userName': currentUser.username,

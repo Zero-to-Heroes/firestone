@@ -478,6 +478,10 @@ export class GameEvents {
 			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
 			this.existingLogLines = [];
 		}
+		if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
+			// Complete game, we don't handle it
+			this.existingLogLines = [];
+		}
 		if (existingLine === 'end_of_existing_data') {
 			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
 			// We've caught up

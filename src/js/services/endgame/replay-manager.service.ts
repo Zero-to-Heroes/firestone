@@ -6,14 +6,14 @@ import { GameHelper } from './game-helper.service';
 @Injectable()
 export class ReplayManager {
 	constructor(private gameHelper: GameHelper, private plugin: SimpleIOService) {
-		console.log('starting replay-manager service');
+		console.log('[manastorm-bridge] starting replay-manager service');
 	}
 
 	public async saveLocally(game: GameForUpload): Promise<GameForUpload> {
-		console.log('ready to save game locally');
+		console.log('[manastorm-bridge] ready to save game locally');
 		if (!game.player || !game.opponent) {
 			console.error(
-				'[replay-manager] Could not find player and opponent, not saving replay',
+				'[manastorm-bridge] Could not find player and opponent, not saving replay',
 				game.player,
 				game.opponent,
 				game,
@@ -26,7 +26,7 @@ export class ReplayManager {
 		const opponentName = game.opponent.name.replace('"', '');
 		const matchupName = `${playerName}(${game.player.class})_vs_${opponentName}(${game.opponent.class})`;
 		const fileName = `${matchupName}_${new Date().getTime()}.hszip`;
-		console.log('saving locally', directory + fileName);
+		console.log('[manastorm-bridge] saving locally', directory + fileName);
 		return new Promise<GameForUpload>(resolve => {
 			plugin.writeLocalAppDataZipFile(
 				directory + fileName,
@@ -34,10 +34,14 @@ export class ReplayManager {
 				this.gameHelper.getXmlReplay(game),
 				false,
 				(status, message) => {
-					console.log('local zip file saved', status, message);
+					console.log('[manastorm-bridge] local zip file saved', status, message);
 					game.path = directory + fileName;
 					plugin.getBinaryFile(game.path, -1, async (binaryStatus, data) => {
-						console.log('reading binary file before storing it in localstorage', game.path, binaryStatus);
+						console.log(
+							'[manastorm-bridge] reading binary file before storing it in localstorage',
+							game.path,
+							binaryStatus,
+						);
 						const split = data.split(',');
 						const bytes = [];
 						for (let i = 0; i < split.length; i++) {

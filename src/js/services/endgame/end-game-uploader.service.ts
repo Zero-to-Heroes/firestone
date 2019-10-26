@@ -55,10 +55,10 @@ export class EndGameUploaderService {
 		const isManastormRunning = await this.ow.isManastormRunning();
 		if (isManastormRunning) {
 			// Upload is handled by manastorm
-			this.logger.debug('[end-game] Manastorm is running, no need to upload');
+			this.logger.debug('[manastorm-bridge] Manastorm is running, no need to upload');
 			return;
 		}
-		this.logger.debug('[end-game] Manastorm not running, uploading game info');
+		this.logger.debug('[manastorm-bridge] Manastorm not running, uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
 			currentReviewId,
@@ -84,10 +84,16 @@ export class EndGameUploaderService {
 		const gameResult = gameEvent.additionalData.game;
 		const replayXml = gameEvent.additionalData.replayXml;
 		if (!replayXml) {
-			this.logger.warn('[end-game] could not convert replay');
+			this.logger.warn('[manastorm-bridge] could not convert replay');
 		}
-		this.logger.debug('[end-game] Creating new game', currentGameId, 'with replay length', replayXml.length);
+		this.logger.debug(
+			'[manastorm-bridge] Creating new game',
+			currentGameId,
+			'with replay length',
+			replayXml.length,
+		);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
+		game.reviewId = currentReviewId;
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
 		game.reviewId = currentReviewId;

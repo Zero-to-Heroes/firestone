@@ -90,7 +90,7 @@ export class GameParserService {
 		// console.log('parsed', replayXml);
 		// console.log('replayXML', replayXml);
 		if (!replayXml) {
-			console.warn('invalid game, not adding any meta data');
+			console.warn('[manastorm-bridge] invalid game, not adding any meta data');
 			// Raven.captureMessage('Could not extract matchup', { extra: {
 			// 	game: game
 			// }});

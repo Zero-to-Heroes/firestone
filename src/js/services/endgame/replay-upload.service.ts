@@ -13,25 +13,39 @@ const BUCKET = 'com.zerotoheroes.batch';
 export class ReplayUploadService {
 	constructor(private http: HttpClient, private ow: OverwolfService, private readonly events: Events) {}
 
-	public async uploadGame(game: GameForUpload, retriesLeft = 30) {
-		if (retriesLeft < 0) {
-			console.error('Could not create empty review');
-			return;
-		}
-		const user = await this.ow.getCurrentUser();
-		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
+	public async createEmptyReview(): Promise<string> {
+		return new Promise<string>(resolve => {
+			this.createEmptyReviewInternal(reviewId => resolve(reviewId), 10);
+		});
+	}
 
-		// Build an empty review
+	private createEmptyReviewInternal(callback, retriesLeft = 10) {
+		if (retriesLeft < 0) {
+			console.error('[manastorm-bridge] Could not create empty review');
+			callback(null);
+		}
 		this.http.post(REVIEW_INIT_ENDPOINT, null).subscribe(
 			res => {
 				const reviewId: string = res as string;
-				console.log('Created empty shell review', res, reviewId);
-				this.postFullReview(reviewId, userId, game);
+				console.log('[manastorm-bridge] Created empty shell review', res, reviewId);
+				callback(reviewId);
 			},
 			error => {
-				setTimeout(() => this.uploadGame(game, retriesLeft - 1), 1000);
+				setTimeout(() => this.createEmptyReviewInternal(callback, retriesLeft - 1), 1000);
 			},
 		);
+	}
+
+	public async uploadGame(game: GameForUpload) {
+		const user = await this.ow.getCurrentUser();
+		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
+
+		if (!game.reviewId) {
+			console.error('[manastorm-bridge] Could not upload game, no review id is associated to it');
+			return;
+		}
+
+		this.postFullReview(game.reviewId, userId, game);
 	}
 
 	private postFullReview(reviewId: string, userId: string, game: GameForUpload) {
@@ -40,7 +54,7 @@ export class ReplayUploadService {
 		const byteArray = new Uint8Array(bytes);
 		const blob = new Blob([byteArray], { type: 'application/zip' });
 		const fileKey = Date.now() + '_' + reviewId + '.hszip';
-		console.log('built file key', fileKey);
+		console.log('[manastorm-bridge] built file key', fileKey);
 
 		// Configure The S3 Object
 		AWS.config.region = 'us-west-2';
@@ -76,15 +90,14 @@ export class ReplayUploadService {
 				'scenario-id': game.scenarioId ? '' + game.scenarioId : '',
 			},
 		};
-		console.log('uploading with params', params);
+		console.log('[manastorm-bridge] uploading with params', params);
 		s3.makeUnauthenticatedRequest('putObject', params, async (err, data2) => {
 			// There Was An Error With Your S3 Config
 			if (err) {
-				console.warn('An error during upload', err);
+				console.warn('[manastorm-bridge] An error during upload', err);
 				// reject();
 			} else {
-				console.log('Uploaded game', data2, reviewId);
-				game.reviewId = reviewId;
+				console.log('[manastorm-bridge] Uploaded game', data2, reviewId);
 				const info = {
 					type: 'new-review',
 					reviewId: reviewId,

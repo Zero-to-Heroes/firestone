@@ -5,6 +5,7 @@ import { DeckParserService } from '../decktracker/deck-parser.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { EndGameUploaderService } from './end-game-uploader.service';
+import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
 export class EndGameListenerService {
@@ -13,6 +14,7 @@ export class EndGameListenerService {
 	private currentDeckname: string;
 	private currentBuildNumber: number;
 	private currentScenarioId: string;
+	private currentReviewId: string;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -20,14 +22,22 @@ export class EndGameListenerService {
 		private logger: NGXLogger,
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
+		private replayUpload: ReplayUploadService,
 	) {
 		this.init();
 	}
 
 	private init(): void {
-		this.events.on(Events.NEW_GAME_ID).subscribe(event => {
-			this.logger.debug('Received new game id event', event);
+		this.events.on(Events.NEW_GAME_ID).subscribe(async event => {
+			this.logger.debug('[manastorm-bridge] Received new game id event', event);
 			this.currentGameId = event.data[0];
+			this.currentReviewId = await this.replayUpload.createEmptyReview();
+
+			const info = {
+				type: 'new-empty-review',
+				reviewId: this.currentReviewId,
+			};
+			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
 		});
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			switch (gameEvent.type) {
@@ -40,9 +50,10 @@ export class EndGameListenerService {
 					this.currentScenarioId = gameEvent.additionalData.metaData.ScenarioID;
 					break;
 				case 'GAME_END':
-					this.logger.debug('[eng-game] end game, uploading?');
+					this.logger.debug('[manastorm-bridge] end game, uploading?');
 					await this.endGameUploader.upload(
 						gameEvent,
+						this.currentReviewId,
 						this.currentGameId,
 						this.currentDeckstring,
 						this.currentDeckname,
