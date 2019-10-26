@@ -35,7 +35,8 @@ export class AppBootstrapService {
 	private loadingWindowShown = false;
 	// Seomtimes multiple events can fire in a row, which leads to the app
 	// trying to close windows several times in a row
-	private closing = false;
+	// private closing = false;
+	private closeTimeout;
 
 	constructor(
 		private store: MainWindowStoreService,
@@ -107,9 +108,15 @@ export class AppBootstrapService {
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			console.log('updated game status');
-			if (this.exitGame(res) && !this.closing) {
+			// Issue is that this is triggered when launching the game
+			if (!this.exitGame(res) && this.closeTimeout) {
+				console.log('cancelling app close');
+				clearTimeout(this.closeTimeout);
+				this.closeTimeout = null;
+			}
+			if (this.exitGame(res) && !this.closeTimeout) {
 				console.log('left game, closing app');
-				setTimeout(() => {
+				this.closeTimeout = setTimeout(() => {
 					this.closeApp();
 				}, 5000); // Give some time to the other windows to close
 			} else if (await this.ow.inGame()) {
@@ -201,7 +208,6 @@ export class AppBootstrapService {
 	}
 
 	private async closeApp() {
-		this.closing = true;
 		// Close all windows
 		const windows = await this.ow.getOpenWindows();
 		console.log('closing all windows', windows);
