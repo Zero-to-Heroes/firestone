@@ -32,18 +32,23 @@ export class AchievementsLoaderService {
 		return this.achievements;
 	}
 
+	public async getChallengeModules(): Promise<readonly Challenge[]> {
+		await this.waitForInit();
+		return this.challengeModules;
+	}
+
 	public async initializeAchievements(
 		inputAchievements?: readonly RawAchievement[],
 	): Promise<[readonly Achievement[], readonly Challenge[]]> {
-		console.log('[achievements-loader] Initializing achievements');
+		console.log('[achievements-loader] Initializing achievements', inputAchievements && inputAchievements.length);
 		const rawAchievements: readonly RawAchievement[] = inputAchievements || (await this.loadAll());
-		console.log('[achievements-loader] loaded all');
+		console.log('[achievements-loader] loaded all', rawAchievements.length);
 		return new Promise<[readonly Achievement[], readonly Challenge[]]>(resolve => {
 			this.achievements = rawAchievements.map(rawAchievement => this.wrapRawAchievement(rawAchievement));
 			this.challengeModules = rawAchievements.map(rawAchievement =>
 				this.challengeBuilder.buildChallenge(rawAchievement),
 			);
-			console.log('[achievements-loader] init over');
+			console.log('[achievements-loader] init over', this.achievements.length, this.challengeModules.length);
 			resolve([this.achievements, this.challengeModules]);
 		});
 	}

@@ -37,9 +37,9 @@ export class AchievementsMonitor {
 		});
 	}
 
-	private handleEvent(gameEvent: GameEvent) {
+	private async handleEvent(gameEvent: GameEvent) {
 		// console.log('[achievements] handling events', gameEvent, this.achievementLoader.challengeModules);
-		for (const challenge of this.achievementLoader.challengeModules) {
+		for (const challenge of await this.achievementLoader.getChallengeModules()) {
 			challenge.detect(gameEvent, () => {
 				this.sendUnlockEvent(challenge);
 			});
