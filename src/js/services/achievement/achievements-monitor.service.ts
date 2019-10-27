@@ -92,6 +92,7 @@ export class AchievementsMonitor {
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
 		this.logger.debug('[achievements-monitor] emitted achievement completed event', betterCandidate.achievement.id);
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, betterCandidate.achievement, betterCandidate.challenge);
+		// console.debug('found and broadcast achievemtn comleted');
 		this.store.stateUpdater.next(new AchievementCompletedEvent(betterCandidate.achievement));
 
 		// Now remove all the related events

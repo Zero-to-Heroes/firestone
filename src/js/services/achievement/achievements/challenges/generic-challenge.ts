@@ -54,7 +54,7 @@ export class GenericChallenge implements Challenge {
 	protected testCompletion() {
 		const allRequirementsCompleted = this.requirements.every(req => req.isCompleted());
 		if (this.callback && allRequirementsCompleted) {
-			this.requirements.forEach(req => req.afterAchievementCompletionReset());
+			this.resetStateAfterComplete();
 			this.callback();
 		}
 	}
@@ -63,5 +63,9 @@ export class GenericChallenge implements Challenge {
 		this.callback = undefined;
 		this.correctMode = undefined;
 		this.requirements.forEach(req => req.reset());
+	}
+
+	private resetStateAfterComplete() {
+		this.requirements.forEach(req => req.afterAchievementCompletionReset());
 	}
 }

@@ -80,6 +80,7 @@ export const achievementsValidation = async (
 		stateUpdater: {
 			next: data => {
 				if (data instanceof AchievementCompletedEvent) {
+					// console.debug('achievemnt completed event', data);
 					isAchievementComplete = true;
 				} else if (data instanceof RecomputeGameStatsEvent && collaborators && collaborators.gameStats) {
 					// This will send an event to be processed by the requirements
@@ -123,7 +124,7 @@ export const achievementsValidation = async (
 	);
 
 	// So that it has time to register all the events first
-	await sleep(500);
+	await sleep(1400);
 
 	if (additionalEvents) {
 		additionalEvents.forEach(event => events.broadcast(event.key, event.value));
@@ -131,17 +132,17 @@ export const achievementsValidation = async (
 
 	// wait for a short while, so that all events are processed.
 	// The processing queue is configured with a 1s delay, se we need to wait for a long time
-	await sleep(1500);
+	await sleep(1000);
 
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
 
-	await sleep(1500);
+	await sleep(2400);
 
 	// if (!isAchievementComplete) {
 	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {
 	// 		challenge.requirements.forEach(req => {
 	// 			if (!req.isCompleted()) {
-	// 				console.debug('req not completed', Object.assign({}, req, { cards: undefined }));
+	// 				console.debug('req not completed', Object.assign(req, { cards: undefined }));
 	// 			}
 	// 		});
 	// 	});
