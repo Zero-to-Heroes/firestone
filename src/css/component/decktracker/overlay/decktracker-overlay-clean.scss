@@ -2,79 +2,107 @@
 @import url('https://fonts.googleapis.com/css?family=Sumana');
 
 .root.clean {
-    filter: drop-shadow(0 0 5px rgba(0,0,0,.75));
+	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 
 	.corner {
 		display: none;
-    }
-    
-    .decktracker-container {
-        background: transparent;
-        margin: 10px;
-    }
+	}
+
+	.decktracker-container {
+		background: transparent;
+		margin: 10px;
+	}
 
 	.decktracker {
-        background: transparent;
-	    width: 100%;
-        
-        decktracker-deck-name {
-            display: none;
-        }
+		background: transparent;
+		width: 100%;
 
-        decktracker-title-bar {
-            display: flex;
-            justify-content: flex-end;
-            opacity: 0;
-        }
-    }
+		decktracker-deck-name {
+			display: none;
+		}
 
-    &:hover {
-        .decktracker decktracker-title-bar {
-            opacity: 1;
-        }
-    }
+		decktracker-title-bar {
+			display: flex;
+			justify-content: flex-end;
+			// opacity: 0;
+		}
+	}
 
-    ::ng-deep decktracker-title-bar {
-        .title-bar {
-            background: #07081F;
-        }
-        .logo {
-            display: none;
-        }
-    }
+	::ng-deep decktracker-title-bar {
+		.title-bar {
+			height: 30px;
+		}
+		.controls {
+			background: #07081f;
+			opacity: 0;
+			align-self: flex-end;
+		}
+		.logo {
+			display: none;
+		}
+	}
 
-    ::ng-deep decktracker-deck-list {
-        .select-container {
-            display: none;
-        }
-        
-        grouped-deck-list .deck-list {
-            background: linear-gradient(89.31deg, #090A0D 60.62%, rgba(9, 10, 13, 0) 96.47%);
-        }
+	&.show-title-bar .decktracker decktracker-title-bar {
+		opacity: 1;
 
-        .deck-zone .card-list li {
-            margin-bottom: 2px;
-        }
+		::ng-deep {
+			.title-bar {
+				width: 100%;
+			}
+			.logo {
+				display: inherit;
+				background: #020407;
+				height: 100%;
+				margin: 0;
+				padding-left: 10px;
+				padding-right: 30px;
+				width: 110px;
+				--icon-color: #9fb6d7;
+				border: 1px solid;
+			}
+		}
+	}
 
-        .deck-card {
-            .mana-cost {
-                background: #303352;
-                
-                span {
-                    color: #9FB6D7;
-                }
-            }
+	&:hover {
+		.decktracker decktracker-title-bar {
+			::ng-deep .controls {
+				opacity: 1;
+			}
+		}
+	}
 
-            .card-name {
-                color: #FFE3BA;
-            }
-            
-            &.dim {
-                opacity: 0.3;
-                .dim-overlay {
-                    display: none;
-                }
-            }
-        }
-    }
+	::ng-deep decktracker-deck-list {
+		.select-container {
+			display: none;
+		}
+
+		grouped-deck-list .deck-list {
+			background: linear-gradient(89.31deg, #090a0d 60.62%, rgba(9, 10, 13, 0) 96.47%);
+		}
+
+		.deck-zone .card-list li {
+			margin-bottom: 2px;
+		}
+
+		.deck-card {
+			.mana-cost {
+				background: #303352;
+
+				span {
+					color: #9fb6d7;
+				}
+			}
+
+			.card-name {
+				color: #ffe3ba;
+			}
+
+			&.dim {
+				opacity: 0.3;
+				.dim-overlay {
+					display: none;
+				}
+			}
+		}
+	}
 }

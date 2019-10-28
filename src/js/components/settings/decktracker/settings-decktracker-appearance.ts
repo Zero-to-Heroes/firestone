@@ -73,6 +73,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 					</i>
 				</label>
 			</form>
+			<div class="clean-options settings-group" *ngIf="skinForm.value.selectedSkin === 'clean'">
+				<div class="title">Display options</div>
+				<preference-toggle [field]="'overlayShowTitleBar'" [label]="'Show title bar'"></preference-toggle>
+			</div>
 			<div class="scale-form">
 				<label for="decktracker-scale" [ngClass]="{ 'disabled': !isScaleAvailable }">
 					<span>Change size</span>
@@ -118,6 +122,8 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	trackerScaleChanged: Subject<number> = new Subject<number>();
 
 	isScaleAvailable = false;
+
+	showTitleBar: boolean;
 
 	private skinFormSubscription: Subscription;
 	private trackerScaleFormSubscription: Subscription;
@@ -179,6 +185,7 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 		const prefs = await this.prefs.getPreferences();
 		this.skinForm.controls['selectedSkin'].setValue(prefs.decktrackerSkin, { emitEvent: false });
 		this.trackerScale = prefs.decktrackerScale;
+		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -32,10 +32,14 @@ declare var amplitude;
 		`../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div class="root" [ngClass]="{ 'clean': useCleanMode }" [activeTheme]="'decktracker'">
+		<div
+			class="root"
+			[ngClass]="{ 'clean': useCleanMode, 'show-title-bar': showTitleBar }"
+			[activeTheme]="'decktracker'"
+		>
 			<div class="scalable">
 				<div class="decktracker-container overlay-container-parent">
-					<div class="decktracker" *ngIf="gameState">
+					<div class="decktracker" *ngIf="gameState?.playerDeck?.deck?.length > 0">
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
@@ -85,6 +89,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	overlayDisplayed: boolean;
 	displayMode: string;
 	useCleanMode: boolean;
+	showTitleBar: boolean;
 
 	private scale;
 	private showTooltipTimer;
@@ -226,6 +231,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.displayMode = this.useCleanMode
 			? 'DISPLAY_MODE_GROUPED'
 			: preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
+		this.showTitleBar = preferences.overlayShowTitleBar;
 		// console.log('switching views?', this.useCleanMode, this.displayMode);
 		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
 		if (!(this.cdr as ViewRef).destroyed) {
