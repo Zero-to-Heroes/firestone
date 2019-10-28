@@ -482,7 +482,21 @@ export class GameEvents {
 			// Complete game, we don't handle it
 			this.existingLogLines = [];
 		}
-		if (existingLine === 'end_of_existing_data') {
+		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
+			const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
+			console.log(
+				'[game-events] [existing] last line timestamp',
+				lastLineTimestamp,
+				Date.now(),
+				this.existingLogLines[this.existingLogLines.length - 1],
+			);
+			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 30000) {
+				console.log(
+					'[game-events] [existing] last line is too old, not doing anything',
+					this.existingLogLines[this.existingLogLines.length - 1],
+				);
+				return;
+			}
 			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
 			// We've caught up
 			console.log('[game-events] [existing] enqueueing finished');
@@ -491,6 +505,35 @@ export class GameEvents {
 			return;
 		}
 		this.existingLogLines.push(existingLine);
+	}
+
+	private extractLastTimestamp(lines: string[]): number | undefined {
+		for (let i = lines.length - 1; i >= 0; i--) {
+			const timestamp = this.extractTimestamp(lines[i]);
+			if (timestamp) {
+				return timestamp;
+			}
+		}
+		return undefined;
+	}
+
+	private lineRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*).*');
+
+	private extractTimestamp(line: string): number | undefined {
+		const match = this.lineRegex.exec(line);
+		if (match) {
+			const now = new Date();
+			const day = now.getHours() < parseInt(match[1]) ? now.getDate() - 1 : now.getDate();
+			const dateWithMillis = new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				day,
+				parseInt(match[1]),
+				parseInt(match[2]),
+				parseInt(match[3]),
+			);
+			return dateWithMillis.getTime();
+		}
 	}
 
 	private async uploadLogsAndSendException(first, second) {
