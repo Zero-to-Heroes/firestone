@@ -82,8 +82,8 @@ export class MindVisionService {
 	private initialize() {
 		this.initialized = false;
 		try {
-			this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
 			console.log('[mind-vision] plugin init starting', this.mindVisionPlugin);
+			this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
 			this.mindVisionPlugin.initialize((status: boolean) => {
 				if (status === false) {
 					console.error("[mind-vision] Plugin couldn't be loaded??", 'retrying');

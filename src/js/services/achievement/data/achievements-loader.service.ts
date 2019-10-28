@@ -28,11 +28,13 @@ export class AchievementsLoaderService {
 	}
 
 	public async getAchievements(): Promise<readonly Achievement[]> {
+		console.log('[achievements-loader] Getting achievements');
 		await this.waitForInit();
 		return this.achievements;
 	}
 
 	public async getChallengeModules(): Promise<readonly Challenge[]> {
+		console.log('[achievements-loader] Getting modules');
 		await this.waitForInit();
 		return this.challengeModules;
 	}
