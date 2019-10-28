@@ -19,6 +19,7 @@ import { CardTooltipComponent } from '../components/tooltip/card-tooltip.compone
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input('cardTooltip') cardId = '';
+	@Input('cardTooltipText') cardTooltipText = undefined;
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -87,6 +88,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 
 		// Pass content to tooltip component instance
 		tooltipRef.instance.cardId = this.cardId;
+		tooltipRef.instance.text = this.cardTooltipText;
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
