@@ -15,9 +15,12 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
+import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
 import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+
+declare var amplitude;
 
 @Component({
 	selector: 'decktracker-overlay',
@@ -144,6 +147,12 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
+			if (event.name === DeckEvents.MATCH_METADATA) {
+				amplitude.getInstance().logEvent('match-start', {
+					'active-skin': this.useCleanMode ? 'clean' : 'original',
+					'display-mode': this.displayMode,
+				});
+			}
 			// console.log('received deck event', event.event);
 			this.gameState = event.state;
 			if (!(this.cdr as ViewRef).destroyed) {
