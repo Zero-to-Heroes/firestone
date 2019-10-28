@@ -24,9 +24,9 @@ export class PreferencesService {
 		return this.indexedDb.getUserPreferences();
 	}
 
-	public async setValue(field: string, pref: boolean) {
+	public async setValue(field: string, pref: boolean | number) {
 		const prefs = await this.getPreferences();
-		console.log('setting pref', field, pref);
+		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
 		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
 	}
@@ -175,7 +175,7 @@ export class PreferencesService {
 		await this.indexedDb.saveUserPreferences(userPrefs);
 		// console.log('user pref saved', eventName);
 		if (eventName) {
-			console.log('broadcasting new prefs', userPrefs);
+			// console.log('broadcasting new prefs', userPrefs);
 			const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 			eventBus.next({
 				name: eventName,

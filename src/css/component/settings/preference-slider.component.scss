@@ -1,0 +1,55 @@
+.preference-slider {
+	display: flex;
+
+	label {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 14px;
+		color: #d9c3ab;
+		margin: 0;
+		width: 160px;
+
+		&.disabled {
+			span,
+			.info > svg {
+				opacity: 0.5;
+			}
+		}
+	}
+
+	.slider {
+		width: 200px;
+
+		&:disabled {
+			opacity: 0.5;
+			cursor: auto;
+
+			&::-webkit-slider-thumb {
+				cursor: auto;
+			}
+			&::-webkit-slider-runnable-track {
+				cursor: auto;
+			}
+		}
+	}
+
+	&:hover .slider:not(:disabled) {
+		opacity: 1;
+	}
+
+	.info {
+		position: relative;
+
+		.zth-tooltip {
+			position: absolute;
+			left: 35px;
+			right: auto;
+			bottom: auto;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 200px;
+		}
+	}
+}
