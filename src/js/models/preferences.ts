@@ -18,6 +18,7 @@ export class Preferences {
 	readonly decktrackerScale: number = 100;
 	readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
+	readonly overlayWidthInPx: number = 250;
 	readonly launchAppOnGameStart: boolean = true;
 	readonly alwaysShowNotificationPopups = false;
 	readonly binder: BinderPrefs = new BinderPrefs();

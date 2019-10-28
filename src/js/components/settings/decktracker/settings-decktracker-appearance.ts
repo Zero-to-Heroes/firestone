@@ -73,12 +73,28 @@ import { PreferencesService } from '../../../services/preferences.service';
 					</i>
 				</label>
 			</form>
-			<div class="clean-options settings-group" *ngIf="skinForm.value.selectedSkin === 'clean'">
+			<div class="clean-options settings-group">
 				<div class="title">Display options</div>
-				<preference-toggle [field]="'overlayShowTitleBar'" [label]="'Show title bar'"></preference-toggle>
+				<preference-toggle
+					*ngIf="skinForm.value.selectedSkin === 'clean'"
+					[field]="'overlayShowTitleBar'"
+					[label]="'Show title bar'"
+				></preference-toggle>
+				<preference-slider
+					[field]="'overlayWidthInPx'"
+					[label]="'Overlay Width'"
+					[enabled]="sliderEnabled"
+					[tooltip]="'Change the tracker width.'"
+					[tooltipDisabled]="
+						'Change the tracker width. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
+					"
+					[min]="195"
+					[max]="300"
+				>
+				</preference-slider>
 			</div>
 			<div class="scale-form">
-				<label for="decktracker-scale" [ngClass]="{ 'disabled': !isScaleAvailable }">
+				<label for="decktracker-scale" [ngClass]="{ 'disabled': !sliderEnabled }">
 					<span>Change size</span>
 					<i class="info">
 						<svg>
@@ -87,7 +103,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						<div class="zth-tooltip right">
 							<p>
 								Change the tracker size{{
-									isScaleAvailable
+									sliderEnabled
 										? ''
 										: '. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
 								}}
@@ -99,7 +115,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					</i>
 				</label>
 				<input
-					[disabled]="!isScaleAvailable"
+					[disabled]="!sliderEnabled"
 					type="range"
 					name="decktracker-scale"
 					class="scale-slider"
@@ -121,7 +137,7 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	trackerScale: number;
 	trackerScaleChanged: Subject<number> = new Subject<number>();
 
-	isScaleAvailable = false;
+	sliderEnabled = false;
 
 	showTitleBar: boolean;
 
@@ -152,7 +168,10 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
 			console.log('should display', shouldDisplay);
-			this.isScaleAvailable = shouldDisplay;
+			this.sliderEnabled = shouldDisplay;
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
 		});
 	}
 

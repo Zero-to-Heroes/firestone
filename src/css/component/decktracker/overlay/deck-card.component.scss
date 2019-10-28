@@ -7,8 +7,6 @@
 	align-items: center;
 	height: 26px;
 	position: relative;
-	min-width: 250px;
-	max-width: 250px;
 	overflow: hidden;
 
 	.background-image {
@@ -17,6 +15,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
+		background-size: cover;
 	}
 
 	.gradiant {
