@@ -25,6 +25,7 @@ import { SettingsGeneralMenuComponent } from '../../components/settings/general/
 import { SettingsGeneralComponent } from '../../components/settings/general/settings-general.component';
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
+import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { SettingsAppSelectionComponent } from '../../components/settings/settings-app-selection.component';
 import { SettingsComponent } from '../../components/settings/settings.component';
 import { DebugService } from '../../services/debug.service';
@@ -77,6 +78,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsDecktrackerAppearanceComponent,
 		SettingsDecktrackerFeaturesComponent,
 		SettingsBroadcastComponent,
+
+		PreferenceToggleComponent,
 	],
 	bootstrap: [SettingsComponent],
 	providers: [

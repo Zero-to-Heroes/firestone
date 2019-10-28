@@ -24,6 +24,13 @@ export class PreferencesService {
 		return this.indexedDb.getUserPreferences();
 	}
 
+	public async setValue(field: string, pref: boolean) {
+		const prefs = await this.getPreferences();
+		console.log('setting pref', field, pref);
+		const newPrefs: Preferences = { ...prefs, [field]: pref };
+		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+	}
+
 	public async setLaunchAppOnGameStart(pref: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, launchAppOnGameStart: pref };
