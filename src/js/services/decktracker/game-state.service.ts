@@ -16,6 +16,7 @@ import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
+import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
@@ -256,6 +257,7 @@ export class GameStateService {
 			new NewTurnParser(),
 			new FirstPlayerParser(),
 			new CardStolenParser(),
+			new CardCreatorChangedParser(),
 		];
 	}
 

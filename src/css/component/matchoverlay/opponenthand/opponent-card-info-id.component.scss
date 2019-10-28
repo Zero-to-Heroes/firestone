@@ -15,6 +15,16 @@
 	border-radius: 50%;
 	border: 2px solid #9fb6d7;
 	overflow: hidden;
+
+	&.created-by {
+		border-color: #d9c3ab;
+		border-style: dashed;
+
+		.card-image {
+			width: 250%;
+			clip-path: none;
+		}
+	}
 }
 
 .card-image {

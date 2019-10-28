@@ -86,6 +86,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
+		console.log('game event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -235,7 +236,19 @@ export class GameEvents {
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
 				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
+						// Always present, except for legacy tests
+						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
+				break;
+			case 'CARD_CREATOR_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_CREATOR_CHANGED, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
 				break;
 			case 'END_OF_ECHO_IN_HAND':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));

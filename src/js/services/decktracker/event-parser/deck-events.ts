@@ -14,6 +14,7 @@ export class DeckEvents {
 	public static readonly MINION_DIED = 'MINION_DIED';
 	public static readonly SECRET_PLAYED_FROM_HAND = 'SECRET_PLAYED_FROM_HAND';
 	public static readonly CARD_DRAW = 'DECK_CARD_DRAW';
+	public static readonly CARD_CREATOR_CHANGED = 'DECK_CARD_CREATOR_CHANGED';
 	public static readonly RECEIVE_CARD_IN_HAND = 'RECEIVE_CARD_IN_HAND';
 	public static readonly END_OF_ECHO_IN_HAND = 'END_OF_ECHO_IN_HAND';
 	public static readonly CREATE_CARD_IN_DECK = 'CREATE_CARD_IN_DECK';

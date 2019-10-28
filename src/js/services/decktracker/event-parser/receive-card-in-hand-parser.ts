@@ -17,6 +17,7 @@ export class ReceiveCardInHandParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const creatorCardId = gameEvent.additionalData.creatorCardId;
 		// console.log('[receive-card-in-hand] handling event', cardId, entityId);
 		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -36,6 +37,7 @@ export class ReceiveCardInHandParser implements EventParser {
 				cardName: cardData && cardData.name,
 				manaCost: cardData && cardData.cost,
 				rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : null,
+				creatorCardId: creatorCardId,
 			} as DeckCard);
 		// console.log('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
 		const previousHand = deck.hand;
