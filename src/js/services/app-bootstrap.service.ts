@@ -209,15 +209,15 @@ export class AppBootstrapService {
 
 	private async closeApp() {
 		// Close all windows
-		const windows = await this.ow.getOpenWindows();
-		console.log('closing all windows', windows);
-		for (const [name, window] of Object.entries(windows)) {
-			// Close the main window last
-			if (name !== OverwolfService.MAIN_WINDOW) {
-				console.log('closing window', name, window);
-				this.ow.closeWindowFromName(name);
-			}
-		}
+		// const windows = await this.ow.getOpenWindows();
+		// console.log('closing all windows', windows);
+		// for (const [name, window] of Object.entries(windows)) {
+		// 	// Close the main window last
+		// 	if (name !== OverwolfService.MAIN_WINDOW) {
+		// 		console.log('closing window', name, window);
+		// 		this.ow.closeWindowFromName(name);
+		// 	}
+		// }
 		this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
 	}
 }
