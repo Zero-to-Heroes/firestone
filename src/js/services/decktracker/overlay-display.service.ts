@@ -56,7 +56,7 @@ export class OverlayDisplayService implements OnDestroy {
 	private async handleDisplayPreferences(gameState: GameState, preferences: Preferences = null): Promise<void> {
 		const prefs = preferences || (await this.prefs.getPreferences());
 		const shouldDisplay = this.shouldDisplay(gameState, prefs);
-		this.logger.debug('[overlay-display] should display?', shouldDisplay);
+		// this.logger.debug('[overlay-display] should display?', shouldDisplay);
 		this.decktrackerDisplayEventBus.next(shouldDisplay);
 	}
 

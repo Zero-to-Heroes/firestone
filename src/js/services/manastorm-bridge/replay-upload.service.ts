@@ -37,14 +37,13 @@ export class ReplayUploadService {
 	}
 
 	public async uploadGame(game: GameForUpload) {
-		const user = await this.ow.getCurrentUser();
-		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
-
 		if (!game.reviewId) {
 			console.error('[manastorm-bridge] Could not upload game, no review id is associated to it');
 			return;
 		}
 
+		const user = await this.ow.getCurrentUser();
+		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 		this.postFullReview(game.reviewId, userId, game);
 	}
 
