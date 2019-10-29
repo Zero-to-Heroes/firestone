@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -103,12 +110,24 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[max]="200"
 				>
 				</preference-slider>
+				<preference-slider
+					[field]="'overlayOpacityInPercent'"
+					[label]="'Overlay opacity'"
+					[enabled]="sliderEnabled"
+					[tooltip]="'Change the tracker opacity.'"
+					[tooltipDisabled]="
+						'Change the tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
+					"
+					[min]="0"
+					[max]="100"
+				>
+				</preference-slider>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
+export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, OnDestroy {
 	skinForm = new FormGroup({
 		selectedSkin: new FormControl('original'),
 	});
@@ -120,8 +139,9 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	private skinFormSubscription: Subscription;
 	private displaySubscription: Subscription;
 
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
-		this.cdr.detach();
+	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
+
+	ngAfterViewInit() {
 		this.loadDefaultValues();
 		this.skinFormSubscription = this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value =>
 			this.changeSkinSettings(value),
@@ -129,7 +149,7 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
-			console.log('should display', shouldDisplay);
+			// console.log('should display', shouldDisplay);
 			this.sliderEnabled = shouldDisplay;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -143,7 +163,6 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	}
 
 	changeSkinSettings(newSkin: string) {
-		// console.log('changing skin settings', newSkin, this.skinForm.value.selectedSkin);
 		this.skinForm.controls['selectedSkin'].setValue(newSkin, { emitEvent: false });
 		this.prefs.setDecktrackerSkin(newSkin);
 		// console.log('changedg skin settings', newSkin, this.skinForm.value.selectedSkin);

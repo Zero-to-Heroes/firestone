@@ -36,12 +36,18 @@ declare var amplitude;
 			class="root"
 			[ngClass]="{ 'clean': useCleanMode, 'show-title-bar': showTitleBar }"
 			[activeTheme]="'decktracker'"
+			[style.opacity]="opacity"
 		>
 			<div class="scalable">
 				<div class="decktracker-container overlay-container-parent">
 					<div
 						class="decktracker"
-						*ngIf="gameState?.playerDeck?.deck?.length > 0"
+						*ngIf="
+							gameState?.playerDeck?.deck?.length > 0 ||
+							gameState?.playerDeck?.hand?.length > 0 ||
+							gameState?.playerDeck?.board?.length > 0 ||
+							gameState?.playerDeck?.otherZone?.length > 0
+						"
 						[style.width.px]="overlayWidthInPx"
 					>
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
@@ -95,6 +101,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	useCleanMode: boolean;
 	showTitleBar: boolean;
 	overlayWidthInPx: number;
+	opacity: number;
 
 	private scale;
 	private showTooltipTimer;
@@ -163,7 +170,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 					'display-mode': this.displayMode,
 				});
 			}
-			// console.log('received deck event', event.event);
+			console.log('received deck event', event.event, event.state);
 			this.gameState = event.state;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -180,9 +187,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_SIZE) {
-				this.handleDisplaySize(event.preferences);
-			} else if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
 			}
 		});
@@ -205,7 +210,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.changeWindowSize();
 		await this.changeWindowPosition();
 		this.handleDisplayPreferences();
-		this.handleDisplaySize();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -238,17 +242,14 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			: preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
 		this.showTitleBar = preferences.overlayShowTitleBar;
 		this.overlayWidthInPx = preferences.overlayWidthInPx;
+		this.opacity = preferences.overlayOpacityInPercent / 100;
+		this.scale = preferences.decktrackerScale;
+		this.onResized();
 		// console.log('switching views?', this.useCleanMode, this.displayMode);
 		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-	}
-
-	private async handleDisplaySize(preferences: Preferences = null) {
-		preferences = preferences || (await this.prefs.getPreferences());
-		this.scale = preferences.decktrackerScale;
-		this.onResized();
 	}
 
 	private async onResized() {

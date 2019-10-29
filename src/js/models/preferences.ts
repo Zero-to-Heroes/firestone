@@ -6,6 +6,7 @@ export class Preferences {
 	readonly dontConfirmVideoReplayDeletion: boolean;
 	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
+
 	readonly decktrackerShowArena: boolean;
 	readonly decktrackerShowRanked: boolean = true;
 	readonly decktrackerShowTavernBrawl: boolean = true;
@@ -16,9 +17,12 @@ export class Preferences {
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly decktrackerSkin: string = 'original';
 	readonly decktrackerScale: number = 100;
+
 	readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
 	readonly overlayWidthInPx: number = 250;
+	readonly overlayOpacityInPercent: number = 100;
+
 	readonly launchAppOnGameStart: boolean = true;
 	readonly alwaysShowNotificationPopups = false;
 	readonly binder: BinderPrefs = new BinderPrefs();
