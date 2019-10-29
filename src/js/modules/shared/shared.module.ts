@@ -20,6 +20,7 @@ import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { PulseDirective } from '../../directives/pulse.directive';
+import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 @NgModule({
 	imports: [BrowserModule, OverlayModule],
@@ -47,6 +48,8 @@ import { PulseDirective } from '../../directives/pulse.directive';
 		ActiveThemeDirective,
 		PulseDirective,
 
+		SafeHtmlPipe,
+
 		AdsComponent,
 	],
 	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent],
@@ -73,6 +76,8 @@ import { PulseDirective } from '../../directives/pulse.directive';
 		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
+
+		SafeHtmlPipe,
 
 		AdsComponent,
 	],
