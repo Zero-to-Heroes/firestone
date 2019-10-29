@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewRef } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/internal/operators';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -92,39 +91,18 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[max]="300"
 				>
 				</preference-slider>
-			</div>
-			<div class="scale-form">
-				<label for="decktracker-scale" [ngClass]="{ 'disabled': !sliderEnabled }">
-					<span>Change size</span>
-					<i class="info">
-						<svg>
-							<use xlink:href="/Files/assets/svg/sprite.svg#info" />
-						</svg>
-						<div class="zth-tooltip right">
-							<p>
-								Change the tracker size{{
-									sliderEnabled
-										? ''
-										: '. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
-								}}
-							</p>
-							<svg class="tooltip-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 9">
-								<polygon points="0,0 8,-9 16,0" />
-							</svg>
-						</div>
-					</i>
-				</label>
-				<input
-					[disabled]="!sliderEnabled"
-					type="range"
-					name="decktracker-scale"
-					class="scale-slider"
-					min="50"
-					max="200"
-					(mousedown)="onScaleMouseDown($event)"
-					[(ngModel)]="trackerScale"
-					(ngModelChange)="onScaleChange($event)"
-				/>
+				<preference-slider
+					[field]="'decktrackerScale'"
+					[label]="'Overlay size'"
+					[enabled]="sliderEnabled"
+					[tooltip]="'Change the tracker scale.'"
+					[tooltipDisabled]="
+						'Change the tracker scale. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
+					"
+					[min]="75"
+					[max]="200"
+				>
+				</preference-slider>
 			</div>
 		</div>
 	`,
@@ -134,15 +112,12 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 	skinForm = new FormGroup({
 		selectedSkin: new FormControl('original'),
 	});
-	trackerScale: number;
-	trackerScaleChanged: Subject<number> = new Subject<number>();
 
 	sliderEnabled = false;
 
 	showTitleBar: boolean;
 
 	private skinFormSubscription: Subscription;
-	private trackerScaleFormSubscription: Subscription;
 	private displaySubscription: Subscription;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {
@@ -151,19 +126,6 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 		this.skinFormSubscription = this.skinForm.controls['selectedSkin'].valueChanges.subscribe(value =>
 			this.changeSkinSettings(value),
 		);
-		this.trackerScaleFormSubscription = this.trackerScaleChanged
-			.pipe(
-				debounceTime(20),
-				distinctUntilChanged(),
-			)
-			.subscribe(model => {
-				this.trackerScale = model;
-				console.log('changing scale value', this.trackerScale);
-				this.prefs.setDecktrackerScale(this.trackerScale);
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-			});
 
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(shouldDisplay => {
@@ -177,7 +139,6 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 
 	ngOnDestroy() {
 		this.skinFormSubscription.unsubscribe();
-		this.trackerScaleFormSubscription.unsubscribe();
 		this.displaySubscription.unsubscribe();
 	}
 
@@ -191,19 +152,9 @@ export class SettingsDecktrackerAppearanceComponent implements OnDestroy {
 		}
 	}
 
-	onScaleChange(newScale: number): void {
-		this.trackerScaleChanged.next(newScale);
-	}
-
-	// Prevent drag & drop while dragging the slider
-	onScaleMouseDown(event: MouseEvent) {
-		event.stopPropagation();
-	}
-
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.skinForm.controls['selectedSkin'].setValue(prefs.decktrackerSkin, { emitEvent: false });
-		this.trackerScale = prefs.decktrackerScale;
 		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
