@@ -1,4 +1,5 @@
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { DeckState } from '../../../models/decktracker/deck-state';
 
 export class DeckManipulationHelper {
 	public static removeSingleCardFromZone(
@@ -104,5 +105,25 @@ export class DeckManipulationHelper {
 		return Object.assign(new DeckCard(), card, {
 			cardId: undefined,
 		} as DeckCard);
+	}
+
+	public static assignCardIdToEntity(deck: DeckState, entityId: number, cardId: string): DeckState {
+		const cardInHand = DeckManipulationHelper.findCardInZone(deck.hand, null, entityId);
+		console.log('card in hand', cardInHand);
+		if (cardInHand && !cardInHand.cardId) {
+			const newCard = Object.assign(new DeckCard(), cardInHand, {
+				cardId: cardId,
+			} as DeckCard);
+			const newHand = DeckManipulationHelper.replaceCardInZone(deck.hand, newCard);
+			return Object.assign(new DeckState(), deck, {
+				hand: newHand,
+			} as DeckState);
+		}
+		return deck;
+	}
+
+	public static replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
+		const zoneWithoutCard = zone.filter(card => card.entityId !== newCard.entityId);
+		return [...zoneWithoutCard, newCard];
 	}
 }

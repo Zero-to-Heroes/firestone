@@ -387,6 +387,7 @@ export class GameEvents {
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
 							sourceCardId: gameEvent.Value.SourceCardId,
+							sourceEntityId: gameEvent.Value.SourceEntityId,
 							sourceControllerId: gameEvent.Value.SourceControllerId,
 							targets: gameEvent.Value.Targets,
 						},

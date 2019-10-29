@@ -13,6 +13,7 @@ import { ProcessingQueue } from '../processing-queue.service';
 import { DeckCardService } from './deck-card.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
+import { AssignCardIdParser } from './event-parser/assign-card-ids-parser';
 import { BurnedCardParser } from './event-parser/burned-card-parser';
 import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
@@ -193,21 +194,21 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
-					// this.logger.debug(
-					// 	'board states',
-					// 	this.state.playerDeck.board.length,
-					// 	this.state.opponentDeck.board.length,
-					// 	this.state.playerDeck.board,
-					// 	this.state.opponentDeck.board,
-					// );
-					// this.logger.debug(
-					// 	'hand states',
-					// 	this.state.playerDeck.hand.length,
-					// 	this.state.opponentDeck.hand.length,
-					// 	this.state.playerDeck.hand,
-					// 	this.state.opponentDeck.hand,
-					// );
+					this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
+					this.logger.debug(
+						'board states',
+						this.state.playerDeck.board.length,
+						this.state.opponentDeck.board.length,
+						this.state.playerDeck.board,
+						this.state.opponentDeck.board,
+					);
+					this.logger.debug(
+						'hand states',
+						this.state.playerDeck.hand.length,
+						this.state.opponentDeck.hand.length,
+						this.state.playerDeck.hand,
+						this.state.opponentDeck.hand,
+					);
 				}
 			} catch (e) {
 				this.logger.error('Exception while applying parser', parser.event(), e);
@@ -258,6 +259,7 @@ export class GameStateService {
 			new FirstPlayerParser(),
 			new CardStolenParser(),
 			new CardCreatorChangedParser(),
+			new AssignCardIdParser(),
 		];
 	}
 
