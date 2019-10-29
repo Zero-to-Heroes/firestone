@@ -40,16 +40,7 @@ declare var amplitude;
 		>
 			<div class="scalable">
 				<div class="decktracker-container overlay-container-parent">
-					<div
-						class="decktracker"
-						*ngIf="
-							gameState?.playerDeck?.deck?.length > 0 ||
-							gameState?.playerDeck?.hand?.length > 0 ||
-							gameState?.playerDeck?.board?.length > 0 ||
-							gameState?.playerDeck?.otherZone?.length > 0
-						"
-						[style.width.px]="overlayWidthInPx"
-					>
+					<div class="decktracker" *ngIf="showTracker" [style.width.px]="overlayWidthInPx">
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
@@ -102,6 +93,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	showTitleBar: boolean;
 	overlayWidthInPx: number;
 	opacity: number;
+	showTracker: boolean;
+
+	private hasBeenMovedByUser: boolean;
 
 	private scale;
 	private showTooltipTimer;
@@ -125,9 +119,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	) {}
 
 	async ngAfterViewInit() {
-		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		this.cdr.detach();
-
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		this.showTooltipSubscription = this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
 			clearTimeout(this.hideTooltipTimer);
@@ -170,17 +161,27 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 					'display-mode': this.displayMode,
 				});
 			}
-			console.log('received deck event', event.event, event.state);
+			// console.log('received deck event', event.event, event.state);
 			this.gameState = event.state;
+			this.showTracker =
+				this.gameState &&
+				this.gameState.playerDeck &&
+				((this.gameState.playerDeck.deck && this.gameState.playerDeck.deck.length > 0) ||
+					(this.gameState.playerDeck.hand && this.gameState.playerDeck.hand.length > 0) ||
+					(this.gameState.playerDeck.board && this.gameState.playerDeck.board.length > 0) ||
+					(this.gameState.playerDeck.otherZone && this.gameState.playerDeck.otherZone.length > 0));
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe(event => {
-			console.log('display subscription', event, this.gameState);
+		this.displaySubscription = displayEventBus.asObservable().subscribe(async event => {
+			// console.log('received event', event, this.gameState, window);
 			if (event && this.gameState && this.gameState.playerDeck) {
-				this.restoreWindow();
+				const window = await this.ow.getCurrentWindow();
+				if (window.stateEx !== 'normal') {
+					this.restoreWindow();
+				}
 			} else {
 				this.hideWindow();
 			}
@@ -191,14 +192,14 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 				this.handleDisplayPreferences(event.preferences);
 			}
 		});
-		if (process.env.NODE_ENV !== 'production') {
-			console.error('Should not allow debug game state from production');
-			this.gameState = this.ow.getMainWindow().deckDebug.state;
-			console.log('game state', this.gameState);
-			if (this.gameState) {
-				this.restoreWindow();
-			}
-		}
+		// if (process.env.NODE_ENV !== 'production') {
+		// 	console.error('Should not allow debug game state from production');
+		// 	this.gameState = this.ow.getMainWindow().deckDebug.state;
+		// 	console.log('game state', this.gameState);
+		// 	if (this.gameState) {
+		// 		this.restoreWindow();
+		// 	}
+		// }
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
@@ -209,7 +210,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 		await this.changeWindowSize();
 		await this.changeWindowPosition();
-		this.handleDisplayPreferences();
+		await this.handleDisplayPreferences();
+		await this.restoreWindow();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -228,6 +230,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	@HostListener('mousedown')
 	dragMove() {
 		this.ow.dragMove(this.windowId);
+		this.hasBeenMovedByUser = true;
 	}
 
 	onDisplayModeChanged(pref: string) {
@@ -262,9 +265,12 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async restoreWindow() {
+		const window = await this.ow.getCurrentWindow();
+		console.log('current window', window);
+		const [top, left] = [window.top, window.left];
 		await this.ow.restoreWindow(this.windowId);
-		// await this.changeWindowSize();
-		// await this.changeWindowPosition();
+		await this.ow.changeWindowPosition(this.windowId, left, top);
+		console.log('restoring window to previous position');
 		await this.onResized();
 	}
 
@@ -273,6 +279,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async changeWindowPosition(): Promise<void> {
+		if (this.hasBeenMovedByUser) {
+			return;
+		}
 		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
