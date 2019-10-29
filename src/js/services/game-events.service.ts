@@ -86,7 +86,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		console.log('game event', gameEvent);
+		// console.log('game event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -504,7 +504,7 @@ export class GameEvents {
 				Date.now(),
 				this.existingLogLines[this.existingLogLines.length - 1],
 			);
-			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 30000) {
+			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 90 * 1000) {
 				console.log(
 					'[game-events] [existing] last line is too old, not doing anything',
 					this.existingLogLines[this.existingLogLines.length - 1],

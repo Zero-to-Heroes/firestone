@@ -194,21 +194,21 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
-					this.logger.debug(
-						'board states',
-						this.state.playerDeck.board.length,
-						this.state.opponentDeck.board.length,
-						this.state.playerDeck.board,
-						this.state.opponentDeck.board,
-					);
-					this.logger.debug(
-						'hand states',
-						this.state.playerDeck.hand.length,
-						this.state.opponentDeck.hand.length,
-						this.state.playerDeck.hand,
-						this.state.opponentDeck.hand,
-					);
+					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
+					// this.logger.debug(
+					// 	'board states',
+					// 	this.state.playerDeck.board.length,
+					// 	this.state.opponentDeck.board.length,
+					// 	this.state.playerDeck.board,
+					// 	this.state.opponentDeck.board,
+					// );
+					// this.logger.debug(
+					// 	'hand states',
+					// 	this.state.playerDeck.hand.length,
+					// 	this.state.opponentDeck.hand.length,
+					// 	this.state.playerDeck.hand,
+					// 	this.state.opponentDeck.hand,
+					// );
 				}
 			} catch (e) {
 				this.logger.error('Exception while applying parser', parser.event(), e);
