@@ -4,7 +4,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { init } from '@sentry/browser';
+import { init, Integrations } from '@sentry/browser';
+import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { DeckTrackerOverlayComponent } from '../../components/decktracker/overlay/decktracker-overlay.component';
@@ -20,6 +21,17 @@ init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
 	enabled: process.env.NODE_ENV === 'production',
 	release: process.env.APP_VERSION,
+	attachStacktrace: true,
+	integrations: [
+		new Integrations.GlobalHandlers({
+			onerror: true,
+			onunhandledrejection: true,
+		}),
+		new ExtraErrorData(),
+		new CaptureConsole({
+			levels: ['error'],
+		}),
+	],
 });
 
 console.log('version is ' + process.env.APP_VERSION);
