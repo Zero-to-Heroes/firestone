@@ -38,6 +38,7 @@ declare var amplitude;
 			[activeTheme]="'decktracker'"
 			[style.opacity]="opacity"
 		>
+			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="decktracker-container overlay-container-parent">
 					<div class="decktracker" *ngIf="showTracker" [style.width.px]="overlayWidthInPx">
@@ -58,27 +59,27 @@ declare var amplitude;
 					</div>
 				</div>
 
-				<i class="i-54 gold-theme corner top-left">
+				<i class="i-54 gold-theme corner top-left" *ngIf="showTracker">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<i class="i-54 gold-theme corner top-right">
+				<i class="i-54 gold-theme corner top-right" *ngIf="showTracker">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<i class="i-54 gold-theme corner bottom-right">
+				<i class="i-54 gold-theme corner bottom-right" *ngIf="showTracker">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<i class="i-54 gold-theme corner bottom-left">
+				<i class="i-54 gold-theme corner bottom-left" *ngIf="showTracker">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<tooltips [module]="'decktracker'"></tooltips>
+				<tooltips *ngIf="showTracker" [module]="'decktracker'"></tooltips>
 			</div>
 		</div>
 	`,
