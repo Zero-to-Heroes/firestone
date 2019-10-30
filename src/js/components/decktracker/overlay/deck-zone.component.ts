@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
@@ -48,11 +47,20 @@ export class DeckZoneComponent {
 		const cardsToDisplay = zone.sortingFunction ? [...zone.cards].sort(zone.sortingFunction) : zone.cards;
 		this.cardsInZone = cardsToDisplay.length;
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
-		const grouped: Map<string, DeckCard[]> = this.groupBy(cardsToDisplay, (card: DeckCard) => card.cardId);
+		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(
+			cardsToDisplay,
+			(card: VisualDeckCard) => card.cardId,
+		);
 		this.cards = Array.from(grouped.values(), cards => {
 			const creatorCardIds: readonly string[] = [
-				...new Set(cards.map(card => card.creatorCardId).filter(creator => creator)),
+				...new Set(
+					cards
+						.map(card => card.creatorCardIds)
+						.reduce((a, b) => a.concat(b), [])
+						.filter(creator => creator),
+				),
 			];
+			// console.log('creator card ids', creatorCardIds, cards);
 			return Object.assign(new VisualDeckCard(), cards[0], {
 				totalQuantity: cards.length,
 				creatorCardIds: creatorCardIds,
@@ -68,11 +76,11 @@ export class DeckZoneComponent {
 		}
 	}
 
-	trackCard(index, card: DeckCard) {
+	trackCard(index, card: VisualDeckCard) {
 		return card.cardId;
 	}
 
-	private groupBy(list, keyGetter): Map<string, DeckCard[]> {
+	private groupBy(list, keyGetter): Map<string, VisualDeckCard[]> {
 		const map = new Map();
 		list.forEach(item => {
 			const key = keyGetter(item);

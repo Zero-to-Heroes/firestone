@@ -1,8 +1,8 @@
-import { DeckCard } from '../deck-card';
+import { VisualDeckCard } from '../visual-deck-card';
 
 export interface DeckZone {
 	readonly id: string;
 	readonly name: string;
-	readonly cards: readonly DeckCard[];
-	readonly sortingFunction: (a: DeckCard, b: DeckCard) => number;
+	readonly cards: readonly VisualDeckCard[];
+	readonly sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number;
 }

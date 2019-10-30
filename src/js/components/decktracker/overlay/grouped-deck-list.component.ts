@@ -51,7 +51,7 @@ export class GroupedDeckListComponent {
 				: [...this._deckState.deck, ...this._deckState.hand, ...this._deckState.otherZone].sort(
 						(a, b) => a.manaCost - b.manaCost,
 				  );
-		// console.log('grouping deck list?', deckState.deckList, deck, deckState);
+		// console.log('grouping deck list?', this._deckState.deckList, this.deck, this._deckState);
 		// The zone in this view is the decklist + cards in the deck that didn't
 		// start in the decklist
 		const groupedFromDecklist: Map<string, DeckCard[]> = this.groupBy(
@@ -67,23 +67,24 @@ export class GroupedDeckListComponent {
 		for (const cardId of Array.from(groupedFromDecklist.keys())) {
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			const isAtLeastOneCardInHand = (this.hand || []).filter(card => card.cardId === cardId).length > 0;
-			// console.log(
-			// 	'at least one card in hand 1?',
-			// 	cardId,
-			// 	isAtLeastOneCardInHand,
-			// 	cardsInDeck,
-			// 	groupedFromDeck.get(cardId) || [],
-			// );
+			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
+				.map(card => card.creatorCardId)
+				.filter(creator => creator);
+			// console.log('cardId from in declikst', cardId, cardsInDeck, creatorCardIds, groupedFromDeck.get(cardId));
 			for (let i = 0; i < cardsInDeck; i++) {
+				// console.log('pushing');
 				base.push({
 					cardId: groupedFromDecklist.get(cardId)[0].cardId,
 					cardName: groupedFromDecklist.get(cardId)[0].cardName,
 					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
 					rarity: groupedFromDecklist.get(cardId)[0].rarity,
 					highlight: isAtLeastOneCardInHand && this._highlight ? 'in-hand' : 'normal',
+					creatorCardIds: creatorCardIds,
 				} as VisualDeckCard);
+				// console.log('base is now', base);
 			}
 			if (cardsInDeck === 0) {
+				// console.log('pushing dim version');
 				base.push({
 					cardId: groupedFromDecklist.get(cardId)[0].cardId,
 					cardName: groupedFromDecklist.get(cardId)[0].cardName,
@@ -91,26 +92,27 @@ export class GroupedDeckListComponent {
 					rarity: groupedFromDecklist.get(cardId)[0].rarity,
 					highlight: isAtLeastOneCardInHand && this._highlight ? 'in-hand' : 'dim',
 				} as VisualDeckCard);
+				// console.log('base is now', base);
 			}
 		}
 		for (const cardId of Array.from(groupedFromNotInBaseDeck.keys())) {
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			const isAtLeastOneCardInHand = (this.hand || []).filter(card => card.cardId === cardId).length > 0;
-			// console.log(
-			// 	'at least one card in hand?',
-			// 	cardId,
-			// 	isAtLeastOneCardInHand,
-			// 	cardsInDeck,
-			// 	groupedFromDeck.get(cardId) || [],
-			// );
+			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
+				.map(card => card.creatorCardId)
+				.filter(creator => creator);
+			// console.log('cardId from not in deck', cardId, cardsInDeck, creatorCardIds);
 			for (let i = 0; i < cardsInDeck; i++) {
+				// console.log('pushing');
 				base.push({
 					cardId: groupedFromDeck.get(cardId)[i].cardId,
 					cardName: groupedFromDeck.get(cardId)[i].cardName,
 					manaCost: groupedFromDeck.get(cardId)[i].manaCost,
 					rarity: groupedFromDeck.get(cardId)[i].rarity,
 					highlight: isAtLeastOneCardInHand && this._highlight ? 'in-hand' : 'normal',
+					creatorCardIds: creatorCardIds,
 				} as VisualDeckCard);
+				// console.log('base is now', base);
 			}
 		}
 		this.zone = {
@@ -119,6 +121,7 @@ export class GroupedDeckListComponent {
 			cards: base,
 			sortingFunction: (a, b) => a.manaCost - b.manaCost,
 		} as DeckZone;
+		// console.log('setting final zone', this.zone);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

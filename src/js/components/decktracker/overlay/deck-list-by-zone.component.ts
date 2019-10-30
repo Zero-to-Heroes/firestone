@@ -3,6 +3,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
+import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
 	selector: 'deck-list-by-zone',
@@ -44,11 +45,18 @@ export class DeckListByZoneComponent {
 		return zone.id;
 	}
 
-	private buildDynamicZone(zone: DynamicZone, sortingFunction: (a: DeckCard, b: DeckCard) => number): DeckZone {
+	private buildDynamicZone(
+		zone: DynamicZone,
+		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
+	): DeckZone {
 		return {
 			id: zone.id,
 			name: zone.name,
-			cards: zone.cards,
+			cards: zone.cards.map(card =>
+				Object.assign(new VisualDeckCard(), card, {
+					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+				} as VisualDeckCard),
+			),
 			sortingFunction: sortingFunction,
 		} as DeckZone;
 	}
@@ -57,12 +65,16 @@ export class DeckListByZoneComponent {
 		cards: readonly DeckCard[],
 		id: string,
 		name: string,
-		sortingFunction: (a: DeckCard, b: DeckCard) => number,
+		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
 	): DeckZone {
 		return {
 			id: id,
 			name: name,
-			cards: cards,
+			cards: cards.map(card =>
+				Object.assign(new VisualDeckCard(), card, {
+					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+				} as VisualDeckCard),
+			),
 			sortingFunction: sortingFunction,
 		} as DeckZone;
 	}
