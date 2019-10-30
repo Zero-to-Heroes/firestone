@@ -41,16 +41,23 @@
 	}
 
 	.info {
-		position: relative;
+		margin-left: 5px;
 
 		.zth-tooltip {
 			position: absolute;
-			left: 35px;
-			right: auto;
-			bottom: auto;
-			top: 50%;
-			transform: translateY(-50%);
-			width: 200px;
+			max-width: 200px;
+
+			p {
+				width: 200px;
+				color: #2f0d0d;
+			}
+
+			&.right {
+				top: 50%;
+				transform: translateY(-50%);
+				left: 35px;
+				right: auto;
+			}
 		}
 	}
 }

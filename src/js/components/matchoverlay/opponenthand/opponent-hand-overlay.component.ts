@@ -75,12 +75,10 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			if (event.name === PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY) {
-				this.setDisplayPreferences(event.preferences);
-				this.handleDisplayPreferences();
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
+			this.setDisplayPreferences(event.preferences);
+			this.handleDisplayPreferences();
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
 			}
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
