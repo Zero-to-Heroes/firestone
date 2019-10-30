@@ -156,7 +156,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 				data.data[0] ? data.data[0] : 0,
 			);
 		});
-		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
+		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			if (event.name === DeckEvents.MATCH_METADATA) {
 				amplitude.getInstance().logEvent('match-start', {
@@ -164,7 +164,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 					'display-mode': this.displayMode,
 				});
 			}
-			// console.log('received deck event', event.event, event.state);
+			// console.log('received deck event', event.event);
 			this.gameState = event.state;
 			this.showTracker =
 				this.gameState &&
@@ -179,7 +179,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(async event => {
-			// console.log('received event', event, this.gameState, window);
+			// console.log('received event', event);
 			if (event && this.gameState && this.gameState.playerDeck) {
 				const window = await this.ow.getCurrentWindow();
 				if (window && window.stateEx !== 'normal') {

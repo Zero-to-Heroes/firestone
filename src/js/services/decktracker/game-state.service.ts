@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { BehaviorSubject } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { AllCardsService } from '../all-cards.service';
@@ -57,7 +58,7 @@ export class GameStateService {
 	// We need to get through a queue to avoid race conditions when two events are close together,
 	// so that we're sure teh state is update sequentially
 	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
-	private deckEventBus = new EventEmitter<any>();
+	private deckEventBus = new BehaviorSubject<any>(null);
 	private eventEmitters = [];
 
 	private currentReviewId: string;
@@ -88,7 +89,7 @@ export class GameStateService {
 			}
 		});
 		window['deckEventBus'] = this.deckEventBus;
-		window['deckDebug'] = this;
+		// window['deckDebug'] = this;
 		window['logGameState'] = () => {
 			this.logger.debug(JSON.stringify(this.state));
 		};
