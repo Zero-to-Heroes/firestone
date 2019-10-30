@@ -1,7 +1,7 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DynamicZone } from '../../../models/decktracker/view/dynamic-zone';
 
 @Component({

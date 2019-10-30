@@ -35,6 +35,15 @@ import { Events } from '../../../services/events.service';
 					<span>{{ numberOfCopies }}</span>
 				</div>
 			</div>
+			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0">
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_gift_icon" />
+						</svg>
+					</i>
+				</div>
+			</div>
 			<div class="legendary-symbol" *ngIf="rarity === 'legendary'">
 				<div class="inner-border">
 					<i>
@@ -62,6 +71,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	rarity: string;
 	numberOfCopies: number;
 	highlight: string;
+	creatorCardIds: readonly string[];
 
 	private enterTimestamp: number;
 	private mouseEnterListener;
@@ -82,6 +92,7 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.cardName = card.cardName;
 		this.numberOfCopies = card.totalQuantity;
 		this.rarity = card.rarity;
+		this.creatorCardIds = card.creatorCardIds;
 		this.highlight = card instanceof VisualDeckCard ? (card as VisualDeckCard).highlight : undefined;
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {

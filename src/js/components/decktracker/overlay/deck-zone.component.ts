@@ -1,6 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, ViewRef } from '@angular/core';
-import { DeckZone } from '../../../models/decktracker/view/deck-zone';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
+import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
 @Component({
@@ -49,11 +49,15 @@ export class DeckZoneComponent {
 		this.cardsInZone = cardsToDisplay.length;
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
 		const grouped: Map<string, DeckCard[]> = this.groupBy(cardsToDisplay, (card: DeckCard) => card.cardId);
-		this.cards = Array.from(grouped.values(), cards =>
-			Object.assign(new VisualDeckCard(), cards[0], {
+		this.cards = Array.from(grouped.values(), cards => {
+			const creatorCardIds: readonly string[] = [
+				...new Set(cards.map(card => card.creatorCardId).filter(creator => creator)),
+			];
+			return Object.assign(new VisualDeckCard(), cards[0], {
 				totalQuantity: cards.length,
-			} as VisualDeckCard),
-		);
+				creatorCardIds: creatorCardIds,
+			} as VisualDeckCard);
+		});
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
 	}
 

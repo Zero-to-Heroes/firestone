@@ -28,6 +28,7 @@ export class CreateCardInDeckParser implements EventParser {
 			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
 			manaCost: cardData ? cardData.cost : undefined,
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
+			creatorCardId: gameEvent.additionalData.creatorCardId,
 		} as DeckCard);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);

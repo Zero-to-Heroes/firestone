@@ -238,7 +238,7 @@ export class GameEvents {
 				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
-						// Always present, except for legacy tests
+						// Not always present
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
 					}),
 				);
@@ -254,7 +254,7 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.END_OF_ECHO_IN_HAND, gameEvent));
 				break;
 			case 'CREATE_CARD_IN_DECK':
-				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
+				console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId, gameEvent);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.CREATE_CARD_IN_DECK, gameEvent, {
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,

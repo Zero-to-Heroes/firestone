@@ -43,6 +43,7 @@ export class DeckManipulationHelper {
 			manaCost: cardTemplate.manaCost,
 			rarity: cardTemplate.rarity,
 			zone: cardTemplate.zone,
+			creatorCardId: cardTemplate.creatorCardId,
 		} as DeckCard);
 		return [...zone, newCard];
 	}
