@@ -4,19 +4,28 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
 import { AllCardsService } from '../../all-cards.service';
+import { PreferencesService } from '../../preferences.service';
 import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class GameStartParser implements EventParser {
-	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
+	constructor(
+		private deckParser: DeckParserService,
+		private prefs: PreferencesService,
+		private allCards: AllCardsService,
+	) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.GAME_START;
 	}
 
 	async parse(): Promise<GameState> {
-		const currentDeck = await this.deckParser.getCurrentDeck();
+		const noDeckMode = (await this.prefs.getPreferences()).decktrackerNoDeckMode;
+		if (noDeckMode) {
+			console.log('[game-start-parser] no deck mode is active, not loading current deck');
+		}
+		const currentDeck = noDeckMode ? undefined : await this.deckParser.getCurrentDeck();
 		console.log('[game-start-parser] init game with deck', currentDeck);
 		const deckList: readonly DeckCard[] = this.buildDeckList(currentDeck);
 		const hero: HeroCard = this.buildHero(currentDeck);

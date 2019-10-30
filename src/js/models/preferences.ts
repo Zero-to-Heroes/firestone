@@ -13,10 +13,12 @@ export class Preferences {
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
 	readonly decktrackerShowCasual: boolean = true;
-	readonly dectrackerShowOpponentTurnDraw: boolean = true;
-	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly decktrackerSkin: string = 'original';
 	readonly decktrackerScale: number = 100;
+
+	readonly dectrackerShowOpponentTurnDraw: boolean = true;
+	readonly dectrackerShowOpponentGuess: boolean = true;
+	readonly decktrackerNoDeckMode: boolean = false;
 
 	readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;

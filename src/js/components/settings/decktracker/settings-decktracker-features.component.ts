@@ -23,6 +23,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					label="Opponent guessed cards"
 					tooltip="Show what card is in the opponent's hand when we know it (after it has been sent back to their hand with a Sap for instance)"
 				></preference-toggle>
+				<preference-toggle
+					field="decktrackerNoDeckMode"
+					label="No-deck mode"
+					tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
+				></preference-toggle>
 			</section>
 		</div>
 	`,

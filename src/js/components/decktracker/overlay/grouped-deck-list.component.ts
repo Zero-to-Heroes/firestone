@@ -24,18 +24,11 @@ export class GroupedDeckListComponent {
 	private deckList: readonly DeckCard[];
 	private deck: readonly DeckCard[];
 	private hand: readonly DeckCard[];
+	private _deckState: DeckState;
 	private _highlight: boolean;
 
 	@Input('deckState') set deckState(deckState: DeckState) {
-		// When we don't have the decklist, we just show all the cards in hand + deck
-		this.hand = deckState.hand;
-		this.deckList = deckState.deckList || [];
-		this.deck =
-			this.deckList.length > 0
-				? deckState.deck
-				: [...deckState.deck, ...deckState.hand, ...deckState.otherZone].sort(
-						(a, b) => a.manaCost - b.manaCost,
-				  );
+		this._deckState = deckState;
 		// console.log('setting deck state', deckState, this.deck);
 		this.buildGroupedList();
 	}
@@ -49,6 +42,15 @@ export class GroupedDeckListComponent {
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	private async buildGroupedList() {
+		// When we don't have the decklist, we just show all the cards in hand + deck
+		this.hand = this._deckState.hand;
+		this.deckList = this._deckState.deckList || [];
+		this.deck =
+			this.deckList.length > 0
+				? this._deckState.deck
+				: [...this._deckState.deck, ...this._deckState.hand, ...this._deckState.otherZone].sort(
+						(a, b) => a.manaCost - b.manaCost,
+				  );
 		// console.log('grouping deck list?', deckState.deckList, deck, deckState);
 		// The zone in this view is the decklist + cards in the deck that didn't
 		// start in the decklist
