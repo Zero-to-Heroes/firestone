@@ -16,6 +16,8 @@
 		right: 0;
 		bottom: 0;
 		background-size: cover;
+		// Because some tiles still have a white border on the right
+		background-position-x: 5px;
 	}
 
 	.gradiant {
