@@ -1,58 +1,58 @@
 .deck-zone {
-    .zone-name-container {
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #07081F;
-        position: relative;
+	.zone-name-container {
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #07081f;
+		position: relative;
 
-        .zone-name {
-            font-family: Sumana;
-            font-style: normal;
-            font-weight: normal;
-            line-height: normal;
-            font-size: 15px;
-            color: #9FB6D7;   
-            flex-grow: 1;
-            display: flex;
-            justify-content: center;         
-        }
-    }
+		.zone-name {
+			font-family: Sumana;
+			font-style: normal;
+			font-weight: normal;
+			line-height: normal;
+			font-size: 15px;
+			color: #9fb6d7;
+			flex-grow: 1;
+			display: flex;
+			justify-content: center;
+		}
+	}
 
-    .collapse-caret {
-        --icon-color: #9FB6D7;
-        width: 12px;
-        height: 6px;
-        margin-right: 8px;
+	.collapse-caret {
+		--icon-color: #9fb6d7;
+		width: 12px;
+		height: 6px;
+		margin-right: 8px;
 
-        &.close {
-            transform: scale(1, -1);
-        }
-    }
+		&.close {
+			transform: scale(1, -1);
+		}
+	}
 
-    .card-list li {
-        display: flex;
-        margin-bottom: 3px;
-    }
+	.card-list li {
+		display: flex;
+		margin-bottom: 3px;
+	}
 
-    &.other {
-        .card-list li {
-            opacity: 0.5;
-        }
-    }
+	&.other {
+		.card-list li {
+			opacity: 0.5;
+		}
+	}
 
-    &.hand {
-        ::ng-deep deck-card {
-            .deck-card {
-                background: #BFC1C4;
-            }
+	&.hand {
+		::ng-deep deck-card {
+			.deck-card {
+				background: #ffb948;
+			}
 
-            .background-image {
-                top: 2px;
-                bottom: 2px;
-                right: 2px;
-            }
-        }
-    }
+			.background-image {
+				top: 2px;
+				bottom: 2px;
+				right: 2px;
+			}
+		}
+	}
 }
