@@ -62,41 +62,9 @@
 	.controls {
 		height: 30px;
 		display: flex;
-		// color: $green01;
-		// --icon-color: $green01;
-
-		// .close-button:hover {
-		// 	background: $grey01;
-		// 	color: $darkred;
-		// }
+		margin-right: -10px;
 	}
 }
-
-// &.achievements,
-// &.decktracker {
-
-// 	// .navigation menu-selection .menu-selection {
-// 	// 	color: #7d5a87;
-// 	// }
-
-// 	// .menu-bar {
-// 	// 	border-bottom-color: #4b3052;
-// 	// }
-
-// 	.menu-selection .zth-tooltip {
-// 		background-color: #7d5a87;
-// 		p {
-// 			color: #190505;
-// 		}
-// 		.tooltip-arrow {
-// 			fill: #7d5a87;
-// 		}
-// 	}
-
-// 	.real-time-notifications {
-// 		color: #a276af;
-// 	}
-// }
 
 .content-container {
 	position: relative;
