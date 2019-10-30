@@ -83,12 +83,17 @@ import { PreferencesService } from '../../../services/preferences.service';
 				<div class="title">Display options</div>
 				<preference-toggle
 					*ngIf="skinForm.value.selectedSkin === 'clean'"
+					[field]="'overlayHighlightCardsInHand'"
+					[label]="'Highlight cards in hand'"
+				></preference-toggle>
+				<preference-toggle
+					*ngIf="skinForm.value.selectedSkin === 'clean'"
 					[field]="'overlayShowTitleBar'"
 					[label]="'Show title bar'"
 				></preference-toggle>
 				<preference-slider
 					[field]="'overlayWidthInPx'"
-					[label]="'Overlay Width'"
+					[label]="'Overlay width'"
 					[enabled]="sliderEnabled"
 					[tooltip]="'Change the tracker width.'"
 					[tooltipDisabled]="
@@ -118,7 +123,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[tooltipDisabled]="
 						'Change the tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
 					"
-					[min]="0"
+					[min]="20"
 					[max]="100"
 				>
 				</preference-slider>

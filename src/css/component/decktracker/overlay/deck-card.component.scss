@@ -134,4 +134,17 @@
 	&.legendary .mana-cost {
 		background: #ae7014;
 	}
+
+	&.in-hand {
+		.gradiant {
+			border: 3px solid;
+			border-image: linear-gradient(45deg, rgba(159, 182, 215, 0), #9fb6d7) 1;
+		}
+		.mana-cost.mana-cost {
+			background: #939393;
+			span {
+				color: #101530;
+			}
+		}
+	}
 }

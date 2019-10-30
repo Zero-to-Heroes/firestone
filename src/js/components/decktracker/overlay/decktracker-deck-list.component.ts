@@ -55,6 +55,7 @@ import { Events } from '../../../services/events.service';
 					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
 					[deckState]="_deckState"
 					[activeTooltip]="activeTooltip"
+					[highlightCardsInHand]="highlightCardsInHand"
 				>
 				</grouped-deck-list>
 			</ng-container>
@@ -65,6 +66,7 @@ import { Events } from '../../../services/events.service';
 export class DeckTrackerDeckListComponent implements AfterViewInit {
 	@Input() activeTooltip: string;
 	@Input() displayMode: string;
+	@Input() highlightCardsInHand: boolean;
 	_deckState: DeckState;
 
 	@Output() onDisplayModeChanged: EventEmitter<string> = new EventEmitter<string>();

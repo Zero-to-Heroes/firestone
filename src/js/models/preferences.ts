@@ -20,6 +20,7 @@ export class Preferences {
 
 	readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
+	readonly overlayHighlightCardsInHand: boolean = false;
 	readonly overlayWidthInPx: number = 250;
 	readonly overlayOpacityInPercent: number = 100;
 

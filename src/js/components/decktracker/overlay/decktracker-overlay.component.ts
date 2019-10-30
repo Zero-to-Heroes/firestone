@@ -52,6 +52,7 @@ declare var amplitude;
 							[displayMode]="displayMode"
 							(onDisplayModeChanged)="onDisplayModeChanged($event)"
 							[activeTooltip]="activeTooltip"
+							[highlightCardsInHand]="highlightCardsInHand"
 						>
 						</decktracker-deck-list>
 					</div>
@@ -94,6 +95,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	overlayWidthInPx: number;
 	opacity: number;
 	showTracker: boolean;
+	highlightCardsInHand: boolean;
 
 	private hasBeenMovedByUser: boolean;
 
@@ -179,7 +181,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			// console.log('received event', event, this.gameState, window);
 			if (event && this.gameState && this.gameState.playerDeck) {
 				const window = await this.ow.getCurrentWindow();
-				if (window.stateEx !== 'normal') {
+				if (window && window.stateEx !== 'normal') {
 					this.restoreWindow();
 				}
 			} else {
@@ -247,6 +249,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.overlayWidthInPx = preferences.overlayWidthInPx;
 		this.opacity = preferences.overlayOpacityInPercent / 100;
 		this.scale = preferences.decktrackerScale;
+		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.onResized();
 		// console.log('switching views?', this.useCleanMode, this.displayMode);
 		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
