@@ -296,7 +296,8 @@ module.exports = function(env, argv) {
 
 		devtool: env.production ? false : 'inline-source-map',
 
-		watch: true,
+		// Doesn't work, for some reason the code loaded after refresh is still the old one
+		watch: false,
 
 		watchOptions: {
 			ignored: ['node_modules', 'test', 'dependencies'],
