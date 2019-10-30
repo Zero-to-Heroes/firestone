@@ -33,14 +33,14 @@ declare var amplitude;
 	],
 	template: `
 		<div
-			class="root"
+			class="root overlay-container-parent"
 			[ngClass]="{ 'clean': useCleanMode, 'show-title-bar': showTitleBar }"
 			[activeTheme]="'decktracker'"
 			[style.opacity]="opacity"
 		>
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
-				<div class="decktracker-container overlay-container-parent">
+				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="showTracker" [style.width.px]="overlayWidthInPx">
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name

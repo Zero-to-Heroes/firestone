@@ -1,67 +1,93 @@
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, Directive, ElementRef, HostListener, Input, OnInit } from '@angular/core';
+import {
+	ChangeDetectorRef,
+	ComponentRef,
+	Directive,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	OnInit,
+	ViewRef,
+} from '@angular/core';
 import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
 
 @Directive({
 	selector: '[helpTooltip]',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class HelpTooltipDirective implements OnInit {
+export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input('helpTooltip') text = '';
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' = 'bottom';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
+	private positionStrategy: PositionStrategy;
 
 	constructor(
 		private overlayPositionBuilder: OverlayPositionBuilder,
 		private elementRef: ElementRef,
 		private overlay: Overlay,
+		private cdr: ChangeDetectorRef,
 	) {}
 
 	ngOnInit() {
-		console.log('targeting tooltip help element', this.position);
 		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
+		console.log('targeting tooltip help element', this.position, target);
 
-		const positionStrategy =
+		const positionArrays: ConnectedPosition[] =
 			this.position === 'bottom'
-				? this.overlayPositionBuilder
-						// Create position attached to the elementRef
-						.flexibleConnectedTo(target)
-						// Describe how to connect overlay to the elementRef
-						// Means, attach overlay's center bottom point to the
-						// top center point of the elementRef.
-						.withPositions([
-							{
-								originX: 'center',
-								originY: 'top',
-								overlayX: 'center',
-								overlayY: 'bottom',
-							},
-						])
-						// Fallback if element is close to the top
-						.withPositions([
-							{
-								originX: 'center',
-								originY: 'bottom',
-								overlayX: 'center',
-								overlayY: 'top',
-							},
-						])
-				: this.overlayPositionBuilder
-						// Create position attached to the elementRef
-						.flexibleConnectedTo(target)
-						.withPositions([
-							{
-								originX: 'end',
-								originY: 'center',
-								overlayX: 'start',
-								overlayY: 'center',
-							},
-						]);
+				? [
+						{
+							originX: 'center',
+							originY: 'bottom',
+							overlayX: 'center',
+							overlayY: 'top',
+						},
+						{
+							originX: 'start',
+							originY: 'top',
+							overlayX: 'start',
+							overlayY: 'bottom',
+						},
+						{
+							originX: 'start',
+							originY: 'bottom',
+							overlayX: 'start',
+							overlayY: 'top',
+						},
+				  ]
+				: [
+						{
+							originX: 'end',
+							originY: 'center',
+							overlayX: 'start',
+							overlayY: 'center',
+						},
+				  ];
+		this.positionStrategy = this.overlayPositionBuilder
+			// Create position attached to the elementRef
+			.flexibleConnectedTo(target)
+			.withFlexibleDimensions(false)
+			.withPush(false)
+			.withViewportMargin(10)
+			.withPositions(positionArrays);
 		// Connect position strategy
-		this.overlayRef = this.overlay.create({ positionStrategy });
+		this.overlayRef = this.overlay.create({
+			positionStrategy: this.positionStrategy,
+			scrollStrategy: this.overlay.scrollStrategies.reposition(),
+		});
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	ngOnDestroy() {
+		this.overlayRef.detach();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('mouseenter')
@@ -74,10 +100,18 @@ export class HelpTooltipDirective implements OnInit {
 
 		// Pass content to tooltip component instance
 		tooltipRef.instance.text = this.text;
+		// console.log('setting tooltip text', this.text, tooltipRef);
+		this.positionStrategy.apply();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
 		this.overlayRef.detach();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

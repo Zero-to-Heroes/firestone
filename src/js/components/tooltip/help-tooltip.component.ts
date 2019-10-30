@@ -1,13 +1,22 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 
 @Component({
 	selector: 'help-tooltip',
 	styleUrls: [`../../../css/component/tooltip/help-tooltip.component.scss`],
 	template: `
-		<div class="help-tooltip">{{ text }}</div>
+		<div class="help-tooltip">{{ _text }}</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HelpTooltipComponent {
-	@Input() text: string;
+	_text: string;
+
+	constructor(private cdr: ChangeDetectorRef) {}
+
+	@Input() set text(value: string) {
+		this._text = value;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
 }
