@@ -35,8 +35,10 @@ export class OverlayDisplayService implements OnDestroy {
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			this.gameState = event.state;
-			await this.processEvent(event.event);
+			if (event) {
+				this.gameState = event.state;
+				await this.processEvent(event.event);
+			}
 		});
 	}
 
