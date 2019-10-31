@@ -99,10 +99,12 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 			console.error('invalid number of copies', card);
 		}
 		// Preload
-		const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
-		const image = new Image();
-		// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
-		image.src = imageUrl;
+		if (this.cardId) {
+			const imageUrl = `https://static.zerotoheroes.com/hearthstone/fullcard/en/compressed/${this.cardId}.png`;
+			const image = new Image();
+			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
+			image.src = imageUrl;
+		}
 	}
 
 	constructor(
