@@ -165,7 +165,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 				});
 			}
 			// console.log('received deck event', event.event);
-			this.gameState = event.state;
+			this.gameState = event ? event.state : null;
 			this.showTracker =
 				this.gameState &&
 				this.gameState.playerDeck &&
