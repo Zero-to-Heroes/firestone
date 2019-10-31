@@ -101,6 +101,9 @@ export class GameStatsUpdaterService {
 				? this.cards.getCard(playerCardId).playerClass.toLowerCase()
 				: undefined;
 		const playerInfo = await this.playersInfo.getPlayerInfo();
+		if (!playerInfo) {
+			console.error('[game-stats-updater] no local player info returned by mmindvision', playerInfo);
+		}
 		let playerRank;
 		if (playerInfo && this.currentGameStat.gameFormat === 'standard') {
 			if (playerInfo.standardLegendRank > 0) {
@@ -135,6 +138,9 @@ export class GameStatsUpdaterService {
 				? this.cards.getCard(opponentCardId).playerClass.toLowerCase()
 				: undefined;
 		const opponentInfo = await this.playersInfo.getOpponentInfo();
+		if (!opponentInfo) {
+			console.error('[game-stats-updater] no local player info returned by mmindvision', opponentInfo);
+		}
 		let opponentRank;
 		if (opponentInfo && this.currentGameStat.gameFormat === 'standard') {
 			if (opponentInfo.standardLegendRank > 0) {

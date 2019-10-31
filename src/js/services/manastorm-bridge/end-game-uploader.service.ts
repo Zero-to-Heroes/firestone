@@ -111,6 +111,9 @@ export class EndGameUploaderService {
 			this.playersInfo.getPlayerInfo(),
 			this.playersInfo.getOpponentInfo(),
 		]);
+		if (!playerInfo || !opponentInfo) {
+			console.error('[manastorm-bridge] no local player info returned by mmindvision', playerInfo, opponentInfo);
+		}
 		let playerRank;
 		if (playerInfo && game.gameFormat === 'standard') {
 			if (playerInfo.standardLegendRank > 0) {
