@@ -24,7 +24,7 @@ export class PlayersInfoService {
 		// console.log('[players-info] playerInfo not present in cache, fetching it from GEP');
 		const infoFromGep = await this.memoryService.getPlayerInfo();
 		if (!infoFromGep) {
-			console.error('[players-info] No player info returned by mindvision');
+			console.log('[players-info] No player info returned by mindvision');
 			return null;
 		}
 		console.log('[players-info] retrieved player info from memory', infoFromGep.localPlayer);

@@ -110,6 +110,9 @@ export class GameEvents {
 				// First try without waiting for a callback, which is most of the cases
 				const playerInfo = await this.playersInfoService.getPlayerInfo();
 				console.log('LOCAL_PLAYER info', playerInfo);
+				if (!playerInfo) {
+					console.error('[game-events] no local player info returned by mmindvision');
+				}
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: playerInfo ? playerInfo.standardRank : undefined,
 					standardLegendRank: playerInfo ? playerInfo.standardLegendRank : undefined,
@@ -130,6 +133,9 @@ export class GameEvents {
 				console.log(gameEvent.Type + ' event');
 				const opponentInfo = await this.playersInfoService.getOpponentInfo();
 				console.log('OPPONENT_PLAYER info', opponentInfo);
+				if (!opponentInfo) {
+					console.error('[game-events] no local player info returned by mmindvision');
+				}
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
 					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
