@@ -45,7 +45,7 @@ declare var amplitude;
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
-							[deckName]="gameState.playerDeck.name"
+							[deckName]="gameState.playerDeck?.name"
 						>
 						</decktracker-deck-name>
 						<decktracker-deck-list
@@ -158,7 +158,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			if (event.name === DeckEvents.MATCH_METADATA) {
+			if (event && event.name === DeckEvents.MATCH_METADATA) {
 				amplitude.getInstance().logEvent('match-start', {
 					'active-skin': this.useCleanMode ? 'clean' : 'original',
 					'display-mode': this.displayMode,
@@ -191,7 +191,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			if (event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+			if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
 			}
 		});

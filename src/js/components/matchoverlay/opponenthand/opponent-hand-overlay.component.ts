@@ -65,6 +65,10 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
+			// Can happen because we now have a BehaviorSubject
+			if (event == null) {
+				return;
+			}
 			this.gameState = event.state;
 			if (event.event.name === DeckEvents.MATCH_METADATA) {
 				this.changeWindowSize();
@@ -88,10 +92,10 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 
-		if (process.env.NODE_ENV !== 'production') {
-			console.error('Should not allow debug game state from production');
-			this.gameState = this.ow.getMainWindow().deckDebug.state;
-		}
+		// if (process.env.NODE_ENV !== 'production') {
+		// 	console.error('Should not allow debug game state from production');
+		// 	this.gameState = this.ow.getMainWindow().deckDebug ? this.ow.getMainWindow().deckDebug.state : null;
+		// }
 		this.setDisplayPreferences(await this.prefs.getPreferences());
 		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
