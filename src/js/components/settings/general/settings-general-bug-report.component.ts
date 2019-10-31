@@ -79,6 +79,7 @@ export class SettingsGeneralBugReportComponent {
 			]);
 			const submission = {
 				email: this.email,
+				verion: process.env.APP_VERSION,
 				message: this.body,
 				user: currentUser ? currentUser.username || currentUser.userId || currentUser.machineId : undefined,
 				appLogsKey: appLogs,
