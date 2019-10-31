@@ -43,6 +43,9 @@ export class PulseDirective {
 			}
 		} catch (e) {}
 		const rbgValue = this.buildRgbValueToUse();
+		if (!rbgValue) {
+			return;
+		}
 		const metadata: AnimationMetadata[] = [
 			style({
 				borderRadius: '50%',
@@ -78,6 +81,9 @@ export class PulseDirective {
 			}
 		} catch (e) {}
 		const rbgValue = this.buildRgbValueToUse();
+		if (!rbgValue) {
+			return;
+		}
 		const metadata: AnimationMetadata[] = [
 			style({
 				borderRadius: '50%',
@@ -124,7 +130,10 @@ export class PulseDirective {
 			.getPropertyValue('--pulse-color')
 			.trim();
 		const rgb = this.hexToRgb(hexValue);
-		return rgb.r + ', ' + rgb.g + ', ' + rgb.b;
+		if (rgb) {
+			return rgb.r + ', ' + rgb.g + ', ' + rgb.b;
+		}
+		return null;
 	}
 
 	private hexToRgb(hex) {
