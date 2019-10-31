@@ -7,7 +7,9 @@ import { OverwolfService } from './overwolf.service';
 export class OwNotificationsService {
 	private windowId: string;
 	private messageId: number = 0;
-	private retriesLeft = 10;
+	// Because if we start the app during a game, it might take some time for the notif window to
+	// be created
+	private retriesLeft = 30;
 
 	private stateEmitter = new BehaviorSubject<Message>(undefined);
 
