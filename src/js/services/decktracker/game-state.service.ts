@@ -105,6 +105,7 @@ export class GameStateService {
 		if (retriesLeft <= 0) {
 			this.logger.error('[game-state] Could not get current review id');
 			callback(null);
+			return;
 		}
 		if (!this.currentReviewId) {
 			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 1000);
