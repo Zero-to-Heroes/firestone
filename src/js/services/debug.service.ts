@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-declare var overwolf;
+declare var amplitude;
 
 @Injectable()
 export class DebugService {
@@ -41,6 +41,7 @@ export class DebugService {
 
 	private overrideError(oldConsoleLogFunc: any, debugMode: boolean) {
 		if (debugMode) {
+			amplitude.getInstance().logEvent('error-logged');
 			return function() {
 				const stack = new Error().stack;
 				oldConsoleLogFunc.apply(console, arguments, stack);
