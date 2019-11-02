@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef }
 	styleUrls: [`../../../css/component/tooltip/card-tooltip.component.scss`],
 	template: `
 		<div class="card-tooltip">
-			<img [src]="image" />
+			<img [src]="image" (onload)="refresh()" />
 			<div *ngIf="_text" class="text">{{ _text }}</div>
 		</div>
 	`,
@@ -27,6 +27,12 @@ export class CardTooltipComponent {
 
 	@Input() set text(value: string) {
 		this._text = value;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	refresh() {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

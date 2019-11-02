@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
@@ -12,14 +13,19 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	],
 	template: `
 		<ul class="deck-list">
-			<deck-zone *ngIf="zone" [zone]="zone" [activeTooltip]="activeTooltip"></deck-zone>
+			<deck-zone *ngIf="zone" [zone]="zone" [tooltipPosition]="_tooltipPosition"></deck-zone>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupedDeckListComponent {
-	@Input() activeTooltip: string;
+	_tooltipPosition: CardTooltipPositionType;
 	zone: DeckZone;
+
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[grouped-deck-list] setting tooltip position', value);
+		this._tooltipPosition = value;
+	}
 
 	private deckList: readonly DeckCard[];
 	private deck: readonly DeckCard[];
@@ -41,7 +47,7 @@ export class GroupedDeckListComponent {
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
-	private async buildGroupedList() {
+	private buildGroupedList() {
 		// When we don't have the decklist, we just show all the cards in hand + deck
 		this.hand = this._deckState.hand;
 		this.deckList = this._deckState.deckList || [];
@@ -122,9 +128,9 @@ export class GroupedDeckListComponent {
 			sortingFunction: (a, b) => a.manaCost - b.manaCost,
 		} as DeckZone;
 		// console.log('setting final zone', this.zone);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef).destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	private groupBy(list, keyGetter): Map<string, DeckCard[]> {

@@ -245,8 +245,8 @@ export class OverwolfService {
 		});
 	}
 
-	public dragMove(windowId: string) {
-		overwolf.windows.dragMove(windowId);
+	public dragMove(windowId: string, callback?) {
+		overwolf.windows.dragMove(windowId, callback);
 	}
 
 	public async inGame(): Promise<boolean> {

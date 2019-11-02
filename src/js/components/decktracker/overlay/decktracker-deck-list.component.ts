@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { IOption } from 'ng-select';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Events } from '../../../services/events.service';
 
@@ -42,20 +43,19 @@ import { Events } from '../../../services/events.service';
 						</i>
 					</ng-template>
 				</ng-select>
-				<div class="dim-overlay" *ngIf="activeTooltip"></div>
 			</div>
 			<ng-container [ngSwitch]="displayMode">
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="_deckState"
-					[activeTooltip]="activeTooltip"
+					[tooltipPosition]="_tooltipPosition"
 				>
 				</deck-list-by-zone>
 				<grouped-deck-list
 					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
 					[deckState]="_deckState"
-					[activeTooltip]="activeTooltip"
 					[highlightCardsInHand]="highlightCardsInHand"
+					[tooltipPosition]="_tooltipPosition"
 				>
 				</grouped-deck-list>
 			</ng-container>
@@ -64,10 +64,16 @@ import { Events } from '../../../services/events.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerDeckListComponent implements AfterViewInit {
-	@Input() activeTooltip: string;
 	@Input() displayMode: string;
 	@Input() highlightCardsInHand: boolean;
+
+	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;
+
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[decktracker-deck-list] setting tooltip position', value);
+		this._tooltipPosition = value;
+	}
 
 	@Output() onDisplayModeChanged: EventEmitter<string> = new EventEmitter<string>();
 
@@ -78,7 +84,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
 
-	async ngAfterViewInit() {
+	ngAfterViewInit() {
 		const singleEl: HTMLElement = this.el.nativeElement.querySelector('.single');
 		const caretEl = singleEl.appendChild(document.createElement('i'));
 		caretEl.innerHTML = `<svg class="svg-icon-fill">

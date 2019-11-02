@@ -25,6 +25,7 @@ export class Preferences {
 	readonly overlayHighlightCardsInHand: boolean = false;
 	readonly overlayWidthInPx: number = 250;
 	readonly overlayOpacityInPercent: number = 100;
+	readonly overlayShowTooltipsOnHover: boolean = true;
 
 	readonly launchAppOnGameStart: boolean = true;
 	readonly alwaysShowNotificationPopups = false;

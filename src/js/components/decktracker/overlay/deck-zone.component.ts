@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
@@ -19,11 +20,10 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 						<use xlink:href="assets/svg/sprite.svg#collapse_caret" />
 					</svg>
 				</i>
-				<div class="dim-overlay" *ngIf="activeTooltip"></div>
 			</div>
 			<ul class="card-list" *ngIf="open">
 				<li *ngFor="let card of cards; trackBy: trackCard">
-					<deck-card [activeTooltip]="activeTooltip" [card]="card"></deck-card>
+					<deck-card [card]="card" [tooltipPosition]="_tooltipPosition"></deck-card>
 				</li>
 			</ul>
 		</div>
@@ -31,7 +31,12 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckZoneComponent {
-	@Input() activeTooltip: string;
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[deck-zone] setting tooltip position', value);
+		this._tooltipPosition = value;
+	}
+
+	_tooltipPosition: CardTooltipPositionType;
 	className: string;
 	zoneName: string;
 	cardsInZone = 0;

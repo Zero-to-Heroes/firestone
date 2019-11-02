@@ -91,6 +91,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[field]="'overlayShowTitleBar'"
 					[label]="'Show title bar'"
 				></preference-toggle>
+				<preference-toggle
+					[field]="'overlayShowTooltipsOnHover'"
+					[label]="'Show card tooltips'"
+				></preference-toggle>
 				<preference-slider
 					[field]="'overlayWidthInPx'"
 					[label]="'Overlay width'"

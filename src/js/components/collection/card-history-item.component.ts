@@ -19,7 +19,12 @@ declare var amplitude;
 	selector: 'card-history-item',
 	styleUrls: [`../../../css/component/collection/card-history-item.component.scss`],
 	template: `
-		<div class="card-history-item" [ngClass]="{ 'active': active }" [cardTooltip]="cardId">
+		<div
+			class="card-history-item"
+			[ngClass]="{ 'active': active }"
+			[cardTooltip]="cardId"
+			cardTooltipPosition="left"
+		>
 			<img class="rarity" src="{{ rarityImg }}" />
 			<span class="name">{{ cardName }}</span>
 			<span class="dust-amount" *ngIf="!newCard">

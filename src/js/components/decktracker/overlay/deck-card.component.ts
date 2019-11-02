@@ -1,17 +1,6 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	Input,
-	OnDestroy,
-	Renderer2,
-	ViewChild,
-	ViewRef,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
-import { Events } from '../../../services/events.service';
 
 @Component({
 	selector: 'deck-card',
@@ -21,7 +10,11 @@ import { Events } from '../../../services/events.service';
 		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 	],
 	template: `
-		<div class="deck-card {{ rarity }} {{ highlight }}">
+		<div
+			class="deck-card {{ rarity }} {{ highlight }}"
+			[cardTooltip]="cardId"
+			[cardTooltipPosition]="_tooltipPosition"
+		>
 			<div class="background-image" [style.background-image]="cardImage"></div>
 			<div class="gradiant"></div>
 			<div class="mana-cost">
@@ -53,17 +46,14 @@ import { Events } from '../../../services/events.service';
 					</i>
 				</div>
 			</div>
-			<div class="dim-overlay" *ngIf="highlight === 'dim' || (_activeTooltip && _activeTooltip !== cardId)"></div>
-			<div class="mouse-over" #mouseOverElement></div>
+			<div class="dim-overlay" *ngIf="highlight === 'dim'"></div>
+			<div class="mouse-over"></div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckCardComponent implements AfterViewInit, OnDestroy {
-	@ViewChild('mouseOverElement', { static: true })
-	private mouseOverElement: ElementRef;
-
-	_activeTooltip: string;
+export class DeckCardComponent {
+	_tooltipPosition: CardTooltipPositionType;
 	cardId: string;
 	cardImage: string;
 	manaCost: number;
@@ -73,16 +63,13 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 	highlight: string;
 	creatorCardIds: readonly string[];
 
-	private enterTimestamp: number;
-	private mouseEnterListener;
-	private mouseLeaveListener;
+	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
-	@Input('activeTooltip') set activeTooltip(activeTooltip: string) {
-		this._activeTooltip = activeTooltip;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-		// console.log('setting active tooltip', this.cardId, this._activeTooltip);
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[deck-card] setting tooltip position', value);
+		this._tooltipPosition = value;
+		this.cdr.detectChanges();
 	}
 
 	@Input('card') set card(card: VisualDeckCard) {
@@ -93,7 +80,8 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 		this.numberOfCopies = card.totalQuantity;
 		this.rarity = card.rarity;
 		this.creatorCardIds = card.creatorCardIds;
-		this.highlight = card instanceof VisualDeckCard ? (card as VisualDeckCard).highlight : undefined;
+		this.highlight = card.highlight;
+		// console.log('setting card highlight', this.cardId, this.highlight);
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', card);
@@ -105,55 +93,6 @@ export class DeckCardComponent implements AfterViewInit, OnDestroy {
 			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;
 		}
+		this.cdr.detectChanges();
 	}
-
-	constructor(
-		private el: ElementRef,
-		private cdr: ChangeDetectorRef,
-		private events: Events,
-		private renderer: Renderer2,
-	) {}
-
-	ngAfterViewInit() {
-		this.mouseEnterListener = this.renderer.listen(this.mouseOverElement.nativeElement, 'mouseenter', () => {
-			// console.log('sending tooltip event');
-			const rect = this.el.nativeElement.getBoundingClientRect();
-			this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
-		});
-		this.mouseLeaveListener = this.renderer.listen(this.mouseOverElement.nativeElement, 'mouseleave', () => {
-			// console.log('sending hide tooltip event');
-			this.events.broadcast(Events.DECK_HIDE_TOOLTIP);
-		});
-	}
-
-	ngOnDestroy() {
-		this.mouseEnterListener();
-		this.mouseLeaveListener();
-	}
-
-	// @HostListener('mouseenter') onMouseEnter() {
-	// 	// console.log('mouse enter', this.cardId);
-	// 	this.enterTimestamp = Date.now();
-	// 	const rect = this.el.nativeElement.getBoundingClientRect();
-	// 	this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
-	// }
-
-	// // We want to show the tooltip only if we see the user really keeps their mouse
-	// // over the card
-	// @HostListener('mousemove') onMouseOver(event) {
-	// 	// console.log('mousing move');
-	// 	if (this.enterTimestamp && Date.now() - this.enterTimestamp > 400) {
-	// 		// console.log('showing tooltip');
-	// 		this.enterTimestamp = undefined;
-	// 		const rect = this.el.nativeElement.getBoundingClientRect();
-	// 		this.events.broadcast(Events.DECK_SHOW_TOOLTIP, this.cardId, rect.left, rect.top, true, rect);
-	// 	}
-	// }
-
-	// @HostListener('mouseleave')
-	// onMouseLeave() {
-	// 	// console.log('mouse leave', this.cardId);
-	// 	this.enterTimestamp = undefined;
-	// 	this.events.broadcast(Events.DECK_HIDE_TOOLTIP);
-	// }
 }

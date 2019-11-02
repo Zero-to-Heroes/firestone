@@ -13,6 +13,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 			class="opponent-card-info-id"
 			*ngIf="cardId"
 			[cardTooltip]="cardId"
+			cardTooltipPosition="right"
 			[cardTooltipText]="createdBy ? 'Created by' : undefined"
 			[ngClass]="{ 'created-by': createdBy }"
 		>

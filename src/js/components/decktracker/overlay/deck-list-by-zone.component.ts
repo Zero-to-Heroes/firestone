@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { DeckZone } from '../../../models/decktracker/view/deck-zone';
@@ -14,15 +15,20 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	template: `
 		<ul class="deck-list">
 			<li *ngFor="let zone of zones; trackBy: trackZone">
-				<deck-zone [zone]="zone" [activeTooltip]="activeTooltip"></deck-zone>
+				<deck-zone [zone]="zone" [tooltipPosition]="_tooltipPosition"></deck-zone>
 			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckListByZoneComponent {
-	@Input() activeTooltip: string;
 	zones: readonly DeckZone[];
+	_tooltipPosition: CardTooltipPositionType;
+
+	@Input() set tooltipPosition(value: CardTooltipPositionType) {
+		// console.log('[deck-list-by-zone] setting tooltip position', value);
+		this._tooltipPosition = value;
+	}
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		const zones = [

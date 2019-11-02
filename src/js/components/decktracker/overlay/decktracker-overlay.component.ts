@@ -12,11 +12,11 @@ import {
 } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
-import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -52,8 +52,8 @@ declare var amplitude;
 							[deckState]="gameState.playerDeck"
 							[displayMode]="displayMode"
 							(onDisplayModeChanged)="onDisplayModeChanged($event)"
-							[activeTooltip]="activeTooltip"
 							[highlightCardsInHand]="highlightCardsInHand"
+							[tooltipPosition]="tooltipPosition"
 						>
 						</decktracker-deck-list>
 					</div>
@@ -79,7 +79,6 @@ declare var amplitude;
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<tooltips *ngIf="showTracker" [module]="'decktracker'"></tooltips>
 			</div>
 		</div>
 	`,
@@ -97,12 +96,12 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	opacity: number;
 	showTracker: boolean;
 	highlightCardsInHand: boolean;
+	tooltipPosition: CardTooltipPositionType = 'left';
 
 	private hasBeenMovedByUser: boolean;
+	private showTooltips: boolean = true;
 
 	private scale;
-	private showTooltipTimer;
-	private hideTooltipTimer;
 	private gameInfoUpdatedListener: (message: any) => void;
 	private showTooltipSubscription: Subscription;
 	private hideTooltipSubscription: Subscription;
@@ -114,7 +113,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		private logger: NGXLogger,
 		private prefs: PreferencesService,
 		private cdr: ChangeDetectorRef,
-		private events: Events,
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private renderer: Renderer2,
@@ -123,49 +121,16 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	async ngAfterViewInit() {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.showTooltipSubscription = this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
-			clearTimeout(this.hideTooltipTimer);
-			// Already in tooltip mode
-			if (this.activeTooltip) {
-				this.activeTooltip = data.data[0];
-				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-			} else {
-				this.showTooltipTimer = setTimeout(() => {
-					this.activeTooltip = data.data[0];
-					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 1000);
-			}
-		});
-		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
-			clearTimeout(this.showTooltipTimer);
-			this.hideTooltipTimer = setTimeout(
-				() => {
-					// console.log('hidigin tooltip');
-					this.activeTooltip = undefined;
-					this.events.broadcast(Events.HIDE_TOOLTIP);
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
-					}
-				},
-				data.data[0] ? data.data[0] : 0,
-			);
-		});
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
+			// console.log('received deck event', event);
 			if (event && event.name === DeckEvents.MATCH_METADATA) {
 				amplitude.getInstance().logEvent('match-start', {
 					'active-skin': this.useCleanMode ? 'clean' : 'original',
 					'display-mode': this.displayMode,
 				});
 			}
-			// console.log('received deck event', event.event);
-			this.gameState = event.state;
+			this.gameState = event ? event.state : undefined;
 			this.showTracker =
 				this.gameState &&
 				this.gameState.playerDeck &&
@@ -179,7 +144,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
 		this.displaySubscription = displayEventBus.asObservable().subscribe(async event => {
-			// console.log('received event', event);
+			// console.log('received display event', event);
 			if (event && this.gameState && this.gameState.playerDeck) {
 				const window = await this.ow.getCurrentWindow();
 				if (window && window.stateEx !== 'normal') {
@@ -232,7 +197,15 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	@HostListener('mousedown')
 	dragMove() {
-		this.ow.dragMove(this.windowId);
+		// console.log('starting drag');
+		this.tooltipPosition = 'none';
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+		this.ow.dragMove(this.windowId, async result => {
+			// console.log('drag finished, updating position');
+			await this.updateTooltipPosition();
+		});
 		this.hasBeenMovedByUser = true;
 	}
 
@@ -251,6 +224,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.opacity = preferences.overlayOpacityInPercent / 100;
 		this.scale = preferences.decktrackerScale;
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
+		this.showTooltips = preferences.overlayShowTooltipsOnHover;
+		await this.updateTooltipPosition();
+		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
 		this.onResized();
 		// console.log('switching views?', this.useCleanMode, this.displayMode);
 		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
@@ -259,7 +235,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	private async onResized() {
+	private onResized() {
 		const newScale = this.scale / 100;
 		const element = this.el.nativeElement.querySelector('.scalable');
 		this.renderer.setStyle(element, 'transform', `scale(${newScale})`);
@@ -270,12 +246,18 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	private async restoreWindow() {
 		const window = await this.ow.getCurrentWindow();
-		console.log('current window', window);
+		if (!window) {
+			return;
+		}
+		// console.log('current window', window);
 		const [top, left] = [window.top, window.left];
 		await this.ow.restoreWindow(this.windowId);
 		await this.ow.changeWindowPosition(this.windowId, left, top);
-		console.log('restoring window to previous position');
-		await this.onResized();
+		// console.log('restoring window to previous position');
+		this.onResized();
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	private hideWindow() {
@@ -297,15 +279,37 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		const newLeft = gameWidth - width * dpi - 40; // Leave a bit of room to the right
 		const newTop = 10;
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+		await this.updateTooltipPosition();
 	}
 
 	private async changeWindowSize(): Promise<void> {
-		const width = Math.max(252, 252 * 2); // Max scale
+		const width = Math.max(252, 252 * 3); // Max scale
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
 		const gameHeight = gameInfo.logicalHeight;
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
+		await this.updateTooltipPosition();
+	}
+
+	private async updateTooltipPosition() {
+		// console.log('updating tooltip position');
+		const window = await this.ow.getCurrentWindow();
+		if (!window) {
+			return;
+		}
+		// console.log('retrieved current window', window);
+		if (!this.showTooltips) {
+			this.tooltipPosition = 'none';
+		} else if (window.left < 0) {
+			this.tooltipPosition = 'right';
+		} else {
+			this.tooltipPosition = 'left';
+		}
+		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
