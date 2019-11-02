@@ -60,8 +60,12 @@ export const achievementsValidation = async (
 								localPlayer: {
 									standardRank: collaborators.playerRank,
 								} as PlayerInfo,
+								opponent: {} as PlayerInfo,
 						  }
-						: {},
+						: {
+								localPlayer: {} as PlayerInfo,
+								opponent: {} as PlayerInfo,
+						  },
 				);
 			});
 		},
