@@ -81,6 +81,10 @@ export class GameStateService {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
 		this.buildEventEmitters();
+		if (!this.ow) {
+			console.warn('[game-state] Could not find OW service');
+			return;
+		}
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		preferencesEventBus.subscribe(async event => {
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {

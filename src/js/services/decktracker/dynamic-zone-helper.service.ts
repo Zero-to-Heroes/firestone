@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { PreferencesService } from '../preferences.service';
+import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { DynamicZone } from '../../models/decktracker/view/dynamic-zone';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
-import { DeckCard } from '../../models/decktracker/deck-card';
 
 @Injectable()
 export class DynamicZoneHelperService {
-	constructor(private prefs: PreferencesService) {}
+	constructor() {}
 
 	public fillDynamicZones(deckState: DeckState): DeckState {
 		const dynamicZones: DynamicZone[] = [];

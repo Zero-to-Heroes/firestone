@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
-import { AllCardsService } from '../all-cards.service';
 
 @Injectable()
 export class ZoneOrderingService {
-	constructor(private cards: AllCardsService) {}
+	constructor() {}
 
 	public orderZones(deckState: DeckState, stateFromTracker): DeckState {
 		// return deckState;
