@@ -18,7 +18,7 @@ export class CardDrawParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		// console.log('drawing from deck', cardId, gameEvent);
-		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);

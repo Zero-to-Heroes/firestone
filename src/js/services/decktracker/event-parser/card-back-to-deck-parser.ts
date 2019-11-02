@@ -20,7 +20,7 @@ export class CardBackToDeckParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const initialZone: string = gameEvent.additionalData.initialZone;
 
-		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
 

@@ -18,7 +18,7 @@ export class CardChangedOnBoardParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		// We don't pass the cardId because we know it has changed
 		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);

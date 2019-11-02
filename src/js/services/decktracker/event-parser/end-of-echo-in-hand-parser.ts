@@ -18,7 +18,7 @@ export class EndOfEchoInHandParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 
-		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(

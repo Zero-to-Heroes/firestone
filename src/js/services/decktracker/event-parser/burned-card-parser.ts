@@ -10,13 +10,7 @@ export class BurnedCardParser implements EventParser {
 	constructor() {}
 
 	applies(gameEvent: GameEvent): boolean {
-		if (gameEvent.type !== GameEvent.BURNED_CARD) {
-			return false;
-		}
-		const cardId: string = gameEvent.cardId;
-		const controllerId: number = gameEvent.controllerId;
-		const localPlayer = gameEvent.localPlayer;
-		return cardId && controllerId === localPlayer.PlayerId;
+		return gameEvent.type === GameEvent.BURNED_CARD;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
@@ -25,7 +19,7 @@ export class BurnedCardParser implements EventParser {
 			return currentState;
 		}
 
-		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);

@@ -19,7 +19,7 @@ export class ReceiveCardInHandParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const creatorCardId = gameEvent.additionalData.creatorCardId;
 		// console.log('[receive-card-in-hand] handling event', cardId, entityId);
-		const isPlayer = cardId && controllerId === localPlayer.PlayerId;
+		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		// First try and see if this card doesn't come from the board
