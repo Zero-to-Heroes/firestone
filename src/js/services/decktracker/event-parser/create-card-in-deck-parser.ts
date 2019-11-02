@@ -16,13 +16,13 @@ export class CreateCardInDeckParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		console.debug('applying create card in deck');
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		// console.debug('applying create card in deck', cardId, entityId);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		// console.log('adding card to deck', cardId, controllerId, localPlayer, entityId, isPlayer, deck);
+		// console.debug('adding card to deck', cardId, controllerId, entityId, isPlayer, deck.deck.length);
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
 		const card = Object.assign(new DeckCard(), {
 			cardId: isPlayer ? cardId : undefined,
@@ -32,14 +32,12 @@ export class CreateCardInDeckParser implements EventParser {
 			rarity: cardData && cardData.rarity ? cardData.rarity.toLowerCase() : undefined,
 			creatorCardId: gameEvent.additionalData.creatorCardId,
 		} as DeckCard);
-		// console.log('adding new card to deck', card, gameEvent);
 		const previousDeck = deck.deck;
 		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
-		// console.log('new deck', previousDeck, newDeck);
+		// console.debug('new deck', previousDeck.length, newDeck.length);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 		});
-		// console.log('new player deck', newPlayerDeck);
 		if (!card.cardId && !card.entityId) {
 			console.warn('Adding unidentified card in deck', card, gameEvent);
 		}
