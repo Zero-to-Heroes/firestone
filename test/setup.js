@@ -1,7 +1,6 @@
 let error = console.error;
 console.error = function(message) {
-	error.apply(console, [...arguments, new Error().stack]); // keep default behaviour
-	throw message instanceof Error ? message : new Error(message);
+	error.apply(console, [...arguments, new Error().stack]); // keep default behaviour, but log the stack trace
 };
 
 global.console = {
@@ -13,3 +12,20 @@ global.console = {
 	error: console.error,
 	debug: console.debug,
 };
+
+let isConsoleError;
+
+beforeEach(() => {
+	isConsoleError = false;
+	jest.spyOn(global.console, 'error').mockImplementation((...args) => {
+		isConsoleError = true;
+		// Optional: I've found that jest spits out the errors anyways
+		console.log(...args);
+	});
+});
+
+afterEach(() => {
+	if (isConsoleError) {
+		throw new Error('Console warnings and errors are not allowed', isConsoleError);
+	}
+});
