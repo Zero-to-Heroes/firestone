@@ -21,12 +21,24 @@ export class IndexedDbService {
 			id: 1,
 			cards: collection,
 		};
+		return new Promise<Card[]>(resolve => {
+			this.saveCollectionInternal(dbCollection, result => resolve(result));
+		});
+	}
+
+	private async saveCollectionInternal(dbCollection, callback, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('[collection] [storage] could not update collection');
+			callback(dbCollection.cards);
+			return;
+		}
 		try {
 			await this.db.update('collection', dbCollection);
-			return collection;
+			callback(dbCollection.cards);
+			return;
 		} catch (e) {
-			console.error('[collection] [storage] could not update collection', e.message, e.name, e);
-			return collection;
+			console.warn('[collection] [storage] could not update collection', e.message, e.name, e);
+			setTimeout(() => this.saveCollectionInternal(dbCollection, callback, retriesLeft - 1));
 		}
 	}
 
