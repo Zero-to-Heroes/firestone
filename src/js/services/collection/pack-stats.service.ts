@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core';
-
-import { captureEvent } from '@sentry/core';
-import { Events } from '../events.service';
-import { AllCardsService } from '../all-cards.service';
-import { Card } from '../../models/card';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Card } from '../../models/card';
+import { AllCardsService } from '../all-cards.service';
+import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 
 @Injectable()
@@ -52,17 +50,19 @@ export class PackStatsService {
 			statEvent['card' + (i + 1) + 'Rarity'] = this.allCards.getCard(cards[i].cardId).rarity.toLowerCase();
 		}
 		console.log('posting pack stat event', statEvent);
+		this.publishPackStatInternal(statEvent);
+	}
+
+	private publishPackStatInternal(statEvent, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('Could not send pack stats info');
+			return;
+		}
 		this.http.post(this.PACK_STAT_URL, statEvent).subscribe(
 			result => console.log('pack stat event result', result),
 			error => {
-				console.error('Could not send pack stats info', error);
-				captureEvent({
-					message: 'Could not send pack stats info',
-					extra: {
-						error: error,
-						statEvent: statEvent,
-					},
-				});
+				console.warn('Could not send pack stats info', error);
+				setTimeout(() => this.publishPackStatInternal(statEvent, retriesLeft - 1));
 			},
 		);
 	}
@@ -80,17 +80,19 @@ export class PackStatsService {
 			'isNew': isNew,
 		};
 		console.log('posting card stat event', statEvent);
+		this.publishCardStatsInternal(statEvent);
+	}
+
+	private publishCardStatsInternal(statEvent, retriesLeft = 10) {
+		if (retriesLeft <= 0) {
+			console.error('Could not send card stats info');
+			return;
+		}
 		this.http.post(this.CARD_STAT_URL, statEvent).subscribe(
 			result => console.log('card stat event result', result),
 			error => {
-				console.error('Could not send card stats info', error);
-				captureEvent({
-					message: 'Could not send card stats info',
-					extra: {
-						error: error,
-						statEvent: statEvent,
-					},
-				});
+				console.warn('Could not send card stats info', error);
+				setTimeout(() => this.publishCardStatsInternal(statEvent, retriesLeft - 1));
 			},
 		);
 	}
