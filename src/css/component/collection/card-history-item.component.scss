@@ -4,67 +4,60 @@
 	@extend %you-have-viewed;
 	display: flex;
 	flex-direction: row;
-    align-items: center;
-    cursor: pointer;
+	align-items: center;
+	cursor: pointer;
 	height: 36px;
 
-    &:hover {
-    	background: rgba(255, 255, 255, 0.04);
-    }
-	
-	&.active {
-    	background: rgba(255, 255, 255, 0.08);
+	&:hover {
+		background: rgba(255, 255, 255, 0.04);
 	}
 
 	.rarity {
 		width: 15px;
-	    margin-left: 10px;
-	    margin-right: 16px;
+		margin-left: 10px;
+		margin-right: 16px;
 	}
 
 	.name {
 		// width: 195px;
 		flex-grow: 1;
-	    white-space: nowrap;
-	    overflow: hidden;
-	    text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
-	.dust-amount, .new {
+	.dust-amount,
+	.new {
 		width: 95px;
 		text-align: center;
 		display: flex;
-	    justify-content: flex-end;
-	    align-items: center;
-	    margin-right: 10px;
+		justify-content: flex-end;
+		align-items: center;
+		margin-right: 10px;
 	}
 
 	.dust-amount {
-
-	    span {
+		span {
 			margin-right: 6px;
 		}
 
-
 		&:before {
-			content: "+";
+			content: '+';
 			margin-right: 4px;
 		}
 	}
 
 	.new {
+		span {
+			border: 1px solid;
+			width: 60px;
+			height: 20px;
+			margin-right: 7px;
+			font-size: 12px;
+		}
 
-	    span {
-	    	border: 1px solid;
-		    width: 60px;
-		    height: 20px;
-		    margin-right: 7px;
-    		font-size: 12px;
-	    }
-
-	    &.second span {
-
-	    }
+		&.second span {
+		}
 	}
 
 	.date {
