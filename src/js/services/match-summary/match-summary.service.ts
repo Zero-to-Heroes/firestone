@@ -6,14 +6,12 @@ import { Events } from '../events.service';
 import { MatchStatsAvailableEvent } from '../mainwindow/store/events/stats/match-stats-available-event';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
-import { OverwolfService } from '../overwolf.service';
 
 const MATCH_STATS_ENDPOINT = 'https://lig1nivwu6.execute-api.us-west-2.amazonaws.com/Prod';
 
 @Injectable()
 export class MatchSummaryService {
 	constructor(
-		private readonly ow: OverwolfService,
 		private readonly http: HttpClient,
 		private readonly store: MainWindowStoreService,
 		private readonly logger: NGXLogger,

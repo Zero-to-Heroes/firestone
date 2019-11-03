@@ -38,6 +38,7 @@ export class RemoteAchievementsService {
 			userId: currentUser.userId,
 			machineId: currentUser.machineId,
 		};
+		this.logger.debug('[remote-achievements] loading from server');
 		const result = await this.loadRemoteAchievements(postEvent);
 		this.logger.debug(
 			'[remote-achievements] loaded from server',
