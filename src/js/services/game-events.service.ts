@@ -91,8 +91,8 @@ export class GameEvents {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
 				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START } as GameEvent);
-				this.gameEventsEmitter.allEvents.next(event);
 				this.gameEventsEmitter.onGameStart.next(event);
+				this.gameEventsEmitter.allEvents.next(event);
 				break;
 			case 'MATCH_METADATA':
 				console.log(gameEvent.Type + ' event', gameEvent.Value);

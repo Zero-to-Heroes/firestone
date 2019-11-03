@@ -120,16 +120,22 @@ export class GameStateService {
 	}
 
 	private registerGameEvents() {
+		this.gameEvents.onGameStart.subscribe(event => {
+			this.logger.debug('[game-state] game start event received, resetting currentReviewId');
+			this.currentReviewId = undefined;
+		});
 		this.gameEvents.allEvents.subscribe((gameEvent: GameEvent) => {
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			this.logger.debug('[game-state] Received new review id event', event);
-			const info = event.data[0];
+			this.logger.debug('[game-state] Received new review id event, doing nothing', event);
+			// const info = event.data[0];
 			// Reset once the game is completed
-			if (info && info.type === 'new-review') {
-				this.currentReviewId = undefined;
-			}
+			// Don't reset - some processes (like granting an achievement) - can take longer
+			// and be finalized only after the id has been reset
+			// if (info && info.type === 'new-review') {
+			// 	this.currentReviewId = undefined;
+			// }
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
 			this.logger.debug('[game-state] Received new review id event', event);
