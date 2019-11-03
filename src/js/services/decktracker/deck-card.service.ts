@@ -29,10 +29,6 @@ export class DeckCardService {
 		return zone ? zone.map(card => (card.cardId ? this.doFillCard(card) : card)) : zone;
 	}
 
-	// private tryFillCard(card: DeckCard): DeckCard {
-	// 	return card.cardName || !card.cardId ? card : this.doFillCard(card);
-	// }
-
 	private doFillCard(card: DeckCard): DeckCard {
 		const dbCard = this.cards.getCard(card.cardId);
 		if (!dbCard) {
@@ -41,7 +37,7 @@ export class DeckCardService {
 		return Object.assign(new DeckCard(), card, {
 			cardName: card.cardName || dbCard.name,
 			manaCost: card.manaCost || dbCard.cost,
-			rarity: card.rarity || dbCard.rarity ? dbCard.rarity.toLowerCase() : undefined,
+			rarity: card.rarity || dbCard.rarity ? (card.rarity || dbCard.rarity).toLowerCase() : undefined,
 		} as DeckCard);
 	}
 }
