@@ -16,10 +16,10 @@
 
 	.background-image {
 		position: absolute;
-		top: 0;
+		top: 1px; // Otherwise there is a little band of color showing when art is blank
 		left: 0;
 		right: 0;
-		bottom: 0;
+		bottom: 1px;
 		background-size: cover;
 		// Because some tiles still have a white border on the right
 		background-position-x: 2.5vw;
@@ -30,8 +30,8 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		bottom: -1px; // Otherwise there is a little band of color showing at the bottom
-		background: linear-gradient(89.48deg, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
+		bottom: 0;
+		background: linear-gradient(89.48deg, rgba(0, 0, 0, 1) 0%, #090a0d 36.89%, rgba(9, 10, 13, 0) 99.92%);
 	}
 
 	&.strong {
