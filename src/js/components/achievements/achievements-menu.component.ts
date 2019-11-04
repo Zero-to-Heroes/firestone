@@ -57,7 +57,12 @@ import { OverwolfService } from '../../services/overwolf.service';
 				[ngClass]="{ 'big': !selectedAchievementSet }"
 			>
 				<li (mousedown)="goToAchievementsCategoriesView()">Categories</li>
-				<li class="separator" *ngIf="selectedCategory?.name !== selectedAchievementSet?.displayName"></li>
+				<li
+					class="separator"
+					*ngIf="selectedCategory && selectedCategory?.name !== selectedAchievementSet?.displayName"
+				>
+					>
+				</li>
 				<li
 					*ngIf="selectedCategory && selectedCategory?.name !== selectedAchievementSet?.displayName"
 					(mousedown)="goToAchievementsCategoryView()"
