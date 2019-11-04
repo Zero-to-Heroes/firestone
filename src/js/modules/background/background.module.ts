@@ -29,6 +29,7 @@ import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.se
 import { DevService } from '../../services/dev.service';
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
 import { GameEvents } from '../../services/game-events.service';
+import { GlobalStatsNotifierService } from '../../services/global-stats/global-stats-notifier.service';
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
@@ -140,6 +141,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		MatchSummaryService,
 		GlobalStatsService,
+		GlobalStatsNotifierService,
 
 		TemporaryResolutionOverrideService,
 		LZStringService,

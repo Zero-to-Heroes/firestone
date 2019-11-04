@@ -16,6 +16,7 @@ import { IndexedDbService } from '../../collection/indexed-db.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { Events } from '../../events.service';
+import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
@@ -59,6 +60,7 @@ import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-so
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
 import { ChangeMatchStatCurrentStatEvent } from './events/stats/change-match-stat-current-stat-event';
 import { CloseMatchStatsWindowEvent } from './events/stats/close-match-stats-window-event';
+import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { MatchStatsAvailableEvent } from './events/stats/match-stats-available-event';
 import { MaximizeMatchStatsWindowEvent } from './events/stats/maximize-match-stats-window-event';
 import { MinimizeMatchStatsWindowEvent } from './events/stats/minimize-match-stats-window-event';
@@ -101,6 +103,7 @@ import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/tr
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
 import { ChangeMatchStatCurrentStatProcessor } from './processors/stats/change-match-stat-current-stat-processor';
 import { CloseMatchStatsWindowProcessor } from './processors/stats/close-match-stats-window-processor';
+import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { MatchStatsAvailableProcessor } from './processors/stats/match-stats-available-processor';
 import { MaximizeMatchStatsWindowProcessor } from './processors/stats/maximize-match-stats-window-processor';
 import { MinimizeMatchStatsWindowProcessor } from './processors/stats/minimize-match-stats-window-processor';
@@ -149,6 +152,7 @@ export class MainWindowStoreService {
 		private userService: UserService,
 		private decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly logger: NGXLogger,
+		private readonly globalStats: GlobalStatsService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -252,6 +256,7 @@ export class MainWindowStoreService {
 				this.gameStatsLoader,
 				this.ow,
 				this.cards,
+				this.globalStats,
 			),
 
 			NavigationBackEvent.eventName(),
@@ -340,6 +345,9 @@ export class MainWindowStoreService {
 
 			FilterShownAchievementsEvent.eventName(),
 			new FilterShownAchievementsProcessor(),
+
+			GlobalStatsUpdatedEvent.eventName(),
+			new GlobalStatsUpdatedProcessor(this.events),
 
 			// Social
 			StartSocialSharingEvent.eventName(),

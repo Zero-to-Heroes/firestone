@@ -5,6 +5,7 @@ import { CurrentAppType } from './current-app.type';
 import { DecktrackerState } from './decktracker/decktracker-state';
 import { Navigation } from './navigation';
 import { SocialShareUserInfo } from './social-share-user-info';
+import { GlobalStats } from './stats/global/global-stats';
 import { MatchStatsState } from './stats/match-stats-state';
 import { StatsState } from './stats/stats-state';
 
@@ -17,6 +18,7 @@ export class MainWindowState {
 	readonly decktracker: DecktrackerState = new DecktrackerState();
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
+	readonly globalStats: GlobalStats = new GlobalStats();
 	readonly matchStats: MatchStatsState = new MatchStatsState();
 	readonly navigation: Navigation = new Navigation();
 }

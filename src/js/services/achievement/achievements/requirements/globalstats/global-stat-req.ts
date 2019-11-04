@@ -46,7 +46,7 @@ export class GlobalStatReq implements Requirement {
 	private handleEvent(gameEvent: GameEvent) {
 		const stats: GlobalStats = gameEvent.additionalData.stats;
 		const relevantStat = stats.stats.find(
-			stat => stat.context === this.targetContext && stat.key === this.targetKey,
+			stat => stat.statContext === this.targetContext && stat.statKey === this.targetKey,
 		);
 		this.isValid = relevantStat && relevantStat.value >= this.targetValue;
 	}

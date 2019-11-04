@@ -67,6 +67,15 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
+		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(event => {
+			console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event', event);
+			this.gameEventsEmitter.allEvents.next(
+				Object.assign(new GameEvent(), {
+					type: GameEvent.GLOBAL_STATS_UPDATED,
+					additionalData: { stats: event.data[0] },
+				} as GameEvent),
+			);
+		});
 	}
 
 	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {

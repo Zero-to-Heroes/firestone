@@ -13,8 +13,8 @@ describe('global-stat-req', () => {
 				stats: {
 					stats: [
 						{
-							key: 'total-damage-to-enemy-hero',
-							context: 'global',
+							statKey: 'total-damage-to-enemy-hero',
+							statContext: 'global',
 							value: 500,
 						} as GlobalStat,
 					],
@@ -35,8 +35,8 @@ describe('global-stat-req', () => {
 				stats: {
 					stats: [
 						{
-							key: 'total-damage-to-enemy-hero',
-							context: 'global',
+							statKey: 'total-damage-to-enemy-hero',
+							statContext: 'global',
 							value: 1200,
 						} as GlobalStat,
 					],
@@ -57,8 +57,8 @@ describe('global-stat-req', () => {
 				stats: {
 					stats: [
 						{
-							key: 'total-damage-to-enemy-hero',
-							context: 'global',
+							statKey: 'total-damage-to-enemy-hero',
+							statContext: 'global',
 							value: 200,
 						} as GlobalStat,
 					],
@@ -79,8 +79,8 @@ describe('global-stat-req', () => {
 				stats: {
 					stats: [
 						{
-							key: 'total-damage-to-enemy-hero',
-							context: 'adventure',
+							statKey: 'total-damage-to-enemy-hero',
+							statContext: 'adventure',
 							value: 500,
 						} as GlobalStat,
 					],
@@ -101,8 +101,8 @@ describe('global-stat-req', () => {
 				stats: {
 					stats: [
 						({
-							key: 'total-damage-to-enemy-hero-2',
-							context: 'adventure',
+							statKey: 'total-damage-to-enemy-hero-2',
+							statContext: 'adventure',
 							value: 500,
 						} as unknown) as GlobalStat,
 					],

@@ -31,6 +31,7 @@ export class Events {
 	public static readonly OPPONENT_INFO = 'opponent-info';
 
 	public static readonly GAME_STATS_UPDATED = 'events-game-stats-updated';
+	public static readonly GLOBAL_STATS_UPDATED = 'global-stats-updated';
 
 	public static readonly SHOW_TOOLTIP = 'show-tooltip';
 	public static readonly HIDE_TOOLTIP = 'hide-tooltip';
