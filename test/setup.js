@@ -20,7 +20,7 @@ beforeEach(() => {
 	jest.spyOn(global.console, 'error').mockImplementation((...args) => {
 		isConsoleError = true;
 		// Optional: I've found that jest spits out the errors anyways
-		console.log(...args);
+		console.debug(...args);
 	});
 });
 
