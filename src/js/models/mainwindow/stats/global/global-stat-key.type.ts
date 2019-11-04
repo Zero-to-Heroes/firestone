@@ -1,1 +1,1 @@
-export type GlobalStatKey = 'total-damage';
+export type GlobalStatKey = 'total-damage-to-enemy-hero';
