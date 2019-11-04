@@ -8,6 +8,7 @@ export interface RawAchievement {
 	// The icon to display in the completion steps
 	readonly icon: string;
 	readonly root?: boolean;
+	readonly canBeCompletedOnlyOnce?: boolean;
 	readonly priority?: number;
 	readonly displayName: string; // The header to display on the achievement notification
 	readonly text?: string;

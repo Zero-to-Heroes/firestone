@@ -54,6 +54,7 @@ export class DevService {
 			maxNumberOfRecords: 1,
 			points: 1,
 			numberOfCompletions: 0,
+			canBeCompletedOnlyOnce: false,
 			replayInfo: [],
 			root: null,
 			priority: 0,

@@ -57,6 +57,10 @@ export class AchievementsMonitor {
 			existingAchievement.replayInfo || [],
 		);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
+		if (achievement.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
+			console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+			return;
+		}
 		// console.log('[achievement-monitor] retrieved achievement from repository', challenge.achievementId);
 		const mergedAchievement = Object.assign(new Achievement(), achievement, {
 			numberOfCompletions: completedAchievement.numberOfCompletions,

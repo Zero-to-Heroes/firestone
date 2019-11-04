@@ -6,6 +6,7 @@ export class Achievement {
 	readonly name: string;
 	readonly icon: string;
 	readonly root: boolean;
+	readonly canBeCompletedOnlyOnce: boolean;
 	readonly priority: number; // Used to sort the achievements
 	readonly displayName: string;
 	readonly text: string;
