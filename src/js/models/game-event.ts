@@ -1,6 +1,7 @@
 export class GameEvent {
 	public static readonly SCENE_CHANGED = 'SCENE_CHANGED'; // Not strictly a game event, but needed for requirements procesing
 	public static readonly GAME_STATS_UPDATED = 'GAME_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
+	public static readonly GLOBAL_STATS_UPDATED = 'GLOBAL_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
 	public static readonly MATCH_METADATA = 'MATCH_METADATA';
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
