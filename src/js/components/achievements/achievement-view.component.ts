@@ -10,6 +10,9 @@ import {
 } from '@angular/core';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { StatContext } from '../../models/mainwindow/stats/global/context.type';
+import { GlobalStatKey } from '../../models/mainwindow/stats/global/global-stat-key.type';
+import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -69,6 +72,7 @@ export class AchievementViewComponent implements AfterViewInit {
 	showRecordings: boolean;
 	_achievement: VisualAchievement;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
+	_globalStats: GlobalStats;
 
 	achievementStatus: AchievementStatus;
 	achievementText: string;
@@ -76,6 +80,8 @@ export class AchievementViewComponent implements AfterViewInit {
 	numberOfRecordings: number;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+
+	private placeholderRegex = new RegExp('.*(%%globalStats\\.(.*)\\.(.*)%%).*');
 
 	@Input() set showReplays(showReplays: boolean) {
 		// We just want to trigger the opening of the replay windows, not hide it
@@ -88,7 +94,7 @@ export class AchievementViewComponent implements AfterViewInit {
 		this._achievement = achievement;
 		this.completionDate = undefined;
 		this.achievementStatus = this._achievement.achievementStatus();
-		this.achievementText = this._achievement.text;
+		this.achievementText = this.buildAchievementText(this._achievement.text);
 		this.numberOfRecordings = this._achievement.replayInfo.length;
 		if (this._achievement.replayInfo.length > 0) {
 			const allTs = this._achievement.replayInfo
@@ -106,6 +112,12 @@ export class AchievementViewComponent implements AfterViewInit {
 		}
 	}
 
+	@Input() set globalStats(value: GlobalStats) {
+		// console.log('setting global stats in achievemen-view', value);
+		this._globalStats = value;
+		this.achievementText = this.buildAchievementText(this._achievement.text);
+	}
+
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
 	ngAfterViewInit() {
@@ -120,5 +132,25 @@ export class AchievementViewComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		}
+	}
+
+	private buildAchievementText(initialText: string): string {
+		// console.log('building achievement text', initialText, this._globalStats);
+		if (!this._globalStats || !initialText) {
+			return initialText;
+		}
+		// No placeholder
+		const match = this.placeholderRegex.exec(initialText);
+		if (!match) {
+			// console.log('no match, returning initial text');
+			return initialText;
+		}
+		// console.log('match', match);
+		const key: GlobalStatKey = match[2] as GlobalStatKey;
+		const context: StatContext = match[3] as StatContext;
+		const stat = this._globalStats.stats.find(stat => stat.statKey === key && stat.statContext === context);
+		const value = stat ? stat.value : 0;
+		// console.log('value', value, initialText.replace(match[1], '' + value));
+		return initialText.replace(match[1], '' + value);
 	}
 }

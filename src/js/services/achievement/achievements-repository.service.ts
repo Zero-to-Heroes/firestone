@@ -9,6 +9,7 @@ import { CompetitiveLadderCategoryProvider } from './achievement-sets/competitiv
 import { DalaranHeistCategoryProvider } from './achievement-sets/dalaran_heist/dalaran-heist-category';
 import { DeckbuildingCategoryProvider } from './achievement-sets/deckbuilding/deckbuilding-category';
 import { DungeonRunCategoryProvider } from './achievement-sets/dungeon-run/dungeon-run-category';
+import { GlobalCategoryProvider } from './achievement-sets/global/global-category';
 import { MonsterHuntCategoryProvider } from './achievement-sets/monster_hunt/monster-hunt-category';
 import { RumbleRunCategoryProvider } from './achievement-sets/rumble_run/rumble-run-category';
 import { SetProvider } from './achievement-sets/set-provider';
@@ -56,6 +57,7 @@ export class AchievementsRepository {
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
+			new GlobalCategoryProvider(),
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DeckbuildingCategoryProvider(),

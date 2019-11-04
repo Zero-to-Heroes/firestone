@@ -56,6 +56,7 @@ declare var amplitude: any;
 					[currentUser]="state.currentUser"
 					[socialShareUserInfo]="state.socialShareUserInfo"
 					[hidden]="state.currentApp !== 'achievements'"
+					[globalStats]="state.globalStats"
 				>
 				</achievements>
 				<decktracker

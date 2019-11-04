@@ -2,6 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
@@ -40,6 +41,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 					[achievementsList]="state.displayedAchievementsList"
 					[selectedAchievementId]="state.selectedAchievementId"
 					[achievementSet]="state.selectedCategory"
+					[globalStats]="globalStats"
 				>
 				</achievements-list>
 				<achievement-sharing-modal
@@ -78,6 +80,10 @@ export class AchievementsComponent {
 	@Input() state: AchievementsState;
 	@Input() currentUser: CurrentUser;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
+	// TODO: should probably refactor how state is handled, so that we could
+	// update the achievement text in a single place, instead of having
+	// achievement logic spread out over multiple processors
+	@Input() globalStats: GlobalStats;
 
 	_viewState = 'shown';
 }

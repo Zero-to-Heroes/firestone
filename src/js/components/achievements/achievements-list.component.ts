@@ -14,6 +14,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IOption } from 'ng-select';
 import { AchievementSet } from '../../models/achievement-set';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
+import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
 import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -70,6 +71,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						[socialShareUserInfo]="socialShareUserInfo"
 						[showReplays]="_selectedAchievementId === achievement.id"
 						[achievement]="achievement"
+						[globalStats]="globalStats"
 					>
 					</achievement-view>
 				</li>
@@ -90,6 +92,7 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	@Input() shortDisplay: boolean;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
+	@Input() globalStats: GlobalStats;
 	_achievementSet: AchievementSet;
 	_selectedAchievementId: string;
 	achievements: readonly VisualAchievement[];

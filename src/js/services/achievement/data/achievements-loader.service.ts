@@ -5,14 +5,6 @@ import { RawAchievement } from '../../../models/achievement/raw-achievement';
 import { ReplayInfo } from '../../../models/replay-info';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
-// import amazingPlays from './amazing_plays.json';
-// import competitiveLadder from './competitive_ladder.json';
-// import dalaranHeist from './dalaran_heist.json';
-// import deckbuilding from './deckbuilding.json';
-// import dungeonRun from './dungeon_run.json';
-// import monsterHunt from './monster_hunt.json';
-// import rumbleRun from './rumble_run.json';
-// import tombsOfTerror from './tombs_of_terror.json';
 
 @Injectable()
 export class AchievementsLoaderService {
@@ -58,6 +50,7 @@ export class AchievementsLoaderService {
 	private async loadAll(): Promise<readonly RawAchievement[]> {
 		console.log('[achievements-loader] loading all achievements');
 		const [
+			global,
 			dungeonRun,
 			monsterHunt,
 			rumbleRun,
@@ -67,6 +60,7 @@ export class AchievementsLoaderService {
 			competitiveLadder,
 			deckbuilding,
 		] = await Promise.all([
+			this.loadSet('global.json'),
 			this.loadSet('dungeon_run.json'),
 			this.loadSet('monster_hunt.json'),
 			this.loadSet('rumble_run.json'),
@@ -77,6 +71,7 @@ export class AchievementsLoaderService {
 			this.loadSet('deckbuilding.json'),
 		]);
 		return [
+			...global,
 			...dungeonRun,
 			...monsterHunt,
 			...rumbleRun,
