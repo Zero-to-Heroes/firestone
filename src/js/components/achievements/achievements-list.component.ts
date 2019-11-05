@@ -35,6 +35,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					class="filter"
 					[options]="filterOptions"
 					[ngModel]="activeFilter"
+					placeholder="All achievements"
 					(selected)="selectFilter($event)"
 					(opened)="refresh()"
 					(closed)="refresh()"
