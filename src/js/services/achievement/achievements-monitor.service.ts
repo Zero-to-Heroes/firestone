@@ -46,7 +46,7 @@ export class AchievementsMonitor {
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
-		console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
+		// console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
 		const existingAchievement: CompletedAchievement =
 			(await this.achievementsStorage.loadAchievementFromCache(challenge.achievementId)) ||
 			challenge.defaultAchievement();
@@ -58,9 +58,10 @@ export class AchievementsMonitor {
 		);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
 		if (achievement.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-			console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+			// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
 			return;
 		}
+		console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
 		// console.log('[achievement-monitor] retrieved achievement from repository', challenge.achievementId);
 		const mergedAchievement = Object.assign(new Achievement(), achievement, {
 			numberOfCompletions: completedAchievement.numberOfCompletions,

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-
-import { S3FileUploadService } from './s3-file-upload.service';
-import { SimpleIOService } from './plugins/simple-io.service';
 import { OverwolfService } from './overwolf.service';
+import { SimpleIOService } from './plugins/simple-io.service';
+import { S3FileUploadService } from './s3-file-upload.service';
 
 @Injectable()
 export class LogsUploaderService {
@@ -18,7 +17,7 @@ export class LogsUploaderService {
 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
 			const logLines = await this.io.getFileContents(logsLocation);
 			const s3LogFileKey = await this.s3.postLogs(logLines);
-			console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+			// console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
 			return s3LogFileKey;
 		} catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);
@@ -30,7 +29,7 @@ export class LogsUploaderService {
 		try {
 			const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
 			const firestoneLogKey = await this.s3.postBinaryFile(firestoneLogs);
-			console.log('posted Firestone logs', firestoneLogKey);
+			// console.log('posted Firestone logs', firestoneLogKey);
 			return firestoneLogKey;
 		} catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);

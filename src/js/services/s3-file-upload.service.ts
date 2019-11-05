@@ -18,14 +18,14 @@ export class S3FileUploadService {
 			ACL: 'public-read-write',
 			Body: logString,
 		};
-		console.log('uploading log to S3 with params', params);
+		// console.log('uploading log to S3 with params', params);
 		return new Promise<string>(resolve => {
 			s3.makeUnauthenticatedRequest('putObject', params, (err, data2) => {
 				// There Was An Error With Your S3 Config
 				if (err) {
 					console.warn('An error during upload', err);
 				} else {
-					console.log('Uploaded logs', data2);
+					// console.log('Uploaded logs', data2);
 					resolve(fileKey);
 				}
 			});
@@ -58,7 +58,7 @@ export class S3FileUploadService {
 				if (err) {
 					console.warn('An error during upload', err);
 				} else {
-					console.log('Uploaded logs', data2);
+					// console.log('Uploaded logs', data2);
 					resolve(fileKey);
 				}
 			});

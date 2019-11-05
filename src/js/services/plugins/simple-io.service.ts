@@ -51,7 +51,7 @@ export class SimpleIOService {
 		const plugin = await this.get();
 		return new Promise<string>(resolve => {
 			plugin.getTextFile(filePath, false, (result, contents) => {
-				console.log('read file contents completed', filePath, result);
+				// console.log('read file contents completed', filePath, result);
 				resolve(contents);
 			});
 		});
@@ -62,7 +62,7 @@ export class SimpleIOService {
 		const plugin = await this.get();
 		return new Promise<string>(resolve => {
 			plugin.zipAppLogFolder(appName, (result, contents) => {
-				console.log('zipped directory done, reading binary result', appName, result);
+				// console.log('zipped directory done, reading binary result', appName, result);
 				resolve(contents);
 			});
 		});

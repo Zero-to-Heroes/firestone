@@ -570,7 +570,7 @@ export class GameEvents {
 			const s3LogFileKey = await this.logService.uploadGameLogs();
 			const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
 			const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
-			console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
+			// console.log('uploaded fullLogsFromPlugin to S3', pluginLogsFileKey);
 			const lastLogsReceivedInPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[1] : second;
 			const firstoneLogsKey = await this.logService.uploadAppLogs();
 			captureEvent({
@@ -587,7 +587,7 @@ export class GameEvents {
 					firestoneLogs: firstoneLogsKey,
 				},
 			});
-			console.log('uploaded event to sentry');
+			// console.log('uploaded event to sentry');
 		} catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);
 		}
