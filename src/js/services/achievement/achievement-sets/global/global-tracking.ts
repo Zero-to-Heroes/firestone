@@ -10,6 +10,7 @@ export class GlobalTrackingSetProvider extends GenericSetProvider {
 				'global_enemy_minions_dead',
 				'global_mana_spent',
 				'global_total_duration',
+				'global_total_match',
 			],
 			'tracking',
 		);
