@@ -94,7 +94,7 @@ export abstract class GenericSetProvider extends SetProvider {
 				numberOfCompletions: completions,
 				iconSvgSymbol: achv.icon,
 				text(showTimes: boolean = false): string {
-					const times = showTimes ? `${completions} times` : ``;
+					const times = showTimes && !achievement.canBeCompletedOnlyOnce ? `${completions} times` : ``;
 					return `${achv.completedText} <span class="number-of-times">${times}</span>`;
 				},
 			} as CompletionStep);
