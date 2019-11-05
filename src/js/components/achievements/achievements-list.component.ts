@@ -34,7 +34,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<ng-select
 					class="filter"
 					[options]="filterOptions"
-					[(ngModel)]="activeFilter"
+					[ngModel]="activeFilter"
 					(selected)="selectFilter($event)"
 					(opened)="refresh()"
 					(closed)="refresh()"
@@ -145,7 +145,11 @@ export class AchievementsListComponent implements AfterViewInit {
 				value: option.value,
 			}));
 			this.activeFilter = this.filterOptions[0].value;
+			console.log('set active filter', this.activeFilter);
 			this.updateShownAchievements();
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
@@ -201,6 +205,7 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	selectFilter(option: IOption) {
 		this.activeFilter = option.value;
+		console.log('selected filter', this.activeFilter);
 		this.updateShownAchievements();
 	}
 
