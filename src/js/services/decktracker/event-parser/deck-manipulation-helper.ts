@@ -125,6 +125,7 @@ export class DeckManipulationHelper {
 
 	public static replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
 		const zoneWithoutCard = zone.filter(card => card.entityId !== newCard.entityId);
+		// console.debug('zone without card', zone);
 		return [...zoneWithoutCard, newCard];
 	}
 }
