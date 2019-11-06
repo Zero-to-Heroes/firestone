@@ -51,6 +51,8 @@ export class GameEvent {
 	public static readonly DUNGEON_RUN_STEP = 'DUNGEON_RUN_STEP';
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
 
+	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
+
 	readonly type: string;
 	readonly cardId: string;
 	readonly controllerId: number; // matches a PlayerId

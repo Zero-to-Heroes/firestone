@@ -3,6 +3,7 @@ import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { AllCardsService } from '../../../all-cards.service';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
+import { BattlegroundsFinishReq } from '../requirements/battlegrounds/battlegrounds-finish-req';
 import { BoardFullOfSameLegendaryMinionReq } from '../requirements/board-full-of-same-legendary-minion-req';
 import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-received-in-hand-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
@@ -130,6 +131,7 @@ export class ChallengeBuilderService {
 
 			// The global stat reqs
 			case 'GLOBAL_STAT': return GlobalStatReq.create(rawReq);
+			case 'BATTLEGROUNDS_FINISH': return BattlegroundsFinishReq.create(rawReq);
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {

@@ -12,7 +12,7 @@ export class BattlegroundsTrackingSetProvider extends GenericSetProvider {
 				'battlegrounds_total_duration',
 				'battlegrounds_total_match',
 			],
-			'tracking',
+			'achievements_progression',
 		);
 	}
 }

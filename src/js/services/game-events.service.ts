@@ -420,6 +420,17 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED':
+				console.log(gameEvent.Type + ' event', gameEvent.Value);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED,
+						additionalData: {
+							newPlace: gameEvent.Value.AdditionalProps.NewPlace,
+						},
+					} as GameEvent),
+				);
+				break;
 			case 'WINNER':
 				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(
