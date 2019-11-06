@@ -94,7 +94,7 @@ export class LogListenerService {
 
 		try {
 			// Register file listener
-			const handler = (id: string, status: boolean, isNewLine: boolean, data: string) => {
+			const handler = (id: string, status: boolean, isOldLine: boolean, data: string) => {
 				// console.log('processing', id, status, isNewLine, data);
 				if (!status) {
 					if (data === 'truncated') {
@@ -110,8 +110,10 @@ export class LogListenerService {
 				}
 
 				if (id === fileIdentifier) {
-					if (isNewLine && this.existingLineHandler) {
-						this.existingLineHandler(data);
+					if (isOldLine) {
+						if (this.existingLineHandler) {
+							this.existingLineHandler(data);
+						}
 					} else {
 						this.callback(data);
 					}
