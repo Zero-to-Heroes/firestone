@@ -1,16 +1,16 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
-import { IndexedDbService } from '../../../../collection/indexed-db.service';
-import { PityTimer } from '../../../../../models/pity-timer';
-import { Set, SetCard } from '../../../../../models/set';
-import { NewCardEvent } from '../../events/collection/new-card-event';
-import { MemoryInspectionService } from '../../../../plugins/memory-inspection.service';
 import { Card } from '../../../../../models/card';
 import { CardHistory } from '../../../../../models/card-history';
-import { CardHistoryStorageService } from '../../../../collection/card-history-storage.service';
-import { PackHistoryService } from '../../../../collection/pack-history.service';
+import { BinderState } from '../../../../../models/mainwindow/binder-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { PityTimer } from '../../../../../models/pity-timer';
+import { Set, SetCard } from '../../../../../models/set';
 import { AllCardsService } from '../../../../all-cards.service';
+import { CardHistoryStorageService } from '../../../../collection/card-history-storage.service';
+import { IndexedDbService } from '../../../../collection/indexed-db.service';
+import { PackHistoryService } from '../../../../collection/pack-history.service';
+import { MemoryInspectionService } from '../../../../plugins/memory-inspection.service';
+import { NewCardEvent } from '../../events/collection/new-card-event';
+import { Processor } from '../processor';
 
 // TODO: for now we just bruteforce rebuild the full collection on each new card event,
 // which is highly unefficient. Maybe we should do things a little be smarter
@@ -29,6 +29,10 @@ export class NewCardProcessor implements Processor {
 			await this.indexedDb.saveCollection(collection);
 		}
 		const dbCard = this.cards.getCard(event.card.id);
+		if (!dbCard) {
+			console.error('[new-card-processor] missing card', event.card.id);
+			return;
+		}
 		const relevantCount = event.type === 'GOLDEN' ? event.card.premiumCount : event.card.count;
 		const history = this.isDust(event.card, event.type)
 			? new CardHistory(

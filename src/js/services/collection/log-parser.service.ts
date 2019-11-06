@@ -122,7 +122,8 @@ export class LogParserService {
 			.map(data => this.cardRegex.exec(data) || this.rewardRegex.exec(data))
 			.filter(match => match)
 			.map(match => match[1])
-			.map(cardId => this.cards.getCard(cardId));
+			.map(cardId => this.cards.getCard(cardId))
+			.filter(card => card);
 	}
 
 	private isPack(cards: any[]): boolean {

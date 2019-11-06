@@ -249,6 +249,10 @@ export class PackMonitor {
 
 	public async createNewCardToast(card: Card, type: string) {
 		const dbCard = this.cards.getCard(card.id);
+		if (!dbCard) {
+			console.error('[pack-monitor] missing card', card.id);
+			return;
+		}
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.binder.showCommon && dbCard.rarity === 'Common') {
 			return;
