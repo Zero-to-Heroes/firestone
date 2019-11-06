@@ -1,5 +1,23 @@
 [
 	{
+		"id": "battlegrounds_coin_spent_100",
+		"type": "battlegrounds_coin_spent",
+		"name": "Shopping!",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 100,
+		"displayName": "Achievement completed: Shopping (100 coins spent)",
+		"text": "Spend coins in Battlegrounds (%%globalStats.total-mana-spent.battlegrounds%% coins spent so far)",
+		"completedText": "Spent 100 coins",
+		"displayCardId": "CS2_013t",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "100"] }]
+	},
+	{
 		"id": "battlegrounds_coin_spent_1000",
 		"type": "battlegrounds_coin_spent",
 		"name": "Shopping!",
@@ -34,24 +52,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "10000"] }]
-	},
-	{
-		"id": "battlegrounds_coin_spent_100000",
-		"type": "battlegrounds_coin_spent",
-		"name": "Shopping!",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 100000,
-		"displayName": "Achievement completed: Shopping (100,000 coins spent)",
-		"text": "Spend coins in Battlegrounds (%%globalStats.total-mana-spent.battlegrounds%% coins spent so far)",
-		"completedText": "Spent 100,000 coins",
-		"displayCardId": "CS2_013t",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "100000"] }]
 	},
 	{
 		"id": "battlegrounds_coin_spent_200",
@@ -90,6 +90,24 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "20000"] }]
 	},
 	{
+		"id": "battlegrounds_coin_spent_50",
+		"type": "battlegrounds_coin_spent",
+		"name": "Shopping!",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 50,
+		"displayName": "Achievement completed: Shopping (50 coins spent)",
+		"text": "Spend coins in Battlegrounds (%%globalStats.total-mana-spent.battlegrounds%% coins spent so far)",
+		"completedText": "Spent 50 coins",
+		"displayCardId": "CS2_013t",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "50"] }]
+	},
+	{
 		"id": "battlegrounds_coin_spent_500",
 		"type": "battlegrounds_coin_spent",
 		"name": "Shopping!",
@@ -124,24 +142,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "5000"] }]
-	},
-	{
-		"id": "battlegrounds_coin_spent_50000",
-		"type": "battlegrounds_coin_spent",
-		"name": "Shopping!",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 50000,
-		"displayName": "Achievement completed: Shopping (50,000 coins spent)",
-		"text": "Spend coins in Battlegrounds (%%globalStats.total-mana-spent.battlegrounds%% coins spent so far)",
-		"completedText": "Spent 50,000 coins",
-		"displayCardId": "CS2_013t",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "50000"] }]
 	},
 	{
 		"id": "battlegrounds_damage_to_enemy_heroes_100",
@@ -324,6 +324,24 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "1000"] }]
 	},
 	{
+		"id": "battlegrounds_enemy_minions_dead_20",
+		"type": "battlegrounds_enemy_minions_dead",
+		"name": "Assassin",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 20,
+		"displayName": "Achievement completed: Assassin (Battlegrounds) (20 enemy minions dead)",
+		"text": "Kill enemy minions in Battlegrounds (%%globalStats.total-enemy-minions-death.battlegrounds%% minions killed so far)",
+		"completedText": "Killed 20 enemy minions",
+		"displayCardId": "CS2_076",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "20"] }]
+	},
+	{
 		"id": "battlegrounds_enemy_minions_dead_200",
 		"type": "battlegrounds_enemy_minions_dead",
 		"name": "Assassin",
@@ -394,24 +412,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "500"] }]
-	},
-	{
-		"id": "battlegrounds_enemy_minions_dead_5000",
-		"type": "battlegrounds_enemy_minions_dead",
-		"name": "Assassin",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 5000,
-		"displayName": "Achievement completed: Assassin (Battlegrounds) (5,000 enemy minions dead)",
-		"text": "Kill enemy minions in Battlegrounds (%%globalStats.total-enemy-minions-death.battlegrounds%% minions killed so far)",
-		"completedText": "Killed 5,000 enemy minions",
-		"displayCardId": "CS2_076",
-		"displayCardType": "spell",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "5000"] }]
 	},
 	{
 		"id": "battlegrounds_total_duration_1",

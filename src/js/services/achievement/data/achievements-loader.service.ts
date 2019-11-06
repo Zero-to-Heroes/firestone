@@ -51,6 +51,7 @@ export class AchievementsLoaderService {
 		console.log('[achievements-loader] loading all achievements');
 		const [
 			global,
+			battlegrounds,
 			dungeonRun,
 			monsterHunt,
 			rumbleRun,
@@ -61,6 +62,7 @@ export class AchievementsLoaderService {
 			deckbuilding,
 		] = await Promise.all([
 			this.loadSet('global.json'),
+			this.loadSet('battlegrounds.json'),
 			this.loadSet('dungeon_run.json'),
 			this.loadSet('monster_hunt.json'),
 			this.loadSet('rumble_run.json'),
@@ -72,6 +74,7 @@ export class AchievementsLoaderService {
 		]);
 		return [
 			...global,
+			...battlegrounds,
 			...dungeonRun,
 			...monsterHunt,
 			...rumbleRun,

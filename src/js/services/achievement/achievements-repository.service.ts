@@ -5,6 +5,7 @@ import { AchievementSet } from '../../models/achievement-set';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { AchievementCategoryProvider } from './achievement-sets/achievement-category-provider';
 import { AmazingPlaysCategoryProvider } from './achievement-sets/amazing-plays/amazing-plays-category';
+import { BattlegroundsCategoryProvider } from './achievement-sets/battlegrounds/battlegrounds-category';
 import { CompetitiveLadderCategoryProvider } from './achievement-sets/competitive-ladder/competitive-ladder-category';
 import { DalaranHeistCategoryProvider } from './achievement-sets/dalaran_heist/dalaran-heist-category';
 import { DeckbuildingCategoryProvider } from './achievement-sets/deckbuilding/deckbuilding-category';
@@ -58,6 +59,7 @@ export class AchievementsRepository {
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
 			new GlobalCategoryProvider(),
+			new BattlegroundsCategoryProvider(),
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DeckbuildingCategoryProvider(),
