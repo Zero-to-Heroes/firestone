@@ -58,11 +58,11 @@ export class AchievementSetComponent {
 			this.displayName = achievementSet.displayName;
 			const flatCompletions = achievementSet.achievements
 				.map(achievement => achievement.completionSteps)
-				.reduce((a, b) => a.concat(b));
+				.reduce((a, b) => a.concat(b), []);
 			const total = flatCompletions.length;
 			const achieved = flatCompletions.filter(a => a.numberOfCompletions > 0).length;
-			this.complete = total === achieved;
 			this.empty = achieved === 0;
+			this.complete = total === achieved && !this.empty;
 		}
 	}
 }

@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { VisualAchievement } from '../../models/visual-achievement';
 
 @Component({
@@ -6,7 +6,8 @@ import { VisualAchievement } from '../../models/visual-achievement';
 	styleUrls: [`../../../css/component/achievements/achievement-progress-bar.component.scss`],
 	template: `
 		<div class="achievement-progress-bar">
-			<span class="achieved">{{ achieved }}/{{ total }}</span>
+			<span class="achieved" *ngIf="total > 0">{{ achieved }}/{{ total }}</span>
+			<span class="achieved" *ngIf="total == 0">Coming soon!</span>
 			<div class="progress-bar">
 				<div class="progress" [style.width.%]="(100.0 * achieved) / total"></div>
 			</div>
