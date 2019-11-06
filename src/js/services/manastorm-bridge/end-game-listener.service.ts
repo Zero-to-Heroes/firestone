@@ -4,7 +4,9 @@ import { GameEvent } from '../../models/game-event';
 import { DeckParserService } from '../decktracker/deck-parser.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { OverwolfService } from '../overwolf.service';
 import { EndGameUploaderService } from './end-game-uploader.service';
+import { ManastormInfo } from './manastorm-info';
 import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
@@ -23,6 +25,7 @@ export class EndGameListenerService {
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
 		private replayUpload: ReplayUploadService,
+		private ow: OverwolfService,
 	) {
 		this.init();
 	}
@@ -32,9 +35,23 @@ export class EndGameListenerService {
 			this.logger.debug('[manastorm-bridge] Received new game id event', event);
 			this.currentGameId = event.data[0];
 		});
+		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
+			this.logger.debug('[manastorm-bridge] received manastorm info update', result);
+			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
+			if (info && info.type === 'new-empty-review') {
+				this.currentReviewId = info.reviewId;
+				this.events.broadcast(Events.REVIEW_INITIALIZED, info);
+			}
+		});
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			switch (gameEvent.type) {
 				case GameEvent.GAME_START:
+					const isManastormRunning = await this.ow.isManastormRunning();
+					if (isManastormRunning) {
+						// Upload is handled by manastorm
+						this.logger.debug('[manastorm-bridge] Manastorm is running, no need to init empty review');
+						return;
+					}
 					this.logger.debug('[manastorm-bridge] Creating empty review');
 					this.currentReviewId = await this.replayUpload.createEmptyReview();
 					const info = {
