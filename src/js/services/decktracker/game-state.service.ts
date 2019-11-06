@@ -105,14 +105,14 @@ export class GameStateService {
 		return new Promise<string>(resolve => this.getCurrentReviewIdInternal(reviewId => resolve(reviewId)));
 	}
 
-	private async getCurrentReviewIdInternal(callback, retriesLeft = 10) {
+	private async getCurrentReviewIdInternal(callback, retriesLeft = 15) {
 		if (retriesLeft <= 0) {
 			this.logger.error('[game-state] Could not get current review id');
 			callback(null);
 			return;
 		}
 		if (!this.currentReviewId) {
-			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 1000);
+			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 2000);
 			return;
 		}
 		this.logger.log('[game-state] returning review id', this.currentReviewId);

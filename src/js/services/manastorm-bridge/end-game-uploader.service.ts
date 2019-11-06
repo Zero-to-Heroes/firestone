@@ -37,8 +37,11 @@ export class EndGameUploaderService {
 			this.logger.debug('[manastorm-bridge] received manastorm info update', result);
 			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
 			if (info && info.type === 'new-review') {
-				// Here, regularly query the server for the match stats
+				this.logger.debug('[manastorm-bridge] broadcasting REVIEW_FINALIZED info', info);
 				this.events.broadcast(Events.REVIEW_FINALIZED, info);
+			} else if (info && info.type === 'new-empty-review') {
+				this.logger.debug('[manastorm-bridge] broadcasting REVIEW_INITIALIZED info', info);
+				this.events.broadcast(Events.REVIEW_INITIALIZED, info);
 			}
 		});
 	}

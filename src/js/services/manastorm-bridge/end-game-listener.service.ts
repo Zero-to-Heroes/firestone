@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
 import { DeckParserService } from '../decktracker/deck-parser.service';
+import { GameStateService } from '../decktracker/game-state.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { EndGameUploaderService } from './end-game-uploader.service';
-import { ManastormInfo } from './manastorm-info';
 import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class EndGameListenerService {
 	private currentDeckname: string;
 	private currentBuildNumber: number;
 	private currentScenarioId: string;
-	private currentReviewId: string;
+	// private currentReviewId: string;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -24,6 +24,7 @@ export class EndGameListenerService {
 		private logger: NGXLogger,
 		private deckService: DeckParserService,
 		private endGameUploader: EndGameUploaderService,
+		private gameState: GameStateService,
 		private replayUpload: ReplayUploadService,
 		private ow: OverwolfService,
 	) {
@@ -31,17 +32,10 @@ export class EndGameListenerService {
 	}
 
 	private init(): void {
+		this.logger.debug('[manastorm-bridge] stgarting end-game-listener init');
 		this.events.on(Events.NEW_GAME_ID).subscribe(async event => {
 			this.logger.debug('[manastorm-bridge] Received new game id event', event);
 			this.currentGameId = event.data[0];
-		});
-		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
-			this.logger.debug('[manastorm-bridge] received manastorm info update', result);
-			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
-			if (info && info.type === 'new-empty-review') {
-				this.currentReviewId = info.reviewId;
-				this.events.broadcast(Events.REVIEW_INITIALIZED, info);
-			}
 		});
 		this.gameEvents.allEvents.subscribe(async (gameEvent: GameEvent) => {
 			switch (gameEvent.type) {
@@ -53,10 +47,11 @@ export class EndGameListenerService {
 						return;
 					}
 					this.logger.debug('[manastorm-bridge] Creating empty review');
-					this.currentReviewId = await this.replayUpload.createEmptyReview();
+					const currentReviewId = await this.replayUpload.createEmptyReview();
+					console.log('[manastorm-bridge] built currentReviewId', currentReviewId);
 					const info = {
 						type: 'new-empty-review',
-						reviewId: this.currentReviewId,
+						reviewId: currentReviewId,
 					};
 					this.events.broadcast(Events.REVIEW_INITIALIZED, info);
 					break;
@@ -70,9 +65,10 @@ export class EndGameListenerService {
 					break;
 				case GameEvent.GAME_END:
 					this.logger.debug('[manastorm-bridge] end game, uploading?');
+					const reviewId = await this.gameState.getCurrentReviewId();
 					await this.endGameUploader.upload(
 						gameEvent,
-						this.currentReviewId,
+						reviewId,
 						this.currentGameId,
 						this.currentDeckstring,
 						this.currentDeckname,
