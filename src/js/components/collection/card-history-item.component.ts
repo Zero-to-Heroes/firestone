@@ -1,11 +1,12 @@
 import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
+	ChangeDetectorRef,
 	Component,
-	ElementRef,
 	EventEmitter,
 	HostListener,
 	Input,
+	ViewRef,
 } from '@angular/core';
 import { CardHistory } from '../../models/card-history';
 import { Events } from '../../services/events.service';
@@ -59,7 +60,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private el: ElementRef, private ow: OverwolfService, private events: Events) {}
+	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService, private events: Events) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -80,6 +81,10 @@ export class CardHistoryItemComponent implements AfterViewInit {
 			month: '2-digit',
 			year: '2-digit',
 		});
+		// FIXME: Why do I need this?
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	@HostListener('mousedown') onClick() {
