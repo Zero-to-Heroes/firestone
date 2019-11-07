@@ -10,7 +10,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 		`../../../../css/component/decktracker/main/decktracker-filters.component.scss`,
 	],
 	template: `
-		<div class="decktracker-filters" helpTooltip="Advanced filtering is ont its way, stay tuned!">
+		<div class="decktracker-filters" helpTooltip="Advanced filtering is on its way, stay tuned!">
 			<div class="title" helpTooltipTarget>Active filters</div>
 			<ul class="filters">
 				<li *ngFor="let filter of activeFilters">{{ filter }}</li>
