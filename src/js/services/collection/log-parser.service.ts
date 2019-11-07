@@ -39,7 +39,7 @@ export class LogParserService {
 		}
 		const toProcess: string[] = eventQueue.map(logLine => logLine[1]);
 		if (toProcess.length > 0) {
-			// console.log('lines to process', toProcess);
+			// console.log('[pack-parser] lines to process', toProcess);
 			this.processLines(toProcess);
 		}
 		// We always process all the events
@@ -47,7 +47,7 @@ export class LogParserService {
 	}
 
 	public receiveLogLine(data: string) {
-		// console.log('received log line', data);
+		// console.log('[pack-parser] received log line', data);
 		const match = this.cardRegex.exec(data) || this.rewardRegex.exec(data);
 		if (match) {
 			this.processingQueue.enqueue([Date.now(), data]);
@@ -56,17 +56,17 @@ export class LogParserService {
 
 	private processLines(toProcess: string[]) {
 		// Are we opening a pack?
-		// console.log('processing lines', toProcess);
+		// console.log('[pack-parser] processing lines', toProcess);
 		const cards = this.extractCards(toProcess);
 		if (this.isPack(cards)) {
 			const setId = cards[0].set;
 			const packCards = this.toPackCards(toProcess);
-			// console.log('notifying new pack opening', setId, packCards);
+			console.log('[pack-parser] notifying new pack opening', setId, packCards);
 			amplitude.getInstance().logEvent('new-pack', { 'set': setId });
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		} else {
-			console.log('received cards outside of pack', cards);
+			console.log('[pack-parser] received cards outside of pack', cards);
 		}
 
 		for (const data of toProcess) {
@@ -178,7 +178,7 @@ export class LogParserService {
 	}
 
 	private displayNewCardMessage(card: Card, type: string) {
-		console.log('New card!', card.id, type);
+		console.log('[pack-parser] New card!', card.id, type);
 		setTimeout(() => {
 			this.events.broadcast(Events.NEW_CARD, card, type);
 		}, 20);
@@ -193,7 +193,7 @@ export class LogParserService {
 			this.events.broadcast(Events.MORE_DUST, card, dust, type);
 		}, 20);
 		amplitude.getInstance().logEvent('dust', { 'amount': dust });
-		console.log('Got ' + dust + ' dust', card.id, type);
+		console.log('[pack-parser] Got ' + dust + ' dust', card.id, type);
 	}
 
 	private dustFor(rarity: string): number {

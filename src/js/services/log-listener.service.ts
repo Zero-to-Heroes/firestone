@@ -125,6 +125,7 @@ export class LogListenerService {
 			plugin.onFileListenerChanged.addListener(handler);
 
 			const skipToEnd = this.fileInitiallyPresent && !this.existingLineHandler;
+			console.log('[log-listener] [' + this.logFile + '] skipping to the end?', skipToEnd);
 			plugin.listenOnFile(
 				fileIdentifier,
 				logsLocation,
