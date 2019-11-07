@@ -58,8 +58,8 @@ export class AchievementsRepository {
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
-			new GlobalCategoryProvider(),
 			new BattlegroundsCategoryProvider(),
+			new GlobalCategoryProvider(),
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DeckbuildingCategoryProvider(),
