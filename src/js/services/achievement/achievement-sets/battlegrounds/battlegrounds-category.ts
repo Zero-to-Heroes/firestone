@@ -7,7 +7,7 @@ import { BattlegroundsTrackingSetProvider } from './battlegrounds-tracking';
 
 export class BattlegroundsCategoryProvider extends AchievementCategoryProvider {
 	constructor() {
-		super('battlegrounds', 'Batlegrounds', 'battlegrounds', [
+		super('battlegrounds', 'Battlegrounds', 'battlegrounds', [
 			new BattlegroundsTrackingSetProvider(),
 			new BattlegroundsCompetitiveSetProvider(),
 			new BattlegroundsMinionsSetProvider(),
