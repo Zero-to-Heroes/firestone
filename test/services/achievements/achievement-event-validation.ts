@@ -34,23 +34,6 @@ export const achievementsValidation = async (
 	},
 ) => {
 	const cards = buildCardsService();
-	const challengeBuilder = new ChallengeBuilderService(cards);
-	const loader = new AchievementsLoaderService(null, challengeBuilder);
-	await loader.initializeAchievements(rawAchievements);
-	if (loader.challengeModules.length !== 1) {
-		throw new Error('Can only handle single achievements for now');
-	}
-	// Don't reset achievements
-	loader.challengeModules.forEach(challenge => (challenge['resetState'] = () => {}));
-	// Setup events
-	const events = new Events();
-	const mockPlugin: GameEventsPluginService = {
-		get: () => {
-			return new Promise<any>(resolve => {
-				resolve();
-			});
-		},
-	} as GameEventsPluginService;
 	const memoryService: MemoryInspectionService = {
 		getPlayerInfo: () => {
 			return new Promise<any>(resolve => {
@@ -69,7 +52,29 @@ export const achievementsValidation = async (
 				);
 			});
 		},
+		getBattlegroundsInfo: () => {
+			return new Promise<any>(resolve => {
+				resolve({});
+			});
+		},
 	} as MemoryInspectionService;
+	const challengeBuilder = new ChallengeBuilderService(cards, memoryService);
+	const loader = new AchievementsLoaderService(null, challengeBuilder);
+	await loader.initializeAchievements(rawAchievements);
+	if (loader.challengeModules.length !== 1) {
+		throw new Error('Can only handle single achievements for now');
+	}
+	// Don't reset achievements
+	loader.challengeModules.forEach(challenge => (challenge['resetState'] = () => {}));
+	// Setup events
+	const events = new Events();
+	const mockPlugin: GameEventsPluginService = {
+		get: () => {
+			return new Promise<any>(resolve => {
+				resolve();
+			});
+		},
+	} as GameEventsPluginService;
 	const emitter = new GameEventsEmitterService();
 	const playersInfoService = new PlayersInfoService(events, memoryService);
 	const deckService = new DeckParserService(emitter, null);

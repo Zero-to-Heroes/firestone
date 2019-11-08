@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { AllCardsService } from '../../../all-cards.service';
+import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
 import { BattlegroundsFinishReq } from '../requirements/battlegrounds/battlegrounds-finish-req';
+import { BattlegroundsRankReq } from '../requirements/battlegrounds/battlegrounds-rank-req';
 import { BoardFullOfSameLegendaryMinionReq } from '../requirements/board-full-of-same-legendary-minion-req';
 import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-received-in-hand-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
@@ -58,7 +60,7 @@ import { GenericChallenge } from './generic-challenge';
 
 @Injectable()
 export class ChallengeBuilderService {
-	constructor(private readonly cards: AllCardsService) {}
+	constructor(private readonly cards: AllCardsService, private readonly memoryInspection: MemoryInspectionService) {}
 
 	public buildChallenge(raw: RawAchievement): Challenge {
 		const requirements: readonly Requirement[] = this.buildRequirements(raw.requirements);
@@ -131,7 +133,10 @@ export class ChallengeBuilderService {
 
 			// The global stat reqs
 			case 'GLOBAL_STAT': return GlobalStatReq.create(rawReq);
+
 			case 'BATTLEGROUNDS_FINISH': return BattlegroundsFinishReq.create(rawReq);
+			case 'BATTLEGROUNDS_RANK': return BattlegroundsRankReq.create(rawReq, this.memoryInspection);
+
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
 				return {
