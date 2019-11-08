@@ -1,8 +1,7 @@
-import { GameType } from '../enums/game-type';
-import { FormatType } from '../enums/format-type';
+import { GameFormat, GameType } from '@firestone-hs/reference-data';
 
 export class Metadata {
 	readonly gameType: GameType;
-	readonly formatType: FormatType;
+	readonly formatType: GameFormat;
 	readonly scenarioId: number;
 }

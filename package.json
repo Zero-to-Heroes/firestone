@@ -25,6 +25,7 @@
 		"@angular/material": "8.1.0",
 		"@angular/platform-browser": "8.1.1",
 		"@angular/platform-browser-dynamic": "8.1.1",
+		"@firestone-hs/reference-data": "^0.1.0",
 		"@sentry/browser": "^5.7.1",
 		"@sentry/integrations": "^5.7.1",
 		"angular-resize-event": "1.0.0",

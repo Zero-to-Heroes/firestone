@@ -1,8 +1,8 @@
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
-import { GameType } from '../../models/enums/game-type';
 import { Preferences } from '../../models/preferences';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
@@ -68,24 +68,26 @@ export class OverlayDisplayService implements OnDestroy {
 			return false;
 		}
 		switch (gameState.metadata.gameType as GameType) {
-			case GameType.ARENA:
+			case GameType.GT_ARENA:
 				return prefs.decktrackerShowArena;
-			case GameType.CASUAL:
+			case GameType.GT_CASUAL:
 				return prefs.decktrackerShowCasual;
-			case GameType.RANKED:
+			case GameType.GT_RANKED:
 				return prefs.decktrackerShowRanked;
-			case GameType.VS_AI:
+			case GameType.GT_VS_AI:
 				return prefs.decktrackerShowPractice;
-			case GameType.VS_FRIEND:
+			case GameType.GT_VS_FRIEND:
 				return prefs.decktrackerShowFriendly;
-			case GameType.FSG_BRAWL:
-			case GameType.FSG_BRAWL_1P_VS_AI:
-			case GameType.FSG_BRAWL_2P_COOP:
-			case GameType.FSG_BRAWL_VS_FRIEND:
-			case GameType.TB_1P_VS_AI:
-			case GameType.TB_2P_COOP:
-			case GameType.TAVERNBRAWL:
+			case GameType.GT_FSG_BRAWL:
+			case GameType.GT_FSG_BRAWL_1P_VS_AI:
+			case GameType.GT_FSG_BRAWL_2P_COOP:
+			case GameType.GT_FSG_BRAWL_VS_FRIEND:
+			case GameType.GT_TB_1P_VS_AI:
+			case GameType.GT_TB_2P_COOP:
+			case GameType.GT_TAVERNBRAWL:
 				return prefs.decktrackerShowTavernBrawl;
+			case GameType.GT_BATTLEGROUNDS:
+				return false;
 		}
 		this.logger.debug('[overlay-display] unknown game type', gameState.metadata.gameType as GameType);
 		return gameState.playerDeck.deckList.length > 0;
