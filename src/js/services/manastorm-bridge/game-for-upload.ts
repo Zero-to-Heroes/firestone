@@ -1,3 +1,6 @@
+import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
+import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
+
 export class GameForUpload {
 	id: string;
 	reviewId: string;
@@ -5,8 +8,8 @@ export class GameForUpload {
 
 	spectating: boolean;
 
-	gameMode: string;
-	gameFormat: string;
+	gameMode: StatGameModeType;
+	gameFormat: StatGameFormatType;
 	buildNumber: number;
 	scenarioId: string;
 	playerRank: string;

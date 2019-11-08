@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
+import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { AllCardsService } from '../all-cards.service';
 import { GameForUpload as Game, Player } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
@@ -10,7 +12,7 @@ export class GameParserService {
 
 	constructor(private gameHelper: GameHelper, private cards: AllCardsService) {}
 
-	public toFormatType(formatType: number) {
+	public toFormatType(formatType: number): StatGameFormatType {
 		switch (formatType) {
 			case 0:
 				return 'unknown';
@@ -24,7 +26,7 @@ export class GameParserService {
 		}
 	}
 
-	public toGameType(gameType: number) {
+	public toGameType(gameType: number): StatGameModeType {
 		switch (gameType) {
 			case 0:
 				return 'unknown';
@@ -47,9 +49,9 @@ export class GameParserService {
 			case 20:
 			case 21:
 			case 22:
-				return 'tavernbrawl';
+				return 'tavern-brawl';
 			case 23:
-				return 'tournament';
+				return 'battlegrounds';
 			default:
 				console.warn('unsupported game type', gameType);
 				return 'unknown';

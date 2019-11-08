@@ -42,6 +42,21 @@ export class MindVisionService {
 		});
 	}
 
+	public async getBattlegroundsInfo(): Promise<{ Rating: number; PreviousRating: number }> {
+		return new Promise<{ Rating: number; PreviousRating: number }>(async resolve => {
+			console.log('[mind-vision] retrieving getBattlegroundsInfo');
+			const plugin = await this.get();
+			try {
+				plugin.getBattlegroundsInfo(battlegroundsInfo => {
+					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse battlegroundsInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async getDungeonInfo(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
 			console.log('[mind-vision] retrieving dungeonInfo');
@@ -84,7 +99,7 @@ export class MindVisionService {
 		try {
 			console.log('[mind-vision] plugin init starting', this.mindVisionPlugin);
 			this.mindVisionPlugin = new OverwolfPlugin('mind-vision', true);
-			this.mindVisionPlugin.initialize((status: boolean) => {
+			this.mindVisionPlugin.initialize(async (status: boolean) => {
 				if (status === false) {
 					console.error("[mind-vision] Plugin couldn't be loaded??", 'retrying');
 					setTimeout(() => this.initialize(), 2000);

@@ -60,7 +60,7 @@ export class ReplayUploadService {
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
 		let playerRank = game.playerRank;
-		if ('Arena' === game.gameMode) {
+		if ('arena' === game.gameMode) {
 			if (game.arenaInfo) {
 				playerRank = game.arenaInfo.Wins;
 			} else {
