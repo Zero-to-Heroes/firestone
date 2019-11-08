@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
 import { PlayerInfo } from '../../models/player-info';
 import { Events } from '../events.service';
@@ -22,15 +23,6 @@ export class MemoryInspectionService {
 	public getCollection(delay: number = 0): Promise<Card[]> {
 		return new Promise<Card[]>(resolve => {
 			this.getCollectionInternal((collection: Card[]) => resolve(collection), 20, delay);
-		});
-	}
-
-	public getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
-		// this.playersInfoTriesLeft = 20;
-		return new Promise<{ localPlayer: any; opponent: any }>(resolve => {
-			this.getPlayerInfoInternal((playersInfo: { localPlayer: any; opponent: any }) => {
-				resolve(playersInfo);
-			});
 		});
 	}
 
@@ -76,6 +68,15 @@ export class MemoryInspectionService {
 		}, delay);
 	}
 
+	public getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
+		// this.playersInfoTriesLeft = 20;
+		return new Promise<{ localPlayer: any; opponent: any }>(resolve => {
+			this.getPlayerInfoInternal((playersInfo: { localPlayer: any; opponent: any }) => {
+				resolve(playersInfo);
+			});
+		});
+	}
+
 	private async getPlayerInfoInternal(callback, triesLeft = 20) {
 		// console.log('[memory service] trying to get player info');
 		if (triesLeft <= 0) {
@@ -95,6 +96,35 @@ export class MemoryInspectionService {
 			return;
 		}
 		setTimeout(() => this.getPlayerInfoInternal(callback, triesLeft - 1), 2000);
+	}
+
+	public getBattlegroundsInfo(): Promise<BattlegroundsInfo> {
+		// this.playersInfoTriesLeft = 20;
+		return new Promise<BattlegroundsInfo>(resolve => {
+			this.getBattlegroundsInfoInternal((battlegroundsInfo: BattlegroundsInfo) => {
+				resolve(battlegroundsInfo);
+			});
+		});
+	}
+
+	private async getBattlegroundsInfoInternal(callback, triesLeft = 20) {
+		if (triesLeft <= 0) {
+			console.error('[memory-service] could not get battlegrounds info from memory');
+			callback(null);
+			return;
+		}
+		const battlegroundsInfo = await this.mindVision.getBattlegroundsInfo();
+		if (battlegroundsInfo) {
+			console.log('[memory-service] fetched battlegroundsInfo', battlegroundsInfo);
+			callback(
+				Object.assign(new BattlegroundsInfo(), {
+					rating: battlegroundsInfo.Rating,
+					previousRating: battlegroundsInfo.PreviousRating,
+				} as BattlegroundsInfo),
+			);
+			return;
+		}
+		setTimeout(() => this.getBattlegroundsInfoInternal(callback, triesLeft - 1), 2000);
 	}
 
 	private extractPlayerInfo(matchPlayer: any): PlayerInfo {

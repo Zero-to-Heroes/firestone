@@ -4,6 +4,7 @@ import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { PlayersInfoService } from '../players-info.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { GameForUpload } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
 import { GameParserService } from './game-parser.service';
@@ -24,6 +25,7 @@ export class EndGameUploaderService {
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
+		private memoryInspection: MemoryInspectionService,
 	) {
 		this.init();
 	}
@@ -110,7 +112,8 @@ export class EndGameUploaderService {
 		game.uncompressedXmlReplay = replayXml;
 		this.gameParserService.extractMatchup(game);
 		this.gameParserService.extractDuration(game);
-		const [playerInfo, opponentInfo] = await Promise.all([
+		const [battlegroundsInfo, playerInfo, opponentInfo] = await Promise.all([
+			this.memoryInspection.getBattlegroundsInfo(),
 			this.playersInfo.getPlayerInfo(),
 			this.playersInfo.getOpponentInfo(),
 		]);
@@ -118,7 +121,9 @@ export class EndGameUploaderService {
 			console.error('[manastorm-bridge] no local player info returned by mmindvision', playerInfo, opponentInfo);
 		}
 		let playerRank;
-		if (playerInfo && game.gameFormat === 'standard') {
+		if (game.gameMode === 'battlegrounds') {
+			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
+		} else if (playerInfo && game.gameFormat === 'standard') {
 			if (playerInfo.standardLegendRank > 0) {
 				playerRank = `legend-${playerInfo.standardLegendRank}`;
 			} else {

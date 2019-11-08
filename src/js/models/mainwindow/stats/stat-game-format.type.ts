@@ -1,1 +1,1 @@
-export type StatGameFormatType = 'standard' | 'wild';
+export type StatGameFormatType = 'unknown' | 'standard' | 'wild';
