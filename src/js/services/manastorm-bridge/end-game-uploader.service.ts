@@ -8,7 +8,6 @@ import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { GameForUpload } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
 import { GameParserService } from './game-parser.service';
-import { ManastormInfo } from './manastorm-info';
 import { ReplayManager } from './replay-manager.service';
 import { ReplayUploadService } from './replay-upload.service';
 
@@ -31,22 +30,22 @@ export class EndGameUploaderService {
 	}
 
 	private async init() {
-		this.listenForEndGame();
+		// this.listenForEndGame();
 	}
 
-	private async listenForEndGame() {
-		this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
-			this.logger.debug('[manastorm-bridge] received manastorm info update', result);
-			const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
-			if (info && info.type === 'new-review') {
-				this.logger.debug('[manastorm-bridge] broadcasting REVIEW_FINALIZED info', info);
-				this.events.broadcast(Events.REVIEW_FINALIZED, info);
-			} else if (info && info.type === 'new-empty-review') {
-				this.logger.debug('[manastorm-bridge] broadcasting REVIEW_INITIALIZED info', info);
-				this.events.broadcast(Events.REVIEW_INITIALIZED, info);
-			}
-		});
-	}
+	// private async listenForEndGame() {
+	// 	this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
+	// 		this.logger.debug('[manastorm-bridge] received manastorm info update', result);
+	// 		const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
+	// 		if (info && info.type === 'new-review') {
+	// 			this.logger.debug('[manastorm-bridge] broadcasting REVIEW_FINALIZED info', info);
+	// 			this.events.broadcast(Events.REVIEW_FINALIZED, info);
+	// 		} else if (info && info.type === 'new-empty-review') {
+	// 			this.logger.debug('[manastorm-bridge] broadcasting REVIEW_INITIALIZED info', info);
+	// 			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
+	// 		}
+	// 	});
+	// }
 
 	public async upload(
 		gameEvent: GameEvent,
@@ -57,12 +56,12 @@ export class EndGameUploaderService {
 		buildNumber: number,
 		scenarioId: string,
 	): Promise<void> {
-		const isManastormRunning = await this.ow.isManastormRunning();
-		if (isManastormRunning) {
-			// Upload is handled by manastorm
-			this.logger.debug('[manastorm-bridge] Manastorm is running, no need to upload');
-			return;
-		}
+		// const isManastormRunning = await this.ow.isManastormRunning();
+		// if (isManastormRunning) {
+		// 	// Upload is handled by manastorm
+		// 	this.logger.debug('[manastorm-bridge] Manastorm is running, no need to upload');
+		// 	return;
+		// }
 		this.logger.debug('[manastorm-bridge] Manastorm not running, uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,

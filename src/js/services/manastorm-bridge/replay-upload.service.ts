@@ -101,8 +101,10 @@ export class ReplayUploadService {
 					type: 'new-review',
 					reviewId: reviewId,
 					replayUrl: `http://replays.firestoneapp.com/?reviewId=${reviewId}`,
+					game: game,
 				};
 				this.events.broadcast(Events.REVIEW_FINALIZED, info);
+				this.ow.setExtensionInfo(JSON.stringify(info));
 			}
 		});
 	}
