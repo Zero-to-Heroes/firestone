@@ -63,11 +63,11 @@ export class AchievementsRepository {
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DeckbuildingCategoryProvider(),
-			new DungeonRunCategoryProvider(),
-			new MonsterHuntCategoryProvider(),
-			new RumbleRunCategoryProvider(),
-			new DalaranHeistCategoryProvider(),
 			new TombsOfTerrorCategoryProvider(),
+			new DalaranHeistCategoryProvider(),
+			new RumbleRunCategoryProvider(),
+			new MonsterHuntCategoryProvider(),
+			new DungeonRunCategoryProvider(),
 		];
 
 		this.categories = categoryProviders.map(provider => provider.buildCategory());
