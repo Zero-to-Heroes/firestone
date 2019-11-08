@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
@@ -39,7 +40,10 @@ export class TwitchAuthService {
 		// console.log('ready to emit twitch event', event);
 		let newEvent = Object.assign({}, event);
 		// Tmp fix until we fix the twitch extension
-		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
+		if (
+			newEvent.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
+			(!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0)
+		) {
 			const newDeck: readonly DeckCard[] = [
 				...newEvent.state.playerDeck.deck,
 				...newEvent.state.playerDeck.hand,
