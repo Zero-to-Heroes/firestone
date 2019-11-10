@@ -27,7 +27,7 @@
 		},
 		{
 			"type": "WIN_STREAK_LENGTH",
-			"values": ["3", "AT_LEAST"]
+			"values": ["3", "AT_LEAST", "standard", "ranked"]
 		}
 	],
 	"resetEvents": ["GAME_START"]
