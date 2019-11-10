@@ -34,7 +34,8 @@ export class BattlegroundsFinishReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
-		if (gameEvent.type === GameEvent.WINNER || gameEvent.type === GameEvent.GAME_END) {
+		// Don't use the winner event here, because the leaderboard positions are still updated after the event is sent
+		if (gameEvent.type === GameEvent.GAME_END) {
 			this.gameOver = true;
 			this.detectLeaderboardPlace();
 			return;
