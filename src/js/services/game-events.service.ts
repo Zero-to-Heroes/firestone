@@ -421,7 +421,7 @@ export class GameEvents {
 				);
 				break;
 			case 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED':
-				console.log(gameEvent.Type + ' event', gameEvent.Value);
+				console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED,
