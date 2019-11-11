@@ -363,7 +363,7 @@ export class GameEvents {
 			case 'HEALTH_DEF_CHANGED':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.HEALTH_DEF_CHANGED, gameEvent, {
-						newHealth: gameEvent.Value.NewHealth,
+						newHealth: gameEvent.Value.AdditionalProps.NewHealth,
 					}),
 				);
 				break;
