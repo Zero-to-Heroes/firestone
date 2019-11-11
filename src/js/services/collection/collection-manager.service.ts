@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { Card } from '../../models/card';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { IndexedDbService } from './indexed-db.service';
@@ -15,7 +14,7 @@ export class CollectionManager {
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();
-			console.log('[collection-manager] retrieved collection from db');
+			console.log('[collection-manager] retrieved collection from db', collectionFromDb.length);
 			return collectionFromDb;
 		} else {
 			console.log('[collection-manager] updating collection in db');

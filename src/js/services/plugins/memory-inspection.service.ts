@@ -36,7 +36,7 @@ export class MemoryInspectionService {
 		// right after I had gotten it from a pack, so let's add a little delay
 		setTimeout(async () => {
 			const memoryCollection = await this.mindVision.getCollection();
-			if (!memoryCollection) {
+			if (!memoryCollection || memoryCollection.length === 0) {
 				// If game is running, we should have something in the collection
 				// This might cause an issue if we're dealing with someone who has zero
 				// cards in their collection, but it's unlikely that totally beginners would
