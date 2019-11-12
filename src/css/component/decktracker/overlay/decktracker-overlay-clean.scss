@@ -72,6 +72,14 @@
 	}
 
 	::ng-deep decktracker-deck-list {
+		& > .deck-list {
+			// No scrollbar / background, we can go with the full zoom
+			width: calc(100% + 20px);
+			min-width: calc(100% + 20px);
+			padding-right: 10px;
+			padding-bottom: 20px;
+		}
+
 		.select-container {
 			display: none;
 		}

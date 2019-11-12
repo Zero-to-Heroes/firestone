@@ -2,6 +2,7 @@
 
 ::-webkit-scrollbar {
 	width: 5px;
+	height: 0; // Always hide horizontal scrollbars
 }
 
 ::-webkit-scrollbar-track {
