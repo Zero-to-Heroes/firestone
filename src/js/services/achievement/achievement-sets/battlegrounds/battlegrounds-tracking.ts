@@ -15,6 +15,10 @@ export class BattlegroundsTrackingSetProvider extends GenericSetProvider {
 				'battlegrounds_tavern_upgrade',
 				'battlegrounds_total_duration',
 				'battlegrounds_total_match',
+				'battlegrounds_tribe_played_beast',
+				'battlegrounds_tribe_played_demon',
+				'battlegrounds_tribe_played_mechanical',
+				'battlegrounds_tribe_played_murloc',
 			],
 			'achievements_progression',
 		);

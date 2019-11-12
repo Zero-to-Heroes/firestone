@@ -114,7 +114,7 @@ export class MemoryInspectionService {
 			return;
 		}
 		const battlegroundsInfo = await this.mindVision.getBattlegroundsInfo();
-		if (battlegroundsInfo) {
+		if (battlegroundsInfo && battlegroundsInfo.Rating > 0) {
 			console.log('[memory-service] fetched battlegroundsInfo', battlegroundsInfo);
 			callback(
 				Object.assign(new BattlegroundsInfo(), {
@@ -124,7 +124,7 @@ export class MemoryInspectionService {
 			);
 			return;
 		}
-		setTimeout(() => this.getBattlegroundsInfoInternal(callback, triesLeft - 1), 2000);
+		setTimeout(() => this.getBattlegroundsInfoInternal(callback, triesLeft - 1), 3000);
 	}
 
 	private extractPlayerInfo(matchPlayer: any): PlayerInfo {
