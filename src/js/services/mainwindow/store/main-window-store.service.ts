@@ -334,7 +334,12 @@ export class MainWindowStoreService {
 			new VideoReplayDeletionRequestProcessor(this.io, achievementUpdateHelper, this.achievementsStorage),
 
 			AchievementRecordedEvent.eventName(),
-			new AchievementRecordedProcessor(this.achievementsStorage, achievementStateHelper, this.events),
+			new AchievementRecordedProcessor(
+				this.achievementsStorage,
+				achievementStateHelper,
+				this.achievementsLoader,
+				this.events,
+			),
 
 			AchievementCompletedEvent.eventName(),
 			new AchievementCompletedProcessor(

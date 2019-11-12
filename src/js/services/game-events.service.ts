@@ -530,7 +530,7 @@ export class GameEvents {
 				Date.now(),
 				this.existingLogLines[this.existingLogLines.length - 1],
 			);
-			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 90 * 1000) {
+			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 5 * 60 * 1000) {
 				console.log(
 					'[game-events] [existing] last line is too old, not doing anything',
 					this.existingLogLines[this.existingLogLines.length - 1],

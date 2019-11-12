@@ -46,11 +46,11 @@ export class AchievementsMonitor {
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
-		// console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
+		// console.log('[achievement-monitor] starting process of completed achievement', challenge);
 		const existingAchievement: CompletedAchievement =
 			(await this.achievementsStorage.loadAchievementFromCache(challenge.achievementId)) ||
 			challenge.defaultAchievement();
-		// console.log('[achievement-monitor] loaded existing completed achievement');
+		// console.log('[achievement-monitor] loaded existing completed achievement', existingAchievement);
 		const completedAchievement = new CompletedAchievement(
 			existingAchievement.id,
 			existingAchievement.numberOfCompletions + 1,
@@ -58,11 +58,10 @@ export class AchievementsMonitor {
 		);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
 		if (achievement.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-			// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+			console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
 			return;
 		}
 		console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
-		// console.log('[achievement-monitor] retrieved achievement from repository', challenge.achievementId);
 		const mergedAchievement = Object.assign(new Achievement(), achievement, {
 			numberOfCompletions: completedAchievement.numberOfCompletions,
 			replayInfo: completedAchievement.replayInfo,
@@ -70,7 +69,7 @@ export class AchievementsMonitor {
 
 		this.achievementStats.publishRemoteAchievement(mergedAchievement);
 		await this.achievementsStorage.cacheAchievement(completedAchievement);
-		// console.log('[achievement-monitor] broadcasting event completion event', challenge.achievementId);
+		// console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
 		// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
 
 		this.enqueue({ achievement: mergedAchievement, challenge: challenge } as InternalEvent);
@@ -94,7 +93,11 @@ export class AchievementsMonitor {
 		const betterCandidate: InternalEvent = eventQueue
 			.filter(event => event.achievement.type === candidate.achievement.type)
 			.sort((a, b) => b.achievement.priority - a.achievement.priority)[0];
-		this.logger.debug('[achievements-monitor] emitted achievement completed event', betterCandidate.achievement.id);
+		// this.logger.debug(
+		// 	'[achievements-monitor] emitted achievement completed event',
+		// 	betterCandidate,
+		// 	betterCandidate.achievement.id,
+		// );
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, betterCandidate.achievement, betterCandidate.challenge);
 		// console.debug('found and broadcast achievemtn comleted');
 		this.store.stateUpdater.next(new AchievementCompletedEvent(betterCandidate.achievement));

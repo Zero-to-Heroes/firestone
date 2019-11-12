@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Achievement } from 'src/js/models/achievement';
-import { BroadcastEvent, Events } from '../events.service';
+import { Events } from '../events.service';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 import { Challenge } from './achievements/challenges/challenge';
@@ -33,13 +33,13 @@ export class AchievementsNotificationService {
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
 		const prefs = await this.prefs.getPreferences();
-		// if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
-		// 	this.logger.debug(
-		// 		'[achievements-notification] achievement already completed, not sending any notif',
-		// 		achievement.id,
-		// 	);
-		// 	return;
-		// }
+		if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
+			this.logger.debug(
+				'[achievements-notification] achievement already completed, not sending any notif',
+				achievement.id,
+			);
+			return;
+		}
 		amplitude.getInstance().logEvent('new-achievement', { 'id': achievement.id });
 		const notificationTimeout = challenge.notificationTimeout();
 		this.logger.debug('[achievements-notification] sending new achievement completed notification', achievement.id);
@@ -47,28 +47,29 @@ export class AchievementsNotificationService {
 		const recapText = recordingOff
 			? `Achievement saved! Click to recap`
 			: `Your replay is being recorded...<span class="loader"></span>`;
+		const unclickable = recordingOff ? undefined : 'unclickable';
 		this.notificationService.html({
 			notificationId: achievement.id,
-			content: this.buildNotificationTemplate(achievement, recapText),
+			content: this.buildNotificationTemplate(achievement, recapText, unclickable),
 			type: 'achievement-no-record',
 			app: 'achievement',
 			cardId: achievement.id,
 			timeout: notificationTimeout, // Used to close the notif if no record notif takes its place
 			theClass: 'no-record',
+			clickToClose: recordingOff,
 		} as Message);
 	}
 
 	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] in pre-record notification');
 		const prefs = await this.prefs.getPreferences();
-		// if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
-		// 	this.logger.debug(
-		// 		'[achievements-notification] achievement already completed, not sending any notif',
-		// 		achievement.id,
-		// 	);
-		// 	return;
-		// }
-		// const notificationTimeout = challenge.notificationTimeout();
+		if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
+			this.logger.debug(
+				'[achievements-notification] achievement already completed, not sending any notif',
+				achievement.id,
+			);
+			return;
+		}
 		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
 		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
 		this.notificationService.html({
@@ -79,11 +80,12 @@ export class AchievementsNotificationService {
 			cardId: achievement.id,
 			timeout: 30000, // We will manually remove this notification once the replay is recorded
 			theClass: 'pending',
+			clickToClose: false,
 		});
 	}
 
 	private async handleAchievementRecordCompleted(achievement: Achievement) {
-		this.logger.debug('[achievements-notification] in post-record notification');
+		this.logger.debug('[achievements-notification] in post-record notification', achievement);
 		// const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
 		const prefs = await this.prefs.getPreferences();
 		if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
@@ -102,6 +104,7 @@ export class AchievementsNotificationService {
 			cardId: achievement.id,
 			timeout: 5000, // Used in case something goes wrong and this is the first notif that is being shown
 			theClass: 'active',
+			clickToClose: true,
 		});
 	}
 
@@ -145,10 +148,4 @@ export class AchievementsNotificationService {
 				</button>
 			</div>`;
 	}
-}
-
-interface InternalEvent {
-	readonly initialEvent: BroadcastEvent;
-	readonly achievement: Achievement;
-	readonly notificationType: 'completion' | 'pre-record' | 'record-complete';
 }

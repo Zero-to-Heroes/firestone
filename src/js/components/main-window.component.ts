@@ -106,16 +106,17 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
-		console.log('retrieved storeBus');
+		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				const window = await this.ow.getCurrentWindow();
 				const currentlyVisible = window.isVisible;
 				if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
+					// console.log('restoring window');
 					await this.ow.restoreWindow(this.windowId);
 				}
-				console.log('updated state after event');
+				// console.log('updated state after event');
 				this.state = newState;
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();

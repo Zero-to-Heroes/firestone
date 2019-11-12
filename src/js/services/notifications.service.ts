@@ -70,5 +70,6 @@ export interface Message {
 	app?: 'achievement' | 'collection' | 'decktracker';
 	timeout?: number;
 	theClass?: string;
+	clickToClose?: boolean;
 	eventToSendOnClick?: () => MainWindowStoreEvent;
 }

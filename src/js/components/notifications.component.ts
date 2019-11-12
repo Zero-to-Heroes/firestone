@@ -77,15 +77,16 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.cdr.detach();
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(message => {
 			const messageObject: Message = JSON.parse(message.content);
-			console.log(
-				'received message in notification window',
-				messageObject.notificationId,
-				messageObject.theClass,
-			);
+			// console.log(
+			// 	'received message in notification window',
+			// 	messageObject.notificationId,
+			// 	messageObject.theClass,
+			// 	messageObject,
+			// );
 			this.processingQueue.enqueue(messageObject);
 		});
 		this.gameInfoListener = this.ow.addGameInfoUpdatedListener(message => {
-			console.log('state changed, resizing and repositioning', message);
+			// console.log('state changed, resizing and repositioning', message);
 			this.resize();
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
@@ -95,7 +96,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.notificationsEmitterBus = this.ow.getMainWindow().notificationsEmitterBus;
 		this.notificationsEmitterBus.subscribe((message: Message) => {
 			if (message) {
-				console.log('received message from bus in notification window', message.notificationId);
+				// console.log('received message from bus in notification window', message.notificationId);
 				this.processingQueue.enqueue(message);
 			}
 		});
@@ -148,20 +149,21 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		console.log('in confirm achievement', notificationId);
 		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
 		const toast = activeNotif.toast;
-		console.log('active notif found', notificationId, activeNotif.notificationId);
+		// console.log('active notif found', newClass, toast, activeNotif, notification);
 		toast.theClass = newClass;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
 		notification.classList.add(newClass);
-		console.log('updated notif', notification);
+		// console.log('updated notif', notification);
 		if (newClass === 'pending' && activeNotif.timeoutHandler) {
 			console.log('canceling fade out timeout');
 			clearTimeout(activeNotif.timeoutHandler);
 		} else if (newClass === 'active') {
+			notification.classList.remove('unclickable');
 			setTimeout(() => {
 				this.fadeNotificationOut(notificationId);
 			}, 5000);
+		}
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 
@@ -177,13 +179,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				// Achievement apps are timed out manually
 				// timeOut: messageObject.app === 'achievement' ? 999999 : this.timeout + additionalTimeout,
 				timeOut: this.timeout + additionalTimeout,
-				clickToClose: true,
+				clickToClose: messageObject.clickToClose === false ? false : true,
 			};
-			console.log('will override with options', override, messageObject);
-			if (type === 'achievement-pre-record') {
-				override.clickToClose = false;
-			}
-
+			// console.log('will override with options', override, messageObject);
 			let timeoutHandler;
 			if (type === 'achievement-no-record') {
 				override.timeOut = 999999; // Closing this one manually
@@ -201,14 +199,12 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			}
 			// console.log('running toast message in zone', toast);
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
-				console.log('registered click on toast', event, toast);
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
+				// console.log('registered click on toast', event, toast);
 				let currentElement: any = event.srcElement;
 				while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
 					currentElement = currentElement.parentElement;
 				}
+				// console.log('currentElemetn', currentElement);
 				// Clicked on close, don't show the card
 				if (currentElement && currentElement.className && currentElement.className.indexOf('close') !== -1) {
 					amplitude
@@ -235,13 +231,16 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					this.showSettings();
 					return;
 				}
+				// console.log('currentElemetn before', currentElement, event.srcElement);
 				while (
 					currentElement &&
 					!currentElement.classList.contains('unclickable') &&
 					currentElement.parentElement
 				) {
 					currentElement = currentElement.parentElement;
+					// console.log('currentElemetn pendant', currentElement);
 				}
+				// console.log('currentElemetn after', currentElement);
 				if (currentElement && currentElement.classList.contains('unclickable')) {
 					amplitude
 						.getInstance()
@@ -250,6 +249,8 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					setTimeout(() => {
 						currentElement.classList.remove('shake');
 					}, 500);
+					event.preventDefault();
+					event.stopPropagation();
 					return;
 				}
 				amplitude
@@ -268,6 +269,9 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					} else {
 						this.stateUpdater.next(new ShowCardDetailsEvent(cardId));
 					}
+				}
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
 				}
 			});
 			const activeNotif: ActiveNotification = {
@@ -315,13 +319,13 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
-			console.log(
-				'game info',
-				gameInfo,
-				wrapper,
-				wrapper.getBoundingClientRect(),
-				this.activeNotifications.length,
-			);
+			// console.log(
+			// 	'game info',
+			// 	gameInfo,
+			// 	wrapper,
+			// 	wrapper.getBoundingClientRect(),
+			// 	this.activeNotifications.length,
+			// );
 			if (!gameInfo) {
 				return;
 			}

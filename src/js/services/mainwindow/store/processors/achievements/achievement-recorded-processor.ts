@@ -1,3 +1,4 @@
+import { Achievement } from '../../../../../models/achievement';
 import { AchievementSet } from '../../../../../models/achievement-set';
 import { CompletedAchievement } from '../../../../../models/completed-achievement';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
@@ -5,6 +6,7 @@ import { ReplayInfo } from '../../../../../models/replay-info';
 import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
 import { AchievementsLocalStorageService } from '../../../../achievement/achievements-local-storage.service';
+import { AchievementsLoaderService } from '../../../../achievement/data/achievements-loader.service';
 import { Events } from '../../../../events.service';
 import { AchievementRecordedEvent } from '../../events/achievements/achievement-recorded-event';
 import { AchievementStateHelper } from '../../helper/achievement-state-helper';
@@ -14,13 +16,14 @@ export class AchievementRecordedProcessor implements Processor {
 	constructor(
 		private achievementStorage: AchievementsLocalStorageService,
 		private achievementStateHelper: AchievementStateHelper,
+		private achievementLoader: AchievementsLoaderService,
 		private events: Events,
 	) {}
 
 	public async process(event: AchievementRecordedEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const achievementId: string = event.achievementId;
 		const replayInfo: ReplayInfo = event.replayInfo;
-		const updatedAchievement = await this.saveReplayInfo(achievementId, replayInfo);
+		await this.saveReplayInfo(achievementId, replayInfo);
 		const newGlobalCategories = this.updateGlobalCategories(
 			currentState.achievements.globalCategories,
 			achievementId,
@@ -30,8 +33,11 @@ export class AchievementRecordedProcessor implements Processor {
 			currentState.achievements,
 			newGlobalCategories,
 		);
+		const achievement: Achievement = await this.achievementLoader.getAchievement(achievementId);
+		// We need to do this in case the pre-record notif has already expired
+		// console.log('found full achievement to broadcast', achievement, updatedAchievement);
 		// TODO: Raising events here feels weird, and it's probably a design flaw.
-		this.events.broadcast(Events.ACHIEVEMENT_RECORDED, updatedAchievement);
+		this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievement);
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,
 		});
@@ -97,7 +103,7 @@ export class AchievementRecordedProcessor implements Processor {
 		const achievement: CompletedAchievement = await this.achievementStorage.loadAchievementFromCache(achievementId);
 		const newAchievement = new CompletedAchievement(achievement.id, achievement.numberOfCompletions, [
 			replayInfo,
-			...achievement.replayInfo,
+			...(achievement.replayInfo || []),
 		]);
 		return await this.achievementStorage.cacheAchievement(newAchievement);
 	}
