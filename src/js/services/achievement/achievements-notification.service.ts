@@ -33,13 +33,13 @@ export class AchievementsNotificationService {
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
 		const prefs = await this.prefs.getPreferences();
-		if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
-			this.logger.debug(
-				'[achievements-notification] achievement already completed, not sending any notif',
-				achievement.id,
-			);
-			return;
-		}
+		// if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
+		// 	this.logger.debug(
+		// 		'[achievements-notification] achievement already completed, not sending any notif',
+		// 		achievement.id,
+		// 	);
+		// 	return;
+		// }
 		amplitude.getInstance().logEvent('new-achievement', { 'id': achievement.id });
 		const notificationTimeout = challenge.notificationTimeout();
 		this.logger.debug('[achievements-notification] sending new achievement completed notification', achievement.id);
@@ -61,13 +61,13 @@ export class AchievementsNotificationService {
 	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] in pre-record notification');
 		const prefs = await this.prefs.getPreferences();
-		if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
-			this.logger.debug(
-				'[achievements-notification] achievement already completed, not sending any notif',
-				achievement.id,
-			);
-			return;
-		}
+		// if (achievement.numberOfCompletions > 1 && !prefs.alwaysShowNotificationPopups) {
+		// 	this.logger.debug(
+		// 		'[achievements-notification] achievement already completed, not sending any notif',
+		// 		achievement.id,
+		// 	);
+		// 	return;
+		// }
 		// const notificationTimeout = challenge.notificationTimeout();
 		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
 		let recapText = `Your replay is being recorded...<span class="loader"></span>`;

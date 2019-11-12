@@ -6,6 +6,8 @@
 	width: 100%;
 	height: 100%;
 	// height: 151px;
+	display: flex;
+	flex-direction: column;
 
 	img {
 		width: 100%;
@@ -22,12 +24,16 @@
 	}
 
 	.count {
+		position: absolute;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		height: 15%;
+		bottom: 0%;
+		width: 100%;
+		top: -9%;
+		bottom: auto;
 		position: relative;
-		top: -16%;
 
 		.non-premium,
 		.premium {

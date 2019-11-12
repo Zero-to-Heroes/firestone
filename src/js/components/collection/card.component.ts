@@ -20,18 +20,20 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/collection/card.component.scss`],
 	template: `
 		<div class="card-container" [ngClass]="{ 'missing': missing }">
-			<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" />
-			<img
-				[style.opacity]="showPlaceholder ? 0 : 1"
-				src="{{ image }}"
-				class="real-card"
-				(load)="imageLoadedHandler()"
-			/>
-			<div
-				[hidden]="showPlaceholder"
-				class="overlay"
-				[ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"
-			></div>
+			<div class="images">
+				<img src="/Files/assets/images/placeholder.png" class="pale-theme placeholder" />
+				<img
+					[style.opacity]="showPlaceholder ? 0 : 1"
+					src="{{ image }}"
+					class="real-card"
+					(load)="imageLoadedHandler()"
+				/>
+				<div
+					[hidden]="showPlaceholder"
+					class="overlay"
+					[ngStyle]="{ '-webkit-mask-image': overlayMaskImage }"
+				></div>
+			</div>
 
 			<div class="count" *ngIf="!showPlaceholder">
 				<div class="non-premium" *ngIf="showNonPremiumCount">
@@ -126,11 +128,11 @@ export class CardComponent implements AfterViewInit {
 
 	private updateImage() {
 		// this.showPlaceholder = true;
-		// if (!(this.cdr as ViewRef).destroyed) {
-		// 	this.cdr.detectChanges();
-		// }
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
 		this.overlayMaskImage = `url('${this.image}')`;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }
