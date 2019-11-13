@@ -105,6 +105,7 @@ export class DeckManipulationHelper {
 		// console.log('ofuscating card', card);
 		return Object.assign(new DeckCard(), card, {
 			cardId: undefined,
+			creatorCardId: undefined,
 		} as DeckCard);
 	}
 
