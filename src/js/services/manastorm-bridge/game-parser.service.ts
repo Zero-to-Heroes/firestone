@@ -110,7 +110,10 @@ export class GameParserService {
 		game.player = gamePlayers[0];
 		game.opponent = gamePlayers[1];
 
-		game.title = game.player.name.replace('"', '') + ' vs ' + game.opponent.name.replace('"', '');
+		game.title =
+			game.player && game.opponent
+				? game.player.name.replace('"', '') + ' vs ' + game.opponent.name.replace('"', '')
+				: 'Unknown matchup';
 
 		game.result = this.extractResult(replayXml, mainPlayerEntityId);
 		// console.log('parsed game');
