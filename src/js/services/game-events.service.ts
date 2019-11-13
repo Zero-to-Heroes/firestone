@@ -9,6 +9,7 @@ import { PlayersInfoService } from './players-info.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { S3FileUploadService } from './s3-file-upload.service';
+import { PreferencesService } from './preferences.service';
 
 @Injectable()
 export class GameEvents {
@@ -30,6 +31,7 @@ export class GameEvents {
 		private playersInfoService: PlayersInfoService,
 		private gameEventsEmitter: GameEventsEmitterService,
 		private deckParser: DeckParserService,
+		private prefs: PreferencesService,
 	) {
 		this.init();
 	}
@@ -67,8 +69,13 @@ export class GameEvents {
 				} as GameEvent),
 			);
 		});
-		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(event => {
-			console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event', event);
+		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async event => {
+			const prefs = await this.prefs.getPreferences();
+			// Don't send the global stats in this case
+			if (prefs.resetAchievementsOnAppStart) {
+				return;
+			}
+			console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
 			this.gameEventsEmitter.allEvents.next(
 				Object.assign(new GameEvent(), {
 					type: GameEvent.GLOBAL_STATS_UPDATED,

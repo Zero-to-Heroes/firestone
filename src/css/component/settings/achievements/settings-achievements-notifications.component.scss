@@ -1,0 +1,19 @@
+.achievements-notifications {
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 100%;
+
+	h2 {
+		margin-top: 15px;
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 600;
+		line-height: normal;
+		font-size: 14px;
+		color: #d9c3ab;
+	}
+
+	::ng-deep preference-toggle .preference-toggle label p {
+		width: 240px;
+	}
+}

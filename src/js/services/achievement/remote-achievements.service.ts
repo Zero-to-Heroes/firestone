@@ -5,6 +5,7 @@ import { Achievement } from '../../models/achievement';
 import { CompletedAchievement } from '../../models/completed-achievement';
 import { GameStateService } from '../decktracker/game-state.service';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 import { UserService } from '../user.service';
 import { AchievementsLocalDbService } from './indexed-db.service';
 
@@ -24,6 +25,7 @@ export class RemoteAchievementsService {
 		private ow: OverwolfService,
 		private userService: UserService,
 		private gameService: GameStateService,
+		private prefs: PreferencesService,
 	) {
 		// this.events.on(Events.ACHIEVEMENT_UNLOCKED).subscribe(event => this.publishAchievementStats(event));
 		// this.retrieveUserInfo();
@@ -31,6 +33,12 @@ export class RemoteAchievementsService {
 	}
 
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
+		const prefs = this.prefs.getPreferences();
+		if ((await prefs).resetAchievementsOnAppStart) {
+			this.logger.debug('[remote-achievements] not loading achievements from remote - streamer mode');
+			await this.indexedDb.setAll([]);
+			return [];
+		}
 		const currentUser = await this.userService.getCurrentUser();
 		// Load from remote
 		const postEvent = {
@@ -46,7 +54,7 @@ export class RemoteAchievementsService {
 		);
 
 		// Update local cache
-		await this.indexedDb.saveAll(result.results);
+		await this.indexedDb.setAll(result.results);
 		// await Promise.all(result.results.map(completedAchievement => this.indexedDb.saveAll(completedAchievement)));
 		this.logger.debug('[remote-achievements] updated local cache');
 

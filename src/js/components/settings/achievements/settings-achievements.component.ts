@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-achievements',
@@ -12,6 +12,9 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 			</settings-achievements-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-achievements-capture *ngSwitchCase="'capture'"></settings-achievements-capture>
+				<settings-achievements-notifications
+					*ngSwitchCase="'notifications'"
+				></settings-achievements-notifications>
 			</ng-container>
 		</ul>
 	`,

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
 	selector: 'settings-achievements-menu',
@@ -10,6 +10,9 @@ import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter } from 
 		<ul class="achievements-menu">
 			<li [ngClass]="{ 'selected': selectedMenu === 'capture' }" (mousedown)="selectMenu('capture')">
 				<span>Video options</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedMenu === 'notifications' }" (mousedown)="selectMenu('notifications')">
+				<span>Notifications</span>
 			</li>
 		</ul>
 	`,

@@ -53,6 +53,15 @@ export class AchievementsLocalDbService {
 		return this.getAll();
 	}
 
+	public async setAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
+		if (!achievements) {
+			return [];
+		}
+		this.achievementsCache = {};
+		achievements.forEach(achievement => this.save(achievement));
+		return this.getAll();
+	}
+
 	public async getAll(): Promise<CompletedAchievement[]> {
 		return Object.values(this.achievementsCache);
 		// await this.waitForDbInit();

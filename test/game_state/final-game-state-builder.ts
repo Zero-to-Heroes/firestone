@@ -86,7 +86,16 @@ export const gameStateBuilder = async (
 		deckService,
 	);
 
-	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService, emitter, deckService);
+	const gameEventsService = new GameEvents(
+		mockPlugin,
+		null,
+		null,
+		events,
+		playersInfoService,
+		emitter,
+		deckService,
+		prefs,
+	);
 
 	// Now process all the events
 	for (const event of pluginEvents) {

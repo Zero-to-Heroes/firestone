@@ -23,7 +23,7 @@ export class AchievementRecordedProcessor implements Processor {
 	public async process(event: AchievementRecordedEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const achievementId: string = event.achievementId;
 		const replayInfo: ReplayInfo = event.replayInfo;
-		await this.saveReplayInfo(achievementId, replayInfo);
+		const cachedAchievement = await this.saveReplayInfo(achievementId, replayInfo);
 		const newGlobalCategories = this.updateGlobalCategories(
 			currentState.achievements.globalCategories,
 			achievementId,
@@ -34,10 +34,14 @@ export class AchievementRecordedProcessor implements Processor {
 			newGlobalCategories,
 		);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(achievementId);
+		const achievementWithReplayInfo = Object.assign(new Achievement(), achievement, {
+			replayInfo: cachedAchievement.replayInfo,
+			numberOfCompletions: cachedAchievement.numberOfCompletions,
+		} as Achievement);
 		// We need to do this in case the pre-record notif has already expired
 		// console.log('found full achievement to broadcast', achievement, updatedAchievement);
 		// TODO: Raising events here feels weird, and it's probably a design flaw.
-		this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievement);
+		this.events.broadcast(Events.ACHIEVEMENT_RECORDED, achievementWithReplayInfo);
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,
 		});

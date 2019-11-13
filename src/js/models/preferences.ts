@@ -28,7 +28,7 @@ export class Preferences {
 	readonly overlayShowTooltipsOnHover: boolean = true;
 
 	readonly launchAppOnGameStart: boolean = true;
-	readonly alwaysShowNotificationPopups = false;
+	readonly resetAchievementsOnAppStart = false;
 	readonly binder: BinderPrefs = new BinderPrefs();
 
 	readonly twitchAccessToken: string;

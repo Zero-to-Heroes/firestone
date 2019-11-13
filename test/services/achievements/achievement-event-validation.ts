@@ -21,6 +21,7 @@ import { GameParserService } from '../../../src/js/services/manastorm-bridge/gam
 import { PlayersInfoService } from '../../../src/js/services/players-info.service';
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';
+import { PreferencesService } from '../../../src/js/services/preferences.service.js';
 import { GameStatsUpdaterService } from '../../../src/js/services/stats/game/game-stats-updater.service';
 
 export const achievementsValidation = async (
@@ -81,8 +82,22 @@ export const achievementsValidation = async (
 	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
 	deckService.decodeDeckString();
 	deckService['reset'] = () => {};
+	const prefs = {
+		getPreferences: () => {
+			return {};
+		},
+	} as PreferencesService;
 	// console.debug('built current deck', deckService);
-	const gameEventsService = new GameEvents(mockPlugin, null, null, events, playersInfoService, emitter, deckService);
+	const gameEventsService = new GameEvents(
+		mockPlugin,
+		null,
+		null,
+		events,
+		playersInfoService,
+		emitter,
+		deckService,
+		prefs,
+	);
 	// Setup achievement monitor, that will check for completion
 	let isAchievementComplete = false;
 	const store: MainWindowStoreService = {
