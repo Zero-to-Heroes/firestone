@@ -25,7 +25,7 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 			</div>
 			<input
 				class="email"
-				[ngModel]="email"
+				[(ngModel)]="email"
 				placeholder="Your email (optional, please fill it if you'd like to hear back from us)"
 			/>
 			<textarea
