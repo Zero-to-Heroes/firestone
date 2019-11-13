@@ -5,6 +5,7 @@ import {
 	Component,
 	EventEmitter,
 	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -37,18 +38,36 @@ declare var amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ControlMaximizeComponent implements AfterViewInit {
+export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	@Input() windowId: string;
 	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	maximized = false;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
+	private stateChangedListener: (message: any) => void;
 
 	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
 
-	ngAfterViewInit() {
+	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+
+		const windowName = (await this.ow.getCurrentWindow()).name;
+		this.stateChangedListener = this.ow.addStateChangedListener(windowName, message => {
+			console.log('received message', message);
+			if (message.window_state === 'maximized') {
+				this.maximized = true;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			} else {
+				this.maximized = false;
+				console.log('showing not maximied');
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
+		});
 	}
 
 	async toggleMaximizeWindow() {
@@ -76,5 +95,9 @@ export class ControlMaximizeComponent implements AfterViewInit {
 				this.cdr.detectChanges();
 			}
 		}
+	}
+
+	ngOnDestroy(): void {
+		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 }

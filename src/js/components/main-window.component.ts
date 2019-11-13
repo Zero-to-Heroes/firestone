@@ -99,9 +99,14 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 			}
 		});
 		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
-			if (message.window_state === 'maximized') {
+			console.log('received collection window message', message, this.isMaximized);
+			// If hidden, restore window to as it was
+			if (message.window_previous_state_ex === 'hidden') {
+				console.log('window was previously hidden, keeping the previosu state', this.isMaximized);
+			} else if (message.window_state === 'maximized') {
 				this.isMaximized = true;
-			} else {
+			} else if (message.window_state !== 'minimized') {
+				// When minimized we want to remember the last position
 				this.isMaximized = false;
 			}
 		});
@@ -113,8 +118,11 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				const currentlyVisible = window.isVisible;
 				if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
-					// console.log('restoring window');
+					console.log('restoring window', this.isMaximized);
 					await this.ow.restoreWindow(this.windowId);
+					if (this.isMaximized) {
+						await this.ow.maximizeWindow(this.windowId);
+					}
 				} else if (this.state && newState.currentApp !== this.state.currentApp) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 				}
