@@ -6,8 +6,11 @@ import { Requirement } from '../_requirement';
 
 export class BattlegroundsRankReq implements Requirement {
 	private isValid: boolean;
+	private rankAtReset: number;
 
-	constructor(private readonly memoryInspection: MemoryInspectionService, private readonly targetRank: number) {}
+	constructor(private readonly memoryInspection: MemoryInspectionService, private readonly targetRank: number) {
+		this.reset();
+	}
 
 	public static create(rawReq: RawRequirement, memoryInspection: MemoryInspectionService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {
@@ -16,8 +19,12 @@ export class BattlegroundsRankReq implements Requirement {
 		return new BattlegroundsRankReq(memoryInspection, parseInt(rawReq.values[0]));
 	}
 
-	reset(): void {
+	async reset() {
 		this.isValid = undefined;
+		const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
+		if (battlegroundsInfo) {
+			this.rankAtReset = battlegroundsInfo.rating;
+		}
 	}
 
 	afterAchievementCompletionReset(): void {
@@ -36,7 +43,30 @@ export class BattlegroundsRankReq implements Requirement {
 	}
 
 	private async detectPlayerRank() {
-		const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
+		const battlegroundsInfo: BattlegroundsInfo = await this.getRank();
 		this.isValid = battlegroundsInfo && battlegroundsInfo.rating >= this.targetRank;
+		// console.log('battlegrounds-rank-req', battlegroundsInfo, this.isValid, this.targetRank);
+	}
+
+	private async getRank() {
+		return new Promise<BattlegroundsInfo>(resolve => {
+			this.getRankInternal(info => resolve(info));
+		});
+	}
+
+	private async getRankInternal(callback, retriesLeft = 20): Promise<void> {
+		const rank = await this.memoryInspection.getBattlegroundsInfo();
+		if (!rank || (this.rankAtReset && rank.rating == this.rankAtReset)) {
+			// console.log('battlegrounds-rank-req new rank not updated yet', rank, this.rankAtReset);
+			if (retriesLeft <= 0) {
+				// console.log('battlegrounds-rank-req retries over, returning', rank);
+				callback(rank);
+				return;
+			}
+			setTimeout(() => this.getRankInternal(callback, retriesLeft - 1), 2000);
+			return;
+		}
+		// console.log('returning with real rank', rank);
+		callback(rank);
 	}
 }
