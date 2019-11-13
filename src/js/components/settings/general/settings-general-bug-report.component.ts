@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
 import { LogsUploaderService } from '../../../services/logs-uploader.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -26,12 +26,14 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 			<input
 				class="email"
 				[(ngModel)]="email"
+				(mousedown)="preventDrag($event)"
 				placeholder="Your email (optional, please fill it if you'd like to hear back from us)"
 			/>
 			<textarea
 				class="body"
 				[ngModel]="body"
 				(ngModelChange)="onBodyChange($event)"
+				(mousedown)="preventDrag($event)"
 				placeholder="Your message. If you're reporting a bug, please try to describe what you were doing when the bug occurred, and what happened that caused you to report this bug. And in any case, thanks for reaching out :)"
 			></textarea>
 			<div class="button-group">
@@ -53,6 +55,7 @@ export class SettingsGeneralBugReportComponent {
 		private ow: OverwolfService,
 		private cdr: ChangeDetectorRef,
 		private http: HttpClient,
+		private el: ElementRef,
 	) {}
 
 	onBodyChange(newBody: string) {
@@ -100,5 +103,10 @@ export class SettingsGeneralBugReportComponent {
 		} catch (e) {
 			console.error('Could not upload all relevant log files', e);
 		}
+	}
+
+	// Prevent the window from being dragged around if user drags within the textarea
+	preventDrag(event: MouseEvent) {
+		event.stopPropagation();
 	}
 }
