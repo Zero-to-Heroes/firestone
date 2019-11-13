@@ -115,6 +115,8 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 					// console.log('restoring window');
 					await this.ow.restoreWindow(this.windowId);
+				} else if (this.state && newState.currentApp !== this.state.currentApp) {
+					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 				}
 				// console.log('updated state after event');
 				this.state = newState;
