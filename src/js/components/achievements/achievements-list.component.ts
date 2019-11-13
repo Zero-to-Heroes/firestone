@@ -161,12 +161,14 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
-			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
+			console.log('setting selectedAchievementId', selectedAchievementId, this._selectedAchievementId);
+			// this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
 			const achievementToShow: Element = this.el.nativeElement.querySelector(
 				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
 			);
+			console.log('achievementToShow?', achievementToShow);
 			if (achievementToShow) {
-				achievementToShow.scrollIntoView(true);
+				setTimeout(() => achievementToShow.scrollIntoView(true));
 			}
 		}
 		this._selectedAchievementId = selectedAchievementId;
