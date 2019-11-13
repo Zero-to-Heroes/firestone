@@ -373,7 +373,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			})
 			.sort((a, b) => b.timestamp - a.timestamp);
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
-		console.log('updated thumbnails', this.thumbnails);
+		// console.log('updated thumbnails', this.thumbnails);
 		this.updateThumbnail(this.thumbnails[this.indexOfFirstShown]);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -382,35 +382,35 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	private updateThumbnail(thumbnail: ThumbnailInfo) {
-		console.log('updating thumbnail', thumbnail);
+		// console.log('updating thumbnail', thumbnail);
 		this.currentThumbnail = thumbnail;
 		this.currentVideoPathOnDisk = this.currentThumbnail ? this.currentThumbnail.videoPath : undefined;
 		this.currentReplayLocation = this.currentThumbnail ? this.currentThumbnail.videoLocation : undefined;
 		this.currentReplay = this.currentReplayLocation
 			? this.sanitizer.bypassSecurityTrustUrl(this.currentReplayLocation)
 			: undefined;
-		console.log('updated current replay', this.currentReplay);
+		// console.log('updated current replay', this.currentReplay);
 		this.updateTitle();
 		this.cdr.detectChanges();
 	}
 
 	private async isDeleted(path: string): Promise<boolean> {
 		const fileExists = await this.io.fileExists(path);
-		console.log('fileExists in component?', fileExists);
+		// console.log('fileExists in component?', fileExists);
 		return !fileExists;
 	}
 
 	private async buildDeletedPaths(replayInfo: readonly ReplayInfo[]): Promise<string[]> {
 		const deletedPaths: string[] = [];
 		for (const info of replayInfo) {
-			console.log('considering delete', info, info.path);
+			// console.log('considering delete', info, info.path);
 			const isDeleted: boolean = await this.isDeleted(info.path);
-			console.log('is deleted?', isDeleted);
+			// console.log('is deleted?', isDeleted);
 			if (isDeleted) {
 				deletedPaths.push(info.path);
 			}
 		}
-		console.log('deleted', deletedPaths);
+		// console.log('deleted', deletedPaths);
 		return deletedPaths;
 	}
 

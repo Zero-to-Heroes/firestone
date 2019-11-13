@@ -46,7 +46,7 @@ export class MatchSummaryService {
 					setTimeout(() => this.queryServerForStats(reviewId, retriesLeft - 1), 1000);
 					return;
 				}
-				this.logger.debug('[match-summary] received stats', data);
+				this.logger.debug('[match-summary] received stats');
 				const stats: MatchStats = data.results ? data.results[0] : undefined;
 				this.store.stateUpdater.next(new MatchStatsAvailableEvent(stats));
 			},

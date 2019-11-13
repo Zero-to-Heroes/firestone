@@ -58,7 +58,7 @@ export class AchievementsMonitor {
 		);
 		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
 		if (achievement.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-			console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+			// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
 			return;
 		}
 		console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);

@@ -36,7 +36,7 @@ export class GlobalStatsService {
 					setTimeout(() => this.getGlobalStatsInternal(userId, callback, retriesLeft - 1), 1000);
 					return;
 				}
-				this.logger.debug('[global-stats] received stats', data, data.result);
+				this.logger.debug('[global-stats] received stats');
 				const stats: GlobalStats = data.result;
 				callback(stats);
 			},
