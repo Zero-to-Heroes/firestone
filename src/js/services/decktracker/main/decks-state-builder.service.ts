@@ -11,7 +11,7 @@ export class DecksStateBuilderService {
 	constructor(private readonly logger: NGXLogger) {}
 
 	public buildState(stats: StatsState, filters: DeckFilters): readonly DeckSummary[] {
-		this.logger.debug('[decktracker-stats-loader] update with stats', stats);
+		this.logger.debug('[decktracker-stats-loader] update with stats');
 		const standardRanked = stats.gameStats.stats
 			.filter(stat => stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)

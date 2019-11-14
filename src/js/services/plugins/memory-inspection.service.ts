@@ -109,13 +109,13 @@ export class MemoryInspectionService {
 
 	private async getBattlegroundsInfoInternal(callback, triesLeft = 20) {
 		if (triesLeft <= 0) {
-			console.error('[memory-service] could not get battlegrounds info from memory');
+			// console.error('[memory-service] could not get battlegrounds info from memory');
 			callback(null);
 			return;
 		}
 		const battlegroundsInfo = await this.mindVision.getBattlegroundsInfo();
 		if (battlegroundsInfo && battlegroundsInfo.Rating > 0) {
-			console.log('[memory-service] fetched battlegroundsInfo', battlegroundsInfo);
+			// console.log('[memory-service] fetched battlegroundsInfo', battlegroundsInfo);
 			callback(
 				Object.assign(new BattlegroundsInfo(), {
 					rating: battlegroundsInfo.Rating,
