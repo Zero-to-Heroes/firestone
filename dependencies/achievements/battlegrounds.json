@@ -407,22 +407,22 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "20000"] }]
 	},
 	{
-		"id": "battlegrounds_coin_spent_250",
+		"id": "battlegrounds_coin_spent_450",
 		"type": "battlegrounds_coin_spent",
 		"name": "Shopper",
 		"icon": "boss_victory",
 		"root": true,
 		"canBeCompletedOnlyOnce": true,
-		"priority": 250,
-		"displayName": "Shopper (250 coins spent)",
+		"priority": 450,
+		"displayName": "Shopper (450 coins spent)",
 		"text": "Spend coins in Battlegrounds (%%globalStats.total-mana-spent.battlegrounds%% coins spent so far)",
-		"completedText": "Spent 250 coins",
+		"completedText": "Spent 450 coins",
 		"displayCardId": "CS2_013t",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "250"] }]
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "450"] }]
 	},
 	{
 		"id": "battlegrounds_coin_spent_4500",
@@ -461,22 +461,22 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "50000"] }]
 	},
 	{
-		"id": "battlegrounds_coin_spent_800",
+		"id": "battlegrounds_coin_spent_900",
 		"type": "battlegrounds_coin_spent",
 		"name": "Shopper",
 		"icon": "boss_victory",
 		"root": false,
 		"canBeCompletedOnlyOnce": true,
-		"priority": 800,
-		"displayName": "Shopper (800 coins spent)",
+		"priority": 900,
+		"displayName": "Shopper (900 coins spent)",
 		"text": "Spend coins in Battlegrounds (%%globalStats.total-mana-spent.battlegrounds%% coins spent so far)",
-		"completedText": "Spent 800 coins",
+		"completedText": "Spent 900 coins",
 		"displayCardId": "CS2_013t",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "800"] }]
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-mana-spent", "battlegrounds", "900"] }]
 	},
 	{
 		"id": "battlegrounds_damage_to_enemy_heroes_14000",
@@ -515,24 +515,6 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-damage-to-enemy-hero", "battlegrounds", "1500"] }]
 	},
 	{
-		"id": "battlegrounds_damage_to_enemy_heroes_200",
-		"type": "battlegrounds_damage_to_enemy_heroes",
-		"name": "Past the Defense",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 200,
-		"displayName": "Past the Defense (200 damage)",
-		"text": "Deal damage to enemy heroes in Battlegrounds (%%globalStats.total-damage-to-enemy-hero.battlegrounds%% damage dealt so far)",
-		"completedText": "Dealt 200 damage to enemy heroes",
-		"displayCardId": "TB_BaconUps_038",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-damage-to-enemy-hero", "battlegrounds", "200"] }]
-	},
-	{
 		"id": "battlegrounds_damage_to_enemy_heroes_20000",
 		"type": "battlegrounds_damage_to_enemy_heroes",
 		"name": "Past the Defense",
@@ -567,6 +549,24 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-damage-to-enemy-hero", "battlegrounds", "3000"] }]
+	},
+	{
+		"id": "battlegrounds_damage_to_enemy_heroes_350",
+		"type": "battlegrounds_damage_to_enemy_heroes",
+		"name": "Past the Defense",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 350,
+		"displayName": "Past the Defense (350 damage)",
+		"text": "Deal damage to enemy heroes in Battlegrounds (%%globalStats.total-damage-to-enemy-hero.battlegrounds%% damage dealt so far)",
+		"completedText": "Dealt 350 damage to enemy heroes",
+		"displayCardId": "TB_BaconUps_038",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-damage-to-enemy-hero", "battlegrounds", "350"] }]
 	},
 	{
 		"id": "battlegrounds_damage_to_enemy_heroes_700",
@@ -641,6 +641,24 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-heroes-killed", "battlegrounds", "150"] }]
 	},
 	{
+		"id": "battlegrounds_eliminate_other_players_1500",
+		"type": "battlegrounds_eliminate_other_players",
+		"name": "Today You Die",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 1500,
+		"displayName": "Today You Die (eliminated 1,500 players)",
+		"text": "Eliminate other players (%%globalStats.total-enemy-heroes-killed.battlegrounds%% players eliminated so far)",
+		"completedText": "Eliminated 1,500 players",
+		"displayCardId": "GVG_021",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-heroes-killed", "battlegrounds", "1500"] }]
+	},
+	{
 		"id": "battlegrounds_eliminate_other_players_2000",
 		"type": "battlegrounds_eliminate_other_players",
 		"name": "Today You Die",
@@ -713,24 +731,6 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-heroes-killed", "battlegrounds", "500"] }]
 	},
 	{
-		"id": "battlegrounds_eliminate_other_players_5000",
-		"type": "battlegrounds_eliminate_other_players",
-		"name": "Today You Die",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 5000,
-		"displayName": "Today You Die (eliminated 5,000 players)",
-		"text": "Eliminate other players (%%globalStats.total-enemy-heroes-killed.battlegrounds%% players eliminated so far)",
-		"completedText": "Eliminated 5,000 players",
-		"displayCardId": "GVG_021",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-heroes-killed", "battlegrounds", "5000"] }]
-	},
-	{
 		"id": "battlegrounds_eliminate_other_players_60",
 		"type": "battlegrounds_eliminate_other_players",
 		"name": "Today You Die",
@@ -747,24 +747,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-heroes-killed", "battlegrounds", "60"] }]
-	},
-	{
-		"id": "battlegrounds_enemy_minions_dead_100",
-		"type": "battlegrounds_enemy_minions_dead",
-		"name": "Master of the Board",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 100,
-		"displayName": "Master of the Board (100 enemy minions dead)",
-		"text": "Kill enemy minions in Battlegrounds (%%globalStats.total-enemy-minions-death.battlegrounds%% minions killed so far)",
-		"completedText": "Killed 100 enemy minions",
-		"displayCardId": "AT_121",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "100"] }]
 	},
 	{
 		"id": "battlegrounds_enemy_minions_dead_1000",
@@ -801,6 +783,24 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "10000"] }]
+	},
+	{
+		"id": "battlegrounds_enemy_minions_dead_200",
+		"type": "battlegrounds_enemy_minions_dead",
+		"name": "Master of the Board",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 200,
+		"displayName": "Master of the Board (200 enemy minions dead)",
+		"text": "Kill enemy minions in Battlegrounds (%%globalStats.total-enemy-minions-death.battlegrounds%% minions killed so far)",
+		"completedText": "Killed 200 enemy minions",
+		"displayCardId": "AT_121",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-enemy-minions-death", "battlegrounds", "200"] }]
 	},
 	{
 		"id": "battlegrounds_enemy_minions_dead_2000",
@@ -2579,6 +2579,24 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-lock-all", "battlegrounds", "150"] }]
 	},
 	{
+		"id": "battlegrounds_lock_all_1500",
+		"type": "battlegrounds_lock_all",
+		"name": "Lock Them All",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 1500,
+		"displayName": "Lock Them All (1,500 times)",
+		"text": "Freeze all minions during the Recruit phase (%%globalStats.total-tavern-lock-all.battlegrounds%% times so far)",
+		"completedText": "Locked minions 1,500 times",
+		"displayCardId": "TB_BaconShopLockAll_Button",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-lock-all", "battlegrounds", "1500"] }]
+	},
+	{
 		"id": "battlegrounds_lock_all_2000",
 		"type": "battlegrounds_lock_all",
 		"name": "Lock Them All",
@@ -2649,24 +2667,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-lock-all", "battlegrounds", "500"] }]
-	},
-	{
-		"id": "battlegrounds_lock_all_5000",
-		"type": "battlegrounds_lock_all",
-		"name": "Lock Them All",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 5000,
-		"displayName": "Lock Them All (5,000 times)",
-		"text": "Freeze all minions during the Recruit phase (%%globalStats.total-tavern-lock-all.battlegrounds%% times so far)",
-		"completedText": "Locked minions 5,000 times",
-		"displayCardId": "TB_BaconShopLockAll_Button",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-lock-all", "battlegrounds", "5000"] }]
 	},
 	{
 		"id": "battlegrounds_lock_all_60",
@@ -4139,6 +4139,24 @@
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
 	{
+		"id": "battlegrounds_reroll_tavern_100",
+		"type": "battlegrounds_reroll_tavern",
+		"name": "Not That One",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 100,
+		"displayName": "Not That One (tavern rerolled 100 times)",
+		"text": "Reroll the minions in the tavern (%%globalStats.total-tavern-reroll.battlegrounds%% times so far)",
+		"completedText": "Rerolled minions 100 times",
+		"displayCardId": "TB_BaconShop_1p_Reroll_Button",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "100"] }]
+	},
+	{
 		"id": "battlegrounds_reroll_tavern_1000",
 		"type": "battlegrounds_reroll_tavern",
 		"name": "Not That One",
@@ -4155,24 +4173,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "1000"] }]
-	},
-	{
-		"id": "battlegrounds_reroll_tavern_150",
-		"type": "battlegrounds_reroll_tavern",
-		"name": "Not That One",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 150,
-		"displayName": "Not That One (tavern rerolled 150 times)",
-		"text": "Reroll the minions in the tavern (%%globalStats.total-tavern-reroll.battlegrounds%% times so far)",
-		"completedText": "Rerolled minions 150 times",
-		"displayCardId": "TB_BaconShop_1p_Reroll_Button",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "150"] }]
 	},
 	{
 		"id": "battlegrounds_reroll_tavern_2000",
@@ -4193,24 +4193,6 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "2000"] }]
 	},
 	{
-		"id": "battlegrounds_reroll_tavern_30",
-		"type": "battlegrounds_reroll_tavern",
-		"name": "Not That One",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 30,
-		"displayName": "Not That One (tavern rerolled 30 times)",
-		"text": "Reroll the minions in the tavern (%%globalStats.total-tavern-reroll.battlegrounds%% times so far)",
-		"completedText": "Rerolled minions 30 times",
-		"displayCardId": "TB_BaconShop_1p_Reroll_Button",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "30"] }]
-	},
-	{
 		"id": "battlegrounds_reroll_tavern_300",
 		"type": "battlegrounds_reroll_tavern",
 		"name": "Not That One",
@@ -4227,6 +4209,42 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "300"] }]
+	},
+	{
+		"id": "battlegrounds_reroll_tavern_3000",
+		"type": "battlegrounds_reroll_tavern",
+		"name": "Not That One",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 3000,
+		"displayName": "Not That One (tavern rerolled 3,000 times)",
+		"text": "Reroll the minions in the tavern (%%globalStats.total-tavern-reroll.battlegrounds%% times so far)",
+		"completedText": "Rerolled minions 3,000 times",
+		"displayCardId": "TB_BaconShop_1p_Reroll_Button",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "3000"] }]
+	},
+	{
+		"id": "battlegrounds_reroll_tavern_50",
+		"type": "battlegrounds_reroll_tavern",
+		"name": "Not That One",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 50,
+		"displayName": "Not That One (tavern rerolled 50 times)",
+		"text": "Reroll the minions in the tavern (%%globalStats.total-tavern-reroll.battlegrounds%% times so far)",
+		"completedText": "Rerolled minions 50 times",
+		"displayCardId": "TB_BaconShop_1p_Reroll_Button",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "50"] }]
 	},
 	{
 		"id": "battlegrounds_reroll_tavern_500",
@@ -4265,24 +4283,6 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "5000"] }]
 	},
 	{
-		"id": "battlegrounds_reroll_tavern_60",
-		"type": "battlegrounds_reroll_tavern",
-		"name": "Not That One",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 60,
-		"displayName": "Not That One (tavern rerolled 60 times)",
-		"text": "Reroll the minions in the tavern (%%globalStats.total-tavern-reroll.battlegrounds%% times so far)",
-		"completedText": "Rerolled minions 60 times",
-		"displayCardId": "TB_BaconShop_1p_Reroll_Button",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-reroll", "battlegrounds", "60"] }]
-	},
-	{
 		"id": "battlegrounds_tavern_upgrade_1000",
 		"type": "battlegrounds_tavern_upgrade",
 		"name": "Upgrade",
@@ -4317,6 +4317,24 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-upgrades", "battlegrounds", "150"] }]
+	},
+	{
+		"id": "battlegrounds_tavern_upgrade_1500",
+		"type": "battlegrounds_tavern_upgrade",
+		"name": "Upgrade",
+		"icon": "boss_victory",
+		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 1500,
+		"displayName": "Upgrade (1,500 taverns upgraded)",
+		"text": "Upgrade your tavern (%%globalStats.total-tavern-upgrades.battlegrounds%% taverns upgraded so far)",
+		"completedText": "Upgraded 1,500 taverns",
+		"displayCardId": "TB_BaconShopTechUp02_Button",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-upgrades", "battlegrounds", "1500"] }]
 	},
 	{
 		"id": "battlegrounds_tavern_upgrade_2000",
@@ -4391,24 +4409,6 @@
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-upgrades", "battlegrounds", "500"] }]
 	},
 	{
-		"id": "battlegrounds_tavern_upgrade_5000",
-		"type": "battlegrounds_tavern_upgrade",
-		"name": "Upgrade",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 5000,
-		"displayName": "Upgrade (5,000 taverns upgraded)",
-		"text": "Upgrade your tavern (%%globalStats.total-tavern-upgrades.battlegrounds%% taverns upgraded so far)",
-		"completedText": "Upgraded 5,000 taverns",
-		"displayCardId": "TB_BaconShopTechUp02_Button",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-upgrades", "battlegrounds", "5000"] }]
-	},
-	{
 		"id": "battlegrounds_tavern_upgrade_60",
 		"type": "battlegrounds_tavern_upgrade",
 		"name": "Upgrade",
@@ -4425,24 +4425,6 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-tavern-upgrades", "battlegrounds", "60"] }]
-	},
-	{
-		"id": "battlegrounds_total_duration_1",
-		"type": "battlegrounds_total_duration",
-		"name": "Time is the Essence",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 1,
-		"displayName": "Time is the Essence (1 hours spent in battlegrounds matches)",
-		"text": "Spend time in Battlegrounds matches (%%globalStats.total-duration.battlegrounds%% hours spent in matches so far)",
-		"completedText": "Spent 1 hours in matches",
-		"displayCardId": "BOT_537",
-		"displayCardType": "spell",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-duration", "battlegrounds", "1"] }]
 	},
 	{
 		"id": "battlegrounds_total_duration_10",
@@ -4533,6 +4515,24 @@
 		"maxNumberOfRecords": 1,
 		"points": 25.0,
 		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-duration", "battlegrounds", "300"] }]
+	},
+	{
+		"id": "battlegrounds_total_duration_5",
+		"type": "battlegrounds_total_duration",
+		"name": "Time is the Essence",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 5,
+		"displayName": "Time is the Essence (5 hours spent in battlegrounds matches)",
+		"text": "Spend time in Battlegrounds matches (%%globalStats.total-duration.battlegrounds%% hours spent in matches so far)",
+		"completedText": "Spent 5 hours in matches",
+		"displayCardId": "BOT_537",
+		"displayCardType": "spell",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [{ "type": "GLOBAL_STAT", "values": ["total-duration", "battlegrounds", "5"] }]
 	},
 	{
 		"id": "battlegrounds_total_duration_50",
@@ -4701,26 +4701,6 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_beast_20",
-		"type": "battlegrounds_tribe_played_beast",
-		"name": "Beast Invasion",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 20,
-		"displayName": "Beast Invasion (20 beasts played)",
-		"text": "Play beasts in Battlegrounds (%%globalStats.total-minions-played-by-tribe-beast.battlegrounds%% beasts played so far)",
-		"completedText": "Played 20 beasts",
-		"displayCardId": "TB_BaconUps_043",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [
-			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-beast", "battlegrounds", "20"] }
-		]
-	},
-	{
 		"id": "battlegrounds_tribe_played_beast_200",
 		"type": "battlegrounds_tribe_played_beast",
 		"name": "Beast Invasion",
@@ -4741,11 +4721,31 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_beast_50",
+		"id": "battlegrounds_tribe_played_beast_2000",
 		"type": "battlegrounds_tribe_played_beast",
 		"name": "Beast Invasion",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 2000,
+		"displayName": "Beast Invasion (2,000 beasts played)",
+		"text": "Play beasts in Battlegrounds (%%globalStats.total-minions-played-by-tribe-beast.battlegrounds%% beasts played so far)",
+		"completedText": "Played 2,000 beasts",
+		"displayCardId": "TB_BaconUps_043",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [
+			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-beast", "battlegrounds", "2000"] }
+		]
+	},
+	{
+		"id": "battlegrounds_tribe_played_beast_50",
+		"type": "battlegrounds_tribe_played_beast",
+		"name": "Beast Invasion",
+		"icon": "boss_victory",
+		"root": true,
 		"canBeCompletedOnlyOnce": true,
 		"priority": 50,
 		"displayName": "Beast Invasion (50 beasts played)",
@@ -4821,26 +4821,6 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_demon_20",
-		"type": "battlegrounds_tribe_played_demon",
-		"name": "Demon Invasion",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 20,
-		"displayName": "Demon Invasion (20 demons played)",
-		"text": "Play demons in Battlegrounds (%%globalStats.total-minions-played-by-tribe-demon.battlegrounds%% demons played so far)",
-		"completedText": "Played 20 demons",
-		"displayCardId": "TB_BaconUps_030",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [
-			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-demon", "battlegrounds", "20"] }
-		]
-	},
-	{
 		"id": "battlegrounds_tribe_played_demon_200",
 		"type": "battlegrounds_tribe_played_demon",
 		"name": "Demon Invasion",
@@ -4861,11 +4841,31 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_demon_50",
+		"id": "battlegrounds_tribe_played_demon_2000",
 		"type": "battlegrounds_tribe_played_demon",
 		"name": "Demon Invasion",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 2000,
+		"displayName": "Demon Invasion (2,000 demons played)",
+		"text": "Play demons in Battlegrounds (%%globalStats.total-minions-played-by-tribe-demon.battlegrounds%% demons played so far)",
+		"completedText": "Played 2,000 demons",
+		"displayCardId": "TB_BaconUps_030",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [
+			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-demon", "battlegrounds", "2000"] }
+		]
+	},
+	{
+		"id": "battlegrounds_tribe_played_demon_50",
+		"type": "battlegrounds_tribe_played_demon",
+		"name": "Demon Invasion",
+		"icon": "boss_victory",
+		"root": true,
 		"canBeCompletedOnlyOnce": true,
 		"priority": 50,
 		"displayName": "Demon Invasion (50 demons played)",
@@ -4941,26 +4941,6 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_mechanical_20",
-		"type": "battlegrounds_tribe_played_mechanical",
-		"name": "Mech Invasion",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 20,
-		"displayName": "Mech Invasion (20 mechs played)",
-		"text": "Play mechs in Battlegrounds (%%globalStats.total-minions-played-by-tribe-mechanical.battlegrounds%% mechs played so far)",
-		"completedText": "Played 20 mechs",
-		"displayCardId": "TB_BaconUps_032",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [
-			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-mechanical", "battlegrounds", "20"] }
-		]
-	},
-	{
 		"id": "battlegrounds_tribe_played_mechanical_200",
 		"type": "battlegrounds_tribe_played_mechanical",
 		"name": "Mech Invasion",
@@ -4981,11 +4961,31 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_mechanical_50",
+		"id": "battlegrounds_tribe_played_mechanical_2000",
 		"type": "battlegrounds_tribe_played_mechanical",
 		"name": "Mech Invasion",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 2000,
+		"displayName": "Mech Invasion (2,000 mechs played)",
+		"text": "Play mechs in Battlegrounds (%%globalStats.total-minions-played-by-tribe-mechanical.battlegrounds%% mechs played so far)",
+		"completedText": "Played 2,000 mechs",
+		"displayCardId": "TB_BaconUps_032",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [
+			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-mechanical", "battlegrounds", "2000"] }
+		]
+	},
+	{
+		"id": "battlegrounds_tribe_played_mechanical_50",
+		"type": "battlegrounds_tribe_played_mechanical",
+		"name": "Mech Invasion",
+		"icon": "boss_victory",
+		"root": true,
 		"canBeCompletedOnlyOnce": true,
 		"priority": 50,
 		"displayName": "Mech Invasion (50 mechs played)",
@@ -5061,26 +5061,6 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_murloc_20",
-		"type": "battlegrounds_tribe_played_murloc",
-		"name": "Murloc Invasion",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 20,
-		"displayName": "Murloc Invasion (20 murlocs played)",
-		"text": "Play murlocs in Battlegrounds (%%globalStats.total-minions-played-by-tribe-murloc.battlegrounds%% murlocs played so far)",
-		"completedText": "Played 20 murlocs",
-		"displayCardId": "TB_BaconUps_011",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 1,
-		"points": 25.0,
-		"requirements": [
-			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-murloc", "battlegrounds", "20"] }
-		]
-	},
-	{
 		"id": "battlegrounds_tribe_played_murloc_200",
 		"type": "battlegrounds_tribe_played_murloc",
 		"name": "Murloc Invasion",
@@ -5101,11 +5081,31 @@
 		]
 	},
 	{
-		"id": "battlegrounds_tribe_played_murloc_50",
+		"id": "battlegrounds_tribe_played_murloc_2000",
 		"type": "battlegrounds_tribe_played_murloc",
 		"name": "Murloc Invasion",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 2000,
+		"displayName": "Murloc Invasion (2,000 murlocs played)",
+		"text": "Play murlocs in Battlegrounds (%%globalStats.total-minions-played-by-tribe-murloc.battlegrounds%% murlocs played so far)",
+		"completedText": "Played 2,000 murlocs",
+		"displayCardId": "TB_BaconUps_011",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 1,
+		"points": 25.0,
+		"requirements": [
+			{ "type": "GLOBAL_STAT", "values": ["total-minions-played-by-tribe-murloc", "battlegrounds", "2000"] }
+		]
+	},
+	{
+		"id": "battlegrounds_tribe_played_murloc_50",
+		"type": "battlegrounds_tribe_played_murloc",
+		"name": "Murloc Invasion",
+		"icon": "boss_victory",
+		"root": true,
 		"canBeCompletedOnlyOnce": true,
 		"priority": 50,
 		"displayName": "Murloc Invasion (50 murlocs played)",
