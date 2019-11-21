@@ -98,10 +98,27 @@ export class MemoryInspectionService {
 		setTimeout(() => this.getPlayerInfoInternal(callback, triesLeft - 1), 2000);
 	}
 
-	public getBattlegroundsInfo(): Promise<BattlegroundsInfo> {
+	private cachedBGInfo: BattlegroundsInfo;
+	private bgTimeout;
+
+	public async getBattlegroundsInfo(): Promise<BattlegroundsInfo> {
 		// this.playersInfoTriesLeft = 20;
+		if (this.cachedBGInfo) {
+			return this.cachedBGInfo;
+		}
 		return new Promise<BattlegroundsInfo>(resolve => {
 			this.getBattlegroundsInfoInternal((battlegroundsInfo: BattlegroundsInfo) => {
+				console.log('retrieved battlegrounds info', battlegroundsInfo);
+				this.cachedBGInfo = battlegroundsInfo;
+				// Here the logic is a bit different, as we might still get an old value
+				// So we don't want to always cache the result, but just make sure that
+				// requests that are made more or less at the same time get the same result
+				if (!this.bgTimeout) {
+					this.bgTimeout = setTimeout(() => {
+						this.cachedBGInfo = null;
+						this.bgTimeout = null;
+					}, 2000);
+				}
 				resolve(battlegroundsInfo);
 			});
 		});

@@ -5,8 +5,8 @@ import { MemoryInspectionService } from './plugins/memory-inspection.service';
 
 @Injectable()
 export class PlayersInfoService {
-	// public playerInfo: PlayerInfo;
-	// public opponentInfo: PlayerInfo;
+	private cachedInfo: { localPlayer: PlayerInfo; opponent: PlayerInfo };
+	private cacheInvalidationTimeout;
 
 	constructor(private events: Events, private memoryService: MemoryInspectionService) {
 		// this.events.on(Events.PLAYER_INFO).subscribe(event => {
@@ -22,12 +22,13 @@ export class PlayersInfoService {
 		// 	return this.playerInfo;
 		// }
 		// console.log('[players-info] playerInfo not present in cache, fetching it from GEP');
-		const infoFromGep = await this.memoryService.getPlayerInfo();
+		const infoFromGep = this.cachedInfo || (await this.memoryService.getPlayerInfo());
 		if (!infoFromGep) {
 			console.log('[players-info] No player info returned by mindvision');
 			return null;
 		}
-		console.log('[players-info] retrieved player info from memory', infoFromGep.localPlayer);
+		this.shortCache(infoFromGep);
+		// console.log('[players-info] retrieved player info from memory', infoFromGep.localPlayer);
 		return infoFromGep.localPlayer;
 	}
 
@@ -37,12 +38,23 @@ export class PlayersInfoService {
 		// }
 		// It's usually less important to have the opponent info, so we only add this as a log
 		// console.log('[players-info] opponentInfo not present in cache, fetching it from GEP');
-		const infoFromGep = await this.memoryService.getPlayerInfo();
+		const infoFromGep = this.cachedInfo || (await this.memoryService.getPlayerInfo());
 		if (!infoFromGep) {
 			console.error('[players-info] No player info returned by mindvision');
 			return null;
 		}
-		console.log('[players-info] retrieved opponent info from memory', infoFromGep.opponent);
+		this.shortCache(infoFromGep);
 		return infoFromGep.opponent;
+	}
+
+	private shortCache(memoryInfo) {
+		this.cachedInfo = memoryInfo;
+		if (this.cacheInvalidationTimeout) {
+			clearTimeout(this.cacheInvalidationTimeout);
+		}
+		this.cacheInvalidationTimeout = setTimeout(() => {
+			this.cachedInfo = null;
+			this.cacheInvalidationTimeout = null;
+		}, 10000);
 	}
 }
