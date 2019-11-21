@@ -15,8 +15,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<section class="toggle-label">
 				<preference-toggle
 					field="resetAchievementsOnAppStart"
-					label="Always"
-					tooltip="Streamer mode! Reset your achievements for the session, so that notifications will show even for unlocked achievements. Uncheck to get all your old achievements back. App restart required"
+					label="Streamer mode"
+					tooltip="Reset your achievements for the session, so that notifications will show even for unlocked achievements. Uncheck to get all your old achievements back. App restart required"
 				></preference-toggle>
 			</section>
 		</div>
