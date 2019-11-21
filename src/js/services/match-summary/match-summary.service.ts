@@ -37,7 +37,7 @@ export class MatchSummaryService {
 
 	private queryServerForStats(reviewId: string, retriesLeft: number) {
 		if (retriesLeft <= 0) {
-			this.logger.error('[match-summary] could not retrieve stats', reviewId);
+			this.logger.warn('[match-summary] could not retrieve stats', reviewId);
 			return;
 		}
 		this.http.get(`${MATCH_STATS_ENDPOINT}/${reviewId}`).subscribe(
