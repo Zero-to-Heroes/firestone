@@ -26,7 +26,7 @@ export class MatchSummaryService {
 
 	private async listenForEndGame() {
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(event => {
-			this.logger.debug('[match-summary] Replay created, received info', event.data[0]);
+			this.logger.debug('[match-summary] Replay created, received info');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-review') {
 				// Here, regularly query the server for the match stats

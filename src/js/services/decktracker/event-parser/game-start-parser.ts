@@ -26,7 +26,11 @@ export class GameStartParser implements EventParser {
 			console.log('[game-start-parser] no deck mode is active, not loading current deck');
 		}
 		const currentDeck = noDeckMode ? undefined : await this.deckParser.getCurrentDeck();
-		console.log('[game-start-parser] init game with deck', currentDeck);
+		console.log(
+			'[game-start-parser] init game with deck',
+			currentDeck && currentDeck.deckstring,
+			currentDeck && currentDeck.name,
+		);
 		const deckList: readonly DeckCard[] = this.buildDeckList(currentDeck);
 		const hero: HeroCard = this.buildHero(currentDeck);
 		return Object.assign(new GameState(), {

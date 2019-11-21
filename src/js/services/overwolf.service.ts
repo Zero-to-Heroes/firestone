@@ -201,7 +201,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.restore(windowId, result => {
-					console.log('[overwolf-service] restored window', windowId);
+					// console.log('[overwolf-service] restored window', windowId);
 					resolve(result);
 				});
 			} catch (e) {
@@ -216,7 +216,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.hide(windowId, result => {
-					console.log('[overwolf-service] hid window', windowId);
+					// console.log('[overwolf-service] hid window', windowId);
 					resolve(result);
 				});
 			} catch (e) {
@@ -230,7 +230,7 @@ export class OverwolfService {
 	public minimizeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.minimize(windowId, result => {
-				console.log('[overwolf-service] minimized window', windowId);
+				// console.log('[overwolf-service] minimized window', windowId);
 				resolve(result);
 			});
 		});
@@ -239,7 +239,7 @@ export class OverwolfService {
 	public maximizeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.maximize(windowId, result => {
-				console.log('[overwolf-service] maximized window', windowId);
+				// console.log('[overwolf-service] maximized window', windowId);
 				resolve(result);
 			});
 		});

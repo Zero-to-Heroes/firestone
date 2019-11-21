@@ -115,7 +115,7 @@ export class GameStateService {
 			setTimeout(() => this.getCurrentReviewIdInternal(callback, retriesLeft - 1), 2000);
 			return;
 		}
-		this.logger.log('[game-state] returning review id', this.currentReviewId);
+		// this.logger.log('[game-state] returning review id', this.currentReviewId);
 		callback(this.currentReviewId);
 	}
 
@@ -128,7 +128,7 @@ export class GameStateService {
 			this.processingQueue.enqueue(gameEvent);
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
-			this.logger.debug('[game-state] Received new review id event, doing nothing', event);
+			this.logger.debug('[game-state] Received review finalized event, doing nothing');
 			// const info = event.data[0];
 			// Reset once the game is completed
 			// Don't reset - some processes (like granting an achievement) - can take longer
@@ -138,7 +138,7 @@ export class GameStateService {
 			// }
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
-			this.logger.debug('[game-state] Received new review id event', event);
+			this.logger.debug('[game-state] Received new review id event');
 			const info: ManastormInfo = event.data[0];
 			if (info && info.type === 'new-empty-review') {
 				this.currentReviewId = info.reviewId;

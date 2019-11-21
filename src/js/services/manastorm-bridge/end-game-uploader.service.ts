@@ -62,7 +62,7 @@ export class EndGameUploaderService {
 		// 	this.logger.debug('[manastorm-bridge] Manastorm is running, no need to upload');
 		// 	return;
 		// }
-		this.logger.debug('[manastorm-bridge] Manastorm not running, uploading game info');
+		this.logger.debug('[manastorm-bridge] Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
 			currentReviewId,
