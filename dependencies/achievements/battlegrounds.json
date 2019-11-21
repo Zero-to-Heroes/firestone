@@ -1,70 +1,10 @@
 [
 	{
-		"id": "battlegrounds_0ranking_3700",
-		"type": "battlegrounds_0ranking",
-		"name": "Best rank",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 3700,
-		"displayName": "Best rank (3700)",
-		"text": "Improve your rankings in the Battlegrounds (best ranking is %%globalStats.best-rank.battlegrounds%%)",
-		"emptyText": "Get a ranking of 3700 in Battlegrounds",
-		"completedText": "You got rank 3700",
-		"displayCardId": "TB_BaconShopBob",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 25.0,
-		"requirements": [{ "type": "BATTLEGROUNDS_RANK", "values": ["3700"] }],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "battlegrounds_0ranking_3850",
-		"type": "battlegrounds_0ranking",
-		"name": "Best rank",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 3850,
-		"displayName": "Best rank (3850)",
-		"text": "Improve your rankings in the Battlegrounds (best ranking is %%globalStats.best-rank.battlegrounds%%)",
-		"emptyText": "Get a ranking of 3850 in Battlegrounds",
-		"completedText": "You got rank 3850",
-		"displayCardId": "TB_BaconShopBob",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 25.0,
-		"requirements": [{ "type": "BATTLEGROUNDS_RANK", "values": ["3850"] }],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "battlegrounds_0ranking_4000",
-		"type": "battlegrounds_0ranking",
-		"name": "Best rank",
-		"icon": "boss_victory",
-		"root": false,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 4000,
-		"displayName": "Best rank (4000)",
-		"text": "Improve your rankings in the Battlegrounds (best ranking is %%globalStats.best-rank.battlegrounds%%)",
-		"emptyText": "Get a ranking of 4000 in Battlegrounds",
-		"completedText": "You got rank 4000",
-		"displayCardId": "TB_BaconShopBob",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 25.0,
-		"requirements": [{ "type": "BATTLEGROUNDS_RANK", "values": ["4000"] }],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_0ranking_4250",
 		"type": "battlegrounds_0ranking",
 		"name": "Best rank",
 		"icon": "boss_victory",
-		"root": false,
+		"root": true,
 		"canBeCompletedOnlyOnce": true,
 		"priority": 4250,
 		"displayName": "Best rank (4250)",
@@ -1049,29 +989,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_17",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_17",
-		"name": "Millificent Manastorm",
-		"icon": "boss_encounter",
-		"root": false,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 2,
-		"displayName": "Battlegrounds won with Millificent Manastorm",
-		"emptyText": "Win a Battlegrounds with Millificent Manastorm",
-		"completedText": "You won a Battlegrounds with Millificent Manastorm",
-		"displayCardId": "TB_BaconShop_HERO_17",
-		"displayCardType": "hero",
-		"difficulty": "epic",
-		"maxNumberOfRecords": 4,
-		"points": 20.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_17"] },
-			{ "type": "GAME_WON" },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_18",
 		"type": "battlegrounds_hero_TB_BaconShop_HERO_18",
 		"name": "Patches the Pirate",
@@ -1089,29 +1006,6 @@
 		"points": 20.0,
 		"requirements": [
 			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_18"] },
-			{ "type": "GAME_WON" },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_19",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_19",
-		"name": "Giantfin",
-		"icon": "boss_encounter",
-		"root": false,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 2,
-		"displayName": "Battlegrounds won with Giantfin",
-		"emptyText": "Win a Battlegrounds with Giantfin",
-		"completedText": "You won a Battlegrounds with Giantfin",
-		"displayCardId": "TB_BaconShop_HERO_19",
-		"displayCardType": "hero",
-		"difficulty": "epic",
-		"maxNumberOfRecords": 4,
-		"points": 20.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_19"] },
 			{ "type": "GAME_WON" },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
@@ -1210,23 +1104,23 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_25",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_25",
-		"name": "Lich Baz'hial",
+		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_27",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_27",
+		"name": "Sindragosa",
 		"icon": "boss_encounter",
 		"root": false,
 		"canBeCompletedOnlyOnce": false,
 		"priority": 2,
-		"displayName": "Battlegrounds won with Lich Baz'hial",
-		"emptyText": "Win a Battlegrounds with Lich Baz'hial",
-		"completedText": "You won a Battlegrounds with Lich Baz'hial",
-		"displayCardId": "TB_BaconShop_HERO_25",
+		"displayName": "Battlegrounds won with Sindragosa",
+		"emptyText": "Win a Battlegrounds with Sindragosa",
+		"completedText": "You won a Battlegrounds with Sindragosa",
+		"displayCardId": "TB_BaconShop_HERO_27",
 		"displayCardType": "hero",
 		"difficulty": "epic",
 		"maxNumberOfRecords": 4,
 		"points": 20.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_25"] },
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_27"] },
 			{ "type": "GAME_WON" },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
@@ -1417,29 +1311,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_38",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_38",
-		"name": "King Mukla",
-		"icon": "boss_encounter",
-		"root": false,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 2,
-		"displayName": "Battlegrounds won with King Mukla",
-		"emptyText": "Win a Battlegrounds with King Mukla",
-		"completedText": "You won a Battlegrounds with King Mukla",
-		"displayCardId": "TB_BaconShop_HERO_38",
-		"displayCardType": "hero",
-		"difficulty": "epic",
-		"maxNumberOfRecords": 4,
-		"points": 20.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_38"] },
-			{ "type": "GAME_WON" },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_39",
 		"type": "battlegrounds_hero_TB_BaconShop_HERO_39",
 		"name": "Pyramad",
@@ -1457,6 +1328,75 @@
 		"points": 20.0,
 		"requirements": [
 			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_39"] },
+			{ "type": "GAME_WON" },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_40",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_40",
+		"name": "Sir Finley Mrrgglton",
+		"icon": "boss_encounter",
+		"root": false,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 2,
+		"displayName": "Battlegrounds won with Sir Finley Mrrgglton",
+		"emptyText": "Win a Battlegrounds with Sir Finley Mrrgglton",
+		"completedText": "You won a Battlegrounds with Sir Finley Mrrgglton",
+		"displayCardId": "TB_BaconShop_HERO_40",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"maxNumberOfRecords": 4,
+		"points": 20.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_40"] },
+			{ "type": "GAME_WON" },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_42",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_42",
+		"name": "Elise Starseeker",
+		"icon": "boss_encounter",
+		"root": false,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 2,
+		"displayName": "Battlegrounds won with Elise Starseeker",
+		"emptyText": "Win a Battlegrounds with Elise Starseeker",
+		"completedText": "You won a Battlegrounds with Elise Starseeker",
+		"displayCardId": "TB_BaconShop_HERO_42",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"maxNumberOfRecords": 4,
+		"points": 20.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_42"] },
+			{ "type": "GAME_WON" },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_finish_1_TB_BaconShop_HERO_43",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_43",
+		"name": "Brann Bronzebeard",
+		"icon": "boss_encounter",
+		"root": false,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 2,
+		"displayName": "Battlegrounds won with Brann Bronzebeard",
+		"emptyText": "Win a Battlegrounds with Brann Bronzebeard",
+		"completedText": "You won a Battlegrounds with Brann Bronzebeard",
+		"displayCardId": "TB_BaconShop_HERO_43",
+		"displayCardType": "hero",
+		"difficulty": "epic",
+		"maxNumberOfRecords": 4,
+		"points": 20.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_43"] },
 			{ "type": "GAME_WON" },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
@@ -1601,29 +1541,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_17",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_17",
-		"name": "Millificent Manastorm",
-		"icon": "boss_encounter",
-		"root": false,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 1,
-		"displayName": "Top 4 with Millificent Manastorm",
-		"emptyText": "Finish in the top 4 of a Battlegrounds with Millificent Manastorm",
-		"completedText": "You finished Top 4 with Millificent Manastorm",
-		"displayCardId": "TB_BaconShop_HERO_17",
-		"displayCardType": "hero",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 10.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_17"] },
-			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_18",
 		"type": "battlegrounds_hero_TB_BaconShop_HERO_18",
 		"name": "Patches the Pirate",
@@ -1641,29 +1558,6 @@
 		"points": 10.0,
 		"requirements": [
 			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_18"] },
-			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_19",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_19",
-		"name": "Giantfin",
-		"icon": "boss_encounter",
-		"root": false,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 1,
-		"displayName": "Top 4 with Giantfin",
-		"emptyText": "Finish in the top 4 of a Battlegrounds with Giantfin",
-		"completedText": "You finished Top 4 with Giantfin",
-		"displayCardId": "TB_BaconShop_HERO_19",
-		"displayCardType": "hero",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 10.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_19"] },
 			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
@@ -1762,23 +1656,23 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_25",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_25",
-		"name": "Lich Baz'hial",
+		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_27",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_27",
+		"name": "Sindragosa",
 		"icon": "boss_encounter",
 		"root": false,
 		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
-		"displayName": "Top 4 with Lich Baz'hial",
-		"emptyText": "Finish in the top 4 of a Battlegrounds with Lich Baz'hial",
-		"completedText": "You finished Top 4 with Lich Baz'hial",
-		"displayCardId": "TB_BaconShop_HERO_25",
+		"displayName": "Top 4 with Sindragosa",
+		"emptyText": "Finish in the top 4 of a Battlegrounds with Sindragosa",
+		"completedText": "You finished Top 4 with Sindragosa",
+		"displayCardId": "TB_BaconShop_HERO_27",
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
 		"points": 10.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_25"] },
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_27"] },
 			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
@@ -1969,29 +1863,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_38",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_38",
-		"name": "King Mukla",
-		"icon": "boss_encounter",
-		"root": false,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 1,
-		"displayName": "Top 4 with King Mukla",
-		"emptyText": "Finish in the top 4 of a Battlegrounds with King Mukla",
-		"completedText": "You finished Top 4 with King Mukla",
-		"displayCardId": "TB_BaconShop_HERO_38",
-		"displayCardType": "hero",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 3,
-		"points": 10.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_38"] },
-			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_39",
 		"type": "battlegrounds_hero_TB_BaconShop_HERO_39",
 		"name": "Pyramad",
@@ -2009,6 +1880,75 @@
 		"points": 10.0,
 		"requirements": [
 			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_39"] },
+			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_40",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_40",
+		"name": "Sir Finley Mrrgglton",
+		"icon": "boss_encounter",
+		"root": false,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 1,
+		"displayName": "Top 4 with Sir Finley Mrrgglton",
+		"emptyText": "Finish in the top 4 of a Battlegrounds with Sir Finley Mrrgglton",
+		"completedText": "You finished Top 4 with Sir Finley Mrrgglton",
+		"displayCardId": "TB_BaconShop_HERO_40",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 10.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_40"] },
+			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_42",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_42",
+		"name": "Elise Starseeker",
+		"icon": "boss_encounter",
+		"root": false,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 1,
+		"displayName": "Top 4 with Elise Starseeker",
+		"emptyText": "Finish in the top 4 of a Battlegrounds with Elise Starseeker",
+		"completedText": "You finished Top 4 with Elise Starseeker",
+		"displayCardId": "TB_BaconShop_HERO_42",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 10.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_42"] },
+			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_finish_4_TB_BaconShop_HERO_43",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_43",
+		"name": "Brann Bronzebeard",
+		"icon": "boss_encounter",
+		"root": false,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 1,
+		"displayName": "Top 4 with Brann Bronzebeard",
+		"emptyText": "Finish in the top 4 of a Battlegrounds with Brann Bronzebeard",
+		"completedText": "You finished Top 4 with Brann Bronzebeard",
+		"displayCardId": "TB_BaconShop_HERO_43",
+		"displayCardType": "hero",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 3,
+		"points": 10.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_43"] },
 			{ "type": "BATTLEGROUNDS_FINISH", "values": ["4", "AT_LEAST"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
@@ -2147,28 +2087,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_17",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_17",
-		"name": "Millificent Manastorm",
-		"icon": "boss_encounter",
-		"root": true,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 0,
-		"displayName": "Played Millificent Manastorm",
-		"emptyText": "Take part in a Battlegrounds with Millificent Manastorm",
-		"completedText": "You played Millificent Manastorm",
-		"displayCardId": "TB_BaconShop_HERO_17",
-		"displayCardType": "hero",
-		"difficulty": "common",
-		"maxNumberOfRecords": 1,
-		"points": 1.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_17"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_18",
 		"type": "battlegrounds_hero_TB_BaconShop_HERO_18",
 		"name": "Patches the Pirate",
@@ -2186,28 +2104,6 @@
 		"points": 1.0,
 		"requirements": [
 			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_18"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
-		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_19",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_19",
-		"name": "Giantfin",
-		"icon": "boss_encounter",
-		"root": true,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 0,
-		"displayName": "Played Giantfin",
-		"emptyText": "Take part in a Battlegrounds with Giantfin",
-		"completedText": "You played Giantfin",
-		"displayCardId": "TB_BaconShop_HERO_19",
-		"displayCardType": "hero",
-		"difficulty": "common",
-		"maxNumberOfRecords": 1,
-		"points": 1.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_19"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START"]
@@ -2301,23 +2197,23 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_25",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_25",
-		"name": "Lich Baz'hial",
+		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_27",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_27",
+		"name": "Sindragosa",
 		"icon": "boss_encounter",
 		"root": true,
 		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
-		"displayName": "Played Lich Baz'hial",
-		"emptyText": "Take part in a Battlegrounds with Lich Baz'hial",
-		"completedText": "You played Lich Baz'hial",
-		"displayCardId": "TB_BaconShop_HERO_25",
+		"displayName": "Played Sindragosa",
+		"emptyText": "Take part in a Battlegrounds with Sindragosa",
+		"completedText": "You played Sindragosa",
+		"displayCardId": "TB_BaconShop_HERO_27",
 		"displayCardType": "hero",
 		"difficulty": "common",
 		"maxNumberOfRecords": 1,
 		"points": 1.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_25"] },
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_27"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START"]
@@ -2499,28 +2395,6 @@
 		"resetEvents": ["GAME_START"]
 	},
 	{
-		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_38",
-		"type": "battlegrounds_hero_TB_BaconShop_HERO_38",
-		"name": "King Mukla",
-		"icon": "boss_encounter",
-		"root": true,
-		"canBeCompletedOnlyOnce": false,
-		"priority": 0,
-		"displayName": "Played King Mukla",
-		"emptyText": "Take part in a Battlegrounds with King Mukla",
-		"completedText": "You played King Mukla",
-		"displayCardId": "TB_BaconShop_HERO_38",
-		"displayCardType": "hero",
-		"difficulty": "common",
-		"maxNumberOfRecords": 1,
-		"points": 1.0,
-		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_38"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START"]
-	},
-	{
 		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_39",
 		"type": "battlegrounds_hero_TB_BaconShop_HERO_39",
 		"name": "Pyramad",
@@ -2538,6 +2412,72 @@
 		"points": 1.0,
 		"requirements": [
 			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_39"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_40",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_40",
+		"name": "Sir Finley Mrrgglton",
+		"icon": "boss_encounter",
+		"root": true,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 0,
+		"displayName": "Played Sir Finley Mrrgglton",
+		"emptyText": "Take part in a Battlegrounds with Sir Finley Mrrgglton",
+		"completedText": "You played Sir Finley Mrrgglton",
+		"displayCardId": "TB_BaconShop_HERO_40",
+		"displayCardType": "hero",
+		"difficulty": "common",
+		"maxNumberOfRecords": 1,
+		"points": 1.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_40"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_42",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_42",
+		"name": "Elise Starseeker",
+		"icon": "boss_encounter",
+		"root": true,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 0,
+		"displayName": "Played Elise Starseeker",
+		"emptyText": "Take part in a Battlegrounds with Elise Starseeker",
+		"completedText": "You played Elise Starseeker",
+		"displayCardId": "TB_BaconShop_HERO_42",
+		"displayCardType": "hero",
+		"difficulty": "common",
+		"maxNumberOfRecords": 1,
+		"points": 1.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_42"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START"]
+	},
+	{
+		"id": "battlegrounds_hero_play_TB_BaconShop_HERO_43",
+		"type": "battlegrounds_hero_TB_BaconShop_HERO_43",
+		"name": "Brann Bronzebeard",
+		"icon": "boss_encounter",
+		"root": true,
+		"canBeCompletedOnlyOnce": false,
+		"priority": 0,
+		"displayName": "Played Brann Bronzebeard",
+		"emptyText": "Take part in a Battlegrounds with Brann Bronzebeard",
+		"completedText": "You played Brann Bronzebeard",
+		"displayCardId": "TB_BaconShop_HERO_43",
+		"displayCardType": "hero",
+		"difficulty": "common",
+		"maxNumberOfRecords": 1,
+		"points": 1.0,
+		"requirements": [
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconShop_HERO_43"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START"]
