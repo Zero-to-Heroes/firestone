@@ -19,8 +19,12 @@ export class MindVisionOperationFacade<T> {
 
 	private async processQueue(eventQueue: readonly InternalCall[]): Promise<readonly InternalCall[]> {
 		const event = eventQueue[0];
-		await event();
-		return eventQueue.slice(1);
+		// Since it's a queue of functions that build promises, we can't simply await the result
+		return new Promise<readonly InternalCall[]>(resolve => {
+			event(() => {
+				resolve(eventQueue.slice(1));
+			});
+		});
 	}
 
 	public async call(): Promise<T> {
@@ -29,11 +33,11 @@ export class MindVisionOperationFacade<T> {
 			return this.cachedValue;
 		}
 		return new Promise<T>(resolve => {
-			this.processingQueue.enqueue(() =>
-				this.callInternal(
-					(returnValue: T) => resolve(returnValue ? this.transformer(returnValue) : returnValue),
-					20,
-				),
+			this.processingQueue.enqueue(callback =>
+				this.callInternal((returnValue: T) => {
+					resolve(returnValue ? this.transformer(returnValue) : returnValue);
+					callback();
+				}, 20),
 			);
 			// this.callInternal((returnValue: T) => resolve(this.transformer(returnValue)), 20);
 		});
@@ -80,4 +84,4 @@ export class MindVisionOperationFacade<T> {
 	}
 }
 
-type InternalCall = () => Promise<void>;
+type InternalCall = (callback) => Promise<void>;
