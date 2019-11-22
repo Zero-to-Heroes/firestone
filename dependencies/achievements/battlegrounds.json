@@ -2643,7 +2643,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_002"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_002"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2665,7 +2665,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_003"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_003"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2687,7 +2687,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_004"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_004"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2709,7 +2709,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_006"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_006"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2731,7 +2731,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_008"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_008"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2753,7 +2753,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_009"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_009"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2775,7 +2775,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_011"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_011"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2797,7 +2797,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_014"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_014"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2819,7 +2819,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_019"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_019"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2841,7 +2841,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_025"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_025"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2863,7 +2863,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_026"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_026"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2885,7 +2885,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_027"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_027"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2907,7 +2907,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_028"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_028"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2929,7 +2929,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_030"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_030"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2951,7 +2951,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_031"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_031"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2973,7 +2973,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_032"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_032"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -2995,7 +2995,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_033"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_033"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3017,7 +3017,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_034"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_034"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3039,7 +3039,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_035"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_035"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3061,7 +3061,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_036"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_036"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3083,7 +3083,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_037"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_037"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3105,7 +3105,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_038"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_038"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3127,7 +3127,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_039"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_039"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3149,7 +3149,29 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_041"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_041"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "battlegrounds_minion_play_TB_BaconUps_042",
+		"type": "battlegrounds_minion_play_TB_BaconUps_042",
+		"name": "The Beast",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 0,
+		"displayName": "Triple played: The Beast",
+		"text": "Play a Triple version of The Beast",
+		"completedText": "Triple played: The Beast",
+		"displayCardId": "TB_BaconUps_042",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 2,
+		"points": 3.0,
+		"requirements": [
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_042"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3171,7 +3193,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_043"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_043"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3193,7 +3215,29 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_044"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_044"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "battlegrounds_minion_play_TB_BaconUps_045",
+		"type": "battlegrounds_minion_play_TB_BaconUps_045",
+		"name": "Brann Bronzebeard",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 0,
+		"displayName": "Triple played: Brann Bronzebeard",
+		"text": "Play a Triple version of Brann Bronzebeard",
+		"completedText": "Triple played: Brann Bronzebeard",
+		"displayCardId": "TB_BaconUps_045",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 2,
+		"points": 3.0,
+		"requirements": [
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_045"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3215,7 +3259,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_046"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_046"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3237,7 +3281,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_047"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_047"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3259,7 +3303,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_049"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_049"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3281,7 +3325,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_050"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_050"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3303,7 +3347,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_051"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_051"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3325,7 +3369,29 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_052"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_052"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
+		"id": "battlegrounds_minion_play_TB_BaconUps_053",
+		"type": "battlegrounds_minion_play_TB_BaconUps_053",
+		"name": "Siegebreaker",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 0,
+		"displayName": "Triple played: Siegebreaker",
+		"text": "Play a Triple version of Siegebreaker",
+		"completedText": "Triple played: Siegebreaker",
+		"displayCardId": "TB_BaconUps_053",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 2,
+		"points": 3.0,
+		"requirements": [
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_053"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3347,7 +3413,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_057"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_057"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3369,7 +3435,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_058"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_058"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3391,7 +3457,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_059"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_059"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3413,7 +3479,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_059t"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_059t"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3435,7 +3501,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_060"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_060"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3457,7 +3523,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_061"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_061"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3479,7 +3545,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_062"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_062"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3501,7 +3567,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_063"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_063"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3523,7 +3589,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_064"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_064"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3545,7 +3611,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_066"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_066"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3567,7 +3633,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_068"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_068"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3589,7 +3655,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_069"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_069"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3611,7 +3677,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_070"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_070"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3633,7 +3699,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_072"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_072"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3655,7 +3721,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_073"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_073"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3677,7 +3743,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_074"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_074"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3699,7 +3765,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_075"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_075"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3721,7 +3787,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_077"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_077"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3743,7 +3809,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_079"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_079"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3765,7 +3831,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_080"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_080"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3787,7 +3853,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_082"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_082"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3809,7 +3875,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_083"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_083"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3831,7 +3897,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_084"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_084"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3853,7 +3919,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_085"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_085"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3875,7 +3941,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_086"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_086"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3897,7 +3963,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_087"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_087"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3919,7 +3985,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_088"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_088"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3941,7 +4007,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_089"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_089"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3963,7 +4029,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_090"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_090"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -3985,7 +4051,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_093"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_093"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4007,7 +4073,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_093"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_093"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4029,7 +4095,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_094"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_094"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4051,7 +4117,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_095"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_095"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
@@ -4073,7 +4139,7 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["TB_BaconUps_099"] },
+			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["TB_BaconUps_099"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
