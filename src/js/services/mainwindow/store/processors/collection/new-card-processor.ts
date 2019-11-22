@@ -58,7 +58,7 @@ export class NewCardProcessor implements Processor {
 		} as MainWindowState);
 	}
 
-	private async buildSetsFromCollection(collection: Card[]): Promise<readonly Set[]> {
+	private async buildSetsFromCollection(collection: readonly Card[]): Promise<readonly Set[]> {
 		const pityTimers = await this.pityTimer.getPityTimers();
 		return this.cards
 			.getAllSets()
@@ -66,7 +66,7 @@ export class NewCardProcessor implements Processor {
 			.map(set => this.mergeSet(collection, set.set, set.pityTimer));
 	}
 
-	private mergeSet(collection: Card[], set: Set, pityTimer: PityTimer): Set {
+	private mergeSet(collection: readonly Card[], set: Set, pityTimer: PityTimer): Set {
 		const updatedCards: SetCard[] = this.mergeFullCards(collection, set.allCards);
 		const ownedLimitCollectibleCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollected())
@@ -85,7 +85,7 @@ export class NewCardProcessor implements Processor {
 		);
 	}
 
-	private mergeFullCards(collection: Card[], setCards: readonly SetCard[]): SetCard[] {
+	private mergeFullCards(collection: readonly Card[], setCards: readonly SetCard[]): SetCard[] {
 		return setCards.map((card: SetCard) => {
 			const collectionCard: Card = collection.find((collectionCard: Card) => collectionCard.id === card.id);
 			const ownedPremium = collectionCard ? collectionCard.premiumCount : 0;

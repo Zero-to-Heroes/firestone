@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { decode } from 'deckstrings';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { MindVisionService } from '../plugins/mind-vision.service';
+import { MindVisionService } from '../plugins/mind-vision/mind-vision.service';
 
 @Injectable()
 export class DeckParserService {

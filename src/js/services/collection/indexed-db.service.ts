@@ -15,7 +15,7 @@ export class IndexedDbService {
 		this.init();
 	}
 
-	public async saveCollection(collection: Card[]): Promise<Card[]> {
+	public async saveCollection(collection: readonly Card[]): Promise<Card[]> {
 		await this.waitForDbInit();
 		const dbCollection = {
 			id: 1,

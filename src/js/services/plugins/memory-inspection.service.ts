@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
-import { PlayerInfo } from '../../models/player-info';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
-import { MindVisionService } from './mind-vision.service';
+import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
+import { GetCollectionOperation } from './mind-vision/get-collection-operation';
+import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
+import { MindVisionService } from './mind-vision/mind-vision.service';
 
 @Injectable()
 export class MemoryInspectionService {
@@ -16,157 +18,24 @@ export class MemoryInspectionService {
 		'match_info', // For the GEP game ID
 	];
 
+	private getCollectionOperation = new GetCollectionOperation(this.mindVision);
+	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision);
+	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision);
+
 	constructor(private events: Events, private ow: OverwolfService, private mindVision: MindVisionService) {
 		this.init();
 	}
 
-	public getCollection(delay: number = 0): Promise<Card[]> {
-		return new Promise<Card[]>(resolve => {
-			this.getCollectionInternal((collection: Card[]) => resolve(collection), 20, delay);
-		});
+	public async getCollection(): Promise<readonly Card[]> {
+		return this.getCollectionOperation.call();
 	}
 
-	private getCollectionInternal(callback, retriesLeft = 20, delay: number = 0) {
-		if (retriesLeft <= 0) {
-			console.error('[memory-service] [collection-manager] could not retrieve collection');
-			callback([]);
-			return;
-		}
-		// I observed some cases where the new card information was not present in the memory reading
-		// right after I had gotten it from a pack, so let's add a little delay
-		setTimeout(async () => {
-			const memoryCollection = await this.mindVision.getCollection();
-			if (!memoryCollection || memoryCollection.length === 0) {
-				// If game is running, we should have something in the collection
-				// This might cause an issue if we're dealing with someone who has zero
-				// cards in their collection, but it's unlikely that totally beginners would
-				// use an app
-				// console.log('[memory service] [collection-manager] no collection info', info);
-				const gameInfo = await this.ow.getRunningGameInfo();
-				if (this.ow.gameRunning(gameInfo)) {
-					console.log(
-						'[memory service] [collection-manager] game is running, GEP should return a collection. Waiting...',
-					);
-					setTimeout(() => this.getCollectionInternal(callback, retriesLeft - 1, delay), 2000);
-				} else {
-					console.log('[memory service] [collection-manager] game not running, returning empty collection');
-					callback([]);
-				}
-				return;
-			}
-			console.log('[memory service] [collection-manager] collection info', memoryCollection.length);
-			const collection: Card[] = memoryCollection.map(
-				memoryCard =>
-					({
-						id: memoryCard.CardId,
-						count: memoryCard.Count,
-						premiumCount: memoryCard.PremiumCount,
-					} as Card),
-			);
-			console.log('[memory service] [collection-manager] final collection', collection.length);
-			callback(collection);
-		}, delay);
+	public async getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
+		return this.getPlayerInfoOperation.call();
 	}
-
-	public getPlayerInfo(): Promise<{ localPlayer: any; opponent: any }> {
-		// this.playersInfoTriesLeft = 20;
-		return new Promise<{ localPlayer: any; opponent: any }>(resolve => {
-			this.getPlayerInfoInternal((playersInfo: { localPlayer: any; opponent: any }) => {
-				resolve(playersInfo);
-			});
-		});
-	}
-
-	private async getPlayerInfoInternal(callback, triesLeft = 20) {
-		// console.log('[memory service] trying to get player info');
-		if (triesLeft <= 0) {
-			console.error('[memory-service] could not get player info from memory');
-			callback(null);
-			return;
-		}
-		const matchInfo = await this.mindVision.getMatchInfo();
-		if (matchInfo) {
-			console.log('[memory-service] fetched matchInfo', matchInfo);
-			const localPlayer = this.extractPlayerInfo(matchInfo.LocalPlayer);
-			const opponent = this.extractPlayerInfo(matchInfo.OpposingPlayer);
-			callback({
-				localPlayer: localPlayer,
-				opponent: opponent,
-			});
-			return;
-		}
-		setTimeout(() => this.getPlayerInfoInternal(callback, triesLeft - 1), 2000);
-	}
-
-	private cachedBGInfo: BattlegroundsInfo;
-	private bgTimeout;
 
 	public async getBattlegroundsInfo(): Promise<BattlegroundsInfo> {
-		// this.playersInfoTriesLeft = 20;
-		if (this.cachedBGInfo) {
-			return this.cachedBGInfo;
-		}
-		return new Promise<BattlegroundsInfo>(resolve => {
-			this.getBattlegroundsInfoInternal((battlegroundsInfo: BattlegroundsInfo) => {
-				console.log('retrieved battlegrounds info', battlegroundsInfo);
-				this.cachedBGInfo = battlegroundsInfo;
-				// Here the logic is a bit different, as we might still get an old value
-				// So we don't want to always cache the result, but just make sure that
-				// requests that are made more or less at the same time get the same result
-				if (!this.bgTimeout) {
-					this.bgTimeout = setTimeout(() => {
-						this.cachedBGInfo = null;
-						this.bgTimeout = null;
-					}, 2000);
-				}
-				resolve(battlegroundsInfo);
-			});
-		});
-	}
-
-	private async getBattlegroundsInfoInternal(callback, triesLeft = 20) {
-		if (triesLeft <= 0) {
-			// console.error('[memory-service] could not get battlegrounds info from memory');
-			callback(null);
-			return;
-		}
-		const battlegroundsInfo = await this.mindVision.getBattlegroundsInfo();
-		if (battlegroundsInfo && battlegroundsInfo.Rating > 0) {
-			// console.log('[memory-service] fetched battlegroundsInfo', battlegroundsInfo);
-			callback(
-				Object.assign(new BattlegroundsInfo(), {
-					rating: battlegroundsInfo.Rating,
-					previousRating: battlegroundsInfo.PreviousRating,
-				} as BattlegroundsInfo),
-			);
-			return;
-		}
-		setTimeout(() => this.getBattlegroundsInfoInternal(callback, triesLeft - 1), 3000);
-	}
-
-	private extractPlayerInfo(matchPlayer: any): PlayerInfo {
-		return {
-			name: matchPlayer.Name,
-			cardBackId: matchPlayer.CardBackId,
-			standardLegendRank: matchPlayer.StandardLegendRank,
-			standardRank: matchPlayer.StandardRank,
-			wildLegendRank: matchPlayer.WildLegendRank,
-			wildRank: matchPlayer.WildRank,
-		} as PlayerInfo;
-	}
-
-	private async init() {
-		this.ow.addGameInfoUpdatedListener(res => {
-			if (this.ow.gameLaunched(res)) {
-				this.registerEvents();
-				setTimeout(() => this.setFeatures(), 1000);
-			}
-		});
-		const gameInfo = await this.ow.getRunningGameInfo();
-		if (this.ow.gameRunning(gameInfo)) {
-			this.registerEvents();
-			setTimeout(() => this.setFeatures(), 1000);
-		}
+		return this.getBattlegroundsInfoOperation.call();
 	}
 
 	private handleInfoUpdate(info) {
@@ -219,5 +88,19 @@ export class MemoryInspectionService {
 			return;
 		}
 		console.log('[memory service] Set required features:', info);
+	}
+
+	private async init() {
+		this.ow.addGameInfoUpdatedListener(res => {
+			if (this.ow.gameLaunched(res)) {
+				this.registerEvents();
+				setTimeout(() => this.setFeatures(), 1000);
+			}
+		});
+		const gameInfo = await this.ow.getRunningGameInfo();
+		if (this.ow.gameRunning(gameInfo)) {
+			this.registerEvents();
+			setTimeout(() => this.setFeatures(), 1000);
+		}
 	}
 }
