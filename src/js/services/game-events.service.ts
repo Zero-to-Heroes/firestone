@@ -260,8 +260,9 @@ export class GameEvents {
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.RECEIVE_CARD_IN_HAND, gameEvent, {
-						// Not always present
+						// Not always present?
 						creatorCardId: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.CreatorCardId,
+						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
 					}),
 				);
 				break;
@@ -297,7 +298,11 @@ export class GameEvents {
 				break;
 			case 'CARD_DRAW_FROM_DECK':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_DRAW_FROM_DECK, gameEvent, {
+						isPremium: gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.IsPremium,
+					}),
+				);
 				break;
 			case 'CARD_BACK_TO_DECK':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);

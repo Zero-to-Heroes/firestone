@@ -6,6 +6,7 @@ import { MemoryInspectionService } from '../../../plugins/memory-inspection.serv
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
 import { BattlegroundsFinishReq } from '../requirements/battlegrounds/battlegrounds-finish-req';
 import { BattlegroundsRankReq } from '../requirements/battlegrounds/battlegrounds-rank-req';
+import { BattlegroundsTriplePlayReq } from '../requirements/battlegrounds/battlegrounds-tipple-play--req';
 import { BoardFullOfSameLegendaryMinionReq } from '../requirements/board-full-of-same-legendary-minion-req';
 import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-received-in-hand-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
@@ -136,6 +137,7 @@ export class ChallengeBuilderService {
 
 			case 'BATTLEGROUNDS_FINISH': return BattlegroundsFinishReq.create(rawReq);
 			case 'BATTLEGROUNDS_RANK': return BattlegroundsRankReq.create(rawReq, this.memoryInspection);
+			case 'BATTLEGROUNDS_TRIPLE_PLAY': return BattlegroundsTriplePlayReq.create(rawReq);
 
 			default: 
 				console.error('No requirement provider found, providing no-op requirement instead', rawReq.type, rawReq);
