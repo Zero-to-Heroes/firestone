@@ -18,6 +18,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 					<ng-content></ng-content>
 				</div>
 
+				<version></version>
 				<i class="i-54 gold-theme corner top-left">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />

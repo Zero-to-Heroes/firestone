@@ -9,14 +9,10 @@ const HEARTHSTONE_GAME_ID = 9898;
 
 @Injectable()
 export class OverwolfService {
-	// public static MANASTORM_ID = 'kfnacgfblhkjdgcndfdobooemjaapcefaminngbk';
-
 	public static MAIN_WINDOW = 'MainWindow';
 	public static COLLECTION_WINDOW = 'CollectionWindow';
-	public static MATCH_STATS_WINDOW = 'MatchStatsWindow';
 	public static SETTINGS_WINDOW = 'SettingsWindow';
 	public static LOADING_WINDOW = 'LoadingWindow';
-	public static WELCOME_WINDOW = 'WelcomeWindow';
 	public static DECKTRACKER_WINDOW = 'DeckTrackerWindow';
 	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
 	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
@@ -200,9 +196,15 @@ export class OverwolfService {
 	public async restoreWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			try {
-				overwolf.windows.restore(windowId, result => {
-					// console.log('[overwolf-service] restored window', windowId);
-					resolve(result);
+				overwolf.windows.restore(windowId, async result => {
+					try {
+						overwolf.windows.bringToFront(windowId, true, topMostResult => {
+							// console.log('[overwolf-service] restored window', windowId);
+							resolve(result);
+						});
+					} catch (e) {
+						console.warn('exception when setting topmost', windowId, e);
+					}
 				});
 			} catch (e) {
 				// This doesn't seem to prevent the window from being restored, so let's ignore it

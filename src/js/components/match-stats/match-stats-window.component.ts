@@ -75,13 +75,13 @@ export class MatchStatsWindowComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.stateChangedListener = this.ow.addStateChangedListener('MatchStatsWindow', message => {
-			if (message.window_state === 'maximized') {
-				this.isMaximized = true;
-			} else {
-				this.isMaximized = false;
-			}
-		});
+		// this.stateChangedListener = this.ow.addStateChangedListener('MatchStatsWindow', message => {
+		// 	if (message.window_state === 'maximized') {
+		// 		this.isMaximized = true;
+		// 	} else {
+		// 		this.isMaximized = false;
+		// 	}
+		// });
 		const storeBus: BehaviorSubject<MainWindowState> = this.ow.getMainWindow().mainWindowStore;
 		console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe(async (event: MainWindowState) => {

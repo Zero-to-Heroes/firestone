@@ -81,28 +81,8 @@
 				"min_size": { "width": 680, "height": 620 },
 				"max_size": { "width": 680, "height": 620 }
 			},
-			"WelcomeWindow": {
-				"file": "Files/welcome.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": true,
-				"size": { "width": 1064, "height": 680 },
-				"min_size": { "width": 1064, "height": 680 },
-				"max_size": { "width": 1064, "height": 680 }
-			},
 			"CollectionWindow": {
 				"file": "Files/collection.html",
-				"transparent": true,
-				"resizable": true,
-				"show_in_taskbar": true,
-				"size": { "width": 1170, "height": 720 },
-				"min_size": { "width": 1170, "height": 720 },
-				"block_top_window_navigation": true,
-				"popup_blocker": true,
-				"mute": true
-			},
-			"MatchStatsWindow": {
-				"file": "Files/match_stats.html",
 				"transparent": true,
 				"resizable": true,
 				"show_in_taskbar": true,

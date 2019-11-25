@@ -101,8 +101,7 @@ export class AppBootstrapService {
 					this.store.stateUpdater.next(new CloseMainWindowEvent());
 					await this.ow.hideWindow(window.id);
 				} else {
-					this.closeWelcomeWindow();
-					this.startApp(() => this.showCollectionWindow());
+					this.startApp();
 				}
 			} else {
 				console.log('could not trigger hotkey', hotkeyResult, this.currentState);
@@ -131,14 +130,11 @@ export class AppBootstrapService {
 		await this.ow.hideWindow(collectionWindow.id);
 		this.startApp();
 		this.ow.addAppLaunchTriggeredListener(() => {
-			this.startApp(() => this.showCollectionWindow());
+			this.startApp();
 		});
 		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
 		await this.ow.restoreWindow(settingsWindow.id);
 		await this.ow.hideWindow(settingsWindow.id);
-		const matchStatsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_STATS_WINDOW);
-		await this.ow.restoreWindow(matchStatsWindow.id);
-		await this.ow.hideWindow(matchStatsWindow.id);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 	}
 
@@ -148,7 +144,6 @@ export class AppBootstrapService {
 			return;
 		}
 		const result = await this.ow.restoreWindow(this.loadingWindowId);
-		this.closeWelcomeWindow();
 		this.closeCollectionWindow();
 		console.log('final restore for loadingwindow done', result);
 		setTimeout(() => {
@@ -161,19 +156,8 @@ export class AppBootstrapService {
 		this.ow.sendMessage(this.loadingWindowId, 'ready', 'ready');
 	}
 
-	private async startApp(showWhenStarted?: Function) {
-		const isRunning = await this.ow.inGame();
-		console.log('are we in game?', isRunning);
-		if (isRunning) {
-			if (showWhenStarted) {
-				showWhenStarted();
-			}
-		} else {
-			const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-			if (!window.isVisible) {
-				this.showWelcomePage();
-			}
-		}
+	private async startApp() {
+		this.showCollectionWindow();
 	}
 
 	private async closeLoadingScreen() {
@@ -181,20 +165,9 @@ export class AppBootstrapService {
 		await this.ow.hideWindow(window.id);
 	}
 
-	private async closeWelcomeWindow() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.WELCOME_WINDOW);
-		this.ow.hideWindow(window.id);
-	}
-
 	private async closeCollectionWindow() {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 		this.ow.hideWindow(window.id);
-	}
-
-	private async showWelcomePage() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.WELCOME_WINDOW);
-		await this.ow.restoreWindow(window.id);
-		this.closeLoadingScreen();
 	}
 
 	private async showCollectionWindow() {
