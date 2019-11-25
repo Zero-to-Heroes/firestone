@@ -18,9 +18,9 @@ export class MemoryInspectionService {
 		'match_info', // For the GEP game ID
 	];
 
-	private getCollectionOperation = new GetCollectionOperation(this.mindVision);
-	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision);
-	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision);
+	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow);
+	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
+	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 
 	constructor(private events: Events, private ow: OverwolfService, private mindVision: MindVisionService) {
 		this.init();

@@ -1,3 +1,4 @@
+import { OverwolfService } from '../../overwolf.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 
 export class MindVisionOperationFacade<T> {
@@ -11,6 +12,7 @@ export class MindVisionOperationFacade<T> {
 	);
 
 	constructor(
+		private ow: OverwolfService,
 		private serviceName: string,
 		private mindVisionOperation: () => Promise<any>,
 		private emptyCheck: (input: any) => boolean,
@@ -31,6 +33,9 @@ export class MindVisionOperationFacade<T> {
 		if (this.cachedValue) {
 			// this.log('returning cached value', this.cachedValue);
 			return this.cachedValue;
+		}
+		if (!(await this.ow.inGame())) {
+			return null;
 		}
 		return new Promise<T>(resolve => {
 			this.processingQueue.enqueue(callback =>
@@ -53,6 +58,10 @@ export class MindVisionOperationFacade<T> {
 			// There are cases where not retrieving the info it totally valid,
 			// like trying to get the BattlegroundsInfo right after logging in
 			this.log('coult not perform operation');
+			callback(null);
+			return;
+		}
+		if (!(await this.ow.inGame())) {
 			callback(null);
 			return;
 		}

@@ -1,12 +1,14 @@
 import { BattlegroundsInfo } from '../../../models/battlegrounds-info';
+import { OverwolfService } from '../../overwolf.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
 import { MindVisionService } from './mind-vision.service';
 
 export class GetBattlegroundsInfoOperation extends MindVisionOperationFacade<BattlegroundsInfo> {
-	constructor(private mindVision: MindVisionService) {
+	constructor(mindVision: MindVisionService, ow: OverwolfService) {
 		super(
+			ow,
 			'getBattlegroundsInfo',
-			() => this.mindVision.getBattlegroundsInfo(),
+			() => mindVision.getBattlegroundsInfo(),
 			battlegroundsInfo => battlegroundsInfo.Rating <= 0,
 			battlegroundsInfo =>
 				Object.assign(new BattlegroundsInfo(), {

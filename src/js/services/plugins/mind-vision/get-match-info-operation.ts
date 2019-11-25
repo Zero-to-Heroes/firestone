@@ -1,12 +1,14 @@
 import { PlayerInfo } from '../../../models/player-info';
+import { OverwolfService } from '../../overwolf.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
 import { MindVisionService } from './mind-vision.service';
 
 export class GetMatchInfoOperation extends MindVisionOperationFacade<{ localPlayer: any; opponent: any }> {
-	constructor(private readonly mindVision: MindVisionService) {
+	constructor(mindVision: MindVisionService, ow: OverwolfService) {
 		super(
+			ow,
 			'getMatchInfo',
-			() => this.mindVision.getMatchInfo(),
+			() => mindVision.getMatchInfo(),
 			matchInfo => !matchInfo,
 			matchInfo => {
 				const localPlayer = this.extractPlayerInfo(matchInfo.LocalPlayer);
