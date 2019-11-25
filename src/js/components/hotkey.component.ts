@@ -41,7 +41,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 	private async detectHotKey() {
 		this.hotkey = await this.ow.getHotKey('collection');
 		if (this.hotkey === 'Unassigned') {
-			this.hotkeyHtml = '<span class="text">Hotkey:</span><span class="no-hotkey">No hotkey assigned</span>';
+			this.hotkeyHtml = '<span class="no-hotkey">No hotkey assigned</span>';
 		} else {
 			this.hotkeyHtml = this.splitHotkey();
 		}
@@ -54,7 +54,7 @@ export class HotkeyComponent implements AfterViewInit, OnDestroy {
 		// console.log('splitting hot key', this.hotkey);
 		const split = this.hotkey.split('+');
 		return (
-			'<span class="text">Hotkey:</span>' +
+			'<span class="text">Show/Hide:</span>' +
 			split.map(splitItem => `<span class="key">${splitItem}</span>`).join('<span class="plus">+</span>')
 		);
 	}

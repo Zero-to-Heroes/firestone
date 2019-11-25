@@ -22,9 +22,8 @@ declare var amplitude: any;
 	template: `
 		<window-wrapper *ngIf="state" [activeTheme]="state.currentApp">
 			<section class="menu-bar">
-				<main-window-navigation [navigation]="state.navigation"></main-window-navigation>
+				<!-- <main-window-navigation [navigation]="state.navigation"></main-window-navigation> -->
 				<div class="first">
-					<real-time-notifications></real-time-notifications>
 					<div class="navigation">
 						<i class="i-117X33 gold-theme logo">
 							<svg class="svg-icon-fill">

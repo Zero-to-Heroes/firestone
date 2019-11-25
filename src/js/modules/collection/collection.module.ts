@@ -55,7 +55,6 @@ import { DecktrackerMenuComponent } from '../../components/decktracker/main/deck
 import { DecktrackerReplaysComponent } from '../../components/decktracker/main/decktracker-replays.component';
 import { MainWindowComponent } from '../../components/main-window.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
-import { RealTimeNotificationsComponent } from '../../components/real-time-notifications.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
 import { FsTimeDisplay, FsUtcPipe } from '../../components/video-controls/single-minute-time.component';
@@ -119,7 +118,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		MainWindowComponent,
 		MenuSelectionComponent,
 		RarityComponent,
-		RealTimeNotificationsComponent,
 		SetComponent,
 		SetsComponent,
 		SetsContainer,
