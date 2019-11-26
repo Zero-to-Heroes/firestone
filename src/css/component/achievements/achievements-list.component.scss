@@ -50,10 +50,6 @@
 			transform: scaleY(-1);
 		}
 
-		&.shrink-header i {
-			transform: scaleY(1);
-		}
-
 		&:hover {
 			background-color: #4b3052;
 		}
@@ -198,28 +194,6 @@
 				color: #cb9fd7;
 				margin-bottom: 15px;
 			}
-		}
-	}
-
-	&.shrink-header {
-		.show-filter {
-			margin: 0 15px 0 0;
-			ng-select {
-				visibility: hidden;
-				max-height: 0;
-				opacity: 0;
-			}
-			achievement-progress-bar {
-				visibility: hidden;
-				max-height: 0;
-				opacity: 0;
-			}
-		}
-		.set-title {
-			padding-bottom: 3px;
-		}
-		achievements-filter {
-			visibility: hidden;
 		}
 	}
 }

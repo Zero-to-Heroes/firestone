@@ -1,6 +1,7 @@
 import { AchievementSet } from '../../../../../models/achievement-set';
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { Navigation } from '../../../../../models/mainwindow/navigation';
 import { VisualAchievementCategory } from '../../../../../models/visual-achievement-category';
 import { SelectAchievementCategoryEvent } from '../../events/achievements/select-achievement-category-event';
 import { SelectAchievementSetEvent } from '../../events/achievements/select-achievement-set-event';
@@ -31,6 +32,10 @@ export class SelectAchievementCategoryProcessor implements Processor {
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,
 			isVisible: true,
+			navigation: Object.assign(new Navigation(), currentState.navigation, {
+				text: globalCategory.name,
+				image: null,
+			} as Navigation),
 		} as MainWindowState);
 	}
 }

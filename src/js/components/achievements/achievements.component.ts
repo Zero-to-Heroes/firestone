@@ -17,14 +17,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 	template: `
 		<div class="achievements">
 			<section class="main" [ngClass]="{ 'divider': state.currentView === 'list' }" [@viewState]="_viewState">
-				<achievements-menu
-					[ngClass]="{ 'shrink': state.shortDisplay }"
-					[displayType]="state.menuDisplayType"
-					[currentUser]="currentUser"
-					[selectedCategory]="state.selectedGlobalCategory"
-					[selectedAchievementSet]="state.selectedCategory"
-				>
-				</achievements-menu>
+				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 				<achievements-global-categories
 					[hidden]="state.currentView !== 'categories'"
 					[globalCategories]="state.globalCategories"
@@ -37,7 +30,6 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 				</achievements-categories>
 				<achievements-list
 					[hidden]="state.currentView !== 'list'"
-					[shortDisplay]="state.shortDisplay"
 					[socialShareUserInfo]="socialShareUserInfo"
 					[achievementsList]="state.displayedAchievementsList"
 					[selectedAchievementId]="state.selectedAchievementId"

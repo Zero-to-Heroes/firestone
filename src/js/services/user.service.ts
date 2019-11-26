@@ -24,6 +24,7 @@ export class UserService {
 
 	private async retrieveUserInfo() {
 		this.currentUser = await this.ow.getCurrentUser();
+		console.log('retrieved user info', this.currentUser);
 		this.store.stateUpdater.next(new CurrentUserEvent(this.currentUser));
 	}
 

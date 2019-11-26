@@ -14,7 +14,6 @@ import { StatContext } from '../../models/mainwindow/stats/global/context.type';
 import { GlobalStatKey } from '../../models/mainwindow/stats/global/global-stat-key.type';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -127,7 +126,6 @@ export class AchievementViewComponent implements AfterViewInit {
 	toggleRecordings() {
 		if (this._achievement && this._achievement.replayInfo.length > 0) {
 			this.showRecordings = !this.showRecordings;
-			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(this.showRecordings));
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}

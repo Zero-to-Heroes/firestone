@@ -19,6 +19,7 @@ import { DecktrackerStateLoaderService } from '../../../decktracker/main/decktra
 import { GlobalStatsService } from '../../../global-stats/global-stats.service';
 import { OverwolfService } from '../../../overwolf.service';
 import { GameStatsLoaderService } from '../../../stats/game/game-stats-loader.service';
+import { UserService } from '../../../user.service';
 import { PopulateStoreEvent } from '../events/populate-store-event';
 import { AchievementUpdateHelper } from '../helper/achievement-update-helper';
 import { Processor } from './processor';
@@ -36,16 +37,18 @@ export class PopulateStoreProcessor implements Processor {
 		private ow: OverwolfService,
 		private cards: AllCardsService,
 		private globalStats: GlobalStatsService,
+		private userService: UserService,
 	) {}
 
 	public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		console.log('[populate-store] populating store');
-		const [collection, achievements, socialShareUserInfo, stats, globalStats] = await Promise.all([
+		const [collection, achievements, socialShareUserInfo, stats, globalStats, currentUser] = await Promise.all([
 			this.populateCollectionState(currentState.binder),
 			this.populateAchievementState(currentState),
 			this.initializeSocialShareUserInfo(currentState.socialShareUserInfo),
 			this.initialiseGameStats(currentState.stats),
 			this.globalStats.getGlobalStats(),
+			this.userService.getCurrentUser(),
 		]);
 		// console.error('Adding fake game stats for dev purposes', stats);
 		// const matchStats = Object.assign(new MatchStatsState(), currentState.matchStats, {
@@ -73,6 +76,7 @@ export class PopulateStoreProcessor implements Processor {
 			// matchStats: matchStats,
 			globalStats: globalStats,
 			isVisible: false,
+			currentUser: currentUser,
 		} as MainWindowState);
 	}
 

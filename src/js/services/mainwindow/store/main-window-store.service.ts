@@ -28,7 +28,6 @@ import { UserService } from '../../user.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementRecordedEvent } from './events/achievements/achievement-recorded-event';
-import { ChangeAchievementsShortDisplayEvent } from './events/achievements/change-achievements-short-display-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
@@ -71,7 +70,6 @@ import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementRecordedProcessor } from './processors/achievements/achievement-recorded-processor';
-import { ChangeAchievementsShortDisplayProcessor } from './processors/achievements/change-achievements-short-display-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
@@ -260,6 +258,7 @@ export class MainWindowStoreService {
 				this.ow,
 				this.cards,
 				this.globalStats,
+				this.userService,
 			),
 
 			NavigationBackEvent.eventName(),
@@ -317,9 +316,6 @@ export class MainWindowStoreService {
 			// Achievements
 			AchievementHistoryCreatedEvent.eventName(),
 			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
-
-			ChangeAchievementsShortDisplayEvent.eventName(),
-			new ChangeAchievementsShortDisplayProcessor(),
 
 			ChangeVisibleAchievementEvent.eventName(),
 			new ChangeVisibleAchievementProcessor(),

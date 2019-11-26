@@ -16,7 +16,6 @@ import { AchievementSet } from '../../models/achievement-set';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
-import { ChangeAchievementsShortDisplayEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-short-display-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -28,8 +27,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<div class="achievements-container" [ngClass]="{ 'shrink-header': shortDisplay }">
-			<div class="set-title">{{ _achievementSet ? _achievementSet.displayName : '' }}</div>
+		<div class="achievements-container">
 			<div class="show-filter">
 				<ng-select
 					class="filter"
@@ -53,13 +51,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<achievements-filter></achievements-filter>
 				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
 				</achievement-progress-bar>
-			</div>
-			<div class="collapse-menu" [ngClass]="{ 'shrink-header': shortDisplay }" (mousedown)="toggleMenu()">
-				<i class="i-13X7" *ngIf="showCollapse">
-					<svg class="svg-icon-fill">
-						<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret" />
-					</svg>
-				</i>
 			</div>
 			<ul
 				class="achievements-list"
@@ -89,9 +80,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AchievementsListComponent implements AfterViewInit {
-	readonly SCROLL_SHRINK_START_PX = 5 * 100;
-
-	@Input() shortDisplay: boolean;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	@Input() globalStats: GlobalStats;
 	_achievementSet: AchievementSet;
@@ -105,11 +93,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	emptyStateIcon: string;
 	emptyStateTitle: string;
 	emptyStateText: string;
-	showCollapse: boolean;
 
-	private lastScrollPosition = 0;
-	private lastScrollPositionBeforeScrollDown = 0;
-	private lastScrollPositionBeforeScrollUp = 0;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -162,7 +146,6 @@ export class AchievementsListComponent implements AfterViewInit {
 	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
 			console.log('setting selectedAchievementId', selectedAchievementId, this._selectedAchievementId);
-			// this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
 			const achievementToShow: Element = this.el.nativeElement.querySelector(
 				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
 			);
@@ -172,10 +155,6 @@ export class AchievementsListComponent implements AfterViewInit {
 			}
 		}
 		this._selectedAchievementId = selectedAchievementId;
-	}
-
-	toggleMenu() {
-		this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(!this.shortDisplay));
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click
@@ -194,18 +173,6 @@ export class AchievementsListComponent implements AfterViewInit {
 		}
 	}
 
-	onScroll(event: Event) {
-		// console.log('scrolling event', event);
-		const elem = this.el.nativeElement.querySelector('.achievements-list');
-		// console.log('showing header?', elem.scrollTop, this.lastScrollPosition, this.headerClass);
-		if (elem.scrollTop > this.lastScrollPosition) {
-			this.onScrollDown(elem.scrollTop);
-		} else if (elem.scrollTop <= this.lastScrollPosition) {
-			this.onScrollUp(elem.scrollTop);
-		}
-		this.lastScrollPosition = elem.scrollTop;
-	}
-
 	selectFilter(option: IOption) {
 		this.activeFilter = option.value;
 		console.log('selected filter', this.activeFilter);
@@ -219,26 +186,6 @@ export class AchievementsListComponent implements AfterViewInit {
 	refresh() {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
-		}
-	}
-
-	private onScrollDown(scrollPosition: number) {
-		this.lastScrollPositionBeforeScrollUp = scrollPosition;
-		if (
-			scrollPosition - this.lastScrollPositionBeforeScrollDown >= this.SCROLL_SHRINK_START_PX &&
-			!this.shortDisplay
-		) {
-			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(true));
-		}
-	}
-
-	private onScrollUp(scrollPosition: number) {
-		this.lastScrollPositionBeforeScrollDown = scrollPosition;
-		if (
-			this.lastScrollPositionBeforeScrollUp - scrollPosition >= this.SCROLL_SHRINK_START_PX &&
-			this.shortDisplay
-		) {
-			this.stateUpdater.next(new ChangeAchievementsShortDisplayEvent(false));
 		}
 	}
 
@@ -257,7 +204,6 @@ export class AchievementsListComponent implements AfterViewInit {
 			</svg>
 		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
-		this.showCollapse = this.activeAchievements.length > 0;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

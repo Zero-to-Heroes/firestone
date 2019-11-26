@@ -30,7 +30,7 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			binder: binder,
 			achievements: achievements,
 			navigation: Object.assign(new Navigation(), currentState.navigation, {
-				text: null,
+				text: event.module === 'achievements' ? 'Categories' : null,
 				image: null,
 			} as Navigation),
 		} as MainWindowState);

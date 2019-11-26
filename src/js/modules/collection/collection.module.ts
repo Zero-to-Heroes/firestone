@@ -37,7 +37,6 @@ import { CardSearchComponent } from '../../components/collection/card-search.com
 import { CardComponent } from '../../components/collection/card.component';
 import { CardsComponent } from '../../components/collection/cards.component';
 import { CollectionEmptyStateComponent } from '../../components/collection/collection-empty-state.component';
-import { CollectionMenuComponent } from '../../components/collection/collection-menu.component';
 import { CollectionComponent } from '../../components/collection/collection.component';
 import { FullCardComponent } from '../../components/collection/full-card.component';
 import { RarityComponent } from '../../components/collection/rarity.component';
@@ -115,7 +114,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		CardSearchAutocompleteItemComponent,
 		CollectionComponent,
 		CollectionEmptyStateComponent,
-		CollectionMenuComponent,
 		FullCardComponent,
 		MainWindowComponent,
 		MenuSelectionComponent,

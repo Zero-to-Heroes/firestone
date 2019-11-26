@@ -30,7 +30,10 @@ declare var amplitude: any;
 								<use xlink:href="/Files/assets/svg/sprite.svg#logo" />
 							</svg>
 						</i>
-						<menu-selection [selectedModule]="state.currentApp"></menu-selection>
+						<menu-selection
+							[selectedModule]="state.currentApp"
+							[currentUser]="state.currentUser"
+						></menu-selection>
 					</div>
 				</div>
 				<hotkey></hotkey>

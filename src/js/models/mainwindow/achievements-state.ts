@@ -14,7 +14,6 @@ export class AchievementsState {
 	readonly achievementsList: readonly VisualAchievement[] = [];
 	readonly displayedAchievementsList: readonly VisualAchievement[] = [];
 	readonly selectedAchievementId: string;
-	readonly shortDisplay: boolean = false;
 	readonly achievementHistory: readonly AchievementHistory[] = [];
 	readonly sharingAchievement: SharingAchievement;
 }
