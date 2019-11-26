@@ -52,11 +52,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<achievement-progress-bar [achievements]="_achievementSet ? _achievementSet.achievements : null">
 				</achievement-progress-bar>
 			</div>
-			<ul
-				class="achievements-list"
-				*ngIf="activeAchievements && activeAchievements.length > 0"
-				(scroll)="onScroll($event)"
-			>
+			<ul class="achievements-list" *ngIf="activeAchievements && activeAchievements.length > 0">
 				<li *ngFor="let achievement of activeAchievements; trackBy: trackByAchievementId">
 					<achievement-view
 						[attr.data-achievement-id]="achievement.id.toLowerCase()"

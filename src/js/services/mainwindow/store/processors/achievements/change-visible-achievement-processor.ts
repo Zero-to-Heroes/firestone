@@ -1,6 +1,7 @@
 import { AchievementSet } from '../../../../../models/achievement-set';
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { Navigation } from '../../../../../models/mainwindow/navigation';
 import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { ChangeVisibleAchievementEvent } from '../../events/achievements/change-visible-achievement-event';
 import { Processor } from '../processor';
@@ -35,6 +36,10 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,
 			isVisible: true,
+			navigation: Object.assign(new Navigation(), currentState.navigation, {
+				text: globalCategory.name + ' ' + achievementSet.displayName,
+				image: null,
+			} as Navigation),
 		} as MainWindowState);
 	}
 }
