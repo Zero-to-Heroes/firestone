@@ -15,6 +15,6 @@ export class UpdateCardSearchResultsEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return true;
+		return false;
 	}
 }

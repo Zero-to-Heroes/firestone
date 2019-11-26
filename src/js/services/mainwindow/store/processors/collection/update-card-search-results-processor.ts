@@ -1,11 +1,11 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
-import { BinderState } from '../../../../../models/mainwindow/binder-state';
-import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';
-import { CollectionManager } from '../../../../collection/collection-manager.service';
-import { AllCardsService } from '../../../../all-cards.service';
-import { SetCard } from '../../../../../models/set';
 import { Card } from '../../../../../models/card';
+import { BinderState } from '../../../../../models/mainwindow/binder-state';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { SetCard } from '../../../../../models/set';
+import { AllCardsService } from '../../../../all-cards.service';
+import { CollectionManager } from '../../../../collection/collection-manager.service';
+import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';
+import { Processor } from '../processor';
 
 export class UpdateCardSearchResultsProcessor implements Processor {
 	constructor(private collectionManager: CollectionManager, private cards: AllCardsService) {}

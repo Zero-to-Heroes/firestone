@@ -21,13 +21,6 @@ import { Set, SetCard } from '../../models/set';
 	encapsulation: ViewEncapsulation.None,
 	template: `
 		<div class="cards">
-			<span *ngIf="_set && !_searchString" class="set-title">
-				<img src="{{ '/Files/assets/images/sets/' + _set.id + '.png' }}" class="set-logo" />
-				<span class="text set-name">{{ _set.name }}</span>
-			</span>
-			<span *ngIf="!_set && _searchString" class="set-title">
-				<span class="text set-name">{{ _searchString }}</span>
-			</span>
 			<div class="show-filter" [ngStyle]="{ 'display': _searchString ? 'none' : 'flex' }">
 				<!-- Rarity -->
 				<ng-select

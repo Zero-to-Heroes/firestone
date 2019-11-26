@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { BinderState } from '../../models/mainwindow/binder-state';
+import { Navigation } from '../../models/mainwindow/navigation';
 import { Set } from '../../models/set';
 import { AllCardsService } from '../../services/all-cards.service';
 
@@ -12,14 +13,7 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 	template: `
 		<div class="collection">
 			<section class="main" [ngClass]="{ 'divider': _state.currentView === 'cards' }">
-				<collection-menu
-					[displayType]="_state.menuDisplayType"
-					[selectedSet]="_state.selectedSet"
-					[selectedFormat]="_state.selectedFormat"
-					[selectedCardId]="_state.selectedCard ? _state.selectedCard.id : ''"
-					[searchString]="_state.searchString"
-				>
-				</collection-menu>
+				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 				<sets
 					[selectedFormat]="_state.selectedFormat"
 					[standardSets]="standardSets"
@@ -76,6 +70,7 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 })
 export class CollectionComponent {
 	_state: BinderState;
+	@Input() navigation: Navigation;
 
 	standardSets: Set[];
 	wildSets: Set[];

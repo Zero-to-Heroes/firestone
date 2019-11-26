@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
+import { Navigation } from '../../models/mainwindow/navigation';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
@@ -84,6 +85,7 @@ export class AchievementsComponent {
 	// update the achievement text in a single place, instead of having
 	// achievement logic spread out over multiple processors
 	@Input() globalStats: GlobalStats;
+	@Input() navigation: Navigation;
 
 	_viewState = 'shown';
 }

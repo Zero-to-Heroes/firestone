@@ -20,9 +20,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'set-view',
 	styleUrls: [`../../../css/component/collection/set.component.scss`, `../../../css/global/components-global.scss`],
 	template: `
-		<div *ngIf="_cardSet" class="set" [ngClass]="{ 'coming-soon': !released }">
+		<div *ngIf="_cardSet" class="set" [ngClass]="{ 'coming-soon': !released }" (click)="browseSet()">
 			<div class="wrapper-for-flip" [@flipState]="flip">
-				<div class="box-side set-view" (click)="browseSet()">
+				<div class="box-side set-view">
 					<div class="logo-container">
 						<img src="{{ '/Files/assets/images/sets/' + _cardSet.id + '.png' }}" class="set-logo" />
 						<span class="text set-name" *ngIf="_displayName">{{ _cardSet.name }}</span>
@@ -96,7 +96,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						<p>Coming soon!</p>
 					</div>
 				</div>
-				<div class="box-side extra-info" *ngIf="released" (click)="browseSet()">
+				<div class="box-side extra-info" *ngIf="released">
 					<div class="title">
 						<i class="i-15 pale-theme">
 							<svg class="svg-icon-fill">

@@ -2,9 +2,9 @@
 @import '../../global/fonts';
 
 .sets {
-	margin-top: 12px;
-    display: flex;
-    flex-direction: column;
+	// margin-top: 12px;
+	display: flex;
+	flex-direction: column;
 
 	sets-container {
 		display: flex;
@@ -38,5 +38,4 @@
 			}
 		}
 	}
-
 }

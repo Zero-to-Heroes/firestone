@@ -129,11 +129,12 @@
 		display: flex;
 		flex-wrap: wrap;
 		overflow-y: scroll;
+		align-content: start;
 		// flex-grow: 1;
 
 		li {
 			width: 14%;
-			height: 35%; // We need this so that things are not a mess when the placeholder image is showing
+			height: 31%; // We need this so that things are not a mess when the placeholder image is showing
 			// height: 152px;
 			margin-right: 14px;
 			margin-bottom: 4px;

@@ -180,6 +180,8 @@ export class MainWindowStoreService {
 		const event = eventQueue[0];
 		console.log('[store] processing event', event.eventName());
 		const processor: Processor = this.processors.get(event.eventName());
+		// Don't modify the current state here, as it could make state lookup impossible
+		// (for back / forward arrows for instance)
 		const newState = await processor.process(event, this.state, this.stateHistory);
 		if (newState) {
 			this.addStateToHistory(newState, event.isNavigationEvent(), event.eventName());
@@ -188,6 +190,7 @@ export class MainWindowStoreService {
 			// or forward with the history arrows, the state of these arrows will change
 			// vs what they originally were when the state was stored
 			const stateWithNavigation = this.updateNavigationArrows(newState);
+			console.log('emitting new state', stateWithNavigation);
 			this.stateEmitter.next(stateWithNavigation);
 		} else {
 			console.log('[store] no new state to emit');

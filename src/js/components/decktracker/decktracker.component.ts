@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DecktrackerState } from '../../models/mainwindow/decktracker/decktracker-state';
+import { Navigation } from '../../models/mainwindow/navigation';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -46,6 +47,7 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 })
 export class DecktrackerComponent {
 	@Input() state: DecktrackerState;
+	@Input() navigation: Navigation;
 
 	_viewState = 'shown';
 }

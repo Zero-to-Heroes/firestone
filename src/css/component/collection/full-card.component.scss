@@ -119,8 +119,11 @@
 				}
 
 				.placeholder {
-					// width: 132%;
-					// left: -12%;
+					margin: auto;
+					width: 93%;
+					left: 2%;
+					position: relative;
+					margin-top: -2%;
 				}
 
 				.overlay.overlay {
@@ -129,16 +132,18 @@
 
 				.real-card.real-card {
 					filter: none;
-					// position: absolute;
+					position: absolute;
+					left: 0;
 				}
 
 				.count {
 					height: 40px;
 					// We use top positioning to avoid issues when the text on the side is bigger or smaller
 					// depending on cards
-					top: -9%;
+					top: -4%;
 					bottom: auto;
 					position: relative;
+					// margin-top: 0;
 
 					.non-premium {
 						height: 40px;

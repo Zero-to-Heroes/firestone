@@ -1,6 +1,7 @@
 import { Card } from '../../../../../models/card';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { Navigation } from '../../../../../models/mainwindow/navigation';
 import { SetCard } from '../../../../../models/set';
 import { AllCardsService } from '../../../../all-cards.service';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
@@ -34,6 +35,10 @@ export class SearchCardProcessor implements Processor {
 		return Object.assign(new MainWindowState(), currentState, {
 			binder: newBinder,
 			isVisible: true,
+			navigation: Object.assign(new Navigation(), currentState.navigation, {
+				text: 'Searching for ' + event.searchString,
+				image: null,
+			} as Navigation),
 		} as MainWindowState);
 	}
 

@@ -54,6 +54,7 @@ import { DecktrackerGroupedReplaysComponent } from '../../components/decktracker
 import { DecktrackerMenuComponent } from '../../components/decktracker/main/decktracker-menu.component';
 import { DecktrackerReplaysComponent } from '../../components/decktracker/main/decktracker-replays.component';
 import { MainWindowComponent } from '../../components/main-window.component';
+import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
 import { ShareLoginComponent } from '../../components/sharing/share-login.component';
@@ -100,6 +101,7 @@ console.log('version is ' + process.env.APP_VERSION);
 	],
 	declarations: [
 		MainWindowNavigationComponent,
+		GlobalHeaderComponent,
 
 		FsTimeDisplay,
 		FsUtcPipe,

@@ -10,6 +10,6 @@ export class PopulateStoreEvent implements MainWindowStoreEvent {
 	}
 
 	public isNavigationEvent(): boolean {
-		return false;
+		return true;
 	}
 }

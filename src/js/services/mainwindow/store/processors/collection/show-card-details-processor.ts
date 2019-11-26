@@ -1,5 +1,6 @@
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { Navigation } from '../../../../../models/mainwindow/navigation';
 import { Set, SetCard } from '../../../../../models/set';
 import { AllCardsService } from '../../../../all-cards.service';
 import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
@@ -19,10 +20,15 @@ export class ShowCardDetailsProcessor implements Processor {
 			selectedFormat: selectedSet.standard ? 'standard' : 'wild',
 			searchString: undefined,
 		} as BinderState);
+		const navigation = Object.assign(new Navigation(), currentState.navigation, {
+			text: selectedCard.name,
+			image: null,
+		} as Navigation);
 		return Object.assign(new MainWindowState(), currentState, {
 			isVisible: true,
 			currentApp: 'collection',
 			binder: newBinder,
+			navigation: navigation,
 		} as MainWindowState);
 	}
 

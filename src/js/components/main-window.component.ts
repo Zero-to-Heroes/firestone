@@ -47,11 +47,13 @@ declare var amplitude: any;
 				<collection
 					class="main-section"
 					[state]="state.binder"
+					[navigation]="state.navigation"
 					[hidden]="state.currentApp !== 'collection'"
 				></collection>
 				<achievements
 					class="main-section"
 					[state]="state.achievements"
+					[navigation]="state.navigation"
 					[currentUser]="state.currentUser"
 					[socialShareUserInfo]="state.socialShareUserInfo"
 					[hidden]="state.currentApp !== 'achievements'"
@@ -61,6 +63,7 @@ declare var amplitude: any;
 				<decktracker
 					class="main-section"
 					[state]="state.decktracker"
+					[navigation]="state.navigation"
 					[hidden]="state.currentApp !== 'decktracker'"
 				>
 				</decktracker>

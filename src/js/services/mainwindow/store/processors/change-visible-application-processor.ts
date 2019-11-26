@@ -1,6 +1,7 @@
 import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
 import { BinderState } from '../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { Navigation } from '../../../../models/mainwindow/navigation';
 import { ChangeVisibleApplicationEvent } from '../events/change-visible-application-event';
 import { Processor } from './processor';
 
@@ -28,6 +29,10 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 			currentApp: event.module,
 			binder: binder,
 			achievements: achievements,
+			navigation: Object.assign(new Navigation(), currentState.navigation, {
+				text: null,
+				image: null,
+			} as Navigation),
 		} as MainWindowState);
 	}
 }
