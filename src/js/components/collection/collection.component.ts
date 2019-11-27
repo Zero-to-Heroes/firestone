@@ -9,9 +9,12 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 @Component({
 	selector: 'collection',
-	styleUrls: [`../../../css/component/collection/collection.component.scss`],
+	styleUrls: [
+		`../../../css/component/app-section.component.scss`,
+		`../../../css/component/collection/collection.component.scss`,
+	],
 	template: `
-		<div class="collection">
+		<div class="app-section collection">
 			<section class="main" [ngClass]="{ 'divider': _state.currentView === 'cards' }">
 				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 				<sets

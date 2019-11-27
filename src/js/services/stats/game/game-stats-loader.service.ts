@@ -36,10 +36,7 @@ export class GameStatsLoaderService {
 				this.gameStats = Object.assign(new GameStats(), {
 					stats: endpointResult,
 				} as GameStats);
-				this.logger.debug(
-					'[game-stats-loader] Retrieved game stats for user',
-					this.gameStats && this.gameStats.stats.length,
-				);
+				console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats);
 				resolve(this.gameStats);
 			},
 			error => {

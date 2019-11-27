@@ -2,11 +2,7 @@
 @import '../../global/scrollbar';
 
 .achievements {
-	flex-grow: 1;
-	display: flex;
 	padding-top: 14px;
-	// height: 598px;
-	// max-height: 598px;
 
 	achievements-menu {
 		transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out, flex-shrink 0.4s ease-in-out,
@@ -14,36 +10,11 @@
 	}
 
 	.main {
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-		padding-left: 5px;
-		margin-top: 0;
-		position: relative;
-
-		&.divider {
-			border-right: 1px solid #4b3052;
-			height: 100%;
-		}
-
-		// achievements-menu {
-		//     height: 30px;
-		//     display: flex;
-		//     align-items: flex-end;
-		//     flex-shrink: 0;
-		// }
-
-		achievevements-global-categories {
-			display: flex;
-		}
-
 		achievements-list {
-			display: flex;
 			flex-grow: 1;
 		}
 
 		achievement-sharing-modal {
-			display: flex;
 			position: absolute;
 			background: rgba(0, 0, 0, 0.8);
 			z-index: 999;
@@ -51,16 +22,6 @@
 			left: 0;
 			height: calc(100vh - 40px);
 		}
-	}
-
-	.secondary {
-		display: flex;
-		flex-direction: column;
-		flex-grow: 0;
-		margin-left: 15px;
-		margin-right: 5px;
-		width: 400px;
-		height: calc(100% - 320px);
 	}
 }
 

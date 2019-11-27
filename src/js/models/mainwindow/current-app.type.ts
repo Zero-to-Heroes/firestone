@@ -1,1 +1,1 @@
-export type CurrentAppType = 'collection' | 'achievements' | 'decktracker';
+export type CurrentAppType = 'collection' | 'achievements' | 'decktracker' | 'replays';

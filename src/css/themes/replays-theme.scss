@@ -1,0 +1,38 @@
+:host.replays-theme,
+.replays-theme {
+	--window-background-image: radial-gradient(
+			44.58% 50% at 50% 50%,
+			rgba(14, 72, 30, 0.7) 0%,
+			rgba(24, 43, 27, 0.7) 100%
+		),
+		url('/Files/assets/images/backgrounds/decktracker_main_window.png');
+	--color-1: #a2ccb0;
+	--color-2: #89ad9a;
+	--color-3: #5f7868;
+	--color-4: #3b5141;
+	--color-5: #061d14;
+	--color-6: #c4c4c4;
+
+	--window-outline-color: var(--color-4);
+	--default-text-color: #d9c3ab;
+	--default-title-color: #ffb948;
+	--secondary-text-color: var(--color-6);
+
+	--menu-selection-color: var(--color-3);
+	--on-menu-selection-color: var(--default-title-color);
+	--menu-bar-bottom-border-color: var(--color-4);
+
+	--tooltip-background-color: var(--color-6);
+	--tooltip-color: var(--color-5);
+
+	--ads-background-color: var(--color-5);
+	--ads-color: #182d1e;
+
+	--control-button-color: var(--color-1);
+	--on-control-button-background-color: var(--color-4);
+	--on-close-button-color: var(--color-4);
+	--on-close-button-background-color: var(--color-1);
+
+	--scrollbar-thumb-color: var(--color-3);
+	--on-scrollbar-thumb-color: var(--color-1);
+}

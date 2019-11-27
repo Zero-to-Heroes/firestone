@@ -1,7 +1,10 @@
+import { StatGameFormatType } from '../stats/stat-game-format.type';
+import { StatGameModeType } from '../stats/stat-game-mode.type';
 import { CoinPlayType } from './coin-play.type';
 import { MatchResultType } from './match-result.type';
 
-export class DeckReplayInfo {
+export class ReplayInfo {
+	readonly additionalResult: string;
 	readonly creationTimestamp: number;
 	readonly playerDeckName: string;
 	readonly playerSkin: string;
@@ -14,4 +17,6 @@ export class DeckReplayInfo {
 	readonly result: MatchResultType;
 	readonly coinPlay: CoinPlayType;
 	readonly reviewId: string;
+	readonly gameMode: StatGameModeType;
+	readonly gameFormat: StatGameFormatType;
 }

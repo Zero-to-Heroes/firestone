@@ -4,6 +4,7 @@ import { CardHistory } from '../../../../models/card-history';
 import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
 import { BinderState } from '../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { ReplaysState } from '../../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../../models/mainwindow/social-share-user-info';
 import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
 import { StatsState } from '../../../../models/mainwindow/stats/stats-state';
@@ -16,6 +17,7 @@ import { CardHistoryStorageService } from '../../../collection/card-history-stor
 import { CollectionManager } from '../../../collection/collection-manager.service';
 import { PackHistoryService } from '../../../collection/pack-history.service';
 import { DecktrackerStateLoaderService } from '../../../decktracker/main/decktracker-state-loader.service';
+import { ReplaysStateBuilderService } from '../../../decktracker/main/replays-state-builder.service';
 import { GlobalStatsService } from '../../../global-stats/global-stats.service';
 import { OverwolfService } from '../../../overwolf.service';
 import { GameStatsLoaderService } from '../../../stats/game/game-stats-loader.service';
@@ -38,6 +40,7 @@ export class PopulateStoreProcessor implements Processor {
 		private cards: AllCardsService,
 		private globalStats: GlobalStatsService,
 		private userService: UserService,
+		private replaysStateBuilder: ReplaysStateBuilderService,
 	) {}
 
 	public async process(event: PopulateStoreEvent, currentState: MainWindowState): Promise<MainWindowState> {
@@ -65,10 +68,12 @@ export class PopulateStoreProcessor implements Processor {
 		// 	} as MatchStats,
 		// 	currentStat: 'replay',
 		// } as MatchStatsState);
+		const replayState: ReplaysState = this.replaysStateBuilder.buildState(currentState.replays, stats);
 		const decktracker = this.decktrackerStateLoader.buildState(currentState.decktracker, stats);
 		console.log('[populate-store] almost done');
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: achievements,
+			replays: replayState,
 			binder: collection,
 			decktracker: decktracker,
 			socialShareUserInfo: socialShareUserInfo,

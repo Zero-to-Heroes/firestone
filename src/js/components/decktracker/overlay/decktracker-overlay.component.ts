@@ -124,7 +124,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			// console.log('received deck event', event);
-			if (event && event.name === DeckEvents.MATCH_METADATA) {
+			if (event && event.event && event.event.name === DeckEvents.MATCH_METADATA) {
 				amplitude.getInstance().logEvent('match-start', {
 					'active-skin': this.useCleanMode ? 'clean' : 'original',
 					'display-mode': this.displayMode,

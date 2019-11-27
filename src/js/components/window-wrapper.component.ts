@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 		`../../css/themes/collection-theme.scss`,
 		`../../css/themes/achievements-theme.scss`,
 		`../../css/themes/decktracker-theme.scss`,
+		`../../css/themes/replays-theme.scss`,
 		`../../css/themes/general-theme.scss`,
 	],
 	template: `

@@ -1,11 +1,12 @@
-import { CoinPlayType } from '../decktracker/coin-play.type';
-import { MatchResultType } from '../decktracker/match-result.type';
+import { CoinPlayType } from '../replays/coin-play.type';
+import { MatchResultType } from '../replays/match-result.type';
 import { MatchStats } from './match-stats';
 import { StatGameFormatType } from './stat-game-format.type';
 import { StatGameModeType } from './stat-game-mode.type';
 
 // this mirrors the data structure in the replay_summary DB
 export class GameStat {
+	readonly additionalResult: string;
 	readonly creationTimestamp: number;
 	readonly gameMode: StatGameModeType;
 	readonly gameFormat: StatGameFormatType;

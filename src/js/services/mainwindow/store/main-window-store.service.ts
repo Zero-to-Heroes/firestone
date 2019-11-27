@@ -15,6 +15,7 @@ import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
+import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { Events } from '../../events.service';
 import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OwNotificationsService } from '../../notifications.service';
@@ -151,6 +152,7 @@ export class MainWindowStoreService {
 		private decktrackerStateLoader: DecktrackerStateLoaderService,
 		private readonly logger: NGXLogger,
 		private readonly globalStats: GlobalStatsService,
+		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -259,6 +261,7 @@ export class MainWindowStoreService {
 				this.cards,
 				this.globalStats,
 				this.userService,
+				this.replaysStateBuilder,
 			),
 
 			NavigationBackEvent.eventName(),

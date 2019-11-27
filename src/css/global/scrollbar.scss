@@ -10,11 +10,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-	background: $grey03;
+	background: var(--scrollbar-thumb-color);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-	background: $grey01;
+	background: var(--on-scrollbar-thumb-color);
 }
 
 ::-webkit-scrollbar-button {

@@ -18,8 +18,8 @@ import { OverwolfService } from '../services/overwolf.service';
 	styleUrls: [`../../css/global/menu.scss`, `../../css/component/menu-selection.component.scss`],
 	template: `
 		<ul class="menu-selection">
-			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
-				<span>Collection</span>
+			<li [ngClass]="{ 'selected': selectedModule === 'replays' }" (mousedown)="selectModule('replays')">
+				<span>Replays</span>
 			</li>
 			<li
 				[ngClass]="{ 'selected': selectedModule === 'achievements' }"
@@ -49,6 +49,9 @@ import { OverwolfService } from '../services/overwolf.service';
 							</svg>
 						</div></div
 				></span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedModule === 'collection' }" (mousedown)="selectModule('collection')">
+				<span>Collection</span>
 			</li>
 			<li [ngClass]="{ 'selected': selectedModule === 'decktracker' }" (mousedown)="selectModule('decktracker')">
 				<span>Deck Tracker</span>

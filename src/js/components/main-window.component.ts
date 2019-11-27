@@ -47,12 +47,12 @@ declare var amplitude: any;
 				</div>
 			</section>
 			<section class="content-container">
-				<collection
+				<replays
 					class="main-section"
-					[state]="state.binder"
+					[state]="state.replays"
 					[navigation]="state.navigation"
-					[hidden]="state.currentApp !== 'collection'"
-				></collection>
+					[hidden]="state.currentApp !== 'replays'"
+				></replays>
 				<achievements
 					class="main-section"
 					[state]="state.achievements"
@@ -63,6 +63,12 @@ declare var amplitude: any;
 					[globalStats]="state.globalStats"
 				>
 				</achievements>
+				<collection
+					class="main-section"
+					[state]="state.binder"
+					[navigation]="state.navigation"
+					[hidden]="state.currentApp !== 'collection'"
+				></collection>
 				<decktracker
 					class="main-section"
 					[state]="state.decktracker"

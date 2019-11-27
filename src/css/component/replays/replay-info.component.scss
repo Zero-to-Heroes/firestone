@@ -1,9 +1,32 @@
-.deck-replay-info {
+.replay-info {
 	background: rgba(255, 255, 255, 0.08);
 	display: flex;
 	align-items: center;
 	height: 40px;
 	padding: 10px;
+}
+
+.group {
+	border-right: 1px solid var(--default-text-color);
+	display: flex;
+	height: 100%;
+	padding-right: 10px;
+	margin-right: 10px;
+	align-items: center;
+	justify-content: center;
+
+	&:nth-last-child(2) {
+		border: none;
+	}
+
+	&.result {
+		width: 115px;
+	}
+
+	&.player-images {
+		padding-left: 10px;
+		padding-right: 15px;
+	}
 }
 
 .player-rank {
@@ -30,6 +53,8 @@
 .player-class {
 	width: 30px;
 	height: 30px;
+	clip-path: circle(10px at 50% 50%);
+	transform: scale(1.5);
 
 	&.opponent {
 		margin-right: 5px;
@@ -56,8 +81,8 @@
 	font-size: 13px;
 	line-height: 18px;
 	color: var(--default-text-color);
-	margin-left: 5px;
-	margin-right: 5px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .divider {

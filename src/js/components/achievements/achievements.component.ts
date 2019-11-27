@@ -11,11 +11,12 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 @Component({
 	selector: 'achievements',
 	styleUrls: [
+		`../../../css/component/app-section.component.scss`,
 		`../../../css/component/achievements/achievements.component.scss`,
 		`../../../css/global/components-global.scss`,
 	],
 	template: `
-		<div class="achievements">
+		<div class="app-section achievements">
 			<section class="main" [ngClass]="{ 'divider': state.currentView === 'list' }" [@viewState]="_viewState">
 				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
 				<achievements-global-categories
