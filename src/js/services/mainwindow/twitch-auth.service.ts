@@ -37,13 +37,9 @@ export class TwitchAuthService {
 	}
 
 	public async emitDeckEvent(event: any) {
-		// console.log('ready to emit twitch event', event);
 		let newEvent = Object.assign({}, event);
 		// Tmp fix until we fix the twitch extension
-		if (
-			newEvent.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
-			(!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0)
-		) {
+		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
 			const newDeck: readonly DeckCard[] = [
 				...newEvent.state.playerDeck.deck,
 				...newEvent.state.playerDeck.hand,
@@ -60,6 +56,20 @@ export class TwitchAuthService {
 			});
 			// console.log('fixed event to send', newEvent, event);
 		}
+		if (newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
+			// Don't show anything in the deck itself
+			const newDeck: readonly DeckCard[] = [];
+			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
+				deck: newDeck,
+			} as DeckState);
+			const newState = Object.assign(new GameState(), newEvent.state, {
+				playerDeck: newPlayerDeck,
+			} as GameState);
+			newEvent = Object.assign({}, newEvent, {
+				state: newState,
+			});
+		}
+		console.log('ready to emit twitch event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
 			// console.log('no twitch access token, returning');
