@@ -67,7 +67,7 @@ export interface Message {
 	content: string;
 	cardId?: string;
 	type?: string;
-	app?: 'achievement' | 'collection' | 'decktracker';
+	app?: 'achievement' | 'collection' | 'decktracker' | 'replays';
 	timeout?: number;
 	theClass?: string;
 	clickToClose?: boolean;

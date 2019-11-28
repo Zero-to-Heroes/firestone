@@ -28,6 +28,7 @@ declare var amplitude;
 		'../../css/component/notifications/notifications.component.scss',
 		'../../css/component/notifications/notifications-achievements.scss',
 		'../../css/component/notifications/notifications-decktracker.scss',
+		'../../css/component/notifications/notifications-replays.scss',
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `
@@ -40,7 +41,7 @@ declare var amplitude;
 })
 // Maybe use https://www.npmjs.com/package/ngx-toastr instead
 export class NotificationsComponent implements AfterViewInit, OnDestroy {
-	timeout = 5000;
+	timeout = 10000;
 	// timeout = 999999;
 	toastOptions = {
 		timeOut: this.timeout,
@@ -131,7 +132,11 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const activeNotif = this.activeNotifications.find(
 				notif => notif.notificationId === messageObject.notificationId,
 			);
-			const notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
+			let notification;
+			try {
+				notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
+			} catch (e) {}
+
 			if (notification && activeNotif) {
 				await this.updateAchievementNotification(
 					messageObject.notificationId,
@@ -169,7 +174,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	private async showNotification(messageObject: Message) {
 		return new Promise<void>(async resolve => {
-			console.log('showing notification', messageObject.notificationId);
+			// console.log('showing notification', messageObject.notificationId);
 			const htmlMessage: string = messageObject.content;
 			const cardId: string = messageObject.cardId;
 			const type: string = messageObject.type;
@@ -193,13 +198,13 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 			const toast = this.notificationService.html(htmlMessage, NotificationType.Success, override);
 			toast.theClass = messageObject.theClass;
-			console.log('created toast', toast.id, messageObject.notificationId);
+			// console.log('created toast', toast.id, messageObject.notificationId);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 			// console.log('running toast message in zone', toast);
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
-				// console.log('registered click on toast', event, toast);
+				// console.log('registered click on toast', event, toast, messageObject);
 				let currentElement: any = event.srcElement;
 				while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
 					currentElement = currentElement.parentElement;
@@ -214,6 +219,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					if (override.clickToClose === false) {
 						this.notificationService.remove(toast.id);
 					}
+					console.log('closing notif');
 					// this.notificationService.remove(toast.id);
 					return;
 				}
@@ -229,6 +235,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					event.preventDefault();
 					event.stopPropagation();
 					this.showSettings();
+					// console.log('showing settings');
 					return;
 				}
 				// console.log('currentElemetn before', currentElement, event.srcElement);
@@ -251,19 +258,22 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					}, 500);
 					event.preventDefault();
 					event.stopPropagation();
+					// console.log('unclickable');
 					return;
 				}
 				amplitude
 					.getInstance()
 					.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': type });
 				if (messageObject.eventToSendOnClick) {
+					// console.log('event to send on click', messageObject.eventToSendOnClick);
 					const eventToSend = messageObject.eventToSendOnClick();
 					this.stateUpdater.next(eventToSend);
 				}
 				if (cardId) {
+					// console.log('wxith card id', cardId);
 					const isAchievement = messageObject.app === 'achievement';
 					if (isAchievement) {
-						console.log('sending message', this.mainWindowId);
+						// console.log('sending message', this.mainWindowId);
 						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
 						this.fadeNotificationOut(messageObject.notificationId);
 					} else {
@@ -288,7 +298,10 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			resolve();
 
 			setTimeout(() => {
-				const notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
+				let notification;
+				try {
+					notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
+				} catch (e) {}
 				if (notification) {
 					notification.classList.add(messageObject.theClass);
 				}

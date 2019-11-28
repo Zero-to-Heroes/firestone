@@ -1,0 +1,63 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
+.match-stats-message-container {
+	display: flex;
+	align-items: center;
+	background-image: url('/Files/assets/images/backgrounds/replays-notif-bg.png');
+	background-size: 100%;
+	background-position: center center;
+	outline: 1px solid #3b5141;
+	width: 350px;
+	height: 80px;
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.9);
+	padding: 15px;
+
+	.message {
+		display: flex;
+		flex-direction: column;
+
+		.title {
+			@extend %achievement-name;
+			display: flex;
+			align-items: center;
+
+			i {
+				--icon-color: #ffb948;
+				margin-right: 10px;
+			}
+		}
+
+		.text {
+			@extend %achievements-notification-text;
+			margin-top: 3px;
+		}
+
+		.recap-text {
+			@extend %achievements-recap-text;
+			margin-top: 5px;
+			position: relative;
+			color: #a89782;
+		}
+	}
+
+	.close-button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 30px;
+		height: 30px;
+		--icon-color: #a2ccb0;
+
+		&:hover {
+			color: #3b5141;
+			background: #a2ccb0;
+		}
+	}
+
+	.active {
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+}

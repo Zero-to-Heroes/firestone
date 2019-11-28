@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Achievement } from '../models/achievement';
+import { GameStat } from '../models/mainwindow/stats/game-stat';
+import { GameStats } from '../models/mainwindow/stats/game-stats';
 import { AchievementsLocalStorageService } from './achievement/achievements-local-storage.service';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
@@ -66,6 +68,20 @@ export class DevService {
 				notificationTimeout: () => {},
 				getRecordingDuration: () => 0,
 			} as Challenge);
+			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
+			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
+		};
+		window['showMatchStatsNotification'] = () => {
+			this.events.broadcast(
+				Events.GAME_STATS_UPDATED,
+				Object.assign(new GameStats(), {
+					stats: [
+						Object.assign(new GameStat(), {
+							reviewId: '5ddd7f7f3c4a7900013e16de',
+						} as GameStat),
+					],
+				} as GameStats),
+			);
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		};

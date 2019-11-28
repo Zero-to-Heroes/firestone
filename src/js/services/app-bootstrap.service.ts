@@ -22,6 +22,7 @@ import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
 import { MatchSummaryService } from './match-summary/match-summary.service';
 import { OverwolfService } from './overwolf.service';
+import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 
 declare var amplitude: any;
@@ -62,6 +63,7 @@ export class AppBootstrapService {
 		private init_endGameListenerService: EndGameListenerService,
 		private init_matchSummaryService: MatchSummaryService,
 		private init_GlobalStatsNotifierService: GlobalStatsNotifierService,
+		private init_ReplaysNotificationService: ReplaysNotificationService,
 	) {}
 
 	public async init() {
