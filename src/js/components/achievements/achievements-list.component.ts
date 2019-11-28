@@ -23,7 +23,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'achievements-list',
 	styleUrls: [
 		`../../../css/component/achievements/achievements-list.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`,
+		`../../../css/global/scrollbar.scss`,
 	],
 	encapsulation: ViewEncapsulation.None,
 	template: `

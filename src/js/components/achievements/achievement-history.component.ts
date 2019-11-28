@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, ElementRef, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input } from '@angular/core';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 
 @Component({
 	selector: 'achievement-history',
 	styleUrls: [
 		`../../../css/component/achievements/achievement-history.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`,
+		`../../../css/global/scrollbar.scss`,
 	],
 	template: `
 		<div class="achievement-history">

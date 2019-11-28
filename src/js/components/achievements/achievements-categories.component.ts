@@ -1,7 +1,5 @@
-import { Component, Input, ChangeDetectionStrategy, AfterViewInit, EventEmitter } from '@angular/core';
-
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { AchievementSet } from '../../models/achievement-set';
-
 import { SelectAchievementSetEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-set-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
@@ -10,7 +8,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'achievements-categories',
 	styleUrls: [
 		`../../../css/component/achievements/achievements-categories.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`,
+		`../../../css/global/scrollbar.scss`,
 	],
 	template: `
 		<div class="achievements-categories">

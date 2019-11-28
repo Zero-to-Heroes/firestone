@@ -20,7 +20,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'achievement-sharing-modal',
 	styleUrls: [
 		`../../../css/component/achievements/achievement-sharing-modal.component.scss`,
-		`../../../css/global/scrollbar-achievements.scss`,
+		`../../../css/global/scrollbar.scss`,
 		`../../../css/component/controls/controls.scss`,
 		`../../../css/component/controls/control-close.component.scss`,
 	],
