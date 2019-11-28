@@ -6,6 +6,7 @@ import { ReplayInfo } from '../../models/mainwindow/replays/replay-info';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
+import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -86,8 +87,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	}
 
 	showReplay() {
-		// this.stateUpdater.next(new ShowDeckReplayEvent(null));
-		// this.stateUpdater.next(new ShowDeckReplayEvent(this.reviewId));
+		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 
 	private buildPlayerRankImage(

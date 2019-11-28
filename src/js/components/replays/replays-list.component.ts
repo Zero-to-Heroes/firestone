@@ -27,7 +27,7 @@ export class ReplaysListComponent {
 	@Input() set state(value: ReplaysState) {
 		// this.logger.debug('[decktracker-decks] setting decks', value);
 		console.warn('showing only the last 28 days, will update that when implementing filters');
-		this._replays = value.groupedReplays.slice(0, 28);
+		this._replays = value.groupedReplays ? value.groupedReplays.slice(0, 28) : null;
 	}
 
 	constructor(private readonly logger: NGXLogger, private ow: OverwolfService, private el: ElementRef) {}

@@ -1,0 +1,16 @@
+.external-player {
+	::ng-deep {
+		controls {
+			.discuss,
+			.divider {
+				display: none;
+			}
+			.view-online {
+				width: 75px;
+			}
+		}
+		turn-narrator {
+			color: var(--default-text-color);
+		}
+	}
+}

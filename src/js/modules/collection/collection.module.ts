@@ -52,7 +52,9 @@ import { DecktrackerMenuComponent } from '../../components/decktracker/main/deck
 import { MainWindowComponent } from '../../components/main-window.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
+import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
+import { MatchDetailsComponent } from '../../components/replays/match-details.component';
 import { ReplayInfoComponent } from '../../components/replays/replay-info.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
 import { ReplaysComponent } from '../../components/replays/replays.component';
@@ -152,6 +154,8 @@ console.log('version is ' + process.env.APP_VERSION);
 		ReplaysListComponent,
 		GroupedReplaysComponent,
 		ReplayInfoComponent,
+		MatchDetailsComponent,
+		GameReplayComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,
