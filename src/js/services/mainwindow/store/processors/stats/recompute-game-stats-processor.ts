@@ -14,7 +14,7 @@ export class RecomputeGameStatsProcessor implements Processor {
 	) {}
 
 	public async process(event: RecomputeGameStatsEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		const newGameStats: GameStats = this.gameStatsUpdater.recomputeGameStats(currentState.stats.gameStats);
+		const newGameStats: GameStats = await this.gameStatsUpdater.recomputeGameStats(currentState.stats.gameStats);
 		const newStatsState: StatsState = Object.assign(new StatsState(), currentState.stats, {
 			gameStats: newGameStats,
 		} as StatsState);

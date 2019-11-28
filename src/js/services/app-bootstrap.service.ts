@@ -103,7 +103,7 @@ export class AppBootstrapService {
 					this.store.stateUpdater.next(new CloseMainWindowEvent());
 					await this.ow.hideWindow(window.id);
 				} else {
-					this.startApp();
+					this.startApp(true);
 				}
 			} else {
 				console.log('could not trigger hotkey', hotkeyResult, this.currentState);
@@ -130,9 +130,9 @@ export class AppBootstrapService {
 		const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 		await this.ow.restoreWindow(collectionWindow.id);
 		await this.ow.hideWindow(collectionWindow.id);
-		this.startApp();
+		this.startApp(false);
 		this.ow.addAppLaunchTriggeredListener(() => {
-			this.startApp();
+			this.startApp(true);
 		});
 		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
 		await this.ow.restoreWindow(settingsWindow.id);
@@ -158,8 +158,12 @@ export class AppBootstrapService {
 		this.ow.sendMessage(this.loadingWindowId, 'ready', 'ready');
 	}
 
-	private async startApp() {
-		this.showCollectionWindow();
+	private async startApp(showMainWindow: boolean) {
+		const isRunning = await this.ow.inGame();
+		console.log('are we in game?', isRunning);
+		if (showMainWindow) {
+			this.showCollectionWindow();
+		}
 	}
 
 	private async closeLoadingScreen() {

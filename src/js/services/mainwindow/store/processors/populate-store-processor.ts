@@ -4,6 +4,7 @@ import { CardHistory } from '../../../../models/card-history';
 import { AchievementsState } from '../../../../models/mainwindow/achievements-state';
 import { BinderState } from '../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { Navigation } from '../../../../models/mainwindow/navigation';
 import { ReplaysState } from '../../../../models/mainwindow/replays/replays-state';
 import { SocialShareUserInfo } from '../../../../models/mainwindow/social-share-user-info';
 import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
@@ -82,6 +83,9 @@ export class PopulateStoreProcessor implements Processor {
 			globalStats: globalStats,
 			isVisible: false,
 			currentUser: currentUser,
+			navigation: Object.assign(new Navigation(), {
+				text: 'Categories',
+			} as Navigation),
 		} as MainWindowState);
 	}
 

@@ -13,7 +13,7 @@ import { StatsState } from './stats/stats-state';
 export class MainWindowState {
 	readonly isVisible: boolean = false;
 	readonly currentUser: CurrentUser = null;
-	readonly currentApp: CurrentAppType = 'replays';
+	readonly currentApp: CurrentAppType = 'achievements';
 	readonly replays: ReplaysState = new ReplaysState();
 	readonly binder: BinderState = new BinderState();
 	readonly achievements: AchievementsState = new AchievementsState();

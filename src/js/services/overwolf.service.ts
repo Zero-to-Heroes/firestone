@@ -160,8 +160,10 @@ export class OverwolfService {
 	}
 
 	public async getCurrentUser(): Promise<CurrentUser> {
+		console.log('[overwolf-service] retrieving current user');
 		return new Promise<CurrentUser>(resolve => {
 			overwolf.profile.getCurrentUser(user => {
+				console.log('[overwolf-service] retrieved current user', user);
 				resolve(user);
 			});
 		});

@@ -15,8 +15,11 @@ export class ShowReplayProcessor implements Processor {
 			selectedReplay: matchDetail,
 			currentView: 'match-details',
 		} as ReplaysState);
+		console.log('showing replay', event, newState);
 		return Object.assign(new MainWindowState(), currentState, {
 			replays: newState,
+			isVisible: true,
+			currentApp: 'replays',
 			navigation: Object.assign(new Navigation(), currentState.navigation, {
 				text: new Date(selectedInfo.creationTimestamp).toLocaleDateString('en-US', {
 					month: 'short',

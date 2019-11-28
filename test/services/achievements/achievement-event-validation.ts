@@ -11,6 +11,7 @@ import { AchievementsLoaderService } from '../../../src/js/services/achievement/
 import { RemoteAchievementsService } from '../../../src/js/services/achievement/remote-achievements.service.js';
 import { AllCardsService } from '../../../src/js/services/all-cards.service';
 import { DeckParserService } from '../../../src/js/services/decktracker/deck-parser.service';
+import { GameStateService } from '../../../src/js/services/decktracker/game-state.service';
 import { Events } from '../../../src/js/services/events.service';
 import { GameEventsEmitterService } from '../../../src/js/services/game-events-emitter.service';
 import { GameEvents } from '../../../src/js/services/game-events.service';
@@ -114,6 +115,11 @@ export const achievementsValidation = async (
 			},
 		} as any,
 	} as MainWindowStoreService;
+	const gameState = {
+		getCurrentReviewId: async () => {
+			return '';
+		},
+	} as GameStateService;
 	const statsUpdater = new GameStatsUpdaterService(
 		emitter,
 		events,
@@ -122,6 +128,7 @@ export const achievementsValidation = async (
 		deckService,
 		playersInfoService,
 		new NGXLoggerMock() as NGXLogger,
+		gameState,
 	);
 	statsUpdater.stateUpdater = store.stateUpdater;
 	const storage: AchievementsLocalStorageService = {

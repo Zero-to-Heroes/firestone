@@ -28,7 +28,7 @@ export class PlayersInfoService {
 			return null;
 		}
 		this.shortCache(infoFromGep);
-		// console.log('[players-info] retrieved player info from memory', infoFromGep.localPlayer);
+		console.log('[players-info] retrieved player info from memory', infoFromGep.localPlayer);
 		return infoFromGep.localPlayer;
 	}
 
@@ -44,6 +44,7 @@ export class PlayersInfoService {
 			return null;
 		}
 		this.shortCache(infoFromGep);
+		console.log('[players-info] retrieved player info from memory', infoFromGep.opponent);
 		return infoFromGep.opponent;
 	}
 

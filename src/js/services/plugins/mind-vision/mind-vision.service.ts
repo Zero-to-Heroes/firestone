@@ -44,14 +44,15 @@ export class MindVisionService {
 
 	public async getBattlegroundsInfo(): Promise<{ Rating: number; PreviousRating: number }> {
 		return new Promise<{ Rating: number; PreviousRating: number }>(async resolve => {
-			// console.log('[mind-vision] retrieving getBattlegroundsInfo');
+			console.log('[mind-vision] retrieving getBattlegroundsInfo');
 			const plugin = await this.get();
 			try {
 				plugin.getBattlegroundsInfo(battlegroundsInfo => {
+					console.log('[mind-vision] retrieved getBattlegroundsInfo', battlegroundsInfo);
 					resolve(battlegroundsInfo ? JSON.parse(battlegroundsInfo) : null);
 				});
 			} catch (e) {
-				// console.log('[mind-vision] could not parse battlegroundsInfo', e);
+				console.log('[mind-vision] could not parse battlegroundsInfo', e);
 				resolve(null);
 			}
 		});

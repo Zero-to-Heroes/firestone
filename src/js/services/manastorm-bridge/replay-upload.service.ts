@@ -42,7 +42,9 @@ export class ReplayUploadService {
 			return;
 		}
 
+		console.log('[manastorm-bridge] uploading game');
 		const user = await this.ow.getCurrentUser();
+		console.log('[manastorm-bridge] retrieved current user');
 		const userId = user.userId || user.machineId || user.username || 'unauthenticated_user';
 		this.postFullReview(game.reviewId, userId, game);
 	}

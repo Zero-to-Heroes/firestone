@@ -25,27 +25,7 @@ export class EndGameUploaderService {
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
 		private memoryInspection: MemoryInspectionService,
-	) {
-		this.init();
-	}
-
-	private async init() {
-		// this.listenForEndGame();
-	}
-
-	// private async listenForEndGame() {
-	// 	this.ow.registerInfo(OverwolfService.MANASTORM_ID, result => {
-	// 		this.logger.debug('[manastorm-bridge] received manastorm info update', result);
-	// 		const info: ManastormInfo = result && result.info ? JSON.parse(result.info) : undefined;
-	// 		if (info && info.type === 'new-review') {
-	// 			this.logger.debug('[manastorm-bridge] broadcasting REVIEW_FINALIZED info', info);
-	// 			this.events.broadcast(Events.REVIEW_FINALIZED, info);
-	// 		} else if (info && info.type === 'new-empty-review') {
-	// 			this.logger.debug('[manastorm-bridge] broadcasting REVIEW_INITIALIZED info', info);
-	// 			this.events.broadcast(Events.REVIEW_INITIALIZED, info);
-	// 		}
-	// 	});
-	// }
+	) {}
 
 	public async upload(
 		gameEvent: GameEvent,
@@ -56,12 +36,6 @@ export class EndGameUploaderService {
 		buildNumber: number,
 		scenarioId: string,
 	): Promise<void> {
-		// const isManastormRunning = await this.ow.isManastormRunning();
-		// if (isManastormRunning) {
-		// 	// Upload is handled by manastorm
-		// 	this.logger.debug('[manastorm-bridge] Manastorm is running, no need to upload');
-		// 	return;
-		// }
 		this.logger.debug('[manastorm-bridge] Uploading game info');
 		const game: GameForUpload = await this.initializeGame(
 			gameEvent,
@@ -73,6 +47,7 @@ export class EndGameUploaderService {
 			scenarioId,
 		);
 		const savedGame = await this.replayManager.saveLocally(game);
+		this.logger.debug('{manastorm-bridge] saved game locally', savedGame.path);
 		await this.replayUploadService.uploadGame(savedGame);
 	}
 
@@ -97,9 +72,12 @@ export class EndGameUploaderService {
 			replayXml.length,
 		);
 		const game: GameForUpload = GameForUpload.createEmptyGame(currentGameId);
+		this.logger.debug('[manastorm-bridge] Created new game');
 		game.reviewId = currentReviewId;
 		game.gameFormat = this.gameParserService.toFormatType(gameResult.FormatType);
+		this.logger.debug('[manastorm-bridge] parsed format');
 		game.gameMode = this.gameParserService.toGameType(gameResult.GameType);
+		this.logger.debug('[manastorm-bridge] parsed type');
 		game.reviewId = currentReviewId;
 		game.buildNumber = buildNumber;
 		game.scenarioId = scenarioId;
@@ -107,15 +85,20 @@ export class EndGameUploaderService {
 			game.deckstring = deckstring;
 			game.deckName = deckName;
 		}
+		this.logger.debug('[manastorm-bridge] added meta data');
 		this.gameHelper.setXmlReplay(game, replayXml);
+		this.logger.debug('[manastorm-bridge] set xml replay');
 		game.uncompressedXmlReplay = replayXml;
 		this.gameParserService.extractMatchup(game);
+		this.logger.debug('[manastorm-bridge] extracted matchup');
 		this.gameParserService.extractDuration(game);
+		this.logger.debug('[manastorm-bridge] extracted duration');
 		const [battlegroundsInfo, playerInfo, opponentInfo] = await Promise.all([
 			this.memoryInspection.getBattlegroundsInfo(),
 			this.playersInfo.getPlayerInfo(),
 			this.playersInfo.getOpponentInfo(),
 		]);
+		this.logger.debug('[manastorm-bridge] retrieved rank info');
 		if (!playerInfo || !opponentInfo) {
 			console.error('[manastorm-bridge] no local player info returned by mmindvision', playerInfo, opponentInfo);
 		}
@@ -151,6 +134,7 @@ export class EndGameUploaderService {
 		}
 		game.opponentRank = opponentRank;
 		game.playerRank = playerRank;
+		this.logger.debug('[manastorm-bridge] game ready');
 		return game;
 	}
 }

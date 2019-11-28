@@ -5,6 +5,7 @@ import { GameStat } from '../../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../../models/mainwindow/stats/game-stats';
 import { AllCardsService } from '../../all-cards.service';
 import { DeckParserService } from '../../decktracker/deck-parser.service';
+import { GameStateService } from '../../decktracker/game-state.service';
 import { Events } from '../../events.service';
 import { GameEventsEmitterService } from '../../game-events-emitter.service';
 import { MainWindowStoreEvent } from '../../mainwindow/store/events/main-window-store-event';
@@ -27,6 +28,7 @@ export class GameStatsUpdaterService {
 		private deckParser: DeckParserService,
 		private playersInfo: PlayersInfoService,
 		private logger: NGXLogger,
+		private gameState: GameStateService,
 	) {
 		this.init();
 	}
@@ -35,12 +37,12 @@ export class GameStatsUpdaterService {
 	// (which is probably a bad idea, since the UI will need the stats at some point)
 	// or move the event notification somewhere else (in the processor?). The event
 	// is needed by the achievement requirements
-	public recomputeGameStats(gameStats: GameStats): GameStats {
+	public async recomputeGameStats(gameStats: GameStats): Promise<GameStats> {
 		// Build the new stat ourselves, as we have no way of being notified when
 		// the new stat will be available on the remote db
-		const gameStat: GameStat = this.buildGameStat();
+		const gameStat: GameStat = await this.buildGameStat();
 		const newStats: readonly GameStat[] = [gameStat, ...gameStats.stats];
-		this.logger.debug('[game-stats-updater] built new game stats');
+		this.logger.debug('[game-stats-updater] built new game stats', newStats);
 		const result = Object.assign(new GameStats(), gameStats, {
 			stats: newStats,
 		} as GameStats);
@@ -66,9 +68,12 @@ export class GameStatsUpdaterService {
 				this.currentGameStat = Object.assign(new GameStat(), this.currentGameStat, {
 					result: 'tied',
 				} as GameStat);
-			} else if (event.type === GameEvent.GAME_END) {
-				this.stateUpdater.next(new RecomputeGameStatsEvent());
 			}
+		});
+		// Wait until the review is properly uploaded, to avoid showing
+		// notifications without substance
+		this.events.on(Events.REVIEW_FINALIZED).subscribe(data => {
+			this.stateUpdater.next(new RecomputeGameStatsEvent());
 		});
 	}
 
@@ -174,9 +179,10 @@ export class GameStatsUpdaterService {
 		return newStat;
 	}
 
-	private buildGameStat(): GameStat {
+	private async buildGameStat(): Promise<GameStat> {
 		return Object.assign(new GameStat(), this.currentGameStat, {
 			creationTimestamp: Date.now(),
+			reviewId: await this.gameState.getCurrentReviewId(),
 		} as GameStat);
 	}
 }
