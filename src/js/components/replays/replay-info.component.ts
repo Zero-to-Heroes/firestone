@@ -64,7 +64,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set replay(value: ReplayInfo) {
-		this.logger.debug('[deck-replay-info] setting value', value);
+		// this.logger.debug('[deck-replay-info] setting value', value);
 		this.replayInfo = this.replayInfo;
 		this.gameMode = value.gameMode;
 		this.playerRankImage = this.buildPlayerRankImage(value.gameFormat, value.gameMode, value.playerRank);

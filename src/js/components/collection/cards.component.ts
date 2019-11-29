@@ -319,7 +319,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
-		console.log('dragual load over', this._activeCards.length);
+		// console.log('dragual load over', this._activeCards.length);
 		return;
 	}
 

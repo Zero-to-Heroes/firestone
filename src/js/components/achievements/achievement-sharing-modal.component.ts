@@ -97,7 +97,7 @@ export class AchievementSharingModal implements AfterViewInit, OnDestroy {
 	) {}
 
 	@Input() set sharingAchievement(value: SharingAchievement) {
-		console.log('setting sharing achievement', value);
+		// console.log('setting sharing achievement', value);
 		if (!value) {
 			this.videoPath = undefined;
 			this.videoPathOnDisk = undefined;

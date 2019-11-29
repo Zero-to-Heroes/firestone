@@ -83,13 +83,13 @@ export class CardSearchComponent implements AfterViewInit, OnDestroy {
 	@Input('searchString') set searchString(searchString: string) {
 		this.searchForm.setValue(searchString);
 		this._searchString = searchString;
-		console.log('set searchstring', this._searchString);
+		// console.log('set searchstring', this._searchString);
 	}
 
 	@Input('searchResults') set searchResults(searchResults: readonly SetCard[]) {
 		this._searchResults = searchResults;
 		this.showSearchResults = searchResults && searchResults.length > 0;
-		console.log('set searchResults', this._searchResults);
+		// console.log('set searchResults', this._searchResults);
 	}
 
 	filterKeyPress(event: KeyboardEvent) {

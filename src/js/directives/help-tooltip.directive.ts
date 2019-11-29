@@ -34,7 +34,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		const target = this.elementRef.nativeElement.querySelector('[helpTooltipTarget]') || this.elementRef;
-		console.log('targeting tooltip help element', this.position, target);
+		// console.log('targeting tooltip help element', this.position, target);
 
 		const positionArrays: ConnectedPosition[] =
 			this.position === 'bottom'
