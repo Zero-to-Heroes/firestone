@@ -1,4 +1,8 @@
 .match-details {
 	width: 100%;
 	padding-right: 10px;
+
+	::ng-deep replay-info .replay-info .replay {
+		display: none;
+	}
 }
