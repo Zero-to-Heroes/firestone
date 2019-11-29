@@ -16,6 +16,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="replay-info {{ gameMode }}">
 			<div class="group mode">
 				<img class="player-rank" [src]="playerRankImage" />
+				<div class="rank-text" *ngIf="rankText">{{ rankText }}</div>
 			</div>
 
 			<div class="group player-images">
@@ -50,6 +51,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 	replayInfo: ReplayInfo;
 	gameMode: StatGameModeType;
 	playerRankImage: string;
+	rankText: string;
 	// deckName: string;
 	playerClassImage: string;
 	opponentClassImage: string;
@@ -66,6 +68,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.replayInfo = this.replayInfo;
 		this.gameMode = value.gameMode;
 		this.playerRankImage = this.buildPlayerRankImage(value.gameFormat, value.gameMode, value.playerRank);
+		this.rankText = this.buildRankText(value);
 		// this.deckName = value.playerDeckName || value.playerName;
 		this.playerClassImage = this.buildPlayerClassImage(value, true);
 		this.opponentClassImage = this.buildPlayerClassImage(value, false);
@@ -73,7 +76,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.result = this.buildMatchResultText(value);
 		this.playCoinIconSvg = this.buildPlayCoinIconSvg(value);
 		this.reviewId = value.reviewId;
-		this.opponentName = value.gameMode !== 'battlegrounds' ? value.opponentName : null;
+		this.opponentName = value.gameMode !== 'battlegrounds' ? this.sanitizeName(value.opponentName) : null;
 	}
 
 	constructor(
@@ -181,5 +184,19 @@ export class ReplayInfoComponent implements AfterViewInit {
 				<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#${iconName}"/>
 			</svg>
 		`);
+	}
+
+	private buildRankText(info: ReplayInfo): string {
+		if (info.gameMode === 'ranked' || info.gameMode === 'battlegrounds') {
+			return info.playerRank;
+		}
+		return null;
+	}
+
+	private sanitizeName(name: string) {
+		if (!name || name.indexOf('#') === -1) {
+			return name;
+		}
+		return name.split('#')[0];
 	}
 }

@@ -40,10 +40,25 @@
 	}
 }
 
-.player-rank {
-	width: 30px;
-	height: 30px;
-	margin-right: 5px;
+.mode {
+	position: relative;
+
+	.player-rank {
+		width: 30px;
+		height: 30px;
+		margin-right: 5px;
+	}
+
+	.rank-text {
+		position: absolute;
+		bottom: -57%;
+		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+		color: white;
+		font-size: 12px;
+		width: 100%;
+		text-align: center;
+		padding-right: 3px;
+	}
 }
 
 .player-name {
@@ -54,6 +69,9 @@
 	line-height: 18px;
 	color: var(--default-text-color);
 	width: 100px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 
 	&.player {
 		text-align: right;
@@ -131,8 +149,9 @@
 	color: var(--default-text-color);
 	--icon-color: var(--default-text-color);
 	align-items: center;
-	flex-grow: 1;
+	flex-grow: 0;
 	justify-content: flex-end;
+	margin-left: auto;
 
 	.watch {
 		margin-right: 10px;
