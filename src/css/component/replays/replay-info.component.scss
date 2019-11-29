@@ -4,6 +4,17 @@
 	align-items: center;
 	height: 40px;
 	padding: 10px;
+
+	&.ranked {
+		// Probably temporary, but in the meantime we need to make the ranked icons bigger
+		.player-rank {
+			width: 37px;
+			height: 37px;
+			margin-left: -7px;
+			left: 3px;
+			position: relative;
+		}
+	}
 }
 
 .group {
@@ -118,11 +129,18 @@
 	font-size: 13px;
 	line-height: 18px;
 	color: var(--default-text-color);
+	--icon-color: var(--default-text-color);
 	align-items: center;
 	flex-grow: 1;
 	justify-content: flex-end;
 
 	.watch {
 		margin-right: 10px;
+	}
+
+	&:hover,
+	&:hover svg {
+		color: var(--on-menu-selection-color);
+		--icon-color: var(--on-menu-selection-color);
 	}
 }

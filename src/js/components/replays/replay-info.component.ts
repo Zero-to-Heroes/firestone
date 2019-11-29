@@ -34,9 +34,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="play-coin-icon icon" [innerHTML]="playCoinIconSvg"></div>
 			</div>
 
-			<div class="replay" *ngIf="reviewId">
+			<div class="replay" *ngIf="reviewId" (click)="showReplay()">
 				<div class="watch">Watch</div>
-				<div class="watch-icon" (click)="showReplay()">
+				<div class="watch-icon">
 					<svg class="svg-icon-fill">
 						<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#match_watch" />
 					</svg>
