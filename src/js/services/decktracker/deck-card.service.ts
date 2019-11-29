@@ -34,7 +34,7 @@ export class DeckCardService {
 		if (!dbCard) {
 			return card;
 		}
-		return Object.assign(new DeckCard(), card, {
+		return card.update({
 			cardName: card.cardName || dbCard.name,
 			manaCost: card.manaCost || dbCard.cost,
 			rarity: card.rarity || dbCard.rarity ? (card.rarity || dbCard.rarity).toLowerCase() : undefined,

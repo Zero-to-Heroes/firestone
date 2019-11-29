@@ -1,12 +1,13 @@
+import { Injectable } from '@angular/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { AllCardsService } from '../../all-cards.service';
 
+@Injectable()
 export class DeckManipulationHelper {
-	public static removeSingleCardFromZone(
-		zone: readonly DeckCard[],
-		cardId: string,
-		entityId: number,
-	): readonly DeckCard[] {
+	constructor(private readonly allCards: AllCardsService) {}
+
+	public removeSingleCardFromZone(zone: readonly DeckCard[], cardId: string, entityId: number): readonly DeckCard[] {
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
 			return zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card);
@@ -29,14 +30,14 @@ export class DeckManipulationHelper {
 		return result;
 	}
 
-	public static addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard): readonly DeckCard[] {
+	public addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard): readonly DeckCard[] {
 		// Safeguard to not add twice the same card to the zone
 		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
 		if (zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
 			return zone;
 		}
-		const newCard = Object.assign(new DeckCard(), {
+		const newCard = DeckCard.create({
 			cardId: cardTemplate.cardId,
 			entityId: cardTemplate.entityId,
 			cardName: cardTemplate.cardName,
@@ -48,7 +49,7 @@ export class DeckManipulationHelper {
 		return [...zone, newCard];
 	}
 
-	public static findCardInZone(zone: readonly DeckCard[], cardId: string, entityId: number): DeckCard {
+	public findCardInZone(zone: readonly DeckCard[], cardId: string, entityId: number): DeckCard {
 		// Explicit search by entity id
 		if (entityId) {
 			const found = zone.find(card => card.entityId === entityId);
@@ -56,7 +57,7 @@ export class DeckManipulationHelper {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
 					const idByCardId = zone.find(card => card.cardId === cardId && !card.entityId);
-					return Object.assign(new DeckCard(), idByCardId, {
+					return idByCardId.update({
 						entityId: entityId,
 						cardId: cardId,
 					} as DeckCard);
@@ -69,7 +70,7 @@ export class DeckManipulationHelper {
 					return null;
 				} else {
 					// Empty card Id
-					return Object.assign(new DeckCard(), {
+					return DeckCard.create({
 						entityId: entityId,
 					} as DeckCard);
 				}
@@ -78,8 +79,10 @@ export class DeckManipulationHelper {
 			// We always override with the ID in input, as it's guaranteed to be accurate (for
 			// instance if the card changed in hand and our info is outdated)
 			if (cardId) {
-				return Object.assign(new DeckCard(), found, {
+				const card = this.allCards.getCard(cardId);
+				return found.update({
 					cardId: cardId,
+					cardName: (card && card.name) || found.cardName,
 				} as DeckCard);
 			}
 			return found;
@@ -90,7 +93,7 @@ export class DeckManipulationHelper {
 			const found = zone.find(card => card.cardId === cardId);
 			if (!found) {
 				console.log('could not find card, creating card with default template', cardId, entityId);
-				return Object.assign(new DeckCard(), {
+				return DeckCard.create({
 					cardId: cardId,
 					entityId: entityId,
 				} as DeckCard);
@@ -98,25 +101,25 @@ export class DeckManipulationHelper {
 			return found;
 		}
 		console.error('invalid call to findCard', entityId, cardId);
-		return new DeckCard();
+		return DeckCard.create();
 	}
 
-	public static obfuscateCard(card: DeckCard): DeckCard {
+	public obfuscateCard(card: DeckCard): DeckCard {
 		// console.log('ofuscating card', card);
-		return Object.assign(new DeckCard(), card, {
+		return card.update({
 			cardId: undefined,
 			creatorCardId: undefined,
 		} as DeckCard);
 	}
 
-	public static assignCardIdToEntity(deck: DeckState, entityId: number, cardId: string): DeckState {
-		const cardInHand = DeckManipulationHelper.findCardInZone(deck.hand, null, entityId);
+	public assignCardIdToEntity(deck: DeckState, entityId: number, cardId: string): DeckState {
+		const cardInHand = this.findCardInZone(deck.hand, null, entityId);
 		console.log('card in hand', cardInHand);
 		if (cardInHand && !cardInHand.cardId) {
-			const newCard = Object.assign(new DeckCard(), cardInHand, {
+			const newCard = cardInHand.update({
 				cardId: cardId,
 			} as DeckCard);
-			const newHand = DeckManipulationHelper.replaceCardInZone(deck.hand, newCard);
+			const newHand = this.replaceCardInZone(deck.hand, newCard);
 			return Object.assign(new DeckState(), deck, {
 				hand: newHand,
 			} as DeckState);
@@ -124,7 +127,7 @@ export class DeckManipulationHelper {
 		return deck;
 	}
 
-	public static replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
+	public replaceCardInZone(zone: readonly DeckCard[], newCard: DeckCard): readonly DeckCard[] {
 		const zoneWithoutCard = zone.filter(card => card.entityId !== newCard.entityId);
 		// console.debug('zone without card', zone);
 		return [...zoneWithoutCard, newCard];

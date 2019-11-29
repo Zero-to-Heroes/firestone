@@ -6,7 +6,7 @@ import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper'
 
 @Injectable()
 export class DynamicZoneHelperService {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	public fillDynamicZones(deckState: DeckState): DeckState {
 		const dynamicZones: DynamicZone[] = [];
@@ -28,7 +28,7 @@ export class DynamicZoneHelperService {
 			let newOtherZoneCards = [...deckState.otherZone];
 			for (const card of cardsNotInOtherZone) {
 				newOtherZoneCards = [
-					...DeckManipulationHelper.removeSingleCardFromZone(newOtherZoneCards, card.cardId, card.entityId),
+					...this.helper.removeSingleCardFromZone(newOtherZoneCards, card.cardId, card.entityId),
 				];
 			}
 			dynamicZones.push(

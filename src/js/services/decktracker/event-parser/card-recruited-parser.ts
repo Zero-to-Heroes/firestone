@@ -7,7 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardRecruitedParser implements EventParser {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.RECRUIT_CARD;
@@ -18,18 +18,14 @@ export class CardRecruitedParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
+		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
-			deck.deck,
-			cardId,
-			entityId,
-		);
-		const cardWithZone = Object.assign(new DeckCard(), card, {
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId);
+		const cardWithZone = card.update({
 			zone: 'PLAY',
 		} as DeckCard);
 
-		const newBoard: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(deck.board, cardWithZone);
+		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			board: newBoard,

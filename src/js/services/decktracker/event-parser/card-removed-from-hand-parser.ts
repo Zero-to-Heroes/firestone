@@ -7,7 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardRemovedFromHandParser implements EventParser {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CARD_REMOVED_FROM_HAND;
@@ -18,22 +18,15 @@ export class CardRemovedFromHandParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = DeckManipulationHelper.findCardInZone(deck.hand, cardId, entityId);
+		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
-			previousHand,
-			cardId,
-			entityId,
-		);
-		const cardWithZone = Object.assign(new DeckCard(), card, {
+		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousHand, cardId, entityId);
+		const cardWithZone = card.update({
 			zone: 'SETASIDE',
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
-			previousOtherZone,
-			cardWithZone,
-		);
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			otherZone: newOtherZone,

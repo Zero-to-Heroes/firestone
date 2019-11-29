@@ -4,4 +4,8 @@ export class VisualDeckCard extends DeckCard {
 	readonly highlight: 'dim' | 'normal' | 'in-hand';
 	readonly totalQuantity: number;
 	readonly creatorCardIds?: readonly string[];
+
+	constructor() {
+		super();
+	}
 }

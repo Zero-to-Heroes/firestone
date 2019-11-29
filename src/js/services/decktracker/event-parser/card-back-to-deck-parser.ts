@@ -4,13 +4,12 @@ import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { ReferenceCard } from '../../../models/reference-cards/reference-card';
 import { AllCardsService } from '../../all-cards.service';
-import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardBackToDeckParser implements EventParser {
-	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CARD_BACK_TO_DECK;
@@ -28,9 +27,9 @@ export class CardBackToDeckParser implements EventParser {
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
 		const newOther: readonly DeckCard[] = this.buildNewOther(initialZone, deck.otherZone, card);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
+		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousDeck,
-			isPlayer ? card : DeckManipulationHelper.obfuscateCard(card),
+			isPlayer ? card : this.helper.obfuscateCard(card),
 		);
 		// console.log('updated deck', isPlayer, newDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
@@ -50,22 +49,22 @@ export class CardBackToDeckParser implements EventParser {
 
 	private findCard(initialZone: string, deckState: DeckState, cardId: string, entityId: number): DeckCard {
 		if (initialZone === 'HAND') {
-			return DeckManipulationHelper.findCardInZone(deckState.hand, cardId, entityId);
+			return this.helper.findCardInZone(deckState.hand, cardId, entityId);
 		} else if (initialZone === 'PLAY') {
-			return DeckManipulationHelper.findCardInZone(deckState.board, cardId, entityId);
+			return this.helper.findCardInZone(deckState.board, cardId, entityId);
 		}
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return DeckManipulationHelper.findCardInZone(deckState.otherZone, cardId, entityId);
+			return this.helper.findCardInZone(deckState.otherZone, cardId, entityId);
 		}
 		console.warn('could not find card in card-back-to-deck', initialZone, cardId, deckState);
 		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
-		return {
+		return DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: dbCard.name,
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
-		} as DeckCard;
+		} as DeckCard);
 	}
 
 	private buildNewHand(
@@ -76,7 +75,7 @@ export class CardBackToDeckParser implements EventParser {
 		if (initialZone !== 'HAND') {
 			return previousHand;
 		}
-		return DeckManipulationHelper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId);
+		return this.helper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId);
 	}
 
 	private buildNewOther(
@@ -85,7 +84,7 @@ export class CardBackToDeckParser implements EventParser {
 		movedCard: DeckCard,
 	): readonly DeckCard[] {
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return DeckManipulationHelper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId);
+			return this.helper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId);
 		}
 		return previousOther;
 	}
@@ -98,6 +97,6 @@ export class CardBackToDeckParser implements EventParser {
 		if (initialZone !== 'PLAY') {
 			return previousBOard;
 		}
-		return DeckManipulationHelper.removeSingleCardFromZone(previousBOard, movedCard.cardId, movedCard.entityId);
+		return this.helper.removeSingleCardFromZone(previousBOard, movedCard.cardId, movedCard.entityId);
 	}
 }

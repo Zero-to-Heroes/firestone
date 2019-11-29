@@ -6,6 +6,7 @@ import { AllCardsService } from '../../src/js/services/all-cards.service';
 import { DeckCardService } from '../../src/js/services/decktracker/deck-card.service';
 import { DeckParserService } from '../../src/js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from '../../src/js/services/decktracker/dynamic-zone-helper.service';
+import { DeckManipulationHelper } from '../../src/js/services/decktracker/event-parser/deck-manipulation-helper';
 import { GameStateMetaInfoService } from '../../src/js/services/decktracker/game-state-meta-info.service';
 import { GameStateService } from '../../src/js/services/decktracker/game-state.service';
 import { ZoneOrderingService } from '../../src/js/services/decktracker/zone-ordering.service';
@@ -70,11 +71,13 @@ export const gameStateBuilder = async (
 		getPreferences: () => ({}),
 	} as PreferencesService;
 
+	const helper = new DeckManipulationHelper(cards);
+
 	// The game state
 	const gameStateService = new GameStateService(
 		emitter,
 		events,
-		new DynamicZoneHelperService(),
+		new DynamicZoneHelperService(helper),
 		new GameStateMetaInfoService(),
 		new ZoneOrderingService(),
 		cards,
@@ -84,6 +87,7 @@ export const gameStateBuilder = async (
 		null,
 		new NGXLoggerMock() as NGXLogger,
 		deckService,
+		helper,
 	);
 
 	const gameEventsService = new GameEvents(

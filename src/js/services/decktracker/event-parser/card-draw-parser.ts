@@ -2,14 +2,12 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { AllCardsService } from '../../all-cards.service';
-import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardDrawParser implements EventParser {
-	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CARD_DRAW_FROM_DECK;
@@ -21,18 +19,14 @@ export class CardDrawParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
+		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		// console.log('found card in zone', card, deck);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
-			previousDeck,
-			cardId,
-			entityId,
-		);
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId);
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
+		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
-			isPlayer ? card : DeckManipulationHelper.obfuscateCard(card),
+			isPlayer ? card : this.helper.obfuscateCard(card),
 		);
 		// console.log('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

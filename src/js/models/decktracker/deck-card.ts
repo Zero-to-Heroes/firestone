@@ -8,6 +8,22 @@ export class DeckCard {
 	readonly rarity: string;
 	readonly creatorCardId?: string;
 	// readonly totalQuantity: number;
-	readonly zone: 'DISCARD' | 'BURNED' | 'PLAY' | 'SETASIDE' | 'SECRET' | 'HAND'; // Optional, should only be read when in the Other zone
+	readonly zone: 'DISCARD' | 'BURNED' | 'PLAY' | 'SETASIDE' | 'SECRET' | 'HAND' | 'REMOVEDFROMGAME'; // Optional, should only be read when in the Other zone
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
+
+	public static create(base: DeckCard = {} as DeckCard) {
+		if (base.cardId && !base.cardName) {
+			console.warn('creating deck card without name', base, new Error().stack);
+		}
+		return Object.assign(new DeckCard(), base);
+	}
+
+	protected constructor() {}
+
+	public update(newCard: DeckCard): DeckCard {
+		if (newCard.cardId && !newCard.cardName) {
+			console.warn('updating deck card without name', newCard, new Error().stack);
+		}
+		return Object.assign(new DeckCard(), this, newCard);
+	}
 }

@@ -2,14 +2,12 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
-import { AllCardsService } from '../../all-cards.service';
-import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class EndOfEchoInHandParser implements EventParser {
-	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.END_OF_ECHO_IN_HAND;
@@ -21,11 +19,7 @@ export class EndOfEchoInHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
-			deck.hand,
-			cardId,
-			entityId,
-		);
+		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 		});

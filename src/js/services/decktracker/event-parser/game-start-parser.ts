@@ -115,7 +115,7 @@ export class GameStartParser implements EventParser {
 		}
 		for (let i = 0; i < pair[1]; i++) {
 			result.push(
-				Object.assign(new DeckCard(), {
+				DeckCard.create({
 					cardId: card.id,
 					cardName: card.name,
 					manaCost: card.cost,

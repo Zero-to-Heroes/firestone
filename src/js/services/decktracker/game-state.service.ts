@@ -22,10 +22,12 @@ import { CardCreatorChangedParser } from './event-parser/card-creator-changed-pa
 import { CardDrawParser } from './event-parser/card-draw-parser';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
+import { CardRemovedFromBoardParser } from './event-parser/card-removed-from-board-parser';
 import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
+import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
 import { EventParser } from './event-parser/event-parser';
@@ -77,6 +79,7 @@ export class GameStateService {
 		private ow: OverwolfService,
 		private logger: NGXLogger,
 		private deckParser: DeckParserService,
+		private helper: DeckManipulationHelper,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -200,13 +203,13 @@ export class GameStateService {
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
-					// this.logger.debug(
-					// 	'board states',
-					// 	this.state.playerDeck.board.length,
-					// 	this.state.opponentDeck.board.length,
-					// 	this.state.playerDeck.board,
-					// 	this.state.opponentDeck.board,
-					// );
+					this.logger.debug(
+						'board states',
+						this.state.playerDeck.board.length,
+						this.state.opponentDeck.board.length,
+						this.state.playerDeck.board,
+						this.state.opponentDeck.board,
+					);
 					// this.logger.debug(
 					// 	'hand states',
 					// 	this.state.playerDeck.hand.length,
@@ -243,28 +246,29 @@ export class GameStateService {
 			new MatchMetadataParser(this.deckParser, this.allCards),
 			new MulliganOverParser(this.deckParser, this.allCards),
 			new MainStepReadyParser(this.deckParser, this.allCards),
-			new CardDrawParser(this.deckParser, this.allCards),
-			new ReceiveCardInHandParser(this.deckParser, this.allCards),
-			new CardBackToDeckParser(this.deckParser, this.allCards),
-			new CreateCardInDeckParser(this.deckParser, this.allCards),
-			new CardRemovedFromDeckParser(this.deckParser, this.allCards),
-			new CardRemovedFromHandParser(),
-			new CardChangedOnBoardParser(this.allCards),
-			new CardPlayedFromHandParser(this.deckParser, this.allCards),
-			new SecretPlayedFromHandParser(this.deckParser, this.allCards),
-			new EndOfEchoInHandParser(this.deckParser, this.allCards),
+			new CardDrawParser(this.helper),
+			new ReceiveCardInHandParser(this.helper, this.allCards),
+			new CardBackToDeckParser(this.helper, this.allCards),
+			new CreateCardInDeckParser(this.helper, this.allCards),
+			new CardRemovedFromDeckParser(this.helper),
+			new CardRemovedFromHandParser(this.helper),
+			new CardRemovedFromBoardParser(this.helper),
+			new CardChangedOnBoardParser(this.helper, this.allCards),
+			new CardPlayedFromHandParser(this.helper, this.allCards),
+			new SecretPlayedFromHandParser(this.helper),
+			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(this.deckParser, this.allCards),
-			new DiscardedCardParser(),
-			new CardRecruitedParser(),
-			new MinionSummonedParser(this.allCards),
-			new MinionDiedParser(this.allCards),
-			new BurnedCardParser(),
-			new SecretPlayedFromDeckParser(),
+			new DiscardedCardParser(this.helper),
+			new CardRecruitedParser(this.helper),
+			new MinionSummonedParser(this.helper, this.allCards),
+			new MinionDiedParser(this.helper),
+			new BurnedCardParser(this.helper),
+			new SecretPlayedFromDeckParser(this.helper),
 			new NewTurnParser(),
 			new FirstPlayerParser(),
-			new CardStolenParser(),
-			new CardCreatorChangedParser(),
-			new AssignCardIdParser(),
+			new CardStolenParser(this.helper),
+			new CardCreatorChangedParser(this.helper),
+			new AssignCardIdParser(this.helper),
 		];
 	}
 

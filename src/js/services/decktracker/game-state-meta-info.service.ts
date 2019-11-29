@@ -40,7 +40,7 @@ export class GameStateMetaInfoService {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: undefined,
 		} as CardMetaInfo);
-		return Object.assign(new DeckCard(), card, {
+		return card.update({
 			metaInfo: newMeta,
 		} as DeckCard);
 	}
@@ -55,7 +55,7 @@ export class GameStateMetaInfoService {
 		const newMeta = Object.assign(new CardMetaInfo(), card.metaInfo, {
 			turnAtWhichCardEnteredCurrentZone: currentTurn,
 		} as CardMetaInfo);
-		return Object.assign(new DeckCard(), card, {
+		return card.update({
 			metaInfo: newMeta,
 		} as DeckCard);
 	}

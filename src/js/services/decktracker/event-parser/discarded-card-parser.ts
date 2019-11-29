@@ -7,7 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class DiscardedCardParser implements EventParser {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.DISCARD_CARD;
@@ -18,17 +18,13 @@ export class DiscardedCardParser implements EventParser {
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		const card = DeckManipulationHelper.findCardInZone(deck.hand, cardId, entityId);
+		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
-			deck.hand,
-			card.cardId,
-			entityId,
-		);
-		const cardWithZone = Object.assign(new DeckCard(), card, {
+		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
+		const cardWithZone = card.update({
 			zone: 'DISCARD',
 		} as DeckCard);
-		const newOther: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(deck.otherZone, cardWithZone);
+		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			otherZone: newOther,

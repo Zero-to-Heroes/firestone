@@ -5,7 +5,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class AssignCardIdParser implements EventParser {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
@@ -22,7 +22,7 @@ export class AssignCardIdParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		console.log('assigning card id?', cardId, entityId, isPlayer, deck);
-		const newPlayerDeck = DeckManipulationHelper.assignCardIdToEntity(deck, entityId, cardId);
+		const newPlayerDeck = this.helper.assignCardIdToEntity(deck, entityId, cardId);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});

@@ -7,7 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardCreatorChangedParser implements EventParser {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CARD_CREATOR_CHANGED;
@@ -19,27 +19,27 @@ export class CardCreatorChangedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const cardInHand = DeckManipulationHelper.findCardInZone(deck.hand, cardId, entityId);
+		const cardInHand = this.helper.findCardInZone(deck.hand, cardId, entityId);
 		// console.debug('cardInHand', cardInHand);
-		const cardInDeck = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
+		const cardInDeck = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		// console.debug('cardInDeck', cardInDeck);
 
 		const newCardInHand = cardInHand
-			? Object.assign(new DeckCard(), cardInHand, {
+			? cardInHand.update({
 					creatorCardId: gameEvent.additionalData.creatorCardId,
 			  } as DeckCard)
 			: null;
 		// console.debug('newCardInHand', newCardInHand);
 		const newCardInDeck = cardInDeck
-			? Object.assign(new DeckCard(), cardInDeck, {
+			? cardInDeck.update({
 					creatorCardId: gameEvent.additionalData.creatorCardId,
 			  } as DeckCard)
 			: null;
 		// console.debug('newCardInDeck', newCardInDeck);
 
-		const newHand = newCardInHand ? DeckManipulationHelper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
+		const newHand = newCardInHand ? this.helper.replaceCardInZone(deck.hand, newCardInHand) : deck.hand;
 		// console.debug('newHand', newHand);
-		const newDeck = newCardInDeck ? DeckManipulationHelper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
+		const newDeck = newCardInDeck ? this.helper.replaceCardInZone(deck.deck, newCardInDeck) : deck.deck;
 		// console.debug('newDeck', newDeck);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

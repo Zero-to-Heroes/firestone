@@ -3,13 +3,12 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { AllCardsService } from '../../all-cards.service';
-import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CreateCardInDeckParser implements EventParser {
-	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CREATE_CARD_IN_DECK;
@@ -24,7 +23,7 @@ export class CreateCardInDeckParser implements EventParser {
 
 		// console.debug('adding card to deck', cardId, controllerId, entityId, isPlayer, deck.deck.length);
 		const cardData = cardId != null ? this.allCards.getCard(cardId) : null;
-		const card = Object.assign(new DeckCard(), {
+		const card = DeckCard.create({
 			cardId: isPlayer ? cardId : undefined,
 			entityId: entityId,
 			cardName: this.buildCardName(cardData, gameEvent.additionalData.creatorCardId),
@@ -33,7 +32,7 @@ export class CreateCardInDeckParser implements EventParser {
 			creatorCardId: gameEvent.additionalData.creatorCardId,
 		} as DeckCard);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousDeck, card);
+		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(previousDeck, card);
 		// console.debug('new deck', previousDeck.length, newDeck.length);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,

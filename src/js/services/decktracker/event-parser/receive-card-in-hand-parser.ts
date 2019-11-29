@@ -3,13 +3,12 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { AllCardsService } from '../../all-cards.service';
-import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class ReceiveCardInHandParser implements EventParser {
-	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.RECEIVE_CARD_IN_HAND;
@@ -23,15 +22,15 @@ export class ReceiveCardInHandParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		// First try and see if this card doesn't come from the board
-		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);
+		const card = this.helper.findCardInZone(deck.board, null, entityId);
 		// console.log('[receive-card-in-hand] trying to get card from zone', deck.board, entityId, card, cardId);
-		const newBoard = DeckManipulationHelper.removeSingleCardFromZone(deck.board, null, entityId);
+		const newBoard = this.helper.removeSingleCardFromZone(deck.board, null, entityId);
 		// console.log('[receive-card-in-hand] new board', newBoard);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
 			card ||
-			Object.assign(new DeckCard(), {
+			DeckCard.create({
 				cardId: cardId,
 				entityId: entityId,
 				cardName: cardData && cardData.name,
@@ -41,7 +40,7 @@ export class ReceiveCardInHandParser implements EventParser {
 			} as DeckCard);
 		// console.log('[receive-card-in-hand] cardWithDefault', cardWithDefault, cardData);
 		const previousHand = deck.hand;
-		const newHand: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(previousHand, cardWithDefault);
+		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(previousHand, cardWithDefault);
 		// console.log('[receive-card-in-hand] new hand', newHand);
 
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {

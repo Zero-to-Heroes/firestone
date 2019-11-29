@@ -7,7 +7,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class SecretPlayedFromDeckParser implements EventParser {
-	constructor() {}
+	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.SECRET_PLAYED_FROM_DECK;
@@ -19,21 +19,14 @@ export class SecretPlayedFromDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const card = DeckManipulationHelper.findCardInZone(deck.deck, cardId, entityId);
+		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
-			previousDeck,
-			cardId,
-			entityId,
-		);
-		const cardWithZone = Object.assign(new DeckCard(), card, {
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId);
+		const cardWithZone = card.update({
 			zone: 'SECRET',
 		} as DeckCard);
 		const previousOtherZone = deck.otherZone;
-		const newOtherZone: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
-			previousOtherZone,
-			cardWithZone,
-		);
+		const newOtherZone: readonly DeckCard[] = this.helper.addSingleCardToZone(previousOtherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			otherZone: newOtherZone,

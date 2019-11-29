@@ -8,7 +8,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class MinionSummonedParser implements EventParser {
-	constructor(private cards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly cards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.MINION_SUMMONED;
@@ -20,7 +20,7 @@ export class MinionSummonedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const dbCard = this.cards.getCard(cardId);
-		const card = Object.assign(new DeckCard(), {
+		const card = DeckCard.create({
 			cardId: cardId,
 			entityId: entityId,
 			cardName: dbCard.name,
@@ -29,7 +29,7 @@ export class MinionSummonedParser implements EventParser {
 			zone: 'PLAY',
 		} as DeckCard);
 
-		const newBoard: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(deck.board, card);
+		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.board, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
 		} as DeckState);

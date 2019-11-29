@@ -9,7 +9,7 @@ import { DeckManipulationHelper } from './deck-manipulation-helper';
 import { EventParser } from './event-parser';
 
 export class CardChangedOnBoardParser implements EventParser {
-	constructor(private allCards: AllCardsService) {}
+	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent): boolean {
 		return gameEvent.type === GameEvent.CARD_CHANGED_ON_BOARD;
@@ -21,28 +21,25 @@ export class CardChangedOnBoardParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		// We don't pass the cardId because we know it has changed
-		const card = DeckManipulationHelper.findCardInZone(deck.board, null, entityId);
+		const card = this.helper.findCardInZone(deck.board, null, entityId);
 		if (!card) {
 			console.warn('[card-changed-on-board] could not find card change on board', entityId, deck.board);
 			return currentState;
 		}
 		// The CARD_CHANGED* events keep the same entityId, but change the cardId, and thus the card name
 		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
-		const updatedCard = Object.assign(new DeckCard(), card, {
+		const updatedCard = card.update({
 			cardId: cardId,
 			cardName: dbCard.name,
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
 		} as DeckCard);
-		const boardWithRemovedCard: readonly DeckCard[] = DeckManipulationHelper.removeSingleCardFromZone(
+		const boardWithRemovedCard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.board,
 			null,
 			entityId,
 		);
-		const newBoard: readonly DeckCard[] = DeckManipulationHelper.addSingleCardToZone(
-			boardWithRemovedCard,
-			updatedCard,
-		);
+		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(boardWithRemovedCard, updatedCard);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
 		});
