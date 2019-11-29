@@ -12,4 +12,8 @@ export class UpdateTwitterSocialInfoEvent implements MainWindowStoreEvent {
 	public isNavigationEvent(): boolean {
 		return false;
 	}
+
+	public isResetHistoryEvent(): boolean {
+		return false;
+	}
 }

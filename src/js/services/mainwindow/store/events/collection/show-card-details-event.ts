@@ -17,4 +17,8 @@ export class ShowCardDetailsEvent implements MainWindowStoreEvent {
 	public isNavigationEvent(): boolean {
 		return true;
 	}
+
+	public isResetHistoryEvent(): boolean {
+		return false;
+	}
 }

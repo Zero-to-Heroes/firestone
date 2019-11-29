@@ -12,4 +12,8 @@ export class ToggleShowOnlyNewCardsInHistoryEvent implements MainWindowStoreEven
 	public isNavigationEvent(): boolean {
 		return true;
 	}
+
+	public isResetHistoryEvent(): boolean {
+		return false;
+	}
 }

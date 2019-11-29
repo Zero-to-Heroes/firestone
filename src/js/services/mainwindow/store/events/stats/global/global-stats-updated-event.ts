@@ -15,4 +15,8 @@ export class GlobalStatsUpdatedEvent implements MainWindowStoreEvent {
 	public isNavigationEvent(): boolean {
 		return false;
 	}
+
+	public isResetHistoryEvent(): boolean {
+		return true;
+	}
 }

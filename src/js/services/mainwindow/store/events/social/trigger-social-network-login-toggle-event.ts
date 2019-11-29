@@ -17,4 +17,8 @@ export class TriggerSocialNetworkLoginToggleEvent implements MainWindowStoreEven
 	public isNavigationEvent(): boolean {
 		return false;
 	}
+
+	public isResetHistoryEvent(): boolean {
+		return false;
+	}
 }

@@ -186,7 +186,7 @@ export class MainWindowStoreService {
 		// (for back / forward arrows for instance)
 		const newState = await processor.process(event, this.state, this.stateHistory);
 		if (newState) {
-			this.addStateToHistory(newState, event.isNavigationEvent(), event.eventName());
+			this.addStateToHistory(newState, event);
 			this.state = newState;
 			// We don't want to store the status of the navigation arrows, as when going back
 			// or forward with the history arrows, the state of these arrows will change
@@ -200,7 +200,18 @@ export class MainWindowStoreService {
 		return eventQueue.slice(1);
 	}
 
-	private addStateToHistory(newState: MainWindowState, navigation: boolean, event: string): void {
+	private addStateToHistory(newState: MainWindowState, originalEvent: MainWindowStoreEvent): void {
+		const navigation = originalEvent.isNavigationEvent();
+		const event = originalEvent.eventName();
+		// Because the history stores the state + the navigation state
+		// If we go back in time, we will override the current state with a past state
+		// and this can cause some info to disappear until we restart the app
+		// So all events that cause an actual update to the state data should
+		// reset the history, until we have a better solution
+		const isResetHistory = originalEvent.isResetHistoryEvent();
+		if (isResetHistory) {
+			this.stateHistory = [];
+		}
 		const newIndex = this.stateHistory.map(state => state.state).indexOf(newState);
 		// console.log('newIndex', newIndex, this.stateHistory);
 		// We just did a "next" or "previous", so we don't modify the history
@@ -376,7 +387,11 @@ export class MainWindowStoreService {
 
 			// Stats
 			RecomputeGameStatsEvent.eventName(),
-			new RecomputeGameStatsProcessor(this.gameStatsUpdater, this.decktrackerStateLoader),
+			new RecomputeGameStatsProcessor(
+				this.gameStatsUpdater,
+				this.decktrackerStateLoader,
+				this.replaysStateBuilder,
+			),
 
 			MatchStatsAvailableEvent.eventName(),
 			new MatchStatsAvailableProcessor(this.notifs),

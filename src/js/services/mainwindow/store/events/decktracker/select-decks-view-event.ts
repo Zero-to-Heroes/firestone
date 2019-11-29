@@ -15,4 +15,8 @@ export class SelectDecksViewEvent implements MainWindowStoreEvent {
 	public isNavigationEvent(): boolean {
 		return true;
 	}
+
+	public isResetHistoryEvent(): boolean {
+		return false;
+	}
 }
