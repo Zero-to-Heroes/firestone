@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
+import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { GameEvent } from '../../models/game-event';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
@@ -93,18 +94,22 @@ export class EndGameUploaderService {
 		this.logger.debug('[manastorm-bridge] extracted matchup');
 		this.gameParserService.extractDuration(game);
 		this.logger.debug('[manastorm-bridge] extracted duration');
+
 		const [battlegroundsInfo, playerInfo, opponentInfo] = await Promise.all([
-			this.memoryInspection.getBattlegroundsInfo(),
+			game.gameMode === 'battlegrounds'
+				? this.memoryInspection.getBattlegroundsInfo()
+				: Promise.resolve(null as BattlegroundsInfo),
 			this.playersInfo.getPlayerInfo(),
 			this.playersInfo.getOpponentInfo(),
 		]);
-		this.logger.debug('[manastorm-bridge] retrieved rank info');
+		this.logger.debug('[manastorm-bridge] retrieved rank info', battlegroundsInfo, playerInfo, game.gameMode, game);
 		if (!playerInfo || !opponentInfo) {
 			console.error('[manastorm-bridge] no local player info returned by mmindvision', playerInfo, opponentInfo);
 		}
 		let playerRank;
 		if (game.gameMode === 'battlegrounds') {
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
+			console.log('updated player rank', playerRank);
 		} else if (playerInfo && game.gameFormat === 'standard') {
 			if (playerInfo.standardLegendRank > 0) {
 				playerRank = `legend-${playerInfo.standardLegendRank}`;
