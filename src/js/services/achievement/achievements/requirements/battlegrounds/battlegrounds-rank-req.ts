@@ -22,7 +22,7 @@ export class BattlegroundsRankReq implements Requirement {
 	async reset() {
 		this.isValid = undefined;
 		const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
-		console.log('got battlegrounds info in req', this);
+		// console.log('got battlegrounds info in req', this);
 		if (battlegroundsInfo) {
 			this.rankAtReset = battlegroundsInfo.rating;
 		}
@@ -57,7 +57,7 @@ export class BattlegroundsRankReq implements Requirement {
 
 	private async getRankInternal(callback): Promise<void> {
 		const rank = await this.memoryInspection.getBattlegroundsInfo();
-		console.log('returning with real rank', rank);
+		// console.log('returning with real rank', rank);
 		callback(rank);
 	}
 }
