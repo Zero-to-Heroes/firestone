@@ -1,5 +1,9 @@
 .external-player {
 	::ng-deep {
+		.manastorm-player {
+			// Because the controls and other window elements take space
+			max-width: calc((100vh - 150px) * 16 / 12);
+		}
 		controls {
 			.discuss,
 			.divider {
