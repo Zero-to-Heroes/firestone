@@ -161,7 +161,7 @@ export class AppBootstrapService {
 	private async startApp(showMainWindow: boolean) {
 		const isRunning = await this.ow.inGame();
 		console.log('are we in game?', isRunning);
-		if (showMainWindow) {
+		if (!isRunning || showMainWindow) {
 			this.showCollectionWindow();
 		}
 	}
