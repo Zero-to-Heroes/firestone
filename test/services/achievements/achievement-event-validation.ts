@@ -23,6 +23,7 @@ import { PlayersInfoService } from '../../../src/js/services/players-info.servic
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';
 import { PreferencesService } from '../../../src/js/services/preferences.service.js';
+import { GameStatsLoaderService } from '../../../src/js/services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../../src/js/services/stats/game/game-stats-updater.service';
 
 export const achievementsValidation = async (
@@ -110,7 +111,7 @@ export const achievementsValidation = async (
 				} else if (data instanceof RecomputeGameStatsEvent && collaborators && collaborators.gameStats) {
 					// This will send an event to be processed by the requirements
 					// eslint-disable-next-line @typescript-eslint/no-use-before-define
-					statsUpdater.recomputeGameStats(collaborators.gameStats);
+					statsUpdater.recomputeGameStats(collaborators.gameStats, 'fakeReviewId');
 				}
 			},
 		} as any,
@@ -120,6 +121,11 @@ export const achievementsValidation = async (
 			return '';
 		},
 	} as GameStateService;
+	const statsLoader = {
+		retrieveStats: async () => {
+			return new GameStats();
+		},
+	} as GameStatsLoaderService;
 	const statsUpdater = new GameStatsUpdaterService(
 		emitter,
 		events,
@@ -129,6 +135,7 @@ export const achievementsValidation = async (
 		playersInfoService,
 		new NGXLoggerMock() as NGXLogger,
 		gameState,
+		statsLoader,
 	);
 	statsUpdater.stateUpdater = store.stateUpdater;
 	const storage: AchievementsLocalStorageService = {
