@@ -129,13 +129,6 @@ export class GameStateService {
 		});
 		this.events.on(Events.REVIEW_FINALIZED).subscribe(async event => {
 			this.logger.debug('[game-state] Received review finalized event, doing nothing');
-			// const info = event.data[0];
-			// Reset once the game is completed
-			// Don't reset - some processes (like granting an achievement) - can take longer
-			// and be finalized only after the id has been reset
-			// if (info && info.type === 'new-review') {
-			// 	this.currentReviewId = undefined;
-			// }
 		});
 		this.events.on(Events.REVIEW_INITIALIZED).subscribe(async event => {
 			this.logger.debug('[game-state] Received new review id event');

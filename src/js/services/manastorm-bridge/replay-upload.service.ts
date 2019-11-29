@@ -98,7 +98,7 @@ export class ReplayUploadService {
 				console.warn('[manastorm-bridge] An error during upload', err);
 				// reject();
 			} else {
-				console.log('[manastorm-bridge] Uploaded game', data2, reviewId);
+				console.log('[manastorm-bridge] Uploaded game', game.id, reviewId);
 				const info = {
 					type: 'new-review',
 					reviewId: reviewId,
