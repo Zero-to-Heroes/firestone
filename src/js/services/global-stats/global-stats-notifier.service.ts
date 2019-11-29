@@ -41,15 +41,7 @@ export class GlobalStatsNotifierService {
 		if (!user.userId || !user.username) {
 			this.logger.warn('[global-stats] user not logged in', user);
 		}
-		// Not sure what the best approach is here to be sure we have the latest
-		// version of the stats.
-		// Using a version id might work? But it would dramatically change the way
-		// they are handled.
 		const stats = await this.globalStats.getGlobalStats();
 		this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(stats));
-		// So we just query the stats several times
-		setTimeout(async () => {
-			this.handleNewGlobalStats(retriesLeft - 1);
-		}, 6000);
 	}
 }
