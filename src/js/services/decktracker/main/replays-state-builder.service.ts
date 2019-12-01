@@ -31,7 +31,7 @@ export class ReplaysStateBuilderService {
 		};
 		const groupByDate = groupByFunction(groupingFunction);
 		const replaysByDate = groupByDate(allReplays);
-		this.logger.debug('[replays-state-builder] replays by date', replaysByDate);
+		this.logger.debug('[replays-state-builder] loaded replays by date');
 		return Object.keys(replaysByDate).map(date => this.buildGroupedReplays(date, replaysByDate[date]));
 	}
 
