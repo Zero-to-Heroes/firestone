@@ -37,7 +37,11 @@ import { Events } from '../../../../services/events.service';
 					<div class="decktracker" *ngIf="gameState">
 						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck">
 						</decktracker-twitch-title-bar>
-						<decktracker-deck-list [deckState]="gameState.playerDeck" [displayMode]="displayMode">
+						<decktracker-deck-list
+							[deckState]="gameState.playerDeck"
+							[displayMode]="displayMode"
+							*ngIf="gameState.playerDeck?.deck.length > 0"
+						>
 						</decktracker-deck-list>
 					</div>
 				</div>

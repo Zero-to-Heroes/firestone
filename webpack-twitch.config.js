@@ -1,117 +1,124 @@
-const webpack = require("@artonge/webpack");
+/* eslint-disable @typescript-eslint/no-var-requires */
+const webpack = require('@artonge/webpack');
 // const ngcWebpack = require("ngc-webpack");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
-const DefinePlugin = require("webpack").DefinePlugin;
+const DefinePlugin = require('webpack').DefinePlugin;
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var path = require("path");
+var path = require('path');
 
-var _root = path.resolve(__dirname, ".");
+var _root = path.resolve(__dirname, '.');
 
 function getRoot(args) {
-  args = Array.prototype.slice.call(arguments, 0);
-  return path.join.apply(path, [_root].concat(args));
+	args = Array.prototype.slice.call(arguments, 0);
+	return path.join.apply(path, [_root].concat(args));
 }
 
 module.exports = function(env, argv) {
+	const plugins = [
+		// Define environment variables to export to Angular
+		new DefinePlugin({
+			'process.env.APP_VERSION': JSON.stringify(env.appversion),
+			'process.env.LOCAL_TEST': env.localTest,
+		}),
 
-  return {
-    mode: env.production ? 'production' : 'development',
+		new AngularCompilerPlugin({
+			tsConfigPath: './tsconfig.json',
+			entryModules: ['./src/js/modules/decktracker-twitch/decktracker-twitch.module#DeckTrackerTwitchModule'],
+			sourceMap: true,
+		}),
 
-    entry: {
-      decktracker: "./src/js/modules/decktracker-twitch/main.ts",
-      polyfills: "./src/polyfills.ts"
-    },
+		new MiniCssExtractPlugin({
+			filename: 'app.css',
+		}),
 
-    optimization: {
-      splitChunks: {
-        cacheGroups: {
-          vendor: {
-            test: /node_modules/,
-            chunks: "initial",
-            name: "vendor",
-            priority: 10,
-            enforce: true
-          }
-        }
-      }
-    },
+		new CopyWebpackPlugin([
+			{ from: path.join(process.cwd(), 'src/assets'), to: 'assets', ignore: ['**/twitch*/*'] },
+		]),
 
-    target: "web",
+		new HtmlWebpackPlugin({
+			filename: 'decktracker-twitch.html',
+			template: 'src/html/decktracker-twitch.html',
+			chunksSortMode: 'manual',
+		}),
 
-    devtool: env.production ? false : "inline-source-map",
+		new BundleAnalyzerPlugin(),
+	];
 
-    watch: true,
+	return {
+		mode: env.production ? 'production' : 'development',
 
-    watchOptions: {
-      ignored: ['node_modules']
-    },
+		entry: {
+			// Keep polyfills at the top so that it's imported first in the HTML
+			polyfills: './src/polyfills.ts',
+			decktracker: './src/js/modules/decktracker-twitch/main.ts',
+		},
 
-    output: {
-      path: getRoot("dist-twitch"),
-      publicPath: "/",
-      filename: "[name].js"
-    },
+		// https://hackernoon.com/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
+		optimization: {
+			runtimeChunk: 'single',
+			splitChunks: {
+				chunks: 'all',
+				maxInitialRequests: Infinity,
+				minSize: 1 * 1000, // Don't split the really small chunks
+				cacheGroups: {
+					vendor: {
+						test: /node_modules/,
+						chunks: 'initial',
+						name: 'vendor',
+						priority: 10,
+						enforce: true,
+					},
+				},
+			},
+		},
 
-    resolve: {
-      // Having ts before js is important for webpack watch to work
-      // However, angular2-indexeddb creates an issue (ts files are packaged alongside js), so
-      // you need to remove the .ts files from its node_modules folder
-      // See https://github.com/gilf/angular2-indexeddb/issues/67
-      extensions: [".ts", ".js", ".html"]
-    },
+		target: 'web',
 
-    module: {
-      rules: [
-        {
-          test: /\.ts$/,
-          exclude: /node_modules/,
-		  use: ['@artonge/webpack', 'eslint-loader']
-        },
-        {
-          test: /.js$/,
-          parser: {
-            system: true
-          }
-        },
-        {
-          test: /\.scss$/,
-          include: getRoot("src", "css"),
-          use: ["raw-loader", "sass-loader"]
-        },
+		devtool: env.production ? false : 'inline-source-map',
 
-        {
-          test: /\.scss$/,
-          exclude: getRoot("src", "css"),
-          use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
-        }
-      ]
-    },
+		// Doesn't work, for some reason the code loaded after refresh is still the old one
+		watch: false,
 
-    plugins: [
-      // Define environment variables to export to Angular
-      new DefinePlugin({
-        'process.env.APP_VERSION': JSON.stringify(env.appversion),
-      }),
+		watchOptions: {
+			ignored: ['node_modules', 'test', 'dependencies'],
+		},
 
-      new AngularCompilerPlugin({
-        tsConfigPath: "./tsconfig.json",
-        entryModules: [
-          "./src/js/modules/decktracker-twitch/decktracker-twitch.module#DeckTrackerTwitchModule",
-        ],
-        sourceMap: true
-      }),
+		output: {
+			path: getRoot('dist-twitch'),
+			publicPath: './',
+			filename: '[name].js',
+		},
 
-      new MiniCssExtractPlugin({
-        filename: "app.css"
-      }),
+		resolve: {
+			// Having ts before js is important for webpack watch to work
+			// However, angular2-indexeddb creates an issue (ts files are packaged alongside js), so
+			// you need to remove the .ts files from its node_modules folder
+			// See https://github.com/gilf/angular2-indexeddb/issues/67
+			extensions: ['.ts', '.js', '.html'],
+		},
 
-      new CopyWebpackPlugin([
-        { from: path.join(process.cwd(), "src/html/decktracker-twitch.html"), to: "." },
-        { from: path.join(process.cwd(), "src/assets"), to: "assets" },
-      ]),
-    ]
-  };
+		module: {
+			rules: [
+				{
+					test: /\.ts$/,
+					exclude: [/node_modules/, /test/],
+					use: ['@artonge/webpack'],
+				},
+				{
+					test: /\.scss$/,
+					exclude: /node_modules/,
+					use: ['css-to-string-loader', 'css-loader', 'sass-loader'],
+				},
+			],
+		},
+
+		plugins: plugins,
+	};
 };

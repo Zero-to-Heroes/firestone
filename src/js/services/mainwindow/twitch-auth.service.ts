@@ -6,6 +6,7 @@ import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
+import { ProcessingQueue } from '../processing-queue.service';
 
 const EBS_URL = 'https://ebs.firestoneapp.com/deck/event';
 // const EBS_URL = 'https://ec2-52-42-105-37.us-west-2.compute.amazonaws.com/deck/event';
@@ -22,6 +23,12 @@ const TWITCH_USER_URL = 'https://api.twitch.tv/helix/users';
 export class TwitchAuthService {
 	public stateUpdater = new EventEmitter<any>();
 
+	private processingQueue = new ProcessingQueue<any>(
+		eventQueue => this.processQueue(eventQueue),
+		1000,
+		'twitch-emitter',
+	);
+
 	constructor(
 		private prefs: PreferencesService,
 		private http: HttpClient,
@@ -37,6 +44,16 @@ export class TwitchAuthService {
 	}
 
 	public async emitDeckEvent(event: any) {
+		this.processingQueue.enqueue(event);
+	}
+
+	private async processQueue(eventQueue: readonly string[]): Promise<readonly string[]> {
+		const mostRecentEvent = eventQueue[eventQueue.length - 1];
+		await this.emitEvent(mostRecentEvent);
+		return [];
+	}
+
+	private async emitEvent(event: any) {
 		let newEvent = Object.assign({}, event);
 		// Tmp fix until we fix the twitch extension
 		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
