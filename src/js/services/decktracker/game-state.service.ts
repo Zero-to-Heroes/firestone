@@ -25,6 +25,7 @@ import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { CardRemovedFromBoardParser } from './event-parser/card-removed-from-board-parser';
 import { CardRemovedFromDeckParser } from './event-parser/card-removed-from-deck-parser';
 import { CardRemovedFromHandParser } from './event-parser/card-removed-from-hand-parser';
+import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
@@ -36,6 +37,7 @@ import { GameEndParser } from './event-parser/game-end-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
+import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
 import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
@@ -260,7 +262,9 @@ export class GameStateService {
 			new GameEndParser(this.deckParser, this.allCards),
 			new DiscardedCardParser(this.helper),
 			new CardRecruitedParser(this.helper),
+			new MinionBackOnBoardParser(this.helper),
 			new MinionSummonedParser(this.helper, this.allCards),
+			new CardRevealedParser(this.helper, this.allCards),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),
 			new SecretPlayedFromDeckParser(this.helper),

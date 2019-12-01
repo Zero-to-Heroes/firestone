@@ -237,6 +237,10 @@ export class GameEvents {
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.RECRUIT_CARD, gameEvent));
 				break;
+			case 'MINION_BACK_ON_BOARD':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.MINION_BACK_ON_BOARD, gameEvent));
+				break;
 			case 'SECRET_PLAYED_FROM_DECK':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
@@ -250,6 +254,14 @@ export class GameEvents {
 					: null;
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps),
+				);
+				break;
+			case 'CARD_REVEALED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_REVEALED, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
 				);
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
@@ -319,6 +331,10 @@ export class GameEvents {
 			case 'CARD_REMOVED_FROM_HAND':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_HAND, gameEvent));
+				break;
+			case 'CARD_REMOVED_FROM_BOARD':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_REMOVED_FROM_BOARD, gameEvent));
 				break;
 			case 'BURNED_CARD':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);

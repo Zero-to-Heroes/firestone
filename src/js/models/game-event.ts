@@ -22,9 +22,11 @@ export class GameEvent {
 	public static readonly DISCARD_CARD = 'DISCARD_CARD';
 	public static readonly MINION_DIED = 'MINION_DIED';
 	public static readonly RECRUIT_CARD = 'RECRUIT_CARD';
+	public static readonly MINION_BACK_ON_BOARD = 'MINION_BACK_ON_BOARD';
 	public static readonly FIRST_PLAYER = 'FIRST_PLAYER';
 	public static readonly SECRET_PLAYED_FROM_DECK = 'SECRET_PLAYED_FROM_DECK';
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
+	public static readonly CARD_REVEALED = 'CARD_REVEALED';
 	public static readonly CARD_CHANGED_ON_BOARD = 'CARD_CHANGED_ON_BOARD';
 	public static readonly SECRET_PLAYED = 'SECRET_PLAYED';
 	public static readonly SECRET_TRIGGERED = 'SECRET_TRIGGERED';
@@ -37,6 +39,7 @@ export class GameEvent {
 	public static readonly CARD_BACK_TO_DECK = 'CARD_BACK_TO_DECK';
 	public static readonly CARD_REMOVED_FROM_DECK = 'CARD_REMOVED_FROM_DECK';
 	public static readonly CARD_REMOVED_FROM_HAND = 'CARD_REMOVED_FROM_HAND';
+	public static readonly CARD_REMOVED_FROM_BOARD = 'CARD_REMOVED_FROM_BOARD';
 	public static readonly BURNED_CARD = 'BURNED_CARD';
 	public static readonly CARD_ON_BOARD_AT_GAME_START = 'CARD_ON_BOARD_AT_GAME_START';
 	public static readonly PASSIVE_BUFF = 'PASSIVE_BUFF';

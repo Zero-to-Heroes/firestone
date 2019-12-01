@@ -30,11 +30,14 @@ export class DeckManipulationHelper {
 		return result;
 	}
 
-	public addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard): readonly DeckCard[] {
+	public addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard, debug = false): readonly DeckCard[] {
 		// Safeguard to not add twice the same card to the zone
 		// This is useful in case of cards stolen, where the power.log moves the card to SETASIDE, then changes the controller
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
 		if (zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
+			if (debug) {
+				console.debug('card already added to zone', zone, cardTemplate);
+			}
 			return zone;
 		}
 		const newCard = DeckCard.create({
@@ -46,6 +49,9 @@ export class DeckManipulationHelper {
 			zone: cardTemplate.zone,
 			creatorCardId: cardTemplate.creatorCardId,
 		} as DeckCard);
+		if (debug) {
+			console.debug('adding card to zone', [...zone, newCard]);
+		}
 		return [...zone, newCard];
 	}
 
@@ -57,16 +63,27 @@ export class DeckManipulationHelper {
 				// Card hasn't been found, so we provide a default return
 				if (cardId) {
 					const idByCardId = zone.find(card => card.cardId === cardId && !card.entityId);
-					return idByCardId.update({
-						entityId: entityId,
-						cardId: cardId,
-					} as DeckCard);
+					if (idByCardId) {
+						return idByCardId.update({
+							entityId: entityId,
+							cardId: cardId,
+						} as DeckCard);
+					} else {
+						console.warn(
+							'could not find card in zone',
+							cardId,
+							entityId,
+							zone.map(card => card.entityId),
+							new Error().stack,
+						);
+					}
 				} else if (cardId == null) {
 					// We explicitely said we wanted a card identified by an entityId, so we don't fallback
 					// It's important to distinguish between "force en entityId recognition" and "I didn't have
 					// the cardID to identify the card" (like when dealing with the opponent's deck).
 					// The second case is handled by passing an empty cardId (which is what is returned by the
 					// parser plugin)
+					console.log('returning null because no card id');
 					return null;
 				} else {
 					// Empty card Id
@@ -78,18 +95,20 @@ export class DeckManipulationHelper {
 			// Fill the card ID typically when an opponent plays a card from their hand
 			// We always override with the ID in input, as it's guaranteed to be accurate (for
 			// instance if the card changed in hand and our info is outdated)
-			if (cardId) {
+			if (found && cardId) {
 				const card = this.allCards.getCard(cardId);
 				return found.update({
 					cardId: cardId,
 					cardName: (card && card.name) || found.cardName,
 				} as DeckCard);
 			}
-			return found;
+			if (found) {
+				return found;
+			}
 		}
 		// Search by cardId only
 		if (cardId) {
-			console.error('trying to get a card without providing an entityId', cardId, zone);
+			console.log('trying to get a card without providing an entityId', cardId, zone);
 			const found = zone.find(card => card.cardId === cardId);
 			if (!found) {
 				console.log('could not find card, creating card with default template', cardId, entityId);
