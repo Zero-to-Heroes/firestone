@@ -29,6 +29,10 @@
 		decktracker-twitch-title-bar {
 			display: flex;
 			background: #07081f;
+
+			.close-button {
+				display: none;
+			}
 		}
 
 		decktracker-twitch-control-bar {
