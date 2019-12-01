@@ -16,7 +16,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	template: `
 		<div class="global-header" *ngIf="navigation?.text">
-			<i class="i-13X7 arrow back" (click)="back()" [ngClass]="{ 'disabled': !navigation.backArrowEnabled }">
+			<i class="i-13X7 arrow back" (click)="back()" *ngIf="navigation.backArrowEnabled">
 				<svg class="svg-icon-fill">
 					<use xlink:href="/Files/assets/svg/sprite.svg#collapse_caret" />
 				</svg>
