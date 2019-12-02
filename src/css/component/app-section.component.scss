@@ -31,5 +31,6 @@
 		margin-right: 5px;
 		width: 400px;
 		height: calc(100% - 320px);
+		flex-shrink: 0;
 	}
 }
