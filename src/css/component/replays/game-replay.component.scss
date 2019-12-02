@@ -13,8 +13,17 @@
 				width: 75px;
 			}
 		}
-		turn-narrator {
-			color: var(--default-text-color);
+		turn-narrator,
+		.player-controls-content,
+		.player-control-element {
+			color: var(--color-1);
+			--icon-color: var(--color-1);
+		}
+		.player-control-element:hover,
+		.player-control-element.toggled {
+			color: var(--color-4);
+			--icon-color: var(--color-4);
+			background-color: var(--color-1);
 		}
 	}
 }
