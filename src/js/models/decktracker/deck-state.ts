@@ -7,6 +7,7 @@ export class DeckState {
 	readonly deckstring?: string;
 	readonly name?: string;
 	readonly hero?: HeroCard;
+	readonly heroPower: DeckCard;
 	readonly deckList: readonly DeckCard[] = [];
 
 	// Graveyard is not so easy in fact - we want to know the cards that

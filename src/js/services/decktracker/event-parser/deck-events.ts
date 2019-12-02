@@ -13,6 +13,7 @@ export class DeckEvents {
 	public static readonly MINION_BACK_ON_BOARD = 'MINION_BACK_ON_BOARD';
 	public static readonly SECRET_PLAYED_FROM_DECK = 'SECRET_PLAYED_FROM_DECK';
 	public static readonly MINION_SUMMONED = 'MINION_SUMMONED';
+	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';
 	public static readonly MINION_DIED = 'MINION_DIED';
 	public static readonly SECRET_PLAYED_FROM_HAND = 'SECRET_PLAYED_FROM_HAND';

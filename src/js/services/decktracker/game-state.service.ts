@@ -35,6 +35,7 @@ import { EventParser } from './event-parser/event-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
+import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
@@ -205,13 +206,13 @@ export class GameStateService {
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
-					this.logger.debug(
-						'board states',
-						this.state.playerDeck.board.length,
-						this.state.opponentDeck.board.length,
-						this.state.playerDeck.board,
-						this.state.opponentDeck.board,
-					);
+					// this.logger.debug(
+					// 	'board states',
+					// 	this.state.playerDeck.board.length,
+					// 	this.state.opponentDeck.board.length,
+					// 	this.state.playerDeck.board,
+					// 	this.state.opponentDeck.board,
+					// );
 					// this.logger.debug(
 					// 	'hand states',
 					// 	this.state.playerDeck.hand.length,
@@ -273,6 +274,7 @@ export class GameStateService {
 			new CardStolenParser(this.helper),
 			new CardCreatorChangedParser(this.helper),
 			new AssignCardIdParser(this.helper),
+			new HeroPowerChangedParser(this.helper, this.allCards),
 		];
 	}
 

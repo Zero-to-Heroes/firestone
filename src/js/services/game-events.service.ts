@@ -256,6 +256,13 @@ export class GameEvents {
 					GameEvent.build(GameEvent.MINION_SUMMONED, gameEvent, summonAdditionProps),
 				);
 				break;
+			case 'HERO_POWER_CHANGED':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.HERO_POWER_CHANGED, gameEvent, {
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
+				break;
 			case 'CARD_REVEALED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(
