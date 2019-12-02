@@ -133,7 +133,9 @@
 				"https://localhost",
 				"https://*.firestoneapp.com",
 				"http://*.amazonaws.com",
-				"https://*.amazonaws.com"
+				"https://*.amazonaws.com",
+				"http://static.zerotoheroes.com",
+				"https://static.zerotoheroes.com"
 			]
 		},
 		"extra-objects": {
