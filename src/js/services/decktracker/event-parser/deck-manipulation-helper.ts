@@ -64,18 +64,14 @@ export class DeckManipulationHelper {
 				if (cardId) {
 					const idByCardId = zone.find(card => card.cardId === cardId && !card.entityId);
 					if (idByCardId) {
+						const card = this.allCards.getCard(cardId);
 						return idByCardId.update({
 							entityId: entityId,
 							cardId: cardId,
+							cardName: card && card.name,
 						} as DeckCard);
 					} else {
-						console.warn(
-							'could not find card in zone',
-							cardId,
-							entityId,
-							zone.map(card => card.entityId),
-							new Error().stack,
-						);
+						console.warn('could not find card in zone', cardId, entityId, zone.map(card => card.entityId));
 					}
 				} else if (cardId == null) {
 					// We explicitely said we wanted a card identified by an entityId, so we don't fallback
