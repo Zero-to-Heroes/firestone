@@ -12,11 +12,21 @@ import { Events } from '../../../../services/events.service';
 	],
 	template: `
 		<div class="state-mouse-over">
+			<ul class="hero top-hero">
+				<div class="hero-power">
+					<empty-card [cardId]="topHeroPowerCard"></empty-card>
+				</div>
+			</ul>
 			<ul class="board top-board">
 				<empty-card *ngFor="let cardId of topBoardCards" [cardId]="cardId"></empty-card>
 			</ul>
 			<ul class="board bottom-board">
 				<empty-card *ngFor="let cardId of bottomBoardCards" [cardId]="cardId"></empty-card>
+			</ul>
+			<ul class="hero bottom-hero">
+				<div class="hero-power">
+					<empty-card [cardId]="bottomHeroPowerCard"></empty-card>
+				</div>
 			</ul>
 			<ul class="bottom-hand">
 				<empty-card
@@ -35,8 +45,10 @@ import { Events } from '../../../../services/events.service';
 export class StateMouseOverComponent {
 	_gameState: GameState;
 
+	topHeroPowerCard: string;
 	topBoardCards: readonly string[];
 	bottomBoardCards: readonly string[];
+	bottomHeroPowerCard: string;
 	bottomHandCards: readonly string[];
 
 	private handAdjustment: Map<number, Adjustment> = this.buildHandAdjustment();
@@ -48,10 +60,12 @@ export class StateMouseOverComponent {
 		if (!value) {
 			return;
 		}
+		this.topHeroPowerCard = this._gameState.opponentDeck.heroPower && this._gameState.opponentDeck.heroPower.cardId;
 		this.topBoardCards = this._gameState.opponentDeck.board.map(card => card.cardId);
 		this.bottomBoardCards = this._gameState.playerDeck.board.map(card => card.cardId);
+		this.bottomHeroPowerCard = this._gameState.playerDeck.heroPower && this._gameState.playerDeck.heroPower.cardId;
 		this.bottomHandCards = this._gameState.playerDeck.hand.map(card => card.cardId);
-		this.logger.debug('hand cards', this.bottomHandCards, this._gameState.playerDeck);
+		this.logger.debug('upodated', this.bottomHeroPowerCard, this.topHeroPowerCard);
 	}
 
 	handRotation(i: number) {

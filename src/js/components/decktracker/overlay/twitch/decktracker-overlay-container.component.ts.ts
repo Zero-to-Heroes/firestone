@@ -56,7 +56,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			});
 		});
 		console.log('init done');
-		this.addDebugGameState();
+		// this.addDebugGameState();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
