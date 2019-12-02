@@ -20,8 +20,8 @@
 
 	::ng-deep {
 		decktracker-deck-list {
-			.deck-list {
-				overflow-y: hidden;
+			& > .deck-list.deck-list {
+				overflow: visible;
 				padding-bottom: 0;
 			}
 		}

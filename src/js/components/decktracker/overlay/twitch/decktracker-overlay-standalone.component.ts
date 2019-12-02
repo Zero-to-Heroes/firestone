@@ -11,6 +11,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { ResizedEvent } from 'angular-resize-event';
+import { CardTooltipPositionType } from '../../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { Events } from '../../../../services/events.service';
 
@@ -18,15 +19,18 @@ import { Events } from '../../../../services/events.service';
 	selector: 'decktracker-overlay-standalone',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
+		`../../../../../css/global/cdk-overlay.scss`,
 		'../../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
 		'../../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
+		`../../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
 		<div
 			*ngIf="gameState"
 			class="root clean"
 			[ngClass]="{ 'dragging': dragging }"
+			[activeTheme]="'decktracker'"
 			cdkDrag
 			(cdkDragStarted)="startDragging()"
 			(cdkDragReleased)="stopDragging()"
@@ -38,9 +42,10 @@ import { Events } from '../../../../services/events.service';
 						<decktracker-twitch-title-bar [deckState]="gameState.playerDeck">
 						</decktracker-twitch-title-bar>
 						<decktracker-deck-list
+							*ngIf="gameState.playerDeck?.deck.length > 0"
 							[deckState]="gameState.playerDeck"
 							[displayMode]="displayMode"
-							*ngIf="gameState.playerDeck?.deck.length > 0"
+							[tooltipPosition]="tooltipPosition"
 						>
 						</decktracker-deck-list>
 					</div>
@@ -54,6 +59,7 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	@Input('gameState') gameState: GameState;
 	displayMode: string;
 	dragging: boolean;
+	tooltipPosition: CardTooltipPositionType = 'left';
 
 	@Output() dragStart = new EventEmitter<void>();
 	@Output() dragEnd = new EventEmitter<void>();
@@ -122,22 +128,39 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	}
 
 	startDragging() {
+		this.tooltipPosition = 'none';
 		this.dragging = true;
 		console.log('starting dragging');
-		this.events.broadcast(Events.HIDE_TOOLTIP);
+		// this.events.broadcast(Events.HIDE_TOOLTIP);
 		this.dragStart.next();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	stopDragging() {
+	async stopDragging() {
 		this.dragging = false;
 		console.log('stopped dragging');
 		this.dragEnd.next();
+		await this.updateTooltipPosition();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 		this.keepOverlayInBounds();
+	}
+
+	private async updateTooltipPosition() {
+		// Move the tracker so that it doesn't go over the edges
+		const rect = this.el.nativeElement.querySelector('.scalable').getBoundingClientRect();
+		if (rect.left < 300) {
+			this.tooltipPosition = 'right';
+		} else {
+			this.tooltipPosition = 'left';
+		}
+		console.log('updated tooltip position', rect, this.tooltipPosition);
+		// console.log('[decktracker-overlay] tooltip position updated', this.tooltipPosition);
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 }

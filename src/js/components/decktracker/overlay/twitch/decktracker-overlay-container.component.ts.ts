@@ -1,14 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewRef } from '@angular/core';
 import { inflate } from 'pako';
-import { Subscription } from 'rxjs';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { DeckEvents } from '../../../../services/decktracker/event-parser/deck-events';
 import { Events } from '../../../../services/events.service';
@@ -34,58 +26,18 @@ const EBS_URL = 'https://ebs.firestoneapp.com/deck';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDestroy {
+export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 	gameState: GameState;
 	activeTooltip: string;
-
-	private showTooltipTimer;
-	private hideTooltipTimer;
 
 	private twitch;
 	private token: string;
 
-	private dragging = false;
-	private showTooltipSubscription: Subscription;
-	private hideTooltipSubscription: Subscription;
+	// private dragging = false;
 
-	constructor(private cdr: ChangeDetectorRef, private events: Events, private http: HttpClient) {
-		this.showTooltipSubscription = this.events.on(Events.DECK_SHOW_TOOLTIP).subscribe(data => {
-			clearTimeout(this.hideTooltipTimer);
-			if (this.dragging) {
-				return;
-			}
-			// Already in tooltip mode
-			if (this.activeTooltip) {
-				this.activeTooltip = data.data[0];
-				this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-			} else {
-				this.showTooltipTimer = setTimeout(() => {
-					this.activeTooltip = data.data[0];
-					this.events.broadcast(Events.SHOW_TOOLTIP, ...data.data);
-					if (!(this.cdr as ViewRef).destroyed) {
-						this.cdr.detectChanges();
-					}
-				}, 300);
-			}
-		});
-		this.hideTooltipSubscription = this.events.on(Events.DECK_HIDE_TOOLTIP).subscribe(data => {
-			clearTimeout(this.showTooltipTimer);
-			this.hideTooltipTimer = setTimeout(() => {
-				this.activeTooltip = undefined;
-				this.events.broadcast(Events.HIDE_TOOLTIP, ...data.data);
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
-				}
-			}, 200);
-		});
-		console.log('hop hop hop hop hop');
-	}
+	constructor(private cdr: ChangeDetectorRef, private events: Events, private http: HttpClient) {}
 
 	ngAfterViewInit() {
-		this.cdr.detach();
 		if (!(window as any).Twitch) {
 			setTimeout(() => this.ngAfterViewInit(), 500);
 			return;
@@ -104,26 +56,21 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit, OnDe
 			});
 		});
 		console.log('init done');
-		// this.addDebugGameState();
+		this.addDebugGameState();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
-	ngOnDestroy(): void {
-		this.showTooltipSubscription.unsubscribe();
-		this.hideTooltipSubscription.unsubscribe();
-	}
-
 	onDragStart() {
-		this.dragging = true;
+		// this.dragging = true;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	onDragEnd() {
-		this.dragging = false;
+		// this.dragging = false;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
