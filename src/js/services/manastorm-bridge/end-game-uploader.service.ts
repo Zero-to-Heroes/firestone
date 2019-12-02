@@ -48,6 +48,10 @@ export class EndGameUploaderService {
 			scenarioId,
 		);
 		const savedGame = await this.replayManager.saveLocally(game);
+		if (!savedGame) {
+			this.logger.warn('[manastorm-bridge] not saving replay');
+			return;
+		}
 		this.logger.debug('{manastorm-bridge] saved game locally', savedGame.path);
 		await this.replayUploadService.uploadGame(savedGame);
 	}
