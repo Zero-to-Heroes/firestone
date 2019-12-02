@@ -78,6 +78,8 @@ export class DevService {
 					stats: [
 						Object.assign(new GameStat(), {
 							reviewId: '5ddd7f7f3c4a7900013e16de',
+							gameMode: 'battlegrounds',
+							playerRank: '5123',
 						} as GameStat),
 					],
 				} as GameStats),

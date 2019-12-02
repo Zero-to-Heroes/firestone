@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { GameStats } from '../../models/mainwindow/stats/game-stats';
+import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
+import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { Events } from '../events.service';
 import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-event';
 import { Message, OwNotificationsService } from '../notifications.service';
@@ -37,8 +39,14 @@ export class ReplaysNotificationService {
 	}
 
 	private buildNotificationTemplate(stat: GameStat): string {
+		const playerRankImage = this.buildPlayerRankImage(stat.gameFormat, stat.gameMode, stat.playerRank);
+		const rankText = this.buildRankText(stat) || '';
 		return `
 			<div class="match-stats-message-container ${stat.reviewId}">
+				<div class="mode">
+					<img class="player-rank" src="${playerRankImage}" />
+					<div class="rank-text">${rankText}</div>
+				</div>
 				<div class="message">
 					<div class="title">
 						<span>Game replay saved</span>
@@ -51,5 +59,45 @@ export class ReplaysNotificationService {
 					</svg>
 				</button>
 			</div>`;
+	}
+
+	private buildPlayerRankImage(
+		gameFormat: StatGameFormatType,
+		gameMode: StatGameModeType,
+		playerRank: string,
+	): string {
+		let rankIcon;
+		if (gameMode === 'ranked') {
+			const standard = 'standard_ranked';
+			if (playerRank === 'legend') {
+				rankIcon = `${standard}/legend`;
+			} else if (!playerRank || parseInt(playerRank) >= 25) {
+				rankIcon = `${standard}/rank25_small`;
+			} else {
+				rankIcon = `${standard}/rank${parseInt(playerRank)}_small`;
+			}
+		} else if (gameMode === 'battlegrounds') {
+			rankIcon = 'battlegrounds';
+		} else if (gameMode === 'practice') {
+			rankIcon = 'casual';
+		} else if (gameMode === 'casual') {
+			rankIcon = 'casual';
+		} else if (gameMode === 'friendly') {
+			rankIcon = 'friendly';
+		} else if (gameMode === 'arena') {
+			rankIcon = 'arena/arena12wins';
+		} else if (gameMode === 'tavern-brawl') {
+			rankIcon = 'tavernbrawl';
+		} else {
+			rankIcon = 'arenadraft';
+		}
+		return `/Files/assets/images/deck/ranks/${rankIcon}.png`;
+	}
+
+	private buildRankText(info: GameStat): string {
+		if (info.gameMode === 'ranked' || info.gameMode === 'battlegrounds') {
+			return info.playerRank;
+		}
+		return null;
 	}
 }

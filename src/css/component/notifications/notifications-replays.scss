@@ -61,3 +61,31 @@
 		left: 0;
 	}
 }
+
+.mode {
+	display: flex;
+	height: 100%;
+	padding-right: 10px;
+	margin-right: 10px;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	top: -10%;
+
+	.player-rank {
+		width: 30px;
+		height: 30px;
+		margin-right: 5px;
+	}
+
+	.rank-text {
+		position: absolute;
+		bottom: -12%;
+		text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+		color: white;
+		font-size: 12px;
+		width: 100%;
+		text-align: center;
+		padding-right: 3px;
+	}
+}
