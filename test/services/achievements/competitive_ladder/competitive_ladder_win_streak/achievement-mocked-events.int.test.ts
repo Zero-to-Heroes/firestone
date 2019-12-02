@@ -8,7 +8,7 @@ import { achievementsValidation } from '../../achievement-event-validation';
 import pluginEvents from './plugin-events.json';
 import rawAchievement from './raw_achievement.json';
 
-describe('Competitive Ladder - Win Streak', () => {
+describe('Competitive Ladder Win Streak', () => {
 	const won = Object.assign(new GameStat(), {
 		result: 'won',
 		gameFormat: 'standard',
@@ -25,7 +25,7 @@ describe('Competitive Ladder - Win Streak', () => {
 
 	test('is completed when full events created by CSharp plugin are emitted', async () => {
 		// Provide the existing stats for the win streak - we only care about the result here
-		const stats = [won, won];
+		const stats = [won, won, won];
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
 			gameStats: Object.assign(new GameStats(), {
 				stats: stats,

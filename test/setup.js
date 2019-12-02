@@ -29,3 +29,5 @@ afterEach(() => {
 		throw new Error('Console warnings and errors are not allowed', isConsoleError);
 	}
 });
+
+jest.setTimeout(30000); // in milliseconds

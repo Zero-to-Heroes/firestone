@@ -26,10 +26,12 @@ export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirem
 	}
 
 	reset(): void {
+		console.debug('reset');
 		this.currentWinsAgainstClass = 0;
 	}
 
 	afterAchievementCompletionReset(): void {
+		console.debug('reset after complete');
 		this.currentWinsAgainstClass = 0;
 	}
 
@@ -48,6 +50,7 @@ export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirem
 
 	private handleEvent(gameEvent: GameEvent) {
 		const stats = (gameEvent.additionalData.gameStats as GameStats).stats;
+		console.debug('handling stats', gameEvent);
 		// Add a bit of slack
 		const referenceDate = Date.now() - (this.periodOfTimeInHours + 0.5) * 60 * 60 * 1000;
 		const filtered = stats
@@ -57,5 +60,6 @@ export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirem
 			.filter(stat => stat.opponentClass === this.opponentClass)
 			.filter(stat => stat.result === 'won');
 		this.currentWinsAgainstClass = filtered.length;
+		console.debug('current win', this.currentWinsAgainstClass);
 	}
 }

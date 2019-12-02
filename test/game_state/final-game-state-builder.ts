@@ -1,5 +1,4 @@
 import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
-import cardsJson from '../../dependencies/cards.json';
 import { GameState } from '../../src/js/models/decktracker/game-state';
 import { PlayerInfo } from '../../src/js/models/player-info';
 import { AllCardsService } from '../../src/js/services/all-cards.service';
@@ -17,6 +16,7 @@ import { PlayersInfoService } from '../../src/js/services/players-info.service';
 import { GameEventsPluginService } from '../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../src/js/services/plugins/memory-inspection.service';
 import { PreferencesService } from '../../src/js/services/preferences.service.js';
+import cardsJson from '../cards.json';
 
 export const gameStateBuilder = async (
 	pluginEvents,

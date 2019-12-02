@@ -1,5 +1,4 @@
 import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
-import cardsJson from '../../../dependencies/cards.json';
 import { RawAchievement } from '../../../src/js/models/achievement/raw-achievement';
 import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
 import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
@@ -25,6 +24,7 @@ import { MemoryInspectionService } from '../../../src/js/services/plugins/memory
 import { PreferencesService } from '../../../src/js/services/preferences.service.js';
 import { GameStatsLoaderService } from '../../../src/js/services/stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../../src/js/services/stats/game/game-stats-updater.service';
+import cardsJson from '../../cards.json';
 
 export const achievementsValidation = async (
 	rawAchievements: RawAchievement[],
@@ -111,7 +111,9 @@ export const achievementsValidation = async (
 				} else if (data instanceof RecomputeGameStatsEvent && collaborators && collaborators.gameStats) {
 					// This will send an event to be processed by the requirements
 					// eslint-disable-next-line @typescript-eslint/no-use-before-define
-					statsUpdater.recomputeGameStats(collaborators.gameStats, 'fakeReviewId');
+					console.debug('broadcasting stats', collaborators.gameStats);
+					events.broadcast(Events.GAME_STATS_UPDATED, collaborators.gameStats);
+					// statsUpdater.recomputeGameStats(collaborators.gameStats, 'fakeReviewId');
 				}
 			},
 		} as any,
@@ -174,7 +176,14 @@ export const achievementsValidation = async (
 
 	pluginEvents.forEach(gameEvent => gameEventsService.dispatchGameEvent(gameEvent));
 
-	await sleep(2400);
+	await sleep(2000);
+
+	if (collaborators && collaborators.gameStats) {
+		// console.debug('broadcasting stats', collaborators.gameStats);
+		events.broadcast(Events.GAME_STATS_UPDATED, collaborators.gameStats);
+	}
+
+	await sleep(2000);
 
 	// if (!isAchievementComplete) {
 	// 	loader.challengeModules.forEach((challenge: GenericChallenge) => {

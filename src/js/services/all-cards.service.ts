@@ -18,6 +18,7 @@ export class AllCardsService {
 		['troll', "Rastakhan's Rumble"],
 		['dalaran', 'Rise of Shadows'],
 		['uldum', 'Saviors of Uldum'],
+		['dragons', 'Descent of Dragons'],
 	];
 
 	private readonly WILD_SETS = [

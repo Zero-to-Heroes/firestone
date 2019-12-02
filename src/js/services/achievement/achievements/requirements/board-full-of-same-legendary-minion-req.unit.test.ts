@@ -1,4 +1,4 @@
-import cardsJson from '../../../../../../dependencies/cards.json';
+import cardsJson from '../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent, GameState } from '../../../../models/game-event';
 import { AllCardsService } from '../../../all-cards.service';

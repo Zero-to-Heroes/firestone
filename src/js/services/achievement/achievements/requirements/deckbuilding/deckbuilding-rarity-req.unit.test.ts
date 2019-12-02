@@ -1,5 +1,5 @@
 import { decode } from 'deckstrings';
-import cardsJson from '../../../../../../../dependencies/cards.json';
+import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
 import { RarityTYpe } from '../../../../../models/reference-cards/rarity.type.js';
