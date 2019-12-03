@@ -56,6 +56,7 @@ export class GameEvent {
 	public static readonly MONSTER_HUNT_STEP = 'MONSTER_HUNT_STEP';
 
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
+	public static readonly BATTLEGROUNDS_PLAYER_BOARD = 'BATTLEGROUNDS_PLAYER_BOARD';
 
 	readonly type: string;
 	readonly cardId: string;
