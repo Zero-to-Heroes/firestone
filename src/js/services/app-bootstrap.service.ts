@@ -4,7 +4,6 @@ import { AchievementsNotificationService } from './achievement/achievements-noti
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
-import { BattlegroundsStateService } from './battlegrounds/battlegrounds-state.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';
@@ -64,8 +63,7 @@ export class AppBootstrapService {
 		private init_endGameListenerService: EndGameListenerService,
 		private init_matchSummaryService: MatchSummaryService,
 		private init_GlobalStatsNotifierService: GlobalStatsNotifierService,
-		private init_ReplaysNotificationService: ReplaysNotificationService,
-		private init_BattlegroundsStateService: BattlegroundsStateService,
+		private init_ReplaysNotificationService: ReplaysNotificationService, // private init_BattlegroundsStateService: BattlegroundsStateService,
 	) {}
 
 	public async init() {
@@ -136,17 +134,20 @@ export class AppBootstrapService {
 		this.ow.addAppLaunchTriggeredListener(() => {
 			this.startApp(true);
 		});
-		const [settingsWindow, battlegroundsPlayerInfoWindow] = await Promise.all([
+		const [settingsWindow, battlegroundsPlayerInfoWindow, battlegroundsLeaderboardOverlay] = await Promise.all([
 			this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW),
 			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
+			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
 		]);
 		await Promise.all([
 			this.ow.restoreWindow(settingsWindow.id),
-			this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.restoreWindow(battlegroundsLeaderboardOverlay.id),
 		]);
 		await Promise.all([
 			this.ow.hideWindow(settingsWindow.id),
-			this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.hideWindow(battlegroundsLeaderboardOverlay.id),
 		]);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 	}
