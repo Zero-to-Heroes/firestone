@@ -103,6 +103,28 @@
 				"grab_keyboard_focus": false,
 				"grab_focus_on_desktop": false,
 				"block_top_window_navigation": true
+			},
+			"BattlegroundsPlayerInfoWindow": {
+				"file": "Files/battlegrounds_player_info.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 1170, "height": 720 },
+				"start_position": { "top": 0, "left": 0 },
+				"grab_keyboard_focus": false,
+				"grab_focus_on_desktop": false,
+				"block_top_window_navigation": true
+			},
+			"BattlegroundsLeaderboardOverlay": {
+				"file": "Files/battlegrounds_leaderboard_overlay.html",
+				"transparent": true,
+				"resizable": false,
+				"show_in_taskbar": false,
+				"size": { "width": 1170, "height": 720 },
+				"start_position": { "top": 0, "left": 0 },
+				"grab_keyboard_focus": false,
+				"grab_focus_on_desktop": false,
+				"block_top_window_navigation": true
 			}
 		},
 		"game_targeting": {
