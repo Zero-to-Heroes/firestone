@@ -187,7 +187,11 @@ export class ReplayInfoComponent implements AfterViewInit {
 	}
 
 	private buildRankText(info: ReplayInfo): string {
-		if (info.gameMode === 'ranked' || info.gameMode === 'battlegrounds') {
+		if (info.gameMode === 'ranked') {
+			return info.playerRank;
+		}
+		// Bug for old matches
+		if (info.gameMode === 'battlegrounds' && info.playerRank && parseInt(info.playerRank) > 100) {
 			return info.playerRank;
 		}
 		return null;
