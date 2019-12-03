@@ -2,9 +2,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ColiseumComponentsModule } from '@firestone-hs/coliseum-components';
 import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
+import { BattlegroundsPlayerInfoComponent } from '../../components/battlegrounds/battlegrounds-player-info.component';
 import { BattlegroundsPlayerSummaryComponent } from '../../components/battlegrounds/battlegrounds-player-summary.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -39,8 +41,9 @@ console.log('version is ' + process.env.APP_VERSION);
 		SharedModule,
 		FormsModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+		ColiseumComponentsModule,
 	],
-	declarations: [BattlegroundsPlayerSummaryComponent],
+	declarations: [BattlegroundsPlayerSummaryComponent, BattlegroundsPlayerInfoComponent],
 	bootstrap: [BattlegroundsPlayerSummaryComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })

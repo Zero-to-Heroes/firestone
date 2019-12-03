@@ -5,10 +5,66 @@
 }
 
 .battlegrounds-player-summary {
+	position: relative;
 	width: 300vh;
 	height: 50%;
 	background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
 		url('/Files/assets/images/backgrounds/decktracker_main_window.png');
 	background-size: 100%;
 	background-position-y: 20%;
+	outline: 1px solid #303352;
+	padding-bottom: 1%;
+	padding-left: 10px;
+	padding-right: 10px;
+	display: flex;
+
+	battlegrounds-player-info {
+		width: 20%;
+	}
+
+	board {
+		width: 80%;
+		position: relative;
+		top: 10%;
+	}
+
+	::ng-deep board {
+		.board li {
+			width: 11%;
+		}
+		board-card-stats .stat {
+			color: #fff;
+		}
+	}
+}
+
+.corner {
+	position: absolute;
+	top: auto;
+	left: auto;
+	bottom: auto;
+	right: auto;
+
+	&.top-left {
+		top: -10px;
+		left: -10px;
+	}
+
+	&.top-right {
+		top: -10px;
+		right: -10px;
+		transform: rotate(90deg);
+	}
+
+	&.bottom-right {
+		bottom: -10px;
+		right: -10px;
+		transform: rotate(180deg);
+	}
+
+	&.bottom-left {
+		bottom: -10px;
+		left: -10px;
+		transform: rotate(270deg);
+	}
 }

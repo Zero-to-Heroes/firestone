@@ -4,11 +4,14 @@ import {
 	ChangeDetectorRef,
 	Component,
 	EventEmitter,
+	HostListener,
 	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
+import { BattlegroundsPlayer } from '../../models/battlegrounds/battlegrounds-player';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../models/game-event';
 import { DebugService } from '../../services/debug.service';
@@ -22,8 +25,30 @@ import { OverwolfService } from '../../services/overwolf.service';
 		'../../../css/component/battlegrounds/battlegrounds-player-summary.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-player-summary">
-			{{ state }}
+		<div class="battlegrounds-player-summary" *ngIf="activePlayer">
+			<battlegrounds-player-info [player]="activePlayer"></battlegrounds-player-info>
+			<board [entities]="boardMinions" *ngIf="boardMinions"></board>
+
+			<i class="i-54 gold-theme corner top-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner top-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-right">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
+				</svg>
+			</i>
+			<i class="i-54 gold-theme corner bottom-left">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
+				</svg>
+			</i>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +56,10 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
+
+	activePlayer: BattlegroundsPlayer;
+	boardMinions: readonly Entity[];
+
 	windowId: string;
 
 	private gameInfoUpdatedListener: (message: any) => void;
@@ -41,11 +70,14 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private init_DebugService: DebugService,
+		private allCards: AllCardsService,
 	) {}
 
 	async ngAfterViewInit() {
 		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
 		this.cdr.detach();
+
+		await this.allCards.initializeCardsDb();
 
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().battlegroundsEventBus;
@@ -60,6 +92,12 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 				this.changeWindowSize();
 			}
 			if (this.state) {
+				this.activePlayer = this.state.players && this.state.players.length > 0 && this.state.players[0];
+				this.boardMinions =
+					this.activePlayer &&
+					this.activePlayer.boardStates &&
+					this.activePlayer.boardStates.length > 0 &&
+					this.activePlayer.boardStates[0].minions;
 				this.restoreWindow();
 			} else {
 				this.hideWindow();
@@ -86,6 +124,11 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.stateSubscription.unsubscribe();
+	}
+
+	@HostListener('mousedown')
+	dragMove() {
+		this.ow.dragMove(this.windowId, async result => {});
 	}
 
 	private async changeWindowSize(): Promise<void> {
