@@ -57,6 +57,8 @@ export class GameEvent {
 
 	public static readonly LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED = 'LOCAL_PLAYER_LEADERBOARD_PLACE_CHANGED';
 	public static readonly BATTLEGROUNDS_PLAYER_BOARD = 'BATTLEGROUNDS_PLAYER_BOARD';
+	public static readonly BATTLEGROUNDS_LEADERBOARD_PLACE = 'BATTLEGROUNDS_LEADERBOARD_PLACE';
+	public static readonly BATTLEGROUNDS_TAVERN_UPGRADE = 'BATTLEGROUNDS_TAVERN_UPGRADE';
 
 	readonly type: string;
 	readonly cardId: string;

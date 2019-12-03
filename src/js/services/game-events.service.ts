@@ -487,6 +487,32 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'BATTLEGROUNDS_LEADERBOARD_PLACE':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE,
+						additionalData: {
+							// turn =
+							cardId: gameEvent.Value.CardId,
+							leaderboardPlace: gameEvent.Value.LeaderboardPlace,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_TAVERN_UPGRADE':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_TAVERN_UPGRADE,
+						additionalData: {
+							// turn =
+							cardId: gameEvent.Value.CardId,
+							tavernLevel: gameEvent.Value.TavernLevel,
+						},
+					} as GameEvent),
+				);
+				break;
 			case 'WINNER':
 				console.log(gameEvent.Type + ' event');
 				this.gameEventsEmitter.allEvents.next(

@@ -6,7 +6,9 @@ import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { OverwolfService } from '../overwolf.service';
 import { ProcessingQueue } from '../processing-queue.service';
+import { BattlegroundsLeaderboardPlaceParser } from './events-parser/battlegrounds-leaderboard-place-parser';
 import { BattlegroundsPlayerBoardParser } from './events-parser/battlegrounds-player-board-parser';
+import { BattlegroundsPlayerTavernUpgradeParser } from './events-parser/battlegrounds-player-tavern-upgrade-parser';
 import { EventParser } from './events-parser/event-parser';
 import { GameEndParser } from './events-parser/game-end-parser';
 import { GameStartParser } from './events-parser/game-start-parser';
@@ -88,7 +90,13 @@ export class BattlegroundsStateService {
 	}
 
 	private buildEventParsers(): readonly EventParser[] {
-		return [new GameStartParser(), new GameEndParser(), new BattlegroundsPlayerBoardParser()];
+		return [
+			new GameStartParser(),
+			new GameEndParser(),
+			new BattlegroundsPlayerBoardParser(),
+			new BattlegroundsLeaderboardPlaceParser(),
+			new BattlegroundsPlayerTavernUpgradeParser(),
+		];
 	}
 
 	private async loadBattlegroundsWindow() {
