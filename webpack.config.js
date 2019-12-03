@@ -39,6 +39,7 @@ module.exports = function(env, argv) {
 				'./src/js/modules/opponent-hand/opponent-hand-overlay.module#OpponentHandOverlayModule',
 				'./src/js/modules/settings/settings.module#SettingsModule',
 				'./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule',
+				'./src/js/modules/battlegrounds-player-summary/battlegrounds-player-summary.module#BattlegroundsPlayerSummaryModule',
 			],
 			sourceMap: true,
 		}),
@@ -72,6 +73,7 @@ module.exports = function(env, argv) {
 				'settings',
 				'twitchauthcallback',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 			chunksSortMode: 'manual',
 		}),
@@ -86,6 +88,7 @@ module.exports = function(env, argv) {
 				'settings',
 				'twitchauthcallback',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -99,6 +102,7 @@ module.exports = function(env, argv) {
 				'settings',
 				'twitchauthcallback',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -112,6 +116,7 @@ module.exports = function(env, argv) {
 				'settings',
 				'twitchauthcallback',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -125,6 +130,7 @@ module.exports = function(env, argv) {
 				'settings',
 				'twitchauthcallback',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -138,6 +144,7 @@ module.exports = function(env, argv) {
 				'decktracker',
 				'twitchauthcallback',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -151,6 +158,7 @@ module.exports = function(env, argv) {
 				'decktracker',
 				'settings',
 				'opponentHand',
+				'battlegroundsplayersummary',
 			],
 		}),
 		new HtmlWebpackPlugin({
@@ -165,6 +173,22 @@ module.exports = function(env, argv) {
 				'settings',
 				'twitchauthcallback',
 				'matchStats',
+				'battlegroundsplayersummary',
+			],
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'battlegrounds_player_info.html',
+			template: 'src/html/battlegrounds_player_info.html',
+			excludeChunks: [
+				'collection',
+				'notifications',
+				'background',
+				'loading',
+				'decktracker',
+				'settings',
+				'twitchauthcallback',
+				'matchStats',
+				'opponentHand',
 			],
 		}),
 
@@ -222,6 +246,7 @@ module.exports = function(env, argv) {
 			opponentHand: './src/js/modules/opponent-hand/main.ts',
 			settings: './src/js/modules/settings/main.ts',
 			twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
+			battlegroundsplayersummary: './src/js/modules/battlegrounds-player-summary/main.ts',
 		},
 
 		// https://hackernoon.com/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758

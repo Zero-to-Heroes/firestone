@@ -40,6 +40,6 @@ export class BattlegroundsPlayerBoardParser implements EventParser {
 	}
 
 	private buildTags(tags: { Name: number; Value: number }[]): Map<string, number> {
-		return Map(tags.map(tag => [GameTag[GameTag[tag.Name]], tag.Value]));
+		return Map(tags.map(tag => [GameTag[tag.Name], tag.Value]));
 	}
 }
