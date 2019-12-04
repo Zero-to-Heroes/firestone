@@ -39,6 +39,7 @@
 		margin: 0;
 		overflow-y: scroll;
 		flex-grow: 1;
+		display: flex;
 	}
 
 	.more-data-container {
@@ -72,6 +73,7 @@
 		align-items: center;
 		justify-content: center;
 		height: 100%;
+		margin: auto;
 
 		i {
 			margin-bottom: 10px;

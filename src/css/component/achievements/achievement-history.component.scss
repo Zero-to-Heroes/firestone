@@ -30,6 +30,7 @@
 		overflow-y: scroll;
 		overflow-x: hidden;
 		flex-grow: 1;
+		display: flex;
 
 		li {
 			display: flex;
@@ -60,6 +61,7 @@
 		align-items: center;
 		justify-content: center;
 		height: 100%;
+		margin: auto;
 
 		i {
 			margin-bottom: 10px;
