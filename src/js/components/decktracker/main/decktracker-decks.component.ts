@@ -20,7 +20,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			<section class="empty-state" *ngIf="!_decks || _decks.length === 0">
 				<div class="state-container">
 					<i class="i-236X165">
-						<svg class="svg-icon-fill">
+						<svg>
 							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
 						</svg>
 					</i>

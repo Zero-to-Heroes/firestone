@@ -24,8 +24,8 @@
 		li {
 			width: 155px;
 			height: 200px;
-			margin-right: 15px;
-			margin-bottom: 15px;
+			margin-right: 13px;
+			margin-bottom: 13px;
 		}
 	}
 }
@@ -58,6 +58,10 @@
 
 		.subtitle {
 			color: var(--secondary-text-color);
+		}
+
+		svg {
+			fill: transparent;
 		}
 	}
 }
