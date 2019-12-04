@@ -3,13 +3,14 @@
 
 .hotkey {
 	display: flex;
-	align-items: center;
+	align-items: baseline;
 	position: relative;
 
 	.text {
 		@extend %hotkey-label;
-		margin-right: 10px;
-		color: #a89782;
+		margin-right: 5px;
+		color: var(--on-scrollbar-thumb-color);
+		// color: #a89782;
 	}
 
 	.plus {
@@ -17,6 +18,8 @@
 		font-weight: 400;
 		margin-left: 6px;
 		margin-right: 6px;
+		font-size: 10px;
+		color: var(--control-button-color);
 	}
 
 	.key {
@@ -29,6 +32,7 @@
 		align-items: center;
 		justify-content: center;
 		border: 1px solid;
+		color: var(--control-button-color);
 	}
 
 	.no-hotkey {
