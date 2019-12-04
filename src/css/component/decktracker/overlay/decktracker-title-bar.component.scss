@@ -16,6 +16,29 @@
 		// To avoid having the golden corners interfere with the mouse
 		z-index: 1;
 
+		.import-container {
+			height: 30px;
+			width: 30px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			&:hover {
+				background-color: #303352;
+			}
+
+			.import-deckstring {
+				width: 13px;
+				height: 16px;
+				--icon-color: #101530;
+				--icon-color-secondary: #9fb6d7;
+
+				&:hover {
+					--icon-color: #9fb6d7;
+				}
+			}
+		}
+
 		::ng-deep button {
 			--icon-color: #9fb6d7;
 			color: #9fb6d7;
