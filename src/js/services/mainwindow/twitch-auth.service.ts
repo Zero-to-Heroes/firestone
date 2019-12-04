@@ -86,7 +86,7 @@ export class TwitchAuthService {
 				state: newState,
 			});
 		}
-		console.log('ready to emit twitch event', newEvent);
+		// console.log('ready to emit twitch event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
 			// console.log('no twitch access token, returning');
