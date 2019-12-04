@@ -1,3 +1,6 @@
+@import '../../global/variables';
+@import '../../global/fonts';
+
 .replays-list {
 	list-style: none;
 	padding: 0;
@@ -13,4 +16,37 @@
 	transition: all 2s;
 	flex-grow: 1;
 	padding-right: 10px;
+}
+
+.empty-state {
+	@extend %empty-state;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	align-items: center;
+	color: var(--secondary-text-color);
+	--icon-color: var(--secondary-text-color);
+
+	.state-container {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		color: var(--secondary-text-color);
+
+		i {
+			margin-bottom: 30px;
+		}
+
+		.title {
+			@extend %empty-state-title;
+			margin-bottom: 15px;
+			color: var(--secondary-text-color);
+		}
+
+		.subtitle {
+			color: var(--secondary-text-color);
+		}
+	}
 }
