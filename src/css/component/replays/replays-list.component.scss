@@ -48,5 +48,9 @@
 		.subtitle {
 			color: var(--secondary-text-color);
 		}
+
+		svg {
+			fill: transparent;
+		}
 	}
 }
