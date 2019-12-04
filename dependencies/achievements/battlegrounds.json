@@ -3661,6 +3661,28 @@
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
 	{
+		"id": "battlegrounds_minion_play_TB_BaconUps_055",
+		"type": "battlegrounds_minion_play_TB_BaconUps_055",
+		"name": "Baron Rivendare",
+		"icon": "boss_victory",
+		"root": true,
+		"canBeCompletedOnlyOnce": true,
+		"priority": 0,
+		"displayName": "That's Triple! Baron Rivendare",
+		"text": "Get a Triple version of Baron Rivendare",
+		"completedText": "Played a Triple of Baron Rivendare",
+		"displayCardId": "TB_BaconUps_055",
+		"displayCardType": "minion",
+		"difficulty": "rare",
+		"maxNumberOfRecords": 2,
+		"points": 3.0,
+		"requirements": [
+			{ "type": "BATTLEGROUNDS_TRIPLE_PLAY", "values": ["FP1_031", "TB_BaconUps_055"] },
+			{ "type": "GAME_TYPE", "values": ["23"] }
+		],
+		"resetEvents": ["GAME_START", "GAME_END"]
+	},
+	{
 		"id": "battlegrounds_minion_play_TB_BaconUps_057",
 		"type": "battlegrounds_minion_play_TB_BaconUps_057",
 		"name": "Ghastcoiler",
@@ -4316,28 +4338,6 @@
 		"points": 3.0,
 		"requirements": [
 			{ "type": "BATTLEGROUNDS_TRIPLE_PLAY", "values": ["CFM_315", "TB_BaconUps_093"] },
-			{ "type": "GAME_TYPE", "values": ["23"] }
-		],
-		"resetEvents": ["GAME_START", "GAME_END"]
-	},
-	{
-		"id": "battlegrounds_minion_play_TB_BaconUps_093",
-		"type": "battlegrounds_minion_play_TB_BaconUps_093",
-		"name": "Alleycat",
-		"icon": "boss_victory",
-		"root": true,
-		"canBeCompletedOnlyOnce": true,
-		"priority": 0,
-		"displayName": "That's Triple! Alleycat",
-		"text": "Get a Triple version of Alleycat",
-		"completedText": "Played a Triple of Alleycat",
-		"displayCardId": "TB_BaconUps_093",
-		"displayCardType": "minion",
-		"difficulty": "rare",
-		"maxNumberOfRecords": 2,
-		"points": 3.0,
-		"requirements": [
-			{ "type": "BATTLEGROUNDS_TRIPLE_PLAY", "values": ["FP1_031", "TB_BaconUps_093"] },
 			{ "type": "GAME_TYPE", "values": ["23"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
