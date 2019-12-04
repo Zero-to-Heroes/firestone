@@ -15,6 +15,17 @@ import { OverwolfService } from '../../services/overwolf.service';
 					<grouped-replays [groupedReplays]="replay"></grouped-replays>
 				</li>
 			</ul>
+			<section class="empty-state" *ngIf="!_replays || _replays.length === 0">
+				<div class="state-container">
+					<i class="i-236X165">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
+						</svg>
+					</i>
+					<span class="title">Nothing here yet</span>
+					<span class="subtitle">Play a match to get started</span>
+				</div>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

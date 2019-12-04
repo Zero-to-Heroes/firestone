@@ -1,3 +1,6 @@
+@import '../../../global/variables';
+@import '../../../global/fonts';
+
 :host {
 	height: 100%;
 	display: flex;
@@ -23,6 +26,38 @@
 			height: 200px;
 			margin-right: 15px;
 			margin-bottom: 15px;
+		}
+	}
+}
+
+.empty-state {
+	@extend %empty-state;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	align-items: center;
+	color: var(--secondary-text-color);
+	--icon-color: var(--secondary-text-color);
+
+	.state-container {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		i {
+			margin-bottom: 30px;
+		}
+
+		.title {
+			@extend %empty-state-title;
+			margin-bottom: 15px;
+			color: var(--secondary-text-color);
+		}
+
+		.subtitle {
+			color: var(--secondary-text-color);
 		}
 	}
 }

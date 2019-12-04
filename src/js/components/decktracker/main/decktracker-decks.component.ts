@@ -17,6 +17,17 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					<decktracker-deck-summary [deck]="deck"></decktracker-deck-summary>
 				</li>
 			</ul>
+			<section class="empty-state" *ngIf="!_decks || _decks.length === 0">
+				<div class="state-container">
+					<i class="i-236X165">
+						<svg class="svg-icon-fill">
+							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
+						</svg>
+					</i>
+					<span class="title">Something is cooking up</span>
+					<span class="subtitle">Play ladder ranked standard match to get started</span>
+				</div>
+			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
