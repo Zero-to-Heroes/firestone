@@ -31,10 +31,11 @@
 	::ng-deep decktracker-title-bar {
 		.title-bar {
 			height: 30px;
+			border-bottom: 1px solid #9fb6d7;
+			background: #07081f;
 		}
 		.controls {
-			background: #07081f;
-			opacity: 0;
+			// opacity: 0;
 			align-self: flex-end;
 		}
 		.logo {
@@ -51,14 +52,12 @@
 			}
 			.logo {
 				display: inherit;
-				background: #020407;
 				height: 100%;
 				margin: 0;
 				padding-left: 10px;
 				padding-right: 30px;
 				width: 110px;
 				--icon-color: #9fb6d7;
-				border: 1px solid;
 			}
 		}
 	}

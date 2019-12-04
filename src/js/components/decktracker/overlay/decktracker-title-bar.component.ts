@@ -1,4 +1,6 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { GameEvent } from '../../../models/game-event';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'decktracker-title-bar',
@@ -14,6 +16,17 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 				</svg>
 			</i>
 			<div class="controls">
+				<div class="import-container">
+					<i
+						class="import-deckstring"
+						helpTooltip="Import deck from clipboard"
+						(mousedown)="importDeckstring()"
+					>
+						<svg class="svg-icon-fill">
+							<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
+						</svg>
+					</i>
+				</div>
 				<control-bug></control-bug>
 				<control-settings
 					[settingsApp]="'decktracker'"
@@ -29,4 +42,25 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 })
 export class DeckTrackerTitleBarComponent {
 	@Input() windowId: string;
+
+	private deckUpdater: EventEmitter<GameEvent>;
+
+	constructor(private readonly ow: OverwolfService) {
+		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
+	}
+
+	async importDeckstring() {
+		const clipboardContent = await this.ow.getFromClipboard();
+		// console.log('clipboard content', clipboardContent);
+		if (clipboardContent) {
+			this.deckUpdater.next(
+				Object.assign(new GameEvent(), {
+					type: 'DECKSTRING_OVERRIDE',
+					additionalData: {
+						clipboardContent: clipboardContent,
+					},
+				} as GameEvent),
+			);
+		}
+	}
 }

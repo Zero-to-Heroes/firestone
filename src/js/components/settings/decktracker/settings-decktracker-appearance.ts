@@ -103,7 +103,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[tooltipDisabled]="
 						'Change the tracker width. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
 					"
-					[min]="195"
+					[min]="215"
 					[max]="300"
 				>
 				</preference-slider>

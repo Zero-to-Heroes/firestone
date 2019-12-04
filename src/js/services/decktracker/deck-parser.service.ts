@@ -92,17 +92,21 @@ export class DeckParserService {
 		// console.log('[decks] received log line', data);
 		match = this.deckNameRegex.exec(data);
 		if (match) {
-			console.log('[decks] matching log line for deck name', data);
+			// console.log('[decks] matching log line for deck name', data);
 			this.currentDeck = {
 				name: match[1],
 			};
-			console.log('[decks] deck init', this.currentDeck);
+			// console.log('[decks] deck init', this.currentDeck);
 			return;
 		}
 		match = this.deckstringRegex.exec(data);
 		if (match) {
+			// console.log('[decks] parsing deckstring', match);
+			this.currentDeck = this.currentDeck || {};
 			this.currentDeck.deckstring = match[1];
+			// console.log('[decks] current deck', this.currentDeck);
 			this.decodeDeckString();
+			// console.log('[decks] deckstring decoded', this.currentDeck);
 			return;
 		}
 	}

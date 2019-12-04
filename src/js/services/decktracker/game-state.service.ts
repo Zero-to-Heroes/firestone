@@ -29,6 +29,7 @@ import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
+import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
 import { EventParser } from './event-parser/event-parser';
@@ -64,6 +65,7 @@ export class GameStateService {
 	// so that we're sure teh state is update sequentially
 	// private eventQueue: Queue<GameEvent> = new Queue<GameEvent>();
 	private deckEventBus = new BehaviorSubject<any>(null);
+	private deckUpdater: EventEmitter<GameEvent> = new EventEmitter<GameEvent>();
 	private eventEmitters = [];
 
 	private currentReviewId: string;
@@ -98,7 +100,11 @@ export class GameStateService {
 				this.buildEventEmitters();
 			}
 		});
+		this.deckUpdater.subscribe((event: GameEvent) => {
+			this.processingQueue.enqueue(event);
+		});
 		window['deckEventBus'] = this.deckEventBus;
+		window['deckUpdater'] = this.deckUpdater;
 		// window['deckDebug'] = this;
 		window['logGameState'] = () => {
 			this.logger.debug(JSON.stringify(this.state));
@@ -275,6 +281,7 @@ export class GameStateService {
 			new CardCreatorChangedParser(this.helper),
 			new AssignCardIdParser(this.helper),
 			new HeroPowerChangedParser(this.helper, this.allCards),
+			new DeckstringOverrideParser(this.deckParser, this.allCards),
 		];
 	}
 

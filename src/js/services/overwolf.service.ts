@@ -610,6 +610,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async getFromClipboard(): Promise<string> {
+		return new Promise<string>(resolve => {
+			overwolf.utils.getFromClipboard((res, error) => {
+				resolve(res);
+			});
+		});
+	}
+
 	public gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {
 			return false;

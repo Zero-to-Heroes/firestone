@@ -21,7 +21,8 @@
 		"Profile",
 		"Hotkeys",
 		"VideoCaptureSettings",
-		"Streaming"
+		"Streaming",
+		"Clipboard"
 	],
 	"disable_dockbutton": false,
 	"hide_from_store": false,
