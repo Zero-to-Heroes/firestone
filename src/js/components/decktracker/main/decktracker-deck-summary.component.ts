@@ -34,7 +34,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 	_deck: DeckSummary;
 	deckName: string;
 	totalGames: number;
-	winRatePercentage: number;
+	winRatePercentage: string;
 	lastUsed: string;
 	skin: string;
 
@@ -45,7 +45,10 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this._deck = value;
 		this.deckName = value.deckName || 'Deck name';
 		this.totalGames = value.totalGames;
-		this.winRatePercentage = value.winRatePercentage;
+		this.winRatePercentage = parseFloat('' + value.winRatePercentage).toLocaleString('arab', {
+			minimumIntegerDigits: 1,
+			maximumFractionDigits: 2,
+		});
 		this.lastUsed = this.buildLastUsedDate(value.lastUsedTimestamp);
 		this.skin = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.skin}.jpg`;
 	}
