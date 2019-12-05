@@ -79,7 +79,7 @@ export class DeckManipulationHelper {
 					// the cardID to identify the card" (like when dealing with the opponent's deck).
 					// The second case is handled by passing an empty cardId (which is what is returned by the
 					// parser plugin)
-					console.log('returning null because no card id');
+					// console.log('returning null because no card id');
 					return null;
 				} else {
 					// Empty card Id
