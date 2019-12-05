@@ -204,7 +204,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			}
 			// console.log('running toast message in zone', toast);
 			const subscription: Subscription = toast.click.subscribe((event: MouseEvent) => {
-				// console.log('registered click on toast', event, toast, messageObject);
+				console.log('registered click on toast', messageObject);
 				let currentElement: any = event.srcElement;
 				while (currentElement && (!currentElement.className || !currentElement.className.indexOf)) {
 					currentElement = currentElement.parentElement;
@@ -258,14 +258,14 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					}, 500);
 					event.preventDefault();
 					event.stopPropagation();
-					// console.log('unclickable');
+					console.log('unclickable');
 					return;
 				}
 				amplitude
 					.getInstance()
 					.logEvent('notification', { 'event': 'click', 'app': messageObject.app, 'type': type });
 				if (messageObject.eventToSendOnClick) {
-					// console.log('event to send on click', messageObject.eventToSendOnClick);
+					console.log('event to send on click', messageObject.eventToSendOnClick);
 					const eventToSend = messageObject.eventToSendOnClick();
 					this.stateUpdater.next(eventToSend);
 				}
