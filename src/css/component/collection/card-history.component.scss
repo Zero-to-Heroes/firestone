@@ -41,6 +41,10 @@
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
+
+		li {
+			flex-shrink: 0;
+		}
 	}
 
 	.more-data-container {

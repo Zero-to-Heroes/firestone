@@ -38,6 +38,7 @@
 			align-items: center;
 			justify-content: stretch;
 			padding-left: 10px;
+			flex-shrink: 0;
 
 			&:hover {
 				background: rgba(255, 255, 255, 0.04);
