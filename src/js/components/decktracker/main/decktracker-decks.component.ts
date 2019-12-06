@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+} from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { DeckSummary } from '../../../models/mainwindow/decktracker/deck-summary';
 import { MainWindowStoreEvent } from '../../../services/mainwindow/store/events/main-window-store-event';
@@ -12,7 +20,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	],
 	template: `
 		<div class="decktracker-decks">
-			<ul>
+			<ul class="deck-list">
 				<li *ngFor="let deck of _decks">
 					<decktracker-deck-summary [deck]="deck"></decktracker-deck-summary>
 				</li>
@@ -42,9 +50,25 @@ export class DecktrackerDecksComponent implements AfterViewInit {
 		this._decks = value;
 	}
 
-	constructor(private readonly logger: NGXLogger, private ow: OverwolfService) {}
+	constructor(private readonly logger: NGXLogger, private ow: OverwolfService, private el: ElementRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+	}
+
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		// console.log('handling history click', event);
+		const achievementsList = this.el.nativeElement.querySelector('.deck-list');
+		if (!achievementsList) {
+			return;
+		}
+		const rect = achievementsList.getBoundingClientRect();
+		// console.log('element rect', rect);
+		const scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 }

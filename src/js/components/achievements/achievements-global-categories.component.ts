@@ -1,4 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+} from '@angular/core';
 import { VisualAchievementCategory } from '../../models/visual-achievement-category';
 import { SelectAchievementCategoryEvent } from '../../services/mainwindow/store/events/achievements/select-achievement-category-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
@@ -12,7 +20,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	template: `
 		<div class="achievements-global-categories">
-			<ul>
+			<ul class="achievements-global-categories-list">
 				<li *ngFor="let category of globalCategories">
 					<achievements-global-category [category]="category" (mousedown)="selectCategory(category)">
 					</achievements-global-category>
@@ -27,7 +35,7 @@ export class AchievementsGlobalCategoriesComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private ow: OverwolfService) {}
+	constructor(private ow: OverwolfService, private el: ElementRef) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -35,5 +43,19 @@ export class AchievementsGlobalCategoriesComponent implements AfterViewInit {
 
 	selectCategory(category: VisualAchievementCategory) {
 		this.stateUpdater.next(new SelectAchievementCategoryEvent(category.id));
+	}
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		// console.log('handling history click', event);
+		const achievementsList = this.el.nativeElement.querySelector('.achievements-global-categories-list');
+		if (!achievementsList) {
+			return;
+		}
+		const rect = achievementsList.getBoundingClientRect();
+		// console.log('element rect', rect);
+		const scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 }
