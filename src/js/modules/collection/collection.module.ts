@@ -28,7 +28,6 @@ import { AchievementsFilterComponent } from '../../components/achievements/achie
 import { AchievementsGlobalCategoriesComponent } from '../../components/achievements/achievements-global-categories.component';
 import { AchievementsGlobalCategoryComponent } from '../../components/achievements/achievements-global-category.component';
 import { AchievementsListComponent } from '../../components/achievements/achievements-list.component';
-import { AchievementsMenuComponent } from '../../components/achievements/achievements-menu.component';
 import { AchievementsComponent } from '../../components/achievements/achievements.component';
 import { CardHistoryItemComponent } from '../../components/collection/card-history-item.component';
 import { CardHistoryComponent } from '../../components/collection/card-history.component';
@@ -134,7 +133,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		AchievementHistoryItemComponent,
 		AchievementImageComponent,
 		AchievementsListComponent,
-		AchievementsMenuComponent,
 		AchievementRecordingsComponent,
 		AchievementSetComponent,
 		AchievementProgressBarComponent,
