@@ -10,7 +10,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/component/settings/general/settings-general-launch.component.scss`,
 	],
 	template: `
-		<div class="general-launch">
+		<div class="settings-group general-launch">
 			<section class="toggle-label">
 				<form class="settings-section form-toggle">
 					<fieldset name="">

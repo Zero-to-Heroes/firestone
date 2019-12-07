@@ -10,7 +10,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		`../../../../css/component/settings/decktracker/settings-decktracker-features.component.scss`,
 	],
 	template: `
-		<div class="decktracker-features">
+		<div class="settings-group decktracker-features">
 			<h2 class="modes">The following features are active</h2>
 			<section class="toggle-label">
 				<preference-toggle

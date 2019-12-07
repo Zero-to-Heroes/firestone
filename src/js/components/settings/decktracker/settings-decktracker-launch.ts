@@ -11,7 +11,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 		`../../../../css/component/settings/decktracker/settings-decktracker-launch.component.scss`,
 	],
 	template: `
-		<div class="decktracker-launch">
+		<div class="settings-group decktracker-launch">
 			<h2 class="modes">Decktracker is active for the following modes</h2>
 			<section class="toggle-label">
 				<form class="settings-section form-toggle">

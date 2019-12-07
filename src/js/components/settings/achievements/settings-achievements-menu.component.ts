@@ -8,11 +8,11 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 	],
 	template: `
 		<ul class="achievements-menu">
-			<li [ngClass]="{ 'selected': selectedMenu === 'capture' }" (mousedown)="selectMenu('capture')">
-				<span>Video options</span>
-			</li>
 			<li [ngClass]="{ 'selected': selectedMenu === 'notifications' }" (mousedown)="selectMenu('notifications')">
 				<span>Notifications</span>
+			</li>
+			<li [ngClass]="{ 'selected': selectedMenu === 'capture' }" (mousedown)="selectMenu('capture')">
+				<span>Video options</span>
 			</li>
 		</ul>
 	`,

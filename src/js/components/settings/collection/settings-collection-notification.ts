@@ -12,8 +12,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 	],
 	template: `
 		<div class="collection-notification">
-			<h2 class="modes">You can selectively show some card notifications</h2>
-			<section class="toggle-label">
+			<section class="settings-group toggle-label">
+				<h2 class="modes">You can selectively show some card notifications</h2>
 				<form class="settings-section form-toggle">
 					<fieldset name="">
 						<div class="form-section">

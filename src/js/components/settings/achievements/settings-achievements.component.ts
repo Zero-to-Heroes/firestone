@@ -23,7 +23,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class SettingsAchievementsComponent {
 	_selectedMenu: string;
 	@Input() set selectedMenu(value: string) {
-		this._selectedMenu = value || 'capture';
+		this._selectedMenu = value || 'notifications';
 	}
 
 	onMenuSelected(selectedMenuItem) {

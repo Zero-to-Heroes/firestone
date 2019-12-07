@@ -30,15 +30,16 @@ import { OverwolfService } from '../../services/overwolf.service';
 			</settings-app-selection>
 			<ng-container [ngSwitch]="selectedApp">
 				<settings-general *ngSwitchCase="'general'" [selectedMenu]="selectedMenu"></settings-general>
-				<settings-collection *ngSwitchCase="'collection'" [selectedMenu]="selectedMenu"></settings-collection>
 				<settings-achievements
 					*ngSwitchCase="'achievements'"
 					[selectedMenu]="selectedMenu"
 				></settings-achievements>
+				<settings-collection *ngSwitchCase="'collection'" [selectedMenu]="selectedMenu"></settings-collection>
 				<settings-decktracker
 					*ngSwitchCase="'decktracker'"
 					[selectedMenu]="selectedMenu"
 				></settings-decktracker>
+				<settings-replays *ngSwitchCase="'replays'" [selectedMenu]="selectedMenu"></settings-replays>
 			</ng-container>
 			<settings-modal></settings-modal>
 		</window-wrapper>
@@ -62,7 +63,7 @@ export class SettingsComponent implements AfterViewInit, OnDestroy {
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		this.settingsSubscription = this.settingsEventBus.subscribe(([selectedApp, selectedMenu]) =>
 			// No replays screen yet
-			this.selectApp(selectedApp === 'replays' ? 'general' : selectedApp, selectedMenu),
+			this.selectApp(selectedApp, selectedMenu),
 		);
 		this.messageReceivedListener = this.ow.addMessageReceivedListener(async message => {
 			if (message.id === 'move') {
