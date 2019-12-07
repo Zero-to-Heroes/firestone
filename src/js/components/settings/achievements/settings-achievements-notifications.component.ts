@@ -10,9 +10,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		`../../../../css/component/settings/achievements/settings-achievements-notifications.component.scss`,
 	],
 	template: `
-		<div class="achievements-notifications">
+		<div class="settings-group achievements-notifications">
 			<h2 class="title">Update when you see achievements notifications</h2>
 			<section class="toggle-label">
+				<preference-toggle
+					field="achievementsDisplayNotifications"
+					label="Show notifications"
+					tooltip="Display a notification whenever you unlock an achievement"
+				></preference-toggle>
 				<preference-toggle
 					field="resetAchievementsOnAppStart"
 					label="Streamer mode"

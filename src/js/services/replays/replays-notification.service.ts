@@ -24,6 +24,14 @@ export class ReplaysNotificationService {
 	}
 
 	private async showNewMatchEndNotification(stats: GameStats) {
+		const prefs = await this.prefs.getPreferences();
+		if (!prefs.replaysShowNotification) {
+			this.logger.debug(
+				'[replays-notification] preference is turned off, not showing replay notification',
+				stats,
+			);
+			return;
+		}
 		this.logger.debug('[replays-notification] preparing new game stat notification', stats);
 		const stat = stats.stats[0];
 		this.notificationService.emitNewNotification({

@@ -27,8 +27,12 @@ export class Preferences {
 	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayShowTooltipsOnHover: boolean = true;
 
-	readonly launchAppOnGameStart: boolean = true;
+	readonly replaysShowNotification: boolean = true;
+
+	readonly achievementsDisplayNotifications = true;
 	readonly resetAchievementsOnAppStart = false;
+
+	readonly launchAppOnGameStart: boolean = true;
 	readonly binder: BinderPrefs = new BinderPrefs();
 
 	readonly twitchAccessToken: string;

@@ -32,10 +32,12 @@ export class AchievementsNotificationService {
 
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
-		if (achievement.numberOfCompletions > 1) {
+		const prefs = await this.prefs.getPreferences();
+		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
 			this.logger.debug(
-				'[achievements-notification] achievement already completed, not sending any notif',
+				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
+				prefs.achievementsDisplayNotifications,
 			);
 			return;
 		}
@@ -61,10 +63,12 @@ export class AchievementsNotificationService {
 
 	private async handleAchievementRecordingStarted(achievement: Achievement, challenge: Challenge) {
 		this.logger.debug('[achievements-notification] in pre-record notification');
-		if (achievement.numberOfCompletions > 1) {
+		const prefs = await this.prefs.getPreferences();
+		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
 			this.logger.debug(
-				'[achievements-notification] achievement already completed, not sending any notif',
+				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
+				prefs.achievementsDisplayNotifications,
 			);
 			return;
 		}
@@ -84,11 +88,13 @@ export class AchievementsNotificationService {
 
 	private async handleAchievementRecordCompleted(achievement: Achievement) {
 		this.logger.debug('[achievements-notification] in post-record notification', achievement);
+		const prefs = await this.prefs.getPreferences();
 		// const achievement: Achievement = await this.achievementLoader.getAchievement(newAchievement.id);
-		if (achievement.numberOfCompletions > 1) {
+		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
 			this.logger.debug(
-				'[achievements-notification] achievement already completed, not sending any notif',
+				'[achievements-notification] achievement already completed or pref turned off, not sending any notif',
 				achievement.id,
+				prefs.achievementsDisplayNotifications,
 			);
 			return;
 		}
