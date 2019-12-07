@@ -136,17 +136,24 @@ export class AppBootstrapService {
 		this.ow.addAppLaunchTriggeredListener(() => {
 			this.startApp(true);
 		});
-		const [settingsWindow, battlegroundsPlayerInfoWindow] = await Promise.all([
+		const [
+			settingsWindow,
+			// battlegroundsPlayerInfoWindow,
+			// battlegroundsLeaderboardOverwlayWindow,
+		] = await Promise.all([
 			this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW),
-			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
+			// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
+			// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
 		]);
 		await Promise.all([
 			this.ow.restoreWindow(settingsWindow.id),
-			this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.restoreWindow(battlegroundsLeaderboardOverwlayWindow.id),
 		]);
 		await Promise.all([
 			this.ow.hideWindow(settingsWindow.id),
-			this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
+			// this.ow.hideWindow(battlegroundsLeaderboardOverwlayWindow.id),
 		]);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 	}
