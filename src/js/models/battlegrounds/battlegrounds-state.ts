@@ -2,10 +2,14 @@ import { BattlegroundsPlayer } from './battlegrounds-player';
 
 export class BattlegroundsState {
 	readonly players: readonly BattlegroundsPlayer[] = [];
-	readonly displayedPlayer: number;
+	readonly displayedPlayerCardId: string;
 
 	public static create(): BattlegroundsState {
 		return new BattlegroundsState();
+	}
+
+	public update(newValue: BattlegroundsState): BattlegroundsState {
+		return Object.assign(new BattlegroundsState(), this, newValue);
 	}
 
 	public getPlayer(cardId: string): BattlegroundsPlayer {

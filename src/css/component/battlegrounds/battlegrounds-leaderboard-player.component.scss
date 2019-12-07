@@ -1,0 +1,35 @@
+.battlegrounds-leaderboard-player {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.usability-container {
+	padding: 10px;
+}
+
+.attention-icon-container {
+	background: #07081f;
+	padding: 5px;
+	width: 25px;
+	height: 25px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	border: 2px solid #9fb6d7;
+	position: relative;
+	right: 10px;
+}
+
+.attention-icon {
+	font-family: Sumana;
+	font-style: normal;
+	font-weight: bold;
+	line-height: normal;
+	font-size: 15px;
+	color: #9fb6d7;
+	pointer-events: none;
+}

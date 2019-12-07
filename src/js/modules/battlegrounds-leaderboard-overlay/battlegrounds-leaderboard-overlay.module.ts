@@ -7,6 +7,7 @@ import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { BattlegroundsLeaderboardOverlayComponent } from '../../components/battlegrounds/battlegrounds-leaderboard-overlay.component';
+import { BattlegroundsLeaderboardPlayerComponent } from '../../components/battlegrounds/battlegrounds-leaderboard-player.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
@@ -42,7 +43,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 		ColiseumComponentsModule,
 	],
-	declarations: [BattlegroundsLeaderboardOverlayComponent],
+	declarations: [BattlegroundsLeaderboardOverlayComponent, BattlegroundsLeaderboardPlayerComponent],
 	bootstrap: [BattlegroundsLeaderboardOverlayComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })

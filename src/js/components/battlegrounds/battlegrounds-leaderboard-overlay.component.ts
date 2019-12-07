@@ -24,8 +24,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 		'../../../css/component/battlegrounds/battlegrounds-leaderboard-overlay.component.scss',
 	],
 	template: `
-		<div class="battlegrounds-leaderboard-overlay" *ngIf="state">
-			<li class="player" *ngFor="let player of players; trackBy: trackById"></li>
+		<div class="battlegrounds-leaderboard-overlay">
+			<battlegrounds-leaderboard-player
+				[player]="player"
+				[style.top.%]="getTopOffset(i)
+				[style.left.%]="
+				getLeftOffset(i)
+				class="player"
+				*ngFor="let player of players; let i = index; trackBy: trackById"
+			></battlegrounds-leaderboard-player>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,7 +40,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
-	players: BattlegroundsPlayer[];
+	players: readonly BattlegroundsPlayer[];
 
 	windowId: string;
 
@@ -49,8 +56,9 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 	) {}
 
 	async ngAfterViewInit() {
+		console.log('after leaderboard overlay init');
 		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		this.cdr.detach();
+		// this.cdr.detach();
 
 		await this.allCards.initializeCardsDb();
 
@@ -62,18 +70,30 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 			if (event == null) {
 				return;
 			}
-			this.state = event.state;
 			if (event.name === GameEvent.GAME_START) {
 				this.changeWindowSize();
 			}
-			if (this.state) {
-				this.restoreWindow();
-			} else {
-				this.hideWindow();
+			const theWindow = await this.ow.getCurrentWindow();
+			if (!theWindow) {
+				return;
 			}
-
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
+			if (event.state && !theWindow.isVisible) {
+				console.log('restoring window', theWindow);
+				this.restoreWindow();
+			} else if (!event.state) {
+				console.log('hiding window', theWindow);
+				this.state = event.state;
+				this.hideWindow();
+				return;
+			}
+			if (event.state.players !== this.players) {
+				this.state = event.state;
+				console.log('reassigning players', this.state.players, this.players);
+				this.players = this.state.players;
+				// this.stateSubscription.unsubscribe();
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
 			}
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
@@ -84,12 +104,12 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		});
 		await this.changeWindowSize();
 		// await this.changeWindowPosition();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
+		// if (!(this.cdr as ViewRef).destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 		console.log('handled after view init');
 		// console.warn('debug to remove');
-		// await this.restoreWindow();
+		await this.restoreWindow();
 		// this.players = [];
 		// for (let i = 0; i < 8; i++) {
 		// 	this.players.push({ cardId: 'hop' } as BattlegroundsPlayer);
@@ -109,6 +129,32 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		return item.cardId;
 	}
 
+	getTopOffset(i: number) {
+		// prettier-ignore
+		switch(i) {
+			case 0: return -1;
+			case 1: return -1;
+			case 2: return -1;
+			case 3: return -1;
+			default: return 0;
+		}
+	}
+
+	getLeftOffset(i: number) {
+		// prettier-ignore
+		switch(i) {
+			case 0: return -4;
+			case 1: return -5;
+			case 2: return -6;
+			case 3: return -8;
+			case 4: return -9;
+			case 5: return -10;
+			case 6: return -11;
+			case 7: return -12;
+			default: return 0;
+		}
+	}
+
 	private async changeWindowSize(): Promise<void> {
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
@@ -116,13 +162,13 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		}
 		// At different resolutions, the sides of the board are cropped, so we can't use the width
 		// for our positioning. The height is always the same though
-		const width = gameInfo.height * 0.1;
+		const width = gameInfo.height * 0.15;
 		// Height
 		const height = gameInfo.height * 0.8;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 		// Move it to the right location
 		const center = gameInfo.width / 2;
-		const left = center - 0.65 * gameInfo.height;
+		const left = center - 0.68 * gameInfo.height;
 		const top = (gameInfo.height - height) / 2;
 		await this.ow.changeWindowPosition(this.windowId, left, top);
 	}

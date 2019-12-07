@@ -87,22 +87,30 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 			if (event == null) {
 				return;
 			}
-			this.state = event.state;
+			const theWindow = await this.ow.getCurrentWindow();
+			if (!theWindow) {
+				return;
+			}
 			if (event.name === GameEvent.GAME_START) {
 				this.changeWindowSize();
 			}
-			if (this.state) {
-				this.activePlayer = this.state.players && this.state.players.length > 0 && this.state.players[0];
-				this.boardMinions =
-					this.activePlayer &&
-					this.activePlayer.boardStates &&
-					this.activePlayer.boardStates.length > 0 &&
-					this.activePlayer.boardStates[0].minions;
+			if (event.state && !theWindow.isVisible) {
 				this.restoreWindow();
-			} else {
+			} else if (!event.state) {
 				this.hideWindow();
+				this.state = event.state;
+				return;
 			}
-
+			this.state = event.state;
+			this.activePlayer =
+				this.state.displayedPlayerCardId && this.state.players && this.state.players.length > 0
+					? this.state.players.find(player => player.cardId === this.state.displayedPlayerCardId)
+					: null;
+			this.boardMinions =
+				this.activePlayer &&
+				this.activePlayer.boardStates &&
+				this.activePlayer.boardStates.length > 0 &&
+				this.activePlayer.boardStates[0].minions;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}

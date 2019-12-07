@@ -40,7 +40,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BrowserAnimationsModule,
 		SharedModule,
 		FormsModule,
-		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
+		LoggerModule.forRoot({ level: NgxLoggerLevel.INFO }),
 		ColiseumComponentsModule,
 	],
 	declarations: [BattlegroundsPlayerSummaryComponent, BattlegroundsPlayerInfoComponent],
