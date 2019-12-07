@@ -27,9 +27,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="battlegrounds-leaderboard-overlay">
 			<battlegrounds-leaderboard-player
 				[player]="player"
-				[style.top.%]="getTopOffset(i)
-				[style.left.%]="
-				getLeftOffset(i)
+				[style.top.%]="getTopOffset(i)"
+				[style.left.%]="getLeftOffset(i)"
 				class="player"
 				*ngFor="let player of players; let i = index; trackBy: trackById"
 			></battlegrounds-leaderboard-player>
