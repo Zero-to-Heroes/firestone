@@ -27,7 +27,10 @@ export class SelectAchievementSetProcessor implements Processor {
 			achievements: newState,
 			isVisible: true,
 			navigation: Object.assign(new Navigation(), currentState.navigation, {
-				text: globalCategory.name + ' ' + achievementSet.displayName,
+				text:
+					globalCategory.name !== achievementSet.displayName
+						? globalCategory.name + ' ' + achievementSet.displayName
+						: achievementSet.displayName,
 				image: null,
 			} as Navigation),
 		} as MainWindowState);
