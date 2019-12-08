@@ -106,7 +106,7 @@ export class EndGameUploaderService {
 			this.playersInfo.getPlayerInfo(),
 			this.playersInfo.getOpponentInfo(),
 		]);
-		this.logger.debug('[manastorm-bridge] retrieved rank info', battlegroundsInfo, playerInfo, game.gameMode, game);
+		this.logger.debug('[manastorm-bridge] retrieved rank info', battlegroundsInfo, playerInfo, game.gameMode);
 		if (!playerInfo || !opponentInfo) {
 			console.error('[manastorm-bridge] no local player info returned by mmindvision', playerInfo, opponentInfo);
 		}
