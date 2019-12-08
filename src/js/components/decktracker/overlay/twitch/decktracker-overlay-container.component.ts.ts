@@ -56,7 +56,7 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 			});
 		});
 		console.log('init done');
-		// this.addDebugGameState();
+		this.addDebugGameState();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -81,17 +81,22 @@ export class DeckTrackerOverlayContainerComponent implements AfterViewInit {
 		const options = {
 			headers: { 'Authorization': 'Bearer ' + this.token },
 		};
-		this.http.get(EBS_URL, options).subscribe((result: any) => {
-			console.log('successfully retrieved initial state', result);
-			if (result.event === DeckEvents.GAME_END) {
-				this.gameState = undefined;
-			} else {
-				this.gameState = result.state;
-			}
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
+		this.http.get(EBS_URL, options).subscribe(
+			(result: any) => {
+				console.log('successfully retrieved initial state', result);
+				if (result.event === DeckEvents.GAME_END) {
+					this.gameState = undefined;
+				} else {
+					this.gameState = result.state;
+				}
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			},
+			error => {
+				console.log('could not retrieve initial state, waiting for EBS update');
+			},
+		);
 	}
 
 	private async processEvent(event) {

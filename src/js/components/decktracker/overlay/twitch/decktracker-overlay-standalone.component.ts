@@ -76,20 +76,24 @@ export class DeckTrackerOverlayStandaloneComponent implements AfterViewInit {
 	}
 
 	onResized(event: ResizedEvent) {
-		console.log('resize event', event);
-		// Resize the tracker
-		const scale = event.newHeight / 800;
-		// console.log('proposed scale', scale);
-		// Now shrink the scale is the tracker is taller than a portion of the container's height
-		const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
-		const maxTrackerHeight = containerHeight;
-		const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
-		const element = this.el.nativeElement.querySelector('.scalable');
-		this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+		try {
+			console.log('resize event', event);
+			// Resize the tracker
+			const scale = event.newHeight / 800;
+			// console.log('proposed scale', scale);
+			// Now shrink the scale is the tracker is taller than a portion of the container's height
+			const containerHeight = this.el.nativeElement.parentNode.parentNode.getBoundingClientRect().height;
+			const maxTrackerHeight = containerHeight;
+			const finalScale = Math.min(scale, maxTrackerHeight / event.newHeight);
+			const element = this.el.nativeElement.querySelector('.scalable');
+			this.renderer.setStyle(element, 'transform', `scale(${finalScale})`);
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+			this.keepOverlayInBounds();
+		} catch (e) {
+			console.log('Caught exception while trying to resize overlay', e);
 		}
-		this.keepOverlayInBounds();
 	}
 
 	private keepOverlayInBounds() {
