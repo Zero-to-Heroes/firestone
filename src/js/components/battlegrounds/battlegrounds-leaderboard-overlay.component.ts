@@ -13,8 +13,10 @@ import { Subscription } from 'rxjs';
 import { BattlegroundsPlayer } from '../../models/battlegrounds/battlegrounds-player';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../models/game-event';
+import { Preferences } from '../../models/preferences';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { PreferencesService } from '../../services/preferences.service';
 
 @Component({
 	selector: 'battlegrounds-leaderboard-overlay',
@@ -25,13 +27,15 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	template: `
 		<div class="battlegrounds-leaderboard-overlay">
-			<battlegrounds-leaderboard-player
-				[player]="player"
-				[style.top.%]="getTopOffset(i)"
-				[style.left.%]="getLeftOffset(i)"
-				class="player"
-				*ngFor="let player of players; let i = index; trackBy: trackById"
-			></battlegrounds-leaderboard-player>
+			<ng-container *ngIf="showPlayerIcon">
+				<battlegrounds-leaderboard-player
+					*ngFor="let player of players; let i = index; trackBy: trackById"
+					[player]="player"
+					[style.top.%]="getTopOffset(i)"
+					[style.left.%]="getLeftOffset(i)"
+					class="player"
+				></battlegrounds-leaderboard-player>
+			</ng-container>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,11 +44,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
 	players: readonly BattlegroundsPlayer[];
+	showPlayerIcon: boolean = false;
 
 	windowId: string;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private stateSubscription: Subscription;
+	private preferencesSubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
@@ -52,6 +58,7 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		private ow: OverwolfService,
 		private init_DebugService: DebugService,
 		private allCards: AllCardsService,
+		private prefs: PreferencesService,
 	) {}
 
 	async ngAfterViewInit() {
@@ -62,6 +69,12 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		await this.allCards.initializeCardsDb();
 
 		this.windowId = (await this.ow.getCurrentWindow()).id;
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+				this.handleDisplayPreferences(event.preferences);
+			}
+		});
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().battlegroundsEventBus;
 		this.stateSubscription = eventBus.subscribe(async event => {
 			console.log('received new event', event);
@@ -109,6 +122,7 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		console.log('handled after view init');
 		// console.warn('debug to remove');
 		await this.restoreWindow();
+		await this.handleDisplayPreferences();
 		// this.players = [];
 		// for (let i = 0; i < 8; i++) {
 		// 	this.players.push({ cardId: 'hop' } as BattlegroundsPlayer);
@@ -122,6 +136,7 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 	ngOnDestroy(): void {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.stateSubscription.unsubscribe();
+		this.preferencesSubscription.unsubscribe();
 	}
 
 	trackById(index, item: BattlegroundsPlayer) {
@@ -151,6 +166,14 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 			case 6: return -11;
 			case 7: return -12;
 			default: return 0;
+		}
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.showPlayerIcon = preferences.battlegroundsShowLastOpponentBoard;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
 		}
 	}
 

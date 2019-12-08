@@ -75,9 +75,8 @@ export class TwitchAuthService {
 		}
 		if (newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
 			// Don't show anything in the deck itself
-			const newDeck: readonly DeckCard[] = [];
 			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
-				deck: newDeck,
+				deck: [] as readonly DeckCard[],
 			} as DeckState);
 			const newState = Object.assign(new GameState(), newEvent.state, {
 				playerDeck: newPlayerDeck,
@@ -86,7 +85,7 @@ export class TwitchAuthService {
 				state: newState,
 			});
 		}
-		// console.log('ready to emit twitch event', newEvent);
+		console.log('ready to emit twitch event', newEvent);
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.twitchAccessToken) {
 			// console.log('no twitch access token, returning');

@@ -17,6 +17,7 @@ import { SettingsCollectionNotificationComponent } from '../../components/settin
 import { SettingsCollectionComponent } from '../../components/settings/collection/settings-collection.component';
 import { SettingsBroadcastComponent } from '../../components/settings/decktracker/settings-broadcast';
 import { SettingsDecktrackerAppearanceComponent } from '../../components/settings/decktracker/settings-decktracker-appearance';
+import { SettingsDecktrackerBetaComponent } from '../../components/settings/decktracker/settings-decktracker-beta.component';
 import { SettingsDecktrackerFeaturesComponent } from '../../components/settings/decktracker/settings-decktracker-features.component';
 import { SettingsDecktrackerLaunchComponent } from '../../components/settings/decktracker/settings-decktracker-launch';
 import { SettingsDecktrackerMenuComponent } from '../../components/settings/decktracker/settings-decktracker-menu.component';
@@ -96,6 +97,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsDecktrackerAppearanceComponent,
 		SettingsDecktrackerFeaturesComponent,
 		SettingsBroadcastComponent,
+		SettingsDecktrackerBetaComponent,
 
 		SettingsReplaysComponent,
 		SettingsReplaysGeneralComponent,

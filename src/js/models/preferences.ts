@@ -32,6 +32,8 @@ export class Preferences {
 	readonly achievementsDisplayNotifications = true;
 	readonly resetAchievementsOnAppStart = false;
 
+	readonly battlegroundsShowLastOpponentBoard = false;
+
 	readonly launchAppOnGameStart: boolean = true;
 	readonly binder: BinderPrefs = new BinderPrefs();
 
