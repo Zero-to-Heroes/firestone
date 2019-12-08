@@ -134,7 +134,7 @@ export class AchievementViewComponent implements AfterViewInit {
 
 	private buildAchievementText(initialText: string): string {
 		// console.log('building achievement text', initialText, this._globalStats);
-		if (!this._globalStats || !initialText) {
+		if (!initialText) {
 			return initialText;
 		}
 		// No placeholder
@@ -146,7 +146,10 @@ export class AchievementViewComponent implements AfterViewInit {
 		// console.log('match', match);
 		const key: GlobalStatKey = match[2] as GlobalStatKey;
 		const context: StatContext = match[3] as StatContext;
-		const stat = this._globalStats.stats.find(stat => stat.statKey === key && stat.statContext === context);
+		const stat =
+			this._globalStats && this._globalStats.stats
+				? this._globalStats.stats.find(stat => stat.statKey === key && stat.statContext === context)
+				: null;
 		const value = stat ? stat.value : 0;
 		// console.log('value', value, initialText.replace(match[1], '' + value));
 		return initialText.replace(match[1], '' + value);
