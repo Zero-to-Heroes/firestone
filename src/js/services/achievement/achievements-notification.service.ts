@@ -31,7 +31,11 @@ export class AchievementsNotificationService {
 	}
 
 	private async handleAchievementCompleted(achievement: Achievement, challenge: Challenge) {
-		this.logger.debug('[achievements-notification] preparing achievement completed notification', achievement.id);
+		this.logger.debug(
+			'[achievements-notification] preparing achievement completed notification',
+			achievement.id,
+			achievement.numberOfCompletions,
+		);
 		const prefs = await this.prefs.getPreferences();
 		if (achievement.numberOfCompletions > 1 || !prefs.achievementsDisplayNotifications) {
 			this.logger.debug(
