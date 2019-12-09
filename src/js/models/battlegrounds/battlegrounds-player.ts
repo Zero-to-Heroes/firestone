@@ -5,7 +5,7 @@ export class BattlegroundsPlayer {
 	readonly cardId: string;
 	readonly leaderboardPlace: number;
 	readonly tavernTier: number;
-	readonly boardStates: readonly BattlegroundsBoardState[] = [];
+	readonly boardState: BattlegroundsBoardState;
 
 	public static create(cardId: string): BattlegroundsPlayer {
 		return Object.assign(new BattlegroundsPlayer(), {
@@ -18,7 +18,7 @@ export class BattlegroundsPlayer {
 
 	public addNewBoardState(boardState: BattlegroundsBoardState): BattlegroundsPlayer {
 		return Object.assign(new BattlegroundsPlayer(), this, {
-			boardStates: [boardState, ...this.boardStates] as readonly BattlegroundsBoardState[],
+			boardState: boardState,
 		} as BattlegroundsPlayer);
 	}
 

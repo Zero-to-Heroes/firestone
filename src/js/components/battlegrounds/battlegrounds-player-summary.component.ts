@@ -107,10 +107,7 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 					? this.state.players.find(player => player.cardId === this.state.displayedPlayerCardId)
 					: null;
 			this.boardMinions =
-				this.activePlayer &&
-				this.activePlayer.boardStates &&
-				this.activePlayer.boardStates.length > 0 &&
-				this.activePlayer.boardStates[0].minions;
+				this.activePlayer && this.activePlayer.boardState && this.activePlayer.boardState.minions;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
