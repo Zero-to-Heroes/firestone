@@ -145,7 +145,7 @@ export class GameEvents {
 					cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
 					deck: this.deckParser.currentDeck,
 				});
-				// console.log('sending LOCAL_PLAYER info', localPlayer);
+				console.log('sending LOCAL_PLAYER info', localPlayer);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.LOCAL_PLAYER,
@@ -167,7 +167,7 @@ export class GameEvents {
 					wildLegendRank: opponentInfo ? opponentInfo.wildLegendRank : undefined,
 					cardBackId: opponentInfo ? opponentInfo.cardBackId : undefined,
 				});
-				// console.log('sending OPPONENT_PLAYER info', opponentPlayer);
+				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.OPPONENT,

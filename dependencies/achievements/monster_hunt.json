@@ -5,6 +5,7 @@
 		"name": "A Mangy Wolf",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: A Mangy Wolf",
 		"text": "Unearthly howls drive the wildlife mad.",
@@ -13,19 +14,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_20h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_20h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -35,6 +27,7 @@
 		"name": "Rottooth",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Rottooth",
 		"text": "Incorporeal or not, those claws hurt!",
@@ -43,19 +36,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_21h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_21h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -65,6 +49,7 @@
 		"name": "Cutthroat Willie",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Cutthroat Willie",
 		"text": "WANTED: For doing exactly what his name suggests.",
@@ -73,19 +58,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_22h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_22h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -95,6 +71,7 @@
 		"name": "Grubb the Swampdrinker",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Grubb the Swampdrinker",
 		"text": "An iron gut, and quite the throwing arm.",
@@ -103,19 +80,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_23h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_23h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -125,6 +93,7 @@
 		"name": "Groddo the Bogwarden",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Groddo the Bogwarden",
 		"text": "Dead emerge from the swamp. It's not a pleasant scent.",
@@ -133,19 +102,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_24h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_24h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -155,6 +115,7 @@
 		"name": "Manhunter Ivan",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Manhunter Ivan",
 		"text": "Watch your step, this traitor is an expert trapper.",
@@ -163,19 +124,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_25h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_25h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -185,6 +137,7 @@
 		"name": "Gnomenapper",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Gnomenapper",
 		"text": "A collector of gnomes. Real ones.",
@@ -193,19 +146,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_26h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_26h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -215,6 +159,7 @@
 		"name": "Experiment 3C",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Experiment 3C",
 		"text": "It's a Murloc! It's a Dragon! It's... everything?",
@@ -223,19 +168,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_27h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_27h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -245,6 +181,7 @@
 		"name": "Sazzmi Gentlehorn",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Sazzmi Gentlehorn",
 		"text": "This satyr has a tendency to attract more than just rats.",
@@ -253,19 +190,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_29h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_29h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -275,6 +203,7 @@
 		"name": "Blood Witch Gretta",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Blood Witch Gretta",
 		"text": "Magic is powerful in her grove… but it comes at a cost.",
@@ -283,19 +212,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_30h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_30h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -305,6 +225,7 @@
 		"name": "Gnarlroot",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Gnarlroot",
 		"text": "Gnarled, twisting roots, splintering to life.",
@@ -313,19 +234,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_31h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_31h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -335,6 +247,7 @@
 		"name": "Niira the Trickster",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Niira the Trickster",
 		"text": "She plays with wee critters… until they’re big critters.",
@@ -343,19 +256,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_32h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_32h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -365,27 +269,19 @@
 		"name": "The Scarecrow",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: The Scarecrow",
-		"text": "His enchanted scythe drinks deep from every harvest.",
+		"text": "His enchanted scythe drinks deep from every harvest.",
 		"completedText": "You met The Scarecrow",
 		"displayCardId": "GILA_BOSS_33h",
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_33h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_33h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -395,6 +291,7 @@
 		"name": "Inquisitor Hav'nixx",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Inquisitor Hav'nixx",
 		"text": "A mind is a terrible thing to waste. It's far too delicious.",
@@ -403,19 +300,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_34h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_34h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -425,6 +313,7 @@
 		"name": "Chupacabran",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Chupacabran",
 		"text": "It used to feed on local livestock. Now it hungers for more.",
@@ -433,19 +322,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_35h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_35h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -455,6 +335,7 @@
 		"name": "Griselda",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Griselda",
 		"text": "Watch those lips, she'll kiss just about anything.",
@@ -463,19 +344,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_36h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_36h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -485,6 +357,7 @@
 		"name": "Wharrgarbl",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Wharrgarbl",
 		"text": "The Witchwood's curse has not been kind to the local Murlocs.",
@@ -493,19 +366,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_37h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_37h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -515,6 +379,7 @@
 		"name": "Ravencaller Cozzlewurt",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Ravencaller Cozzlewurt",
 		"text": "The feathered fiends of Gilneas flock to his sinister call.",
@@ -523,19 +388,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_38h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_38h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -545,6 +401,7 @@
 		"name": "Forlorn Lovers",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Forlorn Lovers",
 		"text": "Bound by vows, she just won't let go.",
@@ -553,19 +410,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_39h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_39h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -575,6 +423,7 @@
 		"name": "Splintergraft",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Splintergraft",
 		"text": "She'll take a piece of you and make it her own.",
@@ -583,19 +432,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_40h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_40h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -605,6 +445,7 @@
 		"name": "Brushwood Centurion",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Brushwood Centurion",
 		"text": "This once-stalwart defender of the woods now sows chaos.",
@@ -613,19 +454,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_41h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_41h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -635,6 +467,7 @@
 		"name": "Baran the Blind",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Baran the Blind",
 		"text": "Poor vision doesn't matter with strength like his.",
@@ -643,19 +476,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_42h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_42h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -665,6 +489,7 @@
 		"name": "Gravekeeper Damph",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Gravekeeper Damph",
 		"text": "The rattle of bones remain a comfort to him.",
@@ -673,19 +498,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_43h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_43h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -695,6 +511,7 @@
 		"name": "Doctor Sezavo",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Doctor Sezavo",
 		"text": "It’s good to give blood. But not to him. He’s not a real doctor.",
@@ -703,19 +520,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_44h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_44h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -725,6 +533,7 @@
 		"name": "Cultist S'thara",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Cultist S'thara",
 		"text": "A silver tongue to accompany her silver daggers.",
@@ -733,19 +542,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_45h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_45h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -755,6 +555,7 @@
 		"name": "Vitus the Exiled",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Vitus the Exiled",
 		"text": "Corrupted. Banished. Hungry.",
@@ -763,19 +564,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_46h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_46h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -785,6 +577,7 @@
 		"name": "Shudderwock",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Shudderwock",
 		"text": "And 'lo in uffish thought he stood, crying \"Battle\" in the wood.",
@@ -793,19 +586,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_47h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_47h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -815,6 +599,7 @@
 		"name": "Infinite Toki",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Infinite Toki",
 		"text": "One either dies a hero or mangles time enough to become a villain.",
@@ -823,19 +608,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_48h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_48h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -845,6 +621,7 @@
 		"name": "Glinda Crowskin",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Glinda Crowskin",
 		"text": "The leader of Hagatha’s dark cult hides behind her loyal minions.",
@@ -853,19 +630,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_49h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_49h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -875,6 +643,7 @@
 		"name": "The Whisperer",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: The Whisperer",
 		"text": "Do you hear the echoes of his whispers?",
@@ -883,19 +652,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_50h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_50h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -905,6 +665,7 @@
 		"name": "Garrow, the Rancorous",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Garrow, the Rancorous",
 		"text": "Missing? Dead? He'll still collect.",
@@ -913,19 +674,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_51h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_51h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -935,6 +687,7 @@
 		"name": "Crooked Pete",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Crooked Pete",
 		"text": "The locals report that Pete is up to no good again.",
@@ -943,19 +696,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_52h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_52h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -965,6 +709,7 @@
 		"name": "Cragtorr",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Cragtorr",
 		"text": "Seeds sewn from hatred, sustained by dark magic.",
@@ -973,19 +718,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_54h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_54h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -995,6 +731,7 @@
 		"name": "Azalina Soulthief",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Azalina Soulthief",
 		"text": "Her children's safety is her top priority. At any cost.",
@@ -1003,19 +740,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_55h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_55h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1025,6 +753,7 @@
 		"name": "Face Collector",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Face Collector",
 		"text": "Beware his terrible minions and their ever-shifting faces.",
@@ -1033,19 +762,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_56h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_56h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1055,6 +775,7 @@
 		"name": "Raeth Ghostsong",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Raeth Ghostsong",
 		"text": "There's a reason you should burn the dead.",
@@ -1063,19 +784,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_57h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_57h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1085,6 +797,7 @@
 		"name": "Grum",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Grum",
 		"text": "Grum likes to smash. He also likes to bash. And crash.",
@@ -1093,19 +806,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_58h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_58h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1115,6 +819,7 @@
 		"name": "Lord Godfrey",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Lord Godfrey",
 		"text": "The Lord of Shadowfang Keep has a bullet to pick with Crowley.",
@@ -1123,19 +828,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_59h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_59h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1145,6 +841,7 @@
 		"name": "Captain Shivers",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Captain Shivers",
 		"text": "Vowing vengeance, his cursed crew haunts Gilnean shores.",
@@ -1153,19 +850,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_60h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_60h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1175,6 +863,7 @@
 		"name": "Hagatha the Witch",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Hagatha the Witch",
 		"text": "...",
@@ -1183,19 +872,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_61h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_61h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1205,6 +885,7 @@
 		"name": "Gustave, the Gutripper",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Gustave, the Gutripper",
 		"text": "Hagatha’s pet eats his way from the bottom of the food chain up.",
@@ -1213,19 +894,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_62h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_62h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1235,6 +907,7 @@
 		"name": "Sephira Dusktalon",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Sephira Dusktalon",
 		"text": "Even your own magic can be twisted by these woods.",
@@ -1243,19 +916,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_63h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_63h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1265,6 +929,7 @@
 		"name": "Winslow Tobtock",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Winslow Tobtock",
 		"text": "His tricks will leave you both in a daze.",
@@ -1273,19 +938,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_64h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_64h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1295,6 +951,7 @@
 		"name": "Gobbles",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Gobbles",
 		"text": "Every dying beast makes this dreaded carrion bird stronger.",
@@ -1303,19 +960,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_65h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_65h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1325,6 +973,7 @@
 		"name": "The Mute",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: The Mute",
 		"text": ". . .",
@@ -1333,19 +982,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_66h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_66h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1355,6 +995,7 @@
 		"name": "Ratcatcher Hannigul",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Ratcatcher Hannigul",
 		"text": "Rats aren't always the most loyal pets.",
@@ -1363,19 +1004,10 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_67h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_67h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1385,27 +1017,19 @@
 		"name": "Plaguemaster Rancel",
 		"icon": "boss_encounter",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Boss met: Plaguemaster Rancel",
-		"text": "Dying to his touch is terrible. Living is even worse.",
+		"text": "Dying to his touch is terrible. Living is even worse.",
 		"completedText": "You met Plaguemaster Rancel",
 		"displayCardId": "GILA_BOSS_68h",
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 2,
+		"points": 2.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_68h"]
-			},
-			{
-				"type": "SCENE_CHANGED_TO_GAME"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_68h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1415,6 +1039,7 @@
 		"name": "A Mangy Wolf",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: A Mangy Wolf",
 		"text": "Unearthly howls drive the wildlife mad.",
@@ -1423,19 +1048,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_20h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_20h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1445,6 +1062,7 @@
 		"name": "Rottooth",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Rottooth",
 		"text": "Incorporeal or not, those claws hurt!",
@@ -1453,19 +1071,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_21h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_21h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1475,6 +1085,7 @@
 		"name": "Cutthroat Willie",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Cutthroat Willie",
 		"text": "WANTED: For doing exactly what his name suggests.",
@@ -1483,19 +1094,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_22h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_22h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1505,6 +1108,7 @@
 		"name": "Grubb the Swampdrinker",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Grubb the Swampdrinker",
 		"text": "An iron gut, and quite the throwing arm.",
@@ -1513,19 +1117,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_23h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_23h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1535,6 +1131,7 @@
 		"name": "Groddo the Bogwarden",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Groddo the Bogwarden",
 		"text": "Dead emerge from the swamp. It's not a pleasant scent.",
@@ -1543,19 +1140,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_24h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_24h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1565,6 +1154,7 @@
 		"name": "Manhunter Ivan",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Manhunter Ivan",
 		"text": "Watch your step, this traitor is an expert trapper.",
@@ -1573,19 +1163,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_25h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_25h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1595,6 +1177,7 @@
 		"name": "Gnomenapper",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Gnomenapper",
 		"text": "A collector of gnomes. Real ones.",
@@ -1603,19 +1186,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_26h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_26h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1625,6 +1200,7 @@
 		"name": "Experiment 3C",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Experiment 3C",
 		"text": "It's a Murloc! It's a Dragon! It's... everything?",
@@ -1633,19 +1209,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_27h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_27h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1655,6 +1223,7 @@
 		"name": "Sazzmi Gentlehorn",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Sazzmi Gentlehorn",
 		"text": "This satyr has a tendency to attract more than just rats.",
@@ -1663,19 +1232,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_29h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_29h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1685,6 +1246,7 @@
 		"name": "Blood Witch Gretta",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Blood Witch Gretta",
 		"text": "Magic is powerful in her grove… but it comes at a cost.",
@@ -1693,19 +1255,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_30h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_30h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1715,6 +1269,7 @@
 		"name": "Gnarlroot",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Gnarlroot",
 		"text": "Gnarled, twisting roots, splintering to life.",
@@ -1723,19 +1278,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_31h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_31h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1745,6 +1292,7 @@
 		"name": "Niira the Trickster",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Niira the Trickster",
 		"text": "She plays with wee critters… until they’re big critters.",
@@ -1753,19 +1301,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_32h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_32h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1775,27 +1315,20 @@
 		"name": "The Scarecrow",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: The Scarecrow",
-		"text": "His enchanted scythe drinks deep from every harvest.",
+		"text": "His enchanted scythe drinks deep from every harvest.",
 		"completedText": "You defeated The Scarecrow",
 		"displayCardId": "GILA_BOSS_33h",
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_33h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_33h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1805,6 +1338,7 @@
 		"name": "Inquisitor Hav'nixx",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Inquisitor Hav'nixx",
 		"text": "A mind is a terrible thing to waste. It's far too delicious.",
@@ -1813,19 +1347,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_34h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_34h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1835,6 +1361,7 @@
 		"name": "Chupacabran",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Chupacabran",
 		"text": "It used to feed on local livestock. Now it hungers for more.",
@@ -1843,19 +1370,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_35h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_35h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1865,6 +1384,7 @@
 		"name": "Griselda",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Griselda",
 		"text": "Watch those lips, she'll kiss just about anything.",
@@ -1873,19 +1393,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_36h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_36h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1895,6 +1407,7 @@
 		"name": "Wharrgarbl",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Wharrgarbl",
 		"text": "The Witchwood's curse has not been kind to the local Murlocs.",
@@ -1903,19 +1416,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_37h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_37h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1925,6 +1430,7 @@
 		"name": "Ravencaller Cozzlewurt",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Ravencaller Cozzlewurt",
 		"text": "The feathered fiends of Gilneas flock to his sinister call.",
@@ -1933,19 +1439,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_38h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_38h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1955,6 +1453,7 @@
 		"name": "Forlorn Lovers",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Forlorn Lovers",
 		"text": "Bound by vows, she just won't let go.",
@@ -1963,19 +1462,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_39h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_39h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -1985,6 +1476,7 @@
 		"name": "Splintergraft",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Splintergraft",
 		"text": "She'll take a piece of you and make it her own.",
@@ -1993,19 +1485,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_40h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_40h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2015,6 +1499,7 @@
 		"name": "Brushwood Centurion",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Brushwood Centurion",
 		"text": "This once-stalwart defender of the woods now sows chaos.",
@@ -2023,19 +1508,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_41h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_41h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2045,6 +1522,7 @@
 		"name": "Baran the Blind",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Baran the Blind",
 		"text": "Poor vision doesn't matter with strength like his.",
@@ -2053,19 +1531,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_42h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_42h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2075,6 +1545,7 @@
 		"name": "Gravekeeper Damph",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Gravekeeper Damph",
 		"text": "The rattle of bones remain a comfort to him.",
@@ -2083,19 +1554,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_43h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_43h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2105,6 +1568,7 @@
 		"name": "Doctor Sezavo",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Doctor Sezavo",
 		"text": "It’s good to give blood. But not to him. He’s not a real doctor.",
@@ -2113,19 +1577,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_44h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_44h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2135,6 +1591,7 @@
 		"name": "Cultist S'thara",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Cultist S'thara",
 		"text": "A silver tongue to accompany her silver daggers.",
@@ -2143,19 +1600,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_45h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_45h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2165,6 +1614,7 @@
 		"name": "Vitus the Exiled",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Vitus the Exiled",
 		"text": "Corrupted. Banished. Hungry.",
@@ -2173,19 +1623,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_46h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_46h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2195,6 +1637,7 @@
 		"name": "Shudderwock",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Shudderwock",
 		"text": "And 'lo in uffish thought he stood, crying \"Battle\" in the wood.",
@@ -2203,19 +1646,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_47h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_47h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2225,6 +1660,7 @@
 		"name": "Infinite Toki",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Infinite Toki",
 		"text": "One either dies a hero or mangles time enough to become a villain.",
@@ -2233,19 +1669,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_48h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_48h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2255,6 +1683,7 @@
 		"name": "Glinda Crowskin",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Glinda Crowskin",
 		"text": "The leader of Hagatha’s dark cult hides behind her loyal minions.",
@@ -2263,19 +1692,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_49h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_49h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2285,6 +1706,7 @@
 		"name": "The Whisperer",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: The Whisperer",
 		"text": "Do you hear the echoes of his whispers?",
@@ -2293,19 +1715,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_50h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_50h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2315,6 +1729,7 @@
 		"name": "Garrow, the Rancorous",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Garrow, the Rancorous",
 		"text": "Missing? Dead? He'll still collect.",
@@ -2323,19 +1738,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_51h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_51h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2345,6 +1752,7 @@
 		"name": "Crooked Pete",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Crooked Pete",
 		"text": "The locals report that Pete is up to no good again.",
@@ -2353,19 +1761,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_52h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_52h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2375,6 +1775,7 @@
 		"name": "Cragtorr",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Cragtorr",
 		"text": "Seeds sewn from hatred, sustained by dark magic.",
@@ -2383,19 +1784,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_54h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_54h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2405,6 +1798,7 @@
 		"name": "Azalina Soulthief",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Azalina Soulthief",
 		"text": "Her children's safety is her top priority. At any cost.",
@@ -2413,19 +1807,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_55h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_55h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2435,6 +1821,7 @@
 		"name": "Face Collector",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Face Collector",
 		"text": "Beware his terrible minions and their ever-shifting faces.",
@@ -2443,19 +1830,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_56h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_56h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2465,6 +1844,7 @@
 		"name": "Raeth Ghostsong",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Raeth Ghostsong",
 		"text": "There's a reason you should burn the dead.",
@@ -2473,19 +1853,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_57h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_57h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2495,6 +1867,7 @@
 		"name": "Grum",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Grum",
 		"text": "Grum likes to smash. He also likes to bash. And crash.",
@@ -2503,19 +1876,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_58h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_58h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2525,6 +1890,7 @@
 		"name": "Lord Godfrey",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Lord Godfrey",
 		"text": "The Lord of Shadowfang Keep has a bullet to pick with Crowley.",
@@ -2533,19 +1899,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_59h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_59h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2555,6 +1913,7 @@
 		"name": "Captain Shivers",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Captain Shivers",
 		"text": "Vowing vengeance, his cursed crew haunts Gilnean shores.",
@@ -2563,19 +1922,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_60h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_60h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2585,6 +1936,7 @@
 		"name": "Hagatha the Witch",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Hagatha the Witch",
 		"text": "...",
@@ -2593,19 +1945,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_61h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_61h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2615,6 +1959,7 @@
 		"name": "Gustave, the Gutripper",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Gustave, the Gutripper",
 		"text": "Hagatha’s pet eats his way from the bottom of the food chain up.",
@@ -2623,19 +1968,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_62h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_62h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2645,6 +1982,7 @@
 		"name": "Sephira Dusktalon",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Sephira Dusktalon",
 		"text": "Even your own magic can be twisted by these woods.",
@@ -2653,19 +1991,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_63h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_63h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2675,6 +2005,7 @@
 		"name": "Winslow Tobtock",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Winslow Tobtock",
 		"text": "His tricks will leave you both in a daze.",
@@ -2683,19 +2014,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_64h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_64h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2705,6 +2028,7 @@
 		"name": "Gobbles",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Gobbles",
 		"text": "Every dying beast makes this dreaded carrion bird stronger.",
@@ -2713,19 +2037,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_65h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_65h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2735,6 +2051,7 @@
 		"name": "The Mute",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: The Mute",
 		"text": ". . .",
@@ -2743,19 +2060,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_66h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_66h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2765,6 +2074,7 @@
 		"name": "Ratcatcher Hannigul",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Ratcatcher Hannigul",
 		"text": "Rats aren't always the most loyal pets.",
@@ -2773,19 +2083,11 @@
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_67h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_67h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2795,27 +2097,20 @@
 		"name": "Plaguemaster Rancel",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Boss defeated: Plaguemaster Rancel",
-		"text": "Dying to his touch is terrible. Living is even worse.",
+		"text": "Dying to his touch is terrible. Living is even worse.",
 		"completedText": "You defeated Plaguemaster Rancel",
 		"displayCardId": "GILA_BOSS_68h",
 		"displayCardType": "hero",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_68h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_68h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2825,6 +2120,7 @@
 		"name": "Final Boss - Hagatha the Witch",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Defeated Hagatha the Witch!",
 		"emptyText": "Get ready to fight Hagatha the Witch!",
@@ -2833,19 +2129,11 @@
 		"displayCardType": "hero",
 		"difficulty": "legendary",
 		"maxNumberOfRecords": 5,
-		"points": 15,
+		"points": 15.0,
 		"requirements": [
-			{
-				"type": "CORRECT_OPPONENT",
-				"values": ["GILA_BOSS_61h"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CORRECT_OPPONENT", "values": ["GILA_BOSS_61h"] },
+			{ "type": "GAME_WON" },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -2855,6 +2143,7 @@
 		"name": "Companionship",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Companionship",
 		"text": "(Houndmaster only) Passive Your Bloodhounds have +2 Attack.",
@@ -2863,16 +2152,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_414"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_414"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -2882,6 +2165,7 @@
 		"name": "Lunar Signet",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Lunar Signet",
 		"text": "Passive After you play a minion, trigger its Deathrattle effect.",
@@ -2890,16 +2174,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_415"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_415"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -2909,24 +2187,19 @@
 		"name": "First Aid Kit",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: First Aid Kit",
-		"text": "Passive At the end of your turn, restore 2 Health to all friendly characters.",
+		"text": "Passive At the end of your turn, restore 2 Health to all friendly characters.",
 		"completedText": "You triggered First Aid Kit",
 		"displayCardId": "GILA_506",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_506"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_506"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -2936,6 +2209,7 @@
 		"name": "Sticky Fingers",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Sticky Fingers",
 		"text": "(Tracker only) Passive Cards that didn't start in your deck cost (1) less.",
@@ -2944,16 +2218,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_511"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_511"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -2963,6 +2231,7 @@
 		"name": "Cult of the Wolf",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Cult of the Wolf",
 		"text": "(Tracker only) Passive You can use your Hero Power twice each turn. It costs (1) less.",
@@ -2971,16 +2240,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_513"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_513"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -2990,6 +2253,7 @@
 		"name": "Victorious Rally",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Victorious Rally",
 		"text": "(Cannoneer only) Passive Whenever you fire your Cannons, give your minions +1 Attack this turn.",
@@ -2998,16 +2262,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_602"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_602"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3017,6 +2275,7 @@
 		"name": "Tactical Reinforcements",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Tactical Reinforcements",
 		"text": "(Cannoneer only) Passive Whenever you fire your Cannons, reduce the cost of a card in your hand by (2).",
@@ -3025,16 +2284,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_603"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_603"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3044,6 +2297,7 @@
 		"name": "Dragonfire Ammo",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Dragonfire Ammo",
 		"text": "(Cannoneer only) Passive Your Cannons do 1 extra damage.",
@@ -3052,16 +2306,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_605"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_605"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3071,6 +2319,7 @@
 		"name": "Pillage the Fallen",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Pillage the Fallen",
 		"text": "Passive Whenever your weapon is destroyed, equip a random weapon.",
@@ -3079,16 +2328,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_607"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_607"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3098,24 +2341,19 @@
 		"name": "Entrenchment",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Entrenchment",
-		"text": "Passive Your minions have +2 Health.",
+		"text": "Passive Your minions have +2 Health.",
 		"completedText": "You triggered Entrenchment",
 		"displayCardId": "GILA_805",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_805"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_805"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3125,6 +2363,7 @@
 		"name": "Expedite",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Expedite",
 		"text": "Passive Your minions cost (1) less.",
@@ -3133,16 +2372,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_813"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_813"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3152,6 +2385,7 @@
 		"name": "Caltrops",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Caltrops",
 		"text": "Passive After your opponent plays a minion, deal 1 damage to it.",
@@ -3160,16 +2394,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_814"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_814"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3179,6 +2407,7 @@
 		"name": "Rewind",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Rewind",
 		"text": "(Time-Tinker only) Passive When your hero dies, restart the game and remove this from your Dungeon Deck.",
@@ -3187,16 +2416,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_911"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_911"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3206,6 +2429,7 @@
 		"name": "Double Time",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Double Time",
 		"text": "(Time-Tinker only) Passive After you cast your first spell in a turn, cast a copy of it (targets chosen randomly).",
@@ -3214,16 +2438,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["GILA_913"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["GILA_913"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3233,6 +2451,7 @@
 		"name": "Potion of Vitality",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Potion of Vitality",
 		"text": "Passive Double your starting Health.",
@@ -3241,16 +2460,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_800"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_800"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3260,6 +2473,7 @@
 		"name": "Crystal Gem",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Crystal Gem",
 		"text": "Passive Start with an extra Mana Crystal.",
@@ -3268,16 +2482,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_801"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_801"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3287,6 +2495,7 @@
 		"name": "Scepter of Summoning",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Scepter of Summoning",
 		"text": "Passive Your minions that cost (5) or more cost (5).",
@@ -3295,16 +2504,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_803"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_803"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3314,6 +2517,7 @@
 		"name": "Small Backpacks",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Small Backpacks",
 		"text": "Passive At the start of the game, draw 2 cards.",
@@ -3322,16 +2526,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_804"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_804"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3341,24 +2539,19 @@
 		"name": "Khadgar's Scrying Orb",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Khadgar's Scrying Orb",
-		"text": "Passive Your spells cost (1) less.",
+		"text": "Passive Your spells cost (1) less.",
 		"completedText": "You triggered Khadgar's Scrying Orb",
 		"displayCardId": "LOOTA_824",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_824"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_824"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3368,6 +2561,7 @@
 		"name": "Robe of the Magi",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Robe of the Magi",
 		"text": "Passive Spell Damage +3",
@@ -3376,16 +2570,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_825"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_825"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3395,24 +2583,19 @@
 		"name": "Glyph of Warding",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Passive ability triggered: Glyph of Warding",
-		"text": "Passive Enemy minions cost (1) more.",
+		"text": "Passive Enemy minions cost (1) more.",
 		"completedText": "You triggered Glyph of Warding",
 		"displayCardId": "LOOTA_831",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "PASSIVE_BUFF",
-				"values": ["LOOTA_831"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706"]
-			}
+			{ "type": "PASSIVE_BUFF", "values": ["LOOTA_831"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -3422,6 +2605,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 1",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3430,23 +2614,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 1,
+		"points": 1.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["0"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3456,6 +2629,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 2",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3464,23 +2638,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["1"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["1"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3490,6 +2653,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 2,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 3",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3498,23 +2662,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3524,6 +2677,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 3,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 4",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3532,23 +2686,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 7,
+		"points": 7.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["3"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["3"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3558,6 +2701,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 4,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 5",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3566,23 +2710,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 9,
+		"points": 9.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["4"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["4"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3592,6 +2725,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 5,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 6",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3600,23 +2734,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 11,
+		"points": 11.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["5"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["5"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3626,6 +2749,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 6,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 7",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3634,23 +2758,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 13,
+		"points": 13.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["6"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["6"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3660,6 +2773,7 @@
 		"name": "Monster Hunt progression - Houndmaster Shaw (Hunter)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 7,
 		"displayName": "Houndmaster Shaw (Hunter) - Cleared round 8",
 		"emptyText": "Clear the first round with Hunter to get started",
@@ -3668,23 +2782,12 @@
 		"displayCardType": "hero",
 		"difficulty": "epic",
 		"maxNumberOfRecords": 3,
-		"points": 15,
+		"points": 15.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["7"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_400h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["7"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_400h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3694,6 +2797,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 1",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3702,23 +2806,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 1,
+		"points": 1.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["0"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3728,6 +2821,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 2",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3736,23 +2830,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["1"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["1"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3762,6 +2845,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 2,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 3",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3770,23 +2854,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3796,6 +2869,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 3,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 4",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3804,23 +2878,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 7,
+		"points": 7.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["3"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["3"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3830,6 +2893,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 4,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 5",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3838,23 +2902,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 9,
+		"points": 9.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["4"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["4"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3864,6 +2917,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 5,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 6",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3872,23 +2926,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 11,
+		"points": 11.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["5"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["5"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3898,6 +2941,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 6,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 7",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3906,23 +2950,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 13,
+		"points": 13.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["6"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["6"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3932,6 +2965,7 @@
 		"name": "Monster Hunt progression - Tess Greymane (Rogue)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 7,
 		"displayName": "Tess Greymane (Rogue) - Cleared round 8",
 		"emptyText": "Clear the first round with Rogue to get started",
@@ -3940,23 +2974,12 @@
 		"displayCardType": "hero",
 		"difficulty": "epic",
 		"maxNumberOfRecords": 3,
-		"points": 15,
+		"points": 15.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["7"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_500h3"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["7"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_500h3"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -3966,6 +2989,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 1",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -3974,23 +2998,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 1,
+		"points": 1.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["0"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4000,6 +3013,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 2",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4008,23 +3022,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["1"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["1"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4034,6 +3037,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 2,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 3",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4042,23 +3046,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4068,6 +3061,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 3,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 4",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4076,23 +3070,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 7,
+		"points": 7.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["3"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["3"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4102,6 +3085,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 4,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 5",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4110,23 +3094,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 9,
+		"points": 9.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["4"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["4"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4136,6 +3109,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 5,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 6",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4144,23 +3118,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 11,
+		"points": 11.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["5"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["5"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4170,6 +3133,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 6,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 7",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4178,23 +3142,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 13,
+		"points": 13.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["6"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["6"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4204,6 +3157,7 @@
 		"name": "Monster Hunt progression - Darius Crowley (Warrior)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 7,
 		"displayName": "Darius Crowley (Warrior) - Cleared round 8",
 		"emptyText": "Clear the first round with Warrior to get started",
@@ -4212,23 +3166,12 @@
 		"displayCardType": "hero",
 		"difficulty": "epic",
 		"maxNumberOfRecords": 3,
-		"points": 15,
+		"points": 15.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["7"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_600h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["7"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_600h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4238,6 +3181,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 1",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4246,23 +3190,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 1,
+		"points": 1.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["0"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["0"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4272,6 +3205,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 1,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 2",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4280,23 +3214,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["1"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["1"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4306,6 +3229,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 2,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 3",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4314,23 +3238,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4340,6 +3253,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 3,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 4",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4348,23 +3262,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 7,
+		"points": 7.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["3"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["3"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4374,6 +3277,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 4,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 5",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4382,23 +3286,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 9,
+		"points": 9.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["4"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["4"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4408,6 +3301,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 5,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 6",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4416,23 +3310,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 11,
+		"points": 11.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["5"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["5"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4442,6 +3325,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 6,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 7",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4450,23 +3334,12 @@
 		"displayCardType": "hero",
 		"difficulty": "free",
 		"maxNumberOfRecords": 1,
-		"points": 13,
+		"points": 13.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["6"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["6"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4476,6 +3349,7 @@
 		"name": "Monster Hunt progression - Toki, Time-Tinker (Mage)",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 7,
 		"displayName": "Toki, Time-Tinker (Mage) - Cleared round 8",
 		"emptyText": "Clear the first round with Mage to get started",
@@ -4484,23 +3358,12 @@
 		"displayCardType": "hero",
 		"difficulty": "epic",
 		"maxNumberOfRecords": 3,
-		"points": 15,
+		"points": 15.0,
 		"requirements": [
-			{
-				"type": "MONSTER_HUNT_STEP",
-				"values": ["7"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "PLAYER_HERO",
-				"values": ["GILA_900h"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "MONSTER_HUNT_STEP", "values": ["7"] },
+			{ "type": "GAME_WON" },
+			{ "type": "PLAYER_HERO", "values": ["GILA_900h"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START"]
 	},
@@ -4510,6 +3373,7 @@
 		"name": "Sic 'Em",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Sic 'Em",
 		"text": "(Houndmaster only) Summon 3 minions from your deck with the highest attack.",
@@ -4518,16 +3382,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_401"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_401"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4537,6 +3395,7 @@
 		"name": "Butch",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Butch",
 		"text": "(Houndmaster only) Rush Has +1/+1 for each friendly Beast that died this game.",
@@ -4545,16 +3404,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_403"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_403"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4564,6 +3417,7 @@
 		"name": "Bubba",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Bubba",
 		"text": "(Houndmaster only) Battlecry: Summon six 1/1 Bloodhounds to attack an enemy minion.",
@@ -4572,16 +3426,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_410"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_410"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4591,6 +3439,7 @@
 		"name": "Princess",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Princess",
 		"text": "(Houndmaster only) Battlecry: Gain the Deathrattles of 3 random minions in your deck.",
@@ -4599,16 +3448,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_411"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_411"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4618,6 +3461,7 @@
 		"name": "Blood Moon",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Blood Moon",
 		"text": "Give your minions +1/+1 and Lifesteal.",
@@ -4626,16 +3470,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_412"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_412"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4645,24 +3483,19 @@
 		"name": "Shaw's Shank",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Shaw's Shank",
-		"text": "(Houndmaster only) Has +1 Attack for each friendly minion you control.",
+		"text": "(Houndmaster only) Has +1 Attack for each friendly minion you control.",
 		"completedText": "You played Shaw's Shank",
 		"displayCardId": "GILA_413",
 		"displayCardType": "weapon",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_413"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_413"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4672,6 +3505,7 @@
 		"name": "Exterminate",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Exterminate",
 		"text": "(Tracker only) Echo. Deal 10 damage to a minion and any excess to the enemy hero.",
@@ -4680,16 +3514,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_501"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_501"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4699,24 +3527,19 @@
 		"name": "Hunter's Insight",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Hunter's Insight",
-		"text": "(Tracker only) Reduce the cost of all cards in your hand by (3).",
+		"text": "(Tracker only) Reduce the cost of all cards in your hand by (3).",
 		"completedText": "You played Hunter's Insight",
 		"displayCardId": "GILA_503",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_503"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_503"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4726,6 +3549,7 @@
 		"name": "Bandage",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Bandage",
 		"text": "Restore all friendly minions to full Health. They can attack again this turn.",
@@ -4734,16 +3558,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_506t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_506t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4753,6 +3571,7 @@
 		"name": "Hunter of Old",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Hunter of Old",
 		"text": "(Tracker only) Whenever you cast a spell, gain Spell Damage +2.",
@@ -4761,16 +3580,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_507"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_507"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4780,6 +3593,7 @@
 		"name": "The Exorcisor",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: The Exorcisor",
 		"text": "Silence any minion attacked by this weapon.",
@@ -4788,16 +3602,10 @@
 		"displayCardType": "weapon",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_508"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_508"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4807,24 +3615,19 @@
 		"name": "Frenzied Trapper",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Frenzied Trapper",
-		"text": "(Tracker only) Battlecry: Put 5 random Hunter Secrets into the battlefield.",
+		"text": "(Tracker only) Battlecry: Put 5 random Hunter Secrets into the battlefield.",
 		"completedText": "You played Frenzied Trapper",
 		"displayCardId": "GILA_509",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_509"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_509"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4834,6 +3637,7 @@
 		"name": "Tools of the Trade",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Tools of the Trade",
 		"text": "(Tracker only) Discover one of Tess's weapons and equip it. Return this to your hand.",
@@ -4842,16 +3646,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_510"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_510"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4861,6 +3659,7 @@
 		"name": "Safe Harbor",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Safe Harbor",
 		"text": "Choose a minion and put it into your hand. It costs (0).",
@@ -4869,16 +3668,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_608"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_608"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4888,6 +3681,7 @@
 		"name": "Grizzled Reinforcement",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Grizzled Reinforcement",
 		"text": "(Cannoneer only) Battlecry: Summon an extra Cannon.",
@@ -4896,16 +3690,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_610"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_610"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4915,6 +3703,7 @@
 		"name": "Tuskarr Raider",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Tuskarr Raider",
 		"text": "(Cannoneer only) Rush After this minion attacks, fire your Cannons.",
@@ -4923,16 +3712,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_611"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_611"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4942,6 +3725,7 @@
 		"name": "Seabreaker Goliath",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Seabreaker Goliath",
 		"text": "(Cannoneer only) Costs (1) less for each time you've fired your Cannons.",
@@ -4950,16 +3734,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_612"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_612"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4969,6 +3747,7 @@
 		"name": "Gattling Gunner",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Gattling Gunner",
 		"text": "Whenever you play a card, deal damage equal to its Cost to a random enemy minion.",
@@ -4977,16 +3756,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_801"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_801"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -4996,6 +3769,7 @@
 		"name": "Cartographer",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Cartographer",
 		"text": "Battlecry: Discover a Treasure.",
@@ -5004,16 +3778,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_802"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_802"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5023,6 +3791,7 @@
 		"name": "Gilnean Vigilante",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Gilnean Vigilante",
 		"text": "Battlecry: Destroy a minion and fill your hand with Coins.",
@@ -5031,16 +3800,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_803"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_803"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5050,6 +3813,7 @@
 		"name": "Holy Book",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Holy Book",
 		"text": "Silence and destroy a minion. Summon a 10/10 copy of it.",
@@ -5058,16 +3822,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_804"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_804"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5077,6 +3835,7 @@
 		"name": "Brass Lantern",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Brass Lantern",
 		"text": "Discover a copy of a card in your deck. Repeat this 2 more times.",
@@ -5085,16 +3844,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_806"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_806"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5104,6 +3857,7 @@
 		"name": "Sneak Attack",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Sneak Attack",
 		"text": "Put 2 random minions from your hand into the battlefield and give them Charge.",
@@ -5112,16 +3866,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_810"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_810"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5131,6 +3879,7 @@
 		"name": "Spyglass",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Spyglass",
 		"text": "Echo Put a copy of a random card in your opponent's hand into yours. It costs (3) less.",
@@ -5139,16 +3888,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_811"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_811"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5158,6 +3901,7 @@
 		"name": "Bestiary",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Bestiary",
 		"text": "Fill your board with copies of random minions from your opponent's deck.",
@@ -5166,16 +3910,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_812"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_812"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5185,6 +3923,7 @@
 		"name": "Coin Pouch",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Coin Pouch",
 		"text": "Summon a random 3-Cost minion. Upgrade this and shuffle it into your deck.",
@@ -5193,16 +3932,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_816a"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_816a"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5212,6 +3945,7 @@
 		"name": "Sack of Coins",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Sack of Coins",
 		"text": "Summon a random 6-Cost minion. Upgrade this and shuffle it into your deck.",
@@ -5220,16 +3954,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_816b"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_816b"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5239,6 +3967,7 @@
 		"name": "Hefty Sack of Coins",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Hefty Sack of Coins",
 		"text": "Summon a random 3, 6, and 9-Cost minion.",
@@ -5247,16 +3976,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_816c"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_816c"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5266,6 +3989,7 @@
 		"name": "Creepy Curio",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Creepy Curio",
 		"text": "Summon three 1/1 Ghosts. Upgrade this and shuffle it into your deck.",
@@ -5274,16 +3998,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_817"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_817"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5293,6 +4011,7 @@
 		"name": "Haunted Curio",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Haunted Curio",
 		"text": "Summon three 2/2 Ghosts. Upgrade this and shuffle it into your deck.",
@@ -5301,16 +4020,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_818"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_818"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5320,6 +4033,7 @@
 		"name": "Cursed Curio",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Cursed Curio",
 		"text": "Summon three 3/3 Ghosts with Lifesteal.",
@@ -5328,16 +4042,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_819"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_819"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5347,6 +4055,7 @@
 		"name": "Ricochet Shot",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Ricochet Shot",
 		"text": "Deal 3 damage to a random character. Repeat this 12 times.",
@@ -5355,16 +4064,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_820"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_820"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5374,6 +4077,7 @@
 		"name": "Surly Mob",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Surly Mob",
 		"text": "Destroy a random enemy minion. Upgrade this and shuffle it into your deck.",
@@ -5382,16 +4086,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_821a"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_821a"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5401,6 +4099,7 @@
 		"name": "Angry Mob",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Angry Mob",
 		"text": "Destroy 2 random enemy minions. Upgrade this and shuffle it into your deck.",
@@ -5409,16 +4108,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_821b"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_821b"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5428,6 +4121,7 @@
 		"name": "Crazed Mob",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Crazed Mob",
 		"text": "Silence and destroy all enemy minions.",
@@ -5436,16 +4130,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_821c"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_821c"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5455,6 +4143,7 @@
 		"name": "Royal Gift",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Royal Gift",
 		"text": "Give a minion +2/+2 for each minion you control.",
@@ -5463,16 +4152,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_824"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_824"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5482,6 +4165,7 @@
 		"name": "Gentleman's Top Hat",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Gentleman's Top Hat",
 		"text": "Give a minion +2/+2 and \"Deathrattle: Give your Top Hat to another random friendly minion.\"",
@@ -5490,16 +4174,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_825"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_825"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5509,6 +4187,7 @@
 		"name": "Nalaa the Redeemer",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Nalaa the Redeemer",
 		"text": "Divine Shield. Taunt. After this minion survives  damage, gain Divine Shield.",
@@ -5517,16 +4196,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_826"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_826"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5536,6 +4209,7 @@
 		"name": "Murloc Holmes",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Murloc Holmes",
 		"text": "Whenever your opponent draws a card, add a copy to your hand.",
@@ -5544,16 +4218,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_827"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_827"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5563,6 +4231,7 @@
 		"name": "Hallowed Water",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Hallowed Water",
 		"text": "Restore your hero to full Health.  Draw 5 cards.",
@@ -5571,16 +4240,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_850b"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_850b"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5590,6 +4253,7 @@
 		"name": "Gilnean Tracker",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Gilnean Tracker",
 		"text": "Rush At the start of your turn, transform this into a 5/5.",
@@ -5598,16 +4262,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_851a"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_851a"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5617,6 +4275,7 @@
 		"name": "Transforming Tracker",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Transforming Tracker",
 		"text": "Rush At the start of your turn, transform this into a 7/7 with Windfury.",
@@ -5625,16 +4284,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_851b"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_851b"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5644,6 +4297,7 @@
 		"name": "Worgen Tracker",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Worgen Tracker",
 		"text": "Rush Windfury",
@@ -5652,16 +4306,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_851c"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_851c"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5671,6 +4319,7 @@
 		"name": "Old Militia Horn",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Old Militia Horn",
 		"text": "Give your minions +1/+1 and Taunt. Upgrade this and shuffle it into your deck.",
@@ -5679,16 +4328,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_852a"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_852a"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5698,6 +4341,7 @@
 		"name": "Militia Horn",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Militia Horn",
 		"text": "Give your minions +2/+2 and Taunt. Upgrade this and shuffle it into your deck.",
@@ -5706,16 +4350,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_852b"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_852b"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5725,6 +4363,7 @@
 		"name": "Veteran's Militia Horn",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Veteran's Militia Horn",
 		"text": "Give your minions +4/+4, Taunt, and Divine Shield.",
@@ -5733,16 +4372,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_852c"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_852c"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5752,6 +4385,7 @@
 		"name": "Pristine Compass",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Pristine Compass",
 		"text": "Draw a card and add 2 extra copies of it to your hand. They cost (0).",
@@ -5760,16 +4394,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_853b"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_853b"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5779,6 +4407,7 @@
 		"name": "Beastly Beauty",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Beastly Beauty",
 		"text": "Rush After this attacks a minion and survives, transform this into an 8/8.",
@@ -5787,16 +4416,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_854"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_854"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5806,6 +4429,7 @@
 		"name": "Beautiful Beast",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Beautiful Beast",
 		"text": "...",
@@ -5814,16 +4438,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_854t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_854t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5833,6 +4451,7 @@
 		"name": "Chaos Theory",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Chaos Theory",
 		"text": "(Time-Tinker only) Both players cast all spells in their hand (targets chosen randomly).",
@@ -5841,16 +4460,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_901"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_901"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5860,24 +4473,19 @@
 		"name": "Enhance-a-matic",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Enhance-a-matic",
-		"text": "(Time-Tinker only) Add a random spell from each class to your hand.",
+		"text": "(Time-Tinker only) Add a random spell from each class to your hand.",
 		"completedText": "You played Enhance-a-matic",
 		"displayCardId": "GILA_903",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_903"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_903"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5887,6 +4495,7 @@
 		"name": "Stroke of Midnight",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Stroke of Midnight",
 		"text": "(Time-Tinker only) Echo Destroy a random enemy minion.",
@@ -5895,16 +4504,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_904"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_904"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5914,6 +4517,7 @@
 		"name": "Impetuous Companion",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Impetuous Companion",
 		"text": "(Time-Tinker only) Battlecry: Swap hands with your opponent.",
@@ -5922,16 +4526,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_906"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_906"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5941,6 +4539,7 @@
 		"name": "Clockwork Assistant",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Clockwork Assistant",
 		"text": "(Time-Tinker only) Has +1/+1 for each spell you've cast this game.",
@@ -5949,16 +4548,10 @@
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_907"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_907"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5968,6 +4561,7 @@
 		"name": "Puzzle Box",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Puzzle Box",
 		"text": "(Time-Tinker only) Transform all minions into random ones that cost (3) more.",
@@ -5976,16 +4570,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_910"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_910"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -5995,6 +4583,7 @@
 		"name": "Chuck",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Chuck",
 		"text": "Discard all minions from your hand and deal their Attack to the enemy hero.",
@@ -6003,16 +4592,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_23t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_23t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6022,6 +4605,7 @@
 		"name": "Sack of Gnomes",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Sack of Gnomes",
 		"text": "Fill your board with random Gnomes.",
@@ -6030,16 +4614,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_26t2"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_26t2"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6049,6 +4627,7 @@
 		"name": "Amalgamate",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Amalgamate",
 		"text": "Destroy all minions. Summon an Amalgamation with the combined Attack and Health.",
@@ -6057,16 +4636,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_27t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_27t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6076,6 +4649,7 @@
 		"name": "Enchanting Tune",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Enchanting Tune",
 		"text": "Gain control of all enemy minions. Set their Attack and Health to 1.",
@@ -6084,16 +4658,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_29t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_29t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6103,6 +4671,7 @@
 		"name": "Scythe",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Scythe",
 		"text": "Doesn't lose Durability. When you kill a minion with this weapon, gain +1 Attack.",
@@ -6111,16 +4680,10 @@
 		"displayCardType": "weapon",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_33t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_33t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6130,6 +4693,7 @@
 		"name": "Murloc Infestation",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Murloc Infestation",
 		"text": "Give your minions: \"Deathrattle: Summon a random Murloc.\"",
@@ -6138,16 +4702,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_37t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_37t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6157,6 +4715,7 @@
 		"name": "Grave Mistake",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Grave Mistake",
 		"text": "Trigger all minions' Deathrattles twice.",
@@ -6165,16 +4724,10 @@
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_43t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_43t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	},
@@ -6184,24 +4737,19 @@
 		"name": "Shallow Graves",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": 0,
 		"displayName": "Treasure played: Shallow Graves",
-		"text": "Summon 7 random minions that died this game.",
+		"text": "Summon 7 random minions that died this game.",
 		"completedText": "You played Shallow Graves",
 		"displayCardId": "GILA_BOSS_57t",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 2,
-		"points": 3,
+		"points": 3.0,
 		"requirements": [
-			{
-				"type": "CARD_PLAYED_OR_CHANGED_ON_BOARD",
-				"values": ["GILA_BOSS_57t"]
-			},
-			{
-				"type": "SCENARIO_IDS",
-				"values": ["2706", "2821"]
-			}
+			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["GILA_BOSS_57t"] },
+			{ "type": "SCENARIO_IDS", "values": ["2706", "2821"] }
 		],
 		"resetEvents": ["GAME_START", "GAME_END"]
 	}
