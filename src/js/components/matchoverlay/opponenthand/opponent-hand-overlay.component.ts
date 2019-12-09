@@ -81,6 +81,8 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 					}
 				}
 				this.changeWindowSize();
+			} else if (event.event.name === DeckEvents.GAME_END) {
+				this.hideWindow();
 			}
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
