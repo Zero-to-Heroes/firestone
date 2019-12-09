@@ -16,6 +16,15 @@ describe('Deckbuilding - Death by a Thousand Cuts', () => {
 		expect(isAchievementComplete).toBe(true);
 	});
 
+	test('is completed when full events created by CSharp plugin and GEP are emitted even with cards with 0 attack', async () => {
+		const deckstring = 'AAECAaoIBsUDrwSn7gLv9wLiiQP9pwMMuwPbA/4D7/ECtJEDjJQDtZgDxpkD1KUD+aUDr6cDyqsDAA==';
+		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents, null, {
+			deckstring: deckstring,
+			playerRank: 10,
+		});
+		expect(isAchievementComplete).toBe(true);
+	});
+
 	test('is not completed when GEP event is missing', async () => {
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents);
 		expect(isAchievementComplete).toBeFalsy();

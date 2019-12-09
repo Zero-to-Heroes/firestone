@@ -50,7 +50,7 @@ export class DeckbuildingCardAttributeReq implements Requirement {
 		if (deck && deck.cards && deck.cards.length > 0) {
 			const cards = buildCardArraysFromDeck(deck, this.cards);
 			const numberOfMatchingCards: number = cards
-				.filter(card => card[this.targetAttribute])
+				.filter(card => card[this.targetAttribute] != null)
 				.filter(card =>
 					this.attributeQualifier === 'AT_LEAST'
 						? parseInt(card[this.targetAttribute]) >= this.targetAttributeValue
@@ -62,22 +62,24 @@ export class DeckbuildingCardAttributeReq implements Requirement {
 			// 	'number of matching cards',
 			// 	numberOfMatchingCards,
 			// 	this.targetAttributeValue,
+			// 	this.targetAttribute,
 			// 	this.attributeQualifier,
 			// );
 			// console.debug(
-			// 	'cards',
+			// 	'cards taht dont match',
 			// 	cards
-			// 		.filter(card => card[this.targetAttribute])
-			// 		.filter(card =>
-			// 			this.attributeQualifier === 'AT_LEAST'
-			// 				? parseInt(card[this.targetAttribute]) >= this.targetAttributeValue
-			// 				: this.attributeQualifier === 'AT_MOST'
-			// 				? parseInt(card[this.targetAttribute]) <= this.targetAttributeValue
-			// 				: parseInt(card[this.targetAttribute]) === this.targetAttributeValue,
+			// 		.filter(
+			// 			card =>
+			// 				!card[this.targetAttribute] ||
+			// 				(this.attributeQualifier === 'AT_LEAST'
+			// 					? parseInt(card[this.targetAttribute]) < this.targetAttributeValue
+			// 					: this.attributeQualifier === 'AT_MOST'
+			// 					? parseInt(card[this.targetAttribute]) > this.targetAttributeValue
+			// 					: parseInt(card[this.targetAttribute]) !== this.targetAttributeValue),
 			// 		)
 			// 		.map(card => card.name),
 			// );
-			// console.debug('number of matching', numberOfMatchingCards, cards);
+			// console.debug('number of matching', numberOfMatchingCards);
 			if (this.qualifier === 'AT_LEAST') {
 				this.doesDeckMeetSpec = numberOfMatchingCards >= this.targetNumberOfCards;
 			} else if (this.qualifier === 'AT_MOST') {
