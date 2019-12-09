@@ -8,6 +8,7 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
@@ -71,6 +72,14 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 			}
 			this.gameState = event.state;
 			if (event.event.name === DeckEvents.MATCH_METADATA) {
+				if (this.gameState.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
+					await this.hideWindow();
+				} else {
+					const visible = (await this.ow.getCurrentWindow()).isVisible;
+					if (!visible) {
+						await this.restoreWindow();
+					}
+				}
 				this.changeWindowSize();
 			}
 			if (!(this.cdr as ViewRef).destroyed) {
