@@ -21,15 +21,27 @@ export class ReceiveCardInHandParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		// First try and see if this card doesn't come from the board
-		const card = this.helper.findCardInZone(deck.board, null, entityId);
-		// console.log('[receive-card-in-hand] trying to get card from zone', deck.board, entityId, card, cardId);
-		const newBoard = this.helper.removeSingleCardFromZone(deck.board, null, entityId);
-		// console.log('[receive-card-in-hand] new board', newBoard);
+		// First try and see if this card doesn't come from the board or from the other zone (in case of discovers)
+		const boardCard = this.helper.findCardInZone(deck.board, null, entityId);
+		const otherCard = this.helper.findCardInZone(deck.otherZone, null, entityId);
+		// console.log(
+		// 	'[receive-card-in-hand] trying to get card from zone',
+		// 	deck.board,
+		// 	entityId,
+		// 	boardCard,
+		// 	otherCard,
+		// 	cardId,
+		// );
+		const newBoard = boardCard ? this.helper.removeSingleCardFromZone(deck.board, null, entityId) : deck.board;
+		const newOther = otherCard
+			? this.helper.removeSingleCardFromZone(deck.otherZone, null, entityId)
+			: deck.otherZone;
+		// console.log('[receive-card-in-hand] new board', newBoard, newOther);
 
 		const cardData = cardId ? this.allCards.getCard(cardId) : null;
 		const cardWithDefault =
-			card ||
+			boardCard ||
+			otherCard ||
 			DeckCard.create({
 				cardId: cardId,
 				entityId: entityId,
@@ -46,7 +58,8 @@ export class ReceiveCardInHandParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			board: newBoard,
-		});
+			otherZone: newOther,
+		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
