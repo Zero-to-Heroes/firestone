@@ -108,8 +108,10 @@ export class DeckManipulationHelper {
 			const found = zone.find(card => card.cardId === cardId);
 			if (!found) {
 				console.log('could not find card, creating card with default template', cardId, entityId);
+				const card = this.allCards.getCard(cardId);
 				return DeckCard.create({
 					cardId: cardId,
+					cardName: card ? card.name : null,
 					entityId: entityId,
 				} as DeckCard);
 			}
