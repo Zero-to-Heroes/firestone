@@ -19,9 +19,9 @@ export class CardCreatorChangedParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
-		const cardInHand = this.helper.findCardInZone(deck.hand, cardId, entityId);
+		const cardInHand = this.helper.findCardInZone(deck.hand, null, entityId);
 		// console.debug('cardInHand', cardInHand);
-		const cardInDeck = this.helper.findCardInZone(deck.deck, cardId, entityId);
+		const cardInDeck = this.helper.findCardInZone(deck.deck, null, entityId);
 		// console.debug('cardInDeck', cardInDeck);
 
 		const newCardInHand = cardInHand
