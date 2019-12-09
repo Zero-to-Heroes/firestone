@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { decode } from 'deckstrings';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { MindVisionService } from '../plugins/mind-vision/mind-vision.service';
+import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 
 @Injectable()
 export class DeckParserService {
@@ -17,7 +17,7 @@ export class DeckParserService {
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
-	constructor(private gameEvents: GameEventsEmitterService, private mindVision: MindVisionService) {
+	constructor(private gameEvents: GameEventsEmitterService, private memory: MemoryInspectionService) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
@@ -26,8 +26,8 @@ export class DeckParserService {
 	}
 
 	public async getCurrentDeck(): Promise<any> {
-		if (this.mindVision) {
-			const activeDeck = await this.getActiveDeck();
+		if (this.memory) {
+			const activeDeck = await this.memory.getActiveDeck();
 			if (activeDeck && activeDeck.DeckList && activeDeck.DeckList.length > 0) {
 				console.log('[deck-parser] updating active deck', activeDeck, this.currentDeck);
 				this.currentDeck.deck = { cards: this.explodeDecklist(activeDeck.DeckList) };
@@ -35,28 +35,6 @@ export class DeckParserService {
 		}
 		// console.log('returning current deck', this.currentDeck);
 		return this.currentDeck;
-	}
-
-	private async getActiveDeck() {
-		return new Promise<any>(resolve => {
-			this.getActiveDeckInternal(activeDeck => resolve(activeDeck), 5);
-		});
-	}
-
-	private async getActiveDeckInternal(callback, retriesLeft = 5) {
-		if (retriesLeft <= 0) {
-			callback(null);
-			return;
-		}
-		const activeDeck = await this.mindVision.getActiveDeck();
-		if (activeDeck == null) {
-			setTimeout(() => {
-				this.getActiveDeckInternal(callback, retriesLeft - 1);
-				return;
-			}, 200);
-		}
-		callback(activeDeck);
-		return;
 	}
 
 	private explodeDecklist(decklist: number[]): any[] {

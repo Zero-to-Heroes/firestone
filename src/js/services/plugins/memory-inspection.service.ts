@@ -3,6 +3,7 @@ import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
@@ -21,6 +22,7 @@ export class MemoryInspectionService {
 	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow);
 	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
+	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 
 	constructor(private events: Events, private ow: OverwolfService, private mindVision: MindVisionService) {
 		this.init();
@@ -36,6 +38,10 @@ export class MemoryInspectionService {
 
 	public async getBattlegroundsInfo(): Promise<BattlegroundsInfo> {
 		return this.getBattlegroundsInfoOperation.call();
+	}
+
+	public async getActiveDeck(): Promise<any> {
+		return this.getActiveDeckOperation.call();
 	}
 
 	private handleInfoUpdate(info) {
