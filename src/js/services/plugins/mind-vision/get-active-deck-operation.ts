@@ -4,6 +4,6 @@ import { MindVisionService } from './mind-vision.service';
 
 export class GetActiveDeckOperation extends MindVisionOperationFacade<any> {
 	constructor(mindVision: MindVisionService, ow: OverwolfService) {
-		super(ow, 'getActiveDeck', () => mindVision.getActiveDeck(), deck => !deck, deck => deck);
+		super(ow, 'getActiveDeck', () => mindVision.getActiveDeck(), deck => !deck, deck => deck, 5);
 	}
 }

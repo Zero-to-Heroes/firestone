@@ -17,6 +17,7 @@ export class MindVisionOperationFacade<T> {
 		private mindVisionOperation: () => Promise<any>,
 		private emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
+		private numberOfRetries = 20,
 	) {}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
@@ -72,7 +73,7 @@ export class MindVisionOperationFacade<T> {
 		}
 		return new Promise<T>(resolve => {
 			this.processingQueue.enqueue({
-				retriesLeft: 20,
+				retriesLeft: this.numberOfRetries,
 				// When processing the full queue in one go, we can use this to notify
 				// all pending processes
 				resolve: resolve,
