@@ -180,7 +180,7 @@ export class AllCardsService {
 	public getCard(id: string): ReferenceCard {
 		const found = this.allCards.find(card => card.id === id);
 		if (id && !found) {
-			console.error('Could not find card in json database', id);
+			console.warn('Could not find card in json database', id);
 		}
 		return found;
 	}
