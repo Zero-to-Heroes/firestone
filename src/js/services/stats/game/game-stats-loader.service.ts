@@ -13,7 +13,7 @@ export class GameStatsLoaderService {
 
 	constructor(private http: HttpClient, private ow: OverwolfService, private logger: NGXLogger) {}
 
-	public async retrieveStats(expectedReviewId: string = undefined, retriesLeft = 5): Promise<GameStats> {
+	public async retrieveStats(expectedReviewId: string = undefined, retriesLeft = 10): Promise<GameStats> {
 		console.log('retrieving stats', expectedReviewId, retriesLeft, this.gameStats && this.gameStats[0]);
 		if (
 			this.gameStats &&
@@ -46,7 +46,6 @@ export class GameStatsLoaderService {
 				} else {
 					console.log(
 						'[game-stats-loader] Could not retrieve game stats for user',
-						endpointResult,
 						expectedReviewId,
 						endpointResult[0],
 					);
