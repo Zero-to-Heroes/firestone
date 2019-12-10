@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NGXLogger } from 'ngx-logger';
-import { MatchResultType } from '../../models/mainwindow/replays/match-result.type';
 import { ReplayInfo } from '../../models/mainwindow/replays/replay-info';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
@@ -27,7 +26,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			</div>
 
 			<div class="group result">
-				<div class="result-icon icon" [innerHTML]="matchResultIconSvg"></div>
+				<div class="result-icon icon" *ngIf="matchResultIconSvg" [innerHTML]="matchResultIconSvg"></div>
 				<div class="result">{{ result }}</div>
 			</div>
 
@@ -72,7 +71,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		// this.deckName = value.playerDeckName || value.playerName;
 		this.playerClassImage = this.buildPlayerClassImage(value, true);
 		this.opponentClassImage = this.buildPlayerClassImage(value, false);
-		this.matchResultIconSvg = this.buildMatchResultIconSvg(value.result);
+		this.matchResultIconSvg = this.buildMatchResultIconSvg(value);
 		this.result = this.buildMatchResultText(value);
 		this.playCoinIconSvg = this.buildPlayCoinIconSvg(value);
 		this.reviewId = value.reviewId;
@@ -142,8 +141,11 @@ export class ReplayInfoComponent implements AfterViewInit {
 			: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.opponentSkin}.jpg`;
 	}
 
-	private buildMatchResultIconSvg(result: MatchResultType): SafeHtml {
-		const iconName = result === 'won' ? 'match_result_victory' : 'match_result_defeat';
+	private buildMatchResultIconSvg(info: ReplayInfo): SafeHtml {
+		if (info.gameMode === 'battlegrounds') {
+			return null;
+		}
+		const iconName = info.result === 'won' ? 'match_result_victory' : 'match_result_defeat';
 		return this.sanitizer.bypassSecurityTrustHtml(`
 			<svg class="svg-icon-fill">
 				<use xlink:href="/Files/assets/svg/replays/replays_icons.svg#${iconName}"/>
