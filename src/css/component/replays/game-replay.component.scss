@@ -20,6 +20,11 @@
 			--icon-color: var(--color-1);
 		}
 		.player-control-element:hover,
+		.player-controls-content.player-controls-content a:hover {
+			color: var(--color-1);
+			--icon-color: var(--color-1);
+			background-color: var(--on-control-button-background-color);
+		}
 		.player-control-element.toggled {
 			color: var(--color-4);
 			--icon-color: var(--color-4);
