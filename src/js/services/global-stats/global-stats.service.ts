@@ -22,7 +22,7 @@ export class GlobalStatsService {
 			if (!user.userId || !user.username) {
 				this.logger.warn('[global-stats] user not logged in', user);
 			}
-			this.getGlobalStatsInternal(user.userId, stats => resolve(stats), 10);
+			this.getGlobalStatsInternal(user.userId, stats => resolve(stats), 20);
 		});
 	}
 

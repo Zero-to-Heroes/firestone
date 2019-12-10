@@ -42,6 +42,8 @@ export class GlobalStatsNotifierService {
 			this.logger.warn('[global-stats] user not logged in', user);
 		}
 		const stats = await this.globalStats.getGlobalStats();
-		this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(stats));
+		if (stats) {
+			this.store.stateUpdater.next(new GlobalStatsUpdatedEvent(stats));
+		}
 	}
 }
