@@ -211,7 +211,7 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
+					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
 					// this.logger.debug(
 					// 	'board states',
 					// 	this.state.playerDeck.board.length,
