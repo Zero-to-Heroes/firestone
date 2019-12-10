@@ -201,8 +201,9 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.restore(windowId, async result => {
+					// resolve(result);
 					try {
-						overwolf.windows.bringToFront(windowId, true, topMostResult => {
+						overwolf.windows.bringToFront(windowId, false, result => {
 							// console.log('[overwolf-service] restored window', windowId);
 							resolve(result);
 						});
