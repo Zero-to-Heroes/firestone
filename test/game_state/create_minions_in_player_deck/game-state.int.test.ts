@@ -13,7 +13,7 @@ describe('Cards created in the players deck', () => {
 		expect(gameState.opponentDeck.deck.length).toBe(0);
 		expect(gameState.playerDeck.deck.map(card => card.cardId).filter(cardId => cardId)).toEqual([
 			'EX1_134', // from mulligan
-			'UNG_057t1', // from razorpetal
+			// 'UNG_057t1', // from razorpetal
 			'BOT_288',
 			'BOT_288',
 			'BOT_288',
@@ -29,7 +29,7 @@ describe('Cards created in the players deck', () => {
 			'ULD_186',
 			'EX1_144',
 			'GIL_696',
-			'GVG_055',
+			// 'GVG_055',
 			'EX1_506',
 		]);
 	});
@@ -66,7 +66,7 @@ describe('Cards created in the players deck', () => {
 			'ULD_186',
 			'EX1_144',
 			'GIL_696',
-			'GVG_055',
+			// 'GVG_055',
 			'EX1_506',
 		]);
 	});
