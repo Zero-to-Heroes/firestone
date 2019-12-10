@@ -5,43 +5,24 @@
 		"name": "Perfectly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Perfectly Balanced (rank 1)",
-		"emptyText": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "ULDA_BOSS_62h",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "common"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -51,43 +32,24 @@
 		"name": "Perfectly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Perfectly Balanced (rank 10)",
-		"emptyText": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "ULDA_BOSS_62h",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "common"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -97,43 +59,24 @@
 		"name": "Perfectly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Perfectly Balanced (rank 15)",
-		"emptyText": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "ULDA_BOSS_62h",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "common"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -143,43 +86,24 @@
 		"name": "Perfectly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Perfectly Balanced (rank 20)",
-		"emptyText": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "ULDA_BOSS_62h",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "common"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -189,43 +113,24 @@
 		"name": "Perfectly Balanced",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Perfectly Balanced (rank 25)",
-		"emptyText": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "ULDA_BOSS_62h",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "common"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -235,43 +140,24 @@
 		"name": "Perfectly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Perfectly Balanced (rank 5)",
-		"emptyText": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 common, rare and epic cards in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "ULDA_BOSS_62h",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "common"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "common"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -281,34 +167,22 @@
 		"name": "Classic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Classic (rank 1)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "CS2_127",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CLASSIC" }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -318,34 +192,22 @@
 		"name": "Classic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Classic (rank 10)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "CS2_127",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CLASSIC" }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -355,34 +217,22 @@
 		"name": "Classic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Classic (rank 15)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "CS2_127",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CLASSIC" }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -392,34 +242,22 @@
 		"name": "Classic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Classic (rank 20)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "CS2_127",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CLASSIC" }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -429,34 +267,22 @@
 		"name": "Classic",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Classic (rank 25)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "CS2_127",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CLASSIC" }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -466,34 +292,22 @@
 		"name": "Classic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Classic (rank 5)",
-		"emptyText": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only Classic and Basic cards in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "CS2_127",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CLASSIC"
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CLASSIC" }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -503,35 +317,22 @@
 		"name": "Complexity",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Complexity (rank 1)",
-		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -541,35 +342,22 @@
 		"name": "Complexity",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Complexity (rank 10)",
-		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -579,35 +367,22 @@
 		"name": "Complexity",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Complexity (rank 15)",
-		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -617,35 +392,22 @@
 		"name": "Complexity",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Complexity (rank 20)",
-		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -655,35 +417,22 @@
 		"name": "Complexity",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Complexity (rank 25)",
-		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -693,35 +442,22 @@
 		"name": "Complexity",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Complexity (rank 5)",
-		"emptyText": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at least 8 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "CS2_233",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "8", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "8", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -731,35 +467,22 @@
 		"name": "Epic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Epic (rank 1)",
-		"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only epic cards in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "TB_KTRAF_HP_RAF4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["30", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -769,35 +492,22 @@
 		"name": "Epic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Epic (rank 10)",
-		"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only epic cards in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "TB_KTRAF_HP_RAF4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["30", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -807,35 +517,22 @@
 		"name": "Epic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Epic (rank 15)",
-		"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only epic cards in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "TB_KTRAF_HP_RAF4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["30", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -845,35 +542,22 @@
 		"name": "Epic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Epic (rank 20)",
-		"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only epic cards in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "TB_KTRAF_HP_RAF4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["30", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -883,35 +567,22 @@
 		"name": "Epic",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Epic (rank 25)",
-		"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only epic cards in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "TB_KTRAF_HP_RAF4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["30", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -921,35 +592,22 @@
 		"name": "Epic",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Epic (rank 5)",
-		"emptyText": "Win one game with a deck containing only epic cards in Ranked Standard",
+		"text": "Win one game with a deck containing only epic cards in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "TB_KTRAF_HP_RAF4",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["30", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["30", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -959,39 +617,23 @@
 		"name": "Fragile Nature",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Fragile Nature (rank 1)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "GIL_665",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1001,39 +643,23 @@
 		"name": "Fragile Nature",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Fragile Nature (rank 10)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "GIL_665",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1043,39 +669,23 @@
 		"name": "Fragile Nature",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Fragile Nature (rank 15)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "GIL_665",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1085,39 +695,23 @@
 		"name": "Fragile Nature",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Fragile Nature (rank 20)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "GIL_665",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1127,39 +721,23 @@
 		"name": "Fragile Nature",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Fragile Nature (rank 25)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "GIL_665",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1169,39 +747,23 @@
 		"name": "Fragile Nature",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Fragile Nature (rank 5)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 health and no spell in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "GIL_665",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "health", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "health", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1211,35 +773,22 @@
 		"name": "Free Speech",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Free Speech (rank 1)",
-		"emptyText": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
+		"text": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "ICC_809",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["30", "BATTLECRY", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1249,35 +798,22 @@
 		"name": "Free Speech",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Free Speech (rank 10)",
-		"emptyText": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
+		"text": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "ICC_809",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["30", "BATTLECRY", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1287,35 +823,22 @@
 		"name": "Free Speech",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Free Speech (rank 15)",
-		"emptyText": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
+		"text": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "ICC_809",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["30", "BATTLECRY", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1325,35 +848,22 @@
 		"name": "Free Speech",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Free Speech (rank 20)",
-		"emptyText": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
+		"text": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "ICC_809",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["30", "BATTLECRY", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1363,35 +873,22 @@
 		"name": "Free Speech",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Free Speech (rank 25)",
-		"emptyText": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
+		"text": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "ICC_809",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["30", "BATTLECRY", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1401,35 +898,22 @@
 		"name": "Free Speech",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Free Speech (rank 5)",
-		"emptyText": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
+		"text": "Win one game with a deck containing 30 cards with Battlecry in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "ICC_809",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["30", "BATTLECRY", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["30", "BATTLECRY", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1439,35 +923,22 @@
 		"name": "Lifesteal",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Lifesteal (rank 1)",
-		"emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+		"text": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "DAL_047",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["12", "LIFESTEAL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1477,35 +948,22 @@
 		"name": "Lifesteal",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Lifesteal (rank 10)",
-		"emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+		"text": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "DAL_047",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["12", "LIFESTEAL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1515,35 +973,22 @@
 		"name": "Lifesteal",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Lifesteal (rank 15)",
-		"emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+		"text": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "DAL_047",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["12", "LIFESTEAL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1553,35 +998,22 @@
 		"name": "Lifesteal",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Lifesteal (rank 20)",
-		"emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+		"text": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "DAL_047",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["12", "LIFESTEAL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1591,35 +1023,22 @@
 		"name": "Lifesteal",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Lifesteal (rank 25)",
-		"emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+		"text": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "DAL_047",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["12", "LIFESTEAL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1629,35 +1048,22 @@
 		"name": "Lifesteal",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Lifesteal (rank 5)",
-		"emptyText": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
+		"text": "Win one game with a deck containing at least 12 cards with lifesteal in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "DAL_047",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["12", "LIFESTEAL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_MECHANIC", "values": ["12", "LIFESTEAL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1667,39 +1073,23 @@
 		"name": "Lone Survivor",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Lone Survivor (rank 1)",
-		"emptyText": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "LOOT_124",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "SPELL", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "MINION", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1709,39 +1099,23 @@
 		"name": "Lone Survivor",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Lone Survivor (rank 10)",
-		"emptyText": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "LOOT_124",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "SPELL", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "MINION", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1751,39 +1125,23 @@
 		"name": "Lone Survivor",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Lone Survivor (rank 15)",
-		"emptyText": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "LOOT_124",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "SPELL", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "MINION", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1793,39 +1151,23 @@
 		"name": "Lone Survivor",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Lone Survivor (rank 20)",
-		"emptyText": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "LOOT_124",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "SPELL", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "MINION", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1835,39 +1177,23 @@
 		"name": "Lone Survivor",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Lone Survivor (rank 25)",
-		"emptyText": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "LOOT_124",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "SPELL", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "MINION", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1877,39 +1203,23 @@
 		"name": "Lone Survivor",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Lone Survivor (rank 5)",
-		"emptyText": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 1 minion and 29 spells in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "LOOT_124",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "SPELL", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "MINION", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "SPELL", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "MINION", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1919,35 +1229,22 @@
 		"name": "A Whole Army",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: A Whole Army (rank 1)",
-		"emptyText": "Win one game with a deck containing only minions in Ranked Standard",
+		"text": "Win one game with a deck containing only minions in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "BOT_912",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["30", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1957,35 +1254,22 @@
 		"name": "A Whole Army",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: A Whole Army (rank 10)",
-		"emptyText": "Win one game with a deck containing only minions in Ranked Standard",
+		"text": "Win one game with a deck containing only minions in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "BOT_912",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["30", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -1995,35 +1279,22 @@
 		"name": "A Whole Army",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: A Whole Army (rank 15)",
-		"emptyText": "Win one game with a deck containing only minions in Ranked Standard",
+		"text": "Win one game with a deck containing only minions in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "BOT_912",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["30", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2033,35 +1304,22 @@
 		"name": "A Whole Army",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: A Whole Army (rank 20)",
-		"emptyText": "Win one game with a deck containing only minions in Ranked Standard",
+		"text": "Win one game with a deck containing only minions in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "BOT_912",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["30", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2071,35 +1329,22 @@
 		"name": "A Whole Army",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: A Whole Army (rank 25)",
-		"emptyText": "Win one game with a deck containing only minions in Ranked Standard",
+		"text": "Win one game with a deck containing only minions in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "BOT_912",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["30", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2109,35 +1354,22 @@
 		"name": "A Whole Army",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: A Whole Army (rank 5)",
-		"emptyText": "Win one game with a deck containing only minions in Ranked Standard",
+		"text": "Win one game with a deck containing only minions in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "BOT_912",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["30", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["30", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2147,39 +1379,23 @@
 		"name": "The Miracle",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: The Miracle (rank 1)",
-		"emptyText": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
+		"text": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "ULD_216",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2189,39 +1405,23 @@
 		"name": "The Miracle",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: The Miracle (rank 10)",
-		"emptyText": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
+		"text": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "ULD_216",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2231,39 +1431,23 @@
 		"name": "The Miracle",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: The Miracle (rank 15)",
-		"emptyText": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
+		"text": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "ULD_216",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2273,39 +1457,23 @@
 		"name": "The Miracle",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: The Miracle (rank 20)",
-		"emptyText": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
+		"text": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "ULD_216",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2315,39 +1483,23 @@
 		"name": "The Miracle",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: The Miracle (rank 25)",
-		"emptyText": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
+		"text": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "ULD_216",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2357,39 +1509,23 @@
 		"name": "The Miracle",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: The Miracle (rank 5)",
-		"emptyText": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
+		"text": "Win one game with a deck containing 29 minions and 1 spell in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "ULD_216",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["29", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["1", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["29", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["1", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2399,35 +1535,22 @@
 		"name": "My Own Casino",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: My Own Casino (rank 1)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "KAR_009",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2437,35 +1560,22 @@
 		"name": "My Own Casino",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: My Own Casino (rank 10)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "KAR_009",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2475,35 +1585,22 @@
 		"name": "My Own Casino",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: My Own Casino (rank 15)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "KAR_009",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2513,35 +1610,22 @@
 		"name": "My Own Casino",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: My Own Casino (rank 20)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "KAR_009",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2551,35 +1635,22 @@
 		"name": "My Own Casino",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: My Own Casino (rank 25)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "KAR_009",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2589,35 +1660,22 @@
 		"name": "My Own Casino",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: My Own Casino (rank 5)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"random\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "KAR_009",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "random", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "random", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2627,43 +1685,24 @@
 		"name": "Richly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Richly Balanced (rank 1)",
-		"emptyText": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "TRLA_116",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "legendary"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2673,43 +1712,24 @@
 		"name": "Richly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Richly Balanced (rank 10)",
-		"emptyText": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "TRLA_116",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "legendary"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2719,43 +1739,24 @@
 		"name": "Richly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Richly Balanced (rank 15)",
-		"emptyText": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "TRLA_116",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "legendary"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2765,43 +1766,24 @@
 		"name": "Richly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Richly Balanced (rank 20)",
-		"emptyText": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "TRLA_116",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "legendary"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2811,43 +1793,24 @@
 		"name": "Richly Balanced",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Richly Balanced (rank 25)",
-		"emptyText": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "TRLA_116",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "legendary"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2857,43 +1820,24 @@
 		"name": "Richly Balanced",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Richly Balanced (rank 5)",
-		"emptyText": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
+		"text": "Win one game with a deck containing 10 rare, epic and legendary cards in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "TRLA_116",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "legendary"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "rare"]
-			},
-			{
-				"type": "DECK_RARITY",
-				"values": ["10", "AT_LEAST", "epic"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "legendary"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "rare"] },
+			{ "type": "DECK_RARITY", "values": ["10", "AT_LEAST", "epic"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2903,35 +1847,22 @@
 		"name": "Keeping it Simple",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Keeping it Simple (rank 1)",
-		"emptyText": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "CS2_182",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2941,35 +1872,22 @@
 		"name": "Keeping it Simple",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Keeping it Simple (rank 10)",
-		"emptyText": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "CS2_182",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -2979,35 +1897,22 @@
 		"name": "Keeping it Simple",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Keeping it Simple (rank 15)",
-		"emptyText": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "CS2_182",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3017,35 +1922,22 @@
 		"name": "Keeping it Simple",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Keeping it Simple (rank 20)",
-		"emptyText": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "CS2_182",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3055,35 +1947,22 @@
 		"name": "Keeping it Simple",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Keeping it Simple (rank 25)",
-		"emptyText": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "CS2_182",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3093,35 +1972,22 @@
 		"name": "Keeping it Simple",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Keeping it Simple (rank 5)",
-		"emptyText": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with at most 3 words in their text in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "CS2_182",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_NUMBER_OF_WORDS",
-				"values": ["30", "AT_LEAST", "3", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_NUMBER_OF_WORDS", "values": ["30", "AT_LEAST", "3", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3131,43 +1997,24 @@
 		"name": "So quiet",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: So Quiet (rank 1)",
-		"emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "LOE_077",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["15", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "BATTLECRY", "AT_MOST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "DEATHRATTLE", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3177,43 +2024,24 @@
 		"name": "So quiet",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: So Quiet (rank 10)",
-		"emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "LOE_077",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["15", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "BATTLECRY", "AT_MOST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "DEATHRATTLE", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3223,43 +2051,24 @@
 		"name": "So quiet",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: So Quiet (rank 15)",
-		"emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "LOE_077",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["15", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "BATTLECRY", "AT_MOST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "DEATHRATTLE", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3269,43 +2078,24 @@
 		"name": "So quiet",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: So Quiet (rank 20)",
-		"emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "LOE_077",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["15", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "BATTLECRY", "AT_MOST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "DEATHRATTLE", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3315,43 +2105,24 @@
 		"name": "So quiet",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: So Quiet (rank 25)",
-		"emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "LOE_077",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["15", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "BATTLECRY", "AT_MOST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "DEATHRATTLE", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3361,43 +2132,24 @@
 		"name": "So quiet",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: So Quiet (rank 5)",
-		"emptyText": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions and no battlecry or deathrattle card in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "LOE_077",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NUMBER_OF_MINIONS",
-				"values": ["15", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "BATTLECRY", "AT_MOST"]
-			},
-			{
-				"type": "DECK_MECHANIC",
-				"values": ["0", "DEATHRATTLE", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NUMBER_OF_MINIONS", "values": ["15", "AT_LEAST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "BATTLECRY", "AT_MOST"] },
+			{ "type": "DECK_MECHANIC", "values": ["0", "DEATHRATTLE", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3407,35 +2159,22 @@
 		"name": "Sorcerer",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Sorcerer (rank 1)",
-		"emptyText": "Win one game with a deck containing only spells in Ranked Standard",
+		"text": "Win one game with a deck containing only spells in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "OG_090",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["30", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3445,35 +2184,22 @@
 		"name": "Sorcerer",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Sorcerer (rank 10)",
-		"emptyText": "Win one game with a deck containing only spells in Ranked Standard",
+		"text": "Win one game with a deck containing only spells in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "OG_090",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["30", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3483,35 +2209,22 @@
 		"name": "Sorcerer",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Sorcerer (rank 15)",
-		"emptyText": "Win one game with a deck containing only spells in Ranked Standard",
+		"text": "Win one game with a deck containing only spells in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "OG_090",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["30", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3521,35 +2234,22 @@
 		"name": "Sorcerer",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Sorcerer (rank 20)",
-		"emptyText": "Win one game with a deck containing only spells in Ranked Standard",
+		"text": "Win one game with a deck containing only spells in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "OG_090",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["30", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3559,35 +2259,22 @@
 		"name": "Sorcerer",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Sorcerer (rank 25)",
-		"emptyText": "Win one game with a deck containing only spells in Ranked Standard",
+		"text": "Win one game with a deck containing only spells in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "OG_090",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["30", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3597,35 +2284,22 @@
 		"name": "Sorcerer",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Sorcerer (rank 5)",
-		"emptyText": "Win one game with a deck containing only spells in Ranked Standard",
+		"text": "Win one game with a deck containing only spells in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "OG_090",
 		"displayCardType": "spell",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["30", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["30", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3635,35 +2309,22 @@
 		"name": "Summoner",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Summoner (rank 1)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "DAL_575",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3673,35 +2334,22 @@
 		"name": "Summoner",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Summoner (rank 10)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "DAL_575",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3711,35 +2359,22 @@
 		"name": "Summoner",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Summoner (rank 15)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "DAL_575",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3749,35 +2384,22 @@
 		"name": "Summoner",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Summoner (rank 20)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "DAL_575",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3787,35 +2409,22 @@
 		"name": "Summoner",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Summoner (rank 25)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "DAL_575",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3825,35 +2434,22 @@
 		"name": "Summoner",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Summoner (rank 5)",
-		"emptyText": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
+		"text": "Win one game with a deck containing only cards with the word \"Summon\" in their text or name in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "DAL_575",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_TEXT_VALUE",
-				"values": ["30", "AT_LEAST", "summon", "CONTAINS"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_TEXT_VALUE", "values": ["30", "AT_LEAST", "summon", "CONTAINS"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3863,39 +2459,23 @@
 		"name": "Swords and Spells",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Swords and Spells (rank 1)",
-		"emptyText": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "ULD_329",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3905,39 +2485,23 @@
 		"name": "Swords and Spells",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Swords and Spells (rank 10)",
-		"emptyText": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "ULD_329",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3947,39 +2511,23 @@
 		"name": "Swords and Spells",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Swords and Spells (rank 15)",
-		"emptyText": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "ULD_329",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -3989,39 +2537,23 @@
 		"name": "Swords and Spells",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Swords and Spells (rank 20)",
-		"emptyText": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "ULD_329",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4031,39 +2563,23 @@
 		"name": "Swords and Spells",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Swords and Spells (rank 25)",
-		"emptyText": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "ULD_329",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4073,39 +2589,23 @@
 		"name": "Swords and Spells",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Swords and Spells (rank 5)",
-		"emptyText": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
+		"text": "Win one game with a deck containing 15 minions and 15 spells in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "ULD_329",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "MINION", "AT_LEAST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["15", "SPELL", "AT_LEAST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_TYPE", "values": ["15", "MINION", "AT_LEAST"] },
+			{ "type": "DECK_TYPE", "values": ["15", "SPELL", "AT_LEAST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4115,35 +2615,22 @@
 		"name": "The Void",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: The Void (rank 1)",
-		"emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
+		"text": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "ULD_134",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
-				"values": ["e"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4153,35 +2640,22 @@
 		"name": "The Void",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: The Void (rank 10)",
-		"emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
+		"text": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "ULD_134",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
-				"values": ["e"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4191,35 +2665,22 @@
 		"name": "The Void",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: The Void (rank 15)",
-		"emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
+		"text": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "ULD_134",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
-				"values": ["e"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4229,35 +2690,22 @@
 		"name": "The Void",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: The Void (rank 20)",
-		"emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
+		"text": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "ULD_134",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
-				"values": ["e"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4267,35 +2715,22 @@
 		"name": "The Void",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: The Void (rank 25)",
-		"emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
+		"text": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "ULD_134",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
-				"values": ["e"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4305,35 +2740,22 @@
 		"name": "The Void",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: The Void (rank 5)",
-		"emptyText": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
+		"text": "Win one game with a deck containing no cards with the letter \"e\" in its (English) name in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "ULD_134",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_NO_CARD_WITH_LETTER_IN_NAME",
-				"values": ["e"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_NO_CARD_WITH_LETTER_IN_NAME", "values": ["e"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4343,39 +2765,23 @@
 		"name": "Death by a Thousand Cuts",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -1,
 		"displayName": "Achievement completed: Death by a Thousand Cuts (rank 1)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
 		"completedText": "Completed at rank 1 or better",
 		"displayCardId": "DAL_773",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["1"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["1"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4385,39 +2791,23 @@
 		"name": "Death by a Thousand Cuts",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -10,
 		"displayName": "Achievement completed: Death by a Thousand Cuts (rank 10)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
 		"completedText": "Completed at rank 10 or better",
 		"displayCardId": "DAL_773",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["10"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["10"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4427,39 +2817,23 @@
 		"name": "Death by a Thousand Cuts",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -15,
 		"displayName": "Achievement completed: Death by a Thousand Cuts (rank 15)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
 		"completedText": "Completed at rank 15 or better",
 		"displayCardId": "DAL_773",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["15"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["15"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4469,39 +2843,23 @@
 		"name": "Death by a Thousand Cuts",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -20,
 		"displayName": "Achievement completed: Death by a Thousand Cuts (rank 20)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
 		"completedText": "Completed at rank 20 or better",
 		"displayCardId": "DAL_773",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["20"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["20"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4511,39 +2869,23 @@
 		"name": "Death by a Thousand Cuts",
 		"icon": "boss_victory",
 		"root": true,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -25,
 		"displayName": "Achievement completed: Death by a Thousand Cuts (rank 25)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
 		"completedText": "Completed at rank 25 or better",
 		"displayCardId": "DAL_773",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["25"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["25"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	},
@@ -4553,39 +2895,23 @@
 		"name": "Death by a Thousand Cuts",
 		"icon": "boss_victory",
 		"root": false,
+		"canBeCompletedOnlyOnce": false,
 		"priority": -5,
 		"displayName": "Achievement completed: Death by a Thousand Cuts (rank 5)",
-		"emptyText": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
+		"text": "Win one game with a deck containing at least 15 minions with 1 attack or less and no spell in Ranked Standard",
 		"completedText": "Completed at rank 5 or better",
 		"displayCardId": "DAL_773",
 		"displayCardType": "minion",
 		"difficulty": "rare",
 		"maxNumberOfRecords": 3,
-		"points": 5,
+		"points": 5.0,
 		"requirements": [
-			{
-				"type": "GAME_TYPE",
-				"values": ["7"]
-			},
-			{
-				"type": "RANKED_MIN_RANK",
-				"values": ["5"]
-			},
-			{
-				"type": "RANKED_FORMAT_TYPE",
-				"values": ["2"]
-			},
-			{
-				"type": "GAME_WON"
-			},
-			{
-				"type": "DECK_CARD_ATTRIBUTE_VALUE",
-				"values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"]
-			},
-			{
-				"type": "DECK_TYPE",
-				"values": ["0", "SPELL", "AT_MOST"]
-			}
+			{ "type": "GAME_TYPE", "values": ["7"] },
+			{ "type": "RANKED_MIN_RANK", "values": ["5"] },
+			{ "type": "RANKED_FORMAT_TYPE", "values": ["2"] },
+			{ "type": "GAME_WON" },
+			{ "type": "DECK_CARD_ATTRIBUTE_VALUE", "values": ["15", "AT_LEAST", "attack", "1", "AT_MOST"] },
+			{ "type": "DECK_TYPE", "values": ["0", "SPELL", "AT_MOST"] }
 		],
 		"resetEvents": ["GAME_END"]
 	}
