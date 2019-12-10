@@ -18,7 +18,12 @@ const FEEDBACK_ENDPOINT_POST = 'https://91hyr33pw4.execute-api.us-west-2.amazona
 			<div class="title">Send feedback / Report a bug</div>
 			<div class="note">
 				Don't forget to check out
-				<a href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting" target="_blank"
+				<a
+					href="https://github.com/Zero-to-Heroes/firestone/wiki/FAQ---Troubleshooting"
+					target="_blank"
+					(mousedown)="preventMiddleClick($event)"
+					(click)="preventMiddleClick($event)"
+					(auxclick)="preventMiddleClick($event)"
 					>the FAQ</a
 				>
 				as well!
@@ -108,5 +113,15 @@ export class SettingsGeneralBugReportComponent {
 	// Prevent the window from being dragged around if user drags within the textarea
 	preventDrag(event: MouseEvent) {
 		event.stopPropagation();
+	}
+
+	preventMiddleClick(event: MouseEvent) {
+		// console.log('intercepting mouse click?', event);
+		if (event.which === 2) {
+			// console.log('preventing middle click on href, as it messes up with the windowing system');
+			event.stopPropagation();
+			event.preventDefault();
+			return false;
+		}
 	}
 }

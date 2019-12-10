@@ -32,7 +32,14 @@ import { PreferencesService } from '../../../services/preferences.service';
 			<ol class="todo">
 				<li>
 					1. Install the Firestone Twitch extension:
-					<a href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u" target="_blank">here</a>
+					<a
+						href="https://www.twitch.tv/ext/jbmhw349lqbus9j8tx4wac18nsja9u"
+						target="_blank"
+						(mousedown)="preventMiddleClick($event)"
+						(click)="preventMiddleClick($event)"
+						(auxclick)="preventMiddleClick($event)"
+						>here</a
+					>
 				</li>
 				<li>2. Connect your Twitch account to Firestone by clicking the button below</li>
 			</ol>
@@ -50,7 +57,14 @@ import { PreferencesService } from '../../../services/preferences.service';
 			<div class="twitch logged-in" *ngIf="twitchLoginUrl && twitchedLoggedIn">
 				<div class="user-name">
 					Logged in as:
-					<a href="https://www.twitch.tv/{{ twitchUserName }}" target="_blank">{{ twitchUserName }}</a>
+					<a
+						href="https://www.twitch.tv/{{ twitchUserName }}"
+						target="_blank"
+						(mousedown)="preventMiddleClick($event)"
+						(click)="preventMiddleClick($event)"
+						(auxclick)="preventMiddleClick($event)"
+						>{{ twitchUserName }}</a
+					>
 				</div>
 				<button (mousedown)="disconnect()" class="text">
 					<i class="twitch-icon">
@@ -106,6 +120,16 @@ export class SettingsBroadcastComponent implements AfterViewInit, OnDestroy {
 	disconnect() {
 		console.log('disconnecting twitch');
 		this.prefs.disconnectTwitch();
+	}
+
+	preventMiddleClick(event: MouseEvent) {
+		// console.log('intercepting mouse click?', event);
+		if (event.which === 2) {
+			// console.log('preventing middle click on href, as it messes up with the windowing system');
+			event.stopPropagation();
+			event.preventDefault();
+			return false;
+		}
 	}
 
 	private async loadDefaultValues() {
