@@ -581,11 +581,11 @@ export class GameEvents {
 			return;
 		}
 
-		this.processingQueue.enqueue(data);
-
 		if (data.indexOf('CREATE_GAME') !== -1) {
 			console.log('[game-events] received CREATE_GAME log', data);
 		}
+
+		this.processingQueue.enqueue(data);
 	}
 
 	private existingLogLines: string[] = [];
@@ -623,11 +623,18 @@ export class GameEvents {
 				Date.now(),
 				this.existingLogLines[this.existingLogLines.length - 1],
 			);
-			if (lastLineTimestamp && Date.now() - lastLineTimestamp > 5 * 60 * 1000) {
+			// Sometimes there is a one hour offset that breaks everything, and I couldn't find where it came from
+			// See the following log lines that produced the issue
+			// 2019-12-11 12:46:06,017 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] received CREATE_GAME log" | "D 12:46:05.5537105 GameState.DebugPrintPower() - CREATE_GAME" |
+			// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line timestamp" | 1576075565000 | 1576079166026 | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
+			// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line is too old, not doing anything" | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
+			// 2019-12-11 12:46:06,223 (INFO) </Files/vendor.js> (:1620) - "[game-events] received CREATE_GAME log" | "D 12:46:06.1966960 PowerTaskList.DebugPrintPower() -     CREATE_GAME" |
+			if (lastLineTimestamp && Date.now() - lastLineTimestamp > (60 + 5) * 60 * 1000) {
 				console.log(
 					'[game-events] [existing] last line is too old, not doing anything',
 					this.existingLogLines[this.existingLogLines.length - 1],
 				);
+				this.existingLogLines = [];
 				return;
 			}
 			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
