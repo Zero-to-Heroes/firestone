@@ -85,7 +85,9 @@ export class BattlegroundsStateService {
 					// this.logger.debug('[battlegrounds-state] processing', gameEvent);
 					// We want to keep the null state as a valid return option to signal that
 					// nothing should be displayed
+					const oldState = this.state;
 					this.state = await parser.parse(this.state || BattlegroundsState.create(), gameEvent);
+					await this.updateOverlays(oldState, this.state);
 					const emittedEvent = {
 						name: parser.event(),
 						state: this.state,
@@ -96,6 +98,23 @@ export class BattlegroundsStateService {
 			} catch (e) {
 				this.logger.error('Exception while applying parser', e);
 			}
+		}
+	}
+
+	private async updateOverlays(oldState: BattlegroundsState, newState: BattlegroundsState) {
+		const [leaderboardWindow, playerInfoWindow] = await Promise.all([
+			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
+			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
+		]);
+		if (newState && !leaderboardWindow.isVisible) {
+			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
+		} else if (!newState) {
+			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
+		}
+		if (newState && !playerInfoWindow.isVisible) {
+			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
+		} else if (!newState) {
+			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
 		}
 	}
 

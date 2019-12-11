@@ -85,19 +85,19 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 			if (event.name === GameEvent.GAME_START) {
 				this.changeWindowSize();
 			}
-			const theWindow = await this.ow.getCurrentWindow();
-			if (!theWindow) {
-				return;
-			}
-			if (event.state && !theWindow.isVisible) {
-				console.log('restoring window', theWindow);
-				this.restoreWindow();
-			} else if (!event.state) {
-				console.log('hiding window', theWindow);
-				this.state = event.state;
-				this.hideWindow();
-				return;
-			}
+			// const theWindow = await this.ow.getCurrentWindow();
+			// if (!theWindow) {
+			// 	return;
+			// }
+			// if (event.state && !theWindow.isVisible) {
+			// 	console.log('restoring window', theWindow);
+			// 	this.restoreWindow();
+			// } else if (!event.state) {
+			// 	console.log('hiding window', theWindow);
+			// 	this.state = event.state;
+			// 	this.hideWindow();
+			// 	return;
+			// }
 			if (event.state.players !== this.players) {
 				this.state = event.state;
 				console.log('reassigning players', this.state.players, this.players);
@@ -121,7 +121,7 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		// }
 		console.log('handled after view init');
 		// console.warn('debug to remove');
-		await this.restoreWindow();
+		// await this.restoreWindow();
 		await this.handleDisplayPreferences();
 		// this.players = [];
 		// for (let i = 0; i < 8; i++) {
@@ -195,11 +195,11 @@ export class BattlegroundsLeaderboardOverlayComponent implements AfterViewInit, 
 		await this.ow.changeWindowPosition(this.windowId, left, top);
 	}
 
-	private async restoreWindow() {
-		await this.ow.restoreWindow(this.windowId);
-	}
+	// private async restoreWindow() {
+	// 	await this.ow.restoreWindow(this.windowId);
+	// }
 
-	private hideWindow() {
-		this.ow.hideWindow(this.windowId);
-	}
+	// private hideWindow() {
+	// 	this.ow.hideWindow(this.windowId);
+	// }
 }
