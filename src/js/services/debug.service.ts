@@ -44,8 +44,8 @@ export class DebugService {
 			amplitude.getInstance().logEvent('error-logged');
 			return function() {
 				const stack = new Error().stack;
-				oldConsoleLogFunc.apply(console, arguments, stack);
-				let argsString = stack + '|';
+				// oldConsoleLogFunc.apply(console, arguments, stack);
+				let argsString = stack + '\n|';
 				for (let i = 0; i < arguments.length; i++) {
 					let cache = [];
 					argsString +=
