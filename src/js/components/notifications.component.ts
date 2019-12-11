@@ -312,10 +312,14 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	private fadeNotificationOut(notificationId: string) {
 		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
 		if (!activeNotif) {
-			console.log('notif already removed', notificationId, this.activeNotifications);
+			console.log('activeNotif already removed', notificationId, this.activeNotifications);
 			return;
 		}
 		const notification = this.elRef.nativeElement.querySelector('.' + notificationId);
+		if (!notification) {
+			console.log('notif already removed', notificationId, this.activeNotifications);
+			return;
+		}
 		notification.classList.add('fade-out');
 		console.log('manually fading out notification', notificationId);
 		if (!(this.cdr as ViewRef).destroyed) {
