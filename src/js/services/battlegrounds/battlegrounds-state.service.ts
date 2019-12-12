@@ -1,16 +1,21 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../models/game-event';
+import { Preferences } from '../../models/preferences';
+import { AllCardsService } from '../all-cards.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
+import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
+import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
-import { BattlegroundsHidePlayerInfoParser } from './events-parser/battlegrounds-hide-player-info-processor';
+import { BattlegroundsHeroInfoService } from './battlegrounds-hero-info.service';
+import { BattlegroundsHideHeroSelectionParser } from './events-parser/battlegrounds-hide-hero-selection-parser';
 import { BattlegroundsLeaderboardPlaceParser } from './events-parser/battlegrounds-leaderboard-place-parser';
 import { BattlegroundsPlayerBoardParser } from './events-parser/battlegrounds-player-board-parser';
 import { BattlegroundsPlayerTavernUpgradeParser } from './events-parser/battlegrounds-player-tavern-upgrade-parser';
-import { BattlegroundsShowPlayerInfoParser } from './events-parser/battlegrounds-show-player-info-processor';
+import { BattlegroundsShowHeroSelectionParser } from './events-parser/battlegrounds-show-hero-selection-parser';
 import { EventParser } from './events-parser/event-parser';
 import { GameEndParser } from './events-parser/game-end-parser';
 import { GameStartParser } from './events-parser/game-start-parser';
@@ -37,7 +42,19 @@ export class BattlegroundsStateService {
 	private battlegroundsEventBus = new BehaviorSubject<any>(null);
 	private eventEmitters = [];
 
-	constructor(private gameEvents: GameEventsEmitterService, private logger: NGXLogger, private ow: OverwolfService) {
+	private showHeroSelectionPref: boolean;
+
+	private preferencesSubscription: Subscription;
+
+	constructor(
+		private gameEvents: GameEventsEmitterService,
+		private mainStore: MainWindowStoreService,
+		private logger: NGXLogger,
+		private ow: OverwolfService,
+		private readonly prefs: PreferencesService,
+		private readonly infoService: BattlegroundsHeroInfoService,
+		private readonly allCards: AllCardsService,
+	) {
 		if (!this.ow) {
 			console.warn('[game-state] Could not find OW service');
 			return;
@@ -51,11 +68,18 @@ export class BattlegroundsStateService {
 		this.buildEventEmitters();
 		window['battlegroundsEventBus'] = this.battlegroundsEventBus;
 		window['battlegroundsUpdater'] = this.battlegroundsUpdater;
-		// window['deckDebug'] = this;
 		window['logBattlegroundsState'] = () => {
 			this.logger.debug(JSON.stringify(this.state));
 		};
-		this.loadBattlegroundsWindow();
+		this.handleDisplayPreferences();
+		setTimeout(() => {
+			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+			this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+				if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+					this.handleDisplayPreferences(event.preferences);
+				}
+			});
+		});
 	}
 
 	private registerGameEvents() {
@@ -73,10 +97,6 @@ export class BattlegroundsStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent | BattlegroundsEvent) {
-		// if (!this.state) {
-		// 	this.logger.error('[battlegrounds-state] null state before processing event', gameEvent, this.state);
-		// 	return;
-		// }
 		// this.logger.debug('[battlegrounds-state] trying to process', gameEvent);
 		for (const parser of this.eventParsers) {
 			try {
@@ -86,13 +106,18 @@ export class BattlegroundsStateService {
 					// We want to keep the null state as a valid return option to signal that
 					// nothing should be displayed
 					const oldState = this.state;
-					this.state = await parser.parse(this.state || BattlegroundsState.create(), gameEvent);
-					await this.updateOverlays(oldState, this.state);
+					this.state = await parser.parse(
+						this.state || BattlegroundsState.create(),
+						gameEvent,
+						this.mainStore.state,
+					);
+					this.logger.debug('[battlegrounds-state] udpated state', this.state);
+					await this.updateOverlays();
 					const emittedEvent = {
 						name: parser.event(),
 						state: this.state,
 					};
-					this.logger.debug('[battlegrounds-state] Emitting new event', emittedEvent);
+					this.logger.debug('[battlegrounds-state] Emitting new event', emittedEvent.name);
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 				}
 			} catch (e) {
@@ -101,21 +126,47 @@ export class BattlegroundsStateService {
 		}
 	}
 
-	private async updateOverlays(oldState: BattlegroundsState, newState: BattlegroundsState) {
-		const [leaderboardWindow, playerInfoWindow] = await Promise.all([
+	private async updateOverlays() {
+		const [leaderboardWindow, playerInfoWindow, heroInfoWindow] = await Promise.all([
 			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
 			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
+			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW),
 		]);
-		if (newState && !leaderboardWindow.isVisible) {
+		this.logger.debug(
+			'[battlegrounds-state] udpating overlays?',
+			leaderboardWindow,
+			playerInfoWindow,
+			heroInfoWindow,
+			this.state,
+		);
+		if (this.state && !leaderboardWindow.isVisible) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
-		} else if (!newState) {
+		} else if (!this.state) {
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
 		}
-		if (newState && !playerInfoWindow.isVisible) {
+
+		if (this.state && !playerInfoWindow.isVisible) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
-		} else if (!newState) {
+		} else if (!this.state) {
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
 		}
+
+		if (
+			this.state &&
+			this.state.heroSelection.length > 0 &&
+			!heroInfoWindow.isVisible &&
+			this.showHeroSelectionPref
+		) {
+			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW);
+		} else if (!this.state || this.state.heroSelection.length === 0) {
+			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW);
+		}
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.showHeroSelectionPref = preferences.batlegroundsShowHeroSelectionPref;
+		this.updateOverlays();
 	}
 
 	private async buildEventEmitters() {
@@ -130,15 +181,9 @@ export class BattlegroundsStateService {
 			new BattlegroundsPlayerBoardParser(),
 			new BattlegroundsLeaderboardPlaceParser(),
 			new BattlegroundsPlayerTavernUpgradeParser(),
-			new BattlegroundsHidePlayerInfoParser(),
-			new BattlegroundsShowPlayerInfoParser(),
+			// new BattlegroundsHidePlayerInfoParser(),
+			new BattlegroundsShowHeroSelectionParser(this.infoService, this.allCards),
+			new BattlegroundsHideHeroSelectionParser(),
 		];
-	}
-
-	private async loadBattlegroundsWindow() {
-		// const window = await this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_WINDOW);
-		// const windowId = window.id;
-		// await this.ow.restoreWindow(windowId);
-		// await this.ow.hideWindow(windowId);
 	}
 }

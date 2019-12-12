@@ -1,0 +1,11 @@
+[
+	{ "Type": "NEW_GAME", "Value": null },
+	{
+		"Type": "MATCH_METADATA",
+		"Value": { "BuildNumber": 37060, "GameType": 23, "FormatType": 1, "ScenarioID": 3459 }
+	},
+	{
+		"Type": "BATTLEGROUNDS_HERO_SELECTION",
+		"Value": { "CardIds": ["TB_BaconShop_HERO_43", "TB_BaconShop_HERO_45", "TB_BaconShop_HERO_01"] }
+	}
+]

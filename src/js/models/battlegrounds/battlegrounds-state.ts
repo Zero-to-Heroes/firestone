@@ -1,8 +1,11 @@
+import { BattlegroundsHero } from './battlegrounds-hero';
 import { BattlegroundsPlayer } from './battlegrounds-player';
 
 export class BattlegroundsState {
 	readonly players: readonly BattlegroundsPlayer[] = [];
 	readonly displayedPlayerCardId: string;
+	readonly heroSelection: readonly BattlegroundsHero[] = [];
+	readonly displayedHero: BattlegroundsHero;
 
 	public static create(): BattlegroundsState {
 		return new BattlegroundsState();

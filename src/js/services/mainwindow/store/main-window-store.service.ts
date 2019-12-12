@@ -119,8 +119,8 @@ const MAX_HISTORY_SIZE = 30;
 @Injectable()
 export class MainWindowStoreService {
 	public stateUpdater = new EventEmitter<MainWindowStoreEvent>();
+	public state: MainWindowState = new MainWindowState();
 
-	private state: MainWindowState = new MainWindowState();
 	private stateEmitter = new BehaviorSubject<MainWindowState>(this.state);
 	private processors: Map<string, Processor>;
 

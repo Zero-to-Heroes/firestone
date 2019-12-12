@@ -18,6 +18,7 @@ export class OverwolfService {
 	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
 	public static BATTLEGROUNDS_PLAYER_INFO_WINDOW = 'BattlegroundsPlayerInfoWindow';
 	public static BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW = 'BattlegroundsLeaderboardOverlay';
+	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW = 'BattlegroundsHeroSelectionOverlay';
 
 	public getMainWindow(): any {
 		return overwolf.windows.getMainWindow();

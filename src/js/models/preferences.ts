@@ -33,6 +33,7 @@ export class Preferences {
 	readonly resetAchievementsOnAppStart = false;
 
 	readonly battlegroundsShowLastOpponentBoard = false;
+	readonly batlegroundsShowHeroSelectionPref = false;
 
 	readonly launchAppOnGameStart: boolean = true;
 	readonly binder: BinderPrefs = new BinderPrefs();

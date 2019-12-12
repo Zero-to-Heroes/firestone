@@ -19,8 +19,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			<section class="toggle-label">
 				<preference-toggle
 					field="battlegroundsShowLastOpponentBoard"
-					label="Last known opponent's board"
+					label="BGS - Last known opponent's board"
 					tooltip="Adds an icon next to an opponent's leaderboard name in Battlegrounds. On mouse hover, it displays the last known board state for this opponent."
+				></preference-toggle>
+				<preference-toggle
+					field="batlegroundsShowHeroSelectionPref"
+					label="BGS - Info on hero selection "
+					tooltip="Adds an icon next to an opponent's name in Battlegrounds hero selection. On mouse hover, it displays some basic information, stats and strategy for this hero."
 				></preference-toggle>
 			</section>
 		</div>

@@ -87,6 +87,17 @@ export class DevService {
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		};
+		window['loadEvents'] = async fileName => {
+			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\test\\events\\${fileName}.json`;
+			const logContents = await this.io.getFileContents(logsLocation);
+			const events = JSON.parse(logContents);
+			console.log('sending events', events);
+			for (let event of events) {
+				console.log('dispatching', event);
+				this.gameEvents.dispatchGameEvent(event);
+			}
+			console.log('processing done');
+		};
 		// window['addReplayInfos'] = async () => {
 		// 	const achievements = await this.storage.loadAchievements();
 		// 	const achievement = achievements.filter(ach => ach.replayInfo && ach.replayInfo.length > 0)[0];

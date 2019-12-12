@@ -18,6 +18,7 @@ import { VersionComponent } from '../../components/version.component';
 import { WindowWrapperComponent } from '../../components/window-wrapper.component';
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
+import { ComponentTooltipDirective } from '../../directives/component-tooltip.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
 import { PulseDirective } from '../../directives/pulse.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
@@ -44,6 +45,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		HelpTooltipComponent,
 
 		CardTooltipDirective,
+		ComponentTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
@@ -72,6 +74,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		CardTooltipComponent,
 		HelpTooltipComponent,
 
+		ComponentTooltipDirective,
 		CardTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
