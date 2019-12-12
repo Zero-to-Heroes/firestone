@@ -36,7 +36,9 @@ export class GlobalStatsService {
 			(data: any) => {
 				// Stats are guaranteed to change between two games betwen they record
 				// the time spend in games
-				if (!data || !data.result || this.areEqual(data.result, this.cachedStats)) {
+				const areEqual = this.areEqual(data.result, this.cachedStats);
+				if (!data || !data.result || areEqual) {
+					this.logger.debug('[global-stats] invalid stats received', data == null, areEqual);
 					setTimeout(() => this.getGlobalStatsInternal(userId, callback, retriesLeft - 1), 1000);
 					return;
 				}
