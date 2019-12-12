@@ -16,6 +16,7 @@ export class GameEvents {
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
 	private spectating: boolean;
 	private plugin;
+	private hasSentToS3 = false;
 
 	private processingQueue = new ProcessingQueue<string>(
 		eventQueue => this.processQueue(eventQueue),
@@ -50,7 +51,10 @@ export class GameEvents {
 		if (this.plugin) {
 			this.plugin.onGlobalEvent.addListener((first: string, second: string) => {
 				console.log('[game-events] received global event', first, second);
-				if (first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1) {
+				if (
+					!this.hasSentToS3 &&
+					(first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1)
+				) {
 					this.uploadLogsAndSendException(first, second);
 				}
 			});
@@ -114,6 +118,7 @@ export class GameEvents {
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
+				this.hasSentToS3 = false;
 				const event = Object.assign(new GameEvent(), { type: GameEvent.GAME_START } as GameEvent);
 				this.gameEventsEmitter.onGameStart.next(event);
 				this.gameEventsEmitter.allEvents.next(event);
@@ -678,6 +683,7 @@ export class GameEvents {
 
 	private async uploadLogsAndSendException(first, second) {
 		try {
+			this.hasSentToS3 = true;
 			const s3LogFileKey = await this.logService.uploadGameLogs();
 			const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
 			const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
