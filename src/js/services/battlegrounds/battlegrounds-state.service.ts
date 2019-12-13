@@ -60,7 +60,7 @@ export class BattlegroundsStateService {
 			return;
 		}
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsEvent) => {
-			this.logger.debug('[battlegrounds-state] enqueueing', event);
+			// this.logger.debug('[battlegrounds-state] enqueueing', event);
 			this.processingQueue.enqueue(event);
 		});
 		this.eventParsers = this.buildEventParsers();
@@ -111,13 +111,13 @@ export class BattlegroundsStateService {
 						gameEvent,
 						this.mainStore.state,
 					);
-					this.logger.debug('[battlegrounds-state] udpated state', this.state);
+					// this.logger.debug('[battlegrounds-state] udpated state', this.state);
 					await this.updateOverlays();
 					const emittedEvent = {
 						name: parser.event(),
 						state: this.state,
 					};
-					this.logger.debug('[battlegrounds-state] Emitting new event', emittedEvent.name);
+					// this.logger.debug('[battlegrounds-state] Emitting new event', emittedEvent.name);
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 				}
 			} catch (e) {
@@ -132,13 +132,13 @@ export class BattlegroundsStateService {
 			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
 			this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW),
 		]);
-		this.logger.debug(
-			'[battlegrounds-state] udpating overlays?',
-			leaderboardWindow,
-			playerInfoWindow,
-			heroInfoWindow,
-			this.state,
-		);
+		// this.logger.debug(
+		// 	'[battlegrounds-state] udpating overlays?',
+		// 	leaderboardWindow,
+		// 	playerInfoWindow,
+		// 	heroInfoWindow,
+		// 	this.state,
+		// );
 		if (this.state && !leaderboardWindow.isVisible) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
 		} else if (!this.state) {

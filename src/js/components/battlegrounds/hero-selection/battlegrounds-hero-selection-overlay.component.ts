@@ -13,8 +13,6 @@ import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
-import { GameEvent } from '../../../models/game-event';
-import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
@@ -79,7 +77,6 @@ export class BattlegroundsHeroSelectionOverlayComponent implements AfterViewInit
 			}
 			this.changeWindowSize();
 			this.state = event.state;
-			console.log('handling hero selection', event);
 			this.heroes = this.state.heroSelection;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
