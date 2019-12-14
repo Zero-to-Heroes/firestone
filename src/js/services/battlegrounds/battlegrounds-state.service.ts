@@ -102,15 +102,11 @@ export class BattlegroundsStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				// console.log('trying to apply parser', parser);
-				if (parser.applies(gameEvent)) {
+				if (parser.applies(gameEvent, this.state)) {
 					// this.logger.debug('[battlegrounds-state] processing', gameEvent);
 					// We want to keep the null state as a valid return option to signal that
 					// nothing should be displayed
-					this.state = await parser.parse(
-						this.state || BattlegroundsState.create(),
-						gameEvent,
-						this.mainStore.state,
-					);
+					this.state = await parser.parse(this.state, gameEvent, this.mainStore.state);
 					// this.logger.debug('[battlegrounds-state] udpated state', this.state);
 					await this.updateOverlays();
 					const emittedEvent = {
@@ -138,6 +134,7 @@ export class BattlegroundsStateService {
 		// 	playerInfoWindow,
 		// 	heroInfoWindow,
 		// 	this.state,
+		// 	this,
 		// );
 		if (this.state && !leaderboardWindow.isVisible && this.showLeaderboardPref) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);

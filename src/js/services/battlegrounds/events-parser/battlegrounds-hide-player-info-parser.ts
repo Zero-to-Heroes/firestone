@@ -4,8 +4,8 @@ import { BattlegroundsHidePlayerInfoEvent } from '../events/battlegrounds-hide-p
 import { EventParser } from './event-parser';
 
 export class BattlegroundsHidePlayerInfoParser implements EventParser {
-	public applies(gameEvent: BattlegroundsEvent): boolean {
-		return gameEvent.type === 'BattlegroundsHidePlayerInfoEvent';
+	public applies(gameEvent: BattlegroundsEvent, state: BattlegroundsState): boolean {
+		return state && gameEvent.type === 'BattlegroundsHidePlayerInfoEvent';
 	}
 
 	public async parse(

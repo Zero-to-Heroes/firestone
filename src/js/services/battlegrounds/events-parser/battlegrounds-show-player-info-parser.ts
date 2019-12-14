@@ -5,8 +5,8 @@ import { BattlegroundsShowPlayerInfoEvent } from '../events/battlegrounds-show-p
 import { EventParser } from './event-parser';
 
 export class BattlegroundsShowPlayerInfoParser implements EventParser {
-	public applies(gameEvent: GameEvent | BattlegroundsEvent): boolean {
-		return gameEvent.type === 'BattlegroundsShowPlayerInfoEvent';
+	public applies(gameEvent: GameEvent | BattlegroundsEvent, state: BattlegroundsState): boolean {
+		return state && gameEvent.type === 'BattlegroundsShowPlayerInfoEvent';
 	}
 
 	public async parse(

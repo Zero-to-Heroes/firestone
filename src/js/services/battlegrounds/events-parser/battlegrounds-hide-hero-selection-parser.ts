@@ -7,8 +7,8 @@ import { EventParser } from './event-parser';
 export class BattlegroundsHideHeroSelectionParser implements EventParser {
 	constructor() {}
 
-	public applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.MULLIGAN_DONE;
+	public applies(gameEvent: GameEvent, state: BattlegroundsState): boolean {
+		return state && gameEvent.type === GameEvent.MULLIGAN_DONE;
 	}
 
 	public async parse(

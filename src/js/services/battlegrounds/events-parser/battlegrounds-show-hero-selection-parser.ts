@@ -12,8 +12,8 @@ export class BattlegroundsShowHeroSelectionParser implements EventParser {
 		private readonly allCards: AllCardsService,
 	) {}
 
-	public applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION;
+	public applies(gameEvent: GameEvent, state: BattlegroundsState): boolean {
+		return state && gameEvent.type === GameEvent.BATTLEGROUNDS_HERO_SELECTION;
 	}
 
 	public async parse(

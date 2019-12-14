@@ -8,8 +8,8 @@ import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
 export class BattlegroundsPlayerBoardParser implements EventParser {
-	public applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD;
+	public applies(gameEvent: GameEvent, state: BattlegroundsState): boolean {
+		return state && gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD;
 	}
 
 	public async parse(currentState: BattlegroundsState, gameEvent: GameEvent): Promise<BattlegroundsState> {
