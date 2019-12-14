@@ -9,8 +9,8 @@ export class AssignCardIdParser implements EventParser {
 
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
-	applies(gameEvent: GameEvent): boolean {
-		return [GameEvent.HEALING].indexOf(gameEvent.type) !== -1;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && [GameEvent.HEALING].indexOf(gameEvent.type) !== -1;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

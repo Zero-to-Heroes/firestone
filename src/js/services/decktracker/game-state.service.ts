@@ -70,6 +70,8 @@ export class GameStateService {
 
 	private currentReviewId: string;
 
+	private showDecktracker: boolean;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private events: Events,
@@ -109,7 +111,16 @@ export class GameStateService {
 		window['logGameState'] = () => {
 			this.logger.debug(JSON.stringify(this.state));
 		};
-		this.loadDecktrackerWindow();
+		setTimeout(() => {
+			const decktrackerDisplayEventBus: BehaviorSubject<boolean> = this.ow.getMainWindow()
+				.decktrackerDisplayEventBus;
+			decktrackerDisplayEventBus.subscribe(event => {
+				this.showDecktracker = event;
+				this.logger.debug('decktracker display update', event);
+				this.updateOverlays();
+			});
+		});
+		// this.loadDecktrackerWindow();
 		this.loadMatchOverlayWindows();
 	}
 
@@ -162,48 +173,54 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent) {
-		if (!this.state) {
-			this.logger.error('null state before processing event', gameEvent, this.state);
-			return;
-		}
+		// if (!this.state) {
+		// 	this.logger.error('null state before processing event', gameEvent, this.state);
+		// 	return;
+		// }
 		for (const parser of this.eventParsers) {
 			try {
-				if (parser.applies(gameEvent)) {
-					// this.logger.debug(
-					// 	'[game-state] will apply parser',
-					// 	parser.event(),
-					// 	gameEvent.cardId,
-					// 	gameEvent.entityId,
-					// );
+				if (parser.applies(gameEvent, this.state)) {
+					this.logger.debug(
+						'[game-state] will apply parser',
+						parser.event(),
+						gameEvent.cardId,
+						gameEvent.entityId,
+					);
 					const stateAfterParser = await parser.parse(this.state, gameEvent);
-					if (!stateAfterParser) {
-						this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
-						continue;
+					// if (!stateAfterParser) {
+					// 	this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
+					// 	await this.updateOverlays();
+					// 	continue;
+					// }
+					if (stateAfterParser) {
+						// Add information that is not linked to events, like the number of turns the
+						// card has been present in the zone
+						const stateWithMetaInfos = this.gameStateMetaInfos.addMetaInfos(stateAfterParser);
+						// Add missing info like card names, if the card added doesn't come from a deck state
+						// (like with the Chess brawl)
+						const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
+						const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
+						const stateFromTracker = gameEvent.gameState || ({} as any);
+						const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(
+							playerDeckWithDynamicZones,
+							stateFromTracker.Player,
+						);
+						const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(
+							newState.opponentDeck,
+							stateFromTracker.Opponent,
+						);
+						this.state = Object.assign(new GameState(), newState, {
+							playerDeck: playerDeckWithZonesOrdered,
+							opponentDeck: opponentDeckWithZonesOrdered,
+						} as GameState);
+					} else {
+						this.state = null;
 					}
-					// Add information that is not linked to events, like the number of turns the
-					// card has been present in the zone
-					const stateWithMetaInfos = this.gameStateMetaInfos.addMetaInfos(stateAfterParser);
-					// Add missing info like card names, if the card added doesn't come from a deck state
-					// (like with the Chess brawl)
-					const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
-					const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
-					const stateFromTracker = gameEvent.gameState || ({} as any);
-					const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(
-						playerDeckWithDynamicZones,
-						stateFromTracker.Player,
-					);
-					const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(
-						newState.opponentDeck,
-						stateFromTracker.Opponent,
-					);
-					this.state = Object.assign(new GameState(), newState, {
-						playerDeck: playerDeckWithZonesOrdered,
-						opponentDeck: opponentDeckWithZonesOrdered,
-					} as GameState);
-					if (!this.state) {
-						this.logger.error('null state after processing event', gameEvent, this.state);
-						continue;
-					}
+					await this.updateOverlays();
+					// if (!this.state) {
+					// 	this.logger.error('null state after processing event', gameEvent, this.state);
+					// 	continue;
+					// }
 					const emittedEvent = {
 						event: {
 							name: parser.event(),
@@ -230,6 +247,25 @@ export class GameStateService {
 			} catch (e) {
 				this.logger.error('Exception while applying parser', parser.event(), e);
 			}
+		}
+	}
+
+	private async updateOverlays() {
+		const [decktrackerWindow] = await Promise.all([
+			this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
+		]);
+		const shouldShowTracker =
+			this.state &&
+			this.state.playerDeck &&
+			((this.state.playerDeck.deck && this.state.playerDeck.deck.length > 0) ||
+				(this.state.playerDeck.hand && this.state.playerDeck.hand.length > 0) ||
+				(this.state.playerDeck.board && this.state.playerDeck.board.length > 0) ||
+				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
+		console.log('should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
+		if (shouldShowTracker && !decktrackerWindow.isVisible && this.showDecktracker) {
+			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
+		} else if (!shouldShowTracker || !this.showDecktracker) {
+			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
 	}
 

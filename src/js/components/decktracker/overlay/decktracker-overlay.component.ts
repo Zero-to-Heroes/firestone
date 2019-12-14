@@ -16,7 +16,6 @@ import { CardTooltipPositionType } from '../../../directives/card-tooltip-positi
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
-import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -41,7 +40,7 @@ declare var amplitude;
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="decktracker-container">
-					<div class="decktracker" *ngIf="showTracker" [style.width.px]="overlayWidthInPx">
+					<div class="decktracker" *ngIf="gameState" [style.width.px]="overlayWidthInPx">
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
@@ -59,22 +58,22 @@ declare var amplitude;
 					</div>
 				</div>
 
-				<i class="i-54 gold-theme corner top-left" *ngIf="showTracker">
+				<i class="i-54 gold-theme corner top-left">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<i class="i-54 gold-theme corner top-right" *ngIf="showTracker">
+				<i class="i-54 gold-theme corner top-right">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<i class="i-54 gold-theme corner bottom-right" *ngIf="showTracker">
+				<i class="i-54 gold-theme corner bottom-right">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
 				</i>
-				<i class="i-54 gold-theme corner bottom-left" *ngIf="showTracker">
+				<i class="i-54 gold-theme corner bottom-left">
 					<svg class="svg-icon-fill">
 						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
 					</svg>
@@ -88,13 +87,13 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
 	windowId: string;
 	activeTooltip: string;
-	overlayDisplayed: boolean;
+	// overlayDisplayed: boolean;
 	displayMode: string;
 	useCleanMode: boolean;
 	showTitleBar: boolean;
 	overlayWidthInPx: number;
 	opacity: number;
-	showTracker: boolean;
+	// showTracker: boolean;
 	highlightCardsInHand: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 
@@ -107,7 +106,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	private hideTooltipSubscription: Subscription;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
-	private displaySubscription: Subscription;
+	// private displaySubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
@@ -124,36 +123,36 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			// console.log('received deck event', event);
-			if (event && event.event && event.event.name === DeckEvents.MATCH_METADATA) {
-				amplitude.getInstance().logEvent('match-start', {
-					'active-skin': this.useCleanMode ? 'clean' : 'original',
-					'display-mode': this.displayMode,
-				});
-			}
+			// if (event && event.event && event.event.name === DeckEvents.MATCH_METADATA) {
+			// 	amplitude.getInstance().logEvent('match-start', {
+			// 		'active-skin': this.useCleanMode ? 'clean' : 'original',
+			// 		'display-mode': this.displayMode,
+			// 	});
+			// }
 			this.gameState = event ? event.state : undefined;
-			this.showTracker =
-				this.gameState &&
-				this.gameState.playerDeck &&
-				((this.gameState.playerDeck.deck && this.gameState.playerDeck.deck.length > 0) ||
-					(this.gameState.playerDeck.hand && this.gameState.playerDeck.hand.length > 0) ||
-					(this.gameState.playerDeck.board && this.gameState.playerDeck.board.length > 0) ||
-					(this.gameState.playerDeck.otherZone && this.gameState.playerDeck.otherZone.length > 0));
+			// this.showTracker =
+			// 	this.gameState &&
+			// 	this.gameState.playerDeck &&
+			// 	((this.gameState.playerDeck.deck && this.gameState.playerDeck.deck.length > 0) ||
+			// 		(this.gameState.playerDeck.hand && this.gameState.playerDeck.hand.length > 0) ||
+			// 		(this.gameState.playerDeck.board && this.gameState.playerDeck.board.length > 0) ||
+			// 		(this.gameState.playerDeck.otherZone && this.gameState.playerDeck.otherZone.length > 0));
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
-		const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		this.displaySubscription = displayEventBus.asObservable().subscribe(async event => {
-			// console.log('received display event', event);
-			if (event && this.gameState && this.gameState.playerDeck) {
-				const window = await this.ow.getCurrentWindow();
-				if (window && window.stateEx !== 'normal') {
-					this.restoreWindow();
-				}
-			} else {
-				this.hideWindow();
-			}
-		});
+		// const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
+		// this.displaySubscription = displayEventBus.asObservable().subscribe(async event => {
+		// 	// console.log('received display event', event);
+		// 	if (event && this.gameState && this.gameState.playerDeck) {
+		// 		const window = await this.ow.getCurrentWindow();
+		// 		if (window && window.stateEx !== 'normal') {
+		// 			this.restoreWindow();
+		// 		}
+		// 	} else {
+		// 		this.hideWindow();
+		// 	}
+		// });
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
@@ -179,7 +178,11 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.changeWindowSize();
 		await this.changeWindowPosition();
 		await this.handleDisplayPreferences();
-		await this.restoreWindow();
+		// await this.restoreWindow();
+		amplitude.getInstance().logEvent('match-start', {
+			'active-skin': this.useCleanMode ? 'clean' : 'original',
+			'display-mode': this.displayMode,
+		});
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -192,7 +195,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.hideTooltipSubscription.unsubscribe();
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
-		this.displaySubscription.unsubscribe();
+		// this.displaySubscription.unsubscribe();
 	}
 
 	@HostListener('mousedown')
@@ -244,25 +247,25 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	private async restoreWindow() {
-		const window = await this.ow.getCurrentWindow();
-		if (!window) {
-			return;
-		}
-		// console.log('current window', window);
-		const [top, left] = [window.top, window.left];
-		await this.ow.restoreWindow(this.windowId);
-		await this.ow.changeWindowPosition(this.windowId, left, top);
-		// console.log('restoring window to previous position');
-		this.onResized();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	// private async restoreWindow() {
+	// 	const window = await this.ow.getCurrentWindow();
+	// 	if (!window) {
+	// 		return;
+	// 	}
+	// 	// console.log('current window', window);
+	// 	const [top, left] = [window.top, window.left];
+	// 	await this.ow.restoreWindow(this.windowId);
+	// 	await this.ow.changeWindowPosition(this.windowId, left, top);
+	// 	// console.log('restoring window to previous position');
+	// 	this.onResized();
+	// 	if (!(this.cdr as ViewRef).destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
-	private hideWindow() {
-		this.ow.hideWindow(this.windowId);
-	}
+	// private hideWindow() {
+	// 	this.ow.hideWindow(this.windowId);
+	// }
 
 	private async changeWindowPosition(): Promise<void> {
 		if (this.hasBeenMovedByUser) {

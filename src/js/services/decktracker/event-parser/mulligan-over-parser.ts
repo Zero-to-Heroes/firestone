@@ -8,8 +8,8 @@ import { EventParser } from './event-parser';
 export class MulliganOverParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.MULLIGAN_DONE;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.MULLIGAN_DONE;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

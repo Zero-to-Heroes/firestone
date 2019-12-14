@@ -9,8 +9,8 @@ import { EventParser } from './event-parser';
 export class MatchMetadataParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.MATCH_METADATA;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.MATCH_METADATA;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

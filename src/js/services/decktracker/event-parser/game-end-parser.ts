@@ -8,12 +8,12 @@ import { EventParser } from './event-parser';
 export class GameEndParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.GAME_END;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.GAME_END;
 	}
 
 	async parse(): Promise<GameState> {
-		return new GameState();
+		return null;
 	}
 
 	event(): string {

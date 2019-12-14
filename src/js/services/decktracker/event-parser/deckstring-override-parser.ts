@@ -13,8 +13,8 @@ export class DeckstringOverrideParser implements EventParser {
 
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === 'DECKSTRING_OVERRIDE';
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === 'DECKSTRING_OVERRIDE';
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

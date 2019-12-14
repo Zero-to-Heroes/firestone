@@ -9,8 +9,8 @@ import { EventParser } from './event-parser';
 export class SecretPlayedFromHandParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.SECRET_PLAYED;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.SECRET_PLAYED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

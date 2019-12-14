@@ -8,8 +8,8 @@ import { EventParser } from './event-parser';
 export class MainStepReadyParser implements EventParser {
 	constructor(private deckParser: DeckParserService, private allCards: AllCardsService) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.MAIN_STEP_READY;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.MAIN_STEP_READY;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

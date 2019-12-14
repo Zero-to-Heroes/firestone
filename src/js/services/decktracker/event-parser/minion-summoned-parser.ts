@@ -10,8 +10,8 @@ import { EventParser } from './event-parser';
 export class MinionSummonedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly cards: AllCardsService) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.MINION_SUMMONED;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.MINION_SUMMONED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

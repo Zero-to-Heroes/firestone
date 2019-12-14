@@ -7,8 +7,8 @@ import { EventParser } from './event-parser';
 export class FirstPlayerParser implements EventParser {
 	constructor() {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.FIRST_PLAYER;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.FIRST_PLAYER;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

@@ -9,8 +9,8 @@ import { EventParser } from './event-parser';
 export class CardRemovedFromBoardParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.CARD_REMOVED_FROM_BOARD;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.CARD_REMOVED_FROM_BOARD;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

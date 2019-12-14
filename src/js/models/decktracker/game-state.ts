@@ -7,4 +7,8 @@ export class GameState {
 	readonly mulliganOver: boolean = false;
 	readonly metadata: Metadata = new Metadata();
 	readonly currentTurn: number | 'mulligan' = 'mulligan';
+
+	public static create(): GameState {
+		return Object.assign(new GameState());
+	}
 }

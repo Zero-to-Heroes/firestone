@@ -10,8 +10,8 @@ import { EventParser } from './event-parser';
 export class CreateCardInDeckParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.CREATE_CARD_IN_DECK;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.CREATE_CARD_IN_DECK;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

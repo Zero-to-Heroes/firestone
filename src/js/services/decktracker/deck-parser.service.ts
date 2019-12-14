@@ -106,6 +106,6 @@ export class DeckParserService {
 	// a game mode that doesn't interact with the Decks.log
 	public reset() {
 		this.currentDeck = {};
-		console.log('[decks] resetting deck');
+		// console.log('[decks] resetting deck');
 	}
 }

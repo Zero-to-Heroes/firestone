@@ -55,8 +55,13 @@ export class TwitchAuthService {
 
 	private async emitEvent(event: any) {
 		let newEvent = Object.assign({}, event);
+		if (!newEvent.state) {
+			newEvent = Object.assign({}, newEvent, {
+				state: GameState.create(),
+			});
+		}
 		// Tmp fix until we fix the twitch extension
-		if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
+		else if (!newEvent.state.playerDeck.deckList || newEvent.state.playerDeck.deckList.length === 0) {
 			const newDeck: readonly DeckCard[] = [
 				...newEvent.state.playerDeck.deck,
 				...newEvent.state.playerDeck.hand,
@@ -73,7 +78,7 @@ export class TwitchAuthService {
 			});
 			// console.log('fixed event to send', newEvent, event);
 		}
-		if (newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
+		if (newEvent.state && newEvent.state.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
 			// Don't show anything in the deck itself
 			const newPlayerDeck = Object.assign(new DeckState(), newEvent.state.playerDeck, {
 				deck: [] as readonly DeckCard[],

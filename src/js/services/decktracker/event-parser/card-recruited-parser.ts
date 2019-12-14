@@ -9,8 +9,8 @@ import { EventParser } from './event-parser';
 export class CardRecruitedParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
-	applies(gameEvent: GameEvent): boolean {
-		return gameEvent.type === GameEvent.RECRUIT_CARD;
+	applies(gameEvent: GameEvent, state: GameState): boolean {
+		return state && gameEvent.type === GameEvent.RECRUIT_CARD;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
