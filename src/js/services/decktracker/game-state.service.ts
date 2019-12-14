@@ -3,6 +3,7 @@ import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
+import { Preferences } from '../../models/preferences';
 import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
@@ -71,6 +72,7 @@ export class GameStateService {
 	private currentReviewId: string;
 
 	private showDecktracker: boolean;
+	private showOpponentHand: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -120,8 +122,15 @@ export class GameStateService {
 				this.updateOverlays();
 			});
 		});
-		// this.loadDecktrackerWindow();
-		this.loadMatchOverlayWindows();
+		this.handleDisplayPreferences();
+		setTimeout(() => {
+			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+			preferencesEventBus.subscribe(event => {
+				if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+					this.handleDisplayPreferences(event.preferences);
+				}
+			});
+		});
 	}
 
 	public async getCurrentReviewId(): Promise<string> {
@@ -180,12 +189,12 @@ export class GameStateService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
-					this.logger.debug(
-						'[game-state] will apply parser',
-						parser.event(),
-						gameEvent.cardId,
-						gameEvent.entityId,
-					);
+					// this.logger.debug(
+					// 	'[game-state] will apply parser',
+					// 	parser.event(),
+					// 	gameEvent.cardId,
+					// 	gameEvent.entityId,
+					// );
 					const stateAfterParser = await parser.parse(this.state, gameEvent);
 					// if (!stateAfterParser) {
 					// 	this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
@@ -251,8 +260,9 @@ export class GameStateService {
 	}
 
 	private async updateOverlays() {
-		const [decktrackerWindow] = await Promise.all([
+		const [decktrackerWindow, opponentHandWindow] = await Promise.all([
 			this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
+			this.ow.obtainDeclaredWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
 		]);
 		const shouldShowTracker =
 			this.state &&
@@ -261,12 +271,25 @@ export class GameStateService {
 				(this.state.playerDeck.hand && this.state.playerDeck.hand.length > 0) ||
 				(this.state.playerDeck.board && this.state.playerDeck.board.length > 0) ||
 				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
-		console.log('should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
+		// console.log('should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
 		if (shouldShowTracker && !decktrackerWindow.isVisible && this.showDecktracker) {
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (!shouldShowTracker || !this.showDecktracker) {
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
+
+		if (this.state && this.state.opponentDeck && !opponentHandWindow.isVisible && this.showOpponentHand) {
+			await this.ow.restoreWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
+		} else if (!this.state || !this.state.opponentDeck || !this.showOpponentHand) {
+			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
+		}
+	}
+
+	private async handleDisplayPreferences(preferences: Preferences = null) {
+		preferences = preferences || (await this.prefs.getPreferences());
+		this.showOpponentHand = preferences.dectrackerShowOpponentGuess || preferences.dectrackerShowOpponentTurnDraw;
+		// console.log('update opp hand prefs', this.showOpponentHand, preferences);
+		this.updateOverlays();
 	}
 
 	private async buildEventEmitters() {
@@ -319,19 +342,5 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
 		];
-	}
-
-	private async loadDecktrackerWindow() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
-		const windowId = window.id;
-		await this.ow.restoreWindow(windowId);
-		await this.ow.hideWindow(windowId);
-	}
-
-	private async loadMatchOverlayWindows() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
-		const windowId = window.id;
-		await this.ow.restoreWindow(windowId);
-		await this.ow.hideWindow(windowId);
 	}
 }

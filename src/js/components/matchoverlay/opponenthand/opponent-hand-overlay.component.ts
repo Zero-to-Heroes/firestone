@@ -8,13 +8,11 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
-import { GameType } from '@firestone-hs/reference-data';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
-import { DeckEvents } from '../../../services/decktracker/event-parser/deck-events';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -28,10 +26,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div class="opponent-hand-overlay overlay-container-parent">
 			<opponent-card-infos
+				*ngIf="gameState && gameState.opponentDeck"
 				[cards]="gameState.opponentDeck.hand"
 				[displayTurnNumber]="displayTurnNumber"
 				[displayGuess]="displayGuess"
-				*ngIf="gameState && gameState.opponentDeck"
 			></opponent-card-infos>
 		</div>
 	`,
@@ -44,12 +42,9 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	displayTurnNumber: boolean = true;
 	displayGuess: boolean = true;
 
-	private displayFromPrefs = false;
-
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
-	private displaySubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
@@ -71,19 +66,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			this.gameState = event.state;
-			if (event.event.name === DeckEvents.MATCH_METADATA) {
-				if (this.gameState.metadata.gameType === GameType.GT_BATTLEGROUNDS) {
-					await this.hideWindow();
-				} else {
-					const visible = (await this.ow.getCurrentWindow()).isVisible;
-					if (!visible) {
-						await this.restoreWindow();
-					}
-				}
-				this.changeWindowSize();
-			} else if (event.event.name === DeckEvents.GAME_END) {
-				this.hideWindow();
-			}
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -91,7 +73,6 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			this.setDisplayPreferences(event.preferences);
-			this.handleDisplayPreferences();
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -102,15 +83,8 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 				await this.changeWindowSize();
 			}
 		});
-
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	console.error('Should not allow debug game state from production');
-		// 	this.gameState = this.ow.getMainWindow().deckDebug ? this.ow.getMainWindow().deckDebug.state : null;
-		// }
 		this.setDisplayPreferences(await this.prefs.getPreferences());
-		await this.handleDisplayPreferences();
 		await this.changeWindowSize();
-		// await this.changeWindowPosition();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -121,21 +95,11 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		this.ow.removeGameInfoUpdatedListener(this.gameInfoUpdatedListener);
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
-		this.displaySubscription.unsubscribe();
 	}
 
 	private setDisplayPreferences(preferences: Preferences) {
 		this.displayTurnNumber = preferences.dectrackerShowOpponentTurnDraw;
 		this.displayGuess = preferences.dectrackerShowOpponentGuess;
-		this.displayFromPrefs = this.displayTurnNumber || this.displayGuess;
-	}
-
-	private async handleDisplayPreferences() {
-		if (this.displayFromPrefs) {
-			this.restoreWindow();
-		} else {
-			this.hideWindow();
-		}
 	}
 
 	private async changeWindowSize(): Promise<void> {
@@ -158,13 +122,5 @@ export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 		const gameHeight = gameInfo.height;
 		const height = gameHeight * 0.2;
 		await this.ow.changeWindowSize(this.windowId, width, height);
-	}
-
-	private async restoreWindow() {
-		await this.ow.restoreWindow(this.windowId);
-	}
-
-	private hideWindow() {
-		this.ow.hideWindow(this.windowId);
 	}
 }
