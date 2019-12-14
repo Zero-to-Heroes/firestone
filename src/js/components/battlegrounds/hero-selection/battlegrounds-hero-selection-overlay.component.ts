@@ -8,14 +8,12 @@ import {
 	ViewRef,
 	ViewEncapsulation,
 } from '@angular/core';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
-import { PreferencesService } from '../../../services/preferences.service';
 
 @Component({
 	selector: 'battlegrounds-hero-selection-overlay',
@@ -60,13 +58,9 @@ export class BattlegroundsHeroSelectionOverlayComponent implements AfterViewInit
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
 		private init_DebugService: DebugService,
-		private allCards: AllCardsService,
-		private prefs: PreferencesService,
 	) {}
 
 	async ngAfterViewInit() {
-		await this.allCards.initializeCardsDb();
-
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().battlegroundsEventBus;
 		this.stateSubscription = eventBus.subscribe(async event => {

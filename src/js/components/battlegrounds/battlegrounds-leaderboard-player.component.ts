@@ -29,7 +29,6 @@ export class BattlegroundsLeaderboardPlayerComponent {
 
 	@Input() set player(value: BattlegroundsPlayer) {
 		if (this.cardId !== value.cardId) {
-			console.log('refreshing player', value);
 			this.cardId = value.cardId;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();

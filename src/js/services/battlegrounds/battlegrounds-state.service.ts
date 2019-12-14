@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
@@ -12,10 +12,12 @@ import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { BattlegroundsHeroInfoService } from './battlegrounds-hero-info.service';
 import { BattlegroundsHideHeroSelectionParser } from './events-parser/battlegrounds-hide-hero-selection-parser';
+import { BattlegroundsHidePlayerInfoParser } from './events-parser/battlegrounds-hide-player-info-parser';
 import { BattlegroundsLeaderboardPlaceParser } from './events-parser/battlegrounds-leaderboard-place-parser';
 import { BattlegroundsPlayerBoardParser } from './events-parser/battlegrounds-player-board-parser';
 import { BattlegroundsPlayerTavernUpgradeParser } from './events-parser/battlegrounds-player-tavern-upgrade-parser';
 import { BattlegroundsShowHeroSelectionParser } from './events-parser/battlegrounds-show-hero-selection-parser';
+import { BattlegroundsShowPlayerInfoParser } from './events-parser/battlegrounds-show-player-info-parser';
 import { EventParser } from './events-parser/event-parser';
 import { GameEndParser } from './events-parser/game-end-parser';
 import { GameStartParser } from './events-parser/game-start-parser';
@@ -43,8 +45,7 @@ export class BattlegroundsStateService {
 	private eventEmitters = [];
 
 	private showHeroSelectionPref: boolean;
-
-	private preferencesSubscription: Subscription;
+	private showLeaderboardPref: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -74,7 +75,7 @@ export class BattlegroundsStateService {
 		this.handleDisplayPreferences();
 		setTimeout(() => {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-			this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			preferencesEventBus.subscribe(event => {
 				if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 					this.handleDisplayPreferences(event.preferences);
 				}
@@ -105,7 +106,6 @@ export class BattlegroundsStateService {
 					// this.logger.debug('[battlegrounds-state] processing', gameEvent);
 					// We want to keep the null state as a valid return option to signal that
 					// nothing should be displayed
-					const oldState = this.state;
 					this.state = await parser.parse(
 						this.state || BattlegroundsState.create(),
 						gameEvent,
@@ -139,15 +139,15 @@ export class BattlegroundsStateService {
 		// 	heroInfoWindow,
 		// 	this.state,
 		// );
-		if (this.state && !leaderboardWindow.isVisible) {
+		if (this.state && !leaderboardWindow.isVisible && this.showLeaderboardPref) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
-		} else if (!this.state) {
+		} else if (!this.state || !this.showLeaderboardPref) {
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
 		}
 
-		if (this.state && !playerInfoWindow.isVisible) {
+		if (this.state && !playerInfoWindow.isVisible && this.showLeaderboardPref) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
-		} else if (!this.state) {
+		} else if (!this.state || !this.showLeaderboardPref) {
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
 		}
 
@@ -158,7 +158,7 @@ export class BattlegroundsStateService {
 			this.showHeroSelectionPref
 		) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW);
-		} else if (!this.state || this.state.heroSelection.length === 0) {
+		} else if (!this.state || this.state.heroSelection.length === 0 || !this.showHeroSelectionPref) {
 			await this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW);
 		}
 	}
@@ -166,6 +166,7 @@ export class BattlegroundsStateService {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.showHeroSelectionPref = preferences.batlegroundsShowHeroSelectionPref;
+		this.showLeaderboardPref = preferences.battlegroundsShowLastOpponentBoard;
 		this.updateOverlays();
 	}
 
@@ -181,7 +182,8 @@ export class BattlegroundsStateService {
 			new BattlegroundsPlayerBoardParser(),
 			new BattlegroundsLeaderboardPlaceParser(),
 			new BattlegroundsPlayerTavernUpgradeParser(),
-			// new BattlegroundsHidePlayerInfoParser(),
+			new BattlegroundsShowPlayerInfoParser(),
+			new BattlegroundsHidePlayerInfoParser(),
 			new BattlegroundsShowHeroSelectionParser(this.infoService, this.allCards),
 			new BattlegroundsHideHeroSelectionParser(),
 		];

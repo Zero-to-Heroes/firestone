@@ -13,7 +13,6 @@ import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { BattlegroundsPlayer } from '../../models/battlegrounds/battlegrounds-player';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
-import { GameEvent } from '../../models/game-event';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -74,12 +73,7 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 	) {}
 
 	async ngAfterViewInit() {
-		// We get the changes via event updates, so automated changed detection isn't useful in PUSH mode
-		this.cdr.detach();
-
 		await this.allCards.initializeCardsDb();
-
-		// this.windowId = (await this.ow.getCurrentWindow()).id;
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().battlegroundsEventBus;
 		this.stateSubscription = eventBus.subscribe(async event => {
 			console.log('received new event', event);
@@ -87,20 +81,6 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 			if (event == null) {
 				return;
 			}
-			// const theWindow = await this.ow.getCurrentWindow();
-			// if (!theWindow) {
-			// 	return;
-			// }
-			if (event.name === GameEvent.GAME_START) {
-				this.changeWindowSize();
-			}
-			// if (event.state && !theWindow.isVisible) {
-			// 	this.restoreWindow();
-			// } else if (!event.state) {
-			// 	this.hideWindow();
-			// 	this.state = event.state;
-			// 	return;
-			// }
 			this.state = event.state;
 			this.activePlayer =
 				this.state.displayedPlayerCardId && this.state.players && this.state.players.length > 0
@@ -119,11 +99,6 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 			}
 		});
 		await this.changeWindowSize();
-		// await this.changeWindowPosition();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-		console.log('handled after view init');
 	}
 
 	ngOnDestroy(): void {
@@ -149,12 +124,4 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 		const height = gameHeight * 0.2;
 		await this.ow.changeWindowSize(this.windowId, width, height);
 	}
-
-	// private async restoreWindow() {
-	// 	await this.ow.restoreWindow(this.windowId);
-	// }
-
-	// private hideWindow() {
-	// 	this.ow.hideWindow(this.windowId);
-	// }
 }
