@@ -87,14 +87,18 @@ export class DevService {
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		};
-		window['loadEvents'] = async fileName => {
+		window['loadEvents'] = async (fileName, awaitEvents = false) => {
 			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\test\\events\\${fileName}.json`;
 			const logContents = await this.io.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
 			console.log('sending events', events);
 			for (let event of events) {
 				console.log('dispatching', event);
-				this.gameEvents.dispatchGameEvent(event);
+				if (awaitEvents) {
+					await this.gameEvents.dispatchGameEvent(event);
+				} else {
+					this.gameEvents.dispatchGameEvent(event);
+				}
 			}
 			console.log('processing done');
 		};
