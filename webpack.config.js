@@ -41,6 +41,7 @@ module.exports = function(env, argv) {
 				'./src/js/modules/twitch-auth-callback/twitch-auth-callback.module#TwitchAuthCallbackModule',
 				'./src/js/modules/battlegrounds-player-summary/battlegrounds-player-summary.module#BattlegroundsPlayerSummaryModule',
 				'./src/js/modules/battlegrounds-leaderboard-overlay/battlegrounds-leaderboard-overlay.module#BattlegroundsLeaderboardOverlayModule',
+				'./src/js/modules/battlegrounds-hero-selection-overlay/battlegrounds-hero-selection-overlay.module#BattlegroundsHeroSelectionOverlayModule',
 			],
 			sourceMap: true,
 		}),
@@ -76,6 +77,7 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
 			chunksSortMode: 'manual',
 		}),
@@ -92,7 +94,9 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'loading.html',
@@ -107,7 +111,9 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'notifications.html',
@@ -122,7 +128,9 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'decktracker.html',
@@ -137,7 +145,9 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'settings.html',
@@ -152,7 +162,9 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'twitch-auth-callback.html',
@@ -167,7 +179,9 @@ module.exports = function(env, argv) {
 				'opponentHand',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'match_overlay_opponent_hand.html',
@@ -183,7 +197,9 @@ module.exports = function(env, argv) {
 				'matchStats',
 				'battlegroundsplayersummary',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'battlegrounds_player_info.html',
@@ -199,7 +215,9 @@ module.exports = function(env, argv) {
 				'matchStats',
 				'opponentHand',
 				'battlegroundsleaderboardoverlay',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
 		}),
 		new HtmlWebpackPlugin({
 			filename: 'battlegrounds_leaderboard_overlay.html',
@@ -215,7 +233,27 @@ module.exports = function(env, argv) {
 				'matchStats',
 				'opponentHand',
 				'battlegroundsplayersummary',
+				'battlegroundsheroselectionoverlay',
 			],
+			chunksSortMode: 'manual',
+		}),
+		new HtmlWebpackPlugin({
+			filename: 'battlegrounds_hero_selection_overlay.html',
+			template: 'src/html/battlegrounds_hero_selection_overlay.html',
+			excludeChunks: [
+				'collection',
+				'notifications',
+				'background',
+				'loading',
+				'decktracker',
+				'settings',
+				'twitchauthcallback',
+				'matchStats',
+				'opponentHand',
+				'battlegroundsplayersummary',
+				'battlegroundsleaderboardoverlay',
+			],
+			chunksSortMode: 'manual',
 		}),
 
 		// Replace the version in the manifest
@@ -274,6 +312,7 @@ module.exports = function(env, argv) {
 			twitchauthcallback: './src/js/modules/twitch-auth-callback/main.ts',
 			battlegroundsplayersummary: './src/js/modules/battlegrounds-player-summary/main.ts',
 			battlegroundsleaderboardoverlay: './src/js/modules/battlegrounds-leaderboard-overlay/main.ts',
+			battlegroundsheroselectionoverlay: './src/js/modules/battlegrounds-hero-selection-overlay/main.ts',
 		},
 
 		// https://hackernoon.com/the-100-correct-way-to-split-your-chunks-with-webpack-f8a9df5b7758
