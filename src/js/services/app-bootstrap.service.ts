@@ -75,8 +75,8 @@ export class AppBootstrapService {
 			this.loadingWindowShown = true;
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
 			this.loadingWindowId = window.id;
-			await this.ow.restoreWindow(this.loadingWindowId);
-			await this.ow.hideWindow(this.loadingWindowId);
+			// await this.ow.restoreWindow(this.loadingWindowId);
+			// await this.ow.hideWindow(this.loadingWindowId);
 			const isRunning = await this.ow.inGame();
 			if (isRunning) {
 				this.showLoadingScreen();
@@ -104,6 +104,7 @@ export class AppBootstrapService {
 				if (window.isVisible) {
 					this.store.stateUpdater.next(new CloseMainWindowEvent());
 					await this.ow.hideWindow(window.id);
+					// await this.ow.closeWindow(window.id);
 				} else {
 					this.startApp(true);
 				}
@@ -136,25 +137,25 @@ export class AppBootstrapService {
 		this.ow.addAppLaunchTriggeredListener(() => {
 			this.startApp(true);
 		});
-		const [
-			settingsWindow,
-			// battlegroundsPlayerInfoWindow,
-			// battlegroundsLeaderboardOverwlayWindow,
-		] = await Promise.all([
-			this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW),
-			// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
-			// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
-		]);
-		await Promise.all([
-			this.ow.restoreWindow(settingsWindow.id),
-			// this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
-			// this.ow.restoreWindow(battlegroundsLeaderboardOverwlayWindow.id),
-		]);
-		await Promise.all([
-			this.ow.hideWindow(settingsWindow.id),
-			// this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
-			// this.ow.hideWindow(battlegroundsLeaderboardOverwlayWindow.id),
-		]);
+		// const [
+		// 	settingsWindow,
+		// 	// battlegroundsPlayerInfoWindow,
+		// 	// battlegroundsLeaderboardOverwlayWindow,
+		// ] = await Promise.all([
+		// 	this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW),
+		// 	// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW),
+		// 	// this.ow.obtainDeclaredWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW),
+		// ]);
+		// await Promise.all([
+		// 	this.ow.restoreWindow(settingsWindow.id),
+		// 	// this.ow.restoreWindow(battlegroundsPlayerInfoWindow.id),
+		// 	// this.ow.restoreWindow(battlegroundsLeaderboardOverwlayWindow.id),
+		// ]);
+		// await Promise.all([
+		// 	this.ow.hideWindow(settingsWindow.id),
+		// 	// this.ow.hideWindow(battlegroundsPlayerInfoWindow.id),
+		// 	// this.ow.hideWindow(battlegroundsLeaderboardOverwlayWindow.id),
+		// ]);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
 	}
 
@@ -164,7 +165,7 @@ export class AppBootstrapService {
 			return;
 		}
 		const result = await this.ow.restoreWindow(this.loadingWindowId);
-		this.closeCollectionWindow();
+		// this.closeCollectionWindow();
 		console.log('final restore for loadingwindow done', result);
 		setTimeout(() => {
 			this.notifyAbilitiesReady();
@@ -184,22 +185,24 @@ export class AppBootstrapService {
 		}
 	}
 
-	private async closeLoadingScreen() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
-		await this.ow.hideWindow(window.id);
-	}
+	// private async closeLoadingScreen() {
+	// 	const window = await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
+	// 	// await this.ow.hideWindow(window.id);
+	// 	await this.ow.closeWindow(window.id);
+	// }
 
-	private async closeCollectionWindow() {
-		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		this.ow.hideWindow(window.id);
-	}
+	// private async closeCollectionWindow() {
+	// 	const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+	// 	// this.ow.hideWindow(window.id);
+	// 	await this.ow.closeWindow(window.id);
+	// }
 
 	private async showCollectionWindow() {
 		console.log('reading to show collection window');
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		await this.ow.restoreWindow(window.id);
-		this.closeLoadingScreen();
+		// this.closeLoadingScreen();
 	}
 
 	private exitGame(gameInfoResult: any): boolean {

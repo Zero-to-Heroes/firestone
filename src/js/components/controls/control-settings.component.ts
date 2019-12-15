@@ -34,34 +34,35 @@ export class ControlSettingsComponent implements AfterViewInit {
 	@Input() shouldMoveSettingsWindow = true;
 	@Input() settingsSection: string;
 
-	private settingsWindowId: string;
+	// private settingsWindowId: string;
 	private settingsEventBus: EventEmitter<[string, string]>;
 
 	constructor(private ow: OverwolfService) {}
 
 	async ngAfterViewInit() {
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-		try {
-			const window = await this.ow.obtainDeclaredWindow('SettingsWindow');
-			this.settingsWindowId = window.id;
-		} catch (e) {
-			this.ngAfterViewInit();
-		}
+		// try {
+		// 	const window = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+		// 	this.settingsWindowId = window.id;
+		// } catch (e) {
+		// 	this.ngAfterViewInit();
+		// }
 	}
 
 	async showSettings() {
-		if (this.settingsApp) {
-			console.log('showing settings app', this.settingsApp, this.settingsSection);
-			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
-		}
 		const window = await this.ow.getCurrentWindow();
 		const center = {
 			x: window.left + window.width / 2,
 			y: window.top + window.height / 2,
 		};
-		if (this.shouldMoveSettingsWindow) {
-			await this.ow.sendMessage(this.settingsWindowId, 'move', center);
+		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+		await this.ow.restoreWindow(settingsWindow.id);
+		if (this.settingsApp) {
+			console.log('showing settings app', this.settingsApp, this.settingsSection);
+			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
 		}
-		this.ow.restoreWindow(this.settingsWindowId);
+		if (this.shouldMoveSettingsWindow) {
+			await this.ow.sendMessage(settingsWindow.id, 'move', center);
+		}
 	}
 }

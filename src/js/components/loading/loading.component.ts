@@ -100,6 +100,9 @@ export class LoadingComponent implements AfterViewInit, OnDestroy {
 				}
 			}
 		});
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
 
 	ngOnDestroy(): void {
