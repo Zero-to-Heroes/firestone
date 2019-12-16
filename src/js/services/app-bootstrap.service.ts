@@ -185,11 +185,11 @@ export class AppBootstrapService {
 		}
 	}
 
-	// private async closeLoadingScreen() {
-	// 	const window = await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
-	// 	// await this.ow.hideWindow(window.id);
-	// 	await this.ow.closeWindow(window.id);
-	// }
+	private async closeLoadingScreen() {
+		const window = await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
+		// await this.ow.hideWindow(window.id);
+		await this.ow.closeWindow(window.id);
+	}
 
 	// private async closeCollectionWindow() {
 	// 	const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
@@ -202,7 +202,7 @@ export class AppBootstrapService {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		await this.ow.restoreWindow(window.id);
-		// this.closeLoadingScreen();
+		this.closeLoadingScreen();
 	}
 
 	private exitGame(gameInfoResult: any): boolean {
