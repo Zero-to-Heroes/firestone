@@ -19,6 +19,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				[displayGuess]="displayGuess"
 				[leftVhOffset]="cardPositionLeft(i)"
 				[topVhOffset]="cardPositionTop(i)"
+				[attr.data-entity-id]="card.entityId"
 			></opponent-card-info>
 		</ul>
 	`,
