@@ -202,15 +202,16 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.restore(windowId, async result => {
-					// resolve(result);
-					try {
-						overwolf.windows.bringToFront(windowId, false, result => {
-							// console.log('[overwolf-service] restored window', windowId);
-							resolve(result);
-						});
-					} catch (e) {
-						console.warn('exception when setting topmost', windowId, e);
-					}
+					resolve(result);
+					// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
+					// try {
+					// 	overwolf.windows.bringToFront(windowId, false, result => {
+					// 		// console.log('[overwolf-service] restored window', windowId);
+					// 		resolve(result);
+					// 	});
+					// } catch (e) {
+					// 	console.warn('exception when setting topmost', windowId, e);
+					// }
 				});
 			} catch (e) {
 				// This doesn't seem to prevent the window from being restored, so let's ignore it
