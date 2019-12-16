@@ -23,6 +23,16 @@
 	padding-right: 10px;
 }
 
+.filters {
+	@extend %search-active;
+	display: flex;
+	justify-content: flex-start;
+	flex-shrink: 0;
+	align-items: center;
+	padding-bottom: 15px;
+	transition: margin 0.4s ease-in-out;
+}
+
 .empty-state {
 	@extend %empty-state;
 	flex-grow: 1;

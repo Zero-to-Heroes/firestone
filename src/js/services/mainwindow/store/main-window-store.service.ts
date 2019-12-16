@@ -52,6 +52,7 @@ import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { PopulateStoreEvent } from './events/populate-store-event';
+import { ReplaysFilterEvent } from './events/replays/replays-filter-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
 import { CloseSocialShareModalEvent } from './events/social/close-social-share-modal-event';
@@ -95,6 +96,7 @@ import { NavigationBackProcessor } from './processors/navigation/navigation-back
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { PopulateStoreProcessor } from './processors/populate-store-processor';
 import { Processor } from './processors/processor';
+import { ReplaysFilterProcessor } from './processors/replays/replays-filter-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
 import { CloseSocialShareModalProcessor } from './processors/social/close-social-share-modal-processor';
@@ -414,6 +416,9 @@ export class MainWindowStoreService {
 			// Replays
 			ShowReplayEvent.eventName(),
 			new ShowReplayProcessor(),
+
+			ReplaysFilterEvent.eventName(),
+			new ReplaysFilterProcessor(this.replaysStateBuilder),
 
 			// Decktracker
 			SelectDecksViewEvent.eventName(),

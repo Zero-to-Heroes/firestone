@@ -55,6 +55,7 @@ import { GameReplayComponent } from '../../components/replays/game-replay.compon
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from '../../components/replays/match-details.component';
 import { ReplayInfoComponent } from '../../components/replays/replay-info.component';
+import { ReplaysFilterComponent } from '../../components/replays/replays-filter.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
 import { ReplaysComponent } from '../../components/replays/replays.component';
 import { ShareInfoComponent } from '../../components/sharing/share-info.component';
@@ -150,6 +151,7 @@ console.log('version is ' + process.env.APP_VERSION);
 
 		ReplaysComponent,
 		ReplaysListComponent,
+		ReplaysFilterComponent,
 		GroupedReplaysComponent,
 		ReplayInfoComponent,
 		MatchDetailsComponent,

@@ -10,6 +10,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 	styleUrls: [`../../../css/component/replays/replays-list.component.scss`],
 	template: `
 		<div class="replays-list">
+			<div class="filters">
+				<replays-filter [state]="_state" [filterCategory]="'gameMode'"></replays-filter>
+			</div>
 			<ul>
 				<li *ngFor="let replay of _replays">
 					<grouped-replays [groupedReplays]="replay"></grouped-replays>
@@ -32,12 +35,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class ReplaysListComponent {
 	_replays: readonly GroupedReplays[];
+	_state: ReplaysState;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set state(value: ReplaysState) {
 		// this.logger.debug('[decktracker-decks] setting decks', value);
 		console.warn('showing only the last 28 days, will update that when implementing filters');
+		this._state = value;
 		this._replays = value.groupedReplays ? value.groupedReplays.slice(0, 28) : null;
 	}
 
