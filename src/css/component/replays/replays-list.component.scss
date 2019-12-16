@@ -1,6 +1,11 @@
 @import '../../global/variables';
 @import '../../global/fonts';
 
+:host {
+	height: 100%;
+	display: flex;
+}
+
 .replays-list {
 	list-style: none;
 	padding: 0;
@@ -30,6 +35,7 @@
 
 	.state-container {
 		margin: auto;
+		margin-bottom: 25vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;

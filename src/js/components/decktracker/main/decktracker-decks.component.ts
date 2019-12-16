@@ -32,7 +32,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_tracker" />
 						</svg>
 					</i>
-					<span class="title">Something is cooking up</span>
+					<span class="title">Nothing here yet</span>
 					<span class="subtitle">Play ladder ranked standard match to get started</span>
 				</div>
 			</section>
