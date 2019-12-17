@@ -41,7 +41,7 @@ export class GameStatsLoaderService {
 					this.gameStats = Object.assign(new GameStats(), {
 						stats: endpointResult,
 					} as GameStats);
-					console.log('[game-stats-loader] Retrieved game stats for user', this.gameStats);
+					console.log('[game-stats-loader] Retrieved game stats for user');
 					resolve(this.gameStats);
 				} else {
 					console.log(
@@ -49,12 +49,12 @@ export class GameStatsLoaderService {
 						expectedReviewId,
 						endpointResult[0],
 					);
-					setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
+					setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 1000);
 				}
 			},
 			error => {
 				console.log('could not get stats', error);
-				setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
+				setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 1000);
 			},
 		);
 	}
