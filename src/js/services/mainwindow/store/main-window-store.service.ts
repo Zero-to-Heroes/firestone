@@ -29,6 +29,7 @@ import { UserService } from '../../user.service';
 import { AchievementCompletedEvent } from './events/achievements/achievement-completed-event';
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementRecordedEvent } from './events/achievements/achievement-recorded-event';
+import { AchievementsInitEvent } from './events/achievements/achievements-init-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
@@ -37,6 +38,7 @@ import { ShowAchievementDetailsEvent } from './events/achievements/show-achievem
 import { VideoReplayDeletionRequestEvent } from './events/achievements/video-replay-deletion-request-event';
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
+import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
 import { NewCardEvent } from './events/collection/new-card-event';
 import { NewPackEvent } from './events/collection/new-pack-event';
@@ -62,17 +64,19 @@ import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-so
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
 import { ChangeMatchStatCurrentStatEvent } from './events/stats/change-match-stat-current-stat-event';
 import { CloseMatchStatsWindowEvent } from './events/stats/close-match-stats-window-event';
+import { GameStatsInitEvent } from './events/stats/game-stats-init-event';
+import { GlobalStatsInitEvent } from './events/stats/global/global-stats-init-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
 import { MatchStatsAvailableEvent } from './events/stats/match-stats-available-event';
-import { MaximizeMatchStatsWindowEvent } from './events/stats/maximize-match-stats-window-event';
-import { MinimizeMatchStatsWindowEvent } from './events/stats/minimize-match-stats-window-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
 import { ShowMatchStatsEvent } from './events/stats/show-match-stats-event';
+import { TriggerPopulateStoreEvent } from './events/trigger-populate-store-event';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
 import { AchievementUpdateHelper } from './helper/achievement-update-helper';
 import { AchievementCompletedProcessor } from './processors/achievements/achievement-completed-processor';
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementRecordedProcessor } from './processors/achievements/achievement-recorded-processor';
+import { AchievementsInitProcessor } from './processors/achievements/achievements-init-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
@@ -81,6 +85,7 @@ import { ShowAchievementDetailsProcessor } from './processors/achievements/show-
 import { VideoReplayDeletionRequestProcessor } from './processors/achievements/video-replay-deletion-request-processor';
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
+import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
 import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
 import { NewPackProcessor } from './processors/collection/new-pack-processor';
@@ -106,12 +111,13 @@ import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/tr
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
 import { ChangeMatchStatCurrentStatProcessor } from './processors/stats/change-match-stat-current-stat-processor';
 import { CloseMatchStatsWindowProcessor } from './processors/stats/close-match-stats-window-processor';
+import { GameStatsInitProcessor } from './processors/stats/game-stats-init-processor';
+import { GlobalStatsInitProcessor } from './processors/stats/global/global-stats-init-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
 import { MatchStatsAvailableProcessor } from './processors/stats/match-stats-available-processor';
-import { MaximizeMatchStatsWindowProcessor } from './processors/stats/maximize-match-stats-window-processor';
-import { MinimizeMatchStatsWindowProcessor } from './processors/stats/minimize-match-stats-window-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
 import { ShowMatchStatsProcessor } from './processors/stats/show-match-stats-processor';
+import { TriggerPopulateStoreProcessor } from './processors/trigger-populate-store-processor';
 import { StateHistory } from './state-history';
 
 declare var amplitude;
@@ -183,6 +189,7 @@ export class MainWindowStoreService {
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
 		console.log('[store] processing event', event.eventName());
+		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		// Don't modify the current state here, as it could make state lookup impossible
 		// (for back / forward arrows for instance)
@@ -196,6 +203,14 @@ export class MainWindowStoreService {
 			const stateWithNavigation = this.updateNavigationArrows(newState);
 			// console.log('emitting new state', stateWithNavigation);
 			this.stateEmitter.next(stateWithNavigation);
+			if (Date.now() - start > 2000) {
+				this.logger.warn(
+					'[store] Event',
+					event.eventName(),
+					'processing took too long, consider splitting it',
+					Date.now() - start,
+				);
+			}
 		} else {
 			console.log('[store] no new state to emit');
 		}
@@ -258,26 +273,14 @@ export class MainWindowStoreService {
 		const achievementStateHelper = new AchievementStateHelper();
 		const achievementUpdateHelper = new AchievementUpdateHelper(
 			this.achievementsRepository,
-			this.remoteAchievements,
 			achievementStateHelper,
 		);
 		return Map.of(
+			TriggerPopulateStoreEvent.eventName(),
+			new TriggerPopulateStoreProcessor(this.events),
+
 			PopulateStoreEvent.eventName(),
-			new PopulateStoreProcessor(
-				this.achievementHistoryStorage,
-				achievementUpdateHelper,
-				this.cardHistoryStorage,
-				this.collectionManager,
-				this.pityTimer,
-				this.achievementsLoader,
-				this.decktrackerStateLoader,
-				this.gameStatsLoader,
-				this.ow,
-				this.cards,
-				this.globalStats,
-				this.userService,
-				this.replaysStateBuilder,
-			),
+			new PopulateStoreProcessor(this.ow, this.userService),
 
 			NavigationBackEvent.eventName(),
 			new NavigationBackProcessor(),
@@ -298,6 +301,9 @@ export class MainWindowStoreService {
 			new CurrentUserProcessor(),
 
 			// Collection
+			CollectionInitEvent.eventName(),
+			new CollectionInitProcessor(),
+
 			SearchCardsEvent.eventName(),
 			new SearchCardProcessor(this.collectionManager, this.cards),
 
@@ -332,6 +338,9 @@ export class MainWindowStoreService {
 			),
 
 			// Achievements
+			AchievementsInitEvent.eventName(),
+			new AchievementsInitProcessor(),
+
 			AchievementHistoryCreatedEvent.eventName(),
 			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),
 
@@ -388,12 +397,11 @@ export class MainWindowStoreService {
 			new CloseSocialShareModalProcessor(),
 
 			// Stats
+			GameStatsInitEvent.eventName(),
+			new GameStatsInitProcessor(this.replaysStateBuilder, this.decktrackerStateLoader),
+
 			RecomputeGameStatsEvent.eventName(),
-			new RecomputeGameStatsProcessor(
-				this.gameStatsUpdater,
-				this.decktrackerStateLoader,
-				this.replaysStateBuilder,
-			),
+			new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.replaysStateBuilder),
 
 			MatchStatsAvailableEvent.eventName(),
 			new MatchStatsAvailableProcessor(this.notifs),
@@ -407,11 +415,9 @@ export class MainWindowStoreService {
 			CloseMatchStatsWindowEvent.eventName(),
 			new CloseMatchStatsWindowProcessor(),
 
-			MinimizeMatchStatsWindowEvent.eventName(),
-			new MinimizeMatchStatsWindowProcessor(),
-
-			MaximizeMatchStatsWindowEvent.eventName(),
-			new MaximizeMatchStatsWindowProcessor(),
+			// Global stats
+			GlobalStatsInitEvent.eventName(),
+			new GlobalStatsInitProcessor(),
 
 			// Replays
 			ShowReplayEvent.eventName(),
@@ -428,7 +434,9 @@ export class MainWindowStoreService {
 
 	private populateStore() {
 		console.log('sending populate store event');
+		// Launch events to start gathering data for the store
 		this.stateUpdater.next(new PopulateStoreEvent());
+		this.stateUpdater.next(new TriggerPopulateStoreEvent());
 	}
 
 	private listenForSocialAccountLoginUpdates() {

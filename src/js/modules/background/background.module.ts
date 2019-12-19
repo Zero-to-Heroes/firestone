@@ -36,7 +36,13 @@ import { GlobalStatsNotifierService } from '../../services/global-stats/global-s
 import { GlobalStatsService } from '../../services/global-stats/global-stats.service';
 import { LogListenerService } from '../../services/log-listener.service';
 import { LogRegisterService } from '../../services/log-register.service';
+import { AchievementsBootstrapService } from '../../services/mainwindow/store/achievements-bootstrap.service';
 import { CollaboratorsService } from '../../services/mainwindow/store/collaborators.service';
+import { CollectionBootstrapService } from '../../services/mainwindow/store/collection-bootstrap.service';
+import { GameStatsBootstrapService } from '../../services/mainwindow/store/game-stats-bootstrap.service';
+import { GlobalStatsBootstrapService } from '../../services/mainwindow/store/global-stats-bootstrap.service';
+import { AchievementStateHelper } from '../../services/mainwindow/store/helper/achievement-state-helper';
+import { AchievementUpdateHelper } from '../../services/mainwindow/store/helper/achievement-update-helper';
 import { MainWindowStoreService } from '../../services/mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
 import { EndGameListenerService } from '../../services/manastorm-bridge/end-game-listener.service';
@@ -111,14 +117,18 @@ export class SentryErrorHandler implements ErrorHandler {
 		TwitchAuthService,
 		PlayersInfoService,
 
+		CollectionBootstrapService,
 		PackMonitor,
 		PackStatsService,
 
+		AchievementsBootstrapService,
 		AchievementsMonitor,
 		AchievementsNotificationService,
 		RemoteAchievementsService,
 		AchievementsVideoCaptureService,
 		AchievementRecordingService,
+		AchievementStateHelper,
+		AchievementUpdateHelper,
 
 		DecktrackerStateLoaderService,
 		DecksStateBuilderService,
@@ -136,6 +146,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		BattlegroundsStateService,
 		BattlegroundsHeroInfoService,
 
+		GameStatsBootstrapService,
 		GameStatsLoaderService,
 		GameStatsUpdaterService,
 
@@ -148,6 +159,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameStateMetaInfoService,
 
 		MatchSummaryService,
+		GlobalStatsBootstrapService,
 		GlobalStatsService,
 		GlobalStatsNotifierService,
 

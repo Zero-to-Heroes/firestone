@@ -16,8 +16,12 @@ import { GameStateService } from './decktracker/game-state.service';
 import { OverlayDisplayService } from './decktracker/overlay-display.service';
 import { DevService } from './dev.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
+import { AchievementsBootstrapService } from './mainwindow/store/achievements-bootstrap.service';
+import { CollectionBootstrapService } from './mainwindow/store/collection-bootstrap.service';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
+import { GameStatsBootstrapService } from './mainwindow/store/game-stats-bootstrap.service';
+import { GlobalStatsBootstrapService } from './mainwindow/store/global-stats-bootstrap.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
@@ -66,6 +70,10 @@ export class AppBootstrapService {
 		private init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private init_ReplaysNotificationService: ReplaysNotificationService,
 		private init_BattlegroundsStateService: BattlegroundsStateService,
+		private init_AchievementsBootstrapService: AchievementsBootstrapService,
+		private init_CollectionBootstrapService: CollectionBootstrapService,
+		private init_GameStatsBootstrapService: GameStatsBootstrapService,
+		private init_GlobalStatsBootstrapService: GlobalStatsBootstrapService,
 	) {}
 
 	public async init() {

@@ -17,7 +17,6 @@ import { GameEvents } from '../../../src/js/services/game-events.service';
 import { AchievementCompletedEvent } from '../../../src/js/services/mainwindow/store/events/achievements/achievement-completed-event';
 import { RecomputeGameStatsEvent } from '../../../src/js/services/mainwindow/store/events/stats/recompute-game-stats-event';
 import { MainWindowStoreService } from '../../../src/js/services/mainwindow/store/main-window-store.service';
-import { GameParserService } from '../../../src/js/services/manastorm-bridge/game-parser.service';
 import { PlayersInfoService } from '../../../src/js/services/players-info.service';
 import { GameEventsPluginService } from '../../../src/js/services/plugins/game-events-plugin.service';
 import { MemoryInspectionService } from '../../../src/js/services/plugins/memory-inspection.service';
@@ -128,17 +127,7 @@ export const achievementsValidation = async (
 			return new GameStats();
 		},
 	} as GameStatsLoaderService;
-	const statsUpdater = new GameStatsUpdaterService(
-		emitter,
-		events,
-		null,
-		new GameParserService(null, null),
-		deckService,
-		playersInfoService,
-		new NGXLoggerMock() as NGXLogger,
-		gameState,
-		statsLoader,
-	);
+	const statsUpdater = new GameStatsUpdaterService(events, new NGXLoggerMock() as NGXLogger, statsLoader);
 	statsUpdater.stateUpdater = store.stateUpdater;
 	const storage: AchievementsLocalStorageService = {
 		loadAchievementFromCache: async (achievementId: string) => {

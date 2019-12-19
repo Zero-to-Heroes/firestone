@@ -4,25 +4,17 @@ import { AchievementsState } from '../../../../models/mainwindow/achievements-st
 import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
 import { VisualAchievementCategory } from '../../../../models/visual-achievement-category';
 import { AchievementsRepository } from '../../../achievement/achievements-repository.service';
-import { RemoteAchievementsService } from '../../../achievement/remote-achievements.service';
 import { AchievementStateHelper } from './achievement-state-helper';
 
 export class AchievementUpdateHelper {
-	constructor(
-		private achievementsRepository: AchievementsRepository,
-		private remoteAchievements: RemoteAchievementsService,
-		private helper: AchievementStateHelper,
-	) {}
+	constructor(private achievementsRepository: AchievementsRepository, private helper: AchievementStateHelper) {}
 
 	public async rebuildAchievements(currentState: MainWindowState): Promise<AchievementsState> {
-		const globalCategories = await this.buildGlobalCategories(currentState, true);
+		const globalCategories = await this.buildGlobalCategories(true);
 		return this.helper.updateStateFromNewGlobalCategories(currentState.achievements, globalCategories);
 	}
 
-	public async buildGlobalCategories(
-		currentState: MainWindowState,
-		useCache = false,
-	): Promise<readonly VisualAchievementCategory[]> {
+	public async buildGlobalCategories(useCache = false): Promise<readonly VisualAchievementCategory[]> {
 		const globalCategories: readonly AchievementCategory[] = await this.achievementsRepository.getCategories();
 		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements(
 			useCache,

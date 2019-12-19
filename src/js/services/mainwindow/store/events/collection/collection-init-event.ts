@@ -1,12 +1,15 @@
+import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
-export class MinimizeMatchStatsWindowEvent implements MainWindowStoreEvent {
+export class CollectionInitEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
-		return 'MinimizeMatchStatsWindowEvent';
+		return 'CollectionInitEvent';
 	}
 
+	constructor(public readonly newState: BinderState) {}
+
 	public eventName(): string {
-		return 'MinimizeMatchStatsWindowEvent';
+		return 'CollectionInitEvent';
 	}
 
 	public isNavigationEvent(): boolean {

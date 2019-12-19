@@ -1,12 +1,15 @@
+import { StatsState } from '../../../../../models/mainwindow/stats/stats-state';
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
-export class MaximizeMatchStatsWindowEvent implements MainWindowStoreEvent {
+export class GameStatsInitEvent implements MainWindowStoreEvent {
 	public static eventName(): string {
-		return 'MaximizeMatchStatsWindowEvent';
+		return 'GameStatsInitEvent';
 	}
 
+	constructor(public readonly newState: StatsState) {}
+
 	public eventName(): string {
-		return 'MaximizeMatchStatsWindowEvent';
+		return 'GameStatsInitEvent';
 	}
 
 	public isNavigationEvent(): boolean {
