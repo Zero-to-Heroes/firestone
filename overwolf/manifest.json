@@ -47,9 +47,9 @@
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": true,
-				"size": { "width": 460, "height": 600 },
-				"min_size": { "width": 460, "height": 600 },
-				"max_size": { "width": 460, "height": 600 },
+				"size": { "width": 440, "height": 590 },
+				"min_size": { "width": 440, "height": 590 },
+				"max_size": { "width": 440, "height": 590 },
 				"block_top_window_navigation": true,
 				"popup_blocker": true,
 				"mute": true

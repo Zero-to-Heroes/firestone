@@ -1,12 +1,13 @@
 .deck-list {
 	overflow: visible;
 	width: 100%;
-	padding-bottom: 10px;
+	// padding-bottom: 10px;
 
-	overflow: auto;
+	overflow-y: auto;
 	width: calc(100% + 10px);
 	min-width: calc(100% + 10px);
 	padding-bottom: 10px;
+	// padding-bottom: 0;
 	padding-left: 10px;
 	position: relative;
 	left: -10px;

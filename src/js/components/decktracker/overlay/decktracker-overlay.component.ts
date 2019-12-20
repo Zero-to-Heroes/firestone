@@ -1,15 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	OnDestroy,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, Renderer2, ViewRef } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -41,6 +30,7 @@ declare var amplitude;
 			<div class="scalable">
 				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="gameState" [style.width.px]="overlayWidthInPx">
+						<div class="background"></div>
 						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
@@ -57,27 +47,6 @@ declare var amplitude;
 						</decktracker-deck-list>
 					</div>
 				</div>
-
-				<i class="i-54 gold-theme corner top-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner top-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner bottom-right">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
-				<i class="i-54 gold-theme corner bottom-left">
-					<svg class="svg-icon-fill">
-						<use xlink:href="assets/svg/sprite.svg#golden_corner" />
-					</svg>
-				</i>
 			</div>
 		</div>
 	`,

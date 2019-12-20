@@ -4,10 +4,6 @@
 .root.clean {
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 
-	.corner {
-		display: none;
-	}
-
 	.decktracker-container {
 		background: transparent;
 		margin: 10px;
@@ -87,7 +83,7 @@
 			background: linear-gradient(89.31deg, #090a0d 60.62%, rgba(9, 10, 13, 0) 96.47%);
 		}
 
-		.deck-zone .card-list li {
+		.deck-zone .card-list li:not(:last-child) {
 			margin-bottom: 2px;
 		}
 

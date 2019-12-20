@@ -19,58 +19,39 @@
 		transform-origin: right top;
 	}
 
-	.corner {
-		position: absolute;
-
-		&.top-left {
-			top: 0;
-			left: 0;
-		}
-
-		&.top-right {
-			top: 0;
-			right: 0;
-			transform: rotate(90deg);
-		}
-
-		&.bottom-right {
-			bottom: 0;
-			right: 0;
-			transform: rotate(180deg);
-			top: auto;
-		}
-
-		&.bottom-left {
-			bottom: 0;
-			left: 0;
-			transform: rotate(270deg);
-			top: auto;
-		}
-	}
-
 	.decktracker-container {
 		position: relative;
-		background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
-			url('/Files/assets/images/backgrounds/decktracker_bg.png');
-		background-size: 100%;
-		margin: 10px;
+		// background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+		// 	url('/Files/assets/images/backgrounds/decktracker_bg.png');
+		// background-size: 100%;
+		// margin: 10px;
 		width: 100%;
-		max-width: calc(100% - 20px);
+		max-width: 100%;
 		display: flex;
 		flex-direction: column;
 	}
 
 	.decktracker {
 		position: relative;
-		background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
-			url('/Files/assets/images/backgrounds/decktracker_bg.png');
-		background-size: 100%;
 		width: 100%;
 		// height: calc(100% - 20px);
 		display: flex;
 		flex-direction: column;
 		// overflow: hidden;
 		max-height: 90vh;
+
+		// This is needed to keep a padding at the bottom of the deck-list (to prevent the scrollbar from
+		// appearing on mouse over) while not showing a background
+		.background {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 10px;
+			background-image: radial-gradient(462.5px at 50% 50%, rgba(48, 35, 128, 0.7) 0%, rgba(24, 24, 43, 0.7) 100%),
+				url('/Files/assets/images/backgrounds/decktracker_bg.png');
+			background-size: 100%;
+		}
 
 		decktracker-title-bar {
 			flex-grow: 0;

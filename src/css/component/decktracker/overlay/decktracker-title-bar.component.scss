@@ -13,7 +13,6 @@
 	.controls {
 		display: flex;
 		margin-left: auto;
-		// To avoid having the golden corners interfere with the mouse
 		z-index: 1;
 
 		.import-container {

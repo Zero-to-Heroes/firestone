@@ -118,8 +118,12 @@
 }
 
 ads {
-	bottom: 10px;
-	left: 10px;
+	bottom: 25px;
+	left: 20px;
+}
+
+::ng-deep .version-info {
+	bottom: 5px;
 }
 
 @keyframes spin {
