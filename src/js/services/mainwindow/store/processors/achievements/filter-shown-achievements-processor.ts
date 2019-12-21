@@ -14,15 +14,17 @@ export class FilterShownAchievementsProcessor implements Processor {
 			'searchString': searchString,
 		});
 		console.log('[filter-shown-achievements] filtering shown achievements', searchString);
-		const displayedAchievementsList: readonly VisualAchievement[] = (
-			currentState.achievements.achievementsList || []
-		).filter(
-			achv =>
-				achv.name.toLowerCase().indexOf(searchString) !== -1 ||
-				achv.text.toLowerCase().indexOf(searchString) !== -1,
-		);
+		const allAchievements: readonly VisualAchievement[] =
+			currentState.achievements.findAchievements(currentState.achievements.achievementsList) || [];
+		const displayedAchievementsList: readonly string[] = allAchievements
+			.filter(
+				achv =>
+					achv.name.toLowerCase().indexOf(searchString) !== -1 ||
+					achv.text.toLowerCase().indexOf(searchString) !== -1,
+			)
+			.map(ach => ach.id);
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
-			displayedAchievementsList: displayedAchievementsList.map(ach => ach.id) as readonly string[],
+			displayedAchievementsList: displayedAchievementsList,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,

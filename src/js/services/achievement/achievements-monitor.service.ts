@@ -100,10 +100,14 @@ export class AchievementsMonitor {
 		// );
 		this.events.broadcast(Events.ACHIEVEMENT_COMPLETE, betterCandidate.achievement, betterCandidate.challenge);
 		// console.debug('found and broadcast achievemtn comleted');
-		this.store.stateUpdater.next(new AchievementCompletedEvent(betterCandidate.achievement));
+		this.prepareAchievementCompletedEvent(betterCandidate.achievement);
 
 		// Now remove all the related events
 		return eventQueue.filter(event => event.achievement.type !== betterCandidate.achievement.type);
+	}
+
+	private async prepareAchievementCompletedEvent(achievement: Achievement) {
+		this.store.stateUpdater.next(new AchievementCompletedEvent(achievement));
 	}
 }
 

@@ -113,6 +113,11 @@ export class AchievementsComponent {
 		if (!this.state.displayedAchievementsList || !this.state.achievementsList) {
 			return null;
 		}
-		return this.state.achievementsList.filter(ach => this.state.displayedAchievementsList.indexOf(ach.id) !== -1);
+		return this.state.globalCategories
+			.map(globalCategory => globalCategory.achievementSets)
+			.reduce((a, b) => a.concat(b), [])
+			.map(set => set.achievements)
+			.reduce((a, b) => a.concat(b), [])
+			.filter(ach => this.state.displayedAchievementsList.indexOf(ach.id) !== -1);
 	}
 }

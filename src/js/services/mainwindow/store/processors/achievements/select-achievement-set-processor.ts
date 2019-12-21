@@ -19,7 +19,7 @@ export class SelectAchievementSetProcessor implements Processor {
 			selectedGlobalCategoryId: globalCategory.id,
 			selectedCategoryId: achievementSet.id,
 			// achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
-			achievementsList: achievementSet.achievements,
+			achievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: undefined,
 		} as AchievementsState);

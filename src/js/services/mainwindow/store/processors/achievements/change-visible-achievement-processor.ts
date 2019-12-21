@@ -27,7 +27,7 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 			selectedGlobalCategoryId: globalCategory.id,
 			selectedCategoryId: achievementSet.id,
 			// achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
-			achievementsList: achievementSet.achievements as readonly VisualAchievement[],
+			achievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
 			sharingAchievement: undefined,

@@ -16,7 +16,7 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
 			selectedCategoryId: selectedSet.id,
-			achievementsList: selectedSet.achievements,
+			achievementsList: selectedSet.achievements.map(ach => ach.id) as readonly string[],
 			displayedAchievementsList: selectedSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: achievement,
 		} as AchievementsState);
