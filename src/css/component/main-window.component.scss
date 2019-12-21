@@ -27,8 +27,8 @@
 	flex-direction: row;
 	align-items: stretch;
 	position: relative;
-	width: 100%;
-	// left: -10px;
+	width: calc(100% + 20px);
+	left: -10px;
 	padding-left: 10px;
 	padding-right: 10px;
 	height: 62px;
