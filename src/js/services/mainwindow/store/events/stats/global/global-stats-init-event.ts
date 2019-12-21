@@ -17,6 +17,6 @@ export class GlobalStatsInitEvent implements MainWindowStoreEvent {
 	}
 
 	public isResetHistoryEvent(): boolean {
-		return false;
+		return true;
 	}
 }

@@ -17,6 +17,6 @@ export class CollectionInitEvent implements MainWindowStoreEvent {
 	}
 
 	public isResetHistoryEvent(): boolean {
-		return false;
+		return true;
 	}
 }
