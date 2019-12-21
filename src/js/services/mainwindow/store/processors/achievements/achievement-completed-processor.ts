@@ -16,9 +16,7 @@ export class AchievementCompletedProcessor implements Processor {
 
 	public async process(event: AchievementCompletedEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const achievement = event.achievement;
-		// TODO: all this can probably be done here with a little effort, instead of rebuilding everything
-		const newAchievementState: AchievementsState = await this.helper.rebuildAchievements(currentState);
-		console.log('[achievement-completed-processor] rebuilt achievement state');
+
 		const historyItem = {
 			achievementId: achievement.id,
 			achievementName: achievement.name,
@@ -26,7 +24,7 @@ export class AchievementCompletedProcessor implements Processor {
 			difficulty: achievement.difficulty,
 			creationTimestamp: Date.now(),
 		} as AchievementHistory;
-		await this.historyStorage.save(historyItem);
+		this.historyStorage.save(historyItem);
 		const [historyRef, achievements] = await Promise.all([
 			this.historyStorage.loadAll(),
 			this.achievementLoader.getAchievements(),
@@ -45,6 +43,11 @@ export class AchievementCompletedProcessor implements Processor {
 			})
 			.filter(history => history)
 			.reverse();
+		// const newAchievementState: AchievementsState = currentState.achievements.updateAchievement(achievement);
+		// TODO: all this can probably be done here with a little effort, instead of rebuilding everything
+		const newAchievementState: AchievementsState = await this.helper.rebuildAchievements(currentState);
+		console.log('[achievement-completed-processor] rebuilt achievement state');
+
 		const newState = Object.assign(new AchievementsState(), newAchievementState, {
 			achievementHistory: history as readonly AchievementHistory[],
 		} as AchievementsState);

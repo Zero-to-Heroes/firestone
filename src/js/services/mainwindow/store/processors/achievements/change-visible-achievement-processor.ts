@@ -1,4 +1,3 @@
-import { AchievementSet } from '../../../../../models/achievement-set';
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../../../models/mainwindow/navigation';
@@ -25,11 +24,11 @@ export class ChangeVisibleAchievementProcessor implements Processor {
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedGlobalCategory: globalCategory,
-			selectedCategory: achievementSet,
-			achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
+			selectedGlobalCategoryId: globalCategory.id,
+			selectedCategoryId: achievementSet.id,
+			// achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
 			achievementsList: achievementSet.achievements as readonly VisualAchievement[],
-			displayedAchievementsList: achievementSet.achievements as readonly VisualAchievement[],
+			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: newSelectedAchievement.completionSteps[0].id,
 			sharingAchievement: undefined,
 		} as AchievementsState);

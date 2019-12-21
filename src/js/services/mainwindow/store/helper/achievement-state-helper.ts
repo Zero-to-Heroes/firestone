@@ -8,23 +8,13 @@ export class AchievementStateHelper {
 		currentState: AchievementsState,
 		newGlobalCategories: readonly VisualAchievementCategory[],
 	): AchievementsState {
-		const selectedGlobalCategory =
-			currentState.selectedGlobalCategory != undefined
-				? newGlobalCategories.find(cat => cat.id === currentState.selectedGlobalCategory.id)
-				: undefined;
-		const achievementCategories = this.updateCategories(currentState.achievementCategories, newGlobalCategories);
-		const selectedCategory =
-			currentState.selectedCategory != undefined
-				? achievementCategories.find(set => set.id === currentState.selectedCategory.id)
-				: undefined;
+		// const achievementCategories = this.updateCategories(currentState.achievementCategories, newGlobalCategories);
 		const achievementsList = this.updateAchievementsList(currentState.achievementsList, newGlobalCategories);
 		return Object.assign(new AchievementsState(), currentState, {
 			globalCategories: newGlobalCategories,
-			selectedGlobalCategory: selectedGlobalCategory,
-			achievementCategories: achievementCategories,
-			selectedCategory: selectedCategory,
+			// achievementCategories: achievementCategories,
 			achievementsList: achievementsList,
-			displayedAchievementsList: achievementsList,
+			displayedAchievementsList: achievementsList.map(ach => ach.id) as readonly string[],
 		} as AchievementsState);
 	}
 

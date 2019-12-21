@@ -16,11 +16,11 @@ export class SelectAchievementSetProcessor implements Processor {
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedGlobalCategory: globalCategory,
-			selectedCategory: achievementSet,
-			achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
+			selectedGlobalCategoryId: globalCategory.id,
+			selectedCategoryId: achievementSet.id,
+			// achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
 			achievementsList: achievementSet.achievements,
-			displayedAchievementsList: achievementSet.achievements,
+			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: undefined,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {

@@ -1,4 +1,3 @@
-import { AchievementSet } from '../../../../../models/achievement-set';
 import { AchievementsState } from '../../../../../models/mainwindow/achievements-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../../../models/mainwindow/navigation';
@@ -24,9 +23,9 @@ export class SelectAchievementCategoryProcessor implements Processor {
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'category',
 			menuDisplayType: 'breadcrumbs',
-			selectedGlobalCategory: globalCategory,
-			achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
-			selectedCategory: undefined,
+			selectedGlobalCategoryId: event.globalCategoryId,
+			// achievementCategories: globalCategory.achievementSets as readonly AchievementSet[],
+			selectedCategoryId: undefined,
 			selectedAchievementId: undefined,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {

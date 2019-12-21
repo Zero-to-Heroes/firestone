@@ -22,7 +22,7 @@ export class FilterShownAchievementsProcessor implements Processor {
 				achv.text.toLowerCase().indexOf(searchString) !== -1,
 		);
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
-			displayedAchievementsList: displayedAchievementsList,
+			displayedAchievementsList: displayedAchievementsList.map(ach => ach.id) as readonly string[],
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,

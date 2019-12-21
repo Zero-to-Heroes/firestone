@@ -1,10 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { AchievementSet } from '../../models/achievement-set';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { Navigation } from '../../models/mainwindow/navigation';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
+import { VisualAchievement } from '../../models/visual-achievement';
 
 const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
@@ -26,15 +28,15 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 				</achievements-global-categories>
 				<achievements-categories
 					[hidden]="state.currentView !== 'category'"
-					[achievementSets]="state.achievementCategories"
+					[achievementSets]="getAchievementSets()"
 				>
 				</achievements-categories>
 				<achievements-list
 					[hidden]="state.currentView !== 'list'"
 					[socialShareUserInfo]="socialShareUserInfo"
-					[achievementsList]="state.displayedAchievementsList"
+					[achievementsList]="getDisplayedAchievements()"
 					[selectedAchievementId]="state.selectedAchievementId"
-					[achievementSet]="state.selectedCategory"
+					[achievementSet]="getAchievementSet()"
 					[globalStats]="globalStats"
 				>
 				</achievements-list>
@@ -81,4 +83,36 @@ export class AchievementsComponent {
 	@Input() navigation: Navigation;
 
 	_viewState = 'shown';
+
+	getAchievementSet(): AchievementSet {
+		if (!this.state.selectedCategoryId) {
+			return null;
+		}
+		const currentGlobalCategory = this.state.globalCategories.find(
+			cat => cat.id === this.state.selectedGlobalCategoryId,
+		);
+		if (!currentGlobalCategory) {
+			return null;
+		}
+		return currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId);
+	}
+
+	getAchievementSets(): readonly AchievementSet[] {
+		// console.log('getting achievement sets', this.state);
+		if (!this.state.selectedGlobalCategoryId) {
+			return null;
+		}
+		const currentGlobalCategory = this.state.globalCategories.find(
+			cat => cat.id === this.state.selectedGlobalCategoryId,
+		);
+		// console.log('will return', currentGlobalCategory.achievementSets);
+		return currentGlobalCategory.achievementSets;
+	}
+
+	getDisplayedAchievements(): readonly VisualAchievement[] {
+		if (!this.state.displayedAchievementsList || !this.state.achievementsList) {
+			return null;
+		}
+		return this.state.achievementsList.filter(ach => this.state.displayedAchievementsList.indexOf(ach.id) !== -1);
+	}
 }

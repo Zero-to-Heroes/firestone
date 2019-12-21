@@ -15,9 +15,9 @@ export class ShowAchievementDetailsProcessor implements Processor {
 		const newAchievements = Object.assign(new AchievementsState(), currentState.achievements, {
 			currentView: 'list',
 			menuDisplayType: 'breadcrumbs',
-			selectedCategory: selectedSet,
+			selectedCategoryId: selectedSet.id,
 			achievementsList: selectedSet.achievements,
-			displayedAchievementsList: selectedSet.achievements,
+			displayedAchievementsList: selectedSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: achievement,
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {
