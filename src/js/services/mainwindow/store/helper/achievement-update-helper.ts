@@ -20,12 +20,12 @@ export class AchievementUpdateHelper {
 			useCache,
 		);
 		return globalCategories.map(category => {
-			return {
+			return VisualAchievementCategory.create({
 				id: category.id,
 				name: category.name,
 				icon: category.icon,
 				achievementSets: this.buildSetsForCategory(achievementSets, category.achievementSetIds),
-			} as VisualAchievementCategory;
+			} as VisualAchievementCategory);
 		});
 	}
 

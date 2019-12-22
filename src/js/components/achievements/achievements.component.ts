@@ -85,15 +85,21 @@ export class AchievementsComponent {
 	_viewState = 'shown';
 
 	getAchievementSet(): AchievementSet {
+		console.log('[achievements] getting achievement set', this.state);
 		if (!this.state.selectedCategoryId) {
 			return null;
 		}
 		const currentGlobalCategory = this.state.globalCategories.find(
 			cat => cat.id === this.state.selectedGlobalCategoryId,
 		);
+		console.log('[achievements] currentGlobalCategory', currentGlobalCategory);
 		if (!currentGlobalCategory) {
 			return null;
 		}
+		console.log(
+			'[achievements] creturning set',
+			currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId),
+		);
 		return currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId);
 	}
 

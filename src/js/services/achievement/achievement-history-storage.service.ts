@@ -6,8 +6,8 @@ import { AchievementsLocalDbService } from './indexed-db.service';
 export class AchievementHistoryStorageService {
 	constructor(private indexedDb: AchievementsLocalDbService) {}
 
-	public async save(history: AchievementHistory) {
-		await this.indexedDb.saveHistory(history);
+	public async save(history: AchievementHistory): Promise<void> {
+		return this.indexedDb.saveHistory(history);
 	}
 
 	public loadAll(): Promise<AchievementHistory[]> {

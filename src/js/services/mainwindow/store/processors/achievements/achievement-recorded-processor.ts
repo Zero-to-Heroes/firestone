@@ -76,7 +76,7 @@ export class AchievementRecordedProcessor implements Processor {
 		newSet: AchievementSet,
 	): VisualAchievementCategory {
 		const newAchievements = globalCategory.achievementSets.map(set => (set.id === newSet.id ? newSet : set));
-		return Object.assign({} as VisualAchievementCategory, globalCategory, {
+		return Object.assign(new VisualAchievementCategory(), globalCategory, {
 			achievementSets: newAchievements as readonly AchievementSet[],
 		} as VisualAchievementCategory);
 	}

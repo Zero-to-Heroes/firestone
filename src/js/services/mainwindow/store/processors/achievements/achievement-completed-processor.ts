@@ -15,41 +15,45 @@ export class AchievementCompletedProcessor implements Processor {
 	) {}
 
 	public async process(event: AchievementCompletedEvent, currentState: MainWindowState): Promise<MainWindowState> {
+		console.log('[achievement-completed-processor] ready to handle event', event, currentState);
 		const achievement = event.achievement;
-
 		const historyItem = {
 			achievementId: achievement.id,
 			achievementName: achievement.name,
 			numberOfCompletions: achievement.numberOfCompletions,
 			difficulty: achievement.difficulty,
 			creationTimestamp: Date.now(),
+			displayName: achievement.displayName,
 		} as AchievementHistory;
+		console.log('[achievement-completed-processor] saving history item', historyItem);
 		this.historyStorage.save(historyItem);
-		const [historyRef, achievements] = await Promise.all([
-			this.historyStorage.loadAll(),
+		console.log('[achievement-completed-processor] saved history item', historyItem);
+		const [achievements] = await Promise.all([
+			// this.historyStorage.loadAll(),
 			this.achievementLoader.getAchievements(),
 		]);
-		const history = historyRef
-			.filter(history => history.numberOfCompletions === 1)
-			.map(history => {
-				const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
-				// This can happen with older history items
-				if (!matchingAchievement) {
-					return null;
-				}
-				return Object.assign(new AchievementHistory(), history, {
-					displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
-				} as AchievementHistory);
-			})
-			.filter(history => history)
-			.reverse();
-		// const newAchievementState: AchievementsState = currentState.achievements.updateAchievement(achievement);
-		// TODO: all this can probably be done here with a little effort, instead of rebuilding everything
-		const newAchievementState: AchievementsState = await this.helper.rebuildAchievements(currentState);
-		console.log('[achievement-completed-processor] rebuilt achievement state');
+		console.log('[achievement-completed-processor] retrieved data', achievements);
+		const newHistory = [historyItem, ...currentState.achievements.achievementHistory];
+		// const history = historyRef
+		// 	.filter(history => history.numberOfCompletions === 1)
+		// 	.map(history => {
+		// 		const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
+		// 		// This can happen with older history items
+		// 		if (!matchingAchievement) {
+		// 			return null;
+		// 		}
+		// 		return Object.assign(new AchievementHistory(), history, {
+		// 			displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
+		// 		} as AchievementHistory);
+		// 	})
+		// 	.filter(history => history)
+		// 	.reverse();
+		console.log('[achievement-completed-processor] ready to update achievement', achievement);
+		const newAchievementState: AchievementsState = currentState.achievements.updateAchievement(achievement);
+		console.log('[achievement-completed-processor] rebuilt achievement state', newAchievementState);
 
 		const newState = Object.assign(new AchievementsState(), newAchievementState, {
-			achievementHistory: history as readonly AchievementHistory[],
+			achievementHistory: newHistory as readonly AchievementHistory[],
 		} as AchievementsState);
 		// We store an history item every time, but we display only the first time an achievement is unlocked
 		return Object.assign(new MainWindowState(), currentState, {

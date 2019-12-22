@@ -1,13 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, ViewRef } from '@angular/core';
 import { AchievementStatus } from '../../models/achievement/achievement-status.type';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { StatContext } from '../../models/mainwindow/stats/global/context.type';
@@ -90,6 +81,7 @@ export class AchievementViewComponent implements AfterViewInit {
 	}
 
 	@Input() set achievement(achievement: VisualAchievement) {
+		console.log('[achievement-view] setting achievement', achievement);
 		this._achievement = achievement;
 		this.completionDate = undefined;
 		this.achievementStatus = this._achievement.achievementStatus();

@@ -16,27 +16,32 @@ export class AchievementHistoryCreatedProcessor implements Processor {
 		event: AchievementHistoryCreatedEvent,
 		currentState: MainWindowState,
 	): Promise<MainWindowState> {
-		const [historyRef, achievements] = await Promise.all([
-			this.achievementHistoryStorage.loadAll(),
-			this.achievementsLoader.getAchievements(),
-		]);
-		// TODO: extract this piece of code to a reusable service
-		const history = historyRef
-			.filter(history => history.numberOfCompletions === 1)
-			.map(history => {
-				const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
-				// This can happen with older history items
-				if (!matchingAchievement) {
-					return null;
-				}
-				return Object.assign(new AchievementHistory(), history, {
-					displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
-				} as AchievementHistory);
-			})
-			.filter(history => history)
-			.reverse();
+		// LOOKS LIKE THIS IS NEVER CALLED ANYWHERE
+
+		// const [historyRef, achievements] = await Promise.all([
+		// 	this.achievementHistoryStorage.loadAll(),
+		// 	this.achievementsLoader.getAchievements(),
+		// ]);
+		// // TODO: extract this piece of code to a reusable service
+		// const history = historyRef
+		// 	.filter(history => history.numberOfCompletions === 1)
+		// 	.map(history => {
+		// 		const matchingAchievement = achievements.find(ach => ach.id === history.achievementId);
+		// 		// This can happen with older history items
+		// 		if (!matchingAchievement) {
+		// 			return null;
+		// 		}
+		// 		return Object.assign(new AchievementHistory(), history, {
+		// 			displayName: achievements.find(ach => ach.id === history.achievementId).displayName,
+		// 		} as AchievementHistory);
+		// 	})
+		// 	.filter(history => history)
+		// 	.reverse();
 		const newState = Object.assign(new AchievementsState(), currentState.achievements, {
-			achievementHistory: history as readonly AchievementHistory[],
+			achievementHistory: [
+				event.history,
+				...currentState.achievements.achievementHistory,
+			] as readonly AchievementHistory[],
 		} as AchievementsState);
 		return Object.assign(new MainWindowState(), currentState, {
 			achievements: newState,

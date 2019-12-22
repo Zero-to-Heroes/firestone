@@ -108,6 +108,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	@Input('achievementSet') set achievementSet(achievementSet: AchievementSet) {
+		// console.log('[achievements-list] setting achievement set', achievementSet);
 		this._achievementSet = achievementSet;
 		if (achievementSet) {
 			this.filterOptions = this._achievementSet.filterOptions.map(option => ({
@@ -115,7 +116,7 @@ export class AchievementsListComponent implements AfterViewInit {
 				value: option.value,
 			}));
 			this.activeFilter = this.filterOptions[0].value;
-			console.log('set active filter', this.activeFilter);
+			// console.log('[achievements-list] set active filter', this.activeFilter);
 			this.updateShownAchievements();
 		}
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -124,17 +125,22 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
+		// console.log('[achievements-list] setting achievementsList ', achievementsList);
 		this.achievements = achievementsList || [];
 		this.updateShownAchievements();
 	}
 
 	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
-			console.log('setting selectedAchievementId', selectedAchievementId, this._selectedAchievementId);
+			console.log(
+				'[achievements-list] setting selectedAchievementId',
+				selectedAchievementId,
+				this._selectedAchievementId,
+			);
 			const achievementToShow: Element = this.el.nativeElement.querySelector(
 				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
 			);
-			console.log('achievementToShow?', achievementToShow);
+			console.log('[achievements-list] achievementToShow?', achievementToShow);
 			if (achievementToShow) {
 				setTimeout(() => achievementToShow.scrollIntoView(true));
 			}
@@ -160,7 +166,7 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	selectFilter(option: IOption) {
 		this.activeFilter = option.value;
-		console.log('selected filter', this.activeFilter);
+		console.log('[achievements-list] selected filter', this.activeFilter);
 		this.updateShownAchievements();
 	}
 
@@ -175,6 +181,7 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	private updateShownAchievements() {
+		// console.log('[achievements-list] updating shown achievements', this.achievements, this._achievementSet);
 		if (!this.achievements || !this._achievementSet) {
 			return;
 		}
@@ -189,6 +196,7 @@ export class AchievementsListComponent implements AfterViewInit {
 			</svg>
 		`);
 		this.activeAchievements = this.achievements.filter(filterFunction);
+		// console.log('[achievements-list] updated activeAchievements', this.activeAchievements);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

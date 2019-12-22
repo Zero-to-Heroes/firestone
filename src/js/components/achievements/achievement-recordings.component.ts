@@ -1,15 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, ViewRef } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
 import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
@@ -449,7 +438,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			console.error('Could not find steo for', stepId, this._achievement);
 			return '';
 		}
-		return step.iconSvgSymbol;
+		return step.icon;
 	}
 
 	private buildText(): string {

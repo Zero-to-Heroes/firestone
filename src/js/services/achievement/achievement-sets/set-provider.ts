@@ -45,11 +45,6 @@ export abstract class SetProvider {
 			.filter(achievement => this.supportsAchievement(mergedAchievements, achievement.id))
 			.filter(achievement => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
-			.sort((a, b) => {
-				const aVisibility = this.sortPriority(a.achievement);
-				const bVisibility = this.sortPriority(b.achievement);
-				return bVisibility - aVisibility || a.index - b.index;
-			})
 			.map(obj => obj.achievement);
 		return fullAchievements;
 	}
@@ -57,16 +52,6 @@ export abstract class SetProvider {
 	private supportsAchievement(allAchievements: Achievement[], achievementId: string): boolean {
 		const type = allAchievements.find(achievement => achievement.id === achievementId).type;
 		return this.types.indexOf(type) !== -1;
-	}
-
-	private sortPriority(achievement: VisualAchievement): number {
-		const numberOfSteps = achievement.completionSteps.length;
-		for (let i = numberOfSteps; i > 0; i--) {
-			if (achievement.completionSteps[i - 1].numberOfCompletions > 0) {
-				return i;
-			}
-		}
-		return 0;
 	}
 }
 

@@ -2,6 +2,7 @@ import { Achievement } from '../../../models/achievement';
 import { AchievementSet } from '../../../models/achievement-set';
 import { CompletedAchievement } from '../../../models/completed-achievement';
 import { FilterOption } from '../../../models/filter-option';
+import { ReplayInfo } from '../../../models/replay-info';
 import { CompletionStep, VisualAchievement } from '../../../models/visual-achievement';
 import { IndexedVisualAchievement, SetProvider } from './set-provider';
 
@@ -19,7 +20,13 @@ export abstract class GenericSetProvider extends SetProvider {
 	public provide(allAchievements: Achievement[], completedAchievemnts?: CompletedAchievement[]): AchievementSet {
 		const fullAchievements = this.visualAchievements(allAchievements, completedAchievemnts);
 		const filterOptions: readonly FilterOption[] = this.filterOptions();
-		return new AchievementSet(this.id, this.displayName, this.logoName, fullAchievements, filterOptions);
+		return AchievementSet.create({
+			id: this.id,
+			displayName: this.displayName,
+			logoName: this.logoName,
+			achievements: fullAchievements,
+			filterOptions: filterOptions,
+		} as AchievementSet);
 	}
 
 	protected filterOptions(): readonly FilterOption[] {
@@ -77,10 +84,41 @@ export abstract class GenericSetProvider extends SetProvider {
 			.filter(achv => achv.type === achievement.type)
 			.sort((a, b) => a.priority - b.priority);
 		let text = achievement.text || achievement.emptyText;
+		const [completionSteps, textFromStep] = GenericSetProvider.buildCompletionSteps(
+			achievementForCompletionSteps,
+			achievement,
+			text,
+		);
+		text = text || textFromStep;
+		let replayInfo = [];
+		for (let i = 0; i < achievementForCompletionSteps.length; i++) {
+			replayInfo = [...(achievementForCompletionSteps[i].replayInfo || []), ...replayInfo];
+		}
+		replayInfo = replayInfo.sort((a, b) => a.creationTimestamp - b.creationTimestamp);
+		return {
+			achievement: VisualAchievement.create({
+				id: achievement.id,
+				name: achievement.name,
+				type: this.id,
+				cardId: achievement.displayCardId,
+				cardType: achievement.displayCardType,
+				text: text,
+				completionSteps: completionSteps,
+				replayInfo: replayInfo as readonly ReplayInfo[],
+			} as VisualAchievement),
+			index: index,
+		};
+	}
+
+	public static buildCompletionSteps(
+		achievementForCompletionSteps: readonly (Achievement | CompletionStep)[],
+		achievement: Achievement,
+		text: string,
+	): [readonly CompletionStep[], string] {
+		const invertedCompletionSteps = [];
 		let alreadyDefinedText = achievement.text || false;
 		// Useful to make sure we have some consistency in the number of comletions
 		let maxNumberOfCompletions = 0;
-		const invertedCompletionSteps = [];
 		for (let i = achievementForCompletionSteps.length - 1; i >= 0; i--) {
 			const achv = achievementForCompletionSteps[i];
 			const completions: number = Math.max(maxNumberOfCompletions, achv.numberOfCompletions);
@@ -92,31 +130,15 @@ export abstract class GenericSetProvider extends SetProvider {
 			invertedCompletionSteps.push({
 				id: `${achv.id}`,
 				numberOfCompletions: completions,
-				iconSvgSymbol: achv.icon,
+				icon: achv.icon,
+				completedText: achievement.completedText,
 				text(showTimes: boolean = false): string {
 					const times = showTimes && !achievement.canBeCompletedOnlyOnce ? `${completions} times` : ``;
 					return `${achv.completedText} <span class="number-of-times">${times}</span>`;
 				},
 			} as CompletionStep);
 		}
-		let replayInfo = [];
-		for (let i = 0; i < achievementForCompletionSteps.length; i++) {
-			replayInfo = [...(achievementForCompletionSteps[i].replayInfo || []), ...replayInfo];
-		}
-		replayInfo = replayInfo.sort((a, b) => a.creationTimestamp - b.creationTimestamp);
-		return {
-			achievement: new VisualAchievement(
-				achievement.id,
-				achievement.name,
-				this.id,
-				achievement.displayCardId,
-				achievement.displayCardType,
-				text,
-				invertedCompletionSteps.reverse(),
-				replayInfo,
-			),
-			index: index,
-		};
+		return [invertedCompletionSteps.reverse() as readonly CompletionStep[], text];
 	}
 
 	protected isAchievementVisualRoot(achievement: Achievement): boolean {

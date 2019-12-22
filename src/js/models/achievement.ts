@@ -19,4 +19,8 @@ export class Achievement {
 	readonly points: number;
 	readonly numberOfCompletions: number = 0;
 	readonly replayInfo: readonly ReplayInfo[] = [];
+
+	public update(value: Achievement): Achievement {
+		return Object.assign(new Achievement(), this, value);
+	}
 }
