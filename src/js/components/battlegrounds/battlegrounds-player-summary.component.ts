@@ -1,13 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	EventEmitter,
-	HostListener,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, HostListener, OnDestroy, ViewRef } from '@angular/core';
 import { AllCardsService, Entity } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
@@ -27,27 +18,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 		<div class="battlegrounds-player-summary" *ngIf="activePlayer">
 			<battlegrounds-player-info [player]="activePlayer"></battlegrounds-player-info>
 			<board [entities]="boardMinions" *ngIf="boardMinions"></board>
-
-			<i class="i-54 gold-theme corner top-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner top-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-right">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
-			<i class="i-54 gold-theme corner bottom-left">
-				<svg class="svg-icon-fill">
-					<use xlink:href="/Files/assets/svg/sprite.svg#golden_corner" />
-				</svg>
-			</i>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -74,6 +44,7 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 
 	async ngAfterViewInit() {
 		await this.allCards.initializeCardsDb();
+		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().battlegroundsEventBus;
 		this.stateSubscription = eventBus.subscribe(async event => {
 			console.log('received new event', event);
@@ -122,6 +93,7 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 		// Height
 		const gameHeight = gameInfo.height;
 		const height = gameHeight * 0.2;
+		// console.log('changing window size', width, height, gameInfo);
 		await this.ow.changeWindowSize(this.windowId, width, height);
 	}
 }

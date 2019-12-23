@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { BattlegroundsPlayer } from '../../models/battlegrounds/battlegrounds-player';
 import { GameEvent } from '../../models/game-event';
 import { BattlegroundsEvent } from '../../services/battlegrounds/events/battlegrounds-event';
-import { BattlegroundsHidePlayerInfoEvent } from '../../services/battlegrounds/events/battlegrounds-hide-player-info-event';
 import { BattlegroundsShowPlayerInfoEvent } from '../../services/battlegrounds/events/battlegrounds-show-player-info-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { BattlegroundsHidePlayerInfoEvent } from '../../services/battlegrounds/events/battlegrounds-hide-player-info-event';
 
 @Component({
 	selector: 'battlegrounds-leaderboard-player',
