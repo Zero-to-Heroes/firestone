@@ -81,7 +81,7 @@ import { Set, SetCard } from '../../models/set';
 				</ng-select>
 			</div>
 			<div class="loading" [hidden]="!loading"><div>Loading cards...</div></div>
-			<ul class="cards-list" [hidden]="loading">
+			<ul class="cards-list" [hidden]="loading || _activeCards.length === 0">
 				<li
 					*ngFor="let card of _activeCards; trackBy: trackByCardId"
 					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
