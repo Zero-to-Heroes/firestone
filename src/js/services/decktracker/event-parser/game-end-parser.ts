@@ -13,7 +13,7 @@ export class GameEndParser implements EventParser {
 	}
 
 	async parse(): Promise<GameState> {
-		return null;
+		return new GameState();
 	}
 
 	event(): string {

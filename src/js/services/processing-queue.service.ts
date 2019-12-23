@@ -59,6 +59,7 @@ export class ProcessingQueue<T> {
 		// If no event has been processed, this could mean the processing function is waiting for something
 		// so we just leave the processing loop
 		while (this.eventQueue.length !== 0 && hasEventBeenProcessed) {
+			// console.log('interval - processing queue - continuing to proces', this.queueName, this.eventQueue);
 			const queueAfterProcess = await this.processingFunction([...this.eventQueue]);
 			hasEventBeenProcessed = queueAfterProcess.length !== this.eventQueue.length;
 			this.eventQueue = [...queueAfterProcess, ...this.pendingQueue];

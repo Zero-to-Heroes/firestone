@@ -186,6 +186,7 @@ export class GameStateService {
 		// 	this.logger.error('null state before processing event', gameEvent, this.state);
 		// 	return;
 		// }
+		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent);
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
@@ -196,6 +197,7 @@ export class GameStateService {
 					// 	gameEvent.entityId,
 					// );
 					const stateAfterParser = await parser.parse(this.state, gameEvent);
+					// this.logger.debug('[game-state] applied parser', stateAfterParser);
 					// if (!stateAfterParser) {
 					// 	this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
 					// 	await this.updateOverlays();
@@ -205,27 +207,34 @@ export class GameStateService {
 						// Add information that is not linked to events, like the number of turns the
 						// card has been present in the zone
 						const stateWithMetaInfos = this.gameStateMetaInfos.addMetaInfos(stateAfterParser);
+						// this.logger.debug('[game-state] stateWithMetaInfos', stateWithMetaInfos);
 						// Add missing info like card names, if the card added doesn't come from a deck state
 						// (like with the Chess brawl)
 						const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
+						// this.logger.debug('[game-state] newState', newState);
 						const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
+						// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
 						const stateFromTracker = gameEvent.gameState || ({} as any);
 						const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(
 							playerDeckWithDynamicZones,
 							stateFromTracker.Player,
 						);
+						// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
 						const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(
 							newState.opponentDeck,
 							stateFromTracker.Opponent,
 						);
+						// this.logger.debug('[game-state] opponentDeckWithZonesOrdered', opponentDeckWithZonesOrdered);
 						this.state = Object.assign(new GameState(), newState, {
 							playerDeck: playerDeckWithZonesOrdered,
 							opponentDeck: opponentDeckWithZonesOrdered,
 						} as GameState);
+						// this.logger.debug('[game-state] this.state', this.state);
 					} else {
 						this.state = null;
 					}
 					await this.updateOverlays();
+					// this.logger.debug('[game-state] updateOverlays');
 					// if (!this.state) {
 					// 	this.logger.error('null state after processing event', gameEvent, this.state);
 					// 	continue;
@@ -237,7 +246,7 @@ export class GameStateService {
 						state: this.state,
 					};
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					// this.logger.debug('emitted deck event', emittedEvent.event.name, this.state);
+					// this.logger.debug('[game-state] emitted deck event', emittedEvent.event.name, this.state);
 					// this.logger.debug(
 					// 	'board states',
 					// 	this.state.playerDeck.board.length,
@@ -254,16 +263,17 @@ export class GameStateService {
 					// );
 				}
 			} catch (e) {
-				this.logger.error('Exception while applying parser', parser.event(), e);
+				this.logger.error('[game-state] Exception while applying parser', parser.event(), e);
 			}
 		}
 	}
 
 	private async updateOverlays() {
 		const [decktrackerWindow, opponentHandWindow] = await Promise.all([
-			this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW),
-			this.ow.obtainDeclaredWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
+			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
+			this.ow.getWindowState(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
 		]);
+		// this.logger.debug('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
 		const shouldShowTracker =
 			this.state &&
 			this.state.playerDeck &&
@@ -271,18 +281,32 @@ export class GameStateService {
 				(this.state.playerDeck.hand && this.state.playerDeck.hand.length > 0) ||
 				(this.state.playerDeck.board && this.state.playerDeck.board.length > 0) ||
 				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
-		// console.log('should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
-		if (shouldShowTracker && !decktrackerWindow.isVisible && this.showDecktracker) {
+		// console.log('[game-state] should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
+		if (shouldShowTracker && decktrackerWindow.window_state_ex === 'closed' && this.showDecktracker) {
+			// console.log('[game-state] showing tracker');
+			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
-		} else if (!shouldShowTracker || !this.showDecktracker) {
+		} else if (decktrackerWindow.window_state_ex !== 'closed' && (!shouldShowTracker || !this.showDecktracker)) {
+			// console.log('[game-state] closing tracker');
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
+		// console.log('[game-state] tracker window handled');
 
-		if (this.state && this.state.opponentDeck && !opponentHandWindow.isVisible && this.showOpponentHand) {
+		if (
+			this.state &&
+			this.state.gameStarted &&
+			opponentHandWindow.window_state_ex === 'closed' &&
+			this.showOpponentHand
+		) {
+			await this.ow.obtainDeclaredWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
-		} else if (!this.state || !this.state.opponentDeck || !this.showOpponentHand) {
+		} else if (
+			opponentHandWindow.window_state_ex !== 'closed' &&
+			(!this.state || !this.state.gameStarted || !this.showOpponentHand)
+		) {
 			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		}
+		// console.log('[game-state] opponentDeck window handled');
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {

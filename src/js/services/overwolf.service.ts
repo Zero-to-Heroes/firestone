@@ -130,7 +130,16 @@ export class OverwolfService {
 	public async getOpenWindows() {
 		return new Promise<any>(resolve => {
 			overwolf.windows.getOpenWindows((res: any) => {
-				console.log('[overwolf-service] retrieve all open windows', res);
+				// console.log('[overwolf-service] retrieve all open windows', res);
+				resolve(res);
+			});
+		});
+	}
+
+	public async getWindowState(windowName: string) {
+		return new Promise<any>(resolve => {
+			overwolf.windows.getWindowState(windowName, (res: any) => {
+				// console.log('[overwolf-service] retrieve window states', res);
 				resolve(res);
 			});
 		});
@@ -139,7 +148,7 @@ export class OverwolfService {
 	public async getWindowsStates() {
 		return new Promise<any>(resolve => {
 			overwolf.windows.getWindowsStates((res: any) => {
-				console.log('[overwolf-service] retrieve all windows states', res);
+				// console.log('[overwolf-service] retrieve all windows states', res);
 				resolve(res);
 			});
 		});
@@ -183,6 +192,7 @@ export class OverwolfService {
 	public async closeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.close(windowId, result => {
+				// console.log('[overwolf-service] closed window', windowId);
 				resolve(result);
 			});
 		});
@@ -192,7 +202,7 @@ export class OverwolfService {
 		const window = await this.obtainDeclaredWindow(windowName);
 		return new Promise<any>(resolve => {
 			overwolf.windows.close(window.id, result => {
-				console.log('[overwolf-service] closed window', windowName);
+				// console.log('[overwolf-service] closed window', windowName);
 				resolve(result);
 			});
 		});
@@ -202,6 +212,7 @@ export class OverwolfService {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.restore(windowId, async result => {
+					// console.log('[overwolf-service] restored window', windowId);
 					resolve(result);
 					// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 					// try {
@@ -377,11 +388,11 @@ export class OverwolfService {
 	public async obtainDeclaredWindow(windowName: string): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
 			overwolf.windows.obtainDeclaredWindow(windowName, (res: any) => {
+				console.log('[overwolf-service] obtained declared window', windowName, res.window, res);
 				if (res.status === 'success') {
-					// console.log('[overwolf-service] obtained declared window', windowName, res.window);
 					resolve(res.window);
 				} else {
-					reject(res);
+					resolve(res);
 				}
 			});
 		});
