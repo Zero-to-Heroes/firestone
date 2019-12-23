@@ -10,7 +10,7 @@ describe('Tombs of Terror - Amazing Play - Not so legendary', () => {
 	test('nominal case', async () => {
 		const isAchievementComplete = await achievementsValidation([rawAchievement], pluginEvents);
 		expect(isAchievementComplete).toBe(true);
-	}, 10000);
+	});
 	// test('error case', async () => {
 	// 	const isAchievementComplete = await achievementsValidation([rawAchievement], incorrectPluginEvents);
 	// 	expect(isAchievementComplete).toBeFalsy();
