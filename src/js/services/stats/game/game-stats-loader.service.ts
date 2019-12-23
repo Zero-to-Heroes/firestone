@@ -14,7 +14,12 @@ export class GameStatsLoaderService {
 	constructor(private http: HttpClient, private ow: OverwolfService, private logger: NGXLogger) {}
 
 	public async retrieveStats(expectedReviewId: string = undefined, retriesLeft = 10): Promise<GameStats> {
-		console.log('retrieving stats', expectedReviewId, retriesLeft, this.gameStats && this.gameStats[0]);
+		console.log(
+			'[game-stats-loader] retrieving stats',
+			expectedReviewId,
+			retriesLeft,
+			this.gameStats && this.gameStats[0],
+		);
 		if (
 			this.gameStats &&
 			(!expectedReviewId || this.gameStats.stats.some(stat => stat.reviewId === expectedReviewId))
@@ -29,13 +34,16 @@ export class GameStatsLoaderService {
 	}
 
 	private doRetrieve(userId: string, retrievesLeft: number, resolve, expectedReviewId: string) {
+		console.log('[game-stats-loader] in doRetrieve', userId, retrievesLeft);
 		if (retrievesLeft <= 0) {
 			console.error('[game-stats-loader] could not load stats');
 			resolve(null);
 			return;
 		}
-		this.http.get(`${GAME_STATS_ENDPOINT}/overwolf-${userId}`).subscribe(
+		const expectedReviewPath = expectedReviewId ? `/${expectedReviewId}` : '';
+		this.http.get(`${GAME_STATS_ENDPOINT}/overwolf-${userId}${expectedReviewPath}`).subscribe(
 			data => {
+				console.log('[game-stats-loader] received http data');
 				const endpointResult: readonly GameStat[] = (data as any).results;
 				if (!expectedReviewId || endpointResult.some(stat => stat.reviewId === expectedReviewId)) {
 					this.gameStats = Object.assign(new GameStats(), {
@@ -45,15 +53,15 @@ export class GameStatsLoaderService {
 					resolve(this.gameStats);
 				} else {
 					console.log(
-						'[game-stats-loader] Could not retrieve game stats for user',
+						'[game-stats-loader] Could not retrieve game stats for user, retrying',
 						expectedReviewId,
-						endpointResult[0],
+						endpointResult.length,
 					);
 					setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
 				}
 			},
 			error => {
-				console.log('could not get stats', error);
+				console.log('[game-stats-loader] could not get stats', error);
 				setTimeout(() => this.doRetrieve(userId, retrievesLeft - 1, resolve, expectedReviewId), 2000);
 			},
 		);

@@ -54,6 +54,7 @@ import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
 import { PopulateStoreEvent } from './events/populate-store-event';
+import { RecomputeReplaysEvent } from './events/replays/recompute-replays-event';
 import { ReplaysFilterEvent } from './events/replays/replays-filter-event';
 import { ShowReplayEvent } from './events/replays/show-replay-event';
 import { ShowMainWindowEvent } from './events/show-main-window-event';
@@ -101,6 +102,7 @@ import { NavigationBackProcessor } from './processors/navigation/navigation-back
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { PopulateStoreProcessor } from './processors/populate-store-processor';
 import { Processor } from './processors/processor';
+import { RecomputeReplaysProcessor } from './processors/replays/recompute-replays-processor';
 import { ReplaysFilterProcessor } from './processors/replays/replays-filter-processor';
 import { ShowReplayProcessor } from './processors/replays/show-replay-processor';
 import { ShowMainWindowProcessor } from './processors/show-main-window-processor';
@@ -203,7 +205,7 @@ export class MainWindowStoreService {
 			const stateWithNavigation = this.updateNavigationArrows(newState);
 			// console.log('emitting new state', stateWithNavigation);
 			this.stateEmitter.next(stateWithNavigation);
-			if (Date.now() - start > 2000) {
+			if (Date.now() - start > 1000) {
 				this.logger.warn(
 					'[store] Event',
 					event.eventName(),
@@ -401,7 +403,7 @@ export class MainWindowStoreService {
 			new GameStatsInitProcessor(this.replaysStateBuilder, this.decktrackerStateLoader),
 
 			RecomputeGameStatsEvent.eventName(),
-			new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.replaysStateBuilder),
+			new RecomputeGameStatsProcessor(this.decktrackerStateLoader),
 
 			MatchStatsAvailableEvent.eventName(),
 			new MatchStatsAvailableProcessor(this.notifs),
@@ -425,6 +427,9 @@ export class MainWindowStoreService {
 
 			ReplaysFilterEvent.eventName(),
 			new ReplaysFilterProcessor(this.replaysStateBuilder),
+
+			RecomputeReplaysEvent.eventName(),
+			new RecomputeReplaysProcessor(this.replaysStateBuilder),
 
 			// Decktracker
 			SelectDecksViewEvent.eventName(),
