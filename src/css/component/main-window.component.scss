@@ -75,10 +75,12 @@
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
+	height: calc(100% - 62px);
 
 	& > * {
 		flex-grow: 1;
 		display: flex;
+		max-height: 100%;
 	}
 }
 

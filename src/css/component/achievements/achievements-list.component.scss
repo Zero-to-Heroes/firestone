@@ -69,6 +69,7 @@
 		-webkit-transition: all 2s;
 		transition: all 2s;
 		flex-grow: 1;
+		min-height: 0;
 
 		li {
 			margin-right: 10px;

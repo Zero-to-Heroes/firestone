@@ -6,6 +6,13 @@
 	display: flex;
 }
 
+.replays-container {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
 .replays-list {
 	list-style: none;
 	padding: 0;
@@ -21,6 +28,7 @@
 	transition: all 2s;
 	flex-grow: 1;
 	padding-right: 10px;
+	min-height: 0;
 }
 
 .filters {

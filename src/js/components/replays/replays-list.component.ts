@@ -9,11 +9,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 	selector: 'replays-list',
 	styleUrls: [`../../../css/component/replays/replays-list.component.scss`],
 	template: `
-		<div class="replays-list">
+		<div class="replays-container">
 			<div class="filters">
 				<replays-filter [state]="_state" [filterCategory]="'gameMode'"></replays-filter>
 			</div>
-			<ul>
+			<ul class="replays-list">
 				<li *ngFor="let replay of _replays">
 					<grouped-replays [groupedReplays]="replay"></grouped-replays>
 				</li>
