@@ -62,7 +62,7 @@ export class DevService {
 			priority: 0,
 			emptyText: null,
 			completedText: null,
-		};
+		} as any;
 		window['showAchievementNotification'] = () => {
 			this.events.broadcast(Events.ACHIEVEMENT_RECORDING_STARTED, achievement, {
 				notificationTimeout: () => {},
