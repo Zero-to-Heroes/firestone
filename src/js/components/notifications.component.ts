@@ -1,14 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	OnDestroy,
-	ViewEncapsulation,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import { Notification, NotificationsService, NotificationType } from 'angular2-notifications';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { DebugService } from '../services/debug.service';
@@ -94,12 +84,14 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
-		this.notificationsEmitterBus = this.ow.getMainWindow().notificationsEmitterBus;
-		this.notificationsEmitterBus.subscribe((message: Message) => {
-			if (message) {
-				// console.log('received message from bus in notification window', message.notificationId);
-				this.processingQueue.enqueue(message);
-			}
+		setTimeout(() => {
+			this.notificationsEmitterBus = this.ow.getMainWindow().notificationsEmitterBus;
+			this.notificationsEmitterBus.subscribe((message: Message) => {
+				if (message) {
+					// console.log('received message from bus in notification window', message.notificationId);
+					this.processingQueue.enqueue(message);
+				}
+			});
 		});
 		this.resize();
 	}
