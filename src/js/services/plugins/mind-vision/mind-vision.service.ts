@@ -58,22 +58,6 @@ export class MindVisionService {
 		});
 	}
 
-	public async getDungeonInfo(): Promise<any> {
-		return new Promise<any[]>(async resolve => {
-			console.log('[mind-vision] retrieving dungeonInfo');
-			const plugin = await this.get();
-			try {
-				plugin.getDungeonInfo(dungeonInfo => {
-					console.log('[mind-vision] retrieved dungeonInfo');
-					resolve(dungeonInfo ? JSON.parse(dungeonInfo) : null);
-				});
-			} catch (e) {
-				console.log('[mind-vision] could not parse dungeonInfo', e);
-				resolve(null);
-			}
-		});
-	}
-
 	public async getActiveDeck(): Promise<any> {
 		return new Promise<any[]>(async resolve => {
 			console.log('[mind-vision] retrieving activeDeck');
