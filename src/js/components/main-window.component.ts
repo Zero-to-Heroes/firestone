@@ -1,13 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewEncapsulation,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
@@ -125,6 +116,11 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		// console.log('retrieved storeBus');
 		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
+				// First update the state before restoring the window
+				this.state = newState;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
 				const window = await this.ow.getCurrentWindow();
 				const currentlyVisible = window.isVisible;
 				if (newState.isVisible && (!this.state || !this.state.isVisible || !currentlyVisible)) {
@@ -136,11 +132,6 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					}
 				} else if (this.state && newState.currentApp !== this.state.currentApp) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
-				}
-				// console.log('updated state after event');
-				this.state = newState;
-				if (!(this.cdr as ViewRef).destroyed) {
-					this.cdr.detectChanges();
 				}
 			});
 		});

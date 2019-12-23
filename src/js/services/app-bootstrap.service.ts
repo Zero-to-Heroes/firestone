@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
@@ -18,7 +18,9 @@ import { DevService } from './dev.service';
 import { GlobalStatsNotifierService } from './global-stats/global-stats-notifier.service';
 import { AchievementsBootstrapService } from './mainwindow/store/achievements-bootstrap.service';
 import { CollectionBootstrapService } from './mainwindow/store/collection-bootstrap.service';
+import { ChangeVisibleApplicationEvent } from './mainwindow/store/events/change-visible-application-event';
 import { CloseMainWindowEvent } from './mainwindow/store/events/close-main-window-event';
+import { MainWindowStoreEvent } from './mainwindow/store/events/main-window-store-event';
 import { ShowMainWindowEvent } from './mainwindow/store/events/show-main-window-event';
 import { GameStatsBootstrapService } from './mainwindow/store/game-stats-bootstrap.service';
 import { GlobalStatsBootstrapService } from './mainwindow/store/global-stats-bootstrap.service';
@@ -37,13 +39,14 @@ export class AppBootstrapService {
 	private static readonly STATES = ['INIT', 'READY'];
 	private static readonly LOADING_SCREEN_DURATION = 10000;
 
+	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private currentState = 'INIT';
 	private loadingWindowId: string;
 	private loadingWindowShown = false;
 	// Seomtimes multiple events can fire in a row, which leads to the app
 	// trying to close windows several times in a row
 	// private closing = false;
-	private closeTimeout;
+	private wrapUpTimeout;
 
 	constructor(
 		private store: MainWindowStoreService,
@@ -121,18 +124,18 @@ export class AppBootstrapService {
 			}
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			console.log('updated game status');
+			console.log('updated game status', res);
 			// Issue is that this is triggered when launching the game
-			if (!this.exitGame(res) && this.closeTimeout) {
-				console.log('cancelling app close');
-				clearTimeout(this.closeTimeout);
-				this.closeTimeout = null;
-			}
-			if (this.exitGame(res) && !this.closeTimeout) {
-				console.log('left game, closing app');
-				this.closeTimeout = setTimeout(() => {
-					this.closeApp();
-				}, 5000); // Give some time to the other windows to close
+			// if (!this.exitGame(res) && this.wrapUpTimeout) {
+			// 	console.log('cancelling app close', res);
+			// 	clearTimeout(this.wrapUpTimeout);
+			// 	this.wrapUpTimeout = null;
+			// }
+			if (this.exitGame(res) && res.runningChanged && !this.wrapUpTimeout) {
+				console.log('left game, closing app', res);
+				this.showReplaysRecap();
+				// this.wrapUpTimeout = setTimeout(() => {
+				// }, 1);
 			} else if (await this.ow.inGame()) {
 				console.log('game is running, showing loading screen');
 				this.showLoadingScreen();
@@ -145,6 +148,8 @@ export class AppBootstrapService {
 		this.ow.addAppLaunchTriggeredListener(() => {
 			this.startApp(true);
 		});
+
+		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		// const [
 		// 	settingsWindow,
 		// 	// battlegroundsPlayerInfoWindow,
@@ -217,7 +222,7 @@ export class AppBootstrapService {
 		return !gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning;
 	}
 
-	private async closeApp() {
+	private async showReplaysRecap() {
 		// Close all windows
 		// const windows = await this.ow.getOpenWindows();
 		// console.log('closing all windows', windows);
@@ -228,6 +233,7 @@ export class AppBootstrapService {
 		// 		this.ow.closeWindowFromName(name);
 		// 	}
 		// }
-		this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
+		this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
+		// this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
 	}
 }
