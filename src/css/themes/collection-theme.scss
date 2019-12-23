@@ -1,5 +1,10 @@
 :host.collection-theme,
 .collection-theme {
+	--window-background-image-backup: radial-gradient(
+		340px at 50% 50%,
+		rgba(90, 17, 108, 1) 0%,
+		rgba(47, 13, 13, 1) 100%
+	);
 	--window-background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
 	--window-outline-color: #513b48;
 	--default-text-color: #d9c3ab;

@@ -15,6 +15,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 	template: `
 		<div class="top">
 			<div class="root">
+				<div class="background-backup"></div>
 				<div class="app-container overlay-container-parent">
 					<ng-content></ng-content>
 				</div>

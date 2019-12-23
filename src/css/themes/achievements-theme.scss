@@ -1,5 +1,10 @@
 :host.achievements-theme,
 .achievements-theme {
+	--window-background-image-backup: radial-gradient(
+		340px at 50% 50%,
+		rgba(90, 17, 108, 1) 0%,
+		rgba(47, 13, 13, 1) 100%
+	);
 	--window-background-image: radial-gradient(340px at 50% 50%, rgba(90, 17, 108, 0.7) 0%, rgba(47, 13, 13, 0.7) 100%),
 		url('/Files/assets/images/backgrounds/achievements_bg.jpg');
 	--window-outline-color: #4b3052;
