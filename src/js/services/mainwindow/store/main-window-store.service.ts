@@ -174,12 +174,13 @@ export class MainWindowStoreService {
 		this.processors = this.buildProcessors();
 
 		this.stateUpdater.subscribe((event: MainWindowStoreEvent) => {
+			// console.log('[store] enqueuing event', event);
 			this.processingQueue.enqueue(event);
 		});
 
 		this.ow.addGameInfoUpdatedListener((res: any) => {
 			if (this.ow.gameLaunched(res)) {
-				console.log('game launched, populating store', res);
+				console.log('[store] game launched, populating store', res);
 				this.populateStore();
 			}
 		});
@@ -190,31 +191,35 @@ export class MainWindowStoreService {
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
-		console.log('[store] processing event', event.eventName());
+		// console.log('[store] processing event', event.eventName(), event);
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		// Don't modify the current state here, as it could make state lookup impossible
 		// (for back / forward arrows for instance)
-		const newState = await processor.process(event, this.state, this.stateHistory);
-		if (newState) {
-			this.addStateToHistory(newState, event);
-			this.state = newState;
-			// We don't want to store the status of the navigation arrows, as when going back
-			// or forward with the history arrows, the state of these arrows will change
-			// vs what they originally were when the state was stored
-			const stateWithNavigation = this.updateNavigationArrows(newState);
-			// console.log('emitting new state', stateWithNavigation);
-			this.stateEmitter.next(stateWithNavigation);
-			if (Date.now() - start > 1000) {
-				this.logger.warn(
-					'[store] Event',
-					event.eventName(),
-					'processing took too long, consider splitting it',
-					Date.now() - start,
-				);
+		try {
+			const newState = await processor.process(event, this.state, this.stateHistory);
+			if (newState) {
+				this.addStateToHistory(newState, event);
+				this.state = newState;
+				// We don't want to store the status of the navigation arrows, as when going back
+				// or forward with the history arrows, the state of these arrows will change
+				// vs what they originally were when the state was stored
+				const stateWithNavigation = this.updateNavigationArrows(newState);
+				console.log('emitting new state', stateWithNavigation);
+				this.stateEmitter.next(stateWithNavigation);
+				if (Date.now() - start > 1000) {
+					this.logger.warn(
+						'[store] Event',
+						event.eventName(),
+						'processing took too long, consider splitting it',
+						Date.now() - start,
+					);
+				}
+			} else {
+				console.log('[store] no new state to emit');
 			}
-		} else {
-			console.log('[store] no new state to emit');
+		} catch (e) {
+			console.error('[store] exception while processing event', event, processor);
 		}
 		return eventQueue.slice(1);
 	}
