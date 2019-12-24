@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, Renderer2, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	OnDestroy,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -35,6 +46,7 @@ declare var amplitude;
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
 							[deckName]="gameState.playerDeck?.name"
+							*ngIf="gameState.playerDeck?.name"
 						>
 						</decktracker-deck-name>
 						<decktracker-deck-list
