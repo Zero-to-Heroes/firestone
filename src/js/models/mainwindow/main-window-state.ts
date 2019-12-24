@@ -7,7 +7,6 @@ import { Navigation } from './navigation';
 import { ReplaysState } from './replays/replays-state';
 import { SocialShareUserInfo } from './social-share-user-info';
 import { GlobalStats } from './stats/global/global-stats';
-import { MatchStatsState } from './stats/match-stats-state';
 import { StatsState } from './stats/stats-state';
 
 export class MainWindowState {
@@ -21,6 +20,5 @@ export class MainWindowState {
 	readonly socialShareUserInfo: SocialShareUserInfo = new SocialShareUserInfo();
 	readonly stats: StatsState = new StatsState();
 	readonly globalStats: GlobalStats = new GlobalStats();
-	readonly matchStats: MatchStatsState = new MatchStatsState();
 	readonly navigation: Navigation = new Navigation();
 }

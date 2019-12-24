@@ -63,14 +63,10 @@ import { ShareVideoOnSocialNetworkEvent } from './events/social/share-video-on-s
 import { StartSocialSharingEvent } from './events/social/start-social-sharing-event';
 import { TriggerSocialNetworkLoginToggleEvent } from './events/social/trigger-social-network-login-toggle-event';
 import { UpdateTwitterSocialInfoEvent } from './events/social/update-twitter-social-info-event';
-import { ChangeMatchStatCurrentStatEvent } from './events/stats/change-match-stat-current-stat-event';
-import { CloseMatchStatsWindowEvent } from './events/stats/close-match-stats-window-event';
 import { GameStatsInitEvent } from './events/stats/game-stats-init-event';
 import { GlobalStatsInitEvent } from './events/stats/global/global-stats-init-event';
 import { GlobalStatsUpdatedEvent } from './events/stats/global/global-stats-updated-event';
-import { MatchStatsAvailableEvent } from './events/stats/match-stats-available-event';
 import { RecomputeGameStatsEvent } from './events/stats/recompute-game-stats-event';
-import { ShowMatchStatsEvent } from './events/stats/show-match-stats-event';
 import { TriggerPopulateStoreEvent } from './events/trigger-populate-store-event';
 import { AchievementStateHelper } from './helper/achievement-state-helper';
 import { AchievementUpdateHelper } from './helper/achievement-update-helper';
@@ -111,14 +107,10 @@ import { ShareVideoOnSocialNetworkProcessor } from './processors/social/share-vi
 import { StartSocialSharingProcessor } from './processors/social/start-social-sharing-processor';
 import { TriggerSocialNetworkLoginToggleProcessor } from './processors/social/trigger-social-network-login-toggle-processor';
 import { UpdateTwitterSocialInfoProcessor } from './processors/social/update-twitter-social-info-processor';
-import { ChangeMatchStatCurrentStatProcessor } from './processors/stats/change-match-stat-current-stat-processor';
-import { CloseMatchStatsWindowProcessor } from './processors/stats/close-match-stats-window-processor';
 import { GameStatsInitProcessor } from './processors/stats/game-stats-init-processor';
 import { GlobalStatsInitProcessor } from './processors/stats/global/global-stats-init-processor';
 import { GlobalStatsUpdatedProcessor } from './processors/stats/global/global-stats-updated-processor';
-import { MatchStatsAvailableProcessor } from './processors/stats/match-stats-available-processor';
 import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-stats-processor';
-import { ShowMatchStatsProcessor } from './processors/stats/show-match-stats-processor';
 import { TriggerPopulateStoreProcessor } from './processors/trigger-populate-store-processor';
 import { StateHistory } from './state-history';
 
@@ -191,7 +183,7 @@ export class MainWindowStoreService {
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
-		// console.log('[store] processing event', event.eventName(), event);
+		console.log('[store] processing event', event.eventName(), event);
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		// Don't modify the current state here, as it could make state lookup impossible
@@ -409,18 +401,6 @@ export class MainWindowStoreService {
 
 			RecomputeGameStatsEvent.eventName(),
 			new RecomputeGameStatsProcessor(this.decktrackerStateLoader),
-
-			MatchStatsAvailableEvent.eventName(),
-			new MatchStatsAvailableProcessor(this.notifs),
-
-			ShowMatchStatsEvent.eventName(),
-			new ShowMatchStatsProcessor(),
-
-			ChangeMatchStatCurrentStatEvent.eventName(),
-			new ChangeMatchStatCurrentStatProcessor(),
-
-			CloseMatchStatsWindowEvent.eventName(),
-			new CloseMatchStatsWindowProcessor(),
 
 			// Global stats
 			GlobalStatsInitEvent.eventName(),

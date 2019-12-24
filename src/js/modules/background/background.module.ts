@@ -51,7 +51,6 @@ import { GameHelper } from '../../services/manastorm-bridge/game-helper.service'
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
 import { ReplayManager } from '../../services/manastorm-bridge/replay-manager.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
-import { MatchSummaryService } from '../../services/match-summary/match-summary.service';
 import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
 import { ReplaysNotificationService } from '../../services/replays/replays-notification.service';
@@ -158,7 +157,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		ZoneOrderingService,
 		GameStateMetaInfoService,
 
-		MatchSummaryService,
 		GlobalStatsBootstrapService,
 		GlobalStatsService,
 		GlobalStatsNotifierService,
