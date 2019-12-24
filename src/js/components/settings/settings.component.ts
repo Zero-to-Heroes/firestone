@@ -23,7 +23,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<section class="title-bar">
 				<div class="title">Settings</div>
 				<div class="controls">
-					<control-close [windowId]="thisWindowId"></control-close>
+					<control-close [windowId]="thisWindowId" [shouldHide]="true"></control-close>
 				</div>
 			</section>
 			<settings-app-selection [selectedApp]="selectedApp" (onAppSelected)="onAppSelected($event)">

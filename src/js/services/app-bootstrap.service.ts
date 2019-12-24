@@ -27,7 +27,6 @@ import { GlobalStatsBootstrapService } from './mainwindow/store/global-stats-boo
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
-import { MatchSummaryService } from './match-summary/match-summary.service';
 import { OverwolfService } from './overwolf.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
@@ -69,7 +68,6 @@ export class AppBootstrapService {
 		private settingsCommunicationService: SettingsCommunicationService,
 		private init_decktrackerDisplayService: OverlayDisplayService,
 		private init_endGameListenerService: EndGameListenerService,
-		private init_matchSummaryService: MatchSummaryService,
 		private init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private init_ReplaysNotificationService: ReplaysNotificationService,
 		private init_BattlegroundsStateService: BattlegroundsStateService,
@@ -150,6 +148,9 @@ export class AppBootstrapService {
 		});
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
+		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+		await this.ow.restoreWindow(settingsWindow.id);
+		await this.ow.hideWindow(settingsWindow.id);
 		// const [
 		// 	settingsWindow,
 		// 	// battlegroundsPlayerInfoWindow,

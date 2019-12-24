@@ -28,6 +28,7 @@ export class ControlCloseComponent implements AfterViewInit {
 	@Input() windowId: string;
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
+	@Input() shouldHide: boolean;
 	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -61,7 +62,7 @@ export class ControlCloseComponent implements AfterViewInit {
 			}
 		} else {
 			console.log('[control-close] requested window close', this.windowId);
-			if (this.isMainWindow) {
+			if (this.isMainWindow || this.shouldHide) {
 				this.ow.hideWindow(this.windowId);
 			} else {
 				this.ow.closeWindow(this.windowId);
