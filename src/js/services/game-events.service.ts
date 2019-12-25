@@ -101,12 +101,14 @@ export class GameEvents {
 		if (eventQueue.some(data => data.indexOf('CREATE_GAME') !== -1)) {
 			console.log('[game-events] preparing log lines that include game creation to feed to the plugin');
 		}
+		// console.log('process queue', eventQueue);
 		await this.processLogs(eventQueue);
 		return [];
 	}
 
 	private async processLogs(eventQueue: readonly string[]): Promise<void> {
 		return new Promise<void>(resolve => {
+			// console.log('calling real time processing', eventQueue);
 			this.plugin.realtimeLogProcessing(eventQueue, () => {
 				resolve();
 			});
@@ -643,9 +645,9 @@ export class GameEvents {
 				return;
 			}
 			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
-			// We've caught up
-			console.log('[game-events] [existing] enqueueing finished');
-			this.processingQueue.enqueueAll(this.existingLogLines);
+			if (this.existingLogLines.length > 0) {
+				this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
+			}
 			this.existingLogLines = [];
 			return;
 		}
