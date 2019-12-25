@@ -140,7 +140,7 @@ export class AppBootstrapService {
 			}
 		});
 		const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		await this.ow.restoreWindow(collectionWindow.id);
+		// await this.ow.restoreWindow(collectionWindow.id);
 		await this.ow.hideWindow(collectionWindow.id);
 		this.startApp(false);
 		this.ow.addAppLaunchTriggeredListener(() => {
@@ -149,7 +149,7 @@ export class AppBootstrapService {
 
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
-		await this.ow.restoreWindow(settingsWindow.id);
+		// await this.ow.restoreWindow(settingsWindow.id);
 		await this.ow.hideWindow(settingsWindow.id);
 		// const [
 		// 	settingsWindow,
