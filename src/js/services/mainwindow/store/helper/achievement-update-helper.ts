@@ -19,6 +19,7 @@ export class AchievementUpdateHelper {
 		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements(
 			useCache,
 		);
+		// console.log('[achievements-update] achievementSets', achievementSets);
 		return globalCategories.map(category => {
 			return VisualAchievementCategory.create({
 				id: category.id,

@@ -47,9 +47,9 @@ export class AchievementsMonitor {
 
 	private async sendUnlockEvent(challenge: Challenge) {
 		// console.log('[achievement-monitor] starting process of completed achievement', challenge);
-		const existingAchievement: CompletedAchievement =
-			(await this.achievementsStorage.loadAchievementFromCache(challenge.achievementId)) ||
-			challenge.defaultAchievement();
+		const existingAchievement: CompletedAchievement = await this.achievementsStorage.loadAchievementFromCache(
+			challenge.achievementId,
+		);
 		// console.log('[achievement-monitor] loaded existing completed achievement', existingAchievement);
 		const completedAchievement = new CompletedAchievement(
 			existingAchievement.id,

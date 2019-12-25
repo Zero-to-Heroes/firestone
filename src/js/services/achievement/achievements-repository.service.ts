@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Achievement } from '../../models/achievement';
 import { AchievementCategory } from '../../models/achievement-category';
 import { AchievementSet } from '../../models/achievement-set';
 import { CompletedAchievement } from '../../models/completed-achievement';
@@ -35,13 +36,36 @@ export class AchievementsRepository {
 	}
 
 	public async loadAggregatedAchievements(useCache = false): Promise<AchievementSet[]> {
-		const [allAchievements, completedAchievements] = await Promise.all([
+		const [allAchievements, completedAchievements, replayInfos] = await Promise.all([
 			this.achievementsLoader.getAchievements(),
 			useCache ? this.storage.loadAchievementsFromCache() : this.remoteAchievements.loadAchievements(),
+			this.storage.loadAllReplayInfos(),
 		]);
+		const achievementsWithReplayInfos = this.mergeReplayInfos(allAchievements, replayInfos);
+		// console.log(
+		// 	'[achievements-repository] loading aggregated achievements',
+		// 	allAchievements,
+		// 	completedAchievements,
+		// 	replayInfos,
+		// 	achievementsWithReplayInfos,
+		// 	achievementsWithReplayInfos.find(ach => ach.id === 'dalaran_heist_boss_encounter_DALA_BOSS_74h'),
+		// );
 		return this.setProviders.map(provider =>
-			provider.provide(allAchievements, completedAchievements as CompletedAchievement[]),
+			provider.provide(achievementsWithReplayInfos, completedAchievements as CompletedAchievement[]),
 		);
+	}
+
+	private mergeReplayInfos(
+		allAchievements: readonly Achievement[],
+		replayInfos: readonly CompletedAchievement[],
+	): readonly Achievement[] {
+		return allAchievements.map(ach => {
+			const replays = replayInfos.find(info => info.id === ach.id);
+			if (replays) {
+				console.log('will return ', ach.update({ replayInfo: replays.replayInfo } as Achievement));
+			}
+			return replays ? ach.update({ replayInfo: replays.replayInfo } as Achievement) : ach;
+		});
 	}
 
 	public async getCategories(): Promise<readonly AchievementCategory[]> {

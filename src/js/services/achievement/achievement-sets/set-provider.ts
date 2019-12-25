@@ -35,10 +35,8 @@ export abstract class SetProvider {
 			: allAchievements.map((ref: Achievement) => {
 					const completedAchievement = completedAchievemnts.filter(compl => compl.id === ref.id).pop();
 					const numberOfCompletions = completedAchievement ? completedAchievement.numberOfCompletions : 0;
-					const replayInfo = completedAchievement ? completedAchievement.replayInfo : [];
 					return Object.assign(new Achievement(), ref, {
 						numberOfCompletions: numberOfCompletions,
-						replayInfo: replayInfo,
 					} as Achievement);
 			  });
 		const fullAchievements: VisualAchievement[] = mergedAchievements

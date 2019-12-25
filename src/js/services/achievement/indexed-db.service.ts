@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularIndexedDB } from 'angular2-indexeddb';
 import { AchievementHistory } from '../../models/achievement/achievement-history';
 import { CompletedAchievement } from '../../models/completed-achievement';
+import { ReplayInfo } from '../../models/replay-info';
 
 @Injectable()
 export class AchievementsLocalDbService {
@@ -16,7 +17,11 @@ export class AchievementsLocalDbService {
 	}
 
 	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
-		return this.achievementsCache[achievementId];
+		const achievement = this.achievementsCache[achievementId] || new CompletedAchievement(achievementId, 0, []);
+		const replayInfo = await this.loadReplayInfo(achievementId);
+		return achievement.update({
+			replayInfo: replayInfo,
+		} as CompletedAchievement);
 		// await this.waitForDbInit();
 		// try {
 		// 	const achievement = await this.db.getByKey('achievements', achievementId);
@@ -26,8 +31,21 @@ export class AchievementsLocalDbService {
 		// }
 	}
 
+	private async loadReplayInfo(achievementId: string): Promise<readonly ReplayInfo[]> {
+		await this.waitForDbInit();
+		try {
+			return ((await this.db.getByKey('achievements-replay-info', achievementId)) || ({} as CompletedAchievement))
+				.replayInfo;
+		} catch (e) {
+			console.error('[achievements] [storage] error while loading replay-info', e.message, e.name, e);
+		}
+	}
+
 	public async save(achievement: CompletedAchievement): Promise<CompletedAchievement> {
 		this.achievementsCache[achievement.id] = achievement;
+		if (achievement.replayInfo && achievement.replayInfo.length > 0) {
+			await this.saveReplayInfo(achievement.id, achievement.replayInfo);
+		}
 		return achievement;
 		// await this.waitForDbInit();
 		// try {
@@ -43,6 +61,28 @@ export class AchievementsLocalDbService {
 		// 	);
 		// 	return achievement;
 		// }
+	}
+
+	private async saveReplayInfo(achievementId: string, replayInfo: readonly ReplayInfo[]) {
+		await this.waitForDbInit();
+		try {
+			const replayInfoData = {
+				id: achievementId,
+				replayInfo: replayInfo,
+			} as CompletedAchievement;
+			const result = await this.db.update('achievements-replay-info', replayInfoData);
+			return result;
+		} catch (e) {
+			console.error(
+				'[achievements] [storage] error while saving achievements-replay-info',
+				achievementId,
+				replayInfo,
+				e.message,
+				e.name,
+				e,
+			);
+			return [];
+		}
 	}
 
 	public async saveAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
@@ -63,7 +103,11 @@ export class AchievementsLocalDbService {
 	}
 
 	public async getAll(): Promise<CompletedAchievement[]> {
-		return Object.values(this.achievementsCache);
+		const replayInfos = await this.getAllReplayInfo();
+		return Object.values(this.achievementsCache).map(ach => {
+			const replays = replayInfos.find(info => info.id === ach.id);
+			return replays ? ach.update({ replayInfo: replays.replayInfo } as CompletedAchievement) : ach;
+		});
 		// await this.waitForDbInit();
 		// try {
 		// 	const achievements: CompletedAchievement[] = await this.db.getAll('achievements');
@@ -77,6 +121,21 @@ export class AchievementsLocalDbService {
 		// 	);
 		// 	return [];
 		// }
+	}
+
+	public async getAllReplayInfo(): Promise<readonly CompletedAchievement[]> {
+		await this.waitForDbInit();
+		try {
+			return await this.db.getAll('achievements-replay-info', null);
+		} catch (e) {
+			console.error(
+				'[achievements] [storage] error while getting all achievements-replay-info',
+				e.message,
+				e.name,
+				e,
+			);
+			return [];
+		}
 	}
 
 	public async loadAllHistory(): Promise<AchievementHistory[]> {
@@ -104,7 +163,7 @@ export class AchievementsLocalDbService {
 		console.log('[achievements] [storage] starting init of indexeddb');
 		this.db = new AngularIndexedDB('hs-achievements-db', 2);
 		this.db
-			.openDatabase(2, evt => {
+			.openDatabase(3, evt => {
 				console.log('[achievements] [storage] opendb successful', evt);
 				if (evt.oldVersion < 1) {
 					console.log('[achievements] [storage] creating achievements store');
@@ -115,6 +174,13 @@ export class AchievementsLocalDbService {
 					evt.currentTarget.result.createObjectStore('achievement-history', {
 						keyPath: 'id',
 						autoIncrement: true,
+					});
+				}
+				if (evt.oldVersion < 3) {
+					console.log('[achievements] [storage] upgrade to version 3');
+					evt.currentTarget.result.createObjectStore('achievements-replay-info', {
+						keyPath: 'id',
+						autoIncrement: false,
 					});
 				}
 				console.log('[achievements] [storage] indexeddb upgraded');

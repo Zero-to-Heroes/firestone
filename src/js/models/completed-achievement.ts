@@ -11,4 +11,8 @@ export class CompletedAchievement {
 		this.numberOfCompletions = numberOfCompletions;
 		this.replayInfo = replayInfo;
 	}
+
+	public update(value: CompletedAchievement): CompletedAchievement {
+		return Object.assign(new CompletedAchievement(this.id, this.numberOfCompletions, this.replayInfo), this, value);
+	}
 }

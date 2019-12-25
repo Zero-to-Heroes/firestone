@@ -26,8 +26,12 @@ export class AchievementsLocalStorageService {
 		return completedAchievement;
 	}
 
-	public async loadAchievementsFromCache(): Promise<CompletedAchievement[]> {
+	public async loadAchievementsFromCache(): Promise<readonly CompletedAchievement[]> {
 		return this.indexedDb.getAll();
+	}
+
+	public async loadAllReplayInfos(): Promise<readonly CompletedAchievement[]> {
+		return this.indexedDb.getAllReplayInfo();
 	}
 
 	public async removeReplay(achievementId: string, videoPath: string): Promise<CompletedAchievement> {

@@ -1,4 +1,3 @@
-import { CompletedAchievement } from '../../../../models/completed-achievement';
 import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
@@ -33,10 +32,6 @@ export class GenericChallenge implements Challenge {
 			req.test(gameEvent);
 		});
 		this.testCompletion();
-	}
-
-	public defaultAchievement() {
-		return new CompletedAchievement(this.achievementId, 0, []);
 	}
 
 	public getRecordingDuration(): number {
