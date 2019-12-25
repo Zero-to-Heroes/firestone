@@ -1,5 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewRef,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeUrl } from '@angular/platform-browser';
+import { VgAPI, VgFullscreenAPI } from 'videogular2/core';
 import { ThumbnailInfo } from '../../models/achievement/thumbnail-info';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { ReplayInfo } from '../../models/replay-info';
@@ -17,7 +29,7 @@ declare var amplitude;
 	styleUrls: [`../../../css/component/achievements/achievement-recordings.component.scss`],
 	template: `
 		<div class="achievement-recordings" *ngIf="currentThumbnail">
-			<vg-player [ngClass]="{ 'deleted': currentThumbnail.isDeleted }">
+			<vg-player [ngClass]="{ 'deleted': currentThumbnail.isDeleted }" (onPlayerReady)="onPlayerReady($event)">
 				<div class="title" [innerHTML]="title"></div>
 				<fs-overlay-play></fs-overlay-play>
 
@@ -166,6 +178,8 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	private player;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private stateChangedListener: (message: any) => void;
+	private api: VgAPI;
+	private fsAPI: VgFullscreenAPI;
 
 	constructor(
 		private io: SimpleIOService,
@@ -178,9 +192,15 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 
 	@Input() set achievement(achievement: VisualAchievement) {
 		this._achievement = achievement;
-		console.log('setting achievement', achievement);
-		setTimeout(() => {
-			this.updateThumbnails(achievement.replayInfo);
+		// console.log('[achievement-recordings] setting achievement', achievement);
+		setTimeout(async () => {
+			await this.updateThumbnails(achievement.replayInfo);
+			this.player.load();
+			// this.player.play();
+			this.api.currentTime = 0;
+			// this.api.play();
+			this.api.getDefaultMedia().currentTime = 0;
+			// this.api.getDefaultMedia().play();
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -207,18 +227,35 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 	}
 
+	onPlayerReady(api: VgAPI) {
+		// console.log('[achievement-recordings] on player ready');
+		this.api = api;
+		this.fsAPI = this.api.fsAPI;
+		// this.nativeFs = this.fsAPI.nativeFullscreen;
+
+		this.api.getDefaultMedia().subscriptions.ended.subscribe(() => {
+			// Set the video to the beginning
+			// console.log('[achievement-recordings] reset current time');
+			this.api.getDefaultMedia().currentTime = 0;
+		});
+	}
+
 	showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
 		amplitude.getInstance().logEvent('achievement-video', {
 			'action': 'play',
 		});
-		console.log('[achievment-recordings] showing rplay', thumbnail);
+		// console.log('[achievment-recordings] showing rplay', thumbnail);
 		event.stopPropagation();
 		if (this.currentThumbnail === thumbnail) {
 			return;
 		}
 		this.updateThumbnail(thumbnail);
 		this.player.load();
-		this.player.play();
+		// this.player.play();
+		this.api.currentTime = 0;
+		// this.api.play();
+		this.api.getDefaultMedia().currentTime = 0;
+		// this.api.getDefaultMedia().play();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -229,7 +266,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			'action': 'open-folder',
 		});
 		const result = await this.ow.openWindowsExplorer(this.currentReplayLocation);
-		console.log('opened', result);
+		// console.log('opened', result);
 	}
 
 	goToPreviousPage() {
@@ -252,7 +289,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			this.thumbnails.length - this.THUMBNAILS_PER_PAGE,
 		);
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
-		console.log('thumnailOffset', this.thumbnailsOffsetX);
+		// console.log('thumnailOffset', this.thumbnailsOffsetX);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -420,7 +457,8 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
             </i>
             <div class="text">${this.buildText()}</div>
             <div class="date">${date}</div>
-        `);
+		`);
+		// console.log('[achievement-recordings] new title', this.title);
 	}
 
 	private buildIconSvg(stepId: string) {

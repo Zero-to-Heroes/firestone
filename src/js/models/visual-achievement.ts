@@ -52,7 +52,7 @@ export class VisualAchievement {
 		);
 		// console.log('[visual-achievement] completionSteps', completionSteps, text);
 		return Object.assign(new VisualAchievement(), this, {
-			replayInfo: value.replayInfo,
+			replayInfo: [...value.replayInfo, ...this.replayInfo] as readonly ReplayInfo[],
 			completionSteps: completionSteps, //this.updateCompletionSteps(value),
 			text: text,
 		} as VisualAchievement);

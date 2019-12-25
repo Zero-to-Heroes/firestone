@@ -69,7 +69,7 @@ export class AchievementsMonitor {
 
 		this.achievementStats.publishRemoteAchievement(mergedAchievement);
 		await this.achievementsStorage.cacheAchievement(completedAchievement);
-		// console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
+		console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
 		// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
 
 		this.enqueue({ achievement: mergedAchievement, challenge: challenge } as InternalEvent);

@@ -3,6 +3,7 @@ import { RawAchievement } from '../../../src/js/models/achievement/raw-achieveme
 import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
 import { GameStats } from '../../../src/js/models/mainwindow/stats/game-stats';
 import { PlayerInfo } from '../../../src/js/models/player-info.js';
+import { ReplayInfo } from '../../../src/js/models/replay-info';
 import { AchievementsLocalStorageService } from '../../../src/js/services/achievement/achievements-local-storage.service.js';
 import { AchievementsMonitor } from '../../../src/js/services/achievement/achievements-monitor.service';
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
@@ -131,7 +132,11 @@ export const achievementsValidation = async (
 	statsUpdater.stateUpdater = store.stateUpdater;
 	const storage: AchievementsLocalStorageService = {
 		loadAchievementFromCache: async (achievementId: string) => {
-			return null;
+			return CompletedAchievement.create({
+				id: achievementId,
+				numberOfCompletions: 0,
+				replayInfo: [] as readonly ReplayInfo[],
+			} as CompletedAchievement);
 		},
 		cacheAchievement: async (achievement: CompletedAchievement) => {
 			return null;
