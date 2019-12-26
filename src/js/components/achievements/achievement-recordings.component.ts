@@ -51,7 +51,9 @@ declare var amplitude;
 						</svg>
 					</i>
 
-					<vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen>
+					<!-- Going out of full sceren causes issues I don't know how to fix quickly. 
+					Since the video recordings are not widely used, I'll just disable full screen for now -->
+					<!-- <vg-fullscreen [ngClass]="{ 'fullscreen': fullscreen }"></vg-fullscreen> -->
 				</vg-controls>
 
 				<achievement-social-shares
@@ -192,14 +194,22 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 
 	@Input() set achievement(achievement: VisualAchievement) {
 		this._achievement = achievement;
+		this.update();
+	}
+
+	private update() {
 		// console.log('[achievement-recordings] setting achievement', achievement);
 		setTimeout(async () => {
-			await this.updateThumbnails(achievement.replayInfo);
-			this.player.load();
+			await this.updateThumbnails(this._achievement.replayInfo);
+			if (this.player) {
+				this.player.load();
+			}
 			// this.player.play();
-			this.api.currentTime = 0;
-			// this.api.play();
-			this.api.getDefaultMedia().currentTime = 0;
+			if (this.api) {
+				this.api.currentTime = 0;
+				// this.api.play();
+				this.api.getDefaultMedia().currentTime = 0;
+			}
 			// this.api.getDefaultMedia().play();
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -230,7 +240,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	onPlayerReady(api: VgAPI) {
 		// console.log('[achievement-recordings] on player ready');
 		this.api = api;
-		this.fsAPI = this.api.fsAPI;
+		// this.fsAPI = this.api.fsAPI;
 		// this.nativeFs = this.fsAPI.nativeFullscreen;
 
 		this.api.getDefaultMedia().subscriptions.ended.subscribe(() => {
@@ -238,6 +248,17 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			// console.log('[achievement-recordings] reset current time');
 			this.api.getDefaultMedia().currentTime = 0;
 		});
+
+		// this.fsAPI.onChangeFullscreen.subscribe(event => {
+		// 	amplitude.getInstance().logEvent('achievement-video', {
+		// 		'action': 'full-screen',
+		// 	});
+		// 	console.log('[achievement-recordings] full screen change', event);
+		// 	this.fullscreen = !this.fullscreen;
+		// 	if (!(this.cdr as ViewRef).destroyed) {
+		// 		this.cdr.detectChanges();
+		// 	}
+		// });
 	}
 
 	showReplay(thumbnail: ThumbnailInfo, event: MouseEvent) {
@@ -365,16 +386,16 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		}
 	}
 
-	@HostListener('document:webkitfullscreenchange', ['$event'])
-	onFullScreenChange(event) {
-		amplitude.getInstance().logEvent('achievement-video', {
-			'action': 'full-screen',
-		});
-		this.fullscreen = !this.fullscreen;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
+	// @HostListener('document:webkitfullscreenchange', ['$event'])
+	// onFullScreenChange(event) {
+	// 	amplitude.getInstance().logEvent('achievement-video', {
+	// 		'action': 'full-screen',
+	// 	});
+	// 	this.fullscreen = !this.fullscreen;
+	// 	if (!(this.cdr as ViewRef).destroyed) {
+	// 		this.cdr.detectChanges();
+	// 	}
+	// }
 
 	private async updateThumbnails(replayInfo: readonly ReplayInfo[]) {
 		const deletedPaths: string[] = await this.buildDeletedPaths(replayInfo);
@@ -399,7 +420,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			})
 			.sort((a, b) => b.timestamp - a.timestamp);
 		this.thumbnailsOffsetX = -this.indexOfFirstShown * this.thumbnailWidth;
-		// console.log('updated thumbnails', this.thumbnails);
+		console.log('updated thumbnails', this.thumbnails);
 		this.updateThumbnail(this.thumbnails[this.indexOfFirstShown]);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

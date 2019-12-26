@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, ViewEncapsulation, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	ViewEncapsulation,
+	ViewRef,
+} from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IOption } from 'ng-select';
 import { AchievementSet } from '../../models/achievement-set';
@@ -132,17 +143,20 @@ export class AchievementsListComponent implements AfterViewInit {
 
 	@Input('selectedAchievementId') set selectedAchievementId(selectedAchievementId: string) {
 		if (selectedAchievementId && selectedAchievementId !== this._selectedAchievementId) {
-			console.log(
-				'[achievements-list] setting selectedAchievementId',
-				selectedAchievementId,
-				this._selectedAchievementId,
-			);
+			// console.log(
+			// 	'[achievements-list] setting selectedAchievementId',
+			// 	selectedAchievementId,
+			// 	this._selectedAchievementId,
+			// );
 			const achievementToShow: Element = this.el.nativeElement.querySelector(
 				`achievement-view[data-achievement-id=${selectedAchievementId.toLowerCase()}]`,
 			);
-			console.log('[achievements-list] achievementToShow?', achievementToShow);
+			// console.log('[achievements-list] achievementToShow?', achievementToShow, this.flag);
 			if (achievementToShow) {
-				setTimeout(() => achievementToShow.scrollIntoView(true));
+				setTimeout(() => {
+					achievementToShow.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'nearest' });
+					window.scrollTo({ top: 0, behavior: 'auto' });
+				});
 			}
 		}
 		this._selectedAchievementId = selectedAchievementId;
