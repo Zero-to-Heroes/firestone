@@ -17,7 +17,13 @@ export class AchievementsLocalDbService {
 	}
 
 	public async getAchievement(achievementId: string): Promise<CompletedAchievement> {
-		const achievement = this.achievementsCache[achievementId] || new CompletedAchievement(achievementId, 0, []);
+		const achievement =
+			this.achievementsCache[achievementId] ||
+			CompletedAchievement.create({
+				id: achievementId,
+				numberOfCompletions: 0,
+				replayInfo: [] as readonly ReplayInfo[],
+			} as CompletedAchievement);
 		const replayInfo = await this.loadReplayInfo(achievementId);
 		return achievement.update({
 			replayInfo: replayInfo,
@@ -85,13 +91,13 @@ export class AchievementsLocalDbService {
 		}
 	}
 
-	public async saveAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
-		if (!achievements) {
-			return [];
-		}
-		achievements.forEach(achievement => this.save(achievement));
-		return this.getAll();
-	}
+	// public async saveAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
+	// 	if (!achievements) {
+	// 		return [];
+	// 	}
+	// 	achievements.forEach(achievement => this.save(achievement));
+	// 	return this.getAll();
+	// }
 
 	public async setAll(achievements: readonly CompletedAchievement[]): Promise<readonly CompletedAchievement[]> {
 		if (!achievements) {

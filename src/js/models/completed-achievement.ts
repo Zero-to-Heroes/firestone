@@ -12,6 +12,10 @@ export class CompletedAchievement {
 		this.replayInfo = replayInfo;
 	}
 
+	public static create(base: CompletedAchievement): CompletedAchievement {
+		return Object.assign(new CompletedAchievement(null, null, null), base);
+	}
+
 	public update(value: CompletedAchievement): CompletedAchievement {
 		return Object.assign(new CompletedAchievement(this.id, this.numberOfCompletions, this.replayInfo), this, value);
 	}

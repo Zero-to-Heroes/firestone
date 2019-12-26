@@ -54,7 +54,8 @@ export class RemoteAchievementsService {
 		);
 
 		// Update local cache
-		await this.indexedDb.setAll(result.results);
+		const achievements = result.results.map(ach => CompletedAchievement.create(ach));
+		await this.indexedDb.setAll(achievements);
 		// await Promise.all(result.results.map(completedAchievement => this.indexedDb.saveAll(completedAchievement)));
 		this.logger.debug('[remote-achievements] updated local cache');
 
