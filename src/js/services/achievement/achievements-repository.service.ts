@@ -61,9 +61,9 @@ export class AchievementsRepository {
 	): readonly Achievement[] {
 		return allAchievements.map(ach => {
 			const replays = replayInfos.find(info => info.id === ach.id);
-			if (replays) {
-				console.log('will return ', ach.update({ replayInfo: replays.replayInfo } as Achievement));
-			}
+			// if (replays) {
+			// 	console.log('will return ', ach.update({ replayInfo: replays.replayInfo } as Achievement));
+			// }
 			return replays ? ach.update({ replayInfo: replays.replayInfo } as Achievement) : ach;
 		});
 	}

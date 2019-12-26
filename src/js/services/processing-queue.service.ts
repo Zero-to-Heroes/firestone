@@ -33,11 +33,12 @@ export class ProcessingQueue<T> {
 		} else {
 			this.eventQueue = [...this.eventQueue, ...events];
 		}
+		// console.log('enqueued, starting process queue', this.pendingQueue, this.eventQueue);
 		this.processQueue();
 	}
 
 	private async processQueue() {
-		// console.log('interval - processing queue', this.queueName);
+		// console.log('interval - processing queue', this.queueName, this.eventQueue);
 		if (this.isProcessing) {
 			// console.log('\talready processing, returning', this.queueName);
 			return;
