@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	HostListener,
+	OnDestroy,
+	ViewEncapsulation,
+	ViewRef,
+} from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
