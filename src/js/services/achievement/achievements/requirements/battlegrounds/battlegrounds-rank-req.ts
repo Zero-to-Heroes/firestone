@@ -1,3 +1,4 @@
+import { GameType } from '@firestone-hs/reference-data';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { BattlegroundsInfo } from '../../../../../models/battlegrounds-info';
 import { GameEvent } from '../../../../../models/game-event';
@@ -7,10 +8,9 @@ import { Requirement } from '../_requirement';
 export class BattlegroundsRankReq implements Requirement {
 	private isValid: boolean;
 	private rankAtReset: number;
+	private isBgs: boolean;
 
-	constructor(private readonly memoryInspection: MemoryInspectionService, private readonly targetRank: number) {
-		this.reset();
-	}
+	constructor(private readonly memoryInspection: MemoryInspectionService, private readonly targetRank: number) {}
 
 	public static create(rawReq: RawRequirement, memoryInspection: MemoryInspectionService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {
@@ -21,15 +21,12 @@ export class BattlegroundsRankReq implements Requirement {
 
 	async reset() {
 		this.isValid = undefined;
-		const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
-		// console.log('got battlegrounds info in req', this);
-		if (battlegroundsInfo) {
-			this.rankAtReset = battlegroundsInfo.rating;
-		}
+		this.isBgs = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isValid = undefined;
+		this.isBgs = undefined;
 	}
 
 	isCompleted(): boolean {
@@ -37,15 +34,39 @@ export class BattlegroundsRankReq implements Requirement {
 	}
 
 	test(gameEvent: GameEvent): void {
+		if (gameEvent.type === GameEvent.MATCH_METADATA) {
+			this.handleMetaData(gameEvent);
+			return;
+		}
 		if (gameEvent.type === GameEvent.WINNER) {
 			this.detectPlayerRank();
 			return;
 		}
 	}
 
+	private async handleMetaData(gameEvent: GameEvent) {
+		this.isBgs = gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS;
+		if (this.isBgs) {
+			const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
+			// console.log('got battlegrounds info in req', this);
+			if (battlegroundsInfo) {
+				this.rankAtReset = battlegroundsInfo.rating;
+			}
+		} else {
+			this.rankAtReset = undefined;
+		}
+	}
+
 	private async detectPlayerRank() {
+		if (!this.isBgs) {
+			this.isValid = false;
+			return;
+		}
 		const battlegroundsInfo: BattlegroundsInfo = await this.getRank();
-		this.isValid = battlegroundsInfo && battlegroundsInfo.rating >= this.targetRank;
+		this.isValid =
+			battlegroundsInfo &&
+			battlegroundsInfo.rating >= this.targetRank &&
+			(!this.rankAtReset || battlegroundsInfo.rating !== this.rankAtReset);
 		// console.log('battlegrounds-rank-req', battlegroundsInfo, this.isValid, this.targetRank);
 	}
 
