@@ -9,6 +9,9 @@
 	position: relative;
 	overflow: hidden;
 	transition: all 0.2s ease-in-out;
+	// https://stackoverflow.com/questions/12278587/webkit-text-flickers-when-using-css-transform-scale
+	backface-visibility: hidden;
+	transform-style: preserve-3d;
 
 	&:hover {
 		transform: scale(1.1);
