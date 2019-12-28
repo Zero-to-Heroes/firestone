@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { GameType } from '@firestone-hs/reference-data';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
@@ -295,6 +296,8 @@ export class GameStateService {
 		if (
 			this.state &&
 			this.state.gameStarted &&
+			this.state.metadata &&
+			this.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
 			opponentHandWindow.window_state_ex === 'closed' &&
 			this.showOpponentHand
 		) {
@@ -302,7 +305,10 @@ export class GameStateService {
 			await this.ow.restoreWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		} else if (
 			opponentHandWindow.window_state_ex !== 'closed' &&
-			(!this.state || !this.state.gameStarted || !this.showOpponentHand)
+			(!this.state ||
+				!this.state.gameStarted ||
+				!this.showOpponentHand ||
+				(this.state.metadata && this.state.metadata.gameType === GameType.GT_BATTLEGROUNDS))
 		) {
 			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		}
