@@ -49,6 +49,7 @@
 
 		::ng-deep control-close button {
 			&:hover {
+				--icon-color: #101530;
 				color: #101530;
 				background: #9fb6d7;
 			}
