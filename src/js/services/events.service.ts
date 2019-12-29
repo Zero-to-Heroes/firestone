@@ -46,6 +46,9 @@ export class Events {
 	public static readonly SET_SELECTED = 'set-selected'; // For FTUE, will be refactored later
 	public static readonly SET_MOUSE_OVER = 'set-mouse-over'; // For FTUE, will be refactored later
 
+	public static readonly SHOW_MODAL = 'show-modal';
+	public static readonly HIDE_MODAL = 'hide-modal';
+
 	public static readonly START_POPULATE_COLLECTION_STATE = 'start-populate-collection-state';
 	public static readonly START_POPULATE_ACHIEVEMENT_STATE = 'start-populate-achievements-state';
 	public static readonly START_POPULATE_GAME_STATS_STATE = 'start-populate-game-stats-state';

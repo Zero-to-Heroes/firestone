@@ -1,21 +1,11 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	OnDestroy,
-	Renderer2,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, Renderer2, ViewRef } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
+import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
@@ -57,6 +47,7 @@ declare var amplitude;
 							[tooltipPosition]="tooltipPosition"
 						>
 						</decktracker-deck-list>
+						<div class="backdrop" *ngIf="showBackdrop"></div>
 					</div>
 				</div>
 			</div>
@@ -77,6 +68,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	// showTracker: boolean;
 	highlightCardsInHand: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
+	showBackdrop: boolean;
 
 	private hasBeenMovedByUser: boolean;
 	private showTooltips: boolean = true;
@@ -96,6 +88,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private renderer: Renderer2,
+		private events: Events,
 		private init_DebugService: DebugService,
 	) {}
 
@@ -153,6 +146,18 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
 				await this.changeWindowPosition();
+			}
+		});
+		this.events.on(Events.SHOW_MODAL).subscribe(() => {
+			this.showBackdrop = true;
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
+		this.events.on(Events.HIDE_MODAL).subscribe(() => {
+			this.showBackdrop = false;
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
 			}
 		});
 

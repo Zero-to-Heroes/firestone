@@ -47,6 +47,17 @@ body {
 	z-index: 1;
 	padding: 10px;
 	padding-top: 0;
+
+	.cdk-overlay-backdrop {
+		background: transparent;
+		transition: opacity 0.25s ease-in-out, background 0.25s ease-in-out;
+		opacity: 0;
+
+		&.cdk-overlay-backdrop-showing {
+			background: var(--confirmation-backdrop-color);
+			opacity: 0.7;
+		}
+	}
 }
 
 .background-backup {

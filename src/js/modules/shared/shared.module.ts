@@ -12,11 +12,13 @@ import { ControlMinimizeComponent } from '../../components/controls/control-mini
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
+import { ConfirmationComponent } from '../../components/tooltip/confirmation.component';
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
 import { Tooltip, TooltipsComponent } from '../../components/tooltips.component';
 import { VersionComponent } from '../../components/version.component';
 import { WindowWrapperComponent } from '../../components/window-wrapper.component';
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
+import { AskConfirmationDirective } from '../../directives/ask-confirmation.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { ComponentTooltipDirective } from '../../directives/component-tooltip.directive';
 import { HelpTooltipDirective } from '../../directives/help-tooltip.directive';
@@ -43,18 +45,20 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		TooltipsComponent,
 		CardTooltipComponent,
 		HelpTooltipComponent,
+		ConfirmationComponent,
 
 		CardTooltipDirective,
 		ComponentTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
+		AskConfirmationDirective,
 
 		SafeHtmlPipe,
 
 		AdsComponent,
 	],
-	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent],
+	entryComponents: [Tooltip, HelpTooltipComponent, CardTooltipComponent, ConfirmationComponent],
 	exports: [
 		WindowWrapperComponent,
 
@@ -73,12 +77,14 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		TooltipsComponent,
 		CardTooltipComponent,
 		HelpTooltipComponent,
+		ConfirmationComponent,
 
 		ComponentTooltipDirective,
 		CardTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
+		AskConfirmationDirective,
 
 		SafeHtmlPipe,
 

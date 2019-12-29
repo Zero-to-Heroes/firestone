@@ -13,7 +13,7 @@ declare var amplitude;
 		`../../../css/component/controls/control-close.component.scss`,
 	],
 	template: `
-		<button (mousedown)="closeWindow()">
+		<button confirmationTooltip [askConfirmation]="askConfirmation" (onConfirm)="closeWindow()">
 			<svg class="svg-icon-fill">
 				<use
 					xmlns:xlink="https://www.w3.org/1999/xlink"
@@ -29,7 +29,8 @@ export class ControlCloseComponent implements AfterViewInit {
 	@Input() closeAll: boolean;
 	@Input() isMainWindow: boolean;
 	@Input() shouldHide: boolean;
-	@Input() eventProvider: () => MainWindowStoreEvent;
+	@Input() askConfirmation: boolean;
+	@Input() eventProvider: () => void;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -49,7 +50,7 @@ export class ControlCloseComponent implements AfterViewInit {
 		// Delegate all the logic
 		if (this.eventProvider) {
 			console.log('delegating closing logic');
-			this.stateUpdater.next(this.eventProvider());
+			this.eventProvider();
 			return;
 		}
 		// If game is not running, we close all other windows

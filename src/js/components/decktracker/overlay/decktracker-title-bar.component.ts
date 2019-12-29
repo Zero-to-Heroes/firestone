@@ -34,7 +34,11 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[windowId]="windowId"
 				>
 				</control-settings>
-				<control-close [windowId]="windowId"></control-close>
+				<control-close
+					[windowId]="windowId"
+					[eventProvider]="closeHandler"
+					[askConfirmation]="true"
+				></control-close>
 			</div>
 		</div>
 	`,
@@ -42,11 +46,18 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DeckTrackerTitleBarComponent {
 	@Input() windowId: string;
+	closeHandler: () => void;
 
 	private deckUpdater: EventEmitter<GameEvent>;
 
 	constructor(private readonly ow: OverwolfService) {
 		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
+		this.closeHandler = () =>
+			this.deckUpdater.next(
+				Object.assign(new GameEvent(), {
+					type: 'CLOSE_TRACKER',
+				} as GameEvent),
+			);
 	}
 
 	async importDeckstring() {

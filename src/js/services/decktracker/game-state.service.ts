@@ -75,6 +75,8 @@ export class GameStateService {
 	private showDecktracker: boolean;
 	private showOpponentHand: boolean;
 
+	private closedByUser: boolean;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private events: Events,
@@ -188,6 +190,13 @@ export class GameStateService {
 		// 	return;
 		// }
 		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent);
+		if (gameEvent.type === 'CLOSE_TRACKER') {
+			this.closedByUser = true;
+			this.updateOverlays();
+		} else if (gameEvent.type === GameEvent.GAME_START) {
+			this.closedByUser = false;
+			this.updateOverlays();
+		}
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
@@ -283,11 +292,19 @@ export class GameStateService {
 				(this.state.playerDeck.board && this.state.playerDeck.board.length > 0) ||
 				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
 		// console.log('[game-state] should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
-		if (shouldShowTracker && decktrackerWindow.window_state_ex === 'closed' && this.showDecktracker) {
+		if (
+			shouldShowTracker &&
+			decktrackerWindow.window_state_ex === 'closed' &&
+			this.showDecktracker &&
+			!this.closedByUser
+		) {
 			// console.log('[game-state] showing tracker');
 			await this.ow.obtainDeclaredWindow(OverwolfService.DECKTRACKER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
-		} else if (decktrackerWindow.window_state_ex !== 'closed' && (!shouldShowTracker || !this.showDecktracker)) {
+		} else if (
+			decktrackerWindow.window_state_ex !== 'closed' &&
+			(!shouldShowTracker || !this.showDecktracker || this.closedByUser)
+		) {
 			// console.log('[game-state] closing tracker');
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 		}
