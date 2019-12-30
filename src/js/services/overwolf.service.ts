@@ -388,7 +388,7 @@ export class OverwolfService {
 	public async obtainDeclaredWindow(windowName: string): Promise<any> {
 		return new Promise<any>((resolve, reject) => {
 			overwolf.windows.obtainDeclaredWindow(windowName, (res: any) => {
-				console.log('[overwolf-service] obtained declared window', windowName, res.window, res);
+				// console.log('[overwolf-service] obtained declared window', windowName, res.window, res);
 				if (res.status === 'success') {
 					resolve(res.window);
 				} else {
