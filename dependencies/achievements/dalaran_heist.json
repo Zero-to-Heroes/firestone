@@ -7516,7 +7516,6 @@
 		"maxNumberOfRecords": 2,
 		"points": 3.0,
 		"requirements": [
-			{ "type": "CARD_PLAYED_OR_CHANGED_ON_BOARD", "values": ["DALA_701"] },
 			{ "type": "CARD_DRAWN_OR_RECEIVED_IN_HAND", "values": ["DALA_701"] },
 			{
 				"type": "SCENARIO_IDS",
