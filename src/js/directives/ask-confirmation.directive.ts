@@ -1,6 +1,18 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { AfterViewInit, ChangeDetectorRef, ComponentRef, Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectorRef,
+	ComponentRef,
+	Directive,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnDestroy,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { ConfirmationComponent } from '../components/tooltip/confirmation.component';
 import { Events } from '../services/events.service';
 

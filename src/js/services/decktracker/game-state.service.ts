@@ -279,6 +279,9 @@ export class GameStateService {
 	}
 
 	private async updateOverlays() {
+		if (!this.ow) {
+			return;
+		}
 		const [decktrackerWindow, opponentHandWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
