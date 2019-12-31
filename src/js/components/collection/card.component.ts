@@ -1,14 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	EventEmitter,
-	HostListener,
-	Input,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, ViewRef } from '@angular/core';
 import { SetCard } from '../../models/set';
 import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
@@ -84,7 +74,8 @@ export class CardComponent implements AfterViewInit {
 		this._card = card;
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
 		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
-		this.showNonPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
+		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
+		// console.log('set card', card, this.missing, this.showCounts)
 		this.updateImage();
 	}
 
