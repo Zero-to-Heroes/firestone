@@ -1,5 +1,5 @@
-import { Set, SetCard } from '../set';
 import { CardHistory } from '../card-history';
+import { Set, SetCard } from '../set';
 
 export class BinderState {
 	readonly currentView: string = 'sets';
@@ -15,4 +15,5 @@ export class BinderState {
 	readonly shownCardHistory: readonly CardHistory[] = [];
 	readonly showOnlyNewCardsInHistory: boolean = false;
 	readonly totalHistoryLength: number;
+	readonly isLoading: boolean = true;
 }

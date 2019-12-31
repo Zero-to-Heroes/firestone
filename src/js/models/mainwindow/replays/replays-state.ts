@@ -13,6 +13,7 @@ export class ReplaysState {
 	readonly groupByCriteria: 'creation-date' = 'creation-date';
 	readonly selectedReplay: MatchDetail;
 	readonly filters: readonly ReplaysFilter[];
+	readonly isLoading: boolean = true;
 
 	constructor() {
 		this.filters = this.buildFilters();

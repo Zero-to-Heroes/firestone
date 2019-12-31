@@ -17,6 +17,7 @@ export class DecktrackerStateLoaderService {
 		return Object.assign(new DecktrackerState(), currentState, {
 			decks: decks,
 			filters: filters,
+			isLoading: false,
 		} as DecktrackerState);
 	}
 }

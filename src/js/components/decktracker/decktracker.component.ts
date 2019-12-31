@@ -14,9 +14,14 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 				<decktracker-menu
 					[displayType]="state.menuDisplayType"
 					[currentView]="state.currentView"
+					[hidden]="state.isLoading"
 				></decktracker-menu>
-				<decktracker-filters [state]="state.filters"></decktracker-filters>
-				<decktracker-decks [hidden]="state.currentView !== 'decks'" [decks]="state.decks"></decktracker-decks>
+				<decktracker-filters [state]="state.filters" [hidden]="state.isLoading"></decktracker-filters>
+				<decktracker-decks
+					[hidden]="state.currentView !== 'decks' || state.isLoading"
+					[decks]="state.decks"
+				></decktracker-decks>
+				<loading-state [hidden]="!state.isLoading"></loading-state>
 			</section>
 			<section class="secondary"></section>
 		</div>

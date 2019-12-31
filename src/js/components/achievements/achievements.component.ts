@@ -20,19 +20,20 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 	template: `
 		<div class="app-section achievements">
 			<section class="main" [ngClass]="{ 'divider': state.currentView === 'list' }" [@viewState]="_viewState">
-				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
+				<global-header [navigation]="navigation" *ngIf="navigation.text" [hidden]="state.isLoading">
+				</global-header>
 				<achievements-global-categories
-					[hidden]="state.currentView !== 'categories'"
+					[hidden]="state.currentView !== 'categories' || state.isLoading"
 					[globalCategories]="state.globalCategories"
 				>
 				</achievements-global-categories>
 				<achievements-categories
-					[hidden]="state.currentView !== 'category'"
+					[hidden]="state.currentView !== 'category' || state.isLoading"
 					[achievementSets]="getAchievementSets()"
 				>
 				</achievements-categories>
 				<achievements-list
-					[hidden]="state.currentView !== 'list'"
+					[hidden]="state.currentView !== 'list' || state.isLoading"
 					[socialShareUserInfo]="socialShareUserInfo"
 					[achievementsList]="getDisplayedAchievements()"
 					[selectedAchievementId]="state.selectedAchievementId"
@@ -41,11 +42,12 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 				>
 				</achievements-list>
 				<achievement-sharing-modal
-					[hidden]="!state.sharingAchievement"
+					[hidden]="!state.sharingAchievement || state.isLoading"
 					[socialShareUserInfo]="socialShareUserInfo"
 					[sharingAchievement]="state.sharingAchievement"
 				>
 				</achievement-sharing-modal>
+				<loading-state [hidden]="!state.isLoading"></loading-state>
 			</section>
 			<section class="secondary">
 				<achievement-history [achievementHistory]="state.achievementHistory"></achievement-history>
@@ -85,21 +87,21 @@ export class AchievementsComponent {
 	_viewState = 'shown';
 
 	getAchievementSet(): AchievementSet {
-		console.log('[achievements] getting achievement set', this.state);
+		// console.log('[achievements] getting achievement set', this.state);
 		if (!this.state.selectedCategoryId) {
 			return null;
 		}
 		const currentGlobalCategory = this.state.globalCategories.find(
 			cat => cat.id === this.state.selectedGlobalCategoryId,
 		);
-		console.log('[achievements] currentGlobalCategory', currentGlobalCategory);
+		// console.log('[achievements] currentGlobalCategory', currentGlobalCategory);
 		if (!currentGlobalCategory) {
 			return null;
 		}
-		console.log(
-			'[achievements] creturning set',
-			currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId),
-		);
+		// console.log(
+		// 	'[achievements] creturning set',
+		// 	currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId),
+		// );
 		return currentGlobalCategory.achievementSets.find(set => set.id === this.state.selectedCategoryId);
 	}
 

@@ -1,0 +1,77 @@
+@import '../global/variables';
+@import '../global/fonts';
+
+:host {
+	height: 100%;
+	display: flex;
+}
+
+.loading-state {
+	@extend %empty-state;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	align-items: center;
+	color: var(--default-title-color);
+	--icon-color: var(--default-title-color);
+	--icon-secondary-color: var(--default-title-color);
+
+	.state-container {
+		margin: auto;
+		margin-bottom: 25vh;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		// color: var(--default-title-color);
+		// --icon-color: var(--default-title-color);
+
+		.title {
+			@extend %empty-state-title;
+			margin-top: 50px;
+			margin-bottom: 15px;
+			color: var(--default-title-color);
+		}
+
+		.subtitle {
+			color: var(--default-title-color);
+		}
+
+		.loading-icon {
+			fill: transparent;
+		}
+
+		.oscillate {
+			animation: oscillate 3s ease-in-out 0s infinite alternate;
+		}
+
+		.star {
+			animation: vacillate 3s ease-in-out 0s infinite alternate;
+		}
+
+		@for $i from 1 through 4 {
+			g:nth-child(#{$i}n) {
+				animation-delay: #{$i * 0.5}s;
+				animation-duration: #{1 + $i * 0.6}s;
+			}
+		}
+	}
+}
+
+@keyframes oscillate {
+	from {
+		transform: translateY(0px);
+	}
+	to {
+		transform: translateY(20px);
+	}
+}
+
+@keyframes vacillate {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}

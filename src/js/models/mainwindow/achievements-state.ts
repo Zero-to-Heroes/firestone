@@ -19,6 +19,7 @@ export class AchievementsState {
 	readonly selectedAchievementId: string;
 	readonly achievementHistory: readonly AchievementHistory[] = [];
 	readonly sharingAchievement: SharingAchievement;
+	readonly isLoading: boolean = true;
 
 	public updateAchievement(newAchievement: Achievement): AchievementsState {
 		return Object.assign(new AchievementsState(), this, {

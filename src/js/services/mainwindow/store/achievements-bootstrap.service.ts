@@ -30,6 +30,7 @@ export class AchievementsBootstrapService {
 		const newState = Object.assign(new AchievementsState(), {
 			globalCategories: await this.achievementsHelper.buildGlobalCategories(),
 			achievementHistory: await this.buildAchievementHistory(),
+			isLoading: false,
 		} as AchievementsState);
 		this.stateUpdater.next(new AchievementsInitEvent(newState));
 	}

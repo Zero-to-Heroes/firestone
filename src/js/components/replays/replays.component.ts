@@ -14,9 +14,14 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="app-section replays">
 			<section class="main divider">
-				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
-				<replays-list [state]="state" [hidden]="state.currentView !== 'list'"></replays-list>
-				<match-details [state]="state" [hidden]="state.currentView !== 'match-details'"></match-details>
+				<global-header [navigation]="navigation" *ngIf="navigation.text" [hidden]="state.isLoading">
+				</global-header>
+				<replays-list [state]="state" [hidden]="state.currentView !== 'list' || state.isLoading"></replays-list>
+				<match-details
+					[state]="state"
+					[hidden]="state.currentView !== 'match-details' || state.isLoading"
+				></match-details>
+				<loading-state [hidden]="!state.isLoading"></loading-state>
 			</section>
 			<section class="secondary"></section>
 		</div>

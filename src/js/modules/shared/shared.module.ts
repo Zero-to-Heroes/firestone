@@ -1,6 +1,7 @@
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { InlineSVGModule } from 'ng-inline-svg';
 import { AdsComponent } from '../../components/ads.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
@@ -11,6 +12,7 @@ import { ControlMaximizeComponent } from '../../components/controls/control-maxi
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
+import { LoadingStateComponent } from '../../components/loading-state.component';
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
 import { ConfirmationComponent } from '../../components/tooltip/confirmation.component';
 import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.component';
@@ -26,7 +28,7 @@ import { PulseDirective } from '../../directives/pulse.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 @NgModule({
-	imports: [BrowserModule, OverlayModule],
+	imports: [BrowserModule, OverlayModule, InlineSVGModule.forRoot()],
 	declarations: [
 		WindowWrapperComponent,
 
@@ -53,6 +55,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
+
+		LoadingStateComponent,
 
 		SafeHtmlPipe,
 
@@ -85,6 +89,8 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		ActiveThemeDirective,
 		PulseDirective,
 		AskConfirmationDirective,
+
+		LoadingStateComponent,
 
 		SafeHtmlPipe,
 

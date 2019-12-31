@@ -7,4 +7,5 @@ export class DecktrackerState {
 	readonly menuDisplayType: string = 'menu';
 	readonly filters: DeckFilters = new DeckFilters();
 	readonly decks: readonly DeckSummary[];
+	readonly isLoading: boolean = true;
 }

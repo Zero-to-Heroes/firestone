@@ -19,6 +19,7 @@ export class ReplaysStateBuilderService {
 		return Object.assign(new ReplaysState(), replayState, {
 			allReplays: allReplays,
 			groupedReplays: groupedReplays,
+			isLoading: false,
 		} as ReplaysState);
 	}
 

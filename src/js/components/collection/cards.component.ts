@@ -1,15 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewEncapsulation,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import sortBy from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
@@ -298,7 +287,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
-		console.log('starting loading cards');
+		// console.log('starting loading cards');
 		this.loading = true;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

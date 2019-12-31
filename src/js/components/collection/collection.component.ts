@@ -16,27 +16,29 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 	template: `
 		<div class="app-section collection">
 			<section class="main" [ngClass]="{ 'divider': _state.currentView === 'cards' }">
-				<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
+				<global-header [navigation]="navigation" *ngIf="navigation.text" [hidden]="_state.isLoading">
+				</global-header>
 				<sets
 					[selectedFormat]="_state.selectedFormat"
 					[standardSets]="standardSets"
 					[wildSets]="wildSets"
-					[hidden]="_state.currentView !== 'sets'"
+					[hidden]="_state.currentView !== 'sets' || _state.isLoading"
 				>
 				</sets>
 				<cards
 					[cardList]="_state.cardList"
 					[set]="_state.selectedSet"
 					[searchString]="_state.searchString"
-					[hidden]="_state.currentView !== 'cards'"
+					[hidden]="_state.currentView !== 'cards' || _state.isLoading"
 				>
 				</cards>
 				<full-card
 					class="full-card"
 					[selectedCard]="_state.selectedCard"
-					[hidden]="_state.currentView !== 'card-details'"
+					[hidden]="_state.currentView !== 'card-details' || _state.isLoading"
 				>
 				</full-card>
+				<loading-state [hidden]="!_state.isLoading"></loading-state>
 			</section>
 			<section class="secondary">
 				<card-search [searchString]="_state.searchString" [searchResults]="_state.searchResults"></card-search>
@@ -95,6 +97,6 @@ export class CollectionComponent {
 		this.standardSets = state.allSets.filter(set => set.standard);
 		this.wildSets = state.allSets.filter(set => !set.standard);
 		this._state = state;
-		console.log('set state in collection');
+		// console.log('set state in collection', this._state);
 	}
 }
