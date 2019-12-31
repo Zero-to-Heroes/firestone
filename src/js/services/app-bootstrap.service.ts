@@ -28,6 +28,7 @@ import { MainWindowStoreService } from './mainwindow/store/main-window-store.ser
 import { TwitchAuthService } from './mainwindow/twitch-auth.service';
 import { EndGameListenerService } from './manastorm-bridge/end-game-listener.service';
 import { OverwolfService } from './overwolf.service';
+import { PreferencesService } from './preferences.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 
@@ -65,6 +66,7 @@ export class AppBootstrapService {
 		private collectionManager: CollectionManager,
 		private deckParserService: DeckParserService,
 		private gameStateService: GameStateService,
+		private prefs: PreferencesService,
 		private settingsCommunicationService: SettingsCommunicationService,
 		private init_decktrackerDisplayService: OverlayDisplayService,
 		private init_endGameListenerService: EndGameListenerService,
@@ -171,6 +173,7 @@ export class AppBootstrapService {
 		// 	// this.ow.hideWindow(battlegroundsLeaderboardOverwlayWindow.id),
 		// ]);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
+		setTimeout(() => this.monitorBetaActivations());
 	}
 
 	private async showLoadingScreen() {
@@ -236,5 +239,15 @@ export class AppBootstrapService {
 		// }
 		this.stateUpdater.next(new ChangeVisibleApplicationEvent('replays'));
 		// this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
+	}
+
+	private async monitorBetaActivations() {
+		const prefs = await this.prefs.getPreferences();
+		if (prefs.batlegroundsShowHeroSelectionPref) {
+			amplitude.getInstance().logEvent('beta', { 'feature': 'batlegroundsShowHeroSelectionPref' });
+		}
+		if (prefs.battlegroundsShowLastOpponentBoard) {
+			amplitude.getInstance().logEvent('beta', { 'feature': 'battlegroundsShowLastOpponentBoard' });
+		}
 	}
 }
