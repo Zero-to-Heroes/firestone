@@ -131,7 +131,7 @@ export class AppBootstrapService {
 			// 	clearTimeout(this.wrapUpTimeout);
 			// 	this.wrapUpTimeout = null;
 			// }
-			if (this.exitGame(res) && res.runningChanged && !this.wrapUpTimeout) {
+			if (this.ow.exitGame(res) && res.runningChanged && !this.wrapUpTimeout) {
 				console.log('left game, closing app', res);
 				this.showReplaysRecap();
 				// this.wrapUpTimeout = setTimeout(() => {
@@ -220,10 +220,6 @@ export class AppBootstrapService {
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		await this.ow.restoreWindow(window.id);
 		this.closeLoadingScreen();
-	}
-
-	private exitGame(gameInfoResult: any): boolean {
-		return !gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning;
 	}
 
 	private async showReplaysRecap() {
