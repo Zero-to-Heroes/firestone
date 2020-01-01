@@ -183,7 +183,7 @@ export class MainWindowStoreService {
 
 	private async processQueue(eventQueue: readonly MainWindowStoreEvent[]): Promise<readonly MainWindowStoreEvent[]> {
 		const event = eventQueue[0];
-		console.log('[store] processing event', event.eventName(), event);
+		// console.log('[store] processing event', event.eventName(), event);
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
 		// Don't modify the current state here, as it could make state lookup impossible
@@ -197,7 +197,7 @@ export class MainWindowStoreService {
 				// or forward with the history arrows, the state of these arrows will change
 				// vs what they originally were when the state was stored
 				const stateWithNavigation = this.updateNavigationArrows(newState);
-				console.log('emitting new state', stateWithNavigation);
+				// console.log('emitting new state', stateWithNavigation);
 				this.stateEmitter.next(stateWithNavigation);
 				if (Date.now() - start > 1000) {
 					this.logger.warn(
