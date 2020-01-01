@@ -134,6 +134,12 @@ export class GameStateService {
 				}
 			});
 		});
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if (this.ow.exitGame(res) || !(await this.ow.inGame())) {
+				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
+				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
+			}
+		});
 	}
 
 	public async getCurrentReviewId(): Promise<string> {

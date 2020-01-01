@@ -81,6 +81,13 @@ export class BattlegroundsStateService {
 				}
 			});
 		});
+		this.ow.addGameInfoUpdatedListener(async (res: any) => {
+			if (this.ow.exitGame(res) || !(await this.ow.inGame())) {
+				this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW);
+				this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
+				this.ow.closeWindow(OverwolfService.BATTLEGROUNDS_PLAYER_INFO_WINDOW);
+			}
+		});
 	}
 
 	private registerGameEvents() {

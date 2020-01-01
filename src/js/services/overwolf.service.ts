@@ -280,6 +280,10 @@ export class OverwolfService {
 		});
 	}
 
+	public exitGame(gameInfoResult: any): boolean {
+		return !gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning;
+	}
+
 	public async getRunningGameInfo() {
 		return new Promise<any>(resolve => {
 			try {
