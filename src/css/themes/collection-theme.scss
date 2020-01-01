@@ -6,6 +6,16 @@
 		rgba(47, 13, 13, 1) 100%
 	);
 	--window-background-image: url('/Files/assets/images/backgrounds/main-screen_bg.png');
+	--color-1: #cca2b3;
+	--color-2: #;
+	--color-3: #785f6b;
+	--color-4: #513b48;
+	--color-5: #190505;
+	--color-6: #7d5a87;
+	--color-7: #2a1030;
+	--color-common-1: #d9c3ab;
+	--color-common-2: #ffb948;
+
 	--window-outline-color: #513b48;
 	--default-text-color: #d9c3ab;
 	--default-title-color: #ffb948;
@@ -31,5 +41,13 @@
 
 	--confirmation-text-color: #cb9fd7;
 	--confirmation-background-color: #513b48;
+	--confirmation-backdrop-color: #190505;
+
+	--confirmation-text-color: #cb9fd7;
+	--confirmation-background-color: #513b48;
+	--on-confirmation-button-background-color: rgba(255, 255, 255, 0.08);
+	--confirmation-ok-button-color: #1f2142;
+	--confirmation-ok-button-background-color: #767faf;
+	--on-confirmation-ok-button-background-color: #cb9fd7;
 	--confirmation-backdrop-color: #190505;
 }

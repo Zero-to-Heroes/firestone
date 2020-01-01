@@ -11,6 +11,16 @@
 			rgba(24, 24, 43, 0.7) 100%
 		),
 		url('/Files/assets/images/backgrounds/decktracker_main_window.png');
+	--color-1: #9fb6d7;
+	--color-2: #767faf;
+	--color-3: #5a5f87;
+	--color-4: #303352;
+	--color-5: #1f2142;
+	--color-6: #101530;
+	--color-7: #07081f;
+	--color-common-1: #d9c3ab;
+	--color-common-2: #ffb948;
+
 	--window-outline-color: #303352;
 	--default-text-color: #d9c3ab;
 	--default-title-color: #ffb948;
@@ -36,5 +46,9 @@
 
 	--confirmation-text-color: #9fb6d7;
 	--confirmation-background-color: #303352;
+	--on-confirmation-button-background-color: rgba(255, 255, 255, 0.08);
+	--confirmation-ok-button-color: #1f2142;
+	--confirmation-ok-button-background-color: #767faf;
+	--on-confirmation-ok-button-background-color: #9fb6d7;
 	--confirmation-backdrop-color: #07081f;
 }
