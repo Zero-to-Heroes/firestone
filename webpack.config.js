@@ -286,14 +286,14 @@ module.exports = function(env, argv) {
 	];
 
 	if (env.production) {
-		plugins.push(
-			new SentryWebpackPlugin({
-				include: '.',
-				ignoreFile: '.sentrycliignore',
-				ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
-				configFile: 'sentry.properties',
-			}),
-		);
+		// plugins.push(
+		// 	new SentryWebpackPlugin({
+		// 		include: '.',
+		// 		ignoreFile: '.sentrycliignore',
+		// 		ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
+		// 		configFile: 'sentry.properties',
+		// 	}),
+		// );
 	}
 
 	return {

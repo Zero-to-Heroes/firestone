@@ -1,13 +1,4 @@
-import {
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	HostListener,
-	OnDestroy,
-	ViewEncapsulation,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
@@ -43,7 +34,12 @@ declare var amplitude: any;
 					<control-discord></control-discord>
 					<control-minimize [windowId]="windowId" [isMainWindow]="true"></control-minimize>
 					<control-maximize [windowId]="windowId"></control-maximize>
-					<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
+					<control-close
+						[windowId]="windowId"
+						[isMainWindow]="true"
+						[closeAll]="true"
+						[askConfirmation]="true"
+					></control-close>
 				</div>
 			</section>
 			<section class="content-container">
