@@ -34,7 +34,7 @@ export class RemoteAchievementsService {
 
 	public async loadAchievements(): Promise<readonly CompletedAchievement[]> {
 		const prefs = this.prefs.getPreferences();
-		if ((await prefs).resetAchievementsOnAppStart) {
+		if (process.env.NODE_ENV !== 'production' && (await prefs).resetAchievementsOnAppStart) {
 			this.logger.debug('[remote-achievements] not loading achievements from remote - streamer mode');
 			await this.indexedDb.setAll([]);
 			return [];

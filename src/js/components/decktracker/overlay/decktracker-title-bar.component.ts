@@ -16,7 +16,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</svg>
 			</i>
 			<div class="controls">
-				<div class="import-container">
+				<!-- <div class="import-container">
 					<i
 						class="import-deckstring"
 						helpTooltip="Import deck from clipboard"
@@ -26,7 +26,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 							<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
 						</svg>
 					</i>
-				</div>
+				</div> -->
 				<control-bug></control-bug>
 				<control-settings
 					[settingsApp]="'decktracker'"

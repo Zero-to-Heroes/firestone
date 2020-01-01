@@ -19,6 +19,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					tooltip="Display a notification whenever you unlock an achievement"
 				></preference-toggle>
 				<preference-toggle
+					*ngIf="isDev"
 					field="resetAchievementsOnAppStart"
 					label="Streamer mode"
 					tooltip="Reset your achievements for the session, so that notifications will show even for unlocked achievements. Uncheck to get all your old achievements back. App restart required"
@@ -28,4 +29,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsAchievementsNotificationsComponent {}
+export class SettingsAchievementsNotificationsComponent {
+	isDev: boolean;
+
+	constructor() {
+		this.isDev = process.env.NODE_ENV !== 'production';
+	}
+}

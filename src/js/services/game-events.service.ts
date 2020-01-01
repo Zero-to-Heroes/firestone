@@ -84,7 +84,7 @@ export class GameEvents {
 		this.events.on(Events.GLOBAL_STATS_UPDATED).subscribe(async event => {
 			const prefs = await this.prefs.getPreferences();
 			// Don't send the global stats in this case
-			if (prefs.resetAchievementsOnAppStart) {
+			if (process.env.NODE_ENV !== 'production' && prefs.resetAchievementsOnAppStart) {
 				return;
 			}
 			console.log('[game-events] broadcasting new GLOBAL_STATS_UPDATED event');
