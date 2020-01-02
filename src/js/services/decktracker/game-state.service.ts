@@ -121,7 +121,7 @@ export class GameStateService {
 				.decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe(event => {
 				this.showDecktracker = event;
-				this.logger.debug('decktracker display update', event);
+				// this.logger.debug('decktracker display update', event);
 				this.updateOverlays();
 			});
 		});
