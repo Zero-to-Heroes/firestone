@@ -1,4 +1,16 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
+import {
+	AfterViewChecked,
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewEncapsulation,
+	ViewRef,
+} from '@angular/core';
 import sortBy from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
@@ -162,6 +174,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
+		// console.log('after view init');
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach(singleEl => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
@@ -236,7 +249,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
 	onHistoryClick(event: MouseEvent) {
-		const scrollbarWidth = 5;
+		const scrollbarWidth = 15;
 		const cardsList = this.elRef.nativeElement.querySelector('.cards-list');
 		if (cardsList) {
 			const rect = cardsList.getBoundingClientRect();

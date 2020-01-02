@@ -140,10 +140,11 @@
 					height: 40px;
 					// We use top positioning to avoid issues when the text on the side is bigger or smaller
 					// depending on cards
-					top: -4%;
-					bottom: auto;
-					position: relative;
+					// top: -4%;
+					// bottom: auto;
+					// position: relative;
 					// margin-top: 0;
+					bottom: -5%;
 
 					.non-premium {
 						height: 40px;
