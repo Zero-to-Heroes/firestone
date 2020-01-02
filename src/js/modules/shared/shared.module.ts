@@ -19,6 +19,7 @@ import { HelpTooltipComponent } from '../../components/tooltip/help-tooltip.comp
 import { Tooltip, TooltipsComponent } from '../../components/tooltips.component';
 import { VersionComponent } from '../../components/version.component';
 import { WindowWrapperComponent } from '../../components/window-wrapper.component';
+import { WithLoadingComponent } from '../../components/with-loading.component';
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { AskConfirmationDirective } from '../../directives/ask-confirmation.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
@@ -57,6 +58,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		AskConfirmationDirective,
 
 		LoadingStateComponent,
+		WithLoadingComponent,
 
 		SafeHtmlPipe,
 
@@ -91,6 +93,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		AskConfirmationDirective,
 
 		LoadingStateComponent,
+		WithLoadingComponent,
 
 		SafeHtmlPipe,
 

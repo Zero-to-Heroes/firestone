@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AchievementSet } from '../../models/achievement-set';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
@@ -7,8 +6,6 @@ import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-i
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
 import { VisualAchievement } from '../../models/visual-achievement';
-
-const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 @Component({
 	selector: 'achievements',
@@ -19,35 +16,35 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 	],
 	template: `
 		<div class="app-section achievements">
-			<section class="main" [ngClass]="{ 'divider': state.currentView === 'list' }" [@viewState]="_viewState">
-				<global-header [navigation]="navigation" *ngIf="navigation.text" [hidden]="state.isLoading">
-				</global-header>
-				<achievements-global-categories
-					[hidden]="state.currentView !== 'categories' || state.isLoading"
-					[globalCategories]="state.globalCategories"
-				>
-				</achievements-global-categories>
-				<achievements-categories
-					[hidden]="state.currentView !== 'category' || state.isLoading"
-					[achievementSets]="getAchievementSets()"
-				>
-				</achievements-categories>
-				<achievements-list
-					[hidden]="state.currentView !== 'list' || state.isLoading"
-					[socialShareUserInfo]="socialShareUserInfo"
-					[achievementsList]="getDisplayedAchievements()"
-					[selectedAchievementId]="state.selectedAchievementId"
-					[achievementSet]="getAchievementSet()"
-					[globalStats]="globalStats"
-				>
-				</achievements-list>
-				<achievement-sharing-modal
-					[hidden]="!state.sharingAchievement || state.isLoading"
-					[socialShareUserInfo]="socialShareUserInfo"
-					[sharingAchievement]="state.sharingAchievement"
-				>
-				</achievement-sharing-modal>
-				<loading-state [hidden]="!state.isLoading"></loading-state>
+			<section class="main" [ngClass]="{ 'divider': state.currentView === 'list' }">
+				<with-loading [isLoading]="state.isLoading">
+					<global-header [navigation]="navigation" *ngIf="navigation.text"></global-header>
+					<achievements-global-categories
+						[hidden]="state.currentView !== 'categories'"
+						[globalCategories]="state.globalCategories"
+					>
+					</achievements-global-categories>
+					<achievements-categories
+						[hidden]="state.currentView !== 'category'"
+						[achievementSets]="getAchievementSets()"
+					>
+					</achievements-categories>
+					<achievements-list
+						[hidden]="state.currentView !== 'list'"
+						[socialShareUserInfo]="socialShareUserInfo"
+						[achievementsList]="getDisplayedAchievements()"
+						[selectedAchievementId]="state.selectedAchievementId"
+						[achievementSet]="getAchievementSet()"
+						[globalStats]="globalStats"
+					>
+					</achievements-list>
+					<achievement-sharing-modal
+						[hidden]="!state.sharingAchievement"
+						[socialShareUserInfo]="socialShareUserInfo"
+						[sharingAchievement]="state.sharingAchievement"
+					>
+					</achievement-sharing-modal>
+				</with-loading>
 			</section>
 			<section class="secondary">
 				<achievement-history [achievementHistory]="state.achievementHistory"></achievement-history>
@@ -55,24 +52,6 @@ const ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS = 150;
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger('viewState', [
-			state(
-				'hidden',
-				style({
-					opacity: 0,
-					'pointer-events': 'none',
-				}),
-			),
-			state(
-				'shown',
-				style({
-					opacity: 1,
-				}),
-			),
-			transition('hidden <=> shown', animate(`${ACHIEVEMENTS_HIDE_TRANSITION_DURATION_IN_MS}ms linear`)),
-		]),
-	],
 })
 export class AchievementsComponent {
 	@Input() state: AchievementsState;
@@ -83,8 +62,6 @@ export class AchievementsComponent {
 	// achievement logic spread out over multiple processors
 	@Input() globalStats: GlobalStats;
 	@Input() navigation: Navigation;
-
-	_viewState = 'shown';
 
 	getAchievementSet(): AchievementSet {
 		// console.log('[achievements] getting achievement set', this.state);

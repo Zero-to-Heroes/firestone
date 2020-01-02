@@ -1,11 +1,8 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Navigation } from '../../models/mainwindow/navigation';
 import { Set } from '../../models/set';
 import { AllCardsService } from '../../services/all-cards.service';
-
-const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 
 @Component({
 	selector: 'collection',
@@ -16,29 +13,29 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 	template: `
 		<div class="app-section collection">
 			<section class="main" [ngClass]="{ 'divider': _state.currentView === 'cards' }">
-				<global-header [navigation]="navigation" *ngIf="navigation.text" [hidden]="_state.isLoading">
-				</global-header>
-				<sets
-					[selectedFormat]="_state.selectedFormat"
-					[standardSets]="standardSets"
-					[wildSets]="wildSets"
-					[hidden]="_state.currentView !== 'sets' || _state.isLoading"
-				>
-				</sets>
-				<cards
-					[cardList]="_state.cardList"
-					[set]="_state.selectedSet"
-					[searchString]="_state.searchString"
-					[hidden]="_state.currentView !== 'cards' || _state.isLoading"
-				>
-				</cards>
-				<full-card
-					class="full-card"
-					[selectedCard]="_state.selectedCard"
-					[hidden]="_state.currentView !== 'card-details' || _state.isLoading"
-				>
-				</full-card>
-				<loading-state [hidden]="!_state.isLoading"></loading-state>
+				<with-loading [isLoading]="_state.isLoading">
+					<global-header [navigation]="navigation" *ngIf="navigation.text"> </global-header>
+					<sets
+						[selectedFormat]="_state.selectedFormat"
+						[standardSets]="standardSets"
+						[wildSets]="wildSets"
+						[hidden]="_state.currentView !== 'sets'"
+					>
+					</sets>
+					<cards
+						[cardList]="_state.cardList"
+						[set]="_state.selectedSet"
+						[searchString]="_state.searchString"
+						[hidden]="_state.currentView !== 'cards'"
+					>
+					</cards>
+					<full-card
+						class="full-card"
+						[selectedCard]="_state.selectedCard"
+						[hidden]="_state.currentView !== 'card-details'"
+					>
+					</full-card>
+				</with-loading>
 			</section>
 			<section class="secondary">
 				<card-search [searchString]="_state.searchString" [searchResults]="_state.searchResults"></card-search>
@@ -54,24 +51,6 @@ const COLLECTION_HIDE_TRANSITION_DURATION_IN_MS = 150;
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	animations: [
-		trigger('viewState', [
-			state(
-				'hidden',
-				style({
-					opacity: 0,
-					'pointer-events': 'none',
-				}),
-			),
-			state(
-				'shown',
-				style({
-					opacity: 1,
-				}),
-			),
-			transition('hidden <=> shown', animate(`${COLLECTION_HIDE_TRANSITION_DURATION_IN_MS}ms linear`)),
-		]),
-	],
 })
 export class CollectionComponent {
 	_state: BinderState;
@@ -80,10 +59,7 @@ export class CollectionComponent {
 	standardSets: Set[];
 	wildSets: Set[];
 
-	_viewState = 'shown';
-	private refreshing = false;
-
-	constructor(private cards: AllCardsService) {
+	constructor(private cards: AllCardsService, private cdr: ChangeDetectorRef) {
 		this.init();
 	}
 
