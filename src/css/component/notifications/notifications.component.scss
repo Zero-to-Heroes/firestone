@@ -186,7 +186,14 @@ body {
 		right: 0;
 		width: 30px;
 		height: 30px;
-		--icon-bg-hover: #513b48;
+		color: #cca2b3;
+		--icon-color: #cca2b3;
+
+		&:hover {
+			color: #2a1030;
+			--icon-color: #2a1030;
+			background: #cb9fd7;
+		}
 	}
 }
 
