@@ -1,16 +1,4 @@
-import {
-	AfterViewChecked,
-	AfterViewInit,
-	ChangeDetectionStrategy,
-	ChangeDetectorRef,
-	Component,
-	ElementRef,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewEncapsulation,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
 import sortBy from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';
@@ -84,10 +72,12 @@ import { Set, SetCard } from '../../models/set';
 			<div class="loading" [hidden]="!loading"><div>Loading cards...</div></div>
 			<ul class="cards-list" [hidden]="loading || _activeCards.length === 0">
 				<li
-					*ngFor="let card of _activeCards; trackBy: trackByCardId"
+					*ngFor="let card of _activeCards; let i = index; trackBy: trackByCardId"
 					[ngClass]="{ 'hidden visuallyHidden': !card.displayed }"
 				>
-					<card-view [card]="card">/</card-view>
+					<card-view [card]="card" (imageLoaded)="onImageLoaded()" [loadImage]="shouldLoadImage(i)"
+						>/</card-view
+					>
 				</li>
 			</ul>
 			<collection-empty-state
@@ -167,14 +157,17 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	classActiveFilter = this.CLASS_FILTER_ALL;
 	rarityActiveFilter = this.RARITY_FILTER_ALL;
 	cardsOwnedActiveFilter = this.FILTER_ALL;
-	loading = true;
+	loading = false;
+	imagestoLoad = 0;
+
+	private imagesLoaded = 0;
 
 	private processingTimeout;
 
 	constructor(private elRef: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	ngAfterViewInit() {
-		// console.log('after view init');
+		console.log('after view init');
 		const singleEls: HTMLElement[] = this.elRef.nativeElement.querySelectorAll('.single');
 		singleEls.forEach(singleEl => {
 			const caretEl = singleEl.appendChild(document.createElement('i'));
@@ -270,6 +263,24 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	onImageLoaded() {
+		this.imagesLoaded++;
+		// console.log('image loaded', this.imagesLoaded);
+		if (this.imagesLoaded >= this.imagestoLoad) {
+			setTimeout(() => {
+				// console.log('requesting to load more images', this.imagesLoaded, this.imagestoLoad);
+				this.imagestoLoad += 7;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			}, 200);
+		}
+	}
+
+	shouldLoadImage(index: number) {
+		return index <= this.imagestoLoad;
+	}
+
 	private updateShownCards() {
 		this._activeCards = (this._cardList || []).map(card =>
 			this.shouldBeShown(card)
@@ -300,7 +311,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private *doGradualLoad(cards: SetCard[]): IterableIterator<void> {
-		// console.log('starting loading cards');
+		console.log('starting loading cards');
 		this.loading = true;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -318,6 +329,9 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			yield;
 		}
 		this.loading = false;
+		this.imagestoLoad = 10;
+		this.imagesLoaded = 0;
+		console.log('init images to load', this.imagestoLoad);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

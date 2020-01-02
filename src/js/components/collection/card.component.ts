@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, ViewRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewRef } from '@angular/core';
 import { SetCard } from '../../models/set';
 import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
@@ -48,8 +48,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardComponent implements AfterViewInit {
-	@Input() public tooltips = true;
-	@Input() public showCounts = false;
+	@Input() tooltips: boolean = true;
+	@Input() showCounts: boolean = false;
+	@Output() imageLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	showPlaceholder = true;
 	showNonPremiumCount: boolean;
@@ -61,6 +62,7 @@ export class CardComponent implements AfterViewInit {
 	_card: SetCard;
 	_highRes = false;
 
+	private _loadImage: boolean = true;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(
@@ -75,7 +77,13 @@ export class CardComponent implements AfterViewInit {
 		this.missing = this._card.ownedNonPremium + this._card.ownedPremium === 0;
 		this.showNonPremiumCount = this._card.ownedNonPremium > 0 || this.showCounts;
 		this.showPremiumCount = this._card.ownedPremium > 0 || this.showCounts;
-		// console.log('set card', card, this.missing, this.showCounts)
+		this.updateImage();
+		// console.log('set card', card, this.missing, this.showCounts);
+	}
+
+	@Input() set loadImage(value: boolean) {
+		this._loadImage = value;
+		// console.log('set loadimage', value);
 		this.updateImage();
 	}
 
@@ -95,7 +103,7 @@ export class CardComponent implements AfterViewInit {
 	}
 
 	@HostListener('mouseenter') onMouseEnter() {
-		if (this.tooltips) {
+		if (this.tooltips && this._loadImage) {
 			const rect = this.el.nativeElement.getBoundingClientRect();
 			const x = rect.left + rect.width - 20;
 			const y = rect.top + rect.height / 2;
@@ -111,13 +119,19 @@ export class CardComponent implements AfterViewInit {
 
 	imageLoadedHandler() {
 		this.showPlaceholder = false;
-		// console.log('image loaded', )
+		// console.log('image loaded');
+		this.imageLoaded.next(true);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	private updateImage() {
+		if (!this._loadImage) {
+			this.image = undefined;
+			this.overlayMaskImage = undefined;
+			return;
+		}
 		// this.showPlaceholder = true;
 		const imagePath = this._highRes ? '512' : 'compressed';
 		this.image = `https://static.zerotoheroes.com/hearthstone/fullcard/en/${imagePath}/${this._card.id}.png`;
