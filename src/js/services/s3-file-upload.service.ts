@@ -24,6 +24,7 @@ export class S3FileUploadService {
 				// There Was An Error With Your S3 Config
 				if (err) {
 					console.warn('An error during upload', err);
+					resolve(null);
 				} else {
 					// console.log('Uploaded logs', data2);
 					resolve(fileKey);
@@ -57,6 +58,7 @@ export class S3FileUploadService {
 				// There Was An Error With Your S3 Config
 				if (err) {
 					console.warn('An error during upload', err);
+					resolve(null);
 				} else {
 					// console.log('Uploaded logs', data2);
 					resolve(fileKey);
