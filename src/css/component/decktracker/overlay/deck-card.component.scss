@@ -10,7 +10,7 @@
 	overflow: hidden;
 	transition: all 0.2s ease-in-out;
 	// https://stackoverflow.com/questions/12278587/webkit-text-flickers-when-using-css-transform-scale
-	backface-visibility: hidden;
+	// backface-visibility: hidden; // Activating this makes the font blurry
 	transform-style: preserve-3d;
 
 	&:hover {
