@@ -46,7 +46,7 @@
 				"file": "Files/loading.html",
 				"transparent": true,
 				"resizable": false,
-				"show_in_taskbar": true,
+				"show_in_taskbar": false,
 				"size": { "width": 440, "height": 590 },
 				"min_size": { "width": 440, "height": 590 },
 				"max_size": { "width": 440, "height": 590 },
@@ -77,7 +77,7 @@
 				"file": "Files/settings.html",
 				"transparent": true,
 				"resizable": false,
-				"show_in_taskbar": true,
+				"show_in_taskbar": false,
 				"size": { "width": 680, "height": 620 },
 				"min_size": { "width": 680, "height": 620 },
 				"max_size": { "width": 680, "height": 620 }
