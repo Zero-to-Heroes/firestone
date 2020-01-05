@@ -56,7 +56,7 @@ export class OwNotificationsService {
 	private async detectNotificationsWindow() {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.NOTIFICATIONS_WINDOW);
 		const windowId = window.id;
-		await this.ow.restoreWindow(windowId);
+		// await this.ow.restoreWindow(windowId);
 		await this.ow.hideWindow(windowId);
 		this.windowId = windowId;
 	}
