@@ -15,7 +15,7 @@ export class AchievementCompletedProcessor implements Processor {
 	) {}
 
 	public async process(event: AchievementCompletedEvent, currentState: MainWindowState): Promise<MainWindowState> {
-		console.log('[achievement-completed-processor] ready to handle event', event, currentState);
+		// console.log('[achievement-completed-processor] ready to handle event', event, currentState);
 		const achievement = event.achievement;
 		const historyItem = {
 			achievementId: achievement.id,
@@ -25,14 +25,14 @@ export class AchievementCompletedProcessor implements Processor {
 			creationTimestamp: Date.now(),
 			displayName: achievement.displayName,
 		} as AchievementHistory;
-		console.log('[achievement-completed-processor] saving history item', historyItem);
+		// console.log('[achievement-completed-processor] saving history item', historyItem);
 		this.historyStorage.save(historyItem);
-		console.log('[achievement-completed-processor] saved history item', historyItem);
-		const [achievements] = await Promise.all([
-			// this.historyStorage.loadAll(),
-			this.achievementLoader.getAchievements(),
-		]);
-		console.log('[achievement-completed-processor] retrieved data', achievements);
+		// console.log('[achievement-completed-processor] saved history item', historyItem);
+		// const [achievements] = await Promise.all([
+		// 	// this.historyStorage.loadAll(),
+		// 	this.achievementLoader.getAchievements(),
+		// ]);
+		// console.log('[achievement-completed-processor] retrieved data', achievements);
 		const newHistory = [historyItem, ...currentState.achievements.achievementHistory];
 		// const history = historyRef
 		// 	.filter(history => history.numberOfCompletions === 1)
@@ -48,9 +48,9 @@ export class AchievementCompletedProcessor implements Processor {
 		// 	})
 		// 	.filter(history => history)
 		// 	.reverse();
-		console.log('[achievement-completed-processor] ready to update achievement', achievement);
+		// console.log('[achievement-completed-processor] ready to update achievement', achievement);
 		const newAchievementState: AchievementsState = currentState.achievements.updateAchievement(achievement);
-		console.log('[achievement-completed-processor] rebuilt achievement state', newAchievementState);
+		// console.log('[achievement-completed-processor] rebuilt achievement state', newAchievementState);
 
 		const newState = Object.assign(new AchievementsState(), newAchievementState, {
 			achievementHistory: newHistory as readonly AchievementHistory[],

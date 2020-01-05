@@ -10,7 +10,7 @@ export class CollectionManager {
 	public async getCollection(delay: number = 0): Promise<Card[]> {
 		console.log('[collection-manager] getting collection');
 		const collection = await this.memoryReading.getCollection();
-		console.log('[collection-manager] collection from GEP');
+		console.log('[collection-manager] retrieved collection from GEP');
 		if (!collection || collection.length === 0) {
 			console.log('[collection-manager] retrieving collection from db');
 			const collectionFromDb = await this.db.getCollection();
