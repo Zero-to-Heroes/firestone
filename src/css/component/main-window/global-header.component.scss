@@ -37,14 +37,14 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	--icon-color: var(--control-button-color);
+	--icon-color: var(--color-2);
 
 	&.disabled {
 		opacity: 0.5;
 	}
 
 	&:hover:not(.disabled) {
-		background-color: --on-control-button-background-color;
+		--icon-color: var(--color-1);
 	}
 
 	svg {
