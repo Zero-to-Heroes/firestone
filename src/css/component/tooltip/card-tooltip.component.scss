@@ -1,6 +1,7 @@
 .card-tooltip {
 	display: flex;
 	flex-direction: column;
+	margin-top: -6vh;
 
 	img {
 		width: 256px;
@@ -8,7 +9,7 @@
 	}
 
 	.text {
-		margin-top: 8vh;
+		margin-top: -14vh;
 		text-align: center;
 		font-family: Sumana;
 		font-style: normal;

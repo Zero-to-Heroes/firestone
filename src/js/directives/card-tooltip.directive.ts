@@ -1,16 +1,6 @@
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef, PositionStrategy } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import {
-	AfterViewInit,
-	ChangeDetectorRef,
-	ComponentRef,
-	Directive,
-	ElementRef,
-	HostListener,
-	Input,
-	OnDestroy,
-	ViewRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ComponentRef, Directive, ElementRef, HostListener, Input, OnDestroy, ViewRef } from '@angular/core';
 import { CardTooltipComponent } from '../components/tooltip/card-tooltip.component';
 import { CardTooltipPositionType } from './card-tooltip-position.type';
 
