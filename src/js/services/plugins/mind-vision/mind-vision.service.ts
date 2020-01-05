@@ -15,6 +15,7 @@ export class MindVisionService {
 		return new Promise<any[]>(async (resolve, reject) => {
 			console.log('[mind-vision] retrieving collection');
 			const plugin = await this.get();
+			console.log('[mind-vision] got plugin');
 			try {
 				plugin.getCollection(collection => {
 					console.log('[mind-vision] retrieved collection');

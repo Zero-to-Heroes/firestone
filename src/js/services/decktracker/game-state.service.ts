@@ -195,7 +195,7 @@ export class GameStateService {
 		// 	this.logger.error('null state before processing event', gameEvent, this.state);
 		// 	return;
 		// }
-		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent);
+		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
 			this.closedByUser = true;
 			this.updateOverlays();
@@ -261,6 +261,7 @@ export class GameStateService {
 						},
 						state: this.state,
 					};
+					// this.logger.debug('[game-state] will emit event', emittedEvent);
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 					// this.logger.debug('[game-state] emitted deck event', emittedEvent.event.name, this.state);
 					// this.logger.debug(
@@ -286,6 +287,7 @@ export class GameStateService {
 
 	private async updateOverlays() {
 		if (!this.ow) {
+			console.log('ow not defined, returning');
 			return;
 		}
 		const [decktrackerWindow, opponentHandWindow] = await Promise.all([

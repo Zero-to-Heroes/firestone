@@ -112,7 +112,7 @@ export class MindVisionOperationFacade<T> {
 			// setTimeout(() => this.callInternal(callback, retriesLeft - 1), 1000);
 			return;
 		}
-		this.log('retrieved info from memory');
+		// this.log('retrieved info from memory');
 		this.cachedValue = this.transformer(resultFromMemory);
 		if (!this.timeout) {
 			this.timeout = setTimeout(() => {
