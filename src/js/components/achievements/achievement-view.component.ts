@@ -34,7 +34,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 					</div>
 					<div class="completion-date" *ngIf="completionDate">Completed: {{ completionDate }}</div>
 					<div class="completion-progress">
-						<div class="recordings">
+						<div class="recordings" [ngClass]="{ 'empty': numberOfRecordings === 0 }">
 							<span class="number">{{ numberOfRecordings }}</span>
 							<i class="i-30x20">
 								<svg class="svg-icon-fill">

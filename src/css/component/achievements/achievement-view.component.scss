@@ -94,6 +94,10 @@
 		i {
 			--icon-color: #d9c3ab;
 		}
+
+		&.empty {
+			opacity: 0.5;
+		}
 	}
 
 	achievement-completion-step {
