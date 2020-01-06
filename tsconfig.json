@@ -17,7 +17,7 @@
 		"sourceRoot": "/",
 		"lib": ["dom", "es2015"],
 		"baseUrl": ".",
-		"typeRoots": ["node_modules/@types"],
+		"typeRoots": ["node_modules/@types", "@overwolf/types"],
 		"types": ["node", "jest"]
 	},
 	"angularCompilerOptions": {

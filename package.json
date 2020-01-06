@@ -55,6 +55,7 @@
 		"@angular/compiler-cli": "8.1.1",
 		"@artonge/webpack": "6.0.1",
 		"@calebmer/extract-text-webpack-plugin": "4.0.2",
+		"@overwolf/types": "^2.9.3",
 		"@sentry/cli": "^1.48.0",
 		"@sentry/webpack-plugin": "1.6.2",
 		"@types/core-js": "2.5.0",
