@@ -64,6 +64,9 @@ export class CollectionBootstrapService {
 		const ownedLimitCollectiblePremiumCards = updatedCards
 			.map((card: SetCard) => card.getNumberCollectedPremium())
 			.reduce((c1, c2) => c1 + c2, 0);
+		// if (set.id === 'core') {
+		// 	console.log('building basics', set, updatedCards, ownedLimitCollectibleCards, collection);
+		// }
 		return new Set(
 			set.id,
 			set.name,

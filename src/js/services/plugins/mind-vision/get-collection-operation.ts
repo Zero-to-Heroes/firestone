@@ -1,15 +1,25 @@
 import { Card } from '../../../models/card';
+import { AllCardsService } from '../../all-cards.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
 import { MindVisionService } from './mind-vision.service';
 
 export class GetCollectionOperation extends MindVisionOperationFacade<readonly Card[]> {
-	constructor(mindVision: MindVisionService, ow: OverwolfService) {
+	private basicCards;
+
+	constructor(mindVision: MindVisionService, ow: OverwolfService, private allCards: AllCardsService) {
 		super(
 			ow,
 			'getCollection',
 			() => mindVision.getCollection(),
-			memoryCollection => memoryCollection.length === 0,
+			(memoryCollection: any[]) =>
+				memoryCollection.length === 0 ||
+				memoryCollection.every(entry => entry.Count + entry.PremiumCount === 0) ||
+				// If there are no classic cards, we consider that the collection has not
+				// been fetched from memory yet
+				memoryCollection
+					.filter(entry => this.getBasicCards().indexOf(entry.CardId) !== -1)
+					.every(entry => entry.Count + entry.PremiumCount === 0),
 			memoryCollection =>
 				memoryCollection.map(
 					memoryCard =>
@@ -19,6 +29,17 @@ export class GetCollectionOperation extends MindVisionOperationFacade<readonly C
 							premiumCount: memoryCard.PremiumCount,
 						} as Card),
 				),
+			20,
+			10000,
 		);
+	}
+
+	private getBasicCards() {
+		if (this.basicCards) {
+			return this.basicCards;
+		}
+		const basicCards = this.allCards.getSet('core').allCards.map(card => card.id);
+		this.basicCards = basicCards;
+		return this.basicCards;
 	}
 }

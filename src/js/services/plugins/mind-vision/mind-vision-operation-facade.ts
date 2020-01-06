@@ -18,6 +18,7 @@ export class MindVisionOperationFacade<T> {
 		private emptyCheck: (input: any) => boolean,
 		private transformer: (output: any) => T,
 		private numberOfRetries = 20,
+		private delay = 3000,
 	) {}
 
 	private async processQueue(eventQueue: readonly InternalCall<T>[]): Promise<readonly InternalCall<T>[]> {
@@ -109,16 +110,22 @@ export class MindVisionOperationFacade<T> {
 		if (!resultFromMemory || this.emptyCheck(resultFromMemory)) {
 			// this.log('result from memory is empty, retying', resultFromMemory);
 			callback(null, retriesLeft - 1);
-			// setTimeout(() => this.callInternal(callback, retriesLeft - 1), 1000);
 			return;
 		}
-		// this.log('retrieved info from memory');
+		// this.log('retrieved info from memory', resultFromMemory);
+		// try {
+		// 	this.log(
+		// 		'detail',
+		// 		resultFromMemory.filter(entry => entry.Count + entry.PremiumCount !== 0),
+		// 		resultFromMemory.filter(entry => entry.CardId === 'CS2_041'),
+		// 	);
+		// } catch (e) {}
 		this.cachedValue = this.transformer(resultFromMemory);
 		if (!this.timeout) {
 			this.timeout = setTimeout(() => {
 				this.cachedValue = null;
 				this.timeout = null;
-			}, 3000);
+			}, this.delay);
 		}
 		callback(this.cachedValue, retriesLeft - 1);
 		return;

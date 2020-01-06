@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
+import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
@@ -19,12 +20,17 @@ export class MemoryInspectionService {
 		'match_info', // For the GEP game ID
 	];
 
-	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow);
+	private getCollectionOperation = new GetCollectionOperation(this.mindVision, this.ow, this.cards);
 	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
 
-	constructor(private events: Events, private ow: OverwolfService, private mindVision: MindVisionService) {
+	constructor(
+		private events: Events,
+		private ow: OverwolfService,
+		private mindVision: MindVisionService,
+		private cards: AllCardsService,
+	) {
 		this.init();
 	}
 
