@@ -174,7 +174,7 @@ export class AppBootstrapService {
 		// 	// this.ow.hideWindow(battlegroundsLeaderboardOverwlayWindow.id),
 		// ]);
 		amplitude.getInstance().logEvent('start-app', { 'version': process.env.APP_VERSION });
-		setTimeout(() => this.monitorBetaActivations());
+		setTimeout(() => this.addAnalytics());
 	}
 
 	private async showLoadingScreen() {
@@ -238,13 +238,20 @@ export class AppBootstrapService {
 		// this.ow.closeWindowFromName(OverwolfService.MAIN_WINDOW);
 	}
 
-	private async monitorBetaActivations() {
+	private async addAnalytics() {
 		const prefs = await this.prefs.getPreferences();
 		if (prefs.batlegroundsShowHeroSelectionPref) {
 			amplitude.getInstance().logEvent('beta', { 'feature': 'batlegroundsShowHeroSelectionPref' });
 		}
 		if (prefs.battlegroundsShowLastOpponentBoard) {
 			amplitude.getInstance().logEvent('beta', { 'feature': 'battlegroundsShowLastOpponentBoard' });
+		}
+		const monitorsList = await this.ow.getMonitorsList();
+		// console.log('monitorsList', monitorsList);
+		const numberOfMonitors = monitorsList && monitorsList.displays ? monitorsList.displays.length : -1;
+		// console.log('number of monitors', numberOfMonitors, monitorsList);
+		if (numberOfMonitors > 0) {
+			amplitude.getInstance().logEvent('hardware', { 'number-of-monitors': numberOfMonitors });
 		}
 	}
 }

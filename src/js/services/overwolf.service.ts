@@ -636,6 +636,14 @@ export class OverwolfService {
 		});
 	}
 
+	public async getMonitorsList(): Promise<any> {
+		return new Promise<any>(resolve => {
+			overwolf.utils.getMonitorsList(res => {
+				resolve(res);
+			});
+		});
+	}
+
 	public gameRunning(gameInfo: any): boolean {
 		if (!gameInfo) {
 			return false;
