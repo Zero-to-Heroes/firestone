@@ -1,8 +1,9 @@
 import { CardHistory } from '../card-history';
 import { Set, SetCard } from '../set';
+import { CurrentView } from './collection/current-view.type';
 
 export class BinderState {
-	readonly currentView: string = 'sets';
+	readonly currentView: CurrentView = 'sets';
 	readonly menuDisplayType: string = 'menu';
 	readonly selectedFormat: string = 'standard';
 	readonly allSets: readonly Set[] = [];
