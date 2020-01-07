@@ -3,6 +3,7 @@
 .sets-container {
 	margin-top: 9px;
 	overflow: auto;
+	min-height: 0;
 
 	.category-container {
 		display: flex;
@@ -22,6 +23,7 @@
 			display: flex;
 			justify-content: flex-start;
 			flex-wrap: wrap;
+			overflow-y: scroll;
 
 			li {
 				width: 155px;
