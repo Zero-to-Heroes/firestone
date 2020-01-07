@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
 	selector: 'settings-general',
@@ -13,6 +13,7 @@ import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 			<ng-container [ngSwitch]="_selectedMenu">
 				<settings-general-launch *ngSwitchCase="'launch'"></settings-general-launch>
 				<settings-general-bug-report *ngSwitchCase="'bugreport'"></settings-general-bug-report>
+				<settings-decktracker-beta *ngSwitchCase="'beta'"></settings-decktracker-beta>
 			</ng-container>
 		</ul>
 	`,
