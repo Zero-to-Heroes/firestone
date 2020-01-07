@@ -20,7 +20,7 @@ declare var amplitude: any;
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper *ngIf="state" [activeTheme]="state.currentApp">
+		<window-wrapper *ngIf="state" [activeTheme]="state.currentApp" [allowResize]="true">
 			<section class="menu-bar">
 				<!-- <main-window-navigation [navigation]="state.navigation"></main-window-navigation> -->
 				<div class="first">

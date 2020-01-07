@@ -269,6 +269,10 @@ export class OverwolfService {
 		overwolf.windows.dragMove(windowId, callback);
 	}
 
+	public dragResize(windowId: string, edge: string) {
+		overwolf.windows.dragResize(windowId, edge);
+	}
+
 	public async inGame(): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			overwolf.games.getRunningGameInfo((res: any) => {
