@@ -8,13 +8,15 @@
 	height: 26px;
 	position: relative;
 	overflow: hidden;
-	transition: all 0.2s ease-in-out;
+	// Removing the transition fixes the flicker
+	// transition: transform 0.2s ease-in-out;
 	// https://stackoverflow.com/questions/12278587/webkit-text-flickers-when-using-css-transform-scale
 	// backface-visibility: hidden; // Activating this makes the font blurry
-	transform-style: preserve-3d;
+	// transform-style: preserve-3d;
 
 	&:hover {
 		transform: scale(1.1);
+		animation: card-zoom 0.2s ease-in-out;
 	}
 
 	.background-image {
@@ -157,5 +159,14 @@
 				color: #101530;
 			}
 		}
+	}
+}
+
+@keyframes card-zoom {
+	0% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(1.1);
 	}
 }
