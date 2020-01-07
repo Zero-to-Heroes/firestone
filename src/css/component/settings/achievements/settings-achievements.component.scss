@@ -1,8 +1,9 @@
 .achievements {
-    display: flex;
-    width: 100%;
+	display: flex;
+	width: 100%;
 
-    settings-achievements-capture {
-        flex-grow: 1;
-    }
+	settings-achievements-capture {
+		flex-grow: 1;
+		display: flex;
+	}
 }
