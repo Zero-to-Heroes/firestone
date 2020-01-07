@@ -52,6 +52,9 @@ export class RemoteAchievementsService {
 			'[remote-achievements] loaded from server',
 			result && result.results && result.results.length,
 		);
+		if (!result || !result.results) {
+			return [];
+		}
 
 		// Update local cache
 		const achievements = result.results.map(ach => CompletedAchievement.create(ach));
@@ -90,7 +93,7 @@ export class RemoteAchievementsService {
 			result => {},
 			error => {
 				console.warn('Could not upload achievemnt stats, retrying', error);
-				setTimeout(() => this.publishRemoteAchievement(achievement, retriesLeft--), 3000);
+				setTimeout(() => this.publishRemoteAchievement(achievement, retriesLeft - 1), 3000);
 			},
 		);
 	}
@@ -103,6 +106,7 @@ export class RemoteAchievementsService {
 
 	private loadAchievementsInternal(userInfo, callback, retriesLeft = 15) {
 		if (retriesLeft <= 0) {
+			console.error('Could not load achievements', `${ACHIEVEMENTS_RETRIEVE_URL}`, userInfo);
 			callback([]);
 			return;
 		}
