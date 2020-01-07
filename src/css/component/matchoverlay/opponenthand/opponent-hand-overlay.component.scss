@@ -7,6 +7,16 @@
 .opponent-hand-overlay {
 	width: 100%;
 	height: 100%;
+
+	::ng-deep .card-tooltip {
+		margin-top: -6vh;
+	}
+	::ng-deep card-tooltip .card-tooltip {
+		margin-top: -6vh;
+	}
+	.card-tooltip {
+		margin-top: -6vh;
+	}
 }
 
 opponent-card-infos {
