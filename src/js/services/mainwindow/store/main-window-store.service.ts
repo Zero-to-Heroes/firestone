@@ -188,6 +188,10 @@ export class MainWindowStoreService {
 		// console.log('[store] processing event', event.eventName(), event);
 		const start = Date.now();
 		const processor: Processor = this.processors.get(event.eventName());
+		if (!processor) {
+			this.logger.error('[store] missing processor for event', event.eventName());
+			return;
+		}
 		// Don't modify the current state here, as it could make state lookup impossible
 		// (for back / forward arrows for instance)
 		try {
@@ -213,7 +217,7 @@ export class MainWindowStoreService {
 				console.log('[store] no new state to emit');
 			}
 		} catch (e) {
-			console.error('[store] exception while processing event', event, processor);
+			console.error('[store] exception while processing event', event.eventName(), event, processor);
 		}
 		return eventQueue.slice(1);
 	}
