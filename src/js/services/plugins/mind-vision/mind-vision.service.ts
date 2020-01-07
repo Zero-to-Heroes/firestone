@@ -13,12 +13,12 @@ export class MindVisionService {
 
 	public async getCollection(): Promise<any[]> {
 		return new Promise<any[]>(async (resolve, reject) => {
-			console.log('[mind-vision] retrieving collection');
+			// console.log('[mind-vision] retrieving collection');
 			const plugin = await this.get();
-			console.log('[mind-vision] got plugin');
+			// console.log('[mind-vision] got plugin');
 			try {
 				plugin.getCollection(collection => {
-					console.log('[mind-vision] retrieved collection');
+					// console.log('[mind-vision] retrieved collection', collection != null);
 					resolve(collection ? JSON.parse(collection) : null);
 				});
 			} catch (e) {
