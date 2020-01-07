@@ -1,16 +1,25 @@
-import { Component, Input, ChangeDetectionStrategy, ChangeDetectorRef, ViewRef } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { IOption } from 'ng-select';
+import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { Set } from '../../models/set';
+import { CollectionSetsFilterEvent } from '../../services/mainwindow/store/events/collection/collection-sets-filter-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 
 @Component({
 	selector: 'sets',
 	styleUrls: [`../../../css/component/collection/sets.component.scss`],
 	template: `
 		<div class="sets">
-			<ul class="menu-selection">
+			<filter
+				[filterOptions]="filterOptions"
+				[activeFilter]="activeFilter"
+				[placeholder]="placeholder"
+				[filterChangeFunction]="filterChangeFunction"
+			></filter>
+			<!--<ul class="menu-selection">
 				<li [ngClass]="{ 'active': showStandard }" (mousedown)="toggleStandard()">Standard</li>
 				<li [ngClass]="{ 'active': showWild }" (mousedown)="toggleWild()">Wild</li>
-			</ul>
+			</ul> -->
 			<sets-container [sets]="standardSets" [category]="'Standard'" *ngIf="showStandard"></sets-container>
 			<sets-container [sets]="wildSets" [category]="'Wild'" *ngIf="showWild"></sets-container>
 		</div>
@@ -21,12 +30,31 @@ export class SetsComponent {
 	@Input() standardSets: Set[];
 	@Input() wildSets: Set[];
 
+	filterOptions: readonly IOption[];
+	activeFilter: string;
+	placeholder: string;
+	filterChangeFunction: (option: IOption) => MainWindowStoreEvent;
+
 	showStandard = true;
 	showWild = false;
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	constructor() {
+		this.filterOptions = [
+			{
+				label: 'Standard',
+				value: 'standard',
+			} as IOption,
+			{
+				label: 'Wild',
+				value: 'wild',
+			} as IOption,
+		];
+		this.filterChangeFunction = (option: IOption) =>
+			new CollectionSetsFilterEvent(option.value as StatGameFormatType);
+	}
 
-	@Input('selectedFormat') set selectedFormat(format: string) {
+	@Input('selectedFormat') set selectedFormat(format: StatGameFormatType) {
+		this.activeFilter = format;
 		switch (format) {
 			case 'standard':
 				this.showStandard = true;
@@ -39,24 +67,6 @@ export class SetsComponent {
 			default:
 				this.showStandard = true;
 				this.showWild = false;
-		}
-	}
-
-	toggleStandard() {
-		console.log('showing standard sets');
-		this.showStandard = true;
-		this.showWild = false;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	toggleWild() {
-		console.log('showing wild sets');
-		this.showStandard = false;
-		this.showWild = true;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
 		}
 	}
 }

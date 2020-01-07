@@ -39,6 +39,7 @@ import { VideoReplayDeletionRequestEvent } from './events/achievements/video-rep
 import { ChangeVisibleApplicationEvent } from './events/change-visible-application-event';
 import { CloseMainWindowEvent } from './events/close-main-window-event';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
+import { CollectionSetsFilterEvent } from './events/collection/collection-sets-filter-event';
 import { LoadMoreCardHistoryEvent } from './events/collection/load-more-card-history-event';
 import { NewCardEvent } from './events/collection/new-card-event';
 import { NewPackEvent } from './events/collection/new-pack-event';
@@ -83,6 +84,7 @@ import { VideoReplayDeletionRequestProcessor } from './processors/achievements/v
 import { ChangeVisibleApplicationProcessor } from './processors/change-visible-application-processor';
 import { CloseMainWindowProcessor } from './processors/close-main-window-processor';
 import { CollectionInitProcessor } from './processors/collection/collection-init-processor';
+import { CollectionSetsFilterProcessor } from './processors/collection/collection-sets-filter-processor';
 import { LoadMoreCardHistoryProcessor } from './processors/collection/load-more-card-history-processor';
 import { NewCardProcessor } from './processors/collection/new-card-processor';
 import { NewPackProcessor } from './processors/collection/new-pack-processor';
@@ -306,6 +308,9 @@ export class MainWindowStoreService {
 			// Collection
 			CollectionInitEvent.eventName(),
 			new CollectionInitProcessor(),
+
+			CollectionSetsFilterEvent.eventName(),
+			new CollectionSetsFilterProcessor(),
 
 			SearchCardsEvent.eventName(),
 			new SearchCardProcessor(this.collectionManager, this.cards),

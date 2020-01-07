@@ -1,7 +1,9 @@
 import { OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { InlineSVGModule } from 'ng-inline-svg';
+import { SelectModule } from 'ng-select';
 import { AdsComponent } from '../../components/ads.component';
 import { CdkOverlayContainer } from '../../components/cdk-overlay-container.component';
 import { ControlBugComponent } from '../../components/controls/control-bug.component';
@@ -11,6 +13,7 @@ import { ControlHelpComponent } from '../../components/controls/control-help.com
 import { ControlMaximizeComponent } from '../../components/controls/control-maximize.component';
 import { ControlMinimizeComponent } from '../../components/controls/control-minimize.component';
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
+import { FilterComponent } from '../../components/filter.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
@@ -29,7 +32,7 @@ import { PulseDirective } from '../../directives/pulse.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 @NgModule({
-	imports: [BrowserModule, OverlayModule, InlineSVGModule.forRoot()],
+	imports: [BrowserModule, OverlayModule, SelectModule, FormsModule, ReactiveFormsModule, InlineSVGModule.forRoot()],
 	declarations: [
 		WindowWrapperComponent,
 
@@ -60,6 +63,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		LoadingStateComponent,
 		WithLoadingComponent,
 
+		FilterComponent,
 		SafeHtmlPipe,
 
 		AdsComponent,
@@ -95,6 +99,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		LoadingStateComponent,
 		WithLoadingComponent,
 
+		FilterComponent,
 		SafeHtmlPipe,
 
 		AdsComponent,
