@@ -26,9 +26,13 @@ export class GlobalStatsService {
 		});
 	}
 
-	private getGlobalStatsInternal(userId: string, callback, retriesLeft = 30) {
+	private getGlobalStatsInternal(userId: string, callback, retriesLeft = 30, shouldLogError = false) {
 		if (retriesLeft <= 0) {
-			this.logger.error('[global-stats] could not retrieve stats');
+			if (shouldLogError) {
+				this.logger.error('[global-stats] could not retrieve stats', `${GLOBAL_STATS_ENDPOINT}/${userId}`);
+			} else {
+				this.logger.info('[global-stats] could not retrieve stats', `${GLOBAL_STATS_ENDPOINT}/${userId}`);
+			}
 			callback(null);
 			return;
 		}
@@ -39,7 +43,7 @@ export class GlobalStatsService {
 				const areEqual = this.areEqual(data.result, this.cachedStats);
 				if (!data || !data.result || areEqual) {
 					this.logger.debug('[global-stats] invalid stats received', data == null, areEqual);
-					setTimeout(() => this.getGlobalStatsInternal(userId, callback, retriesLeft - 1), 1000);
+					setTimeout(() => this.getGlobalStatsInternal(userId, callback, retriesLeft - 1, !areEqual), 1000);
 					return;
 				}
 				this.logger.debug('[global-stats] received stats');
