@@ -12,19 +12,18 @@ export class ReplayManager {
 	public async saveLocally(game: GameForUpload): Promise<GameForUpload> {
 		console.log('[manastorm-bridge] ready to save game locally');
 		if (!game.player || !game.opponent) {
-			console.error(
+			console.warn(
 				'[manastorm-bridge] Could not find player and opponent, not saving replay',
 				game.player,
 				game.opponent,
-				game,
 			);
-			return;
 		}
 		const plugin = await this.plugin.get();
 		const directory = plugin.LOCALAPPDATA + '/Overwolf/ZeroToHeroes/Replays/';
-		const playerName = game.player.name.replace('"', '');
-		const opponentName = game.opponent.name.replace('"', '');
-		const matchupName = `${playerName}(${game.player.class})_vs_${opponentName}(${game.opponent.class})`;
+		const playerName = game.player && game.player.name.replace('"', '');
+		const opponentName = game.opponent && game.opponent.name.replace('"', '');
+		const matchupName = `${playerName}(${game.player && game.player.class})_vs_${opponentName}(${game.opponent &&
+			game.opponent.class})`;
 		const fileName = `${matchupName}_${new Date().getTime()}.hszip`;
 		console.log('[manastorm-bridge] saving locally', directory + fileName);
 		return new Promise<GameForUpload>(resolve => {
