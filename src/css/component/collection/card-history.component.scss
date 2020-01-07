@@ -2,18 +2,18 @@
 @import '../../global/fonts';
 
 .card-history {
-	margin-top: 34px;
+	margin-top: 20px;
 	width: 400px;
 	display: flex;
 	flex-direction: column;
 	flex-grow: 1;
 
 	.top-container {
-		margin-bottom: 11px;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		flex-shrink: 0;
+		padding: 10px;
 
 		.toggle-label {
 			display: flex;

@@ -9,10 +9,10 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 	],
 	template: `
 		<div class="achievement-history">
-			<div class="top-container">
-				<span class="title">My Achievements History</span>
-			</div>
 			<ul class="history">
+				<div class="top-container">
+					<span class="title">My Achievements History</span>
+				</div>
 				<li *ngFor="let historyItem of achievementHistory; trackBy: trackById">
 					<achievement-history-item [historyItem]="historyItem"></achievement-history-item>
 				</li>

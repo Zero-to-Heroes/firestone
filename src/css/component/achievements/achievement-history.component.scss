@@ -2,7 +2,7 @@
 @import '../../global/fonts';
 
 .achievement-history {
-	margin-top: 18px;
+	margin-top: 50px;
 	width: 400px;
 	display: flex;
 	flex-direction: column;
@@ -11,7 +11,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: 12px;
+		padding: 10px;
 
 		.title {
 			@extend %achievements-history-header;

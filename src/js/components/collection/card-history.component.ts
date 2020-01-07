@@ -1,18 +1,17 @@
 import {
-	Component,
-	Input,
-	ElementRef,
-	HostListener,
-	ChangeDetectionStrategy,
 	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	ElementRef,
 	EventEmitter,
+	HostListener,
+	Input,
 } from '@angular/core';
-
 import { CardHistory } from '../../models/card-history';
 import { SetCard } from '../../models/set';
-import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { LoadMoreCardHistoryEvent } from '../../services/mainwindow/store/events/collection/load-more-card-history-event';
 import { ToggleShowOnlyNewCardsInHistoryEvent } from '../../services/mainwindow/store/events/collection/toggle-show-only-new-cards-in-history-event';
+import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
@@ -24,23 +23,29 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	template: `
 		<div class="card-history">
-			<div class="top-container">
-				<span class="title">My Card History</span>
-				<section class="toggle-label">
-					<form class="settings-section form-toggle">
-						<fieldset name="">
-							<div class="form-section">
-								<input hidden type="checkbox" name="" id="a-01" (change)="toggleShowOnlyNewCards()" />
-								<label for="a-01">
-									<p class="settings-p">Show only new cards</p>
-									<b></b>
-								</label>
-							</div>
-						</fieldset>
-					</form>
-				</section>
-			</div>
 			<ul class="history">
+				<div class="top-container">
+					<span class="title">My Card History</span>
+					<section class="toggle-label">
+						<form class="settings-section form-toggle">
+							<fieldset name="">
+								<div class="form-section">
+									<input
+										hidden
+										type="checkbox"
+										name=""
+										id="a-01"
+										(change)="toggleShowOnlyNewCards()"
+									/>
+									<label for="a-01">
+										<p class="settings-p">Show only new cards</p>
+										<b></b>
+									</label>
+								</div>
+							</fieldset>
+						</form>
+					</section>
+				</div>
 				<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
 					<card-history-item
 						[historyItem]="historyItem"
