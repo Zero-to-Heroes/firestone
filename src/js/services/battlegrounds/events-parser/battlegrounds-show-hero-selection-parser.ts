@@ -62,7 +62,7 @@ export class BattlegroundsShowHeroSelectionParser implements EventParser {
 			powerLevel: heroInfo ? heroInfo.powerLevel : 'unknown',
 			strategy: heroInfo ? heroInfo.strategy : null,
 		} as BattlegroundsHero);
-		console.log('updating displayed hero', hero);
+		// console.log('updating displayed hero', hero);
 		return hero;
 	}
 }

@@ -13,7 +13,7 @@ export class BattlegroundsHeroInfoService {
 		return new Promise<readonly BattlegroundsHero[]>(async resolve => {
 			this.http.get(BGS_HEROES_INFO_URL).subscribe(
 				(result: any[]) => {
-					this.logger.debug('[bgs-info] retrieved bgs info from CDN', result);
+					this.logger.debug('[bgs-info] retrieved bgs info from CDN');
 					resolve(result);
 				},
 				error => {
