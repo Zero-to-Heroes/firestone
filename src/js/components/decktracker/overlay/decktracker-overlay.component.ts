@@ -81,7 +81,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
-	private hasBeenMovedByUser: boolean;
+	// private hasBeenMovedByUser: boolean;
 	private showTooltips: boolean = true;
 
 	private scale;
@@ -156,7 +156,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
-				await this.changeWindowPosition();
+				// await this.changeWindowPosition();
 			}
 		});
 		this.events.on(Events.SHOW_MODAL).subscribe(() => {
@@ -173,7 +173,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 
 		await this.changeWindowSize();
-		await this.changeWindowPosition();
+		await this.restoreWindowPosition();
+		// await this.changeWindowPosition();
 		await this.handleDisplayPreferences();
 		// await this.restoreWindow();
 		amplitude.getInstance().logEvent('match-start', {
@@ -205,8 +206,16 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.ow.dragMove(this.windowId, async result => {
 			// console.log('drag finished, updating position');
 			await this.updateTooltipPosition();
+			const window = await this.ow.getCurrentWindow();
+			// console.log('retrieved window', window);
+			if (!window) {
+				return;
+			}
+			// console.log('updating tracker position', window.left, window.top);
+			this.prefs.updateTrackerPosition(window.left, window.top);
+			// console.log('updated tracker position', window.left, window.top);
 		});
-		this.hasBeenMovedByUser = true;
+		// this.hasBeenMovedByUser = true;
 	}
 
 	onDisplayModeChanged(pref: string) {
@@ -244,30 +253,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 	}
 
-	// private async restoreWindow() {
-	// 	const window = await this.ow.getCurrentWindow();
-	// 	if (!window) {
-	// 		return;
-	// 	}
-	// 	// console.log('current window', window);
-	// 	const [top, left] = [window.top, window.left];
-	// 	await this.ow.restoreWindow(this.windowId);
-	// 	await this.ow.changeWindowPosition(this.windowId, left, top);
-	// 	// console.log('restoring window to previous position');
-	// 	this.onResized();
-	// 	if (!(this.cdr as ViewRef).destroyed) {
-	// 		this.cdr.detectChanges();
-	// 	}
-	// }
-
-	// private hideWindow() {
-	// 	this.ow.hideWindow(this.windowId);
-	// }
-
-	private async changeWindowPosition(): Promise<void> {
-		if (this.hasBeenMovedByUser) {
-			return;
-		}
+	private async restoreWindowPosition(): Promise<void> {
+		const prefs = await this.prefs.getPreferences();
 		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
@@ -276,8 +263,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		const gameWidth = gameInfo.logicalWidth;
 		const dpi = gameWidth / gameInfo.width;
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-		const newLeft = gameWidth - width * dpi - 40; // Leave a bit of room to the right
-		const newTop = 10;
+		const newLeft = prefs.decktrackerPosition ? prefs.decktrackerPosition.left || 0 : gameWidth - width * dpi - 40; // Leave a bit of room to the right
+		const newTop = prefs.decktrackerPosition ? prefs.decktrackerPosition.top || 0 : 10;
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		await this.updateTooltipPosition();
 	}
