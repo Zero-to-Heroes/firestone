@@ -165,6 +165,12 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async updateTrackerPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, decktrackerPosition: { left, top } };
+		this.savePreferences(newPrefs);
+	}
+
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
 		// console.log('user pref saved', eventName);
