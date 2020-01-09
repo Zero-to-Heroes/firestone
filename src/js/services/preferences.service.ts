@@ -1,6 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { Preferences } from '../models/preferences';
-import { BinderPrefs } from '../models/preferences/binder-prefs';
 import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OverwolfService } from './overwolf.service';
@@ -31,36 +30,6 @@ export class PreferencesService {
 		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
 	}
 
-	public async setLaunchAppOnGameStart(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, launchAppOnGameStart: pref };
-		this.savePreferences(newPrefs);
-	}
-
-	public async setBinderShowDust(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const binder = prefs.binder;
-		const newBinder: BinderPrefs = { ...binder, showDust: pref };
-		const newPrefs: Preferences = { ...prefs, binder: newBinder };
-		this.savePreferences(newPrefs);
-	}
-
-	public async setBinderShowCommon(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const binder = prefs.binder;
-		const newBinder: BinderPrefs = { ...binder, showCommon: pref };
-		const newPrefs: Preferences = { ...prefs, binder: newBinder };
-		this.savePreferences(newPrefs);
-	}
-
-	public async setBinderShowCardsOutsideOfPack(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const binder = prefs.binder;
-		const newBinder: BinderPrefs = { ...binder, showCardsOutsideOfPacks: pref };
-		const newPrefs: Preferences = { ...prefs, binder: newBinder };
-		this.savePreferences(newPrefs);
-	}
-
 	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };
@@ -77,54 +46,6 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, hasSeenVideoCaptureChangeNotif: pref };
 		this.savePreferences(newPrefs);
-	}
-
-	public async setDecktrackerShowArena(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, decktrackerShowArena: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
-
-	public async setDecktrackerShowRanked(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, decktrackerShowRanked: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
-
-	public async setDecktrackerShowTavernBrawl(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, decktrackerShowTavernBrawl: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
-
-	public async setDecktrackerShowPractice(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, decktrackerShowPractice: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
-
-	public async setDecktrackerShowFriendly(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, decktrackerShowFriendly: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
-
-	public async setDecktrackerShowCasual(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, decktrackerShowCasual: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
-
-	public async setDectrackerShowOpponentTurnDraw(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, dectrackerShowOpponentTurnDraw: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY);
-	}
-
-	public async setDectrackerShowOpponentGuess(pref: boolean) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, dectrackerShowOpponentGuess: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_MATCH_OVERLAY_DISPLAY);
 	}
 
 	public async setDecktrackerSkin(pref: string) {

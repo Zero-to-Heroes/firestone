@@ -1,4 +1,3 @@
-import { BinderPrefs } from './preferences/binder-prefs';
 import { Ftue } from './preferences/ftue';
 
 export class Preferences {
@@ -6,6 +5,10 @@ export class Preferences {
 	readonly dontConfirmVideoReplayDeletion: boolean;
 	readonly dontRecordAchievements: boolean = true;
 	readonly hasSeenVideoCaptureChangeNotif: boolean;
+
+	readonly showDust: boolean = true;
+	readonly showCommon: boolean = true;
+	readonly showCardsOutsideOfPacks: boolean = true;
 
 	readonly decktrackerShowArena: boolean;
 	readonly decktrackerShowRanked: boolean = true;
@@ -37,7 +40,6 @@ export class Preferences {
 	readonly batlegroundsShowHeroSelectionPref = false;
 
 	readonly launchAppOnGameStart: boolean = true;
-	readonly binder: BinderPrefs = new BinderPrefs();
 
 	readonly twitchAccessToken: string;
 	readonly twitchUserName: string;

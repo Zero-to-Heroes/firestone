@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewRef } from '@angular/core';
-import { PreferencesService } from '../../../services/preferences.service';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
 	selector: 'settings-collection-notification',
@@ -14,107 +13,16 @@ import { PreferencesService } from '../../../services/preferences.service';
 		<div class="collection-notification">
 			<section class="settings-group toggle-label">
 				<h2 class="modes">You can selectively show some card notifications</h2>
-				<form class="settings-section form-toggle">
-					<fieldset name="">
-						<div class="form-section">
-							<input
-								hidden
-								type="checkbox"
-								[checked]="showDust"
-								name=""
-								id="a-01"
-								(change)="toggleShowDust()"
-							/>
-							<label for="a-01" [ngClass]="{ 'enabled': showDust }">
-								<p class="settings-p">Dust recap</p>
-								<b></b>
-							</label>
-						</div>
-					</fieldset>
-				</form>
-				<form class="settings-section form-toggle">
-					<fieldset name="">
-						<div class="form-section">
-							<input
-								hidden
-								type="checkbox"
-								[checked]="showCommon"
-								name=""
-								id="a-02"
-								(change)="toggleShowCommon()"
-							/>
-							<label for="a-02" [ngClass]="{ 'enabled': showCommon }">
-								<p class="settings-p">Non-golden commons</p>
-								<b></b>
-							</label>
-						</div>
-					</fieldset>
-				</form>
-				<form class="settings-section form-toggle">
-					<fieldset name="">
-						<div class="form-section">
-							<input
-								hidden
-								type="checkbox"
-								[checked]="showCardsOutsideOfPacks"
-								name=""
-								id="a-03"
-								(change)="toggleShowCardsOutsideOfPacks()"
-							/>
-							<label for="a-03" [ngClass]="{ 'enabled': showCardsOutsideOfPacks }">
-								<p class="settings-p">Rewards</p>
-								<b></b>
-							</label>
-						</div>
-					</fieldset>
-				</form>
+				<preference-toggle field="showDust" label="Dust recap"></preference-toggle>
+				<preference-toggle field="showCommon" label="Non-golden commons"></preference-toggle>
+				<preference-toggle
+					field="showCardsOutsideOfPacks"
+					label="Rewards"
+					tooltip="Display a notification whenever you get a card outside of a pack, typically end-of-season or Arena rewards"
+				></preference-toggle>
 			</section>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SettingsCollectionNotificationComponent {
-	showDust: boolean;
-	showCommon: boolean;
-	showCardsOutsideOfPacks: boolean;
-
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private el: ElementRef) {
-		this.cdr.detach();
-		this.loadDefaultValues();
-	}
-
-	toggleShowDust() {
-		this.showDust = !this.showDust;
-		this.prefs.setBinderShowDust(this.showDust);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	toggleShowCommon() {
-		this.showCommon = !this.showCommon;
-		this.prefs.setBinderShowCommon(this.showCommon);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	toggleShowCardsOutsideOfPacks() {
-		this.showCardsOutsideOfPacks = !this.showCardsOutsideOfPacks;
-		this.prefs.setBinderShowCardsOutsideOfPack(this.showCardsOutsideOfPacks);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-
-	private async loadDefaultValues() {
-		const prefs = await this.prefs.getPreferences();
-		this.showDust = prefs.binder.showDust;
-		this.showCommon = prefs.binder.showCommon;
-		this.showCardsOutsideOfPacks = prefs.binder.showCardsOutsideOfPacks;
-		// console.log('loaded prefs', prefs);
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
-}
+export class SettingsCollectionNotificationComponent {}

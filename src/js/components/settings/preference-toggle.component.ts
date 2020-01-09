@@ -5,13 +5,14 @@ import { PreferencesService } from '../../services/preferences.service';
 	selector: 'preference-toggle',
 	styleUrls: [
 		`../../../css/global/components-global.scss`,
+		`../../../css/global/toggle.scss`,
 		`../../../css/component/settings/settings-common.component.scss`,
 		`../../../css/component/settings/preference-toggle.component.scss`,
 	],
 	template: `
 		<div class="preference-toggle">
 			<input hidden type="checkbox" [checked]="value" name="" id="a-01-{{ field }}" (change)="toggleValue()" />
-			<label for="a-01-{{ field }}" [ngClass]="{ 'enabled': value }">
+			<label class="toggle" for="a-01-{{ field }}" [ngClass]="{ 'enabled': value }">
 				<p class="settings-p">
 					{{ label }}
 					<i class="info" *ngIf="tooltip">

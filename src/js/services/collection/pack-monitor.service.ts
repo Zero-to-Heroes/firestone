@@ -263,10 +263,10 @@ export class PackMonitor {
 			return;
 		}
 		const prefs = await this.prefs.getPreferences();
-		if (!prefs.binder.showCommon && dbCard.rarity === 'Common') {
+		if (!prefs.showCommon && dbCard.rarity === 'Common') {
 			return;
 		}
-		if (!this.openingPack && !prefs.binder.showCardsOutsideOfPacks) {
+		if (!this.openingPack && !prefs.showCardsOutsideOfPacks) {
 			return;
 		}
 		let cardName: string = dbCard.name;
@@ -317,7 +317,7 @@ export class PackMonitor {
 
 	private async createDustToast(dust: number, numberOfCards: number) {
 		const prefs = await this.prefs.getPreferences();
-		if (prefs.binder.showDust) {
+		if (prefs.showDust) {
 			console.log('[pack-monitor] showing dust notification', dust, numberOfCards);
 			this.notificationService.html({
 				content: `

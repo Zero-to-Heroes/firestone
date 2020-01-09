@@ -1,0 +1,43 @@
+.toggle {
+	b {
+		flex-shrink: 0;
+		position: relative;
+		margin-left: auto;
+		border: 1px solid var(--toggle-color-border);
+		border-radius: 33.33333%/50%; // 2:3 width height ratio
+		transition: 0.15s;
+		pointer-events: none;
+		width: 30px;
+		height: 20px;
+		margin: 0;
+
+		&:before {
+			content: '';
+			position: absolute;
+			top: 4px;
+			left: 4px;
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			background: var(--toggle-color-knob);
+			transition: background 0.25s, transform 0.15s;
+			opacity: 0.2;
+		}
+	}
+
+	&.enabled b {
+		&:before {
+			transform: translateX(100%);
+			opacity: 1;
+		}
+	}
+
+	p {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 14px;
+		display: flex;
+	}
+}

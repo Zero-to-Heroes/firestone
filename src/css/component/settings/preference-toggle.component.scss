@@ -1,6 +1,4 @@
 .preference-toggle {
-	margin-bottom: 15px;
-
 	label {
 		margin-top: 15px;
 		margin-bottom: 0;
@@ -8,51 +6,9 @@
 		align-items: center;
 	}
 
-	b {
-		flex-shrink: 0;
-		position: relative;
-		margin-left: auto;
-		border: 1px solid var(--toggle-color);
-		border-radius: 33.33333%/50%; // 2:3 width height ratio
-		transition: 0.15s;
-		pointer-events: none;
-		width: 30px;
-		height: 20px;
-		--toggle-color: #d9c3ab;
-		opacity: 0.4;
-		margin: 0;
-
-		&:before {
-			content: '';
-			position: absolute;
-			top: 4px;
-			left: 4px;
-			width: 10px;
-			height: 10px;
-			border-radius: 50%;
-			background: var(--toggle-color);
-			transition: background 0.25s, transform 0.15s;
-		}
-	}
-
-	label.enabled b {
-		--toggle-color: #ffb948;
-		opacity: 1;
-
-		&:before {
-			transform: translateX(100%);
-		}
-	}
-
 	p {
-		font-family: Open Sans;
-		font-style: normal;
-		font-weight: normal;
-		line-height: normal;
-		font-size: 14px;
 		color: #d9c3ab;
 		width: 160px;
-		display: flex;
 	}
 
 	.info {
