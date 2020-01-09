@@ -139,6 +139,9 @@ export class GameStateService {
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
 				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 			}
+			if (await this.ow.inGame()) {
+				this.updateOverlays();
+			}
 		});
 	}
 
@@ -321,6 +324,7 @@ export class GameStateService {
 		}
 		// console.log('[game-state] tracker window handled');
 
+		// console.log('[game-state] showing opp hand?', this.showOpponentHand);
 		if (
 			this.state &&
 			this.state.gameStarted &&

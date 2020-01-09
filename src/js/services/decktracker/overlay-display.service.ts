@@ -35,6 +35,7 @@ export class OverlayDisplayService implements OnDestroy {
 		});
 		const deckEventBus: EventEmitter<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
+			// console.log('[overlay-display] received deck event', event);
 			if (event) {
 				this.gameState = event.state;
 				await this.processEvent(event.event);
@@ -45,11 +46,11 @@ export class OverlayDisplayService implements OnDestroy {
 	private async processEvent(event) {
 		switch (event.name) {
 			case DeckEvents.MATCH_METADATA:
-				this.logger.debug('[overlay-display] received MATCH_METADATA event');
+				// this.logger.debug('[overlay-display] received MATCH_METADATA event');
 				this.handleDisplayPreferences(this.gameState);
 				break;
 			case DeckEvents.GAME_END:
-				this.logger.debug('[overlay-display] received GAME_END event, sending false');
+				// this.logger.debug('[overlay-display] received GAME_END event, sending false');
 				this.decktrackerDisplayEventBus.next(false);
 				break;
 		}
