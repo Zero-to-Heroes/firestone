@@ -12,6 +12,7 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 10px;
+		flex-shrink: 0;
 
 		.title {
 			@extend %achievements-history-header;
