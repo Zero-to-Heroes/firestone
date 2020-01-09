@@ -9,39 +9,6 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: flex-start;
-
-		p {
-			font-family: Open Sans;
-			font-style: normal;
-			font-weight: normal;
-			line-height: normal;
-			font-size: 14px;
-			color: #d9c3ab;
-		}
-
-		label {
-			margin-top: 15px;
-			margin-bottom: 0;
-			display: flex;
-			align-items: center;
-
-			b {
-				border-color: #d9c3ab;
-				opacity: 0.4;
-				margin-right: 15px;
-				&:before {
-					background: #d9c3ab;
-				}
-			}
-
-			&.enabled b {
-				border-color: #ffb948;
-				opacity: 1;
-				&:before {
-					background: #ffb948;
-				}
-			}
-		}
 	}
 
 	label {

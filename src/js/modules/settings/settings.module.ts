@@ -29,7 +29,6 @@ import { SettingsGeneralComponent } from '../../components/settings/general/sett
 import { ModalVideoSettingsChangedComponent } from '../../components/settings/modal/modal-video-settings-changed.component';
 import { SettingsModalComponent } from '../../components/settings/modal/settings-modal.component';
 import { PreferenceSliderComponent } from '../../components/settings/preference-slider.component';
-import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { SettingsReplaysGeneralComponent } from '../../components/settings/replays/settings-replays-general.component';
 import { SettingsReplaysMenuComponent } from '../../components/settings/replays/settings-replays-menu.component';
 import { SettingsReplaysComponent } from '../../components/settings/replays/settings-replays.component';
@@ -103,7 +102,6 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsReplaysGeneralComponent,
 		SettingsReplaysMenuComponent,
 
-		PreferenceToggleComponent,
 		PreferenceSliderComponent,
 	],
 	bootstrap: [SettingsComponent],

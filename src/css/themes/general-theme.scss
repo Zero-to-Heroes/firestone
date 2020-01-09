@@ -3,6 +3,8 @@
 	--window-background-image: url('/Files/assets/images/backgrounds/home-screen-bg.png');
 	--window-outline-color: #472406;
 
+	--color-1: #ffb948;
+
 	--ads-background-color: #190505;
 	--ads-color: rgba(47, 13, 13, 0.8); //#2a1030;
 
@@ -11,6 +13,6 @@
 	--on-close-button-color: #d9c3ab;
 	--on-close-button-background-color: #2f0d0d;
 
-	--toggle-color-border: #ffb948;
-	--toggle-color-knob: #ffb948;
+	--toggle-color-border: var(--color-1);
+	--toggle-color-knob: var(--color-1);
 }

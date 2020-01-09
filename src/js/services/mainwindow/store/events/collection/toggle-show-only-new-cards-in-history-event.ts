@@ -5,6 +5,8 @@ export class ToggleShowOnlyNewCardsInHistoryEvent implements MainWindowStoreEven
 		return 'ToggleShowOnlyNewCardsInHistoryEvent';
 	}
 
+	constructor(public newValue: boolean) {}
+
 	public eventName(): string {
 		return 'ToggleShowOnlyNewCardsInHistoryEvent';
 	}

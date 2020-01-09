@@ -20,6 +20,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 		`../../../css/component/collection/card-history.component.scss`,
 		`../../../css/global/scrollbar.scss`,
 		`../../../css/global/forms.scss`,
+		`../../../css/global/toggle.scss`,
 	],
 	template: `
 		<div class="card-history">
@@ -27,23 +28,11 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<div class="top-container">
 					<span class="title">My Card History</span>
 					<section class="toggle-label">
-						<form class="settings-section form-toggle">
-							<fieldset name="">
-								<div class="form-section">
-									<input
-										hidden
-										type="checkbox"
-										name=""
-										id="a-01"
-										(change)="toggleShowOnlyNewCards()"
-									/>
-									<label for="a-01">
-										<p class="settings-p">Show only new cards</p>
-										<b></b>
-									</label>
-								</div>
-							</fieldset>
-						</form>
+						<preference-toggle
+							field="collectionHistoryShowOnlyNewCards"
+							label="Show only new cards"
+							[toggleFunction]="toggleShowOnlyNewCards"
+						></preference-toggle>
 					</section>
 				</div>
 				<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
@@ -77,7 +66,7 @@ export class CardHistoryComponent implements AfterViewInit {
 	private readonly MAX_RESULTS_DISPLAYED = 1000;
 
 	_selectedCard: SetCard;
-	@Input() showOnlyNewCards: boolean;
+	// @Input() showOnlyNewCards: boolean;
 	@Input() cardHistory: readonly CardHistory[];
 	@Input() shownHistory: readonly CardHistory[];
 	@Input() totalHistoryLength: number;
@@ -98,9 +87,9 @@ export class CardHistoryComponent implements AfterViewInit {
 		this.stateUpdater.next(new LoadMoreCardHistoryEvent(this.MAX_RESULTS_DISPLAYED));
 	}
 
-	toggleShowOnlyNewCards() {
-		this.stateUpdater.next(new ToggleShowOnlyNewCardsInHistoryEvent());
-	}
+	toggleShowOnlyNewCards = (newValue: boolean) => {
+		this.stateUpdater.next(new ToggleShowOnlyNewCardsInHistoryEvent(newValue));
+	};
 
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])

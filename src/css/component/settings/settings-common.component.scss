@@ -169,3 +169,7 @@ input[type='range'] {
 		}
 	}
 }
+
+::ng-deep preference-toggle .preference-toggle {
+	margin-top: 15px;
+}

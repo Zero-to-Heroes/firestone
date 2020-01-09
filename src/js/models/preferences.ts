@@ -9,6 +9,7 @@ export class Preferences {
 	readonly showDust: boolean = true;
 	readonly showCommon: boolean = true;
 	readonly showCardsOutsideOfPacks: boolean = true;
+	readonly collectionHistoryShowOnlyNewCards: boolean = false;
 
 	readonly decktrackerShowArena: boolean;
 	readonly decktrackerShowRanked: boolean = true;

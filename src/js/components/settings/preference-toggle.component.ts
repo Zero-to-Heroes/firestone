@@ -37,6 +37,7 @@ export class PreferenceToggleComponent {
 	@Input() field: string;
 	@Input() label: string;
 	@Input() tooltip: string;
+	@Input() toggleFunction: (newValue: boolean) => void;
 
 	value: boolean;
 
@@ -47,6 +48,9 @@ export class PreferenceToggleComponent {
 	toggleValue() {
 		this.value = !this.value;
 		this.prefs.setValue(this.field, this.value);
+		if (this.toggleFunction) {
+			this.toggleFunction(this.value);
+		}
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

@@ -19,9 +19,11 @@
 			display: flex;
 			align-items: center;
 
-			p {
-				@extend %sub-title;
-				margin-right: 14px;
+			::ng-deep .toggle p {
+				color: var(--color-1);
+			}
+			::ng-deep .preference-toggle {
+				margin: 0;
 			}
 		}
 

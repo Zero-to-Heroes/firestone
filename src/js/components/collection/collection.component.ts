@@ -43,7 +43,6 @@ import { AllCardsService } from '../../services/all-cards.service';
 					[selectedCard]="_state.selectedCard"
 					[cardHistory]="_state.cardHistory"
 					[shownHistory]="_state.shownCardHistory"
-					[showOnlyNewCards]="_state.showOnlyNewCardsInHistory"
 					[totalHistoryLength]="_state.totalHistoryLength"
 				>
 				</card-history>

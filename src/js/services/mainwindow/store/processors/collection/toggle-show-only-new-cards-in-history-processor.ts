@@ -9,7 +9,7 @@ export class ToggleShowOnlyNewCardsInHistoryProcessor implements Processor {
 		event: ToggleShowOnlyNewCardsInHistoryEvent,
 		currentState: MainWindowState,
 	): Promise<MainWindowState> {
-		const showOnlyNewCardsInHistory = !currentState.binder.showOnlyNewCardsInHistory;
+		const showOnlyNewCardsInHistory = event.newValue;
 		const shownHistory: readonly CardHistory[] = showOnlyNewCardsInHistory
 			? currentState.binder.cardHistory.filter((card: CardHistory) => card.isNewCard)
 			: currentState.binder.cardHistory;
