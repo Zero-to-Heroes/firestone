@@ -96,6 +96,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[label]="'Show card tooltips'"
 				></preference-toggle>
 				<preference-slider
+					class="first-slider"
 					[field]="'overlayWidthInPx'"
 					[label]="'Overlay width'"
 					[enabled]="sliderEnabled"
