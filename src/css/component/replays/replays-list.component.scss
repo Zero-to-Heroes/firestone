@@ -48,8 +48,7 @@
 	flex-direction: column;
 	justify-items: center;
 	align-items: center;
-	color: var(--secondary-text-color);
-	--icon-color: var(--secondary-text-color);
+	color: var(--color-1);
 
 	.state-container {
 		margin: auto;
@@ -57,20 +56,22 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		color: var(--secondary-text-color);
+		color: var(--color-1);
 
 		i {
 			margin-bottom: 30px;
+			--icon-color: var(--color-1);
+			--icon-secondary-color: var(--color-3);
 		}
 
 		.title {
 			@extend %empty-state-title;
 			margin-bottom: 15px;
-			color: var(--secondary-text-color);
+			color: var(--color-1);
 		}
 
 		.subtitle {
-			color: var(--secondary-text-color);
+			color: var(--color-1);
 		}
 
 		svg {

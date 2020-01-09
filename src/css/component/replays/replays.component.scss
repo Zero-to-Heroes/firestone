@@ -1,3 +1,7 @@
 .replays {
 	padding-top: 15px;
+
+	with-loading {
+		flex-grow: 1;
+	}
 }
