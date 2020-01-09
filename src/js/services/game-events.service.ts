@@ -11,6 +11,8 @@ import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
+declare var amplitude;
+
 @Injectable()
 export class GameEvents {
 	// The start / end spectating can be set outside of game start / end, so we need to keep it separate
@@ -142,7 +144,11 @@ export class GameEvents {
 				const playerInfo = await this.playersInfoService.getPlayerInfo();
 				// console.log('LOCAL_PLAYER info', playerInfo);
 				if (!playerInfo) {
-					console.error('[game-events] no local player info returned by mmindvision');
+					console.warn('[game-events] no local player info returned by mmindvision');
+					amplitude.getInstance().logEvent('error-logged', {
+						'error-category': 'memory-reading',
+						'error-id': 'no-player-info',
+					});
 				}
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: playerInfo ? playerInfo.standardRank : undefined,
@@ -165,7 +171,11 @@ export class GameEvents {
 				const opponentInfo = await this.playersInfoService.getOpponentInfo();
 				// console.log('OPPONENT_PLAYER info', opponentInfo);
 				if (!opponentInfo) {
-					console.error('[game-events] no local player info returned by mmindvision');
+					console.warn('[game-events] no local player info returned by mmindvision');
+					amplitude.getInstance().logEvent('error-logged', {
+						'error-category': 'memory-reading',
+						'error-id': 'no-player-info',
+					});
 				}
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
