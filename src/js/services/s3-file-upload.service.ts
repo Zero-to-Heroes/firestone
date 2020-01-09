@@ -33,7 +33,7 @@ export class S3FileUploadService {
 		});
 	}
 
-	public async postBinaryFile(biytesAsString: string): Promise<string> {
+	public async postBinaryFile(biytesAsString: string, extension?: string): Promise<string> {
 		const split = biytesAsString.split(',');
 		const bytes = [];
 		for (let i = 0; i < split.length; i++) {
@@ -41,8 +41,11 @@ export class S3FileUploadService {
 		}
 		const byteArray = new Uint8Array(bytes);
 		const blob = new Blob([byteArray], { type: 'application/zip' });
+		return this.postBlob(blob, extension);
+	}
 
-		const fileKey = uuid();
+	public async postBlob(blob: Blob, extension?: string): Promise<string> {
+		const fileKey = uuid() + (extension || '');
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 		const s3 = new S3();
@@ -60,7 +63,7 @@ export class S3FileUploadService {
 					console.warn('An error during upload', err);
 					resolve(null);
 				} else {
-					// console.log('Uploaded logs', data2);
+					console.log('Uploaded logs', data2);
 					resolve(fileKey);
 				}
 			});

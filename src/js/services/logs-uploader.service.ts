@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as JSZip from 'jszip';
 import { OverwolfService } from './overwolf.service';
 import { SimpleIOService } from './plugins/simple-io.service';
 import { S3FileUploadService } from './s3-file-upload.service';
@@ -16,8 +17,19 @@ export class LogsUploaderService {
 			}
 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
 			const logLines = await this.io.getFileContents(logsLocation);
-			const s3LogFileKey = await this.s3.postLogs(logLines);
-			// console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
+			const jszip = new JSZip.default();
+			console.log('ready to zip', jszip);
+			jszip.file('power.log', logLines);
+			const content: Blob = await jszip.generateAsync({
+				type: 'blob',
+				compression: 'DEFLATE',
+				compressionOptions: {
+					level: 9,
+				},
+			});
+			console.log('generated zip', content);
+			const s3LogFileKey = await this.s3.postBlob(content, '.power.zip');
+			console.log('uploaded logs to S3', s3LogFileKey, 'from location', logsLocation);
 			return s3LogFileKey;
 		} catch (e) {
 			console.error('Exception while uploading logs for troubleshooting', e);
@@ -28,7 +40,7 @@ export class LogsUploaderService {
 	public async uploadAppLogs(): Promise<string> {
 		try {
 			const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
-			const firestoneLogKey = await this.s3.postBinaryFile(firestoneLogs);
+			const firestoneLogKey = await this.s3.postBinaryFile(firestoneLogs, '.app.zip');
 			// console.log('posted Firestone logs', firestoneLogKey);
 			return firestoneLogKey;
 		} catch (e) {
