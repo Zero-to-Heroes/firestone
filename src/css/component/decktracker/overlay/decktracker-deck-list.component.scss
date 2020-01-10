@@ -18,17 +18,27 @@
 		.ps-content {
 			padding-left: 10px;
 			padding-right: 10px;
+			pointer-events: none;
+			position: relative;
+			z-index: 2;
+
+			& > * {
+				pointer-events: all;
+			}
 		}
 		.ps__rail-x {
 			display: none;
 		}
 		.ps__rail-y {
 			opacity: 1;
-			z-index: -1;
+			z-index: 0;
 			&:hover {
-				width: 5px;
+				width: 5px !important;
 				background-color: transparent;
 				opacity: 1;
+				.ps__thumb-y {
+					width: 6px;
+				}
 			}
 			.ps__thumb-y {
 				background-color: var(--color-3);
