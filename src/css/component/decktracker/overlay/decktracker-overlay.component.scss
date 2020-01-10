@@ -34,11 +34,8 @@
 	.decktracker {
 		position: relative;
 		width: 100%;
-		// height: calc(100% - 20px);
 		display: flex;
 		flex-direction: column;
-		// overflow: hidden;
-		max-height: 90vh;
 
 		// This is needed to keep a padding at the bottom of the deck-list (to prevent the scrollbar from
 		// appearing on mouse over) while not showing a background

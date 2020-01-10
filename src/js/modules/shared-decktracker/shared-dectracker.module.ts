@@ -4,6 +4,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SelectModule } from 'ng-select';
+import {
+	PerfectScrollbarConfigInterface,
+	PerfectScrollbarModule,
+	PERFECT_SCROLLBAR_CONFIG,
+} from 'ngx-perfect-scrollbar';
 import { DeckCardComponent } from '../../components/decktracker/overlay/deck-card.component';
 import { DeckListByZoneComponent } from '../../components/decktracker/overlay/deck-list-by-zone.component';
 import { DeckZoneComponent } from '../../components/decktracker/overlay/deck-zone.component';
@@ -16,6 +21,10 @@ import { SharedModule } from '../shared/shared.module';
 
 console.log('version is', process.env.APP_VERSION);
 
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+	suppressScrollX: true,
+};
+
 @NgModule({
 	imports: [
 		BrowserModule,
@@ -25,6 +34,7 @@ console.log('version is', process.env.APP_VERSION);
 		SelectModule,
 		FormsModule,
 		ReactiveFormsModule,
+		PerfectScrollbarModule,
 	],
 	declarations: [
 		DeckTrackerOverlayComponent,
@@ -45,6 +55,12 @@ console.log('version is', process.env.APP_VERSION);
 		DeckZoneComponent,
 		DeckTrackerDeckNameComponent,
 		DeckTrackerTitleBarComponent,
+	],
+	providers: [
+		{
+			provide: PERFECT_SCROLLBAR_CONFIG,
+			useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG,
+		},
 	],
 })
 export class SharedDeckTrackerModule {}

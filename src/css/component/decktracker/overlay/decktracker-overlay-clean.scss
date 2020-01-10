@@ -71,7 +71,7 @@
 			// No scrollbar / background, we can go with the full zoom
 			width: calc(100% + 20px);
 			min-width: calc(100% + 20px);
-			padding-right: 10px;
+			// padding-right: 10px;
 			padding-bottom: 10px;
 		}
 
@@ -104,6 +104,9 @@
 				opacity: 0.3;
 				.dim-overlay {
 					display: none;
+				}
+				&:hover {
+					opacity: 0.7;
 				}
 			}
 		}

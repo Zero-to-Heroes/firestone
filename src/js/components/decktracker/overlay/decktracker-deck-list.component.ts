@@ -24,7 +24,7 @@ import { Events } from '../../../services/events.service';
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
-		<div class="deck-list" (scroll)="onScroll($event)">
+		<perfect-scrollbar class="deck-list" (scroll)="onScroll($event)">
 			<div class="select-container">
 				<ng-select
 					class="display-mode-select"
@@ -59,7 +59,7 @@ import { Events } from '../../../services/events.service';
 				>
 				</grouped-deck-list>
 			</ng-container>
-		</div>
+		</perfect-scrollbar>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })

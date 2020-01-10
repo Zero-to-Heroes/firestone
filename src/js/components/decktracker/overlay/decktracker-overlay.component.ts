@@ -107,56 +107,21 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
-			// console.log('received deck event', event);
-			// if (event && event.event && event.event.name === DeckEvents.MATCH_METADATA) {
-			// 	amplitude.getInstance().logEvent('match-start', {
-			// 		'active-skin': this.useCleanMode ? 'clean' : 'original',
-			// 		'display-mode': this.displayMode,
-			// 	});
-			// }
 			this.gameState = event ? event.state : undefined;
-			// this.showTracker =
-			// 	this.gameState &&
-			// 	this.gameState.playerDeck &&
-			// 	((this.gameState.playerDeck.deck && this.gameState.playerDeck.deck.length > 0) ||
-			// 		(this.gameState.playerDeck.hand && this.gameState.playerDeck.hand.length > 0) ||
-			// 		(this.gameState.playerDeck.board && this.gameState.playerDeck.board.length > 0) ||
-			// 		(this.gameState.playerDeck.otherZone && this.gameState.playerDeck.otherZone.length > 0));
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
 		});
-		// const displayEventBus: BehaviorSubject<any> = this.ow.getMainWindow().decktrackerDisplayEventBus;
-		// this.displaySubscription = displayEventBus.asObservable().subscribe(async event => {
-		// 	// console.log('received display event', event);
-		// 	if (event && this.gameState && this.gameState.playerDeck) {
-		// 		const window = await this.ow.getCurrentWindow();
-		// 		if (window && window.stateEx !== 'normal') {
-		// 			this.restoreWindow();
-		// 		}
-		// 	} else {
-		// 		this.hideWindow();
-		// 	}
-		// });
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
 			if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
 				this.handleDisplayPreferences(event.preferences);
 			}
 		});
-		// if (process.env.NODE_ENV !== 'production') {
-		// 	console.error('Should not allow debug game state from production');
-		// 	this.gameState = this.ow.getMainWindow().deckDebug.state;
-		// 	console.log('game state', this.gameState);
-		// 	if (this.gameState) {
-		// 		this.restoreWindow();
-		// 	}
-		// }
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
 				this.logger.debug('[decktracker-overlay] received new game info', res);
 				await this.changeWindowSize();
-				// await this.changeWindowPosition();
 			}
 		});
 		this.events.on(Events.SHOW_MODAL).subscribe(() => {
@@ -174,9 +139,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 		await this.changeWindowSize();
 		await this.restoreWindowPosition();
-		// await this.changeWindowPosition();
 		await this.handleDisplayPreferences();
-		// await this.restoreWindow();
 		amplitude.getInstance().logEvent('match-start', {
 			'active-skin': this.useCleanMode ? 'clean' : 'original',
 			'display-mode': this.displayMode,
@@ -193,7 +156,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.hideTooltipSubscription.unsubscribe();
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
-		// this.displaySubscription.unsubscribe();
 	}
 
 	@HostListener('mousedown')
@@ -215,7 +177,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 			this.prefs.updateTrackerPosition(window.left, window.top);
 			// console.log('updated tracker position', window.left, window.top);
 		});
-		// this.hasBeenMovedByUser = true;
 	}
 
 	onDisplayModeChanged(pref: string) {
@@ -237,8 +198,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
 		this.onResized();
-		// console.log('switching views?', this.useCleanMode, this.displayMode);
-		// const shouldDisplay = await this.displayService.shouldDisplayOverlay(this.gameState, preferences);
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}

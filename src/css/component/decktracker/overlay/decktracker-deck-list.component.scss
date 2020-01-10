@@ -1,16 +1,56 @@
 .deck-list {
 	overflow: visible;
 	width: 100%;
-	// padding-bottom: 10px;
 
 	overflow-y: auto;
-	width: calc(100% + 10px);
-	min-width: calc(100% + 10px);
+	width: calc(100% + 20px);
+	min-width: calc(100% + 20px);
 	padding-bottom: 10px;
-	// padding-bottom: 0;
-	padding-left: 10px;
+	// margin-left: 10px;
+	// margin-right: 10px;
 	position: relative;
 	left: -10px;
+	max-height: 90vh;
+	// max-height: 50vh;
+
+	// perfect-scrollbar
+	::ng-deep {
+		.ps-content {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		.ps__rail-x {
+			display: none;
+		}
+		.ps__rail-y {
+			opacity: 1;
+			z-index: -1;
+			&:hover {
+				width: 5px;
+				background-color: transparent;
+				opacity: 1;
+			}
+			.ps__thumb-y {
+				background-color: var(--color-3);
+
+				&:hover {
+					background-color: var(--color-2);
+				}
+			}
+		}
+		& > .ps.ps--scrolling-y > .ps__rail-y {
+			opacity: 1;
+			background-color: transparent;
+		}
+		.ps:hover > .ps__rail-x,
+		.ps:hover > .ps__rail-y,
+		.ps--focus > .ps__rail-x,
+		.ps--focus > .ps__rail-y,
+		.ps--scrolling-x > .ps__rail-x,
+		.ps--scrolling-y > .ps__rail-y {
+			opacity: 1;
+		}
+	}
 
 	.select-container {
 		width: 100%;

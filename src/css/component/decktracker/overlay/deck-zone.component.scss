@@ -44,6 +44,9 @@
 	&.other {
 		.card-list li {
 			opacity: 0.5;
+			&:hover {
+				opacity: 0.7;
+			}
 		}
 	}
 

@@ -43,6 +43,7 @@
 		"ng-select": "1.0.1",
 		"ng2-fittext": "^1.2.8",
 		"ngx-logger": "3.3.11",
+		"ngx-perfect-scrollbar": "^8.0.0",
 		"pako": "1.0.10",
 		"queue-typescript": "1.0.1",
 		"rxjs": "6.4.0",
