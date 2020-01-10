@@ -6,6 +6,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	selector: 'deck-card',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/dim-overlay.scss',
 		'../../../../css/component/decktracker/overlay/deck-card.component.scss',
 	],
 	template: `
