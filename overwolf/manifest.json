@@ -183,8 +183,8 @@
 				"class": "HearthstoneReplays.ReplayConverterPlugin"
 			},
 			"mind-vision": {
-				"file": "Files/plugins/Overwolf.UnitySpy.Wrapper.dll",
-				"class": "Overwolf.UnitySpy.Wrapper.MindVisionPlugin"
+				"file": "Files/plugins/OverwolfUnitySpy.dll",
+				"class": "OverwolfUnitySpy.MindVisionPlugin"
 			}
 		},
 		"hotkeys": {
