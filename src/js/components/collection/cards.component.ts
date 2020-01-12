@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, ViewEncapsulation, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	HostListener,
+	Input,
+	OnDestroy,
+	ViewEncapsulation,
+	ViewRef,
+} from '@angular/core';
 import sortBy from 'lodash-es/sortBy';
 import { IOption } from 'ng-select';
 import { Card } from '../../models/card';

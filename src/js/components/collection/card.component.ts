@@ -1,4 +1,15 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	Output,
+	ViewRef,
+} from '@angular/core';
 import { SetCard } from '../../models/set';
 import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
