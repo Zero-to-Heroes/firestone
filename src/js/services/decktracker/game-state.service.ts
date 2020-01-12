@@ -76,6 +76,7 @@ export class GameStateService {
 	private showOpponentHand: boolean;
 
 	private closedByUser: boolean;
+	private gameEnded: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -204,11 +205,15 @@ export class GameStateService {
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			this.closedByUser = false;
+			this.gameEnded = false;
+			this.updateOverlays();
+		} else if (gameEvent.type === GameEvent.GAME_END) {
+			this.gameEnded = true;
 			this.updateOverlays();
 		}
 		for (const parser of this.eventParsers) {
 			try {
-				if (parser.applies(gameEvent, this.state)) {
+				if (parser.applies(gameEvent, this.state, await this.prefs.getPreferences())) {
 					// this.logger.debug(
 					// 	'[game-state] will apply parser',
 					// 	parser.event(),
@@ -337,7 +342,8 @@ export class GameStateService {
 			await this.ow.restoreWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		} else if (
 			opponentHandWindow.window_state_ex !== 'closed' &&
-			(!this.state ||
+			(this.gameEnded ||
+				!this.state ||
 				!this.state.gameStarted ||
 				!this.showOpponentHand ||
 				(this.state.metadata && this.state.metadata.gameType === GameType.GT_BATTLEGROUNDS))

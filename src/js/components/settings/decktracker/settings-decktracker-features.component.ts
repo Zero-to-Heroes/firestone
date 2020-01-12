@@ -28,6 +28,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 					label="No-deck mode"
 					tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
 				></preference-toggle>
+				<preference-toggle
+					field="decktrackerCloseOnGameEnd"
+					label="Close tracker on game end"
+					tooltip="Automatically close the tracker when the game ends. If disabled, the tracker needs to be closed manually"
+				></preference-toggle>
 			</section>
 		</div>
 	`,

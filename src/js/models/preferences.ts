@@ -17,6 +17,7 @@ export class Preferences {
 	readonly decktrackerShowPractice: boolean = true;
 	readonly decktrackerShowFriendly: boolean = true;
 	readonly decktrackerShowCasual: boolean = true;
+	readonly decktrackerCloseOnGameEnd: boolean = true;
 	readonly decktrackerSkin: string = 'original';
 	readonly decktrackerScale: number = 100;
 	readonly decktrackerPosition: { left: number; top: number };
