@@ -262,8 +262,9 @@ export class MainWindowStoreService {
 	}
 
 	private updateNavigationArrows(state: MainWindowState): MainWindowState {
+		const targetIndex = NavigationBackProcessor.getTargetIndex(state, this.stateHistory);
 		const backArrowEnabled =
-			NavigationBackProcessor.getTargetIndex(state, this.stateHistory) !== -1 ||
+			(targetIndex !== -1 && this.stateHistory[targetIndex].state.currentApp === state.currentApp) ||
 			NavigationBackProcessor.buildParentState(state) != null;
 		// const backArrowEnabled = NavigationBackProcessor.buildParentState(state) != null;
 		const nextArrowEnabled = NavigationNextProcessor.getTargetIndex(state, this.stateHistory) !== -1;
