@@ -13,12 +13,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 		<div class="settings-group decktracker-launch">
 			<h2 class="modes">Decktracker is active for the following modes</h2>
 			<section class="toggle-label">
-				<preference-toggle field="showRanked" label="Ranked"></preference-toggle>
-				<preference-toggle field="showArena" label="Arena"></preference-toggle>
-				<preference-toggle field="showTavernBrawl" label="Tavern Brawl"></preference-toggle>
-				<preference-toggle field="showPractice" label="Practice"></preference-toggle>
-				<preference-toggle field="showFriendly" label="Friendly"></preference-toggle>
-				<preference-toggle field="showCasual" label="Casual"></preference-toggle>
+				<preference-toggle field="decktrackerShowRanked" label="Ranked"></preference-toggle>
+				<preference-toggle field="decktrackerShowArena" label="Arena"></preference-toggle>
+				<preference-toggle field="decktrackerShowTavernBrawl" label="Tavern Brawl"></preference-toggle>
+				<preference-toggle field="decktrackerShowPractice" label="Practice"></preference-toggle>
+				<preference-toggle field="decktrackerShowFriendly" label="Friendly"></preference-toggle>
+				<preference-toggle field="decktrackerShowCasual" label="Casual"></preference-toggle>
 			</section>
 		</div>
 	`,
