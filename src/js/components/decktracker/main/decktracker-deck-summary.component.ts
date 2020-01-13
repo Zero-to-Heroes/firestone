@@ -45,7 +45,7 @@ export class DecktrackerDeckSummaryComponent implements AfterViewInit {
 		this._deck = value;
 		this.deckName = value.deckName || 'Deck name';
 		this.totalGames = value.totalGames;
-		this.winRatePercentage = parseFloat('' + value.winRatePercentage).toLocaleString('arab', {
+		this.winRatePercentage = parseFloat('' + value.winRatePercentage).toLocaleString('en-US', {
 			minimumIntegerDigits: 1,
 			maximumFractionDigits: 2,
 		});
