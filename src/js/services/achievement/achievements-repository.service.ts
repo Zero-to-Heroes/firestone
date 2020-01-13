@@ -36,23 +36,57 @@ export class AchievementsRepository {
 	}
 
 	public async loadAggregatedAchievements(useCache = false): Promise<AchievementSet[]> {
+		// console.log('[perf] getting reference data');
 		const [allAchievements, completedAchievements, replayInfos] = await Promise.all([
 			this.achievementsLoader.getAchievements(),
 			useCache ? this.storage.loadAchievementsFromCache() : this.remoteAchievements.loadAchievements(),
 			this.storage.loadAllReplayInfos(),
 		]);
+		// console.log('[perf] merging replay infos');
 		const achievementsWithReplayInfos = this.mergeReplayInfos(allAchievements, replayInfos);
-		// console.log(
-		// 	'[achievements-repository] loading aggregated achievements',
-		// 	allAchievements,
-		// 	completedAchievements,
-		// 	replayInfos,
-		// 	achievementsWithReplayInfos,
-		// 	achievementsWithReplayInfos.find(ach => ach.id === 'dalaran_heist_boss_encounter_DALA_BOSS_74h'),
-		// );
-		return this.setProviders.map(provider =>
-			provider.provide(achievementsWithReplayInfos, completedAchievements as CompletedAchievement[]),
+		// console.log('[perf] mapping set providers');
+		const result = await this.gradualLoadProviders(
+			achievementsWithReplayInfos,
+			completedAchievements as CompletedAchievement[],
 		);
+		// console.log('[perf] finished mapping set providers, returning result', result);
+		return result;
+	}
+
+	private async gradualLoadProviders(
+		achievementsWithReplayInfos: readonly Achievement[],
+		completedAchievements: CompletedAchievement[],
+	) {
+		const it = this.doGradualLoad(achievementsWithReplayInfos, completedAchievements);
+		return new Promise<AchievementSet[]>(resolve => {
+			this.gradualLoad(it, providers => {
+				resolve(providers);
+			});
+		});
+	}
+
+	private gradualLoad(it: IterableIterator<void>, callback) {
+		const itValue = it.next();
+		if (!itValue.done) {
+			setTimeout(() => this.gradualLoad(it, callback), 50);
+		} else {
+			callback(itValue.value);
+		}
+	}
+
+	private *doGradualLoad(
+		achievementsWithReplayInfos: readonly Achievement[],
+		completedAchievements: CompletedAchievement[],
+	): IterableIterator<void> {
+		console.log('starting loading cards');
+		const providers = [];
+		for (const provider of this.setProviders) {
+			providers.push(
+				provider.provide(achievementsWithReplayInfos, completedAchievements as CompletedAchievement[]),
+			);
+			yield;
+		}
+		return providers;
 	}
 
 	private mergeReplayInfos(

@@ -8,8 +8,10 @@ export class AchievementsInitProcessor implements Processor {
 
 	public async process(event: AchievementsInitEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const newAchievements = Object.assign(new AchievementsState(), currentState.achievements, event.newState);
-		return Object.assign(new MainWindowState(), currentState, {
+		const result = Object.assign(new MainWindowState(), currentState, {
 			achievements: newAchievements,
 		} as MainWindowState);
+		// console.log('[perf] returning new state in processor');
+		return result;
 	}
 }

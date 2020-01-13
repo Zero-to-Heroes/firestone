@@ -30,6 +30,8 @@ export abstract class SetProvider {
 		allAchievements: Achievement[],
 		completedAchievemnts?: CompletedAchievement[],
 	): readonly VisualAchievement[] {
+		// console.log('\n[perf] providing', this.id);
+		// console.log('[perf] merging achievements');
 		const mergedAchievements: Achievement[] = !completedAchievemnts
 			? allAchievements
 			: allAchievements.map((ref: Achievement) => {
@@ -39,11 +41,13 @@ export abstract class SetProvider {
 						numberOfCompletions: numberOfCompletions,
 					} as Achievement);
 			  });
+		// console.log('[perf] getting full achievements');
 		const fullAchievements: VisualAchievement[] = mergedAchievements
 			.filter(achievement => this.supportsAchievement(mergedAchievements, achievement.id))
 			.filter(achievement => this.isAchievementVisualRoot(achievement))
 			.map((achievement, index) => this.convertToVisual(achievement, index, mergedAchievements))
 			.map(obj => obj.achievement);
+		// console.log('[perf] returning result');
 		return fullAchievements;
 	}
 

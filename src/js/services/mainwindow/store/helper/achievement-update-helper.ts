@@ -15,12 +15,15 @@ export class AchievementUpdateHelper {
 	}
 
 	public async buildGlobalCategories(useCache = false): Promise<readonly VisualAchievementCategory[]> {
+		// console.log('[perf] getting global categories');
 		const globalCategories: readonly AchievementCategory[] = await this.achievementsRepository.getCategories();
+		// console.log('[perf] loading aggregated achievements');
 		const achievementSets: AchievementSet[] = await this.achievementsRepository.loadAggregatedAchievements(
 			useCache,
 		);
+		// console.log('[perf] building sets', achievementSets);
 		// console.log('[achievements-update] achievementSets', achievementSets);
-		return globalCategories.map(category => {
+		const result = globalCategories.map(category => {
 			return VisualAchievementCategory.create({
 				id: category.id,
 				name: category.name,
@@ -28,6 +31,8 @@ export class AchievementUpdateHelper {
 				achievementSets: this.buildSetsForCategory(achievementSets, category.achievementSetIds),
 			} as VisualAchievementCategory);
 		});
+		// console.log('[perf] returning result');
+		return result;
 	}
 
 	private buildSetsForCategory(achievementSets: AchievementSet[], achievementSetIds: string[]): AchievementSet[] {
