@@ -28,6 +28,10 @@
 			border-right: 1px solid var(--menu-bar-bottom-border-color);
 			height: 100%;
 		}
+
+		with-loading {
+			flex-grow: 1;
+		}
 	}
 
 	.secondary {
