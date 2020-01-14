@@ -4,11 +4,11 @@ import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set, SetCard } from '../../../../../models/set';
-import { AllCardsService } from '../../../../all-cards.service';
 import { CardHistoryStorageService } from '../../../../collection/card-history-storage.service';
 import { IndexedDbService } from '../../../../collection/indexed-db.service';
 import { PackHistoryService } from '../../../../collection/pack-history.service';
 import { MemoryInspectionService } from '../../../../plugins/memory-inspection.service';
+import { SetsService } from '../../../../sets-service.service';
 import { NewCardEvent } from '../../events/collection/new-card-event';
 import { Processor } from '../processor';
 
@@ -20,7 +20,7 @@ export class NewCardProcessor implements Processor {
 		private memoryReading: MemoryInspectionService,
 		private cardHistoryStorage: CardHistoryStorageService,
 		private pityTimer: PackHistoryService,
-		private cards: AllCardsService,
+		private cards: SetsService,
 	) {}
 
 	public async process(event: NewCardEvent, currentState: MainWindowState): Promise<MainWindowState> {

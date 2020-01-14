@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { BinderState } from '../../models/mainwindow/binder-state';
 import { Navigation } from '../../models/mainwindow/navigation';
 import { Set } from '../../models/set';
-import { AllCardsService } from '../../services/all-cards.service';
+import { SetsService } from '../../services/sets-service.service';
 
 @Component({
 	selector: 'collection',
@@ -58,7 +58,7 @@ export class CollectionComponent {
 	standardSets: Set[];
 	wildSets: Set[];
 
-	constructor(private cards: AllCardsService, private cdr: ChangeDetectorRef) {
+	constructor(private cards: SetsService, private cdr: ChangeDetectorRef) {
 		this.init();
 	}
 

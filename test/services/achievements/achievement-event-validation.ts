@@ -1,3 +1,4 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { RawAchievement } from '../../../src/js/models/achievement/raw-achievement';
 import { CompletedAchievement } from '../../../src/js/models/completed-achievement';
@@ -9,7 +10,6 @@ import { AchievementsMonitor } from '../../../src/js/services/achievement/achiev
 import { ChallengeBuilderService } from '../../../src/js/services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../../src/js/services/achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../../src/js/services/achievement/remote-achievements.service.js';
-import { AllCardsService } from '../../../src/js/services/all-cards.service';
 import { DeckParserService } from '../../../src/js/services/decktracker/deck-parser.service';
 import { GameStateService } from '../../../src/js/services/decktracker/game-state.service';
 import { Events } from '../../../src/js/services/events.service';

@@ -1,6 +1,6 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
-import { AllCardsService } from '../../../../all-cards.service';
 import { Requirement } from '../_requirement';
 
 export class DeckbuildingNoCardWithLetterInNameReq implements Requirement {

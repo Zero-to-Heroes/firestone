@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
-import { AllCardsService } from '../all-cards.service';
 import { GameForUpload as Game, Player } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
 

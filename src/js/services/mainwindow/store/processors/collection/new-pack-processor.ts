@@ -1,13 +1,13 @@
-import { Processor } from '../processor';
-import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
-import { NewPackEvent } from '../../events/collection/new-pack-event';
+import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { PackHistory } from '../../../../../models/pack-history';
-import { PackHistoryService } from '../../../../collection/pack-history.service';
-import { IndexedDbService } from '../../../../collection/indexed-db.service';
 import { PityTimer } from '../../../../../models/pity-timer';
 import { Set } from '../../../../../models/set';
-import { AllCardsService } from '../../../../all-cards.service';
+import { IndexedDbService } from '../../../../collection/indexed-db.service';
+import { PackHistoryService } from '../../../../collection/pack-history.service';
+import { NewPackEvent } from '../../events/collection/new-pack-event';
+import { Processor } from '../processor';
 
 export class NewPackProcessor implements Processor {
 	constructor(private indexedDb: IndexedDbService, private allCards: AllCardsService) {}

@@ -1,7 +1,6 @@
+import { AllCardsService, RarityTYpe } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
-import { RarityTYpe } from '../../../../../models/reference-cards/rarity.type';
-import { AllCardsService } from '../../../../all-cards.service';
 import { QualifierType } from '../_qualifier.type';
 import { Requirement } from '../_requirement';
 import { buildCardArraysFromDeck } from './deckbuilding-helper';

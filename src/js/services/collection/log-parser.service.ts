@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Card } from '../../models/card';
-import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 import { NewCardEvent } from '../mainwindow/store/events/collection/new-card-event';
 import { NewPackEvent } from '../mainwindow/store/events/collection/new-pack-event';

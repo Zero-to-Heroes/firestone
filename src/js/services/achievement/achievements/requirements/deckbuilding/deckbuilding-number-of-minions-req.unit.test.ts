@@ -1,8 +1,8 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
 import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
-import { AllCardsService } from '../../../../all-cards.service';
 import { DeckbuildingNumberOfMinionsReq } from './deckbuilding-number-of-minions-req';
 
 describe('deckbuilding-number-of-minions-req', () => {

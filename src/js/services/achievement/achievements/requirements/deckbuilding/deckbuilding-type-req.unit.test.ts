@@ -1,8 +1,8 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
 import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
-import { AllCardsService } from '../../../../all-cards.service';
 import { DeckbuildingTypeReq } from './deckbuilding-type-req';
 
 describe('deckbuilding-type-req', () => {

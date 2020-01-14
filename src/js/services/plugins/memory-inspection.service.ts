@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
-import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { SetsService } from '../sets-service.service';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
@@ -29,7 +29,7 @@ export class MemoryInspectionService {
 		private events: Events,
 		private ow: OverwolfService,
 		private mindVision: MindVisionService,
-		private cards: AllCardsService,
+		private cards: SetsService,
 	) {
 		this.init();
 	}

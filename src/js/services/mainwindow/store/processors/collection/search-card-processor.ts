@@ -3,13 +3,13 @@ import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../../../models/mainwindow/navigation';
 import { SetCard } from '../../../../../models/set';
-import { AllCardsService } from '../../../../all-cards.service';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
+import { SetsService } from '../../../../sets-service.service';
 import { SearchCardsEvent } from '../../events/collection/search-cards-event';
 import { Processor } from '../processor';
 
 export class SearchCardProcessor implements Processor {
-	constructor(private collectionManager: CollectionManager, private cards: AllCardsService) {}
+	constructor(private collectionManager: CollectionManager, private cards: SetsService) {}
 
 	public async process(event: SearchCardsEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const collection = await this.collectionManager.getCollection();

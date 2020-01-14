@@ -1,5 +1,4 @@
-import { ReferenceCard } from '../../../../../models/reference-cards/reference-card';
-import { AllCardsService } from '../../../../all-cards.service';
+import { AllCardsService, ReferenceCard } from '@firestone-hs/replay-parser';
 
 export function buildCardArraysFromDeck(deck: any, cards: AllCardsService): readonly ReferenceCard[] {
 	return deck.cards

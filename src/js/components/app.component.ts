@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, Injector } from '@angular/core';
-import { AllCardsService } from '../services/all-cards.service';
 import { AppBootstrapService } from '../services/app-bootstrap.service';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { PreferencesService } from '../services/preferences.service';
+import { SetsService } from '../services/sets-service.service';
 
 @Component({
 	selector: 'app-root',
@@ -16,7 +16,7 @@ import { PreferencesService } from '../services/preferences.service';
 export class AppComponent {
 	constructor(
 		private injector: Injector,
-		private cards: AllCardsService,
+		private cards: SetsService,
 		private debug: DebugService,
 		private ow: OverwolfService,
 		private prefs: PreferencesService,

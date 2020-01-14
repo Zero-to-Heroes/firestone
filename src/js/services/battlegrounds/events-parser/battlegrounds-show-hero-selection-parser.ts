@@ -1,8 +1,8 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
 import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
 import { MainWindowState } from '../../../models/mainwindow/main-window-state';
-import { AllCardsService } from '../../all-cards.service';
 import { BattlegroundsHeroInfoService } from '../battlegrounds-hero-info.service';
 import { EventParser } from './event-parser';
 

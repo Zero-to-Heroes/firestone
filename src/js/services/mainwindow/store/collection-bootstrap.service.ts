@@ -4,12 +4,12 @@ import { CardHistory } from '../../../models/card-history';
 import { BinderState } from '../../../models/mainwindow/binder-state';
 import { PityTimer } from '../../../models/pity-timer';
 import { Set, SetCard } from '../../../models/set';
-import { AllCardsService } from '../../all-cards.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
 import { Events } from '../../events.service';
 import { OverwolfService } from '../../overwolf.service';
+import { SetsService } from '../../sets-service.service';
 import { CollectionInitEvent } from './events/collection/collection-init-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 
@@ -22,7 +22,7 @@ export class CollectionBootstrapService {
 		private readonly cardHistoryStorage: CardHistoryStorageService,
 		private readonly collectionManager: CollectionManager,
 		private readonly pityTimer: PackHistoryService,
-		private readonly cards: AllCardsService,
+		private readonly cards: SetsService,
 		private readonly ow: OverwolfService,
 	) {
 		this.events.on(Events.START_POPULATE_COLLECTION_STATE).subscribe(event => this.initCollectionState());

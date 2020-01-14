@@ -1,7 +1,6 @@
+import { AllCardsService, ReferenceCard } from '@firestone-hs/replay-parser';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../../models/game-event';
-import { ReferenceCard } from '../../../../../models/reference-cards/reference-card';
-import { AllCardsService } from '../../../../all-cards.service';
 import { QualifierType } from '../_qualifier.type';
 import { Requirement } from '../_requirement';
 import { buildCardArraysFromDeck } from './deckbuilding-helper';

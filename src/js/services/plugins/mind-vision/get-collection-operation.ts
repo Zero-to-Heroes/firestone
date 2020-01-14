@@ -1,13 +1,13 @@
 import { Card } from '../../../models/card';
-import { AllCardsService } from '../../all-cards.service';
 import { OverwolfService } from '../../overwolf.service';
+import { SetsService } from '../../sets-service.service';
 import { MindVisionOperationFacade } from './mind-vision-operation-facade';
 import { MindVisionService } from './mind-vision.service';
 
 export class GetCollectionOperation extends MindVisionOperationFacade<readonly Card[]> {
 	private basicCards;
 
-	constructor(mindVision: MindVisionService, ow: OverwolfService, private allCards: AllCardsService) {
+	constructor(mindVision: MindVisionService, ow: OverwolfService, private allCards: SetsService) {
 		super(
 			ow,
 			'getCollection',

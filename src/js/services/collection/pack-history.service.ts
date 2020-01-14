@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-
-import { IndexedDbService } from './indexed-db.service';
 import { PityTimer } from '../../models/pity-timer';
-import { AllCardsService } from '../all-cards.service';
+import { SetsService } from '../sets-service.service';
+import { IndexedDbService } from './indexed-db.service';
 
 @Injectable()
 export class PackHistoryService {
 	public static readonly DEFAULT_EPIC_PITY_TIMER: number = 10;
 	public static readonly DEFAULT_LEGENDARY_PITY_TIMER: number = 40;
 
-	constructor(private indexedDb: IndexedDbService, private allCards: AllCardsService) {}
+	constructor(private indexedDb: IndexedDbService, private allCards: SetsService) {}
 
 	public getPityTimers(): Promise<PityTimer[]> {
 		return new Promise<PityTimer[]>(resolve => {

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Card } from '../../models/card';
-import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
+import { SetsService } from '../sets-service.service';
 
 @Injectable()
 export class PackStatsService {
@@ -16,7 +16,7 @@ export class PackStatsService {
 
 	constructor(
 		private events: Events,
-		private allCards: AllCardsService,
+		private allCards: SetsService,
 		private ow: OverwolfService,
 		private http: HttpClient,
 	) {

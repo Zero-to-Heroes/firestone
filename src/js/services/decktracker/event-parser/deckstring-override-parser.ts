@@ -1,9 +1,9 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
-import { AllCardsService } from '../../all-cards.service';
 import { DeckParserService } from '../deck-parser.service';
 import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';

@@ -1,11 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { GameType } from '@firestone-hs/reference-data';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
-import { AllCardsService } from '../all-cards.service';
 import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { TwitchAuthService } from '../mainwindow/twitch-auth.service';
@@ -379,9 +379,9 @@ export class GameStateService {
 	private buildEventParsers(): readonly EventParser[] {
 		return [
 			new GameStartParser(this.deckParser, this.prefs, this.allCards),
-			new MatchMetadataParser(this.deckParser, this.allCards),
-			new MulliganOverParser(this.deckParser, this.allCards),
-			new MainStepReadyParser(this.deckParser, this.allCards),
+			new MatchMetadataParser(),
+			new MulliganOverParser(),
+			new MainStepReadyParser(),
 			new CardDrawParser(this.helper),
 			new ReceiveCardInHandParser(this.helper, this.allCards),
 			new CardBackToDeckParser(this.helper, this.allCards),
@@ -393,7 +393,7 @@ export class GameStateService {
 			new CardPlayedFromHandParser(this.helper, this.allCards),
 			new SecretPlayedFromHandParser(this.helper),
 			new EndOfEchoInHandParser(this.helper),
-			new GameEndParser(this.deckParser, this.allCards),
+			new GameEndParser(),
 			new DiscardedCardParser(this.helper),
 			new CardRecruitedParser(this.helper),
 			new MinionBackOnBoardParser(this.helper),

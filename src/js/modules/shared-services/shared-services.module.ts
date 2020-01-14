@@ -7,7 +7,6 @@ import { AchievementsRepository } from '../../services/achievement/achievements-
 import { ChallengeBuilderService } from '../../services/achievement/achievements/challenges/challenge-builder.service';
 import { AchievementsLoaderService } from '../../services/achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from '../../services/achievement/indexed-db.service';
-import { AllCardsService } from '../../services/all-cards.service';
 import { CardHistoryStorageService } from '../../services/collection/card-history-storage.service';
 import { CollectionManager } from '../../services/collection/collection-manager.service';
 import { IndexedDbService } from '../../services/collection/indexed-db.service';
@@ -23,6 +22,7 @@ import { MindVisionService } from '../../services/plugins/mind-vision/mind-visio
 import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
+import { SetsService } from '../../services/sets-service.service';
 
 @NgModule({
 	imports: [BrowserModule, LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG })],
@@ -35,7 +35,7 @@ export class SharedServicesModule {
 		return {
 			ngModule: SharedServicesModule,
 			providers: [
-				AllCardsService,
+				SetsService,
 				DebugService,
 				Events,
 				GenericIndexedDbService,

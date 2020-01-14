@@ -1,9 +1,8 @@
+import { AllCardsService, RarityTYpe } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
 import cardsJson from '../../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../../models/achievement/raw-requirement.js';
 import { GameEvent } from '../../../../../models/game-event';
-import { RarityTYpe } from '../../../../../models/reference-cards/rarity.type.js';
-import { AllCardsService } from '../../../../all-cards.service';
 import { DeckbuildingRarityReq } from './deckbuilding-rarity-req';
 
 describe('deckbuilding-rarity-req', () => {

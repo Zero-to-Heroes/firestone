@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
@@ -9,7 +10,6 @@ import { AchievementsLocalStorageService } from '../../achievement/achievements-
 import { AchievementsRepository } from '../../achievement/achievements-repository.service';
 import { AchievementsLoaderService } from '../../achievement/data/achievements-loader.service';
 import { RemoteAchievementsService } from '../../achievement/remote-achievements.service';
-import { AllCardsService } from '../../all-cards.service';
 import { CardHistoryStorageService } from '../../collection/card-history-storage.service';
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
@@ -23,6 +23,7 @@ import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
 import { SimpleIOService } from '../../plugins/simple-io.service';
 import { ProcessingQueue } from '../../processing-queue.service';
+import { SetsService } from '../../sets-service.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
 import { GameStatsUpdaterService } from '../../stats/game/game-stats-updater.service';
 import { UserService } from '../../user.service';
@@ -138,6 +139,7 @@ export class MainWindowStoreService {
 
 	constructor(
 		private cards: AllCardsService,
+		private sets: SetsService,
 		private achievementsRepository: AchievementsRepository,
 		private collectionManager: CollectionManager,
 		private cardHistoryStorage: CardHistoryStorageService,
@@ -318,7 +320,7 @@ export class MainWindowStoreService {
 			new CollectionSetsFilterProcessor(),
 
 			SearchCardsEvent.eventName(),
-			new SearchCardProcessor(this.collectionManager, this.cards),
+			new SearchCardProcessor(this.collectionManager, this.sets),
 
 			LoadMoreCardHistoryEvent.eventName(),
 			new LoadMoreCardHistoryProcessor(this.cardHistoryStorage),
@@ -336,7 +338,7 @@ export class MainWindowStoreService {
 			new ToggleShowOnlyNewCardsInHistoryProcessor(),
 
 			UpdateCardSearchResultsEvent.eventName(),
-			new UpdateCardSearchResultsProcessor(this.collectionManager, this.cards),
+			new UpdateCardSearchResultsProcessor(this.collectionManager, this.sets),
 
 			NewPackEvent.eventName(),
 			new NewPackProcessor(this.collectionDb, this.cards),
@@ -347,7 +349,7 @@ export class MainWindowStoreService {
 				this.memoryReading,
 				this.cardHistoryStorage,
 				this.pityTimer,
-				this.cards,
+				this.sets,
 			),
 
 			// Achievements

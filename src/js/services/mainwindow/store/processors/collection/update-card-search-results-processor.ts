@@ -2,13 +2,13 @@ import { Card } from '../../../../../models/card';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { SetCard } from '../../../../../models/set';
-import { AllCardsService } from '../../../../all-cards.service';
 import { CollectionManager } from '../../../../collection/collection-manager.service';
+import { SetsService } from '../../../../sets-service.service';
 import { UpdateCardSearchResultsEvent } from '../../events/collection/update-card-search-results-event';
 import { Processor } from '../processor';
 
 export class UpdateCardSearchResultsProcessor implements Processor {
-	constructor(private collectionManager: CollectionManager, private cards: AllCardsService) {}
+	constructor(private collectionManager: CollectionManager, private cards: SetsService) {}
 
 	public async process(event: UpdateCardSearchResultsEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const collection = await this.collectionManager.getCollection();

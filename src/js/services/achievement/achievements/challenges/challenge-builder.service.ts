@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { RawAchievement } from '../../../../models/achievement/raw-achievement';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
-import { AllCardsService } from '../../../all-cards.service';
 import { MemoryInspectionService } from '../../../plugins/memory-inspection.service';
 import { ArmorAtEndReq } from '../requirements/armor-at-end-req';
 import { BattlegroundsFinishReq } from '../requirements/battlegrounds/battlegrounds-finish-req';

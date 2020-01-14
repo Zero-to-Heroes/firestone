@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
-import { AllCardsService } from '../all-cards.service';
 
 @Injectable()
 export class DeckCardService {

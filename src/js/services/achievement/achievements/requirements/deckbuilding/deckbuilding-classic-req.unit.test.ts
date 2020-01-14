@@ -1,7 +1,7 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
 import cardsJson from '../../../../../../../test/cards.json';
 import { GameEvent } from '../../../../../models/game-event';
-import { AllCardsService } from '../../../../all-cards.service';
 import { DeckbuildingClassicReq } from './deckbuilding-classic-req';
 
 describe('deckbuilding-classic-req', () => {

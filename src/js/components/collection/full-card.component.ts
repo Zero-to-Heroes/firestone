@@ -9,8 +9,8 @@ import {
 	ViewEncapsulation,
 } from '@angular/core';
 import { SetCard } from '../../models/set';
-import { AllCardsService } from '../../services/all-cards.service';
 import { Events } from '../../services/events.service';
+import { SetsService } from '../../services/sets-service.service';
 
 declare var amplitude;
 
@@ -84,7 +84,7 @@ export class FullCardComponent {
 	// Soi we can cancel a playing sound if a new card is displayed
 	private previousClips = [];
 
-	constructor(private events: Events, private elRef: ElementRef, private cards: AllCardsService) {}
+	constructor(private events: Events, private elRef: ElementRef, private cards: SetsService) {}
 
 	@Input('selectedCard') set selectedCard(selectedCard: SetCard) {
 		if (!selectedCard) {

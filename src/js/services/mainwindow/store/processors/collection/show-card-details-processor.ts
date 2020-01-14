@@ -1,8 +1,8 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BinderState } from '../../../../../models/mainwindow/binder-state';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { Navigation } from '../../../../../models/mainwindow/navigation';
 import { Set, SetCard } from '../../../../../models/set';
-import { AllCardsService } from '../../../../all-cards.service';
 import { ShowCardDetailsEvent } from '../../events/collection/show-card-details-event';
 import { Processor } from '../processor';
 

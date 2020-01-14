@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
-import { AllCardsService } from '../../all-cards.service';
 
 @Injectable()
 export class DeckManipulationHelper {

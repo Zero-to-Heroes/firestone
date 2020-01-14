@@ -1,7 +1,7 @@
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import cardsJson from '../../../../../../test/cards.json';
 import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent, GameState } from '../../../../models/game-event';
-import { AllCardsService } from '../../../all-cards.service';
 import { BoardFullOfSameLegendaryMinionReq } from './board-full-of-same-legendary-minion-req';
 
 describe('board-full-of-same-legendary-minion-req', () => {
