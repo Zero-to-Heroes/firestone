@@ -4,13 +4,10 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	EventEmitter,
 	HostListener,
 	Input,
-	Output,
 	ViewRef,
 } from '@angular/core';
-import { IOption } from 'ng-select';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Events } from '../../../services/events.service';
@@ -25,25 +22,6 @@ import { Events } from '../../../services/events.service';
 	],
 	template: `
 		<perfect-scrollbar class="deck-list" (scroll)="onScroll($event)">
-			<div class="select-container">
-				<ng-select
-					class="display-mode-select"
-					[options]="displayModeSelectOptions"
-					(opened)="refresh()"
-					(closed)="refresh()"
-					(selected)="selectDisplayMode($event)"
-					[ngModel]="displayMode"
-				>
-					<ng-template #optionTemplate let-option="option">
-						<span>{{ option?.label }}</span>
-						<i class="i-30" *ngIf="option.value === displayMode">
-							<svg class="svg-icon-fill">
-								<use xlink:href="assets/svg/sprite.svg#selected_dropdown" />
-							</svg>
-						</i>
-					</ng-template>
-				</ng-select>
-			</div>
 			<ng-container [ngSwitch]="displayMode">
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
@@ -75,13 +53,6 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 		this._tooltipPosition = value;
 	}
 
-	@Output() onDisplayModeChanged: EventEmitter<string> = new EventEmitter<string>();
-
-	displayModeSelectOptions: IOption[] = [
-		{ label: 'Card location', value: 'DISPLAY_MODE_ZONE' },
-		{ label: 'Focus on deck', value: 'DISPLAY_MODE_GROUPED' },
-	];
-
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
 
 	ngAfterViewInit() {
@@ -101,11 +72,6 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
-	}
-
-	selectDisplayMode(option: IOption) {
-		console.log('changing display mode', option);
-		this.onDisplayModeChanged.next(option.value);
 	}
 
 	// Prevent the window from being dragged around if user scrolls with click

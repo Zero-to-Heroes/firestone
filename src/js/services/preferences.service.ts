@@ -54,11 +54,11 @@ export class PreferencesService {
 		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
 	}
 
-	public async setOverlayDisplayMode(pref: string) {
-		const prefs = await this.getPreferences();
-		const newPrefs: Preferences = { ...prefs, overlayDisplayMode: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
-	}
+	// public async setOverlayDisplayMode(pref: string) {
+	// 	const prefs = await this.getPreferences();
+	// 	const newPrefs: Preferences = { ...prefs, overlayDisplayMode: pref };
+	// 	this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+	// }
 
 	public async setTwitchAccessToken(pref: string) {
 		const prefs = await this.getPreferences();

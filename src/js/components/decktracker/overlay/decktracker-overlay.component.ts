@@ -53,7 +53,6 @@ declare var amplitude;
 						<decktracker-deck-list
 							[deckState]="gameState.playerDeck"
 							[displayMode]="displayMode"
-							(onDisplayModeChanged)="onDisplayModeChanged($event)"
 							[highlightCardsInHand]="highlightCardsInHand"
 							[tooltipPosition]="tooltipPosition"
 						>
@@ -179,16 +178,11 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 	}
 
-	onDisplayModeChanged(pref: string) {
-		this.prefs.setOverlayDisplayMode(pref);
-	}
-
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.useCleanMode = preferences.decktrackerSkin === 'clean';
-		this.displayMode = this.useCleanMode
-			? 'DISPLAY_MODE_GROUPED'
-			: preferences.overlayDisplayMode || 'DISPLAY_MODE_ZONE';
+		this.displayMode =
+			!preferences.overlayGroupByZone || this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
 		this.showTitleBar = preferences.overlayShowTitleBar;
 		this.overlayWidthInPx = preferences.overlayWidthInPx;
 		this.opacity = preferences.overlayOpacityInPercent / 100;

@@ -95,6 +95,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[field]="'overlayShowTooltipsOnHover'"
 					[label]="'Show card tooltips'"
 				></preference-toggle>
+				<preference-toggle
+					field="overlayGroupByZone"
+					label="Group cards by zone"
+					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
+				></preference-toggle>
 				<preference-slider
 					class="first-slider"
 					[field]="'overlayWidthInPx'"

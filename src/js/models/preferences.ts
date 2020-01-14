@@ -26,12 +26,13 @@ export class Preferences {
 	readonly dectrackerShowOpponentGuess: boolean = true;
 	readonly decktrackerNoDeckMode: boolean = false;
 
-	readonly overlayDisplayMode: string;
+	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
 	readonly overlayHighlightCardsInHand: boolean = false;
 	readonly overlayWidthInPx: number = 250;
 	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayShowTooltipsOnHover: boolean = true;
+	readonly overlayGroupByZone: boolean = true;
 
 	readonly replaysShowNotification: boolean = true;
 
