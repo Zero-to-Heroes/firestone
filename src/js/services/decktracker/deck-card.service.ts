@@ -2,21 +2,20 @@ import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
-import { GameState } from '../../models/decktracker/game-state';
 
 @Injectable()
 export class DeckCardService {
 	constructor(private cards: AllCardsService) {}
 
-	// Doesn't handle dynamic zones, so should be called before dynamic zones are built
-	public fillMissingCardInfo(gameState: GameState): GameState {
-		return Object.assign(new GameState(), gameState, {
-			playerDeck: this.fillDeck(gameState.playerDeck),
-			opponentDeck: this.fillDeck(gameState.opponentDeck),
-		} as GameState);
-	}
+	// public fillMissingCardInfo(gameState: GameState): GameState {
+	// 	return Object.assign(new GameState(), gameState, {
+	// 		playerDeck: this.fillMissingCardInfoInDeck(gameState.playerDeck),
+	// 		opponentDeck: this.fillMissingCardInfoInDeck(gameState.opponentDeck),
+	// 	} as GameState);
+	// }
 
-	private fillDeck(deckState: DeckState): DeckState {
+	// Doesn't handle dynamic zones, so should be called before dynamic zones are built
+	public fillMissingCardInfoInDeck(deckState: DeckState): DeckState {
 		return Object.assign(new DeckState(), deckState, {
 			board: this.fillZone(deckState.board),
 			deck: this.fillZone(deckState.deck),

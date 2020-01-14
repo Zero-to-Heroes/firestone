@@ -38,7 +38,17 @@ export class DeckListByZoneComponent {
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (deckState.dynamicZones.length === 0) {
 			const otherZone = [...deckState.otherZone, ...deckState.board];
-			zones.push(this.buildZone(otherZone, 'other', 'Other', (a, b) => a.manaCost - b.manaCost));
+			zones.push(
+				this.buildZone(
+					otherZone,
+					'other',
+					'Other',
+					(a, b) => a.manaCost - b.manaCost,
+					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
+					// not show them in the zones
+					(a: VisualDeckCard) => a.zone !== 'SETASIDE',
+				),
+			);
 		}
 		// Otherwise, we add all the dynamic zones
 		deckState.dynamicZones.forEach(zone => {
@@ -72,15 +82,18 @@ export class DeckListByZoneComponent {
 		id: string,
 		name: string,
 		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
+		filterFunction?: (a: VisualDeckCard) => boolean,
 	): DeckZone {
 		return {
 			id: id,
 			name: name,
-			cards: cards.map(card =>
-				Object.assign(new VisualDeckCard(), card, {
-					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-				} as VisualDeckCard),
-			),
+			cards: cards
+				.map(card =>
+					Object.assign(new VisualDeckCard(), card, {
+						creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+					} as VisualDeckCard),
+				)
+				.filter(card => !filterFunction || filterFunction(card)),
 			sortingFunction: sortingFunction,
 		} as DeckZone;
 	}

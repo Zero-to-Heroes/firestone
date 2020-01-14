@@ -2,24 +2,23 @@ import { Injectable } from '@angular/core';
 import { CardMetaInfo } from '../../models/decktracker/card-meta-info';
 import { DeckCard } from '../../models/decktracker/deck-card';
 import { DeckState } from '../../models/decktracker/deck-state';
-import { GameState } from '../../models/decktracker/game-state';
 
 @Injectable()
 export class GameStateMetaInfoService {
-	public addMetaInfos(gameState: GameState): GameState {
-		if (!gameState) {
-			return gameState;
-		}
-		const playerDeck = this.updateDeck(gameState.playerDeck, gameState.currentTurn);
-		const opponentDeck = this.updateDeck(gameState.opponentDeck, gameState.currentTurn);
+	// public addMetaInfos(gameState: GameState): GameState {
+	// 	if (!gameState) {
+	// 		return gameState;
+	// 	}
+	// 	const playerDeck = this.updateDeck(gameState.playerDeck, gameState.currentTurn);
+	// 	const opponentDeck = this.updateDeck(gameState.opponentDeck, gameState.currentTurn);
 
-		return Object.assign(new GameState(), gameState, {
-			playerDeck: playerDeck,
-			opponentDeck: opponentDeck,
-		} as GameState);
-	}
+	// 	return Object.assign(new GameState(), gameState, {
+	// 		playerDeck: playerDeck,
+	// 		opponentDeck: opponentDeck,
+	// 	} as GameState);
+	// }
 
-	private updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
+	public updateDeck(deckState: DeckState, currentTurn: number | 'mulligan'): DeckState {
 		return Object.assign(new DeckState(), deckState, {
 			board: this.cleanZone(deckState.board),
 			deck: this.cleanZone(deckState.deck),

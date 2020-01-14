@@ -3,6 +3,7 @@ import { GameType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
+import { DeckState } from '../../models/decktracker/deck-state';
 import { GameState } from '../../models/decktracker/game-state';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
@@ -230,28 +231,20 @@ export class GameStateService {
 					if (stateAfterParser) {
 						// Add information that is not linked to events, like the number of turns the
 						// card has been present in the zone
-						const stateWithMetaInfos = this.gameStateMetaInfos.addMetaInfos(stateAfterParser);
-						// this.logger.debug('[game-state] stateWithMetaInfos', stateWithMetaInfos);
-						// Add missing info like card names, if the card added doesn't come from a deck state
-						// (like with the Chess brawl)
-						const newState = this.deckCardService.fillMissingCardInfo(stateWithMetaInfos);
-						// this.logger.debug('[game-state] newState', newState);
-						const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState.playerDeck);
-						// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
-						const stateFromTracker = gameEvent.gameState || ({} as any);
-						const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(
-							playerDeckWithDynamicZones,
-							stateFromTracker.Player,
+						const updatedPlayerDeck = this.updateDeck(
+							stateAfterParser.playerDeck,
+							stateAfterParser,
+							(gameEvent.gameState || ({} as any)).Player,
 						);
-						// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
-						const opponentDeckWithZonesOrdered = this.zoneOrdering.orderZones(
-							newState.opponentDeck,
-							stateFromTracker.Opponent,
+						const udpatedOpponentDeck = this.updateDeck(
+							stateAfterParser.opponentDeck,
+							stateAfterParser,
+							(gameEvent.gameState || ({} as any)).Opponent,
 						);
 						// this.logger.debug('[game-state] opponentDeckWithZonesOrdered', opponentDeckWithZonesOrdered);
-						this.state = Object.assign(new GameState(), newState, {
-							playerDeck: playerDeckWithZonesOrdered,
-							opponentDeck: opponentDeckWithZonesOrdered,
+						this.state = Object.assign(new GameState(), stateAfterParser, {
+							playerDeck: updatedPlayerDeck,
+							opponentDeck: udpatedOpponentDeck,
 						} as GameState);
 						// this.logger.debug('[game-state] this.state', this.state);
 					} else {
@@ -291,6 +284,19 @@ export class GameStateService {
 				this.logger.error('[game-state] Exception while applying parser', parser.event(), e);
 			}
 		}
+	}
+
+	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
+		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
+		// Add missing info like card names, if the card added doesn't come from a deck state
+		// (like with the Chess brawl)
+		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
+		// this.logger.debug('[game-state] newState', newState);
+		const playerDeckWithDynamicZones = this.dynamicZoneHelper.fillDynamicZones(newState);
+		// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
+		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
+		// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
+		return playerDeckWithZonesOrdered;
 	}
 
 	private async updateOverlays() {
