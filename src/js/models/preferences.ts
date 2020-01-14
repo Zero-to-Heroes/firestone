@@ -29,7 +29,7 @@ export class Preferences {
 	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
 	readonly overlayHighlightCardsInHand: boolean = false;
-	readonly overlayWidthInPx: number = 250;
+	readonly overlayWidthInPx: number = 227;
 	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayGroupByZone: boolean = true;
