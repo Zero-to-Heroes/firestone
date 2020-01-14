@@ -5,9 +5,10 @@ import {
 	Component,
 	EventEmitter,
 	OnDestroy,
-	ViewRef,
 	ViewEncapsulation,
+	ViewRef,
 } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
@@ -57,10 +58,12 @@ export class BattlegroundsHeroSelectionOverlayComponent implements AfterViewInit
 		private logger: NGXLogger,
 		private cdr: ChangeDetectorRef,
 		private ow: OverwolfService,
+		private cards: AllCardsService,
 		private init_DebugService: DebugService,
 	) {}
 
 	async ngAfterViewInit() {
+		this.cards.initializeCardsDb();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const eventBus: EventEmitter<any> = this.ow.getMainWindow().battlegroundsEventBus;
 		this.stateSubscription = eventBus.subscribe(async event => {
