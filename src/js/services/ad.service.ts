@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { OverwolfService } from './overwolf.service';
 
 const NO_AD_PLAN = 13;
-const SUBSCRIPTION_STATUS_ENDPOINT_GET = 'https://rpeze8ckdl.execute-api.us-west-2.amazonaws.com/Prod/subscriptions';
 
 @Injectable()
 export class AdService {
@@ -20,6 +19,7 @@ export class AdService {
 				this.ow.getActiveSubscriptionPlans(),
 				this.ow.getCurrentUser(),
 			]);
+			console.log('active plans', activePlans);
 			if (activePlans && activePlans.plans && activePlans.plans.indexOf(NO_AD_PLAN) !== -1) {
 				console.log('User has a no-ad subscription, not showing ads', activePlans);
 				resolve(false);
@@ -35,22 +35,7 @@ export class AdService {
 				resolve(true);
 				return;
 			}
-			console.log(
-				'contacting subscription API',
-				`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`,
-			);
-			this.http.get(`${SUBSCRIPTION_STATUS_ENDPOINT_GET}/${user.userId}/${username}`).subscribe(
-				res => {
-					console.log('retrieved sub status for', username, res);
-					resolve(false);
-					return;
-				},
-				error => {
-					console.log('no subscription, showign ads');
-					resolve(true);
-					return;
-				},
-			);
+			resolve(true);
 		});
 	}
 }
