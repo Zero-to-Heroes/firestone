@@ -19,7 +19,7 @@ import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.compone
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class HelpTooltipDirective implements OnInit, OnDestroy {
 	@Input('helpTooltip') text = '';
-	@Input('helpTooltipPosition') position: 'bottom' | 'right' = 'bottom';
+	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' = 'bottom';
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -58,11 +58,20 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 							overlayY: 'top',
 						},
 				  ]
-				: [
+				: this.position === 'right'
+				? [
 						{
 							originX: 'end',
 							originY: 'center',
 							overlayX: 'start',
+							overlayY: 'center',
+						},
+				  ]
+				: [
+						{
+							originX: 'start',
+							originY: 'center',
+							overlayX: 'end',
 							overlayY: 'center',
 						},
 				  ];

@@ -298,7 +298,14 @@ export class GameEvents {
 				break;
 			case 'CARD_CHANGED_ON_BOARD':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent));
+				const summonAdditionProps2 = gameEvent.Value.AdditionalProps
+					? {
+							creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					  }
+					: null;
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.CARD_CHANGED_ON_BOARD, gameEvent, summonAdditionProps2),
+				);
 				break;
 			case 'RECEIVE_CARD_IN_HAND':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);

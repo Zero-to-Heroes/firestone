@@ -16,6 +16,7 @@ export class CardChangedOnBoardParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const creatorCardId = gameEvent.additionalData ? gameEvent.additionalData.creatorCardId : null;
 
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
@@ -32,6 +33,7 @@ export class CardChangedOnBoardParser implements EventParser {
 			cardName: dbCard.name,
 			manaCost: dbCard.cost,
 			rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : null,
+			creatorCardId: creatorCardId,
 		} as DeckCard);
 		const boardWithRemovedCard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
 			deck.board,
