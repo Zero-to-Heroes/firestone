@@ -1,0 +1,40 @@
+.cards-recap {
+	display: flex;
+	flex-grow: 0;
+	flex-shrink: 0;
+	width: 120px;
+}
+
+.recap {
+	display: flex;
+	width: 60px;
+	height: 30px;
+	border: 1px solid var(--color-1);
+	background: var(--color-5);
+	padding: 2px;
+	flex-grow: 0;
+	flex-shrink: 0;
+}
+
+.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	shape-rendering: crispedges;
+}
+
+.count {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--color-7);
+	color: var(--color-1);
+	font-family: Sumana;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 13px;
+	text-align: center;
+	height: 24px;
+	width: 24px;
+}

@@ -1,50 +1,24 @@
 .deck-name {
-    height: 45px;
-    border: 2px solid #FFB948;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1px;
-    position: relative;
+	height: 30px;
+	border: 1px solid var(--color-1);
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	position: relative;
+	background: var(--color-7);
+	padding-left: 10px;
+	padding-right: 10px;
+	z-index: 1;
 
-    .background-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-    }
-
-    .gradiant {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(90.62deg, #020407 25.55%, rgba(2, 4, 7, 0) 99.11%);
-    }
-
-    .inner-border {
-        height: 100%;
-        flex-grow: 1;
-        border: 1px solid #FFB948;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        padding-left: 20px;
-        z-index: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-width: 0;
-
-        span {
-            font-family: Sumana;
-            font-style: normal;
-            font-weight: normal;
-            line-height: normal;
-            font-size: 18px;            
-            color: #FFB948;
-        }
-    }
+	span {
+		font-family: Sumana;
+		font-style: normal;
+		font-weight: normal;
+		line-height: normal;
+		font-size: 14px;
+		color: var(--color-1);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }

@@ -60,18 +60,18 @@ export class DeckTrackerControlBarComponent {
 			);
 	}
 
-	async importDeckstring() {
-		const clipboardContent = await this.ow.getFromClipboard();
-		// console.log('clipboard content', clipboardContent);
-		if (clipboardContent) {
-			this.deckUpdater.next(
-				Object.assign(new GameEvent(), {
-					type: 'DECKSTRING_OVERRIDE',
-					additionalData: {
-						clipboardContent: clipboardContent,
-					},
-				} as GameEvent),
-			);
-		}
-	}
+	// async importDeckstring() {
+	// 	const clipboardContent = await this.ow.getFromClipboard();
+	// 	// console.log('clipboard content', clipboardContent);
+	// 	if (clipboardContent) {
+	// 		this.deckUpdater.next(
+	// 			Object.assign(new GameEvent(), {
+	// 				type: 'DECKSTRING_OVERRIDE',
+	// 				additionalData: {
+	// 					clipboardContent: clipboardContent,
+	// 				},
+	// 			} as GameEvent),
+	// 		);
+	// 	}
+	// }
 }

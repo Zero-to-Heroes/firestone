@@ -63,11 +63,13 @@
 		decktracker-control-bar {
 			flex-grow: 0;
 			flex-shrink: 0;
+			z-index: 1;
 		}
 
-		decktracker-deck-name {
+		decktracker-title-bar {
 			flex-grow: 0;
 			flex-shrink: 0;
+			z-index: 1;
 		}
 
 		decktracker-deck-list {

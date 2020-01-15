@@ -91,6 +91,18 @@
 		<circle cx="10" cy="10" r="9.5" stroke="var(--icon-color, currentcolor)"/>
 		<path d="M10 13C8.3 13 7 11.7 7 10C7 8.3 8.3 7 10 7C11.7 7 13 8.3 13 10C13 11.7 11.7 13 10 13Z" fill="var(--icon-color-secondary, currentcolor)"/>
 	</symbol>
+	<!-- 26x22 -->
+	<symbol id="cards_in_hand" viewBox="0 0 26 22">
+		<rect x="3.39191" y="5.90792" width="8.51924" height="12.4023" transform="rotate(-14.6618 3.39191 5.90792)" fill="#101530" stroke="#9FB6D7" stroke-width="0.8"/>
+		<rect x="8.9406" y="3.41654" width="8.51924" height="12.4023" transform="rotate(2.42157 8.9406 3.41654)" fill="#101530" stroke="#9FB6D7" stroke-width="0.8"/>
+		<rect x="14.3729" y="4.3255" width="8.51924" height="12.4023" transform="rotate(15 14.3729 4.3255)" fill="#101530" stroke="#9FB6D7" stroke-width="0.8"/>
+	</symbol>
+	<symbol id="cards_in_deck" viewBox="0 0 26 22">
+		<path d="M4.57593 18.353V11.5883L14.9395 7.17651L23.0001 8.94122V15.4118L12.9244 21L4.57593 18.353Z" fill="#101530"/>
+		<path d="M4.57593 11.5883V18.353L12.9244 21L23.0001 15.4118V8.94122M4.57593 11.5883L12.9244 13.6471L23.0001 8.94122M4.57593 11.5883L14.9395 7.17651L23.0001 8.94122" stroke="#9FB6D7" stroke-width="0.588235"/>
+		<path d="M4.57568 12.9999L12.9241 15.4999L23 10.4999M23 12.4999L12.9241 17.4999L4.57568 15.1177M4.57568 16.9999L12.9241 19.4999L22.9998 13.9999" stroke="#9FB6D7" stroke-width="0.588235"/>
+		<path d="M12.6363 12.1765L4 10.1176L9.75754 1L18.3939 2.76471L12.6363 12.1765Z" fill="#101530" stroke="#9FB6D7" stroke-width="0.588235"/>
+	</symbol>
 	<!-- icons 30x20 -->
 	<symbol id="video" viewBox="0 0 30 20">
 		<path d="M12 14L19 10L12 6V14Z" fill="var(--icon-color, currentcolor)"/>
