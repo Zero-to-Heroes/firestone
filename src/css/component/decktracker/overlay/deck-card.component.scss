@@ -16,6 +16,7 @@
 
 	&:hover {
 		transform: scale(1.1);
+		z-index: 9;
 		// animation: card-zoom 0.2s ease-in-out;
 	}
 
