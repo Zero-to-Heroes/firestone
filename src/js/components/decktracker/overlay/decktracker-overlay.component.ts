@@ -43,7 +43,7 @@ declare var amplitude;
 				<div class="decktracker-container">
 					<div class="decktracker" *ngIf="gameState" [style.width.px]="overlayWidthInPx">
 						<div class="background"></div>
-						<decktracker-title-bar [windowId]="windowId"></decktracker-title-bar>
+						<decktracker-control-bar [windowId]="windowId"></decktracker-control-bar>
 						<decktracker-deck-name
 							[hero]="gameState.playerDeck.hero"
 							[deckName]="gameState.playerDeck?.name"

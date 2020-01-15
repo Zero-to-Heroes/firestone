@@ -3,13 +3,13 @@ import { GameEvent } from '../../../models/game-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
-	selector: 'decktracker-title-bar',
+	selector: 'decktracker-control-bar',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',
 	],
 	template: `
-		<div class="title-bar">
+		<div class="control-bar">
 			<i class="logo">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#decktracker_logo" />
@@ -44,7 +44,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerTitleBarComponent {
+export class DeckTrackerControlBarComponent {
 	@Input() windowId: string;
 	closeHandler: () => void;
 
