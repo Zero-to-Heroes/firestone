@@ -100,6 +100,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Group cards by zone"
 					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
 				></preference-toggle>
+				<preference-toggle
+					field="overlayShowRarityColors"
+					label="Show rarity colors"
+					tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
+				></preference-toggle>
 				<preference-slider
 					class="first-slider"
 					[field]="'overlayWidthInPx'"

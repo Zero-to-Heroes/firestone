@@ -13,12 +13,18 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	],
 	template: `
 		<ul class="deck-list">
-			<deck-zone *ngIf="zone" [zone]="zone" [tooltipPosition]="_tooltipPosition"></deck-zone>
+			<deck-zone
+				*ngIf="zone"
+				[zone]="zone"
+				[tooltipPosition]="_tooltipPosition"
+				[colorManaCost]="colorManaCost"
+			></deck-zone>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GroupedDeckListComponent {
+	@Input() colorManaCost: boolean;
 	_tooltipPosition: CardTooltipPositionType;
 	zone: DeckZone;
 

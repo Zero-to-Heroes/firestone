@@ -33,6 +33,7 @@ export class Preferences {
 	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayGroupByZone: boolean = true;
+	readonly overlayShowRarityColors: boolean = true;
 
 	readonly replaysShowNotification: boolean = true;
 

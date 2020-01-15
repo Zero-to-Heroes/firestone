@@ -54,6 +54,7 @@ declare var amplitude;
 							[deckState]="gameState.playerDeck"
 							[displayMode]="displayMode"
 							[highlightCardsInHand]="highlightCardsInHand"
+							[colorManaCost]="colorManaCost"
 							[tooltipPosition]="tooltipPosition"
 						>
 						</decktracker-deck-list>
@@ -77,6 +78,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	opacity: number;
 	// showTracker: boolean;
 	highlightCardsInHand: boolean;
+	colorManaCost: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
@@ -113,9 +115,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		});
 		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
-			if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
-				this.handleDisplayPreferences(event.preferences);
-			}
+			this.handleDisplayPreferences(event.preferences);
 		});
 		this.gameInfoUpdatedListener = this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (res && res.resolutionChanged) {
@@ -180,6 +180,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
+		console.log('updating prefs', preferences);
 		this.useCleanMode = preferences.decktrackerSkin === 'clean';
 		this.displayMode =
 			!preferences.overlayGroupByZone || this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
@@ -188,6 +189,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.opacity = preferences.overlayOpacityInPercent / 100;
 		this.scale = preferences.decktrackerScale;
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
+		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);

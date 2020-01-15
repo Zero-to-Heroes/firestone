@@ -12,6 +12,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	template: `
 		<div
 			class="deck-card {{ rarity }} {{ highlight }}"
+			[ngClass]="{ 'color-mana-cost': _colorManaCost }"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="_tooltipPosition"
 		>
@@ -61,6 +62,7 @@ export class DeckCardComponent {
 	rarity: string;
 	numberOfCopies: number;
 	highlight: string;
+	_colorManaCost: boolean;
 	creatorCardIds: readonly string[];
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
@@ -81,7 +83,7 @@ export class DeckCardComponent {
 		this.rarity = card.rarity;
 		this.creatorCardIds = card.creatorCardIds;
 		this.highlight = card.highlight;
-		// console.log('setting card highlight', this.cardId, this.highlight);
+		console.log('setting card highlight', this.cardId, this.highlight, card);
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', card);
@@ -93,6 +95,11 @@ export class DeckCardComponent {
 			// image.onload = () => console.log('[image-preloader] preloaded image', imageUrl);
 			image.src = imageUrl;
 		}
+		this.cdr.detectChanges();
+	}
+
+	@Input() set colorManaCost(value: boolean) {
+		this._colorManaCost = value;
 		this.cdr.detectChanges();
 	}
 }

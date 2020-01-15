@@ -1,5 +1,4 @@
 import {
-	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
@@ -26,6 +25,7 @@ import { Events } from '../../../services/events.service';
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="_deckState"
+					[colorManaCost]="colorManaCost"
 					[tooltipPosition]="_tooltipPosition"
 				>
 				</deck-list-by-zone>
@@ -33,6 +33,7 @@ import { Events } from '../../../services/events.service';
 					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
 					[deckState]="_deckState"
 					[highlightCardsInHand]="highlightCardsInHand"
+					[colorManaCost]="colorManaCost"
 					[tooltipPosition]="_tooltipPosition"
 				>
 				</grouped-deck-list>
@@ -41,9 +42,10 @@ import { Events } from '../../../services/events.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerDeckListComponent implements AfterViewInit {
+export class DeckTrackerDeckListComponent {
 	@Input() displayMode: string;
 	@Input() highlightCardsInHand: boolean;
+	@Input() colorManaCost: boolean;
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;
@@ -54,21 +56,6 @@ export class DeckTrackerDeckListComponent implements AfterViewInit {
 	}
 
 	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
-
-	ngAfterViewInit() {
-		const singleEl: HTMLElement = this.el.nativeElement.querySelector('.single');
-		const caretEl = singleEl.appendChild(document.createElement('i'));
-		caretEl.innerHTML = `<svg class="svg-icon-fill">
-				<use xlink:href="assets/svg/sprite.svg#arrow"/>
-			</svg>`;
-		caretEl.classList.add('i-30');
-		caretEl.classList.add('caret');
-		setTimeout(() => {
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
-		});
-	}
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;

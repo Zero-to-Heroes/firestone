@@ -15,13 +15,18 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	template: `
 		<ul class="deck-list">
 			<li *ngFor="let zone of zones; trackBy: trackZone">
-				<deck-zone [zone]="zone" [tooltipPosition]="_tooltipPosition"></deck-zone>
+				<deck-zone
+					[zone]="zone"
+					[tooltipPosition]="_tooltipPosition"
+					[colorManaCost]="colorManaCost"
+				></deck-zone>
 			</li>
 		</ul>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckListByZoneComponent {
+	@Input() colorManaCost: boolean;
 	zones: readonly DeckZone[];
 	_tooltipPosition: CardTooltipPositionType;
 
@@ -33,7 +38,7 @@ export class DeckListByZoneComponent {
 	@Input('deckState') set deckState(deckState: DeckState) {
 		const zones = [
 			this.buildZone(deckState.deck, 'deck', 'In your deck', (a, b) => a.manaCost - b.manaCost),
-			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost),
+			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost, null, 'in-hand'),
 		];
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (deckState.dynamicZones.length === 0) {
@@ -83,6 +88,7 @@ export class DeckListByZoneComponent {
 		name: string,
 		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
 		filterFunction?: (a: VisualDeckCard) => boolean,
+		highlight?: string,
 	): DeckZone {
 		return {
 			id: id,
@@ -91,6 +97,7 @@ export class DeckListByZoneComponent {
 				.map(card =>
 					Object.assign(new VisualDeckCard(), card, {
 						creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+						highlight: highlight,
 					} as VisualDeckCard),
 				)
 				.filter(card => !filterFunction || filterFunction(card)),

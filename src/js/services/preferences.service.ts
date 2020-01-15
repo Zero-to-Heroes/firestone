@@ -27,7 +27,7 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
-		this.savePreferences(newPrefs, PreferencesService.DECKTRACKER_OVERLAY_DISPLAY);
+		this.savePreferences(newPrefs);
 	}
 
 	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
@@ -94,14 +94,11 @@ export class PreferencesService {
 
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
-		// console.log('user pref saved', eventName);
-		if (eventName) {
-			// console.log('broadcasting new prefs', userPrefs);
-			const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
-			eventBus.next({
-				name: eventName,
-				preferences: userPrefs,
-			});
-		}
+		// console.log('broadcasting new prefs', userPrefs);
+		const eventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		eventBus.next({
+			name: eventName,
+			preferences: userPrefs,
+		});
 	}
 }

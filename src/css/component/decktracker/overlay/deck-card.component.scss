@@ -54,11 +54,11 @@
 	.mana-cost {
 		width: 30px;
 		height: 100%;
-		background: #bfc1c4;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		z-index: 1;
+		background: #303352;
 
 		span {
 			font-family: Sumana;
@@ -66,7 +66,20 @@
 			font-weight: bold;
 			line-height: normal;
 			font-size: 16px;
-			color: #07081f;
+			color: #9fb6d7;
+		}
+	}
+
+	&.in-hand {
+		.gradiant {
+			border: 3px solid;
+			border-image: linear-gradient(45deg, rgba(159, 182, 215, 0), #ffb948) 1;
+		}
+		.mana-cost.mana-cost {
+			background: #939393;
+			span {
+				color: #101530;
+			}
 		}
 	}
 
@@ -138,26 +151,22 @@
 		z-index: 1;
 	}
 
-	&.rare .mana-cost {
-		background: #357ee3;
-	}
-	&.epic .mana-cost {
-		background: #6d3e92;
-	}
-	&.legendary .mana-cost {
-		background: #ae7014;
-	}
-
-	&.in-hand {
-		.gradiant {
-			border: 3px solid;
-			border-image: linear-gradient(45deg, rgba(159, 182, 215, 0), #ffb948) 1;
-		}
-		.mana-cost.mana-cost {
-			background: #939393;
+	&.color-mana-cost,
+	&.in-hand.color-mana-cost {
+		.mana-cost {
+			background: #bfc1c4;
 			span {
-				color: #101530;
+				color: #07081f;
 			}
+		}
+		&.rare .mana-cost {
+			background: #357ee3;
+		}
+		&.epic .mana-cost {
+			background: #6d3e92;
+		}
+		&.legendary .mana-cost {
+			background: #ae7014;
 		}
 	}
 }

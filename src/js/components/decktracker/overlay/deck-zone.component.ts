@@ -23,7 +23,11 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 			</div>
 			<ul class="card-list" *ngIf="open">
 				<li *ngFor="let card of cards; trackBy: trackCard">
-					<deck-card [card]="card" [tooltipPosition]="_tooltipPosition"></deck-card>
+					<deck-card
+						[card]="card"
+						[tooltipPosition]="_tooltipPosition"
+						[colorManaCost]="colorManaCost"
+					></deck-card>
 				</li>
 			</ul>
 		</div>
@@ -31,6 +35,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckZoneComponent {
+	@Input() colorManaCost: boolean;
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		// console.log('[deck-zone] setting tooltip position', value);
 		this._tooltipPosition = value;
