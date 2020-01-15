@@ -40,6 +40,7 @@ import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
+import { LocalPlayerParser } from './event-parser/local-player-parser';
 import { MainStepReadyParser } from './event-parser/main-step-ready-parser';
 import { MatchMetadataParser } from './event-parser/match-metadata-parser';
 import { MinionBackOnBoardParser } from './event-parser/minion-back-on-board-parser';
@@ -415,6 +416,7 @@ export class GameStateService {
 			new AssignCardIdParser(this.helper),
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
+			new LocalPlayerParser(),
 		];
 	}
 }

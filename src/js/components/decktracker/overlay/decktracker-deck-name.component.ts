@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { HeroCard } from '../../../models/decktracker/hero-card';
+import { DeckState } from '../../../models/decktracker/deck-state';
 
 @Component({
 	selector: 'decktracker-deck-name',
@@ -15,13 +15,9 @@ import { HeroCard } from '../../../models/decktracker/hero-card';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerDeckNameComponent {
-	// deckImage: string;
+	deckName: string;
 
-	@Input() deckName: string;
-
-	@Input('hero') set hero(hero: HeroCard) {
-		// if (hero) {
-		// 	this.deckImage = `url(https://static.zerotoheroes.com/hearthstone/cardart/tiles/${hero.cardId}.jpg)`;
-		// }
+	@Input() set deck(value: DeckState) {
+		this.deckName = value.name || (value.hero ? value.hero.playerName || value.hero.name : 'Unnamed deck');
 	}
 }

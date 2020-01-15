@@ -9,7 +9,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 	],
 	template: `
 		<div class="title-bar">
-			<decktracker-deck-name [hero]="deck?.hero" [deckName]="deck?.name"></decktracker-deck-name>
+			<decktracker-deck-name [deck]="deck"></decktracker-deck-name>
 			<decktracker-cards-recap [deck]="deck"></decktracker-cards-recap>
 		</div>
 	`,

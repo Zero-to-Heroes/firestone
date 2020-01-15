@@ -1,4 +1,5 @@
 export class HeroCard {
-	readonly name;
-	readonly cardId;
+	readonly name: string;
+	readonly cardId: string;
+	readonly playerName: string;
 }
