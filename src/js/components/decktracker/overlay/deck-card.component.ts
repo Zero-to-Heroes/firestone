@@ -83,7 +83,7 @@ export class DeckCardComponent {
 		this.rarity = card.rarity;
 		this.creatorCardIds = card.creatorCardIds;
 		this.highlight = card.highlight;
-		console.log('setting card highlight', this.cardId, this.highlight, card);
+		// console.log('setting card highlight', this.cardId, this.highlight, card);
 		// 0 is acceptable when showing the deck as a single deck list
 		if (this.numberOfCopies < 0) {
 			console.error('invalid number of copies', card);

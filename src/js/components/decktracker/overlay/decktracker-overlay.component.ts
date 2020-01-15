@@ -182,7 +182,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
-		console.log('updating prefs', preferences);
+		// console.log('updating prefs', preferences);
 		this.useCleanMode = preferences.decktrackerSkin === 'clean';
 		this.displayMode =
 			!preferences.overlayGroupByZone || this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
