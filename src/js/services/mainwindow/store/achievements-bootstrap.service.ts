@@ -27,16 +27,14 @@ export class AchievementsBootstrapService {
 	}
 
 	public async initAchievementState() {
-		setTimeout(async () => {
-			// console.log('[perf] starting achievement process');
-			const newState = Object.assign(new AchievementsState(), {
-				globalCategories: await this.achievementsHelper.buildGlobalCategories(),
-				achievementHistory: await this.buildAchievementHistory(),
-				isLoading: false,
-			} as AchievementsState);
-			// console.log('[perf] built new achievements state');
-			this.stateUpdater.next(new AchievementsInitEvent(newState));
-		}, 10000);
+		// console.log('[perf] starting achievement process');
+		const newState = Object.assign(new AchievementsState(), {
+			globalCategories: await this.achievementsHelper.buildGlobalCategories(),
+			achievementHistory: await this.buildAchievementHistory(),
+			isLoading: false,
+		} as AchievementsState);
+		// console.log('[perf] built new achievements state');
+		this.stateUpdater.next(new AchievementsInitEvent(newState));
 	}
 
 	private async buildAchievementHistory(): Promise<readonly AchievementHistory[]> {
