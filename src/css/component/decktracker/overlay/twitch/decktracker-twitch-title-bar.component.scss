@@ -1,40 +1,40 @@
-.title-bar {
-    background: #07081F;
-    width: 100%;
+.control-bar {
+	background: #07081f;
+	width: 100%;
 
-    .logo {
-        --icon-color: #9FB6D7;
-    }
+	.logo {
+		--icon-color: #9fb6d7;
+	}
 
-    .copy-deckstring {
-        width: 13px;
-        height: 16px;
-        --icon-color: #101530;
-        --icon-color-secondary: #9FB6D7;
-        margin-left: 10px;
-    }
+	.copy-deckstring {
+		width: 13px;
+		height: 16px;
+		--icon-color: #101530;
+		--icon-color-secondary: #9fb6d7;
+		margin-left: 10px;
+	}
 
-    .copy-text {
-        font-family: Open Sans;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 11px;
-        color: #9FB6D7;
-        flex-grow: 1;
-        margin-left: 5px;
+	.copy-text {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: normal;
+		font-size: 11px;
+		color: #9fb6d7;
+		flex-grow: 1;
+		margin-left: 5px;
 
-        &.copied {
-            color: #1ECC02;
-        }
-    }
+		&.copied {
+			color: #1ecc02;
+		}
+	}
 
-    .close-button {
-        background: #1F2142;
-        color: #9FB6D7;
+	.close-button {
+		background: #1f2142;
+		color: #9fb6d7;
 
-        &:hover {
-            background: #9FB6D7;
-            color: #101530;
-        }
-    }
+		&:hover {
+			background: #9fb6d7;
+			color: #101530;
+		}
+	}
 }

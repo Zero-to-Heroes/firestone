@@ -1,15 +1,15 @@
-import { Component, ChangeDetectionStrategy, Input, ChangeDetectorRef, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { DeckState } from '../../../../models/decktracker/deck-state';
 
 @Component({
 	selector: 'decktracker-twitch-title-bar',
 	styleUrls: [
 		'../../../../../css/global/components-global.scss',
-		'../../../../../css/component/decktracker/overlay/decktracker-title-bar.component.scss',
+		'../../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-twitch-title-bar.component.scss',
 	],
 	template: `
-		<div class="title-bar">
+		<div class="control-bar">
 			<i class="logo">
 				<svg class="svg-icon-fill">
 					<use xlink:href="assets/svg/sprite.svg#decktracker_logo" />
