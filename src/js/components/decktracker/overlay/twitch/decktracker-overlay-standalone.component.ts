@@ -21,14 +21,13 @@ import { Events } from '../../../../services/events.service';
 		'../../../../../css/global/components-global.scss',
 		`../../../../../css/global/cdk-overlay.scss`,
 		'../../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
-		'../../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
 		'../../../../../css/component/decktracker/overlay/twitch/decktracker-overlay-standalone.component.scss',
 		`../../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
 		<div
 			*ngIf="gameState"
-			class="root clean"
+			class="root"
 			[ngClass]="{ 'dragging': dragging }"
 			[activeTheme]="'decktracker'"
 			cdkDrag

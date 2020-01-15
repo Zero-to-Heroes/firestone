@@ -28,16 +28,10 @@ declare var amplitude;
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
 		'../../../../css/component/decktracker/overlay/decktracker-overlay.component.scss',
-		'../../../../css/component/decktracker/overlay/decktracker-overlay-clean.scss',
 		`../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div
-			class="root overlay-container-parent"
-			[ngClass]="{ 'clean': useCleanMode }"
-			[activeTheme]="'decktracker'"
-			[style.opacity]="opacity"
-		>
+		<div class="root overlay-container-parent" [activeTheme]="'decktracker'" [style.opacity]="opacity">
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="decktracker-container">
@@ -73,7 +67,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	activeTooltip: string;
 	// overlayDisplayed: boolean;
 	displayMode: string;
-	useCleanMode: boolean;
 	showTitleBar: boolean;
 	overlayWidthInPx: number;
 	opacity: number;
@@ -142,7 +135,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.restoreWindowPosition();
 		await this.handleDisplayPreferences();
 		amplitude.getInstance().logEvent('match-start', {
-			'active-skin': this.useCleanMode ? 'clean' : 'original',
 			'display-mode': this.displayMode,
 		});
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -183,9 +175,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
-		this.useCleanMode = preferences.decktrackerSkin === 'clean';
-		this.displayMode =
-			!preferences.overlayGroupByZone || this.useCleanMode ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
+		this.displayMode = !preferences.overlayGroupByZone ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
 		this.showTitleBar = preferences.overlayShowTitleBar;
 		this.overlayWidthInPx = preferences.overlayWidthInPx;
 		this.opacity = preferences.overlayOpacityInPercent / 100;
