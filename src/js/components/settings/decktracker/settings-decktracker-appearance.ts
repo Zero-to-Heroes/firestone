@@ -87,9 +87,9 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[label]="'Highlight cards in hand'"
 				></preference-toggle>
 				<preference-toggle
-					*ngIf="skinForm.value.selectedSkin === 'clean'"
-					[field]="'overlayShowTitleBar'"
-					[label]="'Show title bar'"
+					field="overlayShowTitleBar"
+					label="Show title bar"
+					tooltip="Show/hide the deck name and cards left in hand and deck"
 				></preference-toggle>
 				<preference-toggle
 					[field]="'overlayShowTooltipsOnHover'"
