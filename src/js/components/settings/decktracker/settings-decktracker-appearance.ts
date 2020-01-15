@@ -33,17 +33,18 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[label]="'Show card tooltips'"
 				></preference-toggle>
 				<preference-toggle
-					field="overlayGroupByZone"
-					label="Group cards by zone"
-					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
-				></preference-toggle>
-				<preference-toggle
 					field="overlayShowRarityColors"
 					label="Show rarity colors"
 					tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
 				></preference-toggle>
 				<preference-toggle
+					field="overlayGroupByZone"
+					label="Group cards by zone"
+					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
+				></preference-toggle>
+				<preference-toggle
 					*ngIf="!overlayGroupByZone"
+					class="indented"
 					field="overlayCardsGoToBottom"
 					label="Cards in deck at the top"
 					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
