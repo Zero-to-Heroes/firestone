@@ -55,6 +55,7 @@ declare var amplitude;
 							[displayMode]="displayMode"
 							[highlightCardsInHand]="highlightCardsInHand"
 							[colorManaCost]="colorManaCost"
+							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
 						>
 						</decktracker-deck-list>
@@ -79,6 +80,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	// showTracker: boolean;
 	highlightCardsInHand: boolean;
 	colorManaCost: boolean;
+	cardsGoToBottom: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
@@ -190,6 +192,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		this.scale = preferences.decktrackerScale;
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
+		this.cardsGoToBottom = preferences.overlayCardsGoToBottom;
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);

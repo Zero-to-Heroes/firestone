@@ -105,6 +105,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Show rarity colors"
 					tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
 				></preference-toggle>
+				<preference-toggle
+					*ngIf="!overlayGroupByZone"
+					field="overlayCardsGoToBottom"
+					label="Cards in deck at the top"
+					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
+				></preference-toggle>
 				<preference-slider
 					class="first-slider"
 					[field]="'overlayWidthInPx'"
@@ -155,9 +161,11 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	sliderEnabled = false;
 
 	showTitleBar: boolean;
+	overlayGroupByZone: boolean;
 
 	private skinFormSubscription: Subscription;
 	private displaySubscription: Subscription;
+	private preferencesSubscription: Subscription;
 
 	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
 
@@ -175,11 +183,20 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 				this.cdr.detectChanges();
 			}
 		});
+
+		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
+			this.overlayGroupByZone = event.preferences.overlayGroupByZone;
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	ngOnDestroy() {
 		this.skinFormSubscription.unsubscribe();
 		this.displaySubscription.unsubscribe();
+		this.preferencesSubscription.unsubscribe();
 	}
 
 	changeSkinSettings(newSkin: string) {
@@ -193,6 +210,8 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
+		this.overlayGroupByZone = prefs.overlayGroupByZone;
+
 		this.skinForm.controls['selectedSkin'].setValue(prefs.decktrackerSkin, { emitEvent: false });
 		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {

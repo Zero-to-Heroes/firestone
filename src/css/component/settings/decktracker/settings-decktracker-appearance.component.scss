@@ -36,6 +36,11 @@
 	::ng-deep .first-slider .preference-slider {
 		margin-top: 15px;
 	}
+
+	::ng-deep preference-toggle .preference-toggle label p,
+	::ng-deep preference-slider .preference-slider label {
+		width: 200px;
+	}
 }
 
 .skin-form {

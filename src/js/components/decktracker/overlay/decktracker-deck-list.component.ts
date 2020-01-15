@@ -34,6 +34,7 @@ import { Events } from '../../../services/events.service';
 					[deckState]="_deckState"
 					[highlightCardsInHand]="highlightCardsInHand"
 					[colorManaCost]="colorManaCost"
+					[cardsGoToBottom]="cardsGoToBottom"
 					[tooltipPosition]="_tooltipPosition"
 				>
 				</grouped-deck-list>
@@ -46,6 +47,7 @@ export class DeckTrackerDeckListComponent {
 	@Input() displayMode: string;
 	@Input() highlightCardsInHand: boolean;
 	@Input() colorManaCost: boolean;
+	@Input() cardsGoToBottom: boolean;
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;

@@ -37,6 +37,7 @@ export class GroupedDeckListComponent {
 	// private hand: readonly DeckCard[];
 	private _deckState: DeckState;
 	private _highlight: boolean;
+	private _cardsGoToBottom: boolean;
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
@@ -47,6 +48,11 @@ export class GroupedDeckListComponent {
 	@Input() set highlightCardsInHand(value: boolean) {
 		this._highlight = value;
 		// console.log('setting highlightCardsInHand', value);
+		this.buildGroupedList();
+	}
+
+	@Input() set cardsGoToBottom(value: boolean) {
+		this._cardsGoToBottom = value;
 		this.buildGroupedList();
 	}
 
@@ -125,16 +131,32 @@ export class GroupedDeckListComponent {
 				// console.log('base is now', base);
 			}
 		}
+		const sortingFunction = this._cardsGoToBottom
+			? (a: VisualDeckCard, b: VisualDeckCard) => this.sortOrder(a) - this.sortOrder(b) || a.manaCost - b.manaCost
+			: (a: VisualDeckCard, b: VisualDeckCard) => a.manaCost - b.manaCost;
 		this.zone = {
 			id: 'single-zone',
 			name: undefined,
 			cards: base,
-			sortingFunction: (a, b) => a.manaCost - b.manaCost,
+			sortingFunction: sortingFunction,
 		} as DeckZone;
 		// console.log('setting final zone', this.zone);
 		// if (!(this.cdr as ViewRef).destroyed) {
 		// 	this.cdr.detectChanges();
 		// }
+	}
+
+	private sortOrder(card: VisualDeckCard): number {
+		switch (card.highlight) {
+			case 'normal':
+				return 0;
+			case 'in-hand':
+				return 1;
+			case 'dim':
+				return 2;
+			default:
+				return 3;
+		}
 	}
 
 	private groupBy(list, keyGetter): Map<string, DeckCard[]> {

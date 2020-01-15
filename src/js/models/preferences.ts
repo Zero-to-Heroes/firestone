@@ -34,6 +34,7 @@ export class Preferences {
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayGroupByZone: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
+	readonly overlayCardsGoToBottom: boolean = false;
 
 	readonly replaysShowNotification: boolean = true;
 
