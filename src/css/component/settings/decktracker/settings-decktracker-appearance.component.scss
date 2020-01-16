@@ -1,7 +1,9 @@
 .decktracker-appearance {
 	padding-left: 15px;
 	padding-right: 15px;
-	// height: 100%;
+	min-height: 0;
+	overflow: auto;
+	height: 100%;
 
 	.toggle-label {
 		display: flex;

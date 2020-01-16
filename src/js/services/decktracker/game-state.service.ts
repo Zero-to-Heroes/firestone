@@ -110,6 +110,7 @@ export class GameStateService {
 			if (event.name === PreferencesService.TWITCH_CONNECTION_STATUS) {
 				this.logger.debug('rebuilding event emitters');
 				this.buildEventEmitters();
+				return;
 			}
 		});
 		this.deckUpdater.subscribe((event: GameEvent) => {
@@ -126,7 +127,6 @@ export class GameStateService {
 				.decktrackerDisplayEventBus;
 			decktrackerDisplayEventBus.subscribe(event => {
 				this.showDecktracker = event;
-				this.showOpponentTracker = event;
 				// this.logger.debug('decktracker display update', event);
 				this.updateOverlays();
 			});
@@ -135,7 +135,7 @@ export class GameStateService {
 		setTimeout(() => {
 			const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
 			preferencesEventBus.subscribe(event => {
-				if (event && event.name === PreferencesService.DECKTRACKER_OVERLAY_DISPLAY) {
+				if (event) {
 					this.handleDisplayPreferences(event.preferences);
 				}
 			});
@@ -143,6 +143,7 @@ export class GameStateService {
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
 			if (this.ow.exitGame(res) || !(await this.ow.inGame())) {
 				this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
+				this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 			}
 			if (await this.ow.inGame()) {
@@ -396,6 +397,7 @@ export class GameStateService {
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.showOpponentHand = preferences.dectrackerShowOpponentGuess || preferences.dectrackerShowOpponentTurnDraw;
+		this.showOpponentTracker = preferences.opponentTracker;
 		// console.log('update opp hand prefs', this.showOpponentHand, preferences);
 		this.updateOverlays();
 	}

@@ -35,6 +35,12 @@ export class Preferences {
 	readonly overlayShowRarityColors: boolean = true;
 	readonly overlayCardsGoToBottom: boolean = false;
 
+	readonly opponentTracker: boolean = false;
+	readonly opponentOverlayWidthInPx: number = 227;
+	readonly opponentOverlayOpacityInPercent: number = 100;
+	readonly opponentOverlayScale: number = 100;
+	readonly opponentOverlayPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = true;
 
 	readonly achievementsDisplayNotifications = true;

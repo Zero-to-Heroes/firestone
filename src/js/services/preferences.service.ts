@@ -80,6 +80,12 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async updateOpponentTrackerPosition(left: number, top: number) {
+		const prefs = await this.getPreferences();
+		const newPrefs: Preferences = { ...prefs, opponentOverlayPosition: { left, top } };
+		this.savePreferences(newPrefs);
+	}
+
 	private async savePreferences(userPrefs: Preferences, eventName: string = null) {
 		await this.indexedDb.saveUserPreferences(userPrefs);
 		// console.log('broadcasting new prefs', userPrefs);

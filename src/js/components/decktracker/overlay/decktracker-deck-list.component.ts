@@ -22,6 +22,7 @@ import { Events } from '../../../services/events.service';
 	template: `
 		<perfect-scrollbar class="deck-list" (scroll)="onScroll($event)">
 			<ng-container [ngSwitch]="displayMode">
+				<div class="list-background">/</div>
 				<deck-list-by-zone
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="_deckState"

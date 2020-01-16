@@ -24,12 +24,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeckTrackerOverlayOpponentComponent {
-	overlayWidthExtractor = (prefs: Preferences) => prefs.overlayWidthInPx;
-	opacityExtractor = (prefs: Preferences) => prefs.overlayOpacityInPercent;
-	scaleExtractor = (prefs: Preferences) => prefs.decktrackerScale;
+	overlayWidthExtractor = (prefs: Preferences) => prefs.opponentOverlayWidthInPx;
+	opacityExtractor = (prefs: Preferences) => prefs.opponentOverlayOpacityInPercent;
+	scaleExtractor = (prefs: Preferences) => prefs.opponentOverlayScale;
 	deckExtractor = (state: GameState) => state.opponentDeck;
-	trackerPositionUpdater = (left: number, top: number) => {};
-	trackerPositionExtractor = (prefs: Preferences) => null;
+	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateOpponentTrackerPosition(left, top);
+	trackerPositionExtractor = (prefs: Preferences) => prefs.opponentOverlayPosition;
 	defaultTrackerPositionLeftProvider = (gameWidth: number, width: number, dpi: number) => 10;
 	defaultTrackerPositionTopProvider = (gameWidth: number, width: number, dpi: number) => 10;
 

@@ -22,7 +22,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<div class="decktracker-appearance">
 			<div class="settings-group">
-				<div class="title">Display options</div>
+				<div class="title">Common display options</div>
 				<preference-toggle
 					field="overlayShowTitleBar"
 					label="Show title bar"
@@ -49,6 +49,9 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Cards in deck at the top"
 					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
 				></preference-toggle>
+			</div>
+			<div class="settings-group">
+				<div class="title">Player tracker settings</div>
 				<preference-slider
 					class="first-slider"
 					[field]="'overlayWidthInPx'"
@@ -82,7 +85,55 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[tooltipDisabled]="
 						'Change the tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
 					"
-					[min]="20"
+					[min]="40"
+					[max]="100"
+				>
+				</preference-slider>
+			</div>
+			<div class="settings-group">
+				<div class="title">Opponent tracker settings</div>
+				<preference-toggle
+					field="opponentTracker"
+					label="Show opponent tracker"
+					tooltip="When active, a tracker will show for your opponent's cards"
+				></preference-toggle>
+				<preference-slider
+					*ngIf="opponentTracker"
+					class="first-slider"
+					field="opponentOverlayWidthInPx"
+					label="Overlay width"
+					[enabled]="sliderEnabled"
+					tooltip="Change the opponent's tracker width."
+					tooltipDisabled="
+						Change the opponent's tracker width. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
+					"
+					[min]="215"
+					[max]="300"
+				>
+				</preference-slider>
+				<preference-slider
+					*ngIf="opponentTracker"
+					field="opponentOverlayScale"
+					label="Overlay size"
+					[enabled]="sliderEnabled"
+					tooltip="Change the opponent's tracker scale."
+					tooltipDisabled="
+						Change the opponent's tracker scale. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
+					"
+					[min]="75"
+					[max]="200"
+				>
+				</preference-slider>
+				<preference-slider
+					*ngIf="opponentTracker"
+					field="opponentOverlayOpacityInPercent"
+					label="Overlay opacity"
+					[enabled]="sliderEnabled"
+					tooltip="Change the opponent's tracker opacity."
+					tooltipDisabled="
+						Change the opponent's tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
+					"
+					[min]="40"
 					[max]="100"
 				>
 				</preference-slider>
@@ -95,6 +146,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	sliderEnabled = false;
 	showTitleBar: boolean;
 	overlayGroupByZone: boolean;
+	opponentTracker: boolean;
 
 	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
@@ -115,6 +167,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
 			this.overlayGroupByZone = event.preferences.overlayGroupByZone;
+			this.opponentTracker = event.preferences.opponentTracker;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -129,6 +182,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.overlayGroupByZone = prefs.overlayGroupByZone;
+		this.opponentTracker = prefs.opponentTracker;
 		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
