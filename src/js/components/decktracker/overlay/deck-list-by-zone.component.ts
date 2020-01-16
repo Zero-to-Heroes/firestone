@@ -37,8 +37,8 @@ export class DeckListByZoneComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		const zones = [
-			this.buildZone(deckState.deck, 'deck', 'In your deck', (a, b) => a.manaCost - b.manaCost),
-			this.buildZone(deckState.hand, 'hand', 'In your hand', (a, b) => a.manaCost - b.manaCost, null, 'in-hand'),
+			this.buildZone(deckState.deck, 'deck', 'In deck', (a, b) => a.manaCost - b.manaCost),
+			this.buildZone(deckState.hand, 'hand', 'In hand', (a, b) => a.manaCost - b.manaCost, null, 'in-hand'),
 		];
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (deckState.dynamicZones.length === 0) {
