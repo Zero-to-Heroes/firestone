@@ -341,6 +341,7 @@ export class GameStateService {
 			this.state.gameStarted &&
 			this.state.metadata &&
 			this.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
+			!this.gameEnded &&
 			opponentHandWindow.window_state_ex === 'closed' &&
 			this.showOpponentHand
 		) {
