@@ -16,6 +16,7 @@ import { DeckTrackerCardsRecapComponent } from '../../components/decktracker/ove
 import { DeckTrackerControlBarComponent } from '../../components/decktracker/overlay/decktracker-control-bar.component';
 import { DeckTrackerDeckListComponent } from '../../components/decktracker/overlay/decktracker-deck-list.component';
 import { DeckTrackerDeckNameComponent } from '../../components/decktracker/overlay/decktracker-deck-name.component';
+import { DeckTrackerOverlayOpponentComponent } from '../../components/decktracker/overlay/decktracker-overlay-opponent.component';
 import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/overlay/decktracker-overlay-player.component';
 import { DeckTrackerOverlayRootComponent } from '../../components/decktracker/overlay/decktracker-overlay-root.component';
 import { DeckTrackerTitleBarComponent } from '../../components/decktracker/overlay/decktracker-title-bar';
@@ -42,6 +43,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	declarations: [
 		DeckTrackerOverlayRootComponent,
 		DeckTrackerOverlayPlayerComponent,
+		DeckTrackerOverlayOpponentComponent,
 		DeckTrackerDeckListComponent,
 		DeckListByZoneComponent,
 		GroupedDeckListComponent,
@@ -55,6 +57,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	exports: [
 		DeckTrackerOverlayRootComponent,
 		DeckTrackerOverlayPlayerComponent,
+		DeckTrackerOverlayOpponentComponent,
 		DeckTrackerDeckListComponent,
 		DeckListByZoneComponent,
 		GroupedDeckListComponent,
