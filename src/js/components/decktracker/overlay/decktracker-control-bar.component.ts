@@ -16,17 +16,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				</svg>
 			</i>
 			<div class="controls">
-				<!-- <div class="import-container">
-					<i
-						class="import-deckstring"
-						helpTooltip="Import deck from clipboard"
-						(mousedown)="importDeckstring()"
-					>
-						<svg class="svg-icon-fill">
-							<use xlink:href="assets/svg/sprite.svg#copy_deckstring" />
-						</svg>
-					</i>
-				</div> -->
 				<control-bug></control-bug>
 				<control-settings
 					[settingsApp]="'decktracker'"
@@ -46,6 +35,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DeckTrackerControlBarComponent {
 	@Input() windowId: string;
+	@Input() closeEvent: string;
 	closeHandler: () => void;
 
 	private deckUpdater: EventEmitter<GameEvent>;
@@ -55,23 +45,8 @@ export class DeckTrackerControlBarComponent {
 		this.closeHandler = () =>
 			this.deckUpdater.next(
 				Object.assign(new GameEvent(), {
-					type: 'CLOSE_TRACKER',
+					type: this.closeEvent,
 				} as GameEvent),
 			);
 	}
-
-	// async importDeckstring() {
-	// 	const clipboardContent = await this.ow.getFromClipboard();
-	// 	// console.log('clipboard content', clipboardContent);
-	// 	if (clipboardContent) {
-	// 		this.deckUpdater.next(
-	// 			Object.assign(new GameEvent(), {
-	// 				type: 'DECKSTRING_OVERRIDE',
-	// 				additionalData: {
-	// 					clipboardContent: clipboardContent,
-	// 				},
-	// 			} as GameEvent),
-	// 		);
-	// 	}
-	// }
 }

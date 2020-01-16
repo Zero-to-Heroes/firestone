@@ -44,7 +44,10 @@ declare var amplitude;
 						[ngClass]="{ 'hide-title-bar': !showTitleBar }"
 					>
 						<div class="background"></div>
-						<decktracker-control-bar [windowId]="windowId"></decktracker-control-bar>
+						<decktracker-control-bar
+							[windowId]="windowId"
+							[closeEvent]="closeEvent"
+						></decktracker-control-bar>
 						<decktracker-title-bar [deck]="deck"></decktracker-title-bar>
 						<decktracker-deck-list
 							[deckState]="deck"
@@ -72,6 +75,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
 	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number, dpi: number) => number;
 	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number, dpi: number) => number;
+	@Input() closeEvent: string;
 	@Input() player: 'player' | 'opponent';
 
 	deck: DeckState;

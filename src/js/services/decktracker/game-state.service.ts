@@ -208,8 +208,9 @@ export class GameStateService {
 		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
 			this.closedByUser = true;
+			this.updateOverlays();
+		} else if (gameEvent.type === 'CLOSE_OPPONENT_TRACKER') {
 			this.opponentTrackerClosedByUser = true;
-			console.error('Should have a specific event for opponent tracker');
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			this.closedByUser = false;
@@ -270,7 +271,7 @@ export class GameStateService {
 						},
 						state: this.state,
 					};
-					// this.logger.debug('[game-state] will emit event', emittedEvent);
+					this.logger.debug('[game-state] will emit event', emittedEvent);
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 					// this.logger.debug('[game-state] emitted deck event', emittedEvent.event.name, this.state);
 					// this.logger.debug(

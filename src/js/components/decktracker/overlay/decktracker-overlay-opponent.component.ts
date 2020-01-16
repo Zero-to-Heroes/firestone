@@ -17,7 +17,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 			[trackerPositionExtractor]="trackerPositionExtractor"
 			[defaultTrackerPositionLeftProvider]="defaultTrackerPositionLeftProvider"
 			[defaultTrackerPositionTopProvider]="defaultTrackerPositionTopProvider"
-			player="player"
+			closeEvent="CLOSE_OPPONENT_TRACKER"
+			player="opponent"
 		>
 		</decktracker-overlay-root>
 	`,
