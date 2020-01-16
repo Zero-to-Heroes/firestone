@@ -20,7 +20,7 @@ export class MinionDiedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.board, cardId, entityId);
 
-		const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId);
+		const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.board, cardId, entityId)[0];
 		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,

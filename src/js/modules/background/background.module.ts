@@ -18,6 +18,7 @@ import { BattlegroundsStateService } from '../../services/battlegrounds/battlegr
 import { LogParserService } from '../../services/collection/log-parser.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
+import { AiDeckService } from '../../services/decktracker/ai-deck-service.service';
 import { DeckCardService } from '../../services/decktracker/deck-card.service';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from '../../services/decktracker/dynamic-zone-helper.service';
@@ -144,6 +145,8 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		BattlegroundsStateService,
 		BattlegroundsHeroInfoService,
+
+		AiDeckService,
 
 		GameStatsBootstrapService,
 		GameStatsLoaderService,

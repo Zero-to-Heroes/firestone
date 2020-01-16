@@ -2,6 +2,7 @@ import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger, NGXLoggerMock } from 'ngx-logger';
 import { GameState } from '../../src/js/models/decktracker/game-state';
 import { PlayerInfo } from '../../src/js/models/player-info';
+import { AiDeckService } from '../../src/js/services/decktracker/ai-deck-service.service';
 import { DeckCardService } from '../../src/js/services/decktracker/deck-card.service';
 import { DeckParserService } from '../../src/js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from '../../src/js/services/decktracker/dynamic-zone-helper.service';
@@ -61,7 +62,7 @@ export const gameStateBuilder = async (
 	const playersInfoService = new PlayersInfoService(events, memoryService);
 
 	// Deck
-	const deckService = new DeckParserService(emitter, null);
+	const deckService = new DeckParserService(emitter, null, cards);
 	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
 	deckService.decodeDeckString();
 	deckService['reset'] = () => {};
@@ -88,6 +89,9 @@ export const gameStateBuilder = async (
 		new NGXLoggerMock() as NGXLogger,
 		deckService,
 		helper,
+		{
+			getAiDeck: (...args) => null,
+		} as AiDeckService,
 	);
 
 	const gameEventsService = new GameEvents(

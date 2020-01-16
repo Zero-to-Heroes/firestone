@@ -15,20 +15,20 @@ export class CardDrawParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		// console.log('drawing from deck', cardId, gameEvent);
+		console.log('drawing from deck', cardId, gameEvent);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
-		// console.log('found card in zone', card, deck);
+		console.log('found card in zone', card, deck);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId);
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId)[0];
 		const previousHand = deck.hand;
 		const newHand: readonly DeckCard[] = this.helper.addSingleCardToZone(
 			previousHand,
 			isPlayer ? card : this.helper.obfuscateCard(card),
 		);
-		// console.log('added card to hand', newHand);
+		console.log('added card to hand', newHand);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,
 			hand: newHand,

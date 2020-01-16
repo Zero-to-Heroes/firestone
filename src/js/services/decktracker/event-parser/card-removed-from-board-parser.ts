@@ -27,7 +27,7 @@ export class CardRemovedFromBoardParser implements EventParser {
 		}
 
 		const previousBoard = deck.board;
-		const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousBoard, cardId, entityId);
+		const newBoard: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousBoard, cardId, entityId)[0];
 		const cardWithZone = card.update({
 			zone: 'REMOVEDFROMGAME',
 		} as DeckCard);

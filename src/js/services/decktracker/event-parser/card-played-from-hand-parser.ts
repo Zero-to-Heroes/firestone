@@ -22,7 +22,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 		// console.log('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
 
-		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId);
+		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId)[0];
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard = refCard && refCard.type === 'Minion';

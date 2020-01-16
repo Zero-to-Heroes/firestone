@@ -28,7 +28,7 @@ export class DynamicZoneHelperService {
 			let newOtherZoneCards = [...deckState.otherZone];
 			for (const card of cardsNotInOtherZone) {
 				newOtherZoneCards = [
-					...this.helper.removeSingleCardFromZone(newOtherZoneCards, card.cardId, card.entityId),
+					...this.helper.removeSingleCardFromZone(newOtherZoneCards, card.cardId, card.entityId)[0],
 				];
 			}
 			dynamicZones.push(

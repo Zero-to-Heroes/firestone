@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { decode } from 'deckstrings';
+import { DeckCard } from '../../models/decktracker/deck-card';
 import { GameEvent } from '../../models/game-event';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
@@ -17,7 +19,11 @@ export class DeckParserService {
 	private lastDeckTimestamp;
 	private currentBlock: string;
 
-	constructor(private gameEvents: GameEventsEmitterService, private memory: MemoryInspectionService) {
+	constructor(
+		private gameEvents: GameEventsEmitterService,
+		private memory: MemoryInspectionService,
+		private allCards: AllCardsService,
+	) {
 		this.gameEvents.allEvents.subscribe((event: GameEvent) => {
 			if (event.type === GameEvent.GAME_END) {
 				this.reset();
@@ -108,5 +114,47 @@ export class DeckParserService {
 	public reset() {
 		this.currentDeck = {};
 		// console.log('[decks] resetting deck');
+	}
+
+	public buildDeckList(deckstring: string): readonly DeckCard[] {
+		if (!deckstring) {
+			return this.buildEmptyDeckList();
+		}
+		const deck = decode(deckstring);
+		return deck
+			? deck.cards
+					// [dbfid, count] pair
+					.map(pair => this.buildDeckCards(pair))
+					.reduce((a, b) => a.concat(b), [])
+					.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
+			: null;
+	}
+
+	public buildEmptyDeckList(): readonly DeckCard[] {
+		return new Array(30).fill(DeckCard.create({} as DeckCard));
+	}
+
+	public buildDeckCards(pair): DeckCard[] {
+		const card = this.allCards.getCardFromDbfId(pair[0]);
+		const result: DeckCard[] = [];
+		if (!card) {
+			console.error('Could not build deck card', pair);
+			return result;
+		}
+		// Don't include passive buffs in the decklist
+		if (card.mechanics && card.mechanics.indexOf('DUNGEON_PASSIVE_BUFF') !== -1) {
+			return result;
+		}
+		for (let i = 0; i < pair[1]; i++) {
+			result.push(
+				DeckCard.create({
+					cardId: card.id,
+					cardName: card.name,
+					manaCost: card.cost,
+					rarity: card.rarity ? card.rarity.toLowerCase() : null,
+				} as DeckCard),
+			);
+		}
+		return result;
 	}
 }

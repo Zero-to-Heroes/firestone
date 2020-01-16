@@ -74,7 +74,7 @@ export class CardBackToDeckParser implements EventParser {
 		if (initialZone !== 'HAND') {
 			return previousHand;
 		}
-		return this.helper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId);
+		return this.helper.removeSingleCardFromZone(previousHand, movedCard.cardId, movedCard.entityId)[0];
 	}
 
 	private buildNewOther(
@@ -83,7 +83,7 @@ export class CardBackToDeckParser implements EventParser {
 		movedCard: DeckCard,
 	): readonly DeckCard[] {
 		if (['GRAVEYARD', 'REMOVEDFROMGAME', 'SETASIDE', 'SECRET'].indexOf(initialZone) !== -1) {
-			return this.helper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId);
+			return this.helper.removeSingleCardFromZone(previousOther, movedCard.cardId, movedCard.entityId)[0];
 		}
 		return previousOther;
 	}
@@ -96,6 +96,6 @@ export class CardBackToDeckParser implements EventParser {
 		if (initialZone !== 'PLAY') {
 			return previousBOard;
 		}
-		return this.helper.removeSingleCardFromZone(previousBOard, movedCard.cardId, movedCard.entityId);
+		return this.helper.removeSingleCardFromZone(previousBOard, movedCard.cardId, movedCard.entityId)[0];
 	}
 }

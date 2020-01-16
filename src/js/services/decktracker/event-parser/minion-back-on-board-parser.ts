@@ -29,7 +29,7 @@ export class MinionBackOnBoardParser implements EventParser {
 			deck.otherZone,
 			cardId,
 			entityId,
-		);
+		)[0];
 		const cardWithZone = card.update({
 			zone: 'PLAY',
 		} as DeckCard);

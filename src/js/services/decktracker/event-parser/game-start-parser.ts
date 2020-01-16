@@ -31,7 +31,8 @@ export class GameStartParser implements EventParser {
 			currentDeck && currentDeck.deckstring,
 			currentDeck && currentDeck.name,
 		);
-		const deckList: readonly DeckCard[] = this.buildDeckList(currentDeck);
+		const deckList: readonly DeckCard[] = this.deckParser.buildDeckList(currentDeck.deckstring);
+		const opponentDeck: readonly DeckCard[] = this.deckParser.buildEmptyDeckList();
 		const hero: HeroCard = this.buildHero(currentDeck);
 		return Object.assign(new GameState(), {
 			gameStarted: true,
@@ -50,8 +51,8 @@ export class GameStartParser implements EventParser {
 				isFirstPlayer: false,
 			} as DeckState,
 			opponentDeck: {
-				deckList: [],
-				deck: [],
+				deckList: opponentDeck,
+				deck: opponentDeck,
 				graveyard: [],
 				hand: [],
 				board: [],
@@ -90,42 +91,5 @@ export class GameStartParser implements EventParser {
 					name: heroCard.name,
 				} as HeroCard),
 			)[0];
-	}
-
-	private buildDeckList(currentDeck: any): readonly DeckCard[] {
-		if (!currentDeck || !currentDeck.deck) {
-			return [];
-		}
-		return (
-			currentDeck.deck.cards
-				// [dbfid, count] pair
-				.map(pair => this.buildDeckCards(pair))
-				.reduce((a, b) => a.concat(b), [])
-				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
-		);
-	}
-
-	private buildDeckCards(pair): DeckCard[] {
-		const card = this.allCards.getCardFromDbfId(pair[0]);
-		const result: DeckCard[] = [];
-		if (!card) {
-			console.error('Could not build deck card', pair);
-			return result;
-		}
-		// Don't include passive buffs in the decklist
-		if (card.mechanics && card.mechanics.indexOf('DUNGEON_PASSIVE_BUFF') !== -1) {
-			return result;
-		}
-		for (let i = 0; i < pair[1]; i++) {
-			result.push(
-				DeckCard.create({
-					cardId: card.id,
-					cardName: card.name,
-					manaCost: card.cost,
-					rarity: card.rarity ? card.rarity.toLowerCase() : null,
-				} as DeckCard),
-			);
-		}
-		return result;
 	}
 }

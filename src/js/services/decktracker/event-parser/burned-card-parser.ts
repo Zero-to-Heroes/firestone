@@ -24,7 +24,7 @@ export class BurnedCardParser implements EventParser {
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId);
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId)[0];
 		const cardWithZone = card.update({
 			zone: 'BURNED',
 		} as DeckCard);

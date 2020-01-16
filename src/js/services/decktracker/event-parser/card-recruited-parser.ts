@@ -20,7 +20,7 @@ export class CardRecruitedParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId);
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId)[0];
 		const cardWithZone = card.update({
 			zone: 'PLAY',
 		} as DeckCard);

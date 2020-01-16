@@ -14,6 +14,7 @@ import { ManastormInfo } from '../manastorm-bridge/manastorm-info';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
+import { AiDeckService } from './ai-deck-service.service';
 import { DeckCardService } from './deck-card.service';
 import { DeckParserService } from './deck-parser.service';
 import { DynamicZoneHelperService } from './dynamic-zone-helper.service';
@@ -48,6 +49,7 @@ import { MinionDiedParser } from './event-parser/minion-died-parser';
 import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
+import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
@@ -97,6 +99,7 @@ export class GameStateService {
 		private logger: NGXLogger,
 		private deckParser: DeckParserService,
 		private helper: DeckManipulationHelper,
+		private aiDecks: AiDeckService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -205,7 +208,7 @@ export class GameStateService {
 		// 	this.logger.error('null state before processing event', gameEvent, this.state);
 		// 	return;
 		// }
-		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
+		this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
 			this.closedByUser = true;
 			this.updateOverlays();
@@ -453,6 +456,7 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
 			new LocalPlayerParser(),
+			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper),
 		];
 	}
 }

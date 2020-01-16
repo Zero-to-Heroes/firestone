@@ -29,13 +29,13 @@ export class CardStolenParser implements EventParser {
 		// console.log('\tcard in deck', cardInDeck, stolenFromDeck.deck);
 
 		const stolenHand = cardInHand
-			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)
+			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)[0]
 			: stolenFromDeck.hand;
 		const stolenBoard = cardInBoard
-			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)
+			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)[0]
 			: stolenFromDeck.board;
 		const stolenDeck = cardInDeck
-			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
+			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)[0]
 			: stolenFromDeck.deck;
 		const newStolenDeck = Object.assign(new DeckState(), stolenFromDeck, {
 			hand: stolenHand,

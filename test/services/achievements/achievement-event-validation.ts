@@ -80,7 +80,7 @@ export const achievementsValidation = async (
 	} as GameEventsPluginService;
 	const emitter = new GameEventsEmitterService();
 	const playersInfoService = new PlayersInfoService(events, memoryService);
-	const deckService = new DeckParserService(emitter, null);
+	const deckService = new DeckParserService(emitter, null, cards);
 	deckService.currentDeck.deckstring = collaborators ? collaborators.deckstring : undefined;
 	deckService.decodeDeckString();
 	deckService['reset'] = () => {};

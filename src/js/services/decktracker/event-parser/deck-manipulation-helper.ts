@@ -7,27 +7,60 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 export class DeckManipulationHelper {
 	constructor(private readonly allCards: AllCardsService) {}
 
-	public removeSingleCardFromZone(zone: readonly DeckCard[], cardId: string, entityId: number): readonly DeckCard[] {
+	public removeSingleCardFromZone(
+		zone: readonly DeckCard[],
+		cardId: string,
+		entityId: number,
+	): readonly [readonly DeckCard[], DeckCard] {
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
-			return zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card);
+			return [
+				zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card),
+				null,
+			];
 		}
-		// We don't have the entityId, and the cardId is not provided, so we return
 		if (!cardId) {
-			return zone;
+			// If there are some "fillter" cards (ie cards that exist only so that the deck has the right amount
+			// of cards), we remove one
+			if (zone.some(card => !card.entityId && !card.cardId && !card.cardName && !card.creatorCardId)) {
+				let hasRemovedOnce = false;
+				const result = [];
+				let removedCard = undefined;
+				for (const card of zone) {
+					// We don't want to remove a card if it has a different entityId
+					if (
+						!card.entityId &&
+						!card.cardId &&
+						!card.cardName &&
+						!card.creatorCardId &&
+						!card.entityId &&
+						!hasRemovedOnce
+					) {
+						hasRemovedOnce = true;
+						removedCard = card;
+						continue;
+					}
+					result.push(card);
+				}
+				return [result, removedCard];
+			}
+			// We don't have the entityId, and the cardId is not provided, so we return
+			return [zone, null];
 		}
 		// console.log('removing a card from zone without using the entityId', cardId, entityId, zone.length);
 		let hasRemovedOnce = false;
+		let removedCard = null;
 		const result = [];
 		for (const card of zone) {
 			// We don't want to remove a card if it has a different entityId
 			if (card.cardId === cardId && !card.entityId && !hasRemovedOnce) {
 				hasRemovedOnce = true;
+				removedCard = card;
 				continue;
 			}
 			result.push(card);
 		}
-		return result;
+		return [result, removedCard];
 	}
 
 	public addSingleCardToZone(zone: readonly DeckCard[], cardTemplate: DeckCard, debug = false): readonly DeckCard[] {
@@ -79,10 +112,11 @@ export class DeckManipulationHelper {
 					// the cardID to identify the card" (like when dealing with the opponent's deck).
 					// The second case is handled by passing an empty cardId (which is what is returned by the
 					// parser plugin)
-					// console.log('returning null because no card id');
+					console.log('returning null because no card id');
 					return null;
 				} else {
 					// Empty card Id
+					console.log('returning empty card');
 					return DeckCard.create({
 						entityId: entityId,
 					} as DeckCard);
