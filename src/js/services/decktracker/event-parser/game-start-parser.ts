@@ -51,7 +51,7 @@ export class GameStartParser implements EventParser {
 				isFirstPlayer: false,
 			} as DeckState,
 			opponentDeck: {
-				deckList: opponentDeck,
+				deckList: [],
 				deck: opponentDeck,
 				graveyard: [],
 				hand: [],

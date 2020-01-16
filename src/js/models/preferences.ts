@@ -36,7 +36,7 @@ export class Preferences {
 	readonly overlayCardsGoToBottom: boolean = false;
 
 	readonly opponentTracker: boolean = false;
-	readonly opponentOverlayCardsGoToBottom: boolean = false;
+	readonly opponentOverlayCardsGoToBottom: boolean = true;
 	readonly opponentOverlayGroupByZone: boolean = false;
 	readonly opponentOverlayWidthInPx: number = 227;
 	readonly opponentOverlayOpacityInPercent: number = 100;

@@ -60,17 +60,16 @@ export class GroupedDeckListComponent {
 
 	private buildGroupedList() {
 		// When we don't have the decklist, we just show all the cards in hand + deck
+		const knownDeck = this._deckState.deck;
 		const hand = this._deckState.hand;
+		const board = this._deckState.board;
+		const other = this._deckState.otherZone.filter(card => card.zone !== 'SETASIDE');
 		const deckList = this._deckState.deckList || [];
 		const deck =
 			deckList.length > 0
-				? this._deckState.deck
-				: [
-						...this._deckState.deck,
-						...this._deckState.hand,
-						...this._deckState.otherZone.filter(card => card.zone !== 'SETASIDE'),
-				  ].sort((a, b) => a.manaCost - b.manaCost);
-		// console.log('grouping deck list?', this._deckState.deckList, this.deck, this._deckState);
+				? knownDeck
+				: [...knownDeck, ...hand, ...board, ...other].sort((a, b) => a.manaCost - b.manaCost);
+		// console.log('grouping deck list?', knownDeck, deck, this._deckState);
 		// The zone in this view is the decklist + cards in the deck that didn't
 		// start in the decklist
 		const groupedFromDecklist: Map<string, DeckCard[]> = this.groupBy(deckList, (card: DeckCard) => card.cardId);
@@ -114,6 +113,9 @@ export class GroupedDeckListComponent {
 		for (const cardId of Array.from(groupedFromNotInBaseDeck.keys())) {
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			const isAtLeastOneCardInHand = (hand || []).filter(card => card.cardId === cardId).length > 0;
+			const isInOtherZone =
+				[...(board || []), ...(other || [])].filter(card => card.cardId === cardId).length > 0;
+			const isInBaseDeck = (knownDeck || []).filter(card => card.cardId === cardId).length > 0;
 			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
 				.map(card => card.creatorCardId)
 				.filter(creator => creator);
@@ -125,7 +127,12 @@ export class GroupedDeckListComponent {
 					cardName: groupedFromDeck.get(cardId)[i].cardName,
 					manaCost: groupedFromDeck.get(cardId)[i].manaCost,
 					rarity: groupedFromDeck.get(cardId)[i].rarity,
-					highlight: isAtLeastOneCardInHand && this._highlight ? 'in-hand' : 'normal',
+					highlight:
+						isAtLeastOneCardInHand && this._highlight
+							? 'in-hand'
+							: !isInBaseDeck && isInOtherZone
+							? 'dim'
+							: 'normal',
 					creatorCardIds: creatorCardIds,
 				} as VisualDeckCard);
 				// console.log('base is now', base);
