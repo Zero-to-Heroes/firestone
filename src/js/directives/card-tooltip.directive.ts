@@ -19,7 +19,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class CardTooltipDirective implements AfterViewInit, OnDestroy {
-	@Input('cardTooltip') cardId = '';
+	@Input('cardTooltip') cardId = undefined;
 	@Input('cardTooltipText') cardTooltipText = undefined;
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
 		// console.log('[card-tooltip-directive] setting tooltip position', value);
@@ -132,6 +132,9 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		// console.log('mouseenter', this._position);
 		if (this._position === 'none') {
 			console.log('tooltip deactivated, not showing');
+			return;
+		}
+		if (!this.cardId) {
 			return;
 		}
 		// Create tooltip portal
