@@ -10,8 +10,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 	template: `
 		<decktracker-overlay-root
 			[overlayWidthExtractor]="overlayWidthExtractor"
+			[overlayDisplayModeExtractor]="overlayDisplayModeExtractor"
 			[opacityExtractor]="opacityExtractor"
 			[scaleExtractor]="scaleExtractor"
+			[cardsGoToBottomExtractor]="cardsGoToBottomExtractor"
 			[deckExtractor]="deckExtractor"
 			[trackerPositionUpdater]="trackerPositionUpdater"
 			[trackerPositionExtractor]="trackerPositionExtractor"
@@ -26,8 +28,11 @@ import { PreferencesService } from '../../../services/preferences.service';
 })
 export class DeckTrackerOverlayPlayerComponent {
 	overlayWidthExtractor = (prefs: Preferences) => prefs.overlayWidthInPx;
+	overlayDisplayModeExtractor = (prefs: Preferences) =>
+		!prefs.overlayGroupByZone ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
 	opacityExtractor = (prefs: Preferences) => prefs.overlayOpacityInPercent;
 	scaleExtractor = (prefs: Preferences) => prefs.decktrackerScale;
+	cardsGoToBottomExtractor = (prefs: Preferences) => prefs.overlayCardsGoToBottom;
 	deckExtractor = (state: GameState) => state.playerDeck;
 	trackerPositionUpdater = (left: number, top: number) => this.prefs.updateTrackerPosition(left, top);
 	trackerPositionExtractor = (prefs: Preferences) => prefs.decktrackerPosition;

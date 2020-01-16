@@ -68,7 +68,9 @@ declare var amplitude;
 })
 export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy {
 	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
+	@Input() overlayDisplayModeExtractor: (prefs: Preferences) => string;
 	@Input() opacityExtractor: (prefs: Preferences) => number;
+	@Input() cardsGoToBottomExtractor: (prefs: Preferences) => boolean;
 	@Input() scaleExtractor: (prefs: Preferences) => number;
 	@Input() deckExtractor: (state: GameState) => DeckState;
 	@Input() trackerPositionUpdater: (left: number, top: number) => void;
@@ -197,14 +199,14 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	private async handleDisplayPreferences(preferences: Preferences = null) {
 		preferences = preferences || (await this.prefs.getPreferences());
 		// console.log('updating prefs', preferences);
-		this.displayMode = !preferences.overlayGroupByZone ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
+		this.displayMode = this.overlayDisplayModeExtractor(preferences);
 		this.showTitleBar = preferences.overlayShowTitleBar;
 		this.overlayWidthInPx = this.overlayWidthExtractor(preferences);
 		this.opacity = this.opacityExtractor(preferences) / 100;
 		this.scale = this.scaleExtractor(preferences);
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
-		this.cardsGoToBottom = preferences.overlayCardsGoToBottom;
+		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();
 		// console.log('showing tooltips?', this.showTooltips, this.tooltipPosition);
@@ -233,14 +235,17 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = this.trackerPositionExtractor(prefs);
+		console.log('loaded tracker position', trackerPosition, this.player);
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
 		const newLeft = trackerPosition
 			? trackerPosition.left || 0
 			: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi);
-		const newTop = prefs.decktrackerPosition
-			? prefs.decktrackerPosition.top || 0
+		const newTop = trackerPosition
+			? trackerPosition.top || 0
 			: this.defaultTrackerPositionTopProvider(gameWidth, width, dpi);
+		console.log('updating tracker position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
+		console.log('after window position update', await this.ow.getCurrentWindow());
 		await this.updateTooltipPosition();
 	}
 

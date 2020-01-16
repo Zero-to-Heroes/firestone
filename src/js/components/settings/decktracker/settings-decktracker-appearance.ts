@@ -37,6 +37,9 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Show rarity colors"
 					tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
 				></preference-toggle>
+			</div>
+			<div class="settings-group">
+				<div class="title">Player tracker settings</div>
 				<preference-toggle
 					field="overlayGroupByZone"
 					label="Group cards by zone"
@@ -49,9 +52,6 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Cards in deck at the top"
 					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
 				></preference-toggle>
-			</div>
-			<div class="settings-group">
-				<div class="title">Player tracker settings</div>
 				<preference-slider
 					class="first-slider"
 					[field]="'overlayWidthInPx'"
@@ -96,6 +96,19 @@ import { PreferencesService } from '../../../services/preferences.service';
 					field="opponentTracker"
 					label="Show opponent tracker"
 					tooltip="When active, a tracker will show for your opponent's cards"
+				></preference-toggle>
+				<preference-toggle
+					*ngIf="opponentTracker"
+					field="opponentOverlayGroupByZone"
+					label="Group cards by zone"
+					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
+				></preference-toggle>
+				<preference-toggle
+					*ngIf="!opponentOverlayGroupByZone && opponentTracker"
+					class="indented"
+					field="opponentOverlayCardsGoToBottom"
+					label="Cards in deck at the top"
+					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
 				></preference-toggle>
 				<preference-slider
 					*ngIf="opponentTracker"
@@ -146,6 +159,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	sliderEnabled = false;
 	showTitleBar: boolean;
 	overlayGroupByZone: boolean;
+	opponentOverlayGroupByZone: boolean;
 	opponentTracker: boolean;
 
 	private displaySubscription: Subscription;
@@ -168,6 +182,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
 			this.overlayGroupByZone = event.preferences.overlayGroupByZone;
 			this.opponentTracker = event.preferences.opponentTracker;
+			this.opponentOverlayGroupByZone = event.preferences.opponentOverlayGroupByZone;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -182,6 +197,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	private async loadDefaultValues() {
 		const prefs = await this.prefs.getPreferences();
 		this.overlayGroupByZone = prefs.overlayGroupByZone;
+		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
 		this.opponentTracker = prefs.opponentTracker;
 		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
