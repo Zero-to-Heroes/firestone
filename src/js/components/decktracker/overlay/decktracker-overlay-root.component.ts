@@ -6,6 +6,7 @@ import {
 	ElementRef,
 	EventEmitter,
 	HostListener,
+	Input,
 	OnDestroy,
 	Renderer2,
 	ViewRef,
@@ -13,6 +14,7 @@ import {
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
+import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { Preferences } from '../../../models/preferences';
 import { DebugService } from '../../../services/debug.service';
@@ -23,7 +25,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 declare var amplitude;
 
 @Component({
-	selector: 'decktracker-overlay',
+	selector: 'decktracker-overlay-root',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
 		`../../../../css/global/cdk-overlay.scss`,
@@ -43,9 +45,9 @@ declare var amplitude;
 					>
 						<div class="background"></div>
 						<decktracker-control-bar [windowId]="windowId"></decktracker-control-bar>
-						<decktracker-title-bar [deck]="gameState.playerDeck"></decktracker-title-bar>
+						<decktracker-title-bar [deck]="deck"></decktracker-title-bar>
 						<decktracker-deck-list
-							[deckState]="gameState.playerDeck"
+							[deckState]="deck"
 							[displayMode]="displayMode"
 							[highlightCardsInHand]="highlightCardsInHand"
 							[colorManaCost]="colorManaCost"
@@ -61,7 +63,19 @@ declare var amplitude;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
+export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy {
+	@Input() overlayWidthExtractor: (prefs: Preferences) => number;
+	@Input() opacityExtractor: (prefs: Preferences) => number;
+	@Input() scaleExtractor: (prefs: Preferences) => number;
+	@Input() deckExtractor: (state: GameState) => DeckState;
+	@Input() trackerPositionUpdater: (left: number, top: number) => void;
+	@Input() trackerPositionExtractor: (prefs: Preferences) => { left: number; top: number };
+	@Input() defaultTrackerPositionLeftProvider: (gameWidth: number, width: number, dpi: number) => number;
+	@Input() defaultTrackerPositionTopProvider: (gameWidth: number, width: number, dpi: number) => number;
+	@Input() player: 'player' | 'opponent';
+
+	deck: DeckState;
+
 	gameState: GameState;
 	windowId: string;
 	activeTooltip: string;
@@ -104,6 +118,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			this.gameState = event ? event.state : undefined;
+			this.deck = this.gameState ? this.deckExtractor(this.gameState) : null;
 			console.log('game state', this.gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -137,6 +152,7 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		await this.handleDisplayPreferences();
 		amplitude.getInstance().logEvent('match-start', {
 			'display-mode': this.displayMode,
+			'player': this.player,
 		});
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
@@ -168,7 +184,8 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 				return;
 			}
 			// console.log('updating tracker position', window.left, window.top);
-			this.prefs.updateTrackerPosition(window.left, window.top);
+			this.trackerPositionUpdater(window.left, window.top);
+			// this.prefs.updateTrackerPosition(window.left, window.top);
 			// console.log('updated tracker position', window.left, window.top);
 		});
 	}
@@ -178,9 +195,9 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		// console.log('updating prefs', preferences);
 		this.displayMode = !preferences.overlayGroupByZone ? 'DISPLAY_MODE_GROUPED' : 'DISPLAY_MODE_ZONE';
 		this.showTitleBar = preferences.overlayShowTitleBar;
-		this.overlayWidthInPx = preferences.overlayWidthInPx;
-		this.opacity = preferences.overlayOpacityInPercent / 100;
-		this.scale = preferences.decktrackerScale;
+		this.overlayWidthInPx = this.overlayWidthExtractor(preferences);
+		this.opacity = this.opacityExtractor(preferences) / 100;
+		this.scale = this.scaleExtractor(preferences);
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.cardsGoToBottom = preferences.overlayCardsGoToBottom;
@@ -203,7 +220,6 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
-		const prefs = await this.prefs.getPreferences();
 		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
@@ -211,9 +227,15 @@ export class DeckTrackerOverlayComponent implements AfterViewInit, OnDestroy {
 		}
 		const gameWidth = gameInfo.logicalWidth;
 		const dpi = gameWidth / gameInfo.width;
+		const prefs = await this.prefs.getPreferences();
+		const trackerPosition = this.trackerPositionExtractor(prefs);
 		// https://stackoverflow.com/questions/8388440/converting-a-double-to-an-int-in-javascript-without-rounding
-		const newLeft = prefs.decktrackerPosition ? prefs.decktrackerPosition.left || 0 : gameWidth - width * dpi - 40; // Leave a bit of room to the right
-		const newTop = prefs.decktrackerPosition ? prefs.decktrackerPosition.top || 0 : 10;
+		const newLeft = trackerPosition
+			? trackerPosition.left || 0
+			: this.defaultTrackerPositionLeftProvider(gameWidth, width, dpi);
+		const newTop = prefs.decktrackerPosition
+			? prefs.decktrackerPosition.top || 0
+			: this.defaultTrackerPositionTopProvider(gameWidth, width, dpi);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		await this.updateTooltipPosition();
 	}

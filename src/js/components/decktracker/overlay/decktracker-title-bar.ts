@@ -17,12 +17,4 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 })
 export class DeckTrackerTitleBarComponent {
 	@Input() deck: DeckState;
-
-	constructor() {
-		console.log('building title bar');
-	}
-
-	ngAfterViewInit() {
-		console.log('build title bar');
-	}
 }

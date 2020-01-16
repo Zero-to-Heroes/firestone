@@ -37,12 +37,4 @@ export class DeckTrackerCardsRecapComponent {
 		this.cardsInHand = value && value.hand ? value.hand.length : 0;
 		this.cardsInDeck = value && value.deck ? value.deck.length : 0;
 	}
-
-	constructor() {
-		console.log('building recap');
-	}
-
-	ngAfterViewInit() {
-		console.log('build recap');
-	}
 }

@@ -8,7 +8,7 @@ import { init, Integrations } from '@sentry/browser';
 import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
-import { DeckTrackerOverlayComponent } from '../../components/decktracker/overlay/decktracker-overlay.component';
+import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/overlay/decktracker-overlay-player.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
 import { GenericIndexedDbService } from '../../services/generic-indexed-db.service';
@@ -50,7 +50,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
 	declarations: [],
-	bootstrap: [DeckTrackerOverlayComponent],
+	bootstrap: [DeckTrackerOverlayPlayerComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })
 export class DeckTrackerModule {}

@@ -42,8 +42,10 @@
 		width: 200px;
 	}
 
-	.indented {
-		margin-left: 30px;
+	::ng-deep preference-toggle.indented {
+		.preference-toggle {
+			margin-left: 30px;
+		}
 	}
 }
 
