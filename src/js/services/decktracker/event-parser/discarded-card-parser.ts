@@ -20,7 +20,16 @@ export class DiscardedCardParser implements EventParser {
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.helper.findCardInZone(deck.hand, cardId, entityId);
 
-		const newHand: readonly DeckCard[] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId)[0];
+		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
+
+		// See card-played-from-hand
+		let newDeck = deck.deck;
+		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
+			const result = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId);
+			const removedFromDeck = result[1];
+			newDeck = result[0];
+		}
+
 		const cardWithZone = card.update({
 			zone: 'DISCARD',
 		} as DeckCard);
@@ -28,6 +37,7 @@ export class DiscardedCardParser implements EventParser {
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			otherZone: newOther,
+			deck: newDeck,
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

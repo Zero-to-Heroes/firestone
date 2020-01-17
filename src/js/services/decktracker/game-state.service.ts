@@ -299,7 +299,9 @@ export class GameStateService {
 	}
 
 	private updateDeck(deck: DeckState, gameState: GameState, playerFromTracker): DeckState {
+		// this.logger.debug('[game-state] updating deck', deck, gameState, playerFromTracker);
 		const stateWithMetaInfos = this.gameStateMetaInfos.updateDeck(deck, gameState.currentTurn);
+		// this.logger.debug('[game-state] stateWithMetaInfos', stateWithMetaInfos);
 		// Add missing info like card names, if the card added doesn't come from a deck state
 		// (like with the Chess brawl)
 		const newState = this.deckCardService.fillMissingCardInfoInDeck(stateWithMetaInfos);
@@ -456,7 +458,7 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
 			new LocalPlayerParser(),
-			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper),
+			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards),
 		];
 	}
 }

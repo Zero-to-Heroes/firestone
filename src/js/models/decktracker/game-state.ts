@@ -12,4 +12,8 @@ export class GameState {
 	public static create(): GameState {
 		return Object.assign(new GameState());
 	}
+
+	public update(value: GameState): GameState {
+		return Object.assign(new GameState(), this, value);
+	}
 }

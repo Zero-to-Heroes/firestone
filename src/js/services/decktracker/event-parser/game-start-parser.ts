@@ -36,31 +36,19 @@ export class GameStartParser implements EventParser {
 		const hero: HeroCard = this.buildHero(currentDeck);
 		return Object.assign(new GameState(), {
 			gameStarted: true,
-			playerDeck: {
+			playerDeck: DeckState.create({
 				deckstring: currentDeck ? currentDeck.deckstring : null,
 				name: currentDeck ? currentDeck.name : null,
 				hero: hero,
 				deckList: deckList,
 				deck: deckList,
-				graveyard: [],
-				hand: [],
-				board: [],
-				heroPower: undefined,
-				otherZone: [],
-				dynamicZones: [],
 				isFirstPlayer: false,
-			} as DeckState,
-			opponentDeck: {
-				deckList: [],
+			} as DeckState),
+			opponentDeck: DeckState.create({
 				deck: opponentDeck,
-				graveyard: [],
-				hand: [],
-				board: [],
-				otherZone: [],
-				heroPower: undefined,
-				dynamicZones: [],
 				isFirstPlayer: false,
-			} as DeckState,
+				isOpponent: true,
+			} as DeckState),
 		} as GameState);
 	}
 

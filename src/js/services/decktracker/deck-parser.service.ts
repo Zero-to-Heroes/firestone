@@ -121,13 +121,14 @@ export class DeckParserService {
 			return this.buildEmptyDeckList();
 		}
 		const deck = decode(deckstring);
+		// console.log('decoding', deckstring, deck);
 		return deck
 			? deck.cards
 					// [dbfid, count] pair
 					.map(pair => this.buildDeckCards(pair))
 					.reduce((a, b) => a.concat(b), [])
 					.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
-			: null;
+			: [];
 	}
 
 	public buildEmptyDeckList(): readonly DeckCard[] {

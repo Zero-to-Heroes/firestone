@@ -16,7 +16,7 @@ export class DeckManipulationHelper {
 		if (zone.some(card => card.entityId === entityId)) {
 			return [
 				zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card),
-				null,
+				zone.find((card: DeckCard) => card.entityId === entityId),
 			];
 		}
 		if (!cardId) {

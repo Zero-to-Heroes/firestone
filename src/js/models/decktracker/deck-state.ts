@@ -4,6 +4,7 @@ import { DynamicZone } from './view/dynamic-zone';
 
 export class DeckState {
 	readonly isFirstPlayer: boolean;
+	readonly isOpponent: boolean;
 	readonly deckstring?: string;
 	readonly name?: string;
 	readonly hero?: HeroCard;
@@ -20,4 +21,12 @@ export class DeckState {
 	readonly board: readonly DeckCard[] = [];
 	readonly otherZone: readonly DeckCard[] = [];
 	readonly dynamicZones: readonly DynamicZone[] = [];
+
+	public static create(value: DeckState): DeckState {
+		return Object.assign(new DeckState(), value);
+	}
+
+	public update(value: DeckState): DeckState {
+		return Object.assign(new DeckState(), this, value);
+	}
 }
