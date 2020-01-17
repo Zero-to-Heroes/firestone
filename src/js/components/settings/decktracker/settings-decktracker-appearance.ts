@@ -99,6 +99,12 @@ import { PreferencesService } from '../../../services/preferences.service';
 				></preference-toggle>
 				<preference-toggle
 					*ngIf="opponentTracker"
+					field="opponentLoadAiDecklist"
+					label="Load AI decklists"
+					tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Will take effect at the start of the next match"
+				></preference-toggle>
+				<preference-toggle
+					*ngIf="opponentTracker"
 					field="opponentOverlayGroupByZone"
 					label="Group cards by zone"
 					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"

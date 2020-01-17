@@ -30,9 +30,11 @@ export class GameStartParser implements EventParser {
 			'[game-start-parser] init game with deck',
 			currentDeck && currentDeck.deckstring,
 			currentDeck && currentDeck.name,
+			currentDeck,
 		);
 		const deckList: readonly DeckCard[] = this.deckParser.buildDeckList(currentDeck.deckstring);
-		const opponentDeck: readonly DeckCard[] = this.deckParser.buildEmptyDeckList();
+		// We always assume that, not knowing the decklist, the player and opponent decks have the same size
+		const opponentDeck: readonly DeckCard[] = this.deckParser.buildEmptyDeckList(deckList.length);
 		const hero: HeroCard = this.buildHero(currentDeck);
 		return Object.assign(new GameState(), {
 			gameStarted: true,

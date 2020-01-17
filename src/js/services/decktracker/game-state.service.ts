@@ -458,7 +458,7 @@ export class GameStateService {
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
 			new LocalPlayerParser(),
-			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards),
+			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
 		];
 	}
 }

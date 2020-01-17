@@ -35,8 +35,15 @@ export class DeckTrackerCardsRecapComponent {
 
 	@Input() set deck(value: DeckState) {
 		this.cardsInHand = value && value.hand ? value.hand.length : 0;
-		if (value && value.isOpponent && value.hero && value.deckList && value.deck) {
+		if (value && value.isOpponent && value.hero && value.deckList.length > 0 && value.deck.length > 0) {
 			this.cardsInDeck = value.deck.length - value.hand.filter(card => !card.creatorCardId).length;
+			// console.log(
+			// 	'computed cards in deck',
+			// 	this.cardsInDeck,
+			// 	value.deck,
+			// 	value.hand.filter(card => !card.creatorCardId),
+			// 	value,
+			// );
 		} else {
 			this.cardsInDeck = value && value.deck ? value.deck.length : 0;
 		}

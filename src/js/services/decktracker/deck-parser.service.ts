@@ -116,9 +116,9 @@ export class DeckParserService {
 		// console.log('[decks] resetting deck');
 	}
 
-	public buildDeckList(deckstring: string): readonly DeckCard[] {
+	public buildDeckList(deckstring: string, deckSize: number = 30): readonly DeckCard[] {
 		if (!deckstring) {
-			return this.buildEmptyDeckList();
+			return this.buildEmptyDeckList(deckSize);
 		}
 		const deck = decode(deckstring);
 		// console.log('decoding', deckstring, deck);
@@ -131,8 +131,8 @@ export class DeckParserService {
 			: [];
 	}
 
-	public buildEmptyDeckList(): readonly DeckCard[] {
-		return new Array(30).fill(DeckCard.create({} as DeckCard));
+	public buildEmptyDeckList(deckSize: number = 30): readonly DeckCard[] {
+		return new Array(deckSize).fill(DeckCard.create({} as DeckCard));
 	}
 
 	public buildDeckCards(pair): DeckCard[] {

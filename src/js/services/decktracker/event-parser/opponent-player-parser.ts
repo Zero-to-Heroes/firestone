@@ -3,6 +3,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
 import { GameEvent } from '../../../models/game-event';
+import { PreferencesService } from '../../preferences.service';
 import { AiDeckService } from '../ai-deck-service.service';
 import { DeckParserService } from '../deck-parser.service';
 import { DeckManipulationHelper } from './deck-manipulation-helper';
@@ -14,6 +15,7 @@ export class OpponentPlayerParser implements EventParser {
 		private readonly deckParser: DeckParserService,
 		private readonly helper: DeckManipulationHelper,
 		private readonly allCards: AllCardsService,
+		private readonly prefs: PreferencesService,
 	) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
@@ -26,9 +28,12 @@ export class OpponentPlayerParser implements EventParser {
 		const newHero = Object.assign(new HeroCard(), currentState.opponentDeck.hero, {
 			playerName: playerName,
 		} as HeroCard);
-		const aiDeckString = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
+		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
+		const aiDeckString = shouldLoadDecklist
+			? this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
+			: null;
 		console.log('[opponent-player] got deckstring', aiDeckString);
-		const decklist = this.deckParser.buildDeckList(aiDeckString);
+		const decklist = this.deckParser.buildDeckList(aiDeckString, currentState.playerDeck.deckList.length);
 		console.log('[opponent-player] parsed decklist', decklist);
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can
@@ -43,7 +48,7 @@ export class OpponentPlayerParser implements EventParser {
 		console.log('[opponent-player] newDeck', newDeck);
 		const newPlayerDeck = currentState.opponentDeck.update({
 			hero: newHero,
-			deckList: decklist,
+			deckList: shouldLoadDecklist ? decklist : [],
 			deck: newDeck,
 		} as DeckState);
 		console.log('[opponent-player] newPlayerDeck', newPlayerDeck);

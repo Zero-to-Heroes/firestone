@@ -23,7 +23,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		// console.log('[card-played-from-hand] card in zone', card, deck.hand, cardId, entityId);
 
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, cardId, entityId);
-		console.log('removed card from hand', removedCard, currentState, gameEvent);
+		// console.log('removed card from hand', removedCard, currentState, gameEvent);
 		// We can't make a connection between the card in hand and the card that started in the deck
 		// when we are facing an opponent with a known decklist (like is the case with the AI for instance)
 		// There are some cases where we know that a card in hand is a specific card coming from the deck:

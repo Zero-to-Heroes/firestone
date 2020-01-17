@@ -42,6 +42,7 @@ export class Preferences {
 	readonly opponentOverlayOpacityInPercent: number = 100;
 	readonly opponentOverlayScale: number = 100;
 	readonly opponentOverlayPosition: { left: number; top: number };
+	readonly opponentLoadAiDecklist: boolean = true;
 
 	readonly replaysShowNotification: boolean = true;
 
