@@ -29,9 +29,8 @@ export class OpponentPlayerParser implements EventParser {
 			playerName: playerName,
 		} as HeroCard);
 		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
-		const aiDeckString = shouldLoadDecklist
-			? this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId)
-			: null;
+		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
+		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
 		console.log('[opponent-player] got deckstring', aiDeckString);
 		const decklist = this.deckParser.buildDeckList(aiDeckString, currentState.playerDeck.deckList.length);
 		console.log('[opponent-player] parsed decklist', decklist);

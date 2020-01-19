@@ -216,6 +216,13 @@ export class GameEvents {
 					} as GameEvent),
 				);
 				break;
+			case 'DECKLIST_UPDATE':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.DECKLIST_UPDATE, gameEvent, {
+						deckId: gameEvent.Value.AdditionalProps.DeckId,
+					}),
+				);
+				break;
 			case 'RUMBLE_RUN_STEP':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value - 1);
 				this.gameEventsEmitter.allEvents.next(

@@ -33,6 +33,7 @@ import { CardRevealedParser } from './event-parser/card-revealed-parser';
 import { CardStolenParser } from './event-parser/card-stolen-parser';
 import { CreateCardInDeckParser } from './event-parser/create-card-in-deck-parser';
 import { DeckManipulationHelper } from './event-parser/deck-manipulation-helper';
+import { DecklistUpdateParser } from './event-parser/decklist-update-parser';
 import { DeckstringOverrideParser } from './event-parser/deckstring-override-parser';
 import { DiscardedCardParser } from './event-parser/discarded-card-parser';
 import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser';
@@ -459,6 +460,7 @@ export class GameStateService {
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
 			new LocalPlayerParser(),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
+			new DecklistUpdateParser(this.aiDecks, this.deckParser, this.prefs),
 		];
 	}
 }
