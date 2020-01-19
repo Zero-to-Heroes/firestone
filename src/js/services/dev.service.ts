@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { ReferenceCard } from '@firestone-hs/replay-parser';
+import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
 import { GameStat } from '../models/mainwindow/stats/game-stat';
 import { GameStats } from '../models/mainwindow/stats/game-stats';
@@ -12,6 +14,7 @@ import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
 import { SimpleIOService } from './plugins/simple-io.service';
+import { SetsService } from './sets-service.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
 
@@ -29,10 +32,12 @@ export class DevService {
 		private gameEventsPlugin: GameEventsPluginService,
 		private deckService: DeckParserService,
 		private storage: AchievementsLocalStorageService,
+		private cards: SetsService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
 		}
+		this.cards.initializeCardsDb();
 		this.addTestCommands();
 	}
 
@@ -87,20 +92,63 @@ export class DevService {
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		};
-		window['loadEvents'] = async (fileName, awaitEvents = false) => {
+		window['loadEvents'] = async (fileName, awaitEvents = false, timeBetweenEvents?: number) => {
 			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\test\\events\\${fileName}.json`;
 			const logContents = await this.io.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
-			console.log('sending events', events);
+			// console.log('sending events', events);
 			for (let event of events) {
-				console.log('dispatching', event);
+				// console.log('dispatching', event);
 				if (awaitEvents) {
 					await this.gameEvents.dispatchGameEvent(event);
+					if (timeBetweenEvents) {
+						await sleep(timeBetweenEvents);
+					}
 				} else {
 					this.gameEvents.dispatchGameEvent(event);
 				}
 			}
 			console.log('processing done');
+		};
+		window['buildDeck'] = async (decklist, hero) => {
+			const cards = decklist.split('\n');
+			console.log(cards);
+			const allCards = this.cards.getAllCards();
+			const cardArray = cards
+				.map(card => {
+					const [name, count] = card.split('#');
+					const result: [readonly ReferenceCard[], number] = [
+						allCards.filter(card => card.id === name).length > 0
+							? allCards.filter(card => card.id === name)
+							: allCards
+									.filter(card => card.name === name)
+									.filter(card => ['Battlegrounds', 'Wild_event'].indexOf(card.set) === -1)
+									.filter(card => !card.id.startsWith('FB_Champs'))
+									.filter(card => !card.id.startsWith('TB_'))
+									.filter(card => card.type !== 'Hero')
+									.filter(card => card.id.indexOf('o') === -1) // Don't include ???
+									.filter(card => card.id.indexOf('t') === -1) // Don't include tokens
+									.filter(card => card.id.indexOf('e') === -1), // Don't include enchantments
+						count,
+					];
+					if (result[0].length !== 1) {
+						console.warn('issue mapping card', card, result);
+						throw new Error('done');
+					}
+					return result;
+				})
+				.map(cards => {
+					return [cards[0][0].dbfId, parseInt(cards[1] || 1)];
+				});
+			console.log(cardArray);
+			const deck = {
+				cards: cardArray,
+				heroes: [hero],
+				format: 1,
+			};
+			const deckstring = encode(deck as any);
+			console.log(deckstring);
+			console.log(decode(deckstring));
 		};
 		// window['addReplayInfos'] = async () => {
 		// 	const achievements = await this.storage.loadAchievements();
@@ -189,4 +237,8 @@ export class DevService {
 	// 		});
 	// 	});
 	// }
+}
+
+function sleep(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
 }

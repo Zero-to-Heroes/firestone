@@ -70,6 +70,10 @@ export class SetsService {
 		return this.getStandardSets().concat(this.getWildSets());
 	}
 
+	public getAllCards(): ReferenceCard[] {
+		return this.allCards.getCards();
+	}
+
 	public getRarities(setId: string): string[] {
 		if (setId === 'core') {
 			return ['free'];
@@ -95,7 +99,7 @@ export class SetsService {
 					card => card.text && card.text.toLowerCase().indexOf(textToFind.toLowerCase()) !== -1,
 				);
 			}
-			if (fragment.indexOf('-name:') !== -1 && fragment.split('name:')[1]) {
+			if (fragment.indexOf('name:') !== -1 && fragment.split('name:')[1]) {
 				const textToFind = searchString.split('name:')[1];
 				filterFunctions.push(
 					card => card.name && card.name.toLowerCase().indexOf(textToFind.toLowerCase()) === -1,
