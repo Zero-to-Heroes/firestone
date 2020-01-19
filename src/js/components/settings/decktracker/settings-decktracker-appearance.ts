@@ -101,7 +101,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					*ngIf="opponentTracker"
 					field="opponentLoadAiDecklist"
 					label="Load AI decklists"
-					tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Will take effect at the start of the next match"
+					tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Be aware that some decks are pseudo random, so the decklist will often be only indicative."
 				></preference-toggle>
 				<preference-toggle
 					*ngIf="opponentTracker"
