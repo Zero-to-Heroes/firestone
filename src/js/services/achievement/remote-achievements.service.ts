@@ -104,7 +104,7 @@ export class RemoteAchievementsService {
 		});
 	}
 
-	private loadAchievementsInternal(userInfo, callback, retriesLeft = 15) {
+	private loadAchievementsInternal(userInfo, callback, retriesLeft = 5) {
 		if (retriesLeft <= 0) {
 			console.error('Could not load achievements', `${ACHIEVEMENTS_RETRIEVE_URL}`, userInfo);
 			callback([]);
@@ -115,7 +115,7 @@ export class RemoteAchievementsService {
 				callback(result);
 			},
 			error => {
-				setTimeout(() => this.loadAchievementsInternal(userInfo, callback, retriesLeft - 1), 2000);
+				setTimeout(() => this.loadAchievementsInternal(userInfo, callback, retriesLeft - 1), 1000);
 			},
 		);
 	}
