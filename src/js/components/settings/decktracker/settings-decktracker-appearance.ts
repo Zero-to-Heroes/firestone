@@ -52,7 +52,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Cards in deck at the top"
 					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
 				></preference-toggle>
-				<preference-slider
+				<!-- <preference-slider
 					class="first-slider"
 					[field]="'overlayWidthInPx'"
 					[label]="'Overlay width'"
@@ -64,8 +64,9 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[min]="215"
 					[max]="300"
 				>
-				</preference-slider>
+				</preference-slider> -->
 				<preference-slider
+					class="first-slider"
 					[field]="'decktrackerScale'"
 					[label]="'Overlay size'"
 					[enabled]="sliderEnabled"
@@ -74,7 +75,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						'Change the tracker scale. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
 					"
 					[min]="75"
-					[max]="200"
+					[max]="125"
 				>
 				</preference-slider>
 				<preference-slider
@@ -116,7 +117,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					label="Cards in deck at the top"
 					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
 				></preference-toggle>
-				<preference-slider
+				<!-- <preference-slider
 					*ngIf="opponentTracker"
 					class="first-slider"
 					field="opponentOverlayWidthInPx"
@@ -129,9 +130,10 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[min]="215"
 					[max]="300"
 				>
-				</preference-slider>
+				</preference-slider> -->
 				<preference-slider
 					*ngIf="opponentTracker"
+					class="first-slider"
 					field="opponentOverlayScale"
 					label="Overlay size"
 					[enabled]="sliderEnabled"
@@ -140,7 +142,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						Change the opponent's tracker scale. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
 					"
 					[min]="75"
-					[max]="200"
+					[max]="125"
 				>
 				</preference-slider>
 				<preference-slider

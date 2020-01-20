@@ -125,7 +125,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			this.gameState = event ? event.state : undefined;
 			this.deck = this.gameState ? this.deckExtractor(this.gameState) : null;
-			console.log('game state', this.gameState);
+			// console.log('game state', this.gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -201,9 +201,10 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		// console.log('updating prefs', preferences);
 		this.displayMode = this.overlayDisplayModeExtractor(preferences);
 		this.showTitleBar = preferences.overlayShowTitleBar;
-		this.overlayWidthInPx = this.overlayWidthExtractor(preferences);
+		this.overlayWidthInPx = 227; // this.overlayWidthExtractor(preferences);
 		this.opacity = this.opacityExtractor(preferences) / 100;
 		this.scale = this.scaleExtractor(preferences);
+		this.el.nativeElement.style.setProperty('--decktracker-scale', this.scale / 100);
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
