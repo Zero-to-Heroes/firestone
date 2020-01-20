@@ -14,7 +14,7 @@ export class BattlegroundsRankReq implements Requirement {
 
 	public static create(rawReq: RawRequirement, memoryInspection: MemoryInspectionService): Requirement {
 		if (!rawReq.values || rawReq.values.length !== 1) {
-			console.error('invalid parameters for BattlegroundsFinishReq', rawReq);
+			console.error('[battlegrounds-rank-req] invalid parameters for BattlegroundsRankReq', rawReq);
 		}
 		return new BattlegroundsRankReq(memoryInspection, parseInt(rawReq.values[0]));
 	}
@@ -48,12 +48,14 @@ export class BattlegroundsRankReq implements Requirement {
 		this.isBgs = gameEvent.additionalData.metaData.GameType === GameType.GT_BATTLEGROUNDS;
 		if (this.isBgs) {
 			const battlegroundsInfo: BattlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
-			// console.log('got battlegrounds info in req', this);
+			// console.log('[battlegrounds-rank-req]got battlegrounds info in req', this);
 			if (battlegroundsInfo) {
 				this.rankAtReset = battlegroundsInfo.rating;
+				// console.log('[battlegrounds-rank-req]rank at reset', this.rankAtReset);
 			}
 		} else {
 			this.rankAtReset = undefined;
+			// console.log('[battlegrounds-rank-req] not bgs, rank at reset', this.rankAtReset);
 		}
 	}
 
@@ -67,7 +69,7 @@ export class BattlegroundsRankReq implements Requirement {
 			battlegroundsInfo &&
 			battlegroundsInfo.rating >= this.targetRank &&
 			(!this.rankAtReset || battlegroundsInfo.rating !== this.rankAtReset);
-		// console.log('battlegrounds-rank-req', battlegroundsInfo, this.isValid, this.targetRank);
+		// console.log('[battlegrounds-rank-req]', battlegroundsInfo, this.isValid, this.rankAtReset, this.targetRank);
 	}
 
 	private async getRank() {
@@ -78,6 +80,11 @@ export class BattlegroundsRankReq implements Requirement {
 
 	private async getRankInternal(callback): Promise<void> {
 		const rank = await this.memoryInspection.getBattlegroundsInfo();
+		if (this.rankAtReset === rank.rating) {
+			// console.log('[battlegrounds-rank-req] rank not updated, retrying', this.rankAtReset, rank);
+			setTimeout(() => this.getRankInternal(callback), 1000);
+			return;
+		}
 		// console.log('returning with real rank', rank);
 		callback(rank);
 	}
