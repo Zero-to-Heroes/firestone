@@ -211,7 +211,7 @@ export class GameStateService {
 		// 	this.logger.error('null state before processing event', gameEvent, this.state);
 		// 	return;
 		// }
-		this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
+		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
 			this.closedByUser = true;
 			this.updateOverlays();
@@ -277,7 +277,7 @@ export class GameStateService {
 						},
 						state: this.state,
 					};
-					this.logger.debug('[game-state] will emit event', emittedEvent);
+					// this.logger.debug('[game-state] will emit event', emittedEvent);
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
 					// this.logger.debug('[game-state] emitted deck event', emittedEvent.event.name, this.state);
 					// this.logger.debug(
@@ -356,6 +356,7 @@ export class GameStateService {
 		const shouldShowOpponentTracker =
 			this.state &&
 			this.state.opponentDeck &&
+			this.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS &&
 			((this.state.opponentDeck.deck && this.state.opponentDeck.deck.length > 0) ||
 				(this.state.opponentDeck.hand && this.state.opponentDeck.hand.length > 0) ||
 				(this.state.opponentDeck.board && this.state.opponentDeck.board.length > 0) ||
