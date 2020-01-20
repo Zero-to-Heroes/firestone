@@ -6,6 +6,7 @@ export class GameEvent {
 	public static readonly PLAYER = 'PLAYER';
 	public static readonly LOCAL_PLAYER = 'LOCAL_PLAYER';
 	public static readonly OPPONENT = 'OPPONENT';
+	public static readonly GAME_RUNNING = 'GAME_RUNNING';
 	public static readonly INITIAL_CARD_IN_DECK = 'INITIAL_CARD_IN_DECK';
 	public static readonly MULLIGAN_INPUT = 'MULLIGAN_INPUT';
 	public static readonly MULLIGAN_INITIAL_OPTION = 'MULLIGAN_INITIAL_OPTION';

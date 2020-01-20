@@ -19,8 +19,12 @@ export class AiDeckService {
 		}
 		//  this.logger.log('[ai-decks] getting deck for', opponentCardId, scenarioId, this.aiDecks);
 		const deck =
-			this.aiDecks.find(deck => deck.opponentCardId === opponentCardId && deck.scenarioId === scenarioId) ||
-			this.aiDecks.find(deck => deck.opponentCardId === opponentCardId && deck.scenarioId == null);
+			this.aiDecks.find(
+				deck =>
+					deck.opponentCardId === opponentCardId &&
+					deck.scenarioIds &&
+					deck.scenarioIds.indexOf(scenarioId) !== -1,
+			) || this.aiDecks.find(deck => deck.opponentCardId === opponentCardId && deck.scenarioIds == null);
 		return deck;
 	}
 
@@ -64,7 +68,7 @@ export class AiDeckService {
 
 interface AiDeck {
 	readonly opponentCardId: string;
-	readonly scenarioId: number;
+	readonly scenarioIds: readonly number[];
 	readonly deckstring: string;
 	readonly decks?: readonly any[];
 }

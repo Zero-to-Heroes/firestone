@@ -365,6 +365,15 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'GAME_RUNNING':
+				console.log(gameEvent.Type + ' event', gameEvent.Value);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.GAME_RUNNING, gameEvent, {
+						playerDeckCount: gameEvent.Value.AdditionalProps.PlayerDeckCount,
+						opponentDeckCount: gameEvent.Value.AdditionalProps.OpponentDeckCount,
+					}),
+				);
+				break;
 			case 'CARD_BACK_TO_DECK':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId, gameEvent.Value.EntityId);
 				this.gameEventsEmitter.allEvents.next(
@@ -663,6 +672,8 @@ export class GameEvents {
 			// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line timestamp" | 1576075565000 | 1576079166026 | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
 			// 2019-12-11 12:46:06,026 (INFO) </Files/vendor.js> (:1620) - "[game-events] [existing] last line is too old, not doing anything" | "D 12:46:05.9928156 GameState.DebugPrintGame() - PlayerID=2, PlayerName=UNKNOWN HUMAN PLAYER" |
 			// 2019-12-11 12:46:06,223 (INFO) </Files/vendor.js> (:1620) - "[game-events] received CREATE_GAME log" | "D 12:46:06.1966960 PowerTaskList.DebugPrintPower() -     CREATE_GAME" |
+			// DISCARDED COMMENT: However (20/01/2020), having a 1-hour timeout on this is too long, and I'd rather have some missing reconnects
+			// than some issues after a long reconnect where part of the tracker remains visible on home screen
 			if (lastLineTimestamp && Date.now() - lastLineTimestamp > (60 + 5) * 60 * 1000) {
 				console.log(
 					'[game-events] [existing] last line is too old, not doing anything',

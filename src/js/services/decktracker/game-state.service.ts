@@ -24,6 +24,7 @@ import { CardBackToDeckParser } from './event-parser/card-back-to-deck-parser';
 import { CardChangedOnBoardParser } from './event-parser/card-changed-on-board-parser';
 import { CardCreatorChangedParser } from './event-parser/card-creator-changed-parser';
 import { CardDrawParser } from './event-parser/card-draw-parser';
+import { CardOnBoardAtGameStart } from './event-parser/card-on-board-at-game-start-parser';
 import { CardPlayedFromHandParser } from './event-parser/card-played-from-hand-parser';
 import { CardRecruitedParser } from './event-parser/card-recruited-parser';
 import { CardRemovedFromBoardParser } from './event-parser/card-removed-from-board-parser';
@@ -56,6 +57,7 @@ import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-de
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ZoneOrderingService } from './zone-ordering.service';
+import { GameRunningParser } from './event-parser/game-running-parser';
 
 @Injectable()
 export class GameStateService {
@@ -461,6 +463,8 @@ export class GameStateService {
 			new LocalPlayerParser(),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
 			new DecklistUpdateParser(this.aiDecks, this.deckParser, this.prefs),
+			new CardOnBoardAtGameStart(this.helper),
+			new GameRunningParser(this.deckParser),
 		];
 	}
 }

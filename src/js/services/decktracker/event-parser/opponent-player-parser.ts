@@ -32,22 +32,35 @@ export class OpponentPlayerParser implements EventParser {
 		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
 		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
 		console.log('[opponent-player] got deckstring', aiDeckString);
-		const decklist = this.deckParser.buildDeckList(aiDeckString, currentState.playerDeck.deckList.length);
+		// No deckstring, so don't change anything
+		if (!aiDeckString) {
+			const newPlayerDeck = currentState.opponentDeck.update({
+				hero: newHero,
+			} as DeckState);
+			console.log('[opponent-player] newPlayerDeck without ai deckstring', newPlayerDeck);
+			return currentState.update({
+				opponentDeck: newPlayerDeck,
+			} as GameState);
+		}
+
+		const decklist = this.deckParser.buildDeckList(aiDeckString);
 		console.log('[opponent-player] parsed decklist', decklist);
 		// And since this event usually arrives after the cards in hand were drawn, remove from the deck
 		// whatever we can
 		let newDeck = decklist;
-		for (const card of [
-			...currentState.opponentDeck.hand,
-			...currentState.opponentDeck.otherZone,
-			...currentState.opponentDeck.board,
-		]) {
-			newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
+		if (aiDeckString) {
+			for (const card of [
+				...currentState.opponentDeck.hand,
+				...currentState.opponentDeck.otherZone,
+				...currentState.opponentDeck.board,
+			]) {
+				newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
+			}
 		}
 		console.log('[opponent-player] newDeck', newDeck);
 		const newPlayerDeck = currentState.opponentDeck.update({
 			hero: newHero,
-			deckList: shouldLoadDecklist ? decklist : [],
+			deckList: decklist,
 			deck: newDeck,
 		} as DeckState);
 		console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
