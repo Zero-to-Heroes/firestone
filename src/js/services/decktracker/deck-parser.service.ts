@@ -116,6 +116,22 @@ export class DeckParserService {
 		// console.log('[decks] resetting deck');
 	}
 
+	public buildDeck(currentDeck: any): readonly DeckCard[] {
+		if (currentDeck && currentDeck.deckstring) {
+			return this.buildDeckList(currentDeck.deckstring);
+		}
+		if (!currentDeck || !currentDeck.deck) {
+			return [];
+		}
+		return (
+			currentDeck.deck.cards
+				// [dbfid, count] pair
+				.map(pair => this.buildDeckCards(pair))
+				.reduce((a, b) => a.concat(b), [])
+				.sort((a: DeckCard, b: DeckCard) => a.manaCost - b.manaCost)
+		);
+	}
+
 	public buildDeckList(deckstring: string, deckSize: number = 30): readonly DeckCard[] {
 		if (!deckstring) {
 			return this.buildEmptyDeckList(deckSize);
