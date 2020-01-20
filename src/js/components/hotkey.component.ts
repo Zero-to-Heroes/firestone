@@ -13,7 +13,7 @@ import { OverwolfService } from '../services/overwolf.service';
 	selector: 'hotkey',
 	styleUrls: [`../../css/component/hotkey.component.scss`],
 	template: `
-		<div class="hotkey" [innerHTML]="hotkeyHtml"></div>
+		<a class="hotkey" [innerHTML]="hotkeyHtml" href="overwolf://settings/hotkeys"></a>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	encapsulation: ViewEncapsulation.None,

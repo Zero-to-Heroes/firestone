@@ -5,6 +5,9 @@
 	display: flex;
 	align-items: baseline;
 	position: relative;
+	width: auto;
+	height: auto;
+	padding: 5px;
 
 	.text {
 		@extend %hotkey-label;

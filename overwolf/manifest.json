@@ -197,7 +197,7 @@
 		},
 		"hotkeys": {
 			"collection": {
-				"title": "Show/hide collection window",
+				"title": "Show/hide main window",
 				"action-type": "custom",
 				"default": "Alt+C"
 			}
