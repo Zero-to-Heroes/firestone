@@ -54,18 +54,26 @@ export class ControlSettingsComponent implements AfterViewInit {
 			console.log('showing settings app', this.settingsApp, this.settingsSection);
 			this.settingsEventBus.next([this.settingsApp, this.settingsSection]);
 		}
-		// Avoid flickering
-		setTimeout(async () => {
-			const window = await this.ow.getCurrentWindow();
-			const center = {
-				x: window.left + window.width / 2,
-				y: window.top + window.height / 2,
-			};
-			const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
-			await this.ow.restoreWindow(settingsWindow.id);
-			if (this.shouldMoveSettingsWindow) {
-				await this.ow.sendMessage(settingsWindow.id, 'move', center);
-			}
-		}, 10);
+		const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+		console.log('settings window', settingsWindow);
+		// Window hidden, we show it
+		if (settingsWindow.stateEx !== 'normal') {
+			// Avoid flickering
+			setTimeout(async () => {
+				const window = await this.ow.getCurrentWindow();
+				const center = {
+					x: window.left + window.width / 2,
+					y: window.top + window.height / 2,
+				};
+				await this.ow.restoreWindow(settingsWindow.id);
+				if (this.shouldMoveSettingsWindow) {
+					await this.ow.sendMessage(settingsWindow.id, 'move', center);
+				}
+			}, 10);
+		}
+		// Otherwise we hide it
+		else {
+			this.ow.hideWindow(settingsWindow.id);
+		}
 	}
 }
