@@ -292,9 +292,10 @@
 					"3439"
 				]
 			},
+			{ "type": "CARD_NOT_PLAYED", "values": ["ULDA_111"] },
 			{ "type": "GAME_TIE" }
 		],
-		"resetEvents": ["GAME_END"]
+		"resetEvents": ["GAME_END", "GAME_START"]
 	},
 	{
 		"id": "tombs_of_terror_amazing_plays_siamat_servant",

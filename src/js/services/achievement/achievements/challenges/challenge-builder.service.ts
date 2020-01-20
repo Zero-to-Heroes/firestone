@@ -9,6 +9,7 @@ import { BattlegroundsRankReq } from '../requirements/battlegrounds/battleground
 import { BattlegroundsTriplePlayReq } from '../requirements/battlegrounds/battlegrounds-tipple-play--req';
 import { BoardFullOfSameLegendaryMinionReq } from '../requirements/board-full-of-same-legendary-minion-req';
 import { CardDrawnOrReceivedInHandReq } from '../requirements/card-drawn-or-received-in-hand-req';
+import { CardNotPlayedReq } from '../requirements/card-not-played-req';
 import { CardPlayedOrChangedOnBoardReq } from '../requirements/card-played-or-changed-on-board-req';
 import { CardPlayedOrOnBoardAtGameStartReq } from '../requirements/card-played-or-on-board-at-game-start-req';
 import { CorrectOpponentReq } from '../requirements/correct-opponent-req';
@@ -93,6 +94,7 @@ export class ChallengeBuilderService {
 			case 'SCENE_CHANGED_TO_GAME': return SceneChangedToGameReq.create(rawReq);
 			case 'CARD_PLAYED_OR_CHANGED_ON_BOARD': return CardPlayedOrChangedOnBoardReq.create(rawReq);
 			case 'CARD_PLAYED_OR_ON_BOARD_AT_GAME_START': return CardPlayedOrOnBoardAtGameStartReq.create(rawReq);
+			case 'CARD_NOT_PLAYED': return CardNotPlayedReq.create(rawReq);
 			case 'CARD_DRAWN_OR_RECEIVED_IN_HAND': return CardDrawnOrReceivedInHandReq.create(rawReq);
 			case 'MINION_SUMMONED': return MinionSummonedReq.create(rawReq);
 			case 'SECRET_TRIGGERED': return SecretTriggeredReq.create(rawReq);
