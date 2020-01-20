@@ -8,6 +8,7 @@
 	flex-grow: 0;
 	flex-shrink: 0;
 	height: 30px;
+	padding-right: 10px;
 }
 
 .title {
@@ -21,6 +22,11 @@
 	align-items: flex-end;
 	position: relative;
 	top: 3px;
+}
+
+.app-container {
+	padding-left: 0;
+	padding-right: 0;
 }
 
 ::ng-deep .controls {
@@ -56,4 +62,9 @@ settings-collection {
 	// flex-grow will make sure it is properly dimensioned, but we need a height
 	// for the scroll
 	height: 10%;
+}
+
+::ng-deep .version-info {
+	left: 5px;
+	right: auto;
 }

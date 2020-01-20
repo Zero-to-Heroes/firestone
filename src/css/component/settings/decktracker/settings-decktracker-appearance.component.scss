@@ -41,7 +41,8 @@
 
 	::ng-deep preference-toggle .preference-toggle label p,
 	::ng-deep preference-slider .preference-slider label {
-		width: 200px;
+		width: 210px;
+		font-size: 13px;
 	}
 
 	::ng-deep preference-toggle.indented {

@@ -1,11 +1,20 @@
-.title {
+.title,
+.subtitle {
 	font-family: Open Sans;
 	font-style: normal;
 	font-weight: 600;
 	line-height: normal;
 	font-size: 14px;
 	color: #d9c3ab;
-	margin-bottom: 16px;
+	margin-bottom: 5px;
+}
+
+.subgroup {
+	padding-left: 10px;
+	margin-bottom: 25px;
+	&:last-child {
+		margin-bottom: 0;
+	}
 }
 
 a {
@@ -30,8 +39,8 @@ label {
 	i {
 		--icon-color: #a89782;
 		--icon-color-secondary: #ffb948;
-		width: 20px;
-		height: 20px;
+		width: 15px;
+		height: 15px;
 		margin-right: 15px;
 
 		svg {

@@ -5,6 +5,8 @@ import {
 	Component,
 	OnDestroy,
 	ViewRef,
+	HostListener,
+	ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -21,50 +23,91 @@ import { PreferencesService } from '../../../services/preferences.service';
 	],
 	template: `
 		<div class="decktracker-appearance">
+			<div class="title">Activate / Deactivate features</div>
 			<div class="settings-group">
-				<div class="title">Common display options</div>
-				<preference-toggle
-					field="overlayShowTitleBar"
-					label="Show title bar"
-					tooltip="Show/hide the deck name and cards left in hand and deck"
-				></preference-toggle>
-				<preference-toggle
-					[field]="'overlayShowTooltipsOnHover'"
-					[label]="'Show card tooltips'"
-				></preference-toggle>
-				<preference-toggle
-					field="overlayShowRarityColors"
-					label="Show rarity colors"
-					tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
-				></preference-toggle>
+				<div class="subtitle">Global</div>
+				<div class="subgroup">
+					<preference-toggle
+						field="overlayShowTitleBar"
+						label="Show title bar"
+						tooltip="Show/hide the deck name and cards left in hand and deck"
+					></preference-toggle>
+					<preference-toggle
+						[field]="'overlayShowTooltipsOnHover'"
+						[label]="'Show card tooltips'"
+					></preference-toggle>
+					<preference-toggle
+						field="overlayShowRarityColors"
+						label="Show rarity colors"
+						tooltip="When active, the mana cost of cards in the tracker will be colored based on the card's rarity"
+					></preference-toggle>
+					<preference-toggle
+						field="decktrackerCloseOnGameEnd"
+						label="Close tracker on game end"
+						tooltip="Automatically close the tracker when the game ends. If disabled, the tracker needs to be closed manually"
+					></preference-toggle>
+					<preference-toggle
+						field="decktrackerNoDeckMode"
+						label="No-deck mode"
+						tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
+					></preference-toggle>
+				</div>
+				<div class="subtitle">Your deck</div>
+				<div class="subgroup">
+					<preference-toggle
+						field="overlayGroupByZone"
+						label="Group cards by zone"
+						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
+					></preference-toggle>
+					<preference-toggle
+						*ngIf="!overlayGroupByZone"
+						class="indented"
+						field="overlayCardsGoToBottom"
+						label="Used cards go to bottom"
+						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
+					></preference-toggle>
+				</div>
+				<div class="subtitle">Opponent's deck</div>
+				<div class="subgroup">
+					<preference-toggle
+						field="opponentTracker"
+						label="Show opponent's tracker"
+						tooltip="When active, a tracker will show for your opponent's cards"
+					></preference-toggle>
+					<preference-toggle
+						*ngIf="opponentTracker"
+						field="opponentLoadAiDecklist"
+						label="Load AI decklists"
+						tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Be aware that some decks are pseudo random, so the decklist will often be only indicative."
+					></preference-toggle>
+					<preference-toggle
+						*ngIf="opponentTracker"
+						field="opponentOverlayGroupByZone"
+						label="Group cards by zone"
+						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
+					></preference-toggle>
+					<preference-toggle
+						*ngIf="!opponentOverlayGroupByZone && opponentTracker"
+						class="indented"
+						field="opponentOverlayCardsGoToBottom"
+						label="Used cards go to bottom"
+						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
+					></preference-toggle>
+					<preference-toggle
+						field="dectrackerShowOpponentTurnDraw"
+						label="Card turn draw"
+						tooltip="Show the turn at which a card in the opponent's hand was drawn"
+					></preference-toggle>
+					<preference-toggle
+						field="dectrackerShowOpponentGuess"
+						label="Guessed cards"
+						tooltip="Show what card is in the opponent's hand when we know it (after it has been sent back to their hand with a Sap for instance)"
+					></preference-toggle>
+				</div>
 			</div>
+			<div class="title">Deck size</div>
 			<div class="settings-group">
-				<div class="title">Player tracker settings</div>
-				<preference-toggle
-					field="overlayGroupByZone"
-					label="Group cards by zone"
-					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
-				></preference-toggle>
-				<preference-toggle
-					*ngIf="!overlayGroupByZone"
-					class="indented"
-					field="overlayCardsGoToBottom"
-					label="Cards in deck at the top"
-					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
-				></preference-toggle>
-				<!-- <preference-slider
-					class="first-slider"
-					[field]="'overlayWidthInPx'"
-					[label]="'Overlay width'"
-					[enabled]="sliderEnabled"
-					[tooltip]="'Change the tracker width.'"
-					[tooltipDisabled]="
-						'Change the tracker width. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
-					"
-					[min]="215"
-					[max]="300"
-				>
-				</preference-slider> -->
+				<div class="subtitle">Your deck</div>
 				<preference-slider
 					class="first-slider"
 					[field]="'decktrackerScale'"
@@ -78,59 +121,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[max]="125"
 				>
 				</preference-slider>
-				<preference-slider
-					[field]="'overlayOpacityInPercent'"
-					[label]="'Overlay opacity'"
-					[enabled]="sliderEnabled"
-					[tooltip]="'Change the tracker opacity.'"
-					[tooltipDisabled]="
-						'Change the tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
-					"
-					[min]="40"
-					[max]="100"
-				>
-				</preference-slider>
-			</div>
-			<div class="settings-group">
-				<div class="title">Opponent tracker settings</div>
-				<preference-toggle
-					field="opponentTracker"
-					label="Show opponent tracker"
-					tooltip="When active, a tracker will show for your opponent's cards"
-				></preference-toggle>
-				<preference-toggle
-					*ngIf="opponentTracker"
-					field="opponentLoadAiDecklist"
-					label="Load AI decklists"
-					tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Be aware that some decks are pseudo random, so the decklist will often be only indicative."
-				></preference-toggle>
-				<preference-toggle
-					*ngIf="opponentTracker"
-					field="opponentOverlayGroupByZone"
-					label="Group cards by zone"
-					tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
-				></preference-toggle>
-				<preference-toggle
-					*ngIf="!opponentOverlayGroupByZone && opponentTracker"
-					class="indented"
-					field="opponentOverlayCardsGoToBottom"
-					label="Cards in deck at the top"
-					tooltip="When active, the cards still in the deck are shown at the top of the list. It can only be activated if the Group cards by zone option is disabled"
-				></preference-toggle>
-				<!-- <preference-slider
-					*ngIf="opponentTracker"
-					class="first-slider"
-					field="opponentOverlayWidthInPx"
-					label="Overlay width"
-					[enabled]="sliderEnabled"
-					tooltip="Change the opponent's tracker width."
-					tooltipDisabled="
-						Change the opponent's tracker width. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
-					"
-					[min]="215"
-					[max]="300"
-				>
-				</preference-slider> -->
+				<div class="subtitle">Opponent's deck</div>
 				<preference-slider
 					*ngIf="opponentTracker"
 					class="first-slider"
@@ -145,6 +136,23 @@ import { PreferencesService } from '../../../services/preferences.service';
 					[max]="125"
 				>
 				</preference-slider>
+			</div>
+			<div class="title">Deck appearance</div>
+			<div class="settings-group">
+				<div class="subtitle">Your deck</div>
+				<preference-slider
+					[field]="'overlayOpacityInPercent'"
+					[label]="'Overlay opacity'"
+					[enabled]="sliderEnabled"
+					[tooltip]="'Change the tracker opacity.'"
+					[tooltipDisabled]="
+						'Change the tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
+					"
+					[min]="40"
+					[max]="100"
+				>
+				</preference-slider>
+				<div class="subtitle">Opponent's deck</div>
 				<preference-slider
 					*ngIf="opponentTracker"
 					field="opponentOverlayOpacityInPercent"
@@ -173,7 +181,12 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
 
-	constructor(private prefs: PreferencesService, private cdr: ChangeDetectorRef, private ow: OverwolfService) {}
+	constructor(
+		private prefs: PreferencesService,
+		private cdr: ChangeDetectorRef,
+		private el: ElementRef,
+		private ow: OverwolfService,
+	) {}
 
 	ngAfterViewInit() {
 		this.loadDefaultValues();
@@ -200,6 +213,18 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	ngOnDestroy() {
 		this.displaySubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
+	}
+
+	// Prevent the window from being dragged around if user scrolls with click
+	@HostListener('mousedown', ['$event'])
+	onHistoryClick(event: MouseEvent) {
+		// console.log('handling history click', event);
+		const rect = this.el.nativeElement.querySelector('.decktracker-appearance').getBoundingClientRect();
+		// console.log('element rect', rect);
+		const scrollbarWidth = 5;
+		if (event.offsetX >= rect.width - scrollbarWidth) {
+			event.stopPropagation();
+		}
 	}
 
 	private async loadDefaultValues() {
