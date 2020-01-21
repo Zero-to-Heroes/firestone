@@ -19,6 +19,7 @@ import { TombsOfTerrorCategoryProvider } from './achievement-sets/tombs_of_terro
 import { AchievementsLocalStorageService } from './achievements-local-storage.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
+import { GalakrondCategoryProvider } from './achievement-sets/galadrond-awakening/galakrond-category';
 
 @Injectable()
 export class AchievementsRepository {
@@ -116,11 +117,12 @@ export class AchievementsRepository {
 
 	private buildCategories() {
 		const categoryProviders: readonly AchievementCategoryProvider[] = [
-			new BattlegroundsCategoryProvider(),
 			new GlobalCategoryProvider(),
 			new CompetitiveLadderCategoryProvider(),
 			new AmazingPlaysCategoryProvider(),
 			new DeckbuildingCategoryProvider(),
+			new BattlegroundsCategoryProvider(),
+			new GalakrondCategoryProvider(),
 			new TombsOfTerrorCategoryProvider(),
 			new DalaranHeistCategoryProvider(),
 			new RumbleRunCategoryProvider(),

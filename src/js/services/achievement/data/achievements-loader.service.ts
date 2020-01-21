@@ -60,6 +60,7 @@ export class AchievementsLoaderService {
 			amazingPlays,
 			competitiveLadder,
 			deckbuilding,
+			galakrond,
 		] = await Promise.all([
 			this.loadSet('global.json'),
 			this.loadSet('battlegrounds.json'),
@@ -71,6 +72,7 @@ export class AchievementsLoaderService {
 			this.loadSet('amazing_plays.json'),
 			this.loadSet('competitive_ladder.json'),
 			this.loadSet('deckbuilding.json'),
+			this.loadSet('galakrond.json'),
 		]);
 		return [
 			...global,
@@ -83,6 +85,7 @@ export class AchievementsLoaderService {
 			...amazingPlays,
 			...competitiveLadder,
 			...deckbuilding,
+			...galakrond,
 		];
 	}
 
