@@ -45,11 +45,25 @@
 		font-size: 13px;
 	}
 
-	::ng-deep preference-toggle.indented {
-		.preference-toggle {
-			margin-left: 30px;
-		}
+	::ng-deep preference-toggle.disabled .preference-toggle,
+	::ng-deep preference-slider.disabled .preference-slider {
+		opacity: 0.4;
 	}
+
+	::ng-deep preference-slider .preference-slider {
+		width: 230px;
+		margin-left: 10px;
+	}
+	::ng-deep preference-slider:not(:last-child) .preference-slider {
+		width: 230px;
+		margin-bottom: 50px;
+	}
+
+	// ::ng-deep preference-toggle.indented {
+	// 	.preference-toggle {
+	// 		margin-left: 30px;
+	// 	}
+	// }
 }
 
 .scale-form {

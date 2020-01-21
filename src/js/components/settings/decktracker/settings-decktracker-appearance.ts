@@ -11,6 +11,7 @@ import {
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
+import { Knob } from '../preference-slider.component';
 
 @Component({
 	selector: 'settings-decktracker-appearance',
@@ -60,7 +61,7 @@ import { PreferencesService } from '../../../services/preferences.service';
 						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
 					></preference-toggle>
 					<preference-toggle
-						*ngIf="!overlayGroupByZone"
+						[ngClass]="{ 'disabled': overlayGroupByZone}"
 						class="indented"
 						field="overlayCardsGoToBottom"
 						label="Used cards go to bottom"
@@ -75,19 +76,19 @@ import { PreferencesService } from '../../../services/preferences.service';
 						tooltip="When active, a tracker will show for your opponent's cards"
 					></preference-toggle>
 					<preference-toggle
-						*ngIf="opponentTracker"
+						[ngClass]="{ 'disabled': !opponentTracker}"
 						field="opponentLoadAiDecklist"
 						label="Load AI decklists"
 						tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Be aware that some decks are pseudo random, so the decklist will often be only indicative."
 					></preference-toggle>
 					<preference-toggle
-						*ngIf="opponentTracker"
+						[ngClass]="{ 'disabled': !opponentTracker}"
 						field="opponentOverlayGroupByZone"
 						label="Group cards by zone"
 						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
 					></preference-toggle>
 					<preference-toggle
-						*ngIf="!opponentOverlayGroupByZone && opponentTracker"
+						[ngClass]="{ 'disabled': !opponentTracker || opponentOverlayGroupByZone}"
 						class="indented"
 						field="opponentOverlayCardsGoToBottom"
 						label="Used cards go to bottom"
@@ -105,63 +106,45 @@ import { PreferencesService } from '../../../services/preferences.service';
 					></preference-toggle>
 				</div>
 			</div>
-			<div class="title">Deck size</div>
+			<div class="title">Tracker's size</div>
 			<div class="settings-group">
 				<div class="subtitle">Your deck</div>
 				<preference-slider
 					class="first-slider"
 					[field]="'decktrackerScale'"
-					[label]="'Overlay size'"
-					[enabled]="sliderEnabled"
-					[tooltip]="'Change the tracker scale.'"
-					[tooltipDisabled]="
-						'Change the tracker scale. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
-					"
+					[enabled]="true"
 					[min]="75"
 					[max]="125"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
 				<div class="subtitle">Opponent's deck</div>
 				<preference-slider
-					*ngIf="opponentTracker"
 					class="first-slider"
 					field="opponentOverlayScale"
-					label="Overlay size"
-					[enabled]="sliderEnabled"
-					tooltip="Change the opponent's tracker scale."
-					tooltipDisabled="
-						Change the opponent's tracker scale. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
-					"
+					[enabled]="opponentTracker"
 					[min]="75"
 					[max]="125"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
 			</div>
-			<div class="title">Deck appearance</div>
+			<div class="title">Tracker's opacity</div>
 			<div class="settings-group">
 				<div class="subtitle">Your deck</div>
 				<preference-slider
 					[field]="'overlayOpacityInPercent'"
-					[label]="'Overlay opacity'"
-					[enabled]="sliderEnabled"
-					[tooltip]="'Change the tracker opacity.'"
-					[tooltipDisabled]="
-						'Change the tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.'
-					"
+					[enabled]="true"
 					[min]="40"
 					[max]="100"
 				>
 				</preference-slider>
 				<div class="subtitle">Opponent's deck</div>
 				<preference-slider
-					*ngIf="opponentTracker"
 					field="opponentOverlayOpacityInPercent"
-					label="Overlay opacity"
-					[enabled]="sliderEnabled"
-					tooltip="Change the opponent's tracker opacity."
-					tooltipDisabled="
-						Change the opponent's tracker opacity. This feature is only available when the tracker is displayed. Please launch a game, or activate the tracker for your curent mode.
-					"
+					[enabled]="opponentTracker"
 					[min]="40"
 					[max]="100"
 				>
@@ -177,6 +160,20 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	overlayGroupByZone: boolean;
 	opponentOverlayGroupByZone: boolean;
 	opponentTracker: boolean;
+	sizeKnobs: readonly Knob[] = [
+		{
+			percentageValue: 0,
+			label: 'Small',
+		},
+		{
+			percentageValue: 50,
+			label: 'Medium',
+		},
+		{
+			percentageValue: 100,
+			label: 'Large',
+		},
+	]
 
 	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
