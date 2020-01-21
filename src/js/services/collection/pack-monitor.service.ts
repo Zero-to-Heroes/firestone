@@ -282,10 +282,11 @@ export class PackMonitor {
 			newLabel = 'Second copy';
 		}
 		console.log('[pack-monitor] displaying new card toast notification for ' + cardName);
+		const rarity = dbCard && dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free';
 		this.notificationService.html({
 			content: `<div class="message-container message-new-card ${goldenClass}">
 					<div class="outer-border" *ngIf="goldenClass"></div>
-					<img class="rarity" src="/Files/assets/images/rarity/rarity-${dbCard.rarity.toLowerCase()}.png">
+					<img class="rarity" src="/Files/assets/images/rarity/rarity-${rarity}.png">
 					<img class="art" src="https://static.zerotoheroes.com/hearthstone/cardart/256x/${dbCard.id}.jpg">
 					<div class="message">
 						<div *ngIf="goldenClass" class="premium-deco">
