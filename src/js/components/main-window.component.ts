@@ -109,7 +109,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 				this.ow.changeWindowPosition(this.windowId, newX, newY);
 			}
 		});
-		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(OverwolfService.COLLECTION_WINDOW, message => {
 			console.log('received collection window message', message, this.isMaximized);
 			// If hidden, restore window to as it was
 			if (message.window_previous_state_ex === 'hidden') {
@@ -139,7 +139,11 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 					if (this.isMaximized) {
 						await this.ow.maximizeWindow(this.windowId);
 					}
-				} else if (this.state && newState.currentApp !== this.state.currentApp) {
+				} else if (!newState.isVisible && currentlyVisible) {
+					console.log('hiding main window', newState);
+					await this.ow.hideWindow(this.windowId);
+				}
+				if (this.state && newState.currentApp !== this.state.currentApp) {
 					amplitude.getInstance().logEvent('show', { 'window': 'collection', 'page': newState.currentApp });
 				}
 			});

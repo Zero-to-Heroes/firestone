@@ -80,9 +80,9 @@ export class AppBootstrapService {
 	) {}
 
 	public async init() {
-		console.log('in init');
+		console.log('[bootstrap] in init');
 		if (!this.loadingWindowShown) {
-			console.log('initializing loading window');
+			console.log('[bootstrap] initializing loading window');
 			this.loadingWindowShown = true;
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
 			this.loadingWindowId = window.id;
@@ -107,9 +107,9 @@ export class AppBootstrapService {
 			}, 200);
 			return;
 		}
-		console.log('app init starting');
+		console.log('[bootstrap] app init starting');
 		this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
-			console.log('hotkey pressed', hotkeyResult);
+			console.log('[bootstrap] hotkey pressed', hotkeyResult);
 			if (hotkeyResult.status === 'success') {
 				const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 				if (window.isVisible) {
@@ -117,14 +117,14 @@ export class AppBootstrapService {
 					await this.ow.hideWindow(window.id);
 					// await this.ow.closeWindow(window.id);
 				} else {
-					this.startApp(true);
+					this.showCollectionWindow();
 				}
 			} else {
 				console.log('could not trigger hotkey', hotkeyResult, this.currentState);
 			}
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			console.log('updated game status', res);
+			console.log('[bootstrap] updated game status', res);
 			// Issue is that this is triggered when launching the game
 			// if (!this.exitGame(res) && this.wrapUpTimeout) {
 			// 	console.log('cancelling app close', res);
@@ -132,19 +132,19 @@ export class AppBootstrapService {
 			// 	this.wrapUpTimeout = null;
 			// }
 			if (this.ow.exitGame(res) && res.runningChanged && !this.wrapUpTimeout) {
-				console.log('left game, closing app', res);
+				console.log('[bootstrap] left game, closing app', res);
 				this.closeLoadingScreen();
 				this.showReplaysRecap();
 				// this.wrapUpTimeout = setTimeout(() => {
 				// }, 1);
 			} else if (await this.ow.inGame()) {
-				console.log('game is running, showing loading screen');
+				console.log('[bootstrap] game is running, showing loading screen');
 				this.showLoadingScreen();
 			}
 		});
 		const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		// await this.ow.restoreWindow(collectionWindow.id);
 		await this.ow.hideWindow(collectionWindow.id);
+		this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
 		this.ow.addAppLaunchTriggeredListener(() => {
 			this.startApp(true);
@@ -178,13 +178,13 @@ export class AppBootstrapService {
 	}
 
 	private async showLoadingScreen() {
-		console.log('showing loading screen?', this.currentState, this.loadingWindowId);
-		if (this.currentState === 'READY') {
-			return;
-		}
-		const result = await this.ow.restoreWindow(this.loadingWindowId);
-		// this.closeCollectionWindow();
-		console.log('final restore for loadingwindow done', result);
+		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
+		// if (this.currentState === 'READY') {
+		// 	return;
+		// }
+		await this.ow.obtainDeclaredWindow(OverwolfService.LOADING_WINDOW);
+		const result = await this.ow.restoreWindow(OverwolfService.LOADING_WINDOW);
+		console.log('[bootstrap] final restore for loadingwindow done', result);
 		setTimeout(() => {
 			this.notifyAbilitiesReady();
 		}, AppBootstrapService.LOADING_SCREEN_DURATION);
@@ -197,8 +197,9 @@ export class AppBootstrapService {
 
 	private async startApp(showMainWindow: boolean) {
 		const isRunning = await this.ow.inGame();
-		console.log('are we in game?', isRunning);
-		if (!isRunning || showMainWindow) {
+		console.log('[bootstrap] are we in game?', isRunning);
+		// Show main window directly only if started on desktop
+		if (!isRunning) {
 			this.showCollectionWindow();
 		}
 	}
@@ -216,10 +217,11 @@ export class AppBootstrapService {
 	// }
 
 	private async showCollectionWindow() {
-		console.log('reading to show collection window');
+		console.log('[bootstrap] reading to show collection window');
+		// We do both store and direct restore to keep things snappier
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		await this.ow.restoreWindow(window.id);
+		this.store.stateUpdater.next(new ShowMainWindowEvent());
 		this.closeLoadingScreen();
 	}
 

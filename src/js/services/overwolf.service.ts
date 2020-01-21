@@ -210,10 +210,11 @@ export class OverwolfService {
 	}
 
 	public async restoreWindow(windowId: string) {
+		// console.log('[overwolf-service] asked to restore window', windowId, new Error().stack);
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.restore(windowId, async result => {
-					// console.log('[overwolf-service] restored window', windowId);
+					// console.log('[overwolf-service] restored window', windowId, new Error().stack);
 					resolve(result);
 					// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
 					// try {
@@ -242,7 +243,7 @@ export class OverwolfService {
 				});
 			} catch (e) {
 				// This doesn't seem to prevent the window from being restored, so let's ignore it
-				console.warn('Exception while restoring window', e);
+				console.warn('Exception while hiding window', e);
 				resolve(null);
 			}
 		});
