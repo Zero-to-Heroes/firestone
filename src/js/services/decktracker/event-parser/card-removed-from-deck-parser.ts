@@ -21,7 +21,12 @@ export class CardRemovedFromDeckParser implements EventParser {
 
 		const card = this.helper.findCardInZone(deck.deck, cardId, entityId);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(previousDeck, cardId, entityId)[0];
+		const newDeck: readonly DeckCard[] = this.helper.removeSingleCardFromZone(
+			previousDeck,
+			cardId,
+			entityId,
+			deck.deckList.length === 0,
+		)[0];
 		const cardWithZone = card.update({
 			zone: 'SETASIDE',
 		} as DeckCard);

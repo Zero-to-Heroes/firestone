@@ -17,7 +17,7 @@ export class AiDeckService {
 			this.logger.warn('[ai-decks] decks not initialized yet', opponentCardId, scenarioId);
 			return null;
 		}
-		//  this.logger.log('[ai-decks] getting deck for', opponentCardId, scenarioId, this.aiDecks);
+		// this.logger.log('[ai-decks] getting deck for', opponentCardId, scenarioId, this.aiDecks);
 		const deck =
 			this.aiDecks.find(
 				deck =>
@@ -32,7 +32,7 @@ export class AiDeckService {
 		const deckNames: readonly string[] = await this.getDeckNames();
 		const decksArray = await Promise.all(deckNames.map(fileName => this.loadAiDecks(fileName)));
 		this.aiDecks = decksArray.reduce((a, b) => a.concat(b), []);
-		// console.log('loaded ai decks', this.aiDecks);
+		// console.log('[ai-decks] loaded ai decks', this.aiDecks);
 	}
 
 	private async getDeckNames(): Promise<readonly string[]> {

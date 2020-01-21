@@ -32,7 +32,9 @@ export class ReceiveCardInHandParser implements EventParser {
 		// 	otherCard,
 		// 	cardId,
 		// );
-		const newBoard = boardCard ? this.helper.removeSingleCardFromZone(deck.board, null, entityId)[0] : deck.board;
+		const newBoard = boardCard
+			? this.helper.removeSingleCardFromZone(deck.board, null, entityId, deck.deckList.length === 0)[0]
+			: deck.board;
 		const newOther = otherCard
 			? this.helper.removeSingleCardFromZone(deck.otherZone, null, entityId)[0]
 			: deck.otherZone;
