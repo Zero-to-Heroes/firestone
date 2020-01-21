@@ -4,6 +4,8 @@ import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OverwolfService } from './overwolf.service';
 
+declare var amplitude;
+
 @Injectable()
 export class PreferencesService {
 	public static readonly DECKTRACKER_OVERLAY_DISPLAY = 'DECKTRACKER_OVERLAY_DISPLAY';
@@ -27,6 +29,10 @@ export class PreferencesService {
 		const prefs = await this.getPreferences();
 		// console.log('setting pref', field, pref);
 		const newPrefs: Preferences = { ...prefs, [field]: pref };
+		amplitude.getInstance().logEvent('preference-update', {
+			'field': field,
+			'value': pref,
+		});
 		this.savePreferences(newPrefs);
 	}
 

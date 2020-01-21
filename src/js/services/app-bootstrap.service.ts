@@ -246,6 +246,13 @@ export class AppBootstrapService {
 		if (prefs.battlegroundsShowLastOpponentBoard) {
 			amplitude.getInstance().logEvent('beta', { 'feature': 'battlegroundsShowLastOpponentBoard' });
 		}
+		// Log an event for each of the prefs
+		for (let key of Object.keys(prefs)) {
+			amplitude.getInstance().logEvent('preference-status', {
+				'key': key,
+				'value': prefs[key],
+			});
+		}
 		const monitorsList = await this.ow.getMonitorsList();
 		// console.log('monitorsList', monitorsList);
 		const numberOfMonitors = monitorsList && monitorsList.displays ? monitorsList.displays.length : -1;
