@@ -9,6 +9,10 @@
 			flex-grow 0.4s ease-in-out;
 	}
 
+	with-loading {
+		flex-grow: 1;
+	}
+
 	.main {
 		achievements-list {
 			flex-grow: 1;
