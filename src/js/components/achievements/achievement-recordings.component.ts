@@ -226,7 +226,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 			return;
 		}
 		// auto pause the video when window is closed / minimized
-		this.stateChangedListener = this.ow.addStateChangedListener('CollectionWindow', message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(OverwolfService.COLLECTION_WINDOW, message => {
 			if (message.window_state !== 'normal') {
 				this.player.pause();
 			}

@@ -91,7 +91,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			this.resize();
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.mainWindowId = (await this.ow.obtainDeclaredWindow('CollectionWindow')).id;
+		this.mainWindowId = (await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW)).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		setTimeout(() => {
