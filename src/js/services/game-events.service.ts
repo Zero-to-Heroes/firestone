@@ -610,6 +610,7 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string) {
+		// console.log('received log line', data);
 		if (data.indexOf('Begin Spectating') !== -1) {
 			console.log('begin spectating', data);
 			this.spectating = true;
@@ -621,6 +622,7 @@ export class GameEvents {
 
 		if (this.spectating) {
 			// For now we're not interested in spectating events, but that will come out later
+			console.log('spectating, doing nothing');
 			return;
 		}
 
@@ -636,6 +638,7 @@ export class GameEvents {
 	// Handles reading a log file mid-game, i.e. this data is already
 	// present in the log file when we're trying to read it
 	public receiveExistingLogLine(existingLine: string) {
+		// console.log('received existing', existingLine);
 		if (existingLine.indexOf('Begin Spectating') !== -1) {
 			console.log('[game-events] [existing] begin spectating', existingLine);
 			this.spectating = true;
@@ -644,21 +647,11 @@ export class GameEvents {
 			console.log('[game-events] [existing] end spectating', existingLine);
 			this.spectating = false;
 		}
-
-		if (this.spectating) {
-			// For now we're not interested in spectating events, but that will come out later
-			return;
-		}
-
-		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
-			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
-			this.existingLogLines = [];
-		}
-		if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
-			// Complete game, we don't handle it
-			this.existingLogLines = [];
-		}
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
+			// There is no automatic reconnect when spectating, so we can always safely say
+			// that when we finish catching up with the actual contents of the file, we are 
+			// not spectating
+			this.spectating = false;
 			const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
 			console.log(
 				'[game-events] [existing] last line timestamp',
@@ -682,12 +675,26 @@ export class GameEvents {
 				this.existingLogLines = [];
 				return;
 			}
-			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length);
+			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length, this.spectating);
 			if (this.existingLogLines.length > 0) {
 				this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 			}
 			this.existingLogLines = [];
 			return;
+		}
+
+		if (this.spectating) {
+			// For now we're not interested in spectating events, but that will come out later
+			return;
+		}
+
+		if (existingLine.indexOf('CREATE_GAME') !== -1 && existingLine.indexOf('GameState') !== -1) {
+			console.log('[game-events] [existing] received CREATE_GAME log', existingLine);
+			this.existingLogLines = [];
+		}
+		if (existingLine.indexOf('GOLD_REWARD_STATE') !== -1) {
+			// Complete game, we don't handle it
+			this.existingLogLines = [];
 		}
 		this.existingLogLines.push(existingLine);
 	}
