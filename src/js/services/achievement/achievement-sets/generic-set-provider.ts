@@ -115,13 +115,19 @@ export abstract class GenericSetProvider extends SetProvider {
 		achievement: Achievement,
 		text: string,
 	): [readonly CompletionStep[], string] {
+		const areProgressionSteps =
+			achievementForCompletionSteps
+				.map(achv => achv.priority)
+				.filter((value, index, self) => self.indexOf(value) === index).length !== 1;
 		const invertedCompletionSteps = [];
 		let alreadyDefinedText = achievement.text || false;
 		// Useful to make sure we have some consistency in the number of comletions
 		let maxNumberOfCompletions = 0;
 		for (let i = achievementForCompletionSteps.length - 1; i >= 0; i--) {
 			const achv = achievementForCompletionSteps[i];
-			const completions: number = Math.max(maxNumberOfCompletions, achv.numberOfCompletions);
+			const completions: number = areProgressionSteps
+				? Math.max(maxNumberOfCompletions, achv.numberOfCompletions)
+				: achv.numberOfCompletions;
 			maxNumberOfCompletions = completions;
 			if (completions > 0 && !alreadyDefinedText) {
 				text = achv.completedText;
@@ -129,9 +135,10 @@ export abstract class GenericSetProvider extends SetProvider {
 			}
 			invertedCompletionSteps.push({
 				id: `${achv.id}`,
-				numberOfCompletions: completions,
+				numberOfCompletions: areProgressionSteps ? completions : achv.numberOfCompletions,
 				icon: achv.icon,
 				completedText: achievement.completedText,
+				priority: achievementForCompletionSteps[i].priority,
 				text(showTimes: boolean = false): string {
 					const times = showTimes && !achievement.canBeCompletedOnlyOnce ? `${completions} times` : ``;
 					return `${achv.completedText} <span class="number-of-times">${times}</span>`;

@@ -85,6 +85,7 @@ export interface CompletionStep {
 	readonly numberOfCompletions: number;
 	readonly icon: string;
 	readonly completedText: string;
+	readonly priority: number;
 
 	text(showTimes?: boolean): string;
 }
