@@ -5,6 +5,11 @@ import { RawAchievement } from '../../../models/achievement/raw-achievement';
 import { ReplayInfo } from '../../../models/replay-info';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
+import { NGXLogger } from 'ngx-logger';
+import { timeout, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+const ACHIEVEMENTS_URL = 'https://static.zerotoheroes.com/hearthstone/data/achievements';
 
 @Injectable()
 export class AchievementsLoaderService {
@@ -12,7 +17,11 @@ export class AchievementsLoaderService {
 
 	private achievements: readonly Achievement[];
 
-	constructor(private http: HttpClient, private challengeBuilder: ChallengeBuilderService) {}
+	constructor(
+		private http: HttpClient,
+		private challengeBuilder: ChallengeBuilderService,
+		private logger: NGXLogger,
+	) {}
 
 	public async getAchievement(achievementId): Promise<Achievement> {
 		await this.waitForInit();
@@ -49,57 +58,68 @@ export class AchievementsLoaderService {
 
 	private async loadAll(): Promise<readonly RawAchievement[]> {
 		console.log('[achievements-loader] loading all achievements');
-		const [
-			global,
-			battlegrounds,
-			dungeonRun,
-			monsterHunt,
-			rumbleRun,
-			dalaranHeist,
-			tombsOfTerror,
-			amazingPlays,
-			competitiveLadder,
-			deckbuilding,
-			galakrond,
-		] = await Promise.all([
-			this.loadSet('global.json'),
-			this.loadSet('battlegrounds.json'),
-			this.loadSet('dungeon_run.json'),
-			this.loadSet('monster_hunt.json'),
-			this.loadSet('rumble_run.json'),
-			this.loadSet('dalaran_heist.json'),
-			this.loadSet('tombs_of_terror.json'),
-			this.loadSet('amazing_plays.json'),
-			this.loadSet('competitive_ladder.json'),
-			this.loadSet('deckbuilding.json'),
-			this.loadSet('galakrond.json'),
-		]);
-		return [
-			...global,
-			...battlegrounds,
-			...dungeonRun,
-			...monsterHunt,
-			...rumbleRun,
-			...dalaranHeist,
-			...tombsOfTerror,
-			...amazingPlays,
-			...competitiveLadder,
-			...deckbuilding,
-			...galakrond,
+		const achievementFiles = [
+			'global',
+			'battlegrounds',
+			'dungeon_run',
+			'monster_hunt',
+			'rumble_run',
+			'dalaran_heist',
+			'tombs_of_terror',
+			'amazing_plays',
+			'competitive_ladder',
+			'deckbuilding',
+			'galakrond',
 		];
+		const achievementsArray = await Promise.all(achievementFiles.map(fileName => this.loadAchievements(fileName)));
+		const result = achievementsArray.reduce((a, b) => a.concat(b), []);
+		this.logger.debug('[achievements-loader] returning full achievements', result && result.length);
+		return result;
 	}
 
-	private async loadSet(fileName: string): Promise<readonly RawAchievement[]> {
+	private async loadAchievements(fileName: string): Promise<readonly RawAchievement[]> {
 		return new Promise<readonly RawAchievement[]>((resolve, reject) => {
-			this.http.get(`./achievements/${fileName}`).subscribe(
-				(result: RawAchievement[]) => {
-					resolve(result);
-				},
-				error => {
-					console.error('[achievements-loader] could not load achievement set', fileName, error);
-					reject();
-				},
-			);
+			this.logger.debug('[achievements-loader] retrieving local achievements', fileName);
+			this.http
+				.get(`./achievements/${fileName}.json`)
+				.pipe(
+					timeout(500),
+					catchError((error, caught) => {
+						this.logger.debug(
+							'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
+							fileName,
+							error,
+						);
+						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json`).subscribe(
+							(result: any[]) => {
+								this.logger.debug(
+									'[achievements-loader] retrieved all achievements from CDN',
+									fileName,
+								);
+								resolve(result);
+								return of(null);
+							},
+							error => {
+								this.logger.debug(
+									'[achievements-loader] Could not retrieve achievements from CDN',
+									fileName,
+									error,
+								);
+								return of(null);
+							},
+						);
+						return of(null);
+					}),
+				)
+				.subscribe(
+					(result: any[]) => {
+						if (result) {
+							this.logger.debug('[achievements-loader] retrieved all cards locally', fileName);
+							resolve(result);
+						}
+					},
+					error => {},
+				);
 		});
 	}
 

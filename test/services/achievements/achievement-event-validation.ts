@@ -37,6 +37,7 @@ export const achievementsValidation = async (
 	},
 ) => {
 	const cards = buildCardsService();
+	const logger = new NGXLoggerMock() as NGXLogger;
 	const memoryService: MemoryInspectionService = {
 		getPlayerInfo: () => {
 			return new Promise<any>(resolve => {
@@ -62,7 +63,7 @@ export const achievementsValidation = async (
 		},
 	} as MemoryInspectionService;
 	const challengeBuilder = new ChallengeBuilderService(cards, memoryService);
-	const loader = new AchievementsLoaderService(null, challengeBuilder);
+	const loader = new AchievementsLoaderService(null, challengeBuilder, logger);
 	await loader.initializeAchievements(rawAchievements);
 	if (loader.challengeModules.length !== 1) {
 		throw new Error('Can only handle single achievements for now');
