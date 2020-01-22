@@ -1,6 +1,6 @@
 {
 	"name": "firestone",
-	"version": "4.2.4",
+	"version": "4.2.5",
 	"scripts": {
 		"lint": "node --max_old_space_size=6000 ./node_modules//eslint/bin/eslint.js --color --fix --ext .ts ./src/",
 		"test": "node --max_old_space_size=6000 ./node_modules/jest/bin/jest.js --colors",
@@ -83,7 +83,7 @@
 		"jest-extended": "^0.11.2",
 		"jest-text-transformer": "^1.0.2",
 		"mini-css-extract-plugin": "0.8.0",
-		"node-sass": "4.12.0",
+		"node-sass": "^4.13.1",
 		"prettier": "1.18.2",
 		"raw-loader": "3.1.0",
 		"replace-in-file-webpack-plugin": "1.0.6",
