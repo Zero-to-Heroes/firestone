@@ -59,6 +59,7 @@ import { WinStreakReq } from '../requirements/win-streak-req';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 import { GenericChallenge } from './generic-challenge';
+import { PlayerClassReq } from '../requirements/player-class-req';
 
 @Injectable()
 export class ChallengeBuilderService {
@@ -89,6 +90,7 @@ export class ChallengeBuilderService {
 			case 'GAME_TIE': return GameTieReq.create(rawReq);
 			case 'GAME_MIN_TURNS': return GameMinTurnsReq.create(rawReq);
 			case 'PLAYER_HERO': return PlayerHeroReq.create(rawReq);
+			case 'PLAYER_CLASS': return PlayerClassReq.create(rawReq, this.cards);
 			case 'CORRECT_OPPONENT': return CorrectOpponentReq.create(rawReq);
 			case 'CORRECT_STARTING_HEALTH': return CorrectStartingHealthReq.create(rawReq);
 			case 'SCENE_CHANGED_TO_GAME': return SceneChangedToGameReq.create(rawReq);
