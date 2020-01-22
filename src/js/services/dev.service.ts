@@ -13,8 +13,8 @@ import { DeckParserService } from './decktracker/deck-parser.service';
 import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
 import { GameEventsPluginService } from './plugins/game-events-plugin.service';
-import { SimpleIOService } from './plugins/simple-io.service';
 import { SetsService } from './sets-service.service';
+import { OverwolfService } from './overwolf.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
 
@@ -27,7 +27,7 @@ export class DevService {
 		private achievementMonitor: AchievementsMonitor,
 		private achievementNotifications: AchievementsNotificationService,
 		private packMonitor: PackMonitor,
-		private io: SimpleIOService,
+		private ow: OverwolfService,
 		private gameEvents: GameEvents,
 		private gameEventsPlugin: GameEventsPluginService,
 		private deckService: DeckParserService,
@@ -94,7 +94,7 @@ export class DevService {
 		};
 		window['loadEvents'] = async (fileName, awaitEvents = false, timeBetweenEvents?: number) => {
 			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\test\\events\\${fileName}.json`;
-			const logContents = await this.io.getFileContents(logsLocation);
+			const logContents = await this.ow.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
 			// console.log('sending events', events);
 			for (let event of events) {

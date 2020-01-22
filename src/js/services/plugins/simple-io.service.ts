@@ -24,38 +24,38 @@ export class SimpleIOService {
 		});
 	}
 
-	public async fileExists(filePath: string): Promise<boolean> {
-		await this.waitForInit();
-		const plugin = await this.get();
-		return new Promise<boolean>(resolve => {
-			plugin.fileExists(filePath, result => {
-				// console.log('file exists?', filePath, result, message);
-				resolve(result);
-			});
-		});
-	}
+	// public async fileExists(filePath: string): Promise<boolean> {
+	// 	await this.waitForInit();
+	// 	const plugin = await this.get();
+	// 	return new Promise<boolean>(resolve => {
+	// 		plugin.fileExists(filePath, result => {
+	// 			// console.log('file exists?', filePath, result, message);
+	// 			resolve(result);
+	// 		});
+	// 	});
+	// }
 
-	public async deleteFile(filePath: string): Promise<boolean> {
-		await this.waitForInit();
-		const plugin = await this.get();
-		return new Promise<boolean>(resolve => {
-			plugin.deleteFile(filePath, (result, message) => {
-				console.log('deletion completed', filePath, result, message);
-				resolve(result);
-			});
-		});
-	}
+	// public async deleteFile(filePath: string): Promise<boolean> {
+	// 	await this.waitForInit();
+	// 	const plugin = await this.get();
+	// 	return new Promise<boolean>(resolve => {
+	// 		plugin.deleteFile(filePath, (result, message) => {
+	// 			console.log('deletion completed', filePath, result, message);
+	// 			resolve(result);
+	// 		});
+	// 	});
+	// }
 
-	public async getFileContents(filePath: string): Promise<string> {
-		await this.waitForInit();
-		const plugin = await this.get();
-		return new Promise<string>(resolve => {
-			plugin.getTextFile(filePath, false, (result, contents) => {
-				// console.log('read file contents completed', filePath, result);
-				resolve(contents);
-			});
-		});
-	}
+	// public async getFileContents(filePath: string): Promise<string> {
+	// 	await this.waitForInit();
+	// 	const plugin = await this.get();
+	// 	return new Promise<string>(resolve => {
+	// 		plugin.getTextFile(filePath, false, (result, contents) => {
+	// 			// console.log('read file contents completed', filePath, result);
+	// 			resolve(contents);
+	// 		});
+	// 	});
+	// }
 
 	public async zipAppLogFolder(appName: string): Promise<string> {
 		await this.waitForInit();

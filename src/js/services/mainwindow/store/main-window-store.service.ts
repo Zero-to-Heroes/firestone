@@ -21,7 +21,6 @@ import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
-import { SimpleIOService } from '../../plugins/simple-io.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { SetsService } from '../../sets-service.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
@@ -147,7 +146,6 @@ export class MainWindowStoreService {
 		private achievementHistoryStorage: AchievementHistoryStorageService,
 		private achievementsLoader: AchievementsLoaderService,
 		private remoteAchievements: RemoteAchievementsService,
-		private io: SimpleIOService,
 		private collectionDb: IndexedDbService,
 		private gameStatsUpdater: GameStatsUpdaterService,
 		private gameStatsLoader: GameStatsLoaderService,
@@ -375,7 +373,7 @@ export class MainWindowStoreService {
 			new ShowAchievementDetailsProcessor(),
 
 			VideoReplayDeletionRequestEvent.eventName(),
-			new VideoReplayDeletionRequestProcessor(this.io, achievementUpdateHelper, this.achievementsStorage),
+			new VideoReplayDeletionRequestProcessor(this.ow, achievementUpdateHelper, this.achievementsStorage),
 
 			AchievementRecordedEvent.eventName(),
 			new AchievementRecordedProcessor(

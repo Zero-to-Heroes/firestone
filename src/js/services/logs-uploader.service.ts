@@ -16,7 +16,7 @@ export class LogsUploaderService {
 				return null;
 			}
 			const logsLocation = res.executionPath.split('Hearthstone.exe')[0] + 'Logs\\Power.log';
-			const logLines = await this.io.getFileContents(logsLocation);
+			const logLines = await this.ow.getFileContents(logsLocation);
 			const jszip = new JSZip.default();
 			console.log('ready to zip', jszip);
 			jszip.file('power.log', logLines);
@@ -39,6 +39,7 @@ export class LogsUploaderService {
 
 	public async uploadAppLogs(): Promise<string> {
 		try {
+
 			const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
 			const firestoneLogKey = await this.s3.postBinaryFile(firestoneLogs, '.app.zip');
 			// console.log('posted Firestone logs', firestoneLogKey);

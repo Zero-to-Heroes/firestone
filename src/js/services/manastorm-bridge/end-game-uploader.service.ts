@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GameEvent } from '../../models/game-event';
-import { Events } from '../events.service';
-import { OverwolfService } from '../overwolf.service';
 import { PlayersInfoService } from '../players-info.service';
 import { MemoryInspectionService } from '../plugins/memory-inspection.service';
 import { GameForUpload } from './game-for-upload';
 import { GameHelper } from './game-helper.service';
 import { GameParserService } from './game-parser.service';
-import { ReplayManager } from './replay-manager.service';
 import { ReplayUploadService } from './replay-upload.service';
 
 @Injectable()
@@ -17,10 +14,7 @@ export class EndGameUploaderService {
 
 	constructor(
 		private logger: NGXLogger,
-		private events: Events,
-		private ow: OverwolfService,
 		private gameHelper: GameHelper,
-		private replayManager: ReplayManager,
 		private replayUploadService: ReplayUploadService,
 		private gameParserService: GameParserService,
 		private playersInfo: PlayersInfoService,
@@ -46,13 +40,7 @@ export class EndGameUploaderService {
 			buildNumber,
 			scenarioId,
 		);
-		const savedGame = await this.replayManager.saveLocally(game);
-		if (!savedGame) {
-			this.logger.warn('[manastorm-bridge] not saving replay');
-			return;
-		}
-		this.logger.debug('{manastorm-bridge] saved game locally', savedGame.path);
-		await this.replayUploadService.uploadGame(savedGame);
+		await this.replayUploadService.uploadGame(game);
 	}
 
 	private async initializeGame(

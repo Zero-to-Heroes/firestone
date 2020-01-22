@@ -50,7 +50,6 @@ import { EndGameListenerService } from '../../services/manastorm-bridge/end-game
 import { EndGameUploaderService } from '../../services/manastorm-bridge/end-game-uploader.service';
 import { GameHelper } from '../../services/manastorm-bridge/game-helper.service';
 import { GameParserService } from '../../services/manastorm-bridge/game-parser.service';
-import { ReplayManager } from '../../services/manastorm-bridge/replay-manager.service';
 import { ReplayUploadService } from '../../services/manastorm-bridge/replay-upload.service';
 import { PlayersInfoService } from '../../services/players-info.service';
 import { GameEventsPluginService } from '../../services/plugins/game-events-plugin.service';
@@ -139,7 +138,6 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameHelper,
 		GameParserService,
 		ReplayUploadService,
-		ReplayManager,
 		GameStateService,
 		DeckManipulationHelper,
 

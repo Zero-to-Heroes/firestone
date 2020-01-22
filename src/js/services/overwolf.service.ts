@@ -628,8 +628,35 @@ export class OverwolfService {
 			};
 			console.log('[overwolf-service] sharing on Twitter', shareParam);
 			overwolf.social.twitter.share(shareParam, (res, error) => {
-				console.log('uploaded file to twitter', res, error);
+				console.log('[overwolf-service] uploaded file to twitter', res, error);
 				resolve(res);
+			});
+		});
+	}
+
+	public async fileExists(filePathOnDisk: string): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			overwolf.io.fileExists(filePathOnDisk, (res, error) => {
+				console.log('[overwolf-service] fileExists?', res);
+				resolve(res.found);
+			});
+		});
+	}
+
+	public async getFileContents(filePathOnDisk: string): Promise<string> {
+		return new Promise<string>(resolve => {
+			overwolf.io.readFileContents(filePathOnDisk, 'UTF8', (res, error) => {
+				console.log('[overwolf-service] file contents', res);
+				resolve(res.status === 'success' ? res.content : null);
+			});
+		});
+	}
+
+	public async deleteFile(filePathOnDisk: string): Promise<boolean> {
+		return new Promise<boolean>(resolve => {
+			overwolf.io.writeFileContents(filePathOnDisk, '', 'UTF8', false, (res, error) => {
+				console.log('[overwolf-service] file overwritten?', res);
+				resolve(res.status === 'success');
 			});
 		});
 	}
@@ -648,6 +675,10 @@ export class OverwolfService {
 				resolve(res);
 			});
 		});
+	}
+
+	public listenOnFile(id: string, path: string, options: any, callback: (lineInfo: ListenObject) => any) {
+		overwolf.io.listenOnFile(id, path, options, callback);
 	}
 
 	public gameRunning(gameInfo: any): boolean {
@@ -681,4 +712,12 @@ export class OverwolfService {
 		// Only detect new game launched events when it goes from not running to running
 		return gameInfoResult.runningChanged || gameInfoResult.gameChanged;
 	}
+}
+
+export interface ListenObject {
+	readonly success: boolean;
+	readonly error: string;
+	readonly state: 'running' | 'terminated' | 'truncated';
+	readonly content: string;
+	readonly info: string;
 }

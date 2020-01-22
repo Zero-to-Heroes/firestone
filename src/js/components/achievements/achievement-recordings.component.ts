@@ -19,7 +19,6 @@ import { VisualAchievement } from '../../models/visual-achievement';
 import { VideoReplayDeletionRequestEvent } from '../../services/mainwindow/store/events/achievements/video-replay-deletion-request-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
-import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 
 declare var amplitude;
@@ -184,7 +183,6 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	private fsAPI: VgFullscreenAPI;
 
 	constructor(
-		private io: SimpleIOService,
 		private elRef: ElementRef,
 		private cdr: ChangeDetectorRef,
 		private prefs: PreferencesService,
@@ -442,7 +440,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 	}
 
 	private async isDeleted(path: string): Promise<boolean> {
-		const fileExists = await this.io.fileExists(path);
+		const fileExists = await this.ow.fileExists(path);
 		// console.log('fileExists in component?', fileExists);
 		return !fileExists;
 	}

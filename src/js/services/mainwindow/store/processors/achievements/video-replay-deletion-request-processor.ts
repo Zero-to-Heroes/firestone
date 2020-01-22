@@ -1,13 +1,13 @@
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { AchievementsLocalStorageService } from '../../../../achievement/achievements-local-storage.service';
-import { SimpleIOService } from '../../../../plugins/simple-io.service';
 import { VideoReplayDeletionRequestEvent } from '../../events/achievements/video-replay-deletion-request-event';
 import { AchievementUpdateHelper } from '../../helper/achievement-update-helper';
 import { Processor } from '../processor';
+import { OverwolfService } from '../../../../overwolf.service';
 
 export class VideoReplayDeletionRequestProcessor implements Processor {
 	constructor(
-		private io: SimpleIOService,
+		private ow: OverwolfService,
 		private helper: AchievementUpdateHelper,
 		private achievementsStorage: AchievementsLocalStorageService,
 	) {}
@@ -16,7 +16,7 @@ export class VideoReplayDeletionRequestProcessor implements Processor {
 		event: VideoReplayDeletionRequestEvent,
 		currentState: MainWindowState,
 	): Promise<MainWindowState> {
-		const result: boolean = await this.io.deleteFile(event.videoPath);
+		const result: boolean = await this.ow.deleteFile(event.videoPath);
 		if (!result) {
 			return currentState;
 		}

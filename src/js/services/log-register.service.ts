@@ -5,7 +5,6 @@ import { DeckParserService } from './decktracker/deck-parser.service';
 import { GameEvents } from './game-events.service';
 import { LogListenerService } from './log-listener.service';
 import { OverwolfService } from './overwolf.service';
-import { SimpleIOService } from './plugins/simple-io.service';
 
 @Injectable()
 export class LogRegisterService {
@@ -21,21 +20,20 @@ export class LogRegisterService {
 		private collectionLogParserService: LogParserService,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
-		private plugin: SimpleIOService,
 	) {
 		this.init();
 	}
 
 	init(): void {
 		console.log('[log-register] initiating log registerservice');
-		new LogListenerService(this.plugin, this.ow)
+		new LogListenerService(this.ow)
 			.configure('Achievements.log', data => this.collectionLogParserService.receiveLogLine(data))
 			.subscribe(status => {
 				console.log('[log-register] status for achievements', status);
 				this.events.broadcast(status, 'Achiements.log');
 			})
 			.start();
-		new LogListenerService(this.plugin, this.ow)
+		new LogListenerService(this.ow)
 			.configure(
 				'Power.log',
 				data => this.gameEvents.receiveLogLine(data),
@@ -46,7 +44,7 @@ export class LogRegisterService {
 				// this.events.broadcast(status, "Power.log");
 			})
 			.start();
-		new LogListenerService(this.plugin, this.ow)
+		new LogListenerService(this.ow)
 			.configure('Decks.log', data => this.decksService.parseActiveDeck(data))
 			.subscribe(status => {
 				console.log('[log-register] status for decks', status);

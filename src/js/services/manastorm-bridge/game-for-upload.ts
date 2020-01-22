@@ -30,8 +30,6 @@ export class GameForUpload {
 	// We don't send this over the network, but it avoids compression / decompression when
 	// using it locally in the GS
 	uncompressedXmlReplay: string;
-	path: string;
-	replayBytes: any[];
 
 	static createEmptyGame(id: string): GameForUpload {
 		const game = new GameForUpload();

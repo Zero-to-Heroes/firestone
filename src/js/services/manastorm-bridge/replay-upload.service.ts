@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import S3 from 'aws-sdk/clients/s3';
 import AWS from 'aws-sdk/global';
+import * as JSZip from 'jszip';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { GameForUpload } from './game-for-upload';
@@ -49,11 +50,17 @@ export class ReplayUploadService {
 		this.postFullReview(game.reviewId, userId, game);
 	}
 
-	private postFullReview(reviewId: string, userId: string, game: GameForUpload) {
-		// https://stackoverflow.com/questions/35038884/download-file-from-bytes-in-javascript
-		const bytes = game.replayBytes;
-		const byteArray = new Uint8Array(bytes);
-		const blob = new Blob([byteArray], { type: 'application/zip' });
+	private async postFullReview(reviewId: string, userId: string, game: GameForUpload) {
+		const jszip = new JSZip.default();
+		console.log('ready to zip', jszip);
+		jszip.file('power.log', game.uncompressedXmlReplay);
+		const blob: Blob = await jszip.generateAsync({
+			type: 'blob',
+			compression: 'DEFLATE',
+			compressionOptions: {
+				level: 9,
+			},
+		});
 		const fileKey = Date.now() + '_' + reviewId + '.hszip';
 		console.log('[manastorm-bridge] built file key', fileKey);
 
