@@ -83,7 +83,6 @@ export class AppBootstrapService {
 		console.log('[bootstrap] in init');
 		if (!this.loadingWindowShown) {
 			console.log('[bootstrap] initializing loading window');
-			this.loadingWindowShown = true;
 			const window = await this.ow.obtainDeclaredWindow('LoadingWindow');
 			this.loadingWindowId = window.id;
 			// await this.ow.restoreWindow(this.loadingWindowId);
@@ -178,6 +177,10 @@ export class AppBootstrapService {
 	}
 
 	private async showLoadingScreen() {
+		if (this.loadingWindowShown) {
+			return;
+		}
+		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
 		// if (this.currentState === 'READY') {
 		// 	return;
