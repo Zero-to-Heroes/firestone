@@ -610,7 +610,7 @@ export class GameEvents {
 	}
 
 	public receiveLogLine(data: string) {
-		console.log('received log line', data);
+		// console.log('received log line', data);
 		if (data.indexOf('Begin Spectating') !== -1) {
 			console.log('begin spectating', data);
 			this.spectating = true;
