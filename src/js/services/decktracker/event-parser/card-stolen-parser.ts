@@ -44,6 +44,7 @@ export class CardStolenParser implements EventParser {
 		if (
 			!isPlayerStolenFrom &&
 			currentState.opponentDeck.deckList &&
+			removedCardFromHand &&
 			!removedCardFromHand.creatorCardId &&
 			!removedCardFromHand.cardId
 		) {
