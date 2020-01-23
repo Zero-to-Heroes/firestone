@@ -89,7 +89,8 @@ export class LogListenerService {
 
 	async listenOnFileUpdate(logsLocation: string) {
 		const fileIdentifier = this.logFile;
-		console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
+		console.log('[log-listener] [' + this.logFile + '] preparing to listen on file update', logsLocation);
+		let lastLineIsNew = true;
 
 		try {
 			const handler = (lineInfo: ListenObject) => {
@@ -106,8 +107,10 @@ export class LogListenerService {
 					console.log(
 						'[log-listener] [' +
 							this.logFile +
-							'] truncated log file - HS probably just overwrote the file. Going on',
+							'] truncated log file - HS probably just overwrote the file. Restarting listening',
 					);
+					this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
+					return;
 				}
 				const info: {
 					readonly index: number;
@@ -117,10 +120,15 @@ export class LogListenerService {
 				} = lineInfo.info ? JSON.parse(lineInfo.info) : null;
 				// console.log('info', info);
 				if (info && !info.isNew) {
+					lastLineIsNew = false;
 					if (this.existingLineHandler) {
 						this.existingLineHandler(lineInfo.content);
 					}
 				} else {
+					if (!lastLineIsNew && this.existingLineHandler) {
+						lastLineIsNew = true;
+						this.existingLineHandler('end_of_existing_data');
+					}
 					this.callback(lineInfo.content);
 				}
 			};
@@ -131,6 +139,7 @@ export class LogListenerService {
 			};
 			// console.log('skipping to end?', skipToEnd);
 			this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);
+			console.log('[log-listener] [' + this.logFile + '] listening on file update', logsLocation);
 
 			// const plugin = await this.io.get();
 			// plugin.onFileListenerChanged.addListener(handler);
