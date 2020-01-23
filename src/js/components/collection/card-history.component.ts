@@ -24,7 +24,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	],
 	template: `
 		<div class="card-history">
-			<ul class="history">
+			<div class="history">
 				<div class="top-container">
 					<span class="title">My Card History</span>
 					<section class="toggle-label">
@@ -35,29 +35,31 @@ import { OverwolfService } from '../../services/overwolf.service';
 						></preference-toggle>
 					</section>
 				</div>
-				<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
-					<card-history-item
-						[historyItem]="historyItem"
-						[active]="(_selectedCard && _selectedCard.id === historyItem.cardId) || false"
-					>
-					</card-history-item>
-				</li>
-				<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
-					<span class="more-data-text"
-						>You've viewed {{ cardHistory.length }} of {{ totalHistoryLength }} cards</span
-					>
-					<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
-				</li>
-				<section *ngIf="!cardHistory || cardHistory.length === 0" class="empty-state">
-					<i class="i-60x78 pale-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_my_card_history" />
-						</svg>
-					</i>
-					<span>No history yet</span>
-					<span>Open a pack to start one!</span>
-				</section>
-			</ul>
+				<ul>
+					<li *ngFor="let historyItem of shownHistory; trackBy: trackById">
+						<card-history-item
+							[historyItem]="historyItem"
+							[active]="(_selectedCard && _selectedCard.id === historyItem.cardId) || false"
+						>
+						</card-history-item>
+					</li>
+					<li *ngIf="cardHistory && cardHistory.length < totalHistoryLength" class="more-data-container">
+						<span class="more-data-text"
+							>You've viewed {{ cardHistory.length }} of {{ totalHistoryLength }} cards</span
+						>
+						<button class="load-more-button" (mousedown)="loadMore()">Load More</button>
+					</li>
+					<section *ngIf="!cardHistory || cardHistory.length === 0" class="empty-state">
+						<i class="i-60x78 pale-theme">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_my_card_history" />
+							</svg>
+						</i>
+						<span>No history yet</span>
+						<span>Open a pack to start one!</span>
+					</section>
+				</ul>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

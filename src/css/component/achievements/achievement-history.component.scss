@@ -21,18 +21,26 @@
 		}
 	}
 
-	ul {
+	.history {
 		background: rgba(255, 255, 255, 0.08);
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		// height: 160px;
-		// height: 212px;
-		overflow-y: scroll;
 		overflow-x: hidden;
 		flex-grow: 1;
 		display: flex;
 		flex-direction: column;
+		height: 100%;
+
+		ul {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			overflow-y: scroll;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+		}
 
 		li {
 			display: flex;

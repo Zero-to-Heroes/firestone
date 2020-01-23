@@ -9,23 +9,25 @@ import { AchievementHistory } from '../../models/achievement/achievement-history
 	],
 	template: `
 		<div class="achievement-history">
-			<ul class="history">
+			<div class="history">
 				<div class="top-container">
 					<span class="title">My Achievements History</span>
 				</div>
-				<li *ngFor="let historyItem of achievementHistory; trackBy: trackById">
-					<achievement-history-item [historyItem]="historyItem"></achievement-history-item>
-				</li>
-				<section *ngIf="!achievementHistory || achievementHistory.length === 0" class="empty-state">
-					<i class="i-60x78 pale-theme">
-						<svg class="svg-icon-fill">
-							<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_my_card_history" />
-						</svg>
-					</i>
-					<span>No history yet</span>
-					<span>Complete an achievement to start one!</span>
-				</section>
-			</ul>
+				<ul>
+					<li *ngFor="let historyItem of achievementHistory; trackBy: trackById">
+						<achievement-history-item [historyItem]="historyItem"></achievement-history-item>
+					</li>
+					<section *ngIf="!achievementHistory || achievementHistory.length === 0" class="empty-state">
+						<i class="i-60x78 pale-theme">
+							<svg class="svg-icon-fill">
+								<use xlink:href="/Files/assets/svg/sprite.svg#empty_state_my_card_history" />
+							</svg>
+						</i>
+						<span>No history yet</span>
+						<span>Complete an achievement to start one!</span>
+					</section>
+				</ul>
+			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
