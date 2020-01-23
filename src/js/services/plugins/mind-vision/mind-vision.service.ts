@@ -43,8 +43,8 @@ export class MindVisionService {
 		});
 	}
 
-	public async getBattlegroundsInfo(): Promise<{ Rating: number; PreviousRating: number }> {
-		return new Promise<{ Rating: number; PreviousRating: number }>(async resolve => {
+	public async getBattlegroundsInfo(): Promise<{ Rating: number }> {
+		return new Promise<{ Rating: number }>(async resolve => {
 			// console.log('[mind-vision] retrieving getBattlegroundsInfo');
 			const plugin = await this.get();
 			try {

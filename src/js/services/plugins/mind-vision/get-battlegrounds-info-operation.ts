@@ -13,7 +13,7 @@ export class GetBattlegroundsInfoOperation extends MindVisionOperationFacade<Bat
 			battlegroundsInfo =>
 				Object.assign(new BattlegroundsInfo(), {
 					rating: battlegroundsInfo.Rating,
-					previousRating: battlegroundsInfo.PreviousRating,
+					// previousRating: battlegroundsInfo.PreviousRating,
 				} as BattlegroundsInfo),
 		);
 	}
