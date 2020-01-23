@@ -13,6 +13,7 @@ import { Events } from '../../services/events.service';
 import { ShowCardDetailsEvent } from '../../services/mainwindow/store/events/collection/show-card-details-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 
 declare var amplitude;
 
@@ -60,7 +61,12 @@ export class CardHistoryItemComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	constructor(private cdr: ChangeDetectorRef, private ow: OverwolfService, private events: Events) {}
+	constructor(
+		private cdr: ChangeDetectorRef,
+		private ow: OverwolfService,
+		private events: Events,
+		private cards: AllCardsService,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -73,9 +79,12 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		this.cardId = history.cardId;
 		this.newCard = history.isNewCard;
 		this.relevantCount = history.relevantCount;
-		this.rarityImg = `/Files/assets/images/rarity/rarity-${history.rarity}.png`;
-		this.cardName = (history.isPremium ? 'Golden ' : '') + history.cardName;
-		this.dustValue = history.dustValue;
+		const dbCard = this.cards.getCard(history.cardId);
+		console.log('history for card', history.cardId, dbCard.name, dbCard, history);
+		this.rarityImg = `/Files/assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
+		const name = dbCard && dbCard.name ? dbCard.name : 'Unknown card';
+		this.cardName = (history.isPremium ? 'Golden ' : '') + name;
+		this.dustValue = this.getDust(dbCard, history.isPremium);
 		this.creationDate = new Date(history.creationTimestamp).toLocaleDateString('en-GB', {
 			day: '2-digit',
 			month: '2-digit',
@@ -93,5 +102,23 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		});
 		this.stateUpdater.next(new ShowCardDetailsEvent(this.cardId));
 		this.events.broadcast(Events.HIDE_TOOLTIP, this.cardId);
+	}
+
+	private getDust(dbCard: any, isPremium: boolean) {
+		const dust = this.dustFor((dbCard.rarity || 'free').toLowerCase());
+		return isPremium ? dust * 4 : dust;
+	}
+
+	private dustFor(rarity: string): number {
+		switch (rarity) {
+			case 'legendary':
+				return 400;
+			case 'epic':
+				return 100;
+			case 'rare':
+				return 20;
+			default:
+				return 5;
+		}
 	}
 }

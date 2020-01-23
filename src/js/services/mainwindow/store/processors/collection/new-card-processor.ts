@@ -28,23 +28,15 @@ export class NewCardProcessor implements Processor {
 		if (collection && collection.length > 0) {
 			await this.indexedDb.saveCollection(collection);
 		}
-		const dbCard = this.cards.getCard(event.card.id);
-		if (!dbCard) {
-			console.error('[new-card-processor] missing card', event.card.id);
-			return;
-		}
 		const relevantCount = event.type === 'GOLDEN' ? event.card.premiumCount : event.card.count;
 		const history = this.isDust(event.card, event.type)
 			? new CardHistory(
-					dbCard.id,
-					dbCard.name,
-					dbCard.rarity,
-					this.getDust(dbCard, event.type),
+				event.card.id,
 					event.type === 'GOLDEN',
 					false,
 					-1,
 			  )
-			: new CardHistory(dbCard.id, dbCard.name, dbCard.rarity, 0, event.type === 'GOLDEN', true, relevantCount);
+			: new CardHistory(event.card.id, event.type === 'GOLDEN', true, relevantCount);
 		await this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];
 		// console.log('new cardHistory', cardHistory);
