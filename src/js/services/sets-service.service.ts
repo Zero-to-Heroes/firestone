@@ -14,6 +14,7 @@ export class SetsService {
 		['dalaran', 'Rise of Shadows'],
 		['uldum', 'Saviors of Uldum'],
 		['dragons', 'Descent of Dragons'],
+		['yod', "Galakrond's Awakening"],
 	];
 
 	private readonly WILD_SETS = [
