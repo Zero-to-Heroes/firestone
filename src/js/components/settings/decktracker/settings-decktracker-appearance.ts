@@ -61,7 +61,7 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': overlayGroupByZone}"
+						[ngClass]="{ 'disabled': overlayGroupByZone }"
 						class="indented"
 						field="overlayCardsGoToBottom"
 						label="Used cards go to bottom"
@@ -76,19 +76,19 @@ import { Knob } from '../preference-slider.component';
 						tooltip="When active, a tracker will show for your opponent's cards"
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': !opponentTracker}"
+						[ngClass]="{ 'disabled': !opponentTracker }"
 						field="opponentLoadAiDecklist"
 						label="Load AI decklists"
 						tooltip="When active, the tracker will try to load the decklist of the current AI opponent. Be aware that some decks are pseudo random, so the decklist will often be only indicative."
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': !opponentTracker}"
+						[ngClass]="{ 'disabled': !opponentTracker }"
 						field="opponentOverlayGroupByZone"
 						label="Group cards by zone"
 						tooltip="When active, the tracker will split the cards into collapsable sections. The sections active today are Deck, Hand and Other"
 					></preference-toggle>
 					<preference-toggle
-						[ngClass]="{ 'disabled': !opponentTracker || opponentOverlayGroupByZone}"
+						[ngClass]="{ 'disabled': !opponentTracker || opponentOverlayGroupByZone }"
 						class="indented"
 						field="opponentOverlayCardsGoToBottom"
 						label="Used cards go to bottom"
@@ -106,7 +106,7 @@ import { Knob } from '../preference-slider.component';
 					></preference-toggle>
 				</div>
 			</div>
-			<div class="title">Tracker's size</div>
+			<div class="title">Tracker's size & opacity</div>
 			<div class="settings-group">
 				<div class="subtitle">Your deck</div>
 				<preference-slider
@@ -117,6 +117,15 @@ import { Knob } from '../preference-slider.component';
 					[max]="125"
 					[snapSensitivity]="5"
 					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
+				<div class="text">Opacity</div>
+				<preference-slider
+					[field]="'overlayOpacityInPercent'"
+					[enabled]="true"
+					[min]="40"
+					[max]="100"
+					[showCurrentValue]="true"
 				>
 				</preference-slider>
 				<div class="subtitle">Opponent's deck</div>
@@ -130,23 +139,13 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
-			</div>
-			<div class="title">Tracker's opacity</div>
-			<div class="settings-group">
-				<div class="subtitle">Your deck</div>
-				<preference-slider
-					[field]="'overlayOpacityInPercent'"
-					[enabled]="true"
-					[min]="40"
-					[max]="100"
-				>
-				</preference-slider>
-				<div class="subtitle">Opponent's deck</div>
+				<div class="text" [ngClass]="{ 'disabled': opponentTracker }">Opacity</div>
 				<preference-slider
 					field="opponentOverlayOpacityInPercent"
 					[enabled]="opponentTracker"
 					[min]="40"
 					[max]="100"
+					[showCurrentValue]="true"
 				>
 				</preference-slider>
 			</div>
@@ -173,7 +172,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 			percentageValue: 100,
 			label: 'Large',
 		},
-	]
+	];
 
 	private displaySubscription: Subscription;
 	private preferencesSubscription: Subscription;
