@@ -80,7 +80,7 @@ export class CardHistoryItemComponent implements AfterViewInit {
 		this.newCard = history.isNewCard;
 		this.relevantCount = history.relevantCount;
 		const dbCard = this.cards.getCard(history.cardId);
-		console.log('history for card', history.cardId, dbCard.name, dbCard, history);
+		// console.log('history for card', history.cardId, dbCard.name, dbCard, history);
 		this.rarityImg = `/Files/assets/images/rarity/rarity-${dbCard.rarity || 'free'}.png`;
 		const name = dbCard && dbCard.name ? dbCard.name : 'Unknown card';
 		this.cardName = (history.isPremium ? 'Golden ' : '') + name;
