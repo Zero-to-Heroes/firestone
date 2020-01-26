@@ -90,7 +90,7 @@ export class BattlegroundsMinionsSetProvider extends GenericSetProvider {
 				'battlegrounds_minion_play_TB_BaconUps_090',
 				'battlegrounds_minion_play_TB_BaconUps_080',
 				'battlegrounds_minion_play_TB_BaconUps_059',
-				'battlegrounds_minion_play_BGS_022',
+				'battlegrounds_minion_play_TB_BaconUps_091',
 			],
 			'achievements_treasure',
 		);
