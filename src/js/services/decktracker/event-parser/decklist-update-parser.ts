@@ -18,7 +18,7 @@ export class DecklistUpdateParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [, controllerId, localPlayer, ] = gameEvent.parse();
+		const [, controllerId, localPlayer] = gameEvent.parse();
 		// console.debug('applying create card in deck', cardId, entityId);
 
 		const isPlayer = controllerId === localPlayer.PlayerId;

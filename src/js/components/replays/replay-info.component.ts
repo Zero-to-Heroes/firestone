@@ -7,6 +7,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
+import { ScenarioId, GALAKROND_ALL, GALAKROND_EXPLORER, GALAKROND_EVIL } from '@firestone-hs/reference-data';
 
 @Component({
 	selector: 'replay-info',
@@ -108,7 +109,13 @@ export class ReplayInfoComponent implements AfterViewInit {
 		} else if (gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
 		} else if (gameMode === 'practice') {
-			rankIcon = 'casual';
+			if (GALAKROND_EXPLORER.indexOf(info.scenarioId) !== -1) {
+				rankIcon = 'galakrond_explorers';
+			} else if (GALAKROND_EVIL.indexOf(info.scenarioId) !== -1) {
+				rankIcon = 'galakrond_evil';
+			} else {
+				rankIcon = 'casual';
+			}
 		} else if (gameMode === 'casual') {
 			rankIcon = 'casual';
 		} else if (gameMode === 'friendly') {
