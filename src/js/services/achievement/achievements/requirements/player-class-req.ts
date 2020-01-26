@@ -36,7 +36,7 @@ export class PlayerClassReq implements Requirement {
 	private handleEvent(gameEvent: GameEvent) {
 		const localPlayer = gameEvent.localPlayer;
 		if (localPlayer.CardID) {
-			const card = this.cards.getCard(localPlayer.CardID)
+			const card = this.cards.getCard(localPlayer.CardID);
 			const playerClass = card && card.playerClass ? card.playerClass.toLowerCase() : null;
 			this.isCorrectPlayerClass = playerClass === this.playerClass;
 		}

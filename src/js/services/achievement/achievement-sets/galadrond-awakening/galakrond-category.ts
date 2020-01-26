@@ -8,7 +8,7 @@ export class GalakrondCategoryProvider extends AchievementCategoryProvider {
 		super('galakrond', 'Galakrond', 'galakrond', [
 			new GalakrondTrackingSetProvider(),
 			new GalakrondDominationSetProvider(),
-			new GalakrondAmazingPlaysSetProvider()
+			new GalakrondAmazingPlaysSetProvider(),
 		]);
 	}
 }

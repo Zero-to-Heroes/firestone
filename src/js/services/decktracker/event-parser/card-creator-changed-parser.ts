@@ -14,7 +14,7 @@ export class CardCreatorChangedParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
 		// console.debug('card creator changed', cardId, entityId);
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;

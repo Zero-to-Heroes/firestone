@@ -30,12 +30,7 @@ export class NewCardProcessor implements Processor {
 		}
 		const relevantCount = event.type === 'GOLDEN' ? event.card.premiumCount : event.card.count;
 		const history = this.isDust(event.card, event.type)
-			? new CardHistory(
-				event.card.id,
-					event.type === 'GOLDEN',
-					false,
-					-1,
-			  )
+			? new CardHistory(event.card.id, event.type === 'GOLDEN', false, -1)
 			: new CardHistory(event.card.id, event.type === 'GOLDEN', true, relevantCount);
 		await this.cardHistoryStorage.newHistory(history);
 		const cardHistory = [history, ...currentState.binder.cardHistory] as readonly CardHistory[];

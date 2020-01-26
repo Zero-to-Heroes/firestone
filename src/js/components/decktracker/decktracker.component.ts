@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { DecktrackerState } from '../../models/mainwindow/decktracker/decktracker-state';
 import { Navigation } from '../../models/mainwindow/navigation';

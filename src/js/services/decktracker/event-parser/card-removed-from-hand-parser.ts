@@ -27,7 +27,7 @@ export class CardRemovedFromHandParser implements EventParser {
 		let newDeck = deck.deck;
 		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
 			const result = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId);
-			const removedFromDeck = result[1];
+			// const removedFromDeck = result[1];
 			newDeck = result[0];
 		}
 

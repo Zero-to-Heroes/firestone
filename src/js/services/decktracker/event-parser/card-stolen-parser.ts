@@ -49,7 +49,7 @@ export class CardStolenParser implements EventParser {
 			!removedCardFromHand.cardId
 		) {
 			const result = this.helper.removeSingleCardFromZone(stolenDeck, cardId, entityId);
-			const removedFromDeck = result[1];
+			// const removedFromDeck = result[1];
 			newDeck = result[0];
 		}
 		const newStolenDeck = Object.assign(new DeckState(), stolenFromDeck, {

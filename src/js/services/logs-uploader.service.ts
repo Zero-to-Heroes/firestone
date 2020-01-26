@@ -39,7 +39,6 @@ export class LogsUploaderService {
 
 	public async uploadAppLogs(): Promise<string> {
 		try {
-
 			const firestoneLogs = await this.io.zipAppLogFolder('Firestone');
 			const firestoneLogKey = await this.s3.postBinaryFile(firestoneLogs, '.app.zip');
 			// console.log('posted Firestone logs', firestoneLogKey);

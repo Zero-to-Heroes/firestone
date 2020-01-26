@@ -649,7 +649,7 @@ export class GameEvents {
 		}
 		if (existingLine === 'end_of_existing_data' && this.existingLogLines.length > 0) {
 			// There is no automatic reconnect when spectating, so we can always safely say
-			// that when we finish catching up with the actual contents of the file, we are 
+			// that when we finish catching up with the actual contents of the file, we are
 			// not spectating
 			this.spectating = false;
 			const lastLineTimestamp = this.extractLastTimestamp(this.existingLogLines);
@@ -675,7 +675,11 @@ export class GameEvents {
 				this.existingLogLines = [];
 				return;
 			}
-			console.log('[game-events] [existing] caught up, enqueueing all events', this.existingLogLines.length, this.spectating);
+			console.log(
+				'[game-events] [existing] caught up, enqueueing all events',
+				this.existingLogLines.length,
+				this.spectating,
+			);
 			if (this.existingLogLines.length > 0) {
 				this.processingQueue.enqueueAll(['START_CATCHING_UP', ...this.existingLogLines, 'END_CATCHING_UP']);
 			}

@@ -284,7 +284,7 @@ export class AchievementRecordingsComponent implements AfterViewInit, OnDestroy 
 		amplitude.getInstance().logEvent('achievement-video', {
 			'action': 'open-folder',
 		});
-		const result = await this.ow.openWindowsExplorer(this.currentReplayLocation);
+		await this.ow.openWindowsExplorer(this.currentReplayLocation);
 		// console.log('opened', result);
 	}
 

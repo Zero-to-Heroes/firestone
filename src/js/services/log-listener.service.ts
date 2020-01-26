@@ -93,6 +93,10 @@ export class LogListenerService {
 		let lastLineIsNew = true;
 
 		try {
+			const skipToEnd = this.fileInitiallyPresent && !this.existingLineHandler;
+			const options = {
+				skipToEnd: skipToEnd,
+			};
 			const handler = (lineInfo: ListenObject) => {
 				// console.log('[log-listener] [' + this.logFile + '] received line info', lineInfo);
 				if (!lineInfo.success) {
@@ -131,11 +135,6 @@ export class LogListenerService {
 					}
 					this.callback(lineInfo.content);
 				}
-			};
-
-			const skipToEnd = this.fileInitiallyPresent && !this.existingLineHandler;
-			const options = {
-				skipToEnd: skipToEnd,
 			};
 			// console.log('skipping to end?', skipToEnd);
 			this.ow.listenOnFile(fileIdentifier, logsLocation, options, handler);

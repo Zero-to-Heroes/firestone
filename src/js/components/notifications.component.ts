@@ -335,7 +335,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 
 	private resize() {
 		setTimeout(async () => {
-			const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
+			// const wrapper = this.elRef.nativeElement.querySelector('.simple-notification-wrapper');
 			const width = 500;
 			const gameInfo = await this.ow.getRunningGameInfo();
 			// console.log(

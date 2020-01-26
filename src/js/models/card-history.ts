@@ -6,12 +6,7 @@ export class CardHistory {
 	readonly relevantCount: number;
 	readonly creationTimestamp: number;
 
-	constructor(
-		cardId: string,
-		isPremium: boolean,
-		isNewCard: boolean,
-		relevantCount: number,
-	) {
+	constructor(cardId: string, isPremium: boolean, isNewCard: boolean, relevantCount: number) {
 		this.cardId = cardId;
 		this.isPremium = isPremium;
 		this.isNewCard = isNewCard;

@@ -159,7 +159,7 @@ export class PreferenceSliderComponent implements OnDestroy {
 			this.knobs && this.knobs.some(knob => knob.percentageValue === 0)
 				? Math.min(10, Math.max(2, (this.progress / 100) * width))
 				: 0;
-		this.right = (100 - this.progress) * width / 100 + 6;
+		this.right = ((100 - this.progress) * width) / 100 + 6;
 	}
 }
 
