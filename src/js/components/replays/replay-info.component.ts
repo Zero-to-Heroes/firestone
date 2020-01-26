@@ -1,12 +1,12 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NGXLogger } from 'ngx-logger';
-import { ReplayInfo } from '../../models/mainwindow/replays/replay-info';
 import { StatGameFormatType } from '../../models/mainwindow/stats/stat-game-format.type';
 import { StatGameModeType } from '../../models/mainwindow/stats/stat-game-mode.type';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { ShowReplayEvent } from '../../services/mainwindow/store/events/replays/show-replay-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
 
 @Component({
 	selector: 'replay-info',
@@ -47,7 +47,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplayInfoComponent implements AfterViewInit {
-	replayInfo: ReplayInfo;
+	replayInfo: GameStat;
 	gameMode: StatGameModeType;
 	playerRankImage: string;
 	rankText: string;
@@ -62,11 +62,11 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
-	@Input() set replay(value: ReplayInfo) {
+	@Input() set replay(value: GameStat) {
 		// this.logger.debug('[deck-replay-info] setting value', value);
 		this.replayInfo = this.replayInfo;
 		this.gameMode = value.gameMode;
-		this.playerRankImage = this.buildPlayerRankImage(value.gameFormat, value.gameMode, value.playerRank);
+		this.playerRankImage = this.buildPlayerRankImage(value);
 		this.rankText = this.buildRankText(value);
 		// this.deckName = value.playerDeckName || value.playerName;
 		this.playerClassImage = this.buildPlayerClassImage(value, true);
@@ -92,11 +92,9 @@ export class ReplayInfoComponent implements AfterViewInit {
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
 	}
 
-	private buildPlayerRankImage(
-		gameFormat: StatGameFormatType,
-		gameMode: StatGameModeType,
-		playerRank: string,
-	): string {
+	private buildPlayerRankImage(info: GameStat): string {
+		const gameMode = info.gameMode;
+		const playerRank = info.playerRank;
 		let rankIcon;
 		if (gameMode === 'ranked') {
 			const standard = 'standard_ranked';
@@ -125,23 +123,23 @@ export class ReplayInfoComponent implements AfterViewInit {
 		return `/Files/assets/images/deck/ranks/${rankIcon}.png`;
 	}
 
-	private buildPlayerClassImage(info: ReplayInfo, isPlayer: boolean): string {
+	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): string {
 		if (info.gameMode === 'battlegrounds') {
 			if (!isPlayer) {
 				return null;
-			} else if (info.playerSkin) {
-				return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerSkin}.jpg`;
+			} else if (info.playerCardId) {
+				return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerCardId}.jpg`;
 			} else {
 				// Return Bob to not have an empty image
 				return `https://static.zerotoheroes.com/hearthstone/cardart/256x/TB_BaconShop_HERO_PH.jpg`;
 			}
 		}
 		return isPlayer
-			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerSkin}.jpg`
-			: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.opponentSkin}.jpg`;
+			? `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.playerCardId}.jpg`
+			: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${info.opponentCardId}.jpg`;
 	}
 
-	private buildMatchResultIconSvg(info: ReplayInfo): SafeHtml {
+	private buildMatchResultIconSvg(info: GameStat): SafeHtml {
 		if (info.gameMode === 'battlegrounds') {
 			return null;
 		}
@@ -153,7 +151,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		`);
 	}
 
-	private buildMatchResultText(info: ReplayInfo): string {
+	private buildMatchResultText(info: GameStat): string {
 		if (info.gameMode === 'battlegrounds' && info.additionalResult) {
 			// prettier-ignore
 			switch (parseInt(info.additionalResult)) {
@@ -176,7 +174,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		}
 	}
 
-	private buildPlayCoinIconSvg(info: ReplayInfo): SafeHtml {
+	private buildPlayCoinIconSvg(info: GameStat): SafeHtml {
 		if (info.gameMode === 'battlegrounds') {
 			return null;
 		}
@@ -188,7 +186,7 @@ export class ReplayInfoComponent implements AfterViewInit {
 		`);
 	}
 
-	private buildRankText(info: ReplayInfo): string {
+	private buildRankText(info: GameStat): string {
 		if (info.gameMode === 'ranked') {
 			return info.playerRank;
 		}

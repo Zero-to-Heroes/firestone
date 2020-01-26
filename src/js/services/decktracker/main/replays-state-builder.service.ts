@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GroupedReplays } from '../../../models/mainwindow/replays/grouped-replays';
-import { ReplayInfo } from '../../../models/mainwindow/replays/replay-info';
 import { ReplaysFilter } from '../../../models/mainwindow/replays/replays-filter';
 import { ReplaysFilterCategoryType } from '../../../models/mainwindow/replays/replays-filter-category.type';
 import { ReplaysState } from '../../../models/mainwindow/replays/replays-state';
@@ -14,7 +13,7 @@ export class ReplaysStateBuilderService {
 	constructor(private readonly logger: NGXLogger) {}
 
 	public buildState(replayState: ReplaysState, stats: StatsState): ReplaysState {
-		const allReplays: readonly ReplayInfo[] = this.buildReplayInfos(stats.gameStats.stats);
+		const allReplays: readonly GameStat[] = [...stats.gameStats.stats];
 		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(allReplays, replayState.groupByCriteria);
 		return Object.assign(new ReplaysState(), replayState, {
 			allReplays: allReplays,
@@ -29,13 +28,11 @@ export class ReplaysStateBuilderService {
 		const updatedFilters = this.updateFilters(replayState.filters, type, value);
 		// console.log('updated filters', updatedFilters);
 		const filteredStats: readonly GameStat[] = this.filterStats(stats, updatedFilters);
-		// console.log('filteredStats', filteredStats);
-		const allReplays: readonly ReplayInfo[] = this.buildReplayInfos(filteredStats);
 		// console.log('filtereallReplaysdStats', allReplays);
-		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(allReplays, replayState.groupByCriteria);
+		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(filteredStats, replayState.groupByCriteria);
 		// console.log('groupedReplays', groupedReplays);
 		return Object.assign(new ReplaysState(), replayState, {
-			allReplays: allReplays,
+			allReplays: filteredStats,
 			groupedReplays: groupedReplays,
 			filters: updatedFilters,
 		} as ReplaysState);
@@ -65,8 +62,8 @@ export class ReplaysStateBuilderService {
 		return filters.every(filter => filter.allows(stat));
 	}
 
-	private groupReplays(allReplays: readonly ReplayInfo[], groupByCriteria: string): readonly GroupedReplays[] {
-		const groupingFunction = (replay: ReplayInfo) => {
+	private groupReplays(allReplays: readonly GameStat[], groupByCriteria: string): readonly GroupedReplays[] {
+		const groupingFunction = (replay: GameStat) => {
 			const date = new Date(replay.creationTimestamp);
 			return date.toLocaleDateString('en-US', {
 				month: 'short',
@@ -80,35 +77,11 @@ export class ReplaysStateBuilderService {
 		return Object.keys(replaysByDate).map(date => this.buildGroupedReplays(date, replaysByDate[date]));
 	}
 
-	private buildGroupedReplays(date: string, replays: readonly ReplayInfo[]): GroupedReplays {
+	private buildGroupedReplays(date: string, replays: readonly GameStat[]): GroupedReplays {
 		return Object.assign(new GroupedReplays(), {
 			header: date,
 			replays: replays,
 		} as GroupedReplays);
-	}
-
-	private buildReplayInfos(stats: readonly GameStat[]): readonly ReplayInfo[] {
-		return stats.map(stat => this.buildReplayInfo(stat));
-	}
-
-	private buildReplayInfo(stat: GameStat): ReplayInfo {
-		return Object.assign(new ReplayInfo(), {
-			additionalResult: stat.additionalResult,
-			coinPlay: stat.coinPlay,
-			creationTimestamp: stat.creationTimestamp,
-			opponentClass: stat.opponentClass,
-			opponentName: stat.opponentName,
-			opponentSkin: stat.opponentCardId,
-			playerName: stat.playerName,
-			playerClass: stat.playerClass,
-			playerDeckName: stat.playerDeckName,
-			playerRank: stat.playerRank,
-			playerSkin: stat.playerCardId,
-			result: stat.result,
-			reviewId: stat.reviewId,
-			gameMode: stat.gameMode,
-			gameFormat: stat.gameFormat,
-		} as ReplayInfo);
 	}
 }
 

@@ -1,5 +1,5 @@
-import { ReplayInfo } from './replay-info';
+import { GameStat } from '../stats/game-stat';
 
 export class MatchDetail {
-	readonly replayInfo: ReplayInfo;
+	readonly replayInfo: GameStat;
 }

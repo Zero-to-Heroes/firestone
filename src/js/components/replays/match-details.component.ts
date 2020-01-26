@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
-import { ReplayInfo } from '../../models/mainwindow/replays/replay-info';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
 
 @Component({
 	selector: 'match-details',
@@ -19,7 +19,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 })
 export class MatchDetailsComponent {
 	selectedReplay: MatchDetail;
-	replayInfo: ReplayInfo;
+	replayInfo: GameStat;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
