@@ -119,15 +119,18 @@ export abstract class GenericSetProvider extends SetProvider {
 			achievementForCompletionSteps
 				.map(achv => achv.priority)
 				.filter((value, index, self) => self.indexOf(value) === index).length !== 1;
+		// console.log('[completion-steps] areProgressionSteps', areProgressionSteps);
 		const invertedCompletionSteps = [];
 		let alreadyDefinedText = achievement.text || false;
 		// Useful to make sure we have some consistency in the number of comletions
 		let maxNumberOfCompletions = 0;
 		for (let i = achievementForCompletionSteps.length - 1; i >= 0; i--) {
 			const achv = achievementForCompletionSteps[i];
+			// console.log('[completion-steps] handling step', achv);
 			const completions: number = areProgressionSteps
 				? Math.max(maxNumberOfCompletions, achv.numberOfCompletions)
 				: achv.numberOfCompletions;
+			// console.log('[completion-steps] completions', completions);
 			maxNumberOfCompletions = completions;
 			if (completions > 0 && !alreadyDefinedText) {
 				text = achv.completedText;
@@ -137,7 +140,7 @@ export abstract class GenericSetProvider extends SetProvider {
 				id: `${achv.id}`,
 				numberOfCompletions: areProgressionSteps ? completions : achv.numberOfCompletions,
 				icon: achv.icon,
-				completedText: achievement.completedText,
+				completedText: achv.completedText,
 				priority: achievementForCompletionSteps[i].priority,
 				text(showTimes: boolean = false): string {
 					const times = showTimes && !achievement.canBeCompletedOnlyOnce ? `${completions} times` : ``;
@@ -145,6 +148,7 @@ export abstract class GenericSetProvider extends SetProvider {
 				},
 			} as CompletionStep);
 		}
+		// console.log('[completion-steps] invertedCompletionSteps', invertedCompletionSteps);
 		return [invertedCompletionSteps.reverse() as readonly CompletionStep[], text];
 	}
 
