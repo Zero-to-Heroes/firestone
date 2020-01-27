@@ -12,6 +12,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 
 declare var amplitude: any;
 
@@ -96,7 +97,10 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
-	) {}
+		private readonly cards: AllCardsService
+	) {
+		cards.initializeCardsDb();
+	}
 
 	async ngAfterViewInit() {
 		this.cdr.detach();
