@@ -2,6 +2,7 @@ import { AchievementsState } from '../../../../../models/mainwindow/achievements
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { ShowAchievementDetailsEvent } from '../../events/achievements/show-achievement-details-event';
 import { Processor } from '../processor';
+import { Navigation } from '../../../../../models/mainwindow/navigation';
 
 export class ShowAchievementDetailsProcessor implements Processor {
 	public async process(event: ShowAchievementDetailsEvent, currentState: MainWindowState): Promise<MainWindowState> {
@@ -21,11 +22,19 @@ export class ShowAchievementDetailsProcessor implements Processor {
 			displayedAchievementsList: achievementSet.achievements.map(ach => ach.id) as readonly string[],
 			selectedAchievementId: achievement,
 		} as AchievementsState);
+
 		// console.log('[show-achievement-details] showing achievement state', newAchievements);
 		return Object.assign(new MainWindowState(), currentState, {
 			isVisible: true,
 			currentApp: 'achievements',
 			achievements: newAchievements,
+			navigation: Object.assign(new Navigation(), currentState.navigation, {
+				text:
+					globalCategory.name !== achievementSet.displayName
+						? globalCategory.name + ' ' + achievementSet.displayName
+						: achievementSet.displayName,
+				image: null,
+			} as Navigation),
 		} as MainWindowState);
 	}
 
