@@ -40,7 +40,7 @@ describe('Cards created in the players deck', () => {
 		});
 
 		expect(gameState.opponentDeck.hand.map(card => card.entityId)).toEqual([55, 52, 61, 39]);
-		expect(gameState.opponentDeck.deck.length).toBe(0);
+		expect(gameState.opponentDeck.deck.length).toBe(23);
 		expect(gameState.playerDeck.deck.map(card => card.cardId).filter(cardId => cardId)).toIncludeSameMembers([
 			'KAR_069',
 			'KAR_069',

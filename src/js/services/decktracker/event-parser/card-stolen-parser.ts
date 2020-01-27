@@ -30,13 +30,13 @@ export class CardStolenParser implements EventParser {
 
 		const [stolenHand, removedCardFromHand] = cardInHand
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)
-			: stolenFromDeck.hand;
-		const stolenBoard = cardInBoard
-			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)[0]
-			: stolenFromDeck.board;
-		const stolenDeck = cardInDeck
-			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)[0]
-			: stolenFromDeck.deck;
+			: [stolenFromDeck.hand, undefined];
+		const [stolenBoard, removedFromBoard] = cardInBoard
+			? this.helper.removeSingleCardFromZone(stolenFromDeck.board, cardId, entityId)
+			: [stolenFromDeck.board, undefined];
+		const [stolenDeck, removedFromDeck] = cardInDeck
+			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
+			: [stolenFromDeck.deck, undefined];
 		// console.log('\tnew stolen deck', newStolenDeck);
 
 		// See card-played-from-hand

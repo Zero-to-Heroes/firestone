@@ -227,6 +227,7 @@ export class GameStateService {
 			this.gameEnded = true;
 			this.updateOverlays();
 		}
+		// const debug = gameEvent.type === GameEvent.CARD_STOLEN && gameEvent.entityId === 2098;
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state, await this.prefs.getPreferences())) {
@@ -237,6 +238,9 @@ export class GameStateService {
 					// 	gameEvent.entityId,
 					// );
 					const stateAfterParser = await parser.parse(this.state, gameEvent);
+					// if (debug) {
+					// 	console.debug('stateAfterParser', stateAfterParser.opponentDeck.board);
+					// }
 					// this.logger.debug('[game-state] applied parser', stateAfterParser);
 					// if (!stateAfterParser) {
 					// 	this.logger.error('null state after processing event', gameEvent.type, parser, gameEvent);
@@ -261,6 +265,9 @@ export class GameStateService {
 							playerDeck: updatedPlayerDeck,
 							opponentDeck: udpatedOpponentDeck,
 						} as GameState);
+						// if (debug) {
+						// 	console.debug('end state', this.state.opponentDeck.board);
+						// }
 						// this.logger.debug('[game-state] this.state', this.state);
 					} else {
 						this.state = null;

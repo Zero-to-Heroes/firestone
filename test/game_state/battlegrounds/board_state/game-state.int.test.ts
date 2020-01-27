@@ -17,5 +17,5 @@ describe('Battlegrounds Board state', () => {
 			4668,
 		]);
 		expect(gameState.opponentDeck.board.map(card => card.entityId)).toEqual([5192, 5193, 5194, 5195, 5196]);
-	}, 20000);
+	}, 200000);
 });
