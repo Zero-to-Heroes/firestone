@@ -13,6 +13,8 @@ import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/even
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 
+declare var amplitude;
+
 @Component({
 	selector: 'menu-selection',
 	styleUrls: [`../../css/global/menu.scss`, `../../css/component/menu-selection.component.scss`],
@@ -96,6 +98,9 @@ export class MenuSelectionComponent implements AfterViewInit {
 	login() {
 		this.ow.openLoginDialog();
 		this.loginPopupActive = false;
+		amplitude.getInstance().logEvent('log-in', {
+			'source': 'menu-icon',
+		});
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
