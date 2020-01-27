@@ -38,7 +38,9 @@ declare var amplitude;
 							<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
 						</svg>
 						<div class="login-conf-popup" *ngIf="loginPopupActive">
-							<div class="text">Click on the icon to log in to Overwolf and save your achievements online</div>
+							<div class="text">
+								Click on the icon to log in to Overwolf and save your achievements online
+							</div>
 							<div class="buttons">
 								<button class="cancel" (click)="cancel()">Cancel</button>
 								<button class="log-in" (click)="login()">Log in</button>

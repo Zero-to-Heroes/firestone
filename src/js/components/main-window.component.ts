@@ -97,7 +97,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		private readonly cdr: ChangeDetectorRef,
 		private readonly ow: OverwolfService,
 		private readonly debug: DebugService,
-		private readonly cards: AllCardsService
+		private readonly cards: AllCardsService,
 	) {
 		cards.initializeCardsDb();
 	}
