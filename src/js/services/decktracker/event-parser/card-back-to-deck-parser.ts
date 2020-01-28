@@ -21,15 +21,20 @@ export class CardBackToDeckParser implements EventParser {
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		const card = this.findCard(initialZone, deck, cardId, entityId);
+		// console.log('sending card back to deck', card, deck, gameEvent);
 
 		const newHand: readonly DeckCard[] = this.buildNewHand(initialZone, deck.hand, card);
 		const newBoard: readonly DeckCard[] = this.buildNewBoard(initialZone, deck.board, card);
 		const newOther: readonly DeckCard[] = this.buildNewOther(initialZone, deck.otherZone, card);
 		const previousDeck = deck.deck;
-		const newDeck: readonly DeckCard[] = this.helper.addSingleCardToZone(
-			previousDeck,
-			isPlayer ? card : this.helper.obfuscateCard(card),
-		);
+		// When we have a deckstring / decklist, we show all the possible remaining options in the
+		// decklist. This means that when a filler card goes back, it's one of these initial cards
+		// that goes back, and so we don't add them once again
+		const shouldKeepDeckAsIs = deck.deckstring && card.inInitialDeck && !card.cardId;
+		// console.log('shouldKeepDeckAsIs', shouldKeepDeckAsIs, deck.deckstring, card.isFiller(), deck, card);
+		const newDeck: readonly DeckCard[] = shouldKeepDeckAsIs
+			? previousDeck
+			: this.helper.addSingleCardToZone(previousDeck, isPlayer ? card : this.helper.obfuscateCard(card));
 		// console.log('updated deck', isPlayer, newDeck, card);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			deck: newDeck,

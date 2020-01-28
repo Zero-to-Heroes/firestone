@@ -10,6 +10,7 @@ export class DeckCard {
 	// readonly totalQuantity: number;
 	readonly zone: 'DISCARD' | 'BURNED' | 'PLAY' | 'SETASIDE' | 'SECRET' | 'HAND' | 'REMOVEDFROMGAME'; // Optional, should only be read when in the Other zone
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
+	readonly inInitialDeck: boolean;
 
 	public static create(base: DeckCard = {} as DeckCard) {
 		if (base.cardId && !base.cardName) {
@@ -25,5 +26,9 @@ export class DeckCard {
 			console.warn('updating deck card without name', newCard, new Error().stack);
 		}
 		return Object.assign(new DeckCard(), this, newCard);
+	}
+
+	public isFiller(): boolean {
+		return !this.cardId && !this.entityId && !this.creatorCardId && !this.cardName;
 	}
 }

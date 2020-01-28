@@ -2,19 +2,19 @@ import { Injectable } from '@angular/core';
 import { ReferenceCard } from '@firestone-hs/replay-parser';
 import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
+import { DeckCard } from '../models/decktracker/deck-card';
+import { DeckState } from '../models/decktracker/deck-state';
+import { GameState } from '../models/decktracker/game-state';
 import { GameStat } from '../models/mainwindow/stats/game-stat';
 import { GameStats } from '../models/mainwindow/stats/game-stats';
-import { AchievementsLocalStorageService } from './achievement/achievements-local-storage.service';
-import { AchievementsMonitor } from './achievement/achievements-monitor.service';
-import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { Challenge } from './achievement/achievements/challenges/challenge';
-import { PackMonitor } from './collection/pack-monitor.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
+import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
+import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
-import { GameEventsPluginService } from './plugins/game-events-plugin.service';
-import { SetsService } from './sets-service.service';
 import { OverwolfService } from './overwolf.service';
+import { SetsService } from './sets-service.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
 
@@ -24,15 +24,12 @@ import { OverwolfService } from './overwolf.service';
 export class DevService {
 	constructor(
 		private events: Events,
-		private achievementMonitor: AchievementsMonitor,
-		private achievementNotifications: AchievementsNotificationService,
-		private packMonitor: PackMonitor,
 		private ow: OverwolfService,
 		private gameEvents: GameEvents,
-		private gameEventsPlugin: GameEventsPluginService,
-		private deckService: DeckParserService,
-		private storage: AchievementsLocalStorageService,
+		private deckParser: DeckParserService,
 		private cards: SetsService,
+		private gameState: GameStateService,
+		private helper: DeckManipulationHelper,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -92,7 +89,12 @@ export class DevService {
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
 			// setTimeout(() => this.achievementMonitor.sendPostRecordNotification(achievement), 500);
 		};
-		window['loadEvents'] = async (fileName, awaitEvents = false, timeBetweenEvents?: number) => {
+		window['loadEvents'] = async (
+			fileName,
+			awaitEvents = false,
+			deckstring?: string,
+			timeBetweenEvents?: number,
+		) => {
 			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\test\\events\\${fileName}.json`;
 			const logContents = await this.ow.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
@@ -106,6 +108,40 @@ export class DevService {
 					}
 				} else {
 					this.gameEvents.dispatchGameEvent(event);
+				}
+
+				if (deckstring && event.Type === 'OPPONENT_PLAYER') {
+					await sleep(500);
+					const decklist = this.deckParser.buildDeckList(deckstring);
+					// console.log('[opponent-player] parsed decklist', decklist);
+					// And since this event usually arrives after the cards in hand were drawn, remove from the deck
+					// whatever we can
+					let newDeck = decklist;
+					const currentState = this.gameState.state;
+					for (const card of [
+						...currentState.opponentDeck.hand,
+						...currentState.opponentDeck.otherZone,
+						...currentState.opponentDeck.board,
+					]) {
+						newDeck = this.helper.removeSingleCardFromZone(newDeck, card.cardId, card.entityId)[0];
+					}
+					// console.log('[opponent-player] newDeck', newDeck);
+					const newPlayerDeck = currentState.opponentDeck.update({
+						deckstring: deckstring,
+						deckList: decklist,
+						deck: deckstring ? this.flagCards(newDeck) : newDeck,
+						hand: deckstring
+							? this.flagCards(currentState.opponentDeck.hand)
+							: currentState.opponentDeck.hand,
+						otherZone: deckstring
+							? this.flagCards(currentState.opponentDeck.otherZone)
+							: currentState.opponentDeck.otherZone,
+					} as DeckState);
+					// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
+					this.gameState.state = currentState.update({
+						opponentDeck: newPlayerDeck,
+					} as GameState);
+					console.log('updated decklist', this.gameState.state);
 				}
 			}
 			console.log('processing done');
@@ -237,6 +273,14 @@ export class DevService {
 	// 		});
 	// 	});
 	// }
+
+	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
+		return cards.map(card =>
+			card.update({
+				inInitialDeck: true,
+			} as DeckCard),
+		);
+	}
 }
 
 function sleep(ms) {

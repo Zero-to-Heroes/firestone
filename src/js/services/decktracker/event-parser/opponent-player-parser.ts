@@ -1,4 +1,5 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { HeroCard } from '../../../models/decktracker/hero-card';
@@ -60,8 +61,13 @@ export class OpponentPlayerParser implements EventParser {
 		// console.log('[opponent-player] newDeck', newDeck);
 		const newPlayerDeck = currentState.opponentDeck.update({
 			hero: newHero,
+			deckstring: aiDeckString,
 			deckList: decklist,
-			deck: newDeck,
+			deck: aiDeckString ? this.flagCards(newDeck) : newDeck,
+			hand: aiDeckString ? this.flagCards(currentState.opponentDeck.hand) : currentState.opponentDeck.hand,
+			otherZone: aiDeckString
+				? this.flagCards(currentState.opponentDeck.otherZone)
+				: currentState.opponentDeck.otherZone,
 		} as DeckState);
 		// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
 		return currentState.update({
@@ -80,5 +86,13 @@ export class OpponentPlayerParser implements EventParser {
 	private getNameFromCard(cardId: string): string {
 		const card = cardId ? this.allCards.getCard(cardId) : null;
 		return card ? card.name : 'Unnamed player';
+	}
+
+	private flagCards(cards: readonly DeckCard[]): readonly DeckCard[] {
+		return cards.map(card =>
+			card.update({
+				inInitialDeck: true,
+			} as DeckCard),
+		);
 	}
 }
