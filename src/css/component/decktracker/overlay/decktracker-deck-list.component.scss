@@ -10,7 +10,7 @@
 	// margin-right: 10px;
 	position: relative;
 	left: -10px;
-	max-height: calc(90vh / var(--decktracker-scale) - 30px); // Take into account the top menu
+	max-height: calc(var(--decktracker-max-height) / var(--decktracker-scale) - 30px); // Take into account the top menu
 	// max-height: calc(100vh - 30px);
 	// max-height: 50vh;
 

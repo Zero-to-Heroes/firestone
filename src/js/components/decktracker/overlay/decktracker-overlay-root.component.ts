@@ -205,6 +205,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.opacity = this.opacityExtractor(preferences) / 100;
 		this.scale = this.scaleExtractor(preferences);
 		this.el.nativeElement.style.setProperty('--decktracker-scale', this.scale / 100);
+		this.el.nativeElement.style.setProperty('--decktracker-max-height', this.player === 'player' ? '90vh' : '70vh');
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
