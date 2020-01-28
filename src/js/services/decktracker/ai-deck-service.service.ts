@@ -37,7 +37,7 @@ export class AiDeckService {
 
 	private async getDeckNames(): Promise<readonly string[]> {
 		return new Promise<readonly string[]>(resolve => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/all_files_test.json`).subscribe(
 				(result: any[]) => {
 					// this.logger.debug('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
