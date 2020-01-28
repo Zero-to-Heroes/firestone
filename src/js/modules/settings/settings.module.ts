@@ -40,6 +40,7 @@ import { LogsUploaderService } from '../../services/logs-uploader.service';
 import { TwitchAuthService } from '../../services/mainwindow/twitch-auth.service';
 import { OwNotificationsService } from '../../services/notifications.service';
 import { OverwolfService } from '../../services/overwolf.service';
+import { SimpleIOService } from '../../services/plugins/simple-io.service';
 import { PreferencesService } from '../../services/preferences.service';
 import { S3FileUploadService } from '../../services/s3-file-upload.service';
 import { SharedModule } from '../shared/shared.module';
@@ -112,6 +113,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		LogsUploaderService,
 		S3FileUploadService,
 		OwNotificationsService,
+		SimpleIOService,
 	],
 })
 export class SettingsModule {}
