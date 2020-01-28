@@ -23,12 +23,7 @@ export class DiscardedCardParser implements EventParser {
 		const [newHand, removedCard] = this.helper.removeSingleCardFromZone(deck.hand, card.cardId, entityId);
 
 		// See card-played-from-hand
-		let newDeck = deck.deck;
-		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
-			const result = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId);
-			// const removedFromDeck = result[1];
-			newDeck = result[0];
-		}
+		const newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
 		const cardWithZone = card.update({
 			zone: 'DISCARD',

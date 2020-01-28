@@ -29,19 +29,7 @@ export class CardPlayedFromHandParser implements EventParser {
 			deck.deckList.length === 0,
 		);
 		// console.log('removed card from hand', removedCard, currentState, gameEvent);
-		// We can't make a connection between the card in hand and the card that started in the deck
-		// when we are facing an opponent with a known decklist (like is the case with the AI for instance)
-		// There are some cases where we know that a card in hand is a specific card coming from the deck:
-		// if has been bounced back from the board for instance (then it has a card id).
-		// If the card has a creatorCardId, we know that it's not from the original deck, so we do nothing
-		let newDeck = deck.deck;
-		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
-			const result = this.helper.removeSingleCardFromZone(deck.deck, cardId, entityId);
-			// const removedFromDeck = result[1];
-			// if (removedFromDeck && removedFromDeck.cardId) {
-			newDeck = result[0];
-			// }
-		}
+		const newDeck = this.helper.updateDeckForAi(gameEvent, currentState, removedCard);
 
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);

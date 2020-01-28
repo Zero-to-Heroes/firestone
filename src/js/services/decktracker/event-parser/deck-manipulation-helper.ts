@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
+import { GameState } from '../../../models/decktracker/game-state';
+import { GameEvent } from '../../../models/game-event';
 
 @Injectable()
 export class DeckManipulationHelper {
@@ -246,5 +248,63 @@ export class DeckManipulationHelper {
 		const zoneWithoutCard = zone.filter(card => card.entityId !== newCard.entityId);
 		// console.debug('zone without card', zone);
 		return [...zoneWithoutCard, newCard];
+	}
+
+	// We can't always make a connection between the card in hand and the card that started in the deck
+	// when we are facing an opponent with a known decklist (like is the case with the AI for instance)
+	// There are some cases where we know that a card in hand is a specific card coming from the deck:
+	// if has been bounced back from the board for instance (then it has a card id).
+	// If the card has a creatorCardId, we know that it's not from the original deck, so we do nothing
+	public updateDeckForAi(gameEvent: GameEvent, currentState: GameState, removedCard: DeckCard) {
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const isPlayer = controllerId === localPlayer.PlayerId;
+		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		if (!isPlayer && currentState.opponentDeck.deckList && !removedCard.creatorCardId && !removedCard.cardId) {
+			const newCardId = this.overrideCardIdForSomeAiCards(cardId);
+			const result = this.removeSingleCardFromZone(deck.deck, newCardId, entityId);
+			return result[0];
+		}
+		return deck.deck;
+	}
+
+	// The spellstones are present in the AI decklist in their basic version
+	// However, if the AI plays the spellstone's upgraded version, we need to remove
+	// the basic one from the decklist
+	private overrideCardIdForSomeAiCards(cardId: string): string {
+		switch (cardId) {
+			// The spellstones
+			case 'LOOT_103t1':
+			case 'LOOT_103t2':
+				return 'LOOT_103';
+			case 'LOOT_043t2':
+			case 'LOOT_043t3':
+				return 'LOOT_043';
+			case 'LOOT_051t1':
+			case 'LOOT_051t2':
+				return 'LOOT_051';
+			case 'LOOT_064t1':
+			case 'LOOT_064t2':
+				return 'LOOT_064';
+			case 'LOOT_080t2':
+			case 'LOOT_080t3':
+				return 'LOOT_080';
+			case 'LOOT_091t1':
+			case 'LOOT_091t2':
+				return 'LOOT_091';
+			case 'LOOT_203t2':
+			case 'LOOT_203t3':
+				return 'LOOT_203';
+			case 'LOOT_503t':
+			case 'LOOT_503t2':
+				return 'LOOT_503';
+			case 'LOOT_507t':
+			case 'LOOT_507t2':
+				return 'LOOT_507';
+			case 'FB_Champs_LOOT_080t2':
+			case 'FB_Champs_LOOT_080t3':
+				return 'FB_Champs_LOOT_080';
+			default:
+				return cardId;
+		}
 	}
 }
