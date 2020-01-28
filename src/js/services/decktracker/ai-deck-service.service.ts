@@ -32,12 +32,12 @@ export class AiDeckService {
 		const deckNames: readonly string[] = await this.getDeckNames();
 		const decksArray = await Promise.all(deckNames.map(fileName => this.loadAiDecks(fileName)));
 		this.aiDecks = decksArray.reduce((a, b) => a.concat(b), []);
-		// console.log('[ai-decks] loaded ai decks', this.aiDecks);
+		console.log('[ai-decks] loaded ai decks', this.aiDecks);
 	}
 
 	private async getDeckNames(): Promise<readonly string[]> {
 		return new Promise<readonly string[]>(resolve => {
-			this.http.get(`${AI_DECKSTRINGS_URL}/all_files_test.json`).subscribe(
+			this.http.get(`${AI_DECKSTRINGS_URL}/all_files.json`).subscribe(
 				(result: any[]) => {
 					// this.logger.debug('[ai-decks] retrieved ai deck from CDN', fileName, result);
 					resolve(result);
