@@ -33,7 +33,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 						</svg>
 					</i>
 					<span class="title">Nothing here yet</span>
-					<span class="subtitle">Play ladder ranked standard match to get started</span>
+					<span class="subtitle">Play a standard ranked match to get started!</span>
 				</div>
 			</section>
 		</div>
