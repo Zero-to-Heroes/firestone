@@ -146,6 +146,7 @@ export class GroupedDeckListComponent {
 			name: undefined,
 			cards: base,
 			sortingFunction: sortingFunction,
+			numberOfCards: base.length,
 		} as DeckZone;
 		// console.log('setting final zone', this.zone);
 		// if (!(this.cdr as ViewRef).destroyed) {

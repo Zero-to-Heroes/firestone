@@ -11,6 +11,9 @@ export class DeckState {
 	readonly heroPower: DeckCard;
 	readonly deckList: readonly DeckCard[] = [];
 	readonly unknownRealCardsInDeck: boolean;
+	// This is too cumbersome to compute for the opponent deck when the decklist is known,
+	// so we just read it form the game entities
+	readonly cardsLeftInDeck: number;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
 	// can be interacted with, which means dead minions for Priest, or

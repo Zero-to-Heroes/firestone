@@ -37,8 +37,22 @@ export class DeckListByZoneComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		const zones = [
-			this.buildZone(deckState.deck, 'deck', 'In deck', (a, b) => a.manaCost - b.manaCost),
-			this.buildZone(deckState.hand, 'hand', 'In hand', (a, b) => a.manaCost - b.manaCost, null, 'in-hand'),
+			this.buildZone(
+				deckState.deck,
+				'deck',
+				'In deck',
+				(a, b) => a.manaCost - b.manaCost,
+				deckState.cardsLeftInDeck,
+			),
+			this.buildZone(
+				deckState.hand,
+				'hand',
+				'In hand',
+				(a, b) => a.manaCost - b.manaCost,
+				deckState.hand.length,
+				null,
+				'in-hand',
+			),
 		];
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (deckState.dynamicZones.length === 0) {
@@ -49,6 +63,7 @@ export class DeckListByZoneComponent {
 					'other',
 					'Other',
 					(a, b) => a.manaCost - b.manaCost,
+					null,
 					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 					// not show them in the zones
 					(a: VisualDeckCard) => a.zone !== 'SETASIDE',
@@ -78,6 +93,7 @@ export class DeckListByZoneComponent {
 					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
 				} as VisualDeckCard),
 			),
+			numberOfCards: zone.cards.length,
 			sortingFunction: sortingFunction,
 		} as DeckZone;
 	}
@@ -87,21 +103,24 @@ export class DeckListByZoneComponent {
 		id: string,
 		name: string,
 		sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number,
+		numberOfCards: number,
 		filterFunction?: (a: VisualDeckCard) => boolean,
 		highlight?: string,
 	): DeckZone {
+		const cardsInZone = cards
+			.map(card =>
+				Object.assign(new VisualDeckCard(), card, {
+					creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
+					highlight: highlight,
+				} as VisualDeckCard),
+			)
+			.filter(card => !filterFunction || filterFunction(card));
 		return {
 			id: id,
 			name: name,
-			cards: cards
-				.map(card =>
-					Object.assign(new VisualDeckCard(), card, {
-						creatorCardIds: (card.creatorCardId ? [card.creatorCardId] : []) as readonly string[],
-						highlight: highlight,
-					} as VisualDeckCard),
-				)
-				.filter(card => !filterFunction || filterFunction(card)),
+			cards: cardsInZone,
 			sortingFunction: sortingFunction,
+			numberOfCards: numberOfCards != null ? numberOfCards : cardsInZone.length,
 		} as DeckZone;
 	}
 }

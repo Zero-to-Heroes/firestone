@@ -41,6 +41,7 @@ import { EndOfEchoInHandParser } from './event-parser/end-of-echo-in-hand-parser
 import { EventParser } from './event-parser/event-parser';
 import { FirstPlayerParser } from './event-parser/first-player-parser';
 import { GameEndParser } from './event-parser/game-end-parser';
+import { GameRunningParser } from './event-parser/game-running-parser';
 import { GameStartParser } from './event-parser/game-start-parser';
 import { HeroPowerChangedParser } from './event-parser/hero-power-changed-parser';
 import { LocalPlayerParser } from './event-parser/local-player-parser';
@@ -57,7 +58,6 @@ import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-de
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { ZoneOrderingService } from './zone-ordering.service';
-import { GameRunningParser } from './event-parser/game-running-parser';
 
 @Injectable()
 export class GameStateService {
@@ -320,7 +320,11 @@ export class GameStateService {
 		// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
 		// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
-		return playerDeckWithZonesOrdered;
+		return playerDeckWithZonesOrdered && playerFromTracker
+			? playerDeckWithZonesOrdered.update({
+					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
+			  } as DeckState)
+			: playerDeckWithZonesOrdered;
 	}
 
 	private async updateOverlays() {
