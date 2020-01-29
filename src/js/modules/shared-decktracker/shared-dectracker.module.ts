@@ -27,6 +27,7 @@ console.log('version is', process.env.APP_VERSION);
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 	suppressScrollX: true,
+	maxScrollbarLength: 100,
 };
 
 @NgModule({
