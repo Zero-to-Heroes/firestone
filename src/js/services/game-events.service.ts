@@ -57,7 +57,9 @@ export class GameEvents {
 					!this.hasSentToS3 &&
 					(first.toLowerCase().indexOf('exception') !== -1 || first.toLowerCase().indexOf('error') !== -1)
 				) {
-					this.uploadLogsAndSendException(first, second);
+					this.hasSentToS3 = true;
+					// Wait a bit before sending the logs
+					setTimeout(() => this.uploadLogsAndSendException(first, second), 20000);
 				}
 			});
 			this.plugin.onGameEvent.addListener(gameEvent => {
@@ -734,7 +736,6 @@ export class GameEvents {
 
 	private async uploadLogsAndSendException(first, second) {
 		try {
-			this.hasSentToS3 = true;
 			const s3LogFileKey = await this.logService.uploadGameLogs();
 			const fullLogsFromPlugin = second.indexOf('/#/') !== -1 ? second.split('/#/')[0] : second;
 			const pluginLogsFileKey = await this.s3.postLogs(fullLogsFromPlugin);
