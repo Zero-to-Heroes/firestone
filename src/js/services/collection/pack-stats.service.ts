@@ -47,7 +47,8 @@ export class PackStatsService {
 		for (let i = 0; i < cards.length; i++) {
 			statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId.toLowerCase();
 			statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType.toLowerCase();
-			statEvent['card' + (i + 1) + 'Rarity'] = this.allCards.getCard(cards[i].cardId).rarity.toLowerCase();
+			const dbCard = this.allCards.getCard(cards[i].cardId);
+			statEvent['card' + (i + 1) + 'Rarity'] = dbCard && dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free';
 		}
 		console.log('posting pack stat event', statEvent);
 		this.publishPackStatInternal(statEvent);
