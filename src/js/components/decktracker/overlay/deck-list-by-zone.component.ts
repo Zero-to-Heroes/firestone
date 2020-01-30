@@ -37,12 +37,17 @@ export class DeckListByZoneComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		const zones = [
-			this.buildZone(
-				deckState.deck,
-				'deck',
-				'In deck',
-				(a, b) => a.manaCost - b.manaCost,
-				deckState.cardsLeftInDeck,
+			Object.assign(
+				this.buildZone(
+					deckState.deck,
+					'deck',
+					'In deck',
+					(a, b) => a.manaCost - b.manaCost,
+					deckState.cardsLeftInDeck,
+				),
+				{
+					showWarning: deckState.showDecklistWarning,
+				} as DeckZone,
 			),
 			this.buildZone(
 				deckState.hand,

@@ -1,9 +1,9 @@
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
 import { DeckParserService } from '../deck-parser.service';
 import { EventParser } from './event-parser';
-import { DeckCard } from '../../../models/decktracker/deck-card';
 
 export class GameRunningParser implements EventParser {
 	constructor(private readonly deckParser: DeckParserService) {}
@@ -46,6 +46,7 @@ export class GameRunningParser implements EventParser {
 		return state.update({
 			deckList: [] as readonly DeckCard[],
 			deck: newDeck,
+			cardsLeftInDeck: deckCount,
 		} as DeckState);
 	}
 }

@@ -14,6 +14,7 @@ export class DeckState {
 	// This is too cumbersome to compute for the opponent deck when the decklist is known,
 	// so we just read it form the game entities
 	readonly cardsLeftInDeck: number;
+	readonly showDecklistWarning: boolean;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
 	// can be interacted with, which means dead minions for Priest, or

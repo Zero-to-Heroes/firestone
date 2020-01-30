@@ -38,9 +38,11 @@ export class GroupedDeckListComponent {
 	private _deckState: DeckState;
 	private _highlight: boolean;
 	private _cardsGoToBottom: boolean;
+	private showWarning: boolean;
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
+		this.showWarning = deckState.showDecklistWarning;
 		// console.log('setting deck state', deckState, this.deck);
 		this.buildGroupedList();
 	}
@@ -147,6 +149,7 @@ export class GroupedDeckListComponent {
 			cards: base,
 			sortingFunction: sortingFunction,
 			numberOfCards: base.length,
+			showWarning: this.showWarning,
 		} as DeckZone;
 		// console.log('setting final zone', this.zone);
 		// if (!(this.cdr as ViewRef).destroyed) {

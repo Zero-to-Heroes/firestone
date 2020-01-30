@@ -5,5 +5,6 @@ export interface DeckZone {
 	readonly name: string;
 	readonly cards: readonly VisualDeckCard[];
 	readonly numberOfCards: number;
+	readonly showWarning?: boolean;
 	readonly sortingFunction: (a: VisualDeckCard, b: VisualDeckCard) => number;
 }

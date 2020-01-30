@@ -29,6 +29,9 @@ export class OpponentPlayerParser implements EventParser {
 		const newHero = Object.assign(new HeroCard(), currentState.opponentDeck.hero, {
 			playerName: playerName,
 		} as HeroCard);
+		// Total cards before setting the decklist
+		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;
+		// console.log('[opponent-player] total cards in actual deck + hand', cardsInDeck);
 		const shouldLoadDecklist = (await this.prefs.getPreferences()).opponentLoadAiDecklist;
 		const aiDeck = this.aiDecks.getAiDeck(gameEvent.opponentPlayer.CardID, currentState.metadata.scenarioId);
 		const aiDeckString = shouldLoadDecklist && aiDeck ? aiDeck.deckstring : null;
@@ -59,15 +62,18 @@ export class OpponentPlayerParser implements EventParser {
 			}
 		}
 		// console.log('[opponent-player] newDeck', newDeck);
+		const hand = aiDeckString ? this.flagCards(currentState.opponentDeck.hand) : currentState.opponentDeck.hand;
+		const deck = aiDeckString ? this.flagCards(newDeck) : newDeck;
 		const newPlayerDeck = currentState.opponentDeck.update({
 			hero: newHero,
 			deckstring: aiDeckString,
 			deckList: decklist,
-			deck: aiDeckString ? this.flagCards(newDeck) : newDeck,
-			hand: aiDeckString ? this.flagCards(currentState.opponentDeck.hand) : currentState.opponentDeck.hand,
+			deck: deck,
+			hand: hand,
 			otherZone: aiDeckString
 				? this.flagCards(currentState.opponentDeck.otherZone)
 				: currentState.opponentDeck.otherZone,
+			showDecklistWarning: cardsInDeck < decklist.length,
 		} as DeckState);
 		// console.log('[opponent-player] newPlayerDeck', newPlayerDeck);
 		return currentState.update({
@@ -95,4 +101,14 @@ export class OpponentPlayerParser implements EventParser {
 			} as DeckCard),
 		);
 	}
+
+	// private extractCardsInDeck(gameEvent: GameEvent): number {
+	// 	try {
+	// 		console.log('getting cards in deck', gameEvent);
+	// 		return gameEvent.additionalData.gameState.Opponent.Deck.length;
+	// 	} catch (e) {
+	// 		console.log('could not get cards in deck', gameEvent, e);
+	// 		return null;
+	// 	}
+	// }
 }

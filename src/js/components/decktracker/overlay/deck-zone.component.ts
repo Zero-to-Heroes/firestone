@@ -13,7 +13,16 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	template: `
 		<div class="deck-zone {{ className }}">
 			<div class="zone-name-container" *ngIf="zoneName" (mousedown)="toggleZone()">
-				<span class="zone-name">{{ zoneName }} ({{ cardsInZone }})</span>
+				<div class="zone-name">
+					<span>{{ zoneName }} ({{ cardsInZone }})</span>
+					<div *ngIf="showWarning" class="warning">
+						<svg
+							helpTooltip="The actual cards in this deck are randomly chosen from all the cards in the list below"
+						>
+							<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
+						</svg>
+					</div>
+				</div>
 				<!-- TODO: collapse caret -->
 				<i class="collapse-caret {{ open ? 'open' : 'close' }}">
 					<svg class="svg-icon-fill">
@@ -44,6 +53,7 @@ export class DeckZoneComponent {
 	_tooltipPosition: CardTooltipPositionType;
 	className: string;
 	zoneName: string;
+	showWarning: boolean;
 	cardsInZone = 0;
 	cards: readonly VisualDeckCard[];
 	open = true;
@@ -53,6 +63,7 @@ export class DeckZoneComponent {
 	@Input('zone') set zone(zone: DeckZone) {
 		this.className = zone.id;
 		this.zoneName = zone.name;
+		this.showWarning = zone.showWarning;
 		// console.log('setting zone', zone);
 		const cardsToDisplay = zone.sortingFunction ? [...zone.cards].sort(zone.sortingFunction) : zone.cards;
 		this.cardsInZone = zone.numberOfCards;

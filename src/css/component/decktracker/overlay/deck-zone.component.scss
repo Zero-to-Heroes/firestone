@@ -20,6 +20,20 @@
 			height: 100%;
 			align-items: center;
 		}
+
+		.warning {
+			height: 17px;
+			width: 17px;
+			position: relative;
+			left: 10px;
+			color: #9fb6d7;
+			--icon-color: #9fb6d7;
+
+			svg {
+				color: transparent;
+				fill: currentcolor;
+			}
+		}
 	}
 
 	.collapse-caret {

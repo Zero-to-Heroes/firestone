@@ -120,7 +120,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		console.log('game event', gameEvent);
+		// console.log('game event', gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -179,7 +179,7 @@ export class GameEvents {
 						'error-id': 'no-player-info',
 					});
 				}
-				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
+				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value.OpponentPlayer, {
 					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
 					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
 					wildRank: opponentInfo ? opponentInfo.wildRank : undefined,
@@ -191,6 +191,9 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.OPPONENT,
 						opponentPlayer: opponentPlayer,
+						additionalData: {
+							gameState: gameEvent.Value.GameState,
+						},
 					} as GameEvent),
 				);
 				break;
@@ -624,7 +627,7 @@ export class GameEvents {
 
 		if (this.spectating) {
 			// For now we're not interested in spectating events, but that will come out later
-			console.log('spectating, doing nothing');
+			// console.log('spectating, doing nothing');
 			return;
 		}
 
