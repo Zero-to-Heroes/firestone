@@ -18,8 +18,16 @@ import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.compone
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class HelpTooltipDirective implements OnInit, OnDestroy {
-	@Input('helpTooltip') text = '';
+	_text: string = '';
+
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' = 'bottom';
+
+	@Input('helpTooltip') set text(value: string) {
+		this._text = value;
+		if (!this._text && this.overlayRef) {
+			this.overlayRef.detach();
+		}
+	}
 
 	private tooltipPortal;
 	private overlayRef: OverlayRef;
@@ -101,6 +109,9 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseenter')
 	onMouseEnter() {
+		if (!this._text) {
+			return;
+		}
 		// Create tooltip portal
 		this.tooltipPortal = new ComponentPortal(HelpTooltipComponent);
 
@@ -108,8 +119,8 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		const tooltipRef: ComponentRef<HelpTooltipComponent> = this.overlayRef.attach(this.tooltipPortal);
 
 		// Pass content to tooltip component instance
-		tooltipRef.instance.text = this.text;
-		// console.log('setting tooltip text', this.text, tooltipRef);
+		tooltipRef.instance.text = this._text;
+		// console.log('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

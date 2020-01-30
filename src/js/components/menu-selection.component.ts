@@ -28,7 +28,9 @@ declare var amplitude;
 					>Achievements
 					<div *ngIf="!currentUser || !currentUser.username" class="attention-icon-container">
 						<svg
-							helpTooltip="Login to save your achievements online"
+							[helpTooltip]="
+								loginPopupActive ? null : 'Click on the icon to log in to save your achievements online'
+							"
 							helpTooltipPosition="right"
 							class="svg-icon-fill attention-icon pulse"
 							pulse="hasSeenAchievementsLoginButton"
@@ -39,7 +41,7 @@ declare var amplitude;
 						</svg>
 						<div class="login-conf-popup" *ngIf="loginPopupActive">
 							<div class="text">
-								Click on the icon to log in to Overwolf and save your achievements online
+								Log in to Overwolf and save your achievements online
 							</div>
 							<div class="buttons">
 								<button class="cancel" (click)="cancel()">Cancel</button>
