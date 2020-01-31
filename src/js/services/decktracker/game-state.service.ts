@@ -56,7 +56,9 @@ import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
+import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
+import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
 
 @Injectable()
@@ -103,6 +105,7 @@ export class GameStateService {
 		private deckParser: DeckParserService,
 		private helper: DeckManipulationHelper,
 		private aiDecks: AiDeckService,
+		private secretsConfig: SecretConfigService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -273,11 +276,6 @@ export class GameStateService {
 						this.state = null;
 					}
 					await this.updateOverlays();
-					// this.logger.debug('[game-state] updateOverlays');
-					// if (!this.state) {
-					// 	this.logger.error('null state after processing event', gameEvent, this.state);
-					// 	continue;
-					// }
 					const emittedEvent = {
 						event: {
 							name: parser.event(),
@@ -286,21 +284,12 @@ export class GameStateService {
 					};
 					// this.logger.debug('[game-state] will emit event', emittedEvent);
 					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					// this.logger.debug('[game-state] emitted deck event', emittedEvent.event.name, this.state);
-					// this.logger.debug(
-					// 	'board states',
-					// 	this.state.playerDeck.board.length,
-					// 	this.state.opponentDeck.board.length,
-					// 	this.state.playerDeck.board,
-					// 	this.state.opponentDeck.board,
-					// );
-					// this.logger.debug(
-					// 	'hand states',
-					// 	this.state.playerDeck.hand.length,
-					// 	this.state.opponentDeck.hand.length,
-					// 	this.state.playerDeck.hand,
-					// 	this.state.opponentDeck.hand,
-					// );
+					this.logger.debug(
+						'[game-state] emitted deck event',
+						emittedEvent.event.name,
+						this.state,
+						gameEvent,
+					);
 				}
 			} catch (e) {
 				this.logger.error('[game-state] Exception while applying parser', parser.event(), e);
@@ -454,7 +443,7 @@ export class GameStateService {
 			new CardRemovedFromBoardParser(this.helper),
 			new CardChangedOnBoardParser(this.helper, this.allCards),
 			new CardPlayedFromHandParser(this.helper, this.allCards),
-			new SecretPlayedFromHandParser(this.helper),
+			new SecretPlayedFromHandParser(this.helper, this.secretsConfig),
 			new EndOfEchoInHandParser(this.helper),
 			new GameEndParser(),
 			new DiscardedCardParser(this.helper),
@@ -464,7 +453,7 @@ export class GameStateService {
 			new CardRevealedParser(this.helper, this.allCards),
 			new MinionDiedParser(this.helper),
 			new BurnedCardParser(this.helper),
-			new SecretPlayedFromDeckParser(this.helper),
+			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
 			new NewTurnParser(),
 			new FirstPlayerParser(),
 			new CardStolenParser(this.helper),
@@ -472,11 +461,15 @@ export class GameStateService {
 			new AssignCardIdParser(this.helper),
 			new HeroPowerChangedParser(this.helper, this.allCards),
 			new DeckstringOverrideParser(this.deckParser, this.allCards),
-			new LocalPlayerParser(),
+			new LocalPlayerParser(this.allCards),
 			new OpponentPlayerParser(this.aiDecks, this.deckParser, this.helper, this.allCards, this.prefs),
 			new DecklistUpdateParser(this.aiDecks, this.deckParser, this.prefs),
 			new CardOnBoardAtGameStart(this.helper),
 			new GameRunningParser(this.deckParser),
+			new SecretTriggeredParser(this.helper),
+
+			// Secrets parser
+			// new BearTrapSecretParser(),
 		];
 	}
 }

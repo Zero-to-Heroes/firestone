@@ -120,7 +120,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// console.log('game event', gameEvent);
+		console.log('game event', gameEvent.Type, gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -283,7 +283,13 @@ export class GameEvents {
 				break;
 			case 'SECRET_PLAYED_FROM_DECK':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SECRET_PLAYED_FROM_DECK, gameEvent, {
+						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
+							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+							: null,
+					}),
+				);
 				break;
 			case 'MINION_SUMMONED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
@@ -352,7 +358,13 @@ export class GameEvents {
 				break;
 			case 'SECRET_PLAYED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SECRET_PLAYED, gameEvent, {
+						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
+							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+							: null,
+					}),
+				);
 				break;
 			case 'SECRET_TRIGGERED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);

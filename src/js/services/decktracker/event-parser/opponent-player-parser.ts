@@ -26,8 +26,10 @@ export class OpponentPlayerParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const battleTag = gameEvent.opponentPlayer && gameEvent.opponentPlayer.Name;
 		const playerName = this.extractNameFromBTag(battleTag) || this.getNameFromCard(gameEvent.opponentPlayer.CardID);
+		const playerClass = this.allCards.getCard(gameEvent.opponentPlayer.CardID).playerClass;
 		const newHero = Object.assign(new HeroCard(), currentState.opponentDeck.hero, {
 			playerName: playerName,
+			playerClass: playerClass ? playerClass.toLowerCase() : null,
 		} as HeroCard);
 		// Total cards before setting the decklist
 		const cardsInDeck = currentState.opponentDeck.hand.length + currentState.opponentDeck.deck.length;

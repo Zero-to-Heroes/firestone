@@ -9,6 +9,7 @@ import { DynamicZoneHelperService } from '../../src/js/services/decktracker/dyna
 import { DeckManipulationHelper } from '../../src/js/services/decktracker/event-parser/deck-manipulation-helper';
 import { GameStateMetaInfoService } from '../../src/js/services/decktracker/game-state-meta-info.service';
 import { GameStateService } from '../../src/js/services/decktracker/game-state.service';
+import { SecretConfigService } from '../../src/js/services/decktracker/secret-config.service';
 import { ZoneOrderingService } from '../../src/js/services/decktracker/zone-ordering.service';
 import { Events } from '../../src/js/services/events.service';
 import { GameEventsEmitterService } from '../../src/js/services/game-events-emitter.service';
@@ -92,6 +93,9 @@ export const gameStateBuilder = async (
 		{
 			getAiDeck: (...args) => null,
 		} as AiDeckService,
+		({
+			getValidSecrets: (...args) => [],
+		} as unknown) as SecretConfigService,
 	);
 
 	const gameEventsService = new GameEvents(

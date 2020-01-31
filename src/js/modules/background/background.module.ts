@@ -29,6 +29,7 @@ import { DecksStateBuilderService } from '../../services/decktracker/main/decks-
 import { DecktrackerStateLoaderService } from '../../services/decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../services/decktracker/main/replays-state-builder.service';
 import { OverlayDisplayService } from '../../services/decktracker/overlay-display.service';
+import { SecretConfigService } from '../../services/decktracker/secret-config.service';
 import { ZoneOrderingService } from '../../services/decktracker/zone-ordering.service';
 import { DevService } from '../../services/dev.service';
 import { GameEventsEmitterService } from '../../services/game-events-emitter.service';
@@ -145,6 +146,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		BattlegroundsHeroInfoService,
 
 		AiDeckService,
+		SecretConfigService,
 
 		GameStatsBootstrapService,
 		GameStatsLoaderService,
