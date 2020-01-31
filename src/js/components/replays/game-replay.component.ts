@@ -6,7 +6,6 @@ import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
 declare var amplitude;
 
-const REVIEW_API = 'https://www.zerotoheroes.com/api/reviews/';
 const REPLAY_API = 'https://s3-us-west-2.amazonaws.com/com.zerotoheroes.output/';
 
 @Component({
@@ -75,7 +74,9 @@ export class GameReplayComponent implements OnInit {
 		window['coliseum'].zone.run(() => {
 			window['coliseum'].component.updateStatus('Downloading replay file');
 		});
-		const review: any = await this.http.get(REVIEW_API + reviewId).toPromise();
+		const review: any = await this.http
+			.get(`https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/${reviewId}`)
+			.toPromise();
 		const headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
 		console.log('loaded review');
 		const replay = await this.http
