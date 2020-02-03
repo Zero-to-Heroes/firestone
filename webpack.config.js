@@ -6,9 +6,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 const AngularCompilerPlugin = webpack.AngularCompilerPlugin;
 const DefinePlugin = require('webpack').DefinePlugin;
-const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+// const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 var path = require('path');
@@ -312,19 +312,19 @@ module.exports = function(env, argv) {
 				],
 			},
 		]),
-		new BundleAnalyzerPlugin(),
+		// new BundleAnalyzerPlugin(),
 	];
 
-	if (env.production) {
-		plugins.push(
-			new SentryWebpackPlugin({
-				include: '.',
-				ignoreFile: '.sentrycliignore',
-				ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
-				configFile: 'sentry.properties',
-			}),
-		);
-	}
+	// if (env.production) {
+	// 	plugins.push(
+	// 		new SentryWebpackPlugin({
+	// 			include: '.',
+	// 			ignoreFile: '.sentrycliignore',
+	// 			ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
+	// 			configFile: 'sentry.properties',
+	// 		}),
+	// 	);
+	// }
 
 	return {
 		mode: env.production ? 'production' : 'development',
