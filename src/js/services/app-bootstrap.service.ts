@@ -132,6 +132,7 @@ export class AppBootstrapService {
 			// }
 			if (this.ow.exitGame(res) && res.runningChanged && !this.wrapUpTimeout) {
 				console.log('[bootstrap] left game, closing app', res);
+				this.loadingWindowShown = false;
 				this.closeLoadingScreen();
 				this.showReplaysRecap();
 				// this.wrapUpTimeout = setTimeout(() => {
