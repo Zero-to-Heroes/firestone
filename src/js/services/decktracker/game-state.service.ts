@@ -156,6 +156,7 @@ export class GameStateService {
 				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 			}
 			if (await this.ow.inGame()) {
+				console.log('[game-state] updating overlays', res);
 				this.updateOverlays();
 			}
 		});
@@ -216,17 +217,21 @@ export class GameStateService {
 		// }
 		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === 'CLOSE_OPPONENT_TRACKER') {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.opponentTrackerClosedByUser = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
 			this.opponentTrackerClosedByUser = false;
 			this.gameEnded = false;
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_END) {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
 			this.updateOverlays();
 		}
@@ -321,6 +326,7 @@ export class GameStateService {
 			console.log('ow not defined, returning');
 			return;
 		}
+		const inGame = await this.ow.inGame();
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
@@ -336,6 +342,7 @@ export class GameStateService {
 				(this.state.playerDeck.otherZone && this.state.playerDeck.otherZone.length > 0));
 		// console.log('[game-state] should show tracker?', shouldShowTracker, this.showDecktracker, this.state);
 		if (
+			inGame &&
 			shouldShowTracker &&
 			decktrackerWindow.window_state_ex === 'closed' &&
 			this.showDecktracker &&
@@ -346,7 +353,7 @@ export class GameStateService {
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_WINDOW);
 		} else if (
 			decktrackerWindow.window_state_ex !== 'closed' &&
-			(!shouldShowTracker || !this.showDecktracker || this.closedByUser)
+			(!shouldShowTracker || !this.showDecktracker || this.closedByUser || !inGame)
 		) {
 			// console.log('[game-state] closing tracker');
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_WINDOW);
@@ -363,6 +370,7 @@ export class GameStateService {
 				(this.state.opponentDeck.otherZone && this.state.opponentDeck.otherZone.length > 0));
 		// console.log('[game-state] should show tracker?', shouldShowOpponentTracker, this.showDecktracker, this.state);
 		if (
+			inGame &&
 			shouldShowOpponentTracker &&
 			opponentTrackerWindow.window_state_ex === 'closed' &&
 			this.showOpponentTracker &&
@@ -373,7 +381,7 @@ export class GameStateService {
 			await this.ow.restoreWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
 		} else if (
 			opponentTrackerWindow.window_state_ex !== 'closed' &&
-			(!shouldShowOpponentTracker || !this.showOpponentTracker || this.opponentTrackerClosedByUser)
+			(!shouldShowOpponentTracker || !this.showOpponentTracker || this.opponentTrackerClosedByUser || !inGame)
 		) {
 			// console.log('[game-state] closing tracker');
 			await this.ow.closeWindow(OverwolfService.DECKTRACKER_OPPONENT_WINDOW);
@@ -381,6 +389,7 @@ export class GameStateService {
 
 		// console.log('[game-state] showing opp hand?', this.showOpponentHand);
 		if (
+			inGame &&
 			this.state &&
 			this.state.gameStarted &&
 			this.state.metadata &&
@@ -397,6 +406,7 @@ export class GameStateService {
 				!this.state ||
 				!this.state.gameStarted ||
 				!this.showOpponentHand ||
+				!inGame ||
 				(this.state.metadata && this.state.metadata.gameType === GameType.GT_BATTLEGROUNDS))
 		) {
 			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
