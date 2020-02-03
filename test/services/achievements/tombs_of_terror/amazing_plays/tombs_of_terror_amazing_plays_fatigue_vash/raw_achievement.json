@@ -47,5 +47,5 @@
 			]
 		}
 	],
-	"resetEvents": ["GAME_END"]
+	"resetEvents": ["GAME_START"]
 }
