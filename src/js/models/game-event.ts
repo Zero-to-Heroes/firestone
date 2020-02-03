@@ -50,7 +50,10 @@ export class GameEvent {
 	public static readonly MINION_ON_BOARD_ATTACK_UPDATED = 'MINION_ON_BOARD_ATTACK_UPDATED';
 	public static readonly ARMOR_CHANGED = 'ARMOR_CHANGED';
 	public static readonly HEALTH_DEF_CHANGED = 'HEALTH_DEF_CHANGED';
+	public static readonly NUM_CARDS_PLAYED_THIS_TURN = 'NUM_CARDS_PLAYED_THIS_TURN';
 	public static readonly FATIGUE_DAMAGE = 'FATIGUE_DAMAGE';
+	public static readonly ATTACK_ON_HERO = 'ATTACK_ON_HERO';
+	public static readonly ATTACK_ON_MINION = 'ATTACK_ON_MINION';
 	public static readonly DAMAGE = 'DAMAGE';
 	public static readonly HEALING = 'HEALING';
 	public static readonly CARD_STOLEN = 'CARD_STOLEN';
@@ -108,6 +111,7 @@ export interface GameEventPlayer {
 }
 
 export interface GameState {
+	readonly ActivePlayerId: number;
 	readonly Player: PlayerGameState;
 	readonly Opponent: PlayerGameState;
 }

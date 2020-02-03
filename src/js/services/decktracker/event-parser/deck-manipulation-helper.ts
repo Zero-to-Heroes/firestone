@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { BoardSecret } from '../../../models/decktracker/board-secret';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
+import { SecretOption } from '../../../models/decktracker/secret-option';
 import { GameEvent } from '../../../models/game-event';
 
 @Injectable()
@@ -265,6 +267,23 @@ export class DeckManipulationHelper {
 			return result[0];
 		}
 		return deck.deck;
+	}
+
+	public removeSecretOption(deck: DeckState, secretCardId: string) {
+		const newSecrets: readonly BoardSecret[] = deck.secrets.map(secret =>
+			this.removeSecretOptionFromSecret(secret, secretCardId),
+		);
+		return deck.update({
+			secrets: newSecrets,
+		} as DeckState);
+	}
+
+	private removeSecretOptionFromSecret(secret: BoardSecret, secretCardId: string): BoardSecret {
+		return secret.update({
+			allPossibleOptions: secret.allPossibleOptions.filter(
+				option => option.cardId !== secretCardId,
+			) as readonly SecretOption[],
+		} as BoardSecret);
 	}
 
 	// The spellstones are present in the AI decklist in their basic version

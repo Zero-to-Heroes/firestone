@@ -470,6 +470,37 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'NUM_CARDS_PLAYED_THIS_TURN':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.NUM_CARDS_PLAYED_THIS_TURN, gameEvent, {
+						cardsPlayed: gameEvent.Value.AdditionalProps.NumCardsPlayed,
+					}),
+				);
+				break;
+			case 'ATTACK_ON_HERO':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ATTACK_ON_HERO, gameEvent, {
+						sourceCardId: gameEvent.Value.SourceCardId,
+						sourceEntityId: gameEvent.Value.SourceEntityId,
+						sourceControllerId: gameEvent.Value.SourceControllerId,
+						targetCardId: gameEvent.Value.TargetCardId,
+						targetEntityId: gameEvent.Value.TargetEntityId,
+						targetControllerId: gameEvent.Value.TargetControllerId,
+					}),
+				);
+				break;
+			case 'ATTACK_ON_MINION':
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.ATTACK_ON_MINION, gameEvent, {
+						sourceCardId: gameEvent.Value.SourceCardId,
+						sourceEntityId: gameEvent.Value.SourceEntityId,
+						sourceControllerId: gameEvent.Value.SourceControllerId,
+						targetCardId: gameEvent.Value.TargetCardId,
+						targetEntityId: gameEvent.Value.TargetEntityId,
+						targetControllerId: gameEvent.Value.TargetControllerId,
+					}),
+				);
+				break;
 			case 'FATIGUE_DAMAGE':
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
