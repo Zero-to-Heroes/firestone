@@ -312,19 +312,19 @@ module.exports = function(env, argv) {
 				],
 			},
 		]),
-		new BundleAnalyzerPlugin(),
+		// new BundleAnalyzerPlugin(),
 	];
 
-	if (env.production) {
-		plugins.push(
-			new SentryWebpackPlugin({
-				include: '.',
-				ignoreFile: '.sentrycliignore',
-				ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
-				configFile: 'sentry.properties',
-			}),
-		);
-	}
+	// if (env.production) {
+	// 	plugins.push(
+	// 		new SentryWebpackPlugin({
+	// 			include: '.',
+	// 			ignoreFile: '.sentrycliignore',
+	// 			ignore: ['node_modules', 'test', 'dependencies', 'webpack.config.js', 'webpack-twitch.config.js'],
+	// 			configFile: 'sentry.properties',
+	// 		}),
+	// 	);
+	// }
 
 	return {
 		mode: env.production ? 'production' : 'development',
