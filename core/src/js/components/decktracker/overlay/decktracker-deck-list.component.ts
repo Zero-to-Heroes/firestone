@@ -20,7 +20,7 @@ import { Events } from '../../../services/events.service';
 		`../../../../css/global/scrollbar-decktracker-overlay.scss`,
 	],
 	template: `
-		<perfect-scrollbar class="deck-list" (scroll)="onScroll($event)">
+		<perfect-scrollbar class="deck-list" (scroll)="onScroll($event)" [ngClass]="{ 'active': isScroll }">
 			<ng-container [ngSwitch]="displayMode">
 				<div class="list-background">/</div>
 				<deck-list-by-zone
@@ -52,17 +52,24 @@ export class DeckTrackerDeckListComponent {
 
 	_tooltipPosition: CardTooltipPositionType;
 	_deckState: DeckState;
+	isScroll: boolean;
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		// console.log('[decktracker-deck-list] setting tooltip position', value);
 		this._tooltipPosition = value;
 	}
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
-
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
+		setTimeout(() => {
+			const contentHeight = this.el.nativeElement.querySelector('.ps-content').getBoundingClientRect().height;
+			const containerHeight = this.el.nativeElement.querySelector('.ps').getBoundingClientRect().height;
+			this.isScroll = contentHeight > containerHeight;
+			this.refresh();
+		}, 1000);
 	}
+
+	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
 
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
