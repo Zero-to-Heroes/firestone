@@ -27,6 +27,10 @@ export class RatTrapSecretParser implements EventParser {
 
 		const isPlayedWithCardPlayed = cardPlayedControllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayedWithCardPlayed ? currentState.opponentDeck : currentState.playerDeck;
+
+		if (deckWithSecretToCheck.board.length === 7) {
+			return currentState;
+		}
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayedWithCardPlayed ? 'opponentDeck' : 'playerDeck']: newPlayerDeck,

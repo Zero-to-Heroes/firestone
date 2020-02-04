@@ -5,8 +5,8 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
-export class PressurePlateSecretParser implements EventParser {
-	private readonly secretCardId = 'ULD_152';
+export class CatTrickSecretParser implements EventParser {
+	private readonly secretCardId = 'KAR_004';
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -32,8 +32,7 @@ export class PressurePlateSecretParser implements EventParser {
 		}
 		// Might need to be a little more specific than this? E.g. with dormant minions?
 		// It's an edge case, so leaving it aside for a first implementation
-		const deckWithBoard = isPlayerWithCardPlayed ? currentState.playerDeck : currentState.opponentDeck;
-		if (deckWithBoard.board.length === 0) {
+		if (deckWithSecretToCheck.board.length === 7) {
 			return currentState;
 		}
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
@@ -43,6 +42,6 @@ export class PressurePlateSecretParser implements EventParser {
 	}
 
 	event(): string {
-		return 'SECRET_PRESSURE_PLATE';
+		return 'SECRET_CAT_TRICK';
 	}
 }

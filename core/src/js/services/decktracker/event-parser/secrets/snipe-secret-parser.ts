@@ -5,8 +5,8 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
-export class PressurePlateSecretParser implements EventParser {
-	private readonly secretCardId = 'ULD_152';
+export class SnipeSecretParser implements EventParser {
+	private readonly secretCardId = 'EX1_609';
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -17,32 +17,26 @@ export class PressurePlateSecretParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, playedCardControllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secret doesn't trigger if you're the one playing the minion
-		if (activePlayerId === playedCardControllerId) {
+		// Secrets don't trigger during your turn
+		if (activePlayerId === controllerId) {
+			return currentState;
+		}
+		const dbCard = this.allCards.getCard(cardId);
+		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()) {
 			return currentState;
 		}
 
-		const isPlayerWithCardPlayed = playedCardControllerId === localPlayer.PlayerId;
-		const deckWithSecretToCheck = isPlayerWithCardPlayed ? currentState.opponentDeck : currentState.playerDeck;
-		const dbCard = this.allCards.getCard(cardId);
-		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.SPELL].toLowerCase()) {
-			return currentState;
-		}
-		// Might need to be a little more specific than this? E.g. with dormant minions?
-		// It's an edge case, so leaving it aside for a first implementation
-		const deckWithBoard = isPlayerWithCardPlayed ? currentState.playerDeck : currentState.opponentDeck;
-		if (deckWithBoard.board.length === 0) {
-			return currentState;
-		}
+		const isMinionPlayedByPlayer = controllerId === localPlayer.PlayerId;
+		const deckWithSecretToCheck = isMinionPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
 		return Object.assign(new GameState(), currentState, {
-			[isPlayerWithCardPlayed ? 'opponentDeck' : 'playerDeck']: newPlayerDeck,
+			[isMinionPlayedByPlayer ? 'opponentDeck' : 'playerDeck']: newPlayerDeck,
 		});
 	}
 
 	event(): string {
-		return 'SECRET_PRESSURE_PLATE';
+		return 'SECRET_SNIPE';
 	}
 }
