@@ -1,18 +1,17 @@
-.deck-list {
-	overflow: visible;
-	width: 100%;
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
 
-	overflow-y: auto;
+.deck-list {
+	overflow: hidden;
+	width: 100%;
+	// overflow-y: hidden;
 	width: calc(100% + 20px);
 	min-width: calc(100% + 20px);
-	// padding-bottom: 10px;
-	// margin-left: 10px;
-	// margin-right: 10px;
 	position: relative;
 	left: -10px;
 	max-height: calc(var(--decktracker-max-height) / var(--decktracker-scale) - 30px); // Take into account the top menu
-	// max-height: calc(100vh - 30px);
-	// max-height: 50vh;
+	// max-height: 30vh;
+	// height: 25vh;
+	// height: 100%;
 
 	.list-background {
 		position: absolute;
@@ -40,32 +39,45 @@
 			display: none;
 		}
 		.ps__rail-y.ps__rail-y {
-			opacity: 1;
-			right: 8px !important;
-			width: 15px !important;
-			background-color: rgba(255, 255, 255, 0.01);
-			z-index: 2;
-			transition: width 100ms linear, opacity 100ms linear, background-color 100ms linear;
+			display: none;
+		}
+	}
 
-			&:hover {
-				opacity: 1 !important;
-				.ps__thumb-y {
-					width: 10px;
-				}
-			}
-			.ps__thumb-y {
-				width: 6px;
-				background-color: var(--color-3);
+	&.active {
+		::ng-deep {
+			// IMPORTANT! Remove the !important from top: 0 !important
+			// node_modules/ngx-perfect-scrollbar (do a Ctrl+F)
+			// for perfect-scrollbar > .ps.ps--active-y > .ps__rail-y {
+			.ps__rail-y.ps__rail-y {
+				display: block;
+				opacity: 1;
+				right: 8px !important;
+				width: 15px !important;
+				background-color: rgba(255, 255, 255, 0.01);
+				z-index: 2;
+				transition: width 100ms linear, opacity 100ms linear, background-color 100ms linear;
+				// height: 100% !important;
 
 				&:hover {
-					background-color: var(--color-2);
+					opacity: 1 !important;
+					.ps__thumb-y {
+						width: 10px;
+					}
+				}
+				.ps__thumb-y {
+					width: 6px;
+					background-color: var(--color-3);
+
+					&:hover {
+						background-color: var(--color-2);
+					}
 				}
 			}
-		}
-		.ps:hover > .ps__rail-y,
-		.ps--focus > .ps__rail-y,
-		.ps.ps--scrolling-y > .ps__rail-y {
-			opacity: 0.01;
+			.ps:hover > .ps__rail-y,
+			.ps--focus > .ps__rail-y,
+			.ps.ps--scrolling-y > .ps__rail-y {
+				opacity: 0.01;
+			}
 		}
 	}
 
