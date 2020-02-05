@@ -1,10 +1,10 @@
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
-export class VenomstrikeTrapSecretParser implements EventParser {
-	private readonly secretCardId = 'ICC_200';
+export class SnakeTrapSecretParser implements EventParser {
+	private readonly secretCardId = 'EX1_554';
 
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
@@ -16,16 +16,20 @@ export class VenomstrikeTrapSecretParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const attackedMinionControllerId = gameEvent.additionalData.targetControllerId;
-		const attackerControllerId = gameEvent.additionalData.sourceControllerId;
 		const isPlayerBeingAttacked = attackedMinionControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secrets don't trigger during your turn
-		if (activePlayerId === attackedMinionControllerId) {
+		const deckWithSecretToCheck = isPlayerBeingAttacked ? currentState.playerDeck : currentState.opponentDeck;
+		if (isPlayerBeingAttacked && activePlayerId === gameEvent.localPlayer.PlayerId) {
+			console.log('snake', 'active player being attacked', isPlayerBeingAttacked, activePlayerId, gameEvent);
 			return currentState;
 		}
-		const deckWithSecretToCheck = isPlayerBeingAttacked ? currentState.playerDeck : currentState.opponentDeck;
+		if (!isPlayerBeingAttacked && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
+			console.log('snake', 'active opp being attacked', isPlayerBeingAttacked, activePlayerId, gameEvent);
+			return currentState;
+		}
 		// If board is full, secret can't trigger
 		if (deckWithSecretToCheck.board.length === 7) {
+			console.log('snake', 'board full', isPlayerBeingAttacked, deckWithSecretToCheck);
 			return currentState;
 		}
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
@@ -35,6 +39,6 @@ export class VenomstrikeTrapSecretParser implements EventParser {
 	}
 
 	event(): string {
-		return 'SECRET_VENOMSTRIKE_TRAP';
+		return 'SECRET_SNAKE_TRAP';
 	}
 }

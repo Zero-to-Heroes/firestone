@@ -1,7 +1,7 @@
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
 export class ExplosiveTrapSecretParser implements EventParser {
 	private readonly secretCardId = 'EX1_610';
@@ -14,20 +14,22 @@ export class ExplosiveTrapSecretParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const attackedPlayerControllerId = gameEvent.additionalData.targetControllerId;
+		const isPlayerTheAttackedParty = attackedPlayerControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secrets don't trigger during your turn
-		if (activePlayerId === attackedPlayerControllerId) {
+		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
+		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {
 			return currentState;
 		}
-		const isPlayedBeingAttacked = attackedPlayerControllerId === gameEvent.localPlayer.PlayerId;
-		const deckWithSecretToCheck = isPlayedBeingAttacked ? currentState.playerDeck : currentState.opponentDeck;
+		if (!isPlayerTheAttackedParty && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
+			return currentState;
+		}
 		// If board is full, secret can't trigger so we can't eliminate any option
 		if (deckWithSecretToCheck.board.length === 7) {
 			return currentState;
 		}
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
 		return Object.assign(new GameState(), currentState, {
-			[isPlayedBeingAttacked ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[isPlayerTheAttackedParty ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}
 

@@ -200,6 +200,9 @@ export class GameEvents {
 			case 'INITIAL_CARD_IN_DECK':
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.INITIAL_CARD_IN_DECK, gameEvent));
 				break;
+			case 'HERO_POWER_USED':
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.HERO_POWER_USED, gameEvent));
+				break;
 			case 'MULLIGAN_INPUT':
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
@@ -482,24 +485,24 @@ export class GameEvents {
 			case 'ATTACK_ON_HERO':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ATTACK_ON_HERO, gameEvent, {
-						sourceCardId: gameEvent.Value.SourceCardId,
-						sourceEntityId: gameEvent.Value.SourceEntityId,
-						sourceControllerId: gameEvent.Value.SourceControllerId,
-						targetCardId: gameEvent.Value.TargetCardId,
-						targetEntityId: gameEvent.Value.TargetEntityId,
-						targetControllerId: gameEvent.Value.TargetControllerId,
+						sourceCardId: gameEvent.Value.AdditionalProps.SourceCardId,
+						sourceEntityId: gameEvent.Value.AdditionalProps.SourceEntityId,
+						sourceControllerId: gameEvent.Value.AdditionalProps.SourceControllerId,
+						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+						targetControllerId: gameEvent.Value.AdditionalProps.TargetControllerId,
 					}),
 				);
 				break;
 			case 'ATTACK_ON_MINION':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ATTACK_ON_MINION, gameEvent, {
-						sourceCardId: gameEvent.Value.SourceCardId,
-						sourceEntityId: gameEvent.Value.SourceEntityId,
-						sourceControllerId: gameEvent.Value.SourceControllerId,
-						targetCardId: gameEvent.Value.TargetCardId,
-						targetEntityId: gameEvent.Value.TargetEntityId,
-						targetControllerId: gameEvent.Value.TargetControllerId,
+						sourceCardId: gameEvent.Value.AdditionalProps.SourceCardId,
+						sourceEntityId: gameEvent.Value.AdditionalProps.SourceEntityId,
+						sourceControllerId: gameEvent.Value.AdditionalProps.SourceControllerId,
+						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+						targetControllerId: gameEvent.Value.AdditionalProps.TargetControllerId,
 					}),
 				);
 				break;

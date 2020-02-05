@@ -57,6 +57,7 @@ import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-par
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
+import { SecretsParserService } from './event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from './game-state-meta-info.service';
 import { SecretConfigService } from './secret-config.service';
 import { ZoneOrderingService } from './zone-ordering.service';
@@ -106,6 +107,7 @@ export class GameStateService {
 		private helper: DeckManipulationHelper,
 		private aiDecks: AiDeckService,
 		private secretsConfig: SecretConfigService,
+		private secretsParser: SecretsParserService,
 	) {
 		this.eventParsers = this.buildEventParsers();
 		this.registerGameEvents();
@@ -235,6 +237,7 @@ export class GameStateService {
 			this.gameEnded = true;
 			this.updateOverlays();
 		}
+		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
 		// const debug = gameEvent.type === GameEvent.CARD_STOLEN && gameEvent.entityId === 2098;
 		for (const parser of this.eventParsers) {
 			try {
@@ -477,9 +480,6 @@ export class GameStateService {
 			new CardOnBoardAtGameStart(this.helper),
 			new GameRunningParser(this.deckParser),
 			new SecretTriggeredParser(this.helper),
-
-			// Secrets parser
-			// new BearTrapSecretParser(),
 		];
 	}
 }

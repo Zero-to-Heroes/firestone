@@ -5,7 +5,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { SecretOption } from '../../../models/decktracker/secret-option';
-import { GameEvent } from '../../../models/game-event';
+import { EntityGameState, GameEvent, GameState as EventGameState, PlayerGameState } from '../../../models/game-event';
 
 @Injectable()
 export class DeckManipulationHelper {
@@ -278,11 +278,24 @@ export class DeckManipulationHelper {
 		} as DeckState);
 	}
 
+	public findEntityInGameState(gameState: EventGameState, entityId: number): EntityGameState {
+		const playerState: PlayerGameState = gameState.Player || ({} as PlayerGameState);
+		const opponentState: PlayerGameState = gameState.Opponent || ({} as PlayerGameState);
+		const allEntities = [
+			...(playerState.Board || []),
+			...(playerState.Hand || []),
+			...(opponentState.Board || []),
+			...(opponentState.Hand || []),
+		];
+		return allEntities.find(entity => entity.entityId === entityId);
+	}
+
 	private removeSecretOptionFromSecret(secret: BoardSecret, secretCardId: string): BoardSecret {
+		const newOptions: readonly SecretOption[] = secret.allPossibleOptions.map(option =>
+			option.cardId === secretCardId ? option.update({ isValidOption: false } as SecretOption) : option,
+		);
 		return secret.update({
-			allPossibleOptions: secret.allPossibleOptions.filter(
-				option => option.cardId !== secretCardId,
-			) as readonly SecretOption[],
+			allPossibleOptions: newOptions,
 		} as BoardSecret);
 	}
 

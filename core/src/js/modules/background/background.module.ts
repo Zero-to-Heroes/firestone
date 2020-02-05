@@ -23,6 +23,7 @@ import { DeckCardService } from '../../services/decktracker/deck-card.service';
 import { DeckParserService } from '../../services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from '../../services/decktracker/dynamic-zone-helper.service';
 import { DeckManipulationHelper } from '../../services/decktracker/event-parser/deck-manipulation-helper';
+import { SecretsParserService } from '../../services/decktracker/event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from '../../services/decktracker/game-state-meta-info.service';
 import { GameStateService } from '../../services/decktracker/game-state.service';
 import { DecksStateBuilderService } from '../../services/decktracker/main/decks-state-builder.service';
@@ -139,6 +140,7 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameHelper,
 		GameParserService,
 		ReplayUploadService,
+		SecretsParserService,
 		GameStateService,
 		DeckManipulationHelper,
 

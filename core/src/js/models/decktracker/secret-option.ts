@@ -8,4 +8,8 @@ export class SecretOption {
 			isValidOption: true,
 		} as SecretOption);
 	}
+
+	public update(base: SecretOption): SecretOption {
+		return Object.assign(new SecretOption(), this, base);
+	}
 }

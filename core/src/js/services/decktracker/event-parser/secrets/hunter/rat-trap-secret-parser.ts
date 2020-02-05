@@ -1,8 +1,8 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
 export class RatTrapSecretParser implements EventParser {
 	private readonly secretCardId = 'GIL_577';
@@ -19,15 +19,8 @@ export class RatTrapSecretParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, cardPlayedControllerId, localPlayer, entityId] = gameEvent.parse();
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secrets don't trigger during your turn
-		if (activePlayerId === cardPlayedControllerId) {
-			return currentState;
-		}
-
 		const isPlayedWithCardPlayed = cardPlayedControllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayedWithCardPlayed ? currentState.opponentDeck : currentState.playerDeck;
-
 		if (deckWithSecretToCheck.board.length === 7) {
 			return currentState;
 		}

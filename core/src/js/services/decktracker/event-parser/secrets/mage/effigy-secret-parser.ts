@@ -1,7 +1,7 @@
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
 export class EffigySecretParser implements EventParser {
 	private readonly secretCardId = 'AT_002';

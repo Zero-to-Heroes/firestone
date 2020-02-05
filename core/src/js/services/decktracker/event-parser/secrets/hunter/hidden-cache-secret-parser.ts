@@ -1,9 +1,9 @@
 import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
 export class HiddenCacheSecretParser implements EventParser {
 	private readonly secretCardId = 'CFM_026';
@@ -18,16 +18,10 @@ export class HiddenCacheSecretParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secrets don't trigger during your turn
-		if (activePlayerId === controllerId) {
-			return currentState;
-		}
 		const dbCard = this.allCards.getCard(cardId);
 		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()) {
 			return currentState;
 		}
-
 		const isMinionPlayedByPlayer = controllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isMinionPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
 		// if we don't have the cardID for all cards, we can draw no conclusion.

@@ -1,7 +1,7 @@
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
 export class BearTrapSecretParser implements EventParser {
 	private readonly secretCardId = 'AT_060';
@@ -16,14 +16,16 @@ export class BearTrapSecretParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const attackedControllerId = gameEvent.additionalData.targetControllerId;
-		const attackerControllerId = gameEvent.additionalData.sourceControllerId;
+		// const attackerControllerId = gameEvent.additionalData.sourceControllerId;
 		const isPlayerTheAttackedParty = attackedControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secrets don't trigger during your turn
-		if (activePlayerId === attackerControllerId) {
+		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
+		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {
 			return currentState;
 		}
-		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
+		if (!isPlayerTheAttackedParty && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
+			return currentState;
+		}
 		// If board is full, secret can't trigger so we can't eliminate any option
 		if (deckWithSecretToCheck.board.length === 7) {
 			return currentState;

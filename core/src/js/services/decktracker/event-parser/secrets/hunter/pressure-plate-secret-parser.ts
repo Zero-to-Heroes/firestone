@@ -1,12 +1,12 @@
 import { CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { GameState } from '../../../../models/decktracker/game-state';
-import { GameEvent } from '../../../../models/game-event';
-import { DeckManipulationHelper } from '../deck-manipulation-helper';
-import { EventParser } from '../event-parser';
+import { GameState } from '../../../../../models/decktracker/game-state';
+import { GameEvent } from '../../../../../models/game-event';
+import { DeckManipulationHelper } from '../../deck-manipulation-helper';
+import { EventParser } from '../../event-parser';
 
-export class CatTrickSecretParser implements EventParser {
-	private readonly secretCardId = 'KAR_004';
+export class PressurePlateSecretParser implements EventParser {
+	private readonly secretCardId = 'ULD_152';
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -18,12 +18,6 @@ export class CatTrickSecretParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, playedCardControllerId, localPlayer, entityId] = gameEvent.parse();
-		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		// Secret doesn't trigger if you're the one playing the minion
-		if (activePlayerId === playedCardControllerId) {
-			return currentState;
-		}
-
 		const isPlayerWithCardPlayed = playedCardControllerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerWithCardPlayed ? currentState.opponentDeck : currentState.playerDeck;
 		const dbCard = this.allCards.getCard(cardId);
@@ -32,7 +26,8 @@ export class CatTrickSecretParser implements EventParser {
 		}
 		// Might need to be a little more specific than this? E.g. with dormant minions?
 		// It's an edge case, so leaving it aside for a first implementation
-		if (deckWithSecretToCheck.board.length === 7) {
+		const deckWithBoard = isPlayerWithCardPlayed ? currentState.playerDeck : currentState.opponentDeck;
+		if (deckWithBoard.board.length === 0) {
 			return currentState;
 		}
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
@@ -42,6 +37,6 @@ export class CatTrickSecretParser implements EventParser {
 	}
 
 	event(): string {
-		return 'SECRET_CAT_TRICK';
+		return 'SECRET_PRESSURE_PLATE';
 	}
 }
