@@ -373,7 +373,17 @@ export class GameEvents {
 				break;
 			case 'SECRET_TRIGGERED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_TRIGGERED, gameEvent));
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SECRET_TRIGGERED, gameEvent, {
+						// Reuse the same props name as the ATTACKING events to make it easier to share code
+						attackerCardId: gameEvent.Value.AdditionalProps.ProposedAttackerCardId,
+						attackerEntityId: gameEvent.Value.AdditionalProps.ProposedAttackerEntityId,
+						attackerControllerId: gameEvent.Value.AdditionalProps.ProposedAttackerControllerId,
+						defenderCardId: gameEvent.Value.AdditionalProps.ProposedDefenderCardId,
+						defenderEntityId: gameEvent.Value.AdditionalProps.ProposedDefenderEntityId,
+						defenderControllerId: gameEvent.Value.AdditionalProps.ProposedDefenderControllerId,
+					}),
+				);
 				break;
 			case 'DEATHRATTLE_TRIGGERED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);

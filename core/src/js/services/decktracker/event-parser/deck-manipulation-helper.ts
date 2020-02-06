@@ -269,13 +269,19 @@ export class DeckManipulationHelper {
 		return deck.deck;
 	}
 
-	public removeSecretOption(deck: DeckState, secretCardId: string) {
-		const newSecrets: readonly BoardSecret[] = deck.secrets.map(secret =>
-			this.removeSecretOptionFromSecret(secret, secretCardId),
-		);
+	public removeSecretOption(deck: DeckState, secretCardId: string): DeckState {
 		return deck.update({
-			secrets: newSecrets,
+			secrets: deck.secrets.map(secret =>
+				this.removeSecretOptionFromSecret(secret, secretCardId),
+			) as readonly BoardSecret[],
 		} as DeckState);
+	}
+
+	public removeSecretOptionFromSecrets(
+		secrets: readonly BoardSecret[],
+		secretCardId: string,
+	): readonly BoardSecret[] {
+		return secrets.map(secret => this.removeSecretOptionFromSecret(secret, secretCardId));
 	}
 
 	public findEntityInGameState(gameState: EventGameState, entityId: number): EntityGameState {

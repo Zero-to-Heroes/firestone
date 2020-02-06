@@ -40,19 +40,12 @@ export class SecretsParserService {
 	private buildSecretParsers(): readonly EventParser[] {
 		return [
 			new TriggerOnAttackSecretsParser(this.helper, this.allCards),
-			// new FreezingTrapSecretParser(this.helper, this.allCards),
-			// new ExplosiveTrapSecretParser(this.helper),
-			// new BearTrapSecretParser(this.helper),
 			new CatTrickSecretParser(this.helper, this.allCards),
 			new DartTrapSecretParser(this.helper),
 			new HiddenCacheSecretParser(this.helper, this.allCards),
-			// new MisdirectionSecretParser(this.helper),
 			new PressurePlateSecretParser(this.helper, this.allCards),
 			new RatTrapSecretParser(this.helper, this.allCards),
-			// new SnakeTrapSecretParser(this.helper),
 			new SnipeSecretParser(this.helper, this.allCards),
-			// new VenomstrikeTrapSecretParser(this.helper),
-			// new WanderingMonsterSecretParser(this.helper),
 		];
 	}
 }

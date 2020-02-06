@@ -1,5 +1,7 @@
 import { CardIds, CardType } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
+import { BoardSecret } from '../../../../models/decktracker/board-secret';
+import { DeckState } from '../../../../models/decktracker/deck-state';
 import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
@@ -22,10 +24,43 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && (gameEvent.type === GameEvent.ATTACKING_HERO || gameEvent.type === GameEvent.ATTACKING_MINION);
+		return (
+			state &&
+			(gameEvent.type === GameEvent.ATTACKING_HERO ||
+				gameEvent.type === GameEvent.ATTACKING_MINION ||
+				gameEvent.type === GameEvent.SECRET_TRIGGERED)
+		);
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		if (gameEvent.type === GameEvent.ATTACKING_HERO || gameEvent.type === GameEvent.ATTACKING_MINION) {
+			return this.handleAttack(currentState, gameEvent, deck => [...deck.secrets]);
+		} else if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
+			return this.handleSecretTriggered(currentState, gameEvent);
+		}
+		console.warn('[trigger-on-attack] invalid event', gameEvent.type);
+		return currentState;
+	}
+
+	// Here we should probably retrieve the PROPOSED_* entities, and apply the same logic as real attacks
+	// (on the old secrets) to rule out the ones that would have triggered otherwise
+	private async handleSecretTriggered(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
+		if (this.secretsTriggeringOnAttack.indexOf(gameEvent.cardId) === -1) {
+			return currentState;
+		}
+		console.warn('TODO: remove older secrets that didnt trigger even though the conditions were met');
+		const filterSecrets = (deck: DeckState): BoardSecret[] => {
+			const index = deck.secrets.map(secret => secret.entityId).indexOf(gameEvent.entityId);
+			return deck.secrets.slice(0, index);
+		};
+		return this.handleAttack(currentState, gameEvent, filterSecrets);
+	}
+
+	private async handleAttack(
+		currentState: GameState,
+		gameEvent: GameEvent,
+		secretsExtractor: (deck: DeckState) => BoardSecret[],
+	): Promise<GameState> {
 		const attackerId = gameEvent.additionalData.attackerEntityId;
 		const defenderId = gameEvent.additionalData.defenderEntityId;
 		const defenderControllerId = gameEvent.additionalData.defenderControllerId;
@@ -48,7 +83,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		}
 
 		console.log('deck to check', deckWithSecretToCheck);
-		let newPlayerDeck = deckWithSecretToCheck;
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 
 		// Check that the attacker is a minion
@@ -95,14 +129,20 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		if (otherTargets.length === 0) {
 			toExclude.push(CardIds.Collectible.Hunter.Misdirection);
 		}
+
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
 			secret => toExclude.indexOf(secret) === -1,
 		);
+
+		let secrets: BoardSecret[] = [...secretsExtractor(deckWithSecretToCheck)];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, newPlayerDeck);
-			newPlayerDeck = this.helper.removeSecretOption(newPlayerDeck, secret);
+			console.log('marking as invalid', secret, secrets);
+			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
+		let newPlayerDeck = deckWithSecretToCheck.update({
+			secrets: secrets as readonly BoardSecret[],
+		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayerTheAttackedParty ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
