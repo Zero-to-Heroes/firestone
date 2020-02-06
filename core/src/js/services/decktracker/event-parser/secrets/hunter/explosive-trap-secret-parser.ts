@@ -23,10 +23,6 @@ export class ExplosiveTrapSecretParser implements EventParser {
 		if (!isPlayerTheAttackedParty && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
 			return currentState;
 		}
-		// If board is full, secret can't trigger so we can't eliminate any option
-		if (deckWithSecretToCheck.board.length === 7) {
-			return currentState;
-		}
 		const newPlayerDeck = this.helper.removeSecretOption(deckWithSecretToCheck, this.secretCardId);
 		return Object.assign(new GameState(), currentState, {
 			[isPlayerTheAttackedParty ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
