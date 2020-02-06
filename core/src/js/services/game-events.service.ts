@@ -266,7 +266,13 @@ export class GameEvents {
 				break;
 			case 'CARD_PLAYED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
-				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent));
+				const props = gameEvent.Value.AdditionalProps
+					? {
+							targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
+							targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
+					  }
+					: null;
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent, props));
 				break;
 			case 'DISCARD_CARD':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);

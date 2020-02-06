@@ -5,6 +5,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
+import { TriggerOnFriendlyMinionDiedSecretsParser } from './trigger-on-friendly-minion-died-parser';
 import { TriggerOnHeroPowerSecretsParser } from './trigger-on-hero-power-secrets-parser';
 import { TriggerOnMinionPlaySecretsParser } from './trigger-on-minion-play-secrets-parser';
 import { TriggerOnNumCardPlaySecretsParser } from './trigger-on-num-card-play-secrets-parser';
@@ -33,9 +34,11 @@ export class SecretsParserService {
 		return gameState;
 	}
 
+	// Ice block is never handled, because ruling it out means ending the game
 	private buildSecretParsers(): readonly EventParser[] {
 		return [
 			new TriggerOnAttackSecretsParser(this.helper, this.allCards),
+			new TriggerOnFriendlyMinionDiedSecretsParser(this.helper, this.allCards),
 			new TriggerOnMinionPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnHeroPowerSecretsParser(this.helper, this.allCards),
 			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),

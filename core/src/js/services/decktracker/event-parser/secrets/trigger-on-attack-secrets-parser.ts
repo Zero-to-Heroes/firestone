@@ -17,6 +17,10 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Collectible.Hunter.FreezingTrap,
 		CardIds.Collectible.Hunter.VenomstrikeTrap,
 		CardIds.Collectible.Hunter.WanderingMonster,
+		CardIds.Collectible.Mage.IceBarrier,
+		CardIds.Collectible.Mage.Vaporize,
+		CardIds.Collectible.Mage.SplittingImage,
+		CardIds.Collectible.Mage.FlameWard,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -97,23 +101,28 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			defenderCard.type &&
 			defenderCard.type.toLowerCase() === CardType[CardType.MINION].toLowerCase();
 		console.log('attacker minion?', isAttackerMinion, 'defender minion?', isDefenderMinion, gameEvent);
-		const toExclude = [];
+		const secretsWeCantRuleOut = [];
 		if (isBoardFull) {
-			toExclude.push(CardIds.Collectible.Hunter.BearTrap);
-			toExclude.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
 		}
 		if (!isAttackerMinion) {
-			toExclude.push(CardIds.Collectible.Hunter.FreezingTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
 		}
 		if (!isDefenderMinion) {
-			toExclude.push(CardIds.Collectible.Hunter.SnakeTrap);
-			toExclude.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
 		}
 		if (isDefenderMinion) {
-			toExclude.push(CardIds.Collectible.Hunter.BearTrap);
-			toExclude.push(CardIds.Collectible.Hunter.Misdirection);
-			toExclude.push(CardIds.Collectible.Hunter.ExplosiveTrap);
-			toExclude.push(CardIds.Collectible.Hunter.WanderingMonster);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.Misdirection);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.ExplosiveTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.WanderingMonster);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrier);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
 		}
 		const allEntities = [
 			gameEvent.gameState.Player.Hero,
@@ -125,11 +134,11 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		console.log('other targets', otherTargets, allEntities, attackerId, defenderId);
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
-			toExclude.push(CardIds.Collectible.Hunter.Misdirection);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.Misdirection);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => toExclude.indexOf(secret) === -1,
+			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...secretsExtractor(deckWithSecretToCheck)];

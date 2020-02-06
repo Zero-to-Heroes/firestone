@@ -8,7 +8,14 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnMinionPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [CardIds.Collectible.Hunter.HiddenCache, CardIds.Collectible.Hunter.Snipe];
+	private secretsTriggeringOnMinionPlay = [
+		CardIds.Collectible.Hunter.HiddenCache,
+		CardIds.Collectible.Hunter.Snipe,
+		CardIds.Collectible.Mage.PotionOfPolymorph,
+		CardIds.Collectible.Mage.MirrorEntity,
+		CardIds.Collectible.Mage.FrozenClone,
+		CardIds.Collectible.Mage.ExplosiveRunes,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -25,17 +32,27 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		}
 		const deckWithSecretToCheck = isMinionPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
-		const toExclude = [];
+		const secretsWeCantRuleOut = [];
 		// The only case where we can for sure know that the secret could be HiddenCache without
 		// triggering is when there are no cards in hand. Otherwise, we're just guessing
 		// We take the stance here that the most likely scenario is that the opponent has a
 		// minion in hand (which is even more likely if they actually played HiddenCache)
 		if (deckWithSecretToCheck.hand.length === 0) {
-			toExclude.push(CardIds.Collectible.Hunter.HiddenCache);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.HiddenCache);
 		}
 
-		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => toExclude.indexOf(secret) === -1,
+		const isBoardFull = deckWithSecretToCheck.board.length === 7;
+		if (isBoardFull) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntity);
+		}
+		// TODO: handle the case where the max hand size has been bumped to 12
+		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
+		if (isHandFull) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Duplicate);
+		}
+
+		const optionsToFlagAsInvalid = this.secretsTriggeringOnMinionPlay.filter(
+			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];

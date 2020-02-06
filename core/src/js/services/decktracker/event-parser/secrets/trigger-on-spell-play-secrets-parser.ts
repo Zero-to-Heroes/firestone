@@ -8,7 +8,13 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnSpellPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [CardIds.Collectible.Hunter.CatTrick, CardIds.Collectible.Hunter.PressurePlate];
+	private secretsTriggeringOnAttack = [
+		CardIds.Collectible.Hunter.CatTrick,
+		CardIds.Collectible.Hunter.PressurePlate,
+		CardIds.Collectible.Mage.Counterspell,
+		CardIds.Collectible.Mage.Spellbender,
+		CardIds.Collectible.Mage.ManaBind,
+	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -19,23 +25,48 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isSpellPlayedByPlayer = controllerId === localPlayer.PlayerId;
-		const dbCard = this.allCards.getCard(cardId);
-		if (!dbCard || !dbCard.type || dbCard.type.toLowerCase() !== CardType[CardType.SPELL].toLowerCase()) {
+		const spellCard = this.allCards.getCard(cardId);
+		if (!spellCard || !spellCard.type || spellCard.type.toLowerCase() !== CardType[CardType.SPELL].toLowerCase()) {
 			return currentState;
 		}
 		const deckWithSecretToCheck = isSpellPlayedByPlayer ? currentState.opponentDeck : currentState.playerDeck;
 
-		const toExclude = [];
+		const secretsWeCantRuleOut = [];
+
+		const targetCardId = gameEvent.additionalData.targetEntityId;
+		if (!targetCardId) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Spellbender);
+		} else {
+			const targetCard = this.allCards.getCard(targetCardId);
+			if (
+				!targetCard ||
+				!targetCard.type ||
+				targetCard.type.toLowerCase() !== CardType[CardType.MINION].toLowerCase()
+			) {
+				secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Spellbender);
+			}
+		}
 
 		// Might need to be a little more specific than this? E.g. with dormant minions?
 		// It's an edge case, so leaving it aside for a first implementation
 		const deckWithBoard = isSpellPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck;
 		if (deckWithBoard.board.length === 0) {
-			toExclude.push(CardIds.Collectible.Hunter.PressurePlate);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PressurePlate);
+		}
+
+		const isBoardFull = deckWithSecretToCheck.board.length === 7;
+		if (isBoardFull) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.CatTrick);
+		}
+
+		// TODO: handle the case where the max hand size has been bumped to 12
+		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
+		if (isHandFull) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.ManaBind);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => toExclude.indexOf(secret) === -1,
+			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
