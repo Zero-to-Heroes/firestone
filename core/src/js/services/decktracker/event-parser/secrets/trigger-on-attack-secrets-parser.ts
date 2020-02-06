@@ -21,8 +21,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
-	// Whenever something occurs that publicly reveal a card, we try to assign its
-	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
@@ -149,6 +147,6 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 	}
 
 	event(): string {
-		return 'SECRET_BEAR_TRAP';
+		return 'SECRET_ATTACK';
 	}
 }

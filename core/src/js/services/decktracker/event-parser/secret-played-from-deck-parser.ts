@@ -39,8 +39,8 @@ export class SecretPlayedFromDeckParser implements EventParser {
 			deck: newDeck,
 			otherZone: newOtherZone,
 			secrets: [
-				BoardSecret.create(entityId, this.secretConfig.getValidSecrets(currentState.metadata, secretClass)),
 				...deck.secrets,
+				BoardSecret.create(entityId, this.secretConfig.getValidSecrets(currentState.metadata, secretClass)),
 			] as readonly BoardSecret[],
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {

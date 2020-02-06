@@ -4,19 +4,15 @@ import { GameState } from '../../../../models/decktracker/game-state';
 import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
-import { CatTrickSecretParser } from './hunter/cat-trick-secret-parser';
-import { DartTrapSecretParser } from './hunter/dart-trap-secret-parser';
-import { HiddenCacheSecretParser } from './hunter/hidden-cache-secret-parser';
-import { PressurePlateSecretParser } from './hunter/pressure-plate-secret-parser';
-import { RatTrapSecretParser } from './hunter/rat-trap-secret-parser';
-import { SnipeSecretParser } from './hunter/snipe-secret-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
+import { TriggerOnHeroPowerSecretsParser } from './trigger-on-hero-power-secrets-parser';
+import { TriggerOnMinionPlaySecretsParser } from './trigger-on-minion-play-secrets-parser';
+import { TriggerOnNumCardPlaySecretsParser } from './trigger-on-num-card-play-secrets-parser';
+import { TriggerOnSpellPlaySecretsParser } from './trigger-on-spell-play-secrets-parser';
 
 @Injectable()
 export class SecretsParserService {
-	// https://hearthstone.gamepedia.com/Advanced_rulebook#Combat
 	private secretParsers = this.buildSecretParsers();
-	// private slowSecretParsers = this.buildSlowSecretParsers();
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -40,12 +36,16 @@ export class SecretsParserService {
 	private buildSecretParsers(): readonly EventParser[] {
 		return [
 			new TriggerOnAttackSecretsParser(this.helper, this.allCards),
-			new CatTrickSecretParser(this.helper, this.allCards),
-			new DartTrapSecretParser(this.helper),
-			new HiddenCacheSecretParser(this.helper, this.allCards),
-			new PressurePlateSecretParser(this.helper, this.allCards),
-			new RatTrapSecretParser(this.helper, this.allCards),
-			new SnipeSecretParser(this.helper, this.allCards),
+			new TriggerOnMinionPlaySecretsParser(this.helper, this.allCards),
+			new TriggerOnHeroPowerSecretsParser(this.helper, this.allCards),
+			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
+			new TriggerOnNumCardPlaySecretsParser(this.helper, this.allCards),
+			// new CatTrickSecretParser(this.helper, this.allCards),
+			// new DartTrapSecretParser(this.helper),
+			// new HiddenCacheSecretParser(this.helper, this.allCards),
+			// new PressurePlateSecretParser(this.helper, this.allCards),
+			// new RatTrapSecretParser(this.helper, this.allCards),
+			// new SnipeSecretParser(this.helper, this.allCards),
 		];
 	}
 }
