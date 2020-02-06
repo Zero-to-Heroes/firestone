@@ -14,6 +14,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Mage.Counterspell,
 		CardIds.Collectible.Mage.Spellbender,
 		CardIds.Collectible.Mage.ManaBind,
+		CardIds.Collectible.Paladin.NeverSurrender,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -57,6 +58,11 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.CatTrick);
+		}
+
+		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
+		if (isBoardEmpty) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NeverSurrender);
 		}
 
 		// TODO: handle the case where the max hand size has been bumped to 12

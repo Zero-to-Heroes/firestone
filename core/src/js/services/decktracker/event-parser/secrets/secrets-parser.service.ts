@@ -5,11 +5,13 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 import { TriggerOnAttackSecretsParser } from './trigger-on-attack-secrets-parser';
-import { TriggerOnFriendlyMinionDiedSecretsParser } from './trigger-on-friendly-minion-died-parser';
+import { TriggerOnDamageSecretsParser } from './trigger-on-damage-secrets-parser';
+import { TriggerOnFriendlyMinionDiedSecretsParser } from './trigger-on-friendly-minion-died-secrets-parser';
 import { TriggerOnHeroPowerSecretsParser } from './trigger-on-hero-power-secrets-parser';
 import { TriggerOnMinionPlaySecretsParser } from './trigger-on-minion-play-secrets-parser';
 import { TriggerOnNumCardPlaySecretsParser } from './trigger-on-num-card-play-secrets-parser';
 import { TriggerOnSpellPlaySecretsParser } from './trigger-on-spell-play-secrets-parser';
+import { TriggerOnTurnStartSecretsParser } from './trigger-on-turn-start-secrets-parser';
 
 @Injectable()
 export class SecretsParserService {
@@ -38,11 +40,13 @@ export class SecretsParserService {
 	private buildSecretParsers(): readonly EventParser[] {
 		return [
 			new TriggerOnAttackSecretsParser(this.helper, this.allCards),
+			new TriggerOnDamageSecretsParser(this.helper, this.allCards),
 			new TriggerOnFriendlyMinionDiedSecretsParser(this.helper, this.allCards),
-			new TriggerOnMinionPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnHeroPowerSecretsParser(this.helper, this.allCards),
-			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
+			new TriggerOnMinionPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnNumCardPlaySecretsParser(this.helper, this.allCards),
+			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
+			new TriggerOnTurnStartSecretsParser(this.helper, this.allCards),
 			// new CatTrickSecretParser(this.helper, this.allCards),
 			// new DartTrapSecretParser(this.helper),
 			// new HiddenCacheSecretParser(this.helper, this.allCards),

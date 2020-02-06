@@ -271,7 +271,7 @@ export class GameEvents {
 							targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
 							targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
 					  }
-					: null;
+					: {};
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.CARD_PLAYED, gameEvent, props));
 				break;
 			case 'DISCARD_CARD':
@@ -510,15 +510,17 @@ export class GameEvents {
 					}),
 				);
 				break;
-			case 'ATTACING_MINION':
+			case 'ATTACKING_MINION':
 				this.gameEventsEmitter.allEvents.next(
 					GameEvent.build(GameEvent.ATTACKING_MINION, gameEvent, {
 						attackerCardId: gameEvent.Value.AdditionalProps.AttackerCardId,
 						attackerEntityId: gameEvent.Value.AdditionalProps.AttackerEntityId,
 						attackerControllerId: gameEvent.Value.AdditionalProps.AttackerControllerId,
+						attackerTags: gameEvent.Value.AdditionalProps.AttackerTags,
 						defenderCardId: gameEvent.Value.AdditionalProps.DefenderCardId,
 						defenderEntityId: gameEvent.Value.AdditionalProps.DefenderEntityId,
 						defenderControllerId: gameEvent.Value.AdditionalProps.DefenderControllerId,
+						defenderTags: gameEvent.Value.AdditionalProps.DefenderTags,
 					}),
 				);
 				break;
@@ -569,8 +571,10 @@ export class GameEvents {
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
+						gameState: gameEvent.Value.GameState,
 						additionalData: {
-							turnNumber: gameEvent.Value,
+							// Legacy, to avoid regenerating all the tests
+							turnNumber: gameEvent.Value.Turn || gameEvent.Value,
 						},
 					} as GameEvent),
 				);

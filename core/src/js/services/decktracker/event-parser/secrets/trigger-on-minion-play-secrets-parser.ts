@@ -10,11 +10,13 @@ import { EventParser } from '../event-parser';
 export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnMinionPlay = [
 		CardIds.Collectible.Hunter.HiddenCache,
-		CardIds.Collectible.Hunter.Snipe,
+		CardIds.Collectible.Hunter.Snipe, // Tested
 		CardIds.Collectible.Mage.PotionOfPolymorph,
 		CardIds.Collectible.Mage.MirrorEntity,
 		CardIds.Collectible.Mage.FrozenClone,
 		CardIds.Collectible.Mage.ExplosiveRunes,
+		CardIds.Collectible.Paladin.Repentance,
+		CardIds.Collectible.Paladin.SacredTrial,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -44,6 +46,12 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntity);
+		}
+
+		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
+		// So at most 2 minions before this one was played
+		if (enemyBoard.length < 4) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.SacredTrial);
 		}
 		// TODO: handle the case where the max hand size has been bumped to 12
 		const isHandFull = deckWithSecretToCheck.hand.length >= 10;

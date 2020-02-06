@@ -7,36 +7,38 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
-export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
-	private secretsTriggeringOnFriendlyMinionDeath = [
-		CardIds.Collectible.Mage.Effigy,
-		CardIds.Collectible.Mage.Duplicate,
-	];
+export class TriggerOnDamageSecretsParser implements EventParser {
+	private secretsTriggeringOnDamage = [CardIds.Collectible.Paladin.EyeForAnEye];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.MINION_DIED;
+		return state && gameEvent.type === GameEvent.DAMAGE;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, deadMinionControllerId, localPlayer, entityId] = gameEvent.parse();
+		const [, , localPlayer] = gameEvent.parse();
+		const sourceControllerId = gameEvent.additionalData.sourceControllerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
-		if (activePlayerId === deadMinionControllerId) {
-			return currentState;
-		}
 
-		const isPlayerWithDeadMinion = deadMinionControllerId === localPlayer.PlayerId;
-		const deckWithSecretToCheck = isPlayerWithDeadMinion ? currentState.playerDeck : currentState.opponentDeck;
+		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
+		const deckWithSecretToCheck = isPlayerActive ? currentState.opponentDeck : currentState.playerDeck;
+		const enemyHeroEntityId = isPlayerActive
+			? gameEvent.gameState.Opponent.Hero.entityId
+			: gameEvent.gameState.Player.Hero.entityId;
+		const heroTarget = gameEvent.additionalData.targets
+			? Object.values(gameEvent.additionalData.targets).find(
+					(target: any) => target.TargetEntityId === enemyHeroEntityId,
+			  )
+			: null;
+
 		const secretsWeCantRuleOut = [];
 
-		// TODO: handle the case where the max hand size has been bumped to 12
-		const isHandFull = deckWithSecretToCheck.hand.length >= 10;
-		if (isHandFull) {
-			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Duplicate);
+		if (!heroTarget) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEye);
 		}
 
-		const optionsToFlagAsInvalid = this.secretsTriggeringOnFriendlyMinionDeath.filter(
+		const optionsToFlagAsInvalid = this.secretsTriggeringOnDamage.filter(
 			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
@@ -50,11 +52,11 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 			secrets: secrets as readonly BoardSecret[],
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
-			[isPlayerWithDeadMinion ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
+			[isPlayerActive ? 'opponentDeck' : 'playerDeck']: newPlayerDeck,
 		});
 	}
 
 	event(): string {
-		return 'SECRET_FRIENDLY_MINION_DEATH';
+		return 'SECRET_DAMAGE';
 	}
 }

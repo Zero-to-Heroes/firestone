@@ -7,37 +7,33 @@ import { GameEvent } from '../../../../models/game-event';
 import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
-export class TriggerOnNumCardPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [
-		CardIds.Collectible.Hunter.RatTrap, // Tested
-		CardIds.Collectible.Paladin.HiddenWisdom,
-	];
+export class TriggerOnTurnStartSecretsParser implements EventParser {
+	private secretsTriggeringOnTurnStart = [CardIds.Collectible.Paladin.CompetitiveSpirit];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.NUM_CARDS_PLAYED_THIS_TURN;
+		return state && gameEvent.type === GameEvent.TURN_START;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [cardId, cardPlayedControllerId, localPlayer, entityId] = gameEvent.parse();
-		const isPlayerWhoPlayedCard = cardPlayedControllerId === localPlayer.PlayerId;
-		const deckWithSecretToCheck = isPlayerWhoPlayedCard ? currentState.opponentDeck : currentState.playerDeck;
+		const [, , localPlayer] = gameEvent.parse();
+		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 
-		const toExclude = [];
-		if (gameEvent.additionalData.cardsPlayed < 3) {
-			toExclude.push(CardIds.Collectible.Hunter.RatTrap);
-			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
+		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
+		const deckWithSecretToCheck = isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
+		const secretsWeCantRuleOut = [];
+
+		// TODO: handle the case where the max hand size has been bumped to 12
+		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
+		if (isBoardEmpty) {
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.CompetitiveSpirit);
 		}
-		if (deckWithSecretToCheck.board.length === 7) {
-			toExclude.push(CardIds.Collectible.Hunter.RatTrap);
-		}
-		if (deckWithSecretToCheck.hand.length === 10) {
-			toExclude.push(CardIds.Collectible.Paladin.HiddenWisdom);
-		}
-		const optionsToFlagAsInvalid = this.secretsTriggeringOnAttack.filter(
-			secret => toExclude.indexOf(secret) === -1,
+
+		const optionsToFlagAsInvalid = this.secretsTriggeringOnTurnStart.filter(
+			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
+
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
 			console.log('marking as invalid', secret, secrets);
@@ -48,11 +44,11 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 			secrets: secrets as readonly BoardSecret[],
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
-			[isPlayerWhoPlayedCard ? 'opponentDeck' : 'playerDeck']: newPlayerDeck,
+			[isPlayerActive ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,
 		});
 	}
 
 	event(): string {
-		return 'SECRET_NUM_CARDS_PLAYED';
+		return 'SECRET_TURN_START';
 	}
 }
