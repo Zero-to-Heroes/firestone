@@ -9,12 +9,12 @@ export class ExplosiveTrapSecretParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.ATTACK_ON_HERO;
+		return state && gameEvent.type === GameEvent.ATTACKING_HERO;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const attackedPlayerControllerId = gameEvent.additionalData.targetControllerId;
-		const isPlayerTheAttackedParty = attackedPlayerControllerId === gameEvent.localPlayer.PlayerId;
+		const defenderPlayerControllerId = gameEvent.additionalData.defenderControllerId;
+		const isPlayerTheAttackedParty = defenderPlayerControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {

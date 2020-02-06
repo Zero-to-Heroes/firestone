@@ -11,13 +11,13 @@ export class BearTrapSecretParser implements EventParser {
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.ATTACK_ON_HERO;
+		return state && gameEvent.type === GameEvent.ATTACKING_HERO;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const attackedControllerId = gameEvent.additionalData.targetControllerId;
-		// const attackerControllerId = gameEvent.additionalData.sourceControllerId;
-		const isPlayerTheAttackedParty = attackedControllerId === gameEvent.localPlayer.PlayerId;
+		const defenderControllerId = gameEvent.additionalData.defenderControllerId;
+		// const attackerControllerId = gameEvent.additionalData.attackerControllerId;
+		const isPlayerTheAttackedParty = defenderControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {

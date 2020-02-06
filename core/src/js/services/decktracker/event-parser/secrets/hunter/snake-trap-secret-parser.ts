@@ -11,20 +11,20 @@ export class SnakeTrapSecretParser implements EventParser {
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.ATTACK_ON_MINION;
+		return state && gameEvent.type === GameEvent.ATTACKING_MINION;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const attackedMinionControllerId = gameEvent.additionalData.targetControllerId;
-		const isPlayerBeingAttacked = attackedMinionControllerId === gameEvent.localPlayer.PlayerId;
+		const defenderMinionControllerId = gameEvent.additionalData.defenderControllerId;
+		const isPlayerBeingAttacked = defenderMinionControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerBeingAttacked ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerBeingAttacked && activePlayerId === gameEvent.localPlayer.PlayerId) {
-			console.log('snake', 'active player being attacked', isPlayerBeingAttacked, activePlayerId, gameEvent);
+			console.log('snake', 'active player being defender', isPlayerBeingAttacked, activePlayerId, gameEvent);
 			return currentState;
 		}
 		if (!isPlayerBeingAttacked && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
-			console.log('snake', 'active opp being attacked', isPlayerBeingAttacked, activePlayerId, gameEvent);
+			console.log('snake', 'active opp being defender', isPlayerBeingAttacked, activePlayerId, gameEvent);
 			return currentState;
 		}
 		// If board is full, secret can't trigger

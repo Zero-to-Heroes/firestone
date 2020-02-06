@@ -482,27 +482,27 @@ export class GameEvents {
 					}),
 				);
 				break;
-			case 'ATTACK_ON_HERO':
+			case 'ATTACKING_HERO':
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.ATTACK_ON_HERO, gameEvent, {
-						sourceCardId: gameEvent.Value.AdditionalProps.SourceCardId,
-						sourceEntityId: gameEvent.Value.AdditionalProps.SourceEntityId,
-						sourceControllerId: gameEvent.Value.AdditionalProps.SourceControllerId,
-						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
-						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
-						targetControllerId: gameEvent.Value.AdditionalProps.TargetControllerId,
+					GameEvent.build(GameEvent.ATTACKING_HERO, gameEvent, {
+						attackerCardId: gameEvent.Value.AdditionalProps.AttackerCardId,
+						attackerEntityId: gameEvent.Value.AdditionalProps.AttackerEntityId,
+						attackerControllerId: gameEvent.Value.AdditionalProps.AttackerControllerId,
+						defenderCardId: gameEvent.Value.AdditionalProps.DefenderCardId,
+						defenderEntityId: gameEvent.Value.AdditionalProps.DefenderEntityId,
+						defenderControllerId: gameEvent.Value.AdditionalProps.DefenderControllerId,
 					}),
 				);
 				break;
-			case 'ATTACK_ON_MINION':
+			case 'ATTACING_MINION':
 				this.gameEventsEmitter.allEvents.next(
-					GameEvent.build(GameEvent.ATTACK_ON_MINION, gameEvent, {
-						sourceCardId: gameEvent.Value.AdditionalProps.SourceCardId,
-						sourceEntityId: gameEvent.Value.AdditionalProps.SourceEntityId,
-						sourceControllerId: gameEvent.Value.AdditionalProps.SourceControllerId,
-						targetCardId: gameEvent.Value.AdditionalProps.TargetCardId,
-						targetEntityId: gameEvent.Value.AdditionalProps.TargetEntityId,
-						targetControllerId: gameEvent.Value.AdditionalProps.TargetControllerId,
+					GameEvent.build(GameEvent.ATTACKING_MINION, gameEvent, {
+						attackerCardId: gameEvent.Value.AdditionalProps.AttackerCardId,
+						attackerEntityId: gameEvent.Value.AdditionalProps.AttackerEntityId,
+						attackerControllerId: gameEvent.Value.AdditionalProps.AttackerControllerId,
+						defenderCardId: gameEvent.Value.AdditionalProps.DefenderCardId,
+						defenderEntityId: gameEvent.Value.AdditionalProps.DefenderEntityId,
+						defenderControllerId: gameEvent.Value.AdditionalProps.DefenderControllerId,
 					}),
 				);
 				break;

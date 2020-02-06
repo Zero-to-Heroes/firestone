@@ -53,8 +53,8 @@ export class GameEvent {
 	public static readonly HEALTH_DEF_CHANGED = 'HEALTH_DEF_CHANGED';
 	public static readonly NUM_CARDS_PLAYED_THIS_TURN = 'NUM_CARDS_PLAYED_THIS_TURN';
 	public static readonly FATIGUE_DAMAGE = 'FATIGUE_DAMAGE';
-	public static readonly ATTACK_ON_HERO = 'ATTACK_ON_HERO';
-	public static readonly ATTACK_ON_MINION = 'ATTACK_ON_MINION';
+	public static readonly ATTACKING_HERO = 'ATTACK_ON_HERO';
+	public static readonly ATTACKING_MINION = 'ATTACK_ON_MINION';
 	public static readonly DAMAGE = 'DAMAGE';
 	public static readonly HEALING = 'HEALING';
 	public static readonly CARD_STOLEN = 'CARD_STOLEN';

@@ -11,12 +11,12 @@ export class WanderingMonsterSecretParser implements EventParser {
 	// Whenever something occurs that publicly reveal a card, we try to assign its
 	// cardId to the corresponding entity
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.ATTACK_ON_HERO;
+		return state && gameEvent.type === GameEvent.ATTACKING_HERO;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const attackedPlayerControllerId = gameEvent.additionalData.targetControllerId;
-		const isPlayerBeingAttacked = attackedPlayerControllerId === gameEvent.localPlayer.PlayerId;
+		const defenderPlayerControllerId = gameEvent.additionalData.defenderControllerId;
+		const isPlayerBeingAttacked = defenderPlayerControllerId === gameEvent.localPlayer.PlayerId;
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerBeingAttacked ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerBeingAttacked && activePlayerId === gameEvent.localPlayer.PlayerId) {
