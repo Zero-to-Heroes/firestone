@@ -14,6 +14,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		CardIds.Collectible.Paladin.GetawayKodo,
 		CardIds.Collectible.Paladin.Redemption,
 		CardIds.Collectible.Paladin.Avenge,
+		CardIds.Collectible.Rogue.CheatDeath,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -38,6 +39,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 		if (isHandFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Duplicate);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.GetawayKodo);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.CheatDeath);
 		}
 
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;

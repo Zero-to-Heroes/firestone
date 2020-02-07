@@ -8,7 +8,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnDamageSecretsParser implements EventParser {
-	private secretsTriggeringOnDamage = [CardIds.Collectible.Paladin.EyeForAnEye];
+	private secretsTriggeringOnDamage = [CardIds.Collectible.Paladin.EyeForAnEye, CardIds.Collectible.Rogue.Evasion];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -36,6 +36,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 
 		if (!heroTarget) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.EyeForAnEye);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Evasion);
 		}
 
 		const optionsToFlagAsInvalid = this.secretsTriggeringOnDamage.filter(

@@ -10,19 +10,20 @@ import { EventParser } from '../event-parser';
 // https://hearthstone.gamepedia.com/Advanced_rulebook#Combat
 export class TriggerOnAttackSecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
-		CardIds.Collectible.Hunter.BearTrap,
-		CardIds.Collectible.Hunter.Misdirection,
-		CardIds.Collectible.Hunter.SnakeTrap,
-		CardIds.Collectible.Hunter.ExplosiveTrap,
-		CardIds.Collectible.Hunter.FreezingTrap,
-		CardIds.Collectible.Hunter.VenomstrikeTrap,
-		CardIds.Collectible.Hunter.WanderingMonster,
+		CardIds.Collectible.Hunter.BearTrap, // Tested
+		CardIds.Collectible.Hunter.Misdirection, // Tested
+		CardIds.Collectible.Hunter.SnakeTrap, // Tested
+		CardIds.Collectible.Hunter.ExplosiveTrap, // Tested
+		CardIds.Collectible.Hunter.FreezingTrap, // Tested
+		CardIds.Collectible.Hunter.VenomstrikeTrap, // Tested
+		CardIds.Collectible.Hunter.WanderingMonster, // Tested
 		CardIds.Collectible.Mage.IceBarrier,
 		CardIds.Collectible.Mage.Vaporize,
 		CardIds.Collectible.Mage.SplittingImage,
 		CardIds.Collectible.Mage.FlameWard,
 		CardIds.Collectible.Paladin.AutodefenseMatrix,
 		CardIds.Collectible.Paladin.NobleSacrifice,
+		CardIds.Collectible.Rogue.SuddenBetrayal,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -108,6 +109,8 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 				tag => (tag.Name as number) === GameTag.DIVINE_SHIELD && (tag.Value as number) === 1,
 			);
 		console.log('attacker minion?', isAttackerMinion, 'defender minion?', isDefenderMinion, gameEvent);
+		const enemyBoard = (isPlayerTheAttackedParty ? currentState.opponentDeck : currentState.playerDeck).board;
+
 		const secretsWeCantRuleOut = [];
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
@@ -124,6 +127,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 		}
 		if (isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
@@ -134,6 +138,9 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
 			if (isDefenderDivineShield) {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
+			}
+			if (enemyBoard.length === 1) {
+				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			}
 		}
 		const allEntities = [
