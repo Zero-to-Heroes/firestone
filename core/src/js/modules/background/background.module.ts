@@ -62,6 +62,10 @@ import { GameStatsUpdaterService } from '../../services/stats/game/game-stats-up
 import { UserService } from '../../services/user.service';
 import { SharedServicesModule } from '../shared-services/shared-services.module';
 
+console.log('version is ' + process.env.APP_VERSION);
+console.log('environment is ' + process.env.NODE_ENV);
+console.log('is local test? ' + process.env.LOCAL_TEST);
+
 init({
 	dsn: 'https://53b0813bb66246ae90c60442d05efefe@sentry.io/1338840',
 	enabled: process.env.NODE_ENV === 'production',
@@ -78,10 +82,6 @@ init({
 		}),
 	],
 });
-
-console.log('version is ' + process.env.APP_VERSION);
-console.log('environment is ' + process.env.NODE_ENV);
-console.log('is local test? ' + process.env.LOCAL_TEST);
 
 if (process.env.LOCAL_TEST) {
 	console.error('LOCAL_TEST is true, this should never happen in prod');

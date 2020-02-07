@@ -56,6 +56,7 @@ export class ControlCloseComponent implements AfterViewInit {
 		// If game is not running, we close all other windows
 		const isRunning: boolean = await this.ow.inGame();
 		if (this.closeAll && !isRunning) {
+			console.log('[control-close] closing all app windows');
 			this.ow.hideWindow(this.windowId);
 			const openWindows = await this.ow.getOpenWindows();
 			for (const [name] of Object.entries(openWindows)) {
