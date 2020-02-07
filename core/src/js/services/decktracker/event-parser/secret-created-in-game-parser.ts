@@ -43,7 +43,11 @@ export class SecretCreatedInGameParser implements EventParser {
 			otherZone: newOtherZone,
 			secrets: [
 				...deck.secrets,
-				BoardSecret.create(entityId, this.secretConfig.getValidSecrets(currentState.metadata, secretClass)),
+				BoardSecret.create(
+					entityId,
+					cardId,
+					this.secretConfig.getValidSecrets(currentState.metadata, secretClass),
+				),
 			] as readonly BoardSecret[],
 		} as DeckState);
 		return Object.assign(new GameState(), currentState, {
