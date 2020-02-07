@@ -27,6 +27,7 @@ export class CardStolenParser implements EventParser {
 		// console.log('\tcard in board', cardInBoard, stolenFromDeck.board);
 		const cardInDeck = this.helper.findCardInZone(stolenFromDeck.deck, null, entityId);
 		// console.log('\tcard in deck', cardInDeck, stolenFromDeck.deck);
+		const secret = stolenFromDeck.secrets.find(entity => entity.entityId === entityId);
 
 		const [stolenHand, removedCardFromHand] = cardInHand
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.hand, cardId, entityId)
@@ -37,6 +38,7 @@ export class CardStolenParser implements EventParser {
 		const [stolenDeck, removedFromDeck] = cardInDeck
 			? this.helper.removeSingleCardFromZone(stolenFromDeck.deck, cardId, entityId)
 			: [stolenFromDeck.deck, undefined];
+		const stolenSecrets = stolenFromDeck.secrets.filter(entity => entity.entityId !== entityId);
 		// console.log('\tnew stolen deck', newStolenDeck);
 
 		// See card-played-from-hand
@@ -56,6 +58,7 @@ export class CardStolenParser implements EventParser {
 			hand: stolenHand,
 			board: stolenBoard,
 			deck: newDeck,
+			secrets: stolenSecrets,
 		});
 
 		// Here we just keep the card in the same zone, but in the other deck. Another event will
@@ -73,12 +76,14 @@ export class CardStolenParser implements EventParser {
 					isPlayerStolenFrom ? this.helper.obfuscateCard(cardInDeck) : cardInDeck,
 			  )
 			: stealingToDeck.deck;
+		const stealingSecrets = secret ? [...stealingToDeck.secrets, secret] : stealingToDeck.secrets;
 		// console.log('new stealing deck', stealingDeck, cardInDeck);
 		// console.log('new stolen from deck', stolenFromDeck);
 		const newStealingDeck = Object.assign(new DeckState(), stealingToDeck, {
 			hand: stealingHand,
 			board: stealingBoard,
 			deck: stealingDeck,
+			secrets: stealingSecrets,
 		});
 
 		return Object.assign(new GameState(), currentState, {

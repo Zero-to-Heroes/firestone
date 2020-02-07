@@ -55,6 +55,7 @@ import { NewTurnParser } from './event-parser/new-turn-parser';
 import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { SecretCreatedInGameParser } from './event-parser/secret-created-in-game-parser';
+import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
 import { SecretPlayedFromDeckParser } from './event-parser/secret-played-from-deck-parser';
 import { SecretPlayedFromHandParser } from './event-parser/secret-played-from-hand-parser';
 import { SecretTriggeredParser } from './event-parser/secret-triggered-parser';
@@ -469,6 +470,7 @@ export class GameStateService {
 			new BurnedCardParser(this.helper),
 			new SecretPlayedFromDeckParser(this.helper, this.secretsConfig),
 			new SecretCreatedInGameParser(this.helper, this.secretsConfig, this.allCards),
+			new SecretDestroyedParser(this.helper),
 			new NewTurnParser(),
 			new FirstPlayerParser(),
 			new CardStolenParser(this.helper),

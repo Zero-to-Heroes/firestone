@@ -402,6 +402,10 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'SECRET_DESTROYED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
+				break;
 			case 'DEATHRATTLE_TRIGGERED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.DEATHRATTLE_TRIGGERED, gameEvent));
