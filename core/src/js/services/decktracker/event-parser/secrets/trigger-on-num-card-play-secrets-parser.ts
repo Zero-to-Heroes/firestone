@@ -8,10 +8,7 @@ import { DeckManipulationHelper } from '../deck-manipulation-helper';
 import { EventParser } from '../event-parser';
 
 export class TriggerOnNumCardPlaySecretsParser implements EventParser {
-	private secretsTriggeringOnAttack = [
-		CardIds.Collectible.Hunter.RatTrap, // Tested
-		CardIds.Collectible.Paladin.HiddenWisdom,
-	];
+	private secretsTriggeringOnAttack = [CardIds.Collectible.Hunter.RatTrap, CardIds.Collectible.Paladin.HiddenWisdom];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
@@ -40,7 +37,7 @@ export class TriggerOnNumCardPlaySecretsParser implements EventParser {
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, secrets);
+			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}

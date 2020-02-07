@@ -10,13 +10,13 @@ import { EventParser } from '../event-parser';
 // https://hearthstone.gamepedia.com/Advanced_rulebook#Combat
 export class TriggerOnAttackSecretsParser implements EventParser {
 	private secretsTriggeringOnAttack = [
-		CardIds.Collectible.Hunter.BearTrap, // Tested
-		CardIds.Collectible.Hunter.Misdirection, // Tested
-		CardIds.Collectible.Hunter.SnakeTrap, // Tested
-		CardIds.Collectible.Hunter.ExplosiveTrap, // Tested
-		CardIds.Collectible.Hunter.FreezingTrap, // Tested
-		CardIds.Collectible.Hunter.VenomstrikeTrap, // Tested
-		CardIds.Collectible.Hunter.WanderingMonster, // Tested
+		CardIds.Collectible.Hunter.BearTrap,
+		CardIds.Collectible.Hunter.Misdirection,
+		CardIds.Collectible.Hunter.SnakeTrap,
+		CardIds.Collectible.Hunter.ExplosiveTrap,
+		CardIds.Collectible.Hunter.FreezingTrap,
+		CardIds.Collectible.Hunter.VenomstrikeTrap,
+		CardIds.Collectible.Hunter.WanderingMonster,
 		CardIds.Collectible.Mage.IceBarrier,
 		CardIds.Collectible.Mage.Vaporize,
 		CardIds.Collectible.Mage.SplittingImage,
@@ -39,7 +39,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
 		if (gameEvent.type === GameEvent.ATTACKING_HERO || gameEvent.type === GameEvent.ATTACKING_MINION) {
-			return this.handleAttack(currentState, gameEvent, deck => [...deck.secrets]);
+			return this.handleAttack(currentState, gameEvent, (deck: DeckState, secret: BoardSecret) => true);
 		} else if (gameEvent.type === GameEvent.SECRET_TRIGGERED) {
 			return this.handleSecretTriggered(currentState, gameEvent);
 		}
@@ -53,25 +53,26 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		if (this.secretsTriggeringOnAttack.indexOf(gameEvent.cardId) === -1) {
 			return currentState;
 		}
-		console.warn('TODO: remove older secrets that didnt trigger even though the conditions were met');
-		const filterSecrets = (deck: DeckState): BoardSecret[] => {
-			const index = deck.secrets.map(secret => secret.entityId).indexOf(gameEvent.entityId);
-			return deck.secrets.slice(0, index);
+		// console.warn('TODO: remove older secrets that didnt trigger even though the conditions were met');
+		const isSecretToBeConsidered = (deck: DeckState, secret: BoardSecret): boolean => {
+			const indexOfTriggeredSecret = deck.secrets.map(secret => secret.entityId).indexOf(gameEvent.entityId);
+			const indexOfCurrentSecret = deck.secrets.map(secret => secret.entityId).indexOf(secret.entityId);
+			return indexOfCurrentSecret < indexOfTriggeredSecret;
 		};
-		return this.handleAttack(currentState, gameEvent, filterSecrets);
+		return this.handleAttack(currentState, gameEvent, isSecretToBeConsidered);
 	}
 
 	private async handleAttack(
 		currentState: GameState,
 		gameEvent: GameEvent,
-		secretsExtractor: (deck: DeckState) => BoardSecret[],
+		isSecretToBeConsidered: (deck: DeckState, secret: BoardSecret) => boolean,
 	): Promise<GameState> {
 		const attackerId = gameEvent.additionalData.attackerEntityId;
 		const defenderId = gameEvent.additionalData.defenderEntityId;
 		const defenderControllerId = gameEvent.additionalData.defenderControllerId;
 		const attackerControllerId = gameEvent.additionalData.attackerControllerId;
 		if (defenderControllerId === attackerControllerId) {
-			console.log('attacker and defender are the same', gameEvent);
+			// console.log('attacker and defender are the same', gameEvent);
 			return currentState;
 		}
 
@@ -79,15 +80,15 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
 		const deckWithSecretToCheck = isPlayerTheAttackedParty ? currentState.playerDeck : currentState.opponentDeck;
 		if (isPlayerTheAttackedParty && activePlayerId === gameEvent.localPlayer.PlayerId) {
-			console.log('active player is attacked', gameEvent);
+			// console.log('active player is attacked', gameEvent);
 			return currentState;
 		}
 		if (!isPlayerTheAttackedParty && activePlayerId === gameEvent.opponentPlayer.PlayerId) {
-			console.log('active opponent is attacked', gameEvent);
+			// console.log('active opponent is attacked', gameEvent);
 			return currentState;
 		}
 
-		console.log('deck to check', deckWithSecretToCheck);
+		// console.log('deck to check', deckWithSecretToCheck);
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 
 		// Check that the attacker is a minion
@@ -108,7 +109,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			gameEvent.additionalData.defenderTags.find(
 				tag => (tag.Name as number) === GameTag.DIVINE_SHIELD && (tag.Value as number) === 1,
 			);
-		console.log('attacker minion?', isAttackerMinion, 'defender minion?', isDefenderMinion, gameEvent);
+		// console.log('attacker minion?', isAttackerMinion, 'defender minion?', isDefenderMinion, gameEvent);
 		const enemyBoard = (isPlayerTheAttackedParty ? currentState.opponentDeck : currentState.playerDeck).board;
 
 		const secretsWeCantRuleOut = [];
@@ -119,15 +120,21 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrifice);
 		}
 		if (!isAttackerMinion) {
+			// console.log('ruling out sudden betrayal, no attacker minion', isAttackerMinion);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.FreezingTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.FlameWard);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 		}
 		if (!isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
+			if (enemyBoard.length === 1) {
+				// console.log('ruling out sudden betrayal', enemyBoard);
+				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
+			}
 		}
 		if (isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
@@ -136,11 +143,9 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.WanderingMonster);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.IceBarrier);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Vaporize);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			if (isDefenderDivineShield) {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
-			}
-			if (enemyBoard.length === 1) {
-				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
 			}
 		}
 		const allEntities = [
@@ -150,7 +155,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			...gameEvent.gameState.Opponent.Board,
 		];
 		const otherTargets = allEntities.filter(entity => [attackerId, defenderId].indexOf(entity.entityId) === -1);
-		console.log('other targets', otherTargets, allEntities, attackerId, defenderId);
+		// console.log('other targets', otherTargets, allEntities, attackerId, defenderId);
 		// Misdirection only triggers if there is another entity on the board that can be attacked
 		if (otherTargets.length === 0) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.Misdirection);
@@ -160,10 +165,16 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 			secret => secretsWeCantRuleOut.indexOf(secret) === -1,
 		);
 
-		let secrets: BoardSecret[] = [...secretsExtractor(deckWithSecretToCheck)];
+		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, secrets);
-			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
+			// console.log('marking as invalid', secret, secrets);
+			secrets = secrets.map(boardSecret => {
+				if (isSecretToBeConsidered(deckWithSecretToCheck, boardSecret)) {
+					return this.helper.removeSecretOptionFromSecret(boardSecret, secret);
+				}
+				return boardSecret;
+			});
+			// secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
 		let newPlayerDeck = deckWithSecretToCheck.update({

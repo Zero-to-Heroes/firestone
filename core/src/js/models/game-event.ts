@@ -29,6 +29,7 @@ export class GameEvent {
 	public static readonly MINION_BACK_ON_BOARD = 'MINION_BACK_ON_BOARD';
 	public static readonly FIRST_PLAYER = 'FIRST_PLAYER';
 	public static readonly SECRET_PLAYED_FROM_DECK = 'SECRET_PLAYED_FROM_DECK';
+	public static readonly SECRET_CREATED_IN_GAME = 'SECRET_CREATED_IN_GAME';
 	public static readonly MINION_SUMMONED = 'MINION_SUMONED';
 	public static readonly HERO_POWER_CHANGED = 'HERO_POWER_CHANGED';
 	public static readonly CARD_REVEALED = 'CARD_REVEALED';

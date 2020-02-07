@@ -297,6 +297,17 @@ export class GameEvents {
 						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
 							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
 							: null,
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
+				break;
+			case 'SECRET_CREATED_IN_GAME':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.SECRET_CREATED_IN_GAME, gameEvent, {
+						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
+							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+							: null,
 					}),
 				);
 				break;
@@ -543,6 +554,7 @@ export class GameEvents {
 						type: GameEvent.DAMAGE,
 						localPlayer: gameEvent.Value.LocalPlayer,
 						opponentPlayer: gameEvent.Value.OpponentPlayer,
+						gameState: gameEvent.Value.GameState,
 						additionalData: {
 							sourceCardId: gameEvent.Value.SourceCardId,
 							sourceControllerId: gameEvent.Value.SourceControllerId,
@@ -572,6 +584,8 @@ export class GameEvents {
 					Object.assign(new GameEvent(), {
 						type: GameEvent.TURN_START,
 						gameState: gameEvent.Value.GameState,
+						localPlayer: gameEvent.Value.LocalPlayer,
+						opponentPlayer: gameEvent.Value.OpponentPlayer,
 						additionalData: {
 							// Legacy, to avoid regenerating all the tests
 							turnNumber: gameEvent.Value.Turn || gameEvent.Value,

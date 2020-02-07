@@ -296,7 +296,7 @@ export class DeckManipulationHelper {
 		return allEntities.find(entity => entity.entityId === entityId);
 	}
 
-	private removeSecretOptionFromSecret(secret: BoardSecret, secretCardId: string): BoardSecret {
+	public removeSecretOptionFromSecret(secret: BoardSecret, secretCardId: string): BoardSecret {
 		const newOptions: readonly SecretOption[] = secret.allPossibleOptions.map(option =>
 			option.cardId === secretCardId ? option.update({ isValidOption: false } as SecretOption) : option,
 		);

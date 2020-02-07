@@ -10,7 +10,7 @@ import { EventParser } from '../event-parser';
 export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	private secretsTriggeringOnMinionPlay = [
 		CardIds.Collectible.Hunter.HiddenCache,
-		CardIds.Collectible.Hunter.Snipe, // Tested
+		CardIds.Collectible.Hunter.Snipe,
 		CardIds.Collectible.Mage.PotionOfPolymorph,
 		CardIds.Collectible.Mage.MirrorEntity,
 		CardIds.Collectible.Mage.FrozenClone,
@@ -49,8 +49,9 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;
-		// So at most 2 minions before this one was played
-		if (enemyBoard.length < 4) {
+		// console.log('enemy board', enemyBoard, isMinionPlayedByPlayer, currentState, gameEvent);
+		if (enemyBoard.length < 3) {
+			// console.log('ruling out sacred trial', enemyBoard);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.SacredTrial);
 		}
 		// TODO: handle the case where the max hand size has been bumped to 12
@@ -65,7 +66,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, secrets);
+			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}

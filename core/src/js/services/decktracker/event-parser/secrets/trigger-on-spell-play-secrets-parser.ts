@@ -34,7 +34,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 
 		const secretsWeCantRuleOut = [];
 
-		const targetCardId = gameEvent.additionalData.targetEntityId;
+		const targetCardId = gameEvent.additionalData.targetCardId;
 		if (!targetCardId) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.Spellbender);
 		} else {
@@ -76,7 +76,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		);
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, secrets);
+			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}

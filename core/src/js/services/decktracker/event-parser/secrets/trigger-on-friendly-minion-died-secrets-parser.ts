@@ -42,8 +42,8 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.CheatDeath);
 		}
 
-		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
-		if (isBoardEmpty) {
+		// If it's the only minion on board, we trigger nothing
+		if (deckWithSecretToCheck.board.length === 1) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.Avenge);
 		}
 		// TODO: Redemption will not trigger if deathrattles fill up the board
@@ -54,7 +54,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, secrets);
+			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}

@@ -17,16 +17,21 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [, , localPlayer] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const activePlayerId = gameEvent.gameState.ActivePlayerId;
+		// Can happen at the very start of the game
+		if (!localPlayer) {
+			// console.log('[turn-start] no local player, returning', gameEvent);
+			return currentState;
+		}
 
 		const isPlayerActive = activePlayerId === localPlayer.PlayerId;
 		const deckWithSecretToCheck = isPlayerActive ? currentState.playerDeck : currentState.opponentDeck;
 		const secretsWeCantRuleOut = [];
 
-		// TODO: handle the case where the max hand size has been bumped to 12
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
 		if (isBoardEmpty) {
+			// console.log('[turn-start] board empty', deckWithSecretToCheck, isPlayerActive, gameEvent);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.CompetitiveSpirit);
 		}
 
@@ -36,7 +41,7 @@ export class TriggerOnTurnStartSecretsParser implements EventParser {
 
 		let secrets: BoardSecret[] = [...deckWithSecretToCheck.secrets];
 		for (const secret of optionsToFlagAsInvalid) {
-			console.log('marking as invalid', secret, secrets);
+			// console.log('marking as invalid', secret, secrets);
 			secrets = [...this.helper.removeSecretOptionFromSecrets(secrets, secret)];
 			// console.log('marked as invalid', secret, newPlayerDeck);
 		}
