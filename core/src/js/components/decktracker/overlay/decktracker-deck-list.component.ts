@@ -1,15 +1,20 @@
 import {
+	AfterViewInit,
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
+	EventEmitter,
 	HostListener,
 	Input,
+	OnDestroy,
 	ViewRef,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { Events } from '../../../services/events.service';
+import { OverwolfService } from '../../../services/overwolf.service';
 
 @Component({
 	selector: 'decktracker-deck-list',
@@ -44,7 +49,7 @@ import { Events } from '../../../services/events.service';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeckTrackerDeckListComponent {
+export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() displayMode: string;
 	@Input() highlightCardsInHand: boolean;
 	@Input() colorManaCost: boolean;
@@ -61,15 +66,28 @@ export class DeckTrackerDeckListComponent {
 
 	@Input('deckState') set deckState(deckState: DeckState) {
 		this._deckState = deckState;
-		setTimeout(() => {
-			const contentHeight = this.el.nativeElement.querySelector('.ps-content').getBoundingClientRect().height;
-			const containerHeight = this.el.nativeElement.querySelector('.ps').getBoundingClientRect().height;
-			this.isScroll = contentHeight > containerHeight;
-			this.refresh();
-		}, 1000);
+		this.refreshScroll();
 	}
 
-	constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private events: Events) {}
+	private preferencesSubscription: Subscription;
+
+	constructor(
+		private el: ElementRef,
+		private cdr: ChangeDetectorRef,
+		private events: Events,
+		private ow: OverwolfService,
+	) {}
+
+	ngAfterViewInit() {
+		const preferencesEventBus: EventEmitter<any> = this.ow.getMainWindow().preferencesEventBus;
+		this.preferencesSubscription = preferencesEventBus.subscribe(event => {
+			this.refreshScroll();
+		});
+	}
+
+	ngOnDestroy() {
+		this.preferencesSubscription.unsubscribe();
+	}
 
 	// Prevent the window from being dragged around if user scrolls with click
 	@HostListener('mousedown', ['$event'])
@@ -93,5 +111,15 @@ export class DeckTrackerDeckListComponent {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private refreshScroll() {
+		setTimeout(() => {
+			const contentHeight = this.el.nativeElement.querySelector('.ps-content').getBoundingClientRect().height;
+			const containerHeight = this.el.nativeElement.querySelector('.ps').getBoundingClientRect().height;
+			this.isScroll = contentHeight > containerHeight;
+			console.log('isScroll', this.isScroll, containerHeight, contentHeight);
+			this.refresh();
+		}, 1000);
 	}
 }
