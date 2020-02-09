@@ -60,15 +60,15 @@ export class ControlSettingsComponent implements AfterViewInit {
 		if (settingsWindow.stateEx !== 'normal') {
 			// Avoid flickering
 			setTimeout(async () => {
-				const window = await this.ow.getCurrentWindow();
-				const center = {
-					x: window.left + window.width / 2,
-					y: window.top + window.height / 2,
-				};
+				// const window = await this.ow.getCurrentWindow();
+				// const center = {
+				// 	x: window.left + window.width / 2,
+				// 	y: window.top + window.height / 2,
+				// };
 				await this.ow.restoreWindow(settingsWindow.id);
-				if (this.shouldMoveSettingsWindow) {
-					await this.ow.sendMessage(settingsWindow.id, 'move', center);
-				}
+				// if (this.shouldMoveSettingsWindow) {
+				// 	await this.ow.sendMessage(settingsWindow.id, 'move', center);
+				// }
 			}, 10);
 		}
 		// Otherwise we hide it

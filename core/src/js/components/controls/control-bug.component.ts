@@ -34,13 +34,13 @@ export class ControlBugComponent {
 		this.settingsEventBus.next(['general', 'bugreport']);
 		// Avoid flickering
 		setTimeout(async () => {
-			const window = await this.ow.getCurrentWindow();
-			const center = {
-				x: window.left + window.width / 2,
-				y: window.top + window.height / 2,
-			};
+			// const window = await this.ow.getCurrentWindow();
+			// const center = {
+			// 	x: window.left + window.width / 2,
+			// 	y: window.top + window.height / 2,
+			// };
 			const settingsWindow = await this.ow.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
-			await this.ow.sendMessage(settingsWindow.id, 'move', center);
+			// await this.ow.sendMessage(settingsWindow.id, 'move', center);
 			this.ow.restoreWindow(settingsWindow.id);
 		}, 10);
 	}
