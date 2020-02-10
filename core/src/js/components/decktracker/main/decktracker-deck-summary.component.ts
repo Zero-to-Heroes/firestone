@@ -17,7 +17,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 			helpTooltipPosition="right"
 		>
 			<div class="deck-name">{{ deckName }}</div>
-			<div class="deck-image" helpTooltipTarget>
+			<div class="deck-image">
 				<img class="skin" [src]="skin" />
 				<img class="frame" src="/Files/assets/images/deck/hero_frame.png" />
 			</div>
