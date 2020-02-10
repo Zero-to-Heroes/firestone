@@ -3,10 +3,10 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
+	HostListener,
 	OnDestroy,
 	ViewRef,
-	HostListener,
-	ElementRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { OverwolfService } from '../../../services/overwolf.service';
@@ -47,11 +47,6 @@ import { Knob } from '../preference-slider.component';
 						label="Close tracker on game end"
 						tooltip="Automatically close the tracker when the game ends. If disabled, the tracker needs to be closed manually"
 					></preference-toggle>
-					<preference-toggle
-						field="decktrackerNoDeckMode"
-						label="No-deck mode"
-						tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
-					></preference-toggle>
 				</div>
 				<div class="subtitle">Your deck</div>
 				<div class="subgroup">
@@ -66,6 +61,11 @@ import { Knob } from '../preference-slider.component';
 						field="overlayCardsGoToBottom"
 						label="Used cards go to bottom"
 						tooltip="When active, the cards that have been used are shown at the bottom of the list. It can only be activated if the Group cards by zone option is disabled"
+					></preference-toggle>
+					<preference-toggle
+						field="decktrackerNoDeckMode"
+						label="Ignore decklist"
+						tooltip="Don't load the initial decklist and only track played and drawn cards. Changes will be applied for the next game"
 					></preference-toggle>
 				</div>
 				<div class="subtitle">Opponent's deck</div>
