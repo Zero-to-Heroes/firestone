@@ -50,16 +50,17 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 	// Here we should probably retrieve the PROPOSED_* entities, and apply the same logic as real attacks
 	// (on the old secrets) to rule out the ones that would have triggered otherwise
 	private async handleSecretTriggered(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		if (this.secretsTriggeringOnAttack.indexOf(gameEvent.cardId) === -1) {
-			return currentState;
-		}
-		// console.warn('TODO: remove older secrets that didnt trigger even though the conditions were met');
-		const isSecretToBeConsidered = (deck: DeckState, secret: BoardSecret): boolean => {
-			const indexOfTriggeredSecret = deck.secrets.map(secret => secret.entityId).indexOf(gameEvent.entityId);
-			const indexOfCurrentSecret = deck.secrets.map(secret => secret.entityId).indexOf(secret.entityId);
-			return indexOfCurrentSecret < indexOfTriggeredSecret;
-		};
-		return this.handleAttack(currentState, gameEvent, isSecretToBeConsidered);
+		return currentState;
+		// if (this.secretsTriggeringOnAttack.indexOf(gameEvent.cardId) === -1) {
+		// 	return currentState;
+		// }
+		// // console.warn('TODO: remove older secrets that didnt trigger even though the conditions were met');
+		// const isSecretToBeConsidered = (deck: DeckState, secret: BoardSecret): boolean => {
+		// 	const indexOfTriggeredSecret = deck.secrets.map(secret => secret.entityId).indexOf(gameEvent.entityId);
+		// 	const indexOfCurrentSecret = deck.secrets.map(secret => secret.entityId).indexOf(secret.entityId);
+		// 	return indexOfCurrentSecret < indexOfTriggeredSecret;
+		// };
+		// return this.handleAttack(currentState, gameEvent, isSecretToBeConsidered);
 	}
 
 	private async handleAttack(
