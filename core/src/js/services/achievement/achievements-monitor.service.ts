@@ -46,33 +46,49 @@ export class AchievementsMonitor {
 	}
 
 	private async sendUnlockEvent(challenge: Challenge) {
-		// console.log('[achievement-monitor] starting process of completed achievement', challenge);
-		const existingAchievement: CompletedAchievement = await this.achievementsStorage.loadAchievementFromCache(
-			challenge.achievementId,
+		const achievement: Achievement = await this.achievementLoader.getAchievement(challenge.achievementId);
+		const autoGrantAchievements = await this.achievementLoader.getAchievementsById(
+			achievement.linkedAchievementIds,
 		);
-		// console.log('[achievement-monitor] loaded existing completed achievement', existingAchievement);
-		const completedAchievement = new CompletedAchievement(
-			existingAchievement.id,
-			existingAchievement.numberOfCompletions + 1,
-			existingAchievement.replayInfo || [],
-		);
-		const achievement: Achievement = await this.achievementLoader.getAchievement(completedAchievement.id);
-		if (achievement.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
-			// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
-			return;
+		// console.log('[achievement-monitor] autoGrantAchievements', autoGrantAchievements);
+		const allAchievements =
+			autoGrantAchievements.length > 0 ? [achievement, ...autoGrantAchievements] : [achievement];
+		// console.log('[achievement-monitor] will grant achievements?', allAchievements, achievement);
+		for (const achv of allAchievements) {
+			// console.log('[achievement-monitor] starting process of completed achievement', challenge);
+			const existingAchievement: CompletedAchievement = await this.achievementsStorage.loadAchievementFromCache(
+				achv.id,
+			);
+			// console.log('[achievement-monitor] loaded existing completed achievement', existingAchievement);
+			const completedAchievement = new CompletedAchievement(
+				existingAchievement.id,
+				existingAchievement.numberOfCompletions + 1,
+				existingAchievement.replayInfo || [],
+			);
+			if (achv.canBeCompletedOnlyOnce && existingAchievement.numberOfCompletions >= 1) {
+				// console.log('[achievement-monitor] achievement can be completed only once', completedAchievement.id);
+				continue;
+			}
+			// Don't grant a linked achievement more than once
+			if (
+				existingAchievement.numberOfCompletions >= 1 &&
+				autoGrantAchievements.map(a => a.id).indexOf(achv.id) !== -1
+			) {
+				continue;
+			}
+			console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
+			const mergedAchievement = Object.assign(new Achievement(), achv, {
+				numberOfCompletions: completedAchievement.numberOfCompletions,
+				replayInfo: completedAchievement.replayInfo,
+			} as Achievement);
+
+			this.achievementStats.publishRemoteAchievement(mergedAchievement);
+			await this.achievementsStorage.cacheAchievement(completedAchievement);
+			console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
+			// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
+
+			this.enqueue({ achievement: mergedAchievement, challenge: challenge } as InternalEvent);
 		}
-		console.log('[achievement-monitor] starting process of completed achievement', challenge.achievementId);
-		const mergedAchievement = Object.assign(new Achievement(), achievement, {
-			numberOfCompletions: completedAchievement.numberOfCompletions,
-			replayInfo: completedAchievement.replayInfo,
-		} as Achievement);
-
-		this.achievementStats.publishRemoteAchievement(mergedAchievement);
-		await this.achievementsStorage.cacheAchievement(completedAchievement);
-		console.log('[achievement-monitor] broadcasting event completion event', mergedAchievement);
-		// this.events.broadcast(Events.ACHIEVEMENT_UNLOCKED, mergedAchievement, challenge);
-
-		this.enqueue({ achievement: mergedAchievement, challenge: challenge } as InternalEvent);
 	}
 
 	private enqueue(event: InternalEvent) {

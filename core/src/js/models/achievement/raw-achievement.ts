@@ -21,4 +21,5 @@ export interface RawAchievement {
 	readonly points: number;
 	readonly requirements: readonly RawRequirement[];
 	readonly resetEvents: readonly string[];
+	readonly linkedAchievementIds?: readonly string[];
 }

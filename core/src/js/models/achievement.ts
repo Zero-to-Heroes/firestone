@@ -18,6 +18,7 @@ export class Achievement {
 	readonly maxNumberOfRecords: number;
 	readonly points: number;
 	readonly numberOfCompletions: number = 0;
+	readonly linkedAchievementIds: readonly string[] = [];
 	readonly replayInfo: readonly ReplayInfo[] = [];
 
 	public update(value: Achievement): Achievement {

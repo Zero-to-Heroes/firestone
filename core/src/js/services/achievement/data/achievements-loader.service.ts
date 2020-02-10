@@ -1,13 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
+import { of } from 'rxjs';
+import { catchError, timeout } from 'rxjs/operators';
 import { Achievement } from '../../../models/achievement';
 import { RawAchievement } from '../../../models/achievement/raw-achievement';
 import { ReplayInfo } from '../../../models/replay-info';
 import { Challenge } from '../achievements/challenges/challenge';
 import { ChallengeBuilderService } from '../achievements/challenges/challenge-builder.service';
-import { NGXLogger } from 'ngx-logger';
-import { timeout, catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 const ACHIEVEMENTS_URL = 'https://static.zerotoheroes.com/hearthstone/data/achievements';
 
@@ -23,9 +23,17 @@ export class AchievementsLoaderService {
 		private logger: NGXLogger,
 	) {}
 
-	public async getAchievement(achievementId): Promise<Achievement> {
+	public async getAchievement(achievementId: string): Promise<Achievement> {
 		await this.waitForInit();
 		return this.achievements.find(achievement => achievement.id === achievementId);
+	}
+
+	public async getAchievementsById(achievementIds: readonly string[]): Promise<readonly Achievement[]> {
+		if (!achievementIds) {
+			return [];
+		}
+		await this.waitForInit();
+		return this.achievements.filter(achievement => achievementIds.indexOf(achievement.id) !== -1);
 	}
 
 	public async getAchievements(): Promise<readonly Achievement[]> {
@@ -88,7 +96,6 @@ export class AchievementsLoaderService {
 						this.logger.debug(
 							'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
 							fileName,
-							error,
 						);
 						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json`).subscribe(
 							(result: any[]) => {
