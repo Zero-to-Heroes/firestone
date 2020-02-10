@@ -11,33 +11,11 @@ export class VisualAchievement {
 	readonly cardType: string;
 	readonly text: string;
 	readonly completionSteps: CompletionStep[];
-	// readonly achievementStepIds: string[];
-	// readonly numberOfCompletions: number[] = [];
 	readonly replayInfo: readonly ReplayInfo[] = [];
 
 	public static create(value: VisualAchievement): VisualAchievement {
 		return Object.assign(new VisualAchievement(), value);
 	}
-
-	// constructor(
-	// 	id: string = null,
-	// 	name: string = null,
-	// 	type: string = null,
-	// 	cardId: string = null,
-	// 	cardType: string = null,
-	// 	text: string = null,
-	// 	completionSteps: CompletionStep[] = null,
-	// 	replayInfo: readonly ReplayInfo[] = null,
-	// ) {
-	// 	this.id = id;
-	// 	this.name = name;
-	// 	this.type = type;
-	// 	this.cardId = cardId;
-	// 	this.cardType = cardType;
-	// 	this.text = text;
-	// 	this.completionSteps = completionSteps;
-	// 	this.replayInfo = replayInfo;
-	// }
 
 	public update(value: Achievement): VisualAchievement {
 		if (value.id !== this.id && this.completionSteps.map(step => step.id).indexOf(value.id) === -1) {

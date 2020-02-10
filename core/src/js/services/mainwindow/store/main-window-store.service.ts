@@ -220,7 +220,7 @@ export class MainWindowStoreService {
 				console.log('[store] no new state to emit');
 			}
 		} catch (e) {
-			console.error('[store] exception while processing event', event.eventName(), event, processor);
+			console.error('[store] exception while processing event', event.eventName(), event, processor, e);
 		}
 		return eventQueue.slice(1);
 	}

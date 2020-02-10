@@ -141,7 +141,7 @@ export abstract class GenericSetProvider extends SetProvider {
 				numberOfCompletions: areProgressionSteps ? completions : achv.numberOfCompletions,
 				icon: achv.icon,
 				completedText: achv.completedText,
-				priority: achievementForCompletionSteps[i].priority,
+				priority: achv.priority,
 				text(showTimes: boolean = false): string {
 					const times = showTimes && !achievement.canBeCompletedOnlyOnce ? `${completions} times` : ``;
 					return `${achv.completedText} <span class="number-of-times">${times}</span>`;

@@ -7,12 +7,16 @@ import { DeckState } from '../models/decktracker/deck-state';
 import { GameState } from '../models/decktracker/game-state';
 import { GameStat } from '../models/mainwindow/stats/game-stat';
 import { GameStats } from '../models/mainwindow/stats/game-stats';
+import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { Challenge } from './achievement/achievements/challenges/challenge';
+import { ChallengeBuilderService } from './achievement/achievements/challenges/challenge-builder.service';
+import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { DeckParserService } from './decktracker/deck-parser.service';
 import { DeckManipulationHelper } from './decktracker/event-parser/deck-manipulation-helper';
 import { GameStateService } from './decktracker/game-state.service';
 import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
+import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
 import { SetsService } from './sets-service.service';
 
@@ -30,6 +34,10 @@ export class DevService {
 		private cards: SetsService,
 		private gameState: GameStateService,
 		private helper: DeckManipulationHelper,
+		private store: MainWindowStoreService,
+		private challengeBuilder: ChallengeBuilderService,
+		private achievementLoader: AchievementsLoaderService,
+		private achievementsMonitor: AchievementsMonitor,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -185,6 +193,11 @@ export class DevService {
 			const deckstring = encode(deck as any);
 			console.log(deckstring);
 			console.log(decode(deckstring));
+		};
+		window['grantAchievement'] = async id => {
+			const challenges = await this.achievementLoader.getChallengeModules();
+			const challenge = challenges.find(chal => chal.achievementId === id);
+			this.achievementsMonitor['sendUnlockEvent'](challenge);
 		};
 		// window['addReplayInfos'] = async () => {
 		// 	const achievements = await this.storage.loadAchievements();
