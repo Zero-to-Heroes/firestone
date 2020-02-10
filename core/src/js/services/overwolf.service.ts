@@ -286,8 +286,22 @@ export class OverwolfService {
 		});
 	}
 
+	public inAnotherGame(gameInfoResult: any): boolean {
+		return (
+			gameInfoResult &&
+			gameInfoResult.gameInfo &&
+			gameInfoResult.gameInfo.isRunning &&
+			Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID
+		);
+	}
+
 	public exitGame(gameInfoResult: any): boolean {
-		return !gameInfoResult || !gameInfoResult.gameInfo || !gameInfoResult.gameInfo.isRunning;
+		return (
+			!gameInfoResult ||
+			!gameInfoResult.gameInfo ||
+			!gameInfoResult.gameInfo.isRunning ||
+			Math.floor(gameInfoResult.gameInfo.id / 10) !== HEARTHSTONE_GAME_ID
+		);
 	}
 
 	public async getRunningGameInfo() {

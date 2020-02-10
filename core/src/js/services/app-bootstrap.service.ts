@@ -43,10 +43,6 @@ export class AppBootstrapService {
 	private currentState = 'INIT';
 	private loadingWindowId: string;
 	private loadingWindowShown = false;
-	// Seomtimes multiple events can fire in a row, which leads to the app
-	// trying to close windows several times in a row
-	// private closing = false;
-	private wrapUpTimeout;
 
 	constructor(
 		private store: MainWindowStoreService,
@@ -123,20 +119,19 @@ export class AppBootstrapService {
 			}
 		});
 		this.ow.addGameInfoUpdatedListener(async (res: any) => {
-			console.log('[bootstrap] updated game status', res);
-			// Issue is that this is triggered when launching the game
-			// if (!this.exitGame(res) && this.wrapUpTimeout) {
-			// 	console.log('cancelling app close', res);
-			// 	clearTimeout(this.wrapUpTimeout);
-			// 	this.wrapUpTimeout = null;
-			// }
-			if (this.ow.exitGame(res) && res.runningChanged && !this.wrapUpTimeout) {
-				console.log('[bootstrap] left game, showing replay tab', res);
-				this.loadingWindowShown = false;
-				this.closeLoadingScreen();
-				this.showReplaysRecap();
-				// this.wrapUpTimeout = setTimeout(() => {
-				// }, 1);
+			// console.log('[bootstrap] updated game status', res);
+			if (this.ow.exitGame(res)) {
+				// This can happen when we're in another game, so we exit the app for good
+				// console.log('[bootstrap] left game, showing replay tab', res);
+				if (this.ow.inAnotherGame(res)) {
+					// console.log('in another game, hiding app', res);
+					this.ow.minimizeWindow(OverwolfService.COLLECTION_WINDOW);
+					this.ow.closeWindow(OverwolfService.SETTINGS_WINDOW);
+				} else if (res.runningChanged) {
+					this.loadingWindowShown = false;
+					this.closeLoadingScreen();
+					this.showReplaysRecap();
+				}
 			} else if (await this.ow.inGame()) {
 				console.log('[bootstrap] game is running, showing loading screen');
 				this.showLoadingScreen();
@@ -206,6 +201,10 @@ export class AppBootstrapService {
 		if (!isRunning) {
 			this.showCollectionWindow();
 		}
+	}
+
+	private closeApp() {
+		this.ow.closeWindow(OverwolfService.MAIN_WINDOW);
 	}
 
 	private async closeLoadingScreen() {
