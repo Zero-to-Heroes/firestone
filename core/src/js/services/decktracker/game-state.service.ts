@@ -91,6 +91,7 @@ export class GameStateService {
 	private closedByUser: boolean;
 	private opponentTrackerClosedByUser: boolean;
 	private gameEnded: boolean;
+	private onGameScreen: boolean;
 
 	constructor(
 		private gameEvents: GameEventsEmitterService,
@@ -238,6 +239,10 @@ export class GameStateService {
 			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
 			this.updateOverlays();
+		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type, gameEvent);
+			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
+			this.updateOverlays();
 		}
 		this.state = await this.secretsParser.parseSecrets(this.state, gameEvent);
 		// const debug = gameEvent.type === GameEvent.CARD_STOLEN && gameEvent.entityId === 2098;
@@ -319,6 +324,11 @@ export class GameStateService {
 		// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
 		// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
+		this.logger.debug(
+			'[game-state] updating cards left in deck',
+			playerDeckWithZonesOrdered,
+			playerFromTracker && playerFromTracker.Deck,
+		);
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
@@ -331,7 +341,7 @@ export class GameStateService {
 			console.log('ow not defined, returning');
 			return;
 		}
-		const inGame = await this.ow.inGame();
+		const inGame = (await this.ow.inGame()) && this.onGameScreen;
 		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
