@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { GameEvent } from '../../models/game-event';
+import { OverwolfService } from '../../services/overwolf.service';
 
 @Component({
 	selector: 'secrets-helper-control-bar',
@@ -10,7 +12,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 		<div class="control-bar">
 			<div class="title">Secrets Helper</div>
 			<div class="controls">
-				<control-close [windowId]="windowId"></control-close>
+				<control-minimize [windowId]="windowId" [eventProvider]="minimizeHandler"></control-minimize>
 			</div>
 		</div>
 	`,
@@ -18,17 +20,17 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class SecretsHelperControlBarComponent {
 	@Input() windowId: string;
-	// closeHandler: () => void;
+	minimizeHandler: () => void;
 
-	// private deckUpdater: EventEmitter<GameEvent>;
+	private deckUpdater: EventEmitter<GameEvent>;
 
-	// constructor(private readonly ow: OverwolfService) {
-	// 	this.deckUpdater = this.ow.getMainWindow().deckUpdater;
-	// 	this.closeHandler = () =>
-	// 		this.deckUpdater.next(
-	// 			Object.assign(new GameEvent(), {
-	// 				type: this.closeEvent,
-	// 			} as GameEvent),
-	// 		);
-	// }
+	constructor(private readonly ow: OverwolfService) {
+		this.deckUpdater = this.ow.getMainWindow().deckUpdater;
+		this.minimizeHandler = () =>
+			this.deckUpdater.next(
+				Object.assign(new GameEvent(), {
+					type: 'TOGGLE_SECRET_HELPER',
+				} as GameEvent),
+			);
+	}
 }
