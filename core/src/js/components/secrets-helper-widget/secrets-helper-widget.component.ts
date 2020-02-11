@@ -157,10 +157,24 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 		const prefs = await this.prefs.getPreferences();
 		const widgetPosition = prefs.secretsHelperWidgetPosition;
 		console.error('TODO: properly position widget');
-		const newLeft = widgetPosition ? widgetPosition.left || 0 : 400;
-		const newTop = widgetPosition ? widgetPosition.top || 0 : 200;
+		const newLeft = (false && widgetPosition && widgetPosition.left) || (await this.buildDefaultLeft());
+		const newTop = (false && widgetPosition && widgetPosition.top) || (await this.buildDefaultTop());
 		console.log('updating widget position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		console.log('after window position update', await this.ow.getCurrentWindow());
+	}
+
+	private async buildDefaultLeft(): Promise<number> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameWidth = gameInfo.logicalWidth;
+		const dpi = gameWidth / gameInfo.width;
+		// Use the height as a way to change the position, as the width can expand around the play
+		// area based on the screen resolution
+		return gameWidth / 2 - 40 * dpi - gameInfo.logicalHeight * 0.2;
+	}
+
+	private async buildDefaultTop(): Promise<number> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		return gameInfo.logicalHeight * 0.15;
 	}
 }

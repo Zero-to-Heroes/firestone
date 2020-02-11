@@ -195,22 +195,34 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
-		const width = Math.max(252, 252 * 2);
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
-		const gameWidth = gameInfo.logicalWidth;
-		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
 		console.error('TODO: properly position widget');
-		const newLeft = trackerPosition ? trackerPosition.left || 0 : 400;
-		const newTop = trackerPosition ? trackerPosition.top || 0 : 40;
+		const newLeft = (false && trackerPosition && trackerPosition.left) || (await this.buildDefaultLeft());
+		const newTop = (false && trackerPosition && trackerPosition.top) || (await this.buildDefaultTop());
 		console.log('updating tracker position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
 		console.log('after window position update', await this.ow.getCurrentWindow());
 		await this.updateTooltipPosition();
+	}
+
+	private async buildDefaultLeft(): Promise<number> {
+		const width = Math.max(252, 252 * 2);
+		const gameInfo = await this.ow.getRunningGameInfo();
+		const gameWidth = gameInfo.logicalWidth;
+		const dpi = gameWidth / gameInfo.width;
+		// Use the height as a way to change the position, as the width can expand around the play
+		// area based on the screen resolution
+		return gameWidth / 2 - width * dpi - gameInfo.logicalHeight * 0.3;
+	}
+
+	private async buildDefaultTop(): Promise<number> {
+		const gameInfo = await this.ow.getRunningGameInfo();
+		return gameInfo.logicalHeight * 0.05;
 	}
 
 	private async changeWindowSize(): Promise<void> {
