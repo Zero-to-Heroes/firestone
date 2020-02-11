@@ -139,7 +139,7 @@ import { Knob } from '../preference-slider.component';
 					[knobs]="sizeKnobs"
 				>
 				</preference-slider>
-				<div class="text" [ngClass]="{ 'disabled': opponentTracker }">Opacity</div>
+				<div class="text" [ngClass]="{ 'disabled': !opponentTracker }">Opacity</div>
 				<preference-slider
 					field="opponentOverlayOpacityInPercent"
 					[enabled]="opponentTracker"
