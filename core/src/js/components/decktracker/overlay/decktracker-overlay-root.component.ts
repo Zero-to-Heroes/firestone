@@ -154,7 +154,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		});
 
 		await this.changeWindowSize();
-		await this.restoreWindowPosition();
+		// await this.restoreWindowPosition();
 		await this.handleDisplayPreferences();
 		amplitude.getInstance().logEvent('match-start', {
 			'display-mode': this.displayMode,
@@ -228,7 +228,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
-		const width = Math.max(252, 252 * 2);
+		const width = 252;
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
@@ -252,13 +252,14 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	private async changeWindowSize(): Promise<void> {
-		const width = Math.max(252, 252 * 3); // Max scale
+		const width = 252 * 3; // Max scale
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
 		}
 		const gameHeight = gameInfo.logicalHeight;
 		await this.ow.changeWindowSize(this.windowId, width, gameHeight);
+		await this.restoreWindowPosition();
 		await this.updateTooltipPosition();
 	}
 
