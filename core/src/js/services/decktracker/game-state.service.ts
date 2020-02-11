@@ -162,7 +162,7 @@ export class GameStateService {
 				this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 			}
 			if (await this.ow.inGame()) {
-				console.log('[game-state] updating overlays', res);
+				// console.log('[game-state] updating overlays', res);
 				this.updateOverlays();
 			}
 		});
@@ -224,15 +224,15 @@ export class GameStateService {
 		// }
 		// this.logger.debug('[game-state] ready to process event', gameEvent.type, gameEvent, this.state);
 		if (gameEvent.type === 'CLOSE_TRACKER') {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === 'CLOSE_OPPONENT_TRACKER') {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.opponentTrackerClosedByUser = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER') {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.state = this.state.update({
 				opponentDeck: this.state.opponentDeck.update({
 					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
@@ -240,7 +240,7 @@ export class GameStateService {
 			} as GameState);
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.state = this.state.update({
 				opponentDeck: this.state.opponentDeck.update({
 					secretHelperActiveHover: true,
@@ -248,7 +248,7 @@ export class GameStateService {
 			} as GameState);
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.state = this.state.update({
 				opponentDeck: this.state.opponentDeck.update({
 					secretHelperActiveHover: false,
@@ -256,13 +256,13 @@ export class GameStateService {
 			} as GameState);
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
 			this.opponentTrackerClosedByUser = false;
 			this.gameEnded = false;
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_END) {
-			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
 			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
@@ -331,13 +331,13 @@ export class GameStateService {
 			};
 			// this.logger.debug('[game-state] will emit event', emittedEvent);
 			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-			this.logger.debug(
-				'[game-state] emitted deck event',
-				emittedEvent.event.name,
-				this.state.opponentDeck.secrets,
-				this.state,
-				gameEvent,
-			);
+			// this.logger.debug(
+			// 	'[game-state] emitted deck event',
+			// 	emittedEvent.event.name,
+			// 	this.state.opponentDeck.secrets,
+			// 	this.state,
+			// 	gameEvent,
+			// );
 		}
 	}
 
@@ -471,21 +471,21 @@ export class GameStateService {
 			this.state.opponentDeck.secrets &&
 			this.state.opponentDeck.secrets.length > 0 &&
 			this.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS;
-		console.log(
-			'[game-state] should show secrets helper?',
-			shouldShowSecretsHelper,
-			this.state.opponentDeck,
-			this.state.metadata,
-			secretsHelperWindow,
-			inGame,
-		);
+		// console.log(
+		// 	'[game-state] should show secrets helper?',
+		// 	shouldShowSecretsHelper,
+		// 	this.state.opponentDeck,
+		// 	this.state.metadata,
+		// 	secretsHelperWindow,
+		// 	inGame,
+		// );
 		if (
 			inGame &&
 			shouldShowSecretsHelper &&
 			secretsHelperWindow.window_state_ex === 'closed' &&
 			this.showSecretsHelper
 		) {
-			console.log('[game-state] showing secrets helper');
+			// console.log('[game-state] showing secrets helper');
 			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
@@ -494,7 +494,7 @@ export class GameStateService {
 			secretsHelperWindow.window_state_ex !== 'closed' &&
 			(!shouldShowSecretsHelper || !inGame || !this.showSecretsHelper)
 		) {
-			console.log('[game-state] closing secrets helper');
+			// console.log('[game-state] closing secrets helper');
 			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
 		}

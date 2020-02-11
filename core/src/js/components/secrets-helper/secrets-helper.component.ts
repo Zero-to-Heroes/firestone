@@ -113,7 +113,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 				this.gameState.opponentDeck &&
 				(this.gameState.opponentDeck.secretHelperActive || this.gameState.opponentDeck.secretHelperActiveHover);
 			this.secrets = this.gameState && this.gameState.opponentDeck ? this.gameState.opponentDeck.secrets : null;
-			console.log('game state', this.secrets, this.gameState);
+			// console.log('game state', this.secrets, this.gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -201,12 +201,11 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		}
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
-		console.error('TODO: properly position widget');
-		const newLeft = (false && trackerPosition && trackerPosition.left) || (await this.buildDefaultLeft());
-		const newTop = (false && trackerPosition && trackerPosition.top) || (await this.buildDefaultTop());
-		console.log('updating tracker position', newLeft, newTop);
+		const newLeft = (trackerPosition && trackerPosition.left) || (await this.buildDefaultLeft());
+		const newTop = (trackerPosition && trackerPosition.top) || (await this.buildDefaultTop());
+		// console.log('updating tracker position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-		console.log('after window position update', await this.ow.getCurrentWindow());
+		// console.log('after window position update', await this.ow.getCurrentWindow());
 		await this.updateTooltipPosition();
 	}
 

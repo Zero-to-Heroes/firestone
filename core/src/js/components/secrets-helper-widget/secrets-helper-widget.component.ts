@@ -63,7 +63,7 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			const gameState: GameState = event ? event.state : undefined;
 			this.active = gameState && gameState.opponentDeck ? !gameState.opponentDeck.secretHelperActive : false;
-			console.log('game state', this.active, gameState);
+			// console.log('game state', this.active, gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -156,12 +156,12 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 		const gameWidth = gameInfo.logicalWidth;
 		const prefs = await this.prefs.getPreferences();
 		const widgetPosition = prefs.secretsHelperWidgetPosition;
-		console.error('TODO: properly position widget');
-		const newLeft = (false && widgetPosition && widgetPosition.left) || (await this.buildDefaultLeft());
-		const newTop = (false && widgetPosition && widgetPosition.top) || (await this.buildDefaultTop());
-		console.log('updating widget position', newLeft, newTop);
+		// console.error('TODO: properly position widget');
+		const newLeft = (widgetPosition && widgetPosition.left) || (await this.buildDefaultLeft());
+		const newTop = (widgetPosition && widgetPosition.top) || (await this.buildDefaultTop());
+		// console.log('updating widget position', newLeft, newTop);
 		await this.ow.changeWindowPosition(this.windowId, newLeft, newTop);
-		console.log('after window position update', await this.ow.getCurrentWindow());
+		// console.log('after window position update', await this.ow.getCurrentWindow());
 	}
 
 	private async buildDefaultLeft(): Promise<number> {
