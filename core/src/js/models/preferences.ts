@@ -44,6 +44,7 @@ export class Preferences {
 	readonly opponentOverlayPosition: { left: number; top: number };
 	readonly opponentLoadAiDecklist: boolean = true;
 
+	readonly secretsHelper: boolean = true;
 	readonly secretsHelperOpacity: number = 100;
 	readonly secretsHelperScale: number = 80;
 	readonly secretsHelperCardsGoToBottom: boolean = true;

@@ -9,6 +9,7 @@ import {
 	ViewRef,
 } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { Preferences } from '../../../models/preferences';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 import { Knob } from '../preference-slider.component';
@@ -105,6 +106,14 @@ import { Knob } from '../preference-slider.component';
 						tooltip="Show what card is in the opponent's hand when we know it (after it has been sent back to their hand with a Sap for instance)"
 					></preference-toggle>
 				</div>
+				<div class="subtitle">Secrets Helper</div>
+				<div class="subgroup">
+					<preference-toggle
+						field="secretsHelper"
+						label="Enable Secrets Helper"
+						tooltip="When active, a popup with all possible secrets will appear whenever the opponent plays a secret."
+					></preference-toggle>
+				</div>
 			</div>
 			<div class="title">Tracker's size & opacity</div>
 			<div class="settings-group">
@@ -148,6 +157,17 @@ import { Knob } from '../preference-slider.component';
 					[showCurrentValue]="true"
 				>
 				</preference-slider>
+				<div class="subtitle">Secrets Helper</div>
+				<preference-slider
+					class="first-slider"
+					field="secretsHelperScale"
+					[enabled]="secretsHelper"
+					[min]="60"
+					[max]="100"
+					[snapSensitivity]="5"
+					[knobs]="sizeKnobs"
+				>
+				</preference-slider>
 			</div>
 		</div>
 	`,
@@ -159,6 +179,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 	overlayGroupByZone: boolean;
 	opponentOverlayGroupByZone: boolean;
 	opponentTracker: boolean;
+	secretsHelper: boolean;
 	sizeKnobs: readonly Knob[] = [
 		{
 			percentageValue: 0,
@@ -197,9 +218,11 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 
 		const preferencesEventBus: BehaviorSubject<any> = this.ow.getMainWindow().preferencesEventBus;
 		this.preferencesSubscription = preferencesEventBus.asObservable().subscribe(event => {
-			this.overlayGroupByZone = event.preferences.overlayGroupByZone;
-			this.opponentTracker = event.preferences.opponentTracker;
-			this.opponentOverlayGroupByZone = event.preferences.opponentOverlayGroupByZone;
+			const preferences: Preferences = event.preferences;
+			this.overlayGroupByZone = preferences.overlayGroupByZone;
+			this.opponentTracker = preferences.opponentTracker;
+			this.secretsHelper = preferences.secretsHelper;
+			this.opponentOverlayGroupByZone = preferences.opponentOverlayGroupByZone;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
 			}
@@ -228,6 +251,7 @@ export class SettingsDecktrackerAppearanceComponent implements AfterViewInit, On
 		this.overlayGroupByZone = prefs.overlayGroupByZone;
 		this.opponentOverlayGroupByZone = prefs.opponentOverlayGroupByZone;
 		this.opponentTracker = prefs.opponentTracker;
+		this.secretsHelper = prefs.secretsHelper;
 		this.showTitleBar = prefs.overlayShowTitleBar;
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
