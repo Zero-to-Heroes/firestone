@@ -28,6 +28,17 @@
 		color: #d9c3ab;
 	}
 
+	input::placeholder,
+	textarea::placeholder {
+		font-family: Open Sans;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+		font-size: 12px;
+		color: #d9c3ab;
+		opacity: 0.5;
+	}
+
 	input,
 	input:focus,
 	input:active {
