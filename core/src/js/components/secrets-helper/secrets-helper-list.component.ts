@@ -36,6 +36,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 						[card]="card"
 						[tooltipPosition]="_tooltipPosition"
 						[colorManaCost]="colorManaCost"
+						[colorClassCards]="true"
 					></deck-card>
 				</li>
 			</ul>
@@ -127,20 +128,36 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 		console.log('grouped', optionsGroupedByCard);
 		const reducedOptions: readonly DeckCard[] = [...optionsGroupedByCard.values()]
 			.filter(options => options && options.length > 0)
-			.map(options => {
+			.map((options, index) => {
 				const validOption = options.some(option => option.isValidOption);
-				const refOption = options[0];
+				const refOption = options[0].update({
+					isValidOption: validOption,
+				} as SecretOption);
+				return { index: index, data: refOption };
+			})
+			.sort((a, b) => {
+				if (this.cardsGoToBottom) {
+					if (a.data.isValidOption && !b.data.isValidOption) {
+						return -1;
+					}
+					if (!a.data.isValidOption && b.data.isValidOption) {
+						return 1;
+					}
+				}
+				return a.index - b.index;
+			})
+			.map(refOption => refOption.data)
+			.map(refOption => {
 				const dbCard = this.allCards.getCard(refOption.cardId);
 				return VisualDeckCard.create({
 					cardId: refOption.cardId,
 					cardName: dbCard.name,
 					manaCost: dbCard.cost,
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
-					highlight: validOption ? 'normal' : 'dim',
+					highlight: refOption.isValidOption ? 'normal' : 'dim',
 				} as VisualDeckCard);
 			});
 		// TODO: add an optional filter step based on user preference to see or not the ruled out secrets
-		// TODO: add an optional sort step based on user pref to see the ruled out secrets at the bottom
 		console.log('reducedOptions', reducedOptions);
 		return reducedOptions;
 	}

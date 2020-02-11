@@ -12,7 +12,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 	template: `
 		<div
 			class="deck-card {{ rarity }} {{ highlight }}"
-			[ngClass]="{ 'color-mana-cost': _colorManaCost }"
+			[ngClass]="{ 'color-mana-cost': _colorManaCost, 'color-class-cards': _colorClassCards }"
 			[cardTooltip]="cardId"
 			[cardTooltipPosition]="_tooltipPosition"
 		>
@@ -63,6 +63,7 @@ export class DeckCardComponent {
 	numberOfCopies: number;
 	highlight: string;
 	_colorManaCost: boolean;
+	_colorClassCards: boolean;
 	creatorCardIds: readonly string[];
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
@@ -100,6 +101,11 @@ export class DeckCardComponent {
 
 	@Input() set colorManaCost(value: boolean) {
 		this._colorManaCost = value;
+		this.cdr.detectChanges();
+	}
+
+	@Input() set colorClassCards(value: boolean) {
+		this._colorClassCards = value;
 		this.cdr.detectChanges();
 	}
 }

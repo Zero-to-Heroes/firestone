@@ -84,6 +84,32 @@
 		}
 	}
 
+	&.color-class-cards {
+		.gradiant {
+			border: 3px solid;
+		}
+		&.paladin {
+			.gradiant {
+				border-image: linear-gradient(to right, rgba(255, 185, 72, 0), #f1af0d) 1;
+			}
+		}
+		&.mage {
+			.gradiant {
+				border-image: linear-gradient(to right, rgba(220, 16, 238, 0), #dc10ee) 1;
+			}
+		}
+		&.hunter {
+			.gradiant {
+				border-image: linear-gradient(to right, rgba(5, 221, 26, 0), #05dd1a) 1;
+			}
+		}
+		&.rogue {
+			.gradiant {
+				border-image: linear-gradient(to right, rgba(131, 5, 231, 0), #8305e7) 1;
+			}
+		}
+	}
+
 	.card-name {
 		flex-grow: 1;
 		display: flex;
