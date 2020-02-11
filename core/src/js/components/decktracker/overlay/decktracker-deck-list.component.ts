@@ -118,7 +118,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 			const contentHeight = this.el.nativeElement.querySelector('.ps-content').getBoundingClientRect().height;
 			const containerHeight = this.el.nativeElement.querySelector('.ps').getBoundingClientRect().height;
 			this.isScroll = contentHeight > containerHeight;
-			console.log('isScroll', this.isScroll, containerHeight, contentHeight);
+			// console.log('isScroll', this.isScroll, containerHeight, contentHeight);
 			this.refresh();
 		}, 1000);
 	}
