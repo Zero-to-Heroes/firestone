@@ -62,7 +62,7 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			const gameState: GameState = event ? event.state : undefined;
-			this.active = gameState && gameState.opponentDeck ? gameState.opponentDeck.secretHelperActive : false;
+			this.active = gameState && gameState.opponentDeck ? !gameState.opponentDeck.secretHelperActive : false;
 			console.log('game state', this.active, gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
