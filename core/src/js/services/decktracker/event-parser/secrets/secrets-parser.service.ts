@@ -32,8 +32,6 @@ export class SecretsParserService {
 				gameState = await parser.parse(gameState, gameEvent);
 			}
 		}
-		console.log('player secrets', gameState.playerDeck.secrets);
-		console.log('opp secrets', gameState.opponentDeck.secrets);
 		return gameState;
 	}
 

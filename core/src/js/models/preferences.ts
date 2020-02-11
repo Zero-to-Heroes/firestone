@@ -44,6 +44,11 @@ export class Preferences {
 	readonly opponentOverlayPosition: { left: number; top: number };
 	readonly opponentLoadAiDecklist: boolean = true;
 
+	readonly secretsHelperOpacity: number = 100;
+	readonly secretsHelperScale: number = 80;
+	readonly secretsHelperCardsGoToBottom: boolean = true;
+	readonly secretsHelperPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = true;
 
 	readonly achievementsDisplayNotifications = true;

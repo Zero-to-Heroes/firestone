@@ -216,6 +216,7 @@ export class GameStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent) {
+		const previousState = this.state;
 		// if (!this.state) {
 		// 	this.logger.error('null state before processing event', gameEvent, this.state);
 		// 	return;
@@ -290,25 +291,28 @@ export class GameStateService {
 					} else {
 						this.state = null;
 					}
-					await this.updateOverlays();
-					const emittedEvent = {
-						event: {
-							name: parser.event(),
-						},
-						state: this.state,
-					};
-					// this.logger.debug('[game-state] will emit event', emittedEvent);
-					this.eventEmitters.forEach(emitter => emitter(emittedEvent));
-					this.logger.debug(
-						'[game-state] emitted deck event',
-						emittedEvent.event.name,
-						this.state,
-						gameEvent,
-					);
 				}
 			} catch (e) {
 				this.logger.error('[game-state] Exception while applying parser', parser.event(), e);
 			}
+		}
+		if (previousState !== this.state) {
+			await this.updateOverlays();
+			const emittedEvent = {
+				event: {
+					name: gameEvent.type,
+				},
+				state: this.state,
+			};
+			// this.logger.debug('[game-state] will emit event', emittedEvent);
+			this.eventEmitters.forEach(emitter => emitter(emittedEvent));
+			this.logger.debug(
+				'[game-state] emitted deck event',
+				emittedEvent.event.name,
+				this.state.opponentDeck.secrets,
+				this.state,
+				gameEvent,
+			);
 		}
 	}
 
@@ -324,11 +328,11 @@ export class GameStateService {
 		// this.logger.debug('[game-state] playerDeckWithDynamicZones', playerDeckWithDynamicZones);
 		const playerDeckWithZonesOrdered = this.zoneOrdering.orderZones(playerDeckWithDynamicZones, playerFromTracker);
 		// this.logger.debug('[game-state] playerDeckWithZonesOrdered', playerDeckWithZonesOrdered);
-		this.logger.debug(
-			'[game-state] updating cards left in deck',
-			playerDeckWithZonesOrdered,
-			playerFromTracker && playerFromTracker.Deck,
-		);
+		// this.logger.debug(
+		// 	'[game-state] updating cards left in deck',
+		// 	playerDeckWithZonesOrdered,
+		// 	playerFromTracker && playerFromTracker.Deck,
+		// );
 		return playerDeckWithZonesOrdered && playerFromTracker
 			? playerDeckWithZonesOrdered.update({
 					cardsLeftInDeck: playerFromTracker.Deck ? playerFromTracker.Deck.length : null,
@@ -342,11 +346,13 @@ export class GameStateService {
 			return;
 		}
 		const inGame = (await this.ow.inGame()) && this.onGameScreen;
-		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow] = await Promise.all([
+		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
 			this.ow.getWindowState(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
+			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WINDOW),
 		]);
+
 		// this.logger.debug('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
 		const shouldShowTracker =
 			this.state &&
@@ -427,6 +433,29 @@ export class GameStateService {
 			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		}
 		// console.log('[game-state] opponentDeck window handled');
+
+		const shouldShowSecretsHelper =
+			this.state &&
+			this.state.opponentDeck &&
+			this.state.opponentDeck.secrets &&
+			this.state.opponentDeck.secrets.length > 0 &&
+			this.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS;
+		console.log(
+			'[game-state] should show secrets helper?',
+			shouldShowSecretsHelper,
+			this.state.opponentDeck,
+			this.state.metadata,
+			secretsHelperWindow,
+			inGame,
+		);
+		if (inGame && shouldShowSecretsHelper && secretsHelperWindow.window_state_ex === 'closed') {
+			console.log('[game-state] showing secrets helper');
+			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WINDOW);
+			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WINDOW);
+		} else if (secretsHelperWindow.window_state_ex !== 'closed' && (!shouldShowSecretsHelper || !inGame)) {
+			console.log('[game-state] closing secrets helper');
+			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WINDOW);
+		}
 	}
 
 	private async handleDisplayPreferences(preferences: Preferences = null) {

@@ -71,6 +71,14 @@
 				"size": { "width": 530, "height": 800 },
 				"start_position": { "top": 0, "left": 0 }
 			},
+			"SecretsHelperWindow": {
+				"file": "Files/secrets_helper.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": false,
+				"size": { "width": 530, "height": 800 },
+				"start_position": { "top": 50, "left": 400 }
+			},
 			"NotificationsWindow": {
 				"file": "Files/notifications.html",
 				"transparent": true,

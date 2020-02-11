@@ -21,6 +21,7 @@ import { DeckTrackerOverlayPlayerComponent } from '../../components/decktracker/
 import { DeckTrackerOverlayRootComponent } from '../../components/decktracker/overlay/decktracker-overlay-root.component';
 import { DeckTrackerTitleBarComponent } from '../../components/decktracker/overlay/decktracker-title-bar';
 import { GroupedDeckListComponent } from '../../components/decktracker/overlay/grouped-deck-list.component';
+import { SecretsHelperListComponent } from '../../components/secrets-helper/secrets-helper-list.component';
 import { SharedModule } from '../shared/shared.module';
 
 console.log('version is', process.env.APP_VERSION);
@@ -54,6 +55,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerControlBarComponent,
 		DeckTrackerTitleBarComponent,
 		DeckTrackerCardsRecapComponent,
+		SecretsHelperListComponent,
 	],
 	exports: [
 		DeckTrackerOverlayRootComponent,
@@ -68,6 +70,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 		DeckTrackerControlBarComponent,
 		DeckTrackerTitleBarComponent,
 		DeckTrackerCardsRecapComponent,
+		SecretsHelperListComponent,
 	],
 	providers: [
 		{
