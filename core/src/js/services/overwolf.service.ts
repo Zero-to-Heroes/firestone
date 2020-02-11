@@ -18,6 +18,7 @@ export class OverwolfService {
 	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
 	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
 	public static SECRETS_HELPER_WINDOW = 'SecretsHelperWindow';
+	public static SECRETS_HELPER_WIDGET_WINDOW = 'SecretsHelperWidgetWindow';
 	public static BATTLEGROUNDS_PLAYER_INFO_WINDOW = 'BattlegroundsPlayerInfoWindow';
 	public static BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW = 'BattlegroundsLeaderboardOverlay';
 	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW = 'BattlegroundsHeroSelectionOverlay';

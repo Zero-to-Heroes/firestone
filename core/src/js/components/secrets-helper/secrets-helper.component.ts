@@ -33,7 +33,12 @@ declare var amplitude;
 		`../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div class="root overlay-container-parent" [activeTheme]="'decktracker'" [style.opacity]="opacity">
+		<div
+			class="root overlay-container-parent"
+			[activeTheme]="'decktracker'"
+			[style.opacity]="opacity"
+			[ngClass]="{ 'active': active }"
+		>
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="secrets-helper-container">
@@ -57,6 +62,7 @@ declare var amplitude;
 })
 export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	secrets: readonly BoardSecret[];
+	active: boolean;
 
 	gameState: GameState;
 	windowId: string;
@@ -102,6 +108,10 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			this.gameState = event ? event.state : undefined;
+			this.active =
+				this.gameState &&
+				this.gameState.opponentDeck &&
+				(this.gameState.opponentDeck.secretHelperActive || this.gameState.opponentDeck.secretHelperActiveHover);
 			this.secrets = this.gameState && this.gameState.opponentDeck ? this.gameState.opponentDeck.secrets : null;
 			console.log('game state', this.secrets, this.gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
@@ -194,6 +204,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		const dpi = gameWidth / gameInfo.width;
 		const prefs = await this.prefs.getPreferences();
 		const trackerPosition = prefs.secretsHelperPosition;
+		console.error('TODO: properly position widget');
 		const newLeft = trackerPosition ? trackerPosition.left || 0 : 400;
 		const newTop = trackerPosition ? trackerPosition.top || 0 : 40;
 		console.log('updating tracker position', newLeft, newTop);

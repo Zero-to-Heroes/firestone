@@ -18,6 +18,8 @@ export class DeckState {
 	readonly showDecklistWarning: boolean;
 
 	readonly secrets: readonly BoardSecret[] = [];
+	readonly secretHelperActive: boolean = true;
+	readonly secretHelperActiveHover: boolean = false;
 
 	// Graveyard is not so easy in fact - we want to know the cards that
 	// can be interacted with, which means dead minions for Priest, or

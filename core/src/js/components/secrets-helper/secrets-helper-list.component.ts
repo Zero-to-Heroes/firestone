@@ -155,6 +155,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 					manaCost: dbCard.cost,
 					rarity: dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free',
 					highlight: refOption.isValidOption ? 'normal' : 'dim',
+					cardClass: dbCard.cardClass,
 				} as VisualDeckCard);
 			});
 		// TODO: add an optional filter step based on user preference to see or not the ruled out secrets

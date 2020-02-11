@@ -49,6 +49,8 @@ export class Preferences {
 	readonly secretsHelperCardsGoToBottom: boolean = true;
 	readonly secretsHelperPosition: { left: number; top: number };
 
+	readonly secretsHelperWidgetPosition: { left: number; top: number };
+
 	readonly replaysShowNotification: boolean = true;
 
 	readonly achievementsDisplayNotifications = true;

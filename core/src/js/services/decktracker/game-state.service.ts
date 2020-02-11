@@ -230,6 +230,30 @@ export class GameStateService {
 			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.opponentTrackerClosedByUser = true;
 			this.updateOverlays();
+		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER') {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			this.state = this.state.update({
+				opponentDeck: this.state.opponentDeck.update({
+					secretHelperActive: !this.state.opponentDeck.secretHelperActive,
+				} as DeckState),
+			} as GameState);
+			this.updateOverlays();
+		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			this.state = this.state.update({
+				opponentDeck: this.state.opponentDeck.update({
+					secretHelperActiveHover: true,
+				} as DeckState),
+			} as GameState);
+			this.updateOverlays();
+		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
+			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
+			this.state = this.state.update({
+				opponentDeck: this.state.opponentDeck.update({
+					secretHelperActiveHover: false,
+				} as DeckState),
+			} as GameState);
+			this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
@@ -346,11 +370,18 @@ export class GameStateService {
 			return;
 		}
 		const inGame = (await this.ow.inGame()) && this.onGameScreen;
-		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
+		const [
+			decktrackerWindow,
+			opponentTrackerWindow,
+			opponentHandWindow,
+			secretsHelperWindow,
+			secretsHelperWidgetWindow,
+		] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
 			this.ow.getWindowState(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
 			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WINDOW),
+			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW),
 		]);
 
 		// this.logger.debug('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
@@ -433,6 +464,32 @@ export class GameStateService {
 			await this.ow.closeWindow(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW);
 		}
 		// console.log('[game-state] opponentDeck window handled');
+
+		const shouldShowSecretsHelperWidget =
+			this.state &&
+			this.state.opponentDeck &&
+			this.state.opponentDeck.secrets &&
+			this.state.opponentDeck.secrets.length > 0 &&
+			this.state.metadata.gameType !== GameType.GT_BATTLEGROUNDS;
+		console.log(
+			'[game-state] should show secrets helper?',
+			shouldShowSecretsHelperWidget,
+			this.state.opponentDeck,
+			this.state.metadata,
+			secretsHelperWindow,
+			inGame,
+		);
+		if (inGame && shouldShowSecretsHelperWidget && secretsHelperWidgetWindow.window_state_ex === 'closed') {
+			console.log('[game-state] showing secrets helper widget');
+			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
+			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
+		} else if (
+			secretsHelperWidgetWindow.window_state_ex !== 'closed' &&
+			(!shouldShowSecretsHelperWidget || !inGame)
+		) {
+			console.log('[game-state] closing secrets helper widget');
+			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
+		}
 
 		const shouldShowSecretsHelper =
 			this.state &&
