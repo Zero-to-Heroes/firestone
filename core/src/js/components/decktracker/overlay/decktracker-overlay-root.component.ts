@@ -228,7 +228,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	}
 
 	private async restoreWindowPosition(): Promise<void> {
-		const width = 252;
+		const width = 252 * 2;
 		const gameInfo = await this.ow.getRunningGameInfo();
 		if (!gameInfo) {
 			return;
