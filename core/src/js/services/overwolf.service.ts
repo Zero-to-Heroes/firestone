@@ -236,7 +236,7 @@ export class OverwolfService {
 		});
 	}
 
-	public hideWindow(windowId: string) {
+	public async hideWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			try {
 				overwolf.windows.hide(windowId, result => {
@@ -248,6 +248,15 @@ export class OverwolfService {
 				console.warn('Exception while hiding window', e);
 				resolve(null);
 			}
+		});
+	}
+
+	public async hideCollectionWindow() {
+		const collectionWindow = await this.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+		const settingsWindow = await this.obtainDeclaredWindow(OverwolfService.SETTINGS_WINDOW);
+		return new Promise<any>(async resolve => {
+			await Promise.all([this.hideWindow(collectionWindow.id), this.hideWindow(settingsWindow.id)]);
+			resolve();
 		});
 	}
 

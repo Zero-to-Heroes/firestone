@@ -109,7 +109,7 @@ export class AppBootstrapService {
 				const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 				if (window.isVisible) {
 					this.store.stateUpdater.next(new CloseMainWindowEvent());
-					await this.ow.hideWindow(window.id);
+					await this.ow.hideCollectionWindow();
 					// await this.ow.closeWindow(window.id);
 				} else {
 					this.showCollectionWindow();
@@ -137,8 +137,9 @@ export class AppBootstrapService {
 				this.showLoadingScreen();
 			}
 		});
-		const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		await this.ow.hideWindow(collectionWindow.id);
+		// const collectionWindow = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
+		await this.ow.hideCollectionWindow();
+		// await this.ow.hideWindow(collectionWindow.id);
 		this.store.stateUpdater.next(new CloseMainWindowEvent());
 		this.startApp(false);
 		this.ow.addAppLaunchTriggeredListener(() => {

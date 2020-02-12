@@ -51,7 +51,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 	};
 
 	private windowId: string;
-	private mainWindowId: string;
 	private activeNotifications: ActiveNotification[] = [];
 	private notificationsEmitterBus: BehaviorSubject<Message>;
 	private messageReceivedListener: (message: any) => void;
@@ -91,7 +90,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			this.resize();
 		});
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.mainWindowId = (await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW)).id;
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
 		this.settingsEventBus = this.ow.getMainWindow().settingsEventBus;
 		setTimeout(() => {
@@ -275,7 +273,6 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 					// console.log('wxith card id', cardId);
 					const isAchievement = messageObject.app === 'achievement';
 					if (isAchievement) {
-						// console.log('sending message', this.mainWindowId);
 						this.stateUpdater.next(new ShowAchievementDetailsEvent(cardId));
 						this.fadeNotificationOut(messageObject.notificationId);
 					} else {

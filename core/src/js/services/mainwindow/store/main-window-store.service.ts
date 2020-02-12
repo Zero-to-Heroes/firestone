@@ -176,7 +176,7 @@ export class MainWindowStoreService {
 			if (this.ow.gameLaunched(res)) {
 				console.log('[store] game launched, populating store', res);
 				// Do both so that it's hidden right away
-				this.ow.hideWindow(OverwolfService.COLLECTION_WINDOW);
+				this.ow.hideCollectionWindow();
 				this.stateUpdater.next(new CloseMainWindowEvent());
 				this.populateStore();
 			}
