@@ -21,8 +21,8 @@ export class LogParserService {
 	);
 	private timestampRegex = new RegExp('D (\\d*):(\\d*):(\\d*).(\\d*) .*');
 
-	// private logLines: any[][] = [];
-	// private processingLines = false;
+	// Avoid showing the same notif twice
+	private cardsNotifiedThisSession = [];
 
 	private processingQueue = new ProcessingQueue<any[]>(
 		eventQueue => this.processQueue(eventQueue),
@@ -66,7 +66,7 @@ export class LogParserService {
 			this.events.broadcast(Events.NEW_PACK, setId.toLowerCase(), packCards);
 			this.store.stateUpdater.next(new NewPackEvent(setId.toLowerCase(), packCards));
 		} else {
-			console.log('[pack-parser] received cards outside of pack', cards);
+			console.log('[pack-parser] received cards outside of pack', cards, toProcess);
 		}
 
 		for (const data of toProcess) {
@@ -81,13 +81,19 @@ export class LogParserService {
 				const cardId = match[1];
 				const type = match[2];
 				const newCount = parseInt(match[3]);
+				const memoryLine = `${cardId.toLowerCase()}-${type.toLowerCase()}-${newCount}`;
+				if (this.cardsNotifiedThisSession.indexOf(memoryLine) !== -1) {
+					console.log('duplicate cards, returning', memoryLine);
+					continue;
+				}
+				this.cardsNotifiedThisSession.push(memoryLine);
 				// console.log('handling new card', cardId, type, newCount, data);
 				// console.log('card in collection?', cardId, type, cardInCollection);
 				if (multipleCopies) {
 					for (let i = 0; i < newCount; i++) {
 						this.handleNotification(cardId, type, i + 1);
 					}
-					return;
+					continue;
 				}
 				this.handleNotification(cardId, type, newCount);
 			}
