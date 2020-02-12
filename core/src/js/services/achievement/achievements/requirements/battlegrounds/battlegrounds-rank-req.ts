@@ -80,7 +80,7 @@ export class BattlegroundsRankReq implements Requirement {
 
 	private async getRankInternal(callback): Promise<void> {
 		const rank = await this.memoryInspection.getBattlegroundsInfo();
-		if (this.rankAtReset === rank.rating) {
+		if (!rank || this.rankAtReset === rank.rating) {
 			// console.log('[battlegrounds-rank-req] rank not updated, retrying', this.rankAtReset, rank);
 			setTimeout(() => this.getRankInternal(callback), 1000);
 			return;
