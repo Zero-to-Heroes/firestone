@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { GALAKROND_EVIL, GALAKROND_EXPLORER } from '@firestone-hs/reference-data';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { GameStat } from '../../models/mainwindow/stats/game-stat';
@@ -76,8 +75,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 		// this.logger.debug('[deck-replay-info] setting value', value);
 		this.replayInfo = this.replayInfo;
 		this.gameMode = value.gameMode;
-		[this.playerRankImage, this.playerRankImageTooltip] = this.buildPlayerRankImage(value);
-		this.rankText = this.buildRankText(value);
+		[this.playerRankImage, this.playerRankImageTooltip] = value.buildPlayerRankImage();
+		this.rankText = value.buildRankText();
 		// this.deckName = value.playerDeckName || value.playerName;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(value, true);
 		[this.opponentClassImage, this.opponentClassTooltip] = this.buildPlayerClassImage(value, false);
@@ -101,55 +100,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	showReplay() {
 		this.stateUpdater.next(new ShowReplayEvent(this.reviewId));
-	}
-
-	private buildPlayerRankImage(info: GameStat): [string, string] {
-		const gameMode = info.gameMode;
-		const playerRank = info.playerRank;
-		let rankIcon;
-		let rankIconTooltip;
-		if (gameMode === 'ranked') {
-			const standard = 'standard_ranked';
-			if (playerRank === 'legend') {
-				rankIcon = `${standard}/legend`;
-				rankIconTooltip = 'Legend';
-			} else if (!playerRank || parseInt(playerRank) >= 25) {
-				rankIcon = `${standard}/rank25_small`;
-				rankIconTooltip = 'Rank 25';
-			} else {
-				rankIcon = `${standard}/rank${playerRank}_small`;
-				rankIconTooltip = 'Rank ' + playerRank;
-			}
-		} else if (gameMode === 'battlegrounds') {
-			rankIcon = 'battlegrounds';
-			rankIconTooltip = 'Battlegrounds';
-		} else if (gameMode === 'practice') {
-			if (GALAKROND_EXPLORER.indexOf(info.scenarioId) !== -1) {
-				rankIcon = 'galakrond_explorers';
-				rankIconTooltip = "Galakrond's Awakening - Explorers";
-			} else if (GALAKROND_EVIL.indexOf(info.scenarioId) !== -1) {
-				rankIcon = 'galakrond_evil';
-				rankIconTooltip = "Galakrond's Awakening - E.V.I.L.";
-			} else {
-				rankIcon = 'casual';
-				rankIconTooltip = 'Practice';
-			}
-		} else if (gameMode === 'casual') {
-			rankIcon = 'casual';
-			rankIconTooltip = 'Casual';
-		} else if (gameMode === 'friendly') {
-			rankIcon = 'friendly';
-			rankIconTooltip = 'Friendly';
-		} else if (gameMode === 'arena') {
-			rankIcon = 'arena/arena12wins';
-			rankIconTooltip = 'Arena';
-		} else if (gameMode === 'tavern-brawl') {
-			rankIcon = 'tavernbrawl';
-			rankIconTooltip = 'Tavern Brawl';
-		} else {
-			rankIcon = 'arenadraft';
-		}
-		return [`/Files/assets/images/deck/ranks/${rankIcon}.png`, rankIconTooltip];
 	}
 
 	private buildPlayerClassImage(info: GameStat, isPlayer: boolean): [string, string] {
@@ -222,17 +172,6 @@ export class ReplayInfoComponent implements AfterViewInit {
 		`),
 			tooltip,
 		];
-	}
-
-	private buildRankText(info: GameStat): string {
-		if (info.gameMode === 'ranked') {
-			return info.playerRank;
-		}
-		// Bug for old matches
-		if (info.gameMode === 'battlegrounds' && info.playerRank && parseInt(info.playerRank) > 100) {
-			return info.playerRank;
-		}
-		return null;
 	}
 
 	private sanitizeName(name: string) {
