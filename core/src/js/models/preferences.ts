@@ -23,21 +23,22 @@ export class Preferences {
 
 	readonly dectrackerShowOpponentTurnDraw: boolean = true;
 	readonly dectrackerShowOpponentGuess: boolean = true;
-	readonly decktrackerNoDeckMode: boolean = false;
 
 	// readonly overlayDisplayMode: string;
 	readonly overlayShowTitleBar: boolean = true;
-	readonly overlayHighlightCardsInHand: boolean = false;
-	readonly overlayWidthInPx: number = 227;
-	readonly overlayOpacityInPercent: number = 100;
 	readonly overlayShowTooltipsOnHover: boolean = true;
-	readonly overlayGroupByZone: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
-	readonly overlayCardsGoToBottom: boolean = false;
 
-	readonly opponentTracker: boolean = true;
+	readonly overlayGroupByZone: boolean = true;
+	readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
+	readonly overlayCardsGoToBottom: boolean = false;
+	readonly decktrackerNoDeckMode: boolean = false;
+	readonly overlayOpacityInPercent: number = 100;
+	readonly overlayWidthInPx: number = 227; // No UI
+
+	readonly opponentOverlayGroupByZone: boolean = true;
 	readonly opponentOverlayCardsGoToBottom: boolean = true;
-	readonly opponentOverlayGroupByZone: boolean = false;
+	readonly opponentTracker: boolean = true;
 	readonly opponentOverlayWidthInPx: number = 227;
 	readonly opponentOverlayOpacityInPercent: number = 100;
 	readonly opponentOverlayScale: number = 100;
