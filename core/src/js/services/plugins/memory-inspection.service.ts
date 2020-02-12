@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ArenaInfo } from '../../models/arena-info';
 import { BattlegroundsInfo } from '../../models/battlegrounds-info';
 import { Card } from '../../models/card';
 import { Events } from '../events.service';
 import { OverwolfService } from '../overwolf.service';
 import { SetsService } from '../sets-service.service';
 import { GetActiveDeckOperation } from './mind-vision/get-active-deck-operation';
+import { GetArenaInfoOperation } from './mind-vision/get-arena-info-operation';
 import { GetBattlegroundsInfoOperation } from './mind-vision/get-battlegrounds-info-operation';
 import { GetCollectionOperation } from './mind-vision/get-collection-operation';
 import { GetMatchInfoOperation } from './mind-vision/get-match-info-operation';
@@ -24,6 +26,7 @@ export class MemoryInspectionService {
 	private getPlayerInfoOperation = new GetMatchInfoOperation(this.mindVision, this.ow);
 	private getBattlegroundsInfoOperation = new GetBattlegroundsInfoOperation(this.mindVision, this.ow);
 	private getActiveDeckOperation = new GetActiveDeckOperation(this.mindVision, this.ow);
+	private getArenaInfoOperation = new GetArenaInfoOperation(this.mindVision, this.ow);
 
 	constructor(
 		private events: Events,
@@ -48,6 +51,10 @@ export class MemoryInspectionService {
 
 	public async getActiveDeck(): Promise<any> {
 		return this.getActiveDeckOperation.call();
+	}
+
+	public async getArenaInfo(): Promise<ArenaInfo> {
+		return this.getArenaInfoOperation.call();
 	}
 
 	private handleInfoUpdate(info) {

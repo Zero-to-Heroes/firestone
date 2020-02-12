@@ -15,7 +15,7 @@ export class GameForUpload {
 	playerRank: string;
 	opponentRank: string;
 	result: string;
-	arenaInfo: any;
+	// arenaInfo: any;
 	durationTimeSeconds: number;
 	durationTurns: number;
 	ended: boolean;

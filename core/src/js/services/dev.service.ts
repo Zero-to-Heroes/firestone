@@ -18,6 +18,7 @@ import { Events } from './events.service';
 import { GameEvents } from './game-events.service';
 import { MainWindowStoreService } from './mainwindow/store/main-window-store.service';
 import { OverwolfService } from './overwolf.service';
+import { MemoryInspectionService } from './plugins/memory-inspection.service';
 import { SetsService } from './sets-service.service';
 
 // const HEARTHSTONE_GAME_ID = 9898;
@@ -38,6 +39,7 @@ export class DevService {
 		private challengeBuilder: ChallengeBuilderService,
 		private achievementLoader: AchievementsLoaderService,
 		private achievementsMonitor: AchievementsMonitor,
+		private memoryService: MemoryInspectionService,
 	) {
 		if (process.env.NODE_ENV === 'production') {
 			return;
@@ -50,6 +52,10 @@ export class DevService {
 		// this.addCollectionCommands();
 		this.addAchievementCommands();
 		// this.addCustomLogLoaderCommand();
+		window['arena'] = async () => {
+			const info = await this.memoryService.getArenaInfo();
+			console.log(info);
+		};
 	}
 
 	private addAchievementCommands() {

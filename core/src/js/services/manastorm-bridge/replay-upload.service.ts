@@ -69,13 +69,6 @@ export class ReplayUploadService {
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
 		let playerRank = game.playerRank;
-		if ('arena' === game.gameMode) {
-			if (game.arenaInfo) {
-				playerRank = game.arenaInfo.Wins;
-			} else {
-				playerRank = undefined;
-			}
-		}
 		const s3 = new S3();
 		const params = {
 			Bucket: BUCKET,

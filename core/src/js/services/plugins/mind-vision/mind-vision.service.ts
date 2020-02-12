@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ArenaInfo } from '../../../models/arena-info';
 
 declare var OverwolfPlugin: any;
 
@@ -54,6 +55,22 @@ export class MindVisionService {
 				});
 			} catch (e) {
 				console.log('[mind-vision] could not parse battlegroundsInfo', e);
+				resolve(null);
+			}
+		});
+	}
+
+	public async getArenaInfo(): Promise<ArenaInfo> {
+		return new Promise<ArenaInfo>(async resolve => {
+			console.log('[mind-vision] retrieving getArenaInfo');
+			const plugin = await this.get();
+			try {
+				plugin.getArenaInfo(arenaInfo => {
+					console.log('[mind-vision] retrieved arena info', arenaInfo);
+					resolve(arenaInfo ? JSON.parse(arenaInfo) : null);
+				});
+			} catch (e) {
+				console.log('[mind-vision] could not parse getArenaInfo', e);
 				resolve(null);
 			}
 		});

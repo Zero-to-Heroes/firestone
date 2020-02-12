@@ -91,6 +91,10 @@ export class EndGameUploaderService {
 			const battlegroundsInfo = await this.memoryInspection.getBattlegroundsInfo();
 			playerRank = battlegroundsInfo ? battlegroundsInfo.rating : undefined;
 			console.log('updated player rank', playerRank);
+		} else if (game.gameMode === 'arena') {
+			const arenaInfo = await this.memoryInspection.getArenaInfo();
+			playerRank = arenaInfo ? arenaInfo.wins + '-' + arenaInfo.losses : undefined;
+			console.log('updated player rank for arena', playerRank);
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const playerInfo = await this.playersInfo.getPlayerInfo();
 			if (playerInfo && game.gameFormat === 'standard') {
