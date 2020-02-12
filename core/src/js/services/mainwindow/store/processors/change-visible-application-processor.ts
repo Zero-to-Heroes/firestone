@@ -11,6 +11,9 @@ export class ChangeVisibleApplicationProcessor implements Processor {
 		event: ChangeVisibleApplicationEvent,
 		currentState: MainWindowState,
 	): Promise<MainWindowState> {
+		if (event.module === currentState.currentApp) {
+			return currentState;
+		}
 		const binder =
 			event.module === 'collection'
 				? Object.assign(new BinderState(), currentState.binder, {
