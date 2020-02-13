@@ -12,6 +12,9 @@ export class DecksStateBuilderService {
 
 	public buildState(stats: StatsState, filters: DeckFilters): readonly DeckSummary[] {
 		this.logger.debug('[decktracker-stats-loader] update with stats');
+		if (!stats || !stats.gameStats) {
+			return [];
+		}
 		const standardRanked = stats.gameStats.stats
 			.filter(stat => stat.gameFormat === filters.gameFormat)
 			.filter(stat => stat.gameMode === filters.gameMode)
