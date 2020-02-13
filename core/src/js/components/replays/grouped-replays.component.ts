@@ -28,8 +28,8 @@ export class GroupedReplaysComponent implements AfterViewInit {
 
 	@Input() set groupedReplays(value: GroupedReplays) {
 		this.header = value.header;
-		// console.log('receiving grouped replays', value);
-		this._replays = value.replays.map(stat => Object.assign(new GameStat(), stat));
+		this._replays = value.replays;
+		// console.log('receiving grouped replays', value, this._replays);
 	}
 
 	constructor(private readonly logger: NGXLogger, private ow: OverwolfService) {}
