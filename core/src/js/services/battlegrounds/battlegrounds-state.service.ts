@@ -57,7 +57,7 @@ export class BattlegroundsStateService {
 		private readonly allCards: AllCardsService,
 	) {
 		if (!this.ow) {
-			console.warn('[game-state] Could not find OW service');
+			console.warn('[battlegrounds-state] Could not find OW service');
 			return;
 		}
 		this.battlegroundsUpdater.subscribe((event: GameEvent | BattlegroundsEvent) => {
@@ -105,7 +105,7 @@ export class BattlegroundsStateService {
 	}
 
 	private async processEvent(gameEvent: GameEvent | BattlegroundsEvent) {
-		// this.logger.debug('[battlegrounds-state] trying to process', gameEvent);
+		// this.logger.debug('[battlegrounds-state] trying to process', gameEvent.type, gameEvent);
 		for (const parser of this.eventParsers) {
 			try {
 				// console.log('trying to apply parser', parser);
@@ -114,7 +114,7 @@ export class BattlegroundsStateService {
 					// We want to keep the null state as a valid return option to signal that
 					// nothing should be displayed
 					this.state = await parser.parse(this.state, gameEvent, this.mainStore.state);
-					// this.logger.debug('[battlegrounds-state] udpated state', this.state);
+					// this.logger.debug('[battlegrounds-state] udpated state');
 					await this.updateOverlays();
 					const emittedEvent = {
 						name: parser.event(),
@@ -137,11 +137,11 @@ export class BattlegroundsStateService {
 		]);
 		// this.logger.debug(
 		// 	'[battlegrounds-state] udpating overlays?',
-		// 	leaderboardWindow,
-		// 	playerInfoWindow,
-		// 	heroInfoWindow,
-		// 	this.state,
-		// 	this,
+		// 	leaderboardWindow.isVisible,
+		// 	playerInfoWindow.isVisible,
+		// 	heroInfoWindow.isVisible,
+		// 	this.state != null,
+		// 	this.showLeaderboardPref,
 		// );
 		if (this.state && !leaderboardWindow.isVisible && this.showLeaderboardPref) {
 			await this.ow.restoreWindow(OverwolfService.BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW);
@@ -171,6 +171,7 @@ export class BattlegroundsStateService {
 		preferences = preferences || (await this.prefs.getPreferences());
 		this.showHeroSelectionPref = preferences.batlegroundsShowHeroSelectionPref;
 		this.showLeaderboardPref = preferences.battlegroundsShowLastOpponentBoard;
+		// this.logger.debug('[battlegrounds-state]', 'prefs', this.showHeroSelectionPref, this.showLeaderboardPref);
 		this.updateOverlays();
 	}
 
