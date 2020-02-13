@@ -34,6 +34,7 @@ export class ReplaysNotificationService {
 		}
 		this.logger.debug('[replays-notification] preparing new game stat notification', stats);
 		const stat = Object.assign(new GameStat(), stats.stats[0]);
+		// this.logger.debug('[replays-notification] will emit notif notification', stat);
 		this.notificationService.emitNewNotification({
 			notificationId: stat.reviewId,
 			content: this.buildNotificationTemplate(stat),
@@ -48,7 +49,9 @@ export class ReplaysNotificationService {
 
 	private buildNotificationTemplate(stat: GameStat): string {
 		const playerRankImage = stat.buildPlayerRankImage();
+		// this.logger.debug('[replays-notification] preparing playerRankImage', playerRankImage);
 		const rankText = stat.buildRankText() || '';
+		// this.logger.debug('[replays-notification] preparing rankText', rankText);
 		return `
 			<div class="match-stats-message-container ${stat.reviewId}">
 				<div class="mode">

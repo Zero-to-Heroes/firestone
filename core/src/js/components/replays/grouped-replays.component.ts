@@ -1,9 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
+import { GameStat } from '../../models/mainwindow/stats/game-stat';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
-import { GameStat } from '../../models/mainwindow/stats/game-stat';
 
 @Component({
 	selector: 'grouped-replays',
@@ -28,7 +28,8 @@ export class GroupedReplaysComponent implements AfterViewInit {
 
 	@Input() set groupedReplays(value: GroupedReplays) {
 		this.header = value.header;
-		this._replays = value.replays;
+		// console.log('receiving grouped replays', value);
+		this._replays = value.replays.map(stat => Object.assign(new GameStat(), stat));
 	}
 
 	constructor(private readonly logger: NGXLogger, private ow: OverwolfService) {}
