@@ -15,11 +15,14 @@ export class SecretTriggeredParser implements EventParser {
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
-		const [, controllerId, localPlayer, entityId] = gameEvent.parse();
+		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
+		// console.log('[secret-triggered]', cardId);
 
-		const newSecrets: readonly BoardSecret[] = deck.secrets.filter(secret => secret.entityId !== entityId);
+		const newSecrets: readonly BoardSecret[] = deck.secrets
+			.filter(secret => secret.entityId !== entityId)
+			.map(secret => this.helper.removeSecretOptionFromSecret(secret, cardId));
 
 		const newPlayerDeck = deck.update({
 			secrets: newSecrets,

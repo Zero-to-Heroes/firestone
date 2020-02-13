@@ -46,12 +46,6 @@ export class SecretsParserService {
 			new TriggerOnNumCardPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnSpellPlaySecretsParser(this.helper, this.allCards),
 			new TriggerOnTurnStartSecretsParser(this.helper, this.allCards),
-			// new CatTrickSecretParser(this.helper, this.allCards),
-			// new DartTrapSecretParser(this.helper),
-			// new HiddenCacheSecretParser(this.helper, this.allCards),
-			// new PressurePlateSecretParser(this.helper, this.allCards),
-			// new RatTrapSecretParser(this.helper, this.allCards),
-			// new SnipeSecretParser(this.helper, this.allCards),
 		];
 	}
 }
