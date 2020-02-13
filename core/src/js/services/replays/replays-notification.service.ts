@@ -48,7 +48,7 @@ export class ReplaysNotificationService {
 	}
 
 	private buildNotificationTemplate(stat: GameStat): string {
-		const playerRankImage = stat.buildPlayerRankImage();
+		const [playerRankImage, playerRankTooltip] = stat.buildPlayerRankImage();
 		// this.logger.debug('[replays-notification] preparing playerRankImage', playerRankImage);
 		const rankText = stat.buildRankText() || '';
 		// this.logger.debug('[replays-notification] preparing rankText', rankText);
