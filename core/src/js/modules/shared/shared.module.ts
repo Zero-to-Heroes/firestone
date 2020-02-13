@@ -15,6 +15,7 @@ import { ControlMinimizeComponent } from '../../components/controls/control-mini
 import { ControlSettingsComponent } from '../../components/controls/control-settings.component';
 import { FilterComponent } from '../../components/filter.component';
 import { HotkeyComponent } from '../../components/hotkey.component';
+import { InfiniteScrollComponent } from '../../components/infinite-scroll.component';
 import { LoadingStateComponent } from '../../components/loading-state.component';
 import { PreferenceToggleComponent } from '../../components/settings/preference-toggle.component';
 import { CardTooltipComponent } from '../../components/tooltip/card-tooltip.component';
@@ -66,6 +67,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		PreferenceToggleComponent,
 
+		InfiniteScrollComponent,
 		FilterComponent,
 		SafeHtmlPipe,
 
@@ -104,6 +106,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		PreferenceToggleComponent,
 
+		InfiniteScrollComponent,
 		FilterComponent,
 		SafeHtmlPipe,
 
