@@ -41,6 +41,17 @@
 	transition: margin 0.4s ease-in-out;
 }
 
+.loading {
+	@extend %search-active;
+	height: 25px;
+	flex-grow: 0;
+	flex-shrink: 0;
+	display: flex;
+	justify-items: center;
+	align-items: center;
+	color: var(--color-1);
+}
+
 .empty-state {
 	@extend %empty-state;
 	flex-grow: 1;

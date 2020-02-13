@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	ViewRef,
+} from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { GroupedReplays } from '../../models/mainwindow/replays/grouped-replays';
 import { ReplaysState } from '../../models/mainwindow/replays/replays-state';
@@ -13,12 +22,13 @@ import { OverwolfService } from '../../services/overwolf.service';
 			<div class="filters">
 				<replays-filter [state]="_state" [filterCategory]="'gameMode'"></replays-filter>
 			</div>
-			<ul class="replays-list">
-				<li *ngFor="let replay of _replays">
+			<infinite-scroll class="replays-list" (scrolled)="onScroll()">
+				<li *ngFor="let replay of displayedReplays">
 					<grouped-replays [groupedReplays]="replay"></grouped-replays>
 				</li>
-			</ul>
-			<section class="empty-state" *ngIf="!_replays || _replays.length === 0">
+				<div class="loading" *ngIf="isLoading">Loading more replays...</div>
+			</infinite-scroll>
+			<section class="empty-state" *ngIf="!displayedReplays || displayedReplays.length === 0">
 				<div class="state-container">
 					<i class="i-236X165">
 						<svg>
@@ -34,19 +44,28 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReplaysListComponent {
+	displayedReplays: readonly GroupedReplays[] = [];
 	_replays: readonly GroupedReplays[];
 	_state: ReplaysState;
+	isLoading: boolean;
+
+	private replaysIterator: IterableIterator<void>;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set state(value: ReplaysState) {
-		// this.logger.debug('[decktracker-decks] setting decks', value);
-		console.warn('showing only the last 28 days, will update that when implementing filters');
+		// this.logger.debug('[replays-list]');
 		this._state = value;
-		this._replays = value.groupedReplays ? value.groupedReplays.slice(0, 28) : null;
+		this._replays = value.groupedReplays || [];
+		this.handleProgressiveDisplay();
 	}
 
-	constructor(private readonly logger: NGXLogger, private ow: OverwolfService, private el: ElementRef) {}
+	constructor(
+		private readonly logger: NGXLogger,
+		private readonly ow: OverwolfService,
+		private readonly el: ElementRef,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
 
 	ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -66,5 +85,55 @@ export class ReplaysListComponent {
 		if (event.offsetX >= rect.width - scrollbarWidth) {
 			event.stopPropagation();
 		}
+	}
+
+	trackGroupedReplay(value: GroupedReplays, index: number) {
+		return (value && value.replays && value.replays.length > 0 && value.replays[0].reviewId) || index;
+	}
+
+	onScroll() {
+		// this.logger.debug('[replays-list]', 'arrived at the end of display, loading more elements');
+		this.replaysIterator && this.replaysIterator.next();
+	}
+
+	// We load the first replays, and load the rest only when the user scrolls down
+	private handleProgressiveDisplay() {
+		this.replaysIterator = this.buildIterator();
+	}
+
+	private *buildIterator(): IterableIterator<void> {
+		// this.logger.debug('[replays-list]', 'starting loading replays');
+		const workingReplays = [...this._replays];
+		const step = 100;
+		while (workingReplays.length > 0) {
+			let currentReplays = [];
+			while (
+				workingReplays.length > 0 &&
+				(currentReplays.length === 0 || this.getTotalReplaysLength(currentReplays) < step)
+			) {
+				currentReplays.push(...workingReplays.splice(0, 1));
+			}
+			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
+			this.isLoading = true;
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+			// this.logger.debug(
+			// 	'[replays-list]',
+			// 	'loaded replays',
+			// 	this.displayedReplays,
+			// 	this.getTotalReplaysLength(this.displayedReplays),
+			// );
+			yield;
+		}
+		this.isLoading = false;
+		return;
+	}
+
+	private getTotalReplaysLength(currentReplays: readonly GroupedReplays[]): number {
+		if (!currentReplays || currentReplays.length === 0) {
+			return 0;
+		}
+		return currentReplays.map(grouped => grouped.replays).reduce((a, b) => a.concat(b), []).length;
 	}
 }
