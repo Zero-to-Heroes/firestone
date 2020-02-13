@@ -65,10 +65,11 @@ export class GameStat {
 			rankIconTooltip = 'Friendly';
 		} else if (this.gameMode === 'arena') {
 			// New format
-			if (this.playerRank.indexOf('-') !== -1) {
+			if (this.playerRank && this.playerRank.indexOf('-') !== -1) {
 				const wins = this.playerRank.split('-')[0];
 				// const losses = this.playerRank.split('-')[1];
 				rankIcon = `arena/arena${wins}wins`;
+				rankIconTooltip = 'Arena';
 			} else {
 				rankIcon = 'arena/arena12wins';
 				rankIconTooltip = 'Arena';
@@ -86,7 +87,7 @@ export class GameStat {
 		if (this.gameMode === 'ranked') {
 			return this.playerRank;
 		}
-		if (this.gameMode === 'arena') {
+		if (this.gameMode === 'arena' && this.playerRank && this.playerRank.indexOf('-') !== -1) {
 			const wins = this.playerRank.split('-')[0];
 			const losses = this.playerRank.split('-')[1];
 			return `${wins}-${losses}`;
