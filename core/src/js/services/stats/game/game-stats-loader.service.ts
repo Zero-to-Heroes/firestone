@@ -47,7 +47,7 @@ export class GameStatsLoaderService {
 				const endpointResult: readonly GameStat[] = (data as any).results;
 				if (!expectedReviewId || endpointResult.some(stat => stat.reviewId === expectedReviewId)) {
 					this.gameStats = Object.assign(new GameStats(), {
-						stats: endpointResult,
+						stats: endpointResult.map(stat => Object.assign(new GameStat(), stat)),
 					} as GameStats);
 					console.log('[game-stats-loader] Retrieved game stats for user');
 					resolve(this.gameStats);
