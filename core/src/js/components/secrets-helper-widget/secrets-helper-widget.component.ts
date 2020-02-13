@@ -45,6 +45,8 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 	private preferencesSubscription: Subscription;
 	private windowId: string;
 	private deckUpdater: EventEmitter<GameEvent>;
+	private showTimeout;
+	private isDragging: boolean;
 
 	constructor(
 		private logger: NGXLogger,
@@ -95,16 +97,26 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 	}
 
 	toggleSecretsHelper() {
-		this.deckUpdater.next(
-			Object.assign(new GameEvent(), {
-				type: 'TOGGLE_SECRET_HELPER',
-			} as GameEvent),
-		);
+		if (this.isDragging) {
+			return;
+		}
+		this.showTimeout = setTimeout(() => {
+			this.deckUpdater.next(
+				Object.assign(new GameEvent(), {
+					type: 'TOGGLE_SECRET_HELPER',
+				} as GameEvent),
+			);
+		}, 200);
 	}
 
 	@HostListener('mousedown')
 	dragMove() {
+		if (this.showTimeout) {
+			clearTimeout(this.showTimeout);
+		}
+		this.isDragging = true;
 		this.ow.dragMove(this.windowId, async result => {
+			this.isDragging = false;
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
 				return;
