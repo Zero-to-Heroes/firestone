@@ -32,6 +32,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					*ngSwitchCase="'DISPLAY_MODE_ZONE'"
 					[deckState]="_deckState"
 					[colorManaCost]="colorManaCost"
+					[showGiftsSeparately]="showGiftsSeparately"
 					[tooltipPosition]="_tooltipPosition"
 				>
 				</deck-list-by-zone>
@@ -40,6 +41,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[deckState]="_deckState"
 					[highlightCardsInHand]="highlightCardsInHand"
 					[colorManaCost]="colorManaCost"
+					[showGiftsSeparately]="showGiftsSeparately"
 					[cardsGoToBottom]="cardsGoToBottom"
 					[tooltipPosition]="_tooltipPosition"
 				>
@@ -53,6 +55,7 @@ export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() displayMode: string;
 	@Input() highlightCardsInHand: boolean;
 	@Input() colorManaCost: boolean;
+	@Input() showGiftsSeparately: boolean;
 	@Input() cardsGoToBottom: boolean;
 
 	_tooltipPosition: CardTooltipPositionType;

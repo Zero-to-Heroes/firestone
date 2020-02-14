@@ -19,6 +19,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					[zone]="zone"
 					[tooltipPosition]="_tooltipPosition"
 					[colorManaCost]="colorManaCost"
+					[showGiftsSeparately]="showGiftsSeparately"
 				></deck-zone>
 			</li>
 		</ul>
@@ -27,6 +28,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 })
 export class DeckListByZoneComponent {
 	@Input() colorManaCost: boolean;
+	@Input() showGiftsSeparately: boolean;
 	zones: readonly DeckZone[];
 	_tooltipPosition: CardTooltipPositionType;
 

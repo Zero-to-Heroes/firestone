@@ -11,6 +11,7 @@ import {
 	Renderer2,
 	ViewRef,
 } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
@@ -54,6 +55,7 @@ declare var amplitude;
 							[displayMode]="displayMode"
 							[highlightCardsInHand]="highlightCardsInHand"
 							[colorManaCost]="colorManaCost"
+							[showGiftsSeparately]="showGiftsSeparately"
 							[cardsGoToBottom]="cardsGoToBottom"
 							[tooltipPosition]="tooltipPosition"
 						>
@@ -93,6 +95,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	// showTracker: boolean;
 	highlightCardsInHand: boolean;
 	colorManaCost: boolean;
+	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
@@ -117,9 +120,11 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		private renderer: Renderer2,
 		private events: Events,
 		private init_DebugService: DebugService,
+		private cards: AllCardsService,
 	) {}
 
 	async ngAfterViewInit() {
+		this.cards.initializeCardsDb();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
 		const deckEventBus: BehaviorSubject<any> = this.ow.getMainWindow().deckEventBus;
 		this.deckSubscription = deckEventBus.subscribe(async event => {
@@ -208,6 +213,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.el.nativeElement.style.setProperty('--decktracker-max-height', this.player === 'player' ? '90vh' : '70vh');
 		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
+		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
 		await this.updateTooltipPosition();

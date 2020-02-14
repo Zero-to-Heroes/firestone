@@ -45,9 +45,20 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 })
 export class DeckZoneComponent {
 	@Input() colorManaCost: boolean;
+
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		// console.log('[deck-zone] setting tooltip position', value);
 		this._tooltipPosition = value;
+	}
+
+	@Input() set showGiftsSeparately(value: boolean) {
+		this._showGiftsSeparately = value;
+		this.refreshZone();
+	}
+
+	@Input() set zone(zone: DeckZone) {
+		this._zone = zone;
+		this.refreshZone();
 	}
 
 	_tooltipPosition: CardTooltipPositionType;
@@ -58,19 +69,37 @@ export class DeckZoneComponent {
 	cards: readonly VisualDeckCard[];
 	open = true;
 
+	private _showGiftsSeparately = true;
+	private _zone: DeckZone;
+
 	constructor(private cdr: ChangeDetectorRef) {}
 
-	@Input('zone') set zone(zone: DeckZone) {
-		this.className = zone.id;
-		this.zoneName = zone.name;
-		this.showWarning = zone.showWarning;
+	toggleZone() {
+		this.open = !this.open;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
+	}
+
+	trackCard(index, card: VisualDeckCard) {
+		return card.cardId;
+	}
+
+	private refreshZone() {
+		if (!this._zone) {
+			return;
+		}
+		this.className = this._zone.id;
+		this.zoneName = this._zone.name;
+		this.showWarning = this._zone.showWarning;
 		// console.log('setting zone', zone);
-		const cardsToDisplay = zone.sortingFunction ? [...zone.cards].sort(zone.sortingFunction) : zone.cards;
-		this.cardsInZone = zone.numberOfCards;
+		const cardsToDisplay = this._zone.sortingFunction
+			? [...this._zone.cards].sort(this._zone.sortingFunction)
+			: this._zone.cards;
+		this.cardsInZone = this._zone.numberOfCards;
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
-		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(
-			cardsToDisplay,
-			(card: VisualDeckCard) => card.cardId,
+		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(cardsToDisplay, (card: VisualDeckCard) =>
+			this._showGiftsSeparately ? card.cardId + card.creatorCardIds.reduce((a, b) => a + b, '') : card.cardId,
 		);
 		this.cards = Array.from(grouped.values(), cards => {
 			const creatorCardIds: readonly string[] = [
@@ -86,19 +115,30 @@ export class DeckZoneComponent {
 				totalQuantity: cards.length,
 				creatorCardIds: creatorCardIds,
 			} as VisualDeckCard);
-		});
+		}).sort((a, b) => this.compare(a, b));
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
 	}
 
-	toggleZone() {
-		this.open = !this.open;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+	private compare(a: VisualDeckCard, b: VisualDeckCard): number {
+		if (a.manaCost < b.manaCost) {
+			return -1;
 		}
-	}
-
-	trackCard(index, card: VisualDeckCard) {
-		return card.cardId;
+		if (a.manaCost > b.manaCost) {
+			return 1;
+		}
+		if (a.cardName < b.cardName) {
+			return -1;
+		}
+		if (a.cardName > b.cardName) {
+			return 1;
+		}
+		if (a.creatorCardIds.length === 0) {
+			return -1;
+		}
+		if (b.creatorCardIds.length === 0) {
+			return 1;
+		}
+		return 0;
 	}
 
 	private groupBy(list, keyGetter): Map<string, VisualDeckCard[]> {

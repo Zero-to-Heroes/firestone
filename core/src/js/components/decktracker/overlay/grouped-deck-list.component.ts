@@ -18,6 +18,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 				[zone]="zone"
 				[tooltipPosition]="_tooltipPosition"
 				[colorManaCost]="colorManaCost"
+				[showGiftsSeparately]="showGiftsSeparately"
 			></deck-zone>
 		</ul>
 	`,
@@ -25,6 +26,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 })
 export class GroupedDeckListComponent {
 	@Input() colorManaCost: boolean;
+	@Input() showGiftsSeparately: boolean;
 	_tooltipPosition: CardTooltipPositionType;
 	zone: DeckZone;
 

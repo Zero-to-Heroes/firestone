@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { CardTooltipPositionType } from '../../../directives/card-tooltip-position.type';
 import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 
@@ -29,7 +30,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					<span>{{ numberOfCopies }}</span>
 				</div>
 			</div>
-			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0">
+			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -66,9 +67,10 @@ export class DeckCardComponent {
 	_colorClassCards: boolean;
 	cardClass: string;
 	creatorCardIds: readonly string[];
+	giftTooltip: string;
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	constructor(private readonly cdr: ChangeDetectorRef, private readonly cards: AllCardsService) {}
 
 	@Input() set tooltipPosition(value: CardTooltipPositionType) {
 		// console.log('[deck-card] setting tooltip position', value);
@@ -84,6 +86,8 @@ export class DeckCardComponent {
 		this.numberOfCopies = card.totalQuantity;
 		this.rarity = card.rarity;
 		this.creatorCardIds = card.creatorCardIds;
+		this.giftTooltip = null;
+		this.updateGiftTooltip();
 		this.highlight = card.highlight;
 		this.cardClass = card.cardClass ? card.cardClass.toLowerCase() : null;
 		// console.log('setting card highlight', this.cardId, this.highlight, card);
@@ -109,5 +113,26 @@ export class DeckCardComponent {
 	@Input() set colorClassCards(value: boolean) {
 		this._colorClassCards = value;
 		this.cdr.detectChanges();
+	}
+
+	private updateGiftTooltip() {
+		if (!this.cards.getCards() || this.cards.getCards().length === 0) {
+			setTimeout(() => this.updateGiftTooltip(), 200);
+			return;
+		}
+		if (this.creatorCardIds && this.creatorCardIds.length === 1) {
+			const creatorCard = this.cards.getCard(this.creatorCardIds[0]);
+			if (creatorCard) {
+				this.giftTooltip = `Created by <br /> ${creatorCard.name}`;
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			}
+		} else if (this.creatorCardIds && this.creatorCardIds.length > 1) {
+			this.giftTooltip = `Created by <br /> multiple entities`;
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
+		}
 	}
 }

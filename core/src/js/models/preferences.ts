@@ -28,6 +28,7 @@ export class Preferences {
 	readonly overlayShowTitleBar: boolean = true;
 	readonly overlayShowTooltipsOnHover: boolean = true;
 	readonly overlayShowRarityColors: boolean = true;
+	readonly overlayShowGiftedCardsInSeparateLine: boolean = false;
 
 	readonly overlayGroupByZone: boolean = true;
 	readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
