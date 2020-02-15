@@ -53,6 +53,10 @@ import { MinionSummonedParser } from './event-parser/minion-summoned-parser';
 import { MulliganOverParser } from './event-parser/mulligan-over-parser';
 import { NewTurnParser } from './event-parser/new-turn-parser';
 import { OpponentPlayerParser } from './event-parser/opponent-player-parser';
+import { QuestCreatedInGameParser } from './event-parser/quest-created-in-game-parser';
+import { QuestDestroyedParser } from './event-parser/quest-destroyed-parser';
+import { QuestPlayedFromDeckParser } from './event-parser/quest-played-from-deck-parser';
+import { QuestPlayedFromHandParser } from './event-parser/quest-played-from-hand-parser';
 import { ReceiveCardInHandParser } from './event-parser/receive-card-in-hand-parser';
 import { SecretCreatedInGameParser } from './event-parser/secret-created-in-game-parser';
 import { SecretDestroyedParser } from './event-parser/secret-destroyed-parser';
@@ -567,6 +571,10 @@ export class GameStateService {
 			new CardOnBoardAtGameStart(this.helper),
 			new GameRunningParser(this.deckParser),
 			new SecretTriggeredParser(this.helper),
+			new QuestCreatedInGameParser(this.helper, this.allCards),
+			new QuestDestroyedParser(),
+			new QuestPlayedFromDeckParser(this.helper),
+			new QuestPlayedFromHandParser(this.helper),
 		];
 	}
 }
