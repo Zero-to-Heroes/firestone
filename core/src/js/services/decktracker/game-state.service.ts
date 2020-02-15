@@ -370,7 +370,8 @@ export class GameStateService {
 			console.log('ow not defined, returning');
 			return;
 		}
-		const inGame = (await this.ow.inGame()) && this.onGameScreen;
+		const prefs = await this.prefs.getPreferences();
+		const inGame = (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
 		const [
 			decktrackerWindow,
 			opponentTrackerWindow,
