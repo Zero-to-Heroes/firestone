@@ -311,6 +311,27 @@ export class GameEvents {
 					}),
 				);
 				break;
+			case 'QUEST_PLAYED_FROM_DECK':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.QUEST_PLAYED_FROM_DECK, gameEvent, {
+						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
+							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+							: null,
+						creatorCardId: gameEvent.Value.AdditionalProps.CreatorCardId,
+					}),
+				);
+				break;
+			case 'QUEST_CREATED_IN_GAME':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.QUEST_PLAYED_FROM_DECK, gameEvent, {
+						playerClass: gameEvent.Value.AdditionalProps.PlayerClass
+							? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+							: null,
+					}),
+				);
+				break;
 			case 'MINION_SUMMONED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				const summonAdditionProps = gameEvent.Value.AdditionalProps
@@ -405,6 +426,22 @@ export class GameEvents {
 			case 'SECRET_DESTROYED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
 				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.SECRET_DESTROYED, gameEvent));
+				break;
+			case 'QUEST_PLAYED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(
+					GameEvent.build(GameEvent.QUEST_PLAYED, gameEvent, {
+						playerClass:
+							// Should always be the case, except in some older tests
+							gameEvent.Value.AdditionalProps && gameEvent.Value.AdditionalProps.PlayerClass
+								? gameEvent.Value.AdditionalProps.PlayerClass.toLowerCase()
+								: null,
+					}),
+				);
+				break;
+			case 'QUEST_DESTROYED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
+				this.gameEventsEmitter.allEvents.next(GameEvent.build(GameEvent.QUEST_DESTROYED, gameEvent));
 				break;
 			case 'DEATHRATTLE_TRIGGERED':
 				// console.log(gameEvent.Type + ' event', gameEvent.Value.CardId);
