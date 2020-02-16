@@ -31,6 +31,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return (
 			state &&
+			gameEvent.gameState &&
 			(gameEvent.type === GameEvent.ATTACKING_HERO ||
 				gameEvent.type === GameEvent.ATTACKING_MINION ||
 				gameEvent.type === GameEvent.SECRET_TRIGGERED)

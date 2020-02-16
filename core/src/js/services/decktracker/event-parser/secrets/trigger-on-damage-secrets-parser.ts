@@ -13,7 +13,7 @@ export class TriggerOnDamageSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.DAMAGE;
+		return state && gameEvent.gameState && gameEvent.type === GameEvent.DAMAGE;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

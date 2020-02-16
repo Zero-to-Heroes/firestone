@@ -22,7 +22,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.CARD_PLAYED;
+		return state && gameEvent.gameState && gameEvent.type === GameEvent.CARD_PLAYED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

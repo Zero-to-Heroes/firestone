@@ -7,6 +7,7 @@ import { DeckCardService } from '../../core/src/js/services/decktracker/deck-car
 import { DeckParserService } from '../../core/src/js/services/decktracker/deck-parser.service';
 import { DynamicZoneHelperService } from '../../core/src/js/services/decktracker/dynamic-zone-helper.service';
 import { DeckManipulationHelper } from '../../core/src/js/services/decktracker/event-parser/deck-manipulation-helper';
+import { SecretsParserService } from '../../core/src/js/services/decktracker/event-parser/secrets/secrets-parser.service';
 import { GameStateMetaInfoService } from '../../core/src/js/services/decktracker/game-state-meta-info.service';
 import { GameStateService } from '../../core/src/js/services/decktracker/game-state.service';
 import { SecretConfigService } from '../../core/src/js/services/decktracker/secret-config.service';
@@ -96,6 +97,7 @@ export const gameStateBuilder = async (
 		({
 			getValidSecrets: (...args) => [],
 		} as unknown) as SecretConfigService,
+		new SecretsParserService(helper, cards),
 	);
 
 	const gameEventsService = new GameEvents(
