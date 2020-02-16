@@ -13,7 +13,7 @@ export class TriggerOnHeroPowerSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.HERO_POWER_USED;
+		return state && gameEvent.gameState && gameEvent.type === GameEvent.HERO_POWER_USED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {

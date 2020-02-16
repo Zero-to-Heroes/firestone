@@ -20,7 +20,7 @@ export class TriggerOnFriendlyMinionDiedSecretsParser implements EventParser {
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
 
 	applies(gameEvent: GameEvent, state: GameState): boolean {
-		return state && gameEvent.type === GameEvent.MINION_DIED;
+		return state && gameEvent.gameState && gameEvent.type === GameEvent.MINION_DIED;
 	}
 
 	async parse(currentState: GameState, gameEvent: GameEvent): Promise<GameState> {
