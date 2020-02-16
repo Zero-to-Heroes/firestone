@@ -9,9 +9,11 @@ import {
 	Input,
 	OnDestroy,
 	OnInit,
+	Renderer2,
 	ViewRef,
 } from '@angular/core';
 import { HelpTooltipComponent } from '../components/tooltip/help-tooltip.component';
+import { OverwolfService } from '../services/overwolf.service';
 
 @Directive({
 	selector: '[helpTooltip]',
@@ -29,7 +31,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		}
 	}
 
-	private tooltipPortal;
+	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
 
@@ -38,6 +40,8 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		private elementRef: ElementRef,
 		private overlay: Overlay,
 		private cdr: ChangeDetectorRef,
+		private ow: OverwolfService,
+		private renderer: Renderer2,
 	) {}
 
 	ngOnInit() {
@@ -108,7 +112,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	}
 
 	@HostListener('mouseenter')
-	onMouseEnter() {
+	async onMouseEnter() {
 		if (!this._text) {
 			return;
 		}
@@ -122,8 +126,32 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		tooltipRef.instance.text = this._text;
 		// console.log('setting tooltip text', this._text, tooltipRef);
 		this.positionStrategy.apply();
+
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
+		}
+
+		const window = await this.ow.getCurrentWindow();
+		const gameInfo = await this.ow.getRunningGameInfo();
+		const tooltipLeft =
+			window.left +
+			(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
+			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x;
+		if (tooltipLeft < 0) {
+			this.renderer.setStyle(tooltipRef.location.nativeElement, 'marginLeft', `${-tooltipLeft}px`);
+		}
+
+		const tooltipRight =
+			window.left +
+			(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
+			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x +
+			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).width;
+		if (tooltipRight > gameInfo.logicalWidth) {
+			this.renderer.setStyle(
+				tooltipRef.location.nativeElement,
+				'marginLeft',
+				`${gameInfo.logicalWidth - tooltipRight}px`,
+			);
 		}
 	}
 
