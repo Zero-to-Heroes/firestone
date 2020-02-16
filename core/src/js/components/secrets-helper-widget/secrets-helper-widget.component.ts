@@ -30,7 +30,7 @@ declare var amplitude;
 		`../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div class="secrets-helper-widget" [ngClass]="{ 'active': active }" (click)="toggleSecretsHelper()">
+		<div class="secrets-helper-widget" [ngClass]="{ 'active': active }" (mousedown)="toggleSecretsHelper($event)">
 			<div class="icon idle"></div>
 			<div class="icon active"></div>
 		</div>
@@ -46,6 +46,7 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 	private windowId: string;
 	private deckUpdater: EventEmitter<GameEvent>;
 	private showTimeout;
+	private cancelTimeout;
 	private isDragging: boolean;
 
 	constructor(
@@ -96,11 +97,12 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 		this.preferencesSubscription.unsubscribe();
 	}
 
-	toggleSecretsHelper() {
-		if (this.isDragging) {
-			return;
-		}
+	toggleSecretsHelper(event: MouseEvent) {
 		this.showTimeout = setTimeout(() => {
+			// console.log('event for toggle', event);
+			// if (this.isDragging) {
+			// 	return;
+			// }
 			this.deckUpdater.next(
 				Object.assign(new GameEvent(), {
 					type: 'TOGGLE_SECRET_HELPER',
@@ -109,20 +111,30 @@ export class SecretsHelperWidgetComponent implements AfterViewInit, OnDestroy {
 		}, 200);
 	}
 
-	@HostListener('mousedown')
-	dragMove() {
-		if (this.showTimeout) {
-			clearTimeout(this.showTimeout);
-		}
-		this.isDragging = true;
+	@HostListener('mousedown', ['$event'])
+	dragMove(event: MouseEvent) {
+		// console.log('event for drag', event);
+		this.cancelTimeout = setTimeout(() => {
+			if (this.showTimeout) {
+				clearTimeout(this.showTimeout);
+			}
+		}, 100);
+		// setTimeout
+		// this.isDragging = true;
 		this.ow.dragMove(this.windowId, async result => {
-			this.isDragging = false;
+			// this.isDragging = false;
 			const window = await this.ow.getCurrentWindow();
 			if (!window) {
 				return;
 			}
 			this.prefs.updateSecretsHelperWidgetPosition(window.left, window.top);
 		});
+	}
+
+	@HostListener('mouseup', ['$event'])
+	mouseUp(event: MouseEvent) {
+		// console.log('mouseup', event);
+		clearTimeout(this.cancelTimeout);
 	}
 
 	@HostListener('mouseenter')
