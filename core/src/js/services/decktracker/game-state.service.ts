@@ -245,20 +245,20 @@ export class GameStateService {
 			this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_ON') {
 			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
-			this.state = this.state.update({
-				opponentDeck: this.state.opponentDeck.update({
-					secretHelperActiveHover: true,
-				} as DeckState),
-			} as GameState);
-			this.updateOverlays();
+			// this.state = this.state.update({
+			// 	opponentDeck: this.state.opponentDeck.update({
+			// 		secretHelperActiveHover: true,
+			// 	} as DeckState),
+			// } as GameState);
+			// this.updateOverlays();
 		} else if (gameEvent.type === 'TOGGLE_SECRET_HELPER_HOVER_OFF') {
 			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
-			this.state = this.state.update({
-				opponentDeck: this.state.opponentDeck.update({
-					secretHelperActiveHover: false,
-				} as DeckState),
-			} as GameState);
-			this.updateOverlays();
+			// this.state = this.state.update({
+			// 	opponentDeck: this.state.opponentDeck.update({
+			// 		secretHelperActiveHover: false,
+			// 	} as DeckState),
+			// } as GameState);
+			// this.updateOverlays();
 		} else if (gameEvent.type === GameEvent.GAME_START) {
 			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.closedByUser = false;
@@ -493,15 +493,15 @@ export class GameStateService {
 			// console.log('[game-state] showing secrets helper');
 			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WINDOW);
-			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
-			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
+			// await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
+			// await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
 		} else if (
 			secretsHelperWindow.window_state_ex !== 'closed' &&
 			(!shouldShowSecretsHelper || !inGame || !this.showSecretsHelper)
 		) {
 			// console.log('[game-state] closing secrets helper');
 			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WINDOW);
-			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
+			// await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
 		}
 	}
 

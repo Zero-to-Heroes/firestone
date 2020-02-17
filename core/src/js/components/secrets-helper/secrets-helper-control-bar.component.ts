@@ -11,9 +11,9 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="control-bar">
 			<div class="title">Secrets Helper</div>
-			<div class="controls">
+			<!-- <div class="controls">
 				<control-minimize [windowId]="windowId" [eventProvider]="minimizeHandler"></control-minimize>
-			</div>
+			</div> -->
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
