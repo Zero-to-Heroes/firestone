@@ -132,26 +132,45 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			const activeNotif = this.activeNotifications.find(
 				notif => notif.notificationId === messageObject.notificationId,
 			);
+			// console.log(
+			// 	'activeNotif',
+			// 	activeNotif,
+			// 	activeNotif && activeNotif.toast,
+			// 	activeNotif && activeNotif.toast.theClass,
+			// 	this.activeNotifications,
+			// 	messageObject,
+			// );
 			let notification;
 			try {
 				notification = this.elRef.nativeElement.querySelector('.' + messageObject.notificationId);
-			} catch (e) {}
-
-			if (notification && activeNotif) {
-				await this.updateAchievementNotification(
-					messageObject.notificationId,
-					messageObject.theClass,
-					notification,
-				);
-			} else {
-				await this.showNotification(messageObject);
+			} catch (e) {
+				console.warn('could not get notif', this.elRef.nativeElement, e);
 			}
+
+			if (activeNotif) {
+				const previousClass = activeNotif.toast.theClass;
+				// console.log('notification', notification, previousClass);
+				if (previousClass === 'remove-on-update') {
+					this.notificationService.remove(activeNotif.toast.id);
+					// console.log('removing previous notif', activeNotif);
+					await this.showNotification(messageObject);
+					resolve();
+					return;
+				} else if (notification) {
+					await this.updateNotification(messageObject.notificationId, messageObject.theClass, notification);
+					resolve();
+					return;
+				}
+			}
+			// console.log('showing notif');
+			await this.showNotification(messageObject);
 			resolve();
+			return;
 		});
 	}
 
-	private async updateAchievementNotification(notificationId: string, newClass: string, notification) {
-		console.log('in confirm achievement', notificationId);
+	private async updateNotification(notificationId: string, newClass: string, notification) {
+		// console.log('in confirm achievement', notificationId);
 		const activeNotif = this.activeNotifications.find(notif => notif.notificationId === notificationId);
 		const toast = activeNotif.toast;
 		// console.log('active notif found', newClass, toast, activeNotif, notification);
@@ -167,6 +186,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 				this.fadeNotificationOut(notificationId);
 			}, 5000);
 		}
+
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -294,6 +314,7 @@ export class NotificationsComponent implements AfterViewInit, OnDestroy {
 			amplitude
 				.getInstance()
 				.logEvent('notification', { 'event': 'show', 'app': messageObject.app, 'type': type });
+			console.log('added notif to active notifs', this.activeNotifications, activeNotif);
 			resolve();
 
 			setTimeout(() => {
