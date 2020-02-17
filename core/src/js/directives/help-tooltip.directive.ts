@@ -146,7 +146,7 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
 			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x +
 			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).width;
-		if (tooltipRight > gameInfo.logicalWidth) {
+		if (gameInfo && tooltipRight > gameInfo.logicalWidth) {
 			this.renderer.setStyle(
 				tooltipRef.location.nativeElement,
 				'marginLeft',
