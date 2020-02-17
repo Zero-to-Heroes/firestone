@@ -39,7 +39,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 				<grouped-deck-list
 					*ngSwitchCase="'DISPLAY_MODE_GROUPED'"
 					[deckState]="_deckState"
-					[highlightCardsInHand]="highlightCardsInHand"
 					[colorManaCost]="colorManaCost"
 					[showGiftsSeparately]="showGiftsSeparately"
 					[cardsGoToBottom]="cardsGoToBottom"
@@ -53,7 +52,6 @@ import { OverwolfService } from '../../../services/overwolf.service';
 })
 export class DeckTrackerDeckListComponent implements AfterViewInit, OnDestroy {
 	@Input() displayMode: string;
-	@Input() highlightCardsInHand: boolean;
 	@Input() colorManaCost: boolean;
 	@Input() showGiftsSeparately: boolean;
 	@Input() cardsGoToBottom: boolean;

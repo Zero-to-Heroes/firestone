@@ -53,7 +53,6 @@ declare var amplitude;
 						<decktracker-deck-list
 							[deckState]="deck"
 							[displayMode]="displayMode"
-							[highlightCardsInHand]="highlightCardsInHand"
 							[colorManaCost]="colorManaCost"
 							[showGiftsSeparately]="showGiftsSeparately"
 							[cardsGoToBottom]="cardsGoToBottom"
@@ -93,7 +92,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	overlayWidthInPx: number;
 	opacity: number;
 	// showTracker: boolean;
-	highlightCardsInHand: boolean;
+	// highlightCardsInHand: boolean;
 	colorManaCost: boolean;
 	showGiftsSeparately: boolean;
 	cardsGoToBottom: boolean;
@@ -211,7 +210,6 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.scale = this.scaleExtractor(preferences);
 		this.el.nativeElement.style.setProperty('--decktracker-scale', this.scale / 100);
 		this.el.nativeElement.style.setProperty('--decktracker-max-height', this.player === 'player' ? '90vh' : '70vh');
-		this.highlightCardsInHand = preferences.overlayHighlightCardsInHand;
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.showGiftsSeparately = preferences.overlayShowGiftedCardsInSeparateLine;
 		this.cardsGoToBottom = this.cardsGoToBottomExtractor(preferences);

@@ -99,7 +99,9 @@ export class DeckZoneComponent {
 		this.cardsInZone = this._zone.numberOfCards;
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
 		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(cardsToDisplay, (card: VisualDeckCard) =>
-			this._showGiftsSeparately ? card.cardId + card.creatorCardIds.reduce((a, b) => a + b, '') : card.cardId,
+			this._showGiftsSeparately
+				? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
+				: card.cardId,
 		);
 		this.cards = Array.from(grouped.values(), cards => {
 			const creatorCardIds: readonly string[] = [

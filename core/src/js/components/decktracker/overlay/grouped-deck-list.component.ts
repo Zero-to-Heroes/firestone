@@ -38,7 +38,6 @@ export class GroupedDeckListComponent {
 	// private deckList: readonly DeckCard[];
 	// private hand: readonly DeckCard[];
 	private _deckState: DeckState;
-	private _highlight: boolean;
 	private _cardsGoToBottom: boolean;
 	private showWarning: boolean;
 
@@ -46,12 +45,6 @@ export class GroupedDeckListComponent {
 		this._deckState = deckState;
 		this.showWarning = deckState.showDecklistWarning;
 		// console.log('setting deck state', deckState, this.deck);
-		this.buildGroupedList();
-	}
-
-	@Input() set highlightCardsInHand(value: boolean) {
-		this._highlight = value;
-		// console.log('setting highlightCardsInHand', value);
 		this.buildGroupedList();
 	}
 
@@ -86,6 +79,7 @@ export class GroupedDeckListComponent {
 		for (const cardId of Array.from(groupedFromDecklist.keys())) {
 			const cardsInDeck = (groupedFromDeck.get(cardId) || []).length;
 			const isAtLeastOneCardInHand = (hand || []).filter(card => card.cardId === cardId).length > 0;
+			// console.log('at least one in hand?', isAtLeastOneCardInHand, cardId, hand);
 			const creatorCardIds: readonly string[] = (groupedFromDeck.get(cardId) || [])
 				.map(card => card.creatorCardId)
 				.filter(creator => creator);
@@ -97,7 +91,7 @@ export class GroupedDeckListComponent {
 					cardName: groupedFromDecklist.get(cardId)[0].cardName,
 					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
 					rarity: groupedFromDecklist.get(cardId)[0].rarity,
-					highlight: isAtLeastOneCardInHand && this._highlight ? 'in-hand' : 'normal',
+					highlight: isAtLeastOneCardInHand ? 'in-hand' : 'normal',
 					creatorCardIds: creatorCardIds,
 				} as VisualDeckCard);
 				// console.log('base is now', base);
@@ -109,7 +103,7 @@ export class GroupedDeckListComponent {
 					cardName: groupedFromDecklist.get(cardId)[0].cardName,
 					manaCost: groupedFromDecklist.get(cardId)[0].manaCost,
 					rarity: groupedFromDecklist.get(cardId)[0].rarity,
-					highlight: isAtLeastOneCardInHand && this._highlight ? 'in-hand' : 'dim',
+					highlight: isAtLeastOneCardInHand ? 'in-hand' : 'dim',
 				} as VisualDeckCard);
 				// console.log('base is now', base);
 			}
@@ -131,12 +125,7 @@ export class GroupedDeckListComponent {
 					cardName: groupedFromDeck.get(cardId)[i].cardName,
 					manaCost: groupedFromDeck.get(cardId)[i].manaCost,
 					rarity: groupedFromDeck.get(cardId)[i].rarity,
-					highlight:
-						isAtLeastOneCardInHand && this._highlight
-							? 'in-hand'
-							: !isInBaseDeck && isInOtherZone
-							? 'dim'
-							: 'normal',
+					highlight: isAtLeastOneCardInHand ? 'in-hand' : !isInBaseDeck && isInOtherZone ? 'dim' : 'normal',
 					creatorCardIds: creatorCardIds,
 				} as VisualDeckCard);
 				// console.log('base is now', base);
