@@ -172,7 +172,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.opacity = preferences.secretsHelperOpacity / 100;
 		this.scale = preferences.secretsHelperScale;
 		this.el.nativeElement.style.setProperty('--secrets-helper-scale', this.scale / 100);
-		this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '32vh');
+		this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '22vh');
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.cardsGoToBottom = preferences.secretsHelperCardsGoToBottom;
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;
