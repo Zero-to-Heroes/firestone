@@ -44,6 +44,7 @@ export class ReplaysNotificationService {
 			cardId: undefined,
 			theClass: 'remove-on-update',
 			clickToClose: true,
+			timeout: 99999,
 		} as Message);
 	}
 

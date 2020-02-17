@@ -39,6 +39,7 @@ declare var amplitude;
 			[style.opacity]="opacity"
 			[ngClass]="{ 'active': active }"
 		>
+			<secrets-helper-widget-icon class="icon" [active]="active"></secrets-helper-widget-icon>
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="secrets-helper-container">
@@ -109,9 +110,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.deckSubscription = deckEventBus.subscribe(async event => {
 			this.gameState = event ? event.state : undefined;
 			this.active =
-				this.gameState &&
-				this.gameState.opponentDeck &&
-				(this.gameState.opponentDeck.secretHelperActive || this.gameState.opponentDeck.secretHelperActiveHover);
+				this.gameState && this.gameState.opponentDeck && this.gameState.opponentDeck.secretHelperActive;
 			this.secrets = this.gameState && this.gameState.opponentDeck ? this.gameState.opponentDeck.secrets : null;
 			// console.log('game state', this.secrets, this.gameState);
 			if (!(this.cdr as ViewRef).destroyed) {
@@ -173,7 +172,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		this.opacity = preferences.secretsHelperOpacity / 100;
 		this.scale = preferences.secretsHelperScale;
 		this.el.nativeElement.style.setProperty('--secrets-helper-scale', this.scale / 100);
-		this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '30vh');
+		this.el.nativeElement.style.setProperty('--secrets-helper-max-height', '32vh');
 		this.colorManaCost = preferences.overlayShowRarityColors;
 		this.cardsGoToBottom = preferences.secretsHelperCardsGoToBottom;
 		this.showTooltips = preferences.overlayShowTooltipsOnHover;

@@ -9,6 +9,7 @@ import { CaptureConsole, ExtraErrorData } from '@sentry/integrations';
 import { SelectModule } from 'ng-select';
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
 import { SecretsHelperControlBarComponent } from '../../components/secrets-helper/secrets-helper-control-bar.component';
+import { SecretsHelperWidgetIconComponent } from '../../components/secrets-helper/secrets-helper-widget-icon.component';
 import { SecretsHelperComponent } from '../../components/secrets-helper/secrets-helper.component';
 import { DebugService } from '../../services/debug.service';
 import { Events } from '../../services/events.service';
@@ -50,7 +51,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		SharedDeckTrackerModule,
 		LoggerModule.forRoot({ level: NgxLoggerLevel.DEBUG }),
 	],
-	declarations: [SecretsHelperControlBarComponent, SecretsHelperComponent],
+	declarations: [SecretsHelperControlBarComponent, SecretsHelperComponent, SecretsHelperWidgetIconComponent],
 	bootstrap: [SecretsHelperComponent],
 	providers: [DebugService, Events, GenericIndexedDbService, PreferencesService, OverwolfService],
 })
