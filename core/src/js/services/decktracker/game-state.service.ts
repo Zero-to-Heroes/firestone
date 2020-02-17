@@ -376,18 +376,11 @@ export class GameStateService {
 		}
 		const prefs = await this.prefs.getPreferences();
 		const inGame = (await this.ow.inGame()) && (this.onGameScreen || !prefs.decktrackerCloseOnGameEnd);
-		const [
-			decktrackerWindow,
-			opponentTrackerWindow,
-			opponentHandWindow,
-			secretsHelperWindow,
-			secretsHelperWidgetWindow,
-		] = await Promise.all([
+		const [decktrackerWindow, opponentTrackerWindow, opponentHandWindow, secretsHelperWindow] = await Promise.all([
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_WINDOW),
 			this.ow.getWindowState(OverwolfService.DECKTRACKER_OPPONENT_WINDOW),
 			this.ow.getWindowState(OverwolfService.MATCH_OVERLAY_OPPONENT_HAND_WINDOW),
 			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WINDOW),
-			this.ow.getWindowState(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW),
 		]);
 
 		// this.logger.debug('[game-state] retrieved windows', decktrackerWindow, opponentHandWindow);
@@ -493,15 +486,12 @@ export class GameStateService {
 			// console.log('[game-state] showing secrets helper');
 			await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WINDOW);
 			await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WINDOW);
-			// await this.ow.obtainDeclaredWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
-			// await this.ow.restoreWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
 		} else if (
 			secretsHelperWindow.window_state_ex !== 'closed' &&
 			(!shouldShowSecretsHelper || !inGame || !this.showSecretsHelper)
 		) {
 			// console.log('[game-state] closing secrets helper');
 			await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WINDOW);
-			// await this.ow.closeWindow(OverwolfService.SECRETS_HELPER_WIDGET_WINDOW);
 		}
 	}
 
