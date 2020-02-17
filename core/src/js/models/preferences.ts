@@ -30,7 +30,7 @@ export class Preferences {
 	readonly overlayShowRarityColors: boolean = true;
 
 	readonly overlayGroupByZone: boolean = true;
-	readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
+	// readonly overlayHighlightCardsInHand: boolean = false; // Doesn't have a UI anymore?
 	readonly overlayCardsGoToBottom: boolean = false;
 	readonly decktrackerNoDeckMode: boolean = false;
 	readonly overlayOpacityInPercent: number = 100;
