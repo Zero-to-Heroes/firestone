@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { GameEvent } from '../../../models/game-event';
 import { OverwolfService } from '../../../services/overwolf.service';
 
@@ -6,6 +6,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	selector: 'decktracker-control-bar',
 	styleUrls: [
 		'../../../../css/global/components-global.scss',
+		`../../../../css/component/controls/controls.scss`,
 		'../../../../css/component/decktracker/overlay/decktracker-control-bar.component.scss',
 	],
 	template: `
@@ -23,6 +24,14 @@ import { OverwolfService } from '../../../services/overwolf.service';
 					[windowId]="windowId"
 				>
 				</control-settings>
+				<button (mousedown)="minimize()">
+					<svg class="svg-icon-fill">
+						<use
+							xmlns:xlink="https://www.w3.org/1999/xlink"
+							xlink:href="/Files/assets/svg/sprite.svg#window-control_minimize"
+						></use>
+					</svg>
+				</button>
 				<control-close
 					[windowId]="windowId"
 					[eventProvider]="closeHandler"
@@ -36,6 +45,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class DeckTrackerControlBarComponent {
 	@Input() windowId: string;
 	@Input() closeEvent: string;
+	@Output() onMinimize: EventEmitter<void> = new EventEmitter<void>();
 	closeHandler: () => void;
 
 	private deckUpdater: EventEmitter<GameEvent>;
@@ -48,5 +58,10 @@ export class DeckTrackerControlBarComponent {
 					type: this.closeEvent,
 				} as GameEvent),
 			);
+	}
+
+	minimize() {
+		console.log('minimizing', this.onMinimize);
+		this.onMinimize.next();
 	}
 }

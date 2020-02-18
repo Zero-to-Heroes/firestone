@@ -1,0 +1,26 @@
+.decktracker-widget {
+	transition: transform 0.2s ease-out;
+	&.big {
+		transform: scale(1.1);
+	}
+	.icon {
+		width: 80px;
+		height: 80px;
+		fill: currentcolor;
+	}
+	.idle {
+		background: url(/Files/assets/svg/decktracker_widget_idle.svg) center center;
+	}
+	.active {
+		background: url(/Files/assets/svg/decktracker_widget_active.svg) center center;
+		display: none;
+	}
+	&:hover {
+		.active {
+			display: flex;
+		}
+		.idle {
+			display: none;
+		}
+	}
+}

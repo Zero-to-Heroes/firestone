@@ -14,9 +14,54 @@
 	// height: 100%;
 	filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.75));
 
+	&.active {
+		.icon {
+			opacity: 0;
+		}
+	}
+
+	&:not(.active) {
+		.scalable {
+			// display: none;
+			transform: scale(0) !important;
+			opacity: 0;
+			transition-property: transform, opacity;
+			transition-duration: 0.2s;
+			transition-timing-function: ease-out;
+		}
+	}
+
+	.icon {
+		position: absolute;
+		top: 10px;
+		z-index: 1;
+		right: 260px;
+		opacity: 1;
+		transition-property: opacity;
+		transition-duration: 0.2s;
+		transition-timing-function: ease-out;
+	}
+
 	.scalable {
 		transform: scale(1);
-		transform-origin: right top;
+		top: 30px;
+		position: relative;
+	}
+
+	&.player {
+		.scalable {
+			transform-origin: right top;
+		}
+	}
+
+	&.opponent {
+		.scalable {
+			transform-origin: left top;
+		}
+		.icon {
+			right: auto;
+			left: 260px;
+		}
 	}
 
 	.decktracker-container {

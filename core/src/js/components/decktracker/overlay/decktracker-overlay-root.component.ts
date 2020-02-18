@@ -34,7 +34,17 @@ declare var amplitude;
 		`../../../../css/themes/decktracker-theme.scss`,
 	],
 	template: `
-		<div class="root overlay-container-parent" [activeTheme]="'decktracker'" [style.opacity]="opacity">
+		<div
+			class="root overlay-container-parent {{ player }}"
+			[activeTheme]="'decktracker'"
+			[style.opacity]="opacity"
+			[ngClass]="{ 'active': active }"
+		>
+			<decktracker-widget-icon
+				class="icon"
+				(decktrackerToggle)="onDecktrackerToggle($event)"
+				[decktrackerToggled]="active"
+			></decktracker-widget-icon>
 			<!-- Never remove the scalable from the DOM so that we can perform resizing even when not visible -->
 			<div class="scalable">
 				<div class="decktracker-container">
@@ -48,6 +58,7 @@ declare var amplitude;
 						<decktracker-control-bar
 							[windowId]="windowId"
 							[closeEvent]="closeEvent"
+							(onMinimize)="onMinimize()"
 						></decktracker-control-bar>
 						<decktracker-title-bar [deck]="deck"></decktracker-title-bar>
 						<decktracker-deck-list
@@ -84,6 +95,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	deck: DeckState;
 
 	gameState: GameState;
+	active: boolean = true;
 	windowId: string;
 	activeTooltip: string;
 	// overlayDisplayed: boolean;
@@ -176,6 +188,18 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 		this.hideTooltipSubscription.unsubscribe();
 		this.deckSubscription.unsubscribe();
 		this.preferencesSubscription.unsubscribe();
+	}
+
+	onMinimize() {
+		console.log('minimizing in root');
+		this.onDecktrackerToggle(false);
+	}
+
+	async onDecktrackerToggle(toggled: boolean) {
+		this.active = toggled;
+		// Avoid artifacts when minimizing
+		this.showTooltips = this.active;
+		await this.updateTooltipPosition();
 	}
 
 	@HostListener('mousedown')

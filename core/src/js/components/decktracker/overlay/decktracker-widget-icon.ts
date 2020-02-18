@@ -1,0 +1,72 @@
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	Component,
+	EventEmitter,
+	HostListener,
+	Input,
+	Output,
+} from '@angular/core';
+import { NGXLogger } from 'ngx-logger';
+import { OverwolfService } from '../../../services/overwolf.service';
+import { PreferencesService } from '../../../services/preferences.service';
+
+declare var amplitude;
+
+@Component({
+	selector: 'decktracker-widget-icon',
+	styleUrls: [
+		'../../../../css/global/components-global.scss',
+		'../../../../css/component/decktracker/overlay/decktracker-widget-icon.component.scss',
+		`../../../../css/themes/decktracker-theme.scss`,
+	],
+	template: `
+		<div class="decktracker-widget" [ngClass]="{ 'big': big }" (mouseup)="toggleDecktracker($event)">
+			<div class="icon idle"></div>
+			<div class="icon active"></div>
+		</div>
+	`,
+	changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DecktrackerWidgetIconComponent implements AfterViewInit {
+	@Output() decktrackerToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
+	@Input() decktrackerToggled: boolean = true;
+	big: boolean;
+
+	private windowId: string;
+	private draggingTimeout;
+	private isDragging: boolean;
+
+	constructor(private logger: NGXLogger, private prefs: PreferencesService, private ow: OverwolfService) {}
+
+	async ngAfterViewInit() {
+		this.windowId = (await this.ow.getCurrentWindow()).id;
+	}
+
+	toggleDecktracker(event: MouseEvent) {
+		console.log('toggling', this.isDragging);
+		if (this.isDragging) {
+			return;
+		}
+		this.big = true;
+		setTimeout(() => (this.big = false), 200);
+		this.decktrackerToggled = !this.decktrackerToggled;
+		this.decktrackerToggle.next(this.decktrackerToggled);
+	}
+
+	@HostListener('mousedown', ['$event'])
+	dragMove(event: MouseEvent) {
+		this.draggingTimeout = setTimeout(() => {
+			this.isDragging = true;
+		}, 500);
+		this.ow.dragMove(this.windowId, async result => {
+			clearTimeout(this.draggingTimeout);
+			this.isDragging = false;
+			const window = await this.ow.getCurrentWindow();
+			if (!window) {
+				return;
+			}
+			// this.prefs.updateSecretsHelperWidgetPosition(window.left, window.top);
+		});
+	}
+}
