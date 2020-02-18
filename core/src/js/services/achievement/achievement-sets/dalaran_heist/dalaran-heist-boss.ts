@@ -161,7 +161,7 @@ export class DalaranHeistBossSetProvider extends GenericSetProvider {
 					);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: 'Tons of achievements await you!',
+				emptyStateTitle: 'Tons of achievements are awaiting you!',
 				emptyStateText: 'Find them listed here once completed.',
 			},
 		];

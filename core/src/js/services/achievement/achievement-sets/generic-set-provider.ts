@@ -46,7 +46,7 @@ export abstract class GenericSetProvider extends SetProvider {
 					return a.completionSteps.map(step => step.numberOfCompletions).reduce((a, b) => a + b, 0) === 0;
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: 'Tons of achievements await you!',
+				emptyStateTitle: 'Tons of achievements are awaiting you!',
 				emptyStateText: 'Find them listed here once completed.',
 			},
 			{
@@ -59,7 +59,7 @@ export abstract class GenericSetProvider extends SetProvider {
 					);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Tons of achievements await you!',
+				emptyStateTitle: 'Tons of achievements are awaiting you!',
 				emptyStateText: 'Find them listed here once completed.',
 			},
 			{
@@ -69,7 +69,7 @@ export abstract class GenericSetProvider extends SetProvider {
 					return a.completionSteps.every(step => step.numberOfCompletions > 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
-				emptyStateTitle: 'Tons of achievements await you!',
+				emptyStateTitle: 'Tons of achievements are awaiting you!',
 				emptyStateText: 'Find them listed here once completed.',
 			},
 		];
