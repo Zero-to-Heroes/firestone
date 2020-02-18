@@ -84,14 +84,14 @@ export class PackMonitor {
 		console.log('[pack-monitor] preparing to handle new card event');
 		const card: Card = event.data[0];
 		const type: string = event.data[1];
-		this.cardEvents[card.id] = () => {
+		this.cardEvents[card.id + type] = () => {
 			this.createNewCardToast(card, type);
 		};
 		if (this.openingPack) {
 			if (!card.id) {
 				console.error('[pack-monitor] Trying to add an empty card id to unrevealed cards', card, type);
 			}
-			this.unrevealedCards.push(card.id);
+			this.unrevealedCards.push(card.id + type);
 		} else {
 			this.revealCardById(card.id);
 		}
@@ -105,13 +105,14 @@ export class PackMonitor {
 		console.log('[pack-monitor] preparing to handle new dust event');
 		const card: Card = event.data[0];
 		const dust: number = event.data[1];
+		const type: string = event.data[2];
 		if (this.openingPack) {
 			// console.log('[pack-monitor] opening pack, waiting to show dust');
 			if (!card.id) {
 				console.error('[pack-monitor] Trying to add an empty card id to unrevealed cards', card, dust);
 			}
-			this.unrevealedCards.push(card.id);
-			this.cardEvents[card.id] = () => {
+			this.unrevealedCards.push(card.id + type);
+			this.cardEvents[card.id + type] = () => {
 				this.totalDustInPack += dust;
 				this.totalDuplicateCards++;
 			};
@@ -149,7 +150,7 @@ export class PackMonitor {
 				return;
 			}
 			this.spacePressed++;
-			const cardsToBeRevealed: number = this.unrevealedCards.filter(card => card).length;
+			const cardsToBeRevealed: number = this.unrevealedCards.filter(cardIdAndType => cardIdAndType).length;
 			if (cardsToBeRevealed !== this.spacePressed) {
 				return;
 			}
@@ -226,15 +227,15 @@ export class PackMonitor {
 		if (i === -1) {
 			return;
 		}
-		const cardId = this.unrevealedCards[i];
+		const cardIdAndType = this.unrevealedCards[i];
 		this.unrevealedCards[i] = '';
-		this.revealCardById(cardId);
+		this.revealCardById(cardIdAndType);
 	}
 
-	private revealCardById(cardId: string) {
-		console.log('[pack-monitor] revealing card', cardId, this.unrevealedCards);
-		if (this.cardEvents[cardId]) {
-			this.cardEvents[cardId]();
+	private revealCardById(cardIdAndType: string) {
+		console.log('[pack-monitor] revealing card', cardIdAndType, this.unrevealedCards);
+		if (this.cardEvents[cardIdAndType]) {
+			this.cardEvents[cardIdAndType]();
 		}
 
 		for (let j = 0; j < 5; j++) {
