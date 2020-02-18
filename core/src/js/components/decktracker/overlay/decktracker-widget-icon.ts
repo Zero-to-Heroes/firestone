@@ -30,12 +30,19 @@ declare var amplitude;
 })
 export class DecktrackerWidgetIconComponent implements AfterViewInit {
 	@Output() decktrackerToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
-	@Input() decktrackerToggled: boolean = true;
+	_decktrackerToggled: boolean = true;
 	big: boolean;
+
+	@Input() set decktrackerToggled(value: boolean) {
+		this._decktrackerToggled = value;
+		this.isDebounce = true;
+		setTimeout(() => (this.isDebounce = false), 200);
+	}
 
 	private windowId: string;
 	private draggingTimeout;
 	private isDragging: boolean;
+	private isDebounce: boolean;
 
 	constructor(private logger: NGXLogger, private prefs: PreferencesService, private ow: OverwolfService) {}
 
@@ -45,13 +52,13 @@ export class DecktrackerWidgetIconComponent implements AfterViewInit {
 
 	toggleDecktracker(event: MouseEvent) {
 		console.log('toggling', this.isDragging);
-		if (this.isDragging) {
+		if (this.isDragging || this.isDebounce) {
 			return;
 		}
 		this.big = true;
 		setTimeout(() => (this.big = false), 200);
-		this.decktrackerToggled = !this.decktrackerToggled;
-		this.decktrackerToggle.next(this.decktrackerToggled);
+		this._decktrackerToggled = !this._decktrackerToggled;
+		this.decktrackerToggle.next(this._decktrackerToggled);
 	}
 
 	@HostListener('mousedown', ['$event'])
