@@ -76,8 +76,7 @@
 				}
 			}
 			.ps:hover > .ps__rail-y,
-			.ps--focus > .ps__rail-y,
-			.ps.ps--scrolling-y > .ps__rail-y {
+			.ps--focus > .ps__rail-y {
 				opacity: 0.01;
 			}
 		}
