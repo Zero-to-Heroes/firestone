@@ -23,32 +23,6 @@ export class ReplaysNotificationService {
 		this.logger.debug('[replays-notification] listening for achievement completion events');
 	}
 
-<<<<<<< HEAD
-=======
-	private async showReplayRecordingStart(reviewId: string) {
-		const prefs = await this.prefs.getPreferences();
-		if (!prefs.replaysShowNotification) {
-			this.logger.debug(
-				'[replays-notification] preference is turned off, not showing replay start notification',
-				reviewId,
-			);
-			return;
-		}
-		this.logger.debug('[replays-notification] preparing replay start notification', reviewId);
-		// this.logger.debug('[replays-notification] will emit notif notification', stat);
-		this.notificationService.emitNewNotification({
-			notificationId: `replay-${reviewId}`,
-			content: this.buildStartNotificationTemplate(reviewId),
-			type: 'match-stats-recorded',
-			app: 'replays',
-			cardId: undefined,
-			theClass: 'remove-on-update',
-			clickToClose: true,
-			timeout: 99999,
-		} as Message);
-	}
-
->>>>>>> 985c8511... UI: first rework of the secrets helper look
 	private async showNewMatchEndNotification(stats: GameStats) {
 		const prefs = await this.prefs.getPreferences();
 		if (!prefs.replaysShowNotification) {
