@@ -18,7 +18,6 @@ import { BoardSecret } from '../../models/decktracker/board-secret';
 import { GameState } from '../../models/decktracker/game-state';
 import { Preferences } from '../../models/preferences';
 import { DebugService } from '../../services/debug.service';
-import { Events } from '../../services/events.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
@@ -67,19 +66,13 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 
 	gameState: GameState;
 	windowId: string;
-	// activeTooltip: string;
-	// displayMode: string;
-	// showTitleBar: boolean;
 	widthInPx: number;
 	opacity: number;
-	// showTracker: boolean;
-	// highlightCardsInHand: boolean;
 	colorManaCost: boolean;
 	cardsGoToBottom: boolean;
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
-	// private hasBeenMovedByUser: boolean;
 	private showTooltips: boolean = true;
 
 	private scale;
@@ -88,7 +81,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	private hideTooltipSubscription: Subscription;
 	private deckSubscription: Subscription;
 	private preferencesSubscription: Subscription;
-	// private displaySubscription: Subscription;
 
 	constructor(
 		private logger: NGXLogger,
@@ -97,7 +89,6 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 		private ow: OverwolfService,
 		private el: ElementRef,
 		private renderer: Renderer2,
-		private events: Events,
 		private init_DebugService: DebugService,
 		private cards: AllCardsService,
 	) {
