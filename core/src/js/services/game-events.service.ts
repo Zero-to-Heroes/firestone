@@ -702,7 +702,7 @@ export class GameEvents {
 				);
 				break;
 			case 'WINNER':
-				console.log(gameEvent.Type + ' event');
+				console.log(gameEvent.Type + ' event', gameEvent.Value.Winner);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
 						type: GameEvent.WINNER,
