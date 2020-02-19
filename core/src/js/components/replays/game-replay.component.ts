@@ -75,12 +75,13 @@ export class GameReplayComponent implements OnInit {
 			window['coliseum'].component.updateStatus('Downloading replay file');
 		});
 		const review: any = await this.http
-			.get(`https://nx16sjfatc.execute-api.us-west-2.amazonaws.com/prod/get-review/${reviewId}`)
+			.get(`https://nj8w9uc6p5.execute-api.us-west-2.amazonaws.com/Prod/${reviewId}`)
 			.toPromise();
+		//console.log('review in firestone', review);
 		const headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
 		console.log('loaded review');
 		const replay = await this.http
-			.get(REPLAY_API + review.key, { headers: headers, responseType: 'text' })
+			.get(REPLAY_API + review.replayKey, { headers: headers, responseType: 'text' })
 			.toPromise();
 		console.log('loaded replay');
 		return replay;
