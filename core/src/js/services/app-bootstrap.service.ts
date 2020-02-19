@@ -37,7 +37,7 @@ declare var amplitude: any;
 @Injectable()
 export class AppBootstrapService {
 	private static readonly STATES = ['INIT', 'READY'];
-	private static readonly LOADING_SCREEN_DURATION = 10000;
+	private static readonly LOADING_SCREEN_DURATION = 20000;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private currentState = 'INIT';
@@ -226,7 +226,6 @@ export class AppBootstrapService {
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 		await this.ow.restoreWindow(window.id);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
-		this.closeLoadingScreen();
 	}
 
 	private async showReplaysRecap() {
