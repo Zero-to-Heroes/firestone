@@ -34,12 +34,15 @@ export class CardPlayedFromHandParser implements EventParser {
 		// Only minions end up on the board
 		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard = refCard && refCard.type === 'Minion';
+		const cardWithZone = card.update({
+			zone: 'PLAY',
+		} as DeckCard);
 		const newBoard: readonly DeckCard[] = isOnBoard
-			? this.helper.addSingleCardToZone(deck.board, card)
+			? this.helper.addSingleCardToZone(deck.board, cardWithZone)
 			: deck.board;
 		const newOtherZone: readonly DeckCard[] = isOnBoard
 			? deck.otherZone
-			: this.helper.addSingleCardToZone(deck.otherZone, card);
+			: this.helper.addSingleCardToZone(deck.otherZone, cardWithZone);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			hand: newHand,
 			board: newBoard,

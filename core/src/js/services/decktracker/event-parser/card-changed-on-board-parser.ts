@@ -28,6 +28,10 @@ export class CardChangedOnBoardParser implements EventParser {
 		}
 		// The CARD_CHANGED* events keep the same entityId, but change the cardId, and thus the card name
 		const dbCard = this.allCards.getCard(cardId) || ({} as ReferenceCard);
+		// So that we can keep track of transformed cards
+		const oldCard = card.update({
+			zone: 'TRANSFORMED_INTO_OTHER',
+		} as DeckCard);
 		const updatedCard = card.update({
 			cardId: cardId,
 			cardName: dbCard.name,
@@ -41,8 +45,10 @@ export class CardChangedOnBoardParser implements EventParser {
 			entityId,
 		)[0];
 		const newBoard: readonly DeckCard[] = this.helper.addSingleCardToZone(boardWithRemovedCard, updatedCard);
+		const newOther: readonly DeckCard[] = this.helper.addSingleCardToZone(deck.otherZone, oldCard);
 		const newPlayerDeck = Object.assign(new DeckState(), deck, {
 			board: newBoard,
+			other: newOther,
 		});
 		return Object.assign(new GameState(), currentState, {
 			[isPlayer ? 'playerDeck' : 'opponentDeck']: newPlayerDeck,

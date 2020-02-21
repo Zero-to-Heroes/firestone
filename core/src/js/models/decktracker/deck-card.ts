@@ -8,7 +8,17 @@ export class DeckCard {
 	readonly rarity: string;
 	readonly creatorCardId?: string;
 	// readonly totalQuantity: number;
-	readonly zone: 'DISCARD' | 'BURNED' | 'PLAY' | 'SETASIDE' | 'SECRET' | 'HAND' | 'REMOVEDFROMGAME'; // Optional, should only be read when in the Other zone
+	// Optional, should only be read when in the Other zone
+	readonly zone:
+		| 'DISCARD'
+		| 'BURNED'
+		| 'PLAY'
+		| 'SETASIDE'
+		| 'SECRET'
+		| 'HAND'
+		| 'REMOVEDFROMGAME'
+		| 'GRAVEYARD'
+		| 'TRANSFORMED_INTO_OTHER';
 	readonly metaInfo: CardMetaInfo = new CardMetaInfo();
 	readonly inInitialDeck: boolean;
 
