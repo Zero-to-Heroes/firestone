@@ -77,7 +77,7 @@ export class ReplayUploadService {
 			Body: blob,
 			Metadata: {
 				'review-id': reviewId,
-				'application-key': 'overwolf',
+				'application-key': 'firestone',
 				'user-key': userId,
 				'file-type': 'hszip',
 				'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
