@@ -41,10 +41,9 @@ export class ReplaysNotificationService {
 			content: this.buildStartNotificationTemplate(reviewId),
 			type: 'match-stats-recorded',
 			app: 'replays',
-			cardId: undefined,
 			theClass: 'remove-on-update',
 			clickToClose: true,
-			timeout: 99999,
+			timeout: 15000,
 		} as Message);
 	}
 
