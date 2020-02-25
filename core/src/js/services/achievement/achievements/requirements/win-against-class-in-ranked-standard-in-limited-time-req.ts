@@ -47,6 +47,9 @@ export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirem
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
+		if (!gameEvent.additionalData || !gameEvent.additionalData.gameStats) {
+			return;
+		}
 		const stats = (gameEvent.additionalData.gameStats as GameStats).stats;
 		// Add a bit of slack
 		const referenceDate = Date.now() - (this.periodOfTimeInHours + 0.5) * 60 * 60 * 1000;

@@ -49,6 +49,9 @@ export class WinStreakReq implements Requirement {
 	}
 
 	private handleEvent(gameEvent: GameEvent) {
+		if (!gameEvent.additionalData || !gameEvent.additionalData.gameStats) {
+			return;
+		}
 		const stats = (gameEvent.additionalData.gameStats as GameStats).stats;
 		// console.debug('handling event', gameEvent, this);
 		const standardRanked = stats

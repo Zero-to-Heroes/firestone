@@ -13,6 +13,10 @@ export class ReplaysStateBuilderService {
 	constructor(private readonly logger: NGXLogger) {}
 
 	public buildState(replayState: ReplaysState, stats: StatsState): ReplaysState {
+		if (!stats || !stats.gameStats || !stats.gameStats.stats) {
+			console.error('Could not build replay state from empty stats', stats);
+			return replayState;
+		}
 		const allReplays: readonly GameStat[] = [...stats.gameStats.stats];
 		const groupedReplays: readonly GroupedReplays[] = this.groupReplays(allReplays, replayState.groupByCriteria);
 		return Object.assign(new ReplaysState(), replayState, {
