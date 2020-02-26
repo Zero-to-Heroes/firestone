@@ -17,6 +17,7 @@ export class BattlegroundsTrackingSetProvider extends GenericSetProvider {
 				'battlegrounds_total_match',
 				'battlegrounds_tribe_played_beast',
 				'battlegrounds_tribe_played_demon',
+				'battlegrounds_tribe_played_dragon',
 				'battlegrounds_tribe_played_mechanical',
 				'battlegrounds_tribe_played_murloc',
 			],
