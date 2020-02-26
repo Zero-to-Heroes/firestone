@@ -80,7 +80,6 @@ export class ReplayUploadService {
 				'application-key': 'firestone',
 				'user-key': userId,
 				'file-type': 'hszip',
-				'review-text': 'Created by [Overwolf](http://www.overwolf.com)',
 				'player-rank': playerRank ? '' + playerRank : '',
 				'opponent-rank': game.opponentRank ? '' + game.opponentRank : '',
 				'game-mode': game.gameMode,
