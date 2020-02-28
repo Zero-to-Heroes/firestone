@@ -39,6 +39,9 @@ export class BattlegroundsShowHeroSelectionParser implements EventParser {
 		heroInfos: readonly BattlegroundsHero[],
 		appState: MainWindowState,
 	): BattlegroundsHero {
+		if (!appState || !appState.stats || !appState.stats.gameStats) {
+			return null;
+		}
 		const heroInfo = heroInfos.find(info => info.cardId === cardId);
 		// Build stats
 		const heroStats = appState.stats.gameStats.stats
