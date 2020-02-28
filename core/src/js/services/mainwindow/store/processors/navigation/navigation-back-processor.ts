@@ -15,12 +15,15 @@ export class NavigationBackProcessor implements Processor {
 	): Promise<MainWindowState> {
 		// console.log('returning state', NavigationBackProcessor.buildParentState(currentState), currentState);
 		// return NavigationBackProcessor.buildParentState(currentState);
+		const nonNavigationState = currentState.nonNavigationState;
 		let targetIndex = NavigationBackProcessor.getTargetIndex(currentState, history);
-		if (targetIndex === -1) {
-			console.log('building parent state');
-			return NavigationBackProcessor.buildParentState(currentState) || currentState;
-		}
-		return history[targetIndex].state;
+		const newState =
+			targetIndex === -1
+				? NavigationBackProcessor.buildParentState(currentState) || currentState
+				: history[targetIndex].state;
+		return Object.assign(new MainWindowState(), newState, {
+			nonNavigationState: nonNavigationState,
+		} as MainWindowState);
 	}
 
 	public static getTargetIndex(currentState: MainWindowState, history: readonly StateHistory[]): number {

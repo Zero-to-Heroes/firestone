@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { AchievementSet } from '../../models/achievement-set';
 import { AchievementsState } from '../../models/mainwindow/achievements-state';
 import { Navigation } from '../../models/mainwindow/navigation';
+import { NonNavigationState } from '../../models/mainwindow/non-navigation-state';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { CurrentUser } from '../../models/overwolf/profile/current-user';
@@ -35,6 +36,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 						[achievementsList]="getDisplayedAchievements()"
 						[selectedAchievementId]="state.selectedAchievementId"
 						[achievementSet]="getAchievementSet()"
+						[activeFilter]="nonNavigationState.achievementActiveFilter"
 						[globalStats]="globalStats"
 					>
 					</achievements-list>
@@ -55,6 +57,7 @@ import { VisualAchievement } from '../../models/visual-achievement';
 })
 export class AchievementsComponent {
 	@Input() state: AchievementsState;
+	@Input() nonNavigationState: NonNavigationState;
 	@Input() currentUser: CurrentUser;
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	// TODO: should probably refactor how state is handled, so that we could

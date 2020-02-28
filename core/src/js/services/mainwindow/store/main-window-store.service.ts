@@ -30,6 +30,7 @@ import { AchievementCompletedEvent } from './events/achievements/achievement-com
 import { AchievementHistoryCreatedEvent } from './events/achievements/achievement-history-created-event';
 import { AchievementRecordedEvent } from './events/achievements/achievement-recorded-event';
 import { AchievementsInitEvent } from './events/achievements/achievements-init-event';
+import { ChangeAchievementsActiveFilterEvent } from './events/achievements/change-achievements-active-filter-event';
 import { ChangeVisibleAchievementEvent } from './events/achievements/change-visible-achievement-event';
 import { FilterShownAchievementsEvent } from './events/achievements/filter-shown-achievements-event';
 import { SelectAchievementCategoryEvent } from './events/achievements/select-achievement-category-event';
@@ -75,6 +76,7 @@ import { AchievementCompletedProcessor } from './processors/achievements/achieve
 import { AchievementHistoryCreatedProcessor } from './processors/achievements/achievement-history-created-processor';
 import { AchievementRecordedProcessor } from './processors/achievements/achievement-recorded-processor';
 import { AchievementsInitProcessor } from './processors/achievements/achievements-init-processor';
+import { ChangeAchievementsActiveFilterProcessor } from './processors/achievements/change-achievements-active-filter-processor';
 import { ChangeVisibleAchievementProcessor } from './processors/achievements/change-visible-achievement-processor';
 import { FilterShownAchievementsProcessor } from './processors/achievements/filter-shown-achievements-processor';
 import { SelectAchievementCategoryProcessor } from './processors/achievements/select-achievement-category-processor';
@@ -356,6 +358,9 @@ export class MainWindowStoreService {
 			// Achievements
 			AchievementsInitEvent.eventName(),
 			new AchievementsInitProcessor(),
+
+			ChangeAchievementsActiveFilterEvent.eventName(),
+			new ChangeAchievementsActiveFilterProcessor(),
 
 			AchievementHistoryCreatedEvent.eventName(),
 			new AchievementHistoryCreatedProcessor(this.achievementHistoryStorage, this.achievementsLoader),

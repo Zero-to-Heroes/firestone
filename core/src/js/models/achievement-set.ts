@@ -9,20 +9,6 @@ export class AchievementSet {
 	readonly achievements: readonly VisualAchievement[] = [];
 	readonly filterOptions: readonly FilterOption[] = [];
 
-	// constructor(
-	// 	id: string = null,
-	// 	displayName: string = null,
-	// 	logoName: string = null,
-	// 	achievements: readonly VisualAchievement[] = null,
-	// 	filterOptions: readonly FilterOption[] = null,
-	// ) {
-	// 	this.id = id;
-	// 	this.displayName = displayName;
-	// 	this.logoName = logoName;
-	// 	this.achievements = achievements;
-	// 	this.filterOptions = filterOptions;
-	// }
-
 	public static create(value: AchievementSet): AchievementSet {
 		const sortedAchievements = AchievementSet.sort(value.achievements);
 		return Object.assign(new AchievementSet(), value, {

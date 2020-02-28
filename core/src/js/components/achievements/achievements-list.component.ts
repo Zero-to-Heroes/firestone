@@ -16,6 +16,7 @@ import { AchievementSet } from '../../models/achievement-set';
 import { SocialShareUserInfo } from '../../models/mainwindow/social-share-user-info';
 import { GlobalStats } from '../../models/mainwindow/stats/global/global-stats';
 import { VisualAchievement } from '../../models/visual-achievement';
+import { ChangeAchievementsActiveFilterEvent } from '../../services/mainwindow/store/events/achievements/change-achievements-active-filter-event';
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
@@ -32,7 +33,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				<ng-select
 					class="filter"
 					[options]="filterOptions"
-					[ngModel]="activeFilter"
+					[ngModel]="_activeFilter"
 					placeholder="All achievements"
 					(selected)="selectFilter($event)"
 					(opened)="refresh()"
@@ -41,7 +42,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 				>
 					<ng-template #optionTemplate let-option="option">
 						<span>{{ option?.label }}</span>
-						<i class="i-30 selected-icon" *ngIf="option.value === activeFilter">
+						<i class="i-30 selected-icon" *ngIf="option.value === _activeFilter">
 							<svg class="svg-icon-fill">
 								<use xlink:href="/Files/assets/svg/sprite.svg#selected_dropdown" />
 							</svg>
@@ -78,17 +79,19 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class AchievementsListComponent implements AfterViewInit {
 	@Input() socialShareUserInfo: SocialShareUserInfo;
 	@Input() globalStats: GlobalStats;
+	_activeFilter: string;
 	_achievementSet: AchievementSet;
 	_selectedAchievementId: string;
 	achievements: readonly VisualAchievement[];
 
 	activeAchievements: VisualAchievement[];
 	filterOptions: IOption[];
-	activeFilter: string;
 	emptyStateSvgTemplate: SafeHtml;
 	emptyStateIcon: string;
 	emptyStateTitle: string;
 	emptyStateText: string;
+
+	private filterFromPrefs: string;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
@@ -126,13 +129,18 @@ export class AchievementsListComponent implements AfterViewInit {
 				label: option.label,
 				value: option.value,
 			}));
-			this.activeFilter = this.filterOptions[0].value;
 			// console.log('[achievements-list] set active filter', this.activeFilter);
 			this.updateShownAchievements();
 		}
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	@Input() set activeFilter(value: string) {
+		console.log('setting active filter', value);
+		this.filterFromPrefs = value;
+		this.updateShownAchievements();
 	}
 
 	@Input('achievementsList') set achievementsList(achievementsList: VisualAchievement[]) {
@@ -179,9 +187,9 @@ export class AchievementsListComponent implements AfterViewInit {
 	}
 
 	selectFilter(option: IOption) {
-		this.activeFilter = option.value;
-		console.log('[achievements-list] selected filter', this.activeFilter);
-		this.updateShownAchievements();
+		console.log('[achievements-list] selected filter', option.value);
+		this.stateUpdater.next(new ChangeAchievementsActiveFilterEvent(option.value));
+		// this.activeFilter = option.value;
 	}
 
 	trackByAchievementId(achievement: VisualAchievement, index: number) {
@@ -199,7 +207,10 @@ export class AchievementsListComponent implements AfterViewInit {
 		if (!this.achievements || !this._achievementSet) {
 			return;
 		}
-		const filterOption = this._achievementSet.filterOptions.filter(option => option.value === this.activeFilter)[0];
+		this.updateActiveFilter();
+		const filterOption = this._achievementSet.filterOptions.filter(
+			option => option.value === this._activeFilter,
+		)[0];
 		const filterFunction: (VisualAchievement) => boolean = filterOption.filterFunction;
 		this.emptyStateIcon = filterOption.emptyStateIcon;
 		this.emptyStateTitle = filterOption.emptyStateTitle;
@@ -214,5 +225,12 @@ export class AchievementsListComponent implements AfterViewInit {
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
+	}
+
+	private updateActiveFilter() {
+		this._activeFilter =
+			this.filterFromPrefs ||
+			(this.filterOptions && this.filterOptions.length > 0 ? this.filterOptions[0].value : null);
+		console.log('updated active filter', this._activeFilter, this.filterFromPrefs, this.filterOptions);
 	}
 }

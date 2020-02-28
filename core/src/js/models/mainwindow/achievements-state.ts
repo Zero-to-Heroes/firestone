@@ -11,7 +11,6 @@ export class AchievementsState {
 	readonly menuDisplayType: string = 'menu';
 	readonly globalCategories: readonly VisualAchievementCategory[] = [];
 	readonly selectedGlobalCategoryId: string;
-	// readonly achievementCategories: readonly AchievementSet[] = [];
 	readonly selectedCategoryId: string;
 	// Holds the IDs of all the relevant achievements. The real data is somewhere in the achievements catergories
 	readonly achievementsList: readonly string[] = [];

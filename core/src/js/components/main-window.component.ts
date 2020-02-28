@@ -8,11 +8,11 @@ import {
 	ViewEncapsulation,
 	ViewRef,
 } from '@angular/core';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
-import { AllCardsService } from '@firestone-hs/replay-parser';
 
 declare var amplitude: any;
 
@@ -57,6 +57,7 @@ declare var amplitude: any;
 				<achievements
 					class="main-section"
 					[state]="state.achievements"
+					[nonNavigationState]="state.nonNavigationState"
 					[navigation]="state.navigation"
 					[currentUser]="state.currentUser"
 					[socialShareUserInfo]="state.socialShareUserInfo"
