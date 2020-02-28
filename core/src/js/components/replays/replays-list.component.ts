@@ -54,10 +54,14 @@ export class ReplaysListComponent {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	@Input() set state(value: ReplaysState) {
-		// this.logger.debug('[replays-list]');
+		// this.logger.debug('[replays-list] setting state', value);
 		this._state = value;
+		this.displayedReplays = [];
 		this._replays = value.groupedReplays || [];
 		this.handleProgressiveDisplay();
+		// if (!(this.cdr as ViewRef).destroyed) {
+		// 	this.cdr.detectChanges();
+		// }
 	}
 
 	constructor(
@@ -98,12 +102,16 @@ export class ReplaysListComponent {
 
 	// We load the first replays, and load the rest only when the user scrolls down
 	private handleProgressiveDisplay() {
+		// this.logger.debug('[replays-list] handleProgressiveDisplay');
 		this.replaysIterator = this.buildIterator();
+		this.onScroll();
+		// this.logger.debug('[replays-list] handleProgressiveDisplay done');
 	}
 
 	private *buildIterator(): IterableIterator<void> {
 		// this.logger.debug('[replays-list]', 'starting loading replays');
 		const workingReplays = [...this._replays];
+		// this.logger.debug('[replays-list] workingReplays', workingReplays);
 		const step = 100;
 		while (workingReplays.length > 0) {
 			let currentReplays = [];
@@ -112,8 +120,10 @@ export class ReplaysListComponent {
 				(currentReplays.length === 0 || this.getTotalReplaysLength(currentReplays) < step)
 			) {
 				currentReplays.push(...workingReplays.splice(0, 1));
+				// this.logger.debug('[replays-list] currentReplays', currentReplays);
 			}
 			this.displayedReplays = [...this.displayedReplays, ...currentReplays];
+			// this.logger.debug('[replays-list] displayedReplays', this.displayedReplays);
 			this.isLoading = true;
 			if (!(this.cdr as ViewRef).destroyed) {
 				this.cdr.detectChanges();
@@ -127,6 +137,7 @@ export class ReplaysListComponent {
 			yield;
 		}
 		this.isLoading = false;
+		// this.logger.debug('[replays-list] everything loaded');
 		return;
 	}
 
