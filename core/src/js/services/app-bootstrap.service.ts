@@ -104,7 +104,10 @@ export class AppBootstrapService {
 		}
 		console.log('[bootstrap] app init starting');
 		this.ow.addHotKeyPressedListener('collection', async hotkeyResult => {
-			console.log('[bootstrap] hotkey pressed', hotkeyResult);
+			console.log('[bootstrap] hotkey pressed', hotkeyResult, this.currentState);
+			if (this.currentState !== 'READY') {
+				return;
+			}
 			if (hotkeyResult.status === 'success') {
 				const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
 				if (window.isVisible) {
@@ -224,8 +227,9 @@ export class AppBootstrapService {
 		console.log('[bootstrap] reading to show collection window');
 		// We do both store and direct restore to keep things snappier
 		const window = await this.ow.obtainDeclaredWindow(OverwolfService.COLLECTION_WINDOW);
-		await this.ow.restoreWindow(window.id);
+		this.ow.restoreWindow(window.id);
 		this.store.stateUpdater.next(new ShowMainWindowEvent());
+		this.ow.closeWindow(OverwolfService.LOADING_WINDOW);
 	}
 
 	private async showReplaysRecap() {
