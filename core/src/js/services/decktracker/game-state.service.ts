@@ -216,7 +216,11 @@ export class GameStateService {
 		const gameEvent = eventQueue[0];
 		// TODO: process several events if the queue is long, as otherwise it can cause a big lag
 		// (eg shudderwok)
-		await this.processEvent(gameEvent);
+		try {
+			await this.processEvent(gameEvent);
+		} catch (e) {
+			console.error('Exception while processing event', e);
+		}
 		return eventQueue.slice(1);
 	}
 
