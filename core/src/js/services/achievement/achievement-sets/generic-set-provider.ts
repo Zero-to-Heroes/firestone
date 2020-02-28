@@ -41,24 +41,11 @@ export abstract class GenericSetProvider extends SetProvider {
 			},
 			{
 				value: 'ONLY_MISSING',
-				label: 'Locked achievements',
+				label: 'Incomplete achievements',
 				filterFunction: (a: VisualAchievement) => {
-					return a.completionSteps.map(step => step.numberOfCompletions).reduce((a, b) => a + b, 0) === 0;
+					return a.completionSteps.some(step => step.numberOfCompletions === 0);
 				},
 				emptyStateIcon: 'empty_state_Only_cards_I_don’t_have_illustration',
-				emptyStateTitle: 'Tons of achievements are awaiting you!',
-				emptyStateText: 'Find them listed here once completed.',
-			},
-			{
-				value: 'ONLY_PARTIALLY_COMPLETED',
-				label: 'Partial achievements',
-				filterFunction: (a: VisualAchievement) => {
-					return (
-						a.completionSteps.some(step => step.numberOfCompletions > 0) &&
-						!a.completionSteps.every(step => step.numberOfCompletions > 0)
-					);
-				},
-				emptyStateIcon: 'empty_state_Only_cards_I_have_illustration',
 				emptyStateTitle: 'Tons of achievements are awaiting you!',
 				emptyStateText: 'Find them listed here once completed.',
 			},
