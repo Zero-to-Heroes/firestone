@@ -117,7 +117,9 @@ export class DeckZoneComponent {
 				totalQuantity: cards.length,
 				creatorCardIds: creatorCardIds,
 			} as VisualDeckCard);
-		}).sort((a, b) => this.compare(a, b));
+		})
+			.sort((a, b) => this.compare(a, b))
+			.sort((a, b) => this.sortByIcon(a, b));
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
 	}
 
@@ -138,6 +140,28 @@ export class DeckZoneComponent {
 			return -1;
 		}
 		if (b.creatorCardIds.length === 0) {
+			return 1;
+		}
+		return 0;
+	}
+
+	private sortByIcon(a: VisualDeckCard, b: VisualDeckCard): number {
+		if (a.zone === 'PLAY' && b.zone !== 'PLAY') {
+			return -1;
+		}
+		if (a.zone !== 'PLAY' && b.zone === 'PLAY') {
+			return 1;
+		}
+		if (a.zone === 'GRAVEYARD' && b.zone !== 'GRAVEYARD') {
+			return -1;
+		}
+		if (a.zone !== 'GRAVEYARD' && b.zone === 'GRAVEYARD') {
+			return 1;
+		}
+		if (a.zone === 'DISCARD' && b.zone !== 'DISCARD') {
+			return -1;
+		}
+		if (a.zone !== 'DISCARD' && b.zone === 'DISCARD') {
 			return 1;
 		}
 		return 0;

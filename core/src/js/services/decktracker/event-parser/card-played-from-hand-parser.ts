@@ -35,7 +35,7 @@ export class CardPlayedFromHandParser implements EventParser {
 		const refCard = this.allCards.getCard(cardId);
 		const isOnBoard = refCard && refCard.type === 'Minion';
 		const cardWithZone = card.update({
-			zone: 'PLAY',
+			zone: isOnBoard ? 'PLAY' : null,
 		} as DeckCard);
 		const newBoard: readonly DeckCard[] = isOnBoard
 			? this.helper.addSingleCardToZone(deck.board, cardWithZone)

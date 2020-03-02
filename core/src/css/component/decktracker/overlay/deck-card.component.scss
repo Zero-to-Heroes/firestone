@@ -134,6 +134,7 @@
 
 	.number-of-copies,
 	.legendary-symbol,
+	.icon-symbol,
 	.gift-symbol {
 		width: 23px;
 		height: 100%;
@@ -166,6 +167,19 @@
 		i {
 			width: 13px;
 			height: 12px;
+		}
+
+		&.discard {
+			i {
+				width: 13px;
+				height: 17px;
+			}
+		}
+		&.graveyard {
+			i {
+				width: 13px;
+				height: 16px;
+			}
 		}
 	}
 

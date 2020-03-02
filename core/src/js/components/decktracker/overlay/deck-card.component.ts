@@ -30,6 +30,42 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					<span>{{ numberOfCopies }}</span>
 				</div>
 			</div>
+			<div class="icon-symbol" *ngIf="isBurned" [helpTooltip]="'Card burned'">
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_burned" />
+						</svg>
+					</i>
+				</div>
+			</div>
+			<div class="icon-symbol graveyard" *ngIf="isGraveyard" [helpTooltip]="'In graveyard'">
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_graveyard" />
+						</svg>
+					</i>
+				</div>
+			</div>
+			<div class="icon-symbol discard" *ngIf="isDiscarded" [helpTooltip]="'Card discarded'">
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_discarded" />
+						</svg>
+					</i>
+				</div>
+			</div>
+			<div class="icon-symbol trasnformed" *ngIf="isTransformed" [helpTooltip]="'Card transformed'">
+				<div class="inner-border">
+					<i>
+						<svg>
+							<use xlink:href="assets/svg/sprite.svg#card_transformed" />
+						</svg>
+					</i>
+				</div>
+			</div>
 			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
 				<div class="inner-border">
 					<i>
@@ -68,6 +104,10 @@ export class DeckCardComponent {
 	cardClass: string;
 	creatorCardIds: readonly string[];
 	giftTooltip: string;
+	isBurned: boolean;
+	isDiscarded: boolean;
+	isGraveyard: boolean;
+	isTransformed: boolean;
 
 	// I don't know why I need the cdr.detectChanges() here. Maybe some async stuff shenanigans?
 	constructor(private readonly cdr: ChangeDetectorRef, private readonly cards: AllCardsService) {}
@@ -89,6 +129,11 @@ export class DeckCardComponent {
 		this.giftTooltip = null;
 		this.updateGiftTooltip();
 		this.highlight = card.highlight;
+		this.isBurned = card.zone === 'BURNED';
+		this.isDiscarded = card.zone === 'DISCARD';
+		this.isGraveyard = card.zone === 'GRAVEYARD';
+		this.isTransformed = card.zone === 'TRANSFORMED_INTO_OTHER';
+
 		this.cardClass = card.cardClass ? card.cardClass.toLowerCase() : null;
 		// console.log('setting card highlight', this.cardId, this.highlight, card);
 		// 0 is acceptable when showing the deck as a single deck list
