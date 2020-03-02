@@ -14,18 +14,28 @@ export class GenericIndexedDbService {
 	public async saveUserPreferences(preferences: Preferences): Promise<Preferences> {
 		await this.waitForDbInit();
 		return new Promise<Preferences>(resolve => {
-			this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
+			try {
+				this.db.update('user-preferences', preferences).then((preferences: Preferences) => {
+					resolve(preferences);
+				});
+			} catch (e) {
+				console.error('[generic-storage] could not update user prefs', e.message, e.name, e);
 				resolve(preferences);
-			});
+			}
 		});
 	}
 
 	public async getUserPreferences(): Promise<Preferences> {
 		await this.waitForDbInit();
 		return new Promise<Preferences>(resolve => {
-			this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
-				resolve(Object.assign(new Preferences(), preferences[0] || {}));
-			});
+			try {
+				this.db.getAll('user-preferences').then((preferences: Preferences[]) => {
+					resolve(Object.assign(new Preferences(), preferences[0] || {}));
+				});
+			} catch (e) {
+				console.error('[generic-storage] could not get user prefs', e.message, e.name, e);
+				resolve(new Preferences());
+			}
 		});
 	}
 
