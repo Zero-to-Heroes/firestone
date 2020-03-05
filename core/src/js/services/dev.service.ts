@@ -109,7 +109,7 @@ export class DevService {
 			deckstring?: string,
 			timeBetweenEvents?: number,
 		) => {
-			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\test\\events\\${fileName}.json`;
+			const logsLocation = `G:\\Source\\zerotoheroes\\firestone\\integration-tests\\events\\${fileName}.json`;
 			const logContents = await this.ow.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
 			// console.log('sending events', events);
