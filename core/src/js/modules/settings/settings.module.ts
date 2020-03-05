@@ -18,8 +18,11 @@ import { SettingsCollectionComponent } from '../../components/settings/collectio
 import { SettingsBroadcastComponent } from '../../components/settings/decktracker/settings-broadcast';
 import { SettingsDecktrackerAppearanceComponent } from '../../components/settings/decktracker/settings-decktracker-appearance';
 import { SettingsDecktrackerBetaComponent } from '../../components/settings/decktracker/settings-decktracker-beta.component';
+import { SettingsDecktrackerGlobalComponent } from '../../components/settings/decktracker/settings-decktracker-global';
 import { SettingsDecktrackerLaunchComponent } from '../../components/settings/decktracker/settings-decktracker-launch';
 import { SettingsDecktrackerMenuComponent } from '../../components/settings/decktracker/settings-decktracker-menu.component';
+import { SettingsDecktrackerOpponentDeckComponent } from '../../components/settings/decktracker/settings-decktracker-opponent-deck';
+import { SettingsDecktrackerYourDeckComponent } from '../../components/settings/decktracker/settings-decktracker-your-deck';
 import { SettingsDecktrackerComponent } from '../../components/settings/decktracker/settings-decktracker.component';
 import { SettingsGeneralBugReportComponent } from '../../components/settings/general/settings-general-bug-report.component';
 import { SettingsGeneralLaunchComponent } from '../../components/settings/general/settings-general-launch.component';
@@ -93,6 +96,9 @@ console.log('version is ' + process.env.APP_VERSION);
 		SettingsDecktrackerMenuComponent,
 		SettingsDecktrackerLaunchComponent,
 		SettingsDecktrackerAppearanceComponent,
+		SettingsDecktrackerYourDeckComponent,
+		SettingsDecktrackerOpponentDeckComponent,
+		SettingsDecktrackerGlobalComponent,
 		SettingsBroadcastComponent,
 		SettingsDecktrackerBetaComponent,
 

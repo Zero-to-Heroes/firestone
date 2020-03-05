@@ -11,7 +11,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 			<settings-decktracker-menu [selectedMenu]="_selectedMenu" (onMenuSelected)="onMenuSelected($event)">
 			</settings-decktracker-menu>
 			<ng-container [ngSwitch]="_selectedMenu">
-				<settings-decktracker-appearance *ngSwitchCase="'appearance'"></settings-decktracker-appearance>
+				<settings-decktracker-your-deck *ngSwitchCase="'your-deck'"></settings-decktracker-your-deck>
+				<settings-decktracker-opponent-deck
+					*ngSwitchCase="'opponent-deck'"
+				></settings-decktracker-opponent-deck>
+				<settings-decktracker-global *ngSwitchCase="'global'"></settings-decktracker-global>
 				<settings-decktracker-launch *ngSwitchCase="'launch'"></settings-decktracker-launch>
 				<settings-broadcast *ngSwitchCase="'broadcast'"></settings-broadcast>
 			</ng-container>
@@ -22,7 +26,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 export class SettingsDecktrackerComponent {
 	_selectedMenu: string;
 	@Input() set selectedMenu(value: string) {
-		this._selectedMenu = value || 'appearance';
+		this._selectedMenu = value || 'your-deck';
 	}
 
 	onMenuSelected(selectedMenuItem) {
