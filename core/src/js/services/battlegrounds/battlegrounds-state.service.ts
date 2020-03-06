@@ -16,6 +16,7 @@ import { BattlegroundsHidePlayerInfoParser } from './events-parser/battlegrounds
 import { BattlegroundsLeaderboardPlaceParser } from './events-parser/battlegrounds-leaderboard-place-parser';
 import { BattlegroundsPlayerBoardParser } from './events-parser/battlegrounds-player-board-parser';
 import { BattlegroundsPlayerTavernUpgradeParser } from './events-parser/battlegrounds-player-tavern-upgrade-parser';
+import { BattlegroundsResetBattleStateParser } from './events-parser/battlegrounds-reset-battle-state-parser';
 import { BattlegroundsShowHeroSelectionParser } from './events-parser/battlegrounds-show-hero-selection-parser';
 import { BattlegroundsShowPlayerInfoParser } from './events-parser/battlegrounds-show-player-info-parser';
 import { EventParser } from './events-parser/event-parser';
@@ -191,6 +192,7 @@ export class BattlegroundsStateService {
 			new BattlegroundsHidePlayerInfoParser(),
 			new BattlegroundsShowHeroSelectionParser(this.infoService, this.allCards),
 			new BattlegroundsHideHeroSelectionParser(),
+			new BattlegroundsResetBattleStateParser(),
 		];
 	}
 }

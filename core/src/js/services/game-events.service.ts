@@ -120,7 +120,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// console.log('game event', gameEvent.Type, gameEvent);
+		console.log('game event', gameEvent.Type, gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -671,6 +671,7 @@ export class GameEvents {
 							// turn =
 							cardId: gameEvent.Value.CardId,
 							board: gameEvent.Value.Board, // as is
+							hero: gameEvent.Value.Hero, // as is
 						},
 					} as GameEvent),
 				);

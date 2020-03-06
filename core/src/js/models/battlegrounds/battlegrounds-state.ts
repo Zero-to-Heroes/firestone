@@ -1,11 +1,14 @@
 import { BattlegroundsHero } from './battlegrounds-hero';
 import { BattlegroundsPlayer } from './battlegrounds-player';
+import { BgsBattleInfo } from './bgs-battle-info';
+import { BgsBoardInfo } from './bgs-board-info';
 
 export class BattlegroundsState {
 	readonly players: readonly BattlegroundsPlayer[] = [];
 	readonly displayedPlayerCardId: string;
 	readonly heroSelection: readonly BattlegroundsHero[] = [];
 	readonly displayedHero: BattlegroundsHero;
+	readonly battleInfo: BgsBattleInfo;
 
 	public static create(): BattlegroundsState {
 		return new BattlegroundsState();
@@ -26,6 +29,28 @@ export class BattlegroundsState {
 		].sort((a, b) => a.leaderboardPlace - b.leaderboardPlace);
 		return Object.assign(new BattlegroundsState(), this, {
 			players: newPlayers,
+		} as BattlegroundsState);
+	}
+
+	public addBattleBoardInfo(bgsInfo: BgsBoardInfo): BattlegroundsState {
+		const battleInfo: any = this.battleInfo || {};
+		if (!battleInfo.playerBoard) {
+			battleInfo.playerBoard = bgsInfo;
+		} else if (!battleInfo.opponentBoard) {
+			battleInfo.opponentBoard = bgsInfo;
+			console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
+		} else {
+			console.error('trying to set bgsinfo in full data', this, bgsInfo);
+			return this;
+		}
+		return Object.assign(new BattlegroundsState(), this, {
+			battleInfo: battleInfo,
+		} as BattlegroundsState);
+	}
+
+	public resetBattleBoardInfo(): BattlegroundsState {
+		return Object.assign(new BattlegroundsState(), this, {
+			battleInfo: undefined,
 		} as BattlegroundsState);
 	}
 }
