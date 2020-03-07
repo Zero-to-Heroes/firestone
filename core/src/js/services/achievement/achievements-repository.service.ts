@@ -11,6 +11,7 @@ import { CompetitiveLadderCategoryProvider } from './achievement-sets/competitiv
 import { DalaranHeistCategoryProvider } from './achievement-sets/dalaran_heist/dalaran-heist-category';
 import { DeckbuildingCategoryProvider } from './achievement-sets/deckbuilding/deckbuilding-category';
 import { DungeonRunCategoryProvider } from './achievement-sets/dungeon-run/dungeon-run-category';
+import { GalakrondCategoryProvider } from './achievement-sets/galadrond-awakening/galakrond-category';
 import { GlobalCategoryProvider } from './achievement-sets/global/global-category';
 import { MonsterHuntCategoryProvider } from './achievement-sets/monster_hunt/monster-hunt-category';
 import { RumbleRunCategoryProvider } from './achievement-sets/rumble_run/rumble-run-category';
@@ -19,7 +20,6 @@ import { TombsOfTerrorCategoryProvider } from './achievement-sets/tombs_of_terro
 import { AchievementsLocalStorageService } from './achievements-local-storage.service';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 import { RemoteAchievementsService } from './remote-achievements.service';
-import { GalakrondCategoryProvider } from './achievement-sets/galadrond-awakening/galakrond-category';
 
 @Injectable()
 export class AchievementsRepository {
@@ -44,7 +44,10 @@ export class AchievementsRepository {
 			this.storage.loadAllReplayInfos(),
 		]);
 		// console.log('[perf] merging replay infos');
-		const achievementsWithReplayInfos = this.mergeReplayInfos(allAchievements, replayInfos);
+		const achievementsWithReplayInfos = this.mergeReplayInfos(
+			allAchievements as readonly Achievement[], // Not sure why this is needed?
+			replayInfos,
+		);
 		// console.log('[perf] mapping set providers');
 		const result = await this.gradualLoadProviders(
 			achievementsWithReplayInfos,
