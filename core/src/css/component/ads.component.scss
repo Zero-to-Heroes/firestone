@@ -36,3 +36,20 @@
 		z-index: 999999999999999;
 	}
 }
+
+.subscription-link {
+	position: relative;
+	top: -20px;
+	text-align: center;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--default-text-color);
+	color: var(--color-3);
+	text-align: center;
+	text-decoration: underline;
+
+	&:hover {
+		color: var(--color-1);
+	}
+}

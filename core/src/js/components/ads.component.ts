@@ -20,6 +20,9 @@ declare var amplitude: any;
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/ads.component.scss`],
 	template: `
 		<div class="ads-container">
+			<div class="subscription-link" *ngIf="shouldDisplayAds" (click)="showSubscription()">
+				Support the dev and remove the ads
+			</div>
 			<div class="no-ads-placeholder">
 				<i class="i-117X33 gold-theme logo">
 					<svg class="svg-icon-fill">
@@ -34,12 +37,12 @@ declare var amplitude: any;
 })
 export class AdsComponent implements AfterViewInit, OnDestroy {
 	@Input() parentComponent: string;
+	shouldDisplayAds = true;
 
-	windowId: string;
+	private windowId: string;
 
 	private adRef;
 	private adInit = false;
-	private shouldDisplayAds = true;
 	private stateChangedListener: (message: any) => void;
 	private impressionListener: (message: any) => void;
 
@@ -69,6 +72,10 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	ngOnDestroy(): void {
 		this.ow.removeStateChangedListener(this.stateChangedListener);
 		this.adRef.removeEventListener(this.impressionListener);
+	}
+
+	showSubscription() {
+		this.ow.openStore();
 	}
 
 	private async refreshAds() {
