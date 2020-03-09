@@ -34,6 +34,12 @@ export class GenericChallenge implements Challenge {
 		this.testCompletion();
 	}
 
+	public resetState(): void {
+		this.callback = undefined;
+		this.correctMode = undefined;
+		this.requirements.forEach(req => req.reset());
+	}
+
 	public getRecordingDuration(): number {
 		return 15000;
 	}
@@ -52,12 +58,6 @@ export class GenericChallenge implements Challenge {
 			this.resetStateAfterComplete();
 			this.callback();
 		}
-	}
-
-	private resetState(): void {
-		this.callback = undefined;
-		this.correctMode = undefined;
-		this.requirements.forEach(req => req.reset());
 	}
 
 	private resetStateAfterComplete() {

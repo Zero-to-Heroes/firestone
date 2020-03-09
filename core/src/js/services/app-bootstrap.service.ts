@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AchievementsMonitor } from './achievement/achievements-monitor.service';
 import { AchievementsNotificationService } from './achievement/achievements-notification.service';
 import { AchievementsVideoCaptureService } from './achievement/achievements-video-capture.service';
+import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
 import { BattlegroundsStateService } from './battlegrounds/battlegrounds-state.service';
@@ -52,6 +53,7 @@ export class AppBootstrapService {
 		private dev: DevService,
 		private collectionDb: IndexedDbService,
 		private achievementsDb: AchievementsDb,
+		private achievementsLoader: AchievementsLoaderService,
 		private packMonitor: PackMonitor,
 		private packHistory: PackHistoryService,
 		private achievementsMonitor: AchievementsMonitor,
@@ -133,6 +135,10 @@ export class AppBootstrapService {
 				} else if (res.runningChanged) {
 					this.loadingWindowShown = false;
 					this.closeLoadingScreen();
+					// Because Firestone can stay open between two game sessions, and if
+					// the game was forced-closed, some achievements didn't have the opportunity
+					// to reset, so we're forcing it here
+					(await this.achievementsLoader.getChallengeModules()).forEach(challenge => challenge.resetState());
 					this.showReplaysRecap();
 				}
 			} else if (await this.ow.inGame()) {

@@ -7,4 +7,5 @@ export interface Challenge {
 	getRecordPastDurationMillis(): number;
 	getRecordingDuration(): number;
 	notificationTimeout(): number;
+	resetState(): void;
 }
