@@ -1,6 +1,7 @@
 import { BattlegroundsHero } from './battlegrounds-hero';
 import { BattlegroundsPlayer } from './battlegrounds-player';
 import { BgsBattleInfo } from './bgs-battle-info';
+import { BgsBattleSimulationResult } from './bgs-battle-simulation-result';
 import { BgsBoardInfo } from './bgs-board-info';
 
 export class BattlegroundsState {
@@ -9,6 +10,7 @@ export class BattlegroundsState {
 	readonly heroSelection: readonly BattlegroundsHero[] = [];
 	readonly displayedHero: BattlegroundsHero;
 	readonly battleInfo: BgsBattleInfo;
+	readonly battleResult: BgsBattleSimulationResult;
 
 	public static create(): BattlegroundsState {
 		return new BattlegroundsState();

@@ -15,6 +15,7 @@ import { TemporaryResolutionOverrideService } from '../../services/achievement/t
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { BattlegroundsHeroInfoService } from '../../services/battlegrounds/battlegrounds-hero-info.service';
 import { BattlegroundsStateService } from '../../services/battlegrounds/battlegrounds-state.service';
+import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
 import { LogParserService } from '../../services/collection/log-parser.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
@@ -146,6 +147,7 @@ export class SentryErrorHandler implements ErrorHandler {
 
 		BattlegroundsStateService,
 		BattlegroundsHeroInfoService,
+		BgsBattleSimulationService,
 
 		AiDeckService,
 		SecretConfigService,

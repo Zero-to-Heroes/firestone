@@ -5,12 +5,14 @@ import { BehaviorSubject } from 'rxjs';
 import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
+import { Events } from '../events.service';
 import { GameEventsEmitterService } from '../game-events-emitter.service';
 import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
 import { OverwolfService } from '../overwolf.service';
 import { PreferencesService } from '../preferences.service';
 import { ProcessingQueue } from '../processing-queue.service';
 import { BattlegroundsHeroInfoService } from './battlegrounds-hero-info.service';
+import { BattlegroundsBattleSimulationParser } from './events-parser/battlegrounds-battle-simulation-parser';
 import { BattlegroundsHideHeroSelectionParser } from './events-parser/battlegrounds-hide-hero-selection-parser';
 import { BattlegroundsHidePlayerInfoParser } from './events-parser/battlegrounds-hide-player-info-parser';
 import { BattlegroundsLeaderboardPlaceParser } from './events-parser/battlegrounds-leaderboard-place-parser';
@@ -49,10 +51,11 @@ export class BattlegroundsStateService {
 	private showLeaderboardPref: boolean;
 
 	constructor(
-		private gameEvents: GameEventsEmitterService,
-		private mainStore: MainWindowStoreService,
-		private logger: NGXLogger,
-		private ow: OverwolfService,
+		private readonly gameEvents: GameEventsEmitterService,
+		private readonly mainStore: MainWindowStoreService,
+		private readonly logger: NGXLogger,
+		private readonly ow: OverwolfService,
+		private readonly events: Events,
 		private readonly prefs: PreferencesService,
 		private readonly infoService: BattlegroundsHeroInfoService,
 		private readonly allCards: AllCardsService,
@@ -185,7 +188,7 @@ export class BattlegroundsStateService {
 		return [
 			new GameStartParser(),
 			new GameEndParser(),
-			new BattlegroundsPlayerBoardParser(),
+			new BattlegroundsPlayerBoardParser(this.events),
 			new BattlegroundsLeaderboardPlaceParser(),
 			new BattlegroundsPlayerTavernUpgradeParser(),
 			new BattlegroundsShowPlayerInfoParser(),
@@ -193,6 +196,7 @@ export class BattlegroundsStateService {
 			new BattlegroundsShowHeroSelectionParser(this.infoService, this.allCards),
 			new BattlegroundsHideHeroSelectionParser(),
 			new BattlegroundsResetBattleStateParser(),
+			new BattlegroundsBattleSimulationParser(),
 		];
 	}
 }

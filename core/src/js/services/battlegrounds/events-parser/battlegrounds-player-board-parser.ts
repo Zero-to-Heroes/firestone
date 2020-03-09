@@ -7,9 +7,12 @@ import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-
 import { BgsBoardInfo } from '../../../models/battlegrounds/bgs-board-info';
 import { BoardEntity } from '../../../models/battlegrounds/board-entity';
 import { GameEvent } from '../../../models/game-event';
+import { Events } from '../../events.service';
 import { EventParser } from './event-parser';
 
 export class BattlegroundsPlayerBoardParser implements EventParser {
+	constructor(private readonly events: Events) {}
+
 	public applies(gameEvent: GameEvent, state: BattlegroundsState): boolean {
 		return state && gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD;
 	}
@@ -21,9 +24,14 @@ export class BattlegroundsPlayerBoardParser implements EventParser {
 			minions: board,
 		} as BattlegroundsBoardState);
 		const bgsBoard: readonly BoardEntity[] = this.buildBgsEntities(gameEvent.additionalData.board);
+		let tavernTier = gameEvent.additionalData.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value;
+		if (!tavernTier) {
+			console.log('[bgs-simulation] no tavern tier', gameEvent);
+			tavernTier = 1;
+		}
 		const bgsInfo: BgsBoardInfo = {
 			player: {
-				tavernTier: gameEvent.additionalData.hero?.Tags?.find(tag => tag.Name === GameTag.TECH_LEVEL),
+				tavernTier: tavernTier,
 				cardId: gameEvent.additionalData.hero?.CardId,
 			},
 			board: bgsBoard,
@@ -31,9 +39,13 @@ export class BattlegroundsPlayerBoardParser implements EventParser {
 		// console.log('bgsInfo', JSON.stringify(bgsInfo, null, 4));
 		const player: BattlegroundsPlayer = currentState.getPlayer(cardId);
 		const newPlayer = player.addNewBoardState(boardState);
-		return currentState
+		const result = currentState
 			.updatePlayer(newPlayer)
 			.addBattleBoardInfo(bgsInfo);
+		if (result.battleInfo.opponentBoard) {
+			this.events.broadcast(Events.START_BGS_BATTLE_SIMULATION, result.battleInfo);
+		}
+		return result;
 	}
 
 	public event() {

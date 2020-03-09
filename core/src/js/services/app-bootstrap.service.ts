@@ -6,6 +6,7 @@ import { AchievementsLoaderService } from './achievement/data/achievements-loade
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
 import { BattlegroundsStateService } from './battlegrounds/battlegrounds-state.service';
+import { BgsBattleSimulationService } from './battlegrounds/bgs-battle-simulation.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';
@@ -75,6 +76,7 @@ export class AppBootstrapService {
 		private init_CollectionBootstrapService: CollectionBootstrapService,
 		private init_GameStatsBootstrapService: GameStatsBootstrapService,
 		private init_GlobalStatsBootstrapService: GlobalStatsBootstrapService,
+		private init_bgsBattleService: BgsBattleSimulationService,
 	) {}
 
 	public async init() {

@@ -59,6 +59,7 @@ export class GameEvents {
 				) {
 					this.hasSentToS3 = true;
 					// Wait a bit before sending the logs
+					console.error('sending logs to S3', first, second);
 					setTimeout(() => this.uploadLogsAndSendException(first, second), 20000);
 				}
 			});
@@ -120,7 +121,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		console.log('game event', gameEvent.Type, gameEvent);
+		// console.log('game event', gameEvent.Type, gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
