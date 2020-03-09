@@ -272,7 +272,7 @@ export class GameStateService {
 		} else if (gameEvent.type === GameEvent.GAME_END) {
 			// this.logger.debug('[game-state] handling overlay for event', gameEvent.type);
 			this.gameEnded = true;
-			this.updateOverlays();
+			this.updateOverlays(true);
 		} else if (gameEvent.type === GameEvent.SCENE_CHANGED) {
 			this.logger.debug('[game-state] handling overlay for event', gameEvent.type, gameEvent);
 			this.onGameScreen = gameEvent.additionalData.scene === 'scene_gameplay';
@@ -373,7 +373,7 @@ export class GameStateService {
 			: playerDeckWithZonesOrdered;
 	}
 
-	private async updateOverlays() {
+	private async updateOverlays(shouldForceCloseSecretsHelper = false) {
 		if (!this.ow) {
 			console.log('ow not defined, returning');
 			return;
@@ -468,6 +468,7 @@ export class GameStateService {
 		}
 
 		const shouldShowSecretsHelper =
+			!shouldForceCloseSecretsHelper &&
 			this.state &&
 			this.state.opponentDeck &&
 			this.state.opponentDeck.secrets &&
