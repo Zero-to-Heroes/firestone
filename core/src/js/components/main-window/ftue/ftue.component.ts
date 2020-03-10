@@ -16,30 +16,35 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	template: `
 		<div class="ftue">
 			<div class="backdrop"></div>
-			<div class="element">
-				<div class="title">{{ title }}</div>
-				<div class="text">{{ text }}</div>
-				<div class="icon" [inlineSVG]="icon"></div>
-				<div class="progress" *ngIf="!isHome">
+			<div class="element" *ngIf="isHome">
+				<div class="title">Welcome to Firestone</div>
+				<div class="text">How about a quick tour?</div>
+				<div class="icon" [inlineSVG]="'/Files/assets/svg/ftue/general.svg'"></div>
+				<button class="get-started" (click)="next()" growOnClick>Let's start</button>
+				<div class="skip-ftue ftue-nav-link" (click)="skip()" growOnClick>Skip</div>
+			</div>
+			<div class="element" *ngIf="!isHome">
+				<div class="steps">
+					<div class="scroller" [style.marginLeft.%]="-1 * currentIndex * 100"></div>
+					<div *ngFor="let step of ftueSteps; let i = index" class="step">
+						<div class="title">{{ step.title }}</div>
+						<div class="text">{{ step.text }}</div>
+						<div class="icon" [inlineSVG]="step.icon"></div>
+					</div>
+				</div>
+				<div class="progress">
 					<div
 						class="knot"
-						*ngFor="let step of progressSteps; let i = index"
-						[ngClass]="{ 'active': i === progressIndex }"
-						(click)="goToStep(step)"
+						*ngFor="let step of ftueSteps; let i = index"
+						[ngClass]="{ 'active': i === currentIndex }"
+						(click)="goToStep(step.id)"
 					></div>
 				</div>
-				<button *ngIf="isHome" class="get-started" (click)="next()" growOnClick>Let's start</button>
-				<div *ngIf="isHome" class="skip-ftue" (click)="skip()" growOnClick>Skip</div>
-				<div
-					class="previous-ftue ftue-nav-link"
-					(click)="previous()"
-					*ngIf="!isHome && progressIndex > 0"
-					growOnClick
-				>
+				<div class="previous-ftue ftue-nav-link" (click)="previous()" *ngIf="currentIndex > 0" growOnClick>
 					Previous
 				</div>
-				<div class="next-ftue ftue-nav-link" (click)="next()" *ngIf="!isHome" growOnClick>
-					{{ progressIndex === 3 ? 'Done' : 'Next' }}
+				<div class="next-ftue ftue-nav-link" (click)="next()" growOnClick>
+					{{ currentIndex === ftueSteps.length - 1 ? 'Done' : 'Next' }}
 				</div>
 			</div>
 		</div>
@@ -47,52 +52,45 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FtueComponent implements AfterViewInit {
-	title: string;
-	text: string;
-	icon: string;
-	progressIndex: number;
-	isHome: boolean;
-	progressSteps: CurrentAppType[] = ['achievements', 'collection', 'decktracker', 'replays'];
+	currentIndex: number = 0;
+	isHome: boolean = true;
+	ftueSteps: FtueStep[] = [
+		{
+			id: 'achievements',
+			title: 'Achievements',
+			text: "Challenge yourself throughout the game. Here you'll find all the feats you have accomplished",
+			icon: `/Files/assets/svg/ftue/achievements.svg`,
+			progressIndex: 0,
+		},
+		{
+			id: 'collection',
+			title: 'Collection',
+			text:
+				'Here your can find all the cards in the game, with detailed information (you can even play the sounds they make)',
+			icon: `/Files/assets/svg/ftue/collection.svg`,
+			progressIndex: 1,
+		},
+		{
+			id: 'decktracker',
+			title: 'Deck Tracker',
+			text: 'Track your cards in game and your deck stats',
+			icon: `/Files/assets/svg/ftue/decktracker.svg`,
+			progressIndex: 2,
+		},
+		{
+			id: 'replays',
+			title: 'Replays',
+			text: 'Here you can find all your past games, broken into step by step actions',
+			icon: `/Files/assets/svg/ftue/replays.svg`,
+			progressIndex: 3,
+		},
+	];
 
 	@Input() set selectedModule(value: CurrentAppType) {
-		switch (value) {
-			case 'replays':
-				this.title = 'Replays';
-				this.text = 'Here you can find all your past games, broken into step by step actions';
-				this.icon = `/Files/assets/svg/ftue/replays.svg`;
-				this.isHome = false;
-				this.progressIndex = 3;
-				break;
-			case 'achievements':
-				this.title = 'Achievements';
-				this.text =
-					"Challenge yourself throughout the game. Here you'll find all the feats you have accomplished";
-				this.icon = `/Files/assets/svg/ftue/achievements.svg`;
-				this.progressIndex = 0;
-				this.isHome = false;
-				break;
-			case 'collection':
-				this.title = 'Collection';
-				this.text =
-					'Here your can find all the cards in the game, with detailed information (you can even play the sounds they make)';
-				this.icon = `/Files/assets/svg/ftue/collection.svg`;
-				this.progressIndex = 1;
-				this.isHome = false;
-				break;
-			case 'decktracker':
-				this.title = 'Deck Tracker';
-				this.text = 'Track your cards in game and your deck stats';
-				this.icon = `/Files/assets/svg/ftue/decktracker.svg`;
-				this.progressIndex = 2;
-				this.isHome = false;
-				break;
-			default:
-				this.title = 'Welcome to Firestone!';
-				this.text = 'How about a quick tour?';
-				this.icon = `/Files/assets/svg/ftue/general.svg`;
-				this.isHome = true;
-				break;
-		}
+		const indexes = this.ftueSteps.map(step => step.id);
+		this.currentIndex = indexes.indexOf(value);
+		this.isHome = this.currentIndex < 0;
+		// console.log('currentIndex', value, this.currentIndex, indexes, this.ftueSteps, this.isHome);
 	}
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -114,4 +112,12 @@ export class FtueComponent implements AfterViewInit {
 	skip() {
 		this.stateUpdater.next(new SkipFtueEvent());
 	}
+}
+
+interface FtueStep {
+	readonly id: CurrentAppType;
+	readonly title: string;
+	readonly text: string;
+	readonly icon: string;
+	readonly progressIndex: number;
 }

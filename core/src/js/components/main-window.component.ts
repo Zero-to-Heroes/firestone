@@ -134,7 +134,7 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
-				console.log('received state', newState);
+				// console.log('received state', newState);
 				this.state = newState;
 				this.activeTheme = this.state.showFtue ? 'general' : this.state.currentApp;
 				if (!(this.cdr as ViewRef).destroyed) {
