@@ -2,7 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsState } from '../../models/battlegrounds/old/battlegrounds-state';
 import { GameEvent } from '../../models/game-event';
 import { Preferences } from '../../models/preferences';
 import { Events } from '../events.service';

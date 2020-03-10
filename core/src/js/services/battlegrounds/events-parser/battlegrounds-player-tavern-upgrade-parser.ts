@@ -1,5 +1,5 @@
-import { BattlegroundsPlayer } from '../../../models/battlegrounds/battlegrounds-player';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsPlayer } from '../../../models/battlegrounds/old/battlegrounds-player';
+import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 

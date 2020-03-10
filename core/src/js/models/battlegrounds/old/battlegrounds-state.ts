@@ -1,8 +1,8 @@
+import { BgsBattleInfo } from '../bgs-battle-info';
+import { BgsBattleSimulationResult } from '../bgs-battle-simulation-result';
+import { BgsBoardInfo } from '../bgs-board-info';
 import { BattlegroundsHero } from './battlegrounds-hero';
 import { BattlegroundsPlayer } from './battlegrounds-player';
-import { BgsBattleInfo } from './bgs-battle-info';
-import { BgsBattleSimulationResult } from './bgs-battle-simulation-result';
-import { BgsBoardInfo } from './bgs-board-info';
 
 export class BattlegroundsState {
 	readonly players: readonly BattlegroundsPlayer[] = [];

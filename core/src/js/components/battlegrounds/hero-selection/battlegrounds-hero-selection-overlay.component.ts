@@ -11,8 +11,8 @@ import {
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
-import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsHero } from '../../../models/battlegrounds/old/battlegrounds-hero';
+import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
 import { DebugService } from '../../../services/debug.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 

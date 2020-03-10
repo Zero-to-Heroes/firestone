@@ -9,8 +9,8 @@ import {
 } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
-import { BattlegroundsPlayer } from '../../models/battlegrounds/battlegrounds-player';
-import { BattlegroundsState } from '../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsPlayer } from '../../models/battlegrounds/old/battlegrounds-player';
+import { BattlegroundsState } from '../../models/battlegrounds/old/battlegrounds-state';
 import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 

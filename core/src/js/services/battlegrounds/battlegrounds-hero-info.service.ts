@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { BattlegroundsHero } from '../../models/battlegrounds/battlegrounds-hero';
+import { BattlegroundsHero } from '../../models/battlegrounds/old/battlegrounds-hero';
 
 const BGS_HEROES_INFO_URL = 'https://static.zerotoheroes.com/hearthstone/data/bgs_heroes_info.json';
 

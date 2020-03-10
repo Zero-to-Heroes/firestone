@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
+import { BattlegroundsHero } from '../../../models/battlegrounds/old/battlegrounds-hero';
 
 @Component({
 	selector: 'battlegrounds-hero-info',

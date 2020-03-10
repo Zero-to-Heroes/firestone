@@ -1,4 +1,4 @@
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
 import { BattlegroundsEvent } from '../events/battlegrounds-event';
 import { BattlegroundsHidePlayerInfoEvent } from '../events/battlegrounds-hide-player-info-event';
 import { EventParser } from './event-parser';

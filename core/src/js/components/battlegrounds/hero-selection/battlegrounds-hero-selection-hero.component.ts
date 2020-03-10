@@ -1,6 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input } from '@angular/core';
-import { BattlegroundsHero } from '../../../models/battlegrounds/battlegrounds-hero';
+import { BattlegroundsHero } from '../../../models/battlegrounds/old/battlegrounds-hero';
 import { GameEvent } from '../../../models/game-event';
 import { BattlegroundsEvent } from '../../../services/battlegrounds/events/battlegrounds-event';
 import { OverwolfService } from '../../../services/overwolf.service';

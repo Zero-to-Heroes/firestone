@@ -1,11 +1,11 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
-import { BattlegroundsBoardState } from '../../../models/battlegrounds/battlegrounds-board-state';
-import { BattlegroundsPlayer } from '../../../models/battlegrounds/battlegrounds-player';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
 import { BgsBoardInfo } from '../../../models/battlegrounds/bgs-board-info';
 import { BoardEntity } from '../../../models/battlegrounds/board-entity';
+import { BattlegroundsBoardState } from '../../../models/battlegrounds/old/battlegrounds-board-state';
+import { BattlegroundsPlayer } from '../../../models/battlegrounds/old/battlegrounds-player';
+import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
 import { Events } from '../../events.service';
 import { EventParser } from './event-parser';

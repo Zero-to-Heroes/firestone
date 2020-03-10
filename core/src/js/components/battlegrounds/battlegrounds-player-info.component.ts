@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Entity } from '@firestone-hs/replay-parser';
-import { BattlegroundsPlayer } from '../../models/battlegrounds/battlegrounds-player';
+import { BattlegroundsPlayer } from '../../models/battlegrounds/old/battlegrounds-player';
 
 @Component({
 	selector: 'battlegrounds-player-info',

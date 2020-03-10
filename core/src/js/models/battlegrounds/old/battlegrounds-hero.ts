@@ -1,5 +1,5 @@
-import { BgsHeroDifficultyLevel } from './bgs-hero-difficulty-level';
-import { BgsHeroPowerLevel } from './bgs-hero-power-level';
+import { BgsHeroDifficultyLevel } from '../bgs-hero-difficulty-level';
+import { BgsHeroPowerLevel } from '../bgs-hero-power-level';
 
 export class BattlegroundsHero {
 	readonly cardId: string;

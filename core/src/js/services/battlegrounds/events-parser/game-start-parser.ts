@@ -1,5 +1,5 @@
 import { GameType } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '../../../models/battlegrounds/battlegrounds-state';
+import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
 import { GameEvent } from '../../../models/game-event';
 import { EventParser } from './event-parser';
 
