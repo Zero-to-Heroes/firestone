@@ -188,6 +188,7 @@ export class AppBootstrapService {
 		}
 		this.loadingWindowShown = true;
 		console.log('[bootstrap] showing loading screen?', this.currentState, this.loadingWindowId);
+		this.ow.hideCollectionWindow();
 		// if (this.currentState === 'READY') {
 		// 	return;
 		// }
