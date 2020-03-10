@@ -5,11 +5,16 @@
 
 	--color-1: #ffb948;
 	--color-3: #d9c3ab;
+	--color-5: #190505;
 	--color-common-1: #d9c3ab;
 
 	--default-text-color: #d9c3ab;
 
-	--ads-background-color: #190505;
+	--menu-selection-color: #8e5b23;
+	--backdrop-color: rgba(25, 5, 5, 0.8); // #190505
+	--ftue-popup-background-color: #472406;
+
+	--ads-background-color: var(--color-5);
 	--ads-color: rgba(47, 13, 13, 0.8); //#2a1030;
 
 	--control-button-color: #d9c3ab;

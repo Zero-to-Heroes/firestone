@@ -21,6 +21,7 @@ import { GlobalStatsService } from '../../global-stats/global-stats.service';
 import { OwNotificationsService } from '../../notifications.service';
 import { OverwolfService } from '../../overwolf.service';
 import { MemoryInspectionService } from '../../plugins/memory-inspection.service';
+import { PreferencesService } from '../../preferences.service';
 import { ProcessingQueue } from '../../processing-queue.service';
 import { SetsService } from '../../sets-service.service';
 import { GameStatsLoaderService } from '../../stats/game/game-stats-loader.service';
@@ -52,6 +53,9 @@ import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
 import { CurrentUserEvent } from './events/current-user-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
+import { NextFtueEvent } from './events/ftue/next-ftue-event';
+import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
+import { SkipFtueEvent } from './events/ftue/skip-ftue-event';
 import { MainWindowStoreEvent } from './events/main-window-store-event';
 import { NavigationBackEvent } from './events/navigation/navigation-back-event';
 import { NavigationNextEvent } from './events/navigation/navigation-next-event';
@@ -98,6 +102,9 @@ import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collectio
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
+import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
+import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
+import { SkipFtueProcessor } from './processors/ftue/skip-ftue-processor';
 import { NavigationBackProcessor } from './processors/navigation/navigation-back-processor';
 import { NavigationNextProcessor } from './processors/navigation/navigation-next-processor';
 import { PopulateStoreProcessor } from './processors/populate-store-processor';
@@ -161,6 +168,7 @@ export class MainWindowStoreService {
 		private readonly logger: NGXLogger,
 		private readonly globalStats: GlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
+		private readonly prefs: PreferencesService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -208,7 +216,7 @@ export class MainWindowStoreService {
 				// or forward with the history arrows, the state of these arrows will change
 				// vs what they originally were when the state was stored
 				const stateWithNavigation = this.updateNavigationArrows(newState);
-				// console.log('emitting new state', stateWithNavigation);
+				console.log('emitting new state', stateWithNavigation);
 				this.stateEmitter.next(stateWithNavigation);
 				if (Date.now() - start > 1000) {
 					this.logger.warn(
@@ -295,7 +303,7 @@ export class MainWindowStoreService {
 			new TriggerPopulateStoreProcessor(this.events),
 
 			PopulateStoreEvent.eventName(),
-			new PopulateStoreProcessor(this.ow, this.userService),
+			new PopulateStoreProcessor(this.ow, this.userService, this.prefs),
 
 			NavigationBackEvent.eventName(),
 			new NavigationBackProcessor(),
@@ -416,6 +424,16 @@ export class MainWindowStoreService {
 
 			CloseSocialShareModalEvent.eventName(),
 			new CloseSocialShareModalProcessor(),
+
+			// Ftue
+			NextFtueEvent.eventName(),
+			new NextFtueProcessor(this.prefs),
+
+			PreviousFtueEvent.eventName(),
+			new PreviousFtueProcessor(),
+
+			SkipFtueEvent.eventName(),
+			new SkipFtueProcessor(this.prefs),
 
 			// Stats
 			GameStatsInitEvent.eventName(),

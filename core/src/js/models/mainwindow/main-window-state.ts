@@ -14,6 +14,7 @@ export class MainWindowState {
 	readonly isVisible: boolean = false;
 	readonly currentUser: CurrentUser = null;
 	readonly currentApp: CurrentAppType = 'achievements';
+	readonly showFtue: boolean = false;
 	readonly replays: ReplaysState = new ReplaysState();
 	readonly binder: BinderState = new BinderState();
 	readonly achievements: AchievementsState = new AchievementsState();

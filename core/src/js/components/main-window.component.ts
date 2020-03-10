@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { CurrentAppType } from '../models/mainwindow/current-app.type';
 import { MainWindowState } from '../models/mainwindow/main-window-state';
 import { DebugService } from '../services/debug.service';
 import { OverwolfService } from '../services/overwolf.service';
@@ -21,8 +22,8 @@ declare var amplitude: any;
 	styleUrls: [`../../css/global/components-global.scss`, `../../css/component/main-window.component.scss`],
 	encapsulation: ViewEncapsulation.None,
 	template: `
-		<window-wrapper *ngIf="state" [activeTheme]="state.currentApp" [allowResize]="true">
-			<section class="menu-bar">
+		<window-wrapper *ngIf="state" [activeTheme]="activeTheme" [allowResize]="true">
+			<section class="menu-bar" [ngClass]="{ 'ftue': state.showFtue }">
 				<!-- <main-window-navigation [navigation]="state.navigation"></main-window-navigation> -->
 				<div class="first">
 					<div class="navigation">
@@ -47,7 +48,8 @@ declare var amplitude: any;
 					<control-close [windowId]="windowId" [isMainWindow]="true" [closeAll]="true"></control-close>
 				</div>
 			</section>
-			<section class="content-container">
+			<ftue *ngIf="state.showFtue" [selectedModule]="state.currentApp"> </ftue>
+			<section class="content-container" *ngIf="!state.showFtue">
 				<replays
 					class="main-section"
 					[state]="state.replays"
@@ -80,7 +82,7 @@ declare var amplitude: any;
 				</decktracker>
 			</section>
 			<tooltips></tooltips>
-			<ads [parentComponent]="'main-window'"></ads>
+			<ads [parentComponent]="'main-window'" *ngIf="!state.showFtue"></ads>
 		</window-wrapper>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,6 +90,7 @@ declare var amplitude: any;
 export class MainWindowComponent implements AfterViewInit, OnDestroy {
 	state: MainWindowState;
 	windowId: string;
+	activeTheme: CurrentAppType;
 
 	private isMaximized = false;
 	private stateChangedListener: (message: any) => void;
@@ -131,7 +134,9 @@ export class MainWindowComponent implements AfterViewInit, OnDestroy {
 		this.storeSubscription = storeBus.subscribe((newState: MainWindowState) => {
 			setTimeout(async () => {
 				// First update the state before restoring the window
+				console.log('received state', newState);
 				this.state = newState;
+				this.activeTheme = this.state.showFtue ? 'general' : this.state.currentApp;
 				if (!(this.cdr as ViewRef).destroyed) {
 					this.cdr.detectChanges();
 				}

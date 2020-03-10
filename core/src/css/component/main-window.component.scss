@@ -68,9 +68,19 @@
 		margin-right: -10px;
 		// margin-top: -10px;
 	}
+
+	&.ftue {
+		menu-selection {
+			pointer-events: none;
+		}
+		.attention-icon-container {
+			display: none;
+		}
+	}
 }
 
-.content-container {
+.content-container,
+ftue {
 	position: relative;
 	flex-grow: 1;
 	display: flex;

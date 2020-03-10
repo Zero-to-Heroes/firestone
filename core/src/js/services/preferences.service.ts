@@ -36,6 +36,14 @@ export class PreferencesService {
 		this.savePreferences(newPrefs);
 	}
 
+	public async setGlobalFtueDone() {
+		const prefs = await this.getPreferences();
+		const ftue: Ftue = { ...prefs.ftue, hasSeenGlobalFtue: true };
+		// console.log('setting pref', field, pref);
+		const newPrefs: Preferences = { ...prefs, ftue: ftue };
+		this.savePreferences(newPrefs);
+	}
+
 	public async setDontConfirmVideoDeletion(dontAsk: boolean) {
 		const prefs = await this.getPreferences();
 		const newPrefs: Preferences = { ...prefs, dontConfirmVideoReplayDeletion: dontAsk };

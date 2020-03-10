@@ -49,6 +49,7 @@ import { DecktrackerDecksComponent } from '../../components/decktracker/main/dec
 import { DecktrackerFiltersComponent } from '../../components/decktracker/main/decktracker-filters.component';
 import { DecktrackerMenuComponent } from '../../components/decktracker/main/decktracker-menu.component';
 import { MainWindowComponent } from '../../components/main-window.component';
+import { FtueComponent } from '../../components/main-window/ftue/ftue.component';
 import { GlobalHeaderComponent } from '../../components/main-window/global-header.component';
 import { MenuSelectionComponent } from '../../components/menu-selection.component';
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
@@ -159,6 +160,8 @@ console.log('version is ' + process.env.APP_VERSION);
 
 		ShareLoginComponent,
 		ShareInfoComponent,
+
+		FtueComponent,
 	],
 	bootstrap: [MainWindowComponent],
 	providers: [AdService, RealTimeNotificationService],

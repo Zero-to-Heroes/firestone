@@ -1,5 +1,6 @@
 export class Ftue {
-	readonly hasSeenAchievementsLoginButton = false;
+	readonly hasSeenGlobalFtue: boolean = false;
+	readonly hasSeenAchievementsLoginButton: boolean = false;
 }
 
-export type FtueKey = undefined | 'hasSeenAchievementsLoginButton';
+export type FtueKey = undefined | 'hasSeenAchievementsLoginButton' | 'hasSeenGlobalFtue';
