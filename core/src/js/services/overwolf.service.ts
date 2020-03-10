@@ -28,7 +28,7 @@ export class OverwolfService {
 
 	public addStateChangedListener(targetWindowName: string, callback): (message: any) => void {
 		const listener = message => {
-			if (message.window_name !== targetWindowName) {
+			if (message.window_name !== targetWindowName && message.window_id !== targetWindowName) {
 				return;
 			}
 			callback(message);
