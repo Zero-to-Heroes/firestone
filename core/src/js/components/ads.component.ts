@@ -53,7 +53,8 @@ export class AdsComponent implements AfterViewInit, OnDestroy {
 	async ngAfterViewInit() {
 		this.cdr.detach();
 		this.windowId = (await this.ow.getCurrentWindow()).id;
-		this.stateChangedListener = this.ow.addStateChangedListener(OverwolfService.COLLECTION_WINDOW, message => {
+		this.stateChangedListener = this.ow.addStateChangedListener(this.windowId, message => {
+			// console.log('state changed', message);
 			if (message.window_state !== 'normal' && message.window_state !== 'maximized') {
 				this.logger.info('[ads] removing ad', message.window_state);
 				this.removeAds();
