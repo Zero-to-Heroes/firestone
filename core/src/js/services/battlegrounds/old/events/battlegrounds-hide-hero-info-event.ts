@@ -1,4 +1,4 @@
-import { BattlegroundsEvent } from './battlegrounds-event';
+import { BattlegroundsEvent } from '../../events/battlegrounds-event';
 
 export class BattlegroundsHideHeroInfoEvent extends BattlegroundsEvent {
 	constructor() {

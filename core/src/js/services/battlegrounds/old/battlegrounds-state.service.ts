@@ -2,15 +2,18 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { BehaviorSubject } from 'rxjs';
-import { BattlegroundsState } from '../../models/battlegrounds/old/battlegrounds-state';
-import { GameEvent } from '../../models/game-event';
-import { Preferences } from '../../models/preferences';
-import { Events } from '../events.service';
-import { GameEventsEmitterService } from '../game-events-emitter.service';
-import { MainWindowStoreService } from '../mainwindow/store/main-window-store.service';
-import { OverwolfService } from '../overwolf.service';
-import { PreferencesService } from '../preferences.service';
-import { ProcessingQueue } from '../processing-queue.service';
+import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
+import { GameEvent } from '../../../models/game-event';
+import { Preferences } from '../../../models/preferences';
+import { Events } from '../../events.service';
+import { GameEventsEmitterService } from '../../game-events-emitter.service';
+import { MainWindowStoreService } from '../../mainwindow/store/main-window-store.service';
+import { OverwolfService } from '../../overwolf.service';
+import { PreferencesService } from '../../preferences.service';
+import { ProcessingQueue } from '../../processing-queue.service';
+import { BattlegroundsResetBattleStateParser } from '../events-parser/battlegrounds-reset-battle-state-parser';
+import { EventParser } from '../events-parser/event-parser';
+import { BattlegroundsEvent } from '../events/battlegrounds-event';
 import { BattlegroundsHeroInfoService } from './battlegrounds-hero-info.service';
 import { BattlegroundsBattleSimulationParser } from './events-parser/battlegrounds-battle-simulation-parser';
 import { BattlegroundsHideHeroSelectionParser } from './events-parser/battlegrounds-hide-hero-selection-parser';
@@ -18,13 +21,10 @@ import { BattlegroundsHidePlayerInfoParser } from './events-parser/battlegrounds
 import { BattlegroundsLeaderboardPlaceParser } from './events-parser/battlegrounds-leaderboard-place-parser';
 import { BattlegroundsPlayerBoardParser } from './events-parser/battlegrounds-player-board-parser';
 import { BattlegroundsPlayerTavernUpgradeParser } from './events-parser/battlegrounds-player-tavern-upgrade-parser';
-import { BattlegroundsResetBattleStateParser } from './events-parser/battlegrounds-reset-battle-state-parser';
 import { BattlegroundsShowHeroSelectionParser } from './events-parser/battlegrounds-show-hero-selection-parser';
 import { BattlegroundsShowPlayerInfoParser } from './events-parser/battlegrounds-show-player-info-parser';
-import { EventParser } from './events-parser/event-parser';
 import { GameEndParser } from './events-parser/game-end-parser';
 import { GameStartParser } from './events-parser/game-start-parser';
-import { BattlegroundsEvent } from './events/battlegrounds-event';
 
 @Injectable()
 export class BattlegroundsStateService {

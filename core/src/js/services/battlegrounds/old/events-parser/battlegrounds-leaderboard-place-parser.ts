@@ -1,7 +1,7 @@
-import { BattlegroundsPlayer } from '../../../models/battlegrounds/old/battlegrounds-player';
-import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
-import { GameEvent } from '../../../models/game-event';
-import { EventParser } from './event-parser';
+import { BattlegroundsPlayer } from '../../../../models/battlegrounds/old/battlegrounds-player';
+import { BattlegroundsState } from '../../../../models/battlegrounds/old/battlegrounds-state';
+import { GameEvent } from '../../../../models/game-event';
+import { EventParser } from '../../events-parser/event-parser';
 
 export class BattlegroundsLeaderboardPlaceParser implements EventParser {
 	public applies(gameEvent: GameEvent, state: BattlegroundsState): boolean {

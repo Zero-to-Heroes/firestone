@@ -1,14 +1,14 @@
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { Map } from 'immutable';
-import { BgsBoardInfo } from '../../../models/battlegrounds/bgs-board-info';
-import { BoardEntity } from '../../../models/battlegrounds/board-entity';
-import { BattlegroundsBoardState } from '../../../models/battlegrounds/old/battlegrounds-board-state';
-import { BattlegroundsPlayer } from '../../../models/battlegrounds/old/battlegrounds-player';
-import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
-import { GameEvent } from '../../../models/game-event';
-import { Events } from '../../events.service';
-import { EventParser } from './event-parser';
+import { BgsBoardInfo } from '../../../../models/battlegrounds/bgs-board-info';
+import { BoardEntity } from '../../../../models/battlegrounds/board-entity';
+import { BattlegroundsBoardState } from '../../../../models/battlegrounds/old/battlegrounds-board-state';
+import { BattlegroundsPlayer } from '../../../../models/battlegrounds/old/battlegrounds-player';
+import { BattlegroundsState } from '../../../../models/battlegrounds/old/battlegrounds-state';
+import { GameEvent } from '../../../../models/game-event';
+import { Events } from '../../../events.service';
+import { EventParser } from '../../events-parser/event-parser';
 
 export class BattlegroundsPlayerBoardParser implements EventParser {
 	constructor(private readonly events: Events) {}
@@ -24,7 +24,8 @@ export class BattlegroundsPlayerBoardParser implements EventParser {
 			minions: board,
 		} as BattlegroundsBoardState);
 		const bgsBoard: readonly BoardEntity[] = this.buildBgsEntities(gameEvent.additionalData.board);
-		let tavernTier = gameEvent.additionalData.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)?.Value;
+		let tavernTier = gameEvent.additionalData.hero?.Tags?.find(tag => tag.Name === GameTag.PLAYER_TECH_LEVEL)
+			?.Value;
 		if (!tavernTier) {
 			console.log('[bgs-simulation] no tavern tier', gameEvent);
 			tavernTier = 1;
@@ -39,9 +40,7 @@ export class BattlegroundsPlayerBoardParser implements EventParser {
 		// console.log('bgsInfo', JSON.stringify(bgsInfo, null, 4));
 		const player: BattlegroundsPlayer = currentState.getPlayer(cardId);
 		const newPlayer = player.addNewBoardState(boardState);
-		const result = currentState
-			.updatePlayer(newPlayer)
-			.addBattleBoardInfo(bgsInfo);
+		const result = currentState.updatePlayer(newPlayer).addBattleBoardInfo(bgsInfo);
 		if (result.battleInfo.opponentBoard) {
 			this.events.broadcast(Events.START_BGS_BATTLE_SIMULATION, result.battleInfo);
 		}

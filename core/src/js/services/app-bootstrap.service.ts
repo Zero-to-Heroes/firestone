@@ -5,8 +5,8 @@ import { AchievementsVideoCaptureService } from './achievement/achievements-vide
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
-import { BattlegroundsStateService } from './battlegrounds/battlegrounds-state.service';
 import { BgsBattleSimulationService } from './battlegrounds/bgs-battle-simulation.service';
+import { BattlegroundsStateService } from './battlegrounds/old/battlegrounds-state.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';

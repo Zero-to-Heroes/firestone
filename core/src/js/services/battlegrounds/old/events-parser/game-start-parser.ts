@@ -1,8 +1,7 @@
 import { GameType } from '@firestone-hs/reference-data';
-import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
-import { GameEvent } from '../../../models/game-event';
-import { EventParser } from './event-parser';
-
+import { BattlegroundsState } from '../../../../models/battlegrounds/old/battlegrounds-state';
+import { GameEvent } from '../../../../models/game-event';
+import { EventParser } from './../../events-parser/event-parser';
 export class GameStartParser implements EventParser {
 	applies(gameEvent: GameEvent): boolean {
 		return (

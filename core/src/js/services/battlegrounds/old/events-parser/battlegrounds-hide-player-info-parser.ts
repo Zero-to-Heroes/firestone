@@ -1,7 +1,7 @@
-import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
-import { BattlegroundsEvent } from '../events/battlegrounds-event';
+import { BattlegroundsState } from '../../../../models/battlegrounds/old/battlegrounds-state';
+import { EventParser } from '../../events-parser/event-parser';
+import { BattlegroundsEvent } from '../../events/battlegrounds-event';
 import { BattlegroundsHidePlayerInfoEvent } from '../events/battlegrounds-hide-player-info-event';
-import { EventParser } from './event-parser';
 
 export class BattlegroundsHidePlayerInfoParser implements EventParser {
 	public applies(gameEvent: BattlegroundsEvent, state: BattlegroundsState): boolean {

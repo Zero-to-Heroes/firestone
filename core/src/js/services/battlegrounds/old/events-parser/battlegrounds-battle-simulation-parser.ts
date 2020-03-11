@@ -1,7 +1,7 @@
-import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
-import { BattlegroundsBattleSimulationEvent } from '../events/battlegrounds-battle-simulation-event';
-import { BattlegroundsEvent } from '../events/battlegrounds-event';
-import { EventParser } from './event-parser';
+import { BattlegroundsState } from '../../../../models/battlegrounds/old/battlegrounds-state';
+import { EventParser } from '../../events-parser/event-parser';
+import { BattlegroundsBattleSimulationEvent } from '../../events/battlegrounds-battle-simulation-event';
+import { BattlegroundsEvent } from '../../events/battlegrounds-event';
 
 export class BattlegroundsBattleSimulationParser implements EventParser {
 	public applies(gameEvent: BattlegroundsEvent, state: BattlegroundsState): boolean {

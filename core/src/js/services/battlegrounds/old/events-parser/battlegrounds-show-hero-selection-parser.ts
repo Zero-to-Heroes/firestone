@@ -1,10 +1,10 @@
 import { AllCardsService } from '@firestone-hs/replay-parser';
-import { BattlegroundsHero } from '../../../models/battlegrounds/old/battlegrounds-hero';
-import { BattlegroundsState } from '../../../models/battlegrounds/old/battlegrounds-state';
-import { GameEvent } from '../../../models/game-event';
-import { MainWindowState } from '../../../models/mainwindow/main-window-state';
+import { BattlegroundsHero } from '../../../../models/battlegrounds/old/battlegrounds-hero';
+import { BattlegroundsState } from '../../../../models/battlegrounds/old/battlegrounds-state';
+import { GameEvent } from '../../../../models/game-event';
+import { MainWindowState } from '../../../../models/mainwindow/main-window-state';
+import { EventParser } from '../../events-parser/event-parser';
 import { BattlegroundsHeroInfoService } from '../battlegrounds-hero-info.service';
-import { EventParser } from './event-parser';
 
 export class BattlegroundsShowHeroSelectionParser implements EventParser {
 	constructor(

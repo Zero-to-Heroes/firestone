@@ -13,9 +13,9 @@ import { AchievementsVideoCaptureService } from '../../services/achievement/achi
 import { RemoteAchievementsService } from '../../services/achievement/remote-achievements.service';
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
-import { BattlegroundsHeroInfoService } from '../../services/battlegrounds/battlegrounds-hero-info.service';
-import { BattlegroundsStateService } from '../../services/battlegrounds/battlegrounds-state.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
+import { BattlegroundsHeroInfoService } from '../../services/battlegrounds/old/battlegrounds-hero-info.service';
+import { BattlegroundsStateService } from '../../services/battlegrounds/old/battlegrounds-state.service';
 import { LogParserService } from '../../services/collection/log-parser.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
