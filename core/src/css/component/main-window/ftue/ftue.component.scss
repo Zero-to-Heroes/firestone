@@ -106,10 +106,10 @@
 			position: absolute;
 			padding: 10px;
 			bottom: -35px;
-			opacity: 0.8;
+			color: var(--inactive-link-color);
 
 			&:hover {
-				opacity: 1;
+				color: var(--default-text-color);
 			}
 		}
 
