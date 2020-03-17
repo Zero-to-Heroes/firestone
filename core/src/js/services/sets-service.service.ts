@@ -11,10 +11,11 @@ export class SetsService {
 		['gilneas', 'The Witchwood'],
 		['boomsday', 'The Boomsday Project'],
 		['troll', "Rastakhan's Rumble"],
-		['dalaran', 'Rise of Shadows'],
+		['dalaran', 'Rise of hadows'],
 		['uldum', 'Saviors of Uldum'],
 		['dragons', 'Descent of Dragons'],
 		['yod', "Galakrond's Awakening"],
+		['black_temple', 'Ashes of Outland'],
 	];
 
 	private readonly WILD_SETS = [
