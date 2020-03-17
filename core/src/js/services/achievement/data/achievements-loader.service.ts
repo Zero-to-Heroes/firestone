@@ -97,7 +97,7 @@ export class AchievementsLoaderService {
 							'[achievements-loader] Could not retrieve achievements locally, getting them from CDN',
 							fileName,
 						);
-						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json`).subscribe(
+						this.http.get(`${ACHIEVEMENTS_URL}/${fileName}.json?v=2`).subscribe(
 							(result: any[]) => {
 								this.logger.debug(
 									'[achievements-loader] retrieved all achievements from CDN',
