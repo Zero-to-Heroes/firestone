@@ -16,14 +16,14 @@
 	display: flex;
 	list-style: none;
 
-	li:after {
+	.filter:after {
 		border-right: 1px solid;
 		content: '';
 		padding-right: 10px;
 		margin-right: 10px;
 	}
 
-	li:last-child:after {
+	.filter:last-child:after {
 		border-right: none;
 	}
 }

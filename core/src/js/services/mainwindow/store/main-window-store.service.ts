@@ -14,6 +14,7 @@ import { CardHistoryStorageService } from '../../collection/card-history-storage
 import { CollectionManager } from '../../collection/collection-manager.service';
 import { IndexedDbService } from '../../collection/indexed-db.service';
 import { PackHistoryService } from '../../collection/pack-history.service';
+import { DecksStateBuilderService } from '../../decktracker/main/decks-state-builder.service';
 import { DecktrackerStateLoaderService } from '../../decktracker/main/decktracker-state-loader.service';
 import { ReplaysStateBuilderService } from '../../decktracker/main/replays-state-builder.service';
 import { Events } from '../../events.service';
@@ -52,6 +53,7 @@ import { ShowCardDetailsEvent } from './events/collection/show-card-details-even
 import { ToggleShowOnlyNewCardsInHistoryEvent } from './events/collection/toggle-show-only-new-cards-in-history-event';
 import { UpdateCardSearchResultsEvent } from './events/collection/update-card-search-results-event';
 import { CurrentUserEvent } from './events/current-user-event';
+import { ChangeDeckModeFilterEvent } from './events/decktracker/change-deck-mode-filter-event';
 import { SelectDecksViewEvent } from './events/decktracker/select-decks-view-event';
 import { NextFtueEvent } from './events/ftue/next-ftue-event';
 import { PreviousFtueEvent } from './events/ftue/previous-ftue-event';
@@ -101,6 +103,7 @@ import { ShowCardDetailsProcessor } from './processors/collection/show-card-deta
 import { ToggleShowOnlyNewCardsInHistoryProcessor } from './processors/collection/toggle-show-only-new-cards-in-history-processor';
 import { UpdateCardSearchResultsProcessor } from './processors/collection/update-card-search-results-processor';
 import { CurrentUserProcessor } from './processors/current-user-process.ts';
+import { ChangeDeckModeFilterProcessor } from './processors/decktracker/change-deck-mode-filter-processor';
 import { SelectDeckViewProcessor } from './processors/decktracker/select-decks-view-processor';
 import { NextFtueProcessor } from './processors/ftue/next-ftue-processor';
 import { PreviousFtueProcessor } from './processors/ftue/previous-ftue-processor';
@@ -169,6 +172,7 @@ export class MainWindowStoreService {
 		private readonly globalStats: GlobalStatsService,
 		private readonly replaysStateBuilder: ReplaysStateBuilderService,
 		private readonly prefs: PreferencesService,
+		private readonly decksStateBuilder: DecksStateBuilderService,
 	) {
 		this.userService.init(this);
 		window['mainWindowStore'] = this.stateEmitter;
@@ -459,6 +463,9 @@ export class MainWindowStoreService {
 			// Decktracker
 			SelectDecksViewEvent.eventName(),
 			new SelectDeckViewProcessor(),
+
+			ChangeDeckModeFilterEvent.eventName(),
+			new ChangeDeckModeFilterProcessor(this.decksStateBuilder),
 		);
 	}
 
