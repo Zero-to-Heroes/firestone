@@ -38,6 +38,7 @@ export class DeckListByZoneComponent {
 	}
 
 	@Input('deckState') set deckState(deckState: DeckState) {
+		// console.log('deck state', deckState);
 		const zones = [
 			Object.assign(
 				this.buildZone(
@@ -114,6 +115,7 @@ export class DeckListByZoneComponent {
 		filterFunction?: (a: VisualDeckCard) => boolean,
 		highlight?: string,
 	): DeckZone {
+		// console.log('building zone for', id, name, cards);
 		const cardsInZone = cards
 			.map(card =>
 				Object.assign(new VisualDeckCard(), card, {

@@ -320,7 +320,7 @@ export class GameStateService {
 						// if (debug) {
 						// 	console.debug('end state', this.state.opponentDeck.board);
 						// }
-						// this.logger.debug('[game-state] this.state', this.state);
+						// this.logger.debug('[game-state] this.state', gameEvent.type, this.state);
 					} else {
 						this.state = null;
 					}

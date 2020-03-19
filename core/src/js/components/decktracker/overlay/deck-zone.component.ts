@@ -97,7 +97,7 @@ export class DeckZoneComponent {
 			? [...this._zone.cards].sort(this._zone.sortingFunction)
 			: this._zone.cards;
 		this.cardsInZone = this._zone.numberOfCards;
-		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
+		// console.log('setting cards in zone', this._zone, cardsToDisplay, this.cardsInZone);
 		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(cardsToDisplay, (card: VisualDeckCard) =>
 			this._showGiftsSeparately
 				? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')

@@ -21,7 +21,10 @@ export class DeckManipulationHelper {
 		// We have the entityId, so we just remove it
 		if (zone.some(card => card.entityId === entityId)) {
 			if (debug) {
-				console.debug('removing', zone.find((card: DeckCard) => card.entityId === entityId));
+				console.debug(
+					'removing',
+					zone.find((card: DeckCard) => card.entityId === entityId),
+				);
 			}
 			return [
 				zone.map((card: DeckCard) => (card.entityId === entityId ? null : card)).filter(card => card),
@@ -137,7 +140,12 @@ export class DeckManipulationHelper {
 		// (triggering the "card stolen" event), then changes the zone (triggering the "receive card in hand" event)
 		if (zone.filter(card => card.entityId === cardTemplate.entityId).length > 0) {
 			if (debug) {
-				console.debug('card already added to zone', zone, cardTemplate);
+				console.debug(
+					'card already added to zone',
+					zone,
+					cardTemplate,
+					zone.filter(card => card.entityId === cardTemplate.entityId),
+				);
 			}
 			return zone;
 		}
@@ -151,7 +159,7 @@ export class DeckManipulationHelper {
 			creatorCardId: cardTemplate.creatorCardId,
 		} as DeckCard);
 		if (debug) {
-			console.debug('adding card to zone', [...zone, newCard]);
+			console.debug('adding card to zone', [...zone, newCard], cardTemplate);
 		}
 		return [...zone, newCard];
 	}
@@ -172,7 +180,12 @@ export class DeckManipulationHelper {
 							cardName: card && card.name,
 						} as DeckCard);
 					} else {
-						console.warn('could not find card in zone', cardId, entityId, zone.map(card => card.entityId));
+						console.warn(
+							'could not find card in zone',
+							cardId,
+							entityId,
+							zone.map(card => card.entityId),
+						);
 					}
 				} else if (cardId == null) {
 					// We explicitely said we wanted a card identified by an entityId, so we don't fallback
