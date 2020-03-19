@@ -34,7 +34,7 @@ import { PreferencesService } from './preferences.service';
 import { ReplaysNotificationService } from './replays/replays-notification.service';
 import { SettingsCommunicationService } from './settings/settings-communication.service';
 
-declare var amplitude: any;
+declare let amplitude: any;
 
 @Injectable()
 export class AppBootstrapService {
@@ -266,7 +266,7 @@ export class AppBootstrapService {
 		}
 		// Log an event for each of the prefs
 		console.log('pref status', prefs);
-		for (let key of Object.keys(prefs)) {
+		for (const key of Object.keys(prefs)) {
 			amplitude.getInstance().logEvent('preference-status', {
 				'key': key,
 				'value': prefs[key],

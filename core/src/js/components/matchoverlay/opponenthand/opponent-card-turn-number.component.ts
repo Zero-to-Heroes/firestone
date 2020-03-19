@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
+import { Component, Input } from '@angular/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -14,12 +13,8 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		</div>
 	`,
 })
-export class OpponentCardTurnNumberComponent implements OnInit {
+export class OpponentCardTurnNumberComponent {
 	_turn: number | 'M';
-
-	constructor(private logger: NGXLogger) {}
-
-	ngOnInit(): void {}
 
 	@Input() set card(value: DeckCard) {
 		const turn = value.metaInfo ? value.metaInfo.turnAtWhichCardEnteredCurrentZone : undefined;

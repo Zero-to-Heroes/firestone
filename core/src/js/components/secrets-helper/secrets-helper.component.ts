@@ -21,7 +21,7 @@ import { DebugService } from '../../services/debug.service';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'secrets-helper',
@@ -73,7 +73,7 @@ export class SecretsHelperComponent implements AfterViewInit, OnDestroy {
 	tooltipPosition: CardTooltipPositionType = 'left';
 	showBackdrop: boolean;
 
-	private showTooltips: boolean = true;
+	private showTooltips = true;
 
 	private scale;
 	private gameInfoUpdatedListener: (message: any) => void;

@@ -23,7 +23,7 @@ import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'decktracker-overlay-root',
@@ -95,7 +95,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	deck: DeckState;
 
 	gameState: GameState;
-	active: boolean = true;
+	active = true;
 	windowId: string;
 	activeTooltip: string;
 	// overlayDisplayed: boolean;
@@ -112,7 +112,7 @@ export class DeckTrackerOverlayRootComponent implements AfterViewInit, OnDestroy
 	showBackdrop: boolean;
 
 	// private hasBeenMovedByUser: boolean;
-	private showTooltips: boolean = true;
+	private showTooltips = true;
 
 	private scale;
 	private gameInfoUpdatedListener: (message: any) => void;

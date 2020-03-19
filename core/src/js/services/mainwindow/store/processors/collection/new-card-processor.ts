@@ -105,13 +105,10 @@ export class NewCardProcessor implements Processor {
 			return false;
 		}
 		// The collection is updated immediately, so when we query it the new card has already been inserted
-		if ((type === 'NORMAL' && (dbCard.rarity === 'Legendary' && card.count >= 2)) || card.count >= 3) {
+		if ((type === 'NORMAL' && dbCard.rarity === 'Legendary' && card.count >= 2) || card.count >= 3) {
 			return true;
 		}
-		if (
-			(type === 'GOLDEN' && (dbCard.rarity === 'Legendary' && card.premiumCount >= 2)) ||
-			card.premiumCount >= 3
-		) {
+		if ((type === 'GOLDEN' && dbCard.rarity === 'Legendary' && card.premiumCount >= 2) || card.premiumCount >= 3) {
 			return true;
 		}
 		return false;

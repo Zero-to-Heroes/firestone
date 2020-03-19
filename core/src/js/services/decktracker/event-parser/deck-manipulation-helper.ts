@@ -15,7 +15,7 @@ export class DeckManipulationHelper {
 		zone: readonly DeckCard[],
 		cardId: string,
 		entityId: number,
-		removeFillerCard: boolean = false,
+		removeFillerCard = false,
 	): readonly [readonly DeckCard[], DeckCard] {
 		const debug = false; // entityId === 2098;
 		// We have the entityId, so we just remove it

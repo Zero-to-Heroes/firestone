@@ -5,7 +5,7 @@ import { Events } from '../../../services/events.service';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var overwolf;
+declare let overwolf;
 
 @Component({
 	selector: 'settings-achievements-video-capture',

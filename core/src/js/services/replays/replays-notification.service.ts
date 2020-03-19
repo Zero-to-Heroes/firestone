@@ -7,7 +7,7 @@ import { ShowReplayEvent } from '../mainwindow/store/events/replays/show-replay-
 import { Message, OwNotificationsService } from '../notifications.service';
 import { PreferencesService } from '../preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Injectable()
 export class ReplaysNotificationService {

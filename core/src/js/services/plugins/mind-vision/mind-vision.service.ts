@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ArenaInfo } from '../../../models/arena-info';
 
-declare var OverwolfPlugin: any;
+declare let OverwolfPlugin: any;
 
 @Injectable()
 export class MindVisionService {

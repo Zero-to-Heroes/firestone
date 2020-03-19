@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NGXLogger } from 'ngx-logger';
+import { Component, Input } from '@angular/core';
 import { DeckCard } from '../../../models/decktracker/deck-card';
 
 @Component({
@@ -15,7 +14,7 @@ import { DeckCard } from '../../../models/decktracker/deck-card';
 		</div>
 	`,
 })
-export class OpponentCardInfoComponent implements OnInit {
+export class OpponentCardInfoComponent {
 	@Input() displayGuess: boolean;
 	@Input() displayTurnNumber: boolean;
 	// Weuse vh instead of vw here, because the height of the playing area is not affected when
@@ -24,10 +23,6 @@ export class OpponentCardInfoComponent implements OnInit {
 	@Input() leftVhOffset: number;
 	@Input() topVhOffset: number;
 	_card: DeckCard;
-
-	constructor(private logger: NGXLogger) {}
-
-	ngOnInit(): void {}
 
 	@Input() set card(value: DeckCard) {
 		this._card = value;

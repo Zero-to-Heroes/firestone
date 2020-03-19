@@ -4,7 +4,7 @@ import { AbstractRequirement } from './_abstract-requirement';
 import { Requirement } from './_requirement';
 
 export class TotalDamageDealtReq extends AbstractRequirement {
-	private totalDamageDealt: number = 0;
+	private totalDamageDealt = 0;
 
 	constructor(
 		private readonly targetDamage: number,

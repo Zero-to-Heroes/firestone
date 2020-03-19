@@ -90,7 +90,9 @@ export class RemoteAchievementsService {
 		};
 		// console.log('saving achievement to RDS', achievement, completedAchievement, statEvent);
 		this.http.post(ACHIEVEMENTS_POST_URL, statEvent).subscribe(
-			result => {},
+			result => {
+				// Do nothing
+			},
 			error => {
 				console.warn('Could not upload achievemnt stats, retrying', error);
 				setTimeout(() => this.publishRemoteAchievement(achievement, retriesLeft - 1), 3000);

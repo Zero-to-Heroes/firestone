@@ -114,7 +114,7 @@ export class ReplaysListComponent {
 		// this.logger.debug('[replays-list] workingReplays', workingReplays);
 		const step = 100;
 		while (workingReplays.length > 0) {
-			let currentReplays = [];
+			const currentReplays = [];
 			while (
 				workingReplays.length > 0 &&
 				(currentReplays.length === 0 || this.getTotalReplaysLength(currentReplays) < step)

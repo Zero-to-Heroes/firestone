@@ -4,8 +4,6 @@ import { GlobalStatsInitEvent } from '../../../events/stats/global/global-stats-
 import { Processor } from '../../processor';
 
 export class GlobalStatsInitProcessor implements Processor {
-	constructor() {}
-
 	public async process(event: GlobalStatsInitEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const stats = Object.assign(new GlobalStats(), currentState.globalStats, event.newState);
 		return Object.assign(new MainWindowState(), currentState, {

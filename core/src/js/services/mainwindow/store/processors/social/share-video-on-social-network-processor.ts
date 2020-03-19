@@ -4,7 +4,7 @@ import { OverwolfService } from '../../../../overwolf.service';
 import { ShareVideoOnSocialNetworkEvent } from '../../events/social/share-video-on-social-network-event';
 import { Processor } from '../processor';
 
-declare var amplitude;
+declare let amplitude;
 
 export class ShareVideoOnSocialNetworkProcessor implements Processor {
 	constructor(private ow: OverwolfService) {}

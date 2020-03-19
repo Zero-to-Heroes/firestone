@@ -116,7 +116,9 @@ export class IndexedDbService {
 				error: (e: Event) => {
 					console.error('[collection] [storage] counld not create transaction', e);
 				},
-				complete: () => {},
+				complete: () => {
+					// Do nothing
+				},
 			});
 			const objectStore: IDBObjectStore = transaction.objectStore('card-history');
 			const request = objectStore.count();
@@ -215,21 +217,22 @@ export class IndexedDbService {
 	}
 
 	private getAllWithLimit(storeName: string, limit: number, indexDetails?: IndexDetails) {
-		const self = this;
 		return new Promise<any>((resolve, reject) => {
-			self.db.dbWrapper.validateBeforeTransaction(storeName, reject);
+			this.db.dbWrapper.validateBeforeTransaction(storeName, reject);
 
-			let transaction = self.db.dbWrapper.createTransaction({
-					storeName: storeName,
-					dbMode: 'readonly',
-					error: (e: Event) => {
-						reject(e);
-					},
-					complete: () => {},
-				}),
-				objectStore = transaction.objectStore(storeName),
-				result: any[] = [],
-				request: IDBRequest;
+			const transaction = this.db.dbWrapper.createTransaction({
+				storeName: storeName,
+				dbMode: 'readonly',
+				error: (e: Event) => {
+					reject(e);
+				},
+				complete: () => {
+					// Do nothing
+				},
+			});
+			const objectStore = transaction.objectStore(storeName);
+			const result: any[] = [];
+			let request: IDBRequest;
 			if (indexDetails) {
 				const index = objectStore.index(indexDetails.indexName),
 					order = indexDetails.order === 'desc' ? 'prev' : 'next';

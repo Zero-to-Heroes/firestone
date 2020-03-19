@@ -81,7 +81,7 @@ export class DevService {
 		} as any;
 		window['showAchievementNotification'] = () => {
 			this.events.broadcast(Events.ACHIEVEMENT_RECORDING_STARTED, achievement, {
-				notificationTimeout: () => {},
+				notificationTimeout: () => 0,
 				getRecordingDuration: () => 0,
 			} as Challenge);
 			// this.achievementMonitor.sendPreRecordNotification(achievement, 20000);
@@ -113,7 +113,7 @@ export class DevService {
 			const logContents = await this.ow.getFileContents(logsLocation);
 			const events = JSON.parse(logContents);
 			// console.log('sending events', events);
-			for (let event of events) {
+			for (const event of events) {
 				// console.log('dispatching', event);
 				if (awaitEvents) {
 					await this.gameEvents.dispatchGameEvent(event);

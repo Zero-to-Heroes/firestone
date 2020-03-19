@@ -3,7 +3,7 @@ import { TwitterUserInfo } from '../models/mainwindow/twitter-user-info';
 import { ActiveSubscriptionPlan } from '../models/overwolf/profile/active-subscription-plan';
 import { CurrentUser } from '../models/overwolf/profile/current-user';
 
-declare var overwolf: any;
+declare let overwolf: any;
 
 const HEARTHSTONE_GAME_ID = 9898;
 

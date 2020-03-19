@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-declare var amplitude;
+declare let amplitude;
 
 @Injectable()
 export class DebugService {

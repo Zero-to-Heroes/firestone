@@ -4,7 +4,7 @@ import { VisualAchievement } from '../../../../../models/visual-achievement';
 import { FilterShownAchievementsEvent } from '../../events/achievements/filter-shown-achievements-event';
 import { Processor } from '../processor';
 
-declare var amplitude;
+declare let amplitude;
 
 export class FilterShownAchievementsProcessor implements Processor {
 	public async process(event: FilterShownAchievementsEvent, currentState: MainWindowState): Promise<MainWindowState> {

@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class TotalDamageTakenReq implements Requirement {
-	private totalDamageTaken: number = 0;
+	private totalDamageTaken = 0;
 
 	constructor(private readonly targetDamage: number) {}
 

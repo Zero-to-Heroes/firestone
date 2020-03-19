@@ -20,7 +20,7 @@ import { OverwolfService } from '../services/overwolf.service';
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
 export class HelpTooltipDirective implements OnInit, OnDestroy {
-	_text: string = '';
+	_text = '';
 
 	@Input('helpTooltipPosition') position: 'bottom' | 'right' | 'left' = 'bottom';
 

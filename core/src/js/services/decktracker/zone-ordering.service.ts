@@ -4,8 +4,6 @@ import { DeckState } from '../../models/decktracker/deck-state';
 
 @Injectable()
 export class ZoneOrderingService {
-	constructor() {}
-
 	public orderZones(deckState: DeckState, stateFromTracker): DeckState {
 		// return deckState;
 		if (!stateFromTracker) {

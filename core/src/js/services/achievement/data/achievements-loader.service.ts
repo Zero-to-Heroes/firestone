@@ -125,7 +125,9 @@ export class AchievementsLoaderService {
 							resolve(result);
 						}
 					},
-					error => {},
+					error => {
+						this.logger.warn('[achievements-loader] could not load cards', error);
+					},
 				);
 		});
 	}

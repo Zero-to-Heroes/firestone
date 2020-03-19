@@ -70,14 +70,14 @@ export class PreferenceSliderComponent implements OnDestroy {
 	@Input() tooltipDisabled: string;
 	@Input() min: number;
 	@Input() max: number;
-	@Input() snapSensitivity: number = 3;
+	@Input() snapSensitivity = 3;
 	@Input() knobs: readonly Knob[];
 	@Input() showCurrentValue: boolean;
 
 	value: number;
 	progress: number;
-	left: number = 0;
-	right: number = 0;
+	left = 0;
+	right = 0;
 	displayedValue: string;
 	valueChanged: Subject<number> = new Subject<number>();
 

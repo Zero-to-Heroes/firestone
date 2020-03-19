@@ -4,7 +4,7 @@ import { GameEvent } from '../../models/game-event';
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'secrets-helper-widget-icon',

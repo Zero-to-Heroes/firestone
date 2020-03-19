@@ -3,7 +3,7 @@ import { CloseMainWindowEvent } from '../../services/mainwindow/store/events/clo
 import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../../services/overwolf.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'control-close',

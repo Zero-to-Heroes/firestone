@@ -59,8 +59,8 @@ import { OverwolfService } from '../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardComponent implements AfterViewInit {
-	@Input() tooltips: boolean = true;
-	@Input() showCounts: boolean = false;
+	@Input() tooltips = true;
+	@Input() showCounts = false;
 	@Output() imageLoaded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
 	showPlaceholder = true;
@@ -73,7 +73,7 @@ export class CardComponent implements AfterViewInit {
 	_card: SetCard;
 	_highRes = false;
 
-	private _loadImage: boolean = true;
+	private _loadImage = true;
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 
 	constructor(

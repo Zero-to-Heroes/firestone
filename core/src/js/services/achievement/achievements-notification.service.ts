@@ -7,7 +7,7 @@ import { PreferencesService } from '../preferences.service';
 import { Challenge } from './achievements/challenges/challenge';
 import { AchievementsLoaderService } from './data/achievements-loader.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Injectable()
 export class AchievementsNotificationService {
@@ -77,7 +77,7 @@ export class AchievementsNotificationService {
 			return;
 		}
 		this.logger.debug('[achievements-notification] sending new notification', achievement.id);
-		let recapText = `Your replay is being recorded...<span class="loader"></span>`;
+		const recapText = `Your replay is being recorded...<span class="loader"></span>`;
 		this.notificationService.html({
 			notificationId: achievement.id,
 			content: this.buildNotificationTemplate(achievement, recapText, 'unclickable'),

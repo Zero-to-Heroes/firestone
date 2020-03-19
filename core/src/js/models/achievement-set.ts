@@ -18,9 +18,9 @@ export class AchievementSet {
 
 	public updateAchievement(newAchievement: Achievement): AchievementSet {
 		return Object.assign(new AchievementSet(), this, {
-			achievements: AchievementSet.sort(this.achievements.map(ach =>
-				ach.update(newAchievement),
-			) as readonly VisualAchievement[]),
+			achievements: AchievementSet.sort(
+				this.achievements.map(ach => ach.update(newAchievement)) as readonly VisualAchievement[],
+			),
 		} as AchievementSet);
 	}
 

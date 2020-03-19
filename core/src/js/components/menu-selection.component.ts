@@ -13,7 +13,7 @@ import { ChangeVisibleApplicationEvent } from '../services/mainwindow/store/even
 import { MainWindowStoreEvent } from '../services/mainwindow/store/events/main-window-store-event';
 import { OverwolfService } from '../services/overwolf.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'menu-selection',

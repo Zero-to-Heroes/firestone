@@ -11,9 +11,9 @@ import { NGXLogger } from 'ngx-logger';
 import { AdService } from '../services/ad.service';
 import { OverwolfService } from '../services/overwolf.service';
 
-declare var adsReady: any;
-declare var OwAd: any;
-declare var amplitude: any;
+declare let adsReady: any;
+declare let OwAd: any;
+declare let amplitude: any;
 
 @Component({
 	selector: 'ads',

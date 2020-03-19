@@ -4,8 +4,6 @@ import { CollectionSetsFilterEvent } from '../../events/collection/collection-se
 import { Processor } from '../processor';
 
 export class CollectionSetsFilterProcessor implements Processor {
-	constructor() {}
-
 	public async process(event: CollectionSetsFilterEvent, currentState: MainWindowState): Promise<MainWindowState> {
 		const newCollection = Object.assign(new BinderState(), currentState.binder, {
 			selectedFormat: event.value,

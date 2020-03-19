@@ -24,7 +24,7 @@ export class DeckstringOverrideParser implements EventParser {
 			console.log('no new deckstring to import, returning', gameEvent);
 			return currentState;
 		}
-		for (let line of formattedData) {
+		for (const line of formattedData) {
 			await this.deckParser.parseActiveDeck(line);
 		}
 		const currentDeck = await this.deckParser.getCurrentDeck();
@@ -37,13 +37,13 @@ export class DeckstringOverrideParser implements EventParser {
 		const hero: HeroCard = this.buildHero(currentDeck);
 		// Remove the cards that are not in deck anymore, i.e. the cards that are in the other zones
 		// It's not 100% accurate, but probably as good as we can do it without replaying all the match
-		let deck: DeckCard[] = [...deckList];
+		const deck: DeckCard[] = [...deckList];
 		const allOtherZoneCards = [
 			...currentState.playerDeck.board,
 			...currentState.playerDeck.hand,
 			...currentState.playerDeck.otherZone,
 		].map(card => card.cardId);
-		for (let card of allOtherZoneCards) {
+		for (const card of allOtherZoneCards) {
 			// https://stackoverflow.com/questions/53534721/find-and-remove-first-matching-element-in-an-array-of-javascript-objects
 			deck.find((o, i) => {
 				if (o.cardId === card) {

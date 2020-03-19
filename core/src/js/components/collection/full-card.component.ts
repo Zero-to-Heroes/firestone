@@ -12,7 +12,7 @@ import { SetCard } from '../../models/set';
 import { Events } from '../../services/events.service';
 import { SetsService } from '../../services/sets-service.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'full-card',

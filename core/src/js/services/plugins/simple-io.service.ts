@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-declare var OverwolfPlugin: any;
+declare let OverwolfPlugin: any;
 
 @Injectable()
 export class SimpleIOService {

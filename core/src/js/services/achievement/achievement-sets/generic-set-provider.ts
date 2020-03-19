@@ -129,7 +129,7 @@ export abstract class GenericSetProvider extends SetProvider {
 				icon: achv.icon,
 				completedText: achv.completedText,
 				priority: achv.priority,
-				text(showTimes: boolean = false): string {
+				text(showTimes = false): string {
 					const times = showTimes && !achievement.canBeCompletedOnlyOnce ? `${completions} times` : ``;
 					return `${achv.completedText} <span class="number-of-times">${times}</span>`;
 				},

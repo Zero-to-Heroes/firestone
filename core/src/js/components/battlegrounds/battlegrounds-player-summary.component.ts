@@ -88,7 +88,9 @@ export class BattlegroundsPlayerSummaryComponent implements AfterViewInit, OnDes
 
 	@HostListener('mousedown')
 	dragMove() {
-		this.ow.dragMove(this.windowId, async result => {});
+		this.ow.dragMove(this.windowId, async result => {
+			// Do nothing
+		});
 	}
 
 	private async changeWindowSize(): Promise<void> {

@@ -90,7 +90,6 @@ if (process.env.LOCAL_TEST) {
 
 @Injectable()
 export class SentryErrorHandler implements ErrorHandler {
-	constructor() {}
 	handleError(error) {
 		captureException(error.originalError || error);
 		throw error;

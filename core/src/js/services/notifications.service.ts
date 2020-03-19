@@ -6,7 +6,7 @@ import { OverwolfService } from './overwolf.service';
 @Injectable()
 export class OwNotificationsService {
 	private windowId: string;
-	private messageId: number = 0;
+	private messageId = 0;
 	// Because if we start the app during a game, it might take some time for the notif window to
 	// be created
 	private retriesLeft = 30;

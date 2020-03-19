@@ -2,7 +2,7 @@ import { Processor } from '../processor';
 import { MainWindowState } from '../../../../../models/mainwindow/main-window-state';
 import { TriggerSocialNetworkLoginToggleEvent } from '../../events/social/trigger-social-network-login-toggle-event';
 
-declare var overwolf;
+declare let overwolf;
 
 export class TriggerSocialNetworkLoginToggleProcessor implements Processor {
 	public async process(

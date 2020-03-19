@@ -11,7 +11,7 @@ import { PreferencesService } from './preferences.service';
 import { ProcessingQueue } from './processing-queue.service';
 import { S3FileUploadService } from './s3-file-upload.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Injectable()
 export class GameEvents {

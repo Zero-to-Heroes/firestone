@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Set } from '../../models/set';
 
 @Component({
@@ -23,6 +23,4 @@ import { Set } from '../../models/set';
 export class RarityComponent {
 	@Input() rarity: string;
 	@Input() cardSet: Set;
-
-	constructor() {}
 }

@@ -68,7 +68,7 @@ export class ReplayUploadService {
 		AWS.config.region = 'us-west-2';
 		AWS.config.httpOptions.timeout = 3600 * 1000 * 10;
 
-		let playerRank = game.playerRank;
+		const playerRank = game.playerRank;
 		const s3 = new S3();
 		const params = {
 			Bucket: BUCKET,

@@ -5,8 +5,6 @@ import { MainWindowState } from '../../../../models/mainwindow/main-window-state
 import { EventParser } from '../../events-parser/event-parser';
 
 export class BattlegroundsHideHeroSelectionParser implements EventParser {
-	constructor() {}
-
 	public applies(gameEvent: GameEvent, state: BattlegroundsState): boolean {
 		return state && gameEvent.type === GameEvent.MULLIGAN_DONE;
 	}

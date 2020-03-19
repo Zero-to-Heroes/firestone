@@ -14,8 +14,6 @@ export class BattlegroundsPlayer {
 		} as BattlegroundsPlayer);
 	}
 
-	private constructor() {}
-
 	public addNewBoardState(boardState: BattlegroundsBoardState): BattlegroundsPlayer {
 		return Object.assign(new BattlegroundsPlayer(), this, {
 			boardState: boardState,

@@ -2,7 +2,7 @@ import { ReplaysFilterCategoryType } from '../../../../../models/mainwindow/repl
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ReplaysFilterEvent implements MainWindowStoreEvent {
-	constructor(readonly type: ReplaysFilterCategoryType, readonly selectedValue: string) {}
+	constructor(public readonly type: ReplaysFilterCategoryType, public readonly selectedValue: string) {}
 
 	public static eventName(): string {
 		return 'ReplaysFilterEvent';

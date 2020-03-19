@@ -16,7 +16,7 @@ export class CollectionManager {
 		// this.init();
 	}
 
-	public async getCollection(delay: number = 0): Promise<Card[]> {
+	public async getCollection(delay = 0): Promise<Card[]> {
 		console.log('[collection-manager] getting collection');
 		const collection = await this.memoryReading.getCollection();
 		console.log('[collection-manager] retrieved collection from GEP');

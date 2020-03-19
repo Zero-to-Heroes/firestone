@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { MatchDetail } from '../../models/mainwindow/replays/match-detail';
 
-declare var amplitude;
+declare let amplitude;
 
 const REPLAY_API = 'https://s3-us-west-2.amazonaws.com/com.zerotoheroes.output/';
 

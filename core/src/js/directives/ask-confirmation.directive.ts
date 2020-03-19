@@ -62,7 +62,7 @@ export class AskConfirmationDirective implements AfterViewInit, OnDestroy {
 			// this.overlayRef.detach();
 			// this.overlayRef.dispose();
 		}
-		let positions: ConnectedPosition[] = [
+		const positions: ConnectedPosition[] = [
 			{
 				originX: 'end',
 				originY: 'bottom',

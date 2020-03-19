@@ -12,7 +12,9 @@ export class ReplaysFilter {
 		return Object.assign(new ReplaysFilter(), base);
 	}
 
-	private constructor() {}
+	private constructor() {
+		// To force call to static factory
+	}
 
 	update(value: ReplaysFilter): object {
 		return Object.assign(new ReplaysFilter(), this, value);

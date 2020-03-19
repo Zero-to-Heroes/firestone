@@ -4,7 +4,7 @@ import { OverwolfService } from '../overwolf.service';
 
 const HEARTHSTONE_GAME_ID = 9898;
 
-declare var overwolf;
+declare let overwolf;
 
 @Injectable()
 export class TemporaryResolutionOverrideService {

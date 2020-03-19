@@ -132,7 +132,7 @@ export class DeckParserService {
 		);
 	}
 
-	public buildDeckList(deckstring: string, deckSize: number = 30): readonly DeckCard[] {
+	public buildDeckList(deckstring: string, deckSize = 30): readonly DeckCard[] {
 		if (!deckstring) {
 			return this.buildEmptyDeckList(deckSize);
 		}
@@ -147,7 +147,7 @@ export class DeckParserService {
 			: [];
 	}
 
-	public buildEmptyDeckList(deckSize: number = 30): readonly DeckCard[] {
+	public buildEmptyDeckList(deckSize = 30): readonly DeckCard[] {
 		return new Array(deckSize).fill(DeckCard.create({} as DeckCard));
 	}
 

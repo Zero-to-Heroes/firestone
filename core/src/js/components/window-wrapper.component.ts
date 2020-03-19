@@ -48,7 +48,7 @@ import { OverwolfService } from '../services/overwolf.service';
 	encapsulation: ViewEncapsulation.None,
 })
 export class WindowWrapperComponent implements AfterViewInit, OnDestroy {
-	@Input() allowResize: boolean = false;
+	@Input() allowResize = false;
 	maximized: boolean;
 
 	private stateChangedListener: (message: any) => void;

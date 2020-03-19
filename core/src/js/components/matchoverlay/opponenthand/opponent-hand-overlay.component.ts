@@ -39,8 +39,8 @@ import { PreferencesService } from '../../../services/preferences.service';
 export class OpponentHandOverlayComponent implements AfterViewInit, OnDestroy {
 	gameState: GameState;
 	windowId: string;
-	displayTurnNumber: boolean = true;
-	displayGuess: boolean = true;
+	displayTurnNumber = true;
+	displayGuess = true;
 
 	private gameInfoUpdatedListener: (message: any) => void;
 	private deckSubscription: Subscription;

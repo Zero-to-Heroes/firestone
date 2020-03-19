@@ -6,7 +6,7 @@ import { StatGameModeType } from '../../../../models/mainwindow/stats/stat-game-
 import { Requirement } from './_requirement';
 
 export class WinStreakReq implements Requirement {
-	private currentWinStreak: number = 0;
+	private currentWinStreak = 0;
 
 	constructor(
 		private readonly targetWinStreak: number,

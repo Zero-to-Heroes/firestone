@@ -4,7 +4,7 @@ import { GameStats } from '../../../../models/mainwindow/stats/game-stats';
 import { Requirement } from './_requirement';
 
 export class WinAgsinstClassInRankedStandardInLimitedTimeReq implements Requirement {
-	private currentWinsAgainstClass: number = 0;
+	private currentWinsAgainstClass = 0;
 
 	constructor(
 		private readonly targetVictories: number,

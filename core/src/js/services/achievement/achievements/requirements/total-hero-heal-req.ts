@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class TotalHeroHealReq implements Requirement {
-	private totalHealingReceived: number = 0;
+	private totalHealingReceived = 0;
 
 	constructor(private readonly targetHealing: number, private readonly qualifier: string) {}
 

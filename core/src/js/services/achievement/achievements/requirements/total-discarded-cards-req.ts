@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class TotalDiscardedCardsReq implements Requirement {
-	private totalDiscardedCards: number = 0;
+	private totalDiscardedCards = 0;
 	private completed = false;
 
 	constructor(private readonly targetDiscardedCards: number) {}

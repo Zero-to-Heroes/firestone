@@ -47,7 +47,7 @@ import { OverwolfService } from '../../../services/overwolf.service';
 export class BattlegroundsHeroSelectionOverlayComponent implements AfterViewInit, OnDestroy {
 	state: BattlegroundsState;
 	heroes: readonly BattlegroundsHero[];
-	showPlayerIcon: boolean = true; // Will update with prefs later
+	showPlayerIcon = true; // Will update with prefs later
 
 	windowId: string;
 

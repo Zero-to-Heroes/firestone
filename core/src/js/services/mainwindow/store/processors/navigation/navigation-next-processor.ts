@@ -10,7 +10,7 @@ export class NavigationNextProcessor implements Processor {
 		history: readonly StateHistory[],
 	): Promise<MainWindowState> {
 		// We go back until we find an item that is a navigation state
-		let targetIndex = NavigationNextProcessor.getTargetIndex(currentState, history);
+		const targetIndex = NavigationNextProcessor.getTargetIndex(currentState, history);
 		if (targetIndex === -1) {
 			console.error('invalid next state', history, currentState);
 			return currentState;

@@ -11,7 +11,7 @@ import { NGXLogger } from 'ngx-logger';
 import { OverwolfService } from '../../../services/overwolf.service';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'decktracker-widget-icon',
@@ -30,7 +30,7 @@ declare var amplitude;
 })
 export class DecktrackerWidgetIconComponent implements AfterViewInit {
 	@Output() decktrackerToggle: EventEmitter<boolean> = new EventEmitter<boolean>();
-	_decktrackerToggled: boolean = true;
+	_decktrackerToggled = true;
 	big: boolean;
 
 	@Input() set decktrackerToggled(value: boolean) {

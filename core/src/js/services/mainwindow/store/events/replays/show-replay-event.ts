@@ -1,7 +1,7 @@
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class ShowReplayEvent implements MainWindowStoreEvent {
-	constructor(readonly reviewId: string) {}
+	constructor(public readonly reviewId: string) {}
 
 	public static eventName(): string {
 		return 'ShowReplayEvent';

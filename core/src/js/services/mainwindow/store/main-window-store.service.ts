@@ -128,7 +128,7 @@ import { RecomputeGameStatsProcessor } from './processors/stats/recompute-game-s
 import { TriggerPopulateStoreProcessor } from './processors/trigger-populate-store-processor';
 import { StateHistory } from './state-history';
 
-declare var amplitude;
+declare let amplitude;
 
 const MAX_HISTORY_SIZE = 30;
 

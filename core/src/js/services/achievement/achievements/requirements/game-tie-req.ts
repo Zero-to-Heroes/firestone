@@ -5,8 +5,6 @@ import { Requirement } from './_requirement';
 export class GameTieReq implements Requirement {
 	private isGameTied: boolean;
 
-	constructor() {}
-
 	public static create(rawReq: RawRequirement): Requirement {
 		return new GameTieReq();
 	}

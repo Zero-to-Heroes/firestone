@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class FatigueDamageReq implements Requirement {
-	private totalFatigueDamage: number = 0;
+	private totalFatigueDamage = 0;
 
 	constructor(
 		private readonly targetDamage: number,

@@ -10,6 +10,11 @@ export abstract class AchievementCategoryProvider {
 	) {}
 
 	public buildCategory() {
-		return new AchievementCategory(this.id, this.name, this.icon, this.setProviders.map(provider => provider.id));
+		return new AchievementCategory(
+			this.id,
+			this.name,
+			this.icon,
+			this.setProviders.map(provider => provider.id),
+		);
 	}
 }

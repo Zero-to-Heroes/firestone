@@ -2,7 +2,7 @@ import { DecktrackerViewType } from '../../../../../models/mainwindow/decktracke
 import { MainWindowStoreEvent } from '../main-window-store-event';
 
 export class SelectDecksViewEvent implements MainWindowStoreEvent {
-	constructor(readonly newView: DecktrackerViewType) {}
+	constructor(public readonly newView: DecktrackerViewType) {}
 
 	public static eventName(): string {
 		return 'SelectDecksViewEvent';

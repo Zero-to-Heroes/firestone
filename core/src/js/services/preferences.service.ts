@@ -4,7 +4,7 @@ import { Ftue } from '../models/preferences/ftue';
 import { GenericIndexedDbService } from './generic-indexed-db.service';
 import { OverwolfService } from './overwolf.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Injectable()
 export class PreferencesService {

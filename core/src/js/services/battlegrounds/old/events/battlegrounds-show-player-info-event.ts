@@ -1,7 +1,7 @@
 import { BattlegroundsEvent } from '../../events/battlegrounds-event';
 
 export class BattlegroundsShowPlayerInfoEvent extends BattlegroundsEvent {
-	constructor(readonly playerCardId: string) {
+	constructor(public readonly playerCardId: string) {
 		super('BattlegroundsShowPlayerInfoEvent');
 	}
 }

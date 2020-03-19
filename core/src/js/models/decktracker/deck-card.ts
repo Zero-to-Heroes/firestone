@@ -29,7 +29,9 @@ export class DeckCard {
 		return Object.assign(new DeckCard(), base);
 	}
 
-	protected constructor() {}
+	protected constructor() {
+		// Protected to force call to static factory
+	}
 
 	public update(newCard: DeckCard): DeckCard {
 		if (newCard.cardId && !newCard.cardName) {

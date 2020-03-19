@@ -16,7 +16,7 @@ export class NavigationBackProcessor implements Processor {
 		// console.log('returning state', NavigationBackProcessor.buildParentState(currentState), currentState);
 		// return NavigationBackProcessor.buildParentState(currentState);
 		const nonNavigationState = currentState.nonNavigationState;
-		let targetIndex = NavigationBackProcessor.getTargetIndex(currentState, history);
+		const targetIndex = NavigationBackProcessor.getTargetIndex(currentState, history);
 		const newState =
 			targetIndex === -1
 				? NavigationBackProcessor.buildParentState(currentState) || currentState

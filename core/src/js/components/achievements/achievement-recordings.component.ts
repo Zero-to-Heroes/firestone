@@ -21,7 +21,7 @@ import { MainWindowStoreEvent } from '../../services/mainwindow/store/events/mai
 import { OverwolfService } from '../../services/overwolf.service';
 import { PreferencesService } from '../../services/preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'achievement-recordings',

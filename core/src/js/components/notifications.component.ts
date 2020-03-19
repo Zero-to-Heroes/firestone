@@ -19,7 +19,7 @@ import { Message } from '../services/notifications.service';
 import { OverwolfService } from '../services/overwolf.service';
 import { ProcessingQueue } from '../services/processing-queue.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'notifications',

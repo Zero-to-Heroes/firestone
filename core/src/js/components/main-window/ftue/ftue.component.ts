@@ -52,8 +52,8 @@ import { OverwolfService } from '../../../services/overwolf.service';
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FtueComponent implements AfterViewInit {
-	currentIndex: number = 0;
-	isHome: boolean = true;
+	currentIndex = 0;
+	isHome = true;
 	ftueSteps: FtueStep[] = [
 		{
 			id: 'achievements',

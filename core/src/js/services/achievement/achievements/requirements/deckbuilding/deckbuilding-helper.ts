@@ -8,8 +8,8 @@ export function buildCardArraysFromDeck(deck: any, cards: AllCardsService): read
 }
 
 function fillArray(value, len) {
-	var arr = [];
-	for (var i = 0; i < len; i++) {
+	const arr = [];
+	for (let i = 0; i < len; i++) {
 		arr.push(value);
 	}
 	return arr;

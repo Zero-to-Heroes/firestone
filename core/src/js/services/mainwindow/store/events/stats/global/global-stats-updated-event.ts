@@ -2,7 +2,7 @@ import { GlobalStats } from '../../../../../../models/mainwindow/stats/global/gl
 import { MainWindowStoreEvent } from '../../main-window-store-event';
 
 export class GlobalStatsUpdatedEvent implements MainWindowStoreEvent {
-	constructor(readonly stats: GlobalStats) {}
+	constructor(public readonly stats: GlobalStats) {}
 
 	public static eventName(): string {
 		return 'GlobalStatsUpdatedEvent';

@@ -5,8 +5,6 @@ import { Requirement } from './_requirement';
 export class SceneChangedToGameReq implements Requirement {
 	private sceneChanged: boolean;
 
-	constructor() {}
-
 	public static create(rawReq: RawRequirement): Requirement {
 		return new SceneChangedToGameReq();
 	}

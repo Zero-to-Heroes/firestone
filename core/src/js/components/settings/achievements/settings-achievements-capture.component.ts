@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { PreferencesService } from '../../../services/preferences.service';
 
-declare var amplitude;
+declare let amplitude;
 
 @Component({
 	selector: 'settings-achievements-capture',

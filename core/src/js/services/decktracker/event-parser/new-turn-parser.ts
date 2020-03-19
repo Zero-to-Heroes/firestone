@@ -4,8 +4,6 @@ import { DeckEvents } from './deck-events';
 import { EventParser } from './event-parser';
 
 export class NewTurnParser implements EventParser {
-	constructor() {}
-
 	applies(gameEvent: GameEvent, state: GameState): boolean {
 		return state && gameEvent.type === GameEvent.TURN_START;
 	}

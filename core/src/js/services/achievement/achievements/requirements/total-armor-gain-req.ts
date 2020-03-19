@@ -3,7 +3,7 @@ import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
 export class TotalArmorGainReq implements Requirement {
-	private totalArmorGained: number = 0;
+	private totalArmorGained = 0;
 
 	constructor(private readonly targetArmor: number, private readonly qualifier: string) {}
 
