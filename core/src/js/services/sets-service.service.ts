@@ -200,7 +200,7 @@ export class SetsService {
 			.filter(card => card.collectible)
 			.filter(card => card.set)
 			.filter(card => this.NON_COLLECTIBLE_HEROES.indexOf(card.id) === -1)
-			.filter(card => setId === card.set.toLowerCase())
-			.map(card => new SetCard(card.id, card.name, card.playerClass, card.rarity.toLowerCase(), card.cost));
+			.filter(card => setId === card.set?.toLowerCase())
+			.map(card => new SetCard(card.id, card.name, card.playerClass, card.rarity?.toLowerCase(), card.cost));
 	}
 }

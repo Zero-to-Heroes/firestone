@@ -115,7 +115,7 @@ export class NewCardProcessor implements Processor {
 	}
 
 	private getDust(dbCard: any, type: string) {
-		const dust = this.dustFor(dbCard.rarity.toLowerCase());
+		const dust = this.dustFor(dbCard.rarity?.toLowerCase());
 		return type === 'GOLDEN' ? dust * 4 : dust;
 	}
 

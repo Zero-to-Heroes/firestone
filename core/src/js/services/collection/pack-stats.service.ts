@@ -48,7 +48,7 @@ export class PackStatsService {
 			statEvent['card' + (i + 1) + 'Id'] = cards[i].cardId.toLowerCase();
 			statEvent['card' + (i + 1) + 'Type'] = cards[i].cardType.toLowerCase();
 			const dbCard = this.allCards.getCard(cards[i].cardId);
-			statEvent['card' + (i + 1) + 'Rarity'] = dbCard && dbCard.rarity ? dbCard.rarity.toLowerCase() : 'free';
+			statEvent['card' + (i + 1) + 'Rarity'] = dbCard && dbCard.rarity ? dbCard.rarity?.toLowerCase() : 'free';
 		}
 		console.log('posting pack stat event', statEvent);
 		this.publishPackStatInternal(statEvent);
@@ -77,7 +77,7 @@ export class PackStatsService {
 			'userName': this.username,
 			'cardId': card.id,
 			'type': type.toLowerCase(),
-			'rarity': this.allCards.getCard(card.id).rarity.toLowerCase(),
+			'rarity': this.allCards.getCard(card.id).rarity?.toLowerCase(),
 			'isNew': isNew,
 		};
 		console.log('posting card stat event', statEvent);

@@ -190,7 +190,7 @@ export class LogParserService {
 
 	private displayDustMessage(card: Card, type: string) {
 		const dbCard = this.cards.getCard(card.id);
-		let dust = this.dustFor(dbCard.rarity.toLowerCase());
+		let dust = this.dustFor(dbCard.rarity?.toLowerCase());
 		dust = type === 'GOLDEN' ? dust * 4 : dust;
 		setTimeout(() => {
 			this.events.broadcast(Events.MORE_DUST, card, dust, type);

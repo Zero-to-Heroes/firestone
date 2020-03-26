@@ -31,21 +31,21 @@ export class Set {
 	numberOfLimitCollectibleCards(): number {
 		let totalCards = 0;
 		this.allCards.forEach((card: SetCard) => {
-			totalCards += card.rarity.toLowerCase() === 'legendary' ? 1 : 2;
+			totalCards += card.rarity?.toLowerCase() === 'legendary' ? 1 : 2;
 		});
 		return totalCards;
 	}
 
 	ownedForRarity(rarity: string): number {
 		return this.allCards
-			.filter(card => card.rarity.toLowerCase() === rarity)
+			.filter(card => card.rarity?.toLowerCase() === rarity)
 			.map((card: SetCard) => card.getNumberCollected())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
 
 	totalForRarity(rarity: string): number {
 		return this.allCards
-			.filter(card => card.rarity.toLowerCase() === rarity)
+			.filter(card => card.rarity?.toLowerCase() === rarity)
 			.map((card: SetCard) => card.getMaxCollectible())
 			.reduce((c1, c2) => c1 + c2, 0);
 	}
@@ -137,7 +137,10 @@ export class SetCard {
 	}
 
 	getMaxCollectible(): number {
-		return this.rarity.toLowerCase() === 'legendary' ? 1 : 2;
+		if (!this.rarity) {
+			console.warn('missing rarity', this);
+		}
+		return this.rarity?.toLowerCase() === 'legendary' ? 1 : 2;
 	}
 
 	isOwned(): boolean {

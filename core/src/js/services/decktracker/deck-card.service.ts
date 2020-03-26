@@ -36,7 +36,7 @@ export class DeckCardService {
 		return card.update({
 			cardName: card.cardName || dbCard.name,
 			manaCost: card.manaCost || dbCard.cost,
-			rarity: card.rarity || dbCard.rarity ? (card.rarity || dbCard.rarity).toLowerCase() : undefined,
+			rarity: card.rarity || dbCard.rarity ? (card.rarity || dbCard.rarity)?.toLowerCase() : undefined,
 		} as DeckCard);
 	}
 }

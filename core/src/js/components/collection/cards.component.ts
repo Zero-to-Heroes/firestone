@@ -355,7 +355,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			case this.RARITY_FILTER_ALL:
 				return (card: SetCard) => true;
 			default:
-				return (card: SetCard) => card.rarity && card.rarity.toLowerCase() === this.rarityActiveFilter;
+				return (card: SetCard) => card.rarity && card.rarity?.toLowerCase() === this.rarityActiveFilter;
 		}
 	}
 
@@ -364,7 +364,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 			case this.CLASS_FILTER_ALL:
 				return (card: SetCard) => true;
 			default:
-				return (card: SetCard) => card.cardClass && card.cardClass.toLowerCase() === this.classActiveFilter;
+				return (card: SetCard) => card.cardClass && card.cardClass?.toLowerCase() === this.classActiveFilter;
 		}
 	}
 

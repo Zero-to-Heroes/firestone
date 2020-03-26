@@ -6,9 +6,9 @@ import { Set } from '../../models/set';
 	styleUrls: [`../../../css/component/collection/rarity.component.scss`],
 	template: `
 		<div *ngIf="cardSet && rarity" class="rarity-container">
-			<div class="rarity-progress" (mousedown)="toggleShowMissingCards()">
+			<div class="rarity-progress">
 				<img
-					src="{{ '/Files/assets/images/rarity-' + rarity.toLowerCase() + '.png' }}"
+					src="{{ '/Files/assets/images/rarity-' + rarity?.toLowerCase() + '.png' }}"
 					class="rarity"
 					title="{{ rarity }}"
 				/>
