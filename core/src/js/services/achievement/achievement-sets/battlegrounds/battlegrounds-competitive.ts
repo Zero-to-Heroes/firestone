@@ -10,6 +10,7 @@ export class BattlegroundsCompetitiveSetProvider extends GenericSetProvider {
 				'battlegrounds_0win_streak',
 				'battlegrounds_hero_TB_BaconShop_HERO_01',
 				'battlegrounds_hero_TB_BaconShop_HERO_02',
+				'battlegrounds_hero_TB_BaconShop_HERO_08',
 				'battlegrounds_hero_TB_BaconShop_HERO_10',
 				'battlegrounds_hero_TB_BaconShop_HERO_11',
 				'battlegrounds_hero_TB_BaconShop_HERO_12',
