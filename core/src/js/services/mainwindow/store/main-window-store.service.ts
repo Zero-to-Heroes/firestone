@@ -220,7 +220,7 @@ export class MainWindowStoreService {
 				// or forward with the history arrows, the state of these arrows will change
 				// vs what they originally were when the state was stored
 				const stateWithNavigation = this.updateNavigationArrows(newState);
-				console.log('emitting new state', stateWithNavigation);
+				// console.log('emitting new state', stateWithNavigation);
 				this.stateEmitter.next(stateWithNavigation);
 				if (Date.now() - start > 1000) {
 					this.logger.warn(
