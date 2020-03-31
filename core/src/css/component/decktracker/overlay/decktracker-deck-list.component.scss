@@ -53,7 +53,7 @@
 			.ps__rail-y.ps__rail-y {
 				display: block;
 				opacity: 1;
-				right: 8px !important;
+				right: -2px !important;
 				width: 15px !important;
 				background-color: rgba(255, 255, 255, 0.01);
 				z-index: 2;
@@ -67,7 +67,7 @@
 					}
 				}
 				.ps__thumb-y {
-					width: 6px;
+					width: 10px;
 					background-color: var(--color-3);
 
 					&:hover {
