@@ -50,6 +50,7 @@ export class GroupedDeckListComponent {
 
 	@Input() set cardsGoToBottom(value: boolean) {
 		this._cardsGoToBottom = value;
+		console.log('update cards go to bottom', value);
 		this.buildGroupedList();
 	}
 
@@ -133,7 +134,8 @@ export class GroupedDeckListComponent {
 		}
 		const sortingFunction = this._cardsGoToBottom
 			? (a: VisualDeckCard, b: VisualDeckCard) => this.sortOrder(a) - this.sortOrder(b) || a.manaCost - b.manaCost
-			: (a: VisualDeckCard, b: VisualDeckCard) => a.manaCost - b.manaCost;
+			: null;
+		// console.log('sorting function', this._cardsGoToBottom, sortingFunction);
 		this.zone = {
 			id: 'single-zone',
 			name: undefined,

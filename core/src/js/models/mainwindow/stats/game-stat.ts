@@ -33,7 +33,7 @@ export class GameStat {
 		let rankIconTooltip;
 		if (this.gameMode === 'ranked') {
 			const standard = 'standard_ranked';
-			if (this.playerRank === 'legend') {
+			if (this.playerRank?.indexOf('legend') !== -1) {
 				rankIcon = `${standard}/legend`;
 				rankIconTooltip = 'Legend';
 			} else if (!this.playerRank || parseInt(this.playerRank) >= 25) {
@@ -85,6 +85,9 @@ export class GameStat {
 
 	public buildRankText(): string {
 		if (this.gameMode === 'ranked') {
+			if (this.playerRank?.indexOf('legend-') !== -1) {
+				return this.playerRank.split('legend-')[1];
+			}
 			return this.playerRank;
 		}
 		if (this.gameMode === 'arena' && this.playerRank && this.playerRank.indexOf('-') !== -1) {
