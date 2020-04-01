@@ -124,6 +124,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 	readonly CLASS_WARRIOR = 'warrior';
 
 	readonly FILTER_OWN = 'own';
+	readonly FILTER_MISSING_PLAYABLE_COPIES = 'missingplayablecopies';
 	readonly FILTER_GOLDEN_OWN = 'goldenown';
 	readonly FILTER_DONT_OWN = 'dontown';
 	readonly FILTER_NON_PREMIUM_NOT_COMPLETED = 'notpremiumnotcompleted';
@@ -154,6 +155,7 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 
 	cardsOwnedSelectOptions: IOption[] = [
 		{ label: this.labelFor(this.FILTER_OWN), value: this.FILTER_OWN },
+		{ label: this.labelFor(this.FILTER_MISSING_PLAYABLE_COPIES), value: this.FILTER_MISSING_PLAYABLE_COPIES },
 		{ label: this.labelFor(this.FILTER_GOLDEN_OWN), value: this.FILTER_GOLDEN_OWN },
 		{ label: this.labelFor(this.FILTER_DONT_OWN), value: this.FILTER_DONT_OWN },
 		{ label: this.labelFor(this.FILTER_NON_PREMIUM_NOT_COMPLETED), value: this.FILTER_NON_PREMIUM_NOT_COMPLETED },
@@ -374,6 +376,8 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 				return (card: SetCard) => true;
 			case this.FILTER_OWN:
 				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium > 0;
+			case this.FILTER_MISSING_PLAYABLE_COPIES:
+				return (card: SetCard) => card.ownedNonPremium + card.ownedPremium < card.getMaxCollectible();
 			case this.FILTER_GOLDEN_OWN:
 				return (card: SetCard) => card.ownedPremium > 0;
 			case this.FILTER_NON_PREMIUM_NOT_COMPLETED:
@@ -426,6 +430,8 @@ export class CardsComponent implements AfterViewInit, OnDestroy {
 
 			case this.FILTER_ALL:
 				return 'All existing cards';
+			case this.FILTER_MISSING_PLAYABLE_COPIES:
+				return 'Only cards where I miss playable copies';
 			case this.FILTER_OWN:
 				return 'Only cards I have';
 			case this.FILTER_GOLDEN_OWN:
