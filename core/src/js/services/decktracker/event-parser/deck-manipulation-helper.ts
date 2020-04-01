@@ -164,6 +164,13 @@ export class DeckManipulationHelper {
 		return [...zone, newCard];
 	}
 
+	public updateCardInZone(zone: readonly DeckCard[], entityId: number, cardId: string): readonly DeckCard[] {
+		if (!cardId) {
+			return zone;
+		}
+		return zone.map(card => (card.entityId !== entityId ? card : card.update({ cardId: cardId } as DeckCard)));
+	}
+
 	public findCardInZone(zone: readonly DeckCard[], cardId: string, entityId: number): DeckCard {
 		// Explicit search by entity id
 		if (entityId) {

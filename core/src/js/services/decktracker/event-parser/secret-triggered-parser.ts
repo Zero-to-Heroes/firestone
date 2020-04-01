@@ -1,4 +1,5 @@
 import { BoardSecret } from '../../../models/decktracker/board-secret';
+import { DeckCard } from '../../../models/decktracker/deck-card';
 import { DeckState } from '../../../models/decktracker/deck-state';
 import { GameState } from '../../../models/decktracker/game-state';
 import { GameEvent } from '../../../models/game-event';
@@ -18,14 +19,16 @@ export class SecretTriggeredParser implements EventParser {
 		const [cardId, controllerId, localPlayer, entityId] = gameEvent.parse();
 		const isPlayer = controllerId === localPlayer.PlayerId;
 		const deck = isPlayer ? currentState.playerDeck : currentState.opponentDeck;
-		// console.log('[secret-triggered]', cardId);
+		// console.log('[secret-triggered]', cardId, gameEvent, deck);
 
 		const newSecrets: readonly BoardSecret[] = deck.secrets
 			.filter(secret => secret.entityId !== entityId)
 			.map(secret => this.helper.removeSecretOptionFromSecret(secret, cardId));
+		const newOther: readonly DeckCard[] = this.helper.updateCardInZone(deck.otherZone, entityId, cardId);
 
 		const newPlayerDeck = deck.update({
 			secrets: newSecrets,
+			otherZone: newOther,
 		} as DeckState);
 		// console.log('[secret-triggered] new deck', entityId, newPlayerDeck);
 		return Object.assign(new GameState(), currentState, {
