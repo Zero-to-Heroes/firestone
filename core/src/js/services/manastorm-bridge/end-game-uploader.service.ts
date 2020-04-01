@@ -98,16 +98,16 @@ export class EndGameUploaderService {
 		} else if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const playerInfo = await this.playersInfo.getPlayerInfo();
 			if (playerInfo && game.gameFormat === 'standard') {
-				if (playerInfo.standardLegendRank > 0) {
-					playerRank = `legend-${playerInfo.standardLegendRank}`;
+				if (playerInfo.standard?.legendRank > 0) {
+					playerRank = `legend-${playerInfo.standard.legendRank}`;
 				} else {
-					playerRank = playerInfo.standardRank;
+					playerRank = `${playerInfo.standard.leagueId}-${playerInfo.standard?.rankValue}`;
 				}
 			} else if (playerInfo && game.gameFormat === 'wild') {
-				if (playerInfo.wildLegendRank > 0) {
-					playerRank = `legend-${playerInfo.wildLegendRank}`;
+				if (playerInfo.wild?.legendRank > 0) {
+					playerRank = `legend-${playerInfo.wild.legendRank}`;
 				} else {
-					playerRank = playerInfo.wildRank;
+					playerRank = `${playerInfo.wild.leagueId}-${playerInfo.wild?.rankValue}`;
 				}
 			}
 		}
@@ -115,16 +115,16 @@ export class EndGameUploaderService {
 		if (game.gameFormat === 'standard' || game.gameFormat === 'wild') {
 			const opponentInfo = await this.playersInfo.getOpponentInfo();
 			if (opponentInfo && game.gameFormat === 'standard') {
-				if (opponentInfo.standardLegendRank > 0) {
-					opponentRank = `legend-${opponentInfo.standardLegendRank}`;
+				if (opponentInfo.standard?.legendRank > 0) {
+					opponentRank = `legend-${opponentInfo.standard.legendRank}`;
 				} else {
-					opponentRank = opponentInfo.standardRank;
+					opponentRank = `${opponentInfo.standard.leagueId}-${opponentInfo.standard?.rankValue}`;
 				}
 			} else if (opponentInfo && game.gameFormat === 'wild') {
-				if (opponentInfo.wildLegendRank > 0) {
-					opponentRank = `legend-${opponentInfo.wildLegendRank}`;
+				if (opponentInfo.wild?.legendRank > 0) {
+					opponentRank = `legend-${opponentInfo.wild.legendRank}`;
 				} else {
-					opponentRank = opponentInfo.wildRank;
+					opponentRank = `${opponentInfo.wild.leagueId}-${opponentInfo.wild?.rankValue}`;
 				}
 			}
 		}

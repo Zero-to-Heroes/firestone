@@ -1,3 +1,5 @@
+import { Rank } from './player-info';
+
 export class GameEvent {
 	public static readonly SCENE_CHANGED = 'SCENE_CHANGED'; // Not strictly a game event, but needed for requirements procesing
 	public static readonly GAME_STATS_UPDATED = 'GAME_STATS_UPDATED'; // Not strictly a game event, but needed for req processing
@@ -109,10 +111,12 @@ export interface GameEventPlayer {
 	PlayerId: number;
 	Name: string;
 	CardID: string;
-	standardRank: number;
-	standardLegendRank: number;
-	wildRank: number;
-	wildLegendRank: number;
+	standard: Rank;
+	wild: Rank;
+	// standardRank: number;
+	// standardLegendRank: number;
+	// wildRank: number;
+	// wildLegendRank: number;
 	cardBackId: number;
 	deck: { deckstring: string; deck };
 }
