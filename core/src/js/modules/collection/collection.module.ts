@@ -55,6 +55,7 @@ import { MenuSelectionComponent } from '../../components/menu-selection.componen
 import { GameReplayComponent } from '../../components/replays/game-replay.component';
 import { GroupedReplaysComponent } from '../../components/replays/grouped-replays.component';
 import { MatchDetailsComponent } from '../../components/replays/match-details.component';
+import { RankImageComponent } from '../../components/replays/rank-image.component';
 import { ReplayInfoComponent } from '../../components/replays/replay-info.component';
 import { ReplaysFilterComponent } from '../../components/replays/replays-filter.component';
 import { ReplaysListComponent } from '../../components/replays/replays-list.component';
@@ -157,6 +158,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		ReplayInfoComponent,
 		MatchDetailsComponent,
 		GameReplayComponent,
+		RankImageComponent,
 
 		ShareLoginComponent,
 		ShareInfoComponent,

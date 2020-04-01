@@ -28,20 +28,31 @@ export class GameStat {
 	readonly reviewId: string;
 	readonly matchStat: MatchStats;
 
-	public buildPlayerRankImage(): [string, string] {
+	public buildPlayerRankImage(): [string, string, string] {
 		let rankIcon;
 		let rankIconTooltip;
 		if (this.gameMode === 'ranked') {
 			const standard = 'standard_ranked';
+			console.log('playerRank', this.playerRank);
 			if (this.playerRank?.indexOf('legend') !== -1) {
 				rankIcon = `${standard}/legend`;
 				rankIconTooltip = 'Legend';
-			} else if (!this.playerRank || parseInt(this.playerRank) >= 25) {
-				rankIcon = `${standard}/rank25_small`;
-				rankIconTooltip = 'Rank 25';
-			} else {
+			} else if (this.playerRank?.indexOf('-') > -1) {
+				const leagueId = parseInt(this.playerRank.split('-')[0]);
+				const rank = this.playerRank.split('-')[1];
+				const paddedRank = rank.padStart(2, '0');
+				const [leagueFrame, leagueName] = this.getLeagueInfo(leagueId);
+				return [
+					leagueFrame,
+					`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/RankedPlay_Medal_Portrait_${leagueName}_${paddedRank}.png`,
+					`${leagueName} ${rank}`,
+				];
+			} else if (this.playerRank && this.playerRank.indexOf('-') === -1) {
 				rankIcon = `${standard}/rank${this.playerRank}_small`;
 				rankIconTooltip = 'Rank ' + this.playerRank;
+			} else {
+				rankIcon = `${standard}/rank25_small`;
+				rankIconTooltip = 'Rank 25';
 			}
 		} else if (this.gameMode === 'battlegrounds') {
 			rankIcon = 'battlegrounds';
@@ -80,13 +91,15 @@ export class GameStat {
 		} else {
 			rankIcon = 'arenadraft';
 		}
-		return [`/Files/assets/images/deck/ranks/${rankIcon}.png`, rankIconTooltip];
+		return [`/Files/assets/images/deck/ranks/${rankIcon}.png`, null, rankIconTooltip];
 	}
 
 	public buildRankText(): string {
 		if (this.gameMode === 'ranked') {
 			if (this.playerRank?.indexOf('legend-') !== -1) {
 				return this.playerRank.split('legend-')[1];
+			} else if (this.playerRank?.indexOf('-') > -1) {
+				return this.playerRank.split('-')[1];
 			}
 			return this.playerRank;
 		}
@@ -100,5 +113,28 @@ export class GameStat {
 			return this.playerRank;
 		}
 		return null;
+	}
+
+	private getLeagueInfo(leagueId: number): [string, string] {
+		const leagueName = this.getLeagueName(leagueId);
+		return [
+			`https://static.zerotoheroes.com/hearthstone/asset/firestone/images/deck/ranks/ranked/Ranked_Medal_Frame_${leagueName}.png?v=2`,
+			leagueName,
+		];
+	}
+
+	private getLeagueName(leagueId: number): string {
+		switch (leagueId) {
+			case 5:
+				return 'Bronze';
+			case 4:
+				return 'Silver';
+			case 3:
+				return 'Gold';
+			case 2:
+				return 'Platinum';
+			case 1:
+				return 'Diamond';
+		}
 	}
 }

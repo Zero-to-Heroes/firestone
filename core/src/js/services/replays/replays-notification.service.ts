@@ -94,14 +94,17 @@ export class ReplaysNotificationService {
 	}
 
 	private buildNotificationTemplate(stat: GameStat): string {
-		const [playerRankImage, playerRankTooltip] = stat.buildPlayerRankImage();
+		const [playerRankImage, playerRankArt, playerRankTooltip] = stat.buildPlayerRankImage();
 		// this.logger.debug('[replays-notification] preparing playerRankImage', playerRankImage);
 		const rankText = stat.buildRankText() || '';
 		// this.logger.debug('[replays-notification] preparing rankText', rankText);
 		return `
 			<div class="match-stats-message-container replay-${stat.reviewId}">
-				<div class="mode">
-					<img class="player-rank" src="${playerRankImage}" />
+				<div class="mode rank-image">
+					<div class="rank-icon">
+						<img class="art" src="${playerRankArt}" />
+						<img class="frame" src="${playerRankImage}" />
+					</div>
 					<div class="rank-text">${rankText}</div>
 				</div>
 				<div class="message">

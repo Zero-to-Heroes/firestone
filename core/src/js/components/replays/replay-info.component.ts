@@ -14,8 +14,7 @@ import { OverwolfService } from '../../services/overwolf.service';
 	template: `
 		<div class="replay-info {{ gameMode }}">
 			<div class="group mode">
-				<img class="player-rank" [src]="playerRankImage" [helpTooltip]="playerRankImageTooltip" />
-				<div class="rank-text" *ngIf="rankText">{{ rankText }}</div>
+				<rank-image class="player-rank" [stat]="replayInfo"></rank-image>
 			</div>
 
 			<div class="group player-images">
@@ -54,9 +53,6 @@ import { OverwolfService } from '../../services/overwolf.service';
 export class ReplayInfoComponent implements AfterViewInit {
 	replayInfo: GameStat;
 	gameMode: StatGameModeType;
-	playerRankImage: string;
-	playerRankImageTooltip: string;
-	rankText: string;
 	// deckName: string;
 	playerClassImage: string;
 	playerClassTooltip: string;
@@ -73,10 +69,8 @@ export class ReplayInfoComponent implements AfterViewInit {
 
 	@Input() set replay(value: GameStat) {
 		// this.logger.debug('[deck-replay-info] setting value', value);
-		this.replayInfo = this.replayInfo;
+		this.replayInfo = value;
 		this.gameMode = value.gameMode;
-		[this.playerRankImage, this.playerRankImageTooltip] = value.buildPlayerRankImage();
-		this.rankText = value.buildRankText();
 		// this.deckName = value.playerDeckName || value.playerName;
 		[this.playerClassImage, this.playerClassTooltip] = this.buildPlayerClassImage(value, true);
 		[this.opponentClassImage, this.opponentClassTooltip] = this.buildPlayerClassImage(value, false);
