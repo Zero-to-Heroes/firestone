@@ -2,10 +2,10 @@ import { RawRequirement } from '../../../../models/achievement/raw-requirement';
 import { GameEvent } from '../../../../models/game-event';
 import { Requirement } from './_requirement';
 
-export class StandardRankedMinRankReq implements Requirement {
+export class StandardRankedMinLeagueReq implements Requirement {
 	private isRanked: boolean;
 	private isStandard: boolean;
-	private isMinRank: boolean;
+	private isMinLeague: boolean;
 
 	constructor(private readonly targetRank: number) {}
 
@@ -13,26 +13,26 @@ export class StandardRankedMinRankReq implements Requirement {
 		if (!rawReq.values || rawReq.values.length === 0) {
 			console.error('invalid parameters for StandardRankedMinRankReq', rawReq);
 		}
-		return new StandardRankedMinRankReq(parseInt(rawReq.values[0]));
+		return new StandardRankedMinLeagueReq(parseInt(rawReq.values[0]));
 	}
 
 	reset(): void {
 		this.isRanked = undefined;
 		this.isStandard = undefined;
-		this.isMinRank = undefined;
+		this.isMinLeague = undefined;
 	}
 
 	afterAchievementCompletionReset(): void {
 		this.isRanked = undefined;
 		this.isStandard = undefined;
-		this.isMinRank = undefined;
+		this.isMinLeague = undefined;
 	}
 
 	isCompleted(): boolean {
 		if (process.env.LOCAL_TEST) {
 			return true;
 		}
-		return this.isRanked && this.isStandard && this.isMinRank;
+		return this.isRanked && this.isStandard && this.isMinLeague;
 	}
 
 	test(gameEvent: GameEvent): void {
@@ -54,8 +54,11 @@ export class StandardRankedMinRankReq implements Requirement {
 	}
 
 	private handlePlayerEvent(gameEvent: GameEvent) {
-		if (gameEvent.localPlayer.standardRank <= this.targetRank || gameEvent.localPlayer.standardLegendRank > 0) {
-			this.isMinRank = true;
+		if (
+			gameEvent.localPlayer.standard?.leagueId <= this.targetRank ||
+			gameEvent.localPlayer.standard?.legendRank > 0
+		) {
+			this.isMinLeague = true;
 		}
 	}
 }

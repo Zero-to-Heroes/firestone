@@ -131,8 +131,8 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		if (!isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
-			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			if (enemyBoard.length === 1) {
 				// console.log('ruling out sudden betrayal', enemyBoard);
 				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);
@@ -150,6 +150,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 				secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
 			}
 		}
+		console.log('considering secret', isDefenderMinion, isDefenderDivineShield, gameEvent);
 		const allEntities = [
 			gameEvent.gameState.Player.Hero,
 			...gameEvent.gameState.Player.Board,
