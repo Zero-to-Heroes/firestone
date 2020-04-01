@@ -154,13 +154,11 @@ export class GameEvents {
 					});
 				}
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
-					standardRank: playerInfo ? playerInfo.standardRank : undefined,
-					standardLegendRank: playerInfo ? playerInfo.standardLegendRank : undefined,
-					wildRank: playerInfo ? playerInfo.wildRank : undefined,
-					wildLegendRank: playerInfo ? playerInfo.wildLegendRank : undefined,
+					standard: playerInfo.standard,
+					wild: playerInfo.wild,
 					cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
 					deck: this.deckParser.currentDeck,
-				});
+				} as GameEventPlayer);
 				console.log('sending LOCAL_PLAYER info', localPlayer);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
@@ -181,12 +179,10 @@ export class GameEvents {
 					});
 				}
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value.OpponentPlayer, {
-					standardRank: opponentInfo ? opponentInfo.standardRank : undefined,
-					standardLegendRank: opponentInfo ? opponentInfo.standardLegendRank : undefined,
-					wildRank: opponentInfo ? opponentInfo.wildRank : undefined,
-					wildLegendRank: opponentInfo ? opponentInfo.wildLegendRank : undefined,
+					standard: opponentInfo.standard,
+					wild: opponentInfo.wild,
 					cardBackId: opponentInfo ? opponentInfo.cardBackId : undefined,
-				});
+				} as GameEventPlayer);
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.gameEventsEmitter.allEvents.next(
 					Object.assign(new GameEvent(), {
