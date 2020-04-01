@@ -42,13 +42,14 @@ import { MinionsControlledDuringTurnReq } from '../requirements/minions-controll
 import { MonsterHuntStepReq } from '../requirements/monster-hunt-step-req';
 import { MulliganDoneReq } from '../requirements/mulligan-done-req';
 import { PassiveBuffReq } from '../requirements/passive-buff-req';
+import { PlayerClassReq } from '../requirements/player-class-req';
 import { PlayerHeroReq } from '../requirements/player-hero-req';
 import { ResummonRecurringVillainRew } from '../requirements/resummon-recurring-villain-req';
 import { RumbleRunStepReq } from '../requirements/rumble-run-step-req';
 import { ScenarioIdReq } from '../requirements/scenario-id-req';
 import { SceneChangedToGameReq } from '../requirements/scene-changed-to-game-req';
 import { SecretTriggeredReq } from '../requirements/secret-triggered-req';
-import { StandardRankedMinRankReq } from '../requirements/standard-ranked-min-rank-req';
+import { StandardRankedMinLeagueReq } from '../requirements/standard-ranked-min-rank-req';
 import { TotalArmorGainReq } from '../requirements/total-armor-gain-req';
 import { TotalDamageDealtReq } from '../requirements/total-damage-dealt-req';
 import { TotalDamageTakenReq } from '../requirements/total-damage-taken-req';
@@ -59,7 +60,6 @@ import { WinStreakReq } from '../requirements/win-streak-req';
 import { Requirement } from '../requirements/_requirement';
 import { Challenge } from './challenge';
 import { GenericChallenge } from './generic-challenge';
-import { PlayerClassReq } from '../requirements/player-class-req';
 
 @Injectable()
 export class ChallengeBuilderService {
@@ -81,7 +81,7 @@ export class ChallengeBuilderService {
 			case 'MONSTER_HUNT_STEP': return MonsterHuntStepReq.create(rawReq);
 			case 'RUMBLE_RUN_STEP': return RumbleRunStepReq.create(rawReq);
 			case 'GAME_TYPE': return GameTypeReq.create(rawReq);
-			case 'RANKED_MIN_RANK': return StandardRankedMinRankReq.create(rawReq);
+			case 'RANKED_MIN_LEAGUE': return StandardRankedMinLeagueReq.create(rawReq);
 			case 'RANKED_FORMAT_TYPE': return FormatTypeReq.create(rawReq);
 			case 'SCENARIO_IDS': return ScenarioIdReq.create(rawReq);
 			case 'EXCLUDED_SCENARIO_IDS': return ExcludedScenarioIdReq.create(rawReq);
