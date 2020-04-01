@@ -1,0 +1,30 @@
+.rank-image {
+	height: 100%;
+}
+
+.icon {
+	height: 100%;
+}
+
+.art {
+	position: absolute;
+	height: 70%;
+	left: 15%;
+	top: 12%;
+	clip-path: ellipse(50% 50% at 50% 50%);
+}
+
+.frame {
+	height: 100%;
+	position: relative;
+}
+
+.rank-text {
+	position: absolute;
+	bottom: -9%;
+	text-shadow: -2px -2px 0 #000, 0px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0px 2px 0 #000, 2px 2px 0 #000;
+	color: white;
+	font-size: 12px;
+	width: 100%;
+	text-align: center;
+}
