@@ -33,7 +33,7 @@ export class GameStat {
 		let rankIconTooltip;
 		if (this.gameMode === 'ranked') {
 			const standard = 'standard_ranked';
-			console.log('playerRank', this.playerRank);
+			// console.log('playerRank', this.playerRank);
 			if (this.playerRank?.indexOf('legend') !== -1) {
 				rankIcon = `${standard}/legend`;
 				rankIconTooltip = 'Legend';
