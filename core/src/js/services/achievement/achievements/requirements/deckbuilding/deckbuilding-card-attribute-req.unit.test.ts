@@ -120,7 +120,7 @@ describe('deckbuilding-card-attribute-req', () => {
 });
 
 function buildCardsService() {
-	const service = new AllCardsService(null, null);
+	const service = new AllCardsService();
 	service['allCards'] = [...(cardsJson as any[])];
 	return service;
 }

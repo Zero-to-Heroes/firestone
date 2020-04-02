@@ -39,9 +39,13 @@ export class AchievementsMonitor {
 
 	private async handleEvent(gameEvent: GameEvent) {
 		for (const challenge of await this.achievementLoader.getChallengeModules()) {
-			challenge.detect(gameEvent, () => {
-				this.sendUnlockEvent(challenge);
-			});
+			try {
+				challenge.detect(gameEvent, () => {
+					this.sendUnlockEvent(challenge);
+				});
+			} catch (e) {
+				console.error('Exception while trying to handle challenge', challenge.achievementId, e);
+			}
 		}
 	}
 

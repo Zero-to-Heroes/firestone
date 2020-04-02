@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AllCardsService, ReferenceCard } from '@firestone-hs/replay-parser';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
+import { AllCardsService } from '@firestone-hs/replay-parser';
 import { NGXLogger } from 'ngx-logger';
 import { Set, SetCard } from '../models/set';
 

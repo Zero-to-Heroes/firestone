@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ReferenceCard } from '@firestone-hs/replay-parser';
+import { ReferenceCard } from '@firestone-hs/reference-data/lib/models/reference-cards/reference-card';
 import { decode, encode } from 'deckstrings';
 import { Achievement } from '../models/achievement';
 import { DeckCard } from '../models/decktracker/deck-card';
@@ -55,6 +55,14 @@ export class DevService {
 		window['arena'] = async () => {
 			const info = await this.memoryService.getArenaInfo();
 			console.log(info);
+		};
+		window['matchStart'] = async () => {
+			this.gameEvents.dispatchGameEvent({
+				Type: 'BATTLEGROUNDS_HERO_SELECTION',
+				Value: {
+					CardIds: ['TB_BaconShop_HERO_58', 'TB_BaconShop_HERO_22', 'TB_BaconShop_HERO_56'],
+				},
+			});
 		};
 	}
 
