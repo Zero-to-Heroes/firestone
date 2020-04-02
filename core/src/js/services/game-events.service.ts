@@ -154,8 +154,8 @@ export class GameEvents {
 					});
 				}
 				const localPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value, {
-					standard: playerInfo.standard,
-					wild: playerInfo.wild,
+					standard: playerInfo?.standard,
+					wild: playerInfo?.wild,
 					cardBackId: playerInfo ? playerInfo.cardBackId : undefined,
 					deck: this.deckParser.currentDeck,
 				} as GameEventPlayer);
@@ -179,9 +179,9 @@ export class GameEvents {
 					});
 				}
 				const opponentPlayer: GameEventPlayer = Object.assign({}, gameEvent.Value.OpponentPlayer, {
-					standard: opponentInfo.standard,
-					wild: opponentInfo.wild,
-					cardBackId: opponentInfo ? opponentInfo.cardBackId : undefined,
+					standard: opponentInfo?.standard,
+					wild: opponentInfo?.wild,
+					cardBackId: opponentInfo?.cardBackId,
 				} as GameEventPlayer);
 				console.log('sending OPPONENT_PLAYER info', opponentPlayer);
 				this.gameEventsEmitter.allEvents.next(
