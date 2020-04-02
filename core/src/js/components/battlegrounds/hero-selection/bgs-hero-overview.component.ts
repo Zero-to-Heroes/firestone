@@ -19,7 +19,7 @@ declare let amplitude: any;
 				<div class="title">Stats</div>
 				<div class="entry">
 					<div class="label" helpTooltip="Average final position">
-						Avg position
+						Avg position:
 					</div>
 					<div
 						class="global-value"
@@ -33,7 +33,7 @@ declare let amplitude: any;
 				</div>
 				<div class="entry">
 					<div class="label" helpTooltip="Percentage of times ending in top 4">
-						Top 4
+						Top 4:
 					</div>
 					<div
 						class="global-value"
@@ -47,7 +47,7 @@ declare let amplitude: any;
 				</div>
 				<div class="entry">
 					<div class="label" helpTooltip="Percentage of times winning the run">
-						Top 1
+						Top 1:
 					</div>
 					<div
 						class="global-value"
@@ -61,7 +61,7 @@ declare let amplitude: any;
 				</div>
 				<div class="entry">
 					<div class="label" helpTooltip="Percentage of times this hero is plqyed">
-						Popularity
+						Popularity:
 					</div>
 					<div
 						class="global-value"
@@ -92,6 +92,7 @@ declare let amplitude: any;
 						<div class="icon-container">
 							<img class="icon" [src]="getIcon(tribe.tribe)" [helpTooltip]="tribe.tribe" />
 						</div>
+						<div class="tribe-name">{{ tribe.tribe }}</div>
 						<div class="value">{{ tribe.percent }}%</div>
 					</div>
 				</div>
@@ -113,7 +114,7 @@ export class BgsHeroOverviewComponent {
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroCardId}.png`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
-			.map(stat => ({ tribe: stat.tribe, percent: stat.percent.toFixed(1) }))
+			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
 		this.warbandStats = value.warbandStats;
 		this.tier = value.tier;
@@ -122,20 +123,19 @@ export class BgsHeroOverviewComponent {
 	getIcon(tribe: string): string {
 		let referenceCardId: string;
 		switch (tribe) {
-			case 'mech':
-			case 'mechanical':
-				referenceCardId = 'BOT_537';
+			case 'Mech':
+				referenceCardId = 'GVG_027';
 				break;
-			case 'beast':
+			case 'Beast':
 				referenceCardId = 'BGS_021';
 				break;
-			case 'demon':
+			case 'Demon':
 				referenceCardId = 'TB_BaconUps_060';
 				break;
-			case 'dragon':
+			case 'Dragon':
 				referenceCardId = 'BGS_036';
 				break;
-			case 'murloc':
+			case 'Murloc':
 				referenceCardId = 'BGS_030';
 				break;
 			default:
@@ -143,5 +143,14 @@ export class BgsHeroOverviewComponent {
 				break;
 		}
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+	}
+
+	private getTribe(tribe: string): string {
+		if (tribe === 'mechanical') {
+			tribe = 'mech';
+		} else if (tribe === 'blank') {
+			tribe = 'no tribe';
+		}
+		return tribe.charAt(0).toUpperCase() + tribe.slice(1);
 	}
 }

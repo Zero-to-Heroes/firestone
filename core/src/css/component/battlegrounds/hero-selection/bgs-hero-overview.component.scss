@@ -88,7 +88,7 @@
 		}
 
 		.label {
-			flex-grow: 1;
+			// flex-grow: 1;
 		}
 
 		.global-value {
@@ -133,11 +133,21 @@
 			.tribe {
 				display: flex;
 				flex-direction: column;
-				width: 6.4vh;
+				// width: 6.5vh;
+				width: 33%;
 				overflow: hidden;
 				align-items: center;
 				justify-content: center;
 				margin-bottom: -5%;
+			}
+
+			.tribe-name {
+				font-weight: bold;
+				top: -10px;
+				position: relative;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 
 			.value {
@@ -156,5 +166,43 @@
 @media (max-height: 850px) {
 	.profile {
 		display: none;
+	}
+}
+
+@media (max-width: 1400px) {
+	.hero-overview .tribes .composition .tribe {
+		font-size: 11px;
+		// width: 6.4vh;
+	}
+}
+
+@media (min-width: 1450px) {
+	.hero-overview .tribes .composition .tribe {
+		font-size: 11px;
+		width: calc(min(33%, 9vh));
+	}
+}
+
+@media (min-height: 850px) {
+	.profile {
+		width: calc(min(33%, 6vh));
+	}
+}
+
+@media (min-height: 960px) {
+	.profile {
+		width: calc(min(33%, 7vh));
+	}
+}
+
+@media (min-height: 1000px) {
+	.profile {
+		width: calc(min(33%, 8vh));
+	}
+}
+
+@media (min-height: 1050px) {
+	.profile {
+		width: calc(min(33%, 9vh));
 	}
 }
