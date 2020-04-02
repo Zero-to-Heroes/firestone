@@ -79,7 +79,7 @@ export class GameReplayComponent implements OnInit {
 			.toPromise();
 		//console.log('review in firestone', review);
 		const headers = new HttpHeaders({ 'Content-Type': 'text/xml' }).set('Accept', 'text/xml');
-		console.log('loaded review');
+		console.log('loaded review', reviewId);
 		const replay = await this.http
 			.get(REPLAY_API + review.replayKey, { headers: headers, responseType: 'text' })
 			.toPromise();

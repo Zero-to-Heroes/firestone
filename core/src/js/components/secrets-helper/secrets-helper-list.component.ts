@@ -123,9 +123,9 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 			return;
 		}
 		const allOptionsList = this._secrets.map(secret => secret.allPossibleOptions).reduce((a, b) => a.concat(b), []);
-		console.log('allOptions', allOptionsList);
+		// console.log('allOptions', allOptionsList);
 		const optionsGroupedByCard = this.groupBy(allOptionsList, (secret: SecretOption) => secret.cardId);
-		console.log('grouped', optionsGroupedByCard);
+		// console.log('grouped', optionsGroupedByCard);
 		const reducedOptions: readonly DeckCard[] = [...optionsGroupedByCard.values()]
 			.filter(options => options && options.length > 0)
 			.map((options, index) => {
@@ -159,7 +159,7 @@ export class SecretsHelperListComponent implements AfterViewInit, OnDestroy {
 				} as VisualDeckCard);
 			});
 		// TODO: add an optional filter step based on user preference to see or not the ruled out secrets
-		console.log('reducedOptions', reducedOptions);
+		// console.log('reducedOptions', reducedOptions);
 		return reducedOptions;
 	}
 
