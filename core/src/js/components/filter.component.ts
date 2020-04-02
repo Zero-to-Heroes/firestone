@@ -44,6 +44,7 @@ export class FilterComponent {
 	@Input() filterOptions: readonly IOption[];
 	@Input() activeFilter: string;
 	@Input() placeholder: string;
+	@Input() delegateFullControl: boolean;
 	@Input() filterChangeFunction: (option: IOption) => MainWindowStoreEvent;
 
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
@@ -74,7 +75,11 @@ export class FilterComponent {
 	}
 
 	selectFilter(option: IOption) {
-		this.stateUpdater.next(this.filterChangeFunction(option));
+		if (this.delegateFullControl) {
+			this.filterChangeFunction(option);
+		} else {
+			this.stateUpdater.next(this.filterChangeFunction(option));
+		}
 	}
 
 	refresh() {
