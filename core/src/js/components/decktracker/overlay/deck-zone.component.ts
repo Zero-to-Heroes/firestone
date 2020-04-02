@@ -93,16 +93,18 @@ export class DeckZoneComponent {
 		this.zoneName = this._zone.name;
 		this.showWarning = this._zone.showWarning;
 		// console.log('setting zone', zone);
-		const cardsToDisplay = this._zone.sortingFunction
-			? [...this._zone.cards].sort(this._zone.sortingFunction)
-			: this._zone.cards;
+		// const cardsToDisplay = this._zone.sortingFunction
+		// 	? [...this._zone.cards].sort(this._zone.sortingFunction)
+		// 	: this._zone.cards;
+		// console.log('setting zone', this._zone, cardsToDisplay);
 		this.cardsInZone = this._zone.numberOfCards;
-		// console.log('setting cards in zone', this._zone, cardsToDisplay, this.cardsInZone);
-		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(cardsToDisplay, (card: VisualDeckCard) =>
+		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone);
+		const grouped: Map<string, VisualDeckCard[]> = this.groupBy(this._zone.cards, (card: VisualDeckCard) =>
 			this._showGiftsSeparately
 				? card.cardId + (card.creatorCardIds || []).reduce((a, b) => a + b, '')
 				: card.cardId,
 		);
+		// console.log('grouped', grouped);
 		this.cards = Array.from(grouped.values(), cards => {
 			const creatorCardIds: readonly string[] = [
 				...new Set(
@@ -120,6 +122,10 @@ export class DeckZoneComponent {
 		})
 			.sort((a, b) => this.compare(a, b))
 			.sort((a, b) => this.sortByIcon(a, b));
+		if (this._zone.sortingFunction) {
+			console.log('sorting', this._zone.sortingFunction);
+			this.cards = [...this.cards].sort(this._zone.sortingFunction);
+		}
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
 	}
 

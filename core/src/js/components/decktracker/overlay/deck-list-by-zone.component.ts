@@ -40,27 +40,10 @@ export class DeckListByZoneComponent {
 	@Input('deckState') set deckState(deckState: DeckState) {
 		// console.log('deck state', deckState);
 		const zones = [
-			Object.assign(
-				this.buildZone(
-					deckState.deck,
-					'deck',
-					'In deck',
-					(a, b) => a.manaCost - b.manaCost,
-					deckState.cardsLeftInDeck,
-				),
-				{
-					showWarning: deckState.showDecklistWarning,
-				} as DeckZone,
-			),
-			this.buildZone(
-				deckState.hand,
-				'hand',
-				'In hand',
-				(a, b) => a.manaCost - b.manaCost,
-				deckState.hand.length,
-				null,
-				'in-hand',
-			),
+			Object.assign(this.buildZone(deckState.deck, 'deck', 'In deck', null, deckState.cardsLeftInDeck), {
+				showWarning: deckState.showDecklistWarning,
+			} as DeckZone),
+			this.buildZone(deckState.hand, 'hand', 'In hand', null, deckState.hand.length, null, 'in-hand'),
 		];
 		// If there are no dynamic zones, we use the standard "other" zone
 		if (deckState.dynamicZones.length === 0) {
@@ -70,7 +53,7 @@ export class DeckListByZoneComponent {
 					otherZone,
 					'other',
 					'Other',
-					(a, b) => a.manaCost - b.manaCost,
+					null,
 					null,
 					// We want to keep the info in the deck state (that there are cards in the SETASIDE zone) but
 					// not show them in the zones
@@ -80,7 +63,7 @@ export class DeckListByZoneComponent {
 		}
 		// Otherwise, we add all the dynamic zones
 		deckState.dynamicZones.forEach(zone => {
-			zones.push(this.buildDynamicZone(zone, (a, b) => a.manaCost - b.manaCost));
+			zones.push(this.buildDynamicZone(zone, null));
 		});
 		this.zones = zones as readonly DeckZone[];
 	}
