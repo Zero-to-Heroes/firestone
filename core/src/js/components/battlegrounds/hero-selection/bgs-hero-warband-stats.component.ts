@@ -9,7 +9,7 @@ import {
 	ViewChild,
 	ViewRef,
 } from '@angular/core';
-import { ChartDataSets, ChartOptions } from 'chart.js';
+import { ChartData, ChartDataSets, ChartOptions, ChartTooltipItem } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 
 declare let amplitude: any;
@@ -49,6 +49,9 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 	lineChartLabels: Label[];
 	lineChartOptions: ChartOptions = {
 		responsive: true,
+		layout: {
+			padding: 0,
+		},
 		scales: {
 			xAxes: [
 				{
@@ -77,22 +80,32 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 				},
 			],
 		},
+		tooltips: {
+			intersect: false,
+			backgroundColor: '#CE73B4',
+			titleFontSize: 0,
+			bodyFontFamily: 'Open Sans',
+			bodyFontColor: '#40032E',
+			xPadding: 5,
+			yPadding: 5,
+			caretSize: 10,
+			caretPadding: 2,
+			displayColors: false,
+			callbacks: {
+				beforeBody: (item: ChartTooltipItem[], data: ChartData): string | string[] => {
+					return ['Turn: ' + item[0].label, 'Stats: ' + item[0].value];
+				},
+				label: (tooltipItem: ChartTooltipItem, data: ChartData): string | string[] => {
+					return null;
+				},
+			},
+		},
 	};
 	lineChartColors: Color[];
 
 	@Input() set warbandStats(value: readonly { turn: number; totalStats: number }[]) {
 		this.lineChartData = [{ data: value.map(stat => stat.totalStats), label: 'Warband stats delta' }];
 		this.lineChartLabels = value.map(stat => '' + stat.turn);
-		// this.lineChartColors = [
-		// 	{
-		// 		backgroundColor: this.getBackgroundColor(),
-		// 		borderColor: '#CE73B4',
-		// 		pointBackgroundColor: 'transparent',
-		// 		pointBorderColor: 'transparent',
-		// 		pointHoverBackgroundColor: '#fff',
-		// 		pointHoverBorderColor: 'rgba(148,159,177,0.8)',
-		// 	},
-		// ];
 	}
 
 	constructor(private readonly el: ElementRef, private readonly cdr: ChangeDetectorRef) {}
@@ -114,8 +127,8 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 				borderColor: '#CE73B4',
 				pointBackgroundColor: 'transparent',
 				pointBorderColor: 'transparent',
-				pointHoverBackgroundColor: '#fff',
-				pointHoverBorderColor: 'rgba(148,159,177,0.8)',
+				pointHoverBackgroundColor: 'transparent',
+				pointHoverBorderColor: 'transparent',
 			},
 		];
 		if (!(this.cdr as ViewRef).destroyed) {
