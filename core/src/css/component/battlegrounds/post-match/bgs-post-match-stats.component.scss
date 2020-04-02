@@ -1,0 +1,31 @@
+.container {
+	display: flex;
+	height: 100%;
+	width: 100%;
+	flex-grow: 1;
+}
+
+.left {
+	width: 410px;
+	height: fit-content;
+	flex-shrink: 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	order: 2;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+	width: calc(100% - 410px);
+	min-height: 0;
+	overflow: auto;
+	// So that the divine shields are the top are not truncated
+	padding-top: 20px;
+	position: relative;
+	top: -20px;
+}

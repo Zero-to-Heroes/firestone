@@ -444,7 +444,7 @@ export class MainWindowStoreService {
 			new GameStatsInitProcessor(this.replaysStateBuilder, this.decktrackerStateLoader),
 
 			RecomputeGameStatsEvent.eventName(),
-			new RecomputeGameStatsProcessor(this.decktrackerStateLoader),
+			new RecomputeGameStatsProcessor(this.decktrackerStateLoader, this.events),
 
 			// Global stats
 			GlobalStatsInitEvent.eventName(),

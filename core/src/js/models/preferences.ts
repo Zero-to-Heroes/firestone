@@ -62,6 +62,8 @@ export class Preferences {
 	readonly battlegroundsShowLastOpponentBoard = false;
 	readonly batlegroundsShowHeroSelectionPref = false;
 
+	readonly bgsUseLocalSimulator = true;
+
 	readonly launchAppOnGameStart: boolean = true;
 
 	readonly twitchAccessToken: string;

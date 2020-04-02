@@ -27,6 +27,7 @@ export class GameStatsBootstrapService {
 		const newState = Object.assign(new StatsState(), {
 			gameStats: newGameStats,
 		} as StatsState);
+		this.events.broadcast(Events.MATCH_STATS_UPDATED, newGameStats);
 		this.stateUpdater.next(new GameStatsInitEvent(newState));
 	}
 }

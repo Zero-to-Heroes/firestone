@@ -18,9 +18,7 @@ export class OverwolfService {
 	public static NOTIFICATIONS_WINDOW = 'NotificationsWindow';
 	public static MATCH_OVERLAY_OPPONENT_HAND_WINDOW = 'MatchOverlayOpponentHandWindow';
 	public static SECRETS_HELPER_WINDOW = 'SecretsHelperWindow';
-	public static BATTLEGROUNDS_PLAYER_INFO_WINDOW = 'BattlegroundsPlayerInfoWindow';
-	public static BATTLEGROUNDS_LEADERBOARD_OVERLAY_WINDOW = 'BattlegroundsLeaderboardOverlay';
-	public static BATTLEGROUNDS_HERO_SELECTION_OVERLAY_WINDOW = 'BattlegroundsHeroSelectionOverlay';
+	public static BATTLEGROUNDS_WINDOW = 'BattlegroundsWindow';
 
 	public getMainWindow(): any {
 		return overwolf.windows.getMainWindow();
@@ -235,6 +233,22 @@ export class OverwolfService {
 		});
 	}
 
+	public async bringToFront(windowId: string) {
+		// console.log('[overwolf-service] asked to restore window', windowId, new Error().stack);
+		return new Promise<any>(resolve => {
+			// https://overwolf.github.io/docs/api/overwolf-windows#setdesktoponlywindowid-shouldbedesktoponly-callback
+			try {
+				overwolf.windows.bringToFront(windowId, false, result => {
+					// console.log('[overwolf-service] restored window', windowId);
+					resolve(result);
+				});
+			} catch (e) {
+				console.warn('exception when setting topmost', windowId, e);
+				resolve(null);
+			}
+		});
+	}
+
 	public async hideWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			try {
@@ -271,7 +285,7 @@ export class OverwolfService {
 	public maximizeWindow(windowId: string) {
 		return new Promise<any>(resolve => {
 			overwolf.windows.maximize(windowId, result => {
-				// console.log('[overwolf-service] maximized window', windowId);
+				console.log('[overwolf-service] maximized window', windowId);
 				resolve(result);
 			});
 		});

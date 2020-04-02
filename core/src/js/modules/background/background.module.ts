@@ -14,8 +14,9 @@ import { RemoteAchievementsService } from '../../services/achievement/remote-ach
 import { TemporaryResolutionOverrideService } from '../../services/achievement/temporary-resolution-override-service';
 import { AppBootstrapService } from '../../services/app-bootstrap.service';
 import { BgsBattleSimulationService } from '../../services/battlegrounds/bgs-battle-simulation.service';
-import { BattlegroundsHeroInfoService } from '../../services/battlegrounds/old/battlegrounds-hero-info.service';
-import { BattlegroundsStateService } from '../../services/battlegrounds/old/battlegrounds-state.service';
+import { BgsGlobalStatsService } from '../../services/battlegrounds/bgs-global-stats.service';
+import { BgsInitService } from '../../services/battlegrounds/bgs-init.service';
+import { BattlegroundsStoreService } from '../../services/battlegrounds/store/battlegrounds-store.service';
 import { LogParserService } from '../../services/collection/log-parser.service';
 import { PackMonitor } from '../../services/collection/pack-monitor.service';
 import { PackStatsService } from '../../services/collection/pack-stats.service';
@@ -144,8 +145,9 @@ export class SentryErrorHandler implements ErrorHandler {
 		GameStateService,
 		DeckManipulationHelper,
 
-		BattlegroundsStateService,
-		BattlegroundsHeroInfoService,
+		BattlegroundsStoreService,
+		BgsInitService,
+		BgsGlobalStatsService,
 		BgsBattleSimulationService,
 
 		AiDeckService,

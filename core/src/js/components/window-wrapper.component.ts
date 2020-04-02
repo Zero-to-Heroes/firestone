@@ -18,6 +18,7 @@ import { OverwolfService } from '../services/overwolf.service';
 		`../../css/component/window-wrapper.component.scss`,
 		`../../css/themes/collection-theme.scss`,
 		`../../css/themes/achievements-theme.scss`,
+		`../../css/themes/battlegrounds-theme.scss`,
 		`../../css/themes/decktracker-theme.scss`,
 		`../../css/themes/replays-theme.scss`,
 		`../../css/themes/general-theme.scss`,

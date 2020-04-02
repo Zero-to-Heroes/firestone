@@ -1,7 +1,9 @@
+import { BgsPanel } from './bgs-panel';
 import { BgsStageId } from './bgs-stage-id.type';
 
 export interface BgsStage {
-	id: BgsStageId;
-	icon: string;
-	name: string;
+	readonly id: BgsStageId;
+	readonly icon: string;
+	readonly name: string;
+	readonly panels: readonly BgsPanel[];
 }

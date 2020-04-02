@@ -121,7 +121,7 @@ export class GameEvents {
 	}
 
 	public async dispatchGameEvent(gameEvent) {
-		// console.log('game event', gameEvent.Type, gameEvent);
+		console.log('game event', gameEvent.Type, gameEvent);
 		switch (gameEvent.Type) {
 			case 'NEW_GAME':
 				console.log(gameEvent.Type + ' event');
@@ -655,6 +655,67 @@ export class GameEvents {
 						type: GameEvent.BATTLEGROUNDS_HERO_SELECTION,
 						additionalData: {
 							heroCardIds: gameEvent.Value.CardIds,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_HERO_SELECTED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_HERO_SELECTED,
+						cardId: gameEvent.Value.CardId,
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_TRIPLE':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_TRIPLE,
+						cardId: gameEvent.Value.CardId,
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_COMBAT_START':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_COMBAT_START,
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_BATTLE_RESULT':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_BATTLE_RESULT,
+						additionalData: {
+							opponent: gameEvent.Value.Opponent,
+							result: gameEvent.Value.Result,
+							damage: gameEvent.Value.Damage,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_NEXT_OPPONENT':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_NEXT_OPPONENT,
+						additionalData: {
+							nextOpponentCardId: gameEvent.Value.CardId,
+						},
+					} as GameEvent),
+				);
+				break;
+			case 'BATTLEGROUNDS_OPPONENT_REVEALED':
+				// console.log(gameEvent.Type + ' event', gameEvent.Value.AdditionalProps.NewPlace);
+				this.gameEventsEmitter.allEvents.next(
+					Object.assign(new GameEvent(), {
+						type: GameEvent.BATTLEGROUNDS_OPPONENT_REVEALED,
+						additionalData: {
+							cardId: gameEvent.Value.CardId,
 						},
 					} as GameEvent),
 				);

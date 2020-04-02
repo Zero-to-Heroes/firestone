@@ -5,8 +5,9 @@ import { AchievementsVideoCaptureService } from './achievement/achievements-vide
 import { AchievementsLoaderService } from './achievement/data/achievements-loader.service';
 import { AchievementsLocalDbService as AchievementsDb } from './achievement/indexed-db.service';
 import { RemoteAchievementsService } from './achievement/remote-achievements.service';
-import { BgsBattleSimulationService } from './battlegrounds/bgs-battle-simulation.service';
-import { BattlegroundsStateService } from './battlegrounds/old/battlegrounds-state.service';
+import { BgsInitService } from './battlegrounds/bgs-init.service';
+import { BattlegroundsStoreService } from './battlegrounds/store/battlegrounds-store.service';
+// import { BattlegroundsStateService } from './battlegrounds/old/battlegrounds-state.service';
 import { CollectionManager } from './collection/collection-manager.service';
 import { IndexedDbService } from './collection/indexed-db.service';
 import { PackHistoryService } from './collection/pack-history.service';
@@ -71,12 +72,14 @@ export class AppBootstrapService {
 		private init_endGameListenerService: EndGameListenerService,
 		private init_GlobalStatsNotifierService: GlobalStatsNotifierService,
 		private init_ReplaysNotificationService: ReplaysNotificationService,
-		private init_BattlegroundsStateService: BattlegroundsStateService,
+		// private init_BattlegroundsStateService: BattlegroundsStateService,
 		private init_AchievementsBootstrapService: AchievementsBootstrapService,
 		private init_CollectionBootstrapService: CollectionBootstrapService,
 		private init_GameStatsBootstrapService: GameStatsBootstrapService,
 		private init_GlobalStatsBootstrapService: GlobalStatsBootstrapService,
-		private init_bgsBattleService: BgsBattleSimulationService,
+		private init_BgsStoreService: BattlegroundsStoreService,
+		// private init_bgsBattleService: BgsBattleSimulationService,
+		private init_BgsInitService: BgsInitService,
 	) {}
 
 	public async init() {

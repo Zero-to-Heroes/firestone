@@ -1,0 +1,17 @@
+.hero-mini {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	flex-grow: 0;
+	flex-shrink: 0;
+
+	.portrait {
+		width: 100%;
+	}
+
+	.results {
+		display: flex;
+	}
+}

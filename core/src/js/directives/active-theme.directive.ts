@@ -12,6 +12,9 @@ export class ActiveThemeDirective {
 	@HostBinding('class.achievements-theme') get achievementsTheme() {
 		return this.activeTheme === 'achievements';
 	}
+	@HostBinding('class.battlegrounds-theme') get battlegroundsTheme() {
+		return this.activeTheme === 'battlegrounds';
+	}
 	@HostBinding('class.decktracker-theme') get decktrackerTheme() {
 		return this.activeTheme === 'decktracker';
 	}
@@ -21,5 +24,5 @@ export class ActiveThemeDirective {
 	@HostBinding('class.general-theme') get generalTheme() {
 		return this.activeTheme === 'general';
 	}
-	@Input() activeTheme: CurrentAppType | 'general';
+	@Input() activeTheme: CurrentAppType | 'general' | 'battlegrounds';
 }

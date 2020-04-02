@@ -111,41 +111,24 @@
 				"popup_blocker": true,
 				"mute": true
 			},
+			"BattlegroundsWindow": {
+				"file": "Files/battlegrounds.html",
+				"transparent": true,
+				"resizable": true,
+				"show_in_taskbar": true,
+				"native_window": true,
+				"use_os_windowing": true,
+				"desktop_only": true,
+				"topmost": false,
+				"size": { "width": 1170, "height": 720 },
+				"min_size": { "width": 1170, "height": 720 },
+				"block_top_window_navigation": true,
+				"keep_window_location": true,
+				"popup_blocker": true,
+				"mute": true
+			},
 			"MatchOverlayOpponentHandWindow": {
 				"file": "Files/match_overlay_opponent_hand.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-				"size": { "width": 1170, "height": 720 },
-				"start_position": { "top": 0, "left": 0 },
-				"grab_keyboard_focus": false,
-				"grab_focus_on_desktop": false,
-				"block_top_window_navigation": true
-			},
-			"BattlegroundsPlayerInfoWindow": {
-				"file": "Files/battlegrounds_player_info.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-				"size": { "width": 1170, "height": 720 },
-				"start_position": { "top": 0, "left": 0 },
-				"grab_keyboard_focus": false,
-				"grab_focus_on_desktop": false,
-				"block_top_window_navigation": true
-			},
-			"BattlegroundsLeaderboardOverlay": {
-				"file": "Files/battlegrounds_leaderboard_overlay.html",
-				"transparent": true,
-				"resizable": false,
-				"show_in_taskbar": false,
-				"size": { "width": 1170, "height": 720 },
-				"start_position": { "top": 0, "left": 0 },
-				"grab_keyboard_focus": false,
-				"grab_focus_on_desktop": false,
-				"block_top_window_navigation": true
-			},
-			"BattlegroundsHeroSelectionOverlay": {
-				"file": "Files/battlegrounds_hero_selection_overlay.html",
 				"transparent": true,
 				"resizable": false,
 				"show_in_taskbar": false,
