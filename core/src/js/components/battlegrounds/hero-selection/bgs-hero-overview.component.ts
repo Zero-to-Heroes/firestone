@@ -26,20 +26,7 @@ declare let amplitude: any;
 				</div>
 				<bgs-hero-warband-stats [warbandStats]="warbandStats"></bgs-hero-warband-stats>
 			</div>
-			<div class="tribes">
-				<div class="title" helpTooltip="Percentage of each tribe present in average in winning warbands">
-					Winning tribes
-				</div>
-				<div class="composition">
-					<div *ngFor="let tribe of tribes" class="tribe">
-						<div class="icon-container">
-							<img class="icon" [src]="getIcon(tribe.tribe)" [helpTooltip]="tribe.tribe" />
-						</div>
-						<div class="tribe-name">{{ tribe.tribe }}</div>
-						<div class="value">{{ tribe.percent }}%</div>
-					</div>
-				</div>
-			</div>
+			<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,38 +4,40 @@ import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bg
 declare let amplitude: any;
 
 @Component({
-	selector: 'bgs-hero-selection-tooltip',
+	selector: 'bgs-hero-tribes',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
-		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component.scss`,
+		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tribes.component.scss`,
 	],
 	template: `
-		<div class="hero-selection-tooltip">
-			<img class="hero-power" [src]="heroPowerImage" />
-			<!-- <bgs-hero-warband-stats class="warband-stats" [warbandStats]="warbandStats"></bgs-hero-warband-stats> -->
-			<div class="infos">
-				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
-				<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
+		<div class="tribes">
+			<div class="title" helpTooltip="Percentage of each tribe present in average in winning warbands">
+				Winning tribes
+			</div>
+			<div class="composition">
+				<div *ngFor="let tribe of tribes" class="tribe">
+					<div class="icon-container">
+						<img class="icon" [src]="getIcon(tribe.tribe)" [helpTooltip]="tribe.tribe" />
+					</div>
+					<div class="tribe-name">{{ tribe.tribe }}</div>
+					<div class="value">{{ tribe.percent }}%</div>
+				</div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsHeroSelectionTooltipComponent {
+export class BgsHeroTribesComponent {
 	_hero: BgsHeroOverview;
-	heroPowerImage: string;
 	tribes: readonly { tribe: string; percent: string }[];
-	warbandStats: readonly { turn: number; totalStats: number }[];
 
-	@Input() set config(value: BgsHeroOverview) {
+	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;
-		this.heroPowerImage = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/${value.heroPowerCardId}.png`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
-		this.warbandStats = value.warbandStats;
 	}
 
 	getIcon(tribe: string): string {

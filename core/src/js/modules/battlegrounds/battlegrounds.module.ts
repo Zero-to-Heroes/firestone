@@ -18,6 +18,7 @@ import { BgsHeroSelectionOverviewComponent } from '../../components/battleground
 import { BgsHeroSelectionTooltipComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component';
 import { BgsHeroStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-stats.component';
 import { BgsHeroTierComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tier.component.ts';
+import { BgsHeroTribesComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-tribes.component';
 import { BgsHeroWarbandStatsComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-warband-stats.component';
 import { BgsHeroFaceOffComponent } from '../../components/battlegrounds/in-game/bgs-hero-face-off.component';
 import { BgsNextOpponentOverviewComponent } from '../../components/battlegrounds/in-game/bgs-next-opponent-overview.component';
@@ -85,6 +86,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroTierComponent,
 		BgsHeroSelectionTooltipComponent,
 		BgsHeroStatsComponent,
+		BgsHeroTribesComponent,
 	],
 	entryComponents: [BgsHeroSelectionTooltipComponent],
 	bootstrap: [BattlegroundsComponent],

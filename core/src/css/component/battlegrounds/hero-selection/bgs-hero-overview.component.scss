@@ -57,59 +57,6 @@
 		margin-bottom: 10px;
 	}
 
-	.tribes {
-		margin-top: 20px;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-
-		.composition {
-			display: flex;
-			width: 100%;
-			align-items: center;
-			justify-content: center;
-			flex-wrap: wrap;
-
-			.icon-container {
-				background: #ce73b4;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				clip-path: ellipse(43% 32% at 50% 50%);
-			}
-
-			.icon {
-				width: 135%;
-				clip-path: ellipse(30% 30% at 50% 50%);
-			}
-
-			.tribe {
-				display: flex;
-				flex-direction: column;
-				// width: 6.5vh;
-				width: 33%;
-				overflow: hidden;
-				align-items: center;
-				justify-content: center;
-				margin-bottom: -5%;
-			}
-
-			.tribe-name {
-				font-weight: bold;
-				top: -10px;
-				position: relative;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-
-			.value {
-				top: -10px;
-				position: relative;
-			}
-		}
-	}
-
 	.profile {
 		margin-top: 20px;
 		width: 100%;
@@ -123,14 +70,14 @@
 }
 
 @media (max-width: 1400px) {
-	.hero-overview .tribes .composition .tribe {
+	::ng-deep .hero-overview .tribes .composition .tribe {
 		font-size: 11px;
 		// width: 6.4vh;
 	}
 }
 
 @media (min-width: 1450px) {
-	.hero-overview .tribes .composition .tribe {
+	::ng-deep .hero-overview .tribes .composition .tribe {
 		font-size: 11px;
 		width: calc(min(33%, 9vh));
 	}

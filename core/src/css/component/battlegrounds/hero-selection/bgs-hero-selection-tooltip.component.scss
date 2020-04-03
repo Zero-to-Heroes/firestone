@@ -14,118 +14,26 @@
 	line-height: 22px;
 	// border: 1px solid #c4c4c4;
 
-	.title {
-		color: var(--default-title-color);
-		margin-bottom: 5px;
-		text-align: center;
-		width: 100%;
-		padding-bottom: 10px;
-		border-bottom: 1px solid var(--color-3);
-		margin-bottom: 10px;
-	}
-
 	.hero-power {
 		width: 210px;
 		margin-right: 20px;
 	}
 
-	.stats {
-		// margin-top: 20px;
-		margin-top: 0.1vh;
+	.infos {
+		height: 100%;
 		display: flex;
 		flex-direction: column;
-
-		.entry {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.stat-icon {
-			width: 25%;
-
-			.image {
-				width: 100%;
-			}
-		}
-
-		.label {
-			// flex-grow: 1;
-		}
-
-		.global-value {
-			margin-left: 5px;
-			font-weight: bold;
-		}
-
-		.player-value {
-			color: #ce73b4;
-			margin-left: 5px;
-			font-weight: bold;
-			font-size: 10px;
-		}
 	}
 
-	.tribes {
-		margin-top: 20px;
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-
-		.composition {
-			display: flex;
-			width: 100%;
-			align-items: center;
-			justify-content: center;
-			flex-wrap: wrap;
-
-			.icon-container {
-				background: #ce73b4;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				clip-path: ellipse(43% 32% at 50% 50%);
-			}
-
-			.icon {
-				width: 135%;
-				clip-path: ellipse(30% 30% at 50% 50%);
-			}
-
-			.tribe {
-				display: flex;
-				flex-direction: column;
-				// width: 6.5vh;
-				width: 33%;
-				overflow: hidden;
-				align-items: center;
-				justify-content: center;
-				margin-bottom: -5%;
-			}
-
-			.tribe-name {
-				font-weight: bold;
-				top: -10px;
-				position: relative;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-
-			.value {
-				top: -10px;
-				position: relative;
-			}
-		}
-	}
-
-	.tribes {
-		.composition {
-			.tribe {
-				width: 20%;
-			}
-			.tribe-name {
-				display: none;
+	::ng-deep bgs-hero-tribes {
+		.tribes.tribes {
+			.composition {
+				.tribe {
+					width: 20%;
+				}
+				.tribe-name {
+					display: none;
+				}
 			}
 		}
 	}
