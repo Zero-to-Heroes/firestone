@@ -7,6 +7,7 @@ declare let amplitude: any;
 	selector: 'bgs-hero-selection-tooltip',
 	styleUrls: [
 		`../../../../css/global/components-global.scss`,
+		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-layout.component.scss`,
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-selection-tooltip.component.scss`,
 	],
 	template: `
@@ -14,74 +15,7 @@ declare let amplitude: any;
 			<img class="hero-power" [src]="heroPowerImage" />
 			<!-- <bgs-hero-warband-stats class="warband-stats" [warbandStats]="warbandStats"></bgs-hero-warband-stats> -->
 			<div class="infos">
-				<div class="stats">
-					<div class="title">Stats</div>
-					<div class="entry">
-						<div class="label" helpTooltip="Average final position">
-							Avg position:
-						</div>
-						<div
-							class="global-value"
-							helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
-						>
-							{{ _hero.globalAveragePosition.toFixed(1) }}
-						</div>
-						<div
-							class="player-value"
-							helpTooltip="Your value, based on all your games since the last patch"
-						>
-							({{ _hero.ownAveragePosition.toFixed(1) }})
-						</div>
-					</div>
-					<div class="entry">
-						<div class="label" helpTooltip="Percentage of times ending in top 4">
-							Top 4:
-						</div>
-						<div
-							class="global-value"
-							helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
-						>
-							{{ _hero.globalTop4.toFixed(0) }}%
-						</div>
-						<div
-							class="player-value"
-							helpTooltip="Your value, based on all your games since the last patch"
-						>
-							({{ _hero.ownTop4Percentage.toFixed(0) }}%)
-						</div>
-					</div>
-					<div class="entry">
-						<div class="label" helpTooltip="Percentage of times winning the run">
-							Top 1:
-						</div>
-						<div
-							class="global-value"
-							helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
-						>
-							{{ _hero.globalTop1.toFixed(0) }}%
-						</div>
-						<div
-							class="player-value"
-							helpTooltip="Your value, based on all your games since the last patch"
-						>
-							({{ _hero.ownTop1Percentage.toFixed(0) }}%)
-						</div>
-					</div>
-					<div class="entry">
-						<div class="label" helpTooltip="Percentage of times this hero is plqyed">
-							Popularity:
-						</div>
-						<div
-							class="global-value"
-							helpTooltip="Value for the top 10% of players since the last patch (6000+ MMR)"
-						>
-							{{ _hero.globalPopularity.toFixed(0) }}%
-						</div>
-						<div class="player-value" helpTooltip="Your value, based on all the games since the last patch">
-							({{ _hero.ownPopularity.toFixed(0) }}%)
-						</div>
-					</div>
-				</div>
+				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 				<div class="tribes">
 					<div class="title" helpTooltip="Percentage of each tribe present in average in winning warbands">
 						Winning tribes

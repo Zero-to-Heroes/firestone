@@ -57,53 +57,6 @@
 		margin-bottom: 10px;
 	}
 
-	.title {
-		color: var(--default-title-color);
-		margin-bottom: 5px;
-		text-align: center;
-		width: 100%;
-		padding-bottom: 10px;
-		border-bottom: 1px solid var(--color-3);
-		margin-bottom: 10px;
-	}
-
-	.stats {
-		// margin-top: 20px;
-		margin-top: 0.1vh;
-		display: flex;
-		flex-direction: column;
-
-		.entry {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-
-		.stat-icon {
-			width: 25%;
-
-			.image {
-				width: 100%;
-			}
-		}
-
-		.label {
-			// flex-grow: 1;
-		}
-
-		.global-value {
-			margin-left: 5px;
-			font-weight: bold;
-		}
-
-		.player-value {
-			color: #ce73b4;
-			margin-left: 5px;
-			font-weight: bold;
-			font-size: 10px;
-		}
-	}
-
 	.tribes {
 		margin-top: 20px;
 		width: 100%;
