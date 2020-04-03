@@ -2,6 +2,7 @@ import { BgsHeroTier } from '../stats/bgs-hero-stat';
 
 export class BgsHeroOverview {
 	readonly heroCardId: string;
+	readonly heroPowerCardId: string;
 	readonly name: string;
 	readonly globalPopularity: number;
 	readonly globalAveragePosition: number;

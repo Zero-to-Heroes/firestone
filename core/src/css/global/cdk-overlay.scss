@@ -8,7 +8,7 @@
 }
 .cdk-overlay-container {
 	position: fixed;
-	z-index: 1000;
+	z-index: 99999999999; // Above the ads
 }
 .cdk-overlay-container:empty {
 	display: none;
