@@ -5,8 +5,8 @@
 	height: 100%;
 	align-items: center;
 	padding: 10px;
-	padding-left: 11%;
-	padding-right: 11%;
+	padding-left: 10%;
+	padding-right: 10%;
 	position: relative;
 
 	.name {
@@ -70,14 +70,14 @@
 }
 
 @media (max-width: 1400px) {
-	::ng-deep .hero-overview .tribes .composition .tribe {
+	::ng-deep .hero-overview .tribes.tribes.tribes.tribes .composition .tribe {
 		font-size: 11px;
 		// width: 6.4vh;
 	}
 }
 
 @media (min-width: 1450px) {
-	::ng-deep .hero-overview .tribes .composition .tribe {
+	::ng-deep .hero-overview .tribes.tribes.tribes.tribes .composition .tribe {
 		font-size: 11px;
 		width: calc(min(33%, 9vh));
 	}
