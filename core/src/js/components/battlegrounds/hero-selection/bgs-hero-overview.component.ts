@@ -12,7 +12,7 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-overview.component.scss`,
 	],
 	template: `
-		<div class="hero-overview">
+		<div class="hero-overview" *ngIf="_hero">
 			<div class="name">{{ _hero.name }}</div>
 			<div class="tier {{ tier?.toLowerCase() }}">{{ tier }}</div>
 			<img [src]="icon" class="portrait" />
@@ -28,6 +28,13 @@ declare let amplitude: any;
 			</div>
 			<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
 		</div>
+		<div class="hero-overview empty" *ngIf="!_hero">
+			<i class="placeholder">
+				<svg class="svg-icon-fill">
+					<use xlink:href="/Files/assets/svg/sprite.svg#ad_placeholder" />
+				</svg>
+			</i>
+		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -40,7 +47,9 @@ export class BgsHeroOverviewComponent {
 
 	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;
-		console.log('setting hero', value);
+		if (!value) {
+			return;
+		}
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.heroCardId}.png`;
 		this.tribes = [...value.tribesStat]
 			.sort((a, b) => b.percent - a.percent)

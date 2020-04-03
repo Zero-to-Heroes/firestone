@@ -61,6 +61,18 @@
 		margin-top: 20px;
 		width: 100%;
 	}
+
+	&.empty {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		i {
+			--icon-color: var(--color-5);
+			width: 50%;
+			height: 5000px; // Just a big value so that we can use the width as a constraint
+		}
+	}
 }
 
 @media (max-height: 850px) {

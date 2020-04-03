@@ -30,7 +30,7 @@ declare let amplitude: any;
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsHeroSelectionOverviewComponent {
-	heroOverviews: readonly BgsHeroOverview[];
+	heroOverviews: BgsHeroOverview[];
 	smallOverviews: readonly BgsHeroOverview[];
 	tiers: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }[] = [];
 	_panel: BgsHeroSelectionOverview;
@@ -79,14 +79,17 @@ export class BgsHeroSelectionOverviewComponent {
 			.map(cardId => this._panel.heroOverview.find(overview => overview.heroCardId === cardId))
 			// Add null-safe in case the heroes have been updated but not the code
 			.filter(hero => hero);
+		while (this.heroOverviews.length < 4) {
+			this.heroOverviews.push(null);
+		}
 	}
 
 	getOverviewWidth(): number {
 		switch (this._panel.heroOptionCardIds.length) {
 			case 2:
-				return 45;
+			// return 45;
 			case 3:
-				return 30;
+			// return 30;
 			case 4:
 				return 24;
 		}
