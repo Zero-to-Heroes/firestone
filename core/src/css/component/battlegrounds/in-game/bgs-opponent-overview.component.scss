@@ -1,54 +1,132 @@
 .opponent-overview {
 	display: flex;
-	flex-direction: column;
 	flex-grow: 1;
 	flex-shrink: 1;
-
-	.header {
-		display: flex;
-		flex-direction: row;
-		// height: 40%;
-	}
+	background: rgba(255, 255, 255, 0.08);
+	padding: 20px;
+	position: relative;
+	height: 100%;
+	width: 100%;
 
 	.portrait {
-		height: 100%;
 		flex-grow: 0;
 		flex-shrink: 0;
 		display: flex;
 		flex-direction: column;
-		width: 15%;
-	}
-
-	.icon {
-		width: 100%;
-	}
-
-	board {
+		width: 14%;
 		position: relative;
-		flex-grow: 1;
-		flex-shrink: 1;
-		margin-left: 5%;
-		width: 80%;
-	}
+		margin-right: 5%;
 
-	::ng-deep board {
-		// .board li {
-		// 	width: 11%;
-		// }
-		board-card-stats .stat {
-			color: #fff;
+		.icon {
+			width: 100%;
+		}
+
+		.name {
+			color: var(--default-title-color);
+			overflow: hidden;
+			font-size: 12px;
+			text-overflow: ellipsis;
+			width: 100%;
+			text-align: center;
+			top: -5px;
+			position: relative;
+		}
+
+		.tavern {
+			position: absolute;
+			right: -8%;
+			top: 20%;
+			width: 35%;
 		}
 	}
 
-	.body {
-		margin-top: 25px;
+	.main-info {
 		display: flex;
-	}
-}
+		flex-direction: column;
+		flex-grow: 1;
+		flex-shrink: 1;
+		border-right: 1px solid var(--color-3);
+		justify-content: center;
+		// padding-right: 5%;
+		margin-right: 3%;
+		overflow: hidden;
 
-.tavern-upgrades,
-.triple-tiers {
-	display: flex;
-	flex-direction: column;
-	margin-right: 10%;
+		.board-turn {
+			// margin-bottom: 10px;
+			flex-grow: 0;
+			flex-shrink: 0;
+			// margin-bottom: -12%;
+		}
+
+		board {
+			display: flex;
+			align-items: center;
+			position: relative;
+			flex-grow: 1;
+			flex-shrink: 1;
+			width: 100%;
+			// max-height: 75%;
+		}
+
+		::ng-deep board {
+			// .board li {
+			// 	width: 11%;
+			// }
+			.board {
+				height: auto;
+			}
+			board-card-stats .stat {
+				color: #fff;
+			}
+		}
+	}
+
+	.triples-section {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		// flex-grow: 1;
+		flex-grow: 0;
+		width: 20%;
+		flex-shrink: 0;
+
+		.subtitle {
+			margin: auto;
+		}
+
+		.triple-tiers {
+			display: flex;
+			justify-content: space-around;
+			align-items: center;
+			width: 100%;
+			flex-grow: 1;
+
+			.triple {
+				position: relative;
+				width: 2vw;
+				height: 2.3vw;
+
+				.number {
+					color: var(--default-title-color);
+					// font-size: 18px;
+					font-size: 1vw;
+					background: var(--color-4);
+					border: 3px solid var(--default-title-color);
+					border-radius: 50px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					width: 100%;
+					height: 100%;
+				}
+
+				.tavern {
+					position: absolute;
+					left: -13%;
+					top: -4px;
+					width: 65%;
+				}
+			}
+		}
+	}
 }

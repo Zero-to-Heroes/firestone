@@ -28,16 +28,20 @@ declare let amplitude: any;
 				<bgs-hero-face-off *ngFor="let faceOff of opponentFaceOffs" [faceOff]="faceOff"></bgs-hero-face-off>
 			</div>
 			<div class="content" *ngIf="opponentInfos.length > 0">
-				<bgs-opponent-overview
+				<bgs-opponent-overview-big
 					[opponentInfo]="opponentInfos[0]"
 					[currentTurn]="currentTurn"
-				></bgs-opponent-overview>
-				<div class="subtitle">Other opponents</div>
-				<bgs-opponent-overview
-					*ngFor="let opponentInfo of opponentInfos.slice(1)"
-					[opponentInfo]="opponentInfo"
-					[currentTurn]="currentTurn"
-				></bgs-opponent-overview>
+				></bgs-opponent-overview-big>
+				<div class="other-opponents">
+					<div class="subtitle">Other opponents</div>
+					<div class="opponents">
+						<bgs-opponent-overview
+							*ngFor="let opponentInfo of opponentInfos.slice(1)"
+							[opponentInfo]="opponentInfo"
+							[currentTurn]="currentTurn"
+						></bgs-opponent-overview>
+					</div>
+				</div>
 			</div>
 		</div>
 	`,
@@ -73,26 +77,45 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		}, 100);
 	}
 
+	previousFirstBoardWidth: number;
+
 	@HostListener('window:resize')
 	onResize() {
 		const boardContainers = this.el.nativeElement.querySelectorAll('board');
+		let i = 0;
 		for (const boardContainer of boardContainers) {
 			const rect = boardContainer.getBoundingClientRect();
+			if (this.previousFirstBoardWidth === rect.width) {
+				return;
+			}
+			if (i === 0) {
+				console.log('rect', rect.width, rect);
+				this.previousFirstBoardWidth = rect.width;
+			}
 			// console.log('boardContainer', boardContainer, rect);
 			// const constrainedByWidth = rect.width <
 			const cardElements = boardContainer.querySelectorAll('li');
 			// 	console.log('cardElements', cardElements);
 			let cardWidth = rect.width / 8;
 			let cardHeight = 1.48 * cardWidth;
+			if (i === 0) {
+				console.log('first card width', cardWidth, cardHeight, rect.height);
+			}
 			if (cardHeight > rect.height) {
 				cardHeight = rect.height;
 				cardWidth = cardHeight / 1.48;
+			}
+			if (i === 0) {
+				console.log('card width', cardWidth, cardHeight);
 			}
 			for (const cardElement of cardElements) {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
 			}
+
+			i++;
 		}
+		setTimeout(() => this.onResize(), 200);
 	}
 
 	private updateInfo() {
@@ -104,19 +127,20 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		if (!nextOpponent) {
 			return;
 		}
+		console.log('next opponent', nextOpponent?.getLastBoardStateTurn());
 		const opponents = this._game.players.filter(player => !player.isMainPlayer);
 		this.opponentInfos = opponents
 			.map(
 				opponent =>
 					({
 						id: opponent.cardId,
-						icon: `https://static.zerotoheroes.com/hearthstone/cardart/256x/${opponent.cardId}.jpg`,
+						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${opponent.cardId}.png`,
 						name: opponent.name,
 						tavernTier: '' + opponent.getCurrentTavernTier(),
 						boardMinions: opponent.getLastKnownBoardState(),
 						boardTurn: opponent.getLastBoardStateTurn(),
-						tavernUpgrades: [...opponent.tavernUpgradeHistory].reverse(),
-						triples: [...opponent.tripleHistory].reverse(),
+						tavernUpgrades: [...opponent.tavernUpgradeHistory],
+						triples: [...opponent.tripleHistory],
 						displayBody: opponent.cardId === this._panel.opponentOverview.cardId,
 						nextBattle: opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleResult,
 					} as OpponentInfo),
@@ -145,6 +169,6 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		);
 		setTimeout(() => {
 			this.onResize();
-		}, 100);
+		}, 300);
 	}
 }

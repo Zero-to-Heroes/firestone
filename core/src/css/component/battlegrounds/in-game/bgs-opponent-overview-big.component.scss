@@ -1,0 +1,218 @@
+:host {
+	display: flex;
+}
+
+.opponent-overview {
+	display: flex;
+	flex-grow: 1;
+	flex-shrink: 1;
+	position: relative;
+
+	.background-additions {
+		width: 9%;
+		margin-left: 7%;
+		display: flex;
+		flex-direction: column;
+
+		.top {
+			background: rgba(255, 255, 255, 0.08);
+			border-top: 1px solid var(--color-common-2);
+			height: 20%;
+		}
+		.bottom {
+			background: transparent;
+			border-right: 1px solid var(--color-common-2);
+			height: 80%;
+		}
+	}
+
+	.portrait {
+		flex-grow: 0;
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		width: 14%;
+		position: absolute;
+		top: -10%;
+		left: 2%;
+
+		.icon {
+			width: 100%;
+		}
+
+		.name {
+			color: var(--default-title-color);
+			overflow: hidden;
+			font-size: 14px;
+			text-overflow: ellipsis;
+			width: 100%;
+			text-align: center;
+			top: -5px;
+			position: relative;
+			right: 6%;
+		}
+
+		.tavern {
+			position: absolute;
+			right: -8%;
+			top: 20%;
+			width: 35%;
+		}
+	}
+
+	.opponent-info {
+		background: rgba(255, 255, 255, 0.08);
+		border-width: 1px;
+		border-style: solid;
+		border-image: linear-gradient(to right, var(--color-common-2), rgba(255, 185, 72, 0.2)) 1 100%;
+		border-image-slice: 1 1 1 0;
+		border-left: none;
+		width: 100%;
+		display: flex;
+		padding: 20px;
+		padding-left: 3%;
+		position: relative;
+
+		.main-info {
+			display: flex;
+			flex-direction: column;
+			flex-grow: 0;
+			flex-shrink: 0;
+			width: 80%;
+			border-right: 1px solid var(--color-3);
+			justify-content: space-evenly;
+
+			.board-turn {
+				margin-bottom: 10px;
+				flex-grow: 0;
+				flex-shrink: 0;
+			}
+
+			board {
+				position: relative;
+				flex-grow: 1;
+				flex-shrink: 1;
+				width: 100%;
+				max-height: 42%;
+			}
+
+			::ng-deep board {
+				// .board li {
+				// 	width: 11%;
+				// }
+				board-card-stats .stat {
+					color: #fff;
+				}
+			}
+		}
+
+		.bottom-info {
+			display: flex;
+			margin-top: 30px;
+
+			.triples-section {
+				display: flex;
+				align-items: center;
+				flex-grow: 1;
+
+				.title {
+					width: 90px;
+					margin-right: 30px;
+				}
+
+				.triple-tiers {
+					display: flex;
+
+					.triple {
+						position: relative;
+						width: 3.5vw;
+						height: 4vw;
+
+						.number {
+							color: var(--default-title-color);
+							font-size: 18px;
+							background: var(--color-4);
+							border: 3px solid var(--default-title-color);
+							border-radius: 50px;
+							display: flex;
+							align-items: center;
+							justify-content: center;
+							width: 100%;
+							height: 100%;
+						}
+
+						.tavern {
+							position: absolute;
+							left: -13%;
+							top: -4px;
+							width: 65%;
+						}
+					}
+				}
+			}
+
+			.battle-simulation {
+				display: flex;
+				flex-direction: column;
+				border-left: 1px solid var(--color-3);
+				margin-right: 20px;
+				padding-left: 3%;
+
+				.winning-chance {
+					display: flex;
+					align-items: center;
+
+					.label {
+						width: 130px;
+					}
+
+					.value {
+						color: var(--default-title-color);
+						font-size: 30px;
+					}
+				}
+
+				.damage {
+					display: flex;
+
+					.label {
+						width: 130px;
+					}
+				}
+			}
+		}
+
+		.tavern-upgrades {
+			width: 20%;
+			display: flex;
+			flex-direction: column;
+
+			.title {
+				margin-bottom: 10px;
+				text-align: center;
+			}
+
+			.upgrades {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: center;
+			}
+
+			.tavern-upgrade {
+				width: 40%;
+			}
+
+			.label {
+				margin-top: -15%;
+				text-align: center;
+			}
+
+			::ng-deep tavern-level-icon .tavern-level-icon {
+				position: relative;
+				width: 60%;
+				margin: auto;
+			}
+		}
+	}
+}

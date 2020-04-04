@@ -15,6 +15,12 @@
 	order: 2;
 }
 
+bgs-opponent-overview-big {
+	max-height: 42%;
+	height: 42%;
+	flex-shrink: 0;
+}
+
 bgs-hero-face-off {
 	width: 105px;
 	position: relative;
@@ -29,21 +35,44 @@ bgs-hero-face-off {
 	flex-grow: 1;
 	flex-shrink: 1;
 	width: calc(100% - 410px);
-	min-height: 0;
-	overflow: auto;
+	// min-height: 0;
+	// overflow: auto;
 	// So that the divine shields are the top are not truncated
 	padding-top: 20px;
 	position: relative;
-	top: -20px;
+	top: 0px;
 }
 
-.subtitle {
-	flex-grow: 0;
-	flex-shrink: 0;
-	height: 40px;
-	color: var(--default-title-color);
-	font-size: 16px;
+.other-opponents {
 	display: flex;
-	align-items: center;
-	justify-content: center;
+	flex-direction: column;
+	flex-grow: 1;
+	flex-shrink: 1;
+	min-height: 0;
+	// overflow: auto;
+	margin-top: 20px;
+
+	.subtitle {
+		flex-grow: 0;
+		flex-shrink: 0;
+		height: 40px;
+		color: var(--default-title-color);
+		font-size: 20px;
+		display: flex;
+	}
+
+	.opponents {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		min-height: 0;
+		overflow: auto;
+		padding-right: 10px;
+
+		bgs-opponent-overview {
+			width: calc(50% - 10px);
+			margin-bottom: 20px;
+			height: 9vw;
+		}
+	}
 }

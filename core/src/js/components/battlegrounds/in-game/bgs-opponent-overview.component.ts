@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
+import { groupByFunction } from '../../../services/utils';
 import { OpponentInfo } from './opponent-info';
 
 declare let amplitude: any;
@@ -11,48 +13,66 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="opponent-overview">
-			<div class="header" (click)="toggleDisplayBody(opponentInfo)">
-				<div class="portrait">
-					<img [src]="opponentInfo.icon" class="icon" />
-					<div class="name">{{ opponentInfo.name }}</div>
-					<!-- <img [src]="taverTierIcon" class="tavern-tier" /> -->
-					<div class="tavern-tier">Tavern: {{ opponentInfo.tavernTier }}</div>
+			<div class="portrait">
+				<img [src]="_opponentInfo.icon" class="icon" />
+				<div class="name">{{ _opponentInfo.name }}</div>
+				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>
+			</div>
+			<div class="main-info">
+				<div class="board-turn" *ngIf="_opponentInfo.boardMinions?.length">
+					Board as seen
+					{{
+						currentTurn - _opponentInfo.boardTurn === 0
+							? 'just now'
+							: currentTurn - _opponentInfo.boardTurn + ' turns ago'
+					}}
 				</div>
-				<board [entities]="opponentInfo.boardMinions" *ngIf="opponentInfo.boardMinions"></board>
-				<div class="board-turn">
-					Board as seen at turn {{ opponentInfo.boardTurn }} ({{ currentTurn - opponentInfo.boardTurn }})
-					turns ago)
+				<div class="board-turn" *ngIf="!_opponentInfo.boardMinions?.length">
+					You have not fought that player yet
 				</div>
-				<div class="body" *ngIf="opponentInfo.displayBody">
-					<div class="tavern-upgrades">
-						<div *ngFor="let upgrade of opponentInfo.tavernUpgrades">
-							Turn {{ upgrade.turn }}: Upgrade tier {{ upgrade.tavernTier }}
-						</div>
-					</div>
-					<div class="triple-tiers">
-						<div *ngFor="let triple of opponentInfo.triples">
-							Turn {{ triple.turn }}: One tier {{ triple.tierOfTripledMinion }} triple
-						</div>
-					</div>
-					<div class="next-battle" *ngIf="opponentInfo.nextBattle">
-						<div class="win-chance">
-							Chances to win: {{ opponentInfo.nextBattle.wonPercent?.toFixed(1) }} (for
-							{{ opponentInfo.nextBattle.averageDamageWon?.toFixed(1) }} damage)
-						</div>
-						<div class="loss-chance">
-							Chances to lose: {{ opponentInfo.nextBattle.lostPercent?.toFixed(1) }} (for
-							{{ opponentInfo.nextBattle.averageDamageLost?.toFixed(1) }} damage)
-						</div>
+				<board [entities]="_opponentInfo.boardMinions" *ngIf="_opponentInfo.boardMinions?.length"></board>
+			</div>
+			<div class="triples-section">
+				<div class="title" *ngIf="tierTriples?.length">New triples</div>
+				<div class="triple-tiers" *ngIf="tierTriples?.length">
+					<div
+						*ngFor="let triple of tierTriples"
+						class="triple"
+						[helpTooltip]="
+							'That player got ' +
+							triple.quantity +
+							' tier ' +
+							triple.minionTier +
+							' minions since last time you fought them'
+						"
+					>
+						<div class="number">x{{ triple.quantity }}</div>
+						<tavern-level-icon [level]="triple.minionTier" class="tavern"></tavern-level-icon>
 					</div>
 				</div>
+				<div class="subtitle" *ngIf="!tierTriples?.length">No new triple since the last encounter</div>
 			</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BgsOpponentOverviewComponent {
-	@Input() opponentInfo: OpponentInfo;
+	tierTriples: { minionTier: number; quantity: number }[];
+	_opponentInfo: OpponentInfo;
+
 	@Input() currentTurn: number;
+
+	@Input() set opponentInfo(value: OpponentInfo) {
+		this._opponentInfo = value;
+		const triplesSinceLastBoard = value.triples.filter(triple => triple.turn >= value.boardTurn);
+		const groupedByTier = groupByFunction((triple: BgsTriple) => '' + triple.tierOfTripledMinion)(
+			triplesSinceLastBoard,
+		);
+		this.tierTriples = Object.keys(groupedByTier).map(minionTier => ({
+			minionTier: parseInt(minionTier),
+			quantity: groupedByTier[minionTier].length as number,
+		}));
+	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 
