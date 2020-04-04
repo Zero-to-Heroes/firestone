@@ -1,17 +1,15 @@
 .face-off {
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	width: 100%;
-	height: 100%;
+	height: 70px;
 	flex-grow: 0;
 	flex-shrink: 0;
+	display: flex;
 
 	.portrait {
-		width: 70%;
-	}
-
-	.results {
-		display: flex;
+		width: 60%;
+		position: relative;
+		top: 5px;
 	}
 }

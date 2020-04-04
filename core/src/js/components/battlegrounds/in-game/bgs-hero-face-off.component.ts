@@ -10,13 +10,13 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/in-game/bgs-hero-face-off.component.scss`,
 	],
 	template: `
-		<div class="face-off">
-			<img [src]="icon" class="portrait" />
-			<div class="results">
-				<div class="wins">{{ wins }}</div>
-				<div class="separator">-</div>
-				<div class="losses">{{ losses }}</div>
+		<div class="face-off entry">
+			<div class="hero">
+				<img [src]="icon" class="portrait" />
 			</div>
+			<div class="won">{{ wins }}</div>
+			<div class="lost">{{ losses }}</div>
+			<div class="tied">{{ ties }}</div>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,10 +25,12 @@ export class BgsHeroFaceOffComponent {
 	icon: string;
 	wins: number;
 	losses: number;
+	ties: number;
 
 	@Input() set faceOff(value: OpponentFaceOff) {
-		this.icon = `https://static.zerotoheroes.com/hearthstone/cardart/256x/${value.cardId}.jpg`;
-		this.wins = value.wins;
+		(this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`),
+			(this.wins = value.wins);
 		this.losses = value.losses;
+		this.ties = value.ties;
 	}
 }

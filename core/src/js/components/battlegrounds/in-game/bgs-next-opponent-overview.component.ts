@@ -25,7 +25,10 @@ declare let amplitude: any;
 	template: `
 		<div class="container">
 			<div class="left">
-				<bgs-hero-face-off *ngFor="let faceOff of opponentFaceOffs" [faceOff]="faceOff"></bgs-hero-face-off>
+				<div class="title" helpTooltip="Recap of all the encounters you had with the other players">
+					Score Board
+				</div>
+				<bgs-hero-face-offs [opponentFaceOffs]="opponentFaceOffs"></bgs-hero-face-offs>
 			</div>
 			<div class="content" *ngIf="opponentInfos.length > 0">
 				<bgs-opponent-overview-big
@@ -165,6 +168,10 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						.filter(faceOff => faceOff.playerCardId === this._game.getMainPlayer().cardId)
 						.filter(faceOff => faceOff.opponentCardId === opp.cardId)
 						.filter(faceOff => faceOff.result === 'lost').length,
+					ties: this._game.faceOffs
+						.filter(faceOff => faceOff.playerCardId === this._game.getMainPlayer().cardId)
+						.filter(faceOff => faceOff.opponentCardId === opp.cardId)
+						.filter(faceOff => faceOff.result === 'tied').length,
 				} as OpponentFaceOff),
 		);
 		setTimeout(() => {

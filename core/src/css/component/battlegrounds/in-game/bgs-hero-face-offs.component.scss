@@ -1,0 +1,36 @@
+.face-offs {
+	background: var(--color-7);
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+	min-height: 0;
+	overflow: auto;
+	height: 100%;
+
+	.header {
+		color: var(--color-1);
+		display: flex;
+		margin-bottom: 5px;
+	}
+
+	bgs-hero-face-off {
+		position: relative;
+		width: 100%;
+		display: flex;
+	}
+
+	::ng-deep {
+		.hero,
+		.won,
+		.lost,
+		.tied {
+			width: 25%;
+			text-align: center;
+		}
+
+		.entry {
+			border-bottom: 1px solid var(--color-3);
+			padding-bottom: 5px;
+		}
+	}
+}
