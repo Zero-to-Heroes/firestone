@@ -21,7 +21,7 @@ declare let amplitude: any;
 					[cardTooltipText]="_opponentInfo.name"
 					[cardTooltipClass]="'bgs-hero-power'"
 				/>
-				<div class="name">{{ _opponentInfo.name }}</div>
+				<!-- <div class="name">{{ _opponentInfo.name }}</div> -->
 				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="main-info">
