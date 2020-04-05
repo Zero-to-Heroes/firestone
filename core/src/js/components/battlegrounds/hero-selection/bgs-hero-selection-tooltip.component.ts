@@ -15,6 +15,7 @@ declare let amplitude: any;
 			<img class="hero-power" [src]="heroPowerImage" />
 			<!-- <bgs-hero-warband-stats class="warband-stats" [warbandStats]="warbandStats"></bgs-hero-warband-stats> -->
 			<div class="infos">
+				<div class="name">{{ _hero.name }}</div>
 				<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 				<bgs-hero-tribes [hero]="_hero"></bgs-hero-tribes>
 			</div>

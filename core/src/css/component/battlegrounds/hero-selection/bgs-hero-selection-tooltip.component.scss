@@ -1,7 +1,7 @@
 .hero-selection-tooltip {
 	display: flex;
 	background: var(--color-4);
-	height: 300px;
+	height: 320px;
 	width: 500px;
 	align-items: center;
 	padding: 10px;
@@ -23,6 +23,13 @@
 		height: 100%;
 		display: flex;
 		flex-direction: column;
+	}
+
+	.name {
+		color: var(--default-title-color);
+		font-size: 16px;
+		margin-bottom: 10px;
+		text-align: center;
 	}
 
 	::ng-deep bgs-hero-tribes {
