@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { groupByFunction } from '../../../services/utils';
 import { OpponentInfo } from './opponent-info';
@@ -57,19 +57,33 @@ declare let amplitude: any;
 								</div>
 							</div>
 						</div>
-						<div class="battle-simulation" *ngIf="_opponentInfo.nextBattle">
+						<div class="battle-simulation">
 							<div class="winning-chance">
 								<div class="label">Your chance of winning</div>
-								<div class="value">{{ _opponentInfo.nextBattle.wonPercent?.toFixed(1) }}%</div>
+								<div class="value" [helpTooltip]="temporaryBattleTooltip">
+									{{
+										_opponentInfo.nextBattle
+											? _opponentInfo.nextBattle.wonPercent?.toFixed(1)
+											: temporaryWinValue.toFixed(1)
+									}}%
+								</div>
 							</div>
 							<div class="damage">
 								<div class="label">Avg damage</div>
 								<div class="win" helpTooltip="Expected average damage in case you win the fight">
-									{{ _opponentInfo.nextBattle.averageDamageWon?.toFixed(1) }}
+									{{
+										_opponentInfo.nextBattle
+											? _opponentInfo.nextBattle.averageDamageWon?.toFixed(1)
+											: '...'
+									}}
 								</div>
 								/
 								<div class="lose" helpTooltip="Expected average damage in case you lose the fight">
-									{{ _opponentInfo.nextBattle.averageDamageLost?.toFixed(1) }}
+									{{
+										_opponentInfo.nextBattle
+											? _opponentInfo.nextBattle.averageDamageLost?.toFixed(1)
+											: '...'
+									}}
 								</div>
 							</div>
 						</div>
@@ -93,6 +107,9 @@ export class BgsOpponentOverviewBigComponent {
 	tierTriples: { minionTier: number; quantity: number }[];
 	_opponentInfo: OpponentInfo;
 
+	temporaryBattleTooltip: string;
+	temporaryWinValue: number;
+
 	@Input() currentTurn: number;
 
 	@Input() set opponentInfo(value: OpponentInfo) {
@@ -105,7 +122,27 @@ export class BgsOpponentOverviewBigComponent {
 			minionTier: parseInt(minionTier),
 			quantity: groupedByTier[minionTier].length as number,
 		}));
+
+		if (!value.nextBattle) {
+			if (this.tempInterval) {
+				clearInterval(this.tempInterval);
+			}
+			this.temporaryBattleTooltip = 'Battle simulation is running, results will arrive soon';
+			this.tempInterval = setInterval(() => {
+				this.temporaryWinValue = 99 * Math.random();
+				if (!(this.cdr as ViewRef).destroyed) {
+					this.cdr.detectChanges();
+				}
+			}, 20);
+		} else {
+			if (this.tempInterval) {
+				clearInterval(this.tempInterval);
+			}
+			this.temporaryBattleTooltip = null;
+		}
 	}
+
+	private tempInterval;
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
 }
