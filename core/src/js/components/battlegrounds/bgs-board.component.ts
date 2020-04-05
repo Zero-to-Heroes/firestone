@@ -13,7 +13,7 @@ import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 			Board as seen
 			{{ currentTurn - boardTurn === 0 ? 'just now' : currentTurn - boardTurn + ' turns ago' }}
 		</div>
-		<div class="board-turn" *ngIf="!_entities?.length">
+		<div class="board-turn empty" *ngIf="!_entities?.length">
 			You have not fought that player yet
 		</div>
 		<ul class="board" [transition-group]="'flip-list'" *ngIf="_entities?.length">
