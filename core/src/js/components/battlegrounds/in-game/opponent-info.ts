@@ -4,6 +4,7 @@ import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 
 export interface OpponentInfo {
 	id: string;
+	heroPowerCardId: string;
 	icon: string;
 	name: string;
 	tavernTier: string;

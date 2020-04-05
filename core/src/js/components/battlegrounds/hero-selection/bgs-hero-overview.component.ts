@@ -15,7 +15,12 @@ declare let amplitude: any;
 		<div class="hero-overview" *ngIf="_hero">
 			<div class="name">{{ _hero.name }}</div>
 			<div class="tier {{ tier?.toLowerCase() }}">{{ tier }}</div>
-			<img [src]="icon" class="portrait" />
+			<img
+				[src]="icon"
+				class="portrait"
+				[cardTooltip]="_hero.heroPowerCardId"
+				[cardTooltipClass]="'bgs-hero-select'"
+			/>
 			<bgs-hero-stats [hero]="_hero"></bgs-hero-stats>
 			<div class="profile">
 				<div

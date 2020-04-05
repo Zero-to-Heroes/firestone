@@ -135,12 +135,14 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		}
 		// console.log('next opponent', nextOpponent?.getLastBoardStateTurn());
 		const opponents = this._game.players.filter(player => !player.isMainPlayer);
+		console.log('opponents', opponents);
 		this.opponentInfos = opponents
 			.map(
 				opponent =>
 					({
 						id: opponent.cardId,
 						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${opponent.cardId}.png`,
+						heroPowerCardId: opponent.heroPowerCardId,
 						name: opponent.name,
 						tavernTier: '' + opponent.getCurrentTavernTier(),
 						boardMinions: opponent.getLastKnownBoardState(),
@@ -162,7 +164,9 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		this.opponentFaceOffs = opponents.map(
 			opp =>
 				({
+					name: opp.name,
 					cardId: opp.cardId,
+					heroPowerCardId: opp.heroPowerCardId,
 					wins: this._game.faceOffs
 						.filter(faceOff => faceOff.playerCardId === this._game.getMainPlayer().cardId)
 						.filter(faceOff => faceOff.opponentCardId === opp.cardId)

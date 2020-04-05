@@ -18,7 +18,13 @@ declare let amplitude: any;
 				<div class="bottom"></div>
 			</div>
 			<div class="portrait">
-				<img [src]="_opponentInfo.icon" class="icon" />
+				<img
+					[src]="_opponentInfo.icon"
+					class="icon"
+					[cardTooltip]="_opponentInfo.heroPowerCardId"
+					[cardTooltipText]="_opponentInfo.name"
+					[cardTooltipClass]="'bgs-hero-power'"
+				/>
 				<div class="name">{{ _opponentInfo.name }}</div>
 				<!-- <img [src]="taverTierIcon" class="tavern-tier" /> -->
 				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>

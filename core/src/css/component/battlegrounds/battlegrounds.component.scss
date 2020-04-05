@@ -13,3 +13,34 @@ ads {
 	bottom: 10px;
 	right: 10px;
 }
+
+.card-tooltip.bgs-hero-select.bgs-hero-select.bgs-hero-select {
+	img {
+		filter: drop-shadow(0px 0px 15px rgba(223, 179, 211, 0.7));
+		width: 208px;
+	}
+}
+
+.card-tooltip.bgs-hero-power.bgs-hero-power.bgs-hero-power {
+	background: var(--color-4);
+	width: 190px;
+	// As there is no intelligent positioning, this makes sure it doesn't go over the top
+	margin-top: 30px;
+
+	img {
+		filter: drop-shadow(0px 0px 15px rgba(223, 179, 211, 0.7));
+		margin-top: -50px;
+		position: relative;
+		left: -9px;
+		width: 208px;
+	}
+	.text {
+		margin-top: 0;
+		font-size: 16px;
+		color: var(--default-title-color);
+		text-shadow: none;
+		font-weight: normal;
+		font-family: Open Sans;
+		padding-bottom: 7px;
+	}
+}

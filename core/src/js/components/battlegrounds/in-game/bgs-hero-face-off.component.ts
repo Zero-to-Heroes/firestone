@@ -12,7 +12,13 @@ declare let amplitude: any;
 	template: `
 		<div class="face-off entry">
 			<div class="hero">
-				<img [src]="icon" class="portrait" />
+				<img
+					[src]="icon"
+					class="portrait"
+					[cardTooltip]="heroPowerIcon"
+					[cardTooltipText]="name"
+					[cardTooltipClass]="'bgs-hero-power'"
+				/>
 			</div>
 			<div class="won">{{ wins }}</div>
 			<div class="lost">{{ losses }}</div>
@@ -23,13 +29,17 @@ declare let amplitude: any;
 })
 export class BgsHeroFaceOffComponent {
 	icon: string;
+	heroPowerIcon: string;
+	name: string;
 	wins: number;
 	losses: number;
 	ties: number;
 
 	@Input() set faceOff(value: OpponentFaceOff) {
-		(this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`),
-			(this.wins = value.wins);
+		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
+		this.heroPowerIcon = value.heroPowerCardId;
+		this.name = value.name;
+		this.wins = value.wins;
 		this.losses = value.losses;
 		this.ties = value.ties;
 	}

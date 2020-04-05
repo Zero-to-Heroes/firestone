@@ -21,6 +21,7 @@ import { CardTooltipPositionType } from './card-tooltip-position.type';
 export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 	@Input('cardTooltip') cardId = undefined;
 	@Input('cardTooltipText') cardTooltipText = undefined;
+	@Input() cardTooltipClass = undefined;
 	@Input('cardTooltipPosition') set position(value: CardTooltipPositionType) {
 		// console.log('[card-tooltip-directive] setting tooltip position', value);
 		if (value !== this._position) {
@@ -146,6 +147,8 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		// Pass content to tooltip component instance
 		tooltipRef.instance.cardId = this.cardId;
 		tooltipRef.instance.text = this.cardTooltipText;
+		tooltipRef.instance.additionalClass = this.cardTooltipClass;
+		console.log('tooltip class', this.cardTooltipClass);
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
