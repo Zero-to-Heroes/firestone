@@ -27,6 +27,7 @@ import { WindowWrapperComponent } from '../../components/window-wrapper.componen
 import { WithLoadingComponent } from '../../components/with-loading.component';
 import { ActiveThemeDirective } from '../../directives/active-theme.directive';
 import { AskConfirmationDirective } from '../../directives/ask-confirmation.directive';
+import { CachedComponentTooltipDirective } from '../../directives/cached-component-tooltip.directive';
 import { CardTooltipDirective } from '../../directives/card-tooltip.directive';
 import { ComponentTooltipDirective } from '../../directives/component-tooltip.directive';
 import { GrowOnClickDirective } from '../../directives/grow-on-click.directive';
@@ -58,6 +59,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
 		CardTooltipDirective,
 		ComponentTooltipDirective,
+		CachedComponentTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,
 		PulseDirective,
@@ -97,6 +99,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 		ConfirmationComponent,
 
 		ComponentTooltipDirective,
+		CachedComponentTooltipDirective,
 		CardTooltipDirective,
 		HelpTooltipDirective,
 		ActiveThemeDirective,

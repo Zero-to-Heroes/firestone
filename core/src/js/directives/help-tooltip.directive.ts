@@ -105,9 +105,11 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 	}
 
 	ngOnDestroy() {
-		this.overlayRef.detach();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+		if (this.overlayRef) {
+			this.overlayRef.detach();
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
 	}
 
@@ -157,9 +159,11 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		this.overlayRef.detach();
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
+		if (this.overlayRef) {
+			this.overlayRef.detach();
+			if (!(this.cdr as ViewRef).destroyed) {
+				this.cdr.detectChanges();
+			}
 		}
 	}
 }

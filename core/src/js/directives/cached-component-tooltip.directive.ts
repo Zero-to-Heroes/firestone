@@ -3,6 +3,7 @@ import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 import {
 	AfterViewInit,
 	ChangeDetectorRef,
+	ComponentRef,
 	Directive,
 	ElementRef,
 	HostListener,
@@ -12,10 +13,10 @@ import {
 } from '@angular/core';
 
 @Directive({
-	selector: '[componentTooltip]',
+	selector: '[cachedComponentTooltip] ',
 })
 // See https://blog.angularindepth.com/building-tooltips-for-angular-3cdaac16d138
-export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
+export class CachedComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	private _componentInput: any;
 	private _componentType: ComponentType<any>;
 	private viewInit = false;
@@ -55,7 +56,8 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 	}
 
 	private updatePositionStrategy() {
-		if (!this.viewInit) {
+		// console.log('updatePositionStrategy', this.viewInit, this._componentInput, this._componentType);
+		if (!this.viewInit || !this._componentInput || !this._componentType) {
 			return;
 		}
 		if (this.positionStrategy) {
@@ -77,7 +79,6 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 		// Connect position strategy
 		this.overlayRef = this.overlay.create({ positionStrategy: this.positionStrategy });
-
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();
 		}
@@ -85,6 +86,7 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	ngOnDestroy() {
 		// console.log('on destroy for component tooltip');
+		this.tooltipRef = null;
 		if (this.overlayRef) {
 			this.overlayRef.detach();
 			if (!(this.cdr as ViewRef).destroyed) {
@@ -93,18 +95,24 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 		}
 	}
 
+	private tooltipRef: ComponentRef<any>;
+
 	@HostListener('mouseenter')
 	onMouseEnter() {
-		// console.log('mouseenter');
-		// Create tooltip portal
-		this.tooltipPortal = new ComponentPortal(this._componentType);
+		// console.log('mouseenter', this.overlayRef);
 
-		// Attach tooltip portal to overlay
-		const tooltipRef = this.overlayRef.attach(this.tooltipPortal);
+		if (!this.tooltipRef) {
+			// Create tooltip portal
+			this.tooltipPortal = new ComponentPortal(this._componentType);
 
-		// Pass content to tooltip component instance
-		tooltipRef.instance.config = this._componentInput;
+			// Attach tooltip portal to overlay
+			this.tooltipRef = this.overlayRef.attach(this.tooltipPortal);
 
+			// Pass content to tooltip component instance
+			this.tooltipRef.instance.config = this._componentInput;
+			// console.log('created tooltipRef', this.tooltipRef);
+		}
+		this.tooltipRef.instance.visible = true;
 		this.positionStrategy.apply();
 		// console.log('created tooltip instance', tooltipRef);
 		if (!(this.cdr as ViewRef).destroyed) {
@@ -114,12 +122,13 @@ export class ComponentTooltipDirective implements AfterViewInit, OnDestroy {
 
 	@HostListener('mouseleave')
 	onMouseLeave() {
-		if (this.overlayRef) {
-			this.overlayRef.detach();
-			if (!(this.cdr as ViewRef).destroyed) {
-				this.cdr.detectChanges();
-			}
+		this.tooltipRef.instance.visible = false;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
 		}
+		// if (this.overlayRef) {
+		// 	this.overlayRef.detach();
+		// }
 	}
 
 	private buildPositions(): ConnectedPosition[] {
