@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
 
 declare let amplitude: any;
@@ -36,7 +36,12 @@ export class BgsHeroSelectionTooltipComponent {
 			.map(stat => ({ tribe: this.getTribe(stat.tribe), percent: stat.percent.toFixed(1) }))
 			.slice(0, 5);
 		this.warbandStats = value.warbandStats;
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	getIcon(tribe: string): string {
 		let referenceCardId: string;

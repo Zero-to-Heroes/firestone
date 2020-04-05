@@ -67,3 +67,15 @@
 	width: 100%;
 	overflow-y: scroll;
 }
+
+.cdk-global-overlay-wrapper,
+.cdk-overlay-container {
+	pointer-events: none;
+
+	& > * {
+		pointer-events: none !important;
+		& > * {
+			pointer-events: none !important;
+		}
+	}
+}

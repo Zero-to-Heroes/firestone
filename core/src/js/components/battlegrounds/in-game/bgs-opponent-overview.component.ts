@@ -19,18 +19,12 @@ declare let amplitude: any;
 				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>
 			</div>
 			<div class="main-info">
-				<div class="board-turn" *ngIf="_opponentInfo.boardMinions?.length">
-					Board as seen
-					{{
-						currentTurn - _opponentInfo.boardTurn === 0
-							? 'just now'
-							: currentTurn - _opponentInfo.boardTurn + ' turns ago'
-					}}
-				</div>
-				<div class="board-turn" *ngIf="!_opponentInfo.boardMinions?.length">
-					You have not fought that player yet
-				</div>
-				<board [entities]="_opponentInfo.boardMinions" *ngIf="_opponentInfo.boardMinions?.length"></board>
+				<bgs-board
+					[entities]="_opponentInfo.boardMinions"
+					[currentTurn]="currentTurn"
+					[boardTurn]="_opponentInfo.boardTurn"
+					[tooltipPosition]="'top'"
+				></bgs-board>
 			</div>
 			<div class="triples-section">
 				<div class="title" *ngIf="tierTriples?.length">New triples</div>

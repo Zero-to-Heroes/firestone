@@ -81,29 +81,6 @@
 			width: 80%;
 			border-right: 1px solid var(--color-3);
 			justify-content: space-evenly;
-
-			.board-turn {
-				margin-bottom: 10px;
-				flex-grow: 0;
-				flex-shrink: 0;
-			}
-
-			board {
-				position: relative;
-				flex-grow: 1;
-				flex-shrink: 1;
-				width: 100%;
-				max-height: 42%;
-			}
-
-			::ng-deep board {
-				// .board li {
-				// 	width: 11%;
-				// }
-				board-card-stats .stat {
-					color: #fff;
-				}
-			}
 		}
 
 		.bottom-info {

@@ -12,7 +12,13 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-mini.component.scss`,
 	],
 	template: `
-		<div class="hero-mini" componentTooltip [componentType]="componentType" [componentInput]="_hero">
+		<div
+			class="hero-mini"
+			componentTooltip
+			[componentType]="componentType"
+			[componentInput]="_hero"
+			componentTooltipPosition="left"
+		>
 			<img [src]="icon" class="portrait" />
 		</div>
 	`,

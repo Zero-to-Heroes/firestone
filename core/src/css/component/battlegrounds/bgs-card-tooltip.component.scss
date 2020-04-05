@@ -1,0 +1,18 @@
+:host() {
+	pointer-events: none;
+}
+
+::ng-deep card.tooltip .card {
+	height: 40vh;
+
+	&::before {
+		padding-top: 0;
+	}
+}
+
+::ng-deep card.tooltip.hidden {
+	pointer-events: none !important;
+	.card {
+		opacity: 0 !important;
+	}
+}

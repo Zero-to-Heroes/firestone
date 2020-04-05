@@ -55,6 +55,8 @@ export class BattlegroundsStoreService {
 		'battlegrounds-queue',
 	);
 
+	private requeueTimeout;
+
 	constructor(
 		private gameEvents: GameEventsEmitterService,
 		private allCards: AllCardsService,
@@ -150,16 +152,20 @@ export class BattlegroundsStoreService {
 				this.state.currentGame?.battleInfo?.opponentBoard,
 				gameEvent,
 			);
-			setTimeout(() => {
+			if (this.requeueTimeout) {
+				clearTimeout(this.requeueTimeout);
+			}
+			this.requeueTimeout = setTimeout(() => {
 				this.maybeHandleNextOpponent(gameEvent);
-			}, 1000);
+			}, 2000);
 		} else {
-			console.log(
-				'will process next opponent',
-				this.state,
-				this.state.currentGame?.battleInfo?.opponentBoard,
-				gameEvent,
-			);
+			clearTimeout(this.requeueTimeout);
+			// console.log(
+			// 	'will process next opponent',
+			// 	this.state,
+			// 	this.state.currentGame?.battleInfo?.opponentBoard,
+			// 	gameEvent,
+			// );
 			this.battlegroundsUpdater.next(new BgsNextOpponentEvent(gameEvent.additionalData.nextOpponentCardId));
 		}
 	}

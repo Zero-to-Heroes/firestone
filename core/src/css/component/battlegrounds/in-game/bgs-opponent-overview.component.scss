@@ -50,35 +50,6 @@
 		// padding-right: 5%;
 		margin-right: 3%;
 		overflow: hidden;
-
-		.board-turn {
-			// margin-bottom: 10px;
-			flex-grow: 0;
-			flex-shrink: 0;
-			// margin-bottom: -12%;
-		}
-
-		board {
-			display: flex;
-			align-items: center;
-			position: relative;
-			flex-grow: 1;
-			flex-shrink: 1;
-			width: 100%;
-			// max-height: 75%;
-		}
-
-		::ng-deep board {
-			// .board li {
-			// 	width: 11%;
-			// }
-			.board {
-				height: auto;
-			}
-			board-card-stats .stat {
-				color: #fff;
-			}
-		}
 	}
 
 	.triples-section {

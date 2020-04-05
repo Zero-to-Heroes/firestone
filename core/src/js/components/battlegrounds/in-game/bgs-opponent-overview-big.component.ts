@@ -25,15 +25,12 @@ declare let amplitude: any;
 			</div>
 			<div class="opponent-info">
 				<div class="main-info">
-					<div class="board-turn">
-						Board as seen
-						{{
-							currentTurn - _opponentInfo.boardTurn === 0
-								? 'just now'
-								: currentTurn - _opponentInfo.boardTurn + ' turns ago'
-						}}
-					</div>
-					<board [entities]="_opponentInfo.boardMinions" *ngIf="_opponentInfo.boardMinions"></board>
+					<bgs-board
+						[entities]="_opponentInfo.boardMinions"
+						[currentTurn]="currentTurn"
+						[boardTurn]="_opponentInfo.boardTurn"
+						*ngIf="_opponentInfo.boardMinions"
+					></bgs-board>
 					<div class="bottom-info">
 						<div class="triples-section">
 							<div class="title">Triples since last encounter</div>

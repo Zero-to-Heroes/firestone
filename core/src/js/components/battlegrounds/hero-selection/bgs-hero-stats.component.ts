@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
 import { BgsHeroOverview } from '../../../models/battlegrounds/hero-selection/bgs-hero-overview';
 
 declare let amplitude: any;
@@ -78,8 +78,13 @@ export class BgsHeroStatsComponent {
 
 	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;
-		console.log('setting hero', value);
+		// console.log('setting hero', value);
+		if (!(this.cdr as ViewRef).destroyed) {
+			this.cdr.detectChanges();
+		}
 	}
+
+	constructor(private readonly cdr: ChangeDetectorRef) {}
 
 	getIcon(tribe: string): string {
 		let referenceCardId: string;
@@ -104,14 +109,5 @@ export class BgsHeroStatsComponent {
 				break;
 		}
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
-	}
-
-	private getTribe(tribe: string): string {
-		if (tribe === 'mechanical') {
-			tribe = 'mech';
-		} else if (tribe === 'blank') {
-			tribe = 'no tribe';
-		}
-		return tribe.charAt(0).toUpperCase() + tribe.slice(1);
 	}
 }

@@ -4,7 +4,6 @@ import {
 	ChangeDetectorRef,
 	Component,
 	ElementRef,
-	HostListener,
 	Input,
 	Renderer2,
 } from '@angular/core';
@@ -75,16 +74,21 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 	) {}
 
 	async ngAfterViewInit() {
+		console.log('after view init');
 		setTimeout(() => {
 			this.onResize();
 		}, 100);
+		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
+		// issue when destroying / recreating the view?)
+		window.addEventListener('resize', () => this.onResize());
 	}
 
 	previousFirstBoardWidth: number;
 
-	@HostListener('window:resize')
+	// @HostListener('window:resize')
 	onResize() {
-		const boardContainers = this.el.nativeElement.querySelectorAll('board');
+		console.log('on window resize');
+		const boardContainers = this.el.nativeElement.querySelectorAll('.board');
 		let i = 0;
 		for (const boardContainer of boardContainers) {
 			const rect = boardContainer.getBoundingClientRect();
@@ -92,7 +96,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 				return;
 			}
 			if (i === 0) {
-				console.log('rect', rect.width, rect);
+				// console.log('rect', rect.width, rect);
 				this.previousFirstBoardWidth = rect.width;
 			}
 			// console.log('boardContainer', boardContainer, rect);
@@ -101,21 +105,20 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 			// 	console.log('cardElements', cardElements);
 			let cardWidth = rect.width / 8;
 			let cardHeight = 1.48 * cardWidth;
-			if (i === 0) {
-				console.log('first card width', cardWidth, cardHeight, rect.height);
-			}
+			// if (i === 0) {
+			// 	console.log('first card width', cardWidth, cardHeight, rect.height);
+			// }
 			if (cardHeight > rect.height) {
 				cardHeight = rect.height;
 				cardWidth = cardHeight / 1.48;
 			}
-			if (i === 0) {
-				console.log('card width', cardWidth, cardHeight);
-			}
+			// if (i === 0) {
+			// 	console.log('card width', cardWidth, cardHeight);
+			// }
 			for (const cardElement of cardElements) {
 				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
 				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
 			}
-
 			i++;
 		}
 		setTimeout(() => this.onResize(), 200);
@@ -130,7 +133,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		if (!nextOpponent) {
 			return;
 		}
-		console.log('next opponent', nextOpponent?.getLastBoardStateTurn());
+		// console.log('next opponent', nextOpponent?.getLastBoardStateTurn());
 		const opponents = this._game.players.filter(player => !player.isMainPlayer);
 		this.opponentInfos = opponents
 			.map(
