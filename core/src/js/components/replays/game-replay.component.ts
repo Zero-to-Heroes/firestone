@@ -42,32 +42,44 @@ export class GameReplayComponent implements OnInit {
 
 	async ngOnInit() {
 		// this.logger.debug('initializing coliseum');
-		const coliseum = (window as any).coliseum;
-		await coliseum.init();
-		coliseum.zone.run(() => coliseum.component.reset());
-		this.logger.debug('coliseum init done');
-		this.initDone = true;
+		try {
+			const coliseum = (window as any).coliseum;
+			await coliseum.init();
+			coliseum.zone.run(() => coliseum.component.reset());
+			this.logger.debug('coliseum init done');
+			this.initDone = true;
+		} catch (e) {
+			this.logger.error('[game-replay] error wile initializing coliseum', e.message, e);
+		}
 	}
 
 	async reload(replay: string, reviewId: string) {
-		amplitude.getInstance().logEvent('load-replay');
-		this.logger.debug('requested replay load');
-		await this.waitForViewerInit();
-		this.logger.debug('loading replay');
-		const coliseum = (window as any).coliseum;
-		coliseum.zone.run(() => {
-			coliseum.component.loadReplay(replay, {
-				reviewId: reviewId,
+		try {
+			amplitude.getInstance().logEvent('load-replay');
+			this.logger.debug('requested replay load');
+			await this.waitForViewerInit();
+			this.logger.debug('loading replay');
+			const coliseum = (window as any).coliseum;
+			coliseum.zone.run(() => {
+				coliseum.component.loadReplay(replay, {
+					reviewId: reviewId,
+				});
 			});
-		});
+		} catch (e) {
+			this.logger.error('[game-replay] error wile reloading replay', reviewId, e.message, e);
+		}
 	}
 
 	async resetGame() {
-		// Resetting the game
-		await this.waitForViewerInit();
-		this.logger.debug('[game-replay] resetting player');
-		const coliseum = (window as any).coliseum;
-		coliseum.zone.run(() => coliseum.component.reset());
+		try {
+			// Resetting the game
+			await this.waitForViewerInit();
+			this.logger.debug('[game-replay] resetting player');
+			const coliseum = (window as any).coliseum;
+			coliseum.zone.run(() => coliseum.component.reset());
+		} catch (e) {
+			this.logger.error('[game-replay] error wile resetting game', e.message, e);
+		}
 	}
 
 	private async getReplayXml(reviewId: string): Promise<string> {
