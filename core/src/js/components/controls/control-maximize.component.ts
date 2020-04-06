@@ -3,6 +3,7 @@ import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
 	Component,
+	ElementRef,
 	EventEmitter,
 	Input,
 	OnDestroy,
@@ -40,6 +41,7 @@ declare let amplitude;
 })
 export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	@Input() windowId: string;
+	@Input() doubleClickListenerParentClass: string;
 	@Input() eventProvider: () => MainWindowStoreEvent;
 
 	maximized = false;
@@ -47,7 +49,7 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 	private stateUpdater: EventEmitter<MainWindowStoreEvent>;
 	private stateChangedListener: (message: any) => void;
 
-	constructor(private ow: OverwolfService, private cdr: ChangeDetectorRef) {}
+	constructor(private ow: OverwolfService, private el: ElementRef, private cdr: ChangeDetectorRef) {}
 
 	async ngAfterViewInit() {
 		this.stateUpdater = this.ow.getMainWindow().mainWindowStoreUpdater;
@@ -68,6 +70,18 @@ export class ControlMaximizeComponent implements AfterViewInit, OnDestroy {
 				}
 			}
 		});
+
+		if (this.doubleClickListenerParentClass) {
+			let parent = this.el.nativeElement;
+			while (parent && !(parent.classList as DOMTokenList).contains(this.doubleClickListenerParentClass)) {
+				parent = parent.parentNode;
+			}
+			if (parent && (parent.classList as DOMTokenList).contains(this.doubleClickListenerParentClass)) {
+				parent.addEventListener('dblclick', () => {
+					this.toggleMaximizeWindow();
+				});
+			}
+		}
 	}
 
 	async toggleMaximizeWindow() {

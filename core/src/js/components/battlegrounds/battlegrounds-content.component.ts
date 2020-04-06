@@ -41,7 +41,10 @@ declare let amplitude: any;
 					<control-settings [windowId]="windowId"></control-settings>
 					<control-discord></control-discord>
 					<control-minimize [windowId]="windowId"></control-minimize>
-					<control-maximize [windowId]="windowId"></control-maximize>
+					<control-maximize
+						[windowId]="windowId"
+						[doubleClickListenerParentClass]="'menu-bar'"
+					></control-maximize>
 					<control-close [windowId]="windowId"></control-close>
 				</div>
 			</section>
