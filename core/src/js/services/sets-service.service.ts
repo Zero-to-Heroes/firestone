@@ -8,9 +8,7 @@ export class SetsService {
 	private readonly STANDARD_SETS = [
 		['core', 'Basic'],
 		['expert1', 'Classic'],
-		['gilneas', 'The Witchwood'],
-		['boomsday', 'The Boomsday Project'],
-		['troll', "Rastakhan's Rumble"],
+		['demon_hunter_initiate', 'Demon Hunter Initiate'],
 		['dalaran', 'Rise of hadows'],
 		['uldum', 'Saviors of Uldum'],
 		['dragons', 'Descent of Dragons'],
@@ -31,6 +29,9 @@ export class SetsService {
 		['ungoro', "Journey to Un'Goro"],
 		['icecrown', 'Knights of the Frozen Throne'],
 		['lootapalooza', 'Kobolds and Catacombs'],
+		['gilneas', 'The Witchwood'],
+		['boomsday', 'The Boomsday Project'],
+		['troll', "Rastakhan's Rumble"],
 	];
 
 	// I can't find anything in the card data that sets these apart

@@ -198,7 +198,7 @@ export class SetComponent implements AfterViewInit {
 		this._cardSet = set;
 		this.released = set.allCards && set.allCards.length > 0;
 		// console.log('setting set', set, set.name)
-		if (['Basic', 'Classic', 'Hall of Fame'].indexOf(set.name) > -1) {
+		if (['Basic', 'Classic', 'Hall of Fame', 'Demon Hunter Initiate'].indexOf(set.name) > -1) {
 			this._displayName = true;
 		}
 		this.epicTimer = set.pityTimer.packsUntilGuaranteedEpic;
