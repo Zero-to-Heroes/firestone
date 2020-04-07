@@ -17,6 +17,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Mage.ExplosiveRunes,
 		CardIds.Collectible.Paladin.Repentance,
 		CardIds.Collectible.Paladin.SacredTrial,
+		CardIds.Collectible.Rogue.Ambush,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -46,6 +47,7 @@ export class TriggerOnMinionPlaySecretsParser implements EventParser {
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.MirrorEntity);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Ambush);
 		}
 
 		const enemyBoard = (isMinionPlayedByPlayer ? currentState.playerDeck : currentState.opponentDeck).board;

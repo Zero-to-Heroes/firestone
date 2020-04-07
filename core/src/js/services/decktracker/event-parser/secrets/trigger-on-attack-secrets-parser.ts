@@ -13,6 +13,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Collectible.Hunter.BearTrap,
 		CardIds.Collectible.Hunter.Misdirection,
 		CardIds.Collectible.Hunter.SnakeTrap,
+		CardIds.Collectible.Hunter.PackTactics,
 		CardIds.Collectible.Hunter.ExplosiveTrap,
 		CardIds.Collectible.Hunter.FreezingTrap,
 		CardIds.Collectible.Hunter.VenomstrikeTrap,
@@ -24,6 +25,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		CardIds.Collectible.Paladin.AutodefenseMatrix,
 		CardIds.Collectible.Paladin.NobleSacrifice,
 		CardIds.Collectible.Rogue.SuddenBetrayal,
+		CardIds.Collectible.Rogue.Bamboozle,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -118,6 +120,7 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.BearTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.NobleSacrifice);
 		}
@@ -130,9 +133,11 @@ export class TriggerOnAttackSecretsParser implements EventParser {
 		}
 		if (!isDefenderMinion) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.SnakeTrap);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.PackTactics);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.VenomstrikeTrap);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.SplittingImage);
 			secretsWeCantRuleOut.push(CardIds.Collectible.Paladin.AutodefenseMatrix);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.Bamboozle);
 			if (enemyBoard.length === 1) {
 				// console.log('ruling out sudden betrayal', enemyBoard);
 				secretsWeCantRuleOut.push(CardIds.Collectible.Rogue.SuddenBetrayal);

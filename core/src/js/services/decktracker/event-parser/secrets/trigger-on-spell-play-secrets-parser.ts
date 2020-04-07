@@ -12,9 +12,11 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		CardIds.Collectible.Hunter.CatTrick,
 		CardIds.Collectible.Hunter.PressurePlate,
 		CardIds.Collectible.Mage.Counterspell,
+		CardIds.Collectible.Mage.NetherwindPortal,
 		CardIds.Collectible.Mage.Spellbender,
 		CardIds.Collectible.Mage.ManaBind,
 		CardIds.Collectible.Paladin.NeverSurrender,
+		CardIds.Collectible.Rogue.DirtyTricks,
 	];
 
 	constructor(private readonly helper: DeckManipulationHelper, private readonly allCards: AllCardsService) {}
@@ -63,6 +65,7 @@ export class TriggerOnSpellPlaySecretsParser implements EventParser {
 		const isBoardFull = deckWithSecretToCheck.board.length === 7;
 		if (isBoardFull) {
 			secretsWeCantRuleOut.push(CardIds.Collectible.Hunter.CatTrick);
+			secretsWeCantRuleOut.push(CardIds.Collectible.Mage.NetherwindPortal);
 		}
 
 		const isBoardEmpty = deckWithSecretToCheck.board.length === 0;
