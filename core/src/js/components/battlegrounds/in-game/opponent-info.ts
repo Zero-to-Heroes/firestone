@@ -14,6 +14,8 @@ export interface OpponentInfo {
 	triples: readonly BgsTriple[];
 	displayBody: boolean;
 	nextBattle: BattleResult;
+	health: number;
+	maxHealth: number;
 }
 
 export interface BattleResult {

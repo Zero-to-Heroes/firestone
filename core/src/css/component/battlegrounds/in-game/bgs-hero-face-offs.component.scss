@@ -25,7 +25,10 @@
 		.lost,
 		.tied {
 			width: 25%;
-			text-align: center;
+			// text-align: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
 		.entry {

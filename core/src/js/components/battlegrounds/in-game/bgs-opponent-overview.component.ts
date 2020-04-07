@@ -14,13 +14,15 @@ declare let amplitude: any;
 	template: `
 		<div class="opponent-overview">
 			<div class="portrait">
-				<img
-					[src]="_opponentInfo.icon"
+				<bgs-hero-portrait
 					class="icon"
+					[icon]="_opponentInfo.icon"
+					[health]="_opponentInfo.health"
+					[maxHealth]="_opponentInfo.maxHealth"
 					[cardTooltip]="_opponentInfo.heroPowerCardId"
 					[cardTooltipText]="_opponentInfo.name"
 					[cardTooltipClass]="'bgs-hero-power'"
-				/>
+				></bgs-hero-portrait>
 				<!-- <div class="name">{{ _opponentInfo.name }}</div> -->
 				<tavern-level-icon [level]="_opponentInfo.tavernTier" class="tavern"></tavern-level-icon>
 			</div>

@@ -1,4 +1,4 @@
-import { GameTag } from '@firestone-hs/reference-data';
+import { CardIds, GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
 import { BoardEntity } from '@firestone-hs/simulate-bgs-battle/dist/board-entity';
 import { BgsBoard } from './in-game/bgs-board';
@@ -15,9 +15,13 @@ export class BgsPlayer {
 	readonly tripleHistory: readonly BgsTriple[] = [];
 	readonly compositionHistory: readonly BgsComposition[] = [];
 	readonly boardHistory: readonly BgsBoard[] = [];
+	readonly initialHealth: number;
+	readonly damageTaken: number = 0;
+	readonly leaderboardPlace: number;
 
 	public static create(base: BgsPlayer): BgsPlayer {
-		return Object.assign(new BgsPlayer(), base);
+		const startingHealth = base.cardId === CardIds.NonCollectible.Neutral.PatchwerkTavernBrawl2 ? 50 : 40;
+		return Object.assign(new BgsPlayer(), { initialHealth: startingHealth }, base);
 	}
 
 	public update(base: BgsPlayer) {

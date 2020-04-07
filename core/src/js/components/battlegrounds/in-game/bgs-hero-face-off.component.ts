@@ -12,13 +12,15 @@ declare let amplitude: any;
 	template: `
 		<div class="face-off entry">
 			<div class="hero">
-				<img
-					[src]="icon"
+				<bgs-hero-portrait
 					class="portrait"
+					[icon]="icon"
+					[health]="health"
+					[maxHealth]="maxHealth"
 					[cardTooltip]="heroPowerIcon"
 					[cardTooltipText]="name"
 					[cardTooltipClass]="'bgs-hero-power'"
-				/>
+				></bgs-hero-portrait>
 			</div>
 			<div class="won">{{ wins }}</div>
 			<div class="lost">{{ losses }}</div>
@@ -31,6 +33,8 @@ export class BgsHeroFaceOffComponent {
 	icon: string;
 	heroPowerIcon: string;
 	name: string;
+	health: number;
+	maxHealth: number;
 	wins: number;
 	losses: number;
 	ties: number;
@@ -42,5 +46,7 @@ export class BgsHeroFaceOffComponent {
 		this.wins = value.wins;
 		this.losses = value.losses;
 		this.ties = value.ties;
+		this.health = value.health;
+		this.maxHealth = value.maxHealth;
 	}
 }

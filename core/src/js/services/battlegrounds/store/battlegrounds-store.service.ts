@@ -12,11 +12,13 @@ import { BgsBattleSimulationService } from '../bgs-battle-simulation.service';
 import { BattlegroundsResetBattleStateParser } from './event-parsers/battlegrounds-reset-battle-state-parser';
 import { BgsBattleResultParser } from './event-parsers/bgs-battle-result-parser';
 import { BgsBattleSimulationParser } from './event-parsers/bgs-battle-simulation-parser';
+import { BgsDamageDealtParser } from './event-parsers/bgs-damage-dealt-parser';
 import { BgsGameEndParser } from './event-parsers/bgs-game-end-parser';
 import { BgsHeroSelectedParser } from './event-parsers/bgs-hero-selected-parser';
 import { BgsHeroSelectionDoneParser } from './event-parsers/bgs-hero-selection-done-parser';
 import { BgsHeroSelectionParser } from './event-parsers/bgs-hero-selection-parser';
 import { BgsInitParser } from './event-parsers/bgs-init-parser';
+import { BgsLeaderboardPlaceParser } from './event-parsers/bgs-leaderboard-place-parser';
 import { BgsMatchStartParser } from './event-parsers/bgs-match-start-parser';
 import { BgsNextOpponentParser } from './event-parsers/bgs-next-opponent-parser';
 import { BgsOpponentRevealedParser } from './event-parsers/bgs-opponent-revealed-parser';
@@ -29,9 +31,11 @@ import { BgsTripleCreatedParser } from './event-parsers/bgs-triple-created-parse
 import { BgsTurnStartParser } from './event-parsers/bgs-turn-start-parser';
 import { EventParser } from './event-parsers/_event-parser';
 import { BgsBattleResultEvent } from './events/bgs-battle-result-event';
+import { BgsDamageDealtEvent } from './events/bgs-damage-dealth-event';
 import { BgsGameEndEvent } from './events/bgs-game-end-event';
 import { BgsHeroSelectedEvent } from './events/bgs-hero-selected-event';
 import { BgsHeroSelectionEvent } from './events/bgs-hero-selection-event';
+import { BgsLeaderboardPlaceEvent } from './events/bgs-leaderboard-place-event';
 import { BgsMatchStartEvent } from './events/bgs-match-start-event';
 import { BgsNextOpponentEvent } from './events/bgs-next-opponent-event';
 import { BgsOpponentRevealedEvent } from './events/bgs-opponent-revealed-event';
@@ -97,6 +101,14 @@ export class BattlegroundsStoreService {
 				this.battlegroundsUpdater.next(
 					new BgsTavernUpgradeEvent(gameEvent.additionalData.cardId, gameEvent.additionalData.tavernLevel),
 				);
+			} else if (
+				gameEvent.type === GameEvent.DAMAGE &&
+				gameEvent.additionalData.targets &&
+				Object.keys(gameEvent.additionalData.targets).length === 1
+			) {
+				const playerCardId = Object.keys(gameEvent.additionalData.targets)[0];
+				const damage = gameEvent.additionalData.targets[playerCardId].Damage;
+				this.battlegroundsUpdater.next(new BgsDamageDealtEvent(playerCardId, damage));
 			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_PLAYER_BOARD) {
 				this.battlegroundsUpdater.next(
 					new BgsPlayerBoardEvent(
@@ -129,6 +141,13 @@ export class BattlegroundsStoreService {
 				// 	this.battlegroundsUpdater.next(new BgsBoardCompositionEvent());
 			} else if (gameEvent.type === GameEvent.GAME_END) {
 				this.battlegroundsUpdater.next(new BgsGameEndEvent(gameEvent.additionalData.replayXml));
+			} else if (gameEvent.type === GameEvent.BATTLEGROUNDS_LEADERBOARD_PLACE) {
+				this.battlegroundsUpdater.next(
+					new BgsLeaderboardPlaceEvent(
+						gameEvent.additionalData.cardId,
+						gameEvent.additionalData.leaderboardPlace,
+					),
+				);
 			}
 		});
 	}
@@ -221,6 +240,8 @@ export class BattlegroundsStoreService {
 			new BgsResetBattleStateParser(),
 			new BgsBattleSimulationParser(),
 			new BgsPostMatchStatsFilterChangeParser(),
+			new BgsDamageDealtParser(),
+			new BgsLeaderboardPlaceParser(),
 		];
 	}
 }

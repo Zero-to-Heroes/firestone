@@ -40,16 +40,9 @@
 			width: 100%;
 		}
 
-		.name {
-			color: var(--default-title-color);
-			overflow: hidden;
-			font-size: 14px;
-			text-overflow: ellipsis;
-			width: 100%;
-			text-align: center;
-			top: -5px;
-			position: relative;
-			right: 6%;
+		::ng-deep bgs-hero-portrait .health .value {
+			font-size: 2vw;
+			top: 74%;
 		}
 
 		.tavern {

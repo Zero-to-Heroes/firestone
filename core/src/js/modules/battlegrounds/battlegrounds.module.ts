@@ -14,6 +14,7 @@ import { BattlegroundsContentComponent } from '../../components/battlegrounds/ba
 import { BattlegroundsComponent } from '../../components/battlegrounds/battlegrounds.component';
 import { BgsBoardComponent } from '../../components/battlegrounds/bgs-board.component';
 import { BgsCardTooltipComponent } from '../../components/battlegrounds/bgs-card-tooltip.component';
+import { BgsHeroPortraitComponent } from '../../components/battlegrounds/bgs-hero-portrait.component';
 import { BgsHeroMiniComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-mini.component';
 import { BgsHeroOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-overview.component';
 import { BgsHeroSelectionOverviewComponent } from '../../components/battlegrounds/hero-selection/bgs-hero-selection-overview.component';
@@ -95,6 +96,7 @@ console.log('version is ' + process.env.APP_VERSION);
 		BgsHeroFaceOffsComponent,
 		BgsBoardComponent,
 		BgsCardTooltipComponent,
+		BgsHeroPortraitComponent,
 	],
 	entryComponents: [BgsHeroSelectionTooltipComponent, BgsCardTooltipComponent],
 	bootstrap: [BattlegroundsComponent],

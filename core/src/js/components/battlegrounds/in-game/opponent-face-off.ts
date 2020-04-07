@@ -5,4 +5,6 @@ export interface OpponentFaceOff {
 	readonly wins: number;
 	readonly losses: number;
 	readonly ties: number;
+	readonly health: number;
+	readonly maxHealth: number;
 }

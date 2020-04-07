@@ -19,6 +19,13 @@ export class BgsGame {
 		return Object.assign(new BgsGame(), this, base);
 	}
 
+	public updatePlayer(newPlayer: BgsPlayer): BgsGame {
+		const newPlayers: readonly BgsPlayer[] = this.players.map(player =>
+			player.cardId === newPlayer.cardId ? newPlayer : player,
+		);
+		return this.update({ players: newPlayers } as BgsGame);
+	}
+
 	public getMainPlayer(): BgsPlayer {
 		return this.players.find(player => player.isMainPlayer);
 	}

@@ -134,7 +134,23 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 			return;
 		}
 		// console.log('next opponent', nextOpponent?.getLastBoardStateTurn());
-		const opponents = this._game.players.filter(player => !player.isMainPlayer);
+		const opponents = this._game.players
+			.filter(player => !player.isMainPlayer)
+			.sort((a, b) => {
+				if (a.leaderboardPlace < b.leaderboardPlace) {
+					return -1;
+				}
+				if (b.leaderboardPlace < a.leaderboardPlace) {
+					return 1;
+				}
+				if (a.damageTaken < b.damageTaken) {
+					return -1;
+				}
+				if (b.damageTaken < a.damageTaken) {
+					return 1;
+				}
+				return 0;
+			});
 		console.log('opponents', opponents);
 		this.opponentInfos = opponents
 			.map(
@@ -144,6 +160,8 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						icon: `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${opponent.cardId}.png`,
 						heroPowerCardId: opponent.heroPowerCardId,
 						name: opponent.name,
+						health: opponent.initialHealth - opponent.damageTaken,
+						maxHealth: opponent.initialHealth,
 						tavernTier: '' + opponent.getCurrentTavernTier(),
 						boardMinions: opponent.getLastKnownBoardState(),
 						boardTurn: opponent.getLastBoardStateTurn(),
@@ -167,6 +185,8 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 					name: opp.name,
 					cardId: opp.cardId,
 					heroPowerCardId: opp.heroPowerCardId,
+					health: opp.initialHealth - opp.damageTaken,
+					maxHealth: opp.initialHealth,
 					wins: this._game.faceOffs
 						.filter(faceOff => faceOff.playerCardId === this._game.getMainPlayer().cardId)
 						.filter(faceOff => faceOff.opponentCardId === opp.cardId)
