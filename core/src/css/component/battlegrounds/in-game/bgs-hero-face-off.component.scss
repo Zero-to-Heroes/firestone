@@ -7,6 +7,10 @@
 	flex-shrink: 0;
 	display: flex;
 
+	&.highlighted {
+		background: rgba(255, 255, 255, 0.08);
+	}
+
 	.portrait {
 		width: 60%;
 		position: relative;

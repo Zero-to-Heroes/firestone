@@ -167,7 +167,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						boardTurn: opponent.getLastBoardStateTurn(),
 						tavernUpgrades: [...opponent.tavernUpgradeHistory],
 						triples: [...opponent.tripleHistory],
-						displayBody: opponent.cardId === this._panel.opponentOverview.cardId,
+						isNextOpponent: opponent.cardId === this._panel.opponentOverview.cardId,
 						nextBattle: opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleResult,
 					} as OpponentInfo),
 			)
@@ -199,6 +199,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						.filter(faceOff => faceOff.playerCardId === this._game.getMainPlayer().cardId)
 						.filter(faceOff => faceOff.opponentCardId === opp.cardId)
 						.filter(faceOff => faceOff.result === 'tied').length,
+					isNextOpponent: opp.cardId === this._panel.opponentOverview.cardId,
 				} as OpponentFaceOff),
 		);
 		setTimeout(() => {

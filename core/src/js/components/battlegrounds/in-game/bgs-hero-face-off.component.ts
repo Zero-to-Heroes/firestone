@@ -10,7 +10,7 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/in-game/bgs-hero-face-off.component.scss`,
 	],
 	template: `
-		<div class="face-off entry">
+		<div class="face-off entry" [ngClass]="{ 'highlighted': isNextOpponent }">
 			<div class="hero">
 				<bgs-hero-portrait
 					class="portrait"
@@ -38,6 +38,7 @@ export class BgsHeroFaceOffComponent {
 	wins: number;
 	losses: number;
 	ties: number;
+	isNextOpponent: boolean;
 
 	@Input() set faceOff(value: OpponentFaceOff) {
 		this.icon = `https://static.zerotoheroes.com/hearthstone/fullcard/en/256/battlegrounds/${value.cardId}.png`;
@@ -48,5 +49,6 @@ export class BgsHeroFaceOffComponent {
 		this.ties = value.ties;
 		this.health = value.health;
 		this.maxHealth = value.maxHealth;
+		this.isNextOpponent = value.isNextOpponent;
 	}
 }

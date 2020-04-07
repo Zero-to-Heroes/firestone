@@ -12,7 +12,7 @@ export interface OpponentInfo {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
-	displayBody: boolean;
+	isNextOpponent: boolean;
 	nextBattle: BattleResult;
 	health: number;
 	maxHealth: number;

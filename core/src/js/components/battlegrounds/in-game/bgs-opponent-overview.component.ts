@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { groupByFunction } from '../../../services/utils';
 import { OpponentInfo } from './opponent-info';
@@ -77,11 +77,4 @@ export class BgsOpponentOverviewComponent {
 	}
 
 	constructor(private readonly cdr: ChangeDetectorRef) {}
-
-	toggleDisplayBody(opponentInfo: OpponentInfo) {
-		opponentInfo.displayBody = !opponentInfo.displayBody;
-		if (!(this.cdr as ViewRef).destroyed) {
-			this.cdr.detectChanges();
-		}
-	}
 }

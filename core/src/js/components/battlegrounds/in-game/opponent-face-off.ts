@@ -7,4 +7,5 @@ export interface OpponentFaceOff {
 	readonly ties: number;
 	readonly health: number;
 	readonly maxHealth: number;
+	readonly isNextOpponent: boolean;
 }
