@@ -121,7 +121,7 @@ export class DeckZoneComponent {
 			.sort((a, b) => this.compare(a, b))
 			.sort((a, b) => this.sortByIcon(a, b));
 		if (this._zone.sortingFunction) {
-			console.log('sorting', this._zone.sortingFunction);
+			// console.log('sorting', this._zone.sortingFunction);
 			this.cards = [...this.cards].sort(this._zone.sortingFunction);
 		}
 		// console.log('setting cards in zone', zone, cardsToDisplay, this.cardsInZone, this.cards, grouped);
