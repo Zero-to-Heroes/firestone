@@ -34,8 +34,10 @@ export class BgsGame {
 		const battleInfo: any = this.battleInfo || {};
 		if (!battleInfo.playerBoard) {
 			battleInfo.playerBoard = bgsInfo;
+			battleInfo.status = 'empty';
 		} else if (!battleInfo.opponentBoard) {
 			battleInfo.opponentBoard = bgsInfo;
+			battleInfo.status = 'waiting-for-result';
 			console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
 		} else {
 			console.error('trying to set bgsinfo in full data', this, bgsInfo);

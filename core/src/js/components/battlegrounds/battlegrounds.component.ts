@@ -74,7 +74,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 			try {
 				this.state = newState;
 				console.log('received state', this.state);
-				if (!(this.cdr as ViewRef).destroyed) {
+				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
 			} catch (e) {

@@ -193,11 +193,14 @@ export class BattlegroundsStoreService {
 		for (const parser of this.eventParsers) {
 			try {
 				if (parser.applies(gameEvent, this.state)) {
-					this.state = await parser.parse(this.state, gameEvent);
-					console.log('updated state', gameEvent.type, this.state, gameEvent);
-					this.battlegroundsStoreEventBus.next(this.state);
-					// this.battlegroundsStoreEventBus.
-					this.updateOverlay();
+					const newState = await parser.parse(this.state, gameEvent);
+					if (newState !== this.state) {
+						this.state = newState;
+						console.log('updated state', gameEvent.type, this.state, gameEvent);
+						this.battlegroundsStoreEventBus.next(this.state);
+						// this.battlegroundsStoreEventBus.
+						this.updateOverlay();
+					}
 				}
 			} catch (e) {
 				console.error('[bgs-store] Exception while applying parser', gameEvent.type, e);

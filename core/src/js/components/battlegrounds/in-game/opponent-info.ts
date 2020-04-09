@@ -14,6 +14,7 @@ export interface OpponentInfo {
 	triples: readonly BgsTriple[];
 	isNextOpponent: boolean;
 	nextBattle: BattleResult;
+	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 	health: number;
 	maxHealth: number;
 }

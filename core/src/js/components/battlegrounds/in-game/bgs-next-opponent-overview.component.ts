@@ -80,7 +80,10 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		}, 100);
 		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
 		// issue when destroying / recreating the view?)
-		window.addEventListener('resize', () => this.onResize());
+		window.addEventListener('resize', () => {
+			console.log('detected window resize');
+			this.onResize();
+		});
 	}
 
 	previousFirstBoardWidth: number;
@@ -90,11 +93,13 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 		console.log('on window resize');
 		const boardContainers = this.el.nativeElement.querySelectorAll('.board');
 		let i = 0;
+		console.log('board containers', boardContainers);
 		for (const boardContainer of boardContainers) {
 			const rect = boardContainer.getBoundingClientRect();
 			if (this.previousFirstBoardWidth === rect.width) {
 				return;
 			}
+			console.log('keeping the resize loop', i, this.previousFirstBoardWidth, rect.width, rect);
 			if (i === 0) {
 				// console.log('rect', rect.width, rect);
 				this.previousFirstBoardWidth = rect.width;
@@ -169,6 +174,8 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						triples: [...opponent.tripleHistory],
 						isNextOpponent: opponent.cardId === this._panel.opponentOverview.cardId,
 						nextBattle: opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleResult,
+						battleSimulationStatus:
+							opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleInfo?.status,
 					} as OpponentInfo),
 			)
 			.sort((a, b) =>
@@ -203,6 +210,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 				} as OpponentFaceOff),
 		);
 		setTimeout(() => {
+			console.log('will resize after setting opponent info');
 			this.onResize();
 		}, 300);
 	}

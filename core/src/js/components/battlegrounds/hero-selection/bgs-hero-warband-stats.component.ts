@@ -131,7 +131,7 @@ export class BgsHeroWarbandStatsComponent implements AfterViewInit {
 				pointHoverBorderColor: 'transparent',
 			},
 		];
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

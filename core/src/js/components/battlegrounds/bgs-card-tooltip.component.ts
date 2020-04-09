@@ -25,14 +25,14 @@ export class BgsCardTooltipComponent {
 	@Input() set config(value: Entity) {
 		this._entity = value;
 		// console.log('setting card in tooltip', value);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
 
 	@Input() set visible(value: boolean) {
 		this._visible = value;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

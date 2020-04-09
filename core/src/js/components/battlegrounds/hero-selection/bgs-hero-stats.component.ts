@@ -79,7 +79,7 @@ export class BgsHeroStatsComponent {
 	@Input() set hero(value: BgsHeroOverview) {
 		this._hero = value;
 		// console.log('setting hero', value);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

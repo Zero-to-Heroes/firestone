@@ -77,7 +77,7 @@ export class BgsChartWarbandCompositionComponent {
 		console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.width / 2;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -87,7 +87,7 @@ export class BgsChartWarbandCompositionComponent {
 		this.chartLabels = await this.buildChartLabels(value);
 		this.chartColors = []; // await this.buildChartColors(value);
 		console.log('built line colors', this.chartColors);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

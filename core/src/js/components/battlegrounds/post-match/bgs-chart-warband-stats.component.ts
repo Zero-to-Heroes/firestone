@@ -79,7 +79,7 @@ export class BgsChartWarbandStatsComponent {
 		console.log('chartContainer', chartContainer, rect);
 		this.chartWidth = rect.width;
 		this.chartHeight = rect.width / 2;
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
@@ -89,7 +89,7 @@ export class BgsChartWarbandStatsComponent {
 		this.lineChartLabels = await this.buildChartLabels(value.stats);
 		this.lineChartColors = await this.buildChartColors(value.stats);
 		console.log('built line colors', this.lineChartColors);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}

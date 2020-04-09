@@ -88,7 +88,7 @@ export class BgsPostMatchStatsComponent implements AfterViewInit {
 		this.filterChangeFunction = (option: IOption) =>
 			this.battlegroundsUpdater.next(new BgsPostMatchStatsFilterChangeEvent(option.value as BgsStatsFilterId));
 		console.log('filterChangeFunction', this.filterChangeFunction);
-		if (!(this.cdr as ViewRef).destroyed) {
+		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
 	}
