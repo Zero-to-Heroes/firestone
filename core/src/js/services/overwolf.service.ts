@@ -675,7 +675,7 @@ export class OverwolfService {
 	public async fileExists(filePathOnDisk: string): Promise<boolean> {
 		return new Promise<boolean>(resolve => {
 			overwolf.io.fileExists(filePathOnDisk, (res, error) => {
-				console.log('[overwolf-service] fileExists?', res);
+				console.log('[overwolf-service] fileExists?', filePathOnDisk, res);
 				resolve(res.found);
 			});
 		});
