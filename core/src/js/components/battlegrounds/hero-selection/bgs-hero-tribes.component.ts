@@ -11,14 +11,14 @@ declare let amplitude: any;
 		`../../../../css/component/battlegrounds/hero-selection/bgs-hero-tribes.component.scss`,
 	],
 	template: `
-		<div class="tribes">
+		<div class="tribes" *ngIf="tribes?.length">
 			<div class="title" helpTooltip="Percentage of each tribe present in average in winning warbands">
 				Winning tribes
 			</div>
 			<div class="composition">
-				<div *ngFor="let tribe of tribes" class="tribe">
+				<div *ngFor="let tribe of tribes; trackBy: trackByTribeFn" class="tribe" [helpTooltip]="tribe.tribe">
 					<div class="icon-container">
-						<img class="icon" [src]="getIcon(tribe.tribe)" [helpTooltip]="tribe.tribe" />
+						<img class="icon" [src]="getIcon(tribe.tribe)" />
 					</div>
 					<div class="tribe-name">{{ tribe.tribe }}</div>
 					<div class="value">{{ tribe.percent }}%</div>
@@ -63,6 +63,10 @@ export class BgsHeroTribesComponent {
 				break;
 		}
 		return `https://static.zerotoheroes.com/hearthstone/cardart/256x/${referenceCardId}.jpg`;
+	}
+
+	trackByTribeFn(index, item: { tribe: string; percent: string }) {
+		return item.tribe;
 	}
 
 	private getTribe(tribe: string): string {

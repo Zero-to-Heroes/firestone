@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, ViewRef } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
+import { BgsTavernUpgrade } from '../../../models/battlegrounds/in-game/bgs-tavern-upgrade';
 import { BgsTriple } from '../../../models/battlegrounds/in-game/bgs-triple';
 import { groupByFunction } from '../../../services/utils';
 import { OpponentInfo } from './opponent-info';
@@ -42,9 +52,9 @@ declare let amplitude: any;
 					<div class="bottom-info">
 						<div class="triples-section">
 							<div class="title">Triples since last encounter</div>
-							<div class="triple-tiers">
+							<div class="triple-tiers" *ngIf="tierTriples?.length">
 								<div
-									*ngFor="let triple of tierTriples"
+									*ngFor="let triple of tierTriples; trackBy: trackByTripleFn"
 									class="triple"
 									[helpTooltip]="
 										'That player got ' +
@@ -89,8 +99,11 @@ declare let amplitude: any;
 				</div>
 				<div class="tavern-upgrades">
 					<div class="title">Tavern upgrades</div>
-					<div class="upgrades">
-						<div class="tavern-upgrade" *ngFor="let upgrade of _opponentInfo.tavernUpgrades">
+					<div class="upgrades" *ngIf="_opponentInfo.tavernUpgrades?.length">
+						<div
+							class="tavern-upgrade"
+							*ngFor="let upgrade of _opponentInfo.tavernUpgrades; trackBy: trackByUpgradeFn"
+						>
 							<tavern-level-icon [level]="upgrade.tavernTier" class="tavern"></tavern-level-icon>
 							<div class="label">Turn {{ upgrade.turn }}</div>
 						</div>
@@ -101,7 +114,7 @@ declare let amplitude: any;
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsOpponentOverviewBigComponent {
+export class BgsOpponentOverviewBigComponent implements AfterViewInit {
 	tierTriples: { minionTier: number; quantity: number }[];
 	_opponentInfo: OpponentInfo;
 
@@ -112,6 +125,7 @@ export class BgsOpponentOverviewBigComponent {
 	@Input() currentTurn: number;
 
 	@Input() set opponentInfo(value: OpponentInfo) {
+		console.log('setting next opponent info', value);
 		this._opponentInfo = value;
 		const triplesSinceLastBoard = value.triples.filter(triple => triple.turn >= value.boardTurn);
 		const groupedByTier = groupByFunction((triple: BgsTriple) => '' + triple.tierOfTripledMinion)(
@@ -122,7 +136,7 @@ export class BgsOpponentOverviewBigComponent {
 			quantity: groupedByTier[minionTier].length as number,
 		}));
 
-		if (!value.nextBattle || value.battleSimulationStatus === 'empty') {
+		if (value.battleSimulationStatus === 'empty') {
 			if (this.tempInterval) {
 				clearInterval(this.tempInterval);
 			}
@@ -135,20 +149,81 @@ export class BgsOpponentOverviewBigComponent {
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}
-			}, 100);
+			}, 30);
 		} else {
 			if (this.tempInterval) {
 				clearInterval(this.tempInterval);
 			}
 			this.temporaryBattleTooltip = null;
-			this.battleSimulationResult = this._opponentInfo.nextBattle.wonPercent?.toFixed(1);
+			this.battleSimulationResult = this._opponentInfo.nextBattle?.wonPercent?.toFixed(1);
 		}
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
+		setTimeout(() => {
+			console.log('will resize after setting opponent info');
+			this.onResize();
+		}, 300);
 	}
 
 	private tempInterval;
 
-	constructor(private readonly cdr: ChangeDetectorRef) {}
+	private previousBoardWidth: number;
+
+	constructor(private readonly cdr: ChangeDetectorRef, private el: ElementRef, private renderer: Renderer2) {}
+
+	ngAfterViewInit() {
+		setTimeout(() => {
+			this.onResize();
+		}, 100);
+		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
+		// issue when destroying / recreating the view?)
+		window.addEventListener('resize', () => {
+			console.log('detected window resize');
+			this.onResize();
+		});
+	}
+
+	onResize() {
+		console.log('on window resize');
+		const boardContainer = this.el.nativeElement.querySelector('.board');
+		if (!boardContainer) {
+			return;
+		}
+		const rect = boardContainer.getBoundingClientRect();
+		if (this.previousBoardWidth === rect.width) {
+			return;
+		}
+		console.log('keeping the resize loop', this.previousBoardWidth, rect.width, rect);
+		this.previousBoardWidth = rect.width;
+		// console.log('boardContainer', boardContainer, rect);
+		// const constrainedByWidth = rect.width <
+		const cardElements = boardContainer.querySelectorAll('li');
+		// 	console.log('cardElements', cardElements);
+		let cardWidth = rect.width / 8;
+		let cardHeight = 1.48 * cardWidth;
+		// if (i === 0) {
+		// 	console.log('first card width', cardWidth, cardHeight, rect.height);
+		// }
+		if (cardHeight > rect.height) {
+			cardHeight = rect.height;
+			cardWidth = cardHeight / 1.48;
+		}
+		// if (i === 0) {
+		// 	console.log('card width', cardWidth, cardHeight);
+		// }
+		for (const cardElement of cardElements) {
+			this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
+			this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
+		}
+		setTimeout(() => this.onResize(), 300);
+	}
+
+	trackByTripleFn(index, item: { minionTier: number; quantity: number }) {
+		return item.minionTier;
+	}
+
+	trackByUpgradeFn(index, item: BgsTavernUpgrade) {
+		return item.tavernTier;
+	}
 }

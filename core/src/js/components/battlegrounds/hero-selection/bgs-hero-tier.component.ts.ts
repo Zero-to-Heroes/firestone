@@ -15,8 +15,8 @@ declare let amplitude: any;
 			<div class="tier {{ _tier?.toLowerCase() }}">
 				{{ _tier }}
 			</div>
-			<div class="heroes">
-				<bgs-hero-mini *ngFor="let hero of heroes" [hero]="hero"></bgs-hero-mini>
+			<div class="heroes" *ngIf="heroes?.length">
+				<bgs-hero-mini *ngFor="let hero of heroes; trackBy: trackByHeroFn" [hero]="hero"></bgs-hero-mini>
 			</div>
 		</div>
 	`,
@@ -29,5 +29,9 @@ export class BgsHeroTierComponent {
 	@Input() set tier(value: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }) {
 		this._tier = value.tier;
 		this.heroes = value.heroes;
+	}
+
+	trackByHeroFn(index, item: BgsHeroOverview) {
+		return item.heroCardId;
 	}
 }

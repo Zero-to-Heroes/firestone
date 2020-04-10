@@ -13,13 +13,13 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="stats-container">
-			<div class="tavern-upgrades">
-				<div *ngFor="let upgrade of tavernUpgrades">
+			<div class="tavern-upgrades" *ngIf="tavernUpgrades?.length">
+				<div *ngFor="let upgrade of tavernUpgrades; trackBy: trackByUpgradeFn">
 					Turn {{ upgrade.turn }}: Upgrade tier {{ upgrade.tavernTier }}
 				</div>
 			</div>
-			<div class="triple-tiers">
-				<div *ngFor="let triple of triples">
+			<div class="triple-tiers" *ngIf="triples?.length">
+				<div *ngFor="let triple of triples; trackBy: trackByTripleFn">
 					Turn {{ triple.turn }}: One tier {{ triple.tierOfTripledMinion }} triple
 				</div>
 			</div>
@@ -48,5 +48,13 @@ export class BgsChartStatsComponent {
 		this.triples = value.tripleTimings;
 		this.coinsWasted = value.coinsWasted;
 		this.rerolls = value.rerolls;
+	}
+
+	trackByTripleFn(index, item: { minionTier: number; quantity: number }) {
+		return item.minionTier;
+	}
+
+	trackByUpgradeFn(index, item: BgsTavernUpgrade) {
+		return item.tavernTier;
 	}
 }

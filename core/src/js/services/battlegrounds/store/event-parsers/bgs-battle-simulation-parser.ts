@@ -16,6 +16,7 @@ export class BgsBattleSimulationParser implements EventParser {
 		return currentState.update({
 			currentGame: currentState.currentGame.update({
 				battleResult: event.result,
+				battleInfoStatus: 'done',
 			} as BgsGame),
 		} as BattlegroundsState);
 	}

@@ -38,7 +38,7 @@ declare let amplitude: any;
 					<div class="subtitle">Other opponents</div>
 					<div class="opponents">
 						<bgs-opponent-overview
-							*ngFor="let opponentInfo of opponentInfos.slice(1)"
+							*ngFor="let opponentInfo of opponentInfos.slice(1); trackBy: trackByOpponentInfoFn"
 							[opponentInfo]="opponentInfo"
 							[currentTurn]="currentTurn"
 						></bgs-opponent-overview>
@@ -75,58 +75,13 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 
 	async ngAfterViewInit() {
 		console.log('after view init');
-		setTimeout(() => {
-			this.onResize();
-		}, 100);
-		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
-		// issue when destroying / recreating the view?)
-		window.addEventListener('resize', () => {
-			console.log('detected window resize');
-			this.onResize();
-		});
 	}
 
 	previousFirstBoardWidth: number;
 
 	// @HostListener('window:resize')
-	onResize() {
-		console.log('on window resize');
-		const boardContainers = this.el.nativeElement.querySelectorAll('.board');
-		let i = 0;
-		console.log('board containers', boardContainers);
-		for (const boardContainer of boardContainers) {
-			const rect = boardContainer.getBoundingClientRect();
-			if (this.previousFirstBoardWidth === rect.width) {
-				return;
-			}
-			console.log('keeping the resize loop', i, this.previousFirstBoardWidth, rect.width, rect);
-			if (i === 0) {
-				// console.log('rect', rect.width, rect);
-				this.previousFirstBoardWidth = rect.width;
-			}
-			// console.log('boardContainer', boardContainer, rect);
-			// const constrainedByWidth = rect.width <
-			const cardElements = boardContainer.querySelectorAll('li');
-			// 	console.log('cardElements', cardElements);
-			let cardWidth = rect.width / 8;
-			let cardHeight = 1.48 * cardWidth;
-			// if (i === 0) {
-			// 	console.log('first card width', cardWidth, cardHeight, rect.height);
-			// }
-			if (cardHeight > rect.height) {
-				cardHeight = rect.height;
-				cardWidth = cardHeight / 1.48;
-			}
-			// if (i === 0) {
-			// 	console.log('card width', cardWidth, cardHeight);
-			// }
-			for (const cardElement of cardElements) {
-				this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
-				this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
-			}
-			i++;
-		}
-		setTimeout(() => this.onResize(), 200);
+	trackByOpponentInfoFn(index, item: OpponentInfo) {
+		return item.id;
 	}
 
 	private updateInfo() {
@@ -175,7 +130,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						isNextOpponent: opponent.cardId === this._panel.opponentOverview.cardId,
 						nextBattle: opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleResult,
 						battleSimulationStatus:
-							opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleInfo?.status,
+							opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleInfoStatus,
 					} as OpponentInfo),
 			)
 			.sort((a, b) =>
@@ -185,6 +140,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 					? 1
 					: 0,
 			);
+		console.log('oponentInfos', this.opponentInfos);
 
 		this.opponentFaceOffs = opponents.map(
 			opp =>
@@ -209,9 +165,5 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 					isNextOpponent: opp.cardId === this._panel.opponentOverview.cardId,
 				} as OpponentFaceOff),
 		);
-		setTimeout(() => {
-			console.log('will resize after setting opponent info');
-			this.onResize();
-		}, 300);
 	}
 }

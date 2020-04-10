@@ -15,12 +15,12 @@ declare let amplitude: any;
 	],
 	template: `
 		<div class="container">
-			<div class="left">
-				<bgs-hero-tier *ngFor="let tier of tiers" [tier]="tier"></bgs-hero-tier>
+			<div class="left" *ngIf="tiers?.length">
+				<bgs-hero-tier *ngFor="let tier of tiers; trackBy: trackByTierFn" [tier]="tier"></bgs-hero-tier>
 			</div>
-			<div class="hero-selection-overview">
+			<div class="hero-selection-overview" *ngIf="heroOverviews?.length">
 				<bgs-hero-overview
-					*ngFor="let hero of heroOverviews"
+					*ngFor="let hero of heroOverviews; trackBy: trackByHeroFn"
 					[hero]="hero"
 					[style.width.%]="getOverviewWidth()"
 				></bgs-hero-overview>
@@ -97,5 +97,13 @@ export class BgsHeroSelectionOverviewComponent {
 
 	isAvailableHero(hero: BgsHeroOverview): boolean {
 		return this.heroOverviews.map(h => h.heroCardId).indexOf(hero.heroCardId) !== -1;
+	}
+
+	trackByTierFn(index, item: { tier: BgsHeroTier; heroes: readonly BgsHeroOverview[] }) {
+		return item.tier;
+	}
+
+	trackByHeroFn(index, item: BgsHeroOverview) {
+		return item?.heroCardId;
 	}
 }

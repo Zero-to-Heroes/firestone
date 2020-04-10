@@ -9,6 +9,7 @@ export class BgsGame {
 	readonly currentTurn: number = 1;
 	readonly faceOffs: readonly BgsFaceOff[] = [];
 	readonly battleInfo: BgsBattleInfo;
+	readonly battleInfoStatus: 'empty' | 'waiting-for-result' | 'done';
 	readonly battleResult: BgsBattleSimulationResult;
 
 	public static create(base: BgsGame): BgsGame {
@@ -34,10 +35,8 @@ export class BgsGame {
 		const battleInfo: any = this.battleInfo || {};
 		if (!battleInfo.playerBoard) {
 			battleInfo.playerBoard = bgsInfo;
-			battleInfo.status = 'empty';
 		} else if (!battleInfo.opponentBoard) {
 			battleInfo.opponentBoard = bgsInfo;
-			battleInfo.status = 'waiting-for-result';
 			console.log('Set battle info', JSON.stringify(battleInfo, null, 4));
 		} else {
 			console.error('trying to set bgsinfo in full data', this, bgsInfo);
@@ -45,6 +44,7 @@ export class BgsGame {
 		}
 		return Object.assign(new BgsGame(), this, {
 			battleInfo: battleInfo,
+			battleInfoStatus: !battleInfo.opponentBoard ? 'empty' : 'waiting-for-result',
 		} as BgsGame);
 	}
 
