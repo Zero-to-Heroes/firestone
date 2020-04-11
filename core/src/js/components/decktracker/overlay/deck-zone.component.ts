@@ -18,6 +18,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					<div *ngIf="showWarning" class="warning">
 						<svg
 							helpTooltip="The actual cards in this deck are randomly chosen from all the cards in the list below"
+							[bindTooltipToGameWindow]="true"
 						>
 							<use xlink:href="/Files/assets/svg/sprite.svg#attention" />
 						</svg>

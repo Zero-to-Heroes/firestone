@@ -31,6 +31,8 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 		}
 	}
 
+	@Input() bindTooltipToGameWindow: boolean = false;
+
 	private tooltipPortal: ComponentPortal<any>;
 	private overlayRef: OverlayRef;
 	private positionStrategy: PositionStrategy;
@@ -133,27 +135,53 @@ export class HelpTooltipDirective implements OnInit, OnDestroy {
 			this.cdr.detectChanges();
 		}
 
-		const window = await this.ow.getCurrentWindow();
-		const gameInfo = await this.ow.getRunningGameInfo();
-		const tooltipLeft =
-			window.left +
-			(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
-			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x;
-		if (tooltipLeft < 0) {
-			this.renderer.setStyle(tooltipRef.location.nativeElement, 'marginLeft', `${-tooltipLeft}px`);
-		}
+		// These are used by the decktracker, since the window has some transparent space to the left
+		// and right that can go out of the game's window
+		// For all other cases, it should not be needed
+		if (this.bindTooltipToGameWindow) {
+			const window = await this.ow.getCurrentWindow();
+			const gameInfo = await this.ow.getRunningGameInfo();
+			const tooltipLeft =
+				window.left +
+				(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
+				(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x;
+			if (tooltipLeft < 0) {
+				console.log(
+					'tooltip left',
+					tooltipLeft,
+					window,
+					this.overlayRef.hostElement.getBoundingClientRect(),
+					this.overlayRef.hostElement,
+					tooltipRef,
+					tooltipRef.location.nativeElement.getBoundingClientRect(),
+					tooltipRef.location.nativeElement,
+				);
+				this.renderer.setStyle(tooltipRef.location.nativeElement, 'marginLeft', `${-tooltipLeft}px`);
+			}
 
-		const tooltipRight =
-			window.left +
-			(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
-			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x +
-			(tooltipRef.location.nativeElement.getBoundingClientRect() as any).width;
-		if (gameInfo && tooltipRight > gameInfo.logicalWidth) {
-			this.renderer.setStyle(
-				tooltipRef.location.nativeElement,
-				'marginLeft',
-				`${gameInfo.logicalWidth - tooltipRight}px`,
-			);
+			const tooltipRight =
+				window.left +
+				(this.overlayRef.hostElement.getBoundingClientRect() as any).x +
+				(tooltipRef.location.nativeElement.getBoundingClientRect() as any).x +
+				(tooltipRef.location.nativeElement.getBoundingClientRect() as any).width;
+			if (gameInfo && tooltipRight > gameInfo.logicalWidth) {
+				console.log(
+					'tooltip right',
+					gameInfo,
+					tooltipRight,
+					window,
+					this.overlayRef.hostElement.getBoundingClientRect(),
+					this.overlayRef.hostElement,
+					tooltipRef,
+					tooltipRef.location.nativeElement.getBoundingClientRect(),
+					tooltipRef.location.nativeElement,
+				);
+				this.renderer.setStyle(
+					tooltipRef.location.nativeElement,
+					'marginLeft',
+					`${gameInfo.logicalWidth - tooltipRight}px`,
+				);
+			}
 		}
 	}
 

@@ -30,7 +30,7 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					<span>{{ numberOfCopies }}</span>
 				</div>
 			</div>
-			<div class="icon-symbol" *ngIf="isBurned" [helpTooltip]="'Card burned'">
+			<div class="icon-symbol" *ngIf="isBurned" [helpTooltip]="'Card burned'" [bindTooltipToGameWindow]="true">
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -39,7 +39,12 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol graveyard" *ngIf="isGraveyard" [helpTooltip]="'In graveyard'">
+			<div
+				class="icon-symbol graveyard"
+				*ngIf="isGraveyard"
+				[helpTooltip]="'In graveyard'"
+				[bindTooltipToGameWindow]="true"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -48,7 +53,12 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol discard" *ngIf="isDiscarded" [helpTooltip]="'Card discarded'">
+			<div
+				class="icon-symbol discard"
+				*ngIf="isDiscarded"
+				[helpTooltip]="'Card discarded'"
+				[bindTooltipToGameWindow]="true"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -57,7 +67,12 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div class="icon-symbol trasnformed" *ngIf="isTransformed" [helpTooltip]="'Card transformed'">
+			<div
+				class="icon-symbol trasnformed"
+				*ngIf="isTransformed"
+				[helpTooltip]="'Card transformed'"
+				[bindTooltipToGameWindow]="true"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>
@@ -66,7 +81,12 @@ import { VisualDeckCard } from '../../../models/decktracker/visual-deck-card';
 					</i>
 				</div>
 			</div>
-			<div class="gift-symbol" *ngIf="creatorCardIds && creatorCardIds.length > 0" [helpTooltip]="giftTooltip">
+			<div
+				class="gift-symbol"
+				*ngIf="creatorCardIds && creatorCardIds.length > 0"
+				[helpTooltip]="giftTooltip"
+				[bindTooltipToGameWindow]="true"
+			>
 				<div class="inner-border">
 					<i>
 						<svg>

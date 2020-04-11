@@ -9,7 +9,7 @@ import { DeckState } from '../../../models/decktracker/deck-state';
 	],
 	template: `
 		<div class="deck-name">
-			<span class="name" [helpTooltip]="deckName">{{ deckName }}</span>
+			<span class="name" [helpTooltip]="deckName" [bindTooltipToGameWindow]="true">{{ deckName }}</span>
 		</div>
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
