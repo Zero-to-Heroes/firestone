@@ -148,7 +148,7 @@ export class CardTooltipDirective implements AfterViewInit, OnDestroy {
 		tooltipRef.instance.cardId = this.cardId;
 		tooltipRef.instance.text = this.cardTooltipText;
 		tooltipRef.instance.additionalClass = this.cardTooltipClass;
-		console.log('tooltip class', this.cardTooltipClass);
+		// console.log('tooltip class', this.cardTooltipClass);
 		this.positionStrategy.apply();
 		if (!(this.cdr as ViewRef).destroyed) {
 			this.cdr.detectChanges();

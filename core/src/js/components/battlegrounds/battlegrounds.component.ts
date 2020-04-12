@@ -73,7 +73,7 @@ export class BattlegroundsComponent implements AfterViewInit, OnDestroy {
 		this.storeSubscription = storeBus.subscribe((newState: BattlegroundsState) => {
 			try {
 				this.state = newState;
-				console.log('received state', this.state);
+				// console.log('received state', this.state);
 				if (!(this.cdr as ViewRef)?.destroyed) {
 					this.cdr.detectChanges();
 				}

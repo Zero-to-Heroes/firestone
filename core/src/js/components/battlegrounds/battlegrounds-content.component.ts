@@ -78,7 +78,7 @@ export class BattlegroundsContentComponent implements AfterViewInit {
 		this.currentStage = value?.stages?.find(stage => stage.id === value.currentStageId);
 		this.currentPanel = this.currentStage?.panels?.find(panel => panel.id === value.currentPanelId);
 
-		console.log('setting state', value, this.currentStage, this.currentPanel);
+		// console.log('setting state', value, this.currentStage, this.currentPanel);
 		if (!(this.cdr as ViewRef)?.destroyed) {
 			this.cdr.detectChanges();
 		}
