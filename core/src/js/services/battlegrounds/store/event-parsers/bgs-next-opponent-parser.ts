@@ -20,8 +20,8 @@ export class BgsNextOpponentParser implements EventParser {
 		);
 		return currentState.update({
 			stages: stages,
-			// currentStageId: 'in-game',
-			// currentPanelId: 'bgs-next-opponent-overview',
+			currentStageId: 'in-game',
+			currentPanelId: 'bgs-next-opponent-overview',
 		} as BattlegroundsState);
 	}
 
