@@ -1,8 +1,16 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+	AfterViewInit,
+	ChangeDetectionStrategy,
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	Input,
+	Renderer2,
+	ViewRef,
+} from '@angular/core';
 import { GameTag } from '@firestone-hs/reference-data';
 import { Entity } from '@firestone-hs/replay-parser';
-import { NGXLogger } from 'ngx-logger';
 import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 
 @Component({
@@ -16,7 +24,7 @@ import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 		<div class="board-turn empty" *ngIf="!_entities?.length">
 			You have not fought that player yet
 		</div>
-		<ul class="board" [transition-group]="'flip-list'" *ngIf="_entities?.length">
+		<ul class="board" *ngIf="_entities?.length">
 			<li
 				*ngFor="let entity of _entities; trackBy: trackByFn"
 				cachedComponentTooltip
@@ -38,23 +46,43 @@ import { BgsCardTooltipComponent } from './bgs-card-tooltip.component';
 	`,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BgsBoardComponent {
+export class BgsBoardComponent implements AfterViewInit {
 	_entities: readonly Entity[];
 	_enchantmentCandidates: readonly Entity[];
 	_options: readonly number[];
 	componentType: ComponentType<any> = BgsCardTooltipComponent;
 
-	constructor(private logger: NGXLogger) {}
-
 	@Input() isMainPlayer: boolean;
+	@Input() debug: boolean;
 	@Input() isRecruitPhase: boolean;
 	@Input() currentTurn: number;
 	@Input() boardTurn: number;
 	@Input() tooltipPosition: 'left' | 'right' | 'top' | 'bottom' = 'right';
 
 	@Input('entities') set entities(entities: readonly Entity[]) {
-		// this.logger.debug('[board] setting new entities', entities);
-		this._entities = entities;
+		// console.log(
+		// 	'setting new entities',
+		// 	entities == this._entities,
+		// 	rdiff.getDiff(entities, this._entities, true),
+		// 	this._entities,
+		// 	entities,
+		// );
+		// That's a big hack, and it looks like I have to do it for all changing arrays (!).
+		// Otherwise, there is an issue when removing all items from the first list then adding another:
+		// - in core.js DefaultIterableDiffer.prototype.forEachOperation, the adjPreviousIndex gets negative for the
+		// first item to add in the new list (all the other parameters stay at 0)
+		// - in common.js, this causes NgForOf.prototype._applyChanges to try and get a view with a negative index
+		// Resetting the view first seems to do the trick. This is fine since we almost never capitalize on the
+		// fact that items that move around are kept alive in these cases
+		this._entities = [];
+		setTimeout(() => {
+			this._entities = entities;
+			this.previousBoardWidth = undefined;
+			this.onResize();
+			if (!(this.cdr as ViewRef)?.destroyed) {
+				this.cdr.detectChanges();
+			}
+		});
 	}
 
 	@Input('enchantmentCandidates') set enchantmentCandidates(value: readonly Entity[]) {
@@ -65,6 +93,87 @@ export class BgsBoardComponent {
 	@Input('options') set options(value: readonly number[]) {
 		// this.logger.debug('[board] setting options', value);
 		this._options = value;
+	}
+
+	private previousBoardWidth: number;
+	// private previousNumberOfEntities: number;
+
+	constructor(
+		private readonly el: ElementRef,
+		private readonly renderer: Renderer2,
+		private readonly cdr: ChangeDetectorRef,
+	) {}
+
+	ngAfterViewInit() {
+		setTimeout(() => {
+			this.onResize();
+		}, 100);
+		// Using HostListener bugs when moving back and forth between the tabs (maybe there is an
+		// issue when destroying / recreating the view?)
+		window.addEventListener('resize', () => {
+			// console.log('detected window resize');
+			this.onResize();
+		});
+	}
+
+	onResize() {
+		// return;
+		// console.log('on window resize');
+		const boardContainer = this.el.nativeElement.querySelector('.board');
+		if (!boardContainer) {
+			if (this._entities?.length) {
+				// if (this.debug) {
+				// 	console.log('no  board container, retrying', this.el.nativeElement);
+				// }
+				setTimeout(() => this.onResize(), 300);
+				return;
+			}
+			return;
+		}
+		const rect = boardContainer.getBoundingClientRect();
+		// We have to resize even though we have the same number of entities, because the resize is
+		// set on the DOM elements, which are teared down and recreated
+		if (this.previousBoardWidth === rect.width) {
+			return;
+		}
+		// if (this.debug) {
+		// 	console.log(
+		// 		'resizing  board',
+		// 		rect,
+		// 		boardContainer,
+		// 		this.previousBoardWidth,
+		// 		this.previousNumberOfEntities,
+		// 		this._entities?.length,
+		// 	);
+		// }
+		// console.log('keeping the resize loop', this.previousBoardWidth, rect.width, rect);
+		this.previousBoardWidth = rect.width;
+		// this.previousNumberOfEntities = this._entities?.length;
+		// console.log('boardContainer', boardContainer, rect);
+		// const constrainedByWidth = rect.width <
+		const cardElements: any[] = boardContainer.querySelectorAll('li');
+		if (cardElements.length !== this._entities?.length) {
+			// if (this.debug) {
+			// 	console.log('opponent board not ready yet', cardElements.length, this._entities?.length);
+			// }
+			setTimeout(() => this.onResize(), 300);
+			return;
+		}
+		let cardWidth = rect.width / 8;
+		let cardHeight = 1.48 * cardWidth;
+		if (cardHeight > rect.height) {
+			cardHeight = rect.height;
+			cardWidth = cardHeight / 1.48;
+		}
+		for (const cardElement of cardElements) {
+			// if (this.debug) {
+			// 	console.log('resizing card element', cardElement);
+			// }
+			this.renderer.setStyle(cardElement, 'width', cardWidth + 'px');
+			this.renderer.setStyle(cardElement, 'height', cardHeight + 'px');
+		}
+		// Continue resizing until the board size has stabilized
+		setTimeout(() => this.onResize(), 300);
 	}
 
 	isOption(entity: Entity): boolean {

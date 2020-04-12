@@ -8,9 +8,10 @@ import {
 	Renderer2,
 } from '@angular/core';
 import { BgsGame } from '../../../models/battlegrounds/bgs-game';
+import { BgsPlayer } from '../../../models/battlegrounds/bgs-player';
 import { BgsNextOpponentOverviewPanel } from '../../../models/battlegrounds/in-game/bgs-next-opponent-overview-panel';
 import { OpponentFaceOff } from './opponent-face-off';
-import { OpponentInfo } from './opponent-info';
+import { BattleResult, OpponentInfo } from './opponent-info';
 
 declare let amplitude: any;
 
@@ -29,10 +30,12 @@ declare let amplitude: any;
 				</div>
 				<bgs-hero-face-offs [opponentFaceOffs]="opponentFaceOffs"></bgs-hero-face-offs>
 			</div>
-			<div class="content" *ngIf="opponentInfos.length > 0">
+			<div class="content" *ngIf="opponents.length > 0">
 				<bgs-opponent-overview-big
-					[opponentInfo]="opponentInfos[0]"
+					[opponent]="opponents[0]"
 					[currentTurn]="currentTurn"
+					[nextBattle]="nextBattle"
+					[battleSimulationStatus]="battleSimulationStatus"
 				></bgs-opponent-overview-big>
 				<div class="other-opponents">
 					<div class="subtitle">Other opponents</div>
@@ -51,8 +54,11 @@ declare let amplitude: any;
 })
 export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 	opponentInfos: readonly OpponentInfo[] = [];
+	opponents: readonly BgsPlayer[];
 	opponentFaceOffs: readonly OpponentFaceOff[];
 	currentTurn: number;
+	nextBattle: BattleResult;
+	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
 
 	private _panel: BgsNextOpponentOverviewPanel;
 	private _game: BgsGame;
@@ -111,7 +117,17 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 				}
 				return 0;
 			});
-		console.log('opponents', opponents);
+		// console.log('opponents', opponents);
+		this.nextBattle = this._game.battleResult;
+		this.battleSimulationStatus = this._game.battleInfoStatus;
+		this.opponents = opponents.sort((a, b) =>
+			a.cardId === this._panel.opponentOverview.cardId
+				? -1
+				: b.cardId === this._panel.opponentOverview.cardId
+				? 1
+				: 0,
+		);
+
 		this.opponentInfos = opponents
 			.map(
 				opponent =>
@@ -127,10 +143,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 						boardTurn: opponent.getLastBoardStateTurn(),
 						tavernUpgrades: [...opponent.tavernUpgradeHistory],
 						triples: [...opponent.tripleHistory],
-						isNextOpponent: opponent.cardId === this._panel.opponentOverview.cardId,
-						nextBattle: opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleResult,
-						battleSimulationStatus:
-							opponent.cardId === this._panel.opponentOverview.cardId && this._game.battleInfoStatus,
+						// isNextOpponent: opponent.cardId === this._panel.opponentOverview.cardId,
 					} as OpponentInfo),
 			)
 			.sort((a, b) =>
@@ -140,7 +153,7 @@ export class BgsNextOpponentOverviewComponent implements AfterViewInit {
 					? 1
 					: 0,
 			);
-		console.log('oponentInfos', this.opponentInfos);
+		// console.log('oponentInfos', this.opponentInfos);
 
 		this.opponentFaceOffs = opponents.map(
 			opp =>

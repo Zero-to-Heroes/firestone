@@ -52,18 +52,18 @@ export class DevService {
 		// this.addCollectionCommands();
 		this.addAchievementCommands();
 		// this.addCustomLogLoaderCommand();
-		window['arena'] = async () => {
-			const info = await this.memoryService.getArenaInfo();
-			console.log(info);
-		};
-		window['matchStart'] = async () => {
-			this.gameEvents.dispatchGameEvent({
-				Type: 'BATTLEGROUNDS_HERO_SELECTION',
-				Value: {
-					CardIds: ['TB_BaconShop_HERO_58', 'TB_BaconShop_HERO_22', 'TB_BaconShop_HERO_56'],
-				},
-			});
-		};
+		// window['arena'] = async () => {
+		// 	const info = await this.memoryService.getArenaInfo();
+		// 	console.log(info);
+		// };
+		// window['matchStart'] = async () => {
+		// 	this.gameEvents.dispatchGameEvent({
+		// 		Type: 'BATTLEGROUNDS_HERO_SELECTION',
+		// 		Value: {
+		// 			CardIds: ['TB_BaconShop_HERO_58', 'TB_BaconShop_HERO_22', 'TB_BaconShop_HERO_56'],
+		// 		},
+		// 	});
+		// };
 	}
 
 	private addAchievementCommands() {
@@ -122,6 +122,9 @@ export class DevService {
 			const events = JSON.parse(logContents);
 			// console.log('sending events', events);
 			for (const event of events) {
+				if (event.Type === 'BATTLEGROUNDS_NEXT_OPPONENT') {
+					await sleep(3000);
+				}
 				// console.log('dispatching', event);
 				if (awaitEvents) {
 					await this.gameEvents.dispatchGameEvent(event);

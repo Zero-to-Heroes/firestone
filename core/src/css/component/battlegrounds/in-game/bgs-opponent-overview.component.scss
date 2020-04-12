@@ -52,52 +52,37 @@
 		overflow: hidden;
 	}
 
-	.triples-section {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		// flex-grow: 1;
+	bgs-triples {
 		flex-grow: 0;
 		width: 20%;
 		flex-shrink: 0;
+	}
 
+	::ng-deep bgs-triples {
+		.triples-section {
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+		}
+		.title {
+			width: auto;
+			margin: 0;
+		}
 		.subtitle {
 			margin: auto;
 		}
-
 		.triple-tiers {
-			display: flex;
 			justify-content: space-around;
 			align-items: center;
 			width: 100%;
 			flex-grow: 1;
-
-			.triple {
-				position: relative;
-				width: 2vw;
-				height: 2.3vw;
-
-				.number {
-					color: var(--default-title-color);
-					// font-size: 18px;
-					font-size: 1vw;
-					background: var(--color-4);
-					border: 3px solid var(--default-title-color);
-					border-radius: 50px;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					width: 100%;
-					height: 100%;
-				}
-
-				.tavern {
-					position: absolute;
-					left: -13%;
-					top: -4px;
-					width: 65%;
-				}
-			}
+		}
+		.triple {
+			width: 2vw;
+			height: 2.3vw;
+		}
+		.number {
+			font-size: 1vw;
 		}
 	}
 }

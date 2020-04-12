@@ -12,9 +12,7 @@ export interface OpponentInfo {
 	boardTurn: number;
 	tavernUpgrades: readonly BgsTavernUpgrade[];
 	triples: readonly BgsTriple[];
-	isNextOpponent: boolean;
-	nextBattle: BattleResult;
-	battleSimulationStatus: 'empty' | 'waiting-for-result' | 'done';
+	// isNextOpponent: boolean;
 	health: number;
 	maxHealth: number;
 }
