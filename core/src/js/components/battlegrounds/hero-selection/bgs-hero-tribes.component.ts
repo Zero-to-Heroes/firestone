@@ -16,9 +16,9 @@ declare let amplitude: any;
 				Winning tribes
 			</div>
 			<div class="composition">
-				<div *ngFor="let tribe of tribes; trackBy: trackByTribeFn" class="tribe" [helpTooltip]="tribe.tribe">
+				<div *ngFor="let tribe of tribes; trackBy: trackByTribeFn" class="tribe">
 					<div class="icon-container">
-						<img class="icon" [src]="getIcon(tribe.tribe)" />
+						<img class="icon" [src]="getIcon(tribe.tribe)" [helpTooltip]="tribe.tribe" />
 					</div>
 					<div class="tribe-name">{{ tribe.tribe }}</div>
 					<div class="value">{{ tribe.percent }}%</div>
