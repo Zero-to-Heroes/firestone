@@ -29,7 +29,7 @@
 		"@firestone-hs/hs-replay-xml-parser": "0.0.33",
 		"@firestone-hs/reference-data": "^0.1.30",
 		"@firestone-hs/replay-parser": "^1.1.16",
-		"@firestone-hs/simulate-bgs-battle": "^1.0.9",
+		"@firestone-hs/simulate-bgs-battle": "^1.0.11",
 		"@sentry/browser": "^5.7.1",
 		"@sentry/integrations": "^5.7.1",
 		"angular-resize-event": "1.0.0",
